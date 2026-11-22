@@ -38,6 +38,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/fastapi/asyncer";
     changelog = "https://github.com/fastapi/asyncer/releases/tag/${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ defelo ];
+    maintainers = [ ];
   };
 }

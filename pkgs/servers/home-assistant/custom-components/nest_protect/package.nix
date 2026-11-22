@@ -2,21 +2,39 @@
   lib,
   fetchFromGitHub,
   buildHomeAssistantComponent,
+  googleapis-common-protos,
+  nix-update-script,
+  protobuf,
+  pytest-freezer,
+  pytest-homeassistant-custom-component,
+  pytest-timeout,
+  pytestCheckHook,
 }:
 buildHomeAssistantComponent rec {
   owner = "iMicknl";
   domain = "nest_protect";
-  version = "0.4.4";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = "ha-nest-protect";
     tag = "v${version}";
-    hash = "sha256-WpQKpYVtmyqLWqhyDsImWvpfWagVWe50zG0RsmeU/8Q=";
+    hash = "sha256-jN2dc4AsRFbnSsbomUtrbLO4WgcTBGxUpuZbaUGmIEA=";
   };
 
-  # AttributeError: 'async_generator' object has no attribute 'data'
-  doCheck = false;
+  dependencies = [
+    googleapis-common-protos
+    protobuf
+  ];
+
+  nativeCheckInputs = [
+    pytest-freezer
+    pytest-homeassistant-custom-component
+    pytest-timeout
+    pytestCheckHook
+  ];
+
+  passthru.updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
 
   meta = {
     changelog = "https://github.com/iMicknl/ha-nest-protect/releases/tag/v${version}";

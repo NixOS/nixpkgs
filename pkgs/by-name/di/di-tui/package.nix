@@ -6,14 +6,14 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "di-tui";
-  version = "1.15.0";
+  version = "1.15.1";
 
   src = fetchFromGitea {
     domain = "code.adriano.fyi";
     owner = "me";
     repo = "di-tui";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-3dYcecrDSfd5sP5PjkagbFt2RmhaQSVw6kMt9J7wyeM=";
+    hash = "sha256-Y9WyGRDyXVN1mP7BueYnH+XLzKSWYhPhnbxTxpuuVDQ=";
   };
 
   vendorHash = "sha256-b7dG0nSjPQpjWUbOlIxWudPZWKqtq96sQaJxKvsQT9I=";

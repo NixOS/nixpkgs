@@ -1,5 +1,6 @@
 {
   fetchurl,
+  fetchpatch,
   runCommand,
   lib,
   stdenv,
@@ -84,6 +85,15 @@ stdenv.mkDerivation (finalAttrs: {
     url = "mirror://gnome/sources/mutter/${lib.versions.major finalAttrs.version}/mutter-${finalAttrs.version}.tar.xz";
     hash = "sha256-7BAqo8uw45ABIGYnrKMFUxRVX3BgneXmwrfvzR+pDyA=";
   };
+
+  patches = [
+    # Fix build with pango 1.58
+    # https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/5102
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/mutter/-/commit/ba64e055b5159a3acd5b4e4bc3d381066b26c62c.patch";
+      hash = "sha256-93i0BnVi8Psi1KpwnLESvq9ntal9fOzH4z2vYhboLhQ=";
+    })
+  ];
 
   mesonFlags = [
     "-Degl_device=true"

@@ -15,7 +15,8 @@
   tabulate,
   yfinance,
 }:
-buildPythonPackage rec {
+
+buildPythonPackage (finalAttrs: {
   pname = "fava-investor";
   version = "1.0.1";
   pyproject = true;
@@ -23,9 +24,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "redstreet";
     repo = "fava_investor";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-WuXbZcia0n9SoiCSB2SkMUjBHsMOA0gCIf9ZEU9pTPA=";
   };
+
+  pythonRelaxDeps = [ "yfinance" ];
 
   build-system = [
     setuptools
@@ -45,18 +48,12 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  disabledTestPaths = [
-    # First differing element 1:
-    # '-----------------  --------  ------------'
-    # '-------------  --------  ------------'
-    #
-    #   ['asset_type    amount    percentage',
-    # -  '-----------------  --------  ------------',
-    # ?                ----
-    #
-    # +  '-------------  --------  ------------',
-    "fava_investor/modules/assetalloc_class/test_asset_allocation.py::TestScriptCheck::test_multicurrency"
-    "fava_investor/modules/assetalloc_class/test_asset_allocation.py::TestScriptCheck::test_tree_empty_parent"
+  disabledTests = [
+    # AssertionError: Lists differ: ['Warning: skipping...
+    "test_multicurrency"
+    "test_tree_empty_parent"
+    "test_basic_specified"
+    "test_basic_unspecified"
   ];
 
   pythonImportsCheck = [ "fava_investor" ];
@@ -68,4 +65,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ ambroisie ];
   };
-}
+})

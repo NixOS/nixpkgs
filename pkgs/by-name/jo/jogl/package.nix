@@ -72,6 +72,22 @@ stdenv.mkDerivation (finalAttrs: {
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     sed -i '/if="use.macos/d' gluegen/make/gluegen-cpptasks-base.xml
     rm -r jogl/oculusvr-sdk
+  ''
+  # clock_gettime and CLOCK_MONOTONIC/CLOCK_REALTIME are only available since
+  # macOS 10.12, while the build files hardcode a 10.7 deployment target.
+  # With -Werror,-Wunguarded-availability the native build then fails.
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace gluegen/make/gluegen-cpptasks-base.xml \
+      --replace-fail '-mmacosx-version-min=10.7' '-mmacosx-version-min=10.12'
+  ''
+  # gluegen's default ant target runs 'dump.localinfo', which executes a junit
+  # test case extending SingletonJunitCase. That class grabs a singleton lock by
+  # binding 127.0.0.1:59999, which is blocked in the sandbox, and then retries
+  # for 15 minutes, hanging the build. The lock only serves to serialize
+  # concurrently running test JVMs, which never happens here; disable it.
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace gluegen/src/junit/com/jogamp/junit/util/SingletonJunitCase.java \
+      --replace-fail 'private static boolean enabled = true;' 'private static boolean enabled = false;'
   '';
 
   nativeBuildInputs = [

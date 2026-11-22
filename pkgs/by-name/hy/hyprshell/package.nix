@@ -13,16 +13,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hyprshell";
-  version = "4.10.8";
+  version = "4.10.10";
 
   src = fetchFromGitHub {
     owner = "H3rmt";
     repo = "hyprshell";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GXegc0W2xiRuSCjMpVc5mmKP5YFCYn87M/POTalISCA=";
+    hash = "sha256-46sygOoJYloveycbSld/OgJfon7UfMdrxP6L1mBymZs=";
   };
 
-  cargoHash = "sha256-idvY6AOLyx22Gy01kQyA4V8j0VupP5JNswsY4K5Oq9M=";
+  cargoHash = "sha256-dDAvi6tfz3/9CSSfHtV6ABgZezTwTB5NtM4fZnmNO/I=";
 
   nativeBuildInputs = [
     wrapGAppsHook4

@@ -13,6 +13,7 @@
   qtquickcontrols2 ? null,
 
   # Qt6-only
+  morph-browser ? null,
   qt5compat ? null,
 }:
 
@@ -21,17 +22,17 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "qqc2-suru-style";
-  version = "0.20260619";
+  version = "0.20261113";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/qqc2-suru-style";
     tag = finalAttrs.version;
-    hash = "sha256-yGm3rBKS1DKrpIVerfZVn5j0keGlQXr7nn6lSmI8xEw=";
+    hash = "sha256-jXan9hgibJROb+vkfqBRGZh3ve57BNIoxeKyQYeOxzI=";
   };
 
   postPatch = ''
-    substituteInPlace qqc2-suru/suru.pri \
+    substituteInPlace qqc2-suru/suru.pro \
       --replace-fail '$$[QT_INSTALL_QML]' "$out/${qtbase.qtQmlPrefix}"
 
     substituteInPlace CMakeLists.txt \
@@ -39,6 +40,8 @@ stdenv.mkDerivation (finalAttrs: {
         "\''${CMAKE_INSTALL_LIBDIR}/qt\''${QT_MAJOR_VERSION}/qml" \
         '${qtbase.qtQmlPrefix}'
   '';
+
+  __structuredAttrs = true;
 
   # QMake can't find Qt modules from buildInputs
   strictDeps = withQt6;
@@ -67,7 +70,12 @@ stdenv.mkDerivation (finalAttrs: {
   # QML plugin
   dontWrapQtApps = true;
 
-  passthru.updateScript = gitUpdater { };
+  passthru = {
+    updateScript = gitUpdater { };
+  }
+  // lib.optionalAttrs withQt6 {
+    inherit (morph-browser.passthru) tests;
+  };
 
   meta = {
     description = "Suru Style for QtQuick Controls 2";

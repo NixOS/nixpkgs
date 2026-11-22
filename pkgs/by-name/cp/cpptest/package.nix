@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cpptest";
-  version = "2.0.0";
+  version = "2.0.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/cpptest/cpptest/cpptest-${finalAttrs.version}/cpptest-${finalAttrs.version}.tar.gz";
-    sha256 = "0lpy3f2fjx1srh02myanlp6zfi497whlldcrnij39ghfhm0arcnm";
+    sha256 = "sha256-bKrKAU/QBl74KAkw9kWbfjXapxq6t+wgnP0aLzCd9oM=";
   };
 
   meta = {

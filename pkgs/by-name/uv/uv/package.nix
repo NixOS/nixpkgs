@@ -5,10 +5,14 @@
   fetchFromGitHub,
 
   # buildInputs
+  aws-lc,
   rust-jemalloc-sys,
+  zstd,
 
   # nativeBuildInputs
   installShellFiles,
+  makeBinaryWrapper,
+  pkg-config,
 
   buildPackages,
   versionCheckHook,
@@ -18,23 +22,29 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "uv";
-  version = "0.13.0";
+  version = "0.13.9";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "uv";
     tag = finalAttrs.version;
-    hash = "sha256-xuC7aRvs7Cz5kXBSl65atxoji5zk9ACNHAoHiljj8Oo=";
+    hash = "sha256-D+NUKgwVCfsc8t4egZ7Tq8pjqHm0vYlJbqnH7D1I0ZU=";
   };
 
-  cargoHash = "sha256-fGSkvK12wafGRSH2vmXrTncENwFNw0jTbKRXTwtnO9s=";
+  cargoHash = "sha256-nmUByTBYI4dzj+ohszZ3x8jOb5yacMInAPnP5Fn2zOA=";
 
   buildInputs = [
+    aws-lc
     rust-jemalloc-sys
+    zstd
   ];
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+    makeBinaryWrapper
+    pkg-config
+  ];
 
   cargoBuildFlags = [
     "--package"
@@ -44,17 +54,22 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # Tests require python3
   doCheck = false;
 
-  postInstall = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
-    let
-      emulator = stdenv.hostPlatform.emulator buildPackages;
-    in
-    ''
-      installShellCompletion --cmd uv \
-        --bash <(${emulator} $out/bin/uv generate-shell-completion bash) \
-        --fish <(${emulator} $out/bin/uv generate-shell-completion fish) \
-        --zsh <(${emulator} $out/bin/uv generate-shell-completion zsh)
-    ''
-  );
+  postInstall =
+    lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
+      let
+        emulator = stdenv.hostPlatform.emulator buildPackages;
+      in
+      ''
+        installShellCompletion --cmd uv \
+          --bash <(${emulator} $out/bin/uv generate-shell-completion bash) \
+          --fish <(${emulator} $out/bin/uv generate-shell-completion fish) \
+          --zsh <(${emulator} $out/bin/uv generate-shell-completion zsh)
+      ''
+    )
+    # uvx runs the uv next to it, so the wrapper also covers uvx.
+    + ''
+      wrapProgram $out/bin/uv --set-default UV_SYSTEM_CERTS 1
+    '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;

@@ -3,6 +3,7 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
+  nix-update-script,
   stdenv,
 }:
 lib.extendMkDerivation {
@@ -23,6 +24,8 @@ lib.extendMkDerivation {
     }:
     {
       pname = "kops";
+
+      __structuredAttrs = true;
 
       src = fetchFromGitHub {
         rev = rev;
@@ -45,6 +48,13 @@ lib.extendMkDerivation {
       ];
 
       doCheck = false;
+
+      passthru.updateScript = nix-update-script {
+        extraArgs = [
+          "--version-regex=^v(${lib.escapeRegex (lib.versions.majorMinor version)}\\.[0-9]+)$"
+          "--override-filename=pkgs/applications/networking/cluster/kops/default.nix"
+        ];
+      };
 
       postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
         installShellCompletion --cmd kops \

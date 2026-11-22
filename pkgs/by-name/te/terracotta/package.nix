@@ -5,8 +5,10 @@
   fetchFromGitHub,
   callPackage,
   easytier,
+  pkg-config,
   replaceVars,
   imagemagick,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -51,7 +53,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail '/Library/LaunchAgents/net.burningtnt.terracotta.daemon.plist' "$daemon_plist"
   '';
 
-  nativeBuildInputs = [ imagemagick ];
+  nativeBuildInputs = [
+    imagemagick
+    pkg-config
+  ];
+
+  buildInputs = [ zstd ];
 
   cargoBuildFlags = [
     "--bin"

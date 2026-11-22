@@ -1,3 +1,4 @@
+# nixpkgs-update: no auto update
 {
   stdenv,
   lib,
@@ -25,6 +26,7 @@
   libdbusmenu-gtk3,
   libglvnd,
   libnotify,
+  libsecret,
   opensc,
   adwaita-icon-theme,
   pipewire,
@@ -43,23 +45,10 @@
 
 ## configurability of the wrapper itself
 
-browser_:
+browser:
 
 let
   isDarwin = stdenv.hostPlatform.isDarwin;
-  browser =
-    # Wrapper breaks codesigning on macOS; though plugins that may require
-    # original mozilla signature (like 1Password) won't work with signatures
-    # stripped, at least the wrapped browser will launch.
-    if isDarwin then
-      browser_.overrideAttrs (
-        oldAttrs:
-        lib.optionalAttrs (oldAttrs.dontFixup or false) {
-          dontFixup = false;
-        }
-      )
-    else
-      browser_;
   wrapper =
     {
       applicationName ? browser.binaryName or (lib.getName browser), # Note: this is actually *binary* name and is different from browser.applicationName, which is *app* name!
@@ -104,6 +93,9 @@ let
       withJACK = browser.withJACK or false;
       # PCSC-Lite daemon (services.pcscd) also must be enabled for firefox to access smartcards
       withPCSC = cfg.smartcardSupport or false;
+      # Loading libsecret selects Secret Service without checking for a provider
+      # or migrating existing OS key-store secrets from the profile's NSS store.
+      withLibsecret = cfg.libsecretSupport or false;
 
       allNativeMessagingHosts = map lib.getBin (lib.unique nativeMessagingHosts);
 
@@ -121,6 +113,7 @@ let
             vulkan-loader
           ]
           ++ lib.optional (cfg.speechSynthesisSupport or true) speechd-minimal
+          ++ lib.optional withLibsecret libsecret
         )
         ++ lib.optional withPipewire pipewire
         ++ lib.optional withFFmpeg ffmpegPackage
@@ -227,6 +220,9 @@ let
       __structuredAttrs = true;
       strictDeps = true;
       inherit pname version;
+
+      # Keep update tools from treating the wrapper as the source package.
+      pos = __curPos;
 
       desktopItem = makeDesktopItem (
         {
@@ -499,6 +495,14 @@ let
             # Suffix the executable with -old, because -wrapped might already be used by the old wrapper.
             oldExe="$executablePrefix/.${applicationName}"-old
             mv "$executablePath" "$oldExe"
+        ''
+        # llvm-strip fails on Mozilla Mach-O binary:
+        # https://github.com/NixOS/nixpkgs/issues/583738
+        + lib.optionalString (isDarwin && browser.dontFixup or false) ''
+          source ${buildPackages.darwin.signingUtils}
+          signIfRequired "$oldExe"
+        ''
+        + ''
           fi
         ''
         + lib.optionalString (!isDarwin) ''

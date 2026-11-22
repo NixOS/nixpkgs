@@ -5,6 +5,10 @@
   rustPlatform,
   installShellFiles,
   libiconv,
+  pkg-config,
+  libgit2,
+  xz,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -20,8 +24,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-BZKNLOv4PtEyZUETxh4JPL0mXyV2PRrtmg4ROvVLHRY=";
 
-  nativeBuildInputs = [ installShellFiles ];
-  buildInputs = lib.optional stdenv.hostPlatform.isDarwin libiconv;
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+  ];
+  buildInputs = [
+    libgit2
+    xz
+    zstd
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
   postInstall = ''
     installManPage docs/fselect.1

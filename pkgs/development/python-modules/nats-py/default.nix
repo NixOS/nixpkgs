@@ -15,14 +15,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "nats-py";
-  version = "2.15.0";
+  version = "2.16.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nats-io";
     repo = "nats.py";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rs+C++g21dKZ6c7L5dJYqWSiv4J8qMGobW7R8icUfVw=";
+    hash = "sha256-4EDK/MXXOiuwLBgZx+3aFLYRoBpLNKTto2ij1+OZb2A=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/nats";

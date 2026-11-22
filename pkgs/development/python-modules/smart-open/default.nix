@@ -1,39 +1,40 @@
 {
   lib,
-  backports-zstd,
-  buildPythonPackage,
-  fetchFromGitHub,
   awscli2,
   azure-common,
   azure-core,
   azure-storage-blob,
+  backports-zstd,
   boto3,
+  buildPythonPackage,
+  fetchFromGitHub,
   google-cloud-storage,
-  requests,
+  lz4,
   moto,
   numpy,
   paramiko,
+  pyopenssl,
   pytest-cov-stub,
   pytest-timeout,
   pytest-xdist,
   pytestCheckHook,
-  pyopenssl,
+  requests,
   responses,
-  setuptools,
   setuptools-scm,
+  setuptools,
   wrapt,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "smart-open";
-  version = "7.5.0";
+  version = "9.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "RaRe-Technologies";
+    owner = "piskvorky";
     repo = "smart_open";
-    tag = "v${version}";
-    hash = "sha256-MKQvvz75PBUZwQ9e/vR+XGdaT+pD2agZtdHOV0Gw9Kk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-aKXinZFw3tr4VXK/f9iPPa8N6WE4rr13GCw17rVAu0o=";
   };
 
   build-system = [
@@ -52,6 +53,7 @@ buildPythonPackage rec {
       azure-core
     ];
     http = [ requests ];
+    lz4 = [ lz4 ];
     webhdfs = [ requests ];
     ssh = [ paramiko ];
     zst = [ backports-zstd ];
@@ -71,12 +73,12 @@ buildPythonPackage rec {
     responses
   ]
   ++ moto.optional-dependencies.server
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   enabledTestPaths = [ "tests" ];
 
   disabledTests = [
-    # https://github.com/RaRe-Technologies/smart_open/issues/784
+    # https://github.com/piskvorky/smart_open/issues/784
     "test_https_seek_forward"
     "test_seek_from_current"
     "test_seek_from_end"
@@ -84,9 +86,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/piskvorky/smart_open/releases/tag/${src.tag}";
     description = "Library for efficient streaming of very large file";
     homepage = "https://github.com/piskvorky/smart_open";
+    changelog = "https://github.com/piskvorky/smart_open/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
+    maintainers = [ ];
   };
-}
+})

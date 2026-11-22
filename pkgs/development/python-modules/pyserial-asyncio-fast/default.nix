@@ -20,7 +20,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "bdraco";
+    owner = "home-assistant-libs";
     repo = "pyserial-asyncio-fast";
     rev = version;
     hash = "sha256-bEJySiVVy77vSF/M5f3WGxjeay/36vU8oBbmkpDCFrI=";
@@ -42,7 +42,7 @@ buildPythonPackage rec {
   meta = {
     changelog = "https://github.com/home-assistant-libs/pyserial-asyncio-fast/releases/tag/${version}";
     description = "Fast asyncio extension package for pyserial that implements eager writes";
-    homepage = "https://github.com/bdraco/pyserial-asyncio-fast";
+    homepage = "https://github.com/home-assistant-libs/pyserial-asyncio-fast";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ hexa ];
   };

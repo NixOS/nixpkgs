@@ -67,10 +67,12 @@ stdenv.mkDerivation (finalAttrs: {
   # macOS Nix store paths do not exist there
   dontPatchShebangs = true;
 
-  RELEASE_VERSION = finalAttrs.version;
+  env = {
+    RELEASE_VERSION = finalAttrs.version;
 
-  # The release archive has no Git metadata
-  GIT_COMMIT = "unknown";
+    # The release archive has no Git metadata
+    GIT_COMMIT = "unknown";
+  };
 
   # SwiftPM's default installer does not provide upstream's plugin layout
   installPhase = ''

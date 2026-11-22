@@ -36,5 +36,5 @@ runCommand "top-julia-packages.yaml"
     ];
   }
   ''
-    python ${./process_top_n.py} ${package-requests} ${registry} > $out
+    python -P ${./process_top_n.py} ${package-requests} ${registry} > $out
   ''

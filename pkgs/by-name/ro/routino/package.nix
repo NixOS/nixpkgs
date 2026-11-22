@@ -3,18 +3,17 @@
   stdenv,
   fetchurl,
   fetchpatch,
-  perl,
   zlib,
   bzip2,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "routino";
-  version = "3.4.3";
+  version = "3.4.4";
 
   src = fetchurl {
     url = "https://routino.org/download/routino-${finalAttrs.version}.tgz";
-    hash = "sha256-TroGfTLJfKk4itbpfA9aPBDUiCk2ckDXjFE3XYzBHlQ=";
+    hash = "sha256-pwF/8EMT+k+1O5ld5Q/to56l54Z7tAo/nIhhh69wKDA=";
   };
 
   patchFlags = [ "-p0" ];
@@ -33,8 +32,6 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace Makefile.conf \
       --subst-var-by PREFIX $out
   '';
-
-  nativeBuildInputs = [ perl ];
 
   buildInputs = [
     zlib

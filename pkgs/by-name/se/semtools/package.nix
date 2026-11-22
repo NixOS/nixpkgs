@@ -3,9 +3,11 @@
   rustPlatform,
   fetchFromGitHub,
   nix-update-script,
+  oniguruma,
   openssl,
   pkg-config,
   protobuf,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -26,7 +28,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     protobuf
   ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [
+    oniguruma
+    openssl
+    zstd
+  ];
 
   checkFlags = [
     # Require network

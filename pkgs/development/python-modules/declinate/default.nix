@@ -8,22 +8,23 @@
   setuptools-scm,
 
   # dependencies
+  ty,
   typing-extensions,
 
   # nativeCheckInputs
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "declinate";
-  version = "0.0.6";
+  version = "0.0.7";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "ternaris";
     repo = "declinate";
-    tag = "v${version}";
-    hash = "sha256-JEO/GtbG/yQuj8vJJaWex9mGy6qpWOPHGlKrdG9vt28=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-GkIg9PcH3VexwFdHLLDiM3yQfV8ryyBMprBNUSAC2L0=";
   };
 
   build-system = [
@@ -32,6 +33,7 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
+    ty
     typing-extensions
   ];
 
@@ -46,8 +48,8 @@ buildPythonPackage rec {
   meta = {
     description = "Command line interface generator";
     homepage = "https://gitlab.com/ternaris/declinate";
-    changelog = "https://gitlab.com/ternaris/declinate/-/blob/${src.tag}/CHANGES.rst";
+    changelog = "https://gitlab.com/ternaris/declinate/-/blob/${finalAttrs.src.tag}/CHANGES.rst";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ nim65s ];
   };
-}
+})

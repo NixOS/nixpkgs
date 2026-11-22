@@ -16,7 +16,7 @@ buildDunePackage (finalAttrs: {
     owner = "rvantonder";
     repo = "hack_parallel";
     rev = finalAttrs.version;
-    sha256 = "0qjlkw35r4q2cm0n2x0i73zvx1xgrp6axaia2nm8zxpm49mid629";
+    hash = "sha256-SZgWayL19o+qFSqqrszNr4e+/zgRdGFBZQKTXAafVGI=";
   };
 
   patches = [ ./hack_parallel.patch ];

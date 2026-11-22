@@ -2,38 +2,41 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  catch2,
   cmake,
+  ctestCheckHook,
   unixodbc,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nanodbc";
-  version = "2.14.0";
+  version = "3.0.8";
 
   src = fetchFromGitHub {
     owner = "nanodbc";
     repo = "nanodbc";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-dVUOwA7LfLqcQq2nc6OAha0krmgTy5RUHupBVrNdo4g=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-GUC7JlI5Bp5javoTaWXsMdE3B0N9xiaHz/PlIrFkMXM=";
   };
-
-  postPatch = ''
-    cp ${catch2}/include/catch2/catch.hpp test/catch/catch.hpp
-
-    substituteInPlace CMakeLists.txt \
-      --replace-fail "cmake_minimum_required(VERSION 3.0.0)" "cmake_minimum_required(VERSION 3.10)"
-  '';
 
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [ unixodbc ];
 
+  nativeCheckInputs = [ ctestCheckHook ];
+  doCheck = true;
+  ctestFlags = [
+    "-R"
+    "^utility_tests$"
+  ];
+
   cmakeFlags =
-    if (stdenv.hostPlatform.isStatic) then
-      [ "-DBUILD_STATIC_LIBS=ON" ]
-    else
-      [ "-DBUILD_SHARED_LIBS=ON" ];
+    lib.optionals stdenv.cc.isClang [ (lib.cmakeBool "NANODBC_FORCE_LIBCXX" false) ]
+    ++ (
+      if (stdenv.hostPlatform.isStatic) then
+        [ "-DBUILD_STATIC_LIBS=ON" ]
+      else
+        [ "-DBUILD_SHARED_LIBS=ON" ]
+    );
 
   meta = {
     homepage = "https://github.com/nanodbc/nanodbc";

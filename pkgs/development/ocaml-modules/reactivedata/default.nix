@@ -15,7 +15,7 @@ buildDunePackage (finalAttrs: {
     owner = "ocsigen";
     repo = "reactiveData";
     rev = finalAttrs.version;
-    sha256 = "sha256-MO9WMe1k2QcC5RynE6uZHohmu3QlpTHvAkvQNgu3P90=";
+    hash = "sha256-MO9WMe1k2QcC5RynE6uZHohmu3QlpTHvAkvQNgu3P90=";
   };
 
   propagatedBuildInputs = [ react ];

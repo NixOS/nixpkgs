@@ -1,14 +1,15 @@
-{ python3Packages }:
+{ lib, python3Packages }:
 
-let
-  litellm = python3Packages.litellm;
-in
 python3Packages.toPythonApplication (
-  litellm.overridePythonAttrs (oldAttrs: {
+  python3Packages.litellm.overridePythonAttrs (oldAttrs: {
     dependencies =
       (oldAttrs.dependencies or [ ])
-      ++ litellm.optional-dependencies.proxy
-      ++ litellm.optional-dependencies.extra_proxy
-      ++ litellm.optional-dependencies.proxy-runtime;
+      ++ lib.concatAttrValues (
+        lib.getAttrs [
+          "proxy"
+          "extra_proxy"
+          "proxy-runtime"
+        ] oldAttrs.optional-dependencies
+      );
   })
 )

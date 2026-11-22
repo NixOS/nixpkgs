@@ -3,6 +3,7 @@
   SDL2,
   autoreconfHook,
   fetchurl,
+  fetchpatch,
   libjpeg,
   libpng,
   libtiff,
@@ -10,6 +11,7 @@
   pkg-config,
   stdenv,
   zlib,
+  testers,
   # Boolean flags
   enableSTB ? true,
   ## Darwin headless will hang when trying to run the SDL test program
@@ -24,6 +26,14 @@ stdenv.mkDerivation (finalAttrs: {
     url = "https://www.libsdl.org/projects/SDL_image/release/SDL2_image-${finalAttrs.version}.tar.gz";
     hash = "sha256-OT9e+1BTbsE8pPSv+2nMmWbTw/lp5sXnAfrd+fl4U4E=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2026-117557.patch";
+      url = "https://github.com/libsdl-org/SDL_image/commit/5cfbe85f3a783417eec4d5aa0660b40c2cff5292.patch";
+      hash = "sha256-mcwXphjE5haGrWmH0oQBUY3TigJas4dRRD2Rd7PJ1vI=";
+    })
+  ];
 
   outputs = [
     "out"
@@ -67,11 +77,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
+  passthru = {
+    tests.pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+    };
+  };
+
   meta = {
     description = "SDL image library";
     homepage = "https://github.com/libsdl-org/SDL_image";
     license = lib.licenses.zlib;
     teams = [ lib.teams.sdl ];
     platforms = lib.platforms.unix;
+    pkgConfigModules = [ "SDL2_image" ];
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "libsdl" finalAttrs.version;
   };
 })

@@ -2,6 +2,9 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
+  fetchpatch,
+  pkg-config,
+  libgit2,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -15,7 +18,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-NlnESZua4OP7rhMoER/VgBST9THqISQ0LCG1ZakNTqs=";
   };
 
-  cargoHash = "sha256-WTg1o2iF5/UOVIqKFqGbC28B4HrKJWM0+XCHgaA1lc4=";
+  cargoPatches = [
+    (fetchpatch {
+      name = "update_git2_to_0.20.0.patch";
+      url = "https://github.com/MitMaro/git-interactive-rebase-tool/commit/4f04527a23aca92675423aefe093247d87f05298.patch";
+      hash = "sha256-XvX07x9p0gcs6FYChDpYDsp58LkrjTtw3M3Oyp7YetY=";
+    })
+  ];
+
+  cargoHash = "sha256-D4X6INF7sPzfpmBTO84pnfqNlCot+JwZCtKJ64oPyHQ=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ libgit2 ];
 
   # Compilation during tests fails if this env var is not set.
   preCheck = "export GIRT_BUILD_GIT_HASH=${finalAttrs.version}";

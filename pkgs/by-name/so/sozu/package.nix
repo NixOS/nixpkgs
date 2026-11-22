@@ -5,6 +5,7 @@
   fetchFromGitHub,
   fetchpatch2,
   protobuf,
+  rust-jemalloc-sys,
   nix-update-script,
   testers,
   sozu,
@@ -32,6 +33,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   nativeBuildInputs = [ protobuf ];
+
+  buildInputs = [ rust-jemalloc-sys ];
 
   doCheck = false;
 

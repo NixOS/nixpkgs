@@ -16,7 +16,7 @@ buildPythonPackage rec {
   pypropject = true;
 
   src = fetchFromGitHub {
-    owner = "h2non";
+    owner = "jsonpath-ng";
     repo = "jsonpath-ng";
     tag = "v${version}";
     hash = "sha256-soCSMOHJpAM/tOaydvv8tGS/VewtSMBteDNipSPttI0=";
@@ -35,8 +35,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "JSONPath implementation";
-    homepage = "https://github.com/h2non/jsonpath-ng";
-    changelog = "https://github.com/h2non/jsonpath-ng/blob/v${version}/History.md";
+    homepage = "https://github.com/jsonpath-ng/jsonpath-ng";
+    changelog = "https://github.com/jsonpath-ng/jsonpath-ng/blob/v${version}/History.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "jsonpath_ng";

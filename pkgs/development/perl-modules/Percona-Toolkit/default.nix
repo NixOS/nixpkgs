@@ -17,8 +17,8 @@ let
   src = fetchFromGitHub {
     owner = "percona";
     repo = "percona-toolkit";
-    rev = "v${version}";
-    sha256 = "sha256-5mdRkdRSXhqdhJ0+pgQD18DS30WyvY2h6oImO4Fhljs=";
+    tag = "v${version}";
+    hash = "sha256-5mdRkdRSXhqdhJ0+pgQD18DS30WyvY2h6oImO4Fhljs=";
 
     # needed for build script
     leaveDotGit = true;
@@ -41,15 +41,17 @@ buildPerlPackage {
 
   nativeBuildInputs = [
     git
+    go
   ];
 
   buildInputs = [
     DBDmysql
-    go
     DBI
     IOSocketSSL
     TermReadKey
   ];
+
+  strictDeps = true;
 
   postPatch = ''
     cp -r --reflink=auto ${goDeps} vendor
@@ -61,6 +63,8 @@ buildPerlPackage {
   preBuild = ''
     export HOME=$TMPDIR
   '';
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Collection of advanced command-line tools to perform a variety of MySQL and system tasks";

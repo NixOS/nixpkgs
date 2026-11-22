@@ -3,7 +3,7 @@
   mk64baserom ? null,
   requireFile,
   fetchFromGitHub,
-  llvmPackages_19,
+  llvmPackages,
   cmake,
   copyDesktopItems,
   installShellFiles,
@@ -17,6 +17,8 @@
   makeDesktopItem,
   n64recomp,
   directx-shader-compiler,
+  fmt_11,
+  fetchpatch,
 }:
 
 let
@@ -39,7 +41,7 @@ let
 
 in
 
-llvmPackages_19.stdenv.mkDerivation (finalAttrs: {
+llvmPackages.stdenv.mkDerivation (finalAttrs: {
   pname = "mariokart64recomp";
   version = "0.9.2";
 
@@ -57,12 +59,32 @@ llvmPackages_19.stdenv.mkDerivation (finalAttrs: {
   };
 
   strictDeps = true;
+  __structuredAttrs = true;
+
+  patches = [
+    # Fix building with gcc16
+    (fetchpatch {
+      name = "rmlui-cstdint.patch";
+      url = "https://github.com/mikke89/RmlUi/commit/8c27b0a5cb601a3c57ecddc6ce8769ca93a97cb8.patch";
+      stripLen = 1;
+      extraPrefix = "lib/RmlUi/";
+      hash = "sha256-oIyPlnBsLcrGIbylT16i5SLttyXmzF5ZP1js/JDRG3o=";
+    })
+    # Required for N64Recomp commit 598ce20: Live recompiler support for PIC jump tables
+    (fetchpatch {
+      name = "n64modernruntime-pic.patch";
+      url = "https://github.com/N64Recomp/N64ModernRuntime/commit/e4342ae030a9d94aa97a81aafd3368ed7daa74df.patch";
+      relative = "librecomp";
+      extraPrefix = "lib/N64ModernRuntime/librecomp/";
+      hash = "sha256-pheuE+ABN9DZDeWDv5NFCoP+0dT8DGps6YKdsdTf0Os=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
     copyDesktopItems
     installShellFiles
-    llvmPackages_19.lld
+    llvmPackages.lld
     makeWrapper
     ninja
     pkg-config
@@ -101,6 +123,15 @@ llvmPackages_19.stdenv.mkDerivation (finalAttrs: {
     substituteInPlace CMakeLists.txt \
       --replace-fail "\''${PROJECT_SOURCE_DIR}/lib/rt64/src/contrib/dxc/lib/x64" "${directx-shader-compiler}/lib/" \
       --replace-fail "\''${PROJECT_SOURCE_DIR}/lib/rt64/src/contrib/dxc/bin/x64/dxc-linux" "${directx-shader-compiler}/bin/dxc"
+
+    # Fix building with llvm 20
+    rm -r lib/N64ModernRuntime/N64Recomp/lib/fmt/*
+    ln -s ${fmt_11.src}/* lib/N64ModernRuntime/N64Recomp/lib/fmt/
+
+    # Fix llvm 21 rt64 error:
+    # error: variable 'empty_string' is uninitialized when passed as a const pointer argument here
+    substituteInPlace lib/rt64/src/contrib/imgui/imgui_widgets.cpp \
+      --replace-fail "IMSTB_TEXTEDIT_CHARTYPE empty_string;" "IMSTB_TEXTEDIT_CHARTYPE empty_string = 0;"
   '';
 
   # This is required or else nothing will build

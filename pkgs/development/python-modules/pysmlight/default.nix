@@ -47,6 +47,15 @@ buildPythonPackage rec {
     syrupy
   ];
 
+  disabledTests = [
+    # snapshot formatting changed
+    "test_info_device_info"
+    "test_info_device_mr_info"
+    "test_ultima_info"
+    "test_info_sensors"
+    "test_ultima_sensors"
+  ];
+
   __darwinAllowLocalNetworking = true;
 
   meta = {

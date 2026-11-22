@@ -23,7 +23,6 @@ buildPythonPackage (finalAttrs: {
   pname = "deepwave";
   version = "0.0.27";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "ar4";

@@ -40,6 +40,8 @@ stdenv.mkDerivation (finalAttrs: {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "X Window System Protocols Transport layer shared code";
     homepage = "https://gitlab.freedesktop.org/xorg/lib/libxtrans";
@@ -50,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
       x11
       hpndSellVariant
     ];
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.smakarov ];
     pkgConfigModules = [ "xtrans" ];
     platforms = lib.platforms.unix;
   };

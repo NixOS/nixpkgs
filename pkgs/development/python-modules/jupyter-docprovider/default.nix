@@ -16,7 +16,6 @@ buildPythonPackage (finalAttrs: {
   pname = "jupyter-docprovider";
   version = "3.0.4";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchPypi {
     pname = "jupyter_docprovider";

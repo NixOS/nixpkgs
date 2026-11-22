@@ -49,6 +49,9 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # these tests are broken with jupyter-notebook >= 7
     "vega/tests/test_entrypoint.py"
+
+    # (from pandas) ValueError("Invalid frequency: H. Failed to parse with error message: KeyError('H'). Did you mean h?")
+    "vega/tests/test_utils.py::test_sanitize_dataframe"
   ];
 
   pythonImportsCheck = [ "vega" ];

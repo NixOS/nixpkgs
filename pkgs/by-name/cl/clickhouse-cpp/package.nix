@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  pkgConfigCheckHook,
   abseil-cpp,
 }:
 
@@ -18,9 +19,6 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-szvRPqj2xarzGTVyycPlSTJkWSxwLO4EKXADS1DpO7Q=";
   };
-
-  flattenPackagesPrefix = "absl_";
-  flattenPcLookupDir = "${abseil-cpp}/lib/pkgconfig";
 
   nativeBuildInputs = [
     cmake
@@ -38,13 +36,19 @@ stdenv.mkDerivation (finalAttrs: {
     substituteAll ${./clickhouse-cpp.pc.in} $out/lib/pkgconfig/clickhouse-cpp.pc
   '';
 
+  nativeInstallCheckInputs = [ pkgConfigCheckHook ];
+  pkgConfigModules = [
+    "clickhouse-cpp"
+  ];
+  doInstallCheck = true;
+
   meta = {
     description = "C++ client library for ClickHouse";
     homepage = "https://github.com/clickhouse/clickhouse-cpp";
     changelog = "https://github.com/clickhouse/clickhouse-cpp/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ jlesquembre ];
-    mainProgram = "clickhouse-cpp";
+    inherit (finalAttrs) pkgConfigModules;
     platforms = lib.platforms.all;
   };
 })

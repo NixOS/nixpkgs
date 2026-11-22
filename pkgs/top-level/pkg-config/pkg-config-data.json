@@ -453,11 +453,6 @@
         "libpcap"
       ]
     },
-    "libpcre": {
-      "attrPath": [
-        "pcre"
-      ]
-    },
     "libpcre2-16": {
       "attrPath": [
         "pcre2"

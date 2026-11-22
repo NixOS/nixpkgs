@@ -39,6 +39,10 @@ stdenv.mkDerivation {
     "GUILE_AUTO_COMPILE=0"
   ];
 
+  guileImportsCheck = [
+    "commonmark"
+  ];
+
   meta = {
     homepage = "https://github.com/OrangeShark/guile-commonmark";
     description = "Implementation of CommonMark for Guile";

@@ -111,21 +111,21 @@ let
         knownVulnerabilities = (lib.optional eol "Garage version ${version} is EOL");
         inherit broken;
         mainProgram = "garage";
+        platforms = lib.platforms.linux;
       };
     };
 in
-rec {
+{
   garage_1 = generic {
     version = "1.3.1";
     hash = "sha256-wkCnJmbulnhzwHvzdpzh9MRceOzmPdhOogffwhqNGPg=";
     cargoHash = "sha256-jfYe2A6zkVgTLrWBDbahICSKCRO3FwsBPNSVFapH0Rs=";
+    eol = true;
   };
 
   garage_2 = generic {
-    version = "2.4.1";
-    hash = "sha256-+3w4R0IGxc7GCVW3t7Izt6Y5PVUjxHsdLrr74ckR9Mg=";
-    cargoHash = "sha256-G928EsavtEgxugLzpBGSbo2RMHLzu9PZf9r3GqU5J3E=";
+    version = "2.5.0";
+    hash = "sha256-5jWgH+hi0Ouqszapw00KOBHFjxlV/y4T7IB22IRaEHE=";
+    cargoHash = "sha256-xk1lMNnGp4qWK7BvgdUKIvc+cR5HDw0GFfV6q64yMso=";
   };
-
-  garage = garage_1;
 }

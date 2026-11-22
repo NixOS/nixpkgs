@@ -18,7 +18,6 @@ buildPythonPackage (finalAttrs: {
   pname = "aiosmtplib";
   version = "5.1.3";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "cole";

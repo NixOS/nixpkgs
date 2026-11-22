@@ -12,18 +12,18 @@
 
 buildGoModule (finalAttrs: {
   pname = "sstorytime";
-  version = "1.0-beta-unstable-2026-09-15";
+  version = "1.0.0-unstable-2026-10-28";
 
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "markburgess";
     repo = "SSTorytime";
-    rev = "f56e7b01b098dff89422c15a56414dd8dec80b03";
-    hash = "sha256-2qIbn4OX4bDYIuEx3fP6lVzDFbLFcqLSpZ6Dqf8+hO8=";
+    rev = "4085237715c7b78eed8aeffcc25a64c9658b4aad";
+    hash = "sha256-98F/9jLF6KrF79kk76+Act8lGrBAbk2zEydIuK30Yw4=";
   };
 
-  vendorHash = "sha256-lei5IG02QYSigHmLArlE7huDFVGoVMkw8DTEQeJWFX0=";
+  vendorHash = "sha256-ow/UNzgtqtOfDx4/fa7z5pc7IFqWbEc3O5OfiW+j8kQ=";
 
   nativeBuildInputs = [ makeWrapper ];
 

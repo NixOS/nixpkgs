@@ -43,7 +43,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "macOS Window management made elegant";
     homepage = "https://github.com/MrKai77/Loop";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ matteopacini ];
+    maintainers = [ ];
     mainProgram = "loopwm";
     platforms = lib.platforms.darwin;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];

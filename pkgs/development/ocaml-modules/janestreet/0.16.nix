@@ -703,27 +703,6 @@ with self;
     ];
   };
 
-  janestreet_csv = janePackage {
-    pname = "janestreet_csv";
-    hash = "sha256-XLyHxVlgBvMIBrG2wzOudbKqy+N12Boheb3K+6o9y1o=";
-    propagatedBuildInputs = [
-      async
-      bignum
-      core_kernel
-      core_unix
-      csvfields
-      delimited_parsing
-      fieldslib
-      numeric_string
-      ppx_jane
-      re2
-      textutils
-      tyxml
-      ocaml_pcre
-    ];
-    meta.description = "Tools for working with CSVs on the command line";
-  };
-
   jane_rope = janePackage {
     pname = "jane_rope";
     hash = "sha256-MpjbwV+VS3qRuW8kxhjGzsITEdrPeWyr0V+LiKR6U8U=";
@@ -912,7 +891,8 @@ with self;
 
   patdiff = janePackage {
     pname = "patdiff";
-    hash = "sha256-iVRYKgVBBJws3ZlUwnZt52bIydMtzV7a2R5mjksQAps=";
+    version = "0.16.1";
+    hash = "sha256-1AXozxcpKzNJVYuFUtQKSMfJC49+iPgJg5LPnlBv4l8=";
 
     # Used by patdiff-git-wrapper.  Providing it here also causes the shebang
     # line to be automatically patched.
@@ -920,7 +900,6 @@ with self;
     propagatedBuildInputs = [
       core_unix
       patience_diff
-      ocaml_pcre
     ];
     meta = {
       description = "File Diff using the Patience Diff algorithm";

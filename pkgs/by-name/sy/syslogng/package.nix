@@ -36,6 +36,7 @@
   withGrpc ? true,
   grpc,
   protobuf,
+  nixosTests,
 }:
 let
   python-deps =
@@ -62,8 +63,6 @@ let
       ply
     ];
   py = python3.withPackages python-deps;
-  # TODO: remove when https://github.com/NixOS/nixpkgs/pull/571072 hits master
-  systemdLibs' = systemdLibs.override { withCompression = true; };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "syslog-ng";
@@ -96,7 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
     eventlog
     glib
     py
-    systemdLibs'
+    systemdLibs
     riemann_c_client
     protobufc
     libnet
@@ -140,6 +139,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   enableParallelBuilding = true;
+
+  passthru.tests.nixos = nixosTests.syslog-ng;
 
   meta = {
     homepage = "https://www.syslog-ng.com";

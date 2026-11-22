@@ -19,9 +19,6 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-jEOonA3kmJSW6INkUo4NVzg2Kv4V78QPEJdItYhQ31k=";
   };
 
-  # z3 does not provide a dist-info, so python-runtime-deps-check will fail
-  pythonRemoveDeps = [ "z3-solver" ];
-
   build-system = [ setuptools ];
 
   dependencies = [

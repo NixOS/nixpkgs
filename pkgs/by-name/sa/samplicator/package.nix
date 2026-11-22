@@ -18,6 +18,9 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "0fv5vldmwd6qrdv2wkk946dk9rn9nrv3c84ldvvqqn1spxfzgirm";
   };
 
+  # clang rejects old-style function definitions in C23
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
   meta = {
     description = "Send copies of (UDP) datagrams to multiple receivers";
     homepage = "https://github.com/sleinen/samplicator/";

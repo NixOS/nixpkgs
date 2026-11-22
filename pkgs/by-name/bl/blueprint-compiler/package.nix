@@ -6,24 +6,26 @@
   libadwaita,
   meson,
   ninja,
-  python3,
   runCommand,
   stdenv,
   testers,
   wrapGAppsNoGuiHook,
   xvfb-run,
   gnome,
+  python3Packages,
 }:
-stdenv.mkDerivation (finalAttrs: {
+
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "blueprint-compiler";
-  version = "0.20.4";
+  version = "0.22.2";
+  pyproject = false;
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "blueprint-compiler";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-dA+FQTRmTz6rl5ToZJ8CXY1Zd7Em7VwvF3U3Qoyvu80=";
+    hash = "sha256-DRpPUfiufwK2c2RW01IYIX6tgVyxfFl5hnv5F8+9aD4=";
   };
 
   postPatch = ''
@@ -34,23 +36,19 @@ stdenv.mkDerivation (finalAttrs: {
     gobject-introspection
     meson
     ninja
-    python3
     wrapGAppsNoGuiHook
   ];
 
   buildInputs = [
     libadwaita
-    (python3.withPackages (
-      ps: with ps; [
-        pygobject3
-      ]
-    ))
   ];
 
   propagatedBuildInputs = [
     # For setup hook, so that the compiler can find typelib files
     gobject-introspection
   ];
+
+  dependencies = [ python3Packages.pygobject3 ];
 
   nativeCheckInputs = [
     dbus
@@ -68,6 +66,13 @@ stdenv.mkDerivation (finalAttrs: {
       meson test --no-rebuild --print-errorlogs
 
     runHook postCheck
+  '';
+
+  # Prevent double wrapping, let the Python wrapper use the args in preFixup.
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
   passthru = {

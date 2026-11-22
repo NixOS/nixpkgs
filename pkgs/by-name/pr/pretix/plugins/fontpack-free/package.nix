@@ -10,7 +10,6 @@ buildPythonPackage (finalAttrs: {
   pname = "pretix-fontpack-free";
   version = "1.11.2";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pretix";

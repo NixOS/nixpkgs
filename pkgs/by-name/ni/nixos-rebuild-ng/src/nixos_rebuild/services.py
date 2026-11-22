@@ -111,10 +111,14 @@ def _get_system_attr(
                     instantiate_flags=grouped_nix_args.common_flags,
                 )
             else:
-                raise NixOSRebuildError("failed to get image variants: both `flake` and `build_attr` are None")
+                raise NixOSRebuildError(
+                    "failed to get image variants: both `flake` and `build_attr` are None"
+                )
 
             _validate_image_variant(args.image_variant, variants)
-            return f"{nix.get_build_image_attr(args.specialisation)}.{args.image_variant}"
+            return (
+                f"{nix.get_build_image_attr(args.specialisation)}.{args.image_variant}"
+            )
 
         case Action.BUILD_VM:
             if args.specialisation:
@@ -301,7 +305,7 @@ def build_and_activate_system(
     )
 
     if args.store_path:
-        path_to_config = Path(args.store_path)
+        path_to_config = Path(args.store_path).resolve()
         nix.copy_closure(
             path_to_config,
             to_host=target_host,

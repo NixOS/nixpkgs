@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pyprojectVersionPatchHook,
   # build
   setuptools,
   cython,
@@ -20,6 +21,8 @@ buildPythonPackage (finalAttrs: {
     rev = "237631c181423c42043ba8003a305dd1d8e0b700"; # repo has no tags or branches
     hash = "sha256-vUaU0U5Smmm+k+i54uKu/R2qpoCbdq3LrjU4/BBEMq8=";
   };
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   build-system = [
     setuptools

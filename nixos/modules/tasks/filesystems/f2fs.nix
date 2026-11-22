@@ -20,10 +20,6 @@ in
       "crc32"
     ];
 
-    boot.initrd.extraUtilsCommands = mkIf (inInitrd && !config.boot.initrd.systemd.enable) ''
-      copy_bin_and_libs ${pkgs.f2fs-tools}/sbin/fsck.f2fs
-    '';
-
     boot.initrd.systemd.initrdBin = mkIf inInitrd [ pkgs.f2fs-tools ];
   };
 }

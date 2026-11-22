@@ -4,27 +4,31 @@
 # and validity checks are done by CI on PRs.
 
 # Type: Path -> Overlay
-baseDirectory:
+
 let
   # Because of Nix's import-value cache, importing lib is free
   lib = import ../../lib;
 
   inherit (builtins)
+    attrNames
+    concatLists
+    listToAttrs
     readDir
     ;
 
   inherit (lib.attrsets)
     mapAttrs
     mapAttrsToList
-    mergeAttrsList
     ;
 
   inherit (lib.trivial)
     flip
     ;
-
-  # Package files for a single shard
-  # Type: String -> String -> AttrsOf Path
+in
+baseDirectory:
+let
+  # Package files for a single shard, as name-value pairs
+  # Type: String -> String -> [ { name :: String; value :: Path; } ]
   namesForShard =
     shard: type:
     if type != "directory" then
@@ -34,25 +38,23 @@ let
       # - Ensure that README.md is the only file, throwing a better error message if that's not the case.
       #   However this would make for a poor code architecture, because one type of error would have to be duplicated in the validity checks and here.
       # Additionally in either of those alternatives, we would have to duplicate the hardcoding of "README.md"
-      { }
+      [ ]
     else
-      mapAttrs (name: _: baseDirectory + "/${shard}/${name}/package.nix") (
-        readDir (baseDirectory + "/${shard}")
-      );
+      map (name: {
+        inherit name;
+        value = baseDirectory + "/${shard}/${name}/package.nix";
+      }) (attrNames (readDir (baseDirectory + "/${shard}")));
 
   # The attribute set mapping names to the package files defining them
   # This is defined up here in order to allow reuse of the value (it's kind of expensive to compute)
   # if the overlay has to be applied multiple times
-  packageFiles = mergeAttrsList (mapAttrsToList namesForShard (readDir baseDirectory));
+  # A single `listToAttrs` allocates less than merging per-shard attribute sets with `mergeAttrsList`,
+  # which copies every package's entry once per level of its merge tree.
+  packageFiles = listToAttrs (concatLists (mapAttrsToList namesForShard (readDir baseDirectory)));
 in
-self: super:
-{
-  # This attribute is necessary to allow CI to ensure that all packages defined in `pkgs/by-name`
-  # don't have an overriding definition in `all-packages.nix` with an empty (`{ }`) second `callPackage` argument.
-  # It achieves that with an overlay that modifies both `callPackage` and this attribute to signal whether `callPackage` is used
-  # and whether it's defined by this file here or `all-packages.nix`.
-  # TODO: This can be removed once `pkgs/by-name` can handle custom `callPackage` arguments without `all-packages.nix` (or any other way of achieving the same result).
-  # Because at that point the code in ./stage.nix can be changed to not allow definitions in `all-packages.nix` to override ones from `pkgs/by-name` anymore and throw an error if that happens instead.
-  _internalCallByNamePackageFile = flip self.callPackage { };
-}
-// mapAttrs (name: self._internalCallByNamePackageFile) packageFiles
+self:
+let
+  # Avoid allocating `{ }` for every package.
+  flippedCallPackage = flip self.callPackage { };
+in
+super: mapAttrs (_attrName: flippedCallPackage) packageFiles

@@ -6,6 +6,7 @@
   rustPlatform,
   pkg-config,
   openssl,
+  zstd,
   vale,
 }:
 
@@ -28,6 +29,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     openssl
+    zstd
   ];
 
   checkFlags = [

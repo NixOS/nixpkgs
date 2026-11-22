@@ -42,6 +42,7 @@
   gtk3,
   gtk4,
   qt6,
+  kdePackages,
   libx11,
   libxscrnsaver,
   libxcomposite,
@@ -90,6 +91,9 @@
   # For Vulkan support (--enable-features=Vulkan); disabled by default as it seems to break VA-API
   vulkanSupport ? false,
   enableVulkan ? vulkanSupport,
+  # Add KDE Plasma/Breeze Qt plugins for theming. Disabled by default to
+  # avoid pulling KDE dependencies into the default Brave closure.
+  plasmaSupport ? false,
 }:
 
 let
@@ -164,6 +168,13 @@ let
     vulkan-loader # Chromium and Dawn dlopen libvulkan.so.1 by name.
     qt6.qtbase
   ]
+  ++ optionals plasmaSupport [
+    # KDE libraries need the libstdc++ they were built with, ahead of any
+    # older copy that the session's graphics driver may load first.
+    stdenv.cc.cc.lib
+    kdePackages.plasma-integration
+    kdePackages.breeze
+  ]
   ++ optional pulseSupport libpulseaudio
   ++ optional libvaSupport libva;
 
@@ -194,7 +205,7 @@ stdenv.mkDerivation {
   __structuredAttrs = true;
   strictDeps = true;
 
-  src = fetchurl { inherit (archive) url sha256; };
+  src = fetchurl { inherit (archive) url hash; };
 
   sourceRoot = lib.optionalString stdenv.hostPlatform.isDarwin "${darwinApp}.app";
 
@@ -303,6 +314,15 @@ stdenv.mkDerivation {
         ]
       }
       --set CHROME_WRAPPER ${pname}
+      # Always put Brave's own qtbase plugins first; a session with a different
+      # Qt version could otherwise make Qt load incompatible platform or
+      # shell-integration plugins and abort. The Plasma/Breeze plugins sit
+      # behind plasmaSupport to avoid pulling KDE into the default closure.
+      --prefix QT_PLUGIN_PATH : ${qt6.qtbase}/lib/qt-6/plugins
+      ${optionalString plasmaSupport ''
+        --prefix QT_PLUGIN_PATH : ${kdePackages.plasma-integration}/lib/qt-6/plugins
+        --prefix QT_PLUGIN_PATH : ${kdePackages.breeze}/lib/qt-6/plugins
+      ''}
       ${optionalString (enableFeatures != [ ]) ''
         --add-flags "--enable-features=${strings.concatStringsSep "," enableFeatures}\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+,WaylandWindowDecorations --enable-wayland-ime=true}}"
       ''}
@@ -348,9 +368,9 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [
       uskudnik
       jefflabonte
-      nasirhm
       buckley310
       rachalaraj
+      bachp
     ];
     platforms = builtins.attrNames archives;
     mainProgram = if flavor == "origin" then "brave-origin" else "brave";

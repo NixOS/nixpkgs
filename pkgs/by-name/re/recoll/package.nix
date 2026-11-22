@@ -150,7 +150,10 @@ stdenv.mkDerivation rec {
   ];
 
   qtWrapperArgs = [
-    "--prefix PATH : ${filterPath}"
+    "--prefix"
+    "PATH"
+    ":"
+    filterPath
   ];
 
   # the filters search through ${PATH} using a sh proc 'checkcmds' for the

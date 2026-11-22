@@ -41,7 +41,7 @@ buildPythonPackage rec {
     geoip
   ];
 
-  doCheck = !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64);
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   pythonImportsCheck = [ "txtorcon" ];
 

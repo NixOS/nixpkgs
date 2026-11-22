@@ -27,6 +27,7 @@ Each interpreter has the following attributes:
 - `withPackages`. Simpler interface to `buildEnv`. See [](#python.withpackages-function) for usage and documentation.
 - `sitePackages`. Alias for `lib/${libPrefix}/site-packages`.
 - `executable`. Name of the interpreter executable, e.g. `python3.10`.
+- `isFreeThreaded`. Whether the interpreter is a free-threaded build (`enableGIL = false`), e.g. `python314FreeThreading`.
 - `pkgs`. Set of Python packages for that specific interpreter. The package set can be modified by overriding the interpreter and passing `packageOverrides`.
 
 ### Building packages and applications {#building-packages-and-applications}
@@ -656,7 +657,7 @@ are used in [`buildPythonPackage`](#buildpythonpackage-function).
 - `pythonRemoveBinBytecode` to remove bytecode from the `/bin` folder.
 - `setuptoolsBuildHook` to build a wheel using `setuptools`.
 - `sphinxHook` to build documentation and manpages using Sphinx.
-- `stestrCheckHook` to run tests with `stestr`.
+- `stestrCheckHook` to run tests with `stestr`. See [example usage](#using-stestrcheckhook).
 - `venvShellHook` to source a Python 3 `venv` at the `venvDir` location. A
   `venv` is created if it does not yet exist. `postVenvCreation` can be used to
   to run commands only after venv is first created.
@@ -1633,6 +1634,35 @@ automatically add `pythonRelaxDepsHook` if either `pythonRelaxDeps` or
 
 `pytest` is compatible with `unittest`, so in most cases you can use `pytestCheckHook` instead.
 
+#### Using stestrCheckHook {#using-stestrcheckhook}
+
+`stestrCheckHook` is a hook which will set up (or configure) a [`checkPhase`](#ssec-check-phase) to run `python -m stestr run`:
+
+```nix
+{
+  nativeCheckInputs = [ stestrCheckHook ];
+
+  stestrFlags = [
+    "--test-path"
+    "tests"
+  ];
+}
+```
+
+`stestrCheckHook` recognizes the following attributes:
+
+`disabledTests`
+
+:   To specify test IDs to exclude, matched exactly (each entry is anchored as `^<id>$`).
+
+`disabledTestsRegex`
+
+:   To specify regular expressions of test IDs to exclude, matched unanchored.
+
+`stestrFlags`
+
+:   To append additional command-line arguments to `python -m stestr run`.
+
 #### Using sphinxHook {#using-sphinxhook}
 
 The `sphinxHook` is a helpful tool to build documentation and manpages
@@ -2212,7 +2242,7 @@ The following rules are desired to be respected:
 * Make sure libraries build for all Python interpreters.
   If it fails to build on some Python versions, consider disabling them by setting `disable = pythonAtLeast "3.x"` along with a comment.
 * The two parameters, `pyproject` and `build-system` are set to avoid the legacy setuptools/distutils build.
-* Only unversioned attributes (e.g. `pydantic`, but not `pypdantic_1`) can be included in `dependencies`,
+* Only unversioned attributes (e.g. `pydantic`, but not `pydantic_1`) can be included in `dependencies`,
   since due to `PYTHONPATH` limitations we can only ever support a single version for libraries
   without running into duplicate module name conflicts.
 * The version restrictions of `dependencies` can be relaxed by [`pythonRelaxDepsHook`](#using-pythonrelaxdepshook).
@@ -2224,7 +2254,6 @@ The following rules are desired to be respected:
 * `pythonImportsCheck` is set. This is still a good smoke test even if `pytestCheckHook` is set.
 * `meta.platforms` takes the default value in many cases.
   It does not need to be set explicitly unless the package requires a specific platform.
-* The file is formatted correctly (e.g., `nix-shell --run treefmt`).
 * Commit names of Python libraries must reflect that they are Python
   libraries (e.g. `python3Packages.numpy: 1.11 -> 1.12` rather than `numpy: 1.11 -> 1.12`).
   See also [`pkgs/README.md`](https://github.com/NixOS/nixpkgs/blob/master/pkgs/README.md#commit-conventions).
@@ -2240,8 +2269,6 @@ The following rules are desired to be respected:
   should not use a name that is already used on PyPI. When possible, they should
   use the package repository name prefixed with the owner (e.g. organization) name
   and using a `-` as delimiter.
-* Attribute names in `python-packages.nix` should be sorted alphanumerically to
-  avoid merge conflicts and ease locating attributes.
 * Non-python runtime dependencies should be added via explicit wrapping or
   patching (using e.g. `substituteInPlace`), rather than through propagation via
   `dependencies`/`propagatedBuildInputs`, to reduce clutter in `$PATH`.

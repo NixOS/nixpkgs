@@ -96,7 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://github.com/complexlogic/EasyAudioSync";
     license = lib.licenses.unlicense;
-    maintainers = with lib.maintainers; [ matteopacini ];
+    maintainers = [ ];
     platforms = with lib.platforms; linux ++ darwin;
   };
 })

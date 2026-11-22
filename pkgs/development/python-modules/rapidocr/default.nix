@@ -48,7 +48,6 @@ buildPythonPackage (finalAttrs: {
   pname = "rapidocr";
   inherit version;
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "RapidAI";
@@ -94,6 +93,11 @@ buildPythonPackage (finalAttrs: {
   # It's just not plausible to manually pick out ones that actually work
   # in a hermetic build environment anymore :(
   doCheck = false;
+
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+  };
 
   meta = {
     description = "Cross platform OCR Library based on OnnxRuntime";

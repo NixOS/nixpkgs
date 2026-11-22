@@ -12,7 +12,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "wong2";
+    owner = "aisk";
     repo = "pick";
     tag = "v${finalAttrs.version}";
     hash = "sha256-/cvnDTRS3V9mk1T0zHAqdrDeRuOrnco9UF7luy687BM=";
@@ -26,9 +26,12 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Module to create curses-based interactive selection list in the terminal";
-    homepage = "https://github.com/wong2/pick";
-    changelog = "https://github.com/wong2/pick/releases/tag/${finalAttrs.src.tag}";
+    homepage = "https://github.com/aisk/pick";
+    changelog = "https://github.com/aisk/pick/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ fab ];
+    maintainers = with lib.maintainers; [
+      fab
+      aisk
+    ];
   };
 })

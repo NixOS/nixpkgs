@@ -14,7 +14,7 @@ buildOctavePackage rec {
     owner = "gnu-octave";
     repo = "octave-windows";
     tag = "release-${version}";
-    sha256 = "sha256-hr94VALlAEwpqNU7imEN63M0BdPFSu5IznhWOn/mNiQ=";
+    hash = "sha256-hr94VALlAEwpqNU7imEN63M0BdPFSu5IznhWOn/mNiQ=";
   };
 
   nativeBuildInputs = [

@@ -23,6 +23,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoBuildFlags = [
     "-p"
     "silverbullet"
+    "-p"
+    "sb"
   ];
   cargoTestFlags = finalAttrs.cargoBuildFlags;
 

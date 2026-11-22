@@ -26,7 +26,6 @@ buildPythonPackage (finalAttrs: {
   pname = "jupyter-collaboration";
   version = "5.0.4";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "jupyterlab";

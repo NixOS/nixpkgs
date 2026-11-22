@@ -3,7 +3,9 @@
   fetchFromGitHub,
   rustPlatform,
   installShellFiles,
-  gitMinimal,
+  pkg-config,
+  rust-jemalloc-sys,
+  aws-lc,
   stdenv,
   versionCheckHook,
   nix-update-script,
@@ -11,7 +13,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rumdl";
-  version = "0.2.78";
+  version = "0.3.5";
 
   __structuredAttrs = true;
 
@@ -19,10 +21,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "rvben";
     repo = "rumdl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Sr2CL1tCYrDYEQm3zcDY/3yzIjMCH1xg9tKpLovEK98=";
+    hash = "sha256-9WBThxAZi6wgiaFn1DLqyEsm+majY94vgepObrzgApg=";
   };
 
-  cargoHash = "sha256-RJ1+G7xdbcXXLdkrV4xyFKsLtxwkRAJiFu16QSXQqUc=";
+  cargoHash = "sha256-PFNjs6jAnVjbJo97CA42OKBVxVAL/r1tK+jF+pcOtcw=";
 
   cargoBuildFlags = [
     "--bin=rumdl"
@@ -30,10 +32,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     installShellFiles
+    pkg-config
   ];
 
-  nativeCheckInputs = [
-    gitMinimal
+  buildInputs = [
+    rust-jemalloc-sys
+  ];
+
+  checkInputs = [
+    aws-lc
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -77,6 +84,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       kachick
       hasnep
       faukah
+      yiyu
     ];
     mainProgram = "rumdl";
     platforms = with lib.platforms; unix ++ windows;

@@ -2,31 +2,32 @@
   lib,
   fetchFromGitLab,
   buildNpmPackage,
+  dart-sass,
   fetchNpmDeps,
   jq,
   moreutils,
-  nodejs_22,
+  nodejs_24,
 }:
 
 buildNpmPackage (finalAttrs: {
   pname = "glitchtip-frontend";
-  version = "6.2.6";
+  version = "7.0.0";
 
   src = fetchFromGitLab {
     owner = "glitchtip";
     repo = "glitchtip-frontend";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-i4ZlIyWIlRIW7bOu8Ae+3Yu84VBHacW0rnkLvd7D0Lk=";
+    hash = "sha256-ZJz/Le+EJ4ITm8xzCY+zC9LR1YIRtr+lWOCJUtFprZc=";
   };
 
-  nodejs = nodejs_22;
+  nodejs = nodejs_24;
 
   npmDepsFetcherVersion = 2;
   npmDeps = fetchNpmDeps {
     name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
     inherit (finalAttrs) src;
     fetcherVersion = 2;
-    hash = "sha256-6+YQoMEg9jTOzzOdDQoJCbuvQtaVLIm54olzxKiR+5g=";
+    hash = "sha256-UVUKWk8l/mGp6A4tZ2lTgQ4IhdJjRq2GUabqw59SxVc=";
   };
 
   postPatch = ''
@@ -38,12 +39,11 @@ buildNpmPackage (finalAttrs: {
     jq
   ];
 
-  buildPhase = ''
-    runHook preBuild
+  npmBuildScript = "build-prod";
 
-    npm run build-prod
-
-    runHook postBuild
+  preBuild = ''
+    substituteInPlace node_modules/sass-embedded/dist/lib/src/compiler-path.js \
+      --replace-fail 'compilerCommand = (() => {' 'compilerCommand = (() => { return ["${lib.getExe dart-sass}"];'
   '';
 
   installPhase = ''
@@ -60,7 +60,6 @@ buildNpmPackage (finalAttrs: {
     changelog = "https://gitlab.com/glitchtip/glitchtip-frontend/-/releases/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      defelo
       felbinger
     ];
   };

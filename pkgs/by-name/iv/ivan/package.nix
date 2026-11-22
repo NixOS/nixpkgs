@@ -8,25 +8,21 @@
   SDL2_mixer,
   alsa-lib,
   libpng,
-  pcre,
+  pcre2,
   makeDesktopItem,
   copyDesktopItems,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ivan";
-  version = "059-unstable-2025-02-20";
+  version = "059-unstable-2026-10-15";
 
   src = fetchFromGitHub {
     owner = "Attnam";
     repo = "ivan";
-    rev = "0000b8621bb767b594802e663686d3a1da2c5060";
-    hash = "sha256-vqrQozsNrqW4oqoJ4V5E15AsMEuHq+pyZz7EtiA5euE=";
+    rev = "fd169a587b19f4a53b16f2c7a920113473b2410b";
+    hash = "sha256-oNGcySuKzagORChecaXqpyinCt8lKdHSnUWa+Tbflqc=";
   };
-
-  patches = [
-    ./cmake.patch
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -39,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     SDL2_mixer
     alsa-lib
     libpng
-    pcre
+    pcre2
   ];
 
   hardeningDisable = [ "all" ];
@@ -55,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     (makeDesktopItem {
       name = finalAttrs.pname;
       exec = finalAttrs.pname;
-      icon = "ivan.png";
+      icon = "ivan";
       desktopName = "IVAN";
       genericName = finalAttrs.pname;
       categories = [

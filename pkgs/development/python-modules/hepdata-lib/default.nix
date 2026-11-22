@@ -11,7 +11,7 @@
   root,
   imagemagick,
   pytestCheckHook,
-  pytest-cov,
+  pytest-cov-stub,
   withRootSupport ? false,
 }:
 
@@ -19,7 +19,6 @@ buildPythonPackage (finalAttrs: {
   pname = "hepdata_lib";
   version = "0.21.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "HEPData";
@@ -41,7 +40,7 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     (imagemagick.override { ghostscriptSupport = true; })
-    pytest-cov
+    pytest-cov-stub
     pytestCheckHook
   ];
 

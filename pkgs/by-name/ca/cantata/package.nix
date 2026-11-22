@@ -163,13 +163,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "cantata";
-  version = "3.4.0";
+  version = "3.5.0";
 
   src = fetchFromGitHub {
     owner = "nullobsi";
     repo = "cantata";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-jwIsuNgsd1TFb1Zkyen/AulGQfVY2RWKfAJaWvg4WMI=";
+    hash = "sha256-9PGlBqV0S0EcaOTIqaWhMYMtioDQP40h152uh1RHFbo=";
   };
 
   patches = [
@@ -203,7 +203,10 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = lib.flatten (map (e: map (f: fstat e.enable f) e.names) options);
 
   qtWrapperArgs = lib.optionals (withHttpStream && !withLibVlc) [
-    "--prefix GST_PLUGIN_PATH : ${lib.makeSearchPathOutput "lib" "lib/gstreamer-1.0" gst}"
+    "--prefix"
+    "GST_PLUGIN_PATH"
+    ":"
+    (lib.makeSearchPathOutput "lib" "lib/gstreamer-1.0" gst)
   ];
 
   meta = {

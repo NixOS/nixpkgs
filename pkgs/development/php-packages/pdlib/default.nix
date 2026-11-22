@@ -6,18 +6,16 @@
   pkg-config,
   dlib,
 }:
-let
+
+buildPecl (finalAttrs: {
   pname = "pdlib";
   version = "1.1.0";
-in
-buildPecl {
-  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "goodspb";
     repo = "pdlib";
-    rev = "v${version}";
-    sha256 = "sha256-AKZ3F2XzEQCeZkacSXBinxeGQrHBmqjP7mDGQ3RBAiE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-AKZ3F2XzEQCeZkacSXBinxeGQrHBmqjP7mDGQ3RBAiE=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -30,4 +28,4 @@ buildPecl {
     homepage = "https://github.com/goodspb/pdlib";
     teams = [ lib.teams.php ];
   };
-}
+})

@@ -4,6 +4,7 @@
   makeDesktopItem,
   copyDesktopItems,
   makeWrapper,
+  jdk,
   jre,
   maven,
 }:
@@ -13,6 +14,10 @@ maven.buildMavenPackage (finalAttrs: {
   version = "0.31";
 
   __structuredAttrs = true;
+
+  # Some tests start telnet servers on localhost, which is blocked by the
+  # darwin build sandbox by default.
+  __darwinAllowLocalNetworking = true;
 
   src = fetchFromGitHub {
     owner = "hneemann";
@@ -26,8 +31,11 @@ maven.buildMavenPackage (finalAttrs: {
   # provide that version number manually as a property.
   # (see https://github.com/hneemann/Digital/issues/289#issuecomment-513721481)
   # Also use the v0.31 commit date as a build and output timestamp.
-  mvnParameters = "-Pno-git-rev -Dgit.commit.id.describe=${finalAttrs.version} -Dproject.build.outputTimestamp=2024-09-03T14:02:31+02:00 -DbuildTimestamp=2024-09-03T14:02:31+02:00";
-  mvnHash = "sha256-qFJvpxK6PDmMfeL5fKVHUzK2NRLcQhQ3PJbwv2hYZqY=";
+  mvnParameters = "-Pno-git-rev -Dgit.commit.id.describe=v${finalAttrs.version} -Dproject.build.outputTimestamp=2024-09-03T14:02:31+02:00 -DbuildTimestamp=2024-09-03T14:02:31+02:00";
+  mvnHash = "sha256-g6gev7ZVhQSzPgUj496E/QjQnQ3rIcBq4o8a/r5x8FA=";
+
+  # SVG export and shape tests need AWT, missing from maven's default jdk_headless
+  mvnJdk = jdk;
 
   nativeBuildInputs = [
     copyDesktopItems

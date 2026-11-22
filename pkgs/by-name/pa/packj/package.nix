@@ -2,6 +2,7 @@
   lib,
   python3,
   fetchFromGitHub,
+  writableTmpDirAsHomeHook,
 }:
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
@@ -16,13 +17,10 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     hash = "sha256-OWcJE2Gtjgoj9bCGZcHDfAFLWRP4wdENeJAnILMdUXY=";
   };
 
-  preBuild = ''
-    export HOME=$(mktemp -d)
-  '';
-
   nativeBuildInputs = with python3.pkgs; [
     setuptools
     wheel
+    writableTmpDirAsHomeHook
   ];
 
   propagatedBuildInputs = with python3.pkgs; [

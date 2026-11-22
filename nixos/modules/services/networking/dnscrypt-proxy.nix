@@ -9,6 +9,7 @@ let
 
   cfg = config.services.dnscrypt-proxy;
   settingsFormat = pkgs.formats.toml { };
+  jsonFormat = pkgs.formats.json { };
 
 in
 
@@ -61,8 +62,7 @@ in
       default =
         pkgs.runCommand "dnscrypt-proxy.toml"
           {
-            json = builtins.toJSON cfg.settings;
-            passAsFile = [ "json" ];
+            jsonPath = jsonFormat.generate "settings.json" cfg.settings;
           }
           ''
             ${

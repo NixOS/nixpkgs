@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "oscar";
-  version = "2.1.0";
+  version = "2.1.1";
 
   src = fetchFromGitLab {
     owner = "CrimsonNape";
     repo = "oscar-sql";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-iRXOqCH3VZsUVWRifHcqyBd1q4oGKKeze/H1cGJt0k4=";
+    hash = "sha256-wJICuj9uhbgmdDQVLtFXZgXx4si1WjeLRRr17pXcGfI=";
   };
 
   nativeBuildInputs = [

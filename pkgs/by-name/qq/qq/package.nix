@@ -210,8 +210,8 @@ else
         cp -r opt $out/opt
         cp -r usr/share $out/share
         substituteInPlace $out/share/applications/qq.desktop \
-          --replace-fail "/opt/QQ/qq" "$out/bin/qq" \
-          --replace-fail "/usr/share" "$out/share"
+          --replace-fail "Exec=/opt/QQ/qq" "Exec=qq" \
+          --replace-fail "Icon=/usr/share/icons/hicolor/512x512/apps/qq.png" "Icon=qq"
         makeShellWrapper $out/opt/QQ/qq $out/bin/qq \
           --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
           --prefix LD_PRELOAD : "${lib.makeLibraryPath [ libssh2 ]}/libssh2.so.1" \

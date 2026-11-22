@@ -2,6 +2,7 @@
   buildDotnetModule,
   dotnetCorePackages,
   fetchFromGitHub,
+  fetchpatch2,
   fetchYarnDeps,
   lib,
   nix-update-script,
@@ -16,17 +17,30 @@
 }:
 buildDotnetModule (finalAttrs: {
   pname = "whisparr";
-  version = "3.6.4-release.1865";
+  version = "3.6.5-release.1886";
 
   src = fetchFromGitHub {
     owner = "Whisparr";
     repo = "Whisparr-Eros";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PCEzbJykKOr3hFzdxB4VMDKhtX89uSdFt/Q2Khvn4Eg=";
+    hash = "sha256-evJ4wJynWKK4WK3m1/QMd5hfEr4yaSu5tcAYVGhbw+c=";
   };
 
   __structuredAttrs = true;
   strictDeps = true;
+
+  patches = [
+    # https://github.com/Whisparr/Whisparr-Eros/pull/1039
+    (fetchpatch2 {
+      name = "remove-trakt-connection.patch";
+      url = "https://github.com/Whisparr/Whisparr-Eros/commit/3881db749d6edbd14599eabab34c4dd2c594df77.patch?full_index=1";
+      includes = [
+        "src/NzbDrone.Core.Test/NotificationTests/TraktTests/*"
+        "src/NzbDrone.Core/Notifications/Trakt/*"
+      ];
+      hash = "sha256-IulnlR6zS+22d6g7yVaFv5Y4GhprOSSC9oUe3eicmPg=";
+    })
+  ];
 
   postPatch = "mv src/NuGet.config NuGet.Config";
 
@@ -109,7 +123,7 @@ buildDotnetModule (finalAttrs: {
 
       yarnOfflineCache = fetchYarnDeps {
         yarnLock = "${finalAttrs.src}/yarn.lock";
-        hash = "sha256-ROqqIz31tnmkpKUZmKsx3FDYzFluUMH5S3srktwcMCM=";
+        hash = "sha256-wsHtPZ2K5+fBRAVUuqk81jip37NHG0rV0DojfejiR1o=";
       };
 
       installPhase = ''

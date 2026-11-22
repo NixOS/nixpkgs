@@ -3,10 +3,12 @@
   lib,
   bash,
   installShellFiles,
+  runCommand,
   buildPackages,
+  nixosTests,
 }:
 
-stdenvNoCC.mkDerivation {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "nixos-firewall-tool";
   version = lib.trivial.release;
   src = builtins.filterSource (name: _: !(lib.hasSuffix ".nix" name)) ./.;
@@ -14,7 +16,6 @@ stdenvNoCC.mkDerivation {
   strictDeps = true;
   buildInputs = [ bash ];
   nativeBuildInputs = [ installShellFiles ];
-  nativeCheckInputs = [ buildPackages.shellcheck-minimal ];
 
   postPatch = ''
     patchShebangs --host nixos-firewall-tool
@@ -26,10 +27,13 @@ stdenvNoCC.mkDerivation {
     installShellCompletion nixos-firewall-tool.{bash,fish}
   '';
 
-  doCheck = buildPackages.shellcheck-minimal.compiler.bootstrapAvailable;
-  checkPhase = ''
-    shellcheck nixos-firewall-tool
-  '';
+  passthru.tests = {
+    shellcheck = runCommand "nixos-firewall-tool-shellcheck" { } ''
+      ${lib.getExe buildPackages.shellcheck-minimal} ${finalAttrs.src}/nixos-firewall-tool
+      touch $out
+    '';
+    inherit (nixosTests) firewall firewall-nftables;
+  };
 
   meta = {
     description = "Tool to temporarily manipulate the NixOS firewall";
@@ -42,4 +46,4 @@ stdenvNoCC.mkDerivation {
     platforms = lib.platforms.linux;
     mainProgram = "nixos-firewall-tool";
   };
-}
+})

@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     owner = "felixr";
     repo = "urxvt-theme-switch";
     rev = "cfcbcc3dd5a5b09a3fec0f6a1fea95f4a36a48c4";
-    sha256 = "0x27m1vdqprn3lqpwgxvffill7prmaj6j9rhgvkvi13mzl5wmlli";
+    hash = "sha256-kdLKC/11hLjnfjAnaaSq+R5Ko3O7P34xHTZf3HaoR3Q=";
   };
 
   installPhase = ''

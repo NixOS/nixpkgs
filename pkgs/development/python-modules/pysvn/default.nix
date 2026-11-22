@@ -8,7 +8,7 @@
   aprutil,
   bash,
   gcc,
-  pycxx,
+  cxx,
   subversion,
 }:
 
@@ -37,9 +37,9 @@ buildPythonPackage rec {
     ${python.pythonOnBuildForHost.interpreter} setup.py configure \
       --apr-inc-dir=${apr.dev}/include \
       --apu-inc-dir=${aprutil.dev}/include \
-      --pycxx-dir=${pycxx.dev}/include \
+      --pycxx-dir=${cxx.dev}/include \
       --svn-inc-dir=${subversion.dev}/include/subversion-1 \
-      --pycxx-src-dir=${pycxx.dev}/src \
+      --pycxx-src-dir=${cxx.dev}/src \
       --apr-lib-dir=${apr.out}/lib \
       --svn-lib-dir=${subversion.out}/lib \
       --svn-bin-dir=${subversion.out}/bin

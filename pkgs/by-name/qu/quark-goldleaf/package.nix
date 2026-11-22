@@ -33,7 +33,7 @@ maven.buildMavenPackage rec {
   ];
 
   mvnJdk = jdk';
-  mvnHash = "sha256-gA3HsQZFa2POP9cyJLb1l8t3hrJYzDowhJU+5Xl79p4=";
+  mvnHash = "sha256-aozN9hAVBC805EIaU3IzNGJaR+oKkWshJdzutWODBT4=";
 
   # set fixed build timestamp for deterministic jar
   mvnParameters = "-Dproject.build.outputTimestamp=1980-01-01T00:00:02Z";

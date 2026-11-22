@@ -3,6 +3,7 @@
   rustPlatform,
   fetchFromGitHub,
   just,
+  aws-lc,
   openssl,
   pkg-config,
   runCommand,
@@ -26,7 +27,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl ];
+  buildInputs = [
+    aws-lc
+    openssl
+  ];
 
   cargoHash = "sha256-Cii5zW7U7dQmKvZp5zjEvWAc60XdDCMRRIRcwvx728E=";
 

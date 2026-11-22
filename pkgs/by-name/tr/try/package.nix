@@ -14,13 +14,13 @@
 }:
 stdenv.mkDerivation {
   pname = "try";
-  version = "0.2.0-unstable-2025-02-25";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "binpash";
     repo = "try";
-    rev = "67052d8f20725f3cdc22ffaec33f7b7c14f1eb6b";
-    hash = "sha256-8mfCmqN50pRAeNTJUlRVrRQulWon4b2OL4Ug/ygBhB0=";
+    tag = "v0.2.1";
+    hash = "sha256-BWCe2oHRUmyLnVdh1BOsVXlmopvSH/N1ux2/YglK21Q=";
   };
 
   # skip TRY_REQUIRE_PROG as it detects executable dependencies by running it
@@ -57,9 +57,6 @@ stdenv.mkDerivation {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  preVersionCheck = ''
-    export version=0.2.0
-  '';
   versionCheckProgramArg = "-v";
 
   meta = {

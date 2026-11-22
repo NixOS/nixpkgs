@@ -49,6 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
+    broken = true; # stuck on fuse2
     homepage = "https://github.com/haiwen/seadrive-fuse";
     description = "SeaDrive daemon with FUSE interface";
     changelog = "https://github.com/haiwen/seadrive-fuse/releases/tag/v${finalAttrs.version}";

@@ -5,14 +5,14 @@
   version,
 
   copyDesktopItems,
-  flutter,
+  flutter347,
   lib,
   makeDesktopItem,
   libx11,
   runCommand,
   yq-go,
 }:
-flutter.buildFlutterApplication {
+flutter347.buildFlutterApplication {
   pname = "nordvpn-gui";
   inherit src version;
 

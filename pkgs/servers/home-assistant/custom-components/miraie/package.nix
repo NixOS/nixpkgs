@@ -10,13 +10,13 @@
 buildHomeAssistantComponent rec {
   owner = "rkzofficial";
   domain = "miraie";
-  version = "1.1.8";
+  version = "1.1.9";
 
   src = fetchFromGitHub {
     owner = "rkzofficial";
     repo = "ha-miraie-ac";
     tag = "v${version}";
-    hash = "sha256-yBVPxhRPjbzcdXsks3pTLbjb0rJ4fuItrN8c7xNbErM=";
+    hash = "sha256-sfypmIQwyra2+MK800rzJyd7rZMGig4P20TSA8G86i4=";
   };
 
   dependencies = [

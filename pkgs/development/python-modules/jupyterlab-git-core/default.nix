@@ -34,7 +34,6 @@ buildPythonPackage (finalAttrs: {
   pname = "jupyterlab-git-core";
   version = "0.54.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "jupyterlab";

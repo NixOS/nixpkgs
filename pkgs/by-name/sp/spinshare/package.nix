@@ -7,11 +7,11 @@
 
 let
   pname = "spinshare";
-  version = "3.32.1";
+  version = "3.35.1";
 
   src = fetchurl {
     url = "https://github.com/SpinShare/client-next/releases/download/v${version}/SpinShare-${version}-x64.AppImage";
-    hash = "sha256-LJjMel0CsvBf+IgyH7DArj/1oWk/dKpPa1aIED69yeE=";
+    hash = "sha256-INAWYTzMCbtldkaruQFZN2CqkULbrSA6xzmb9IfvvCg=";
   };
 
   appimageContents = appimageTools.extract {

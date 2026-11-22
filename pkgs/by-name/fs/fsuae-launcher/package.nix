@@ -1,30 +1,34 @@
 {
   lib,
-  fetchurl,
+  fetchFromGitHub,
   fsuae,
   gettext,
   python3Packages,
   stdenv,
-  libsForQt5,
+  kdePackages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fs-uae-launcher";
-  version = "3.1.70";
+  version = "3.2.35";
 
-  src = fetchurl {
-    url = "https://fs-uae.net/files/FS-UAE-Launcher/Stable/${finalAttrs.version}/fs-uae-launcher-${finalAttrs.version}.tar.xz";
-    hash = "sha256-yvJ8sa44V13SEUJ6C9SgS+N2ZFH5+20TTL2ICY9A36c=";
+  src = fetchFromGitHub {
+    owner = "FrodeSolheim";
+    repo = "fs-uae-launcher";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ggzius1jVtjWerzBpY5oLcPqymN9IVDCwQz+bW9igGg=";
   };
 
   nativeBuildInputs = [
     gettext
+    kdePackages.qtbase
+    kdePackages.wrapQtAppsHook
     python3Packages.python
-    libsForQt5.wrapQtAppsHook
+    python3Packages.pyopengl
   ];
 
   buildInputs = with python3Packages; [
-    pyqt5
+    pyqt6
     requests
     setuptools
   ];

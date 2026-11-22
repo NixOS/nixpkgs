@@ -24,8 +24,6 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   version = "0.0.9.post1";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "fzyzcjy";
     repo = "torch_memory_saver";

@@ -12,6 +12,7 @@
   libxkbcommon,
   pkg-config,
   qt6,
+  rust-jemalloc-sys,
   wayland,
 
   autoPatchelfHook,
@@ -20,20 +21,21 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "slint-viewer";
-  version = "1.18.1";
+  version = "1.19.0";
 
   src = fetchCrate {
     inherit (finalAttrs) pname version;
-    hash = "sha256-MlYBkJl8MupzpTfyjmlLlfpYqFWHg3lll7x87leB5iY=";
+    hash = "sha256-1oazE2WEuEgRr6tJVBy89VqPc3A0jZ+qCYdtgx+NCwg=";
   };
 
-  cargoHash = "sha256-qEXy0uaQFY5fu5Gtpsk+7oW6jtFTK4N/y4aK8ruplI8=";
+  cargoHash = "sha256-UyYmXHejolkBuN9Q5pxyvfBCuaqkq3wSq19JMhrXlxA=";
 
   buildInputs = [
     qt6.qtbase
     qt6.qtsvg
     fontconfig
     libGL
+    rust-jemalloc-sys
   ];
 
   buildFeatures = [ "gettext" ];

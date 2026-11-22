@@ -113,7 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
     pcre2
     libxcrypt
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     expat
     zlib
   ]

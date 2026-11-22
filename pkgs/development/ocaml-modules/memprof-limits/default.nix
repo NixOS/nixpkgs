@@ -12,7 +12,7 @@ buildDunePackage (finalAttrs: {
   src = fetchFromGitLab {
     owner = "gadmm";
     repo = "memprof-limits";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Pmuln5TihPoPZuehZlqPfERif6lf7O+0454kW9y3aKc=";
   };
 

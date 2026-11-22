@@ -29,7 +29,6 @@ buildPythonPackage (finalAttrs: {
   pname = "swcgeom";
   version = "0.21.6";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "yzx9";

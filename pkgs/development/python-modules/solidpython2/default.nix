@@ -37,7 +37,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "solid2" ];
   checkPhase = ''
     runHook preCheck
-    python $TMPDIR/source/tests/run_tests.py
+    # the tests read $src from the environment, which structuredAttrs doesn't export
+    src="$src" python $TMPDIR/source/tests/run_tests.py
     runHook postCheck
   '';
 

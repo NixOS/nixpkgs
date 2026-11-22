@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fluida-lv2";
-  version = "0.9.5";
+  version = "0.9.6";
 
   src = fetchFromGitHub {
     owner = "brummer10";
@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     # submodule: https://github.com/brummer10/libxputty.git
     fetchSubmodules = true;
-    hash = "sha256-5Oud5s81DIc7p/GAJT3i8FHHBh4y9uJqOxfchmX1nE4=";
+    hash = "sha256-n6eQGOTAXBRmSAXLdf9/zDWd8mq1z2D0w/784FQtO1A=";
   };
 
   nativeBuildInputs = [

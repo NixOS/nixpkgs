@@ -145,9 +145,25 @@ let
 
   # Discover configured detectors for acceleration support
   detectors = attrValues cfg.settings.detectors or { };
-  withCoralUSB = any (d: d.type == "edgetpu" && hasPrefix "usb" d.device or "") detectors;
-  withCoralPCI = any (d: d.type == "edgetpu" && hasPrefix "pci" d.device or "") detectors;
+  hasDetector =
+    {
+      type,
+      devicePrefix ? null,
+    }:
+    any (
+      d: d.type == type && (devicePrefix == null || hasPrefix devicePrefix (d.device or ""))
+    ) detectors;
+
+  withCoralUSB = hasDetector {
+    type = "edgetpu";
+    devicePrefix = "usb";
+  };
+  withCoralPCI = hasDetector {
+    type = "edgetpu";
+    devicePrefix = "pci";
+  };
   withCoral = withCoralPCI || withCoralUSB;
+  withOpenVINO = hasDetector { type = "openvino"; };
 in
 
 {
@@ -284,7 +300,6 @@ in
       additionalModules = with pkgs.nginxModules; [
         develkit
         rtmp
-        secure-token
         set-misc
         vod
       ];
@@ -321,6 +336,8 @@ in
             recommendedProxySettings = true;
             extraConfig = ''
               internal;
+              # $go2rtc_stream_proxy is only set by the go2rtc stream locations
+              uninitialized_variable_warn off;
 
               # Strip all request headers
               proxy_pass_request_headers off;
@@ -328,6 +345,9 @@ in
               # Pass info about the request
               proxy_set_header X-Original-Method $request_method;
               proxy_set_header X-Original-URL $scheme://$http_host$request_uri;
+              # set by the go2rtc stream locations; client headers are not forwarded, so
+              # this cannot be spoofed
+              proxy_set_header X-Go2rtc-Stream-Proxy $go2rtc_stream_proxy;
               proxy_set_header X-Server-Port $server_port;
               proxy_set_header Content-Length "";
 
@@ -370,21 +390,24 @@ in
               # Smaller segments, faster generation, better browser compatibility
               vod_hls_container_format fmp4;
 
-              secure_token $args;
-              secure_token_types application/vnd.apple.mpegurl;
+              # fMP4 playlists use EXT-X-MAP, which requires HLS protocol
+              # version 6 (RFC 8216 section 7); the module default is 4
+              vod_hls_version 6;
+
+              # Pass the playlist's query args (e.g. Home Assistant's authSig) on
+              # to every URL in it. These match the only URL endings vod writes
+              # with fmp4 and no subtitles.
+              sub_filter_types application/vnd.apple.mpegurl;
+              sub_filter_once off;
+              sub_filter '.m3u8' '.m3u8$is_args$args';
+              sub_filter '.m4s' '.m4s$is_args$args';
+              sub_filter '.mp4"' '.mp4$is_args$args"';
 
               add_header Cache-Control "no-store";
               expires off;
 
               keepalive_disable safari;
-
-              # vod module returns 502 for non-existent media
-              # https://github.com/kaltura/nginx-vod-module/issues/468
-              error_page 502 =404 /vod-not-found;
             '';
-          };
-          "/vod-not-found" = {
-            return = 404;
           };
           "/stream/" = {
             alias = "/var/cache/frigate/stream/";
@@ -464,6 +487,8 @@ in
               nginxAuthRequest
               + nginxProxySettings
               + ''
+                # tells /auth to apply the go2rtc stream checks
+                set $go2rtc_stream_proxy 1;
                 limit_except GET {
                     deny  all;
                 }
@@ -477,6 +502,8 @@ in
               nginxAuthRequest
               + nginxProxySettings
               + ''
+                # tells /auth to apply the go2rtc stream checks
+                set $go2rtc_stream_proxy 1;
                 limit_except GET {
                     deny  all;
                 }
@@ -504,6 +531,8 @@ in
               nginxAuthRequest
               + nginxProxySettings
               + ''
+                # tells /auth to apply the go2rtc stream checks
+                set $go2rtc_stream_proxy 1;
                 limit_except POST {
                     deny  all;
                 }
@@ -637,7 +666,6 @@ in
           listen 127.0.0.1:5000;
 
           # vod settings
-          vod_hls_version 6;
           vod_base_url "";
           vod_segments_base_url "";
           vod_mode mapped;
@@ -723,7 +751,10 @@ in
         "multi-user.target"
       ];
       environment = {
-        CONFIG_FILE = "/run/frigate/frigate.yml";
+        # Frigate keeps some of its persistent runtime state in a file next to the configuration,
+        # so the config must also live in persistent storage (even though we overwrite it on every
+        # startup.)
+        CONFIG_FILE = "/var/lib/frigate/frigate.yml";
         HOME = "/var/lib/frigate";
         PYTHONPATH = cfg.package.pythonPath;
       }
@@ -752,7 +783,7 @@ in
             ${lib.getExe pkgs.findutils} /var/cache/frigate -not -path '/var/cache/frigate/model_cache/*' -type f -delete
           '')
           (pkgs.writeShellScript "frigate-create-writable-config" ''
-            cp --no-preserve=mode ${configFile} /run/frigate/frigate.yml
+            cp --no-preserve=mode ${configFile} "$CONFIG_FILE"
           '')
         ]
         ++ lib.optionals (!config.systemd.services.frigate.environment ? LIBAVFORMAT_VERSION_MAJOR) [
@@ -764,6 +795,7 @@ in
         ];
         EnvironmentFile = [ "-/run/frigate/ffmpeg-env" ];
         ExecStart = "${cfg.package.python.interpreter} -m frigate";
+        KillMode = "mixed";
         Restart = "on-failure";
         SyslogIdentifier = "frigate";
 
@@ -809,8 +841,9 @@ in
         ProtectKernelTunables = true;
         ProtectSystem = "strict";
 
-        # No JIT compilation
-        MemoryDenyWriteExecute = true;
+        # OpenVINO calls `mprotect(PROT_READ|PROT_WRITE|PROT_EXEC)` as confirmed by strace. See
+        # #575222.
+        MemoryDenyWriteExecute = !withOpenVINO;
 
         # No ABI personality changes
         LockPersonality = true;

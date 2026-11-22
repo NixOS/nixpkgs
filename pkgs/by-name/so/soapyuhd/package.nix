@@ -9,17 +9,19 @@
   soapysdr,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "soapyuhd";
-  version = "0.4.1-unstable-2026-09-25";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "pothosware";
     repo = "SoapyUHD";
-    # includes get_stream_info() overrides needed for UHD >= 4.11
-    rev = "c695089c9d139f90465d2025d8dcb2ef26fa00f0";
-    hash = "sha256-uGPCmjSHI8dx4//tacuHLNPwDImoacvcKHplYyNpLao=";
+    tag = "soapy-uhd-${finalAttrs.version}";
+    hash = "sha256-keIZysr40LAscSKyfbSFQ4+t9oiPjwS4RbXr8Mgb2cc=";
   };
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
     cmake
@@ -44,4 +46,4 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [ markuskowa ];
     platforms = lib.platforms.unix;
   };
-}
+})

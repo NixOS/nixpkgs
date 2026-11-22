@@ -9,11 +9,11 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "maven";
-  version = "3.9.16";
+  version = "3.10.1";
 
   src = fetchurl {
     url = "mirror://apache/maven/maven-3/${finalAttrs.version}/binaries/apache-maven-${finalAttrs.version}-bin.tar.gz";
-    hash = "sha256-gP/KIq7Z6LlxOiMvM5T9gdfyAyLfde/bKwR9vT46I7s=";
+    hash = "sha256-gQuDSPCkD5EWwgIJP64Afr6r9naZvzTYHuficiieCFo=";
   };
 
   sourceRoot = ".";
@@ -59,6 +59,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         );
     in
     {
+      jdk = jdk_headless;
+
       buildMaven = callPackage ./build-maven.nix {
         maven = finalAttrs.finalPackage;
       };

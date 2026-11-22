@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "0.2.37";
 
   src = fetchFromGitHub {
-    owner = "HigherOrderCO";
+    owner = "bendlang";
     repo = "Bend";
     tag = finalAttrs.version;
     hash = "sha256-8uBEI9GKUETk8t6Oanb0OECe3MlJ486QnccOuhIxPuY=";

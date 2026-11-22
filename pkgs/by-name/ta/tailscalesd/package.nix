@@ -15,7 +15,12 @@ buildGoModule (finalAttrs: {
     hash = "sha256-FaM2kr3fBC1R2Kgvf5xz4zAw8JQGOmN3fQhHayB/Zs0=";
   };
 
-  vendorHash = "sha256-/nmX0Zqwda5LRC9cmLneU1NJa/VL8vgG284BtjiNTbE=";
+  patches = [
+    # https://github.com/cfunkhouser/tailscalesd/pull/39
+    ./go-1.27.patch
+  ];
+
+  vendorHash = "sha256-zTuN7CtujEJbDbQJgPJqvRXVDMVw3gp0J3hG4F3CXu8=";
 
   meta = {
     description = "Prometheus Service Discovery for Tailscale";

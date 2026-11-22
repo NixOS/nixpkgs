@@ -18,10 +18,10 @@
   withAnthy ? true,
   anthy,
   withGtk ? true,
-  withGtk2 ? withGtk,
-  gtk2,
   withGtk3 ? withGtk,
   gtk3,
+  withGtk4 ? withGtk,
+  gtk4,
   # Was never enabled in the history of this package and is not needed by any
   # dependent package, hence disabled to save up closure size.
   withQt ? false,
@@ -43,12 +43,12 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.9.6";
+  version = "1.9.9";
   pname = "uim";
 
   src = fetchurl {
     url = "https://github.com/uim/uim/releases/download/${finalAttrs.version}/uim-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-Z/Dl+kKSpTPtxvmLhC32DFMaic+C0DNqThq3IgKrjIM=";
+    hash = "sha256-Vkv1pFRMyaBbVRinj/yAWvMd0FgD1r2XO9sQ5xIVzVY=";
     meta = {
       homepage = "https://github.com/uim/uim/";
     };
@@ -76,8 +76,8 @@ stdenv.mkDerivation (finalAttrs: {
     expat
   ]
   ++ lib.optional withAnthy anthy
-  ++ lib.optional withGtk2 gtk2
   ++ lib.optional withGtk3 gtk3
+  ++ lib.optional withGtk4 gtk4
   ++ lib.optionals withQt5 [
     qt5.qtbase
     qt5.qtx11extras
@@ -112,8 +112,8 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-expat=${expat.dev}"
   ]
   ++ lib.optional withAnthy "--with-anthy-utf8"
-  ++ lib.optional withGtk2 "--with-gtk2"
   ++ lib.optional withGtk3 "--with-gtk3"
+  ++ lib.optional withGtk4 "--with-gtk4"
   ++ lib.optionals withQt5 [
     "--with-qt5"
     "--with-qt5-immodule"

@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   # build-system
-  cython_3_3,
+  cython,
   setuptools,
 
   # nativeBuildInputs
@@ -26,7 +26,6 @@ buildPythonPackage (finalAttrs: {
   pname = "av";
   version = "19.0.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "PyAV-Org";
@@ -36,7 +35,7 @@ buildPythonPackage (finalAttrs: {
   };
 
   build-system = [
-    cython_3_3
+    cython
     setuptools
   ];
 

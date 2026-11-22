@@ -165,6 +165,7 @@ def main(pkgset: str, version: str, nixpkgs: pathlib.Path, sources_url: str | No
             f"kdePackages.{project_name}",
             "--version",
             "skip",
+            "--no-src",
             "--override-filename",
             pkg_file
         ])

@@ -39,13 +39,13 @@ assert lib.asserts.assertOneOf "pageSizeKiB" (toString pageSizeKiB) (
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jemalloc";
-  version = "5.3.1";
+  version = "5.4.0";
 
   src = fetchFromGitHub {
     owner = "jemalloc";
     repo = "jemalloc";
     tag = finalAttrs.version;
-    hash = "sha256-uGQppR2LS/Hhx4eWnavPDW3tzMyI1Df4XYrWEMQwBuw=";
+    hash = "sha256-T3f+BWk+/LeB2Ul7If7TqtJH7qYLq53CcYaU82EMeSg=";
   };
 
   patches = [
@@ -61,16 +61,6 @@ stdenv.mkDerivation (finalAttrs: {
     # A (longer) patch addressing the failure posted upstream at:
     # https://github.com/jemalloc/jemalloc/pull/2954
     ./skip-extent-test-with-prof-active.patch
-
-    # the nonstandard `std::__throw_bad_alloc` is no longer exposed in gcc 16.
-    # this makes it conditional on exceptions and defers to either
-    # `throw std::bad_alloc()` or `std::terminate` as appropriate.
-    # https://github.com/jemalloc/jemalloc/pull/2900
-    (fetchpatch {
-      name = "jemalloc-dont-use-nonstandard-throw-bad-alloc.patch";
-      url = "https://github.com/jemalloc/jemalloc/commit/1a15fe33a48c52bfe26ea83e49f0d317a47da3ea.patch";
-      hash = "sha256-pL9fo8UMSbFlHCo3LFFkw0qBsdrVHcEJIkLutZYa2Yg=";
-    })
   ];
 
   nativeBuildInputs = [
@@ -97,10 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
   # https://sources.debian.org/src/jemalloc/5.3.0-3/debian/rules/
   ++ [
     "--with-lg-page=${toString pageSizeMap."${toString pageSizeKiB}"}"
-  ]
-  # See https://github.com/jemalloc/jemalloc/issues/1997
-  # Using a value of 48 should work on both emulated and native x86_64-darwin.
-  ++ lib.optional (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) "--with-lg-vaddr=48";
+  ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-Wno-error=array-bounds";
 

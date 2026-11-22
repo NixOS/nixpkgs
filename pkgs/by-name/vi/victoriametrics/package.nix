@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGo127Module,
   fetchFromGitHub,
   nix-update-script,
@@ -14,16 +15,18 @@
 
 buildGo127Module (finalAttrs: {
   pname = "VictoriaMetrics";
-  version = "1.154.0";
+  version = "1.156.0";
 
   src = fetchFromGitHub {
     owner = "VictoriaMetrics";
     repo = "VictoriaMetrics";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1c9hltpsAg7tHa+h0ROMql6Zc+Q2yTSULBtzf8RPlaE=";
+    hash = "sha256-J+3D/Ly+bD+ZrAQ/3lNkTikFDfhkaaCAR2YKi7wEf4k=";
   };
 
   vendorHash = null;
+  # Match upstream release builds: CGO is enabled on Linux amd64 and arm64.
+  env.CGO_ENABLED = if with stdenv.hostPlatform; isLinux && (isx86_64 || isAarch64) then "1" else "0";
 
   subPackages =
     lib.optionals withServer [

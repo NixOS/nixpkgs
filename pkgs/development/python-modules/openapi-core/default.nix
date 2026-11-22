@@ -34,7 +34,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "p1c2u";
+    owner = "python-openapi";
     repo = "openapi-core";
     tag = version;
     hash = "sha256-wGaRx+IEqsvs7ygCDgh1H4di662SQhjmpB9LMP/YGKM=";

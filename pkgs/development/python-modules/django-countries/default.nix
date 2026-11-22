@@ -50,6 +50,11 @@ buildPythonPackage rec {
     pytest-django
   ];
 
+  disabledTests = [
+    # timing sensitive
+    "test_iter_caching"
+  ];
+
   meta = {
     description = "Provides a country field for Django models";
     longDescription = ''

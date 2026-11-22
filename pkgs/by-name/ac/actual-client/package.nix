@@ -2,7 +2,7 @@
   lib,
   actual-server,
   copyDesktopItems,
-  electron_42,
+  electron_43,
   imagemagick,
   jq,
   makeDesktopItem,
@@ -11,7 +11,7 @@
   stdenv,
 }:
 let
-  electron = electron_42;
+  electron = electron_43;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "actual-client";

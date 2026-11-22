@@ -10,13 +10,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "llama-index-vector-stores-qdrant";
-  version = "0.10.3";
+  version = "0.11.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "llama_index_vector_stores_qdrant";
     inherit (finalAttrs) version;
-    hash = "sha256-S3t/6kLcpFNhbHbo/LcsyqctVSf1N3SlSVdJJ/PDzyY=";
+    hash = "sha256-Coq64BkB+49Cv+LMLtqpnOqDTAWyqUOxwlXo6dYgwbQ=";
   };
 
   build-system = [ hatchling ];

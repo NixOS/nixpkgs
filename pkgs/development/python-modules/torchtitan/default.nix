@@ -8,41 +8,44 @@
   setuptools,
 
   # dependencies
+  attn-gym,
   datasets,
   einops,
+  grain,
   pillow,
+  pyarrow,
+  renderers,
   safetensors,
   spmd-types,
   tensorboard,
   tokenizers,
   torch,
   torch-checkpointing,
-  torchdata,
-  transformers,
-  tyro,
+  torch-remat,
   wandb,
 
   # tests
   expecttest,
   flash-linear-attention,
+  gitMinimal,
   pytestCheckHook,
   tomli-w,
   torchvision,
+  transformers,
   triton,
   writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "torchtitan";
-  version = "0.3.0";
+  version = "0.4.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "torchtitan";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Wkhx1uGgzCLMiBDS2h7V6NVcaJYcSyDXkZkn2hUbgHE=";
+    hash = "sha256-I3zy0FpOV38S0ZdmIT2FKEMTkfzcAuVmzP7MZ5HILdE=";
   };
 
   build-system = [
@@ -50,28 +53,40 @@ buildPythonPackage (finalAttrs: {
   ];
 
   pythonRelaxDeps = [
+    "attn-gym"
+    "datasets"
+    "grain"
+    "pyarrow"
+    "renderers"
     "spmd_types"
+    "torch_checkpointing"
+    "torch_remat"
   ];
   dependencies = [
+    attn-gym
     datasets
     einops
+    grain
     pillow
+    pyarrow
+    renderers
     safetensors
     spmd-types
     tensorboard
     tokenizers
     torch
     torch-checkpointing
-    torchdata
-    tyro
+    torch-remat
     wandb
-  ];
+  ]
+  ++ attn-gym.optional-dependencies.linear;
 
   pythonImportsCheck = [ "torchtitan" ];
 
   nativeCheckInputs = [
     expecttest
     flash-linear-attention
+    gitMinimal
     pytestCheckHook
     tomli-w
     torchvision
@@ -84,6 +99,15 @@ buildPythonPackage (finalAttrs: {
     # Require internet access
     "test_list_files"
 
+    # The HF dataset cursor state differs with the (relaxed) datasets version from nixpkgs
+    "test_hf_cursor_state_after_restore"
+
+    # Outdated tests: _prepare_multimodal_embeds() missing 2 required keyword-only arguments
+    "test_qwen35_always_calls_vision_encoder_twice"
+
+    # AssertionError: assert I == R
+    "test_qwen35_vision_projections_are_not_dense_tp_boundaries"
+
     # Require helion, but it is broken at the moment
     "TestHelionRoPEOverride"
   ]
@@ -93,8 +117,17 @@ buildPythonPackage (finalAttrs: {
   ];
 
   disabledTestPaths = [
+    # Require the RL dependencies (torchmonarch, torchstore, vllm...)
+    "tests/rl"
+
+    # Require a GPU
+    "tests/unit_tests/gpu"
+
+    # Require a torchao nightly
+    "tests/unit_tests/cpu/quantization"
+
     # Require internet access
-    "tests/unit_tests/test_tokenizer.py"
+    "tests/unit_tests/cpu/components/test_tokenizer.py"
   ];
 
   meta = {

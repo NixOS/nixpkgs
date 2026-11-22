@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "Vifon";
     repo = "autocomplete-ALL-the-things";
     rev = version;
-    sha256 = "06xd59c6gd9rglwq4km93n2p078k7v4x300lqrg1f32vvnjvs7sr";
+    hash = "sha256-WR+9pd1bDBdexhSA0ck+Ex1whR2pToI5fTm1Z1gqrRs=";
   };
 
   installPhase = ''

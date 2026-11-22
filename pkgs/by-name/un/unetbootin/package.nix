@@ -68,14 +68,18 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   qtWrapperArgs = [
-    "--prefix PATH : ${
-      lib.makeBinPath [
-        mtools
-        p7zip
-        which
-      ]
-    }"
-    "--set QT_X11_NO_MITSHM 1"
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [
+      mtools
+      p7zip
+      which
+    ])
+
+    "--set"
+    "QT_X11_NO_MITSHM"
+    "1"
   ];
 
   meta = {

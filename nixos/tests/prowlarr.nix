@@ -1,40 +1,47 @@
-{ lib, config, ... }:
-
-{
+{ lib, ... }: {
   name = "prowlarr";
-  meta.maintainers = [ ];
+  meta.maintainers = with lib.maintainers; [ connor-grady ];
 
-  nodes.machine =
-    { pkgs, ... }:
-    {
-      services.prowlarr.enable = true;
-      specialisation.customDataDir = {
-        inheritParentConfig = true;
-        configuration.services.prowlarr.dataDir = "/srv/prowlarr";
-      };
+  nodes.machine = {
+    services.prowlarr = {
+      enable = true;
+      settings.auth.apikey = "prowlarrnixostest";
     };
+    specialisation.customDataDir.configuration.services.prowlarr.dataDir = "/srv/prowlarr";
+  };
 
-  testScript = ''
-    def verify_prowlarr_works():
+  testScript = { nodes, ... }: ''
+    import json
+
+    def wait_for_prowlarr():
       machine.wait_for_unit("prowlarr.service")
       machine.wait_for_open_port(9696)
-      response = machine.succeed("curl --fail http://localhost:9696/")
-      assert '<title>Prowlarr</title>' in response, "Login page didn't load successfully"
-      machine.succeed("[ -d /var/lib/prowlarr ]")
+      machine.succeed("curl --fail http://localhost:9696/ping")
 
-    with subtest("Prowlarr starts and responds to requests"):
-      verify_prowlarr_works()
+    def prowlarr_api(path, curl_args=""):
+      return machine.succeed(f"curl --fail --header 'X-Api-Key: ${nodes.machine.services.prowlarr.settings.auth.apikey}' {curl_args} http://localhost:9696/api/v1/{path}")
 
-    with subtest("Prowlarr data directory migration works"):
-      machine.systemctl("stop prowlarr.service")
-      machine.succeed("mkdir -p /tmp/prowlarr-migration")
-      machine.succeed("rsync -a -delete /var/lib/prowlarr/ /tmp/prowlarr-migration")
-      machine.succeed("${config.nodes.machine.system.build.toplevel}/specialisation/customDataDir/bin/switch-to-configuration test")
-      machine.wait_for_unit("var-lib-private-prowlarr.mount")
-      machine.succeed("rsync -a -delete /tmp/prowlarr-migration/ /var/lib/prowlarr")
-      machine.systemctl("restart prowlarr.service")
-      # Check that we're using a bind mount when using a non-default dataDir
-      machine.succeed("findmnt /var/lib/private/prowlarr | grep /srv/prowlarr")
-      verify_prowlarr_works()
+    with subtest("Prowlarr starts with the default data directory"):
+      wait_for_prowlarr()
+      prowlarr_api("tag", """--json '{"label": "migrated"}'""")
+
+    with subtest("Prowlarr's state moves to a custom data directory"):
+      machine.succeed("systemctl stop prowlarr.service")
+      machine.succeed("mv /var/lib/private/prowlarr /srv/prowlarr")
+      machine.succeed("${nodes.machine.system.build.toplevel}/specialisation/customDataDir/bin/switch-to-configuration test")
+      machine.succeed("systemctl start prowlarr.service")
+      wait_for_prowlarr()
+      machine.succeed("findmnt --noheadings --output SOURCE --mountpoint /var/lib/private/prowlarr | grep -F '[/srv/prowlarr]'")
+      tags = json.loads(prowlarr_api("tag"))
+      assert [tag["label"] for tag in tags] == ["migrated"], "Prowlarr's state did not carry over"
+
+    with subtest("systemd-tmpfiles leaves the custom data directory's ownership alone"):
+      owner = machine.succeed("stat -c %u:%g /srv/prowlarr")
+      machine.succeed("systemd-tmpfiles --create")
+      assert machine.succeed("stat -c %u:%g /srv/prowlarr") == owner, "systemd-tmpfiles changed ownership"
+
+    with subtest("Prowlarr requires its bind mount"):
+      machine.succeed("systemctl stop var-lib-private-prowlarr.mount")
+      machine.fail("systemctl is-active prowlarr.service")
   '';
 }

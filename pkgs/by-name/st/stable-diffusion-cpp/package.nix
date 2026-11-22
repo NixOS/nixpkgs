@@ -25,7 +25,7 @@
   vulkan-loader,
   spirv-tools,
 
-  metalSupport ? (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64),
+  metalSupport ? stdenv.hostPlatform.isDarwin,
   darwin,
   apple-sdk,
 }:
@@ -41,7 +41,7 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "stable-diffusion-cpp";
-  version = "master-874-656a135";
+  version = "master-1104-5dcfa79";
 
   outputs = [
     "out"
@@ -52,7 +52,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     owner = "leejet";
     repo = "stable-diffusion.cpp";
     tag = finalAttrs.version;
-    hash = "sha256-sieaItMxOIjrILpdHRi5Q29la8gcvCAjdgNt6AuwjJ8=";
+    hash = "sha256-8kHsl8tL+2VVApOC2Gs/zMVpInYUbAnnXhq/C+jSAWo=";
     fetchSubmodules = true;
   };
 

@@ -39,8 +39,12 @@ buildPythonPackage (finalAttrs: {
   # Requires pytest, causing infinite recursion.
   doCheck = false;
 
-  passthru.tests = {
-    inherit distutils;
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+    tests = {
+      inherit distutils;
+    };
   };
 
   meta = {

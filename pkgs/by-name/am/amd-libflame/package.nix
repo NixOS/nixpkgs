@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "amd-libflame";
-  version = "5.3.2";
+  version = "6.0.0";
 
   src = fetchFromGitHub {
     owner = "amd";
     repo = "libflame";
     tag = finalAttrs.version;
-    hash = "sha256-Zl9qw8pb2z7+SKJujHg3/NVt0m2gdmFE6cVXS7wGzAI=";
+    hash = "sha256-Qpyt1ftwLkfdEDGCZ57y9Czkmo8HihO18p/AlbzNRtc=";
   };
 
   postPatch = ''
@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "LAPACK-compatible linear algebra library optimized for AMD CPUs";
-    homepage = "https://developer.amd.com/amd-aocl/blas-library/";
+    homepage = "https://www.amd.com/en/developer/aocl.html";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.markuskowa ];
     platforms = [ "x86_64-linux" ];

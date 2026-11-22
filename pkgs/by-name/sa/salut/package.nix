@@ -10,7 +10,7 @@
 
 rustPlatform.buildRustPackage {
   pname = "salut";
-  version = "3.0.1-unstable-2022-12-17";
+  version = "0.3.1-unstable-2022-12-17";
 
   src = fetchFromGitLab {
     owner = "snakedye";
@@ -20,6 +20,12 @@ rustPlatform.buildRustPackage {
   };
 
   cargoHash = "sha256-xqj9USqVG7g2zT2P3VxDVt8fFDtyUnZOdT6gYZh4cRI=";
+
+  postPatch = ''
+    substituteInPlace "$cargoDepsCopy"/source-git-*/snui-*/src/context.rs \
+      --replace-fail " RadialGradient::new(" " tiny_skia::RadialGradient::new(" \
+      --replace-fail " LinearGradient::new(" " tiny_skia::LinearGradient::new("
+  '';
 
   nativeBuildInputs = [
     pkg-config

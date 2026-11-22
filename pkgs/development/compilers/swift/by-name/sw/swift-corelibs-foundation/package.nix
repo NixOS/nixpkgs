@@ -1,8 +1,12 @@
 {
   lib,
+  callPackage,
   cmake,
+  createToolchainStubsHook,
   curl,
+  darwin,
   fetchFromGitHub,
+  fixUnhelpfulCmakeRpathsHook,
   libxml2,
   ninja,
   stdenv,
@@ -37,12 +41,17 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     ./patches/0001-gnu-install-dirs.patch
     ./patches/0002-Devendor-SwiftFoundation-and-SwiftFoundationICU.patch
+    # Fixes a crash when Foundation can’t find the timezone database on NixOS (because it looks in the wrong place).
+    # See: https://github.com/swiftlang/swift-corelibs-foundation/pull/5657
+    ./patches/0003-Read-TZDIR-from-the-environment-and-probe-common-zon.patch
   ];
 
   strictDeps = true;
 
   nativeBuildInputs = [
     cmake
+    createToolchainStubsHook
+    fixUnhelpfulCmakeRpathsHook
     ninja
     swift-minimal
   ];
@@ -66,10 +75,10 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail '@lib@' "''${!outputLib}" \
       --replace-fail '@swiftPlatform@' ${stdenv.hostPlatform.swift.platform}
   ''
+  # Make sure swift-corelibs-foundation has an rpath pointing at the stdlib (since it is installed outside of it)
+  # as well as to Dispatch and Swift Foundation. Also do the same for `plutil`.
   + lib.optionalString (stdenv.hostPlatform.isElf && !stdenv.hostPlatform.isStatic) ''
-    # Make sure swift-corelibs-foundation has an rpath pointing at the stdlib (since it is installed outside of it)
-    # as well as to Dispatch and Swift Foundation. Also do the same for `plutil`.
-    for f in "$out/bin/plutil" "$out/lib/libFoundation${stdenv.hostPlatform.extensions.sharedLibrary}"; do
+    for f in "$out/bin/plutil" "$out/lib"/*${stdenv.hostPlatform.extensions.sharedLibrary}; do
       patchelf --add-rpath ${
         lib.escapeShellArg (
           lib.makeSearchPathOutput "out" "lib/swift/${stdenv.hostPlatform.swift.platform}" [ swift-minimal ]
@@ -78,6 +87,9 @@ stdenv.mkDerivation (finalAttrs: {
       patchelf --add-rpath ${
         lib.escapeShellArg (
           lib.makeLibraryPath [
+            curl
+            darwin.ICU
+            libxml2
             # Need both for the Swift and non-Swift shared libraries
             swift-corelibs-libdispatch
             (swift-corelibs-libdispatch.override { useSwift = false; })
@@ -86,12 +98,6 @@ stdenv.mkDerivation (finalAttrs: {
         )
       } "$f"
     done
-    patchelf --add-rpath ${
-      lib.escapeShellArg (lib.makeLibraryPath [ curl ])
-    } "$out/lib/libFoundationNetworking${stdenv.hostPlatform.extensions.sharedLibrary}"
-    patchelf --add-rpath ${
-      lib.escapeShellArg (lib.makeLibraryPath [ libxml2 ])
-    } "$out/lib/libFoundationXML${stdenv.hostPlatform.extensions.sharedLibrary}"
   '';
 
   inherit doInstallCheck;
@@ -104,6 +110,11 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstallCheck
   '';
+
+  passthru.tests = lib.packagesFromDirectoryRecursive {
+    inherit callPackage;
+    directory = ./tests;
+  };
 
   __structuredAttrs = true;
 

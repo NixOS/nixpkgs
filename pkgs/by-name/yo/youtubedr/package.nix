@@ -37,7 +37,7 @@ buildGoModule (finalAttrs: {
     owner = "kkdai";
     repo = "youtube";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rkkqLBH4P5DMrbfsZwVgBjnQG1/fHdjVL4mU6amYUxM=";
+    hash = "sha256-Qqsib2VyiWywzSXdmvBmEUDJQkc5JuAIseItekwcYcI";
   };
 
   __structuredAttrs = true;

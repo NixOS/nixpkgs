@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "tailscale-exporter";
-  version = "0.7.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "adinhodovic";
     repo = "tailscale-exporter";
     tag = finalAttrs.version;
-    hash = "sha256-jIXKv+JGZK7+Ml8k9WdjucngXQugPRxYYAzSbGQLJMs=";
+    hash = "sha256-gkJyd0IgdKxUx0im6EVZ5AzU9SvkIwkWgc0X1J9Oe9M=";
   };
 
-  vendorHash = "sha256-NY0tyZu+k+EaDmUvVPuRlEWon4eZ08/gONpnV+rxi+w=";
+  vendorHash = "sha256-vnHAx6S35dHyLscpSMMicswuD1ZClBW6swEvCy0AlHM=";
 
   subPackages = [
     "cmd/tailscale-exporter"

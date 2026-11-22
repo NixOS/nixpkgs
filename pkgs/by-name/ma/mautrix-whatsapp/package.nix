@@ -3,6 +3,8 @@
   nix-update-script,
   buildGoModule,
   fetchFromGitHub,
+  testers,
+  mautrix-whatsapp,
   olm,
   # This option enables the use of an experimental pure-Go implementation of
   # the Olm protocol instead of libolm for end-to-end encryption. Using goolm
@@ -12,31 +14,37 @@
   withGoolm ? false,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "mautrix-whatsapp";
-  version = "26.09";
-  tag = "v0.2609.0";
+  version = "26.11";
+  tag = "v0.2611.0";
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "whatsapp";
-    inherit tag;
-    hash = "sha256-u+Ck8ckCbFu+Q7pVM7T05InqDq7NknqYOAb0wis93OU=";
+    inherit (finalAttrs) tag;
+    hash = "sha256-mu2ZnyPHf5ej+lsDnxfa+kYGoBWmV1Oju0E1yLerkI8=";
   };
 
   buildInputs = lib.optional (!withGoolm) olm;
   tags = lib.optional withGoolm "goolm";
 
-  vendorHash = "sha256-Kpireqd1Cll0XZvnouUJV4BJYJRWPlhQRDhLekujg60=";
+  vendorHash = "sha256-QRtDB7doOsmPDXX7jbzjX5Ah3ZO9Hh+r6QT8G2NI67s=";
 
   ldflags = [
     "-s"
     "-w"
     "-X"
-    "main.Tag=${tag}"
+    "main.Tag=${finalAttrs.tag}"
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.version = testers.testVersion {
+      package = mautrix-whatsapp;
+      version = "v${finalAttrs.version}";
+    };
+  };
 
   meta = {
     homepage = "https://github.com/mautrix/whatsapp";
@@ -47,7 +55,8 @@ buildGoModule rec {
       ma27
       chvp
       SchweGELBin
+      logn
     ];
     mainProgram = "mautrix-whatsapp";
   };
-}
+})

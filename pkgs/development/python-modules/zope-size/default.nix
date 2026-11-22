@@ -11,7 +11,7 @@
   zope-security,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "zope-size";
   version = "6.0";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zopefoundation";
     repo = "zope.size";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-jjI9NvfxnIWZrqDEpZ6FDlhDWZoqEUBliiyh+5PxOAg=";
   };
 
@@ -50,17 +50,17 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     unittestCheckHook
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.concatAttrValues finalAttrs.finalPackage.passthru.optional-dependencies;
 
-  unittestFlagsArray = [ "src/zope/size" ];
+  unittestFlags = [ "--start-directory=src/zope/size" ];
 
   pythonNamespaces = [ "zope" ];
 
   meta = {
     homepage = "https://github.com/zopefoundation/zope.size";
     description = "Interfaces and simple adapter that give the size of an object";
-    changelog = "https://github.com/zopefoundation/zope.size/blob/${version}/CHANGES.rst";
+    changelog = "https://github.com/zopefoundation/zope.size/blob/${finalAttrs.version}/CHANGES.rst";
     license = lib.licenses.zpl21;
     maintainers = [ ];
   };
-}
+})

@@ -23,14 +23,14 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "chameleon-cli";
-  version = "2.2.0-unstable-2026-10-04";
+  version = "2.3.0-unstable-2026-11-11";
 
   src = fetchFromGitHub {
     owner = "RfidResearchGroup";
     repo = "ChameleonUltra";
-    rev = "5a4c8873981a22a2d3901fa63ac870069a732a49";
+    rev = "6009a5fb8adbb92d3efb548eaac9e501bd179801";
     rootDir = "software";
-    hash = "sha256-vB5s/GSh2Z0Ngj/DWjrQVHuvbfPoQUAF1YGPrZ+uDpg=";
+    hash = "sha256-HWBSKKpdl3GcGkU2BjBAwoonJ42V9XDXtS7knEL3f0U=";
   };
 
   postPatch = ''

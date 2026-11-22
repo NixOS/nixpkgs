@@ -7,7 +7,7 @@
   addDriverRunpath,
 
   # build-system
-  cython,
+  cython_3_2,
   setuptools,
   setuptools-scm,
   cuda-pathfinder,
@@ -31,13 +31,13 @@ let
 
   cudaLibPaths = {
     libcuda =
-      # Use cuda_compat to provide libcuda.so on pre-Thor Jetsons
+      # Use cuda_compat to provide libcuda.so from its `compat` directory
       if (cudaPackages.cuda_compat.meta.available or false) then
-        cudaPackages.cuda_compat
+        "${cudaPackages.cuda_compat}/compat"
 
       # Else, use the host CUDA driver library
       else
-        addDriverRunpath.driverLink;
+        "${addDriverRunpath.driverLink}/lib";
     libcudart = lib.getLib cudaPackages.cuda_cudart;
     # libcudla is only available on Xavier and Orin Jetson devices
     libcudla =
@@ -69,6 +69,7 @@ let
       "13.2" = import ./13_2.nix args;
       "13.3" = import ./13_3.nix args;
       "13.4" = import ./13_4.nix args;
+      "13.5" = import ./13_5.nix args;
     }
     .${cudaVersion} or (throw "Unsupported cuda-bindings version: ${cudaVersion}");
 
@@ -78,7 +79,6 @@ buildPythonPackage (finalAttrs: {
   pname = "cuda-bindings";
   inherit (versionSpecificAttrs) version;
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
@@ -104,7 +104,7 @@ buildPythonPackage (finalAttrs: {
     versionSpecificAttrs.nvidiaLibsPatch
   ];
 
-  sourceRoot = "${finalAttrs.src.name}/cuda_bindings";
+  sourceRoot = "${finalAttrs.src.name}/${versionSpecificAttrs.sourceDir or "cuda_bindings"}";
 
   postPatch =
     # Since 13.4, libcuda is loaded from driver_linux.pyx, handled by nvidiaLibsPatch
@@ -112,12 +112,12 @@ buildPythonPackage (finalAttrs: {
       substituteInPlace cuda/bindings/_internal/nvjitlink_linux.pyx \
         --replace-fail \
           "handle = dlopen('libcuda.so.1'" \
-          "handle = dlopen('${cudaLibPaths.libcuda}/lib/libcuda.so.1'"
+          "handle = dlopen('${cudaLibPaths.libcuda}/libcuda.so.1'"
 
       substituteInPlace cuda/bindings/_bindings/cydriver.pyx.in \
         --replace-fail \
           "path = 'libcuda.so.1'" \
-          "path = '${cudaLibPaths.libcuda}/lib/libcuda.so.1'"
+          "path = '${cudaLibPaths.libcuda}/libcuda.so.1'"
     ''
     + (versionSpecificAttrs.postPatch or "");
 
@@ -126,7 +126,8 @@ buildPythonPackage (finalAttrs: {
   '';
 
   build-system = [
-    cython
+    # All versions pin cython<3.3
+    cython_3_2
     setuptools
     setuptools-scm
   ]
@@ -211,20 +212,26 @@ buildPythonPackage (finalAttrs: {
     "tests/"
   ];
 
-  disabledTestPaths = lib.optionals (cudaOlder "13.0") [
-    # The current driver shipped in NixOS (590.48.01) advertises CUDA 13.1, causing the following
-    # error:
-    # cuda.bindings._internal.utils.NotSupportedError: only CUDA 12 driver is supported
-    "tests/test_nvjitlink.py"
-  ];
+  disabledTestPaths =
+    lib.optionals (cudaOlder "13.0") [
+      # The current driver shipped in NixOS (590.48.01) advertises CUDA 13.1, causing the following
+      # error:
+      # cuda.bindings._internal.utils.NotSupportedError: only CUDA 12 driver is supported
+      "tests/test_nvjitlink.py"
+    ]
+    ++ (versionSpecificAttrs.disabledTestPaths or [ ]);
 
   disabledTests = versionSpecificAttrs.disabledTests or [ ];
 
   # Tests need access to a GPU
   doCheck = false;
-  passthru.gpuCheck = finalAttrs.finalPackage.overrideAttrs {
-    requiredSystemFeatures = [ "cuda" ];
-    doInstallCheck = true;
+  passthru = {
+    gpuCheck = finalAttrs.finalPackage.overrideAttrs {
+      requiredSystemFeatures = [ "cuda" ];
+      doInstallCheck = true;
+    };
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
   };
 
   meta = {

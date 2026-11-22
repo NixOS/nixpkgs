@@ -1,41 +1,44 @@
 {
   lib,
   fetchFromGitHub,
-  jdk11,
+  jdk,
   maven,
-  jogl,
 }:
 
-maven.buildMavenPackage rec {
+maven.buildMavenPackage (finalAttrs: {
   pname = "gephi";
-  version = "0.10.1";
+  version = "0.11.4";
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "gephi";
     repo = "gephi";
-    rev = "v${version}";
-    hash = "sha256-ZNSEaiD32zFfF2ISKa1CmcT9Nq6r5i2rNHooQAcVbn4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-4e1Pt2jUzEaE3BiOFCIei6BFL6yrneARn9FY6bbKSMI=";
   };
 
-  mvnJdk = jdk11;
-  mvnHash = "sha256-/2/Yb26Ry0NHQQ3j0LXnjwC0wQqJiztvTgWixyMJqvg=";
+  mvnJdk = jdk;
+  mvnHash = "sha256-z7i71feg66BEM1w8KcZrucQDi0sO2E2DrTS8OKF1yoA=";
 
-  nativeBuildInputs = [ jdk11 ];
+  nativeBuildInputs = [ jdk ];
 
   installPhase = ''
+    runHook preInstall
+
     cp -r modules/application/target/gephi $out
 
     # remove garbage
     find $out -type f -name  .lastModified -delete
     find $out -type f -regex '.+\.exe'     -delete
 
-    # use self-compiled JOGL to avoid patchelf'ing .so inside jars
-    rm $out/gephi/modules/ext/org.gephi.visualization/org-jogamp-{jogl,gluegen}/*.jar
-    cp ${jogl}/share/java/jogl*.jar $out/gephi/modules/ext/org.gephi.visualization/org-jogamp-jogl/
-    cp ${jogl}/share/java/glue*.jar $out/gephi/modules/ext/org.gephi.visualization/org-jogamp-gluegen/
+    printf "\n\njdkhome=${jdk}\n" >> $out/etc/gephi.conf
 
-    printf "\n\njdkhome=${jdk11}\n" >> $out/etc/gephi.conf
+    runHook postInstall
   '';
+
+  # Tests are failing with something related to ByteBuddyAgent
+  doCheck = false;
 
   meta = {
     description = "Platform for visualizing and manipulating large graphs";
@@ -48,4 +51,4 @@ maven.buildMavenPackage rec {
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.taeer ];
   };
-}
+})

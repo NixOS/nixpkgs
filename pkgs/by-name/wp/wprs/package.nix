@@ -7,6 +7,7 @@
   python3,
   runCommand,
   wprs,
+  zstd,
 }:
 rustPlatform.buildRustPackage {
   pname = "wprs";
@@ -26,6 +27,7 @@ rustPlatform.buildRustPackage {
   buildInputs = [
     libxkbcommon
     (python3.withPackages (pp: with pp; [ psutil ]))
+    zstd
   ];
 
   cargoHash = "sha256-khU7SfEfEIlRqI0bFxP57cVUxoIBRso7o0Rw+i2MtSc=";

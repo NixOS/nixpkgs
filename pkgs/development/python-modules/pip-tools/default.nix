@@ -5,7 +5,6 @@
   build,
   click,
   fetchFromGitHub,
-  fetchpatch,
   pip,
   pyproject-hooks,
   pytest-mock,
@@ -17,31 +16,20 @@
   wheel,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pip-tools";
-  version = "7.5.3";
+  version = "7.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "jazzband";
+    owner = "pypa";
     repo = "pip-tools";
-    tag = "v${version}";
-    hash = "sha256-MkYGD/ropw+MLLrk4gRZZguOv5extzNNXwTy6NQnCu0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-gh1oe4Ghz492LofyT2ZLRBuQ9DKn+tYVc2EpkWJ4bfc=";
   };
 
   patches = [
     ./fix-setup-py-bad-syntax-detection.patch
-
-    (fetchpatch {
-      name = "pip-26-compat.patch";
-      url = "https://github.com/jazzband/pip-tools/commit/cbe3c692f8977270e7ae6061c8159450a73c13fe.patch";
-      excludes = [
-        "changelog.d/2379.feature.md"
-        "pyproject.toml"
-        "tox.ini"
-      ];
-      hash = "sha256-wDma1FBnWnrRln0o7HaizMIkoQey6VdQzGh+q84cHxE=";
-    })
   ];
 
   build-system = [ setuptools-scm ];
@@ -64,7 +52,7 @@ buildPythonPackage rec {
     tomli-w
   ];
 
-  preCheck = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
+  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # https://github.com/python/cpython/issues/74570#issuecomment-1093748531
     export no_proxy='*';
   '';
@@ -111,9 +99,9 @@ buildPythonPackage rec {
 
   meta = {
     description = "Keeps your pinned dependencies fresh";
-    homepage = "https://github.com/jazzband/pip-tools/";
-    changelog = "https://github.com/jazzband/pip-tools/releases/tag/${version}";
+    homepage = "https://github.com/pypa/pip-tools/";
+    changelog = "https://github.com/pypa/pip-tools/releases/tag/${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ zimbatm ];
   };
-}
+})

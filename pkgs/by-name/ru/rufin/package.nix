@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   rustPlatform,
+  aws-lc,
   cacert,
   cargo,
   cmake,
@@ -15,25 +16,26 @@
   ninja,
   pkg-config,
   rustc,
+  sqlite,
   wrapGAppsHook4,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rufin";
-  version = "0.16.6";
+  version = "0.19.0";
 
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
-    owner = "screwys";
-    repo = "Rufin";
+    owner = "rufin-app";
+    repo = "rufin";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Anm5iV/cd9Qw/xolZUQD3RpOfjaU9GOPwJY4zmoJ+bA=";
+    hash = "sha256-D48uJ9u9uVpHfYHv4TNIqRwRrdUQYJL0dJcbWURZnPo=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-s+wUcvssyjL1nHTqAmqTgYe2ECxAqJyhZeD4PQg0Lu0=";
+    hash = "sha256-+TGh4/0r+BPw9LJpB/qOJekv2j7jkYjbjM9MYw9KpW4=";
   };
 
   strictDeps = true;
@@ -50,10 +52,12 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
     glib
     glib-networking
     gtk4
     libadwaita
+    sqlite
   ]
   ++ (with gst_all_1; [
     gstreamer
@@ -74,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postInstall = ''
-    substituteInPlace "$out/share/applications/io.github.screwys.Rufin.desktop" \
+    substituteInPlace "$out/share/applications/app.rufin.rufin.desktop" \
       --replace-fail "Exec=rufin" "Exec=$out/bin/rufin"
   '';
 
@@ -87,10 +91,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Native music player for Jellyfin, Navidrome/OpenSubsonic, Plex, and Emby servers;  local folders,  WebDAV including a direct Nextcloud browser login path, Samba and NAS shares";
-    homepage = "https://github.com/screwys/Rufin";
-    changelog = "https://github.com/screwys/Rufin/releases/tag/v${finalAttrs.version}";
+    homepage = "https://github.com/rufin-app/rufin";
+    changelog = "https://github.com/rufin-app/rufin/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ screwys ];
+    maintainers = with lib.maintainers; [
+      screwys
+      Superredstone
+    ];
     mainProgram = "rufin";
     platforms = lib.platforms.linux;
   };

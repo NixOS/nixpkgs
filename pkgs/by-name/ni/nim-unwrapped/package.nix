@@ -6,10 +6,8 @@
   fetchurl,
   boehmgc,
   openssl,
-  pcre,
   readline,
   sqlite,
-  darwin,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "nim-unwrapped";
@@ -24,7 +22,6 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     boehmgc
     openssl
-    pcre
     readline
     sqlite
   ];
@@ -41,6 +38,12 @@ stdenv.mkDerivation (finalAttrs: {
 
     ./openssl.patch
     # dlopen is widely used by Python, Ruby, Perl, ... what you're really telling me here is that your OS is fundamentally broken. That might be news for you, but it isn't for me.
+
+    ./pcre.patch
+    # pcre v1 is no longer supported by nixos
+
+    ./nimgrep.patch
+    # nimgrep depends on pcre
   ];
 
   configurePhase =
@@ -74,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-d:release"
   ];
 
-  preBuild = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
+  preBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace makefile \
       --replace "aarch64" "arm64"
   '';

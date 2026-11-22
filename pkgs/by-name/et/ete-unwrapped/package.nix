@@ -82,5 +82,6 @@ stdenv.mkDerivation (finalAttrs: {
       ashleyghooper
       drupol
     ];
+    platforms = lib.platforms.linux;
   };
 })

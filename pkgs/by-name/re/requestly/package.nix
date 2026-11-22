@@ -4,23 +4,17 @@
   fetchurl,
 }:
 
-let
+appimageTools.wrapType2 (finalAttrs: {
   pname = "requestly";
   version = "26.6.29";
-
   src = fetchurl {
-    url = "https://github.com/requestly/requestly-desktop-app/releases/download/v${version}/Requestly-${version}.AppImage";
+    url = "https://github.com/requestly/requestly-desktop-app/releases/download/v${finalAttrs.version}/Requestly-${finalAttrs.version}.AppImage";
     hash = "sha256-TnHEt5CCGNb75KtDEzuDbkqba6V5Kqkl1JkPfHT6dPI=";
   };
 
-  appimageContents = appimageTools.extract { inherit pname version src; };
-in
-appimageTools.wrapType2 {
-  inherit pname version src;
-
   extraInstallCommands = ''
-    install -Dm 444 ${appimageContents}/${pname}.desktop -t $out/share/applications
-    cp -r ${appimageContents}/usr/share/icons $out/share
+    install -Dm 444 ${finalAttrs.contents}/${finalAttrs.pname}.desktop -t $out/share/applications
+    cp -r ${finalAttrs.contents}/usr/share/icons $out/share
   '';
 
   meta = {
@@ -31,4 +25,4 @@ appimageTools.wrapType2 {
     maintainers = [ ];
     mainProgram = "requestly";
   };
-}
+})

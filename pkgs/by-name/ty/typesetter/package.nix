@@ -31,26 +31,37 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "typesetter";
-  version = "0.15.2";
+  version = "0.16.8";
   __structuredAttrs = true;
 
   src = fetchFromCodeberg {
     owner = "haydn";
     repo = "typesetter";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ck7kW2dVBvl0zbXurTXaxQetWZ57mVSmVl1mE3zg2YE=";
+    hash = "sha256-biovB5HQ7LdGco+5J5LK9jQPU5wE6U0qgOUB7HCEI3I=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-n50EBOcwrbFPQAxfxK3fQWPSp/g6DRIbETOlS+ooWgo=";
+    hash = "sha256-palaxwqWEaN+t2itGjK66CPihKQuGsmt3xoyA+tE1MI=";
   };
+
+  # Upstream does not install desktop/MIME files on darwin, so the corresponding post-install hooks
+  # fail there
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace meson.build \
+      --replace-fail \
+        "update_desktop_database: true" \
+        "update_desktop_database: false" \
+      --replace-fail \
+        "update_mime_database: true" \
+        "update_mime_database: false"
+  '';
 
   strictDeps = true;
 
   nativeBuildInputs = [
     cargo
-    desktop-file-utils
     gettext # msgfmt
     meson
     ninja
@@ -60,6 +71,10 @@ stdenv.mkDerivation (finalAttrs: {
     rustc
     shared-mime-info # update-mime-database
     wrapGAppsHook4
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    # Needed to install the desktop file on Linux
+    desktop-file-utils
   ];
 
   buildInputs = [

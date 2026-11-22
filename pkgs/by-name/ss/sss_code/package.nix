@@ -55,10 +55,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Libraries and tools for building screenshots in a high-performance image format";
     mainProgram = "sss_code";
     homepage = "https://github.com/SergioRibera/sss";
-    license = with lib.licenses; [
-      asl20
-      mit
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
     maintainers = with lib.maintainers; [ krovuxdev ];
   };
 })

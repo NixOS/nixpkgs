@@ -2,24 +2,22 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  pkg-config,
-  fuse,
   versionCheckHook,
   nix-update-script,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "nak";
-  version = "0.21.0";
+  version = "0.22.3";
 
   src = fetchFromGitHub {
     owner = "fiatjaf";
     repo = "nak";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Uucxtgc6y6Pt6EU/qDlVtAchIWJoULfaZHjSpe+sg9A=";
+    hash = "sha256-gsEgPpMjooqlqGEKaxqH+bLOfs1yFxwJV5TRWf5ix0c=";
   };
 
-  vendorHash = "sha256-ScYTA3BTOYmSpKwrBz1+x79p0TcHXi3ifpmGeoavCvY=";
+  vendorHash = "sha256-s2/OtbzLOnCZnBMRqCWdKy1NdXjZ8LLlqoxetd+PYio=";
 
   ldflags = [
     "-s"
@@ -27,13 +25,7 @@ buildGoModule (finalAttrs: {
     "-X main.version=${finalAttrs.version}"
   ];
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
-
-  buildInputs = [
-    fuse
-  ];
+  subPackages = [ "." ];
 
   # Integration tests fail (requires connection to relays)
   doCheck = false;

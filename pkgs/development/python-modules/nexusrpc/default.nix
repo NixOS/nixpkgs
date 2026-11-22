@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "nexus-rpc";
-  version = "1.4.0";
+  version = "1.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nexus-rpc";
     repo = "sdk-python";
     tag = version;
-    hash = "sha256-il+zCyU0dOlqFHGedyeBKgwQlqx1FLNuriGIw3RV3Gs=";
+    hash = "sha256-m/aHhXqKuc7Iuhn0KPXiydnNP1fRpk9/lLBrKGIFZXE=";
     fetchSubmodules = true;
   };
 

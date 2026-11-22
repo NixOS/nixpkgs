@@ -9,14 +9,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "string-view-lite";
-  version = "1.8.1";
+  version = "1.8.2";
 
   src = fetchFromGitHub {
     owner = "nonstd-lite";
     repo = "string-view-lite";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WMWTrzkAex8gR1juvYdUhq1y6qSdxHowJK3EpjAlYbI=";
+    hash = "sha256-L22wItXKg+W2bchdHwGLagRlBCkUNKGs31dUwvAZUro=";
   };
+
+  # libc++ leaves __scope_guard's move constructor undefined before C++17 and relies on copy
+  # elision, so the tests fail to link with -fno-elide-constructors
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace test/CMakeLists.txt \
+      --replace-fail " -fno-elide-constructors" ""
+  '';
 
   nativeBuildInputs = [
     cmake

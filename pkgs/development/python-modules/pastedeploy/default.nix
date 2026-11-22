@@ -7,7 +7,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pastedeploy";
   version = "3.1";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Pylons";
     repo = "pastedeploy";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-yR7UxAeF0fQrbU7tl29GpPeEAc4YcxHdNQWMD67pP3g=";
   };
 
@@ -31,8 +31,8 @@ buildPythonPackage rec {
   meta = {
     description = "Load, configure, and compose WSGI applications and servers";
     homepage = "https://github.com/Pylons/pastedeploy";
-    changelog = "https://github.com/Pylons/pastedeploy/blob/${src.tag}/docs/news.rst";
+    changelog = "https://github.com/Pylons/pastedeploy/blob/${finalAttrs.src.tag}/docs/news.rst";
     license = lib.licenses.mit;
     teams = [ lib.teams.openstack ];
   };
-}
+})

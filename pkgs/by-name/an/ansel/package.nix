@@ -62,32 +62,15 @@
   wrapGAppsHook3,
   x265,
 }:
-
-let
-  # requires libavif 0.x, see https://github.com/aurelienpierreeng/ansel/blob/e2c4a0a60cd80f741dd3d3c6ab72be9ac11234fb/src/CMakeLists.txt#L356
-  libavif_0_11 = libavif.overrideAttrs rec {
-    version = "0.11.1";
-
-    src = fetchFromGitHub {
-      owner = "AOMediaCodec";
-      repo = "libavif";
-      tag = "v${version}";
-      hash = "sha256-mUi0DU99XV3FzUZ8/9uJZU+W3fc6Bk6+y6Z78IRZ9Qs=";
-    };
-
-    patches = [ ];
-    doCheck = false;
-  };
-in
 stdenv.mkDerivation {
   pname = "ansel";
-  version = "0-unstable-2026-06-13";
+  version = "0-unstable-2026-11-20";
 
   src = fetchFromGitHub {
     owner = "aurelienpierreeng";
     repo = "ansel";
-    rev = "2a9850bdc393d88f799b2cb3d80f22757d467d3e";
-    hash = "sha256-hCleHtaqH9dRHDtOVuKN16L1jPMeYJbr4qSwVPLIgL8=";
+    rev = "9f5530e1bec0e6ad71736c78fbf3acd95b4c1191";
+    hash = "sha256-jtan9bZKqAfIi6JlH9M5MobLbvC8EMnNKsgU1OAh8II=";
     fetchSubmodules = true;
   };
 
@@ -162,6 +145,11 @@ stdenv.mkDerivation {
     util-linux
     x265
   ];
+
+  postPatch = ''
+    substituteInPlace src/CMakeLists.txt \
+      --replace-fail "target_include_directories(ansel_deps INTERFACE" "target_include_directories(ansel_deps INTERFACE ${glib.dev}/include/gio-unix-2.0/"
+  '';
 
   preFixup = ''
     gappsWrapperArgs+=(

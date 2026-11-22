@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     owner = "thp";
     repo = "pyotherside";
     rev = version;
-    sha256 = "sha256-2OYVULNW9EzssqodiVtL2EmhTSbefXpLkub3zFvNwNo=";
+    hash = "sha256-2OYVULNW9EzssqodiVtL2EmhTSbefXpLkub3zFvNwNo=";
   };
 
   postPatch = ''

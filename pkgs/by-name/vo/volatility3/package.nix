@@ -3,6 +3,7 @@
   fetchFromGitHub,
   makeWrapper,
   python3,
+  writableTmpDirAsHomeHook,
 }:
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
@@ -19,7 +20,10 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
   build-system = with python3.pkgs; [ setuptools ];
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+    writableTmpDirAsHomeHook
+  ];
 
   dependencies = with python3.pkgs; [
     capstone
@@ -28,10 +32,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     pycryptodome
     yara-python
   ];
-
-  preBuild = ''
-    export HOME=$(mktemp -d);
-  '';
 
   postFixup = ''
     for executable in vol volshell; do

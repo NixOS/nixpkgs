@@ -54,7 +54,9 @@ expectFailure() {
     fi
 }
 
-expectFailure 'escapeShellArg /does-not-exist' "error: path '/does-not-exist' does not exist"
+# The exact wording is implementation-defined, so only check that the error
+# names the missing path.
+expectFailure 'escapeShellArg /does-not-exist' "error:.*/does-not-exist"
 
 # Without this, there would be no need to escape the path.
 export NIX_STORE_DIR="$work/store with spaces"

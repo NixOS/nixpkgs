@@ -20,15 +20,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "alibabacloud-gateway-oss";
-  version = "0.0.29";
+  version = "0.0.30";
   pyproject = true;
-
-  __structuredAttrs = true;
 
   src = fetchPypi {
     pname = "alibabacloud_gateway_oss";
     inherit (finalAttrs) version;
-    hash = "sha256-fsjqL3+DvHIBMm1sI2DHj9CSvBkxxYJNNotG1Nh3m+4=";
+    hash = "sha256-Z/h4Ap+11sinnmOsYcm6l2rM6sjb1vBWi16jJjoi6gU=";
   };
 
   build-system = [ setuptools ];

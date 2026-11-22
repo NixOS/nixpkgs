@@ -13,21 +13,21 @@
 
 buildPythonPackage rec {
   pname = "cachecontrol";
-  version = "0.14.4";
+  version = "0.15.0";
   pyproject = true;
 
   __darwinAllowLocalNetworking = true;
 
   src = fetchFromGitHub {
-    owner = "ionrock";
+    owner = "psf";
     repo = "cachecontrol";
     tag = "v${version}";
-    hash = "sha256-627SqJocVOO0AfI8vswPqOr15MA/Lx7RLAdRAXzWu84=";
+    hash = "sha256-NT+XHQmRC0uDrwi3ia1SumcHjcLqxOvtvZOCnUjf1Tw=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "uv_build>=0.9.6,<0.10.0" uv_build
+      --replace-fail "uv_build>=0.9.6,<0.14.0" uv_build
   '';
 
   build-system = [ uv-build ];
@@ -53,7 +53,7 @@ buildPythonPackage rec {
   meta = {
     description = "Httplib2 caching for requests";
     mainProgram = "doesitcache";
-    homepage = "https://github.com/ionrock/cachecontrol";
+    homepage = "https://github.com/psf/cachecontrol";
     changelog = "https://github.com/psf/cachecontrol/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dotlambda ];

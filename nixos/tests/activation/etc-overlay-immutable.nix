@@ -42,7 +42,6 @@
       # Prerequisites
       systemd.sysusers.enable = true;
       users.mutableUsers = false;
-      boot.initrd.systemd.enable = true;
       time.timeZone = "Utc";
 
       # The standard resolvconf service tries to write to /etc and crashes,

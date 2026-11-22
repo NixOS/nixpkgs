@@ -8,20 +8,19 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pure-magic-rs";
-  version = "0.5.1";
+  version = "0.6.2";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "qjerome";
     repo = "magic-rs";
     tag = "pure-magic-rs-v${finalAttrs.version}";
-    hash = "sha256-NeFqBdxB4cYSrhA44dnr8n7kcrF/CdCcejO3im5RcpQ=";
+    hash = "sha256-4U1utVYq+A7A7oniA9mewV1hCzB6sCIXlTID5N5C62s=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-HFpI7kNKH4ctDyJtB1Rvg/3act5vwWcxLd2DJ4W9JbY=";
+    hash = "sha256-q5igPjOE/gsGH/f0Id5jUp3wezZ8eIhawvsq58OjrQU=";
   };
 
   buildAndTestSubdir = "python";

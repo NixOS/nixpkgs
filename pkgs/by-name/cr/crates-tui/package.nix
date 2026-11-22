@@ -26,6 +26,12 @@ rustPlatform.buildRustPackage {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ];
 
+  # Let libgit2-sys use its bundled libgit2 because nixpkgs' libgit2 is newer
+  # than the version this package supports. Revisit after updating the package.
+  preBuild = ''
+    unset LIBGIT2_NO_VENDOR
+  '';
+
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
 

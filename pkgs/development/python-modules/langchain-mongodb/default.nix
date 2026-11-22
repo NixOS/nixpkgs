@@ -38,7 +38,6 @@ buildPythonPackage (finalAttrs: {
   pname = "langchain-mongodb";
   version = "0.12.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
@@ -50,6 +49,8 @@ buildPythonPackage (finalAttrs: {
   sourceRoot = "${finalAttrs.src.name}/libs/langchain-mongodb";
 
   build-system = [ hatchling ];
+
+  pythonRelaxDeps = [ "langchain-core" ];
 
   dependencies = [
     langchain

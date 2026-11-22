@@ -405,9 +405,18 @@ rec {
   writeDash =
     name: argsOrScript:
     if lib.isAttrs argsOrScript && !lib.isDerivation argsOrScript then
-      makeScriptWriter (argsOrScript // { interpreter = "${lib.getExe pkgs.dash}"; }) name
+      makeScriptWriter (
+        argsOrScript
+        // {
+          interpreter = "${lib.getExe pkgs.dash}";
+          check = argsOrScript.check or "${lib.getExe pkgs.dash} -n";
+        }
+      ) name
     else
-      makeScriptWriter { interpreter = "${lib.getExe pkgs.dash}"; } name argsOrScript;
+      makeScriptWriter {
+        interpreter = "${lib.getExe pkgs.dash}";
+        check = "${lib.getExe pkgs.dash} -n";
+      } name argsOrScript;
 
   /**
     Like writeScriptBin but the first line is a shebang to dash
@@ -848,6 +857,8 @@ rec {
 
     Can be called with or without extra arguments.
 
+    The contents of the script are checked using the `nu-check` built-in.
+
     # Examples
     :::{.example}
     ## `pkgs.writers.writeNu` without arguments
@@ -877,12 +888,27 @@ rec {
   */
   writeNu =
     name: argsOrScript:
+    let
+      # Separate the shebang from doc comments attached to `main`.
+      interpreter = "${lib.getExe pkgs.nushell} --no-config-file\n";
+
+      # The only tool that can serve this purpose seems to be the Nushell
+      # built-in `nu-check`. Since that is a built-in, a Nushell script that
+      # invokes it is created here and used as the check. `writeNu` is not
+      # used in the creation of this wrapper, because that would be infinitely
+      # recursive.
+      check = makeScriptWriter {
+        inherit interpreter;
+      } "nu-check-wrapper" "def main [path] { nu-check --debug $path }";
+    in
     if lib.isAttrs argsOrScript && !lib.isDerivation argsOrScript then
       makeScriptWriter (
-        argsOrScript
+        {
+          inherit check;
+        }
+        // argsOrScript
         // {
-          # Separate the shebang from doc comments attached to `main`.
-          interpreter = "${lib.getExe pkgs.nushell} --no-config-file\n";
+          inherit interpreter;
         }
       ) name
     else
@@ -1354,4 +1380,195 @@ rec {
   writeFSharp = makeFSharpWriter { };
 
   writeFSharpBin = name: writeFSharp "/bin/${name}";
+
+  /**
+    Creates an executable R script.
+
+    # Inputs
+
+    `name` (String)
+    : Name of or path to the script, as in `makeScriptWriter`.
+
+    `config` (AttrSet)
+    : `libraries` (List of packages, Default: [])
+      : R packages available to the script.
+    : `options` (List of strings, Default: [])
+      : Additional command-line options passed to Rscript.
+    : `doCheck` (Boolean, Default: true)
+      : Whether to check the script with jarl.
+
+    Other attributes are passed to `makeScriptWriter`.
+
+    `content` (String or Path)
+    : Script source or a file containing it.
+
+    # Examples
+
+    :::{.example}
+    ## `pkgs.writers.writeRscript` usage example
+
+    ```nix
+    writeRscript "example" { libraries = [ pkgs.rPackages.jsonlite ]; } ''
+      message <- jsonlite::fromJSON('{"text":"Hello!"}')
+      cat(message$text)
+    ''
+    ```
+
+    :::
+  */
+  writeRscript =
+    name:
+    args@{
+      libraries ? [ ],
+      options ? [ ],
+      doCheck ? true,
+      ...
+    }:
+    let
+      R = pkgs.rWrapper.override { packages = libraries; };
+      rest = (
+        removeAttrs args [
+          "libraries"
+          "options"
+          "doCheck"
+        ]
+      );
+
+      rCheck = writeDash "rCheck" /* sh */ ''
+        exec ${buildPackages.jarl}/bin/jarl check "$1"
+      '';
+    in
+    makeScriptWriter (
+      rest
+      // {
+        interpreter = toString ([ "${R}/bin/Rscript" ] ++ options);
+        check = if doCheck then rCheck else "";
+      }
+    ) name;
+
+  /**
+    Takes the same arguments as `writeRscript`, but creates the script
+    at `$out/bin/<name>` (like `writeScriptBin`).
+  */
+  writeRscriptBin = name: writeRscript "/bin/${name}";
+
+  /**
+    Like writeScript but the first line is a shebang to cosh
+
+    Can be called with or without extra arguments.
+
+    # Examples
+    :::{.example}
+    ## `pkgs.writers.writeCosh` example without arguments
+
+    ```nix
+    writeCosh "example" ''
+      "𐑣𐑧𐑤𐑴, ·𐑯𐑦𐑒𐑕" println
+    ''
+    ```
+    :::
+
+    :::{.example}
+    ## `pkgs.writers.writeCosh` example with arguments
+
+    ```nix
+    writeCosh "example"
+      {
+        makeWrapperArgs = [
+          "--prefix" "PATH" ":" "${lib.makeBinPath [ pkgs.hello ]}"
+        ];
+      }
+      ''
+        hello exec; exit
+      ''
+
+    ```
+    :::
+
+    :::{.note}
+    The contents of the script are checked by compiling them to cosh bytecode &
+    a existence check. Pass `check = ""` to disable the check.
+    :::
+  */
+  writeCosh =
+    name: argsOrScript:
+    let
+      interpreter = lib.getExe pkgs.cosh;
+      check = writeDash "cosh-compile-check" ''
+        set -euf
+        checkfile="check.chc"
+        ${interpreter} -c -o "$checkfile" "$1"
+        [ -f "$checkfile" ]
+      '';
+    in
+    if lib.isAttrs argsOrScript && !lib.isDerivation argsOrScript then
+      makeScriptWriter ({ inherit interpreter check; } // argsOrScript) name
+    else
+      makeScriptWriter { inherit interpreter check; } name argsOrScript;
+
+  /**
+    Compiles cosh source code into cosh bytecode, then wraps the cosh
+    interpreter to call the resulting bytecode resulting in an executable.
+
+    # Examples
+    :::{.example}
+    ## `pkgs.writers.writeCoshBin` example without arguments
+
+    ```nix
+    writeCoshBin "example" ''
+      "𐑣𐑧𐑤𐑴, ·𐑯𐑦𐑒𐑕" println
+    ''
+    ```
+    :::
+
+    :::{.example}
+    ## `pkgs.writers.writeCoshBin` example with arguments
+
+    ```nix
+    writeCoshBin "example"
+      {
+        makeWrapperArgs = [
+          "--prefix" "PATH" ":" "${lib.makeBinPath [ pkgs.hello ]}"
+        ];
+      }
+      ''
+        hello exec; exit
+      ''
+    ```
+    :::
+  */
+  writeCoshBin =
+    name: argsOrScript:
+    let
+      interpreter = lib.getExe pkgs.cosh;
+      makeWrapperArgs = lib.optionals (lib.isAttrs argsOrScript && !lib.isDerivation argsOrScript) (
+        argsOrScript.makeWrapperArgs or [ ]
+      );
+      bytecode =
+        content:
+        let
+          env =
+            if types.str.check content then
+              {
+                inherit content;
+                passAsFile = [ "content" ];
+              }
+            else
+              { contentPath = content; };
+        in
+        pkgs.runCommandLocal "${name}.chc" env /* bash */ ''
+          set -euf
+          ${interpreter} -c -o "$out" "$contentPath"
+          [ -f "$out" ]
+        '';
+      writer =
+        content:
+        makeBinWriter {
+          compileScript = /* bash */ ''
+            makeWrapper ${interpreter} "$out" --add-flags "--bytecode ${bytecode content}"
+          '';
+          inherit makeWrapperArgs;
+        } "/bin/${name}" content;
+    in
+    if lib.isAttrs argsOrScript && !lib.isDerivation argsOrScript then writer else writer argsOrScript;
 }

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "mer-core";
     repo = "nemo-qml-plugin-dbus";
     rev = version;
-    sha256 = "1ilg929456d3k0xkvxa5r4k7i4kkw9i8kgah5xx1yq0d9wka0l77";
+    hash = "sha256-51CgJk8NYB96L1C9iWLic5J4JslF9T07mKOZQpJIj8Y=";
   };
 
   nativeBuildInputs = [

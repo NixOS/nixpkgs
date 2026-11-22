@@ -36,7 +36,7 @@ stdenv.mkDerivation {
       src
       sourceRoot
       ;
-    hash = "sha256-9jMy23VD+C87hg/TMXGbzAoqx76dhVOkWcQNudSwsYA=";
+    hash = "sha256-jeI98XnlzPlr6wUSdH1EDcBYLz/ZHBzQ60gviAoxdVM=";
   };
 
   nativeBuildInputs = [
@@ -65,9 +65,7 @@ stdenv.mkDerivation {
     '';
     homepage = "https://github.com/AaronErhardt/tuxedo-rs";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [
-      xaverdh
-    ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

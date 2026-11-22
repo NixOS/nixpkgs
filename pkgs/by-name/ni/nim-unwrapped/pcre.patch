@@ -1,0 +1,10 @@
+diff --git a/lib/wrappers/pcre.nim b/lib/wrappers/pcre.nim
+index 9144f6784..acd2c1f42 100644
+--- a/lib/wrappers/pcre.nim
++++ b/lib/wrappers/pcre.nim
+@@ -1,3 +1,5 @@
++when not defined(usePcre):
++  {.fatal: "Nixpkgs no longer supports pcre v1. You must either provide it yourself and enable std/pcre with -d:usePcre or use a third-party regex implementation".}
+ #
+ #
+ #            Nim's Runtime Library

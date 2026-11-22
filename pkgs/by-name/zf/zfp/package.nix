@@ -14,7 +14,7 @@
   enableCuda ? config.cudaSupport,
   enableFortran ? builtins.elem stdenv.hostPlatform.system gfortran.meta.platforms,
   enableOpenMP ? true,
-  enablePython ? true,
+  enablePython ? stdenv.buildPlatform == stdenv.hostPlatform,
   enableUtilities ? true,
   versionCheckHook,
 }@inputs:
@@ -89,10 +89,13 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
 
-  passthru.tests = {
-    cmake-config = testers.hasCmakeConfigModules {
-      moduleNames = [ "zfp" ];
-      package = finalAttrs.finalPackage;
+  passthru = {
+    inherit bitStreamWordSize;
+    tests = {
+      cmake-config = testers.hasCmakeConfigModules {
+        moduleNames = [ "zfp" ];
+        package = finalAttrs.finalPackage;
+      };
     };
   };
 
@@ -102,7 +105,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.spease ];
     # 64-bit only
-    platforms = lib.platforms.aarch64 ++ lib.platforms.x86_64;
+    platforms = [ lib.systems.inspect.patterns.is64bit ];
     mainProgram = "zfp";
   };
 })

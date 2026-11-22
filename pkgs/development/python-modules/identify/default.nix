@@ -24,9 +24,10 @@ buildPythonPackage (finalAttrs: {
 
   dependencies = [
     cffi
-    pytestCheckHook
     ukkonen
   ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "identify" ];
 

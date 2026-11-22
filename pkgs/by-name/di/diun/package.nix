@@ -1,19 +1,20 @@
 {
   lib,
-  buildGoModule,
+  buildGo126Module,
   fetchFromGitHub,
   nix-update-script,
   versionCheckHook,
 }:
-buildGoModule (finalAttrs: {
+# https://github.com/crazy-max/diun/blob/9ea9ffdfe144834c7ac88d9873cfcfc06970b0df/Dockerfile#L3
+buildGo126Module (finalAttrs: {
   pname = "diun";
-  version = "4.33.0";
+  version = "4.33.1";
 
   src = fetchFromGitHub {
     owner = "crazy-max";
     repo = "diun";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EVIT6au5B3wzb5xTc2o/sY7p3+tT5lWjlzQX5HdQNkA=";
+    hash = "sha256-jEA5zPrnDwkY3QWt/0BTmMExFsACXgaRBiSjLyZBf9M=";
   };
   vendorHash = null;
 
@@ -27,6 +28,8 @@ buildGoModule (finalAttrs: {
     "-X"
     "main.version=${finalAttrs.version}"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   checkFlags =
     let

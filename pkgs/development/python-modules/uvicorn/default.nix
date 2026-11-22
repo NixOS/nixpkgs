@@ -20,7 +20,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "encode";
+    owner = "Kludex";
     repo = "uvicorn";
     tag = version;
     hash = "sha256-VX5X2BY8eZc93r3zfJFhtz1vuXHvaqWB5rTj7zddSzU=";
@@ -67,6 +67,9 @@ buildPythonPackage rec {
     description = "Lightning-fast ASGI server";
     mainProgram = "uvicorn";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ wd15 ];
+    maintainers = with lib.maintainers; [
+      booxter
+      wd15
+    ];
   };
 }

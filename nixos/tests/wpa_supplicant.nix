@@ -86,6 +86,9 @@ let
               };
               wlan0-3 = {
                 ssid = "nixos-test-wpa2";
+                # Decouple the BSS interface name from the attribute name,
+                # as multi-link setups do with a shared name like mld0.
+                interfaceName = "wlan0-legacy";
                 authentication = {
                   mode = "wpa2-sha256";
                   wpaPassword = naughtyPassphrase;
@@ -140,6 +143,13 @@ let
         # save hostapd config file for manual inspection
         machine.wait_for_unit("hostapd.service")
         machine.copy_from_machine("/run/hostapd/wlan0.hostapd.conf")
+
+        with subtest("Secondary BSS uses its configured interfaceName"):
+            machine.succeed("grep -qx 'interface=wlan0' /run/hostapd/wlan0.hostapd.conf")
+            machine.succeed("grep -qx 'bss=wlan0-legacy' /run/hostapd/wlan0.hostapd.conf")
+            machine.fail("grep -qx 'bss=wlan0-3' /run/hostapd/wlan0.hostapd.conf")
+            machine.succeed("test -d /sys/class/net/wlan0-legacy")
+            machine.fail("test -d /sys/class/net/wlan0-3")
 
         ${extraTestScript}
       '';

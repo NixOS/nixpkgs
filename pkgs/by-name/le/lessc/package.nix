@@ -10,7 +10,7 @@
   testers,
   runCommand,
   writeText,
-  nix-update-script,
+  gitUpdater,
   lessc,
 }:
 
@@ -60,6 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
+    CI=true pnpm prune --prod --ignore-scripts
     mkdir -p $out/{bin,lib/lessc}
     cp -r {packages,node_modules} $out/lib/lessc
     chmod +x $out/lib/lessc/packages/less/bin/lessc
@@ -69,7 +70,10 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    updateScript = nix-update-script { };
+    updateScript = gitUpdater {
+      rev-prefix = "v";
+      ignoredVersions = "alpha";
+    };
     plugins = callPackage ./plugins { };
     wrapper = callPackage ./wrapper { };
     withPlugins = fn: lessc.wrapper.override { plugins = fn lessc.plugins; };

@@ -3,41 +3,36 @@
   async-timeout,
   buildHomeAssistantComponent,
   fetchFromGitHub,
-  fetchpatch,
+  home-assistant,
   pytest-freezer,
-  pytest-homeassistant-custom-component,
+  pytest-homeassistant,
   pytestCheckHook,
 }:
 
 buildHomeAssistantComponent rec {
   owner = "olen";
   domain = "plant";
-  version = "2026.9.0";
+  version = "2026.11.2";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = "homeassistant-plant";
     tag = "v${version}";
-    hash = "sha256-8V+90Onh3MLN8G4CjenzZWznwnGiWfhz17KZhGd1qYk=";
+    hash = "sha256-jxNGNh852sW+fRkTQlRaTMMupGhgSikhWhWLMHiJR+E=";
   };
-
-  patches = [
-    # Remove assertion for deprecated field
-    (fetchpatch {
-      url = "https://github.com/Olen/homeassistant-plant/commit/1da473a4c9cf02267e41756028f67f2847e11b97.patch";
-      hash = "sha256-lfo29gqs/6RgEBD2xwjsthGruFS/S+QPcnQ+I/bhd1k=";
-    })
-  ];
 
   dependencies = [
     async-timeout
   ];
 
   nativeCheckInputs = [
+    home-assistant
     pytest-freezer
-    pytest-homeassistant-custom-component
+    pytest-homeassistant
     pytestCheckHook
   ];
+
+  dontUsePytestXdist = true;
 
   meta = {
     description = "Alternative Plant component of home assistant";

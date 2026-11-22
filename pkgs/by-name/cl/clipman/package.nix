@@ -9,16 +9,23 @@
 
 buildGoModule (finalAttrs: {
   pname = "clipman";
-  version = "1.7.0";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "chmouel";
     repo = "clipman";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-bee40nTmFMhWeP9vC7PTRQUZ/5OLZ4CtC5LlVBbfeNQ=";
+    sha256 = "sha256-K10ne2tov8/zq2xReZ4ypX8Tsz+5ijOP9dCbpMXFlGI=";
   };
 
-  vendorHash = "sha256-I31qF84k1r/xpROW9sZ5rs7lGAxwgqXUEQ9EEo8vsTY=";
+  vendorHash = "sha256-H/a5n396U0+guxj/bTGf6R1LkPtGV0YnX7ETdC+pDTo=";
+
+  ldflags = [
+    "-s"
+    "-w"
+    "-X"
+    "main.version=${finalAttrs.version}"
+  ];
 
   outputs = [
     "out"

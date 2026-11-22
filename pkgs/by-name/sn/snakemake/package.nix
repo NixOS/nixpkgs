@@ -11,15 +11,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "snakemake";
-  version = "9.27.0";
+  version = "9.27.2";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "snakemake";
     repo = "snakemake";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pRL8I8ILaSlZq7CTA+7D/d9PJQlccVQA45csJPBHppw=";
+    hash = "sha256-YsObQu7CT6JNIK58S0I6sCwHfwQr5gHoSClVfnQDDpk=";
   };
 
   postPatch = ''
@@ -38,6 +37,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pythonRelaxDeps = [
     "docutils"
     "packaging"
+    "smart-open"
     "sqlmodel"
   ];
   dependencies = with python3Packages; [

@@ -11,7 +11,7 @@
   pytestCheckHook,
   pythonOlder,
   setuptools,
-  syrupy,
+  syrupy_5,
 }:
 
 buildPythonPackage rec {
@@ -44,7 +44,7 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-error-for-skips
     pytestCheckHook
-    syrupy
+    syrupy_5
   ];
 
   disabledTests = [

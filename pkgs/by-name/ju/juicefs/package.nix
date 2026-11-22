@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "juicefs";
-  version = "1.4.1";
+  version = "1.4.2";
 
   src = fetchFromGitHub {
     owner = "juicedata";
     repo = "juicefs";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-S8sQ14FaHW8gp0OA+cea1YMnV1o1M7AyKjh6FcQjXOg=";
+    hash = "sha256-mWx9+02+yjIShjiFoWMNBGiChPUq23UiID3W8Enplnc=";
   };
 
-  vendorHash = "sha256-JoWsoUFbP2v9g2RUBp5wK/TdguWcYPwhH8hqatzyBew=";
+  vendorHash = "sha256-3CXp4W3SYnRTpZlksWy+oz4uTVoqJ9FG41jePQPfx/Y=";
 
   excludedPackages = [ "sdk/java/libjfs" ];
 

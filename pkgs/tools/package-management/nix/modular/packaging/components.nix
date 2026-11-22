@@ -150,10 +150,7 @@ let
   };
 
   mesonLibraryLayer = finalAttrs: prevAttrs: {
-    # See https://github.com/NixOS/nix/pull/14105 -- enabling this only for Nix 2.32+ as there are
-    # reports of undefined behavior on previous versions. Note that this does //not// use
-    # `finalAttrs.version` in order to avoid infinite recursion.
-    ${if lib.versionOlder version "2.32" then null else "preConfigure"} =
+    preConfigure =
       let
         interpositionFlags = [
           "-fno-semantic-interposition"
@@ -229,8 +226,6 @@ let
         patches = prevScope.patches ++ patches;
       }
     );
-
-  whenAtLeast = v: thing: if lib.versionAtLeast version v then thing else null;
 
 in
 
@@ -377,7 +372,7 @@ in
   nix-store-tests = callPackage ../src/libstore-tests/package.nix { };
 
   nix-fetchers = callPackage ../src/libfetchers/package.nix { };
-  ${whenAtLeast "2.29pre" "nix-fetchers-c"} = callPackage ../src/libfetchers-c/package.nix { };
+  nix-fetchers-c = callPackage ../src/libfetchers-c/package.nix { };
   nix-fetchers-tests = callPackage ../src/libfetchers-tests/package.nix { };
 
   nix-expr = callPackage ../src/libexpr/package.nix { };
@@ -397,7 +392,7 @@ in
   nix-cmd-c = callPackage ../src/libcmd-c/package.nix { };
 
   nix-cli = callPackage ../src/nix/package.nix { };
-  ${whenAtLeast "2.34pre" "nix-nswrapper"} = callPackage ../src/nswrapper/package.nix { };
+  nix-nswrapper = callPackage ../src/nswrapper/package.nix { };
 
   nix-functional-tests = callPackage ../tests/functional/package.nix { };
 

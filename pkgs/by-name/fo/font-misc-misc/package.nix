@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Misc pcf fonts in different sizes";
     homepage = "https://gitlab.freedesktop.org/xorg/font/misc-misc";
     license = lib.licenses.publicDomain;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.kamadorueda ];
     platforms = lib.platforms.unix;
   };
 })

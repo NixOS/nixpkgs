@@ -16,8 +16,7 @@
   useNetCDF ? (!useMinimalFeatures),
   usePoppler ? (!useMinimalFeatures),
   usePostgres ? (!useMinimalFeatures),
-  useTiledb ?
-    (!useMinimalFeatures) && !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64),
+  useTiledb ? (!useMinimalFeatures),
 
   ant,
   armadillo,

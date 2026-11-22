@@ -28,7 +28,6 @@ buildPythonPackage (finalAttrs: {
   pname = "skorch";
   version = "1.4.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "skorch-dev";

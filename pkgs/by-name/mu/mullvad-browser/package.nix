@@ -40,7 +40,7 @@
   libGL,
 
   mediaSupport ? true,
-  ffmpeg_7,
+  ffmpeg_8,
 
   audioSupport ? mediaSupport,
 
@@ -94,10 +94,10 @@ let
     ++ lib.optionals pipewireSupport [ pipewire ]
     ++ lib.optionals pulseaudioSupport [ libpulseaudio ]
     ++ lib.optionals libvaSupport [ libva ]
-    ++ lib.optionals mediaSupport [ ffmpeg_7 ]
+    ++ lib.optionals mediaSupport [ ffmpeg_8 ]
   );
 
-  version = "15.0.25";
+  version = "16.0.2";
 
   sources = {
     x86_64-linux = fetchurl {
@@ -109,7 +109,19 @@ let
         "https://tor.eff.org/dist/mullvadbrowser/${version}/mullvad-browser-linux-x86_64-${version}.tar.xz"
         "https://tor.calyxinstitute.org/dist/mullvadbrowser/${version}/mullvad-browser-linux-x86_64-${version}.tar.xz"
       ];
-      hash = "sha256-vlU8kViCqOmtxrSE9RdJ7DjCH0VLWd0fcSs4vwtC3gw=";
+      hash = "sha256-wDvqADFOs0RigMqFH3GnY7AMfA0d1H1CXQSVBjrmyf4=";
+    };
+
+    aarch64-linux = fetchurl {
+      urls = [
+        "https://cdn.mullvad.net/browser/${version}/mullvad-browser-linux-aarch64-${version}.tar.xz"
+        "https://github.com/mullvad/mullvad-browser/releases/download/${version}/mullvad-browser-linux-aarch64-${version}.tar.xz"
+        "https://archive.torproject.org/tor-package-archive/mullvadbrowser/${version}/mullvad-browser-linux-aarch64-${version}.tar.xz"
+        "https://dist.torproject.org/mullvadbrowser/${version}/mullvad-browser-linux-aarch64-${version}.tar.xz"
+        "https://tor.eff.org/dist/mullvadbrowser/${version}/mullvad-browser-linux-aarch64-${version}.tar.xz"
+        "https://tor.calyxinstitute.org/dist/mullvadbrowser/${version}/mullvad-browser-linux-aarch64-${version}.tar.xz"
+      ];
+      hash = "sha256-VWZDItDlywpx1A6uSOQEl7QXrL/7sLke3K7L6LkCPp0=";
     };
   };
 
@@ -219,9 +231,6 @@ stdenv.mkDerivation rec {
 
     // Reset pref that captures store paths.
     clearPref("extensions.xpiState");
-
-    // Stop obnoxious first-run redirection.
-    lockPref("noscript.firstRunRedirection", false);
 
     // Allow sandbox access to sound devices if using ALSA directly
     ${

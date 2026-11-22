@@ -14,13 +14,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kryoptic";
-  version = "1.5.3";
+  version = "1.5.4";
 
   src = fetchFromGitHub {
     owner = "latchset";
     repo = "kryoptic";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ta5PHvKma371rpoyjf8VBFX70v+DcQCxaGKG+Q9bcRg=";
+    hash = "sha256-hRVHi9HgfXQa026p5tLl0C3gs9x/t3HwVXjheizb1aU=";
   };
 
   env = {
@@ -41,7 +41,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ./0001-Add-Cargo.lock.patch
   ];
 
-  cargoHash = "sha256-c+FoWGS6Yx0lE1+rICcxtO7ztuPwi2XNN59GGJxICkY=";
+  cargoHash = "sha256-zhnyuOCa5A/Gdaa6LAvNm8Ei8c1A7vQEnl76bXCKpxc=";
 
   cargoBuildFlags = [
     "--no-default-features"

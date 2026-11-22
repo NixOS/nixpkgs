@@ -56,6 +56,8 @@ stdenv.mkDerivation (finalAttrs: {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Generic PCI access library";
     homepage = "https://gitlab.freedesktop.org/xorg/lib/libpciaccess";

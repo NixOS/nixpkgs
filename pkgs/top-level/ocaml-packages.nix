@@ -265,6 +265,10 @@ let
 
         charon = callPackage ../development/ocaml-modules/charon { };
 
+        charrua = callPackage ../development/ocaml-modules/charrua { };
+
+        charrua-server = callPackage ../development/ocaml-modules/charrua/server.nix { };
+
         chrome-trace = callPackage ../development/ocaml-modules/chrome-trace { };
 
         cil = callPackage ../development/ocaml-modules/cil { };
@@ -341,6 +345,10 @@ let
         config = callPackage ../development/ocaml-modules/config { };
 
         config-file = callPackage ../development/ocaml-modules/config-file { };
+
+        console = callPackage ../development/ocaml-modules/console { };
+
+        console-eio = callPackage ../development/ocaml-modules/console/eio.nix { };
 
         containers = callPackage ../development/ocaml-modules/containers { };
 
@@ -1060,6 +1068,8 @@ let
 
         ### K ###
 
+        k7 = callPackage ../development/ocaml-modules/k7 { };
+
         kafka = callPackage ../development/ocaml-modules/kafka { };
 
         kafka_lwt = callPackage ../development/ocaml-modules/kafka/lwt.nix {
@@ -1228,6 +1238,8 @@ let
 
         markup = callPackage ../development/ocaml-modules/markup { };
 
+        matrix = callPackage ../development/ocaml-modules/mosaic/matrix.nix { };
+
         mccs = callPackage ../development/ocaml-modules/mccs { };
 
         mdx = callPackage ../development/ocaml-modules/mdx {
@@ -1296,8 +1308,6 @@ let
 
         minisat = callPackage ../development/ocaml-modules/minisat { };
 
-        minttea = callPackage ../development/ocaml-modules/minttea { };
-
         miou = callPackage ../development/ocaml-modules/miou { };
 
         mirage = callPackage ../development/ocaml-modules/mirage { };
@@ -1344,6 +1354,8 @@ let
 
         mirage-kv = callPackage ../development/ocaml-modules/mirage-kv { };
 
+        mirage-kv-mem = callPackage ../development/ocaml-modules/mirage-kv-mem { };
+
         mirage-logs = callPackage ../development/ocaml-modules/mirage-logs { };
 
         mirage-mtime = callPackage ../development/ocaml-modules/mirage-mtime { };
@@ -1351,6 +1363,8 @@ let
         mirage-nat = callPackage ../development/ocaml-modules/mirage-nat { };
 
         mirage-net = callPackage ../development/ocaml-modules/mirage-net { };
+
+        mirage-net-solo5 = callPackage ../development/ocaml-modules/mirage-net-solo5 { };
 
         mirage-net-xen = callPackage ../development/ocaml-modules/mirage-net-xen { };
 
@@ -1367,6 +1381,8 @@ let
         mirage-runtime = callPackage ../development/ocaml-modules/mirage/runtime.nix { };
 
         mirage-sleep = callPackage ../development/ocaml-modules/mirage-sleep { };
+
+        mirage-solo5 = callPackage ../development/ocaml-modules/mirage-solo5 { };
 
         mirage-time = callPackage ../development/ocaml-modules/mirage-time { };
 
@@ -1407,9 +1423,9 @@ let
           };
         };
 
-        mparser = callPackage ../development/ocaml-modules/mparser { };
+        mosaic = callPackage ../development/ocaml-modules/mosaic { };
 
-        mparser-pcre = callPackage ../development/ocaml-modules/mparser/pcre.nix { };
+        mparser = callPackage ../development/ocaml-modules/mparser { };
 
         mparser-re = callPackage ../development/ocaml-modules/mparser/re.nix { };
 
@@ -1500,8 +1516,6 @@ let
         ocaml-monadic = callPackage ../development/ocaml-modules/ocaml-monadic { };
 
         ocaml_oasis = callPackage ../development/tools/ocaml/oasis { };
-
-        ocaml_pcre = callPackage ../development/ocaml-modules/pcre { };
 
         ocaml-print-intf = callPackage ../development/ocaml-modules/ocaml-print-intf { };
 
@@ -1866,6 +1880,8 @@ let
 
         ppx_tools_versioned = callPackage ../development/ocaml-modules/ppx_tools_versioned { };
 
+        ppx_windtrap = callPackage ../development/ocaml-modules/windtrap/ppx.nix { };
+
         ppx_yojson_conv = callPackage ../development/ocaml-modules/ppx_yojson_conv { };
 
         ppx_yojson_conv_lib = callPackage ../development/ocaml-modules/ppx_yojson_conv_lib { };
@@ -1984,8 +2000,6 @@ let
         ringo = callPackage ../development/ocaml-modules/ringo { };
 
         rio = callPackage ../development/ocaml-modules/rio { };
-
-        riot = callPackage ../development/ocaml-modules/riot { };
 
         rock = callPackage ../development/ocaml-modules/rock { };
 
@@ -2159,6 +2173,8 @@ let
 
         thread-table = callPackage ../development/ocaml-modules/thread-table { };
 
+        thumper = callPackage ../development/ocaml-modules/thumper { };
+
         timed = callPackage ../development/ocaml-modules/timed { };
 
         timedesc = callPackage ../development/ocaml-modules/timedesc { };
@@ -2178,6 +2194,8 @@ let
         tls-miou-unix = callPackage ../development/ocaml-modules/tls/miou-unix.nix { };
 
         tls-mirage = callPackage ../development/ocaml-modules/tls/mirage.nix { };
+
+        toffee = callPackage ../development/ocaml-modules/mosaic/toffee.nix { };
 
         toml = callPackage ../development/ocaml-modules/toml { };
 
@@ -2244,6 +2262,8 @@ let
         uri-sexp = callPackage ../development/ocaml-modules/uri/sexp.nix { };
 
         uring = callPackage ../development/ocaml-modules/uring { };
+
+        utcp = callPackage ../development/ocaml-modules/utcp { };
 
         utop = callPackage ../development/tools/ocaml/utop { };
 

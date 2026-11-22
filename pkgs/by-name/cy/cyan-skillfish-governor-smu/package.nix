@@ -10,7 +10,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cyan-skillfish-governor-smu";
-  version = "0.4.14";
+  version = "0.4.15";
 
   __structuredAttrs = true;
 
@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "filippor";
     repo = "cyan-skillfish-governor";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9MLUtRVefOr4omMcW9QC3sYV+amPCyBgm6dmlJo9/bo=";
+    hash = "sha256-nt6M1rWv9eOC7ic3kcR3clggBZt3A37oCpk5q8Xban8=";
   };
 
   cargoHash = "sha256-zlAVGLGnub2Gc0Bkzb5GU9NBAJ2YWLhIG8JOa+1wHx8=";

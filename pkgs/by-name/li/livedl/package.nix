@@ -2,7 +2,6 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  stdenv,
 }:
 
 buildGoModule {
@@ -27,7 +26,6 @@ buildGoModule {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ wakira ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
-    broken = stdenv.hostPlatform.isDarwin; # build fails with go > 1.17
     mainProgram = "livedl";
   };
 }

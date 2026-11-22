@@ -23,14 +23,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyrate-limiter";
-  version = "4.5.0";
+  version = "4.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "vutran1710";
     repo = "PyrateLimiter";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-UUNXb4lCcZZ+BPO1t8rStuDTj69dnIMMv6wdlNH+gcI=";
+    hash = "sha256-IpiRocGjVAPsoNUcpRYqFKm1amtp9ysH1V846a0/nLk=";
   };
 
   build-system = [
@@ -65,24 +65,28 @@ buildPythonPackage (finalAttrs: {
     redisTestHook
   ];
 
+  # Timing-sensitive, fails under load
+  # https://github.com/vutran1710/PyrateLimiter/issues/245
+  disabledTests = [ "test_limiter_01" ];
+
   disabledTestPaths = [
     # Slow: > 1.5 seconds/test run standalone on a fast machine
     # (Apple M3 Max with highest performance settings and 36GB RAM)
     # and/or hang under load
-    # https://github.com/vutran1710/PyrateLimiter/issues/245
     # https://github.com/vutran1710/PyrateLimiter/issues/247
     "tests/test_bucket_all.py"
-    "tests/test_bucket_factory.py"
-    "tests/test_limiter.py"
-    "tests/test_multiprocessing.py"
     "tests/test_postgres_concurrent.py"
-    "tests/test_multi_bucket.py"
   ];
 
   # For redisTestHook
   __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "pyrate_limiter" ];
+
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+  };
 
   meta = {
     description = "Python Rate-Limiter using Leaky-Bucket Algorimth Family";

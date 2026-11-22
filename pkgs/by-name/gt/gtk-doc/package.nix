@@ -85,8 +85,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     };
   };
 
-  __structuredAttrs = true;
-
   meta = {
     changelog = "https://gitlab.gnome.org/GNOME/gtk-doc/-/blob/${finalAttrs.src.tag}/NEWS";
     description = "Tools to extract documentation embedded in GTK and GNOME source code";

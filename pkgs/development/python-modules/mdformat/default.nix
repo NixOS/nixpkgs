@@ -17,7 +17,7 @@ buildPythonPackage (finalAttrs: {
   disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
-    owner = "executablebooks";
+    owner = "hukkin";
     repo = "mdformat";
     tag = finalAttrs.version;
     hash = "sha256-fo4xO4Y89qPAggEjwuf6dnTyu1JzhZVdJyUqGNpti7g=";
@@ -41,7 +41,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "CommonMark compliant Markdown formatter";
     homepage = "https://mdformat.rtfd.io/";
-    changelog = "https://github.com/executablebooks/mdformat/blob/${finalAttrs.src.tag}/docs/users/changelog.md";
+    changelog = "https://github.com/hukkin/mdformat/blob/${finalAttrs.src.tag}/docs/users/changelog.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       fab

@@ -21,17 +21,20 @@
   ccze,
   ncurses,
   tmux,
+  pv,
+  bat,
+  figlet,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hollywood";
-  version = "1.22";
+  version = "1.26";
 
   src = fetchFromGitHub {
     owner = "dustinkirkland";
     repo = "hollywood";
-    rev = "35275a68c37bbc39d8b2b0e4664a0c2f5451e5f6";
-    sha256 = "sha256-faIm1uXERvIDZ6SK6uarVkWGNJskAroHgq5Cg7nUZc4=";
+    rev = "${finalAttrs.version}";
+    hash = "sha256-8e+XyMZ9xPkMKYt+vgmdPJZqjQDj0yfVmycbdHl6BrA=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -66,6 +69,9 @@ stdenv.mkDerivation {
         tree
         findutils
         ccze
+        pv
+        bat
+        figlet
       ];
     in
     ''
@@ -85,6 +91,6 @@ stdenv.mkDerivation {
     mainProgram = "hollywood";
     homepage = "https://a.hollywood.computer/";
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ olduser101 ];
   };
-}
+})

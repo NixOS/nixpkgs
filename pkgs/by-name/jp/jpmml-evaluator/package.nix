@@ -37,7 +37,7 @@ maven.buildMavenPackage (finalAttrs: {
         '<guava.version>33.5.0-jre</guava.version>'
   '';
 
-  mvnHash = "sha256-xnFwQGjLEX59zeYKX+R7+F9hRRmRXtkP6Xw2hRi6Jbc=";
+  mvnHash = "sha256-+sgeNjZs1bWCqdi2JQ2LxoW6BC3+0EQMr/cjWh1NbZA=";
 
   nativeBuildInputs = [
     makeBinaryWrapper

@@ -18,17 +18,19 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "disktree";
-  version = "0.10.1";
+  version = "0.11.0";
+
+  strictDeps = true;
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "tobi";
     repo = "disktree";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HoJjSLQeLEK20SpEd40DakAwV6WTdtcWM779YCjI3Jk=";
+    hash = "sha256-b7VP3VgOS+zUTR2bhOh6JNcN5mIIeHL/fe3u/eHC+X4=";
   };
 
-  cargoHash = "sha256-+IG75eHRo1+4Sg5dq+b77UWYLKQlqPH30WtAnND/Cbk=";
+  cargoHash = "sha256-k+iLvOS+6o5oC+JcG9BJ3UUAzZAQpcpNelKCXsDx0Fw=";
 
   nativeBuildInputs = [
     pkg-config
@@ -78,7 +80,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/tobi/disktree";
     changelog = "https://github.com/tobi/disktree/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ domenkozar ];
+    maintainers = with lib.maintainers; [
+      domenkozar
+      kleinbem
+    ];
     mainProgram = "disktree";
     platforms = lib.platforms.linux;
   };

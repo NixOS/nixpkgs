@@ -7,7 +7,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "syntaqlite";
-  version = "0.12.1";
+  version = "0.14.0";
 
   __structuredAttrs = true;
 
@@ -15,10 +15,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "LalitMaganti";
     repo = "syntaqlite";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KdzaKjSvaoLWnxTBmNd8CDvPcCjY50hGWAJ1hkxldFc=";
+    hash = "sha256-2zEk7YZHwvdJ9yXSD+IMi52uafEUWUbBtUCiusmHahA=";
   };
 
-  cargoHash = "sha256-tT6HM4R6P2C2zybkpOhvnHJS3OweI8cEeT7UzR4qlxc=";
+  cargoHash = "sha256-/OSiTAJ9mDzgyE/K8q7KL+GVW68/ORLUqqB7Ghx2Usk=";
 
   # CLI contains MCP and LSP
   buildAndTestSubdir = "syntaqlite-cli";

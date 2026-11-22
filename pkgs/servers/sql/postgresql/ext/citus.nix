@@ -31,8 +31,9 @@ let
     };
   };
 
+  pgMajor = lib.versions.major postgresql.version;
   source =
-    sources.${lib.versions.major postgresql.version} or {
+    sources.${pgMajor} or {
       version = "";
       hash = throw "Source for citus is not available for ${postgresql.version}";
     };
@@ -47,6 +48,10 @@ postgresqlBuildExtension (finalAttrs: {
     tag = "v${finalAttrs.version}";
     inherit (source) hash;
   };
+
+  patches = lib.optionals (pgMajor == "15") [
+    ./citus-pg15-fix-build.patch
+  ];
 
   buildInputs = [
     curl

@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "Riverside-Healthcare";
+    owner = "djlint";
     repo = "html-void-elements";
     rev = version;
     hash = "sha256-Q5OEczTdgCCyoOsKv3MKRE3w4t/qyPG4YKbF19jlC88=";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "List of HTML void tag names";
-    homepage = "https://github.com/Riverside-Healthcare/html-void-elements";
+    homepage = "https://github.com/djlint/html-void-elements";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ traxys ];
   };

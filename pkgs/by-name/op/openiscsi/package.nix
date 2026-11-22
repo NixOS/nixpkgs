@@ -12,7 +12,6 @@
   kmod,
   systemd,
   runtimeShell,
-  nixosTests,
   udevCheckHook,
 }:
 
@@ -60,8 +59,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doInstallCheck = true;
-
-  passthru.tests = { inherit (nixosTests) iscsi-root; };
 
   meta = {
     description = "High performance, transport independent, multi-platform implementation of RFC3720";

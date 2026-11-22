@@ -2,7 +2,6 @@
   lib,
   copyDesktopItems,
   fetchurl,
-  ffmpeg,
   gitUpdater,
   jre,
   libarchive,
@@ -13,11 +12,11 @@
 }:
 let
   pname = "maptool";
-  version = "1.18.7";
+  version = "1.18.8";
   repoBase = "https://github.com/RPTools/maptool";
   src = fetchurl {
     url = "${repoBase}/releases/download/${version}/maptool-${version}-x86_64.pkg.tar.zst";
-    hash = "sha256-XJnSShnfrseJsKNT8X0R+qoojOUdjf1MCXRFXpL21rU=";
+    hash = "sha256-2Hg6ISjjV+wt5VA2qmB+4ZsYEOJVv2DlDAtM6qsnLtY=";
   };
 
   meta = {
@@ -117,6 +116,7 @@ stdenvNoCC.mkDerivation {
     dest=$out/${appClasspath}
     install -dm755 "$dest"
     bsdtar -xf "$src" -C "$dest" --strip-components 4 opt/maptool/lib/app/{'*.jar',readme}
+    rm -rf "$dest"/javafx-*.jar
 
     dest=$out/share/icons/hicolor/256x256/apps
     install -dm755 "$dest"
@@ -126,7 +126,6 @@ stdenvNoCC.mkDerivation {
     install -dm755 "$dest"
     makeWrapper ${lib.getExe jre} "$dest"/${binName} \
       "''${gappsWrapperArgs[@]}" \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ ffmpeg ]} \
       --add-flags "${lib.concatStringsSep " " jvmArgs} net.rptools.maptool.client.LaunchInstructions"
 
     runHook postInstall

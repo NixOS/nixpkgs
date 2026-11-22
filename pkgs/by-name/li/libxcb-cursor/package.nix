@@ -53,6 +53,8 @@ stdenv.mkDerivation (finalAttrs: {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "XCB port of libxcursor";
     homepage = "https://gitlab.freedesktop.org/xorg/lib/libxcb-cursor";

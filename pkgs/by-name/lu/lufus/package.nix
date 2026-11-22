@@ -37,8 +37,6 @@ python313Packages.buildPythonApplication (finalAttrs: {
     copyDesktopItems
   ];
 
-  __structuredAttrs = true;
-
   postInstall = ''
     makeWrapper ${python313Packages.python.interpreter} $out/bin/lufus \
       --add-flags "-m lufus" \

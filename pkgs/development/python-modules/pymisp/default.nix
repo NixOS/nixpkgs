@@ -31,8 +31,6 @@ buildPythonPackage (finalAttrs: {
   version = "2.5.34.4";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "MISP";
     repo = "PyMISP";

@@ -1,6 +1,4 @@
 {
-  lib,
-  stdenv,
   buildDunePackage,
   mirage-crypto,
   ohex,
@@ -25,14 +23,6 @@ buildDunePackage {
     ounit2
     randomconv
   ];
-
-  # test_entropy relies on timer jitter and is flaky on x86_64-darwin.
-  postPatch = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) ''
-    substituteInPlace tests/dune \
-      --replace-fail \
-        '(enabled_if (and (<> %{architecture} "arm64") (<> %{architecture} "riscv")))' \
-        '(enabled_if false)'
-  '';
 
   buildInputs = [ dune-configurator ];
   propagatedBuildInputs = [

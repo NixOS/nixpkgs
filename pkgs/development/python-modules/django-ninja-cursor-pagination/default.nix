@@ -41,6 +41,6 @@ buildPythonPackage {
     description = "Django Ninja extension for cursor-based pagination";
     homepage = "https://github.com/kitware-resonant/django-ninja-cursor-pagination";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ defelo ];
+    maintainers = [ ];
   };
 }

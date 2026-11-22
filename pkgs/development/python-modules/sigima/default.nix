@@ -8,6 +8,7 @@
 
   # dependencies
   guidata,
+  imagecodecs,
   makefun,
   numpy,
   packaging,
@@ -15,12 +16,12 @@
   pywavelets,
   scikit-image,
   scipy,
-  typing-extensions,
 
   # optional-dependencies
   babel,
   build,
   coverage,
+  jsonschema,
   pre-commit,
   pylint,
   ruff,
@@ -38,8 +39,6 @@
   sphinx-design,
   sphinx-gallery,
   sphinx-intl,
-  pytest,
-  pytest-xvfb,
 
   # tests
   pytestCheckHook,
@@ -47,16 +46,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "sigima";
-  version = "1.2.0";
+  version = "1.4.1";
   pyproject = true;
   __darwinAllowLocalNetworking = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "DataLab-Platform";
     repo = "Sigima";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pKI1xODYR0ZanXEI3r3UhKj2FvrBA8MWVwSpcg+GBls=";
+    hash = "sha256-hrkGBSWtKuLXVHi0RXyUWf66XkhLPgdOHaUTrNtBrVU=";
   };
 
   build-system = [
@@ -65,6 +63,7 @@ buildPythonPackage (finalAttrs: {
 
   dependencies = [
     guidata
+    imagecodecs
     makefun
     numpy
     packaging
@@ -72,7 +71,6 @@ buildPythonPackage (finalAttrs: {
     pywavelets
     scikit-image
     scipy
-    typing-extensions
   ];
 
   optional-dependencies = {
@@ -109,19 +107,17 @@ buildPythonPackage (finalAttrs: {
       pyqt5
       qtpy
     ];
-    test = [
-      pytest
-      pytest-xvfb
-    ];
   };
+
+  disabledTests = [
+    # TODO re-enable this test when imagecodecs with cctitt support
+    # added in https://github.com/NixOS/nixpkgs/pull/582105 is available for nixpkgs master
+    "test_read_ccitt_group4_tiff"
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
-  ];
-
-  pythonRelaxDeps = [
-    "numpy"
-    "scipy"
+    jsonschema
   ];
 
   pythonImportsCheck = [

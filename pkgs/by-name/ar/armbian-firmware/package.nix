@@ -5,13 +5,13 @@
 }:
 stdenvNoCC.mkDerivation {
   pname = "armbian-firmware";
-  version = "0-unstable-2023-09-16";
+  version = "0-unstable-2026-10-29";
 
   src = fetchFromGitHub {
     owner = "armbian";
     repo = "firmware";
-    rev = "01f9809bb0c4bd60c0c84b9438486b02d58b03f7";
-    hash = "sha256-ozKADff7lFjIT/Zf5dkNlCe8lOK+kwYb/60NaCJ8i2k=";
+    rev = "f7fa5956ecca08af42991633a4a8f09d3b1926e5";
+    hash = "sha256-cH+re0zE1ihJjOoz/Z9ZIBNJNp1uk9deZGEsMvkoxkU=";
   };
 
   installPhase = ''

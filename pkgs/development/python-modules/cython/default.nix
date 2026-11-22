@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   gdb,
   ncurses,
   numpy,
@@ -15,15 +16,23 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "cython";
-  version = "3.2.5";
+  version = "3.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cython";
     repo = "cython";
     tag = finalAttrs.version;
-    hash = "sha256-wes7UFSWW00tKTmp3Aqk0jDpMMRVHRIhonC6CD7pwB4=";
+    hash = "sha256-gIEqq8DAJF197gH1cMuq5JxI4rV/VHS70vg8hywXDqw=";
   };
+
+  patches = [
+    # https://github.com/cython/cython/issues/7942
+    (fetchpatch {
+      url = "https://github.com/cython/cython/pull/7970.patch";
+      hash = "sha256-dsc6Q7ySDt7m8zCJIaIRDvOM0T5HdMSBnv5JH1RwLoE=";
+    })
+  ];
 
   build-system = [
     setuptools
@@ -79,8 +88,12 @@ buildPythonPackage (finalAttrs: {
       runHook postCheck
     '';
 
-  passthru.tests = {
-    inherit pygame-ce sage;
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+    tests = {
+      inherit pygame-ce sage;
+    };
   };
 
   # Force code regeneration in source distributions

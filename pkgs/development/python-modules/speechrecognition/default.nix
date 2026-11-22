@@ -44,7 +44,6 @@ buildPythonPackage (finalAttrs: {
   pname = "speechrecognition";
   version = "3.17.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Uberi";
@@ -110,6 +109,10 @@ buildPythonPackage (finalAttrs: {
   disabledTestPaths = [
     # vosk is not available in nixpkgs
     "tests/recognizers/test_vosk.py"
+
+    # openai 3.x uses httpx2, which respx cannot intercept; these tests
+    # attempt a real network call and fail with openai.APIConnectionError.
+    "tests/recognizers/whisper_api/test_openai.py"
   ];
 
   __darwinAllowLocalNetworking = true;

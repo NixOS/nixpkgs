@@ -5,6 +5,7 @@
   atk,
   autoconf,
   automake,
+  aws-lc,
   cairo,
   capnproto,
   clang,
@@ -55,11 +56,20 @@
     buildInputs = [ alsa-lib ];
   };
 
-  # Force using the cmake backend. At least on Darwin, the build else gets confused and fails.
-  aws-lc-sys = prev: {
-    nativeBuildInputs = [ cmake ];
-    env.AWS_LC_SYS_CMAKE_BUILDER = 1;
-  };
+  aws-lc-sys =
+    attrs:
+    if lib.versionAtLeast attrs.version "0.42.0" then
+      {
+        nativeBuildInputs = [ pkg-config ];
+        buildInputs = [ aws-lc ];
+        env.AWS_LC_SYS_USE_SYSTEM = 1;
+      }
+    else
+      {
+        # Force using the cmake backend. At least on Darwin, the build else gets confused and fails.
+        nativeBuildInputs = [ cmake ];
+        env.AWS_LC_SYS_CMAKE_BUILDER = 1;
+      };
 
   cairo-rs = attrs: {
     buildInputs = [ cairo ];
@@ -227,6 +237,7 @@
   };
 
   libsqlite3-sys = attrs: {
+    LIBSQLITE3_SYS_USE_PKG_CONFIG = true;
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ sqlite ];
   };

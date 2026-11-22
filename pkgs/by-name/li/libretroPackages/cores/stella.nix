@@ -5,13 +5,13 @@
 }:
 mkLibretroCore {
   core = "stella";
-  version = "0-unstable-2026-09-25";
+  version = "0-unstable-2026-11-16";
 
   src = fetchFromGitHub {
     owner = "stella-emu";
     repo = "stella";
-    rev = "36db8267e443a1ddfe4fabc0a3d42ec2b2332cb4";
-    hash = "sha256-g3x/ViAbvYMOmkLX1yVM8McfssBZZUou0KIl0dmzHX0=";
+    rev = "4569658d24abcbfe6450b49fccacdc48e6d96580";
+    hash = "sha256-IFBtPZdVlUd3D4nwYt0nor8mC0Lhw+Uq/WUygxahC0k=";
   };
 
   makefile = "Makefile";

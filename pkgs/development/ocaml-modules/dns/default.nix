@@ -18,13 +18,13 @@
 
 buildDunePackage (finalAttrs: {
   pname = "dns";
-  version = "10.2.6";
+  version = "10.2.7";
 
   minimalOCamlVersion = "4.13";
 
   src = fetchurl {
     url = "https://github.com/mirage/ocaml-dns/releases/download/v${finalAttrs.version}/dns-${finalAttrs.version}.tbz";
-    hash = "sha256-TD3yY91FlvhWNhX+NkTi+tWXi2aiaMPvNSCD1/7g/8g=";
+    hash = "sha256-d+TD0S8vG8QNaH5SQmIDEQeIMx2fgiAWQJvnYvx8cHE=";
   };
 
   propagatedBuildInputs = [

@@ -6,6 +6,7 @@
   pkg-config,
   installShellFiles,
   writableTmpDirAsHomeHook,
+  aws-lc,
   libgit2,
   oniguruma,
   openssl,
@@ -14,7 +15,7 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "forgejo-cli";
-  version = "0.6.0";
+  version = "0.7.0";
 
   __structuredAttrs = true;
 
@@ -22,10 +23,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "forgejo-contrib";
     repo = "forgejo-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XG7IPfl5yLToDQ+P0JkMxhfqsGd3cGWYCNrmlFf9j2Y=";
+    hash = "sha256-aZ74mE5AP1cwGPNgsIJw43SLK5wSB8OlEYEazEuDZ7c=";
   };
 
-  cargoHash = "sha256-+7WiOmYBjTMEsIGaqnMVTIHhzTpm8ObnljNXFnDazhI=";
+  cargoHash = "sha256-8SM2aqws/Q2ynf2IlUj7NBrVA4AaVrDeZ7+WtoHXfk0=";
 
   nativeBuildInputs = [
     pkg-config
@@ -34,6 +35,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
     libgit2
     oniguruma
     openssl
@@ -46,7 +48,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   # The `grep -v ...` in the completion commands below mitigate a forgejo-cli issue
-  # that, as of forgejo-cli 0.6.0, causes the `completion` command to output extra text.
+  # that, as of forgejo-cli 0.7.0, causes the `completion` command to output extra text.
   # see: https://codeberg.org/forgejo-contrib/forgejo-cli/issues/629
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd fj \

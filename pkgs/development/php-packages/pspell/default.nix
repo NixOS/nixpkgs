@@ -6,17 +6,14 @@
   php,
 }:
 
-let
-  version = "1.0.1";
-in
-buildPecl {
-  inherit version;
+buildPecl (finalAttrs: {
   pname = "pspell";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "php";
     repo = "pecl-text-pspell";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-IVBuEVsUKah8W+oVpIPT9Iln6MFox0e5/5Y14/Kgcg4=";
   };
 
@@ -31,4 +28,4 @@ buildPecl {
     license = lib.licenses.php301;
     teams = [ lib.teams.php ];
   };
-}
+})

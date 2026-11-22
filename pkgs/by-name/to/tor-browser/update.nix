@@ -61,7 +61,7 @@ writeShellScript "update-${pname}" ''
 
   declare -A platforms=(
     ['x86_64-linux']='linux-x86_64'
-    ['i686-linux']='linux-i686'
+    ['aarch64-linux']='linux-aarch64'
   )
 
   for platform in ${lib.escapeShellArgs meta.platforms}; do

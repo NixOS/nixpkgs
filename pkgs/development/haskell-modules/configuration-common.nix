@@ -106,7 +106,7 @@ with haskellLib;
           # to bogus references to some dependencies.
           overrideCabal (
             old:
-            lib.optionalAttrs (pkgs.stdenv.hostPlatform.isDarwin && pkgs.stdenv.hostPlatform.isAarch64) {
+            lib.optionalAttrs pkgs.stdenv.hostPlatform.isDarwin {
               postInstall = ''
                 ${old.postInstall or ""}
                 remove-references-to -t ${scope.HTTP} "$out/bin/.cabal-wrapped"
@@ -404,6 +404,10 @@ with haskellLib;
 
   # There are numerical tests on random data, that may fail occasionally
   lapack = dontCheck super.lapack;
+
+  # HiGHS >= 1.16 makes querying the solution of an infeasible model an error.
+  # https://hub.darcs.net/thielema/highs-lp/patch/2bd559ad5108c16e2ec9fa401d206ea20fa79889
+  highs-lp = appendPatch ./patches/highs-lp-highs-1.16.patch super.highs-lp;
 
   # fpr-calc test suite depends on random >= 1.3
   # see https://github.com/IntersectMBO/lsm-tree/issues/797
@@ -2855,16 +2859,7 @@ with haskellLib;
   monad-bayes =
     # Floating point precision issues. Test suite is only checked on x86_64.
     # https://github.com/tweag/monad-bayes/issues/368
-    dontCheckIf
-      (
-        let
-          inherit (pkgs.stdenv) hostPlatform;
-        in
-        !hostPlatform.isx86_64
-        # Presumably because we emulate x86_64-darwin via Rosetta, x86_64-darwin
-        # also fails on Hydra
-        || hostPlatform.isDarwin
-      )
+    dontCheckIf (!pkgs.stdenv.hostPlatform.isx86_64)
       # Too strict bounds on brick (<2.6), vty (<6.3)
       # https://github.com/tweag/monad-bayes/issues/378
       (doJailbreak super.monad-bayes);
@@ -3002,21 +2997,17 @@ with haskellLib;
   stripe-signature = doJailbreak super.stripe-signature;
   stripe-wreq = doJailbreak super.stripe-wreq;
 
-  # 2026-05-10: Remove again, when hackage bump is recent enough
-  botan-low = overrideCabal {
-    version = "0.2.0.1";
-    sha256 = "sha256-yC+GJDNO58TIc197Mgn/vqpt4fY3YghLhJfmGkQjsxk=";
-    revision = null;
-    editedCabalFile = null;
-  } (warnAfterVersion "0.2.0.1" super.botan-low);
-
-  # 2026-05-10: Remove again, when hackage bump is recent enough
-  botan-bindings = overrideCabal {
-    version = "0.3.0.0";
-    sha256 = "sha256-tsarIc3LcUKPgSWZ+xcGPWGO2f9OF6SWHB6nmX/vJYw=";
-    revision = null;
-    editedCabalFile = null;
-  } (warnAfterVersion "0.3.0.0" super.botan-bindings);
+  # 2026-05-10: Remove overrideCabal again, when hackage bump is recent enough
+  # 2026-11-05: Adapt tests to Botan 3.14, which rejects DSA groups with
+  # q > 256 bits and reports PBKDF2 without a PRF as not implemented
+  botan-low = appendPatch ./patches/botan-low-botan-3.14-tests.patch (
+    overrideCabal {
+      version = "0.2.0.1";
+      sha256 = "sha256-yC+GJDNO58TIc197Mgn/vqpt4fY3YghLhJfmGkQjsxk=";
+      revision = null;
+      editedCabalFile = null;
+    } (warnAfterVersion "0.2.0.1" super.botan-low)
+  );
 }
 // import ./configuration-tensorflow.nix { inherit pkgs haskellLib; } self super
 
@@ -3417,26 +3408,36 @@ with haskellLib;
 # Manually maintained
 // (
   let
-    version = "1.12.1";
+    version = "1.15.0";
 
     src = pkgs.fetchFromGitHub {
       owner = "cachix";
       repo = "cachix";
       tag = "v${version}";
-      hash = "sha256-OUB6hPlFBB9FRdZgZXSye4lDOg+fbrqKe8ePv2IM7NY=";
+      hash = "sha256-ftyytmVYzl0oUnMTmCBNS7TTMSjqCsHNlnGbswGxYY8=";
     };
   in
   {
-    cachix-api = overrideSrc {
-      inherit version;
-      src = src + "/cachix-api";
-    } super.cachix-api;
+    cachix-api = lib.pipe super.cachix-api [
+      (overrideSrc {
+        inherit version;
+        src = src + "/cachix-api";
+      })
+      (addBuildDepend self.openapi3)
+    ];
 
     cachix = lib.pipe super.cachix [
       (overrideSrc {
         inherit version;
         src = src + "/cachix";
       })
+      # The test suite spawns the built cachix binary.
+      (overrideCabal (drv: {
+        preCheck = ''
+          export PATH="$PWD/dist/build/cachix:$PATH"
+        ''
+        + (drv.preCheck or "");
+      }))
       (
         drv:
         drv.override {

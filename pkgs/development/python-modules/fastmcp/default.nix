@@ -32,7 +32,6 @@ buildPythonPackage (finalAttrs: {
   pname = "fastmcp";
   version = "3.4.7";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "PrefectHQ";
@@ -143,10 +142,12 @@ buildPythonPackage (finalAttrs: {
     "test_rate_limiting_with_different_operations"
     "test_timeout"
 
-    # RuntimeError: Attempted to exit a cancel scope that isn't the current tasks's current cancel scope
-    "test_stateful_proxy"
-    "test_concurrent_log_requests_no_mixing"
-    "test_multi_proxies_no_mixing"
+    # TypeError: 'typing.Union' object is not callable
+    "test_convert_messages_with_tool_use_content"
+    "test_convert_sampling_messages_to_anthropic_messages"
+    "test_convert_single_image_content_to_anthropic_message"
+    "test_convert_list_content_with_image_and_text"
+    "test_convert_messages_with_tool_result_content"
   ]
   ++ lib.optionals stdenv.hostPlatform.isAarch64 [
     # floating point error

@@ -14,7 +14,7 @@
   configText ? "",
 }:
 let
-  version = "2606";
+  version = "2609";
 
   sysArch =
     if stdenv.hostPlatform.system == "x86_64-linux" then
@@ -72,8 +72,8 @@ let
     pname = "omnissa-horizon-files";
     inherit version;
     src = fetchurl {
-      url = "https://download3.omnissa.com/software/CART27FQ2_LIN_2606_TARBALL/Omnissa-Horizon-Client-Linux-2606-8.19.0-32216036411.tar.gz";
-      hash = "sha256-5kpZAPeiY4R3a8WRLLjWLndWXGhqrg7rC4d6EBoC2Ao=";
+      url = "https://download3.omnissa.com/software/CART27FQ3_LIN_2609_TARBALL/Omnissa-Horizon-Client-Linux-2609-8.20.0-39006907675.tar.gz";
+      hash = "sha256-wfbJ3gwrxc/iE70Ky9snrejS4UXhTFG1sg+dBQOTkbk=";
     };
     nativeBuildInputs = [ makeWrapper ];
     installPhase = ''
@@ -121,7 +121,6 @@ let
           glib
           gst_all_1.gst-plugins-base
           gst_all_1.gstreamer
-          gtk2
           gtk3-x11
           harfbuzz
           liberation_ttf
@@ -151,6 +150,7 @@ let
           omnissaHorizonClientFiles
           pango
           pcsclite
+          pipewire
           pixman
           udev
           zlib

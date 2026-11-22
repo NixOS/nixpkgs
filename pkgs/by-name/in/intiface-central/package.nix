@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  flutter338,
+  flutter347,
   corrosion,
   rustPlatform,
   cargo,
@@ -10,12 +10,14 @@
   jdk,
   udev,
   zlib,
+  cmake,
   copyDesktopItems,
   makeDesktopItem,
   runCommand,
   writeText,
   pkg-config,
   dbus,
+  aws-lc,
 }:
 
 let
@@ -27,13 +29,13 @@ let
 
   pname = "intiface-central";
 
-  version = "3.0.4+40";
+  version = "3.2.2+46";
 
   src = fetchFromGitHub {
     owner = "intiface";
     repo = "intiface-central";
     tag = "v${version}";
-    hash = "sha256-RMllaThwCp2mRl0ecMtj3z6DC4uhdLqYNPI8lZChmhI=";
+    hash = "sha256-NBehtWsJAcWLd90WpXf8BNZ7KEJvp/lS1kwJ3W0KYGo=";
   };
 
   rustDep = rustPlatform.buildRustPackage {
@@ -46,13 +48,17 @@ let
       ln -s ${buttplug} ../../buttplug
     '';
 
-    cargoHash = "sha256-2KmwfvSDIaLvGda/EofUxGPRevv+/UQOUdSPRF2LEJw=";
+    cargoHash = "sha256-IpIA9w+NkM9fyL/a6p1thBpwtNnPElV4YlkndbkxZ+A=";
 
-    nativeBuildInputs = [ pkg-config ];
+    nativeBuildInputs = [
+      pkg-config
+      cmake
+    ];
 
     buildInputs = [
       dbus
       udev
+      aws-lc
     ];
 
     passthru.libraryPath = "lib/librust_lib_intiface_central.so";
@@ -68,11 +74,11 @@ let
   buttplug = fetchFromGitHub {
     owner = "buttplugio";
     repo = "buttplug";
-    tag = "intiface_engine_4.0.2";
-    hash = "sha256-4tzGZEsqfCnz/ZX6qNx/Hku6yDK0g6gyep6p6WZGoQk=";
+    tag = "intiface-engine-5.0.4";
+    hash = "sha256-OUEeW7izB3p4YM3iy6t57XlEvtRidkQfemyCHQDZuwQ=";
   };
 in
-flutter338.buildFlutterApplication {
+flutter347.buildFlutterApplication {
   inherit pname version src;
 
   patches = [
@@ -136,6 +142,7 @@ flutter338.buildFlutterApplication {
   buildInputs = [
     jdk
     udev
+    aws-lc
   ];
 
   env.ZLIB_ROOT = zlib-root;

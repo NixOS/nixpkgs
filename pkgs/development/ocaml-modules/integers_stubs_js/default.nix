@@ -16,7 +16,7 @@ buildDunePackage (finalAttrs: {
     owner = "o1-labs";
     repo = "integers_stubs_js";
     rev = finalAttrs.version;
-    sha256 = "sha256-lg5cX9/LQlVmR42XcI17b6KaatnFO2L9A9ZXfID8mTY=";
+    hash = "sha256-lg5cX9/LQlVmR42XcI17b6KaatnFO2L9A9ZXfID8mTY=";
   };
 
   propagatedBuildInputs = [ zarith_stubs_js ];

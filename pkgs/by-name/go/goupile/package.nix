@@ -4,14 +4,14 @@
   versionCheckHook,
   installShellFiles,
 
-  stdenv,
   clangStdenv,
   llvmPackages,
   nixosTests,
 
   # https://goupile.org/en/build recommends a Paranoid build
-  # which is not bit by bit reproducible, whereas others are
-  profile ? "Paranoid",
+  # which is not bit by bit reproducible, whereas others are.
+  # In nixpkgs we decide to chose reproducibility.
+  profile ? "Fast",
 
   nix-update-script,
 }:
@@ -22,25 +22,20 @@ assert lib.assertOneOf "profile" profile [
   "Paranoid"
 ];
 
-let
-  stdenv' = if (profile == "Paranoid") then clangStdenv else stdenv;
-in
-stdenv'.mkDerivation (finalAttrs: {
+clangStdenv.mkDerivation (finalAttrs: {
   pname = "goupile";
-  version = "3.12.8";
+  version = "3.12.10";
 
   # https://github.com/Koromix/rygel/tags
   src = fetchFromGitHub {
     owner = "Koromix";
     repo = "rygel";
     tag = "goupile/${finalAttrs.version}";
-    hash = "sha256-mAC+s4JsKdulgP/YUI/6p8yZO9OKxqHBb3X98EJdQlI=";
+    hash = "sha256-rqixX9OrmDM3Kh/Zmr46OruOpB+M2b40CsfE2NaB+W4=";
   };
 
   nativeBuildInputs = [
     installShellFiles
-  ]
-  ++ lib.optionals (profile == "Paranoid") [
     llvmPackages.bintools
   ];
 

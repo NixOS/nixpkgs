@@ -19,6 +19,8 @@ buildGoModule (finalAttrs: {
   pname = "aerc";
   version = "0.22.0";
 
+  __structuredAttrs = true;
+
   src = fetchFromSourcehut {
     owner = "~rjarry";
     repo = "aerc";

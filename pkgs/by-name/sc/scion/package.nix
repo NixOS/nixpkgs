@@ -1,12 +1,12 @@
 {
   lib,
-  buildGoModule,
+  buildGo126Module,
   fetchFromGitHub,
   nix-update-script,
   nixosTests,
   ciMode ? true, # Override to false to run time-sensitive tests locally
 }:
-buildGoModule (finalAttrs: {
+buildGo126Module (finalAttrs: {
   pname = "scion";
 
   version = "0.15.1";

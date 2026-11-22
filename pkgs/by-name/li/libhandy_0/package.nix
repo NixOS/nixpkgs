@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Librem5";
     repo = "libhandy";
     rev = "v${finalAttrs.version}";
-    sha256 = "1y23k623sjkldfrdiwfarpchg5mg58smcy1pkgnwfwca15wm1ra5";
+    hash = "sha256-ReVQeQmKccftmzd4VjUqr5YH2c3K8diya3RKPYSZQ/g=";
   };
 
   nativeBuildInputs = [

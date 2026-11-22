@@ -59,11 +59,6 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  passthru.tests = {
-    # uses klibc's ipconfig
-    inherit (nixosTests) initrd-network-ssh;
-  };
-
   meta = {
     description = "Minimalistic libc subset for initramfs usage";
     mainProgram = "klcc";

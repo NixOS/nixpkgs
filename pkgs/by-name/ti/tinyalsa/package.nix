@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tinyalsa";
-  version = "2.0.0-unstable-2026-09-29";
+  version = "2.0.0-unstable-2026-10-23";
 
   src = fetchFromGitHub {
     owner = "tinyalsa";
     repo = "tinyalsa";
-    rev = "961babfe962e71d952ae734074cc89576b28a9e7";
-    hash = "sha256-esuw40BFAKjYhLigflTWQoixcZkQ0e/Mc1UO/pNE05E=";
+    rev = "a7cd26a17fe2add2ff38d2f281ed0b919187a068";
+    hash = "sha256-B2u9xjH3oHb5zrQyyKVUK86hx1Voq+AxdVP4n9ZYerg=";
   };
 
   separateDebugInfo = true;
@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Tiny library to interface with ALSA in the Linux kernel";
     license = lib.licenses.mit;
     pkgConfigModules = [ "tinyalsa" ];
-    maintainers = with lib.maintainers; [ tmarkus ];
+    maintainers = with lib.maintainers; [ AAAAAASomeThingsFailToEvaluate ];
     platforms = with lib.platforms; linux;
   };
 })

@@ -4,11 +4,11 @@
   colorful,
   fetchFromGitHub,
   git,
+  hatchling,
   httpx,
+  httpx2,
   lxml,
   packaging,
-  poetry-core,
-  pyprojectVersionPatchHook,
   pytestCheckHook,
   python-dateutil,
   semver,
@@ -19,23 +19,22 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pontos";
-  version = "26.6.0";
+  version = "26.9.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "greenbone";
     repo = "pontos";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NKe5kM4YPxsGge1UG7DjE3SDXlfZIVazOVmF5RBCbSo=";
+    hash = "sha256-gUBnk7Fbt7SECR8Oypsoa3ubLspGUtI2NlfaB4PryOA=";
   };
 
-  nativeBuildInputs = [ pyprojectVersionPatchHook ];
-
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     colorful
     httpx
+    httpx2
     lxml
     packaging
     python-dateutil

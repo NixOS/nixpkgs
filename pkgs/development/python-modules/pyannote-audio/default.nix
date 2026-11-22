@@ -47,7 +47,6 @@ buildPythonPackage (finalAttrs: {
   pname = "pyannote-audio";
   version = "4.0.7";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pyannote";

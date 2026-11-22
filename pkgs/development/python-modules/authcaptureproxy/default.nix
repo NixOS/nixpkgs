@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "authcaptureproxy";
-  version = "1.3.7";
+  version = "1.3.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "alandtse";
     repo = "auth_capture_proxy";
     tag = "v${version}";
-    hash = "sha256-3osyh4Er0bZ8dvOtDV1w66zOWuzECIWeL8M90gqi+D8=";
+    hash = "sha256-8R2CEj0Iqnr8tAEjV+N3J4rY2poWdayBjEhbTbpAwYg=";
   };
 
   nativeBuildInputs = [ poetry-core ];
@@ -53,6 +53,9 @@ buildPythonPackage rec {
     "test_return_timer_countdown_refresh_html"
     # AttributeError: 'NoneType' object has no attribute 'get'
     "test_replace_empty_action_urls"
+    # AttributeError: 'MockProtocol' object has no attribute 'resume_reading'
+    "test_cross_request_header_contamination"
+    "test_json_parsing"
   ];
 
   pythonImportsCheck = [ "authcaptureproxy" ];

@@ -7,11 +7,11 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "jive";
-  version = "7.46";
+  version = "8.1";
 
   src = fetchurl {
     url = "https://repo.maven.apache.org/maven2/org/tango-controls/Jive/${finalAttrs.version}/Jive-${finalAttrs.version}-jar-with-dependencies.jar";
-    hash = "sha256-AbxTRFi5dCsN/HENTI/o3hBQKZM+cFtJxT3A8RKpQM4=";
+    hash = "sha256-Rni1iUBjrWktwcopRIsBXYRHkJ6ce7p6LzeG0934Jqg=";
   };
 
   dontUnpack = true;

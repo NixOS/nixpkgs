@@ -37,15 +37,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "fireworks-ai";
-  version = "1.2.11";
+  version = "1.2.33";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "fw-ai-external";
     repo = "python-sdk";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OZryFzU9895vA66ArQlnrJoVPKqaj7wY1/JAUQtB3KM=";
+    hash = "sha256-UwJTdXZdo4YV4sAYR1pIgqDGAaD1wfIAVY2JWlvx26E=";
   };
 
   postPatch = ''
@@ -114,7 +113,7 @@ buildPythonPackage (finalAttrs: {
     description = "Client library for Fireworks.ai";
     homepage = "https://github.com/fw-ai-external/python-sdk";
     changelog = "https://github.com/fw-ai-external/python-sdk/blob/${finalAttrs.src.tag}/CHANGELOG.md";
-    license = lib.licenses.mit;
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ sarahec ];
   };
 })

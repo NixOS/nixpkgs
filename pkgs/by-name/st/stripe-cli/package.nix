@@ -12,7 +12,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "stripe-cli";
-  version = "1.43.2";
+  version = "1.55.3";
 
   # required for tests
   __darwinAllowLocalNetworking = true;
@@ -21,9 +21,9 @@ buildGoModule (finalAttrs: {
     owner = "stripe";
     repo = "stripe-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FopjU7m6RbEJTekIFG2XppZ52U/TrFpipVUDWwngPJI=";
+    hash = "sha256-51DA7flo4Q0c1mLI8FmwNjYi8/dlIZVzvKLysG1SO9E=";
   };
-  vendorHash = "sha256-6z6jfRMmEll1703xUJYSc4WU7CN7tMMyidNtay6vo2M=";
+  vendorHash = "sha256-pgL25vTwQcpwljwqEKdUar8sjJS8YYPWpBBCnGh08+o=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -54,7 +54,8 @@ buildGoModule (finalAttrs: {
         ]
       )
       ''
-        rm pkg/plugins/plugin_test.go
+        # The other test files in pkg/plugins use helpers from plugin_test.go.
+        rm pkg/plugins/*_test.go
       '';
 
   checkFlags =

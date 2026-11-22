@@ -29,6 +29,8 @@ stdenv.mkDerivation {
 
     # avoid Makefile because it checks for unnecessary Python dependencies
     KBUILD_BUILD_TIMESTAMP="$(date -u -d "@$SOURCE_DATE_EPOCH")" \
+    # Expected by the script, default value is '.'
+    srctree="." \
     tools/docs/sphinx-build-wrapper mandocs
 
     runHook postBuild

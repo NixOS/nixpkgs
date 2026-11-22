@@ -4,7 +4,7 @@
   lib,
   makeWrapper,
   nodejs,
-  pnpm_11,
+  pnpm_12,
   fetchPnpmDeps,
   pnpmConfigHook,
   stdenv,
@@ -15,32 +15,50 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "cdxgen";
-  version = "13.0.1";
+  version = "13.7.0";
 
   src = fetchFromGitHub {
     owner = "cdxgen";
     repo = "cdxgen";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wnvAeZprSUDCFO5UXyycrF2cZ+a/E70k5V8CM6IJ0NM=";
+    hash = "sha256-Eb16kAfv0V3qK53DzTZywhIsGm0WaaZq55Xbr0UnZ08=";
   };
 
   nativeBuildInputs = [
     makeWrapper
     nodejs
     pnpmConfigHook
-    pnpm_11
+    pnpm_12
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin cctools.libtool;
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_11;
-    fetcherVersion = 4;
-    hash = "sha256-hVa6Um0WkcsI8MwwkqwFwOqESTMzR2Ox9DSmESzEDfQ=";
+    pnpm = pnpm_12;
+    fetcherVersion = 5;
+    hash = "sha256-25R8YQ115BvNiC8nmDpfDyiExeTXkfIDLmnw+yoXPuQ=";
   };
 
   installPhase = ''
     runHook preInstall
+
+    # `pnpm prune` doesn't support monorepos, and with pnpm 12 it also tries
+    # to verify the lockfile against supply-chain policies over the network.
+    # Reinstall production dependencies only instead, as `pnpm prune --help`
+    # recommends for monorepos.
+    rm -rf node_modules
+    pnpm install \
+      --config.trust-lockfile=true \
+      --frozen-lockfile \
+      --ignore-scripts \
+      --offline \
+      --prod
+
+    # TODO: Consider using prune again when pnpm_12 is updated to >= v12.15.0.
+    # See: https://github.com/pnpm/pnpm/issues/16999
+    #
+    # # Remove development dependencies to shrink closure size
+    # CI=true pnpm prune --prod --ignore-scripts
 
     mkdir -p $out/bin $out/lib
     cp -r * $out/lib
@@ -81,6 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Creates CycloneDX Software Bill-of-Materials (SBOM) for your projects from source and container images";
     mainProgram = "cdxgen";
     homepage = "https://github.com/cdxgen/cdxgen";
+    changelog = "https://github.com/cdxgen/cdxgen/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       quincepie

@@ -1,48 +1,83 @@
 {
   lib,
   stdenv,
+  aws-lc,
+  callPackage,
   capnproto,
+  cctools,
   fetchFromGitHub,
-  fontconfig,
   installShellFiles,
   llvmPackages,
-  nix-update-script,
-  openssl,
   pkg-config,
   protobuf,
-  rust-jemalloc-sys,
   rustPlatform,
-  zlib,
+  xcbuild,
+  zig_0_17,
+  zstd,
 }:
-
-rustPlatform.buildRustPackage (finalAttrs: {
+let
   pname = "turbo-unwrapped";
-  version = "2.9.18";
+  version = "2.11.10";
+
+  ghostty-src = fetchFromGitHub {
+    owner = "ghostty-org";
+    repo = "ghostty";
+    rev = "5147c0a503cdeed7615cce245cdd815ed7a6b692";
+    hash = "sha256-+x4rn2cqqGfd0MELw3pzythS7egsVxWznirx4yvISSI=";
+  };
+in
+rustPlatform.buildRustPackage (finalAttrs: {
+  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "vercel";
     repo = "turborepo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ugPkWeUJqt1KnGYC85hihHXl3JPlfbTvk4RaLIvVq2Y=";
+    hash = "sha256-AK1I+bf0IUFLlcctcyUVmK1XChzC3IUL3noUvXC9Tpc=";
   };
 
-  cargoHash = "sha256-LBGaZgW4q//VJfXIqzByQogz0o/fyQcTAAFwlHPuRUc=";
+  patches = [
+    # Zig has removed the ability to use `--global-cache-dir` with
+    # `zig build`. It only allows the global cache dir to be passed
+    # with `ZIG_GLOBAL_CACHE_DIR`.
+    ./fix-zig-global-cache-dir.patch
+  ];
+
+  cargoHash = "sha256-HOzHVpDud/4BIYL2VMiPTFdi4ISz0jdC5U0VLJXnH/U=";
 
   nativeBuildInputs = [
     capnproto
     installShellFiles
     pkg-config
     protobuf
+    zig_0_17
   ]
   # https://github.com/vercel/turbo/blob/ea740706e0592b3906ab34c7cfa1768daafc2a84/CONTRIBUTING.md#linux-dependencies
-  ++ lib.optional stdenv.hostPlatform.isLinux llvmPackages.bintools;
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ llvmPackages.bintools ]
+  # Tools required for building `libghostty-vt-sys` on darwin.
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    cctools
+    xcbuild
+  ];
 
   buildInputs = [
-    fontconfig
-    openssl
-    rust-jemalloc-sys
-    zlib
+    aws-lc
+    zstd
   ];
+
+  dontUseZigBuild = true;
+  dontUseZigCheck = true;
+  dontUseZigInstall = true;
+
+  env = {
+    # Use vendored ghostty source and dependencies.
+    GHOSTTY_SOURCE_DIR = ghostty-src;
+    GHOSTTY_ZIG_SYSTEM_DIR = callPackage ./deps.nix {
+      name = "${finalAttrs.pname}-cache-${finalAttrs.version}";
+    };
+    # nightly features are used
+    RUSTC_BOOTSTRAP = 1;
+  };
 
   cargoBuildFlags = [
     "--package"
@@ -59,17 +94,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --zsh <($out/bin/turbo completion zsh)
   '';
 
-  env = {
-    # nightly features are used
-    RUSTC_BOOTSTRAP = 1;
-  };
-
   passthru = {
-    updateScript = nix-update-script {
-      extraArgs = [
-        "--use-github-releases"
-      ];
-    };
+    inherit ghostty-src;
+    updateScript = ./update.sh;
   };
 
   meta = {

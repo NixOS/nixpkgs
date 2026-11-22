@@ -127,7 +127,7 @@ let
       # See https://github.com/scikit-image/scikit-image/issues/7061 and https://github.com/scikit-image/scikit-image/issues/7104
       "skimage/measure/tests/test_fit.py"
     ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # https://github.com/scikit-image/scikit-image/issues/7104
       "skimage/measure/tests/test_moments.py"
     ];

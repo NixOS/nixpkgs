@@ -31,7 +31,7 @@ maven.buildMavenPackage {
 
   mvnJdk = jdk;
   mvnParameters = "-PskipTests"; # Tests fail
-  mvnHash = "sha256-QfMyiz0zWFi3kUwH8pcgu7FiXleP/KO111avs1WWWG0=";
+  mvnHash = "sha256-E2DRl3GZLc0PB6EzW4trk8pZilhJhinX8jXw8Z1oXbk=";
 
   nativeBuildInputs = [
     makeWrapper

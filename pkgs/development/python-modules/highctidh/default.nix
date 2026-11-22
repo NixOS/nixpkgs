@@ -8,14 +8,14 @@
 }:
 buildPythonPackage rec {
   pname = "highctidh";
-  version = "1.0.2025051200";
+  version = "1.0.2026101300";
   pyproject = true;
 
   src = fetchFromCodeberg {
     owner = "vula";
     repo = "highctidh";
     tag = "v${version}";
-    hash = "sha256-wGJv9UHAFfCOpTrr8THVk0DC+JUtj3gYYOf6o3EaSqg=";
+    hash = "sha256-NgPVC/Oa0P/ijYHDMuxdsYdj4EGYnD/R/ItvhY4Q+c8=";
   };
 
   sourceRoot = "${src.name}/src";

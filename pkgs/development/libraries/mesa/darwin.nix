@@ -36,7 +36,6 @@
     "kosmickrisp" # Vulkan on Metal
   ],
   vulkanLayers ? [
-    "anti-lag"
     "intel-nullhw"
     "overlay"
     "screenshot"

@@ -23,8 +23,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-gW95iJF9RnPC1mcoLjS3r+4tZhX+TP4BSOMU0uB256A=";
   };
 
+  outputs = [
+    "out"
+    "man"
+  ];
+
   mesonFlags = [
     "-Dversion-tag=${finalAttrs.version}"
+    "-Ddocs=man"
   ];
 
   nativeBuildInputs = [

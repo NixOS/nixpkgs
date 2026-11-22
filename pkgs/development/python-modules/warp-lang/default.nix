@@ -45,19 +45,14 @@ let
 in
 buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
   pname = "warp-lang";
-  version = "1.18.0";
+  version = "1.19.0";
   pyproject = true;
-
-  # TODO(@connorbaker): Some CUDA setup hook is failing when __structuredAttrs is false,
-  # causing a bunch of missing math symbols (like expf) when linking against the static library
-  # provided by NVCC.
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "warp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RAgOW3tXaO+OHAAW1Kq8dTvHCgSBgY0AOQpSSxRtWbc=";
+    hash = "sha256-I5x5dx5N1QdRVHHJ18lYC+FObpT/oTzAWuHhA3FE+Sw=";
   };
 
   postPatch = ''

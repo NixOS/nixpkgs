@@ -1,5 +1,6 @@
 {
   fetchFromGitHub,
+  git,
   lib,
   rustPlatform,
   rustfmt,
@@ -7,7 +8,7 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "topcoat-cli";
-  version = "0.10.0";
+  version = "0.12.1";
 
   __structuredAttrs = true;
 
@@ -15,10 +16,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "tokio-rs";
     repo = "topcoat";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rbZlsfBHwVqzlzI0TRD7Uq8ril3guyFPCj6UNUnaz68=";
+    hash = "sha256-Ti6ucFYtH/zcN9xORM40jw7PaZgJX7GTlVuk6BFJz6Q=";
   };
 
-  cargoHash = "sha256-1DHepVBNTPAC/fcxMwUGNXJm4ue5cWsczt14gSHUITc=";
+  cargoHash = "sha256-1J8lg7/yoH4nhOJ+tvHT45nIfeJAenmePjFuZDC9Tts=";
 
   cargoBuildFlags = [
     "-p"
@@ -29,7 +30,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "topcoat-cli"
   ];
 
-  nativeCheckInputs = [ rustfmt ];
+  nativeCheckInputs = [
+    git
+    rustfmt
+  ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;

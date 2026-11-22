@@ -40,7 +40,6 @@
   mpi,
   # Unfree optional dependency for hdf4 and hdf5
   enableSzip ? false,
-  szip,
   libaec,
   enableHDF4 ? true,
   hdf4,
@@ -74,7 +73,7 @@ let
       hdf4.override {
         uselibtirpc = enableLibtirpc;
         szipSupport = enableSzip;
-        inherit szip;
+        inherit libaec;
       };
   hdf5-custom =
     if hdf5-forced != null then
@@ -176,7 +175,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional enableWX wxwidgets_3_2
   ++ lib.optional enableMPI mpi
   ++ lib.optional enableLibtirpc hdf4-custom.libtirpc
-  ++ lib.optional enableSzip szip;
+  ++ lib.optional enableSzip libaec;
 
   propagatedBuildInputs = [
     (python3.withPackages (ps: with ps; [ numpy ]))
@@ -190,7 +189,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional (!enableGRIB) "-DGRIB=OFF"
     ++ lib.optional (!enableGLPK) "-DGLPK=OFF"
     ++ lib.optional (!enableWX) "-DWXWIDGETS=OFF"
-    ++ lib.optional enableSzip "-DSZIPDIR=${szip}"
+    ++ lib.optional enableSzip "-DSZIPDIR=${libaec}"
     ++ lib.optionals enableXWin [
       "-DX11=ON"
       "-DX11DIR=${plplot-with-drivers.libx11}"

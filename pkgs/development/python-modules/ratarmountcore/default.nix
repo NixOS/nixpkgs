@@ -11,33 +11,35 @@
   writableTmpDirAsHomeHook,
   rapidgzip,
   rarfile,
-  setuptools,
+  setuptools_80,
   zstandard, # Python bindings
   zstd, # System tool
+  pypdf,
+  pillow,
 }:
 
 buildPythonPackage rec {
   pname = "ratarmountcore";
-  version = "0.10.1";
+  version = "0.11.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mxmlnkn";
     repo = "ratarmount";
     tag = "core-v${version}";
-    hash = "sha256-7xknOpJIjXMr7Z7JD3Jn3oma63hbEZcj/1zQ6FAp5aA=";
+    hash = "sha256-ScGmLLQPKt80fzNZgwRlsnHKK1DdmlXjOgjxv6hUb0E=";
     fetchSubmodules = true;
   };
 
   sourceRoot = "${src.name}/core";
 
   postPatch = ''
-    substituteInPlace tests/test_AutoMountLayer.py \
-      --replace-fail 'f"tests/{name}.tgz.tgz.gz"' 'os.path.join(os.path.dirname(__file__), f"../../tests/{name}.tgz.tgz.gz")' \
-      --replace-fail 'copy_test_file("tests/double-compressed-nested-tar.tgz.tgz")' 'copy_test_file(os.path.join(os.path.dirname(__file__), "../../tests/double-compressed-nested-tar.tgz.tgz"))'
+    substituteInPlace tests/test_formats.py --replace-fail \
+      '"tests/single-file.tar"' \
+      '"single-file.tar"' \
   '';
 
-  build-system = [ setuptools ];
+  build-system = [ setuptools_80 ];
 
   optional-dependencies = {
     full = [
@@ -53,6 +55,10 @@ buildPythonPackage rec {
     rar = [ rarfile ];
     xz = [ python-xz ];
     zstd = [ indexed-zstd ];
+    pdf = [
+      pypdf
+      pillow
+    ];
   };
 
   nativeCheckInputs = [

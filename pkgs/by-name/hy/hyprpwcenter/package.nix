@@ -4,14 +4,8 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
-  aquamarine,
-  cairo,
-  hyprgraphics,
   hyprtoolkit,
-  hyprutils,
-  libdrm,
   pipewire,
-  pixman,
 }:
 
 gcc16Stdenv.mkDerivation (finalAttrs: {
@@ -31,14 +25,8 @@ gcc16Stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    aquamarine
-    cairo
-    hyprgraphics
     hyprtoolkit
-    hyprutils
-    libdrm
     pipewire
-    pixman
   ];
 
   meta = {

@@ -17,14 +17,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "awkward-cpp";
-  version = "57";
+  version = "59";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchPypi {
     pname = "awkward_cpp";
     inherit (finalAttrs) version;
-    hash = "sha256-3y//WE1yuZQttutwD6JP6Ji8ZeNp7svNNbz4EmmqQdI=";
+    hash = "sha256-T7QVZ/w2rCeRYwoTgXKrxOoodaoQkFXq97/GU4RV9as=";
   };
 
   build-system = [

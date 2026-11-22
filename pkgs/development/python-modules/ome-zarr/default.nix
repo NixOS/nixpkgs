@@ -28,7 +28,6 @@ buildPythonPackage (finalAttrs: {
   pname = "ome-zarr";
   version = "0.18.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "ome";

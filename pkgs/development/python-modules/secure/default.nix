@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "typeerror";
-    repo = "secure.py";
+    repo = "secure";
     tag = "v${version}";
     hash = "sha256-lyosOejztFEINGKO0wAYv3PWBL7vpmAq+eQunwP9h5I=";
   };
@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Adds optional security headers and cookie attributes for Python web frameworks";
-    homepage = "https://github.com/TypeError/secure.py";
+    homepage = "https://github.com/TypeError/secure";
     changelog = "https://github.com/TypeError/secure/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = [ ];

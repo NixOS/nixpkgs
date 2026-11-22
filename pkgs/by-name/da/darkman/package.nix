@@ -10,6 +10,8 @@ buildGoModule (finalAttrs: {
   pname = "darkman";
   version = "2.3.1";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitLab {
     owner = "WhyNotHugo";
     repo = "darkman";

@@ -40,5 +40,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ bennofs ];
     mainProgram = "nbench";
+    license = lib.licenses.unfree;
   };
 })

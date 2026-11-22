@@ -9,6 +9,9 @@
   ripgrep,
   zip,
   fzf,
+  pkg-config,
+  zstd,
+  sqlite,
 }:
 
 let
@@ -37,9 +40,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # override debug=true set in Cargo.toml upstream
   env.RUSTFLAGS = "-C debuginfo=none";
 
+  buildInputs = [
+    zstd
+    sqlite
+  ];
+
   nativeBuildInputs = [
     makeWrapper
     poppler-utils
+    pkg-config
   ];
 
   nativeCheckInputs = path;

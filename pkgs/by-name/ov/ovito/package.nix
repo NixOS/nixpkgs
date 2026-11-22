@@ -36,6 +36,11 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     substituteInPlace src/ovito/core/CMakeLists.txt \
       --replace-fail " IF(OVITO_BUILD_CONDA)" " IF(TRUE)"
+
+    # GCC 16 devirtualization makes StdModGui reference this class, so it must be exported to link
+    substituteInPlace src/ovito/stdmod/modifiers/ColorCodingModifier.h \
+      --replace-fail "class LinesColorCodingModifierDelegate :" \
+                     "class OVITO_STDMOD_EXPORT LinesColorCodingModifierDelegate :"
   '';
 
   nativeBuildInputs = [

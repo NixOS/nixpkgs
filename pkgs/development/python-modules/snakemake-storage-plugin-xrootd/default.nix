@@ -32,7 +32,6 @@ buildPythonPackage (finalAttrs: {
   pname = "snakemake-storage-plugin-xrootd";
   version = "1.2.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "snakemake";

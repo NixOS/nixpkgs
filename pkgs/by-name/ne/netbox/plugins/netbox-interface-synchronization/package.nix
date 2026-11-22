@@ -19,8 +19,6 @@
 }:
 
 buildPythonPackage (finalAttrs: {
-  __structuredAttrs = true;
-
   pname = "netbox-interface-synchronization";
   version = "4.5.8";
   pyproject = true;

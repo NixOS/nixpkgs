@@ -83,8 +83,8 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "API documentation browser for GNOME";
     mainProgram = "devhelp";
-    homepage = "https://apps.gnome.org/Devhelp/";
-    changelog = "https://gitlab.gnome.org/GNOME/devhelp/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
+    homepage = "https://gitlab.gnome.org/Archive/devhelp";
+    changelog = "https://gitlab.gnome.org/Archive/devhelp/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     license = lib.licenses.gpl3Plus;
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.linux;

@@ -28,7 +28,7 @@ let
     overrideCabal (o: {
       postInstall = ''
         ${o.postInstall or ""}
-        ${lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
+        ${lib.optionalString stdenv.hostPlatform.isDarwin ''
           remove-references-to -t ${haskellPackages.hercules-ci-cnix-expr} $out/bin/hercules-ci-agent
           remove-references-to -t ${haskellPackages.hercules-ci-cnix-expr} $out/bin/hercules-ci-agent-worker
         ''}

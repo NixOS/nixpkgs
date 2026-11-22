@@ -6,6 +6,7 @@
   fetchFromGitHub,
   pkg-config,
   openssl,
+  rust-jemalloc-sys,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -33,7 +34,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [
+    openssl
+    rust-jemalloc-sys
+  ];
 
   meta = {
     broken = stdenv.hostPlatform.isDarwin;

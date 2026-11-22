@@ -6,22 +6,23 @@
   git,
   installShellFiles,
   nix-update-script,
+  procps,
   writableTmpDirAsHomeHook,
   versionCheckHook,
 }:
 
 buildGo127Module (finalAttrs: {
   pname = "crush";
-  version = "0.98.1";
+  version = "0.101.0";
 
   src = fetchFromGitHub {
     owner = "charmbracelet";
     repo = "crush";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sz/jlpWH43pgUqKDzaRVKJPK2u7smJLoL2eNrGkXtOY=";
+    hash = "sha256-Rm+RadbyZJbnp8mdTFurNkNMgVJd5MeBdEbnuS3vqaM=";
   };
 
-  vendorHash = "sha256-yEV/cBQ2XsmbsYrSWiyEj/dznzSVrpY9QHXMpuw2lpc=";
+  vendorHash = "sha256-MME0AeBNRUxiNE4sOx5E5VsdxlpP8mvFPtYYWSEoakM=";
 
   ldflags = [
     "-s"
@@ -41,6 +42,9 @@ buildGo127Module (finalAttrs: {
         "TestGrepWithIgnoreFiles"
         "TestSearchImplementations"
         "TestDispatch_BinaryPassthroughExecutes"
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        "TestServiceDetectsRealProcess"
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
@@ -50,6 +54,9 @@ buildGo127Module (finalAttrs: {
   nativeCheckInputs = [
     git
     writableTmpDirAsHomeHook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    procps
   ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];

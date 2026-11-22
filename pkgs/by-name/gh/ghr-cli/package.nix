@@ -4,6 +4,7 @@
   fetchFromGitHub,
   nix-update-script,
   gitMinimal,
+  sqlite,
   versionCheckHook,
 }:
 
@@ -21,6 +22,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-si8sQXC/F6PYYgGh7PT3jxKmLBzmp3QzlH1szYerA4k=";
+
+  buildInputs = [ sqlite ];
 
   passthru.updateScript = nix-update-script { };
 

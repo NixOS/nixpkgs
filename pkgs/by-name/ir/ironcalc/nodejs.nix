@@ -1,13 +1,10 @@
 {
-  lib,
   stdenv,
   pnpm,
   pnpmConfigHook,
   fetchPnpmDeps,
   rustPlatform,
   pkg-config,
-  bzip2,
-  zstd,
   ironcalc,
   nodejs,
   cargo,
@@ -29,8 +26,8 @@ stdenv.mkDerivation {
   pnpmDeps = fetchPnpmDeps {
     inherit (ironcalc) src;
     pname = "ironcalc-nodejs";
-    hash = "sha256-WBISZTISqnti5MiI+/rECZw31YumSm7VPN+MYZNoS28=";
-    fetcherVersion = 4;
+    hash = "sha256-qs+oGYjuCzLttjEQmWD4SLdSbWy+G7MCGSWre0m43oA=";
+    fetcherVersion = 5;
     preInstall = ''
       cd bindings/nodejs
     '';

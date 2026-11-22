@@ -6,24 +6,28 @@
   nix-update-script,
   pkg-config,
   openssl,
+  aws-lc,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sampo";
-  version = "0.22.0";
+  version = "0.24.1";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "bruits";
     repo = "sampo";
     tag = "cargo-sampo-v${finalAttrs.version}";
-    hash = "sha256-1JIrUUf1XraM6JblZk2OAjKsELboOMZF8Qv3PpMpsl4=";
+    hash = "sha256-NSWM1LUghTavZd58G4hiJTQaZ3dpz1RqFm12Cc8WjY0=";
   };
 
-  cargoHash = "sha256-HEp93V3nz+uFaqRuj8E6GUqIQhtrQ56snS5hSoFwZQU=";
+  cargoHash = "sha256-Rmi9Opfgm5tX1HpKD+YyWaHpsShLEODyE+zOH5UyxTo=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [
+    openssl
+    aws-lc
+  ];
 
   # Disable self-update
   buildNoDefaultFeatures = true;

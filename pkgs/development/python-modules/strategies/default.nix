@@ -11,7 +11,6 @@ buildPythonPackage (finalAttrs: {
   pname = "strategies";
   version = "0.2.3";
 
-  __structuredAttrs = true;
   pyproject = true;
 
   # GitHub upstream do not have proper release tags

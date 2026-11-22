@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
-    owner = "mistweaverco";
+    owner = "dont-be-evil-company";
     repo = "kulala-fmt";
     tag = "v${finalAttrs.version}";
     hash = "sha256-sARZDtrF8JihVuE2Ix/f4h/OWIbdGW48xpVJlVmTdYY=";
@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Opinionated .http and .rest files linter and formatter";
-    homepage = "https://github.com/mistweaverco/kulala-fmt";
+    homepage = "https://github.com/dont-be-evil-company/kulala-fmt";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ CnTeng ];
     mainProgram = "kulala-fmt";

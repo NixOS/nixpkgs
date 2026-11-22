@@ -9,14 +9,14 @@
   unicrypto,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "asyauth";
-  version = "0.0.23";
+  version = "0.0.25";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-NvA4TdsrYloQMzNjyv4ZDW6cntF/0Hs+KIdkGjzGJvA=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-YyZZnnlRvfn9Hf7iCBHbvvQfX91ZHbzLjYr21O3DZ3U=";
   };
 
   build-system = [ setuptools ];
@@ -36,8 +36,8 @@ buildPythonPackage rec {
   meta = {
     description = "Unified authentication library";
     homepage = "https://github.com/skelsec/asyauth";
-    changelog = "https://github.com/skelsec/asyauth/releases/tag/${version}";
+    changelog = "https://github.com/skelsec/asyauth/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

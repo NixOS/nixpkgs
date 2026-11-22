@@ -21,8 +21,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.1.57";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "Arize-ai";
     repo = "openinference";
@@ -57,7 +55,11 @@ buildPythonPackage (finalAttrs: {
     "TestTracerLLMDecorator"
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "OpenTelemetry Instrumentation for AI Observability";

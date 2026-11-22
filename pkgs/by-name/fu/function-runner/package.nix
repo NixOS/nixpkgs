@@ -4,12 +4,14 @@
   writableTmpDirAsHomeHook,
   rustPlatform,
   pkg-config,
+  aws-lc,
   openssl,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "function-runner";
-  version = "9.2.2";
+  version = "9.2.3";
 
   __structuredAttrs = true;
 
@@ -17,16 +19,20 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "Shopify";
     repo = "function-runner";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OcdyzMUcUMVyA7fhSFcgl/9ITq67HckZO54sR3opFZo=";
+    hash = "sha256-3oXz9o9riY8P0dAdBMJzRE7FEP3janrfBLLff1J9Lu0=";
   };
 
-  cargoHash = "sha256-9HIaxkq3viBcy9GqtMZ1RHh5XsRmvy9LCL+xpu9swyo=";
+  cargoHash = "sha256-31X0+7RJcpw4O8SZISQpzN/r7OOcrR8XOYlSSQwvxsU=";
 
   nativeBuildInputs = [
     pkg-config
   ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [
+    aws-lc
+    openssl
+    zstd
+  ];
 
   nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 

@@ -7,6 +7,7 @@
   stups-tokens,
   stups-cli-support,
   pytestCheckHook,
+  writableTmpDirAsHomeHook,
   isPy3k,
 }:
 
@@ -31,6 +32,11 @@ buildPythonPackage rec {
     })
   ];
 
+  postPatch = ''
+    substituteInPlace zign/__init__.py \
+      --replace-fail "__version__ = '2016.0.dev1'" "__version__ = '${version}'"
+  '';
+
   build-system = [ setuptools ];
 
   dependencies = [
@@ -38,11 +44,10 @@ buildPythonPackage rec {
     stups-cli-support
   ];
 
-  preCheck = "
-    export HOME=$TEMPDIR
-  ";
-
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    writableTmpDirAsHomeHook
+  ];
 
   meta = {
     description = "OAuth2 token management command line utility";

@@ -337,8 +337,8 @@ stdenv.mkDerivation (finalAttrs: {
   # This should kill all the stdinc frameworks that gcc and friends like to
   # insert into default search paths.
   + lib.optionalString hostPlatform.isDarwin ''
-    substituteInPlace gcc/config/darwin-c.c \
-      --replace 'if (stdinc)' 'if (0)'
+    substituteInPlace gcc/config/darwin-c.cc \
+      --replace-fail 'if (stdinc)' 'if (0)'
   '';
 
   preConfigure =
@@ -503,5 +503,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = gcc_meta // {
     homepage = "https://gcc.gnu.org/";
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
   };
 })

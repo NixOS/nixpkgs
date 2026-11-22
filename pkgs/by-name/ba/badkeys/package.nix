@@ -4,18 +4,19 @@
   fetchFromGitHub,
   python3Packages,
   testers,
+  versionCheckHook,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "badkeys";
-  version = "0.0.20";
+  version = "0.0.22";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "badkeys";
     repo = "badkeys";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cefoHPajW9sZXsGCehk4pW4J32AASCxYnaAVOi9q4Yw=";
+    hash = "sha256-ylGPxumqROB1GyXhZYi4ow6qqcsvaZFMWb9+c4JaCNs=";
   };
 
   build-system = with python3Packages; [
@@ -28,6 +29,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     [
       cryptography
       gmpy2
+      pyopenssl
     ]
     ++ lib.concatAttrValues (finalAttrs.passthru.optional-dependencies);
 
@@ -43,6 +45,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
   passthru = {
     tests.version = testers.testVersion { package = badkeys; };
   };
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "Tool to find common vulnerabilities in cryptographic public keys";

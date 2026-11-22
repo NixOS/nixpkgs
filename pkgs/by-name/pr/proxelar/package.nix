@@ -1,29 +1,44 @@
 {
   lib,
+  aws-lc,
+  clang,
+  cmake,
   fetchFromGitHub,
+  gitMinimal,
   openssl,
   pkg-config,
   rustPlatform,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "proxelar";
-  version = "0.5.1";
+  version = "0.7.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "emanuele-em";
     repo = "proxelar";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-62CWQYHbJm27QvA5EoBJzEqetMbSjr+WlPO9rIxlzmg=";
+    hash = "sha256-1XF5eoAGl5B6sX1j7nZs8vkfm+6vpn2ACOG/0scPkr0=";
   };
 
-  cargoHash = "sha256-HXguxLELbrzjLAF6E04r2PnZ7M8h09x0nJFC/0V6VY8=";
+  cargoHash = "sha256-KMEHI+ZchY9C1PF/AqBVbyUu2QkKf8QgJQ/g/RioSxA=";
 
-  __structuredAttrs = true;
+  nativeBuildInputs = [
+    clang
+    cmake
+    gitMinimal
+    pkg-config
+    rustPlatform.bindgenHook
+  ];
 
-  nativeBuildInputs = [ pkg-config ];
-
-  buildInputs = [ openssl ];
+  buildInputs = [
+    aws-lc
+    openssl
+    zstd
+  ];
 
   env = {
     OPENSSL_NO_VENDOR = true;

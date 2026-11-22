@@ -1,29 +1,56 @@
 {
   lib,
   buildPythonPackage,
+  click,
   fetchFromGitHub,
+  hatchling,
+  httpx,
+  pytest-asyncio,
+  pytest-recording,
   pytestCheckHook,
-  requests,
-  setuptools,
+  respx,
+  tenacity,
 }:
 
 buildPythonPackage rec {
   pname = "wikipedia-api";
-  version = "0.9.0";
+  version = "0.16.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "martin-majlis";
     repo = "Wikipedia-API";
     tag = "v${version}";
-    hash = "sha256-kIZnKb0dzvXBgK1UNoG0gVIy5BvHnOjZbRo+xsLeQ/g=";
+    hash = "sha256-UpRC/Itt//lFhXXtxAlzpqKwj54TZ8MSNm6pYnpyzzU=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
-  dependencies = [ requests ];
+  preConfigure = ''
+    make process-readme
+  '';
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  pythonRelaxDeps = true;
+
+  dependencies = [
+    click
+    httpx
+    tenacity
+  ];
+
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytest-recording
+    pytestCheckHook
+    respx
+  ];
+
+  disabledTests = [
+    # wikipediaapi.exceptions.wiki_connection_error.WikiConnectionError: https://en.wikipedia.org/w/api.php
+    "test_search_with_enum_parameters"
+    "test_search_with_mixed_parameters"
+    "test_search_with_string_parameters"
+  ];
 
   pythonImportsCheck = [ "wikipediaapi" ];
 

@@ -11,6 +11,10 @@ stdenv.mkDerivation rec {
   version = "0.4.5-unstable-2025-09-27";
   name = "${pname}-${kernel.version}-${version}";
 
+  __structuredAttrs = true;
+  strictDeps = true;
+  enableParallelBuilding = true;
+
   src = fetchFromGitLab {
     owner = "${pname}-linux";
     repo = "${pname}-linux";
@@ -22,25 +26,33 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  prePatch = ''
-    substituteInPlace ./ddcci/Makefile \
-      --replace '"$(src)"' '$(PWD)' \
-      --replace depmod \#
-    substituteInPlace ./ddcci-backlight/Makefile \
-      --replace '"$(src)"' '$(PWD)' \
-      --replace depmod \#
-  '';
-
   patches = [
     ./0001-Use-sysfs_emit-and-field-width-specifier.patch
   ];
 
   makeFlags = kernelModuleMakeFlags ++ [
-    "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
-    "KVER=${kernel.modDirVersion}"
-    "KERNEL_MODLIB=$(out)/lib/modules/${kernel.modDirVersion}"
-    "INCLUDEDIR=$(out)/include"
+    "KERNELRELEASE=${kernel.modDirVersion}"
   ];
+
+  installFlags = [
+    "INSTALL_MOD_PATH=${placeholder "out"}"
+  ];
+
+  buildPhase = ''
+    runHook preBuild
+    make modules -C ${kernel.dev}/lib/modules/${kernel.modDirVersion}/build M=$(pwd)/ddcci "''${makeFlags[@]}"
+    make modules -C ${kernel.dev}/lib/modules/${kernel.modDirVersion}/build M=$(pwd)/ddcci-backlight "''${makeFlags[@]}"
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
+    make modules_install -C ${kernel.dev}/lib/modules/${kernel.modDirVersion}/build M=$(pwd)/ddcci \
+      "''${makeFlags[@]}" "''${installFlags[@]}"
+    make modules_install -C ${kernel.dev}/lib/modules/${kernel.modDirVersion}/build M=$(pwd)/ddcci-backlight \
+      "''${makeFlags[@]}" "''${installFlags[@]}"
+    runHook postInstall
+  '';
 
   meta = {
     description = "Kernel module driver for DDC/CI monitors";

@@ -23,7 +23,6 @@ buildPythonPackage (finalAttrs: {
   pname = "ipytablewidgets";
   version = "0.3.4";
   pyproject = true;
-  __structuredAttrs = true;
 
   # The GitHub tarball does not ship the pre-built labextension assets, which
   # `jupyter_packaging` requires at build time. Only the sdist does.

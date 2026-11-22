@@ -9,16 +9,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "packer";
-  version = "1.15.4";
+  version = "1.16.2";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "packer";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mhHES+/FCvVBBQm1qDQeH6WY2c9hIV7N3iFBCqJqJLw=";
+    hash = "sha256-QHpOkhPnR9K3Nd5J2tcrwDRpl1udiaHgvHSFard+uK0=";
   };
 
-  vendorHash = "sha256-HMaT1TZ2lHcKiKpZLZdRkmePb6SWV+z6QbS2q2rR/cY=";
+  vendorHash = "sha256-s0KvpPgkActwu7UFhfzZ5a8Qv8b+sNVScLLCwCxzrE8=";
 
   subPackages = [ "." ];
 

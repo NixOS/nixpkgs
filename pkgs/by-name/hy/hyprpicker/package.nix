@@ -20,13 +20,13 @@
 }:
 gcc16Stdenv.mkDerivation (finalAttrs: {
   pname = "hyprpicker" + lib.optionalString debug "-debug";
-  version = "0.4.7";
+  version = "0.4.8";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprpicker";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ABumeksE8Bvtdb6g4vJ2jA9BLlYHnXU86VAuKJhBPoY=";
+    hash = "sha256-oFZ7DUtYYVsrK2Wb5BG2Dg7cn/MfXAfdMNStHEML23Q=";
   };
 
   cmakeBuildType = if debug then "Debug" else "RelWithDebInfo";

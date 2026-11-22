@@ -15,7 +15,6 @@ buildPythonPackage (finalAttrs: {
   pname = "jupyter-client";
   version = "8.9.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchPypi {
     pname = "jupyter_client";

@@ -28,6 +28,7 @@
   docbook_xml_dtd_42,
   docbook_xml_dtd_45,
   udevCheckHook,
+  removeReferencesTo,
 
   # Defaulting to false because usually the rationale for using elogind is to
   # use it in situation where a systemd dependency does not work (especially
@@ -49,6 +50,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-zPKVD8gXgnjgquHgZ3F8VNIngGGN0i4lQckHokTqtP4=";
   };
 
+  outputs = [
+    "out"
+    "lib"
+    "dev"
+  ];
+
   nativeBuildInputs = [
     meson
     ninja
@@ -67,6 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     python3Packages.python
     python3Packages.jinja2
+    removeReferencesTo
   ]
   ++ lib.optionals enableSystemd [
     # udevCheckHook introduces a dependency on systemdMinimal
@@ -86,6 +94,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace meson.build --replace-fail "install_emptydir(elogindstatedir)" ""
+    substituteInPlace meson.build --replace-fail "bindir / 'pkttyagent'" "'${system}/bin/pkttyagent'"
+
+    # libdir is the lib output, which should only contain libelogind
+    substituteInPlace meson.build --replace-fail "pkglibdir = libdir / 'elogind'" "pkglibdir = '${placeholder "out"}/lib/elogind'"
   ''
   + lib.optionalString (!enableSystemd) ''
     substituteInPlace ./rules.d/71-seat.rules.in --replace-fail "{{BINDIR}}/udevadm" "${eudev}/bin/udevadm"
@@ -121,6 +133,9 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   mesonFlags = [
+    "--libexecdir=${placeholder "out"}/libexec"
+    "--localedir=${placeholder "out"}/share/locale"
+    (lib.mesonOption "pamlibdir" "${placeholder "out"}/lib/security")
     (lib.mesonOption "dbuspolicydir" "${placeholder "out"}/share/dbus-1/system.d")
     (lib.mesonOption "dbussystemservicedir" "${placeholder "out"}/share/dbus-1/system-services")
     (lib.mesonOption "sysconfdir" "${placeholder "out"}/etc")
@@ -130,6 +145,12 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonBool "utmp" (!stdenv.hostPlatform.isMusl))
     (lib.mesonEnable "xenctrl" false)
   ];
+
+  # libelogind compiles in sd_path_lookup() defaults under libexec, which would
+  # create a reference cycle between the out and lib outputs
+  postFixup = ''
+    remove-references-to -t "$out" "$lib"/lib/libelogind.so.*.*.*
+  '';
 
   meta = {
     homepage = "https://github.com/elogind/elogind";

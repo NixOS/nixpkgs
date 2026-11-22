@@ -24,6 +24,10 @@ in
     (mkRemovedOptionModule [ "boot" "loader" "raspberryPi" ]
       "The raspberryPi boot loader has been removed. See https://github.com/NixOS/nixpkgs/pull/241534 for what to use instead."
     )
+    (mkRemovedOptionModule [
+      "boot"
+      "iscsi-initiator"
+    ] "Support for booting from iSCSI has been removed due to lack of maintenance.")
     (mkRemovedOptionModule [ "environment" "blcr" "enable" ] "The BLCR module has been removed")
     (mkRemovedOptionModule [ "environment" "noXlibs" ] ''
       The environment.noXlibs option was removed, as it often caused surprising breakages for new users.
@@ -100,6 +104,10 @@ in
       "services"
       "podgrab"
     ] "The corresponding package was removed from nixpkgs.") # added 2026-10-02
+    (mkRemovedOptionModule [
+      "programs"
+      "envision"
+    ] "'envision' has been removed from nixpkgs.")
     (mkRemovedOptionModule [
       "programs"
       "goldwarden"
@@ -261,6 +269,10 @@ in
         See <https://grafana.com/docs/alloy/latest/set-up/migrate/> or <https://docs.fluentbit.io/manual/data-pipeline/outputs/loki>.
       ''
     )
+    (mkRemovedOptionModule [
+      "services"
+      "haste-server"
+    ] "The `services.haste-server` module has been removed because the upstream project was deleted.")
     (mkRemovedOptionModule [ "services" "homeassistant-satellite" ]
       "The `services.homeassistant-satellite` module has been replaced by `services.wyoming-satellite`."
     )
@@ -306,6 +318,13 @@ in
     ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "meguca" ] "Use meguca has been removed from nixpkgs")
     (mkRemovedOptionModule [ "services" "mesos" ] "The corresponding package was removed from nixpkgs.")
+    (mkRemovedOptionModule
+      [
+        "services"
+        "minio"
+      ]
+      "The minio module has been removed because the `minio` package was abandoned upstream and therefore dropped from nixpkgs."
+    ) # Added 2026-10-11
     (mkRemovedOptionModule [
       "services"
       "mxisd"
@@ -393,9 +412,20 @@ in
       "services"
       "wakeonlan"
     ] "This module was removed in favor of enabling it with networking.interfaces.<name>.wakeOnLan")
+    (mkRemovedOptionModule
+      [
+        "services"
+        "wasabibackend"
+      ]
+      "This module was removed as the corresponding package was removed due to being unmaintained in nixpkgs."
+    )
     (mkRemovedOptionModule [
       "services"
       "winstone"
+    ] "The corresponding package was removed from nixpkgs.")
+    (mkRemovedOptionModule [
+      "services"
+      "wg-access-server"
     ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "xserver" "displayManager" "auto" ] ''
       The services.xserver.displayManager.auto module has been removed
@@ -532,9 +562,6 @@ in
       Consider migrating or switching to Incus, or remove from your configuration.
       https://linuxcontainers.org/incus/docs/main/howto/server_migrate_lxd/
     '')
-    (mkRemovedOptionModule [ "services" "filesender" ] ''
-      services.filesender has been removed since it depends on simplesamlphp which was severely unmaintained.
-    '')
     (mkRemovedOptionModule [ "services" "pghero" ] ''
       services.pghero has been removed because the (unmaintained) package was removed from Nixpkgs.
     '')
@@ -576,6 +603,19 @@ in
       ]
       "`services.overseerr` has been replaced by `services.seerr` as the project has been merged with Jellyseerr under Seerr."
     )
+    (mkRemovedOptionModule [ "services" "unit" ] ''
+      services.unit has been removed together with pkgs.unit.
+    '')
+    (mkRemovedOptionModule [ "services" "castopod" ] ''
+      services.castopod has been removed together with pkgs.castopod.
+    '')
+    (mkRemovedOptionModule [ "services" "scx" ] "Please migrate to services.scx-loader instead.")
+    (mkRemovedOptionModule [ "services" "nixops-dns" ] ''
+      services.nixops-dns has been removed together with pkgs.nixops-dns.
+    '')
+    (mkRemovedOptionModule [ "services" "sharkey" ] ''
+      services.sharkey has been removed together with pkgs.sharkey.
+    '')
     # Do NOT add any option renames here, see top of the file
   ];
 }

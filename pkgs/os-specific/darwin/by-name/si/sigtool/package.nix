@@ -4,28 +4,30 @@
   fetchFromGitHub,
   pkg-config,
   openssl,
+  libplist,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
   pname = "sigtool";
-  version = "0.1.3";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
-    owner = "thefloweringash";
+    owner = "nix-community";
     repo = "sigtool";
     rev = "v${version}";
-    sha256 = "sha256-K3VSFaqcZEomF7kROJz+AwxdW1MmxxEFDaRnWnzcw54=";
+    sha256 = "sha256-czprDpXy+wflnzqIeCIqxwPewYIYv8xlKzRp6eEhcqw=";
   };
 
-  patches = [
-    # Fix missing `UINT64_C` when building with GCC on Linux
-    ./0001-fix-build-with-gcc.patch
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [
+    openssl
+    libplist
   ];
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl ];
-
   installFlags = [ "PREFIX=$(out)" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Tool for working with embedded signatures in Mach-O files";
@@ -33,5 +35,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     mainProgram = "sigtool";
+    maintainers = [ lib.maintainers.viraptor ];
   };
 }

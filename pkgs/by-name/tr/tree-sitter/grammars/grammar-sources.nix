@@ -11,6 +11,9 @@
     version = "0.9.0";
     url = "github:briot/tree-sitter-ada/0a4c27dc1308a9d2742de22e5fcfc0c137b3d3f3";
     hash = "sha256-K5JJjDQwHuHZ6oQaLwJHYJxmFpR+4ENEeiZO2Q0gsk4=";
+    meta = {
+      license = lib.licenses.mit;
+    };
   };
 
   adl = {
@@ -202,6 +205,9 @@
     version = "0.24.2";
     url = "github:tree-sitter/tree-sitter-c";
     hash = "sha256-Juuf57GQI7OAP6O03KtSzyKJAoXtGKjyYJ+sTM1A4mU=";
+    meta = {
+      license = lib.licenses.mit;
+    };
   };
 
   c-sharp = {
@@ -318,9 +324,9 @@
   };
 
   cmake = {
-    version = "0.7.5";
+    version = "0.7.6";
     url = "github:uyha/tree-sitter-cmake";
-    hash = "sha256-3WAADzMe4Rfd35M1CZd7wc/hE9ydD+vTKaxtcMsjSWM=";
+    hash = "sha256-bhxVq5Kc5aK9pQjx+zGlnBlXyJqASUrljOJjvEP3u20=";
     meta = {
       license = lib.licenses.mit;
     };
@@ -469,9 +475,9 @@
   };
 
   dbml = {
-    version = "0.1.0";
+    version = "1.0.0";
     url = "github:dynamotn/tree-sitter-dbml";
-    hash = "sha256-IxxUW6YYxP1hkwA9NEojEEE3c8pwvAI6juX8aF7NfMw=";
+    hash = "sha256-18pAc8tOdUDBvZiFwikwrG0mMXnHCludZM56IJXZTDw=";
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
@@ -720,9 +726,9 @@
   };
 
   erlang = rec {
-    version = "0.1.0";
+    version = "0.21.0";
     url = "github:WhatsApp/tree-sitter-erlang?ref=${version}";
-    hash = "sha256-FH8DNE03k95ZsRwaiXHkaU9/cdWrWALCEdChN5ZPdog=";
+    hash = "sha256-K4ytlHKE5YW8gu1YvXVv9bKrpU6o0I7NNP0kXcV4mSk=";
     meta = {
       license = lib.licenses.asl20;
     };
@@ -1423,7 +1429,7 @@
 
   inko = {
     version = "0.9.0";
-    url = "github:inko-lang/tree-sitter-inko";
+    url = "codeberg:inko-lang/tree-sitter-inko";
     hash = "sha256-thSOSJLxRztyp3krxS2yGUTCof42JotCcFmK08/Lb4M=";
     meta = {
       license = lib.licenses.mpl20;
@@ -1865,10 +1871,10 @@
   };
 
   matlab = {
-    version = "1.3.0-unstable-2026-03-04";
+    version = "1.3.1-unstable-2026-08-26";
     url = "github:acristoffers/tree-sitter-matlab";
-    rev = "c2390a59016f74e7d5f75ef09510768b4f30217e";
-    hash = "sha256-WgyWvItbysSqeD/LdBr233NYlKF1HaxIDtHIr6BQOjw=";
+    rev = "f03d0347acd8bb05d4edd8c845ac1718729e1fad";
+    hash = "sha256-WfBh8/wWfpUFjH/VdGuVqWDGrvmvmFRW7lTbMCjWJ6U=";
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
@@ -1922,6 +1928,7 @@
     rev = "640ee15e4a7b0d09a4bc95dcc71336c28d97999b";
     hash = "sha256-rLIyJZEjMRo8am+ivKCwAESvv6jFtTPYJuuebN3T5Es=";
     meta = {
+      license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
         aciceri
       ];
@@ -2021,6 +2028,9 @@
     version = "0.1.0";
     url = "github:nvim-neorg/tree-sitter-norg-meta";
     hash = "sha256-8qSdwHlfnjFuQF4zNdLtU2/tzDRhDZbo9K54Xxgn5+8=";
+    meta = {
+      license = lib.licenses.mit;
+    };
   };
 
   nu = {
@@ -2090,9 +2100,9 @@
   };
 
   odoc = rec {
-    version = "0.2.0";
+    version = "0.2.1";
     url = "github:tmcgilchrist/tree-sitter-odoc?ref=${version}";
-    hash = "sha256-hLx5spgka2fW7L2yjdDvNxRcEwcZsGGQ9Xd5bFITg8A=";
+    hash = "sha256-wUCXPzr00HuQdT4YEHZaTewqQo5IrL0+fCq3/tjjlkw=";
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
@@ -2497,6 +2507,9 @@
     version = "0.23.1";
     url = "github:tree-sitter/tree-sitter-ql-dbscheme";
     hash = "sha256-lXHm+I3zzCUOR/HjnhQM3Ga+yZr2F2WN28SmpT9Q6nE=";
+    meta = {
+      license = lib.licenses.mit;
+    };
   };
 
   qmljs = rec {
@@ -2600,10 +2613,10 @@
   };
 
   rescript = {
-    version = "6.0.0-unstable-2026-09-25";
+    version = "6.0.0-unstable-2026-11-04";
     url = "github:rescript-lang/tree-sitter-rescript";
-    rev = "90643a6302057b969c51e1bf235b8ecf1da49232";
-    hash = "sha256-k510+GOLhputcgoo3l8JyoaI9IAtDw+aEKoPjMjRyWI=";
+    rev = "cc6a15ee6297d493089134cb661a54fc7a13e376";
+    hash = "sha256-4ncL7Wogzd542A0o6ll67R334pCn1rhAjM7fjKR9BGc=";
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
@@ -2738,9 +2751,9 @@
   };
 
   scala = {
-    version = "0.26.2";
+    version = "0.26.3";
     url = "github:tree-sitter/tree-sitter-scala";
-    hash = "sha256-PRyNcsiGeGfKtHvbLaGtiog/P8QEs117rqoBZZOXbeE=";
+    hash = "sha256-hTcG41bQqTSSsqtvtXW6wJIEFZJE49HYmYNJJw1wrho=";
     meta = {
       license = lib.licenses.mit;
     };
@@ -2923,9 +2936,9 @@
   };
 
   sshclientconfig = rec {
-    version = "2026.10.8";
+    version = "2026.10.29";
     url = "github:metio/tree-sitter-ssh-client-config?ref=${version}";
-    hash = "sha256-PhNHsWjqTmchRH+noVQcwCFNNyA6/RvPiwDDquBuQFo=";
+    hash = "sha256-FfVUU9S6R54tAt4r8P5sC87Kjr5c6ybOshZhquKMYXs=";
     meta = {
       license = lib.licenses.cc0;
       maintainers = with lib.maintainers; [
@@ -3042,6 +3055,7 @@
     url = "github:xasc/tree-sitter-t32";
     hash = "sha256-tM0xN+boHCJzK16jRZKQYk/KkwEBut7KGZxj8KDHMMg=";
     meta = {
+      license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
         aciceri
       ];
@@ -3134,9 +3148,9 @@
   };
 
   tera = {
-    version = "0.1.0";
+    version = "0.1.3";
     url = "github:uncenter/tree-sitter-tera";
-    hash = "sha256-1Gb947YJnEFrCVKAuz06kwJdKD9PMab/alFJtyYjBso=";
+    hash = "sha256-uBSVxsn36GZAaHDS5z35cScdhOPMFHpCBPtdl20SiAw=";
     meta = {
       license = lib.licenses.mit;
     };
@@ -3225,9 +3239,9 @@
   };
 
   tql = {
-    version = "1.2.0";
+    version = "1.2.1";
     url = "github:tenzir/tree-sitter-tql";
-    hash = "sha256-lfrEKZSHFA4JYjDQ98bVTORPlgSV2veGcGwYbspaYaA=";
+    hash = "sha256-88P6PVKh011Nf1ht9L29cSPRCanlXwHP9r4JE+///Ck=";
     meta.license = lib.licenses.mit;
   };
 
@@ -3409,10 +3423,10 @@
   };
 
   vhdl = {
-    version = "2.0.3-unstable-2026-09-14";
+    version = "2.0.3-unstable-2026-10-24";
     url = "github:jpt13653903/tree-sitter-vhdl";
-    rev = "9be8e45c3ae7e7a4373a943a5c81ff92ce3656f8";
-    hash = "sha256-TU1dnMty8+OD24993bb7PB2M0RuzvKElWk4IkTCwGeg=";
+    rev = "0d5d60b269c7f9861c2bada7cef58fe62e6e7879";
+    hash = "sha256-wBmJlUFjK1E2nDdz3S+lm3QzVIStRfV2/LIXPiqsGFY=";
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [

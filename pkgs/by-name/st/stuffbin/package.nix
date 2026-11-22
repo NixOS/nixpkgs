@@ -1,10 +1,9 @@
 {
   lib,
-  buildGoModule,
+  buildGo126Module,
   fetchFromGitHub,
 }:
-
-buildGoModule (finalAttrs: {
+buildGo126Module (finalAttrs: {
   pname = "stuffbin";
   version = "1.3.0";
 

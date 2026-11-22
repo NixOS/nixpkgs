@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  setuptools,
+  hatchling,
   opentelemetry-api,
   opentelemetry-sdk,
   requests,
@@ -12,7 +12,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "opentelemetry-resourcedetector-gcp";
-  version = "1.12.0a0";
+  version = "1.14.0";
   pyproject = true;
 
   # Use PyPi instead of GitHub because the GitHub tags are inaccurate
@@ -20,10 +20,10 @@ buildPythonPackage (finalAttrs: {
   src = fetchPypi {
     pname = "opentelemetry_resourcedetector_gcp";
     inherit (finalAttrs) version;
-    hash = "sha256-1eP3goOicuuSVH4Au+/0W3Myo0rnkacKtOuoGvm8O68=";
+    hash = "sha256-ELQYAqz4FYOKhcn+Ha4C9dJ+vBdSe3dEERHAEL6tlbw=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
   dependencies = [
     opentelemetry-api

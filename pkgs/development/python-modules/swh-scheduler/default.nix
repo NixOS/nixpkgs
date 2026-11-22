@@ -3,9 +3,15 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitLab,
-  setuptools,
-  setuptools-scm,
+
+  # Build system
+  hatchling,
+  hatch-requirements-txt,
+  hatch-vcs,
+
+  # Dependencies
   celery,
+  dateparser,
   flask,
   humanize,
   importlib-metadata,
@@ -13,6 +19,8 @@
   psycopg,
   tabulate,
   swh-storage,
+
+  # Tests
   plotille,
   postgresql,
   postgresqlTestHook,
@@ -31,7 +39,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "swh-scheduler";
-  version = "3.3.2";
+  version = "3.6.0";
   pyproject = true;
 
   src = fetchFromGitLab {
@@ -40,16 +48,18 @@ buildPythonPackage (finalAttrs: {
     owner = "devel";
     repo = "swh-scheduler";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ELjxZKWCsAQte+KtSdwseMGnMdw65H9PrjuJP0PHtIM=";
+    hash = "sha256-QcVC/H0La6BMR72GdJg0kDznTbPZChmTlrzqCQwKdDs=";
   };
 
   build-system = [
-    setuptools
-    setuptools-scm
+    hatchling
+    hatch-requirements-txt
+    hatch-vcs
   ];
 
   dependencies = [
     celery
+    dateparser
     flask
     humanize
     importlib-metadata

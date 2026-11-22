@@ -13,8 +13,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.3.0";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     pname = "aliyun_log_fastpb";
     inherit (finalAttrs) version;

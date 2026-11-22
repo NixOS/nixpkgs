@@ -23,7 +23,11 @@
 let
   # abseil-cpp should be pinned to the branch used by upstream:
   # https://github.com/shaka-project/shaka-packager/tree/main/packager/third_party/abseil-cpp
-  abseil-cpp' = abseil-cpp_202601;
+  abseil-cpp' = abseil-cpp_202601.override {
+    # shaka-packager is not yet compatible with C++20 because of changes to u8path/u8string
+    # in std::filesystem
+    cxxStandard = "17";
+  };
   protobuf' = protobuf.override {
     abseil-cpp = abseil-cpp';
   };

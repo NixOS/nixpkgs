@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromSourcehut {
     owner = "~khumba";
     repo = "nvd";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-3Fb6MDz4z41at3XpjLVng8NBwUJn/N7QBgU6Cbh0w98=";
   };
 
@@ -37,7 +37,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://khumba.net/projects/nvd";
     license = lib.licenses.asl20;
     mainProgram = "nvd";
-    maintainers = with lib.maintainers; [ khumba ];
+    maintainers = with lib.maintainers; [
+      iedame
+      khumba
+    ];
     platforms = lib.platforms.all;
   };
 })

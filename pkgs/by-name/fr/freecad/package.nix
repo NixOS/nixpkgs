@@ -6,6 +6,7 @@
   doxygen,
   eigen,
   fetchFromGitHub,
+  fetchpatch,
   fmt,
   graphviz,
   gts,
@@ -105,7 +106,15 @@ freecad-utils.makeCustomizable (
     ]
     ++ pythonDeps;
 
-    patches = [ ./0001-NIXOS-don-t-ignore-PYTHONPATH.patch ];
+    patches = [
+      ./0001-NIXOS-don-t-ignore-PYTHONPATH.patch
+      (fetchpatch {
+        # PythonWrapper.cpp: add missing include for PySide 6.12
+        # https://github.com/FreeCAD/FreeCAD/pull/33408
+        url = "https://github.com/FreeCAD/FreeCAD/commit/636365fd4a30e017c76ef6a44cf045e77ec5e632.patch";
+        hash = "sha256-+7zdFhxtACzoBZoXVnHBJ+1bax4dd+HHiVKNsoO+jzw=";
+      })
+    ];
 
     postPatch = ''
       substituteInPlace src/Mod/Fem/femmesh/gmshtools.py \
@@ -131,10 +140,24 @@ freecad-utils.makeCustomizable (
         ];
       in
       [
-        "--set COIN_GL_NO_CURRENT_CONTEXT_CHECK 1"
-        "--prefix PATH : ${binPath}"
-        "--prefix PYTHONPATH : ${python3Packages.makePythonPath pythonDeps}"
-        "--prefix XDG_DATA_DIRS : ${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}"
+        "--set"
+        "COIN_GL_NO_CURRENT_CONTEXT_CHECK"
+        "1"
+
+        "--prefix"
+        "PATH"
+        ":"
+        binPath
+
+        "--prefix"
+        "PYTHONPATH"
+        ":"
+        (python3Packages.makePythonPath pythonDeps)
+
+        "--prefix"
+        "XDG_DATA_DIRS"
+        ":"
+        "${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}"
       ];
 
     postFixup = ''
@@ -198,7 +221,7 @@ freecad-utils.makeCustomizable (
         programmer, an experienced CAD user, a student or a teacher, you will feel
         right at home with FreeCAD.
       '';
-      license = lib.licenses.lgpl2Plus;
+      license = lib.licenses.lgpl21Plus;
       maintainers = with lib.maintainers; [
         srounce
         grimmauld

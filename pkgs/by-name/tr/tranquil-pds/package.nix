@@ -4,21 +4,22 @@
   rustPlatform,
   pkg-config,
   openssl,
+  zstd,
   protobuf,
   nixosTests,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tranquil-pds";
-  version = "0.6.7";
+  version = "0.8.0";
 
   src = fetchFromTangled {
     did = "did:plc:jj6ajj6duxnlthwtnob4qyuv";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bhG5ydQZ9nHXQSlrM2jZaUpEP8ZW3Xx6r5O83vLDf8k=";
+    hash = "sha256-0/eBbeO31lCI99TNSSQlk9QaWzegpAuYyGCQMupPb9s=";
   };
 
-  cargoHash = "sha256-kdmWV4O8iP6TLwZYH8oQvndQsB9nOlkLzYAgertiXOw=";
+  cargoHash = "sha256-r6j925a6PfVKNLg60vxKRVw4rddLsGtQ0G2/KvyGw3Q=";
 
   __structuredAttrs = true;
 
@@ -29,6 +30,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     openssl
+    zstd
   ];
 
   # the tranquil test suite has shown itself virtually impossible to complete on most hardware thus stopping reviews.
@@ -41,7 +43,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Tranquil ATProto Personal Data Server implementation written in Rust";
     homepage = "https://tangled.org/tranquil.farm/tranquil-pds";
     license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [ nelind ];
+    maintainers = with lib.maintainers; [
+      nelind
+      pyrox0
+    ];
     mainProgram = "tranquil-server";
   };
 })

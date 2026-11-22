@@ -94,12 +94,12 @@ in
 
   microsoft = buildStyle rec {
     name = "Microsoft";
-    version = "0.15.1";
+    version = "0.15.2";
     src = fetchFromGitHub {
       owner = "errata-ai";
       repo = "Microsoft";
       rev = "v${version}";
-      hash = "sha256-MycWukXoeTZzGAcoNODzt592VHWgjnMXZdNPoQWDC18=";
+      hash = "sha256-BrdGsj+8oh/3tuJeH2ZSyG+Xe05rorq/YxwgQCRttDE=";
     };
     meta = {
       description = "Vale-compatible implementation of the Microsoft Writing Style Guide";
@@ -142,12 +142,12 @@ in
 
   redhat = buildStyle rec {
     name = "RedHat";
-    version = "680";
+    version = "683";
     src = fetchFromGitHub {
       owner = "redhat-documentation";
       repo = "vale-at-red-hat";
       rev = "v${version}";
-      hash = "sha256-1n/hKmNRxSpKFNBSnXdtcgxzu4A+ZF4cIP+6qCVewYo=";
+      hash = "sha256-eIcqytLoU9iCsn7PAtf/Y44Ut2gdQVgDcMePThYPLDE=";
     };
     stylePath = ".vale/styles/RedHat";
     meta = {

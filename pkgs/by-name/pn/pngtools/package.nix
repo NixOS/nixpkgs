@@ -1,22 +1,41 @@
 {
   lib,
   stdenv,
-  libpng12,
+  libpng,
+  autoreconfHook,
+  docbook2x,
+  docbook_sgml_dtd_45,
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pngtools";
-  version = "0-unstable-2022-03-14";
+  version = "1.3";
 
   src = fetchFromGitHub {
     owner = "mikalstill";
     repo = "pngtools";
-    rev = "1ccca3a0f3f6882661bbafbfb62feb774ca195d1";
-    sha256 = "sha256-W1XofOVTyfA7IbxOnTkWdOOZ00gZ4e0GOYl7nMtLIJk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-2V4er/33z3rII8HdnVgaggG0aZjWlFgsRuBWzhvL8cE=";
   };
 
-  buildInputs = [ libpng12 ];
+  # we have docbook dtd 4.5 packaged, but not 4.4. 4.5 seems to work good enough.
+  postPatch = ''
+    substituteInPlace man/Makefile.am \
+      --replace-fail "docbook2man" "docbook2man --sgml"
+    sed -iE 's@DocBook V4.4@DocBook V4.5@g' man/*.sgml.in
+  '';
+
+  nativeBuildInputs = [
+    autoreconfHook
+    docbook2x
+  ];
+
+  env.SGML_CATALOG_FILES = lib.concatStringsSep ":" [
+    "${docbook_sgml_dtd_45}/sgml/dtd/docbook-4.5/docbook.cat"
+  ];
+
+  buildInputs = [ libpng ];
 
   meta = {
     homepage = "https://github.com/mikalstill/pngtools";
@@ -25,4 +44,4 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.all;
   };
-}
+})

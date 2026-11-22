@@ -55,8 +55,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.9.1";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "unclecode";
     repo = "crawl4ai";

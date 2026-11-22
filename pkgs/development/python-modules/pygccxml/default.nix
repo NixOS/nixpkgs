@@ -13,7 +13,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "gccxml";
+    owner = "CastXML";
     repo = "pygccxml";
     tag = "v${version}";
     hash = "sha256-pIo25/tKiXpyiWUkpILPDPTNWIUEGK4uRSTpvoGwS1Q=";
@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python package for easy C++ declarations navigation";
-    homepage = "https://github.com/gccxml/pygccxml";
+    homepage = "https://github.com/CastXML/pygccxml";
     changelog = "https://github.com/CastXML/pygccxml/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.boost;
     maintainers = with lib.maintainers; [ teto ];

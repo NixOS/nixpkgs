@@ -1,6 +1,8 @@
 {
   lib,
   openssl,
+  zstd,
+  libgit2,
   pkg-config,
   rustPlatform,
   fetchFromGitHub,
@@ -19,7 +21,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-BDe1GQtKzE2fyKPDdOEriF4wUxONe/jLfnyHiF/dUh4=";
 
-  buildInputs = [ openssl ];
+  buildInputs = [
+    openssl
+    zstd
+    libgit2
+  ];
 
   nativeBuildInputs = [ pkg-config ];
 

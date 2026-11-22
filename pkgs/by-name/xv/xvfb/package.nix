@@ -38,7 +38,14 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "xvfb";
 
-  inherit (xorg-server) src version;
+  # TODO: commented out for rebuild avoidance after xorg-server update. revert
+  # on staging.
+  # inherit (xorg-server) src version;
+  version = "21.1.24";
+  src = fetchurl {
+    url = "mirror://xorg/individual/xserver/xorg-server-${finalAttrs.version}.tar.xz";
+    hash = "sha256-Gk6zbKZcw7G5NlZtZ3qXhuE8Ec1YBulRrFXz9c45hK8=";
+  };
 
   strictDeps = true;
 

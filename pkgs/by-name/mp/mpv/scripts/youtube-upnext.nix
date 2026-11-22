@@ -2,7 +2,7 @@
   buildLua,
   fetchFromGitHub,
   curl,
-  unstableGitUpdater,
+  gitUpdater,
   lib,
 }:
 
@@ -22,7 +22,7 @@ buildLua rec {
       --replace-fail '"curl"' '"${lib.getExe curl}"'
   '';
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = {
     description = "Userscript that allows you to play 'up next'/recommended youtube videos";

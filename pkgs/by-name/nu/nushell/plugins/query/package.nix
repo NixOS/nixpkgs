@@ -11,7 +11,12 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nu_plugin_query";
-  inherit (nushell) version src cargoHash;
+  inherit (nushell)
+    version
+    src
+    cargoPatches
+    cargoHash
+    ;
 
   nativeBuildInputs = [ pkg-config ] ++ lib.optionals stdenv.cc.isClang [ rustPlatform.bindgenHook ];
   buildInputs = [
@@ -31,8 +36,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "nu_plugin_query";
     homepage = "https://github.com/nushell/nushell/tree/${finalAttrs.version}/crates/nu_plugin_query";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      happysalada
-    ];
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 })

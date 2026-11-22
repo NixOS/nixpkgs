@@ -44,7 +44,7 @@ buildDunePackage {
     qcheck-alcotest
     qcheck-stm
   ];
-  nativeCheckInputs = [ mdx.bin ];
+  nativeCheckInputs = [ mdx.out ];
 
   meta = {
     description = "Parallelism-safe data structures for multicore OCaml";

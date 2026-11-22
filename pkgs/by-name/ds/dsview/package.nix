@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
       bachp
-      carlossless
+      karstx
     ];
   };
 })

@@ -55,7 +55,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   qtWrapperArgs = [
-    "--suffix PATH : ${lib.makeBinPath [ seadrive-fuse ]}"
+    "--suffix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [ seadrive-fuse ])
   ];
 
   passthru.updateScript = nix-update-script { };

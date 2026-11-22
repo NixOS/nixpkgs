@@ -43,15 +43,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "orbax-checkpoint";
-  version = "0.12.7";
+  version = "0.12.11";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "orbax";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-19JYJikTaQ/UKEB7IAkFam2/zsgfgV5H9SU6A0ysqsQ=";
+    hash = "sha256-xeTZKIen7rze0VjbhQs2oeKoi1QYleuMZZ7sH+LSfRE=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/checkpoint";
@@ -76,6 +75,7 @@ buildPythonPackage (finalAttrs: {
     uvloop
   ]
   ++ etils.optional-dependencies.epath
+  ++ etils.optional-dependencies.epath-gcs
   ++ etils.optional-dependencies.epy;
 
   nativeCheckInputs = [
@@ -128,6 +128,10 @@ buildPythonPackage (finalAttrs: {
     "test_memory_size"
     "test_number_of_broadcasts"
     "test_tree_memory_per_device"
+
+    # ValueError: cannot reshape array of size 1 into shape (2,0)
+    "CopyDeviceArraysForAsyncTransferTest"
+    "test_balance_arrays_across_replicas_rejects_local_checkpointing"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Probably failing because of a filesystem impurity
@@ -183,6 +187,13 @@ buildPythonPackage (finalAttrs: {
     # which is not the same as the test file we want to collect:
     #   /build/source/checkpoint/orbax/checkpoint/experimental/v1/_src/metadata/serialization_test.py
     "orbax/checkpoint/experimental/v1/_src/metadata/serialization_test.py"
+
+    # import file mismatch:
+    # imported module 'deletion_test' has this __file__ attribute:
+    #   /build/source/checkpoint/orbax/checkpoint/experimental/v1/_src/deletion/deletion_test.py
+    # which is not the same as the test file we want to collect:
+    #   /build/source/checkpoint/orbax/checkpoint/experimental/v1/_src/training/deletion_test.py
+    "orbax/checkpoint/experimental/v1/_src/training/deletion_test.py"
 
     # E   FileNotFoundError: [Errno 2] No such file or directory:
     # '/build/absl_testing/DefaultSnapshotTest/runTest/root/path/to/source/data.txt'

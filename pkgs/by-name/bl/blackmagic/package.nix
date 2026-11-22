@@ -1,6 +1,7 @@
 {
   stdenv,
   lib,
+  fetchFromCodeberg,
   fetchFromGitHub,
   gcc-arm-embedded-13,
   pkg-config,
@@ -14,8 +15,8 @@
   udevCheckHook,
 }:
 let
-  libopencm3Src = fetchFromGitHub {
-    owner = "libopencm3";
+  libopencm3Src = fetchFromCodeberg {
+    owner = "blackmagic-debug";
     repo = "libopencm3";
     rev = "8a96a9d95a8e5c187a53652540b25a8f4d73a432";
     hash = "sha256-PylP95hpPeg3rqfelHW9qz+pi/qOP60RfvkurxbkWDs=";
@@ -34,7 +35,7 @@ stdenv.mkDerivation rec {
   # `git describe --always`
   firmwareVersion = "v${version}";
 
-  src = fetchFromGitHub {
+  src = fetchFromCodeberg {
     owner = "blackmagic-debug";
     repo = "blackmagic";
     rev = firmwareVersion;
@@ -131,12 +132,12 @@ stdenv.mkDerivation rec {
       directory.  It also places the FTDI version of the blackmagic
       executable in the bin directory.
     '';
-    homepage = "https://github.com/blacksphere/blackmagic";
+    homepage = "https://codeberg.org/blackmagic-debug/blackmagic";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       pjones
       sorki
-      carlossless
+      karstx
     ];
     platforms = lib.platforms.unix;
   };

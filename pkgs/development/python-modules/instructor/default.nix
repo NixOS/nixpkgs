@@ -33,14 +33,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "instructor";
-  version = "1.15.1";
+  version = "1.15.4";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "jxnl";
+    owner = "567-labs";
     repo = "instructor";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+mYVg4IuoU/GEK/L3qXUfO224eWMrRtoXTTi8RhOJk4=";
+    hash = "sha256-nBVjmd+Y/woAOtLU4pUQiKrVAtpSBng0PpDc8TLk8fE=";
   };
 
   build-system = [ hatchling ];
@@ -112,7 +112,7 @@ buildPythonPackage (finalAttrs: {
     # Tests require OpenAI API key
     "tests/llm/"
     # Network and requires API keys
-    "tests/test_auto_client.py"
+    "tests/providers/test_auto_client.py"
     # annoying dependencies
     "tests/docs"
     "examples"
@@ -120,8 +120,8 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Structured outputs for llm";
-    homepage = "https://github.com/jxnl/instructor";
-    changelog = "https://github.com/jxnl/instructor/releases/tag/${finalAttrs.src.tag}";
+    homepage = "https://github.com/567-labs/instructor";
+    changelog = "https://github.com/567-labs/instructor/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mic92 ];
     mainProgram = "instructor";

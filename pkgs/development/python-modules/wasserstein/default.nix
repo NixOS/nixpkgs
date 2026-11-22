@@ -15,7 +15,7 @@ buildPythonPackage rec {
   format = "setuptools";
 
   src = fetchFromGitHub {
-    owner = "pkomiske";
+    owner = "thaler-lab";
     repo = "Wasserstein";
     rev = "v${version}";
     hash = "sha256-s9en6XwvO/WPsF7/+SEmGePHZQgl7zLgu5sEn4nD9YE=";
@@ -47,7 +47,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python/C++ library for computing Wasserstein distances efficiently";
-    homepage = "https://github.com/pkomiske/Wasserstein";
+    homepage = "https://github.com/thaler-lab/Wasserstein";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ veprbl ];
   };

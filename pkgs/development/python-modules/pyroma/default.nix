@@ -61,6 +61,6 @@ buildPythonPackage rec {
     mainProgram = "pyroma";
     homepage = "https://github.com/regebro/pyroma";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ kamadorueda ];
+    maintainers = [ ];
   };
 }

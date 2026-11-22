@@ -9,8 +9,6 @@ buildPythonPackage (finalAttrs: {
   version = "1.2.0";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     pname = "greek-accentuation";
     inherit (finalAttrs) version;

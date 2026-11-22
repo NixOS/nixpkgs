@@ -23,8 +23,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.16";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "abravalheri";
     repo = "ini2toml";
@@ -86,6 +84,8 @@ buildPythonPackage (finalAttrs: {
     [
       "test_handle_license"
       "test_handle_license_and_files"
+      # test args indent mismatch
+      "test_pytest"
     ]
     ++ lib.concatMap (example: [
       "test_examples_api[${example}]"

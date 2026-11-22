@@ -6,16 +6,15 @@
   installShellFiles,
   jq,
   procps,
-  psmisc,
   libnotify,
   xdotool,
+  xwininfo,
   kdotool,
-  kdePackages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wl-freeze";
-  version = "2.1.0";
+  version = "2.2.0";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -24,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Zerodya";
     repo = "wl-freeze";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WY1XB17ARU34dAlU7CqMg3AXVlE0qilXwfGMpYeeiwk=";
+    hash = "sha256-+Sz7uYgnrH4M0cjtyeEIPncjeumbYF50SzHzfi0JG8M=";
   };
 
   dontConfigure = true;
@@ -56,11 +55,10 @@ stdenv.mkDerivation (finalAttrs: {
         lib.makeBinPath [
           jq
           procps
-          psmisc
           libnotify
           xdotool
+          xwininfo
           kdotool
-          kdePackages.qttools
         ]
       }
   '';

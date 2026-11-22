@@ -3,37 +3,43 @@
   stdenv,
   buildNpmPackage,
   fetchFromGitHub,
+  fetchzip,
   makeWrapper,
-  electron_42,
+  # Both upstream stable and latest releases often stay on EOL Electron.
+  electron,
   cacert,
+  darwin,
   makeDesktopItem,
   copyDesktopItems,
   commandLineArgs ? [ ],
   nix-update-script,
   _experimental-update-script-combinators,
   writeShellApplication,
-  nix,
   curl,
   common-updater-scripts,
   jq,
-  gnugrep,
 }:
 
 let
-  electron = electron_42;
+  # electron-builder downloads this icon toolset (JavaScript and WebAssembly) to convert
+  # the app icon for macOS
+  iconsToolset = fetchzip {
+    url = "https://github.com/electron-userland/electron-builder-binaries/releases/download/icons@1.2.3/icons-bundle.tar.gz";
+    hash = "sha256-onqiTAO2NU+obW43RdqUOyR45PqqRFelOborKng0TCs=";
+  };
 in
 buildNpmPackage (finalAttrs: {
   pname = "shogihome";
-  version = "1.29.1";
+  version = "1.30.0";
 
   src = fetchFromGitHub {
     owner = "sunfish-shogi";
     repo = "shogihome";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-F13rgUdquKJHz41Gz2ou8cAk3FmZF/FjA19DKtkJr2E=";
+    hash = "sha256-h9cXoSuzVgWEY8asbWuzs5TNSE+ApzPtgVgp0EKS9SQ=";
   };
 
-  npmDepsHash = "sha256-9pitop6ZGw4JlN/iUfQ7xqY7jN5PyffTSH2Tc/coi+c=";
+  npmDepsHash = "sha256-uH+eXMbEcdpmzqHW6Vix5SfxAEdLRcDEzakmhsYsgio=";
 
   postPatch = ''
     substituteInPlace package.json \
@@ -58,12 +64,19 @@ buildNpmPackage (finalAttrs: {
   // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     # Prevent "unable to get local issuer certificate" error
     NODE_EXTRA_CA_CERTS = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+    ELECTRON_BUILDER_ICONS_TOOLSET_DIR = iconsToolset;
   };
 
-  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
-    makeWrapper
-    copyDesktopItems
-  ];
+  nativeBuildInputs =
+    lib.optionals stdenv.hostPlatform.isLinux [
+      makeWrapper
+      copyDesktopItems
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # Replaces upstream's signMacApp (disabled in postPatch, codesign isn't available in the
+      # sandbox): binaries modified by Electron Fuses must be signed again or the app is killed
+      darwin.autoSignDarwinBinariesHook
+    ];
 
   makeCacheWritable = true;
 
@@ -154,23 +167,6 @@ buildNpmPackage (finalAttrs: {
           "--version=skip"
         ];
       })
-      (lib.getExe (writeShellApplication {
-        name = "${finalAttrs.pname}-electron-updater";
-        runtimeInputs = [
-          nix
-          jq
-          gnugrep
-        ];
-        runtimeEnv = {
-          PNAME = finalAttrs.pname;
-          PKG_FILE = toString ./package.nix;
-        };
-        text = ''
-          new_src="$(nix-build --attr "pkgs.$PNAME.src" --no-out-link)"
-          new_electron_major="$(jq '.devDependencies.electron' "$new_src/package.json" | grep --perl-regexp --only-matching '\d+' | head -n 1)"
-          sed -i -E "s/electron_[0-9]+/electron_$new_electron_major/g" "$PKG_FILE"
-        '';
-      }))
     ];
   };
 
@@ -184,6 +180,7 @@ buildNpmPackage (finalAttrs: {
         asl20 # for icons
       ];
     maintainers = with lib.maintainers; [
+      iedame
       kachick
     ];
     mainProgram = "shogihome";

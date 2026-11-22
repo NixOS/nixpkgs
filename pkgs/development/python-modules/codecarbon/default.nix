@@ -50,7 +50,6 @@ buildPythonPackage (finalAttrs: {
   pname = "codecarbon";
   version = "3.2.8";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "mlco2";

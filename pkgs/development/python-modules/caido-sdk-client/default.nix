@@ -17,8 +17,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.3.2";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     pname = "caido_sdk_client";
     inherit (finalAttrs) version;

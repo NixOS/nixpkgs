@@ -6,6 +6,7 @@
   libjpeg,
   perl,
   zlib,
+  bash,
   ctestCheckHook,
 
   # for passthru.tests
@@ -18,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qpdf";
-  version = "12.3.2";
+  version = "12.4.2";
 
   src = fetchFromGitHub {
     owner = "qpdf";
     repo = "qpdf";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qHc9v3VYrxbOhpsPbaaO7foumI2AdeFN9Z9Zbs4XtKg=";
+    hash = "sha256-57zplmLTWz+SRgIrE/rowQF+QppPyCYRTvLsXimpdWc=";
   };
 
   outputs = [
@@ -45,7 +46,10 @@ stdenv.mkDerivation (finalAttrs: {
     libjpeg
   ];
 
-  nativeCheckInputs = [ ctestCheckHook ];
+  nativeCheckInputs = [
+    bash
+    ctestCheckHook
+  ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;

@@ -8,13 +8,13 @@
 }:
 let
   pname = "open-webui";
-  version = "0.12.2";
+  version = "0.13.3";
 
   src = fetchFromGitHub {
     owner = "open-webui";
     repo = "open-webui";
     tag = "v${version}";
-    hash = "sha256-e7A2wcOoRQAKKZiXr/mGcgicjWHlkUuhkvsGw70CuIo=";
+    hash = "sha256-cyMlCVgUd+zNsrmkL833lVjwfhF50IQsNjC1cWwu8bs=";
   };
 
   # we need datasets_3 for SpeechT5 embeddings
@@ -35,7 +35,7 @@ let
       url = "https://github.com/pyodide/pyodide/releases/download/${pyodideVersion}/pyodide-${pyodideVersion}.tar.bz2";
     };
 
-    npmDepsHash = "sha256-4rZUxkp/VMc3sp5fittjs5BxdJ4qGTqfVjeABxuHrgw=";
+    npmDepsHash = "sha256-uYXXyi6qN2269PLMQg6POqREdM1UCJc4cEzyGp6LkAQ=";
 
     npmFlags = [ "--force" ];
 
@@ -43,12 +43,13 @@ let
     # Until this is solved, running python packages from the browser will not work.
     postPatch = ''
       substituteInPlace package.json \
-        --replace-fail "npm run pyodide:fetch && vite build" "vite build"
+        --replace-fail "npm run pyodide:fetch && " ""
     '';
 
-    env.CYPRESS_INSTALL_BINARY = "0"; # disallow cypress from downloading binaries in sandbox
-    env.ONNXRUNTIME_NODE_INSTALL_CUDA = "skip";
-    env.NODE_OPTIONS = "--max-old-space-size=8192";
+    env = {
+      CYPRESS_INSTALL_BINARY = "0"; # disallow cypress from downloading binaries in sandbox
+      ONNXRUNTIME_NODE_INSTALL_CUDA = "skip";
+    };
 
     preBuild = ''
       tar xf ${pyodide} -C static/
@@ -126,6 +127,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       googleapis-common-protos
       hiredis
       httpx
+      httpx2
       itsdangerous
       joserfc
       langchain
@@ -239,7 +241,11 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   pythonImportsCheck = [ "open_webui" ];
 
-  makeWrapperArgs = [ "--set FRONTEND_BUILD_DIR ${frontend}/share/open-webui" ];
+  makeWrapperArgs = [
+    "--set"
+    "FRONTEND_BUILD_DIR"
+    "${frontend}/share/open-webui"
+  ];
 
   passthru = {
     tests = {

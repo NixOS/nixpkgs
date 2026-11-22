@@ -20,7 +20,7 @@ in
         adminAddr = "please@dont.contact";
         phpPackage = php;
         enablePHP = true;
-        phpOptions = "pcre.jit = true";
+        phpOptions."pcre.jit" = true;
         extraConfig =
           let
             testRoot = pkgs.writeText "index.php" ''

@@ -41,15 +41,14 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "langgraph";
-  version = "1.2.11";
+  version = "1.2.22";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
     tag = finalAttrs.version;
-    hash = "sha256-5CUQh9KNYQ0HBIuREOP0MxZgn5Z1MxMuqB9Be4e6AJo=";
+    hash = "sha256-+uJMkun2WH7ImxnrgfD5mRG1iY3VcJAE4D5WiLHgLcE=";
   };
 
   postgresqlTestSetupPost = ''
@@ -62,6 +61,8 @@ buildPythonPackage (finalAttrs: {
   sourceRoot = "${finalAttrs.src.name}/libs/langgraph";
 
   build-system = [ hatchling ];
+
+  pythonRelaxDeps = [ "langchain-core" ];
 
   dependencies = [
     langchain-core
@@ -130,14 +131,24 @@ buildPythonPackage (finalAttrs: {
   disabledTestPaths = [
     # psycopg.errors.InsufficientPrivilege: permission denied to create database
     "tests/test_checkpoint_migration.py"
-    "tests/test_large_cases.py"
+    "tests/test_delta_channel_exit_mode.py"
+    "tests/test_delta_channel_fork.py"
+    "tests/test_delta_channel_parallel_order.py"
+    "tests/test_delta_channel_subgraph.py"
+    "tests/test_delta_channel_to_plain.py"
+    "tests/test_delta_channel_update_state.py"
+    "tests/test_interrupt_state.py"
+    "tests/test_interruption.py"
     "tests/test_large_cases_async.py"
-    "tests/test_pregel.py"
+    "tests/test_large_cases.py"
     "tests/test_pregel_async.py"
-    "tests/test_subgraph_persistence.py"
+    "tests/test_pregel.py"
+    "tests/test_prune_postgres.py"
+    "tests/test_strict_resume.py"
     "tests/test_subgraph_persistence_async.py"
-    "tests/test_time_travel.py"
+    "tests/test_subgraph_persistence.py"
     "tests/test_time_travel_async.py"
+    "tests/test_time_travel.py"
 
     # Race condition
     "tests/test_retry.py::test_error_handler_resumes_after_crash_multiple_nodes"

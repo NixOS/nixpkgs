@@ -32,7 +32,10 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://github.com/Ayrx/python-fastpbkdf2";
     description = "Python bindings for fastpbkdf2";
-    license = lib.licenses.bsd3;
+    license = lib.licenses.OR [
+      lib.licenses.bsd3
+      lib.licenses.asl20
+    ];
     maintainers = with lib.maintainers; [ jqueiroz ];
   };
 }

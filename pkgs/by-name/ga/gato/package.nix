@@ -7,27 +7,27 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "gato";
-  version = "1.6";
+  version = "1.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "praetorian-inc";
     repo = "gato";
     tag = finalAttrs.version;
-    hash = "sha256-vXQFgP0KDWo1VWe7tMGCB2yEYlr/1KMXsiNupBVLBqc=";
+    hash = "sha256-h0MKEUH0INC227Z0APg4MU1U/b71MmtyUHtIVB+QcCA=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
-    setuptools
-    wheel
-  ];
+  build-system = with python3.pkgs; [ setuptools ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     colorama
     cryptography
     packaging
+    py7zr
     pyyaml
+    rarfile
     requests
+    tqdm
   ];
 
   nativeCheckInputs = with python3.pkgs; [

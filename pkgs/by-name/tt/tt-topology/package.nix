@@ -60,6 +60,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     description = "Command line utility used to flash multiple NB cards on a system to use specific eth routing configurations";
     homepage = "https://github.com/tenstorrent/tt-topology";
     changelog = "https://github.com/tenstorrent/tt-topology/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    teams = [ lib.teams.tenstorrent ];
     maintainers = with lib.maintainers; [ RossComputerGuy ];
     license = lib.licenses.asl20;
   };

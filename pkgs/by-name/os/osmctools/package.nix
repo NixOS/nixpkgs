@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "osm-c-tools";
     repo = "osmctools";
     rev = finalAttrs.version;
-    sha256 = "1m8d3r1q1v05pkr8k9czrmb4xjszw6hvgsf3kn9pf0v14gpn4r8f";
+    hash = "sha256-DmVi7yNhA3eTncPpt6HhX8tOVs2fpYnyvAXsgEMeDdU=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

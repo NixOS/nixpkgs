@@ -1,23 +1,31 @@
 {
   "aarch64-darwin": {
-    "version": "26.1007.71326",
+    "version": "26.1117.41037",
     "src": {
-      "url": "https://persistent.oaistatic.com/codex-app-prod/ChatGPT-darwin-arm64-26.1007.71326.zip",
-      "hash": "sha256-igaIm9tafy4IBj+dZd1D0GwiPZteFfoSzcdq1fB9qXM="
+      "url": "https://persistent.oaistatic.com/codex-app-prod/ChatGPT-darwin-arm64-26.1117.41037.zip",
+      "hash": "sha256-vApC0Bqb3t4cHCuHYVGoGFYNax6vH0WuQC09IinDQiA="
     }
   },
   "aarch64-linux": {
-    "version": "26.1007.71326",
+    "version": "26.1117.41037",
     "src": {
-      "url": "https://persistent.oaistatic.com/codex-app-prod/linux/deb/pool/main/c/chatgpt/chatgpt_26.1007.71326_arm64.deb",
-      "hash": "sha256-2fvYVKFSLtsrU8dVo+pez6Z7P4wDUxNAW1CWckLvugo="
-    }
+      "url": "https://persistent.oaistatic.com/codex-app-prod/linux/deb/pool/main/c/chatgpt/chatgpt_26.1117.41037_arm64.deb",
+      "hash": "sha256-cUFG6cZnsmob1OV2M8VEM0qe1Hw5mYm/2Yz3ZBQL3FM="
+    },
+    "primaryRuntime": null
   },
   "x86_64-linux": {
-    "version": "26.1007.71326",
+    "version": "26.1117.41037",
     "src": {
-      "url": "https://persistent.oaistatic.com/codex-app-prod/linux/deb/pool/main/c/chatgpt/chatgpt_26.1007.71326_amd64.deb",
-      "hash": "sha256-DgBrSTFxL1qQ1M0ElyxuC1M87c39srUZRtW5NnRx9VY="
+      "url": "https://persistent.oaistatic.com/codex-app-prod/linux/deb/pool/main/c/chatgpt/chatgpt_26.1117.41037_amd64.deb",
+      "hash": "sha256-gw4lG2ykrUX+aQQSenkOjwD3wm7UyAOUc/cyPHxOJpI="
+    },
+    "primaryRuntime": {
+      "version": "26.1119.11507",
+      "src": {
+        "url": "https://persistent.oaistatic.com/codex-primary-runtime/26.1119.11507/codex-primary-runtime-linux-x64-26.1119.11507.tar.xz",
+        "hash": "sha256-0vxX4MO9Fm++ofbjzFZf0UQygLDRplX3V8ldwg74lBQ="
+      }
     }
   }
 }

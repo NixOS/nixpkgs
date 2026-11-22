@@ -48,6 +48,8 @@ lib.makeScope newScope (self: {
 
   bsnes-mercury-performance = self.bsnes-mercury.override { withProfile = "performance"; };
 
+  cap32 = self.callPackage ./cores/cap32.nix { };
+
   citra = self.callPackage ./cores/citra.nix { };
 
   desmume = self.callPackage ./cores/desmume.nix { };
@@ -93,6 +95,8 @@ lib.makeScope newScope (self: {
   handy = self.callPackage ./cores/handy.nix { };
 
   hatari = self.callPackage ./cores/hatari.nix { };
+
+  irogb = self.callPackage ./cores/irogb.nix { };
 
   jaxe = self.callPackage ./cores/jaxe.nix { };
 
@@ -169,6 +173,8 @@ lib.makeScope newScope (self: {
 
   same_cdi = self.callPackage ./cores/same_cdi.nix { }; # the name is not a typo
 
+  sameduck = self.callPackage ./cores/sameduck.nix { };
+
   sameboy = self.callPackage ./cores/sameboy.nix { };
 
   scummvm = self.callPackage ./cores/scummvm.nix { };
@@ -230,6 +236,8 @@ lib.makeScope newScope (self: {
   vice-xvic = self.callPackage ./cores/vice.nix { type = "xvic"; };
 
   virtualjaguar = self.callPackage ./cores/virtualjaguar.nix { };
+
+  x1 = self.callPackage ./cores/x1.nix { };
 
   yabause = self.callPackage ./cores/yabause.nix { };
 })

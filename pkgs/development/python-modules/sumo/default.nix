@@ -23,7 +23,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "SMTG-UCL";
+    owner = "SMTG-Bham";
     repo = "sumo";
     tag = "v${version}";
     hash = "sha256-OdoXcdLT/mTkSw/JOrpYjgvUiNLOnBI4avrjrXhzF3U=";
@@ -55,7 +55,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Toolkit for plotting and analysis of ab initio solid-state calculation data";
-    homepage = "https://github.com/SMTG-UCL/sumo";
+    homepage = "https://github.com/SMTG-Bham/sumo";
     changelog = "https://github.com/SMTG-Bham/sumo/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ psyanticy ];

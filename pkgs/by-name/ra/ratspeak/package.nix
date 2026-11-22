@@ -16,62 +16,67 @@
   udev,
   webkitgtk_4_1,
   wrapGAppsHook4,
+  sqlite,
+  # rsLXST is an optional, experimental dependency
+  withExperimentalVoice ? true,
 }:
 
-let
-  # Ratspeak resolves its protocol crates by relative path from sibling
-  # checkouts (../rsReticulum and friends). Upstream does not tag the
-  # siblings together with every app release, so each one is pinned to the
-  # revision current at the v1.0.25 release date.
-  rsReticulum = fetchFromGitHub {
-    owner = "ratspeak";
-    repo = "rsReticulum";
-    rev = "1a0a74ad065c3663f634575561e08bfbc838ad9b";
-    hash = "sha256-FTdyMGvO3F+Viu3JQciiHbpiH1CH9WaEpEqW03Xk0JM=";
-  };
-  rsLXMF = fetchFromGitHub {
-    owner = "ratspeak";
-    repo = "rsLXMF";
-    rev = "4917620b21a3f57b9b5970450b61fa05b99cc84f";
-    hash = "sha256-8Vp7bCZkud7315Md7USCAdR/d7j6F+f+jJPdjwWhuWQ=";
-  };
-  rsLXST = fetchFromGitHub {
-    owner = "ratspeak";
-    repo = "rsLXST";
-    rev = "df41edab47082976e1c1df1c8c6d4bbd3ce5463a";
-    hash = "sha256-NgsViiZdgKqebSiLeTCoApK1pQNHxnF34qMS0pM21K8=";
-  };
-  lrgp-rs = fetchFromGitHub {
-    owner = "ratspeak";
-    repo = "lrgp-rs";
-    rev = "e933b470b89e7ed9a50ed7bcaffc2bfbb9f30842";
-    hash = "sha256-QYWqCMDqgKHw/K/ybvUkQWi+IoTny/umZMJwSPLoPcA=";
-  };
-in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ratspeak";
-  version = "1.0.34";
+  version = "1.1.1";
   __structuredAttrs = true;
 
-  src = fetchFromGitHub {
-    owner = "ratspeak";
-    repo = "Ratspeak";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-qvsp6Vnq8uJjMN5CieNP7NKBb+e4XcX2wC7sz3v1Wv0=";
-  };
+  srcs = [
+    (fetchFromGitHub {
+      name = "ratspeak";
+      owner = "ratspeak";
+      repo = "Ratspeak";
+      tag = "v${finalAttrs.version}";
+      hash = "sha256-nOoCXT7UTzpgToWVEvlKTK8JdC7YdCDnswh2Td83/7E=";
+    })
+    # The app expects the protocol repos next to its own checkout.
+    # rsLXST must be in tree even when it's disabled for the build. See:
+    # https://docs.ratspeak.org/docs/reference/building-from-source#common-build-problems
+    # Ratspeak resolves its protocol crates by relative path from sibling
+    # checkouts (../rsReticulum and friends). Upstream does not tag the
+    # siblings together with every app release, so each one is pinned to the
+    # revision current at the v1.0.25 release date.
+    (fetchFromGitHub {
+      name = "rsReticulum";
+      owner = "ratspeak";
+      repo = "rsReticulum";
+      tag = "ratspeak-v${finalAttrs.version}";
+      hash = "sha256-wp9qTj7wL8D/JG1C4GYrI8/n0gPAUGp0iuv2ZzBtkh4=";
+    })
+    (fetchFromGitHub {
+      name = "rsLXMF";
+      owner = "ratspeak";
+      repo = "rsLXMF";
+      tag = "ratspeak-v${finalAttrs.version}";
+      hash = "sha256-r8O1+e7/h553vXmdS0FdabZY5IbrrHjOs4EC+5BytQc=";
+    })
+    (fetchFromGitHub {
+      name = "rsLXST";
+      owner = "ratspeak";
+      repo = "rsLXST";
+      tag = "ratspeak-v${finalAttrs.version}";
+      hash = "sha256-df/B3fwlIk1d7N8FeKqS7JyNv1gRFa/Bb2d2xjYGPd4=";
+    })
+    (fetchFromGitHub {
+      name = "lrgp-rs";
+      owner = "ratspeak";
+      repo = "lrgp-rs";
+      tag = "ratspeak-v${finalAttrs.version}";
+      hash = "sha256-9BC58C3PGT/wIUwMti08b457feGkB0BT8WbOOLj0V6Q=";
+    })
+  ];
 
-  # The app expects the protocol repos next to its own checkout.
-  postUnpack = ''
-    cp -r ${rsReticulum} rsReticulum
-    cp -r ${rsLXMF} rsLXMF
-    cp -r ${rsLXST} rsLXST
-    cp -r ${lrgp-rs} lrgp-rs
-    chmod -R u+w rsReticulum rsLXMF rsLXST lrgp-rs
-  '';
+  sourceRoot = "ratspeak";
 
-  cargoHash = "sha256-4CvEAH7+ndVqOey75BjqHei8L34R30YWriIn651V5IU=";
+  cargoHash = "sha256-qvESPXDxKJEXAWNimvSL9murCHG4mvG94kQvvcHAjN4=";
   cargoRoot = "src-tauri";
   buildAndTestSubdir = finalAttrs.cargoRoot;
+  buildNoDefaultFeatures = !withExperimentalVoice;
 
   nativeBuildInputs = [
     cargo-tauri.hook
@@ -80,7 +85,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ wrapGAppsHook4 ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+  buildInputs = [
+    sqlite
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
     dbus
     glib-networking
@@ -109,8 +117,22 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Reticulum and LXMF client with messaging, file sharing, voice calls and LoRa support";
     homepage = "https://github.com/ratspeak/Ratspeak";
-    changelog = "https://github.com/ratspeak/Ratspeak/releases/tag/${finalAttrs.src.tag}";
-    license = lib.licenses.agpl3Plus;
+    changelog = "https://github.com/ratspeak/Ratspeak/releases/tag/v${finalAttrs.version}";
+    license =
+      with lib.licenses;
+      # https://github.com/ratspeak/Ratspeak/blob/v1.0.43/NOTICE
+      AND (
+        [
+          # Ratspeak, rsReticulum, rsLXMF
+          reticulum
+          # lrgp-rs
+          mit
+        ]
+        # rsLXST is distributed under a non-free license that only allows
+        # unmodified, non-commercial use with Ratspeak.
+        # https://github.com/ratspeak/rsLXST/blob/ratspeak-v1.0.43/LICENSE
+        ++ lib.optional withExperimentalVoice unfreeRedistributable
+      );
     maintainers = with lib.maintainers; [ eldios ];
     platforms = lib.platforms.linux;
     mainProgram = "ratspeak";

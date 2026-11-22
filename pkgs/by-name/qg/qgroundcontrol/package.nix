@@ -96,6 +96,12 @@ stdenv.mkDerivation rec {
     ./disable-bad-message.patch
   ];
 
+  # -Werror breaks the build with newer compilers, e.g. GCC 16's
+  # -Wunused-but-set-variable in QGCTileCacheWorker.cpp
+  postPatch = ''
+    substituteInPlace QGCCommon.pri --replace-fail "-Werror " ""
+  '';
+
   passthru.updateScript = nix-update-script { };
 
   meta = {

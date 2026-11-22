@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "wslink";
-  version = "2.5.7";
+  version = "2.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kitware";
     repo = "wslink";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-47vHc+b5Z3ipkLZ5k0yEasNaKz0Seu2jiGBVmAI5u6U=";
+    hash = "sha256-4MKBnMnG8DwEaxc2KXmvZVNjYnT0JkLr1brYJLBvik4=";
   };
 
   build-system = [ hatchling ];

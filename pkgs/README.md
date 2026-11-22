@@ -129,7 +129,7 @@ To add a package to Nixpkgs:
    - Pan, a GTK-based newsreader: [`pkgs/by-name/pa/pan/package.nix`](./by-name/pa/pan/package.nix).
      Has an optional dependency on `gspell`, which is only built if `spellCheck` is `true`.
 
-   - Apache HTTPD: [`pkgs/servers/http/apache-httpd/2.4.nix`](servers/http/apache-httpd/2.4.nix).
+   - Apache HTTPD: [`pkgs/by-name/ap/apacheHttpd_2_4/package.nix`](./by-name/ap/apacheHttpd_2_4/package.nix).
      A bunch of optional features, variable substitutions in the configure flags, a post-install hook, and miscellaneous hackery.
 
    - buildMozillaMach: [`pkgs/build-support/build-mozilla-mach/default.nix`](./build-support/build-mozilla-mach/default.nix).
@@ -767,14 +767,14 @@ For very simple tests, they can be written inline:
 
 ```nix
 # ... ,
-{ yq-go }:
+{ lib, yq-go }:
 
 buildGoModule rec {
   # …
 
   passthru.tests = {
     simple = runCommand "${pname}-test" { } ''
-      echo "test: 1" | ${yq-go}/bin/yq eval -j > $out
+      echo "test: 1" | ${lib.getExe yq-go} eval -j > $out
       [ "$(cat $out | tr -d $'\n ')" = '{"test":1}' ]
     '';
   };
@@ -850,7 +850,11 @@ stdenv.mkDerivation {
 Create `tests.nix` in the package directory:
 
 ```nix
-{ runCommand, phoronix-test-suite }:
+{
+  lib,
+  runCommand,
+  phoronix-test-suite,
+}:
 
 let
   inherit (phoronix-test-suite) pname version;
@@ -858,14 +862,14 @@ let
 in
 runCommand "${pname}-tests" { meta.timeout = 60; } ''
   # automatic initial setup to prevent interactive questions
-  ${phoronix-test-suite}/bin/phoronix-test-suite enterprise-setup >/dev/null
+  ${lib.getExe phoronix-test-suite} enterprise-setup >/dev/null
   # get version of installed program and compare with package version
-  if [[ `${phoronix-test-suite}/bin/phoronix-test-suite version` != *"${version}"*  ]]; then
+  if [[ `${lib.getExe phoronix-test-suite} version` != *"${version}"*  ]]; then
     echo "Error: program version does not match package version"
     exit 1
   fi
   # run dummy command
-  ${phoronix-test-suite}/bin/phoronix-test-suite dummy_module.dummy-command >/dev/null
+  ${lib.getExe phoronix-test-suite} dummy_module.dummy-command >/dev/null
   # needed for Nix to register the command as successful
   touch $out
 ''
@@ -1166,10 +1170,8 @@ Reviewing process:
 - Ensure that the commit text [fits the guidelines](../CONTRIBUTING.md#commit-conventions).
 - Ensure that the package maintainers are notified.
   - The continuous integration system will make GitHub notify users based on the submitted changes, but it can happen that it misses some of the package maintainers.
-- Ensure that the meta field information [fits the guidelines](#meta-attributes) and is correct:
+- Ensure that the meta field information [fits the guidelines](#meta-attributes) and is correct.
   - License can change with version updates, so it should be checked to match the upstream license.
-  - If the package has no maintainer, a maintainer must be set.
-    This can be the update submitter or a community member that accepts to take maintainership of the package.
 - Verify any change of upstream.
   - If switching from e.g. PyPi to GitHub, verify that the repo is the official one.
   - If switching to a fork, check with external sources like other package repositories for community consensus.

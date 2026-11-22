@@ -33,13 +33,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kew";
-  version = "4.4.0";
+  version = "4.4.2";
 
   src = fetchFromGitHub {
     owner = "ravachol";
     repo = "kew";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-klU1SBYj3T33sZie4/IliLSeJXO5treGQprBOe3gJ0E=";
+    hash = "sha256-R0tsBPmAotX19gV2EwIOA3UBh/To3w4YL25bkA2ptYo=";
   };
 
   postPatch = ''
@@ -106,7 +106,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       demine
       ddogfoodd
-      matteopacini
     ];
     mainProgram = "kew";
   };

@@ -2,24 +2,25 @@
   lib,
   apple-sdk_14,
   apple-sdk_26,
+  apple-sdk_27,
   bootstrapStage,
   buildSwiftPackages,
   cmake,
   darwin,
   fetchFromGitHub,
-  fetchpatch2,
   libedit,
   libffi,
   libuuid,
   libxml2,
   llvmPackages,
   llvm_libtool,
-  ninja,
+  ninja_1_11,
+  patchesForVersion,
   perl,
   python3,
-  replaceVars,
   srcOnly,
   stdenv,
+  stdenvNoCC,
   stdlib,
   swift-cmark,
   swift-corelibs-libdispatch,
@@ -38,11 +39,9 @@
     "compiler"
     "compiler-swift-syntax-lib"
     #    "dev"
-    "editor-integration"
     #    "llvm-toolchain-dev-tools"
     "license"
     "sdk-overlay"
-    (if stdenv.hostPlatform.isDarwin then "sourcekit-xpc-service" else "sourcekit-inproc")
     #    "stdlib-experimental"
     "swift-syntax-lib"
     #    "testsuite-tools"
@@ -50,6 +49,16 @@
     "toolchain-tools"
     #    "tools"
   ]
+  # Only build editor integration in the final compiler. It’s not needed for the bootstrap compiler or stdlib.
+  ++ lib.optionals (lib.versions.majorMinor swift_release != "6.2" && bootstrapStage == 2) (
+    [
+      "editor-integration"
+      "sourcekit-inproc"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      "sourcekit-xpc-service"
+    ]
+  )
   ++ lib.optionals (stdlib == null) [
     "back-deployment"
     "sdk-overlay"
@@ -61,8 +70,15 @@
 }:
 
 let
+  # Swift 6.2.4 requires different settings and disables LTO to improve build times.
+  isBootstrapToolchain62 = lib.versions.majorMinor swift_release == "6.2";
+
   # SDK versions past 14.x don’t work with the c++-based bootstrap compiler due to unconditionally exposing macros.
-  build-sdk = if bootstrapStage == 2 then apple-sdk_26 else apple-sdk_14;
+  build-sdk =
+    if bootstrapStage == 2 then
+      (if isBootstrapToolchain62 then apple-sdk_26 else apple-sdk_27)
+    else
+      apple-sdk_14;
 
   # `buildSwiftPackages` is always the previous stage. Building the stage 2 compiler requires linking against the
   # separately built stdlib because it does not build its own. Override the stage 1 compiler to use it.
@@ -73,7 +89,10 @@ let
     else
       buildSwiftPackages.swift;
 
-  swift-driver = swift.swift-driver or null;
+  # Only use early Swift compiler driver if the version of the bootstrap compiler matches the target compiler.
+  swift-driver = lib.optionalDrvAttr (
+    swift != null && lib.getVersion swift == swift_release
+  ) swift.swift-driver or null;
 
   inherit (llvmPackages)
     clang
@@ -84,7 +103,32 @@ let
     libllvm
     ;
 
+  lld =
+    if stdenv.hostPlatform.isDarwin then
+      # Darwin can use LLD unwrapped because install names ensure it can find the linked dylibs.
+      # The wrapped version also doesn’t seem to work on Darwin.
+      llvmPackages.lld
+    else
+      stdenvNoCC.mkDerivation {
+        # The linker in `llvmPackages.lld` isn’t wrapped, which causes the build to fail due to missing rpaths.
+        pname = "lld-wrapper";
+        version = lib.getVersion llvmPackages.lld;
+
+        buildCommand = ''
+          mkdir -p "$out/bin"
+          ln -s ${lib.getExe' llvmPackages.bintools "ld"} "$out/bin/ld"
+          ln -s ${lib.getExe' llvmPackages.bintools "ld.lld"} "$out/bin/ld.lld"
+        '';
+      };
+
   inherit (darwin) sigtool;
+
+  # https://github.com/NixOS/nixpkgs/issues/327836
+  # Fail to build with ninja 1.13 when NIX_BUILD_CORES is low (Hydra or Github Actions).
+  # Can reproduce using `nix --option cores 2 build -f . swift`.
+  # Until we find out the exact cause, pin ninja to version 1.11.1.
+  # Note: While upstream is pinned to a newer version of Ninja now, it still has this problem.
+  ninja = ninja_1_11;
 
   doCheck = false; # TODO: Implement tests per https://github.com/swiftlang/swift/blob/main/docs/Testing.md.
 
@@ -93,6 +137,8 @@ let
   isNotSwiftSyntax = if bootstrapStage == 0 then c: !lib.hasInfix "swift-syntax" c else _: true;
 
   swiftComponents' = lib.filter isNotSwiftSyntax swiftComponents;
+
+  withStaticLibsForLLDB = bootstrapStage == 2 && lib.versions.majorMinor swift_release != "6.2";
 
   swiftPlatform = stdenv.hostPlatform.swift.platform;
 
@@ -129,7 +175,7 @@ stdenv.mkDerivation (finalAttrs: {
     "doc"
     "man"
   ]
-  ++ lib.optionals (bootstrapStage == 2) [
+  ++ lib.optionals withStaticLibsForLLDB [
     # Static libs from the compiler build (needed to build LLDB).
     "static"
   ];
@@ -146,51 +192,11 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s ${lib.escapeShellArg srcs.swift-syntax} "$NIX_BUILD_TOP/swift-syntax"
   '';
 
-  patches = [
-    # ClangImporter needs help finding the location of libc and libc++ (and using it).
-    ./patches/0001-Read-C-and-C-stdlib-flags-from-the-wrapped-compiler.patch
-    ./patches/0002-Use-Nixpkgs-C-and-C-stdlib-paths-in-ClangImporter.patch
-    # Backport linking against an external swift-cmark.
-    # From https://github.com/swiftlang/swift/pull/70791.
-    ./patches/0003-cmark-build-revamp.patch
-    # Fix compilation errors when building the SIL module during bootstrap.
-    # error: field has incomplete type 'clang::DeclContext::all_lookups_iterator'
-    # error: field has incomplete type 'clang::DeclContext::ddiag_iterator'
-    ./patches/0004-sil-missing-headers.patch
-    # Use libLTO.dylib from the LLVM built for Swift
-    (replaceVars ./patches/0005-specify-liblto-path.patch {
-      libllvm_path = lib.getLib libllvm;
-    })
-    # Use libdispatch from nixpkgs instead of building it in-tree
-    ./patches/0006-use-nixpkgs-libdispatch.patch
-    # The Swift JIT needs help finding dylibs when they are linked into the toolchain at `$out/lib`.
-    (replaceVars ./patches/0007-Help-Swift-JIT-find-the-separate-stdlib-and-framewor.patch {
-      swiftPlatform = stdenv.hostPlatform.swift.platform;
-    })
-    # Fix missing <cstdint> when building against libstdc++ 15
-    (fetchpatch2 {
-      url = "https://github.com/swiftlang/swift/commit/a5c727125e952839c373fe47e9f9e359db3d4d38.patch?full_index=1";
-      hash = "sha256-OoTcPyqTzAhkxaRAMeu+hab3yoIDRPq6YzK5hrLk4Jg=";
-    })
-    # Fix missing null-terminator on Linux, which results in a crash in `swift repl`.
-    (fetchpatch2 {
-      url = "https://github.com/swiftlang/swift/commit/cfbe70db5d1e65bed2388f97ee52f65719c812b3.patch?full_index=1";
-      hash = "sha256-XxdP3Qs2YfT20d5E216cOQy+fUgYQpwMDWSyl77NQHw=";
-    })
-  ]
-  ++ lib.optionals (bootstrapStage == 0) [
-    # Revert optimizer changes that cause the C++-based bootstrap compiler to be unable to compile functions with
-    # infinite loops that return from the loop. This doesn’t affect the later stages, so it’s applied conditionally.
-    # https://github.com/swiftlang/swift/pull/79186
-    ./patches/0008-revert-optimizer-changes.patch
-    # Work around a compiler crash by partially reverting https://github.com/swiftlang/swift/pull/80920.
-    ./patches/0009-siloptimizer-bootstrap-workaround.patch
-  ]
-  ++ lib.optionals (bootstrapStage == 1) [
-    # Stage 1 doesn’t have a compiler that supports _StringProcessing.
-    # This isn’t a problem on Darwin, but it fails on Linux.
-    ./patches/0010-Remove-dependency-on-_StringProcessing-during-stage-.patch
-  ];
+  patches = patchesForVersion {
+    inherit (finalAttrs) version;
+    inherit bootstrapStage libllvm;
+    path = ./patches;
+  };
 
   postPatch = ''
     # Swift doesn’t really _need_ LLVM’s build folder. It only needs to find a built LLVM, which we can provide.
@@ -254,6 +260,9 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "SWIFT_INCLUDE_TESTS" doCheck)
     # Swift Concurrency is needed to build the stage 1 compiler on Linux.
     (lib.cmakeBool "SWIFT_ENABLE_EXPERIMENTAL_CONCURRENCY" true)
+    # Linking with LLD is more compatible. The resulting shared libraries can be linked by either LLD or GNU ld.
+    # The same is not true when linking with GNU ld. It’s also faster.
+    (lib.cmakeFeature "CMAKE_LINKER_TYPE" "LLD")
   ]
   ++ lib.optionals (bootstrapStage == 1) [
     # Work around crashes in ownership verifier in the bootstrap compiler.
@@ -267,15 +276,19 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "SWIFT_ENABLE_EXPERIMENTAL_STRING_PROCESSING" true)
     # Synchronization is required to build Foundation.
     (lib.cmakeBool "SWIFT_ENABLE_SYNCHRONIZATION" true)
+    # The stage 1 compiler needs to support backtracing to link against a stdlib with backtracing support.
+    #
+    # When building the stdlib, Swift first builds itself using the stdlib from the bootstrap compiler, then it builds
+    # the stdlib using that compiler. This is necessary because Swift does not support building the stdlib with a
+    # different compiler version than the stdlib version.
+    #
+    # This isn’t necessary when building the stage 1 compiler for Swift 6.2.4 because it uses the stage 0 C++ bootstrap
+    # compiler, but newer versions of Swift use a fully-featured Swift 6.2.4 to build their stage 1 compilers.
+    (lib.cmakeBool "SWIFT_ENABLE_BACKTRACING" true)
   ]
   ++ lib.optionals (bootstrapStage >= 2) (
     [
-      # Build Swift with LTO for better performance. Only enable it for tools. The stdlib will enable it separately.
-      (lib.cmakeFeature "SWIFT_TOOLS_ENABLE_LTO" "thin")
-      # LTO is slow with ld64. Only use it for targets that benefit from LTO.
-      (lib.cmakeBool "SWIFT_TOOLS_LD64_LTO_CODEGEN_ONLY_FOR_SUPPORTING_TARGETS" stdenv.hostPlatform.isDarwin)
       # Enable the remaining features.
-      (lib.cmakeBool "SWIFT_ENABLE_BACKTRACING" true)
       (lib.cmakeBool "SWIFT_ENABLE_EXPERIMENTAL_CXX_INTEROP" true)
       (lib.cmakeBool "SWIFT_ENABLE_EXPERIMENTAL_DIFFERENTIABLE_PROGRAMMING" true)
       (lib.cmakeBool "SWIFT_ENABLE_EXPERIMENTAL_DISTRIBUTED" true)
@@ -286,16 +299,22 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.cmakeBool "SWIFT_ENABLE_RUNTIME_MODULE" true)
       (lib.cmakeBool "SWIFT_STDLIB_ENABLE_STRICT_AVAILABILITY" true)
     ]
-    ++ lib.optionals stdenv.cc.bintools.isGNU [
-      # Use `llvm-ar` and `llvm-ranlib` when LTO is enabled, or builds will fail due missing symbol tables in archives.
-      # e.g., `error: lib/libswiftDemangling.a: no archive symbol table (run ranlib)`.
-      (lib.cmakeFeature "CMAKE_AR" (lib.getExe' llvm "llvm-ar"))
-      (lib.cmakeFeature "CMAKE_RANLIB" (lib.getExe' llvm "llvm-ranlib"))
-      # Make sure Swift is built with a consistent toolchan version. This doesn’t matter for non-LTO builds, but it causes
-      # LTO builds to fail when objects built with a newer Clang are processed by the Swift Clang’s libLTO.
-      (lib.cmakeFeature "CMAKE_C_COMPILER" (lib.getExe' clang "clang"))
-      (lib.cmakeFeature "CMAKE_CXX_COMPILER" (lib.getExe' clang "clang++"))
-    ]
+    ++ lib.optionals (!isBootstrapToolchain62) (
+      [
+        # Build Swift with LTO for better performance. Only enable it for tools. The stdlib will enable it separately.
+        (lib.cmakeFeature "SWIFT_TOOLS_ENABLE_LTO" "thin")
+      ]
+      ++ lib.optionals stdenv.cc.bintools.isGNU [
+        # Use `llvm-ar` and `llvm-ranlib` when LTO is enabled, or builds will fail due missing symbol tables in archives.
+        # e.g., `error: lib/libswiftDemangling.a: no archive symbol table (run ranlib)`.
+        (lib.cmakeFeature "CMAKE_AR" (lib.getExe' llvm "llvm-ar"))
+        (lib.cmakeFeature "CMAKE_RANLIB" (lib.getExe' llvm "llvm-ranlib"))
+        # Make sure Swift is built with a consistent toolchain version. This doesn’t matter for non-LTO builds, but it causes
+        # LTO builds to fail when objects built with a newer Clang are processed by the Swift Clang’s libLTO.
+        (lib.cmakeFeature "CMAKE_C_COMPILER" (lib.getExe' clang "clang"))
+        (lib.cmakeFeature "CMAKE_CXX_COMPILER" (lib.getExe' clang "clang++"))
+      ]
+    )
   );
 
   env = {
@@ -308,6 +327,11 @@ stdenv.mkDerivation (finalAttrs: {
       # dependent packages to require a linker plugin to read the LLVM bitcode.
       ++ lib.optionals (bootstrapStage == 2 && stdenv.hostPlatform.isElf) [ "-ffat-lto-objects" ]
     );
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    # Avoid the following error when running `install_name_tool`:
+    #    changing install names or rpaths can't be redone for: <some exe> (for architecture arm64) because larger updated load commands do not fit
+    NIX_LDFLAGS = "-headerpad_max_install_names";
   };
 
   preConfigure =
@@ -338,6 +362,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    lld
     ninja
     perl # For pod2man
     python3
@@ -408,69 +433,79 @@ stdenv.mkDerivation (finalAttrs: {
       ln -s swift-frontend "''${!outputBin}/bin/swift"
       ln -s swift-frontend "''${!outputBin}/bin/swiftc"
     ''
-    + lib.optionalString (bootstrapStage == 2) ''
-      mkdir -p "$static/lib"
+    + lib.optionalString withStaticLibsForLLDB (
+      ''
+        mkdir -p "$static/lib"
 
-      # Copy Swift compiler libraries needed by LLDB into $static. The following list should match the ones found at:
-      # - https://github.com/swiftlang/llvm-project/blob/swift-$swiftVersion-RELEASE/lldb/source/Plugins/ExpressionParser/Swift/CMakeLists.txt
-      # - https://github.com/swiftlang/llvm-project/blob/swift-$swiftVersion-RELEASE/lldb/source/Plugins/Language/Swift/CMakeLists.txt
-      # - https://github.com/swiftlang/llvm-project/blob/swift-$swiftVersion-RELEASE/lldb/source/Plugins/LanguageRuntime/Swift/CMakeLists.txt
-      # - https://github.com/swiftlang/llvm-project/blob/swift-$swiftVersion-RELEASE/lldb/source/Symbol/CMakeLists.txt
-      # - https://github.com/swiftlang/swift/blob/swift-$swiftVersion-RELEASE/SwiftCompilerSources/CMakeLists.txt
-      declare -a swiftLibs=(
-        libswiftAST
-        libswiftASTSectionImporter
-        libswiftBasic
-        libswiftClangImporter
-        libswiftFrontend
-        libswiftIDE
-        libswiftParse
-        libswiftRemoteAST
-        libswiftRemoteInspection
-        libswiftSIL
-        libswiftSILOptimizer
-        libswiftSerialization
-      )
-      # These are dependencies of the above
-      declare -a swiftLibsDeps=(
-        lib_CompilerRegexParser
-        libswiftAPIDigester
-        libswiftASTGen
-        libswiftCompilerModules
-        libswiftConstExtract
-        libswiftDemangling
-        libswiftDriver
-        libswiftIDEUtilsBridging
-        libswiftIRGen
-        libswiftLLVMPasses
-        libswiftLocalization
-        libswiftMacroEvaluation
-        libswiftMarkup
-        libswiftOption
-        libswiftSILGen
-        libswiftSema
-        libswiftSymbolGraphGen
-        swift/host/compiler/lib_Compiler_SwiftLibraryPluginProviderCShims
-        swift/host/compiler/lib_Compiler_SwiftSyntaxCShims
-        swift/host/lib_SwiftLibraryPluginProviderCShims
-        swift/host/lib_SwiftSyntaxCShims
-      )
-      for swiftLib in "''${swiftLibs[@]}" "''${swiftLibsDeps[@]}"; do
-        src=lib/$swiftLib${stdenv.hostPlatform.extensions.staticLibrary}
-        dest=$static/lib/$swiftLib${stdenv.hostPlatform.extensions.staticLibrary}
-        ninja "$(basename "$src")" # Make sure the static library was built. Some aren’t by default.
-        mkdir -p "$(dirname "$dest")"
-        cp -v "$src" "$dest"
-      done
-      # swiftCompilerStub is actually just an object file
-      cp SwiftCompilerSources/CMakeFiles/swiftCompilerStub.dir/stubs.cpp.o "$static/lib/stubs.cpp.o"
-    '';
+        # Copy Swift compiler libraries needed by LLDB into $static. The following list should match the ones found at:
+        # - https://github.com/swiftlang/llvm-project/blob/swift-$swiftVersion-RELEASE/lldb/source/Plugins/ExpressionParser/Swift/CMakeLists.txt
+        # - https://github.com/swiftlang/llvm-project/blob/swift-$swiftVersion-RELEASE/lldb/source/Plugins/Language/Swift/CMakeLists.txt
+        # - https://github.com/swiftlang/llvm-project/blob/swift-$swiftVersion-RELEASE/lldb/source/Plugins/LanguageRuntime/Swift/CMakeLists.txt
+        # - https://github.com/swiftlang/llvm-project/blob/swift-$swiftVersion-RELEASE/lldb/source/Symbol/CMakeLists.txt
+        # - https://github.com/swiftlang/swift/blob/swift-$swiftVersion-RELEASE/SwiftCompilerSources/CMakeLists.txt
+        declare -a swiftLibs=(
+          libswiftAST
+          libswiftASTSectionImporter
+          libswiftBasic
+          libswiftClangImporter
+          libswiftFrontend
+          libswiftIDE
+          libswiftParse
+          libswiftRemoteAST
+          libswiftRemoteInspection
+          libswiftSIL
+          libswiftSILOptimizer
+          libswiftSerialization
+        )
+        # These are dependencies of the above
+        declare -a swiftLibsDeps=(
+          lib_CompilerRegexParser
+          libswiftAPIDigester
+          libswiftASTGen
+          libswiftCompilerModules
+          libswiftConstExtract
+          libswiftDemangling
+          libswiftDriver
+          libswiftIDEUtilsBridging
+          libswiftIRGen
+          libswiftLLVMPasses
+          libswiftLocalization
+          libswiftMacroEvaluation
+          libswiftMarkup
+          libswiftOption
+          libswiftSILGen
+          libswiftSema
+          libswiftSymbolGraphGen
+          swift/host/compiler/lib_Compiler_SwiftLibraryPluginProviderCShims
+          swift/host/compiler/lib_Compiler_SwiftSyntaxCShims
+          swift/host/lib_SwiftLibraryPluginProviderCShims
+          swift/host/lib_SwiftSyntaxCShims
+        )
+      ''
+      + lib.optionalString (lib.versionAtLeast finalAttrs.version "6.3") ''
+        swiftLibsDeps+=(
+          libnixpkgsStuff
+          libswiftBasicSwift
+        )
+      ''
+      + ''
+        for swiftLib in "''${swiftLibs[@]}" "''${swiftLibsDeps[@]}"; do
+          src=lib/$swiftLib${stdenv.hostPlatform.extensions.staticLibrary}
+          dest=$static/lib/$swiftLib${stdenv.hostPlatform.extensions.staticLibrary}
+          ninja "$(basename "$src")" # Make sure the static library was built. Some aren’t by default.
+          mkdir -p "$(dirname "$dest")"
+          cp -v "$src" "$dest"
+        done
+        # swiftCompilerStub is actually just an object file
+        cp SwiftCompilerSources/CMakeFiles/swiftCompilerStub.dir/stubs.cpp.o "$static/lib/stubs.cpp.o"
+      ''
+    );
 
   postFixup =
     # The Swift fork of LLDB needs several internal headers and build artifacts. These are copied in `postFixup` instead
     # of in `postInstall` to prevent the multiple outputs hook from moving them to $dev. We don’t want them in
     # $dev to keep the closure size down when using `swiftc` outside of buidling LLDB.
-    lib.optionalString (bootstrapStage == 2) ''
+    lib.optionalString withStaticLibsForLLDB ''
       staticLibExt=${stdenv.hostPlatform.extensions.staticLibrary}
       sharedLibExt=${stdenv.hostPlatform.extensions.sharedLibrary}
 
@@ -484,7 +519,7 @@ stdenv.mkDerivation (finalAttrs: {
 
       swiftBinaryDir=''${!outputBin}
       swiftIncludeDirs=$swiftcIncPath/include\;$stdlibIncPath/lib\;$stdlibIncPath/include\;$static/include
-      swiftLibraryDirs=$swiftcDevPath/lib\;$swiftcLibPath/lib\;$stdlibLibPath/lib\;$stdlibDevPath/lib
+      swiftLibraryDirs=$swiftcDevPath/lib\;$swiftcLibPath/lib\;$stdlibLibPath/lib\;$stdlibDevPath/lib/swift/${swiftPlatform}
 
       swiftArch=${stdenv.hostPlatform.swift.arch}
       swiftPlatform=${stdenv.hostPlatform.swift.platform}
@@ -538,7 +573,7 @@ stdenv.mkDerivation (finalAttrs: {
       # one of several outputs belong to different derivations.
       sed -i "$static/lib/cmake/swift/SwiftExports.cmake" \
         -e "s|IMPORTED_LOCATION_''${buildType^^} \"$buildDir/lib/swift/$swiftPlatform/$swiftArch/\(.*$sharedLibExt\)\"|IMPORTED_LOCATION_''${buildType^^} \"$stdlibLibPath/lib/\1\"|g" \
-        -e "s|IMPORTED_LOCATION_''${buildType^^} \"$buildDir/lib/swift/$swiftPlatform/$swiftArch/\(.*$staticLibExt\)\"|IMPORTED_LOCATION_''${buildType^^} \"$stdlibDevPath/lib/\1\"|g" \
+        -e "s|IMPORTED_LOCATION_''${buildType^^} \"$buildDir/lib/swift/$swiftPlatform/$swiftArch/\(.*$staticLibExt\)\"|IMPORTED_LOCATION_''${buildType^^} \"$stdlibDevPath//lib/swift/${swiftPlatform}/\1\"|g" \
         -e "s|IMPORTED_LOCATION_''${buildType^^} \"$buildDir/lib/\(swift-[^/]*\)/$swiftPlatform/$swiftArch/\([^/\"]*\)\"|IMPORTED_LOCATION_''${buildType^^} \"$stdlibLibPath/lib/\1/\2\"|g" \
         -e "s|IMPORTED_LOCATION_''${buildType^^} \"$buildDir/lib/swift/host/\(.*$sharedLibExt\)\"|IMPORTED_LOCATION_''${buildType^^} \"$swiftcLibPath/lib/swift/host/\1\"|g" \
         -e "s|IMPORTED_LOCATION_''${buildType^^} \"$buildDir/lib/swift/host/\(.*$staticLibExt\)\"|IMPORTED_LOCATION_''${buildType^^} \"$swiftcDevPath/lib/swift/host/\1\"|g" \

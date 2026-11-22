@@ -55,7 +55,7 @@ in
       owner = "razer";
       repo = "Octoprint_ABL_Expert";
       rev = version;
-      sha256 = "0ij3rvdwya1sbymwm5swlh2j4jagb6fal945g88zrzh5xf26hzjh";
+      hash = "sha256-UH5ohOsF/vwReoUkqpxZT0kiBaRcl8qrXzooz9vOQ0Y=";
     };
 
     meta = {

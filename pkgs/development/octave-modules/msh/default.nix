@@ -21,7 +21,7 @@ buildOctavePackage rec {
     owner = "carlodefalco";
     repo = "msh";
     rev = "v${version}";
-    sha256 = "sha256-UnMrIruzm3ARoTgUlMMxfjTOMZw/znZUQJmj3VEOw8I=";
+    hash = "sha256-UnMrIruzm3ARoTgUlMMxfjTOMZw/znZUQJmj3VEOw8I=";
   };
 
   nativeBuildInputs = [

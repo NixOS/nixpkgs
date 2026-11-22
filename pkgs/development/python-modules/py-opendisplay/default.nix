@@ -19,14 +19,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "py-opendisplay";
-  version = "7.17.1";
+  version = "7.18.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "OpenDisplay";
     repo = "py-opendisplay";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-V6KtUPN7WGnSduEmNW6mM1YBtkOH9SF64fTMpGwDd6U=";
+    hash = "sha256-qNhOb+3tAsX/ED7YO5SC9N7sMpVWkcKa1sBT+bvtW9w=";
   };
 
   build-system = [ hatchling ];

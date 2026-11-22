@@ -11,14 +11,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pip-api";
-  version = "0.0.34";
+  version = "0.0.35";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "di";
     repo = "pip-api";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-nmCP4hp+BsD80OBjerOu+QTBBExGHvn/v19od4V3ncI=";
+    tag = finalAttrs.version;
+    hash = "sha256-SAwpDwIapifLU8VEaf1JL9psO5h6/pVo8BrH40EFxuc=";
   };
 
   build-system = [ setuptools ];

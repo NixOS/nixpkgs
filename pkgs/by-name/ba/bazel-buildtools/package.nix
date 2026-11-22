@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "bazel-buildtools";
-  version = "10.1.0";
+  version = "10.2.0";
 
   src = fetchFromGitHub {
-    owner = "bazelbuild";
+    owner = "bazel-contrib";
     repo = "buildtools";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-6yWPmjKyZsYZZ73a+yryZl1xAREiPFiBANnZZJ4Qv5o=";
+    hash = "sha256-pnzvuerzKSxF++GeceGOzGgx0nQjAAKCj9fnjW1EIIE=";
   };
 
-  vendorHash = "sha256-bUvWtQ0DCdAQRETyPJ6gp4qlaPowlpO5l3GHFaEcH94=";
+  vendorHash = "sha256-N8mmt5P+hL0WzxLrVwEywSh9BAMZj2s2WzwNoB4o4bU=";
 
   preBuild = ''
     rm -r warn/docs
@@ -36,8 +36,8 @@ buildGoModule (finalAttrs: {
 
   meta = {
     description = "Tools for working with Google's bazel buildtool. Includes buildifier, buildozer, and unused_deps";
-    homepage = "https://github.com/bazelbuild/buildtools";
-    changelog = "https://github.com/bazelbuild/buildtools/releases/tag/v${finalAttrs.version}";
+    homepage = "https://github.com/bazel-contrib/buildtools";
+    changelog = "https://github.com/bazel-contrib/buildtools/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     teams = [ lib.teams.bazel ];
   };

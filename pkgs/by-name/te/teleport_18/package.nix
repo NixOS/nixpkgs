@@ -1,6 +1,6 @@
 {
   buildTeleport,
-  buildGoModule,
+  buildGo126Module,
   wasm-bindgen-cli_0_2_122,
   withRdpClient ? true,
   extPatches ? [ ],
@@ -14,6 +14,10 @@ buildTeleport {
   cargoHash = "sha256-cjks+Gv4CdlqWaJFFeyFsIuc3KsE7A/1MEDQB36pTkk=";
 
   wasm-bindgen-cli = wasm-bindgen-cli_0_2_122;
-  buildGoModule = buildGoModule;
+  # Go is pinned for github.com/charlievieth/strcase, which panics at
+  # startup unless its Unicode tables exactly match the Go compiler's
+  # unicode.Version:
+  #   panic: strcase.UnicodeVersion "15.0.0" != unicode.Version "17.0.0"
+  buildGoModule = buildGo126Module; # upgrade manually; do not unpin
   inherit withRdpClient extPatches;
 }

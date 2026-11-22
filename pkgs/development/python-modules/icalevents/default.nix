@@ -17,7 +17,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "jazzband";
+    owner = "eigenmannmartin";
     repo = "icalevents";
     tag = version;
     hash = "sha256-QDqmcZY/UANVKRjk1ZFEFHgrjtD+hXE4qd3tX64sE7c=";
@@ -48,9 +48,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "icalevents" ];
 
   meta = {
-    changelog = "https://github.com/jazzband/icalevents/releases/tag/${src.tag}";
+    changelog = "https://github.com/eigenmannmartin/icalevents/releases/tag/${src.tag}";
     description = "Python module for iCal URL/file parsing and querying";
-    homepage = "https://github.com/jazzband/icalevents";
+    homepage = "https://github.com/eigenmannmartin/icalevents";
     maintainers = with lib.maintainers; [ jamiemagee ];
     license = lib.licenses.mit;
   };

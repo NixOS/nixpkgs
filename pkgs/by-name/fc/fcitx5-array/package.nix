@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fcitx5-array";
-  version = "1.0.2";
+  version = "1.0.4";
 
   src = fetchFromGitHub {
     owner = "ray2501";
     repo = "fcitx5-array";
     tag = finalAttrs.version;
-    hash = "sha256-dEfkJDVGi0+e1jqSJAas/P6ImnJZko/mKRuO9l0HpqY=";
+    hash = "sha256-6y7LpLoKfQb5TRs4fJUf3b7hZVuyN3KLp8ftvcaMXvU=";
   };
 
   nativeBuildInputs = [

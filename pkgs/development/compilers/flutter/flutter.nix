@@ -77,7 +77,6 @@ let
       GIT_AUTHOR_EMAIL= GIT_COMMITTER_EMAIL= \
       GIT_AUTHOR_DATE='1/1/1970 00:00:00 +0000' GIT_COMMITTER_DATE='1/1/1970 00:00:00 +0000' \
         git commit --allow-empty --message="Initial commit"
-      (. '${../../../build-support/fetchgit/deterministic-git}'; make_deterministic_repo .)
     ''
     + ''
       mkdir --parents bin/cache
@@ -139,6 +138,9 @@ let
 
     postInstall = ''
       $out/bin/flutter bash-completion "$TMPDIR/flutter.bash"
+      # Remove timestamps in generated completion file to ensure a
+      # deterministic build.
+      sed -ri '/^## Generated .*Z$/d' "$TMPDIR/flutter.bash"
       installShellCompletion --bash "$TMPDIR/flutter.bash"
       installShellCompletion --zsh "$TMPDIR/flutter.bash"
     '';

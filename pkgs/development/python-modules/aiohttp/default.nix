@@ -48,14 +48,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aiohttp";
-  version = "3.14.3";
+  version = "3.14.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "aiohttp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-n8LH34N9V2Smqc23q/49gqRbP0U1glJAYiyPEGFtEmM=";
+    hash = "sha256-gSxqab8AYJ6PsMP1PYWUxQ8TJ9KtEehoekLD8ziBt+g=";
   };
 
   postPatch = ''
@@ -68,7 +68,7 @@ buildPythonPackage (finalAttrs: {
       --replace-fail "cythonize: .install-cython" "cythonize:"
 
     # don't depend on coverage for tests
-    substituteInPlace setup.cfg \
+    substituteInPlace pytest.ini \
       --replace-fail "ignore:Couldn't import C tracer:coverage.exceptions.CoverageWarning" ""
   '';
 
@@ -108,7 +108,6 @@ buildPythonPackage (finalAttrs: {
   ];
 
   nativeCheckInputs = [
-    blockbuster
     freezegun
     gunicorn
     isal

@@ -23,7 +23,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "CoffeaTeam";
+    owner = "scikit-hep";
     repo = "fsspec-xrootd";
     tag = "v${finalAttrs.version}";
     hash = "sha256-dlSh2TH7SQ95kFNPlSjMa697WdBURRlBxNtNf04uaBU=";
@@ -59,8 +59,8 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "XRootD implementation for fsspec";
-    homepage = "https://github.com/CoffeaTeam/fsspec-xrootd";
-    changelog = "https://github.com/CoffeaTeam/fsspec-xrootd/releases/tag/${finalAttrs.src.tag}";
+    homepage = "https://github.com/scikit-hep/fsspec-xrootd";
+    changelog = "https://github.com/scikit-hep/fsspec-xrootd/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };

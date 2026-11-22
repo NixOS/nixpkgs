@@ -15,14 +15,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "ddgs";
-  version = "9.16.0";
+  version = "9.16.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "deedy5";
     repo = "ddgs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-r65Ak4J6W47sQrDfo1KVcBjgavXjvcprggrA0BoEMA0=";
+    hash = "sha256-R2kk6tGzHJjxeh/6TfeID11ChwABQo+Kjhv/itKsfD4=";
   };
 
   build-system = [ setuptools ];

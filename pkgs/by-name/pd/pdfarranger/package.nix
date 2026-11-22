@@ -51,7 +51,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
   # incompatible with wrapGAppsHook3
   strictDeps = false;
   dontWrapGApps = true;
-  makeWrapperArgs = [ "\${gappsWrapperArgs[@]}" ];
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
   doCheck = false; # no tests
 

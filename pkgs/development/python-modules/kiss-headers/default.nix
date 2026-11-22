@@ -14,7 +14,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "Ousret";
+    owner = "jawah";
     repo = "kiss-headers";
     tag = version;
     hash = "sha256-h0e7kFbn6qxIeSG85qetBg6IeSi/2YAaZLGS0+JH2g8=";
@@ -43,7 +43,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python package for HTTP/1.1 style headers";
-    homepage = "https://github.com/Ousret/kiss-headers";
+    homepage = "https://github.com/jawah/kiss-headers";
     license = lib.licenses.mit;
     maintainers = [ ];
   };

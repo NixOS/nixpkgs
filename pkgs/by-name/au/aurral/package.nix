@@ -1,11 +1,17 @@
 {
   lib,
-  buildNpmPackage,
+  stdenv,
+  fetchPnpmDeps,
+  pnpm_12,
+  pnpmConfigHook,
+  cloudflared,
+  procps,
   fetchFromGitHub,
   gitMinimal,
+  patchelf,
+  cacert,
   nix-update-script,
   nodejs_26,
-  python3,
   sqlite,
   ffmpeg,
   yt-dlp,
@@ -18,46 +24,50 @@
 }:
 
 let
-  matcherPython = python3.withPackages (ps: [ ps.beets ]);
+  pnpm = pnpm_12.override { nodejs-slim = nodejs_26; };
+  # Upstream pins a Node minor release, but Nixpkgs tracks the latest Node 26.
+  relaxNodeVersion = ''
+    substituteInPlace package.json \
+      --replace-fail '"node": "26.12.x"' '"node": "26.x"'
+  '';
 in
-buildNpmPackage (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "aurral";
-  version = "2.10.0";
+  version = "3.0.1";
 
   __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "lklynet";
     repo = "aurral";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PNTcFtP9ajEBi3X7oofdsm5K0bN9T4MlMYA0+srFqgs=";
+    hash = "sha256-4F/bwmTYB1qC68VPiXh3tjLQdNNVwftpy05i7B8poTE=";
   };
 
-  # Specifies files to package leveraging npm & nix hooks. Not used by upstream.
-  patches = [
-    ./package.json.patch
+  postPatch = relaxNodeVersion;
+
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs) pname version src;
+    inherit pnpm;
+    postPatch = relaxNodeVersion;
+    fetcherVersion = 5;
+    hash = "sha256-o9BTUedHn9nuUPWaXTKSKa/pvEB7Pq2Fw8ehgi6h0RU=";
+  };
+
+  nativeBuildInputs = [
+    nodejs_26
+    pnpm
+    pnpmConfigHook
   ];
 
-  # patch needed for upstream test issues and pinned Beets version that is being deprecated see https://github.com/lklynet/aurral/pull/937
-  # TODO: remove recovery test patch after merging https://github.com/lklynet/aurral/pull/951
-  postPatch = ''
-    substituteInPlace backend/services/trackMatching/beetsClient.js \
-      --replace-fail 'const PINNED_BEETS_VERSION = "2.14.0";' \
-      'const PINNED_BEETS_VERSION = "${python3.pkgs.beets.version}";'
-    substituteInPlace .tests/track-matching/beets-client.test.js \
-      --replace-fail 'assert.equal(status.error.required, "2.14.0");' \
-      'assert.equal(status.error.required, "${python3.pkgs.beets.version}");'
-    substituteInPlace .tests/honker/background-worker-recovery.test.js \
-      --replace-fail '  assert.equal(registry?.inFlightActive, undefined);' \
-      '  assert.equal(registry?.inFlightActive, undefined); queue.cancel(jobId);'
+  buildPhase = ''
+    runHook preBuild
+    pnpm rebuild
+    pnpm --filter aurral-frontend run build
+    runHook postBuild
   '';
 
-  npmDepsFetcherVersion = 2;
-  npmDepsHash = "sha256-8GmWzjja+SYIkJa+VqkA0nmY10B/bjq7i2RR8qZBofo=";
-
-  nodejs = nodejs_26;
-
-  env.AURRAL_MATCHER_PYTHON = "${matcherPython}/bin/python";
   env.VITE_APP_VERSION = finalAttrs.version;
   env.LD_LIBRARY_PATH = lib.makeLibraryPath [ sqlite ];
   env.FONTCONFIG_FILE = makeFontsConf {
@@ -67,34 +77,41 @@ buildNpmPackage (finalAttrs: {
     ];
   };
 
-  npmInstallFlags = [
-    "--include=optional"
-    "--include-workspace-root=false"
-  ];
-
-  npmBuildFlags = [ "--workspace=frontend" ];
-
   doCheck = true;
-
   nativeCheckInputs = [
     ffmpeg
     gitMinimal
+    patchelf
+    procps
   ];
-
   checkPhase = ''
     runHook preCheck
-
-    npm test
-    npm run test:integration
-
+    # The Hub tests start Cloudflare's prebuilt workerd to provide a local D1 database.
+    patchelf --set-interpreter ${stdenv.cc.bintools.dynamicLinker} \
+      --set-rpath ${lib.makeLibraryPath [ stdenv.cc.libc ]} \
+      node_modules/.pnpm/@cloudflare+workerd-linux-*/node_modules/@cloudflare/workerd-linux-*/bin/workerd
+    export SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
+    # Test forks start background workers, so bound their concurrency as well.
+    testWorkers=$((NIX_BUILD_CORES < 2 ? NIX_BUILD_CORES : 2))
+    pnpm test --maxWorkers="$testWorkers"
+    pnpm run test:integration --maxWorkers="$testWorkers"
     runHook postCheck
   '';
 
-  npmPruneFlags = [
-    "--workspace=backend"
-    "--include=optional"
-    "--include-workspace-root=false"
-  ];
+  installPhase = ''
+    runHook preInstall
+
+    # pnpm prune does not support this workspace with the packaged pnpm version.
+    # Reinstall only the root and backend production dependencies from the offline store.
+    rm -rf node_modules backend/node_modules frontend/node_modules docs/node_modules
+    pnpm install --offline --ignore-scripts --frozen-lockfile --prod \
+      --filter=aurral --filter=aurral-backend
+
+    mkdir -p $out/lib/aurral/frontend
+    cp -r package.json backend lib node_modules $out/lib/aurral/
+    cp -r frontend/dist $out/lib/aurral/frontend/
+    runHook postInstall
+  '';
 
   postInstall = ''
     mkdir $out/bin
@@ -108,21 +125,21 @@ buildNpmPackage (finalAttrs: {
     }
     export PATH=${
       lib.makeBinPath [
-        finalAttrs.nodejs
+        nodejs_26
         ffmpeg
         yt-dlp
+        cloudflared
       ]
     }\''${PATH:+:}\$PATH
     export FONTCONFIG_FILE=${finalAttrs.env.FONTCONFIG_FILE}
-    export AURRAL_MATCHER_PYTHON=${matcherPython}/bin/python
     export APP_VERSION=${finalAttrs.version}
     export NODE_ENV=production
     case "\$1" in
         resetAdminPassword)
-        exec node $out/lib/node_modules/aurral/backend/scripts/resetAdminPassword.js "\$@"
+        exec node $out/lib/aurral/backend/scripts/resetAdminPassword.ts "\$@"
         ;;
         server|"")
-        exec node $out/lib/node_modules/aurral/backend/server.js
+        exec node --max-semi-space-size=4 $out/lib/aurral/backend/server.ts
         ;;
         -h|--help|*)
         echo "Usage: (server|resetAdminPassword)"
@@ -141,7 +158,7 @@ buildNpmPackage (finalAttrs: {
   };
 
   meta = {
-    description = "Aurral is the Lidarr companion for self-hosted music discovery";
+    description = "Self-hosted music discovery, library management, and streaming";
     mainProgram = "aurral";
     homepage = "https://aurral.org";
     changelog = "https://github.com/lklynet/aurral/releases/tag/${finalAttrs.src.tag}";

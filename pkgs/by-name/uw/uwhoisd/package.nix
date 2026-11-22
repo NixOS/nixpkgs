@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "uwhoisd";
-  version = "0.1.2";
+  version = "0.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kgaughan";
     repo = "uwhoisd";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Em+SkQ/olmKGntwOG+CUe3x1ZIIH8grOBVxY/a3eVGI=";
+    hash = "sha256-fYcuwypxG1woupKcttiYBjf5FWAziQWXMaSGFLdlOKM=";
   };
 
   build-system = with python3.pkgs; [

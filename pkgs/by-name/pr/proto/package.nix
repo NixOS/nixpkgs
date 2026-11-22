@@ -1,31 +1,34 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   rustPlatform,
-  libiconv,
+  aws-lc,
   makeBinaryWrapper,
+  openssl,
   pkg-config,
   perl,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "proto";
-  version = "0.63.0";
+  version = "0.64.0";
 
   src = fetchFromGitHub {
     owner = "moonrepo";
     repo = "proto";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-abfnhxLvhji0a/PDLelNchCZUWuzEr9niY8Dd9FLgWY=";
+    hash = "sha256-XnydyEquTRxCMq8fCkddMwg3ZJrrqPOSFF/eU3iSAQQ=";
   };
 
-  cargoHash = "sha256-rL0kTugLF7pefJ92EJlKHtnf8Sr+lNYwccsSiCEOaII=";
+  cargoHash = "sha256-oz2VEsq0ZMSVIFhlsI9v5sobptLJnVucNfqk+vRDmlU=";
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    libiconv
-
+  buildInputs = [
+    aws-lc
+    zstd
+    openssl
   ];
+
   nativeBuildInputs = [
     makeBinaryWrapper
     pkg-config

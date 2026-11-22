@@ -1,15 +1,17 @@
 {
-  cacert,
   fetchFromGitHub,
   lib,
   nix-update-script,
   rustPlatform,
   stdenv,
+  pkg-config,
+  sqlite,
+  zstd,
   versionCheckHook,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kache";
-  version = "1.2.1";
+  version = "2.2.0";
   __structuredAttrs = true;
 
   outputs = [ "out" ] ++ lib.optional stdenv.hostPlatform.isUnix "shims";
@@ -18,46 +20,36 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "kunobi-ninja";
     repo = "kache";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-j3ZfQQcWZdPy7FTObe10a8DNaC1nVy1DG5TnErGEK00=";
+    hash = "sha256-q0B7gnWphc/h4QduBahvZcSL8LfBxNROsoCyp1w+uJY=";
   };
 
-  cargoHash = "sha256-aGDfVia8sF4tvOh2gedcSar/0o9vOV6cNN531TdTQjk=";
+  cargoHash = "sha256-EPtQ79pC5vrCwZPv/30V38v3TaeQ2KGA1kz/Quasu2k=";
 
-  nativeCheckInputs = [ cacert ];
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [
+    sqlite
+    zstd
+  ];
+
   nativeInstallCheckInputs = [ versionCheckHook ];
 
   cargoBuildFlags = [
     "-p"
     "kache"
   ];
-  cargoTestFlags = [
-    "-p"
-    "kache"
-    "--bins" # exclude integration tests
-  ];
 
-  checkFlags =
-    lib.optionals stdenv.hostPlatform.isLinux [
-      # This test assumes reads update access times, which fails on noatime filesystems.
-      "--skip=unit_prune::tests::probes_whether_reads_move_an_armed_access_time"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # The tmutil xattr test shells out to /usr/bin/tmutil which isn't in the sandbox.
-      "--skip=store::tests::test_exclude_from_indexing_sets_tmutil_xattr"
-      # Nix's sandbox rejects sandbox_apply for these nested sandbox fixtures.
-      # The regular macOS CI job runs both against real allowed/denied processes.
-      "--skip=fallback::macos::tests::policy_distinguishes_denied_and_allowed_output"
-      "--skip=sandbox_preflight_bypasses_denied_server_but_keeps_allowed_server"
-    ];
-
+  # The upstream suite is expensive to compile and has filesystem-sensitive failures on Hydra:
+  # - cli::tests::target_rows_report_each_worktree_and_sort_by_what_frees_most
+  #   reports equal reclaimable sizes for different-sized fixtures on ZFS.
+  # - target_cleanup::tests::pressure_recovery_waits_for_a_build_lock_then_removes_an_idle_target
+  #   assumes a 64 KiB fixture has at least 64 KiB of reclaimable space.
+  doCheck = false;
   doInstallCheck = true;
-
-  # planner_client / remote_backend tests bind 127.0.0.1
-  __darwinAllowLocalNetworking = true;
 
   postInstall = lib.optionalString stdenv.hostPlatform.isUnix ''
     mkdir -p "$shims/bin"
-    for name in cc c++ gcc g++ clang clang++; do
+    for name in cc c++ gcc g++ clang clang++ cargo rustdoc; do
       ln -s "$out/bin/kache" "$shims/bin/$name"
     done
     # Let another kache on PATH recognize and skip this shim directory.

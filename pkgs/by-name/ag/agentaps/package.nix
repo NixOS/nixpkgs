@@ -7,6 +7,7 @@
   makeWrapper,
   wrapGAppsHook4,
   versionCheckHook,
+  alsa-lib,
   fontconfig,
   freetype,
   gtk4,
@@ -20,18 +21,18 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "agentaps";
-  version = "0.5.0";
+  version = "0.7.0";
 
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
-    owner = "domenkozar";
+    owner = "cachix";
     repo = "agentaps";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-nPA3kRbWyWWUa8L/dVGXaHCQ9onKL0Loe5mxE+mIfQM=";
+    hash = "sha256-5221voW4impMuIoOaNi7xhFU0tb3JlnxwP5E99ZX0O4=";
   };
 
-  cargoHash = "sha256-wg56HjRsGm0noQRD5hdHQkmbe56h3JHfZunuPzko66I=";
+  cargoHash = "sha256-E0jX6wQDqwPm25pOXza2L3JJ75PkjXDzgeSFNEInjHg=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -41,6 +42,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    alsa-lib
     fontconfig
     freetype
     gtk4
@@ -54,8 +56,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeCheckInputs = [ git ];
 
-  # The login shell test requires /bin/sh and /usr/bin/env, which are absent in the sandbox.
-  checkFlags = [ "--skip=shell_env::tests::reads_path_from_a_login_shell" ];
+  checkFlags = [
+    # Requires /bin/sh and /usr/bin/env, which are absent in the sandbox.
+    "--skip=shell_env::tests::reads_path_from_a_login_shell"
+    # Flaky: executing the temporary script can fail with ETXTBSY during parallel tests.
+    "--skip=claude_auth::tests::background_login_reports_success_and_failure"
+    # Flaky: times out waiting for a notification event on CI.
+    "--skip=system_notifications::tests::reuses_connection_replaces_notifications_and_releases_resources"
+  ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
@@ -81,8 +89,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Desktop client for Agent Client Protocol agents";
-    homepage = "https://github.com/domenkozar/agentaps";
-    changelog = "https://github.com/domenkozar/agentaps/blob/v${finalAttrs.version}/CHANGELOG.md";
+    homepage = "https://github.com/cachix/agentaps";
+    changelog = "https://github.com/cachix/agentaps/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     mainProgram = "agentaps";
     maintainers = with lib.maintainers; [ domenkozar ];

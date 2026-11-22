@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   cliff,
-  fetchPypi,
+  fetchFromGitHub,
   keystoneauth1,
   openstackdocstheme,
   osc-lib,
@@ -16,16 +16,20 @@
   callPackage,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-octaviaclient";
   version = "3.15.0";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "python_octaviaclient";
-    inherit version;
-    hash = "sha256-sJkCRjQ4b6JDtFVP1ex5lssC3zN8bcQTpKP/hHWuqjs=";
+  src = fetchFromGitHub {
+    owner = "openstack";
+    repo = "python-octaviaclient";
+    tag = finalAttrs.version;
+    hash = "sha256-fVDz+fJjacvwY3+BeddQ8DPxtHd72rmTB24UIWhjtaU=";
   };
+
+  # Manually set version since pbr wants to get it from git (not in a tarball)
+  env.PBR_VERSION = finalAttrs.version;
 
   # NOTE(vinetos): This explicit dependency is removed to avoid infinite recursion
   pythonRemoveDeps = [ "python-openstackclient" ];
@@ -65,4 +69,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     teams = [ lib.teams.openstack ];
   };
-}
+})

@@ -12,7 +12,7 @@ buildOctavePackage rec {
     owner = "lmarkowsky";
     repo = "fuzzy-logic-toolkit";
     tag = version;
-    sha256 = "sha256-cNzUjhJgx6SVfy8QrKUr02HvNsAh5ItQN3+hapA5eq0=";
+    hash = "sha256-cNzUjhJgx6SVfy8QrKUr02HvNsAh5ItQN3+hapA5eq0=";
   };
 
   meta = {

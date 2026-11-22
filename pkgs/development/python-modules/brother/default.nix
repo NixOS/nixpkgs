@@ -11,7 +11,7 @@
   pytestCheckHook,
   pythonOlder,
   setuptools,
-  syrupy_6,
+  syrupy,
 }:
 
 buildPythonPackage rec {
@@ -44,7 +44,7 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-error-for-skips
     pytestCheckHook
-    syrupy_6
+    syrupy
   ];
 
   pythonImportsCheck = [ "brother" ];

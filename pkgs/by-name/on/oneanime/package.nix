@@ -12,7 +12,6 @@
   libgbm,
   libpulseaudio,
   mpv-unwrapped,
-  mimalloc,
   imagemagick,
   runCommand,
   yq-go,
@@ -80,27 +79,6 @@ flutter347.buildFlutterApplication {
   gitHashes = lib.importJSON ./git-hashes.json;
 
   customSourceBuilders = {
-    # unofficial media_kit_libs_linux
-    media_kit_libs_linux =
-      { version, src, ... }:
-      stdenv.mkDerivation rec {
-        pname = "media_kit_libs_linux";
-        inherit version src;
-        inherit (src) passthru;
-
-        postPatch = ''
-          sed -i '/set(MIMALLOC "mimalloc-/,/add_custom_target/d' libs/linux/media_kit_libs_linux/linux/CMakeLists.txt
-          sed -i '/set(PLUGIN_NAME "media_kit_libs_linux_plugin")/i add_custom_target("MIMALLOC_TARGET" ALL DEPENDS ${mimalloc}/lib/mimalloc.o)' libs/linux/media_kit_libs_linux/linux/CMakeLists.txt
-        '';
-
-        installPhase = ''
-          runHook preInstall
-
-          cp -r . $out
-
-          runHook postInstall
-        '';
-      };
     # unofficial media_kit_video
     media_kit_video =
       { version, src, ... }:

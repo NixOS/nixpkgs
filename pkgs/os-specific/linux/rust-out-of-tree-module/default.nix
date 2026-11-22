@@ -7,14 +7,14 @@
 }:
 kernel.stdenv.mkDerivation {
   pname = "rust-out-of-tree-module";
-  version = "0-unstable-2025-11-12";
+  version = "0-unstable-2026-10-27";
 
   src = fetchFromGitHub {
     owner = "Rust-for-linux";
     repo = "rust-out-of-tree-module";
 
-    rev = "00b5a8ee2bf53532d115004d7636b61a54f49802";
-    hash = "sha256-CZw4OZZVHMnN6eHHwLqbEJKhFd0iNa5bgyYArzLPHuI=";
+    rev = "a5ea28fa643afbd3b8b5a26e65fe676d7aa0efe3";
+    hash = "sha256-FAG4qtz1t0YOZWqjt0CFrkCohDFaLh/sk60r3owjqa4=";
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;

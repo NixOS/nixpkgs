@@ -3,6 +3,7 @@
   stdenv,
   buildGoModule,
   fetchFromGitHub,
+  fetchpatch2,
   installShellFiles,
   replaceVars,
 }:
@@ -18,9 +19,20 @@ buildGoModule (finalAttrs: {
     sha256 = "sha256-pkD8MYyinvuKCtSpHGfFE9y8GRP40qdeyjhB32yeiK4=";
   };
 
-  vendorHash = "sha256-CCjZv9ef/F+Cx6qmIkG/isX2Dd8WO/1mtjsJ4d8E3m0=";
+  vendorHash = "sha256-FpyDGBT5uu2ibYz9grjmyHjP5GiOAKpnqLW90zf1OE4=";
 
   patches = [
+    # go1.27 support (x/tools update), remove with the next release
+    (fetchpatch2 {
+      url = "https://github.com/ent/ent/commit/8037bc89bcab9a264099afa2672581237a3e079b.patch?full_index=1";
+      hash = "sha256-kTFpsHftoatf0EIPf4HOSttXiTgZWROd0eVdeNnLjAY=";
+      includes = [
+        "go.mod"
+        "go.sum"
+        "dialect/sql/schema/atlas.go"
+        "cmd/internal/base/packages_test.go"
+      ];
+    })
     # patch in version information so we don't get "version = "(devel)";"
     (replaceVars ./ent_version.patch {
       inherit (finalAttrs) version;

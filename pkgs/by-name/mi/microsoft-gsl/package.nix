@@ -39,9 +39,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/Microsoft/GSL";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [
-      thoughtpolice
-      yuriaisaka
-    ];
+    maintainers = with lib.maintainers; [ thoughtpolice ];
   };
 })

@@ -2,12 +2,13 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  plumbum,
-  requests,
-  setuptools,
   hypothesis,
+  pkg-resources-backport,
+  plumbum,
   pytestCheckHook,
+  requests,
   responses,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -22,7 +23,10 @@ buildPythonPackage rec {
     hash = "sha256-AEeTCrxLXkokRRnNUfW4y23Qdh8ek1F88GmCPLGb84A=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    pkg-resources-backport
+    setuptools
+  ];
 
   dependencies = [
     plumbum

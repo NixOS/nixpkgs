@@ -21,7 +21,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   # The tool relies on the `adb` binary being available in the system
   makeWrapperArgs = [
-    "--prefix PATH : ${lib.makeBinPath [ android-tools ]}"
+    "--prefix"
+    "PATH"
+    ":"
+    "${lib.makeBinPath [ android-tools ]}"
   ];
 
   pythonImportsCheck = [

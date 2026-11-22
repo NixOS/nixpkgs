@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "bytecode";
-  version = "0.19.0";
+  version = "0.19.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "MatthieuDartiailh";
     repo = "bytecode";
     tag = version;
-    hash = "sha256-aO9SPn8PC9UMdaxsnOP0MUcxg5MWOl6jcYOBHWJU/z0=";
+    hash = "sha256-RllKrP5oEmpSH8PTCct8t0uuLDnB57LOzkIELA79gTI=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];

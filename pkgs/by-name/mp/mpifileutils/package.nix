@@ -9,20 +9,25 @@
   dtcmp,
   libarchive,
   libcircle,
+  libcap,
+  python3,
   bzip2,
   openssl,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mpifileutils";
-  version = "0.12";
+  version = "0.12.1";
 
   src = fetchFromGitHub {
     owner = "hpc";
     repo = "mpifileutils";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-WnjStOLWP/VsZyl2wPqR1Q+YqlJQRCQ4R50uOyqkWuM=";
+    hash = "sha256-OOuL51+NC13vae67wA94OWA6XJGDIwz9WtEMCNn0ptQ=";
   };
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   outputs = [
     "out"
@@ -33,12 +38,15 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     pkg-config
+    python3
+    mpi
   ];
   buildInputs = [
     attr
     dtcmp
     libarchive
     libcircle
+    libcap
     bzip2
     openssl
   ];

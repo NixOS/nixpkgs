@@ -17,7 +17,7 @@
   zope-testing,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "zope-security";
   version = "8.3";
   pyproject = true;
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zopefoundation";
     repo = "zope.security";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-iSWSBjtJe4iEvm+VUEWDvRCBdRz1R6m9mlfPLwh01Sk=";
   };
 
@@ -57,7 +57,7 @@ buildPythonPackage rec {
     zope-exceptions
     zope-testing
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.concatAttrValues finalAttrs.finalPackage.passthru.optional-dependencies;
 
   # Import process is too complex and some tests fail
   preCheck = ''
@@ -66,15 +66,15 @@ buildPythonPackage rec {
     rm -r src/zope/security/tests/test_zcml_functest.py
   '';
 
-  unittestFlagsArray = [ "src/zope/security/tests" ];
+  unittestFlags = [ "--start-directory=src/zope/security/tests" ];
 
   pythonNamespaces = [ "zope" ];
 
   meta = {
     description = "Zope Security Framework";
     homepage = "https://github.com/zopefoundation/zope.security";
-    changelog = "https://github.com/zopefoundation/zope.security/blob/${src.tag}/CHANGES.rst";
+    changelog = "https://github.com/zopefoundation/zope.security/blob/${finalAttrs.src.tag}/CHANGES.rst";
     license = lib.licenses.zpl21;
     maintainers = [ ];
   };
-}
+})

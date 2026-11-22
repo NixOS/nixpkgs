@@ -138,6 +138,8 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [ "pyhanko" ];
 
   passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
     testData = buildPythonPackage {
       pname = "common-test-utils";
       inherit (finalAttrs) version src;

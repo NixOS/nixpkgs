@@ -20,8 +20,8 @@ buildPythonPackage (finalAttrs: {
   # On macOS, users are expected to install macFUSE. This means fusepy should
   # be able to find libfuse in /usr/local/lib.
   patchPhase = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-    substituteInPlace fuse.py --replace \
-      "find_library('fuse')" "'${lib.getLib pkgs.fuse}/lib/libfuse.so'"
+    substituteInPlace fuse.py --replace-fail \
+      "find_library('fuse')" "'${lib.getLib pkgs.fuse3}/lib/libfuse3.so'"
   '';
 
   build-system = [ setuptools ];

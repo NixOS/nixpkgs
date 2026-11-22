@@ -209,7 +209,6 @@ rec {
         flac
         libglut
         libjpeg
-        libpng12
         libpulseaudio
         libsamplerate
         libmikmod
@@ -222,7 +221,6 @@ rec {
         SDL2_mixer
         libcaca
         libcanberra
-        libgcrypt
         libvpx
         librsvg
         libxft

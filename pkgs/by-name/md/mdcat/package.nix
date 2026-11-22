@@ -1,6 +1,7 @@
 {
   lib,
   curl,
+  oniguruma,
   stdenv,
   fetchFromGitHub,
   rustPlatform,
@@ -11,17 +12,20 @@
   makeWrapper,
   fzf,
   less,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "mdcat";
-  version = "2.18.0";
+  version = "2.20.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "BIRSAx2";
     repo = "mdcat";
-    rev = "mdcat-${version}";
-    hash = "sha256-wCWyOSiKvKEJltswRoZuzo+6Pfs+dS4V7uCCXukB7aE=";
+    tag = "mdcat-${version}";
+    hash = "sha256-w/kW6Kf7kb6XENXCxJeXgMNDpB0V9zZms2pnL7ksvHQ=";
   };
 
   nativeBuildInputs = [
@@ -32,10 +36,11 @@ rustPlatform.buildRustPackage rec {
   ];
   buildInputs = [
     curl
+    oniguruma
     openssl
   ];
 
-  cargoHash = "sha256-ujwqV0LSHxW9lWigHr7B6CeSL3PAVWgc2g4ZggNpHJg=";
+  cargoHash = "sha256-et8vejUrS4ei6OZG30fBGY9pVS7kdrJpNXHbdWqEioE=";
 
   nativeCheckInputs = [
     # mdpick test pipes through `less -r`
@@ -61,6 +66,13 @@ rustPlatform.buildRustPackage rec {
         --zsh <($out/bin/$bin --completions zsh)
     done
   '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "mdcat-(.*)"
+    ];
+  };
 
   meta = {
     description = "cat for markdown";

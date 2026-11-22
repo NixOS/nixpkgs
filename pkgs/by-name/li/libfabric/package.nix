@@ -6,14 +6,20 @@
   autoreconfHook,
   enablePsm2 ? (stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isLinux),
   libpsm2,
-  enableOpx ? (stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isLinux),
+  enableOpx ? (stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isLinux && !cudaSupport),
   libuuid,
   numactl,
+  rdma-core,
+  enableEfa ? stdenv.hostPlatform.isLinux,
+  config,
+  cudaSupport ? config.cudaSupport,
+  cudaPackages,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libfabric";
-  version = "2.6.0";
+  version = "2.7.0";
 
   enableParallelBuilding = true;
 
@@ -24,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ofiwg";
     repo = "libfabric";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/zQnXfEveIGCpPZ3lgrOLnXSS7m8U2spVjkqsXuaL0o=";
+    hash = "sha256-YDqCgRW+ZJSyf6+9aZebVEA5SAQHMwxofwuYkfGhT4M=";
   };
 
   outputs = [
@@ -43,12 +49,26 @@ stdenv.mkDerivation (finalAttrs: {
       libuuid
       numactl
     ]
-    ++ lib.optionals enablePsm2 [ libpsm2 ];
+    ++ lib.optionals enablePsm2 [ libpsm2 ]
+    ++ lib.optionals enableEfa [ rdma-core ]
+    ++ lib.optionals cudaSupport (
+      with cudaPackages;
+      [
+        cuda_cudart
+        cuda_nvml_dev
+      ]
+    );
 
   configureFlags = [
-    (if enablePsm2 then "--enable-psm2=${libpsm2}" else "--disable-psm2")
-    (if enableOpx then "--enable-opx" else "--disable-opx")
+    (lib.enableFeatureAs enablePsm2 "psm2" libpsm2)
+    (lib.enableFeature enableOpx "opx")
+    (lib.enableFeature enableEfa "efa")
+    (lib.enableFeature cudaSupport "cuda-dlopen")
+    (lib.withFeatureAs cudaSupport "cuda" (lib.getDev cudaPackages.cuda_cudart))
   ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     homepage = "https://ofiwg.github.io/libfabric/";
@@ -59,5 +79,6 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.bzizou ];
+    mainProgram = "fi_info";
   };
 })

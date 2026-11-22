@@ -12,13 +12,13 @@
 buildHomeAssistantComponent (finalAttrs: {
   owner = "mbillow";
   domain = "localthings";
-  version = "0.34.0";
+  version = "0.37.0";
 
   src = fetchFromGitHub {
     owner = "mbillow";
     repo = "localthings";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-kTeoVtKiwud18xnHvkAZ1BgFmWPOsjGtq1sZV5EiunI=";
+    hash = "sha256-pRdGcGEliZjyQJHPZVRuToD5Hv5Sz62tiFWgGyzW/ko=";
   };
 
   dependencies = [
@@ -34,6 +34,8 @@ buildHomeAssistantComponent (finalAttrs: {
 
   disabledTests = [
     "test_a_push_that_will_not_decode_is_kept_raw"
+    # attribute is wrapped slightly different
+    "test_last_response_is_restored_after_a_restart"
   ];
 
   meta = {

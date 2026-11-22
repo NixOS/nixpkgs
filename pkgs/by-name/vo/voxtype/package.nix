@@ -20,6 +20,7 @@
   openssl,
   pciutils,
   pulseaudio,
+  sqlite,
   wl-clipboard,
   wtype,
   which,
@@ -35,6 +36,7 @@
   vulkan-loader,
 
   onnxSupport ? false,
+  oniguruma,
   onnxruntime,
 
   hipSupport ? false,
@@ -57,7 +59,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "voxtype";
-  version = "1.1.0";
+  version = "1.1.1";
 
   __structuredAttrs = true;
 
@@ -65,7 +67,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "peteonrails";
     repo = "voxtype";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zw7Up84IdNv6p8Ae7VnBDuCC/smYHCpMB7C2aN1ZXyc=";
+    hash = "sha256-7Djbq7nUIqL3afCEYKnPWtRnx4jXBvhY4iA1m/4w8Ak=";
   };
 
   # The lock file pins openvino-genai to a git fork whose openvino-sys crate
@@ -74,7 +76,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # built here, so resolve it from crates.io instead.
   cargoPatches = [ ./openvino-genai-from-crates-io.patch ];
 
-  cargoHash = "sha256-z3mPi/FPJtxErjMn2pqO8Gon+y0CntJw1b5pskMKhIs=";
+  cargoHash = "sha256-/3EINM6XjftYdi8B2/WQ+62vhOC/wX4x156IjXLmNv8=";
 
   buildFeatures =
     [ ]
@@ -109,6 +111,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     alsa-lib
     openssl
+    sqlite
   ]
   ++ lib.optionals hipSupport (
     with rocmPackages;
@@ -123,6 +126,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     vulkan-loader
   ]
   ++ lib.optionals onnxSupport [
+    oniguruma
     onnxruntime
   ];
 

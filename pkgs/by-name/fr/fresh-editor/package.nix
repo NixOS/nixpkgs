@@ -6,6 +6,7 @@
   makeBinaryWrapper,
   pkg-config,
   openssl,
+  oniguruma,
   gitMinimal,
   python3,
   nix-update-script,
@@ -13,16 +14,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fresh";
-  version = "0.5.3";
+  version = "0.5.4";
 
   src = fetchFromGitHub {
     owner = "sinelaw";
     repo = "fresh";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BherBpkukiGikcvCo/ursft2T7WEljXHFjM9xTrm8pA=";
+    hash = "sha256-za4G56fIJac8bJ22NsWYnVEChmE/JXmHLG0w8O1jeXg=";
   };
 
-  cargoHash = "sha256-81wwGMtF2Phj+t4xUKBiBfN9DdSyL5gQVg8iC2RY1Gc=";
+  cargoHash = "sha256-J2FA74Ry2oRrd/GA5yA0a7k/DzIQoRkg9kMWQEE9ZTo=";
 
   __structuredAttrs = true;
 
@@ -40,6 +41,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     openssl
+    oniguruma
   ];
 
   preBuild = ''
@@ -61,6 +63,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=services::plugins::embedded::tests::test_extract_plugins"
     # require network access
     "--skip=services::release_checker::tests::the_release_feed_override_is_shared_by_check_and_update"
+    # flaky: https://github.com/NixOS/nixpkgs/pull/585026#issuecomment-6741147524
+    "--skip=services::release_checker::tests::test_update_checker"
   ];
   cargoTestFlags = [
     "--lib"
@@ -83,6 +87,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       chillcicada
       dwt
       randoneering
+      sinelaw
     ];
     mainProgram = "fresh";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;

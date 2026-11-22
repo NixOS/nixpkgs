@@ -12,8 +12,6 @@ buildPythonPackage (finalAttrs: {
   version = "1.1.4";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "boudewijn26";
     repo = "gTTS-token";

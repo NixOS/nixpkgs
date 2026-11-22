@@ -12,8 +12,6 @@ buildPythonPackage (finalAttrs: {
   version = "1.4.4";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "sciunto-org";
     repo = "python-${finalAttrs.pname}";
@@ -29,12 +27,19 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "bibtexparser" ];
 
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+  };
+
   meta = {
     description = "Bibtex parser for Python";
     homepage = "https://github.com/sciunto-org/python-bibtexparser";
-    license = with lib.licenses; [
-      lgpl3Only # or
-      bsd3
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        lgpl3Only
+        bsd3
+      ];
   };
 })

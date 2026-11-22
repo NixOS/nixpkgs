@@ -11,6 +11,9 @@
   hyphen,
   icu,
   imagemagick,
+  jxrlib,
+  libavif,
+  libjxl,
   libjpeg,
   libmtp,
   libpng,
@@ -41,14 +44,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "calibre";
-  version = "9.15.0";
+  version = "9.17.0";
 
   __structuredAttrs = true;
   strictDeps = true;
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${finalAttrs.version}/calibre-${finalAttrs.version}.tar.xz";
-    hash = "sha256-nwLTbeyvRrF2ob73Q0kjJQi8wrSwbRZiu9H9QmxX1Vk=";
+    hash = "sha256-B1B+qKzl+KD3aME6/beZrWhaY2wc29ixEWLdtBl0O+U=";
   };
 
   patches =
@@ -66,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
       (fetchpatch {
         name = "0007-Hardening-Qt-code-${debian-tag}.patch";
         url = "https://github.com/debian-calibre/calibre/raw/refs/tags/debian/${debian-tag}/debian/patches/hardening/0007-Hardening-Qt-code.patch";
-        hash = "sha256-ItJalYmBhK4Qgz6QDGbPpBMaa6oGQetQvg5ie3oxFMM=";
+        hash = "sha256-IMrk//WCn3rvriBuivnYrurRdLc7R7XBCpaWgHmMcHY=";
       })
     ];
 
@@ -113,7 +116,9 @@ stdenv.mkDerivation (finalAttrs: {
     hyphen
     icu
     imagemagick
+    libavif
     libjpeg
+    libjxl
     libmtp
     libpng
     libstemmer
@@ -123,6 +128,7 @@ stdenv.mkDerivation (finalAttrs: {
     podofo
     poppler-utils
     qt6.qtbase
+    qt6.qtimageformats
     qt6.qtwayland
     sqlite
     (python3Packages.python.withPackages (
@@ -240,6 +246,7 @@ stdenv.mkDerivation (finalAttrs: {
           --set QTWEBENGINE_CHROMIUM_FLAGS "--disable-gpu" \
           --prefix PATH : ${
             lib.makeBinPath [
+              jxrlib
               libjpeg
               libwebp
               optipng
@@ -263,8 +270,7 @@ stdenv.mkDerivation (finalAttrs: {
       excludedTestNames = [
         "test_7z" # we don't include 7z support
         "test_zstd" # we don't include zstd support
-        "test_qt" # we don't include svg or webp support
-        "test_cyoa_epub_images" # we don't include webp support
+        "test_qt" # the sandbox has too few fonts for its headless Qt check
         "test_import_of_all_python_modules" # explores actual file paths, gets confused
         "test_websocket_basic" # flaky
 
@@ -303,6 +309,9 @@ stdenv.mkDerivation (finalAttrs: {
     in
     ''
       runHook preInstallCheck
+
+      # Only the wrapper puts the webp plugin on the plugin path
+      export QT_PLUGIN_PATH=${qt6.qtimageformats}/${qt6.qtbase.qtPluginPrefix}''${QT_PLUGIN_PATH:+:$QT_PLUGIN_PATH}
 
       python setup.py test ${testFlags}
 

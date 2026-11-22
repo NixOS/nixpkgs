@@ -60,7 +60,9 @@ buildDotnetModule rec {
       install -D omegamaggotprime_''$((i+1))_''${size}x32.png $out/share/icons/hicolor/$size/apps/scarab.png
     done
 
-    wrapProgram "$out/bin/Scarab" --run '. ${./scaling-settings.bash}'
+    wrapProgram "$out/bin/Scarab" \
+      --prefix PATH : "${lib.makeBinPath [ bc ]}" \
+      --run '. ${./scaling-settings.bash}'
   '';
 
   desktopItems = [

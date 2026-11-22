@@ -31,6 +31,8 @@ stdenv.mkDerivation (finalAttrs: {
   # In procedure bytevector-u8-ref: Argument 2 out of range
   dontStrip = stdenv.hostPlatform.isDarwin;
 
+  guileImportsCheck = [ "lzma" ];
+
   meta = {
     homepage = "https://ngyro.com/software/guile-lzma.html";
     description = "Guile wrapper for lzma library";

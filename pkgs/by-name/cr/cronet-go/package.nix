@@ -52,6 +52,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   postPatch = ''
     patchShebangs --build naiveproxy/src/build/toolchain/apple/linker_driver.py
+
+    sslDir="naiveproxy/src/net/data/ssl/chrome_root_store"
+    # Check existence
+    grep -Fq '# CN=emSign ECC Root CA - G3,' "$sslDir/root_store.textproto"
+    grep -Fxq '# 86a1ecba089c4a8d3bbe2734c612ba341d813e043cf9e8a862cd5c57a36bbe6b' "$sslDir/root_store.certs"
+    # Remove emSign ECC Root CA - G3 from root store, which is compromised.
+    sed -i '/^# CN=emSign ECC Root CA - G3,/,/^}/d' "$sslDir/root_store.textproto"
+    sed -i \
+      '/^# 86a1ecba089c4a8d3bbe2734c612ba341d813e043cf9e8a862cd5c57a36bbe6b$/,/^-----END CERTIFICATE-----$/d' \
+      "$sslDir/root_store.certs"
   '';
 
   nativeBuildInputs = [

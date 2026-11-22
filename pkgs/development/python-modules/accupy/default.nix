@@ -21,7 +21,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "nschloe";
+    owner = "sigma-py";
     repo = "accupy";
     rev = version;
     hash = "sha256-xxwLmL/rFgDFQNr8mRBFG1/NArQk9wanelL4Lu7ls2s=";
@@ -77,7 +77,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Accurate sums and dot products for Python";
-    homepage = "https://github.com/nschloe/accupy";
+    homepage = "https://github.com/sigma-py/accupy";
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
   };

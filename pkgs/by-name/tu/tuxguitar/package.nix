@@ -18,7 +18,6 @@
   which,
   wrapGAppsHook3,
   nixosTests,
-  fetchpatch,
 }:
 
 let
@@ -32,7 +31,7 @@ let
     "-f"
     buildScript
     "-P"
-    "native-modules"
+    (if stdenv.hostPlatform.isDarwin then "native-modules,platform-macos-cocoa" else "native-modules")
     "-Dmaven.test.skip=true"
   ];
   ldLibVar = if stdenv.hostPlatform.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH";
@@ -58,12 +57,6 @@ let
     jre
     which
   ];
-  # FIXME: Makes hash stable across platforms and convert to a single hash.
-  mvnHashByPlatform = {
-    "x86_64-linux" = "sha256-KYF7vSMXPgi6xvtgcSIIEOltK5RL4ynGQf1579Is5nM=";
-    "aarch64-linux" = "sha256-KYF7vSMXPgi6xvtgcSIIEOltK5RL4ynGQf1579Is5nM=";
-    "aarch64-darwin" = "sha256-uJXOACtuE4fKIb4a6C3Cy+MilI8OOdsuAgtJyklxHdw=";
-  };
   wrapperArgs = [
     "\${gappsWrapperArgs[@]}"
     "--prefix"
@@ -79,7 +72,7 @@ let
     ":"
     (lib.concatStringsSep ":" classpath)
   ];
-  version = "2.0.1";
+  version = "2.1.1";
 in
 maven.buildMavenPackage {
   pname = "tuxguitar";
@@ -89,27 +82,18 @@ maven.buildMavenPackage {
     owner = "helge17";
     repo = "tuxguitar";
     tag = version;
-    hash = "sha256-USdYj8ebosXkiZpDqyN5J+g1kjyWm225iQlx/szXmLA=";
+    hash = "sha256-Rwj81MNb4S7CqSfNE9BG2/MotDFQpoYl5WBuoYJCkbE=";
   };
 
   patches = [
     ./fix-include.patch
-    # Helps a little bit with https://github.com/helge17/tuxguitar/issues/961
-    (fetchpatch {
-      name = "create-new-file";
-      url = "https://github.com/helge17/tuxguitar/commit/3dc828a9b92e932952c2b33d8ee41db734f2fcc0.patch";
-      hash = "sha256-umZlCSCTWqj3tgR+qFcPucEDv5vpaC6zHbDJg/W5KUI=";
-    })
   ];
 
   buildOffline = true;
 
   mvnJdk = jdk;
 
-  mvnHash = (
-    mvnHashByPlatform.${stdenv.system}
-      or (lib.warn "Missing mvnHash for ${stdenv.system}, using lib.fakeHash" lib.fakeHash)
-  );
+  mvnHash = "sha256-RGUxSR2pKhBBjHF7Num5KIK+anXg+v94L1Vqeuim9kU=";
 
   mvnParameters = mvnParams;
   mvnDepsParameters = mvnParams;
@@ -124,11 +108,11 @@ maven.buildMavenPackage {
         -DgroupId=org.eclipse.swt \
         -DartifactId=${swtArtifactId} \
         -Dpackaging=jar \
-        -Dversion=4.36 \
+        -Dversion=4.37 \
         -Dmaven.repo.local=$out/.m2
     '';
     postInstall = ''
-      rm -rf $out/.m2/repository/org/eclipse/swt
+      rm -rf $out/.m2/org/eclipse/swt
       find $out -type f -name "maven-metadata-*.xml" -delete
     '';
   };
@@ -139,7 +123,7 @@ maven.buildMavenPackage {
       -DgroupId=org.eclipse.swt \
       -DartifactId=${swtArtifactId} \
       -Dpackaging=jar \
-      -Dversion=4.36 \
+      -Dversion=4.37 \
       -Dmaven.repo.local=$mvnDeps/.m2
   '';
 
@@ -205,7 +189,7 @@ maven.buildMavenPackage {
     # See https://github.com/helge17/tuxguitar/issues/961
     mkdir -p $out/share/templates/.source
     ln -s $out/lib/tuxguitar/share/templates/ $out/share/templates/.source/tuxguitar
-    cp /build/source/desktop/build-scripts/common-resources/common-linux/share/templates/tuxguitar.desktop $out/share/templates/
+    cp ../common-resources/common-linux/share/templates/TuxGuitar.desktop $out/share/templates/
   ''
   + ''
 
@@ -232,7 +216,11 @@ maven.buildMavenPackage {
       ardumont
       mio
     ];
-    platforms = builtins.attrNames mvnHashByPlatform;
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "aarch64-darwin"
+    ];
     mainProgram = "tuxguitar";
   };
 }

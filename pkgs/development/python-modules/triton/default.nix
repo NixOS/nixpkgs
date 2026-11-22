@@ -12,6 +12,7 @@
   cudaPackages,
 
   # build-system
+  nanobind,
   setuptools,
 
   # nativeBuildInputs
@@ -25,13 +26,14 @@
   gtest,
   libxml2,
   ncurses,
-  pybind11,
+  nlohmann_json,
   zlib,
 
   # dependencies
   filelock,
 
   # passthru
+  callPackage,
   python,
   pytestCheckHook,
   torchWithRocm,
@@ -47,16 +49,15 @@ let
 in
 buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
   pname = "triton";
-  version = "3.7.1";
+  version = "3.9.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   # Remember to bump triton-llvm as well!
   src = fetchFromGitHub {
     owner = "triton-lang";
     repo = "triton";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2+NAHZZjFQxj+9UGiNpk4TVAKW6nydw1L1FTTJpNya4=";
+    hash = "sha256-ZjOGVWGef4PcHPWOXO88jrT8Pstn+eXGB3BmDcoDlcE=";
   };
 
   patches = [
@@ -87,13 +88,34 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
       substituteInPlace pyproject.toml \
         --replace-fail "cmake>=3.20,<4.0" "cmake>=3.20"
     ''
+    # Upstream pins nanobind to an exact version
+    + ''
+      substituteInPlace pyproject.toml \
+        --replace-fail '"nanobind==2.10.2"' '"nanobind"'
+    ''
     # Avoid downloading dependencies remove any downloads
     + ''
       substituteInPlace setup.py \
-        --replace-fail "[get_json_package_info()]" "[]" \
-        --replace-fail "[get_llvm_package_info()]" "[]" \
-        --replace-fail 'yield ("triton.profiler", "third_party/proton/proton")' 'pass' \
-        --replace-fail "curr_version.group(1) != version" "False"
+        --replace-fail 'yield ("triton.profiler", "third_party/proton/proton")' 'pass'
+    ''
+    # `is_git_repo` shells out to `git`, which is absent from the sandbox, and only
+    # handles `CalledProcessError`. Upstream already tolerates a missing `git` at the
+    # call site: https://github.com/triton-lang/triton/blob/v3.9.0/setup.py#L82
+    + ''
+      substituteInPlace setup.py \
+        --replace-fail \
+          'except subprocess.CalledProcessError:
+              return False' \
+          'except (subprocess.CalledProcessError, FileNotFoundError):
+              return False'
+    ''
+    # DAGBuilder.cpp uses `llvm::MIRParser`, which is only resolved transitively with a static LLVM:
+    # `undefined reference to symbol '_ZN4llvm9MIRParser13parseIRModule...'`
+    + ''
+      substituteInPlace third_party/amd/lib/Target/MIRDAG/CMakeLists.txt \
+        --replace-fail \
+          "LLVMCodeGen" \
+          "LLVMCodeGen LLVMMIRParser"
     ''
     # Don't fetch googletest
     + ''
@@ -111,6 +133,15 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
           'cc = os.environ.get("CC", "${lib.getExe' effectiveStdenv.cc "cc"}")'
     ''
 
+    # AMDGPU code generation is dlopened from a standalone library, built separately.
+    # It can still be overridden at runtime with `TRITON_AMD_CODEGEN_PATH`.
+    + ''
+      substituteInPlace third_party/amd/backend/compiler.py \
+        --replace-fail \
+          'return str(Path(__file__).parent / "lib" / library)' \
+          'return "${finalAttrs.passthru.amd-codegen}/lib/libtriton_amd_codegen.so"'
+    ''
+
     # triton will try dlopening libcublas.so at runtime
     + lib.optionalString cudaSupport ''
       substituteInPlace third_party/nvidia/include/cublas_instance.h \
@@ -119,7 +150,10 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
           '"${lib.getLib cudaPackages.libcublas}/lib/libcublas.so"'
     '';
 
-  build-system = [ setuptools ];
+  build-system = [
+    nanobind
+    setuptools
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -138,6 +172,7 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeFeature "LLVM_SYSPATH" "${llvm}")
+    (lib.cmakeFeature "JSON_SYSPATH" "${nlohmann_json}")
 
     # `find_package` is called with `NO_DEFAULT_PATH`
     # https://cmake.org/cmake/help/latest/command/find_package.html
@@ -149,7 +184,6 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
     gtest
     libxml2.dev
     ncurses
-    pybind11
     zlib
   ];
 
@@ -177,6 +211,8 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
   env = {
     TRITON_BUILD_PROTON = "OFF";
     TRITON_OFFLINE_BUILD = true;
+    # Skip fetching the prebuilt AMDGPU codegen library, see `postPatch`
+    TRITON_AMD_CODEGEN_PATH = "${finalAttrs.passthru.amd-codegen}/lib/libtriton_amd_codegen.so";
   }
   // lib.optionalAttrs cudaSupport {
     NIX_CFLAGS_COMPILE = toString [
@@ -219,6 +255,12 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
 
   passthru = {
     inherit cudaPackages;
+
+    amd-codegen = callPackage ./amd-codegen.nix {
+      tritonSrc = finalAttrs.src;
+      tritonVersion = finalAttrs.version;
+    };
+
     gpuCheck = effectiveStdenv.mkDerivation {
       pname = "triton-pytest";
       inherit (triton) version src;

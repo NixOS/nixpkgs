@@ -22,7 +22,6 @@
   glibc,
   gsettings-desktop-schemas,
   gst_all_1,
-  gtk2,
   gtk3,
   libGL,
   libdrm,
@@ -81,13 +80,23 @@ let
     pulseaudio
   ];
 
+  # Regular releases are tagged `v<version>` and ship assets named
+  # `<version>-0`, while hotfix releases (e.g. `9.3.5-2`) already include the
+  # build number in both the tag and the asset name.
+  sourceVersion = version: if lib.hasInfix "-" version then version else "${version}-0";
+
   derivation = stdenv.mkDerivation (finalAttrs: {
     pname = "euro-office-desktopeditors";
-    version = "9.3.5-2";
-    src = fetchurl {
-      url = "https://github.com/Euro-Office/DesktopEditors/releases/download/v${finalAttrs.version}/euro-office-euro-office_${finalAttrs.version}_amd64.deb";
-      hash = "sha256-0ekoe/uSePacpynl3z0d0mD1iiZy9Qai76ZKS7Al5aQ=";
-    };
+    version = "9.3.8";
+    src =
+      (fetchurl {
+        url = "https://github.com/Euro-Office/DesktopEditors/releases/download/v${finalAttrs.version}/euro-office-euro-office_${sourceVersion finalAttrs.version}_amd64.deb";
+        hash = "sha256-GBbEzV1YBrdXRow9xX7HbCOs0eoIUtRB5Q1qVJ0hfaE=";
+      })
+      // {
+        # Hint for nix-update, only consider stable releases
+        tag = "refs/tags/v${finalAttrs.version}";
+      };
 
     unpackPhase = ''
       mkdir -p source
@@ -117,7 +126,6 @@ let
       gsettings-desktop-schemas
       gst_all_1.gst-plugins-base
       gst_all_1.gstreamer
-      gtk2
       gtk3
       libdrm
       libgbm
@@ -196,6 +204,9 @@ in
 # Fonts are also discovered by looking in /usr/share/fonts, so adding fonts to targetPkgs will include them
 buildFHSEnv (finalAttrs: {
   inherit (derivation) pname version;
+
+  # Expose the source on the wrapper for nix-update
+  src = derivation.src;
 
   targetPkgs = pkgs': [
     curl

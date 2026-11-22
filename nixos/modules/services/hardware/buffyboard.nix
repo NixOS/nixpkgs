@@ -55,7 +55,7 @@ in
           By default, this is generated from whatever you've set in `settings`.
           If specified manually, then `settings` is ignored.
 
-          For an example config file see [here](https://gitlab.postmarketos.org/postmarketOS/buffybox/-/blob/master/buffyboard/buffyboard.conf)
+          For an example config file see [here](https://gitlab.nura.eco/nura/buffybox/-/blob/main/buffyboard/buffyboard.conf)
         '';
       };
 

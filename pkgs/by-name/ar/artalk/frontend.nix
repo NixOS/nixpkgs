@@ -46,7 +46,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     mkdir -p $out/{dist/{i18n,plugins},sidebar}
 
     # dist
-    cp ./ui/artalk/dist/{Artalk,ArtalkLite}.{css,js} $out/dist
+    cp ./ui/artalk/dist/{Artalk,ArtalkLite}.{css,iife.js,js} $out/dist
     cp ./ui/artalk/dist/i18n/*.js $out/dist/i18n
     cp ./ui/plugin-*/dist/*.js $out/dist/plugins
 

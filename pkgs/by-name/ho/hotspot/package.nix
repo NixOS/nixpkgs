@@ -64,12 +64,13 @@ stdenv.mkDerivation (finalAttrs: {
   ]);
 
   qtWrapperArgs = [
-    "--suffix PATH : ${
-      lib.makeBinPath [
-        perf
-        binutils
-      ]
-    }"
+    "--suffix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [
+      perf
+      binutils
+    ])
   ];
 
   preFixup = ''
@@ -96,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
       nh2
-      tmarkus
+      AAAAAASomeThingsFailToEvaluate
     ];
   };
 })

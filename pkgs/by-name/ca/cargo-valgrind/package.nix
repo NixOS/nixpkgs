@@ -25,6 +25,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     makeWrapper
+  ];
+
+  nativeCheckInputs = [
     valgrind # for tests where the executable is not wrapped yet
   ];
 
@@ -38,14 +41,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=empty_tests_not_leak_in_release_mode"
   ];
 
+  __structuredAttrs = true;
+
   meta = {
     description = ''Cargo subcommand "valgrind": runs valgrind and collects its output in a helpful manner'';
     mainProgram = "cargo-valgrind";
     homepage = "https://github.com/jfrimmel/cargo-valgrind";
-    license = with lib.licenses; [
-      asl20 # or
-      mit
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
     maintainers = with lib.maintainers; [
       otavio
       matthiasbeyer

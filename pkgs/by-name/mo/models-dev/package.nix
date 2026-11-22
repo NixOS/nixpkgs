@@ -60,7 +60,7 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "models-dev";
-  version = "0.0.5-unstable-2026-10-02";
+  version = "sdk-v0.0.5-unstable-2026-10-25";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -68,16 +68,18 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "anomalyco";
     repo = "models.dev";
-    rev = "e752025f46d6ab6357e7df98e169e7357b033293";
-    hash = "sha256-A4iXr7hJo+0TTfNntx5f197XiSKPTIkiejjrBKzYTUQ=";
+    rev = "b7ea0f2912b64f9d486a382aa2923279283fc8c0";
+    hash = "sha256-feTlt/WmSKbG31jmyQH5Ci8fcnrQpIhxsc6iCISZwhU=";
   };
+
+  node_modules = node_modules finalAttrs;
 
   nativeBuildInputs = [ bun ];
 
   configurePhase = ''
     runHook preConfigure
 
-    cp -R ${finalAttrs.passthru.node_modules}/. .
+    cp -R $node_modules/. .
 
     runHook postConfigure
   '';
@@ -103,7 +105,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru = {
     jsonschema = "${finalAttrs.finalPackage}/dist/model-schema.json";
-    node_modules = node_modules finalAttrs;
     updateScript = nix-update-script {
       extraArgs = [
         "--version=branch"

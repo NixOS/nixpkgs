@@ -4,15 +4,11 @@
   buildPackages,
   callPackage,
   fetchpatch2,
-  openssl,
-  python3,
-}:
+  ...
+}@args:
 
 let
-  buildNodejs = callPackage ./nodejs.nix {
-    inherit openssl;
-    python = python3;
-  };
+  buildNodejs = callPackage ./nodejs.nix args;
 
   gypPatches =
     if stdenv.buildPlatform.isDarwin then
@@ -23,8 +19,8 @@ let
       [ ];
 in
 buildNodejs {
-  version = "26.12.0";
-  sha256 = "ce59f9038dda0e637656fb1c36cf52c07c637922fd81d419dbba2ec129afbd35";
+  version = "26.13.1";
+  sha256 = "a7f6204ff63b6a2cd274d48903285abb86ed53a99070e532d4c2fd787457d9e6";
   patches =
     (lib.optional (!(stdenv.hostPlatform.emulatorAvailable buildPackages)) (fetchpatch2 {
       url = "https://raw.githubusercontent.com/buildroot/buildroot/2f0c31bffdb59fb224387e35134a6d5e09a81d57/package/nodejs/nodejs-src/0003-include-obj-name-in-shared-intermediate.patch";
@@ -47,6 +43,9 @@ buildNodejs {
       ./use-correct-env-in-tests.patch
       ./bin-sh-node-run-v22.patch
       ./use-nix-codesign.patch
+
+      # TODO: remove once support for libuv 1.53+ has landed upstream
+      ./fix-libuv-1.53-support.patch
 
       # TODO: remove once https://github.com/nodejs/node/pull/66735 in included in a release
       ./gtest-integration-fix.patch

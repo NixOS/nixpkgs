@@ -14,19 +14,20 @@
   libusb1,
   perl,
   pkg-config,
+  writableTmpDirAsHomeHook,
   xa,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libsidplayfp";
-  version = "3.1.1";
+  version = "3.1.2";
 
   src = fetchFromGitHub {
     owner = "libsidplayfp";
     repo = "libsidplayfp";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-c2LzjFwPdk/Di9Eh6E5sBwup+DD5IPXRJYjlnSBBNJU=";
+    hash = "sha256-j5Cm/tBjzcN/NiRuh02xLcwjbO3ER8Rvd4leQA8xIEI=";
   };
 
   outputs = [
@@ -51,6 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals docSupport [
     doxygen
     graphviz
+    writableTmpDirAsHomeHook
   ];
 
   buildInputs = [
@@ -66,11 +68,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   enableParallelBuilding = true;
-
-  preBuild = ''
-    # Reduce noise from fontconfig during doc building
-    export XDG_CACHE_HOME=$TMPDIR
-  '';
 
   buildFlags = [ "all" ] ++ lib.optionals docSupport [ "doc" ];
 

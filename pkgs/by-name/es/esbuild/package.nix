@@ -8,6 +8,8 @@ buildGoModule rec {
   pname = "esbuild";
   version = "0.27.2";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "evanw";
     repo = "esbuild";

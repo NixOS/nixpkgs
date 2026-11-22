@@ -46,7 +46,9 @@ python3Packages.buildPythonPackage rec {
   '';
 
   dontWrapGApps = true;
-  makeWrapperArgs = [ "\${gappsWrapperArgs[@]}" ];
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
   postFixup = ''
     wrapPythonProgramsIn "$out/lib/open-fprintd" "$out ''${pythonPath[*]}"

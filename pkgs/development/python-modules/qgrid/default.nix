@@ -20,7 +20,6 @@ buildPythonPackage (finalAttrs: {
   pname = "qgrid";
   version = "1.3.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   # Using the Pypi archive to avoid building the node modules from source
   src = fetchPypi {

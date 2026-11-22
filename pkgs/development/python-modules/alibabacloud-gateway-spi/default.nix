@@ -11,8 +11,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.0.4";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     pname = "alibabacloud_gateway_spi";
     inherit (finalAttrs) version;

@@ -8,8 +8,8 @@
   uselibtirpc ? stdenv.hostPlatform.isLinux,
   libtirpc,
   zlib,
-  szipSupport ? false,
-  szip,
+  szipSupport ? true,
+  libaec,
   javaSupport ? false,
   jdk,
   fortranSupport ? false,
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ]
   ++ lib.optional javaSupport jdk
-  ++ lib.optional szipSupport szip
+  ++ lib.optional szipSupport libaec
   ++ lib.optional uselibtirpc libtirpc;
 
   cmakeFlags = [
@@ -88,7 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
       uselibtirpc
       libtirpc
       szipSupport
-      szip
+      libaec
       javaSupport
       jdk
       ;

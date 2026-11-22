@@ -1,5 +1,9 @@
 {
   lib,
+  oniguruma,
+  zstd,
+  pkg-config,
+  sqlite,
   fetchFromGitHub,
   rustPlatform,
   versionCheckHook,
@@ -20,7 +24,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   nativeBuildInputs = [
+    pkg-config
     rustPlatform.bindgenHook
+  ];
+
+  buildInputs = [
+    sqlite
+    oniguruma
+    zstd
   ];
 
   cargoHash = "sha256-BlHdEMt3Z/dBnU8PevH9/g/64G1Vz5lwAps0gv60cmw=";

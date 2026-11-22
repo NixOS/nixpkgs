@@ -10,24 +10,27 @@
     }
   ),
   openssl,
-  tzdata,
   versionCheckHook,
   _experimental-update-script-combinators,
   nix-update-script,
+  zstd,
+  sqlite,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "brioche";
-  version = "0.1.7";
+  version = "0.1.8";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "brioche-dev";
     repo = "brioche";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-j0Hi75olubvlHEOzVbW0cMAslZFWCzHiwXaBqmkXzmE=";
+    hash = "sha256-xxuw+gU8xP5Nl+PHJa220xwfOrenh2gC/F7v2X5QG5U=";
   };
 
-  cargoHash = "sha256-3UvggE45Gvus5ghd64ZK+Nh/VB3NJBmZNrbStl/xJu0=";
+  cargoHash = "sha256-jgvLg+43Kkhb1ZVtXB2GN9INgXeKzWWjrGax+dqAC/g=";
 
   env = {
     OPENSSL_NO_VENDOR = true;
@@ -40,6 +43,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     openssl
+    zstd
+    (lib.getDev sqlite)
   ];
 
   # Tests require network access and CA certificates, which are unavailable in the nix sandbox
@@ -60,7 +65,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Package manager for building and running complex software projects";
     homepage = "https://brioche.dev/";
     downloadPage = "https://github.com/brioche-dev/brioche";
-    changelog = "https://github.com/brioche-dev/brioche/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/brioche-dev/brioche/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
     mainProgram = "brioche";

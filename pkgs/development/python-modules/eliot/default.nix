@@ -31,7 +31,6 @@ buildPythonPackage (finalAttrs: {
   pname = "eliot";
   version = "1.18.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "itamarst";

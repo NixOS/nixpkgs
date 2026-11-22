@@ -51,6 +51,8 @@ runCommandLocal "assert-factor-hello-world"
     if [ "$output" != "$expected" ]; then
       echo "FAIL: expected “$expected”; got “$output”" >&2
       exit 1
+    else
+      printf "Test output\n---\n%s\n---\n" "$output"
     fi
     touch "$out"
   ''

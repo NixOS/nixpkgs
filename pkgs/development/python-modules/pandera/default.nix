@@ -51,7 +51,6 @@ buildPythonPackage (finalAttrs: {
   pname = "pandera";
   version = "0.33.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "unionai-oss";

@@ -60,14 +60,21 @@ let
         --replace-fail "CMAKE_MINIMUM_REQUIRED(VERSION 2.8.8 FATAL_ERROR)" "CMAKE_MINIMUM_REQUIRED(VERSION 3.10 FATAL_ERROR)"
     '';
   });
+
+  pythonForWrappers = python3.pythonOnBuildForHost.withPackages (
+    pkgs: with pkgs; [
+      clang
+      pipcl
+    ]
+  );
 in
 stdenv.mkDerivation rec {
-  version = "1.27.2";
+  version = "1.28.5";
   pname = "mupdf";
 
   src = fetchurl {
     url = "https://mupdf.com/downloads/archive/${pname}-${version}-source.tar.gz";
-    hash = "sha256-VThnsTUwPcTCWrZ8XyNNjpAKDjbmboSE2ZrcBf4ehzc=";
+    hash = "sha256-mKXBDNogw5ks33b/ayoRScMr15zHltP3AyMLEYW36TQ=";
   };
 
   patches = [
@@ -77,6 +84,8 @@ stdenv.mkDerivation rec {
     # Upstream C++ wrap script only defines fixed-sized integers on macOS but
     # this is required on aarch64-linux too.
     ./fix-cpp-build.patch
+    # 1.28.5 dropped pipcl.py and now tries to install it with pip.
+    ./disable-autovenv.patch
   ];
 
   postPatch = ''
@@ -116,6 +125,7 @@ stdenv.mkDerivation rec {
     (python3.pythonOnBuildForHost.withPackages (ps: [
       ps.setuptools
       ps.clang
+      ps.pipcl
     ]))
   ]
   ++ lib.optionals enablePython [
@@ -168,7 +178,7 @@ stdenv.mkDerivation rec {
 
   postBuild = lib.optionalString (enableCxx || enablePython) ''
     for dir in build/*; do
-      ./scripts/mupdfwrap.py -d "$dir" -b ${lib.optionalString enableCxx "01"}${lib.optionalString enablePython "23"}
+      ${lib.getExe pythonForWrappers} ./scripts/mupdfwrap.py -d "$dir" -b ${lib.optionalString enableCxx "01"}${lib.optionalString enablePython "23"}
     done
   '';
 

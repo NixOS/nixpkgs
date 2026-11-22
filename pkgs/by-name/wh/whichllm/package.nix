@@ -7,15 +7,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "whichllm";
-  version = "0.5.20";
+  version = "0.6.8";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Andyyyy64";
     repo = "whichllm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wipPzJzxsHc3P/ZDjEWe7yXcVBZ9zrTc3yKlDwbAlRk=";
+    hash = "sha256-20LDx1TcReqD6EqxKiZ4JHHbZV5ozL3mX/oT0YLw6GI=";
   };
 
   build-system = with python3Packages; [ hatchling ];

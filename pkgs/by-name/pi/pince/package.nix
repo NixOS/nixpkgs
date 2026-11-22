@@ -1,57 +1,27 @@
 {
-  stdenv,
   lib,
+  stdenv,
   fetchFromGitHub,
-  replaceVars,
-  nix-update-script,
-
-  rustPlatform,
-
-  cmake,
-  makeWrapper,
-
-  python3Packages,
-  python3,
+  bashNonInteractive,
+  copyDesktopItems,
+  coreutils,
   gdb,
+  makeDesktopItem,
+  nix-update-script,
+  python3,
   qt6,
-  gtk3,
-  gobject-introspection,
+  zig_0_16,
 }:
 
 let
-  libptrscan = rustPlatform.buildRustPackage {
-    pname = "libptrscan";
-    version = "0.7.4-unstable-2024-09-13";
-
-    src = fetchFromGitHub {
-      owner = "kekeimiku";
-      repo = "PointerSearcher-X";
-      rev = "ba2b5eab4856aa4ffb3ece0bd2c7d0917fa4e6ce"; # last commit on pince_fix_32 branch
-      hash = "sha256-skOM2dx+u7dYbWywaC8dtUuJuXzc4Mm6skBbMfaTwfY=";
-    };
-
-    cargoLock.lockFile = ./libptrscan/Cargo.lock;
-
-    postPatch = ''
-      cp ${./libptrscan/Cargo.lock} Cargo.lock
-      chmod +w Cargo.lock
-    '';
-
-    cargoBuildFlags = [ "-p libptrscan" ];
-
-    postInstall = ''
-      install -Dm644 libptrscan/ptrscan.py -t "$out"/lib/
-    '';
-  };
-
   pythonEnv = python3.withPackages (
     ps: with ps; [
       capstone
       keyboard
       keystone-engine
+      msgpack
       pexpect
       pygdbmi
-      pygobject3
       pyqt6
     ]
   );
@@ -60,80 +30,80 @@ let
     python3 = pythonEnv;
   };
 
-  # LD_LIBRARY_PATH libraries
   LDPath = lib.makeLibraryPath [
     (lib.getLib stdenv.cc.cc)
-    gtk3
     gdb'
-  ];
-
-  # GI_TYPELIB_PATH libraries
-  GIPath = lib.makeSearchPath "lib/girepository-1.0" [
-    gtk3
-    gobject-introspection
   ];
 in
 
-python3Packages.buildPythonApplication (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pince";
-  version = "0.4.5";
-  pyproject = false;
+  version = "0.10.2";
 
   src = fetchFromGitHub {
     owner = "korcankaraokcu";
     repo = "PINCE";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NgoZmmcMEPGpIF3IPEIoeRPOwwuxdinBlkeP0P5eVmU=";
+    hash = "sha256-Tx1rQdbQo/xCwr25Io54o1tOBdwvWFK79EPOvErn5I8=";
     fetchSubmodules = true;
   };
 
-  patches = [
-    (replaceVars ./set-gdb-path.patch {
-      gdb_exe_path = lib.getExe gdb';
-    })
-  ];
+  __structuredAttrs = true;
+  strictDeps = true;
 
-  build-system = with python3Packages; [
-    setuptools
-  ];
+  postPatch = ''
+    substituteInPlace libpince/typedefs.py \
+      --replace-fail '"/bin/gdb"' '"${lib.getExe gdb'}"'
+    substituteInPlace libpince/debugcore.py \
+      --replace-fail 'if not os.environ.get("APPDIR"):' 'if False:'
+    substituteInPlace GUI/Settings/settings.py \
+      --replace-fail 'settings.value("Debug/gdb_path", type=str)' 'typedefs.PATHS.GDB'
+    substituteInPlace PINCE.sh \
+      --replace-fail 'SCRIPTDIR=$(cd -- "$(dirname -- "$0")" && pwd -P)' "" \
+      --replace-fail 'if [ ! -d "''${SCRIPTDIR}/.venv/bin" ]; then' 'if false; then' \
+      --replace-fail '. "''${SCRIPTDIR}/.venv/bin/activate"' "" \
+      --replace-fail 'PYTHON="''${SCRIPTDIR}/.venv/bin/python3"' "" \
+      --replace-fail 'PINCE_PY="''${SCRIPTDIR}/PINCE.py"' "" \
+      --replace-fail '"$PYTHON" "$PINCE_PY"' "$out/libexec/pince" \
+      --replace-fail 'agent env "$@"' 'agent ${lib.getExe' coreutils "env"} -u LC_ALL "$@"'
+  '';
 
   nativeBuildInputs = [
-    cmake
-    gobject-introspection
+    copyDesktopItems
     qt6.qttools
     qt6.wrapQtAppsHook
-    makeWrapper
+    zig_0_16
   ];
 
   buildInputs = [
+    bashNonInteractive
     pythonEnv
-    gdb'
-    gobject-introspection
     qt6.qtbase
     qt6.qtwayland
-    gtk3
   ];
 
-  dontUseCmakeConfigure = true;
+  dontWrapQtApps = true;
 
   buildPhase = ''
     runHook preBuild
 
-    # libscanmem
-    pushd libscanmem-PINCE
+    zigFlags=(-j"$NIX_BUILD_CORES" "$zigDefaultCpuFlag" -Doptimize=ReleaseFast)
 
-    cmake -DCMAKE_BUILD_TYPE=Release .
-    make -j$NIX_BUILD_CORES
-
-    install -Dm555 libscanmem.so       -t ../libpince/libscanmem/
-    install -Dm444 wrappers/scanmem.py -t ../libpince/libscanmem/
+    pushd libmemscan
+    zig build "''${zigFlags[@]}"
+    install -Dm555 zig-out/lib/libmemscan.so -t ../libpince/libmemscan/
+    install -Dm444 memscan.py -t ../libpince/libmemscan/
     popd
 
-    # libptrscan
-    install -Dm555 ${libptrscan}/lib/libptrscan.so -t libpince/libptrscan
-    install -Dm444 ${libptrscan}/lib/ptrscan.py    -t libpince/libptrscan
+    pushd mono_collector
+    for arch in x86_64:x64 x86:x86; do
+      zig build "''${zigFlags[@]}" -Dtarget=''${arch%:*}-linux-gnu
+      install -Dm444 zig-out/lib/libmono_collector.so ../libpince/libmono_collector/mono_collector_''${arch#*:}.so
+      zig build "''${zigFlags[@]}" -Dtarget=''${arch%:*}-windows-gnu
+      install -Dm444 zig-out/bin/mono_collector.dll ../libpince/libmono_collector/mono_collector_wine_''${arch#*:}.dll
+    done
+    popd
 
-    # Translations
     lrelease i18n/ts/*
     mkdir -p i18n/qm
     mv i18n/ts/*.qm i18n/qm/
@@ -141,46 +111,57 @@ python3Packages.buildPythonApplication (finalAttrs: {
     runHook postBuild
   '';
 
-  makeWrapperArgs = [
-    ''--chdir "$out/lib/pince"''
-    ''--prefix LD_LIBRARY_PATH : "${LDPath}"''
-    ''--prefix GI_TYPELIB_PATH : "${GIPath}"''
-    ''--set PYTHONPATH "$out/lib/pince"''
-    ''--set PYTHONDONTWRITEBYTECODE "1"''
-    ''--add-flags "$out/lib/pince/PINCE.py"''
-    ''--prefix PATH : "${lib.makeBinPath [ pythonEnv ]}"''
-  ];
-
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/lib/pince/
-    cp -r GUI i18n libpince media tr AUTHORS COPYING COPYING.CC-BY PINCE.py THANKS $out/lib/pince/
+    install -Dm644 AUTHORS COPYING COPYING.CC-BY PINCE.py THANKS -t $out/lib/pince
+    cp -r GUI i18n libpince media tr $out/lib/pince/
 
-    mkdir -p $out/bin
-    ln -s $out/lib/pince/PINCE.py $out/bin/pince
+    install -Dm644 media/logo/ozgurozbek/pince_appimage.png \
+      $out/share/icons/hicolor/512x512/apps/PINCE.png
+
+    install -Dm755 PINCE.sh $out/bin/pince
 
     runHook postInstall
   '';
 
-  postFixup = ''
-    wrapPythonProgramsIn "$out/lib/pince" "$out ''${pythonPath[*]}"
+  preFixup = ''
+    makeQtWrapper ${pythonEnv.interpreter} $out/libexec/pince \
+      --chdir $out/lib/pince \
+      --set PYTHONPATH $out/lib/pince \
+      --set PYTHONNOUSERSITE true \
+      --prefix LD_LIBRARY_PATH : ${LDPath} \
+      --prefix PATH : ${lib.makeBinPath [ pythonEnv ]} \
+      --add-flags $out/lib/pince/PINCE.py
   '';
 
-  passthru = {
-    inherit libptrscan;
-    updateScript = nix-update-script { };
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = "io.github.korcankaraokcu.PINCE";
+      desktopName = "PINCE";
+      exec = "pince";
+      icon = "PINCE";
+      categories = [
+        "Development"
+        "Debugger"
+      ];
+    })
+  ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Reverse engineering tool for games (Linux alternative to Cheat Engine)";
     homepage = "https://github.com/korcankaraokcu/PINCE";
-    mainProgram = "pince";
     license = with lib.licenses; [
       gpl3Plus
       cc-by-30
     ];
+    maintainers = with lib.maintainers; [
+      mtrsk
+      yuannan
+    ];
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ yuannan ];
+    mainProgram = "pince";
   };
 })

@@ -3,17 +3,18 @@
   stdenv,
   fetchFromGitHub,
   raylib,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation {
   pname = "raylib-games";
-  version = "2026-05-07";
+  version = "0-unstable-2026-08-13";
 
   src = fetchFromGitHub {
     owner = "raysan5";
     repo = "raylib-games";
-    rev = "2175f1fe857aa91a749b66482359545f28cc596f";
-    hash = "sha256-gmCbBcS5tlq6jySvDPUqZz4ONyDkSeUdgAd20c5sUls=";
+    rev = "318688c759eaf391b36b9f893355c038fcf56419";
+    hash = "sha256-KVxpYNdFMOxzDQ4PHC4uBYVl+ng1WF5mEYBxeK4Mv5k=";
   };
 
   buildInputs = [ raylib ];
@@ -33,6 +34,18 @@ stdenv.mkDerivation {
   buildPhase = ''
     runHook preBuild
     for d in *; do
+      if [ $d == raylife ]; then
+        ${
+          # raylife only has a Linux-specific lowercase makefile, which
+          # this test also finds on case-insensitive filesystems such as
+          # macOS's
+          lib.optionalString stdenv.hostPlatform.isDarwin ''
+            continue
+          ''
+        }
+        mv raylife/src/makefile raylife/src/Makefile
+      fi
+
       if [ -f $d/src/Makefile ]; then
         make -C $d/src
       fi
@@ -52,10 +65,17 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+  # Upstream has no tags
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
+
   meta = {
     description = "Collection of games made with raylib";
     homepage = "https://www.raylib.com/games.html";
     license = lib.licenses.zlib;
-    inherit (raylib.meta) platforms;
+    inherit (raylib.meta)
+      platforms
+      maintainers
+      teams
+      ;
   };
 }

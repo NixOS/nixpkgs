@@ -31,6 +31,7 @@
   libepoxy,
   libGL,
   openssl,
+  aws-lc,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "field-monitor";
@@ -68,6 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
     gcr_4
     glib
     gsettings-desktop-schemas

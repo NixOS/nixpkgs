@@ -195,6 +195,8 @@ let
         error_log ${cfg.logError};
         daemon off;
 
+        worker_processes ${toString cfg.workerProcesses};
+
         # load_module is a main-context directive that must precede events{}/http{}.
         ${optionalString (
           (cfg.package.dynamicModules or [ ]) != [ ]
@@ -241,16 +243,21 @@ let
             }
 
             ${optionalString cfg.recommendedTlsSettings ''
-              # Consider https://ssl-config.mozilla.org/#server=nginx&config=intermediate as the lower bound
+              # Consider https://configurator.tlsref.org/#server=nginx&config=intermediate as the lower bound
 
               ssl_conf_command Groups "X25519MLKEM768:X25519:P-256:P-384";
-              ssl_session_timeout 1d;
-              ssl_session_cache shared:SSL:10m;
-              # Breaks forward secrecy: https://github.com/mozilla/server-side-tls/issues/135
-              ssl_session_tickets off;
-              # We don't enable insecure ciphers by default, so this allows
-              # clients to pick the most performant, per https://github.com/mozilla/server-side-tls/issues/260
+
+              # Allow clients to choose the most performant ciphersuite from our safe allowlist
+              # https://github.com/mozilla/server-side-tls/issues/260
               ssl_prefer_server_ciphers off;
+
+              # Support TLS session resumption (cache and tickets)
+              ssl_session_cache shared:SSL:10m; # ~40k sessions
+              ssl_session_timeout 1d;
+            ''}
+
+            ${optionalString cfg.encryptedClientHello.enable ''
+              ssl_ech_file ${cfg.encryptedClientHello.configFile};
             ''}
 
             ${optionalString cfg.recommendedBrotliSettings ''
@@ -288,10 +295,6 @@ let
               proxy_connect_timeout   ${cfg.proxyTimeout};
               proxy_send_timeout      ${cfg.proxyTimeout};
               proxy_read_timeout      ${cfg.proxyTimeout};
-              proxy_http_version      1.1;
-              # don't let clients close the keep-alive connection to upstream. See the nginx blog for details:
-              # https://www.nginx.com/blog/avoiding-top-10-nginx-configuration-mistakes/#no-keepalives
-              proxy_set_header        "Connection" "";
               include ${recommendedProxyConfig};
             ''}
 
@@ -647,6 +650,43 @@ in
         '';
       };
 
+      encryptedClientHello = {
+        enable = mkEnableOption "Encrypted Client Hello extension for TLS 1.3";
+
+        configFile = mkOption {
+          type = types.pathWith { inStore = false; };
+          default = "/var/lib/nginx/ech.pem";
+          example = "/run/keys/nginx.ech.pem";
+          description = ''
+            Path to the file containing both private key and ECHConfig in PEM
+            format.
+
+            This file will be generated if it does not exist and
+            {option}`services.nginx.encryptedClientHello.publicName` is set.
+
+            ::: {.info}
+            The `ECHConfig` value must be published into a HTTPS resource
+            record ([RFC 9460]) so clients can retrieve it before setting up
+            the TLS socket.
+            :::
+
+            [RFC 9460](https://www.rfc-editor.org/info/rfc9460/)
+          '';
+        };
+
+        publicName = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+          example = "ech.example.com";
+          description = ''
+            Public name advertised in the ECHConfig.
+
+            This name is visible in the outer ClientHello. This is not
+            necessarily the hostname of the requested website.
+          '';
+        };
+      };
+
       recommendedOptimisation = mkOption {
         default = false;
         type = types.bool;
@@ -717,6 +757,14 @@ in
         example = "20s";
         description = ''
           Change the uwsgi related timeouts in recommendedUwsgiSettings.
+        '';
+      };
+
+      workerProcesses = mkOption {
+        type = types.either types.ints.positive (types.enum [ "auto" ]);
+        default = "auto";
+        description = ''
+          Defines the number of worker processes.
         '';
       };
 
@@ -1049,7 +1097,7 @@ in
 
       sslCiphers = mkOption {
         type = types.nullOr (types.either types.str (types.listOf types.str));
-        # Keep in sync with https://ssl-config.mozilla.org/#server=nginx&config=intermediate
+        # Keep in sync with https://configurator.tlsref.org/#server=nginx&config=intermediate
         default = [
           "ECDHE-ECDSA-AES128-GCM-SHA256"
           "ECDHE-RSA-AES128-GCM-SHA256"
@@ -1571,6 +1619,28 @@ in
         stopIfChanged = false;
         preStart = ''
           ${cfg.preStart}
+
+          ${lib.optionalString cfg.encryptedClientHello.enable ''
+            if [ ! -e "${cfg.encryptedClientHello.configFile}" ]; then
+              ${
+                if (cfg.encryptedClientHello.publicName != null) then
+                  ''
+                    (
+                      umask 077
+                      ${lib.getExe pkgs.openssl_4_0} ech \
+                        -public_name "${cfg.encryptedClientHello.publicName}" \
+                        -out "${cfg.encryptedClientHello.configFile}"
+                    )
+                  ''
+                else
+                  ''
+                    echo "ECH config file at ${cfg.encryptedClientHello.configFile} is missing and cannot be generated because `publicName` is not set." >&2
+                    exit 1
+                  ''
+              }
+            fi
+          ''}
+
           ${execCommand} -t
         '';
 
@@ -1595,6 +1665,9 @@ in
           # Logs directory and mode
           LogsDirectory = "nginx";
           LogsDirectoryMode = "0750";
+          # State directory and mode
+          StateDirectory = "nginx";
+          StateDirectoryMode = "0700";
           # Proc filesystem
           ProcSubset = "pid";
           ProtectProc = "invisible";

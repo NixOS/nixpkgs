@@ -4,26 +4,33 @@
   fetchFromGitHub,
   rustPlatform,
   installShellFiles,
+  pkg-config,
+  aws-lc,
   versionCheckHook,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "prek";
-  version = "0.5.5";
+  version = "0.5.11";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "j178";
     repo = "prek";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-x97puc3c46mAuXHqywmGARqbA5BF8jO14YEH1Ij/aCo=";
+    hash = "sha256-Y26lBMUNaBKRdjHjfuYDBkVSRA5N/cCmIbCJKdynp0E=";
   };
 
-  cargoHash = "sha256-IPeG4sgH9sOczC6gsuDWHqfLPhdYX0Hrzp5QyUbLW4I=";
+  cargoHash = "sha256-qpZQ9aSB2WB6XyHw/57w4BYKNwZ8l2InLyw6bwji3YI=";
 
   nativeBuildInputs = [
     installShellFiles
+    pkg-config
+  ];
+
+  buildInputs = [
+    aws-lc
   ];
 
   # many tests just do not work, as they require network access

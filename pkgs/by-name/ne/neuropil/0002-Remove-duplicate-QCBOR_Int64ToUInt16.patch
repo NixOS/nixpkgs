@@ -1,0 +1,28 @@
+Since it's already defined when building with system qcbor.
+---
+ src/util/s11n_impl/np_serialize_qcbor.c | 9 ---------
+ 1 file changed, 9 deletions(-)
+
+diff --git a/src/util/s11n_impl/np_serialize_qcbor.c b/src/util/s11n_impl/np_serialize_qcbor.c
+index 903554d8..1f8863d1 100644
+--- a/src/util/s11n_impl/np_serialize_qcbor.c
++++ b/src/util/s11n_impl/np_serialize_qcbor.c
+@@ -37,15 +37,6 @@ static void AppendCBORHeadWithSize(QCBOREncodeContext *me,
+   UsefulOutBuf_AppendUsefulBuf(&(me->OutBuf), EncodedHead);
+ }
+ 
+-static inline int QCBOR_Int64ToUInt16(int64_t src, uint16_t *dest) {
+-  if (src > UINT16_MAX || src < 0) {
+-    return -1;
+-  } else {
+-    *dest = (uint16_t)src;
+-  }
+-  return 0;
+-}
+-
+ uint8_t __np_tree_serialize_read_type_dhkey(QCBORDecodeContext *qcbor_ctx,
+                                             np_treeval_t       *target) {
+ 
+-- 
+2.54.0
+

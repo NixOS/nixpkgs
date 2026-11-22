@@ -43,6 +43,6 @@ buildPythonPackage rec {
     homepage = "https://gitlab.com/burke-software/django-postgres-partition";
     changelog = "https://gitlab.com/burke-software/django-postgres-partition/-/releases/${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ defelo ];
+    maintainers = [ ];
   };
 }

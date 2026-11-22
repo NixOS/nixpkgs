@@ -25,7 +25,7 @@
   libxrender,
   libxxf86vm,
   pipewire,
-  swift,
+  swiftPackages,
   udev,
   wayland,
   zlib,
@@ -90,7 +90,7 @@ buildDotnetModule (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib ]
   # Required by the NativeAOT runtime on darwin
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    swift
+    swiftPackages.stdlib
     darwin.ICU
   ];
 

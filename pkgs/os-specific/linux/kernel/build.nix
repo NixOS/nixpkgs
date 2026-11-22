@@ -165,18 +165,35 @@ lib.makeOverridable (
         substitutions = { inherit configfile modDirVersion; };
         propagatedNativeBuildInputs = [ xz ];
       } ./setup-module-compression.sh)
+      zstd
     ]
-    ++ optional (lib.versionAtLeast version "5.13") zstd
     ++ optionals withRust [
       rustc-unwrapped
       rust-bindgen-unwrapped
     ];
+
+    # Some image types need special install targets
+    installTargetFor =
+      target:
+      if
+        (target == "zImage" || target == "Image.gz" || target == "vmlinuz.efi")
+        && builtins.elem stdenv.hostPlatform.linuxArch [
+          "arm"
+          "arm64"
+          "parisc"
+          "riscv"
+        ]
+      then
+        "zinstall"
+      else
+        "install";
   in
 
   stdenv.mkDerivation {
     inherit pname version src;
 
     __structuredAttrs = true;
+    strictDeps = true;
 
     enableParallelBuilding = true;
 
@@ -204,20 +221,9 @@ lib.makeOverridable (
       # kernelPatches can contain config changes and no actual patch
       lib.filter (p: p != null) (map (p: p.patch) kernelPatches)
       # Required for deterministic builds along with some postPatch magic.
-      ++ optional (lib.versionOlder version "5.19") ./randstruct-provide-seed.patch
-      ++ optional (lib.versionAtLeast version "5.19") ./randstruct-provide-seed-5.19.patch
-      # Linux 5.12 marked certain PowerPC-only symbols as GPL, which breaks
-      # OpenZFS; this was fixed in Linux 5.19 so we backport the fix
-      # https://github.com/openzfs/zfs/pull/13367
-      ++
-        optional
-          (
-            lib.versionAtLeast version "5.12" && lib.versionOlder version "5.19" && stdenv.hostPlatform.isPower
-          )
-          (fetchpatch {
-            url = "https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git/patch/?id=d9e5c3e9e75162f845880535957b7fd0b4637d23";
-            hash = "sha256-bBOyJcP6jUvozFJU0SPTOf3cmnTQ6ZZ4PlHjiniHXLU=";
-          });
+      ++ [
+        ./randstruct-provide-seed-5.19.patch
+      ];
 
     buildFlags = [
       target
@@ -306,8 +312,6 @@ lib.makeOverridable (
       python3Minimal
       kmod
       hexdump
-    ]
-    ++ optionals (lib.versionAtLeast version "5.2") [
       cpio
       pahole
       zlib
@@ -435,6 +439,19 @@ lib.makeOverridable (
         # Required for building external modules on some PowerPC
         # configurations.
         "$buildRoot/arch/powerpc/lib/crtsavres.o"
+
+        # Required for `linuxPackages.rebuildImage`.
+        "$buildRoot/System.map"
+        "$buildRoot/drivers/firmware/efi/libstub"
+        ${lib.optionalString stdenv.hostPlatform.isx86 ''
+          # The `bzImage` build is a mess and requires some files in
+          # directories that also have a bunch of other built files,
+          # including large derivatives of `vmlinux`.
+          "$buildRoot/arch/x86/boot/"{!(bzImage|vmlinux.bin|compressed),.*.cmd}
+          "$buildRoot/arch/x86/boot/compressed/"{!(vmlinux|vmlinux.bin*|piggy.o),.*.cmd}
+          "$buildRoot/arch/x86/kernel/cpu/capflags.c"
+          "$buildRoot/arch/x86/lib/inat-tables.c"
+        ''}
       )
       shopt -u extglob
 
@@ -470,24 +487,46 @@ lib.makeOverridable (
       # from drivers/ in the future; it adds 50M to keep all of its
       # headers on 3.10 though.
 
+      # Keep source files for rebuilding images
+      find . -type f -name 'Kconfig*' -exec chmod u-w '{}' +
+      chmod -R u-w drivers/firmware/efi/libstub
+      ${lib.optionalString stdenv.hostPlatform.isx86 ''
+        # As before, `bzImage` is a pain.
+        chmod -R u-w \
+          arch/x86/boot \
+          arch/x86/kernel/*.S \
+          arch/x86/lib \
+          arch/x86/mm \
+          lib/*.c \
+          lib/zstd
+        ${lib.optionalString (lib.versionAtLeast version "6.6") ''
+          chmod -R u-w \
+            arch/x86/coco \
+            arch/x86/virt/vmx/tdx
+        ''}
+      ''}
+
       # Remove unused arches
       for d in $(cd arch/; ls); do
         if [ -d "$buildRoot/arch/$d" ]; then continue; fi
         if [ -d "$buildRoot/arch/arm64" ] && [ "$d" = arm ]; then continue; fi
-        rm -rf arch/$d
+        find arch/$d -writable '(' '!' -type d -o -empty ')' -delete
       done
 
+      # Keep root and arch-specific Makefiles and install scripts
+      chmod u-w Makefile
+      find arch \
+        '(' -name Makefile -o -name install.sh ')' \
+        -exec chmod u-w '{}' +
+
       # Remove all driver-specific code (50M of which is headers)
-      rm -fR drivers
+      find drivers -writable '(' '!' -type d -o -empty ')' -delete
 
       # Keep all headers
       find .  -type f -name '*.h' -print0 | xargs -0 -r chmod u-w
 
       # Keep linker scripts (they are required for out-of-tree modules on aarch64)
       find .  -type f -name '*.lds' -print0 | xargs -0 -r chmod u-w
-
-      # Keep root and arch-specific Makefiles
-      chmod u-w Makefile arch/*/Makefile*
 
       # Keep rust Makefile
       ${lib.optionalString withRust "chmod u-w rust/Makefile"}
@@ -500,6 +539,14 @@ lib.makeOverridable (
 
       # Delete empty directories
       find -empty -type d -delete
+
+      if [[ -v modules ]]; then
+        # Replace the individual kmodigest single‐module certificates (see
+        # `common-flags.nix`) with a concatenated `modules.cer`.
+        cd -- "$modules/lib/modules/${modDirVersion}"
+        sed 's/$/\.cer/' modules.order | xargs -d'\n' cat > modules.cer
+        sed 's/$/\.cer/' modules.order | xargs -d'\n' rm
+      fi
     '';
 
     stripDebugList = [
@@ -537,24 +584,11 @@ lib.makeOverridable (
       baseVersion = lib.head (lib.splitString "-rc" version);
       kernelOlder = lib.versionOlder baseVersion;
       kernelAtLeast = lib.versionAtLeast baseVersion;
+      inherit installTargetFor;
     };
 
-    # Some image types need special install targets
     installTargets = [
-      (
-        if
-          (target == "zImage" || target == "Image.gz" || target == "vmlinuz.efi")
-          && builtins.elem stdenv.hostPlatform.linuxArch [
-            "arm"
-            "arm64"
-            "parisc"
-            "riscv"
-          ]
-        then
-          "zinstall"
-        else
-          "install"
-      )
+      (installTargetFor target)
     ]
     ++ lib.optionals isModular [ "modules_install" ]
     ++ lib.optionals buildDTBs [ "dtbs_install" ];
@@ -584,12 +618,8 @@ lib.makeOverridable (
       ];
       platforms = platforms.linux;
       badPlatforms =
-        lib.optionals (lib.versionOlder version "4.15") [
-          "riscv32-linux"
-          "riscv64-linux"
-        ]
         # Generic scripts/install.sh is only available on LoongArch64 since 6.16.
-        ++ lib.optional (lib.versionOlder version "6.16") "loongarch64-linux";
+        lib.optional (lib.versionOlder version "6.16") "loongarch64-linux";
       timeout = 14400; # 4 hours
       identifiers.cpeParts = {
         part = "o";

@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     repo = "xidlehook";
     rev = finalAttrs.version;
 
-    sha256 = "1pl7f8fhxfcy0c6c08vkagp0x1ak96vc5wgamigrk1nkd6l371lb";
+    hash = "sha256-i4YzqGnThplfrOrxwrZJU4UO7lNzI8AMA565Dh1yh94=";
   };
 
   cargoHash = "sha256-U1kjOWrFEp1pZnbawW2MCtC4UN7ELD/kcYWfEmn94Pg=";

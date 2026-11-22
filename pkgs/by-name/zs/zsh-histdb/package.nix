@@ -9,13 +9,13 @@
 
 stdenvNoCC.mkDerivation {
   pname = "zsh-histdb";
-  version = "0-unstable-2024-04-18";
+  version = "0-unstable-2026-09-18";
 
   src = fetchFromGitHub {
     owner = "larkery";
     repo = "zsh-histdb";
-    rev = "90a6c104d0fcc0410d665e148fa7da28c49684eb";
-    hash = "sha256-vtG1poaRVbfb/wKPChk1WpPgDq+7udLqLfYfLqap4Vg=";
+    rev = "27b719a993414321135ddaf73f9a4ecf785bd8c5";
+    hash = "sha256-w1HsIkhsB6iG6yFBpiNcyXPiuPprkoQ49wO1jfWRExs=";
   };
 
   postPatch = ''
@@ -31,7 +31,7 @@ stdenvNoCC.mkDerivation {
     runHook preInstall
 
     install -Dt $out/share/zsh-histdb/ \
-      sqlite-history.zsh histdb-interactive.zsh histdb-{merge,migrate}
+      sqlite-history.zsh histdb-fzf.zsh histdb-interactive.zsh histdb-{merge,migrate}
 
     runHook postInstall
   '';

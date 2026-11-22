@@ -10,17 +10,23 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libslirp";
-  version = "4.9.5";
+  version = "4.9.7";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "slirp";
     repo = "libslirp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-iWu3/Klsm8e9MH147BJhn9Vqyneq5ROqPvll1cnieL0=";
+    hash = "sha256-pgqZ2bToa6GvUhrql7b/+jxO20vvduFsSYciXztU9F4=";
   };
 
+  __structuredAttrs = true;
+  strictDeps = true;
   separateDebugInfo = true;
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   nativeBuildInputs = [
     meson

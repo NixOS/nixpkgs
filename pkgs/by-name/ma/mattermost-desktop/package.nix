@@ -17,16 +17,16 @@ in
 
 buildNpmPackage rec {
   pname = "mattermost-desktop";
-  version = "6.3.0";
+  version = "6.3.2";
 
   src = fetchFromGitHub {
     owner = "mattermost";
     repo = "desktop";
     tag = "v${version}";
-    hash = "sha256-aDYmnFb0CJDF/M1ca/6YkKTBcTC56+zpe9iqtRR0cpU=";
+    hash = "sha256-mrV0rQWgJNGEBw0FTFcfMrgh96FHo1WnLB8l3UGIoH8=";
   };
 
-  npmDepsHash = "sha256-nNKfzPKA0kjki169u/qe5r6rrVbVi3+0nkVj6niS+/c=";
+  npmDepsHash = "sha256-2Uv0VMMkTVZRMyTvbk0Y6XpeHYddx0Ypt6rgaiwbLL4=";
   npmBuildScript = "build-prod";
   makeCacheWritable = true;
 
@@ -36,7 +36,7 @@ buildNpmPackage rec {
     autoPatchelfHook
   ];
 
-  autoPatchelfIgnoreMissingDeps = [ "libc.musl-x86_64.so.1" ];
+  autoPatchelfIgnoreMissingDeps = [ "libc.musl-*.so.*" ];
 
   buildInputs = [
     stdenv.cc.cc

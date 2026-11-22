@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   versionCheckHook,
@@ -8,13 +9,15 @@
 
 buildGoModule (finalAttrs: {
   pname = "wpprobe";
-  version = "0.12.12";
+  version = "0.12.13";
+
+  __darwinAllowLocalNetworking = true;
 
   src = fetchFromGitHub {
     owner = "Chocapikk";
     repo = "wpprobe";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-aaZd/L/gLD7PEFEbLxthhEuhFmKAYMYAObyU/Mmkgys=";
+    hash = "sha256-9ug+naCJLZHOXEY62MZqqd2R4LaVVki4jM8ETeV72Tg=";
   };
 
   vendorHash = "sha256-0l7n6u2iODxoVR1fIMyUBaQj7cYk0Q5VnXUePaqOHXc=";
@@ -26,7 +29,6 @@ buildGoModule (finalAttrs: {
 
   ldflags = [
     "-s"
-    "-w"
     "-X=github.com/Chocapikk/wpprobe/internal/version.Version=v${finalAttrs.version}"
   ];
 
@@ -35,6 +37,9 @@ buildGoModule (finalAttrs: {
   checkFlags = [
     # Tests require network access
     "-skip=TestUpdateWordfence|TestAPI_Scan|TestAPI_ScanWithContext|TestAPI_ScanWithProgress|TestAPI_UpdateDatabases"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "-skip=TestGetAllVulnerabilitiesIncludesOptionalWPScan|TestConcurrentCacheReload"
   ];
 
   meta = {

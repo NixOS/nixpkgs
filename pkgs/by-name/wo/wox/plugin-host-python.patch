@@ -3,7 +3,7 @@
  1 file changed, 1 insertion(+), 7 deletions(-)
 
 diff --git a/plugin/host/host_python.go b/plugin/host/host_python.go
-index 40e0195e..91a09501 100644
+index 5e8419d9e..7b5b4ea31 100644
 --- a/plugin/host/host_python.go
 +++ b/plugin/host/host_python.go
 @@ -6,7 +6,6 @@ import (
@@ -14,7 +14,7 @@ index 40e0195e..91a09501 100644
  	"path/filepath"
  	"runtime"
  	"strings"
-@@ -39,12 +38,7 @@ func (n *PythonHost) GetRuntime(ctx context.Context) plugin.Runtime {
+@@ -43,12 +42,7 @@ func (n *PythonHost) GetRuntime(ctx context.Context) plugin.Runtime {
  }
  
  func (n *PythonHost) Start(ctx context.Context) error {
@@ -24,7 +24,7 @@ index 40e0195e..91a09501 100644
 -	}
 -
 -	return n.websocketHost.StartHost(ctx, pythonPath, path.Join(util.GetLocation().GetHostDirectory(), "python-host.pyz"), []string{"SHIV_ROOT=" + util.GetLocation().GetCacheDirectory()})
-+	return n.websocketHost.StartHost(ctx, "env", "@plugin-host-python@", []string{"SHIV_ROOT=" + util.GetLocation().GetCacheDirectory()})
++	return n.websocketHost.StartHost(ctx, "@python3-path@", "@plugin-host-python@", []string{"SHIV_ROOT=" + util.GetLocation().GetCacheDirectory()})
  }
  
  // FindPythonPath finds the best available Python interpreter path

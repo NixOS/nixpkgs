@@ -23,6 +23,7 @@ let
     optional
     optionalString
     seq
+    toLower
     unsafeGetAttrPos
     warn
     all
@@ -472,7 +473,7 @@ let
       teamsPosition = unsafeGetAttrPos "teams" (attrs.meta or { });
 
       problems = completeMetaProblems' attrs;
-      problemsGroupedByKind = groupBy (p: p.name) (
+      problemsGroupedByKind = groupBy (p: p.problem.kind) (
         mapAttrsToList (name: problem: {
           inherit name;
           inherit problem;
@@ -539,7 +540,7 @@ let
           defaultCPEParts = {
             part = "a";
             #vendor = null;
-            ${if attrs.pname or null != null then "product" else null} = attrs.pname;
+            ${if attrs.pname or null != null then "product" else null} = toLower attrs.pname;
             #version = null;
             #update = null;
             edition = "*";

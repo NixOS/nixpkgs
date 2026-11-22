@@ -28,6 +28,9 @@ buildPecl {
 
   inherit (versionData) version sha256;
 
+  # One version and hash per PHP version, which nix-update cannot update
+  passthru.updateScript = null;
+
   buildInputs = [ oracle-instantclient ];
   configureFlags = [ "--with-oci8=shared,instantclient,${oracle-instantclient.lib}/lib" ];
 

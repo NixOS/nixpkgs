@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Show the set of running processes as a tree";
     license = lib.licenses.gpl2;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.booxter ];
     platforms = lib.platforms.unix;
     priority = 5; # Lower than psmisc also providing pstree on Linux platforms
     mainProgram = "pstree";

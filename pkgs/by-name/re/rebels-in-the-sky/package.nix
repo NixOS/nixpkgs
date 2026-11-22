@@ -7,6 +7,7 @@
   cmake,
   pkg-config,
   alsa-lib,
+  aws-lc,
   nix-update-script,
   writableTmpDirAsHomeHook,
   versionCheckHook,
@@ -37,7 +38,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     rustPlatform.bindgenHook
   ];
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib ];
+  buildInputs = [
+    aws-lc
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib ];
 
   nativeCheckInputs = [
     # Save system tests write to home dir

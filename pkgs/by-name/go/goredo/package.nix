@@ -11,11 +11,11 @@
 
 buildGoModule (finalAttrs: {
   pname = "goredo";
-  version = "2.10.0";
+  version = "2.11.0";
 
   src = fetchurl {
     url = "http://www.goredo.stargrave.org/download/goredo-${finalAttrs.version}.tar.zst";
-    hash = "sha256-kinv+9it0nK0ia8S2W8AN8FWy1dRN9nNzVeG8n4aY2Q=";
+    hash = "sha256-U/2NSP+AqTa2l9rlFZJKWcgP6XCdutWpUrp5MDlRNZs=";
   };
 
   nativeBuildInputs = [ zstd ];

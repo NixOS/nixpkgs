@@ -5,6 +5,8 @@
   pkg-config,
   dbus,
   openssl,
+  sqlite,
+  zstd,
   perl,
   cacert,
   nix-update-script,
@@ -30,6 +32,8 @@ rustPlatform.buildRustPackage {
   buildInputs = [
     dbus
     (lib.getDev openssl)
+    sqlite
+    zstd
   ];
 
   checkInputs = [

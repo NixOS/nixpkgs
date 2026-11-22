@@ -16,15 +16,21 @@ let
 in
 pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "quark-engine";
-  version = "25.6.1";
+  version = "26.11.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ev-flow";
     repo = "quark-engine";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DAD37fzswY3c0d+ubOCYImxs4qyD4fhC3m2l0iD977A=";
+    hash = "sha256-EtTlhRQf+aLG0odF4/+l8vd8vzL/GP+ltIA8aMPPL9c=";
   };
+
+  pythonRelaxDeps = [
+    "androguard"
+    "pathvalidate"
+    "r2pipe"
+  ];
 
   build-system = with pythonPackages; [ setuptools ];
 
@@ -32,9 +38,11 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     androguard
     click
     colorama
+    dextrace
     gitMinimal
     graphviz
     pandas
+    pathvalidate
     plotly
     prettytable
     prompt-toolkit
@@ -42,11 +50,6 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     rzpipe
     setuptools
     tqdm
-  ];
-
-  pythonRelaxDeps = [
-    "r2pipe"
-    "androguard"
   ];
 
   # Project has no tests

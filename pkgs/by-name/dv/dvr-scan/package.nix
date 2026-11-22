@@ -4,17 +4,15 @@
   fetchFromGitHub,
   writableTmpDirAsHomeHook,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "dvr-scan";
   version = "1.8.2";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "Breakthrough";
     repo = "DVR-Scan";
-    tag = "v${version}-release";
+    tag = "v${finalAttrs.version}-release";
     hash = "sha256-+1liOZu8360aQlNwWaJXJQS/0POT9bTcIUkDg/v4lxU=";
   };
 
@@ -62,9 +60,9 @@ python3Packages.buildPythonApplication rec {
       Command-line application that automatically detects motion events in video files (e.g. security camera footage). DVR-Scan looks for areas in footage containing motion, and saves each event to a separate video clip. DVR-Scan is free and open-source software, and works on Windows, Linux, and Mac.
     '';
     homepage = "https://www.dvr-scan.com";
-    changelog = "https://github.com/Breakthrough/DVR-Scan/releases/tag/v${version}-release";
+    changelog = "https://github.com/Breakthrough/DVR-Scan/releases/tag/${finalAttrs.src.tag}";
     mainProgram = "dvr-scan";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ DataHearth ];
   };
-}
+})

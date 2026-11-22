@@ -18,7 +18,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "bdraco";
+    owner = "hvaclibs";
     repo = "nexia";
     tag = finalAttrs.version;
     hash = "sha256-jkyosr829jyR/aSDL9L+8xYZwwja0/TRETYFFBbwiFg=";
@@ -43,8 +43,8 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Python module for Nexia thermostats";
-    homepage = "https://github.com/bdraco/nexia";
-    changelog = "https://github.com/bdraco/nexia/releases/tag/${finalAttrs.src.tag}";
+    homepage = "https://github.com/hvaclibs/nexia";
+    changelog = "https://github.com/hvaclibs/nexia/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };

@@ -5,27 +5,15 @@ set -eou pipefail
 
 version=$1
 
-linux_cuda_version="cu130"
+linux_cuda_version="cu132"
 linux_cuda_bucket="https://download.pytorch.org/whl/${linux_cuda_version}"
 linux_cpu_bucket="https://download.pytorch.org/whl/cpu"
 darwin_bucket="https://download.pytorch.org/whl/cpu"
 
 url_and_key_list=(
-  "x86_64-linux-310 $linux_cuda_bucket/torchaudio-${version}%2B${linux_cuda_version}-cp310-cp310-manylinux_2_28_x86_64.whl torchaudio-${version}-cp310-cp310-linux_x86_64.whl"
-  "x86_64-linux-311 $linux_cuda_bucket/torchaudio-${version}%2B${linux_cuda_version}-cp311-cp311-manylinux_2_28_x86_64.whl torchaudio-${version}-cp311-cp311-linux_x86_64.whl"
-  "x86_64-linux-312 $linux_cuda_bucket/torchaudio-${version}%2B${linux_cuda_version}-cp312-cp312-manylinux_2_28_x86_64.whl torchaudio-${version}-cp312-cp312-linux_x86_64.whl"
-  "x86_64-linux-313 $linux_cuda_bucket/torchaudio-${version}%2B${linux_cuda_version}-cp313-cp313-manylinux_2_28_x86_64.whl torchaudio-${version}-cp313-cp313-linux_x86_64.whl"
-  "x86_64-linux-314 $linux_cuda_bucket/torchaudio-${version}%2B${linux_cuda_version}-cp314-cp314-manylinux_2_28_x86_64.whl torchaudio-${version}-cp314-cp314-linux_x86_64.whl"
-  "aarch64-darwin-310 $darwin_bucket/torchaudio-${version}-cp310-cp310-macosx_11_0_arm64.whl torchaudio-${version}-cp310-cp310-macosx_11_0_arm64.whl"
-  "aarch64-darwin-311 $darwin_bucket/torchaudio-${version}-cp311-cp311-macosx_11_0_arm64.whl torchaudio-${version}-cp311-cp311-macosx_11_0_arm64.whl"
-  "aarch64-darwin-312 $darwin_bucket/torchaudio-${version}-cp312-cp312-macosx_11_0_arm64.whl torchaudio-${version}-cp312-cp312-macosx_11_0_arm64.whl"
-  "aarch64-darwin-313 $darwin_bucket/torchaudio-${version}-cp313-cp313-macosx_12_0_arm64.whl torchaudio-${version}-cp313-cp313-macosx_12_0_arm64.whl"
-  "aarch64-darwin-314 $darwin_bucket/torchaudio-${version}-cp314-cp314-macosx_12_0_arm64.whl torchaudio-${version}-cp314-cp314-macosx_12_0_arm64.whl"
-  "aarch64-linux-310 $linux_cpu_bucket/torchaudio-${version}%2Bcpu-cp310-cp310-manylinux_2_28_aarch64.whl torchaudio-${version}-cp310-cp310-manylinux_2_28_aarch64.whl"
-  "aarch64-linux-311 $linux_cpu_bucket/torchaudio-${version}%2Bcpu-cp311-cp311-manylinux_2_28_aarch64.whl torchaudio-${version}-cp311-cp311-manylinux_2_28_aarch64.whl"
-  "aarch64-linux-312 $linux_cpu_bucket/torchaudio-${version}%2Bcpu-cp312-cp312-manylinux_2_28_aarch64.whl torchaudio-${version}-cp312-cp312-manylinux_2_28_aarch64.whl"
-  "aarch64-linux-313 $linux_cpu_bucket/torchaudio-${version}%2Bcpu-cp313-cp313-manylinux_2_28_aarch64.whl torchaudio-${version}-cp313-cp313-manylinux_2_28_aarch64.whl"
-  "aarch64-linux-314 $linux_cpu_bucket/torchaudio-${version}%2Bcpu-cp314-cp314-manylinux_2_28_aarch64.whl torchaudio-${version}-cp314-cp314-manylinux_2_28_aarch64.whl"
+  "x86_64-linux $linux_cuda_bucket/torchaudio-${version}%2B${linux_cuda_version}-py3-none-manylinux_2_28_x86_64.whl torchaudio-${version}-py3-none-linux_x86_64.whl"
+  "aarch64-darwin $darwin_bucket/torchaudio-${version}-py3-none-macosx_14_0_arm64.whl torchaudio-${version}-py3-none-macosx_14_0_arm64.whl"
+  "aarch64-linux $linux_cpu_bucket/torchaudio-${version}%2Bcpu-py3-none-manylinux_2_28_aarch64.whl torchaudio-${version}-py3-none-manylinux_2_28_aarch64.whl"
 )
 
 hashfile=binary-hashes-"$version".nix

@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ pkgs, ... }:
 let
   mainPort = "8080";
 in
@@ -11,6 +11,7 @@ in
       {
         services.litellm = {
           enable = true;
+          environment.LITELLM_MASTER_KEY = "sk-nixos-test";
         };
       };
   };
@@ -22,6 +23,6 @@ in
   '';
 
   meta = {
-    maintainers = [ ];
+    inherit (pkgs.litellm.meta) maintainers;
   };
 }

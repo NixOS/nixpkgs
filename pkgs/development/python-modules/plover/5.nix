@@ -52,7 +52,6 @@ let
   '';
 in
 buildPythonPackage (finalAttrs: {
-  __structuredAttrs = true;
 
   pname = "plover";
   version = "5.4.0";
@@ -154,6 +153,11 @@ buildPythonPackage (finalAttrs: {
   dontWrapQtApps = true;
 
   pythonImportsCheck = [ "plover" ];
+
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+  };
 
   meta = {
     description = "OpenSteno Plover stenography software";

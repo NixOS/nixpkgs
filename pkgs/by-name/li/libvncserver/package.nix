@@ -52,6 +52,18 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/LibVNC/libvncserver/commit/009008e2f4d5a54dd71f422070df3af7b3dbc931.patch";
       hash = "sha256-ZgpiIS7KoRzDmVLQ0J86wTFFykCBVMt6bZwJsFvIO74=";
     })
+
+    # libvncclient: dynamic resolution resizing support for wayvnc
+    (fetchpatch {
+      name = "libvncclient-maintain-screen-data-extdesktopsize.patch";
+      url = "https://github.com/LibVNC/libvncserver/commit/8ea6ed0629cc9aeee2f1447c029cc7cc5be5602d.patch";
+      hash = "sha256-Fa23Xon5IPn0o3rTgbJe/3ObkKETyLJvws9fUvLVPCA=";
+    })
+    (fetchpatch {
+      name = "libvncclient-allow-screen-id-0.patch";
+      url = "https://github.com/LibVNC/libvncserver/commit/041ea576c3dddd6c7169935aaf8889673024fbfc.patch";
+      hash = "sha256-XWEhoGBYdW4k4mUK95iSWuCSgEaBcn4rgacMnEUHpj8=";
+    })
   ];
 
   nativeBuildInputs = [

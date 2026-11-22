@@ -11,8 +11,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.3.5-unstable-2025-07-09";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "MichaelTatarski";
     repo = "fake-http-header";

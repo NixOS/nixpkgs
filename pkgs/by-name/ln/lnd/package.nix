@@ -23,16 +23,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "lnd";
-  version = "0.21.4-beta";
+  version = "0.21.8-beta";
 
   src = fetchFromGitHub {
     owner = "lightningnetwork";
     repo = "lnd";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-SCoUMVFi7svhbNuBMeFIGaIPDVsKlL8YAjuD5nKSU2g=";
+    hash = "sha256-cWBNYM9PnsQ6/lThlINPfWvwNly8ixoYkWTXJBsbHvk=";
   };
 
-  vendorHash = "sha256-wLIyIwfvM7pP4p6wMEXsNPzHBtnlCnLSqMUFW5L7FyQ=";
+  vendorHash = "sha256-gcKnoxS0M26Jv1guEzQSUtGVr5I+8EBSrzRVU0pE1fU=";
 
   subPackages = [
     "cmd/lncli"
@@ -51,5 +51,6 @@ buildGoModule (finalAttrs: {
       cypherpunk2140
       prusnak
     ];
+    mainProgram = "lnd";
   };
 })

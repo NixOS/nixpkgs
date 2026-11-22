@@ -12,8 +12,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.0.6";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   # Pypi only offers a wheel
   src = fetchFromGitHub {
     owner = "BurntSushi";

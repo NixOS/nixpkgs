@@ -90,7 +90,7 @@ stdenv.mkDerivation {
     hash = selectSystem srcHashes;
   };
 
-  dontStrip = true;
+  stripDebugList = [ "Release" ];
 
   dontPatchELF = true;
 

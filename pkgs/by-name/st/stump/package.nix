@@ -16,26 +16,30 @@
   cacert,
   pkg-config,
   makeWrapper,
+  sqlite,
   nix-update-script,
+  writableTmpDirAsHomeHook,
+  zstd,
 }:
+
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stump";
-  version = "0.1.10";
+  version = "0.1.14";
 
   src = fetchFromGitHub {
     owner = "stumpapp";
     repo = "stump";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MV9vhY15JgiCDN5J62AjI2uSkcM+cYjlT5hocxQXSOA=";
+    hash = "sha256-EkQId7cnqG0LGntwy8rEbrkPfqduGbD9VqlhGWsLuwk=";
   };
 
-  frontend = stdenv.mkDerivation (_: {
+  frontend = stdenv.mkDerivation {
     pname = "stump-frontend";
     inherit (finalAttrs) src version;
 
     yarnOfflineCache = fetchYarnDeps {
       yarnLock = finalAttrs.src + "/yarn.lock";
-      hash = "sha256-eKp7rRuo1kk8Nq7mK9JwvliUdaV8L03SoKAqXGQfWLg=";
+      hash = "sha256-a48gfef+LHb/KW1cV8qTKjMwva3v18Oz7fiRhzoq+QI=";
     };
 
     nativeBuildInputs = [
@@ -56,11 +60,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installPhase = ''
       mv ./apps/web/dist $out
     '';
-  });
+  };
 
   __structuredAttrs = true;
 
-  cargoHash = "sha256-eKS4Cax2HCPpeyjuHRFJy42I8KTwhv1oNH4jKaN+2dQ=";
+  cargoHash = "sha256-Ht7dueO7J7TAnMZnK0P36oDBlJYiTpKfJixq4ptCXJw=";
 
   cargoBuildFlags = [
     "--package"
@@ -78,6 +82,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeCheckInputs = [
     cacert
+    writableTmpDirAsHomeHook
   ];
 
   buildInputs = [
@@ -85,12 +90,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     dbus
     glib
     gtk3
+    sqlite
     webkitgtk_4_1
+    zstd
   ];
-
-  preCheck = ''
-    export HOME=$TMP
-  '';
 
   postInstall = ''
     wrapProgram $out/bin/stump_server \
@@ -120,6 +123,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "stump_server";
     maintainers = with lib.maintainers; [
       jvanbruegge
+      stepbrobd
       tr3foil
     ];
   };

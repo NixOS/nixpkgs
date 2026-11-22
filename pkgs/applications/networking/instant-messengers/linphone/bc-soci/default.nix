@@ -19,7 +19,7 @@ stdenv.mkDerivation {
     owner = "public/external";
     repo = "soci";
     rev = "3a9c79088212941d0175c22cd2da8fe1bdd639df";
-    sha256 = "sha256-7aSTFD4yk1i6c9cEGqdo/eJtuqoOUZUTJlZijgjuYpM=";
+    hash = "sha256-7aSTFD4yk1i6c9cEGqdo/eJtuqoOUZUTJlZijgjuYpM=";
   };
 
   patches = [

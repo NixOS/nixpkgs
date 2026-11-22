@@ -14,8 +14,6 @@ buildPythonPackage (finalAttrs: {
   version = "7.6.2";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "RDFLib";
     repo = "OWL-RL";

@@ -10,11 +10,15 @@
   cctools,
   cargo-tauri,
   jq,
+  sqlite,
   writableTmpDirAsHomeHook,
   makeBinaryWrapper,
   swift,
   apple-sdk_26,
+  open-apple-macros,
+  replaceVars,
   symlinkJoin,
+  nix-update-script,
 
   # Linux-only
   webkitgtk_4_1,
@@ -36,6 +40,9 @@
   pipewire,
   alsa-plugins,
   wrapGAppsHook4,
+  wtype,
+  dotool,
+  wl-clipboard,
 
   # Cross-platform
   onnxruntime,
@@ -55,7 +62,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "handy";
-  version = "0.9.6";
+  version = "0.10.0";
 
   __structuredAttrs = true;
 
@@ -63,13 +70,21 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "cjpais";
     repo = "Handy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6eNa9iNjwKgLL8t72GeMHTxjyHaeVl+9VF/QWjlHzts=";
+    hash = "sha256-PnL2le8URBs4I3pv9DKh+JLDII20xtDkJEUJghLToXQ=";
   };
 
   cargoRoot = "src-tauri";
-  cargoHash = "sha256-fzTklIGMCE2ugLc6KIj3XDqxB4qjhtm14LKBUb8kBWE=";
+  cargoHash = "sha256-1ae7U/uEa11R0RC6nZthqBVsxojQsGduiiFQlIrHUZA=";
 
   nativeInstallInputs = [ jq ];
+
+  patches =
+    # Use apple-open-macros to enable using Apple Intelligence on Darwin.
+    lib.optionals stdenv.hostPlatform.isDarwin [
+      (replaceVars ./add-plugin-path-for-swift-macros.patch {
+        inherit open-apple-macros;
+      })
+    ];
 
   postPatch = ''
     patch_json() {
@@ -91,10 +106,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # Strip cbindgen build steps
     find "$cargoDepsCopy" -path "*/ferrous-opencc-*/build.rs" \
       -exec sed -i -e '/cbindgen::Builder::new/{:l;/write_to_file/!{N;bl};d}' {} +
-
-    # FoundationModels requires macros that are only shipped with Xcode. The 26.x SDK in Nixpkgs does not have them.
-    substituteInPlace src-tauri/build.rs \
-      --replace-fail 'has_foundation_models = framework_path.exists()' ' has_foundation_models = false'
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace "$cargoDepsCopy"/*/libappindicator-sys-*/src/lib.rs \
@@ -124,6 +135,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    sqlite
     onnxruntime
     openssl
   ]
@@ -195,8 +207,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   preFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     gappsWrapperArgs+=(
-      --set WEBKIT_DISABLE_DMABUF_RENDERER 1
       --set ALSA_PLUGIN_DIR "${finalAttrs.passthru.alsaPluginDirectory}"
+      # Disable the in-app updater
+      --set HANDY_DISABLE_UPDATER 1
+      # Wayland text injection
+      --suffix PATH : ${
+        lib.makeBinPath [
+          wtype
+          dotool
+          wl-clipboard
+        ]
+      }
     )
   '';
 
@@ -254,9 +275,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
       outputHash =
         {
-          "x86_64-linux" = "sha256-huOC2smHU0sGIxeyvWmzdewUEpKHfdSGNhf9xWpH9Jk=";
-          "aarch64-linux" = "sha256-UDn8nIgIx23ampe43Qr0j9h+hlU9g1QzzlIlbRH2CKs=";
-          "aarch64-darwin" = "sha256-8Rw4iNvqeq/sRvZpbtZo0f0iPAwu1TeB8Y+ut4kb9uw=";
+          "x86_64-linux" = "sha256-2RCuoJpQeg3JN4JqlKvzO4KMz6n7rNXnsb9IyWt9law=";
+          "aarch64-linux" = "sha256-HY3VLb3jt6OwPe8Cai7udn9qb1U6XoSxM/cenALEykk=";
+          "aarch64-darwin" = "sha256-p1a02DsBfFzmwjq8GYaU4Z2IpbzLtkDOzLnrUk++KSw=";
         }
         .${stdenv.hostPlatform.system};
 
@@ -268,6 +289,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
       paths = [
         "${pipewire}/lib/alsa-lib"
         "${alsa-plugins}/lib/alsa-lib"
+      ];
+    };
+
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "frontendDeps"
       ];
     };
   };
@@ -287,6 +315,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       faukah
       philocalyst
+      structix
     ];
     platforms = with lib.platforms; linux ++ darwin;
   };

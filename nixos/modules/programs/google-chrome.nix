@@ -9,6 +9,8 @@ let
   cfg = config.programs.google-chrome;
 in
 {
+  meta = { inherit (pkgs.google-chrome.meta) maintainers; };
+
   options.programs.google-chrome = {
     enable = lib.mkEnableOption "Google Chrome browser";
     package = lib.mkPackageOption pkgs "google-chrome" { };

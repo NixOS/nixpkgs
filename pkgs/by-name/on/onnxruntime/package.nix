@@ -16,7 +16,6 @@
   nlohmann_json,
   pkg-config,
   python3Packages,
-  removeReferencesTo,
   re2,
   zlib,
   protobuf,
@@ -180,7 +179,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   )
   ++ lib.optionals cudaSupport [
     cudaPackages.cuda_nvcc
-    removeReferencesTo
   ]
   ++ lib.optionals isCudaJetson [
     cudaPackages.autoAddCudaCompatRunpath
@@ -300,6 +298,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "onnxruntime_USE_MIGRAPHX" rocmSupport)
     (lib.cmakeBool "onnxruntime_USE_COREML" coremlSupport)
     (lib.cmakeBool "onnxruntime_ENABLE_LTO" (!cudaSupport || cudaPackages.cudaOlder "12.8"))
+    (lib.cmakeBool "onnxruntime_USE_TELEMETRY" false)
     # GCC 16 implemented P0952R2, which changes the output of libstdc++'s
     # std::generate_canonical. Some of onnxruntime('s tests) rely on this old
     # behavior, so we restore the old behavior with the provided macro. Based
@@ -412,10 +411,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  # See comments in `cudaPackages.nccl`
-  postFixup = lib.optionalString cudaSupport ''
-    remove-references-to -t "${lib.getBin cuda_nvcc}" ''${!outputLib}/lib/libonnxruntime_providers_cuda.so
-  '';
+  # nvlink records its library directories in the device code; cuda_nvcc's nvlink wrapper removes them.
   disallowedRequisites = lib.optionals cudaSupport [ (lib.getBin cuda_nvcc) ];
 
   __structuredAttrs = true;

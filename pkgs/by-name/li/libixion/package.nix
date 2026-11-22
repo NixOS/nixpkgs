@@ -22,6 +22,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-v72ihA/V21zM2xHe8t5MKYag1RUC9bWGpq7Sr7x+YIw=";
   };
 
+  # The python module doesn't link libpython; let the interpreter provide its symbols at load time
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace src/python/Makefile.am \
+      --replace-fail "ixion_la_LDFLAGS = -no-undefined" "ixion_la_LDFLAGS = -Wl,-undefined,dynamic_lookup"
+  '';
+
   nativeBuildInputs = [
     autoreconfHook
     pkg-config

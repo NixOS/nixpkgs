@@ -2,13 +2,13 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   callPackage,
   jq,
   cmake,
   flex,
   bison,
   gecode,
-  mpfr,
   cbc,
   zlib,
 }:
@@ -24,6 +24,18 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-FYXofYaAGYMIlzwQV2rP+1Sv8OYbaqH4jHzB4J4c8G4=";
   };
 
+  patches = [
+    # Compatibility with Gecode 6.5.0
+    (fetchpatch {
+      url = "https://github.com/MiniZinc/libminizinc/commit/4a84a48ac8fb31010a421a038a0cfbcac501ee1f.patch";
+      includes = [
+        "CMakeLists.txt"
+        "cmake/*"
+      ];
+      hash = "sha256-W4wkylQalL8j0eTVDimMr6hzth8zfzFzPrWvLZ4+PBo=";
+    })
+  ];
+
   nativeBuildInputs = [
     bison
     cmake
@@ -33,7 +45,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     gecode
-    mpfr
     cbc
     zlib
   ];

@@ -57,7 +57,12 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Open source pan-CJK pixel font";
     homepage = "https://ark-pixel-font.takwolf.com/";
-    license = lib.licenses.ofl;
+    license =
+      with lib.licenses;
+      AND [
+        ofl
+        mit
+      ];
     maintainers = with lib.maintainers; [ h7x4 ];
     platforms = lib.platforms.all;
   };

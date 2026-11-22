@@ -6,15 +6,15 @@
   hatchling,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "llama-index-readers-database";
-  version = "0.6.0";
+  version = "0.8.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "llama_index_readers_database";
-    inherit version;
-    hash = "sha256-LDxPRKd+i4zwGArLW8b8URtBc9Y+id/uKEybnsW4c5U=";
+    inherit (finalAttrs) version;
+    hash = "sha256-UK+omoo20E99vWkN9kLTsZ7DSK+0ZI7wIzQHnrASmJI=";
   };
 
   build-system = [ hatchling ];
@@ -33,4 +33,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

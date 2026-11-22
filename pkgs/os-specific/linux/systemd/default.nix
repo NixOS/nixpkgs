@@ -35,7 +35,6 @@
   lz4,
   openssl,
   libucontext,
-  libgcrypt,
   libidn2,
   curl,
   zlib,
@@ -105,7 +104,6 @@
   withEfi ? stdenv.hostPlatform.isEfi,
   withFido2 ? true,
   withFirstboot ? true,
-  withGcrypt ? true,
   withHomed ? true,
   withHostnamed ? true,
   withHwdb ? true,
@@ -147,6 +145,7 @@
   withRemote ? true,
   withResolved ? true,
   withShellCompletions ? true,
+  withStorage ? true,
   withSysinstall ? true,
   withSysusers ? true,
   withSysupdate ? true,
@@ -196,10 +195,11 @@ assert withFido2 -> withOpenSSL;
 assert withSysupdate -> withOpenSSL;
 assert withNsresourced -> withLibBPF;
 assert withMountfsd -> withLibBPF;
-assert withImportd -> (withGcrypt || withOpenSSL);
+assert withImportd -> withOpenSSL;
 assert withUkify -> (withEfi && withBootloader);
 assert withRepart -> withCryptsetup;
 assert withBootloader -> withEfi;
+assert withStorage; # installed by default in 262, meson option in 263
 
 let
   wantCurl = withRemote || withImportd || withImds;
@@ -213,13 +213,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;
-  version = "261.3";
+  version = "262";
 
   src = fetchFromGitHub {
     owner = "systemd";
     repo = "systemd";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-W3E6QUxr+x5jt4KJlHWbP4unyQCI7yA5oymgz6la1ng=";
+    hash = "sha256-oGzFW2dD8abLXBwDczr1hvl712s03CHTUqOz6uPfhmQ=";
   };
 
   # PATCH POLICY
@@ -246,12 +246,8 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     ./0001-Don-t-try-to-unmount-nix-or-nix-store.patch
     ./0002-Change-usr-share-zoneinfo-to-etc-zoneinfo.patch
-    ./0003-add-rootprefix-to-lookup-dir-paths.patch
-    ./0004-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
-    ./0005-core-don-t-taint-on-unmerged-usr.patch
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isGnu) [
-    ./0006-timesyncd-disable-NSCD-when-DNSSEC-validation-is-dis.patch
+    ./0003-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
+    ./0004-core-don-t-taint-on-unmerged-usr.patch
   ];
 
   postPatch = ''
@@ -345,9 +341,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isMusl [
     libucontext
-  ]
-  ++ lib.optionals withGcrypt [
-    libgcrypt
   ]
   ++ lib.optionals withOpenSSL [ openssl ]
   ++ lib.optional withTests glib
@@ -487,7 +480,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # NSS
     (lib.mesonEnable "nss-mymachines" (withNss && withMachined))
-    (lib.mesonEnable "nss-resolve" withNss)
+    (lib.mesonEnable "nss-resolve" (withNss && withResolved))
     (lib.mesonBool "nss-myhostname" withNss)
     (lib.mesonBool "nss-systemd" withNss)
 
@@ -512,7 +505,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "acl" withAcl)
     (lib.mesonEnable "audit" withAudit)
     (lib.mesonEnable "apparmor" withApparmor)
-    (lib.mesonEnable "gcrypt" withGcrypt)
     (lib.mesonEnable "importd" withImportd)
     (lib.mesonEnable "imds" withImds)
     (lib.mesonEnable "homed" withHomed)
@@ -552,6 +544,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonBool "hwdb" withHwdb)
     (lib.mesonBool "timedated" withTimedated)
     (lib.mesonBool "timesyncd" withTimesyncd)
+    (lib.mesonBool "nsresourced" withNsresourced)
+    (lib.mesonBool "mountfsd" withMountfsd)
     (lib.mesonBool "userdb" withUserDb)
     (lib.mesonBool "coredump" withCoredump)
     (lib.mesonBool "firstboot" withFirstboot)
@@ -568,12 +562,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonBool "create-log-dirs" false)
     (lib.mesonBool "smack" true)
     (lib.mesonBool "b_pie" true)
-  ]
-  ++ lib.optionals withNsresourced [
-    (lib.mesonBool "nsresourced" withNsresourced)
-  ]
-  ++ lib.optionals withMountfsd [
-    (lib.mesonBool "mountfsd" withMountfsd)
   ]
   ++ lib.optionals (withLibBPF && vmlinux-btf != null) [
     (lib.mesonOption "vmlinux-h" "provided")
@@ -735,10 +723,12 @@ stdenv.mkDerivation (finalAttrs: {
       withNspawn
       withRepart
       withPortabled
+      withStorage
       withSysupdate
       withTimedated
       withTpm2Tss
       withUtmp
+      withVmspawn
       util-linux
       kmod
       kbd
@@ -817,8 +807,8 @@ stdenv.mkDerivation (finalAttrs: {
       // {
         inherit (nixosTests)
           simple-vm
-          fsck-systemd-stage-1
-          hibernate-systemd-stage-1
+          fsck
+          hibernate
           switchTest
           switchTest-basics
           switchTest-units
@@ -835,16 +825,15 @@ stdenv.mkDerivation (finalAttrs: {
           systemd-initrd-btrfs-raid
           systemd-initrd-luks-fido2
           systemd-initrd-luks-keyfile
-          systemd-initrd-luks-empty-passphrase
+          initrd-luks-empty-passphrase
           systemd-initrd-luks-password
           systemd-initrd-luks-tpm2
           systemd-initrd-modprobe
-          systemd-initrd-shutdown
           systemd-initrd-simple
           systemd-initrd-swraid
           # systemd-initrd-vconsole # broken on master
           systemd-initrd-networkd-ssh
-          systemd-initrd-networkd-openvpn
+          initrd-network-openvpn
           systemd-initrd-vlan
           systemd-journal
           systemd-journal-gateway
@@ -857,7 +846,6 @@ stdenv.mkDerivation (finalAttrs: {
           systemd-networkd-vrf
           systemd-no-tainted
           systemd-nspawn
-          systemd-nspawn-configfile
           systemd-oomd
           systemd-portabled
           systemd-pstore

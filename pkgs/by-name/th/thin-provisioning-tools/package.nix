@@ -11,6 +11,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "thin-provisioning-tools";
   version = "1.3.2";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "jthornber";
     repo = "thin-provisioning-tools";

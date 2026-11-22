@@ -46,8 +46,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   inherit version src;
   pyproject = true;
 
-  __structuredAttrs = true;
-
   patches = [
     # ERROR: Fst::Write: Can't open file: -
     ./fix-stdout.diff

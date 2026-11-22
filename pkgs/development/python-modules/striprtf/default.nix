@@ -7,13 +7,18 @@
 
 buildPythonPackage rec {
   pname = "striprtf";
-  version = "0.0.32";
+  version = "0.0.35";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-fzdaN12ZonAIQhcxaMkMm1RcskQkH/xdho7Z9rr5FV8=";
+    hash = "sha256-oh6MT3OnkcPyNWHflnAUiMaRqxdJqSSHzJ5f7m6ghFU=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'hatchling>=1.21.0,<1.32' hatchling
+  '';
 
   build-system = [ hatchling ];
 

@@ -17,5 +17,5 @@ runCommand "closure-paths"
     ];
   }
   ''
-    python3 ${./closure-graph.py} "$NIX_ATTRS_JSON_FILE" graph > ''${outputs[out]}
+    python3 -P ${./closure-graph.py} "$NIX_ATTRS_JSON_FILE" graph > ''${outputs[out]}
   ''

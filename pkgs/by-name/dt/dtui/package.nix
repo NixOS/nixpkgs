@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dtui";
-  version = "3.0.1";
+  version = "3.1.1";
 
   src = fetchFromGitHub {
     owner = "Troels51";
     repo = "dtui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bAg9FFoKXb6YClNQRhR7Z/MhnPkJ8r7/xM6SghaH2hU=";
+    hash = "sha256-vt9PVJtzRFBBlZ0tggs4Q0pBiojr5V1wABS7sfAAw90=";
   };
 
-  cargoHash = "sha256-qiFxN0bG3pUWOKKM0gHMmxjZZvqZXYYDeUuRI/V9YbM=";
+  cargoHash = "sha256-QKnupGJWYq7Q77sP7HVMBmQihaSouNJFGOkDXhH5rL4=";
 
   nativeBuildInputs = [
     pkg-config

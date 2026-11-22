@@ -8,12 +8,12 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "vwifi";
-  version = "7.1";
+  version = "7.1.1";
   src = fetchFromGitHub {
     owner = "Raizo62";
     repo = "vwifi";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ed7MLPLdKIK9e4EQq83GwKWiOX3tNJShiFdnNgFGj7Q=";
+    hash = "sha256-aEesXT1psxInT5S4yQmyHhRYOZNjq+BDKoltuJJ259c=";
   };
 
   buildInputs = [

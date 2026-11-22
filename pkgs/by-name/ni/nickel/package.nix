@@ -6,6 +6,7 @@
   python3,
   gitMinimal,
   versionCheckHook,
+  oniguruma,
   pkg-config,
   nixVersions,
   nix-update-script,
@@ -36,12 +37,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     python3
     gitMinimal
-  ]
-  ++ lib.optionals enableNixImport [
     pkg-config
   ];
 
-  buildInputs = lib.optionals enableNixImport [
+  buildInputs = [
+    oniguruma
+  ]
+  ++ lib.optionals enableNixImport [
     nixVersions.nix_2_34
     boost
   ];

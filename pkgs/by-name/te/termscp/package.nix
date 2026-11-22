@@ -1,6 +1,7 @@
 {
   lib,
   stdenvNoCC,
+  aws-lc,
   dbus,
   fetchFromGitHub,
   openssl,
@@ -13,20 +14,21 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "termscp";
-  version = "1.2.0";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "veeso";
     repo = "termscp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Rrb8ae+wpyHrRr4UHrUc7N+ytvI2OKmXmCWcnJOebJU=";
+    hash = "sha256-xH1ZWD3tl7e0bBgoTdbyQ5bHEzao2D3nNPEo3Qlp1ac=";
   };
 
-  cargoHash = "sha256-Var5ZnwX9OyCh+G6/5JF1K/IJR7nQ5508+B1akfsito=";
+  cargoHash = "sha256-xlIms/5NaxZjzPU76Ovln/XCtL9cFZFbjeiEceL8q0U=";
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
+    aws-lc
     dbus
     openssl
     samba

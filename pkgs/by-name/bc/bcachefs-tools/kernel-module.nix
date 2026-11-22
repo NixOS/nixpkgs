@@ -31,6 +31,12 @@ stdenv.mkDerivation {
     "RUST_LIB_SRC=${rustPlatform.rustLibSrc}"
   ];
 
+  # Modules are installed compressed, so the generic strip hooks skip them.
+  # Strip before compression, like ZFS kernel module does.
+  postBuild = ''
+    find . -name '*.ko' -print0 | xargs -0 -P$NIX_BUILD_CORES ${stdenv.cc.targetPrefix}strip --strip-debug
+  '';
+
   installPhase = ''
     runHook preInstall
     make -C ${kernel.dev}/lib/modules/${kernel.modDirVersion}/build M=$(pwd) modules_install "''${makeFlags[@]}" "''${installFlags[@]}"

@@ -17,13 +17,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "geteduroam";
-  version = "0.15";
+  version = "0.16";
 
   src = fetchFromGitHub {
     owner = "geteduroam";
     repo = "linux-app";
     tag = finalAttrs.version;
-    hash = "sha256-j9sLlVglQbrGuFAh0gkxS2/4HR2YpBNxCsVWBQpPNag=";
+    hash = "sha256-i0bmiKsaXnzoZKZjCbKjPgq8RvtkSReRrozEgGObwZk=";
   };
 
   vendorHash = "sha256-HYJ71pk1a8EaPycmbHmMnQeb42dt7M9NvK/1GYhZE0c=";

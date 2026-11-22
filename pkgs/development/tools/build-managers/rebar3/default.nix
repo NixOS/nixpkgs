@@ -4,6 +4,7 @@
   fetchFromGitHub,
   fetchgit,
   fetchHex,
+  cacert,
   erlang,
   makeWrapper,
   writableTmpDirAsHomeHook,
@@ -20,7 +21,7 @@ let
   deps = import ./rebar-deps.nix { inherit fetchFromGitHub fetchgit fetchHex; };
   rebar3 = stdenv.mkDerivation (finalAttrs: {
     pname = "rebar3";
-    version = "3.27.3";
+    version = "3.28.0";
 
     __structuredAttrs = true;
     strictDeps = true;
@@ -31,7 +32,7 @@ let
       owner = "erlang";
       repo = "rebar3";
       tag = finalAttrs.version;
-      sha256 = "Om6c2cpeFCdPAemeA965YxKXhasHbx3gHVgSh+jO2TI=";
+      sha256 = "bhNpZNBYVnM/81EERADvzUGkN9jIR7wPv/kXCC5tWO8=";
     };
 
     nativeBuildInputs = [
@@ -75,7 +76,8 @@ let
     checkPhase = ''
       runHook preCheck
 
-      escript ./rebar3 ct
+      ERL_FLAGS="-public_key cacerts_path '\"${cacert}/etc/ssl/certs/ca-bundle.crt\"'" \
+        escript ./rebar3 ct
 
       runHook postCheck
     '';

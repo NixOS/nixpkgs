@@ -21,12 +21,13 @@
   libgedit-gtksourceview,
   libgedit-tepl,
   libgee,
+  libhandy,
   gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "enter-tex";
-  version = "3.49.0";
+  version = "3.51.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -34,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "gedit";
     repo = "enter-tex";
     tag = finalAttrs.version;
-    hash = "sha256-CRxWN4eeB9uDdLtRh3aXHoN+gSlXSPDftGHcPtjgAzU=";
+    hash = "sha256-hkgbc1n8kzwfqr7FPL5gI6SHvE1zoxWWmLDx3mf2/os=";
   };
 
   nativeBuildInputs = [
@@ -60,6 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     libgedit-gtksourceview
     libgedit-tepl
     libgee
+    libhandy
   ];
 
   preBuild = ''

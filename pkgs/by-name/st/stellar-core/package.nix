@@ -13,11 +13,10 @@
   libunwind,
   perl,
   pkg-config,
-  ripgrep,
+  runCommand,
   rustc,
   rustPlatform,
   stdenv,
-  symlinkJoin,
 }:
 
 let
@@ -49,13 +48,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "stellar-core";
-  version = "28.0.1";
+  version = "30.0.0";
 
   src = fetchFromGitHub {
     owner = "stellar";
     repo = "stellar-core";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yRwUwk0CNIQlPEKitXCjuF47qm8BFt9EYJXUfx28bMs=";
+    hash = "sha256-yVaZVjCR/jm7dm4ldjicUSq4nOheVY3WepjViAbjPMY=";
     fetchSubmodules = true;
   };
 
@@ -70,10 +69,12 @@ stdenv.mkDerivation (finalAttrs: {
         p26 = "sha256-OxkiWTzNtmYxB64OtLUwghAkcT//SnMZVfUXynFg2Bg=";
         p27 = "sha256-KcsyPBJLUOwRAtp95IYFiZZNMi1xWmYW7XXG+bMucmY=";
         p28 = "sha256-SGA69mE0VZSumZKOBcZqvzYtZRkFVSIMHFI5R9xcTWE=";
+        p29 = "sha256-O3WVmx0Ty04eOF6txTSYIj3VLxJS7BFDCYH54mAKtVY=";
+        p30 = "sha256-KoBgiIiZSR3E198ScGG1wekodabNWNKHi/1MgNWdw9w=";
       };
       mainCargoDeps = rustPlatform.fetchCargoVendor {
         inherit (finalAttrs) src;
-        hash = "sha256-7gU7vtYMOXX4qf3PkqriAxANhV3vraF71WMj/sS83ak=";
+        hash = "sha256-B3UhPnfND9b1r6mOy2QydPFUky0l5BSj6v88gx3TNIw=";
       };
       sorobanCargoDeps = lib.mapAttrs (
         protocol: hash:
@@ -85,13 +86,41 @@ stdenv.mkDerivation (finalAttrs: {
         }
       ) sorobanProtocolHashes;
     in
-    symlinkJoin {
-      name = "stellar-core-${finalAttrs.version}-cargo-vendor-dir";
-      paths = [ mainCargoDeps ] ++ lib.attrValues sorobanCargoDeps;
-      passthru = {
-        inherit sorobanProtocolHashes mainCargoDeps sorobanCargoDeps;
-      };
-      postBuild = ''
+    # Every lockfile is built from one `.cargo/config.toml` at the source root.
+    # fetchCargoVendor numbers git sources per lockfile (NixOS/nixpkgs#387337),
+    # so a `symlinkJoin` of the vendor directories drops all but the first
+    # config and lets protocols that pin different revisions of one repository
+    # overwrite each other. Merge the directories by git revision instead.
+    runCommand "stellar-core-${finalAttrs.version}-cargo-vendor-dir"
+      {
+        vendors = [ mainCargoDeps ] ++ lib.attrValues sorobanCargoDeps;
+        passthru = {
+          inherit sorobanProtocolHashes mainCargoDeps sorobanCargoDeps;
+        };
+      }
+      ''
+        mergeSource() {
+          if [ ! -d "$out/source-$1" ]; then
+            mkdir "$out/source-$1"
+            printf '%s\n' "[source.$1]" "''${@:3}" "replace-with = \"vendored-$1\"" \
+              "[source.vendored-$1]" "directory = \"@vendor@/source-$1\""
+          fi
+          ln -sfn -t "$out/source-$1" "$2"/*
+        }
+
+        mkdir -p "$out"/.cargo
+        ln -s ${mainCargoDeps}/Cargo.lock "$out"/Cargo.lock
+        for vendor in $vendors; do
+          mergeSource crates-io "$vendor/source-registry-0"
+          while read -r dir url rev; do
+            mergeSource "git-$rev" "$vendor/$dir" "git = \"$url\"" "rev = \"$rev\""
+          done < <(awk -F'"' '
+            /^\[source\.original-/ { dir = $0; gsub(/.*original-|\]/, "", dir) }
+            /^git = / { url = $2 }
+            /^rev = / { print dir, url, $2 }
+          ' "$vendor"/.cargo/config.toml)
+        done > "$out"/.cargo/config.toml
+
         # `soroban-synth-wasm` resolves this path relative to the vendored git
         # source root, but cargo vendors the workspace crates with versioned
         # directory names.
@@ -104,7 +133,6 @@ stdenv.mkDerivation (finalAttrs: {
           done
         done
       '';
-    };
 
   postPatch = ''
     # Include integer types explicitly instead of relying on transitive standard
@@ -122,7 +150,7 @@ stdenv.mkDerivation (finalAttrs: {
     # that version and apply the upstream 1.5.3 source fix in the vendored crate.
     # https://github.com/nlordell/ethnum-rs/pull/58
     shopt -s nullglob
-    for crate in "$cargoDepsCopy"/source-registry-*/ethnum-1.5.0; do
+    for crate in "$cargoDepsCopy"/source-crates-io/ethnum-1.5.0; do
       patch -p1 -d "$crate" < ${
         fetchpatch2 {
           name = "ethnum-1.5.0-rustc-1.97.patch";
@@ -134,14 +162,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Git dependencies do not include Cargo's published-crate VCS metadata.
     # Recreate it so crate-git-revision can provide GIT_REVISION.
-    for crate in "$cargoDepsCopy"/source-git-*/stellar-xdr-*; do
-      version="$(basename "$crate")"
-      version="''${version#stellar-xdr-}"
-      xdrRevision="$(rg -U -o -r '$1' \
-        "name = \"stellar-xdr\"\nversion = \"$version\"\nsource = \"git\\+https://github.com/stellar/rs-stellar-xdr[^\"]*#([0-9a-f]{40})\"" \
-        Cargo.lock)"
-      test -n "$xdrRevision"
-      printf '{"git":{"sha1":"%s"}}\n' "$xdrRevision" > "$crate/.cargo_vcs_info.json"
+    for crate in "$cargoDepsCopy"/source-git-*/*/; do
+      rev="$(basename "$(dirname "$crate")")"
+      printf '{"git":{"sha1":"%s"}}\n' "''${rev#source-git-}" > "$crate/.cargo_vcs_info.json"
     done
   '';
 
@@ -157,7 +180,6 @@ stdenv.mkDerivation (finalAttrs: {
     libtool
     perl
     pkg-config
-    ripgrep
     rustc
     rustPlatform.cargoSetupHook
   ];

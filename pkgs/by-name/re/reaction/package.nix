@@ -13,17 +13,17 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "reaction";
-  version = "2.5.1";
+  version = "2.7.0";
 
   src = fetchFromGitLab {
     domain = "framagit.org";
     owner = "ppom";
     repo = "reaction";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-a1ioQ+1CvC22tUeyVG8A7hciP+bXvX/UcRi0++To5Ik=";
+    hash = "sha256-W03ehUuzVFBWmUz5HqWwLjSFV8yMU25ZWP5zdCu9hDo=";
   };
 
-  cargoHash = "sha256-qbhNswQW6ExkMQ+KiAr50EOLiDScwm9hILiiN9GxGWU=";
+  cargoHash = "sha256-xMeypqecqYSugmFxSuaC+ZI55XD90ouwG4IYFhS4RpQ=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -42,6 +42,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=ip_pattern_matches"
     # flaky and fails in hydra
     "--skip=concepts::config::tests::merge_config_distinct_concurrency"
+    # Action environment reset clears PATH, causing bare `env` command lookup to fail in sandbox
+    "--skip=concepts::action::tests::action_env"
   ];
 
   cargoTestFlags = [

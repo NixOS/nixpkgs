@@ -22,7 +22,7 @@
   extraPythonPackageOverrides ? (_final: _prev: { }),
 }:
 let
-  defaultPythonPackageOverrides = final: prev: {
+  defaultPythonPackageOverrides = _final: prev: {
     django = prev.django_5;
 
     # tesseract5 may be overwritten in the paperless module and we need to propagate that to make the closure reduction effective
@@ -59,14 +59,14 @@ let
 in
 pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "paperless-ngx";
-  version = "3.3.1";
+  version = "3.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "paperless-ngx";
     repo = "paperless-ngx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Njw5VpjwBkrhmoQGBF/dmQ7smz/RW3RyN+T8op3sLx4=";
+    hash = "sha256-sb3gg7Jla5OErT5iz6DP45IqfithmRMPTjqTiMwvHYw=";
   };
 
   postPatch = ''
@@ -87,6 +87,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     "python-ipware"
     "redis"
     "regex"
+    "torch"
     "turbohtml"
     # requested by maintainer
     "imap-tools"
@@ -116,7 +117,6 @@ pythonPackages.buildPythonApplication (finalAttrs: {
       django-multiselectfield
       django-rich
       django-soft-delete
-      django-treenode
       djangorestframework
       drf-spectacular
       drf-spectacular-sidecar
@@ -168,7 +168,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     ++ django-allauth.optional-dependencies.mfa
     ++ django-allauth.optional-dependencies.socialaccount
     ++ gotenberg-client.optional-dependencies.httpx
-    ++ ocrmypdf.optional-dependencies.heic or [ ]
+    ++ ocrmypdf.optional-dependencies.heic
     ++ redis.optional-dependencies.hiredis
     ++ tika-client.optional-dependencies.httpx
     ++ whoosh-compat.optional-dependencies.tantivy;
@@ -274,6 +274,8 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     # flaky test:
     #   ValueError: Failed to open file for read: 'FileDoesNotExist("meta.json")'
     "src/documents/tests/test_permission_filtering_security.py::TestTrashRestorePermissionBoundary::test_restore_allows_document_with_explicit_delete_permission"
+    # OSError: [Errno 95] Operation not supported
+    "src/documents/tests/test_management_exporter.py::TestExportDerivedFileNameCollisions::test_long_titles_export_within_file_name_limit"
   ];
 
   doCheck = !stdenv.hostPlatform.isDarwin;

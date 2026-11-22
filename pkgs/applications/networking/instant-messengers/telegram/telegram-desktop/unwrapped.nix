@@ -30,13 +30,14 @@
   ada,
   pango,
   tlottie,
-  cmark-gfm,
   libfido2,
   libavif,
   libheif,
   libjxl,
   libicns,
+  wallet-engine,
   apple-sdk_15,
+  swift,
   nix-update-script,
 }:
 
@@ -47,25 +48,23 @@
 # - https://git.alpinelinux.org/aports/tree/testing/telegram-desktop/APKBUILD
 # - https://github.com/void-linux/void-packages/blob/master/srcpkgs/telegram-desktop/template
 
-let
-  needsPangoTlottie = [
-    "64gram-unwrapped"
-    "ayugram-desktop-unwrapped"
-    "kotatogram-desktop-unwrapped"
-    "telegram-desktop-unwrapped"
-  ];
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "telegram-desktop-unwrapped";
-  version = "7.2.9";
+  version = "7.4.4";
 
   src = fetchFromGitHub {
     owner = "telegramdesktop";
     repo = "tdesktop";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-AeeO3Ys+2MhNNPnMmu1AP8vs4ROK3X+Wh79x+Cizc6c=";
+    hash = "sha256-qZx3zNIc1sehz1zi4lnDHB/9rO8SJ3Ovjhog2aXTbgg=";
   };
+
+  postPatch = ''
+    substituteInPlace Telegram/cmake/telegram_apple_swift_runtime.cmake \
+     --replace-warn 'COMMAND "''${swift_bin_dir}/swift-stdlib-tool"' 'COMMAND true' \
+     --replace-warn 'COMMAND xcrun swift-stdlib-tool'                'COMMAND true'
+  '';
 
   nativeBuildInputs = [
     pkg-config
@@ -76,6 +75,9 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     gobject-introspection
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    swift
   ];
 
   buildInputs = [
@@ -93,21 +95,17 @@ stdenv.mkDerivation (finalAttrs: {
     microsoft-gsl
     boost
     ada
-    cmark-gfm
     libfido2
     (tdlib.override { tde2eOnly = true; })
+    tlottie
+    wallet-engine
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     protobuf
     qtwayland
     kcoreaddons
     hunspell
-  ]
-  ++ lib.optionals (lib.elem finalAttrs.pname needsPangoTlottie && stdenv.hostPlatform.isLinux) [
     pango
-  ]
-  ++ lib.optionals (lib.elem finalAttrs.pname needsPangoTlottie) [
-    tlottie
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     apple-sdk_15
@@ -123,8 +121,9 @@ stdenv.mkDerivation (finalAttrs: {
     # We're allowed to used the API ID of the Snap package:
     (lib.cmakeFeature "TDESKTOP_API_ID" "611335")
     (lib.cmakeFeature "TDESKTOP_API_HASH" "d524b414d21f4d37f08684c1df41ac9c")
-    # swift 6 is not available in nixpkgs
-    (lib.cmakeBool "DESKTOP_APP_DISABLE_SWIFT6" true)
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    (lib.cmakeFeature "CMAKE_Swift_COMPILER_TARGET" stdenv.hostPlatform.swift.triple)
   ];
 
   installPhase = lib.optionalString stdenv.hostPlatform.isDarwin ''

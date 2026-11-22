@@ -30,7 +30,6 @@ buildPythonPackage (finalAttrs: {
   pname = "xgrammar";
   version = "0.2.8";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "mlc-ai";
@@ -61,7 +60,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   optional-dependencies = {
-    metal = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+    metal = lib.optionals stdenv.hostPlatform.isDarwin [
       mlx-lm
     ];
   };

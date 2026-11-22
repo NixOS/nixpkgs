@@ -33,7 +33,6 @@ buildPythonPackage (finalAttrs: {
   pname = "chatlas";
   version = "0.17.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "posit-dev";

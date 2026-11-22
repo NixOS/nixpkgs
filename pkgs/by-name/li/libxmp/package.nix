@@ -3,6 +3,7 @@
   stdenv,
   docutils,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   ninja,
   nix-update-script,
@@ -10,14 +11,30 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libxmp";
-  version = "4.7.3";
+  version = "4.7.4";
 
   src = fetchFromGitHub {
     owner = "libxmp";
     repo = "libxmp";
     tag = "libxmp-${finalAttrs.version}";
-    hash = "sha256-wc3+4J//GjkmzawcXuSwfQRIdRRScijrSwPmpaZggL8=";
+    hash = "sha256-wkqOb79jKu72buZIc6vEIN8XHnJuejcnsgXTqMnNTjg=";
   };
+
+  patches = [
+    # https://github.com/libxmp/libxmp/pull/1039
+    (fetchpatch {
+      name = "0001-libxmp-IT-Fix-ChibiTracker-OpenMPT-detection-on-big-endian.patch";
+      url = "https://github.com/libxmp/libxmp/commit/5c63c2f7809dc6f17342df738a3dde5ca65221c9.patch";
+      hash = "sha256-AesBZlZP7Pcu1MWoVAEZCCcDEy5o/6Zn1D7NyTUjbeE=";
+    })
+  ];
+
+  postPatch = lib.optionalString finalAttrs.finalPackage.doCheck (
+    lib.strings.concatMapStringsSep "\n" (test: ''
+      echo "Disabling test: ${test}"
+      sed -i test-dev/all_tests.txt -e '/${test}/d'
+    '') finalAttrs.disabledTests
+  );
 
   outputs = [
     "out"
@@ -38,6 +55,18 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+
+  disabledTests = lib.optionals stdenv.hostPlatform.isBigEndian [
+    # Test failures on ppc64, dug into them abit & created upstream issues:
+    # https://github.com/libxmp/libxmp/issues/1036
+    "test_loader_med4_decvol"
+
+    # https://github.com/libxmp/libxmp/issues/1037
+    "test_loader_titanics"
+
+    # https://github.com/libxmp/libxmp/issues/1038
+    "test_api_smix_load_sample"
+  ];
 
   passthru.updateScript = nix-update-script {
     extraArgs = [

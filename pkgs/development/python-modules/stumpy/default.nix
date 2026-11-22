@@ -25,7 +25,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "TDAmeritrade";
+    owner = "stumpy-dev";
     repo = "stumpy";
     tag = "v${version}";
     hash = "sha256-wBOOYN9UVjc+++lYzgL2+ZqyhLTZOpd5baxYRi2HFJA=";
@@ -59,8 +59,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "Library that can be used for a variety of time series data mining tasks";
-    changelog = "https://github.com/TDAmeritrade/stumpy/blob/v${version}/CHANGELOG.md";
-    homepage = "https://github.com/TDAmeritrade/stumpy";
+    changelog = "https://github.com/stumpy-dev/stumpy/blob/v${version}/CHANGELOG.md";
+    homepage = "https://github.com/stumpy-dev/stumpy";
     license = lib.licenses.bsd3;
     maintainers = [ ];
     badPlatforms = [

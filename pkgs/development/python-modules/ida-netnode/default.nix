@@ -12,8 +12,6 @@ buildPythonPackage (finalAttrs: {
   version = "3.0.0";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "williballenthin";
     repo = "ida-netnode";

@@ -284,6 +284,9 @@ in
               extraConfig = # nginx
                 ''
                   proxy_set_header CLIENT_IP $remote_addr;
+                  # Recommended in https://zammad.com/en/product/releases/7-2-3
+                  proxy_set_header X-Forwarded-User "";
+                  proxy_set_header Remote-User "";
                 '';
             };
             "/cable" = {
@@ -292,6 +295,9 @@ in
               extraConfig = # nginx
                 ''
                   proxy_set_header CLIENT_IP $remote_addr;
+                  # Recommended in https://zammad.com/en/product/releases/7-2-3
+                  proxy_set_header X-Forwarded-User "";
+                  proxy_set_header Remote-User "";
                 '';
             };
             "/ws" = {
@@ -300,6 +306,9 @@ in
               extraConfig = # nginx
                 ''
                   proxy_set_header CLIENT_IP $remote_addr;
+                  # Recommended in https://zammad.com/en/product/releases/7-2-3
+                  proxy_set_header X-Forwarded-User "";
+                  proxy_set_header Remote-User "";
                 '';
             };
           };

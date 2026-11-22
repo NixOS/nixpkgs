@@ -1,8 +1,8 @@
-diff --git i/conda/base/context.py w/conda/base/context.py
-index adf6d6e89..82f2c77f9 100644
---- i/conda/base/context.py
-+++ w/conda/base/context.py
-@@ -832,7 +832,7 @@ class Context(Configuration):
+diff --git a/conda/base/context.py b/conda/base/context.py
+index ebbe9a763..0dab019ec 100644
+--- a/conda/base/context.py
++++ b/conda/base/context.py
+@@ -901,7 +901,7 @@ class Context(Configuration):
  
      @property
      def conda_prefix(self) -> PathType:
@@ -10,12 +10,19 @@ index adf6d6e89..82f2c77f9 100644
 +        return expand("~/.conda")
  
      @property
-     @deprecated(
-@@ -864,35 +864,20 @@ class Context(Configuration):
+     def av_data_dir(self) -> PathType:
+@@ -923,46 +923,21 @@ class Context(Configuration):
          The vars can refer to each other if necessary since the dict is ordered.
          None means unset it.
          """
--        if context.dev:
+-        if self._dev:
+-            deprecated.topic(
+-                "27.3",
+-                "27.9",
+-                topic="`conda.base.context.Context.dev`",
+-                addendum="Set `PYTHONPATH` to the conda source root instead.",
+-                deprecation_type=FutureWarning,
+-            )
 -            if pythonpath := os.environ.get("PYTHONPATH", ""):
 -                pythonpath = os.pathsep.join((CONDA_SOURCE_ROOT, pythonpath))
 -            else:
@@ -30,22 +37,22 @@ index adf6d6e89..82f2c77f9 100644
 -                "CONDA_PYTHON_EXE": sys.executable,
 -                "_CONDA_ROOT": self.conda_prefix,
 -            }
--        else:
--            exe = os.path.join(
--                self.conda_prefix,
--                BIN_DIRECTORY,
--                "conda.exe" if on_win else "conda",
--            )
--            return {
--                "CONDA_EXE": exe,
--                "_CONDA_EXE": exe,
--                "_CE_M": None,
--                "_CE_CONDA": None,
--                "CONDA_PYTHON_EXE": sys.executable,
--                "_CONDA_ROOT": self.conda_prefix,
--            }
-+        import sys
-+        return {
+-
+-        exe = os.path.join(
+-            self.conda_prefix,
+-            BIN_DIRECTORY,
+-            "conda.exe" if on_win else "conda",
+-        )
+         return {
+-            "CONDA_EXE": exe,
+-            "_CONDA_EXE": exe,
+-            # Shell wrappers expand `"$CONDA_EXE" $_CE_M $_CE_CONDA` (`python -m conda`
+-            # when set). None unsets leftovers; keep the keys while wrappers expand them.
+-            # https://github.com/conda/conda/issues/14142
+-            "_CE_M": None,
+-            "_CE_CONDA": None,
+-            "CONDA_PYTHON_EXE": sys.executable,
+-            "_CONDA_ROOT": self.conda_prefix,
 +            "CONDA_EXE": sys.executable,
 +            "_CONDA_EXE": sys.executable,
 +             # do not confuse with os.path.join, we are joining paths with ; or : delimiters
@@ -57,7 +64,9 @@ index adf6d6e89..82f2c77f9 100644
 +              "_CE_CONDA": "conda",
 +              "CONDA_PYTHON_EXE": sys.executable,
 +              "_CONDA_ROOT": self.conda_prefix,
-+        }
+         }
  
++
      @memoizedproperty
      def channel_alias(self) -> Channel:
+         from ..models.channel import Channel

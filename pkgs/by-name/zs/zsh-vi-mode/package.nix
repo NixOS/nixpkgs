@@ -1,20 +1,21 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "zsh-vi-mode";
   version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "jeffreytse";
     repo = "zsh-vi-mode";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-EYr/jInRGZSDZj+QVAc9uLJdkKymx1tjuFBWgpsaCFw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-EYr/jInRGZSDZj+QVAc9uLJdkKymx1tjuFBWgpsaCFw=";
   };
 
+  __structuredAttrs = true;
   strictDeps = true;
   dontBuild = true;
 
@@ -24,10 +25,14 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    homepage = "https://github.com/jeffreytse/zsh-vi-mode";
-    license = lib.licenses.mit;
     description = "Better and friendly vi(vim) mode plugin for ZSH";
-    maintainers = with lib.maintainers; [ kyleondy ];
+    homepage = "https://github.com/jeffreytse/zsh-vi-mode";
+    changelog = "https://github.com/jeffreytse/zsh-vi-mode/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      kyleondy
+      starryreverie
+    ];
     platforms = lib.platforms.all;
   };
 })

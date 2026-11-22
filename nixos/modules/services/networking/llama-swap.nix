@@ -95,7 +95,7 @@ in
     settings = lib.mkOption {
       type = lib.types.submodule { freeformType = settingsFormat.type; };
       description = ''
-        llama-swap configuration. Refer to the [llama-swap example configuration](https://github.com/mostlygeek/llama-swap/blob/main/config.example.yaml)
+        llama-swap configuration. Refer to the [llama-swap example configuration](https://github.com/mostlygeek/llama-swap/blob/main/docs/config.example.yaml)
         for details on supported values.
       '';
       example = lib.literalExpression ''

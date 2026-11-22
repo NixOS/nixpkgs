@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "yaleman";
-    repo = "aussiebb";
+    repo = "pyaussiebb";
     tag = "v${version}";
     hash = "sha256-GD04Bq+uJs2JuTjtnGh6QKD4uFXwmGcOMB1Hu9yBlkI=";
   };
@@ -35,7 +35,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Module for interacting with the Aussie Broadband APIs";
-    homepage = "https://github.com/yaleman/aussiebb";
+    homepage = "https://github.com/yaleman/pyaussiebb";
     changelog = "https://github.com/yaleman/pyaussiebb/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];

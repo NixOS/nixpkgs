@@ -17,7 +17,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "bdraco";
+    owner = "Solarlibs";
     repo = "aiosolaredge";
     tag = "v${version}";
     hash = "sha256-1RdkYcdhhU+MaP91iJ1tSrL0OlUi6Il1XBXnmRYhC7g=";
@@ -40,9 +40,9 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/bdraco/aiosolaredge/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/Solarlibs/aiosolaredge/blob/${src.tag}/CHANGELOG.md";
     description = "Asyncio SolarEdge API client";
-    homepage = "https://github.com/bdraco/aiosolaredge";
+    homepage = "https://github.com/Solarlibs/aiosolaredge";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };

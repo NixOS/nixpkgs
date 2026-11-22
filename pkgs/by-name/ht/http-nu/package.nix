@@ -5,6 +5,10 @@
   stdenvNoCC,
   versionCheckHook,
   nix-update-script,
+  pkg-config,
+  libgit2,
+  oniguruma,
+  sqlite,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -20,8 +24,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-RkwvHB6IanfAoQVdeDqdRR+mvClj7KZufpy+kXGN/yE=";
 
-  nativeBuildInputs = lib.optionals stdenvNoCC.hostPlatform.isDarwin [
+  nativeBuildInputs = [
+    pkg-config
+  ]
+  ++ lib.optionals stdenvNoCC.hostPlatform.isDarwin [
     rustPlatform.bindgenHook
+  ];
+
+  buildInputs = [
+    libgit2
+    oniguruma
+    sqlite
   ];
 
   # Most tests require sandbox-incompatible operations:

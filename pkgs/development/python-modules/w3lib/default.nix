@@ -3,24 +3,28 @@
   buildPythonPackage,
   fetchFromGitHub,
   hatchling,
+  hypothesis,
   pytestCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "w3lib";
-  version = "2.4.1";
+  version = "2.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scrapy";
     repo = "w3lib";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RcjsuzlHx3vp0tBucCQZQTVq9FsxSpY9iLwlvoo02cE=";
+    hash = "sha256-FaH3NrQ1qAH3tJbIiAVeJXxiTjF7861kl3U5Ux3HrlU=";
   };
 
   build-system = [ hatchling ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    hypothesis
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "w3lib" ];
 

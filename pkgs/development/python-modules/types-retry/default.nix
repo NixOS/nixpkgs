@@ -10,8 +10,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.9.9.20260408";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     pname = "types_retry";
     inherit (finalAttrs) version;

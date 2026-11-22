@@ -16,6 +16,7 @@ my $nixpkgsLib = "@lib@";
 
 my $nsenter = "@util-linux@/bin/nsenter";
 my $su = "@su@";
+my $chattr = "@chattr@";
 
 my $configurationDirectory = "@configurationDirectory@";
 my $stateDirectory = "@stateDirectory@";
@@ -208,7 +209,7 @@ sub clearContainerState {
 
     safeRemoveTree($profileDir) if -e $profileDir;
     safeRemoveTree($gcRootsDir) if -e $gcRootsDir;
-    system("chattr", "-i", "$root/var/empty") if -e "$root/var/empty";
+    system($chattr, "-i", "$root/var/empty") if -e "$root/var/empty";
     safeRemoveTree($root) if -e $root;
     unlink($configFile) or die;
 }

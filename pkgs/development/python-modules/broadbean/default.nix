@@ -14,12 +14,12 @@
 
 buildPythonPackage rec {
   pname = "broadbean";
-  version = "0.14.0";
+  version = "0.15.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-v+Ov6mlSnaJG98ooA9AhPGJflrFafKQoO5wi+PxcZVw=";
+    hash = "sha256-GTG7Vw0koeyDIkTlpRg8tRM0ESOJ9/3loLLRw3dCto0=";
   };
 
   nativeBuildInputs = [

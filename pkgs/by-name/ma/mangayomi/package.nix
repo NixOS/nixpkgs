@@ -10,6 +10,8 @@
   webkitgtk_4_1,
   makeDesktopItem,
   writeText,
+  zstd,
+  pkg-config,
 }:
 
 let
@@ -40,6 +42,10 @@ let
     cargoHash = "sha256-q/jlamNxHrBe4z+MIpNr4T4HJgPsJMh0x18bXr4HKtU=";
 
     passthru.libraryPath = "lib/librust_lib_mangayomi.so";
+
+    buildInputs = [ zstd ];
+
+    nativeBuildInputs = [ pkg-config ];
 
     meta = metaCommon;
   };

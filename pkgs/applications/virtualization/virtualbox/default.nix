@@ -43,6 +43,8 @@
   xz,
   yasm,
   glslang,
+  vulkan-loader,
+  wrapGAppsHook3,
   nixosTests,
   # If open-watcom-bin is not passed, VirtualBox will fall back to use
   # the shipped alternative sources (assembly).
@@ -72,13 +74,13 @@ let
   buildType = "release";
   # Use maintainers/scripts/update.nix to update the version and all related hashes or
   # change the hashes in extpack.nix and guest-additions/default.nix as well manually.
-  virtualboxVersion = "7.2.20";
+  virtualboxVersion = "7.2.22";
   virtualboxSubVersion = "";
-  virtualboxSha256 = "5c2138213b72f36c129b92c2c267f2a40e9c98513f4c86a584327f09f9be706d";
+  virtualboxSha256 = "440a2b3eeb46e7e992961b70ef24f43e95b3c99fa2ab30aac20b963ef9e91ad7";
 
-  kvmPatchVboxVersion = "7.2.20";
-  kvmPatchVersion = "20260930";
-  kvmPatchHash = "sha256-gqfAsW2AQFXC0MAss0NfucKYAbpxvT9eYdStYAunwbk=";
+  kvmPatchVboxVersion = "7.2.22";
+  kvmPatchVersion = "20261021";
+  kvmPatchHash = "sha256-7dlaAQxomhKGYdPQbE33e8AQs8w4LtmXPgCa+dxJiXk=";
 
   # The KVM build is not compatible to VirtualBox's kernel modules. So don't export
   # modsrc at all.
@@ -133,10 +135,14 @@ stdenv.mkDerivation (finalAttrs: {
     yasm
     glslang
   ]
-  ++ optional (!headless) wrapQtAppsHook;
+  ++ optionals (!headless) [
+    wrapQtAppsHook
+    wrapGAppsHook3
+  ];
 
   # Wrap manually because we wrap just a small number of executables.
   dontWrapQtApps = true;
+  dontWrapGApps = true;
 
   buildInputs = [
     acpica-tools
@@ -385,6 +391,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   preFixup =
     optionalString (!headless) ''
+      qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
       wrapQtApp $out/bin/VirtualBox
     ''
     # If hardening is disabled, wrap the VirtualBoxVM binary instead of patching
@@ -392,6 +399,12 @@ stdenv.mkDerivation (finalAttrs: {
     + optionalString (!headless && !enableHardening) ''
       wrapQtApp $out/libexec/virtualbox/VirtualBoxVM
     '';
+
+  postFixup = optionalString stdenv.hostPlatform.isLinux ''
+    # VBoxDxVk loads Vulkan dynamically; add its path after RPATH shrinking.
+    patchelf --add-rpath ${lib.makeLibraryPath [ vulkan-loader ]} \
+      "$out/libexec/virtualbox/VBoxDxVk.so"
+  '';
 
   passthru = {
     inherit extensionPack; # for inclusion in profile to prevent gc

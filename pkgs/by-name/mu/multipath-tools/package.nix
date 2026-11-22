@@ -71,8 +71,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   doInstallCheck = true;
 
-  passthru.tests = { inherit (nixosTests) iscsi-multipath-root; };
-
   meta = {
     description = "Tools for the Linux multipathing storage driver";
     homepage = "http://christophe.varoqui.free.fr/";

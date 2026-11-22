@@ -9,14 +9,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pretix-payone";
-  version = "1.4.3";
+  version = "1.4.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pretix";
     repo = "pretix-payone";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ru944WkeNBYq5XkIMoAFLgGcU2gGxClEYVhCwuZGioI=";
+    hash = "sha256-L+7iMVID15QTlHA+PvcO18GPt6FFi2P9J5OsDdmEszA=";
   };
 
   build-system = [

@@ -29,14 +29,14 @@
 
 stdenv.mkDerivation {
   pname = "piglit";
-  version = "unstable-2026-05-04";
+  version = "0-unstable-2026-11-09";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "mesa";
     repo = "piglit";
-    rev = "1bb2910c3fced64396feddd205e356d80e5ff7d9";
-    hash = "sha256-/3OQeZiK7fHfPpSlFtbW7DLEFV3YFBL1cLMndXyxwYs=";
+    rev = "715bb8dd01bc7a3eb2cc76d8f12851bc787116df";
+    hash = "sha256-go2w2IF2TZqkwjeN7n83atMllapi+LuDXZuZhSvdmCs=";
   };
 
   buildInputs = [
@@ -78,6 +78,8 @@ stdenv.mkDerivation {
     substituteInPlace piglit \
       --replace 'script_basename_noext = os.path.splitext(os.path.basename(__file__))[0]' 'script_basename_noext = "piglit"'
   '';
+
+  patches = [ ./mtime-should-be-an-int.patch ];
 
   postInstall = ''
     wrapProgram $out/bin/piglit \

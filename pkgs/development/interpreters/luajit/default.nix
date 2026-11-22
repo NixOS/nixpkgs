@@ -68,6 +68,8 @@ in
 stdenv.mkDerivation (finalAttrs: {
   pname = "luajit";
   inherit version src;
+  __structuredAttrs = true;
+  strictDeps = true;
 
   luaversion = "5.1";
 
@@ -172,6 +174,7 @@ stdenv.mkDerivation (finalAttrs: {
       badPlatforms = [
         "loongarch64-linux" # See https://github.com/LuaJIT/LuaJIT/issues/1278
         "riscv64-linux" # See https://github.com/LuaJIT/LuaJIT/issues/628
+        "s390x-linux" # See https://github.com/LuaJIT/LuaJIT/issues/43
         # `#error "No support for PPC64"`
         "powerpc64-linux"
         "powerpc64le-linux"
@@ -182,6 +185,7 @@ stdenv.mkDerivation (finalAttrs: {
         vcunat
         lblasc
       ];
+      identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "luajit" finalAttrs.version;
     }
     // extraMeta;
 })

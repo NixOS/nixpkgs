@@ -1,5 +1,6 @@
 {
   lib,
+  alibabacloud-gateway-pop,
   alibabacloud-endpoint-util,
   alibabacloud-openapi-util,
   alibabacloud-tea-openapi,
@@ -11,20 +12,19 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "alibabacloud-rds20140815";
-  version = "16.0.0";
+  version = "16.2.0";
   pyproject = true;
-
-  __structuredAttrs = true;
 
   src = fetchPypi {
     pname = "alibabacloud_rds20140815";
     inherit (finalAttrs) version;
-    hash = "sha256-thTj0+SQmDmUBdIzJ8Ny0//HYsB0xJBtaCRjAzY254Q=";
+    hash = "sha256-h/G0RzPM5cOubAvXFJFjPh6Ca6xyNhPiM3tpTYBmZjI=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
+    alibabacloud-gateway-pop
     alibabacloud-endpoint-util
     alibabacloud-openapi-util
     alibabacloud-tea-openapi

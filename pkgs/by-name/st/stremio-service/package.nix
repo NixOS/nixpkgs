@@ -11,6 +11,7 @@
   librsvg,
 
   openssl,
+  zstd,
   glib,
   gtk3,
 
@@ -55,6 +56,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     openssl
+    zstd
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     gtk3.dev

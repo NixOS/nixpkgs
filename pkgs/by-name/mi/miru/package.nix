@@ -10,12 +10,14 @@
   wayland-protocols,
   libffi,
   libGL,
+  libpng,
+  libnotify,
   nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "miru";
-  version = "0.12.0";
+  version = "0.15.0";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -24,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Vaishnav-Sabari-Girish";
     repo = "miru";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7bljx2sUXD/Bkj5Ubtf8P5HDpDxnrZvBB8arE2ol0AY=";
+    hash = "sha256-PKB86HXKzdkMtkXRGy2MIhInIhNsvBRM5h39xbuJQHQ=";
   };
 
   nativeBuildInputs = [
@@ -39,6 +41,8 @@ stdenv.mkDerivation (finalAttrs: {
     wayland-protocols
     libffi
     libGL
+    libpng
+    libnotify
   ];
 
   passthru.updateScript = nix-update-script { };

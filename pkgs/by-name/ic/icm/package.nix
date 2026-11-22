@@ -8,6 +8,8 @@
   openssl,
   nix-update-script,
   onnxruntime,
+  oniguruma,
+  sqlite,
   versionCheckHook,
 }:
 
@@ -33,6 +35,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     openssl
     onnxruntime
+    oniguruma
+    sqlite
   ];
 
   # Build the HTTP dashboard

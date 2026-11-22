@@ -1,42 +1,51 @@
 {
   lib,
-  anthropic,
-  backoff,
   buildPythonPackage,
-  distro,
-  django,
   fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  backoff,
+  distro,
+  requests,
+  typing-extensions,
+
+  # tests
+  anthropic,
+  celery,
+  django,
+  djangorestframework,
+  fastapi,
+  flask,
   freezegun,
   google-genai,
+  griffe,
+  langchain-core,
   mcp,
   mock,
-  monotonic,
   openai,
   opentelemetry-exporter-otlp,
+  opentelemetry-instrumentation-celery,
   opentelemetry-sdk,
   parameterized,
   pytest-asyncio,
   pytest-bdd,
   pytestCheckHook,
-  python-dateutil,
-  pythonAtLeast,
-  requests,
-  setuptools,
-  six,
-  typing-extensions,
   zstandard,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "posthog";
-  version = "7.62.0";
+  version = "7.91.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PostHog";
     repo = "posthog-python";
     tag = "posthog-v${finalAttrs.version}";
-    hash = "sha256-C7RrufEgplFZjCttg5eFNfCjhGUEWw5XQE4U9I8NPA8=";
+    hash = "sha256-RfeCKz36+NTC08Y29KQ3Dz+TBzh4zD6opGw6sI04bPw=";
   };
 
   build-system = [ setuptools ];
@@ -44,22 +53,26 @@ buildPythonPackage (finalAttrs: {
   dependencies = [
     backoff
     distro
-    monotonic
-    python-dateutil
     requests
-    six
     typing-extensions
   ];
 
   nativeCheckInputs = [
     anthropic
+    celery
     django
+    djangorestframework
+    fastapi
+    flask
     freezegun
     google-genai
+    griffe
+    langchain-core
     mcp
     mock
     openai
     opentelemetry-exporter-otlp
+    opentelemetry-instrumentation-celery
     opentelemetry-sdk
     parameterized
     pytest-asyncio
@@ -75,12 +88,22 @@ buildPythonPackage (finalAttrs: {
     "test_excepthook"
     "test_request"
     "test_upload"
+
+    # Timing-sensitive: the worker subprocess times out under load
+    "test_capture_from_worker_thread_wakes_loop_bound_queue"
   ];
+
+  disabledTestPaths = [
+    # Requires many opentelemetry-instrumentation-* packages
+    "posthog/test/test_metrics_autocapture.py"
+  ];
+
+  __darwinAllowLocalNetworking = true; # for the transport tests
 
   meta = {
     description = "Module for interacting with PostHog";
     homepage = "https://github.com/PostHog/posthog-python";
-    changelog = "https://github.com/PostHog/posthog-python/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/PostHog/posthog-python/blob/${finalAttrs.src.tag}/posthog/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ happysalada ];
   };

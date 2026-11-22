@@ -84,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://www.xiphos.org/";
     license = lib.licenses.gpl2Plus;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ mBornand ];
     platforms = lib.platforms.linux;
   };
 })

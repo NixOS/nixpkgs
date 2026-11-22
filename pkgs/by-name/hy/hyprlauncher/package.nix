@@ -4,28 +4,23 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
-  aquamarine,
-  cairo,
-  hyprgraphics,
   hyprlang,
   hyprtoolkit,
-  hyprutils,
   hyprwire,
   libdrm,
   libqalculate,
   libxkbcommon,
-  pixman,
 }:
 
 gcc16Stdenv.mkDerivation (finalAttrs: {
   pname = "hyprlauncher";
-  version = "0.1.6";
+  version = "0.1.7";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprlauncher";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FHw6S2rz716ZwuF661aT5HYN1b6qyyBDkwhEL5hzHUk=";
+    hash = "sha256-Sle245RO67pPNFd7IdvGHluB3bFqoFZlbIgYxrG3AZ0=";
   };
 
   nativeBuildInputs = [
@@ -34,17 +29,12 @@ gcc16Stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    aquamarine
-    cairo
-    hyprgraphics
     hyprlang
     hyprtoolkit
-    hyprutils
     hyprwire
     libdrm
     libqalculate
     libxkbcommon
-    pixman
   ];
 
   meta = {

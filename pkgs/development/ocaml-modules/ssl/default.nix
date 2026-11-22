@@ -11,7 +11,7 @@
 
 buildDunePackage (finalAttrs: {
   pname = "ssl";
-  version = "0.8.0";
+  version = "0.8.1";
 
   minimalOCamlVersion = "4.12";
 
@@ -19,7 +19,7 @@ buildDunePackage (finalAttrs: {
     owner = "savonet";
     repo = "ocaml-ssl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bju77cRwfzxer1VlRN+GLt0wkKbjPIsIQcOTT4zpgU8=";
+    hash = "sha256-SqIklmWpriTV/r1tcI3y/7jGI48Cjk6PtczoQORnE38=";
   };
 
   nativeBuildInputs = [ pkg-config ];

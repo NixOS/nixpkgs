@@ -13,6 +13,7 @@ files using the same mechanism.
 """
 
 import json
+import os
 import shutil
 import sys
 from pathlib import Path
@@ -45,6 +46,10 @@ def add_closure_to_definition(
     if not closure:
         return
 
+    # CopyFiles= follows a symlink source, so put symlink store paths in a
+    # directory and copy that instead.
+    symlinks = Path(f"{definition.stem}-store-symlinks").absolute()
+
     copy_files_lines: list[str] = []
     with open(closure, "r") as f:
         for line in f:
@@ -52,12 +57,21 @@ def add_closure_to_definition(
                 continue
 
             source = Path(line.strip())
+            if source.is_symlink():
+                symlinks.mkdir(exist_ok=True)
+                (symlinks / source.name).symlink_to(os.readlink(source))
+                continue
+
             option = f"CopyFiles={source}"
             if nix_store_prefix:
                 target = nix_store_prefix / source.relative_to("/nix/store/")
                 option = f"{option}:{target}"
 
             copy_files_lines.append(f"{option}\n")
+
+    if symlinks.exists():
+        store_dir = nix_store_prefix or "/nix/store"
+        copy_files_lines.append(f"CopyFiles={symlinks}:{store_dir}\n")
 
     with open(definition, "a") as f:
         f.writelines(copy_files_lines)

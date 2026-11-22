@@ -49,7 +49,6 @@ in
         ++ debugPackages;
       boot.initrd = {
         systemd = {
-          enable = true;
           emergencyAccess = true;
 
           storePaths = debugPackages;

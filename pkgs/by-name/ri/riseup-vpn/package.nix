@@ -21,13 +21,16 @@
 buildGoModule (finalAttrs: {
   pname = "${provider}-vpn";
   version = "0.24.8";
+
+  __structuredAttrs = true;
+
   src = fetchFromGitLab {
     domain = "0xacab.org";
     owner = "leap";
     repo = "bitmask-vpn";
     rev = "8b3ac473f64b6de0262fbf945ff25af8029134f1";
     leaveDotGit = true;
-    sha256 = "sha256-XUgCVHnTLZXFU+r0s1yuYryWNBJRgQrFlf3g1iRrLWs=";
+    hash = "sha256-XUgCVHnTLZXFU+r0s1yuYryWNBJRgQrFlf3g1iRrLWs=";
   };
   vendorHash = null;
 

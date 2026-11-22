@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "datadog";
-  version = "0.55.0";
+  version = "0.56.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "DataDog";
     repo = "datadogpy";
     tag = "v${version}";
-    hash = "sha256-o5Uw84YWYV8FRXwj7fOPm68/ICGjmS2ZL5Wa28/fv+U=";
+    hash = "sha256-ylSCZ59z9Scw/K34mqL0CZDEBoET4n7k5XcgpFkZrbU=";
   };
 
   build-system = [ hatchling ];

@@ -17,7 +17,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "onelogin";
+    owner = "SAML-Toolkits";
     repo = "python3-saml";
     tag = "v${finalAttrs.version}";
     hash = "sha256-KyDGmqhg/c29FaXPKK8rWKSBP6BOCpKKpOujCavXUcc=";
@@ -61,7 +61,7 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "OneLogin's SAML Python Toolkit";
-    homepage = "https://github.com/onelogin/python3-saml";
+    homepage = "https://github.com/SAML-Toolkits/python3-saml";
     changelog = "https://github.com/SAML-Toolkits/python3-saml/blob/v${finalAttrs.version}/changelog.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ zhaofengli ];

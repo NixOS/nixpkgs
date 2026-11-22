@@ -1,7 +1,7 @@
 {
   lib,
   fetchFromGitHub,
-  crystal,
+  crystal_1_20,
   shards,
   makeWrapper,
   pkg-config,
@@ -12,7 +12,7 @@
   zlib,
 }:
 
-crystal.buildCrystalPackage rec {
+crystal_1_20.buildCrystalPackage rec {
   pname = "icr";
   version = "0.9.0";
 
@@ -45,7 +45,7 @@ crystal.buildCrystalPackage rec {
     wrapProgram $out/bin/icr \
       --prefix PATH : ${
         lib.makeBinPath [
-          crystal
+          crystal_1_20
           shards
           which
         ]

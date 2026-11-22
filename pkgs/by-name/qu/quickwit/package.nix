@@ -83,7 +83,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   env = {
     RUSTFLAGS = "--cfg tokio_unstable";
 
-    CARGO_PROFILE_RELEASE_LTO = "fat";
     CARGO_PROFILE_RELEASE_CODEGEN_UNITS = "1";
 
     # needed for internal protobuf c wrapper library
@@ -101,7 +100,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Sub-second search & analytics engine on cloud storage";
     homepage = "https://quickwit.io/";
-    license = lib.licenses.agpl3Only;
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ happysalada ];
     platforms = lib.platforms.all;
     mainProgram = "quickwit";

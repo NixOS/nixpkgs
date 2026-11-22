@@ -106,7 +106,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  cmakeFlags = [ "-D WITH_CRASHPAD=OFF" ];
+  cmakeFlags = [
+    "-D WITH_CRASHPAD=OFF"
+    # Several sources use uint32_t etc. without including <cstdint>, which is no longer
+    # included transitively with GCC 16. Fixed upstream in 0.75.0.
+    "-DCMAKE_CXX_FLAGS=-includecstdint"
+  ];
 
   meta = {
     description = "Advanced cross-platform rhythm game focused on keyboard play";

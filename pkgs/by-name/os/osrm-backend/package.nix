@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   pkg-config,
   bzip2,
@@ -28,6 +29,15 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-DV0oy++PrOwbybFEFRWnNxGfYshgsqDaHrHuVoTlIXE=";
   };
+
+  patches = [
+    # Fix compilation with gcc 16
+    # https://github.com/Project-OSRM/osrm-backend/issues/7588
+    (fetchpatch {
+      url = "https://github.com/Project-OSRM/osrm-backend/commit/ada63647a7de9715a63a07e0840cf15aa2dc2944.patch";
+      hash = "sha256-N0NaDQwR689YEYlLeSByM16QyJ7OIpmu2ky+WI6gWSs=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake

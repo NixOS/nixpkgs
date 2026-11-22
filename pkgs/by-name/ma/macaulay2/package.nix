@@ -46,6 +46,7 @@
   onetbb,
   openssl,
   R,
+  rPackages,
   rWrapper,
   pkg-config,
   python3,
@@ -58,8 +59,13 @@
   xz,
   llvmPackages,
 
-  downloadDocs ? true,
+  disableDocs ? false,
+  downloadDocs ? !disableDocs,
 }:
+assert disableDocs -> !downloadDocs;
+let
+  generateDocs = !(disableDocs || downloadDocs);
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "macaulay2";
   version = "1.26.06";
@@ -69,11 +75,6 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "M2";
     tag = "release-${finalAttrs.version}";
     hash = "sha256-kYxqbMKW+7r6nI4i3o7vvJVf0TGRVLaDviZTFx3PTBI=";
-  };
-
-  docs = fetchurl {
-    url = "https://macaulay2.com/Downloads/OtherSourceCode/Macaulay2-docs-${finalAttrs.version}.tar.gz";
-    hash = "sha256-0+ilvDh87Gmwzx0bLhT6nnadcPwgU3uB6pKhP9VqW0Q=";
   };
 
   buildInputs = [
@@ -179,12 +180,27 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  preBuild = lib.optionalString downloadDocs ''
-    ln -s ${finalAttrs.docs} ../tarfiles/${finalAttrs.docs.name}
-    make -C libraries all-in-Macaulay2-docs
-  '';
+  preBuild =
+    let
+      docs = fetchurl {
+        url = "https://macaulay2.com/Downloads/OtherSourceCode/Macaulay2-docs-${finalAttrs.version}.tar.gz";
+        hash = "sha256-0+ilvDh87Gmwzx0bLhT6nnadcPwgU3uB6pKhP9VqW0Q=";
+      };
+    in
+    if downloadDocs then
+      ''
+        ln -s ${docs} ../tarfiles/${docs.name}
+        make -C libraries all-in-Macaulay2-docs
+      ''
+    else
+      lib.optionalString generateDocs ''
+        # ForeignFunctions documentation
+        export ${lib.optionalString stdenv.hostPlatform.isDarwin "DY"}LD_LIBRARY_PATH=${lib.makeLibraryPath [ mpfr ]}
+        # RInterface documentation
+        export R_LIBS_SITE=${lib.makeSearchPath "library" (with rPackages; [ MASS ])}
+      '';
 
-  buildFlags = lib.optionals downloadDocs [
+  buildFlags = lib.optionals (!generateDocs) [
     "MakeDocumentation=false"
   ];
 

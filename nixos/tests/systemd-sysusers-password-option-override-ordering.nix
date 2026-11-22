@@ -18,7 +18,6 @@ in
   nodes.machine = {
     systemd.sysusers.enable = true;
     system.etc.overlay.enable = true;
-    boot.initrd.systemd.enable = true;
 
     users.mutableUsers = true;
 

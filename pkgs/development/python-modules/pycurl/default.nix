@@ -91,7 +91,7 @@ buildPythonPackage rec {
     "test_clear_via_assign_none_inside_callback_resets_socketp"
     "test_multi_unassign_inside_socket_callback"
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Fatal Python error: Segmentation fault
     "cadata_test"
   ];

@@ -1,7 +1,8 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitLab,
+  fetchzip,
   gitUpdater,
   meson,
   python3,
@@ -16,13 +17,24 @@
   testers,
 }:
 
+let
+  models = fetchzip (finalAttrs: {
+    pname = "opus-models";
+    version = "a5177ec6fb7d15058e99e57029746100121f68e4890b1467d4094aa336b6013e";
+    url = "https://media.xiph.org/opus/models/opus_data-${finalAttrs.version}.tar.gz";
+    hash = "sha256-aCOYMJoOGgdFCYZdFlUKiXjzssQKlQnCsTD3i5gGzCA=";
+  });
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "libopus";
   version = "1.6.1";
 
-  src = fetchurl {
-    url = "https://downloads.xiph.org/releases/opus/opus-${finalAttrs.version}.tar.gz";
-    hash = "sha256-b/y1kyB76SWE3xWzJGbtZLvsmRCfAHyCIF8BlFckEaE=";
+  src = fetchFromGitLab {
+    domain = "gitlab.xiph.org";
+    owner = "xiph";
+    repo = "opus";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-I1f+J//ZJBMj88+PQhsYBjz3fm4Ll3ckZD+fYa6/3Y0=";
   };
 
   patches = [
@@ -32,6 +44,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     patchShebangs meson/
+    echo 'PACKAGE_VERSION="${finalAttrs.version}"' > package_version
+    ln -s ${models}/* ./dnn/
   '';
 
   outputs = [
@@ -61,6 +75,8 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://gitlab.xiph.org/xiph/opus.git";
       rev-prefix = "v";
     };
+
+    inherit models;
 
     tests = {
       inherit ffmpeg-headless;

@@ -9,7 +9,6 @@
   pkg-config,
   curl,
   isa-l,
-  fuse,
   libkrb5,
   libuuid,
   libxcrypt,
@@ -79,10 +78,6 @@ stdenv.mkDerivation (finalAttrs: {
     scitokens-cpp
     zlib
   ]
-  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-    # https://github.com/xrootd/xrootd/blob/5b5a1f6957def2816b77ec773c7e1bfb3f1cfc5b/cmake/XRootDFindLibs.cmake#L58
-    fuse
-  ]
   ++ lib.filter (lib.meta.availableOn stdenv.hostPlatform) [
     isa-l # not available on Apple silicon
     systemd # only available on specific non-static Linux platforms
@@ -121,7 +116,9 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeFeature "XRootD_VERSION_STRING" finalAttrs.version)
     (lib.cmakeBool "FORCE_ENABLED" true)
-    (lib.cmakeBool "ENABLE_FUSE" (!stdenv.hostPlatform.isDarwin)) # XRootD doesn't support MacFUSE
+    # TODO(@ShamrockLee): Turn on for Linux after XRootD migrates to FUSE 3.
+    # See https://github.com/xrootd/xrootd/issues/2423
+    (lib.cmakeBool "ENABLE_FUSE" false)
     (lib.cmakeBool "ENABLE_MACAROONS" false)
     (lib.cmakeBool "ENABLE_PYTHON" false) # built separately
     (lib.cmakeBool "ENABLE_SCITOKENS" true)

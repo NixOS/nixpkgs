@@ -18,11 +18,9 @@ buildPythonPackage {
 
   nativeCheckInputs = [ unittestCheckHook ];
 
-  unittestFlagsArray = [
-    "-s"
-    "test"
-    "-p"
-    "'*test.py'"
+  unittestFlags = [
+    "--start-directory=test"
+    "--pattern=*test.py"
   ];
 
   passthru = {

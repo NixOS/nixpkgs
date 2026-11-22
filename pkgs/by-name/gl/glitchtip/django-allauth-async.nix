@@ -22,7 +22,6 @@
   python3-openid,
   python3-saml,
   requests,
-  requests-oauthlib,
   pyjwt,
   qrcode,
 
@@ -39,15 +38,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "django-allauth-async";
-  version = "65.16.1.7";
+  version = "65.19.1.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitLab {
     owner = "glitchtip";
     repo = "django-allauth-async";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0eUqIbQT4+8qH3oiGrXUzXBzy9iE5vhn00xdUBCGDh0=";
+    hash = "sha256-KLD1FHR4bhwtW28pid+9K+VOsTxvHyXNQ3UFIjdkJag=";
   };
 
   nativeBuildInputs = [ gettext ];
@@ -85,8 +83,8 @@ buildPythonPackage (finalAttrs: {
     openid = [ python3-openid ];
     saml = [ python3-saml ];
     socialaccount = [
+      oauthlib
       requests
-      requests-oauthlib
       pyjwt
     ]
     ++ pyjwt.optional-dependencies.crypto;
@@ -107,9 +105,14 @@ buildPythonPackage (finalAttrs: {
   ]
   ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
-  disabledTests = [
-    # Tests require network access
-    "test_login"
+  disabledTestPaths = [
+    # Timing sensitive TOTP codes
+    "allauth_async/tests/mfa/test_recovery_codes.py::test_generate_view_and_use_code"
+    "allauth_async/tests/mfa/test_totp.py::test_activate_authenticate_deactivate"
+    "allauth_async/tests/mfa/test_totp.py::test_signals_on_activate_and_deactivate"
+    "allauth_async/tests/mfa/test_trust.py::test_trust_stage_parity"
+    # Racy because HMAC keys include the current second
+    "allauth_async/tests/test_email_verification.py::test_asend_confirmation_hmac"
   ];
 
   meta = {
@@ -118,7 +121,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://allauth.org";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      defelo
       felbinger
     ];
   };

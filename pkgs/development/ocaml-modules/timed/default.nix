@@ -14,7 +14,7 @@ buildDunePackage rec {
     owner = "rlepigre";
     repo = "ocaml-${pname}";
     rev = version;
-    sha256 = "sha256-wUoI9j/j0IGYW2NfJHmyR2XEYfYejyoYLWnKsuWdFas=";
+    hash = "sha256-wUoI9j/j0IGYW2NfJHmyR2XEYfYejyoYLWnKsuWdFas=";
   };
 
   doCheck = true;

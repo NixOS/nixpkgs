@@ -21,6 +21,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-5c3epExz3tv6gRiIfpDyV1pkfcRVWjtNpl93LWsYKdk=";
   };
 
+  patches = [
+    # https://github.com/ietf-tools/mail-tlsa-check-exporter/pull/7
+    ./smtp-shutdown.patch
+  ];
+
   nativeBuildInputs = [
     makeWrapper
   ];
@@ -29,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     mkdir -p $out/libexec
-    cp $src/index.mjs $out/libexec
+    cp index.mjs $out/libexec
 
     makeWrapper ${lib.getExe nodejs} $out/bin/mail-tlsa-check-exporter \
       --append-flag $out/libexec/index.mjs

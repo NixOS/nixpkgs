@@ -13,8 +13,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.4.10";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "russhousley";
     repo = "pyasn1-alt-modules";

@@ -36,9 +36,20 @@ in
           ping = json.loads(machine.succeed("curl --fail http://localhost:${toString cfg.settings.server.port}/ping"))
           assert ping["status"] == "OK", ping
     ''
-    + lib.optionalString (!isV2) ''
+    + (
+      if isV2 then
+        ''
+          initialize = json.loads(machine.succeed("curl --fail http://localhost:${toString cfg.settings.server.port}/initialize.json"))
+          api_key = initialize["apiKey"]
+        ''
+      else
+        ''
+          api_key = "${cfg.settings.auth.apikey}"
+        ''
+    )
+    + ''
       with subtest("system status reports the packaged version"):
-          status = json.loads(machine.succeed("curl --fail --header 'X-Api-Key: ${cfg.settings.auth.apikey}' http://localhost:${toString cfg.settings.server.port}/api/v3/system/status"))
+          status = json.loads(machine.succeed(f"curl --fail --header 'X-Api-Key: {api_key}' http://localhost:${toString cfg.settings.server.port}/api/v3/system/status"))
           assert status["version"] == "${cfg.package.versionForDotnet}", status
     '';
 }

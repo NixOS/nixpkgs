@@ -16,6 +16,9 @@
   # buildInputs
   libayatana-appindicator,
 
+  # runtimeDependencies
+  zlib,
+
   # passthru
   nixosTests,
 }:
@@ -71,6 +74,7 @@ else
       makeDesktopItem
 
       libayatana-appindicator
+      zlib
 
       nixosTests
       ;

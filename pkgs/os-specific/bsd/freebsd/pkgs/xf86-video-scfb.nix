@@ -1,4 +1,5 @@
 {
+  lib,
   stdenv,
   fetchFromGitHub,
   xorg-server,
@@ -20,4 +21,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ xorg-server ];
   nativeBuildInputs = [ pkg-config ];
+
+  meta.platforms = lib.platforms.freebsd;
 }

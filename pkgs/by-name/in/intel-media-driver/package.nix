@@ -11,6 +11,7 @@
   libdrm,
   enableX11 ? stdenv.hostPlatform.isLinux,
   libx11,
+  nix-update-script,
   # for passhtru.tests
   pkgsi686Linux,
 }:
@@ -74,6 +75,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests = {
     inherit (pkgsi686Linux) intel-media-driver;
+  };
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--use-github-releases"
+      "--version-regex=intel-media-(.*[.].*[.].*)"
+    ];
   };
 
   meta = {

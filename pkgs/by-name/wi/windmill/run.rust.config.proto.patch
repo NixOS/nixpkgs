@@ -1,11 +1,11 @@
 diff --git a/windmill-worker/nsjail/run.rust.config.proto b/windmill-worker/nsjail/run.rust.config.proto
-index 3357cd88a..c0a1e9534 100644
+index 2b60847..aef80f5 100644
 --- a/windmill-worker/nsjail/run.rust.config.proto
 +++ b/windmill-worker/nsjail/run.rust.config.proto
-@@ -14,16 +14,24 @@ clone_newuser: {CLONE_NEWUSER}
- keep_caps: false
- keep_env: true
- 
+@@ -19,16 +19,24 @@ keep_env: true
+ # execs nsjail: the loader honours `LD_PRELOAD` before the jail exists.
+ {ENVARS}
+
 +mount {
 +    src: "/nix/store"
 +    dst: "/nix/store"
@@ -18,20 +18,20 @@ index 3357cd88a..c0a1e9534 100644
  	is_bind: true
 +    mandatory: false
  }
- 
+
  mount {
      src: "/lib"
      dst: "/lib"
  	is_bind: true
 +    mandatory: false
  }
- 
- 
-@@ -39,6 +47,7 @@ mount {
+
+
+@@ -44,6 +52,7 @@ mount {
      src: "/usr"
      dst: "/usr"
  	is_bind: true
 +    mandatory: false
  }
- 
+
  mount {

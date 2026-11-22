@@ -24,15 +24,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "comet-ml";
-  version = "3.58.6";
+  version = "3.58.12";
   pyproject = true;
-  __structuredAttrs = true;
 
   # No GitHub repository
   src = fetchPypi {
     pname = "comet_ml";
     inherit (finalAttrs) version;
-    hash = "sha256-+YQSl1bhlR8z3Wjp9kdaR68hkpjgj9rY07jXU64JqWU=";
+    hash = "sha256-DwuRwSdnOnix4mlbDnxvSDhnKr6Cqi2mSy4jkC5td6w=";
   };
 
   build-system = [

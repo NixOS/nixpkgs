@@ -20,7 +20,7 @@
   applyPatches,
 }:
 let
-  version = "2.6.5.5623";
+  version = "3.0.2.5780";
   # The dotnet8 compatibility patches also change `yarn.lock`, so we must pass
   # the already patched lockfile to `fetchYarnDeps`.
   src = applyPatches {
@@ -28,10 +28,12 @@ let
       owner = "Prowlarr";
       repo = "Prowlarr";
       tag = "v${version}";
-      hash = "sha256-nuF2enxjC12WqlMROg2q85DTzCU3FndhFFRDmKFe60w=";
+      hash = "sha256-XcWsTEf5WlJjgAy0BQIVWzr2VMU0p9Tpzb6nby2XMJo=";
     };
     postPatch = ''
       mv src/NuGet.config NuGet.Config
+      substituteInPlace global.json \
+        --replace-fail '10.0.404' '10.0.403'
     '';
   };
   rid = dotnetCorePackages.systemToDotnetRid stdenvNoCC.hostPlatform.system;
@@ -50,7 +52,7 @@ buildDotnetModule {
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-3V1ywO0eq35+x9I2GyylonEpnsJ80wT7bKLO9FiHchE=";
+    hash = "sha256-jyD5nyloPl0y/BFhW5UROB75K3mAz9T5XRbj7G3kUcQ=";
   };
 
   postConfigure = ''
@@ -70,8 +72,8 @@ buildDotnetModule {
 
   runtimeDeps = [ sqlite ];
 
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
-  dotnet-runtime = dotnetCorePackages.aspnetcore_8_0;
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
+  dotnet-runtime = dotnetCorePackages.aspnetcore_10_0;
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 
@@ -97,7 +99,7 @@ buildDotnetModule {
   ];
 
   dotnetFlags = [
-    "--property:TargetFramework=net8.0"
+    "--property:TargetFramework=net10.0"
     "--property:EnableAnalyzers=false"
     "--property:SentryUploadSymbols=false" # Fix Sentry upload failed warnings
     # Override defaults in src/Directory.Build.props that use current time.

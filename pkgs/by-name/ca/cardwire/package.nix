@@ -17,6 +17,7 @@
   installShellFiles,
   libxcb,
   libglvnd,
+  sqlite,
   versionCheckHook,
   nix-update-script,
 }:
@@ -63,6 +64,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     libxcb
+    sqlite
     udev
   ];
 

@@ -32,4 +32,13 @@
     name = "c23-compat-libbpf";
     patch = ./C23-compat-6.1.patch;
   };
+
+  tools_128bit_types = rec {
+    name = "tools-add-128-bit-integer-types-for-aarch64";
+    patch = fetchpatch {
+      name = name + ".patch";
+      url = "https://github.com/torvalds/linux/commit/10a47fb67340bca274276faf855d7d460afd9a7a.patch";
+      hash = "sha256-w6ZnvodW2kS3bqtZVvVN5qDt1Zc7fJvnywki3MBsER0=";
+    };
+  };
 }

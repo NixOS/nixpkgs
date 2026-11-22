@@ -1,8 +1,8 @@
 diff --git a/dot2tex/dotparsing.py b/dot2tex/dotparsing.py
-index 391b5dc..6dc77a3 100644
+index 40f63a1..300ed91 100644
 --- a/dot2tex/dotparsing.py
 +++ b/dot2tex/dotparsing.py
-@@ -180,18 +180,8 @@ def __find_executables(path):
+@@ -168,18 +168,8 @@ def __find_executables(path):
  def find_graphviz():
      """Locate Graphviz's executables in the system.
  
@@ -23,20 +23,21 @@ index 391b5dc..6dc77a3 100644
  
      It will return a dictionary containing the program names as keys
      and their paths as values.
-@@ -199,75 +189,9 @@ def find_graphviz():
+@@ -187,76 +177,10 @@ def find_graphviz():
      If this fails, it returns None.
      """
  
 -    # Method 1 (Windows only)
 -    #
--    if os.sys.platform == 'win32':
+-    if sys.platform == 'win32':
 -        try:
--            import win32api, win32con
+-            import win32api
+-            import win32con
 -
 -            # Get the GraphViz install path from the registry
 -            #
 -            hkey = win32api.RegOpenKeyEx(win32con.HKEY_LOCAL_MACHINE,
--                                         "SOFTWARE\AT&T Research Labs\Graphviz", 0, win32con.KEY_QUERY_VALUE)
+-                                         r"SOFTWARE\AT&T Research Labs\Graphviz", 0, win32con.KEY_QUERY_VALUE)
 -
 -            path = win32api.RegQueryValueEx(hkey, "InstallPath")[0]
 -            win32api.RegCloseKey(hkey)
@@ -54,7 +55,7 @@ index 391b5dc..6dc77a3 100644
 -            #
 -            log.debug('The win32api is not installed')
 -            pass
--        except:
+-        except Exception:
 -            log.debug('Failed to access the registry key')
 -
 -    # Method 2 (Linux, Windows etc)
@@ -67,7 +68,7 @@ index 391b5dc..6dc77a3 100644
 -
 -    # Method 3 (Windows only)
 -    #
--    if os.sys.platform == 'win32':
+-    if sys.platform == 'win32':
 -        # Try and work out the equivalent of "C:\Program Files" on this
 -        # machine (might be on drive D:, or in a different language)
 -        #
@@ -75,11 +76,11 @@ index 391b5dc..6dc77a3 100644
 -            # Note, we could also use the win32api to get this
 -            # information, but win32api may not be installed.
 -
--            path = os.path.join(os.environ['PROGRAMFILES'], 'ATT', 'GraphViz', 'bin')
+-            path = os.path.join(os.environ['PROGRAMFILES'], 'GraphViz', 'bin')
 -
 -        else:
 -            # Just in case, try the default...
--            path = r"C:\Program Files\att\Graphviz\bin"
+-            path = r"C:\Program Files\Graphviz\bin"
 -
 -        progs = __find_executables(path)
 -
@@ -98,6 +99,7 @@ index 391b5dc..6dc77a3 100644
 -            return progs
 +    progs = __find_executables('@graphviz@/bin')
 +    if progs is not None:
++        # print("Used path")
 +        return progs
  
      # Failed to find GraphViz

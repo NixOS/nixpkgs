@@ -29,7 +29,7 @@ stdenv.mkDerivation {
     # build fixes
     # https://gitlab.gnome.org/Archive/gtkglext/merge_requests/1
     rev = "ad95fbab68398f81d7a5c895276903b0695887e2";
-    sha256 = "1d1bp4635nla7d07ci40c7w4drkagdqk8wg93hywvdipmjfb4yqb";
+    hash = "sha256-C3uynKw3ts09HOlxNHF7auZG+GGARHZAO4raMgy5K7Q=";
   };
 
   strictDeps = true;

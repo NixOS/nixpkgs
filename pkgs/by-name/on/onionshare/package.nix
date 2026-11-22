@@ -10,6 +10,7 @@
   obfs4,
   snowflake,
   tor,
+  webtunnel,
 
   versionCheckHook,
   gitUpdater,
@@ -18,14 +19,14 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "onionshare-cli";
-  version = "2.6.5";
+  version = "2.7.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "onionshare";
     repo = "onionshare";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RAUTBUU29wON2RLVL7fa2iofMamjXjP2BONP9Bd9ZN0=";
+    hash = "sha256-QgNgVsMuJtRV5d5bzEivNH4RDMQuwu36/BqSSu+7dG0=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/cli";
@@ -38,6 +39,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
         obfs4
         snowflake
         tor
+        webtunnel
         ;
       inherit (tor) geoip;
     })

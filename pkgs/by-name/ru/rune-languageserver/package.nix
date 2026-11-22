@@ -2,6 +2,8 @@
   lib,
   rustPlatform,
   fetchCrate,
+  pkg-config,
+  oniguruma,
   versionCheckHook,
   nix-update-script,
 }:
@@ -17,6 +19,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-QrzOpfDpG08IUoydvSoh0qxJ0vg86391NnyEyJeZr54=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ oniguruma ];
 
   env = {
     RUNE_VERSION = finalAttrs.version;

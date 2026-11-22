@@ -14,19 +14,35 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "matrix-synapse";
-  version = "1.162.0";
+  version = "1.165.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "synapse";
     rev = "v${version}";
-    hash = "sha256-hDsbD0FU3fXR5mLRyoIP4qCC4pJKUu/js1Xe7je7DDo=";
+    hash = "sha256-9ued/q+FbdXyf/P41Mx/JkKNrpyPSAvmGLydOn8F2ig=";
   };
+
+  patches = [
+    # fix compatibility with authlib authlib 1.7+
+    # https://github.com/element-hq/synapse/pull/20330
+    ./authlib.patch
+  ];
+
+  postPatch = ''
+    # the timeout for some tests is too tight, causing the build to fail
+    # if the builder is too contested. the earliest example of these
+    # intermittend failures i could find was
+    # https://hydra.nixos.org/build/349689621/step/1/log/tail
+    # See: https://github.com/element-hq/synapse/pull/20517
+    substituteInPlace tests/server.py tests/unittest.py \
+      --replace-fail "loop_count > 100" "loop_count > 5000"
+  '';
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-BYDW01vrtifxfrFw+bayhAkwXXqzOx7jMd7zHBPnHbA=";
+    hash = "sha256-zs6nvOvCh45GDyEIsqMn9PwqibjEx2f91sXqqmQVZRQ=";
   };
 
   build-system =
@@ -110,7 +126,7 @@ python3Packages.buildPythonApplication rec {
       systemd-python
     ];
     url-preview = [
-      lxml
+      beautifulsoup4
     ];
     sentry = [
       sentry-sdk
@@ -126,6 +142,11 @@ python3Packages.buildPythonApplication rec {
       pympler
     ];
   };
+
+  pythonRemoveDeps = [
+    # part of saml2 extra but unused at runtime
+    "lxml-stubs"
+  ];
 
   nativeCheckInputs = [
     openssl

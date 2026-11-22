@@ -17,7 +17,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "bdraco";
+    owner = "uilibs";
     repo = "unifi-discovery";
     tag = "v${finalAttrs.version}";
     hash = "sha256-nL1liMg7qImY4AXdhvLbLXgZs/S3eypQCSJF5yZldmU=";
@@ -43,8 +43,8 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Module to discover Unifi devices";
-    homepage = "https://github.com/bdraco/unifi-discovery";
-    changelog = "https://github.com/bdraco/unifi-discovery/releases/tag/${finalAttrs.src.tag}";
+    homepage = "https://github.com/uilibs/unifi-discovery";
+    changelog = "https://github.com/uilibs/unifi-discovery/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
     platforms = lib.platforms.linux;

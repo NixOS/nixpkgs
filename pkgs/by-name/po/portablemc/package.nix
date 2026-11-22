@@ -6,6 +6,7 @@
   rustPlatform,
   pkg-config,
   openssl,
+  zstd,
 
   makeWrapper,
 
@@ -109,7 +110,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     nativeBuildInputs = [ pkg-config ];
 
-    buildInputs = [ openssl ];
+    buildInputs = [
+      openssl
+      zstd
+    ];
   };
 
   strictDeps = true;
@@ -132,7 +136,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/theorzr/portablemc";
     description = "Cross platform command line utility for launching Minecraft quickly and reliably with included support for Mojang versions and popular mod loaders";
     changelog = "https://github.com/theorzr/portablemc/releases/tag/${finalAttrs.src.tag}";
-    license = lib.licenses.gpl3Only;
+    license = lib.licenses.asl20;
     mainProgram = "portablemc";
     maintainers = with lib.maintainers; [ tomasajt ];
   };

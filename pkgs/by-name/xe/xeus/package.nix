@@ -7,18 +7,17 @@
   nlohmann_json,
   libuuid,
   nix-update-script,
-  xtl,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xeus";
-  version = "5.2.4";
+  version = "6.1.0";
 
   src = fetchFromGitHub {
     owner = "jupyter-xeus";
     repo = "xeus";
     tag = finalAttrs.version;
-    hash = "sha256-siQzTu2IYHLbZrgLTbHPt8Ek8vLA/wXB0jx7oXC6d7k=";
+    hash = "sha256-ZEvDcQWPCF40wRXYbrzzBgb6JDqAqH3Nt2v4VBgO/8Y=";
   };
 
   nativeBuildInputs = [

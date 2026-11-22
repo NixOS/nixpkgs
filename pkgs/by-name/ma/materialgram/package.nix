@@ -2,6 +2,7 @@
   lib,
   telegram-desktop,
   fetchFromGitHub,
+  fetchpatch2,
   withWebkit ? true,
 }:
 
@@ -11,15 +12,23 @@ telegram-desktop.override {
   unwrapped = telegram-desktop.unwrapped.overrideAttrs (
     finalAttrs: previousAttrs: {
       pname = "materialgram-unwrapped";
-      version = "7.0.5.1";
+      version = "7.3.1.1";
 
       src = fetchFromGitHub {
         owner = "kukuruzka165";
         repo = "materialgram";
-        hash = "sha256-OE7TbxFEYzTM2IB7HMokR3a+tsrg4n4cbHmRXPITykI=";
+        hash = "sha256-7ov8GtHTS8nUADwah8KEg9j88ksZ8Eb6SlZc3z83UaM=";
         tag = "v${finalAttrs.version}";
         fetchSubmodules = true;
       };
+
+      patches = [
+        # Fixed nixpkgs swift build missing runtime library paths
+        (fetchpatch2 {
+          url = "https://github.com/telegramdesktop/tdesktop/commit/e8a7ff26b34bc180c36a1a02b34a6c1d5878c3f5.patch?full_index=1";
+          hash = "sha256-3XPbKeSGqsRZcCNzxRt0weMPtycOQdiZ8yRhIU8lgA0=";
+        })
+      ];
 
       meta = previousAttrs.meta // {
         description = "Telegram Desktop fork with material icons and some improvements";
@@ -35,9 +44,6 @@ telegram-desktop.override {
           stellessia
         ];
         mainProgram = "materialgram";
-        knownVulnerabilities = [
-          "CVE-2026-107181: Telegram Desktop before 7.2.9 IPC Record Injection File Exfiltration via interpret: Scheme"
-        ];
       };
     }
   );

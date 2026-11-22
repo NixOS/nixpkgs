@@ -4,13 +4,13 @@
   makeDesktopItem,
   copyDesktopItems,
   fetchurl,
-  jdk,
+  zulu25,
   makeBinaryWrapper,
   imagemagick,
 }:
 
 let
-  jdkWithFX = jdk.override { enableJavaFX = true; };
+  jdkWithFX = zulu25.override { enableJavaFX = true; };
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "jetuml";
@@ -50,7 +50,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    ${jdkWithFX}/lib/openjdk/bin/jar xf $src jet.png
+    ${jdkWithFX}/bin/jar xf $src jet.png
     magick jet.png -resize 128x128 jet128.png
     magick jet.png -resize 48x48 jet48.png
     install -Dm444 jet48.png $out/share/icons/hicolor/48x48/apps/jet.png
@@ -58,7 +58,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     install -Dm444 $src $out/share/java/JetUML-${finalAttrs.version}.jar
 
-    makeWrapper ${jdkWithFX}/lib/openjdk/bin/java $out/bin/jetuml \
+    makeWrapper ${jdkWithFX}/bin/java $out/bin/jetuml \
+      --add-flags "--enable-native-access=javafx.graphics,javafx.media,javafx.web" \
       --add-flags "-jar $out/share/java/JetUML-${finalAttrs.version}.jar"
 
     runHook postInstall

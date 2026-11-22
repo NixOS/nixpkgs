@@ -1,37 +1,80 @@
 {
+  "brotli": {
+    "url": "https://skia.googlesource.com/external/github.com/google/brotli.git",
+    "rev": "cfa184a997ac19454d5a3ae97f6d600aac2445a6",
+    "sha256": "045p66i6yl4hwg3rwn5f46ih564z02zzr03ngb2697fx0faa5dh0",
+    "fetchSubmodules": false
+  },
+  "d3d12allocator": {
+    "url": "https://skia.googlesource.com/external/github.com/GPUOpen-LibrariesAndSDKs/D3D12MemoryAllocator.git",
+    "rev": "169895d529dfce00390a20e69c2f516066fe7a3b",
+    "sha256": "1r7m8lf0nnzmpkciz5yd1b8l5g9rb75yqpvklh0y7lfvfbzx2dp4",
+    "fetchSubmodules": false
+  },
   "expat": {
     "url": "https://chromium.googlesource.com/external/github.com/libexpat/libexpat.git",
-    "rev": "8e49998f003d693213b538ef765814c7d21abada",
-    "sha256": "sha256-zP2kiB4nyLi0/I8OsRhxKG0qRGPe2ALLQ+HHfqlBJ6Y="
+    "rev": "a76b1174c1ea52abb639a4c69d52b630a8a106a2",
+    "sha256": "1k79irbhqxw5d1rr4rsxkl5hz3c3cryphvqrb61kakjsa4fpa52i",
+    "fetchSubmodules": false
   },
-  "libjpeg-turbo": {
-    "url": "https://chromium.googlesource.com/chromium/deps/libjpeg_turbo.git",
-    "rev": "e14cbfaa85529d47f9f55b0f104a579c1061f9ad",
-    "sha256": "sha256-Ig+tmprZDvlf/M72/DTar2pbxat9ZElgSqdXdoM0lPs="
-  },
-  "icu": {
-    "url": "https://chromium.googlesource.com/chromium/deps/icu.git",
-    "rev": "364118a1d9da24bb5b770ac3d762ac144d6da5a4",
-    "sha256": "sha256-frsmwYMiFixEULsE91x5+p98DvkyC0s0fNupqjoRnvg="
-  },
-  "zlib": {
-    "url": "https://chromium.googlesource.com/chromium/src/third_party/zlib",
-    "rev": "646b7f569718921d7d4b5b8e22572ff6c76f2596",
-    "sha256": "sha256-jNj6SuTZ5/a7crtYhxW3Q/TlfRMNMfYIVxDlr7bYdzQ="
+  "freetype": {
+    "url": "https://chromium.googlesource.com/chromium/src/third_party/freetype2.git",
+    "rev": "891f904e2e7b4289f615598cd4b69832f87d2f3a",
+    "sha256": "133kh4slz06bd9wik51bi2g0xdazfv10fca9ad108i7lycvn9q8c",
+    "fetchSubmodules": false
   },
   "harfbuzz": {
     "url": "https://chromium.googlesource.com/external/github.com/harfbuzz/harfbuzz.git",
-    "rev": "31695252eb6ed25096893aec7f848889dad874bc",
-    "sha256": "sha256-Csyz08JTNXfY2fo27x1Eg1CqO/tt8Rt9udr3KflojSg="
+    "rev": "f5efbbef3841bdcdc6427bde7c2971f62ac8c8f1",
+    "sha256": "0pg5macq3gywp1f13971rina0w7m6wc4hfxbzp1zcrv8cmph4i61",
+    "fetchSubmodules": false
   },
-  "wuffs": {
-    "url": "https://skia.googlesource.com/external/github.com/google/wuffs-mirror-release-c.git",
-    "rev": "e3f919ccfe3ef542cfc983a82146070258fb57f8",
-    "sha256": "sha256-373d2F/STcgCHEq+PO+SCHrKVOo6uO1rqqwRN5eeBCw="
+  "icu": {
+    "url": "https://chromium.googlesource.com/chromium/deps/icu.git",
+    "rev": "2a51536dfb3b448bdf3dae70c782ea2879c90904",
+    "sha256": "09agrwwqkd3k9drqfa6nidmjs2sn3i7b9hchim45gra6rakgkhcc",
+    "fetchSubmodules": false
+  },
+  "libjpeg-turbo": {
+    "url": "https://chromium.googlesource.com/chromium/deps/libjpeg_turbo.git",
+    "rev": "640f254ad0fa03f6b1f29f89b7dd9366f2f6e533",
+    "sha256": "151b7bpzm653a64z5yvnfgh8r3vx51hp05ni5x2r1zvp652zi2n2",
+    "fetchSubmodules": false
   },
   "libpng": {
     "url": "https://skia.googlesource.com/third_party/libpng.git",
-    "rev": "4e3f57d50f552841550a36eabbb3fbcecacb7750",
-    "sha256": "sha256-tNRrA9RUp6Mi7dbIB/70a/4tn/JxAsTUb9EI9nlXLjM="
+    "rev": "3061454d980de7d53608f594194cfac722721d2a",
+    "sha256": "1hsa5rscdfc2r2k0syg7vwkr9a4ih91pwzrhy3j3j1niqwz769r5",
+    "fetchSubmodules": false
+  },
+  "libwebp": {
+    "url": "https://chromium.googlesource.com/webm/libwebp.git",
+    "rev": "b43b2caa710c0c997c066cb32c7fea1391fad70a",
+    "sha256": "0d3333zckffm6grd78vyz4v8nddrk76xs0ka1x4w3ivbi77h3ai9",
+    "fetchSubmodules": false
+  },
+  "vulkanmemoryallocator": {
+    "url": "https://chromium.googlesource.com/external/github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator",
+    "rev": "eb744ea7a2b17040121b4bbb4d6f9e8a77e3cae7",
+    "sha256": "1wyh7wym8dyr42wpxsxj04kh150hjmbm2afw2ydbj6xvi5r4j5ic",
+    "fetchSubmodules": false
+  },
+  "spirv-cross": {
+    "url": "https://chromium.googlesource.com/external/github.com/KhronosGroup/SPIRV-Cross",
+    "rev": "b8fcf307f1f347089e3c46eb4451d27f32ebc8d3",
+    "sha256": "021x72k68z4q7idqf5ljhdnq8hlkz4vawfpspa5fq4nz6pscr38z",
+    "fetchSubmodules": false
+  },
+  "wuffs": {
+    "url": "https://skia.googlesource.com/external/github.com/google/wuffs-mirror-release-c.git",
+    "rev": "7411f488fe2e2c205c3d3b3d28638b7356522930",
+    "sha256": "14w3wa1r7h4gsd9rhaina6p7hj292590fdd7g798j9fd4rl81jq0",
+    "fetchSubmodules": false
+  },
+  "zlib": {
+    "url": "https://chromium.googlesource.com/chromium/src/third_party/zlib",
+    "rev": "456ae730017b9b4bd3371927abc82627fd51feef",
+    "sha256": "0rgx8v96axy3aqap8jmcsyypa1n4nzifr9b26q9mpsnds1iwskib",
+    "fetchSubmodules": false
   }
 }

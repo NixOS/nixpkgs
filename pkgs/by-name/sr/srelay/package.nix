@@ -7,19 +7,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "srelay";
-  version = "0.4.8";
+  version = "0.4.9";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/socks-relay/socks-relay/srelay-${finalAttrs.version}/srelay-${finalAttrs.version}.tar.gz";
-    sha256 = "1sn6005aqyfvrlkm5445cyyaj6h6wfyskfncfmds55x34hfyxpvl";
+    hash = "sha256-nbxbLPpc1Mty2NaECEKZN8gAp809XaNeizFb9phNLtw=";
   };
 
-  patches = [
-    ./arm.patch
-    ./signal-handler.patch
-  ];
-
   buildInputs = [ libxcrypt ];
+
+  # upstream declares signal handlers with unprototyped function pointers, which the C23 default of recent GCC rejects
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
 
   installPhase = "install -D srelay $out/bin/srelay";
 
@@ -31,5 +29,6 @@ stdenv.mkDerivation (finalAttrs: {
     # never built on aarch64-linux since first introduction in nixpkgs
     broken = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64;
     mainProgram = "srelay";
+    maintainers = with lib.maintainers; [ enovamaker ];
   };
 })

@@ -13,7 +13,6 @@
 buildPythonPackage (finalAttrs: {
   pname = "tlmviewer";
   pyproject = true;
-  __structuredAttrs = true;
 
   inherit (torchlensmaker)
     version

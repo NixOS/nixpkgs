@@ -25,6 +25,7 @@ buildPythonPackage (finalAttrs: {
   postPatch = ''
     substituteInPlace tests/numpy/test_any_array.py \
       --replace-fail "np.timedelta64(0)" "np.timedelta64(0, \"s\")"
+    sed -i 's/uv_build[<>=0-9.,]*[0-9]/uv_build/g' pyproject.toml
   '';
 
   build-system = [

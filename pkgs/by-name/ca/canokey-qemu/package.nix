@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
     python3Packages.jinja2
   ];
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
 
   meta = {
     homepage = "https://github.com/canokeys/canokey-qemu";

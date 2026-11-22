@@ -64,13 +64,13 @@ buildPythonPackage (finalAttrs: {
     "TestRequests"
     "TestTimeout"
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Fatal Python error: Aborted
     "test_basic_response"
     "test_text_response"
   ];
 
-  disabledTestPaths = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
     # Fatal Python error: Aborted
     "tests/test_lowlevel.py"
   ];

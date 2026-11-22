@@ -9,22 +9,23 @@
   gst_all_1,
   gnome,
   apple-sdk_gstreamer,
+  testers,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gstreamermm";
   version = "1.10.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0q4dx9sncqbwgpzma0zvj6zssc279yl80pn8irb95qypyyggwn5y";
+    url = "mirror://gnome/sources/gstreamermm/${lib.versions.majorMinor finalAttrs.version}/gstreamermm-${finalAttrs.version}.tar.xz";
+    hash = "sha256-vlj+nvfX45JWjshegKhPRzCtv5H7A1X/fXxhZnXqjWA=";
   };
 
   patches = [
     (fetchpatch {
-      name = "${pname}-${version}.fix-build-against-glib-2.68.patch";
+      name = "gstreamermm-${finalAttrs.version}.fix-build-against-glib-2.68.patch";
       url = "https://gitlab.gnome.org/GNOME/gstreamermm/-/commit/37116547fb5f9066978e39b4cf9f79f2154ad425.patch";
-      sha256 = "sha256-YHtmOiOl4POwas3eWHsew3IyGK7Aq22MweBm3JPwyBM=";
+      hash = "sha256-YHtmOiOl4POwas3eWHsew3IyGK7Aq22MweBm3JPwyBM=";
     })
   ];
 
@@ -32,6 +33,9 @@ stdenv.mkDerivation rec {
     "out"
     "dev"
   ];
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     apple-sdk_gstreamer
@@ -55,14 +59,16 @@ stdenv.mkDerivation rec {
       packageName = "gstreamermm";
       versionPolicy = "odd-unstable";
     };
+    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
   meta = {
     description = "C++ interface for GStreamer";
     homepage = "https://gstreamer.freedesktop.org/bindings/cplusplus.html";
     license = lib.licenses.lgpl21Plus;
+    pkgConfigModules = [ "gstreamermm-1.0" ];
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ romildo ];
   };
 
-}
+})

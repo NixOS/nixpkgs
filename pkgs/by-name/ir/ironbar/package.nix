@@ -22,6 +22,7 @@
   libpulseaudio,
   libinput,
   libevdev,
+  libgit2,
   features ? [ ],
   systemdLibs,
   dbus,
@@ -30,14 +31,14 @@
 let
   hasFeature = f: features == [ ] || builtins.elem f features;
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ironbar";
   version = "0.19.1";
 
   src = fetchFromGitHub {
     owner = "JakeStanger";
     repo = "ironbar";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-JBUpT7eJTRXUe5xLmzDr/MnoFgqyp9LjfI9aY0tWqsg=";
   };
 
@@ -56,6 +57,7 @@ rustPlatform.buildRustPackage rec {
     libxkbcommon
     systemdLibs
     dbus
+    libgit2
   ]
   ++ lib.optionals (hasFeature "volume") [ libpulseaudio ]
   ++ lib.optionals (hasFeature "cairo") [ luajit ]
@@ -72,6 +74,15 @@ rustPlatform.buildRustPackage rec {
   propagatedBuildInputs = [ gtk4 ];
 
   runtimeDeps = [ luajitPackages.lgi ];
+
+  postPatch = ''
+    substituteInPlace ironbar.service \
+      --replace-fail '/usr/bin/ironbar' "$out/bin/ironbar"
+  '';
+
+  postInstall = ''
+    install -Dm644 ironbar.service "$out/lib/systemd/user/ironbar.service"
+  '';
 
   buildNoDefaultFeatures = features != [ ];
   buildFeatures = features;
@@ -93,7 +104,7 @@ rustPlatform.buildRustPackage rec {
 
   preFixup = ''
     gappsWrapperArgs+=(
-      ${gappsWrapperArgs}
+      ${finalAttrs.gappsWrapperArgs}
     )
   '';
 
@@ -109,4 +120,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "ironbar";
   };
-}
+})

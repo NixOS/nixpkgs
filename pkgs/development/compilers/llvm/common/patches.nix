@@ -20,6 +20,22 @@
       path = ../18;
     }
   ];
+  "lld/initialize-symbol-fields.patch" = [
+    {
+      before = "19";
+      path = ../18;
+    }
+    {
+      after = "19";
+      before = "20";
+      path = ../19;
+    }
+    {
+      after = "20";
+      before = "22";
+      path = ../20;
+    }
+  ];
   "lldb/backport-ParseTrieEntries-fixes.patch" = [
     {
       before = "22";
@@ -39,6 +55,17 @@
     {
       after = "23";
       path = ../23;
+    }
+  ];
+  "llvm/align-__linkedit-entries-to-pointer-size.patch" = [
+    {
+      before = "22";
+      path = ../18;
+    }
+    {
+      after = "22";
+      before = "23";
+      path = ../22;
     }
   ];
   "llvm/backport-darwin-triple-parsing.patch" = [
@@ -71,6 +98,12 @@
     {
       after = "22";
       path = ../22;
+    }
+  ];
+  "llvm/get-rid-of-incorrect-std-template-specializations.patch" = [
+    {
+      before = "22";
+      path = ../18;
     }
   ];
   "llvm/gnu-install-dirs.patch" = [
@@ -110,6 +143,17 @@
   ];
   "llvm/llvm-lit-cfg-add-libs-to-dylib-path.patch" = [
     {
+      after = "24";
+      path = ../24;
+    }
+    {
+      before = "24";
+      path = ../18;
+    }
+  ];
+  "llvm/llvm-textapi-separate-arch-name-enum-label.patch" = [
+    {
+      before = "22";
       path = ../18;
     }
   ];

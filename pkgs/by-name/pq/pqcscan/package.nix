@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "anvilsecure";
-    repo = "pqcscan";
+    repo = "pqcutils";
     tag = finalAttrs.version;
     hash = "sha256-+IwUESqmxvZu53n5ORNoYVD8JiSwAjD9AudnsXfIKvc=";
   };
@@ -24,8 +24,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Post-Quantum Cryptography Scanner";
-    homepage = "https://github.com/anvilsecure/pqcscan";
-    changelog = "https://github.com/anvilsecure/pqcscan/releases/tag/${finalAttrs.src.rev}";
+    homepage = "https://github.com/anvilsecure/pqcutils";
+    changelog = "https://github.com/anvilsecure/pqcutils/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "pqcscan";

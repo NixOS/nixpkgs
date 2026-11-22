@@ -230,8 +230,12 @@ new file mode 100644
 index 00000000000..be462c1715e
 --- /dev/null
 +++ b/usr.sbin/makefs/include/sys/endian.h
-@@ -0,0 +1 @@
+@@ -0,0 +1,5 @@
++#ifdef __OpenBSD__
 +#include_next <sys/endian.h>
++#else
++#include <endian.h>
++#endif
 diff --git a/usr.sbin/makefs/include/sys/uuid.h b/usr.sbin/makefs/include/sys/uuid.h
 new file mode 100644
 index 00000000000..7c2abace377
@@ -268,8 +272,10 @@ new file mode 100644
 index 00000000000..99058c68b50
 --- /dev/null
 +++ b/usr.sbin/makefs/include/util.h
-@@ -0,0 +1 @@
+@@ -0,0 +1,3 @@
++#ifdef __OpenBSD__
 +#include_next <util.h>
++#endif
 diff --git a/usr.sbin/makefs/makefs.c b/usr.sbin/makefs/makefs.c
 index af39605d996..10d86fa10e2 100644
 --- a/usr.sbin/makefs/makefs.c

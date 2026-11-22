@@ -2,7 +2,6 @@
 {
   lib,
   stdenv,
-  go,
   xcaddy,
   cacert,
   git,
@@ -52,12 +51,16 @@ caddy.overrideAttrs (
     vendorHash = null;
     subPackages = [ "." ];
 
+    postConfigure = ''
+      rm vendor/github.com/caddyserver/caddy/v2/cmd/x509rootsfallback.go
+    '';
+
     src = stdenv.mkDerivation {
       pname = "caddy-src-with-plugins-${pluginsHash}";
       version = finalAttrs.version;
 
       nativeBuildInputs = [
-        go
+        caddy.go
         xcaddy
         cacert
         git

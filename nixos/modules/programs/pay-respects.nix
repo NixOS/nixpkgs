@@ -186,6 +186,13 @@ in
     programs = {
       bash.interactiveShellInit = initScript "bash";
       fish.interactiveShellInit = optionalString config.programs.fish.enable (initScript "fish");
+      nushell.interactiveShellInit = optionalString config.programs.nushell.enable ''
+        source ${
+          pkgs.runCommand "pay-respects-nushell-config.nu" { } ''
+            ${getExe finalPackage} nushell --alias ${cfg.alias} > "$out"
+          ''
+        }
+      '';
       zsh.interactiveShellInit = optionalString config.programs.zsh.enable (initScript "zsh");
     };
   };

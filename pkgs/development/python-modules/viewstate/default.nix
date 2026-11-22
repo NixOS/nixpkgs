@@ -28,6 +28,6 @@ buildPythonPackage rec {
     description = ".NET viewstate decoder";
     homepage = "https://github.com/yuvadm/viewstate";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ kamadorueda ];
+    maintainers = [ ];
   };
 }

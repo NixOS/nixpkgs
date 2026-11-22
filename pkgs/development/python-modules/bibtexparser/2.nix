@@ -27,6 +27,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bibtexparser" ];
 
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+  };
+
   meta = {
     description = "Bibtex parser for Python";
     homepage = "https://github.com/sciunto-org/python-bibtexparser";

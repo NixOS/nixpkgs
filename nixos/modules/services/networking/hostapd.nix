@@ -88,12 +88,12 @@ let
 
   # Generates the header for a single BSS (i.e. WiFi network)
   writeBssHeader =
-    radio: bss: bssIdx:
+    radio: bss: interfaceName: bssIdx:
     pkgs.writeText "hostapd-radio-${radio}-bss-${bss}.conf" ''
       ''\n''\n# BSS ${toString bssIdx}: ${bss}
       ################################
 
-      ${if bssIdx == 0 then "interface" else "bss"}=${bss}
+      ${if bssIdx == 0 then "interface" else "bss"}=${interfaceName}
     '';
 
   makeRadioRuntimeFiles =
@@ -128,7 +128,7 @@ let
             rm -f "$mac_deny_file"
             touch "$mac_deny_file"
 
-            cat ${writeBssHeader radio bss bssIdx} >> "$hostapd_config_file"
+            cat ${writeBssHeader radio bss bssCfg.interfaceName bssIdx} >> "$hostapd_config_file"
             cat ${escapeShellArg (extraSettingsFormat.generate "hostapd-radio-${radio}-bss-${bss}-extra.conf" bssCfg.settings)} >> "$hostapd_config_file"
             ${concatMapStrings (
               script: "${script} \"$hostapd_config_file\" \"$mac_allow_file\" \"$mac_deny_file\"\n"
@@ -569,6 +569,22 @@ in
                 type = types.attrsOf (
                   types.submodule (bssSubmod: {
                     options = {
+                      interfaceName = mkOption {
+                        type = types.str;
+                        default = bssSubmod.config._module.args.name;
+                        defaultText = lib.literalMD "the network's attribute name";
+                        example = "mld0";
+                        description = ''
+                          Network interface name emitted in the hostapd configuration.
+                          Secondary BSSs on different radios may share an interface
+                          name when configured as links of the same multi-link device
+                          (with `settings.mld_ap = true`). The attribute name remains
+                          the unique configuration identity, including for ACL files.
+
+                          The primary BSS must use the radio's interface name.
+                        '';
+                      };
+
                       logLevel = mkOption {
                         default = 2;
                         type = types.ints.between 0 4;
@@ -1391,6 +1407,10 @@ in
             message = "hostapd radio ${radio}: Exactly one network must be named like the radio, for reasons internal to hostapd.";
           }
           {
+            assertion = radioCfg.networks ? ${radio} && radioCfg.networks.${radio}.interfaceName == radio;
+            message = "hostapd radio ${radio}: The primary network's interfaceName must match the radio name used for device dependencies.";
+          }
+          {
             assertion =
               (radioCfg.wifi4.enable && builtins.elem "HT40-" radioCfg.wifi4.capabilities)
               -> radioCfg.channel != 0;
@@ -1412,7 +1432,7 @@ in
             [
               {
                 assertion = hasPrefix radio bss;
-                message = "hostapd radio ${radio} bss ${bss}: The bss (network) name ${bss} is invalid. It must be prefixed by the radio name for reasons internal to hostapd. A valid name would be e.g. ${radio}, ${radio}-1, ...";
+                message = "hostapd radio ${radio} bss ${bss}: The network attribute name must be prefixed by the radio name to keep configuration identities distinct and order the primary BSS first. Use interfaceName to select a different secondary interface name.";
               }
               {
                 assertion = (length (attrNames radioCfg.networks) > 1) -> (bssCfg.bssid != null);

@@ -125,7 +125,7 @@ in
             group = opts.group;
           };
         }
-      ) (lib.filterAttrs (_username: opts: opts.home != "/var/empty") systemUsers);
+      ) (lib.filterAttrs (_username: opts: opts.createHome && opts.home != "/var/empty") systemUsers);
 
       # Create uid/gid marker files for those without an explicit id
       tmpfiles.settings.nixos-uid = lib.mapAttrs' (

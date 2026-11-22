@@ -6,25 +6,27 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "bbot";
-  version = "3.0.2";
+  version = "3.1.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-kr1nKzBtUA2LJHh+43UP8DF6NHtmMish2uQyOvzxHEU=";
+    hash = "sha256-XhfM8gI5p7ZOPn+mnB4Rg/VEieXk1FLjdwa8YoHcSeI=";
   };
 
   pythonRelaxDeps = [
+    "blastdns"
+    "cloudcheck"
     "dnspython"
     "idna"
     "lxml"
+    "puremagic"
+    "pyjwt"
     "radixtarget"
     "regex"
     "tabulate"
     "websockets"
     "yara-python"
-    "pyjwt"
-    "cloudcheck"
   ];
 
   build-system = with python3.pkgs; [ hatchling ];

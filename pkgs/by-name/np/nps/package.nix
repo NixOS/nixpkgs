@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nps";
-  version = "0.2.12";
+  version = "0.2.14";
 
   src = fetchFromGitHub {
     owner = "OleMussmann";
     repo = "nps";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-kOVpn13lJYeO/99e39c0wbe7qcKHyMj5v4prBtZ3N7s=";
+    hash = "sha256-aX0iAz5Q5b2wCnBStHafZHaN4jmf3026XH0sc8dviBQ=";
   };
 
-  cargoHash = "sha256-dJA9fOU06txPAx5kMl7aGoFeKo7UXqB7X+viUfJqG/M=";
+  cargoHash = "sha256-jNWTIS52Sdrg1bNP2icMjA3mqgTBjWvNU8ciILDZp2g=";
 
   nativeCheckInputs = [ nix ];
 

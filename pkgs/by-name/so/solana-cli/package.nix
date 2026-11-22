@@ -15,6 +15,8 @@
   libclang,
   libusb1,
   rocksdb,
+  rust-jemalloc-sys-unprefixed,
+  zstd,
   # Taken from https://github.com/anza-xyz/agave/blob/master/scripts/agave-build-lists.sh
   solanaPkgs ? [
     "solana"
@@ -87,6 +89,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     clang
     libclang
     libusb1
+    rust-jemalloc-sys-unprefixed
+    zstd
     rustPlatform.bindgenHook
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ udev ];

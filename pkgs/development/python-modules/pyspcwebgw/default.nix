@@ -17,7 +17,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "mbrrg";
+    owner = "pyspcwebgw";
     repo = "pyspcwebgw";
     tag = "v${version}";
     hash = "sha256-gdIrbr25GXaX26B1f7u0NKbqqnAC2tmMFZspzW6I4HI=";
@@ -49,7 +49,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python module for the SPC Web Gateway REST API";
-    homepage = "https://github.com/mbrrg/pyspcwebgw";
+    homepage = "https://github.com/pyspcwebgw/pyspcwebgw";
     changelog = "https://github.com/pyspcwebgw/pyspcwebgw/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];

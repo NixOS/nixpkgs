@@ -9,6 +9,7 @@
   rustc,
   cacert,
   pkg-config,
+  aws-lc,
   openssl,
   cargo-c,
   validatePkgConfig,
@@ -17,17 +18,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "upki";
-  version = "1.0.0-beta.3";
+  version = "1.0.3";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "rustls";
     repo = "upki";
-    tag = "upki-${finalAttrs.version}";
-    hash = "sha256-GZkXxidIjG76yIzAcMRsRorMVYpImFN5Q2pe2YgiEUs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-aHZY4RmvlxspaepkT2hwOmi4BGk6aVfbaDDGBE4OhxM=";
   };
 
-  cargoHash = "sha256-/z11KuGP3A3fh/Jk2Kx26x7okh6brHs+t/XC7BuPgcA=";
+  cargoHash = "sha256-ZtrJ1JdOYXKgx5gk6DtIW/L7ik+AFnL22UGaPSl/IrQ=";
 
   cargoBuildFlags = [
     "--package=upki-cli"
@@ -38,13 +39,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--package=upki-cli"
   ];
 
+  nativeCheckInputs = [ cacert ];
+
   nativeBuildInputs = [
     cargo-c
     pkg-config
   ];
-  buildInputs = [ openssl ];
-
-  env.SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+  buildInputs = [
+    aws-lc
+    openssl
+  ];
 
   postBuild = ''
     ${buildPackages.rust.envVars.setEnv} cargo cbuild --release --frozen \
@@ -55,6 +59,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --package=upki-openssl \
       --prefix=$out \
       --target=${stdenv.hostPlatform.rust.rustcTarget}
+  '';
+
+  preCheck = ''
+    # fetch_with_stale_local_manifest sets its local cache mtime to 1970-01-02.
+    # Make the server fixture newer than that cache.
+    touch -d @172800 upki-cli/tests/data/typical/revocation/manifest.json
   '';
 
   postInstall = ''
@@ -91,7 +101,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
       lib.licenses.mit
       lib.licenses.asl20
     ];
-    maintainers = [ lib.maintainers.skyesoss ];
+    maintainers = [
+      lib.maintainers.skyesoss
+      lib.maintainers.cpu
+    ];
     mainProgram = "upki";
     pkgConfigModules = [
       "upki"

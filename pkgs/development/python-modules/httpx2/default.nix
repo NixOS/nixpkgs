@@ -18,6 +18,7 @@
   idna,
 
   # optional dependencies
+  backports-zstd,
   brotli,
   brotlicffi,
   click,
@@ -26,7 +27,6 @@
   rich,
   socksio,
   wsproto,
-  zstandard,
 
   # tests
   chardet,
@@ -43,14 +43,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "httpx2";
-  version = "2.9.1";
+  version = "2.13.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pydantic";
     repo = "httpx2";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3kghDQMYksF9a4sFGajzNfGPOjdX1OiMwv7rH/fbmM0=";
+    hash = "sha256-XgjFiSwc4xCyPJcTB/Exh838fUOKsT0JRrha7s70C50=";
   };
 
   postPatch = ''
@@ -80,7 +80,7 @@ buildPythonPackage (finalAttrs: {
     http2 = [ h2 ];
     socks = [ socksio ];
     ws = [ wsproto ];
-    zstd = lib.optionals (pythonOlder "3.14") [ zstandard ];
+    zstd = lib.optionals (pythonOlder "3.14") [ backports-zstd ];
   };
 
   pythonImportsCheck = [
@@ -108,6 +108,7 @@ buildPythonPackage (finalAttrs: {
     # network access
     "test_async_proxy_close"
     "test_sync_proxy_close"
+    "test_h2_timeout_during_request"
     # uvicorn access logging mismatch
     "test_logging_request"
     "test_logging_redirect_chain"
@@ -126,7 +127,6 @@ buildPythonPackage (finalAttrs: {
   };
 
   __darwinAllowLocalNetworking = true;
-  __structuredAttrs = true;
 
   meta = {
     description = "A next generation HTTP client for Python";

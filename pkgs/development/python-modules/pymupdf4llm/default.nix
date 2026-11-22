@@ -14,7 +14,7 @@ buildPythonPackage (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "pymupdf";
-    repo = "RAG";
+    repo = "pymupdf4llm";
     tag = "v${finalAttrs.version}";
     hash = "sha256-SgJ47jkE6GcSXVsOMOx8Hm+Ce6pCAjLEhdxGeJEu6DQ=";
   };
@@ -52,8 +52,8 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "PyMuPDF Utilities for LLM/RAG - converts PDF pages to Markdown format for Retrieval-Augmented Generation";
-    homepage = "https://github.com/pymupdf/RAG";
-    changelog = "https://github.com/pymupdf/RAG/blob/${finalAttrs.src.tag}/CHANGES.md";
+    homepage = "https://github.com/pymupdf/pymupdf4llm";
+    changelog = "https://github.com/pymupdf/pymupdf4llm/blob/${finalAttrs.src.tag}/CHANGES.md";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ ryota2357 ];
   };

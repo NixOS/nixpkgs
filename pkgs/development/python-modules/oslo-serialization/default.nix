@@ -1,25 +1,34 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   msgpack,
   oslo-utils,
   oslotest,
   pbr,
   setuptools,
-  stestr,
+  stestrCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "oslo-serialization";
   version = "5.11.0";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "oslo_serialization";
-    inherit version;
-    hash = "sha256-gyboWoCFbBBoAHQj/Pb+Kd0v5Xoy9dh//wEgtVW0tnw=";
+  src = fetchFromGitHub {
+    owner = "openstack";
+    repo = "oslo.serialization";
+    tag = finalAttrs.version;
+    hash = "sha256-hvttFwF+onEa7tWqPKTSh3ua9SRSlW4+JVOuLihFzWc=";
   };
+
+  # Manually set version since pbr wants to get it from git (not in a tarball)
+  env.PBR_VERSION = finalAttrs.version;
+
+  postPatch = ''
+    # pbr needs git to ship subpackages and package data
+    echo "recursive-include oslo_serialization *" > MANIFEST.in
+  '';
 
   build-system = [
     pbr
@@ -33,16 +42,13 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     oslotest
-    stestr
+    stestrCheckHook
   ];
 
-  checkPhase = ''
-    runHook preCheck
-    stestr run
-    runHook postCheck
-  '';
-
-  pythonImportsCheck = [ "oslo_serialization" ];
+  pythonImportsCheck = [
+    "oslo_serialization"
+    "oslo_serialization.serializer"
+  ];
 
   meta = {
     description = "Oslo Serialization library";
@@ -50,4 +56,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     teams = [ lib.teams.openstack ];
   };
-}
+})

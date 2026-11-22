@@ -22,7 +22,7 @@ in
 
         options = {
           # Pull existing port option into config file.
-          port = mkOption {
+          exporter_port = mkOption {
             type = types.port;
             default = cfg.port;
             internal = true;

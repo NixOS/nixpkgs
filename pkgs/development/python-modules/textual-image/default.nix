@@ -18,15 +18,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "textual-image";
-  version = "0.14.1";
+  version = "0.14.4";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "lnqs";
     repo = "textual-image";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-iGjpEUkr8r74Bb7F5Zmx72hvHLshO8q+2SSRfHlvWiE=";
+    hash = "sha256-pUuTBwSHwkqpNaFrpxmJaByvRW3WFivsrl25CsIpM8w=";
   };
 
   build-system = [ uv-build ];

@@ -23,14 +23,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "piccolo";
-  version = "1.36.0";
+  version = "1.39.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "piccolo-orm";
     repo = "piccolo";
     tag = finalAttrs.version;
-    hash = "sha256-BpnFO6AL0AHwyNw+R3yRwDW9PuJYiI3f546UZN5FxwY=";
+    hash = "sha256-uF/OyJCFdVcC8GEaEq4cYRfU3tMAg5P3XioVakjLaIA=";
   };
 
   build-system = [ setuptools ];
@@ -65,12 +65,7 @@ buildPythonPackage (finalAttrs: {
 
   disabledTests = [
     # Timing issues
-    "TestMigrations"
-    "TestForwardsBackwards"
-    "TestMigrationManager"
-    "TestTableStorage"
-    "TestGraph"
-    "TestDumpLoad"
+    "test_add_and_drop_identity"
     "test_add_column"
     "test_altering_table_in_schema"
     "test_auto_all"
@@ -88,12 +83,19 @@ buildPythonPackage (finalAttrs: {
     "test_psql"
     "test_run"
     "test_set_digits"
+    "test_set_identity"
     "test_set_length"
     "test_set_null"
     "test_shared"
     "test_show_all"
     "test_warn_if_are_conflicting_objects"
     "test_warn_if_is_conflicting"
+    "TestDumpLoad"
+    "TestForwardsBackwards"
+    "TestGraph"
+    "TestMigrationManager"
+    "TestMigrations"
+    "TestTableStorage"
   ];
 
   meta = {

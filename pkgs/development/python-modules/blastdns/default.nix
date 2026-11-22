@@ -1,11 +1,13 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   cargo,
   fetchFromGitHub,
   nix-update-script,
   orjson,
   pydantic,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytestCheckHook,
   rustc,
@@ -14,23 +16,21 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "blastdns";
-  version = "1.9.1-unstable-2026-04-15";
+  version = "2.0.4";
   pyproject = true;
-
-  __structuredAttrs = true;
 
   __darwinAllowLocalNetworking = true;
 
   src = fetchFromGitHub {
     owner = "blacklanternsecurity";
     repo = "blastdns";
-    rev = "a35704b0ec2f6d800da8f85505bfff1893172869";
-    hash = "sha256-N0IbnKz/JdZogJhRHMNaZhhMt2LM9Vhs1ETLqeksE2k=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Zw1iHuQD2jPifrp16eWXE1WJ8PuYW1P+wS6hkODI1pY=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-wBC/T/XUSfxurujQy/B8zXxZthpUWczKT9qdnG4BK7w=";
+    hash = "sha256-Q2OZhiLi/UcTjHyxPWeI+rJTv9zPKh3X8G030rfgDVY=";
   };
 
   build-system = [
@@ -39,6 +39,8 @@ buildPythonPackage (finalAttrs: {
     rustPlatform.maturinBuildHook
     rustc
   ];
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   dependencies = [
     orjson
@@ -62,13 +64,19 @@ buildPythonPackage (finalAttrs: {
     "tests"
   ];
 
+  # Copying of the tests doesn't work on darwin
+  doCheck = !stdenv.hostPlatform.isDarwin;
+
   disabledTests = [
-    # Tests requires host system DNS config files that are absent in sandboxed builds.
-    "test_get_system_resolvers"
+    # Tests requires host system DNS config files that are absent in sandboxed builds
     "test_client_resolve"
+    "test_get_system_resolvers"
     "test_mock_matches_real_client"
-    "test_zone_transfer_success"
+    "test_stats_account_for_every_query"
     "test_zone_transfer_nonexistent_zone"
+    "test_zone_transfer_success"
+    # Flaky test
+    "test_batch_size_1000"
   ];
 
   pythonImportsCheck = [ "blastdns" ];

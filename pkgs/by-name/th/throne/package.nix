@@ -21,20 +21,20 @@
   # To get the latest revision go to the rule-set branch and get the revision of the last commit
   # Link: https://github.com/throneproj/routeprofiles/tree/rule-set
   throne-srslist-info ? {
-    rev = "1aa995b5fc30c26b931a61171aea2ab49c3d1711";
-    hash = "sha256-jKYUjgxpE1zwcVv+9Fdj8H1QnPZpTzmzVsMfOMOKGFw=";
+    rev = "570200c88e2bdc691250b5bc9c9c0a0366e4cdfa";
+    hash = "sha256-UsYKYi2RFYfK+VsTYEbexWGo4HrT+VXWVWLWZsmKvmc=";
   },
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "throne";
-  version = "1.3.2";
+  version = "1.4.2";
 
   src = fetchFromGitHub {
     owner = "throneproj";
     repo = "Throne";
     tag = finalAttrs.version;
-    hash = "sha256-Jj8IVXUm+36sE/195DdrU2l/MpaN4WJtW3ST/j8xKVU=";
+    hash = "sha256-zB4j+w6GwHaQGPtqXlrc8rryj7fFYsI8U33/F+tJWls=";
   };
 
   # NKR_ELEVATION_HINT contains spaces
@@ -120,7 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
     # the main package has no tests, checkPhase would only rebuild all deps without -trimpath
     doCheck = false;
 
-    vendorHash = "sha256-NWTXF1f9yNxhzqgF9A7eYWCmGrJ2DV/z/wKW4Yf94ZA=";
+    vendorHash = "sha256-SM4fRBxZQLmJXq2mVL2jlib65nlXn3kNW/o80WKdFIU=";
 
     nativeBuildInputs = [
       protobuf
@@ -157,7 +157,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     tags = [
       "with_clash_api"
-      "with_gvisor"
       "with_quic"
       "with_wireguard"
       "with_utls"

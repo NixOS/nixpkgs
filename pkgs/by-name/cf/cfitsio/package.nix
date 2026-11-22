@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   gitUpdater,
   cmake,
   bzip2,
@@ -19,6 +20,14 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "cfitsio-${finalAttrs.version}";
     hash = "sha256-k05ylMYf+hsYur3BgNAweMeDc89rsBBtie+P7bd+7qg=";
   };
+
+  patches = [
+    # fix for CVE-2026-115504 can be removed with next release
+    (fetchpatch {
+      url = "https://github.com/heasarc/cfitsio/commit/113781d8aa442cf8d3c27295d9084674b8b039f2.patch";
+      hash = "sha256-Je+z9a0ySQ93vfgGSr/PuqtxY3qPsmuOwVwsTQ3nfyY=";
+    })
+  ];
 
   outputs = [
     "bin"

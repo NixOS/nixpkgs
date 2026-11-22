@@ -4,12 +4,16 @@
   fetchFromGitHub,
   pkg-config,
   openssl,
+  oniguruma,
+  sqlite,
   versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "shore";
   version = "0.1.4";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "MoonKraken";
@@ -20,20 +24,20 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-HYdTODIHA1TGhu6BKrKFkvBlGtqVt89wYX9Ehn0EOC0=";
 
-  env.OPENSSL_NO_VENDOR = true;
-
   nativeBuildInputs = [
     pkg-config
   ];
 
   buildInputs = [
     openssl
+    oniguruma
+    sqlite
   ];
 
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
   meta = {
     description = "CLI-based frontend for inference providers with vim inspired keybindings";

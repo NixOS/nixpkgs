@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
   pyproject = false;
 
-  src = clang-unwrapped + "/bin";
+  src = clang-unwrapped.python + "/bin";
 
   dontUnpack = true;
 
@@ -31,6 +31,9 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     ":"
     (lib.makeBinPath [ clang-unwrapped ])
   ];
+
+  # The src and version come from clang-unwrapped
+  passthru.updateScript = null;
 
   meta = {
     description = "intercepts the build process to generate a compilation database";

@@ -22,14 +22,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "google-ai-generativelanguage";
-  version = "0.12.0";
+  version = "0.12.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "google-cloud-python";
     tag = "google-ai-generativelanguage-v${finalAttrs.version}";
-    hash = "sha256-M/7uDWWz4YCfxa4gyM9BaAo10iyTMvtR2MhNpdFYnis=";
+    hash = "sha256-b0FYupZU0ZNeIL9xJIqEXgg7ToRCQLjiswJ67YzX7OI=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/packages/google-ai-generativelanguage";
@@ -59,6 +59,11 @@ buildPythonPackage (finalAttrs: {
     "google.ai.generativelanguage"
     "google.ai.generativelanguage_v1beta2"
   ];
+
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+  };
 
   meta = {
     description = "Google Ai Generativelanguage API client library";

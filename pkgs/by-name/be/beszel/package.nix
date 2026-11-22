@@ -9,13 +9,13 @@
 }:
 buildGo127Module (finalAttrs: {
   pname = "beszel";
-  version = "0.20.0";
+  version = "0.21.2";
 
   src = fetchFromGitHub {
     owner = "henrygd";
     repo = "beszel";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-F7N9IVqOk+pNrH1wIqkNthLNhqW+HmTkJB43RwBMWpo=";
+    hash = "sha256-O5RtDg6V7RBjV7Pe75YppGz8JSVziwfvLBYDD/l6ZAc=";
   };
 
   webui = buildNpmPackage {
@@ -49,10 +49,12 @@ buildGo127Module (finalAttrs: {
 
     sourceRoot = "${finalAttrs.src.name}/internal/site";
 
-    npmDepsHash = "sha256-mYAD8FrQwa+F/VgGxFpe8vqucfZaM0PmY+gJJqw1IKk=";
+    npmDepsHash = "sha256-pL4Qmi17CC4t6G/Mw/AgZUPf6cl0UPm75zfHVfrkoKI=";
   };
 
-  vendorHash = "sha256-rIDsv9BL4k04dMXm0Sqbdjt+W98SSGEaWYP/laBVFrk=";
+  tags = [ "no_self_update" ];
+
+  vendorHash = "sha256-VDFdCoVIB1idUo1Buek6Im4uwYMduYY/PEdSJFgLuFo=";
 
   preBuild = ''
     mkdir -p internal/site/dist
@@ -82,7 +84,7 @@ buildGo127Module (finalAttrs: {
     in
     [
       "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$"
-      "-tags=testing,no_ui"
+      "-tags=testing,no_ui,no_self_update"
     ];
 
   postInstall = ''

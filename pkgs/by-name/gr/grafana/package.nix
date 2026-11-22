@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   removeReferencesTo,
   tzdata,
@@ -17,29 +17,38 @@
   xcbuild,
   faketty,
   nodejs,
+  withSourceMaps ? false,
 }:
 
-buildGoModule (finalAttrs: {
+let
+  wire' = wire.override { buildGoModule = buildGo127Module; };
+in
+let
+  wire = wire';
+in
+buildGo127Module (finalAttrs: {
   pname = "grafana";
-  version = "13.2.3";
+  version = "13.3.1";
 
   subPackages = [
     "pkg/cmd/grafana"
-    "pkg/cmd/grafana-server"
-    "pkg/cmd/grafana-cli"
   ];
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "grafana";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ySpywbu/JzuzvI9iVDXuzBu/nIAICr2e8raOeeie1YE=";
+    hash = "sha256-sv8RHis7EioA2AmaLMfuBfIVuq0P8Hn7det741x+DfY=";
   };
 
   # borrowed from: https://github.com/NixOS/nixpkgs/blob/d70d9425f49f9aba3c49e2c389fe6d42bac8c5b0/pkgs/development/tools/analysis/snyk/default.nix#L20-L22
   env = {
     CYPRESS_INSTALL_BINARY = 0;
     PUPPETEER_SKIP_DOWNLOAD = 1;
+
+    # If this isn't turned off, a grafana build leaves behind a daemon
+    # monitoring for additional file changes.
+    NX_DAEMON = "false";
 
     # The build OOMs on memory constrained aarch64 without this
     NODE_OPTIONS = "--max_old_space_size=4096";
@@ -49,12 +58,12 @@ buildGoModule (finalAttrs: {
   # Since this is not a dependency attribute the buildPackages has to be specified.
   offlineCache = buildPackages.yarn-berry_4-fetcher.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
-    hash = "sha256-rDH/PUHcbPEivSE5BecDaRgW56EPpLPbV1dd7UbgPaA=";
+    hash = "sha256-MG3ugZgGmZwlU7ZJzwIhH7c/eJLdkzbR3ZsZllf7/dQ=";
   };
 
   disallowedRequisites = [ finalAttrs.offlineCache ];
 
-  vendorHash = "sha256-40tV7fiHUv/uBYOLd5/unDNm354qT4SQYnLQnRStih4=";
+  vendorHash = "sha256-LCvahHjznJcC04bT2eyRkpe5z7tIQLGQ+FqUmqjrxJQ=";
 
   # Grafana seems to just set it to the latest version available
   # nowadays.
@@ -119,7 +128,6 @@ buildGoModule (finalAttrs: {
 
     # Workaround for https://github.com/nrwl/nx/issues/22445
     faketty yarn run build
-    yarn run plugins:build-bundled
   '';
 
   ldflags = [
@@ -141,6 +149,11 @@ buildGoModule (finalAttrs: {
   postInstall = ''
     mkdir -p $out/share/grafana
     cp -r public conf $out/share/grafana/
+    find "$out/share/grafana/public" -type d -name node_modules -prune -exec rm -rf {} +
+    find "$out/share/grafana/public" -type f \( -name "*.ts" -o -name "*.tsx" -o -name "*.snap" \) -delete
+  ''
+  + lib.optionalString (!withSourceMaps) ''
+    find "$out/share/grafana/public" -type f -name "*.js.map" -delete
   '';
 
   postFixup = ''

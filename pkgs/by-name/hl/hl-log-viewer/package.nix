@@ -4,6 +4,8 @@
   rustPlatform,
   installShellFiles,
   fetchFromGitHub,
+  pkg-config,
+  zstd,
   nix-update-script,
   versionCheckHook,
 }:
@@ -20,7 +22,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-RXIXoF3z2Zleje1OakHXQxPmNkRcqHjINRZYqMXS8U0=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+  ];
+
+  buildInputs = [ zstd ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd hl \

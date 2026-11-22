@@ -2,11 +2,13 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonAtLeast,
 
   # build-system
   flit-core,
   installShellFiles,
+  stdenv,
+  buildPackages,
+  python,
 
   # docs
   sphinx,
@@ -34,14 +36,14 @@ let
 
   self = buildPythonPackage rec {
     pname = "pip";
-    version = "26.1.2";
+    version = "26.2.2";
     pyproject = true;
 
     src = fetchFromGitHub {
       owner = "pypa";
       repo = "pip";
       tag = version;
-      hash = "sha256-E53TU7LzGz+gpW1TCQUkSRMUif8mq702EgXdAVxtrGw=";
+      hash = "sha256-iH5O1kneYzoHpzbfgrJc/8gVr57CNX3/xpwel4ueNqE=";
     };
 
     postPatch = ''
@@ -104,14 +106,19 @@ let
       werkzeug
     ];
 
-    postInstall = ''
-      installManPage docs/build/man/*
-
-      installShellCompletion --cmd pip \
-        --bash <($out/bin/pip completion --bash --no-cache-dir) \
-        --fish <($out/bin/pip completion --fish --no-cache-dir) \
-        --zsh <($out/bin/pip completion --zsh --no-cache-dir)
-    '';
+    postInstall =
+      let
+        emulator = stdenv.hostPlatform.emulator buildPackages;
+      in
+      ''
+        installManPage docs/build/man/*
+      ''
+      + lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) ''
+        installShellCompletion --cmd pip \
+          --bash <(${emulator} ${python.interpreter} $out/bin/pip completion --bash --no-cache-dir) \
+          --fish <(${emulator} ${python.interpreter} $out/bin/pip completion --fish --no-cache-dir) \
+          --zsh <(${emulator} ${python.interpreter} $out/bin/pip completion --zsh --no-cache-dir)
+      '';
 
     passthru.tests = {
       inherit pip-tools;

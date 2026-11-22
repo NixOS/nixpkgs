@@ -21,38 +21,16 @@
   supportDouble ? false,
 
 }:
-let
-  # On newer versions of Clang, Weverything is too much of everything.
-  ignoredErrors = [
-    "-Wno-unsafe-buffer-usage"
-    "-Wno-reserved-identifier"
-    "-Wno-extra-semi-stmt"
-    "-Wno-implicit-void-ptr-cast"
-  ];
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "unity-test";
-  version = "2.6.1";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "ThrowTheSwitch";
     repo = "Unity";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-g0ubq7RxGQmL1R6vz9RIGJpVWYsgrZhsTWSrL1ySEug=";
+    hash = "sha256-9vCVNdu7e1w0AsCwcLOJXI6EXOaO6zG/PmGjcpsCllw=";
   };
-
-  patches = [
-    # The meson file does not have the subdir set correctly
-    (fetchpatch2 {
-      url = "https://patch-diff.githubusercontent.com/raw/ThrowTheSwitch/Unity/pull/771.patch?full_index=1";
-      hash = "sha256-b1TGYkqeAVbYftN5/YBdiFB7EsSh56S8PCx53fY8lDo=";
-    })
-    # Fix up the shebangs in the auto directory as not all are correct
-    (fetchpatch2 {
-      url = "https://patch-diff.githubusercontent.com/raw/ThrowTheSwitch/Unity/pull/790.patch?full_index=1";
-      hash = "sha256-N3DVkSuhZUA+9RIynPwuISf4XkVSA2eNqJqrt67XOhA=";
-    })
-  ];
 
   postPatch = ''
     patchShebangs --build auto
@@ -63,7 +41,9 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
+  __structuredAttrs = true;
   strictDeps = true;
+
   nativeBuildInputs = [
     meson
     ninja
@@ -78,19 +58,27 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   mesonFlags = [
-    (lib.mesonBool "extension_memory" buildMemory)
+    (lib.mesonEnable "extension_memory" buildMemory)
     (lib.mesonBool "extension_fixture" buildFixture)
     (lib.mesonBool "support_double" supportDouble)
   ];
 
   doCheck = true;
+  dontUseMesonCheck = true;
+  dontUseNinjaCheck = true;
 
-  checkPhase = ''
-    runHook preCheck
+  checkFlags = lib.optionals stdenv.cc.isClang [
+    # Will always try gcc without
+    "CC=clang"
+  ];
 
-    make -C../test -j $NIX_BUILD_CORES ${lib.optionalString stdenv.cc.isClang "CC=clang"} E="-Weverything ${lib.escapeShellArgs ignoredErrors}" test
+  preCheck = ''
+    pushd ../test
+    foundMakefile=1
+  '';
 
-    runHook postCheck
+  postCheck = ''
+    popd
   '';
 
   # Various helpers

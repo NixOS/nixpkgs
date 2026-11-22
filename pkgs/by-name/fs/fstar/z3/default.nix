@@ -1,118 +1,70 @@
 {
   fetchFromGitHub,
-  fetchpatch,
   lib,
-  replaceVars,
   stdenvNoCC,
   z3,
 }:
 
 let
-  z3' = z3.override { useCmakeBuild = false; };
+  z3' = z3.override { pythonBindings = false; };
 
-  # fstar has a pretty hard dependency on certain z3 patch versions.
-  # https://github.com/FStarLang/FStar/issues/3689#issuecomment-2625073641
-  # We need to package all the Z3 versions it prefers here.
-  fstarNewZ3Version = "4.13.3";
-  fstarNewZ3 =
-    if z3'.version == fstarNewZ3Version then
-      z3'
-    else
-      z3'.overrideAttrs (final: rec {
-        version = fstarNewZ3Version;
-        src = fetchFromGitHub {
-          owner = "Z3Prover";
-          repo = "z3";
-          rev = "z3-${version}";
-          hash = "sha256-odwalnF00SI+sJGHdIIv4KapFcfVVKiQ22HFhXYtSvA=";
-        };
-      });
+  mkZ3 =
+    version: hash:
+    z3'.overrideAttrs {
+      inherit version;
+      patches = [ (./. + "/${version}.patch") ];
+      postPatch = "";
+      src = fetchFromGitHub {
+        owner = "Z3Prover";
+        repo = "z3";
+        rev = "z3-${version}";
+        inherit hash;
+      };
+    };
 
-  fstarOldZ3Version = "4.8.5";
-  fstarOldZ3 =
-    if z3'.version == fstarOldZ3Version then
-      z3'
-    else
-      z3'.overrideAttrs (prev: rec {
-        version = fstarOldZ3Version;
-        src = fetchFromGitHub {
-          owner = "Z3Prover";
-          repo = "z3";
-          rev = "Z3-${version}"; # caps matter
-          hash = "sha256-ytG5O9HczbIVJAiIGZfUXC/MuYH7d7yLApaeTRlKXoc=";
-        };
-        patches =
-          let
-            static-matrix-patch = fetchpatch {
-              # clang / gcc fixes. fixes typos in some member names
-              name = "gcc-15-fixes.patch";
-              url = "https://github.com/Z3Prover/z3/commit/2ce89e5f491fa817d02d8fdce8c62798beab258b.patch";
-              includes = [ "src/@dir@/lp/static_matrix.h" ];
-              stripLen = 3;
-              extraPrefix = "src/@dir@/";
-              hash = "sha256-+H1/VJPyI0yq4M/61ay8SRCa6OaoJ/5i+I3zVTAPUVo=";
-            };
+  withLegacyFixes =
+    solver:
+    solver.overrideAttrs (prev: {
+      # Older releases use an uppercase Z3 tag prefix.
+      src = prev.src.override { rev = "Z3-${prev.version}"; };
 
-            # replace @dir@ in the path of the given list of patches
-            fixupPatches = dir: map (patch: replaceVars patch { dir = dir; });
-          in
-          prev.patches or [ ]
-          ++ fixupPatches "util" [
-            ./lower-bound-typo.diff
-            static-matrix-patch
-            ./tail-matrix.diff
-          ]
-          ++ [
-            ./4-8-5-typos.diff
-            (fetchpatch {
-              url = "https://github.com/Z3Prover/z3/commit/40183d7b73fcc4020b4d4b2e658b24a8c4b648ee.patch";
-              hash = "sha256-+VpPYUBVAVB9BQIp+phmL6IAEc0RC+YoUVCIsIe5TSQ=";
-            })
-            (fetchpatch {
-              url = "https://github.com/Z3Prover/z3/commit/03ae6d86cb4db88c71d6b245e29400e9a44cb59f.patch";
-              hash = "sha256-nNjkQpaSCyAqnPEZcRtG+cMTPeA+CQfvmNUe5fAK93Q=";
-            })
-            (fetchpatch {
-              url = "https://github.com/Z3Prover/z3/commit/f6c9ead10c0cf904925d7495f5c08dae66643b7a.patch";
-              hash = "sha256-eUeFayyfdg9Q8s97H6khBXst9nLYWM7NSEoQ2btMHEE=";
-            })
-          ];
+      cmakeFlags = map (lib.replaceStrings [ "-DZ3_" ] [ "-D" ]) prev.cmakeFlags ++ [
+        (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.5")
+      ];
 
-        postPatch =
-          let
-            python = lib.findFirst (pkg: lib.hasPrefix "python" pkg.pname) null prev.nativeBuildInputs;
-          in
+      # The API generator imports distutils even without Python bindings.
+      postPatch = (prev.postPatch or "") + ''
+        substituteInPlace scripts/mk_util.py \
+          --replace-fail "distutils.sysconfig.get_python_lib()" "sysconfig.get_path('purelib')" \
+          --replace-fail "distutils.sysconfig" "sysconfig"
+      '';
 
-          assert python != null;
+      meta = prev.meta // {
+        pkgConfigModules = [ ];
+      };
+    });
 
-          prev.postPatch or ""
-          +
-            lib.optionalString
-              ((lib.versionAtLeast python.version "3.12") && (lib.versionOlder version "4.8.14"))
-              ''
-                # See https://github.com/Z3Prover/z3/pull/5729. This is a specialization of this patch for 4.8.5.
-                for file in scripts/mk_util.py src/api/python/CMakeLists.txt; do
-                  substituteInPlace "$file" \
-                    --replace-fail "distutils.sysconfig.get_python_lib()" "sysconfig.get_path('purelib')" \
-                    --replace-fail "distutils.sysconfig" "sysconfig"
-                done
-              '';
-
-      });
+  # Keep the exact versions distributed with this F* release.
+  # https://github.com/NixOS/nixpkgs/pull/374917#issuecomment-2661497006
+  solvers = {
+    z3_4_8_5 = withLegacyFixes (mkZ3 "4.8.5" "sha256-ytG5O9HczbIVJAiIGZfUXC/MuYH7d7yLApaeTRlKXoc=");
+    z3_4_13_3 = mkZ3 "4.13.3" "sha256-odwalnF00SI+sJGHdIIv4KapFcfVVKiQ22HFhXYtSvA=";
+    z3_4_15_3 = mkZ3 "4.15.3" "sha256-Lw037Z0t0ySxkgMXkbjNW5CB4QQLRrrSEBsLJqiomZ4=";
+    z3_5_3_0 = mkZ3 "5.3.0" "sha256-K0KTI8ZpvvYCF9ITxVTbdtqlalFFjtYcyog/Sy1kRV8=";
+  };
 in
 stdenvNoCC.mkDerivation {
   name = "fstar-z3";
   dontUnpack = true;
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin
-    ln -s ${lib.getExe fstarNewZ3} $out/bin/z3-${lib.escapeShellArg fstarNewZ3.version}
-    ln -s ${lib.getExe fstarOldZ3} $out/bin/z3-${lib.escapeShellArg fstarOldZ3.version}
+    ${lib.concatMapStringsSep "\n" (solver: ''
+      ln -s ${lib.getExe solver} $out/bin/z3-${solver.version}
+    '') (builtins.attrValues solvers)}
+    runHook postInstall
   '';
 
-  passthru = {
-    "z3_${lib.replaceStrings [ "." ] [ "_" ] fstarNewZ3.version}" = fstarNewZ3;
-
-    "z3_${lib.replaceStrings [ "." ] [ "_" ] fstarOldZ3.version}" = fstarOldZ3;
-  };
+  passthru = solvers;
 }

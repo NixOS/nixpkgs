@@ -4,6 +4,7 @@
   fetchFromGitHub,
   pkg-config,
   rustPlatform,
+  sqlite,
   zstd,
 }:
 
@@ -32,6 +33,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     bzip2
+    sqlite
     zstd
   ];
 

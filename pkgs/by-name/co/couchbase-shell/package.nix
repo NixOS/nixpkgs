@@ -1,10 +1,12 @@
 {
   lib,
+  libgit2,
   stdenv,
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
   openssl,
+  sqlite,
   testers,
   nix-update-script,
   couchbase-shell,
@@ -28,7 +30,9 @@ rustPlatform.buildRustPackage rec {
   ];
 
   buildInputs = [
+    libgit2
     openssl
+    sqlite
   ];
 
   # tests need couchbase server

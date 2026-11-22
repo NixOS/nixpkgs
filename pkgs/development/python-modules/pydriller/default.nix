@@ -16,7 +16,6 @@ buildPythonPackage (finalAttrs: {
   pname = "pydriller";
   version = "2.12";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "ishepard";

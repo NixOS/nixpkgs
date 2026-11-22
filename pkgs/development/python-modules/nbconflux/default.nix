@@ -19,7 +19,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "vericast";
+    owner = "adtech-labs";
     repo = "nbconflux";
     tag = version;
     hash = "sha256-kHIuboFKLVsu5zlZ0bM1BUoQR8f1l0XWcaaVI9bECJw=";

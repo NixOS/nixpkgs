@@ -10,20 +10,20 @@
   pytest-error-for-skips,
   pytestCheckHook,
   setuptools,
-  syrupy_6,
+  syrupy,
   tenacity,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "nextdns";
-  version = "5.1.0";
+  version = "5.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bieniu";
     repo = "nextdns";
     tag = finalAttrs.version;
-    hash = "sha256-+ih7QHmtQmWsi6HZZ3xepYBDYlCOyMKo0pQtr6oXpFs=";
+    hash = "sha256-Z/t2bqiDOfl6QbKAUPUEawNDB9de9hbkzWbDvhTL1T4=";
   };
 
   build-system = [ setuptools ];
@@ -41,7 +41,7 @@ buildPythonPackage (finalAttrs: {
     pytest-asyncio
     pytest-error-for-skips
     pytestCheckHook
-    syrupy_6
+    syrupy
   ];
 
   disabledTests = [

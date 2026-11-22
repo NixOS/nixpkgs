@@ -48,6 +48,7 @@ rec {
     import ../pkgs/top-level/release.nix {
       inherit supportedSystems;
       nixpkgs = nixpkgsSrc;
+      jobsetPrefix = "nixpkgs";
     }
   );
 
@@ -79,7 +80,6 @@ rec {
         (onFullSupported "nixos.tests.acme.dns01")
         (onSystems [ "x86_64-linux" ] "nixos.tests.boot.biosCdrom")
         (onSystems [ "x86_64-linux" ] "nixos.tests.boot.biosUsb")
-        (onFullSupported "nixos.tests.boot-stage1")
         (onFullSupported "nixos.tests.boot.uefiCdrom")
         (onFullSupported "nixos.tests.boot.uefiUsb")
         (onFullSupported "nixos.tests.chromium")
@@ -103,24 +103,6 @@ rec {
         (onFullSupported "nixos.tests.gnome")
         (onSystems [ "x86_64-linux" ] "nixos.tests.hibernate")
         (onFullSupported "nixos.tests.i3wm")
-        (onSystems [ "aarch64-linux" ] "nixos.tests.installer-systemd-stage-1.simpleUefiSystemdBoot")
-        (onSystems [ "x86_64-linux" ] "nixos.tests.installer-systemd-stage-1.btrfsSimple")
-        (onSystems [ "x86_64-linux" ] "nixos.tests.installer-systemd-stage-1.btrfsSubvolDefault")
-        (onSystems [ "x86_64-linux" ] "nixos.tests.installer-systemd-stage-1.btrfsSubvolEscape")
-        (onSystems [ "x86_64-linux" ] "nixos.tests.installer-systemd-stage-1.btrfsSubvols")
-        (onSystems [ "x86_64-linux" ] "nixos.tests.installer-systemd-stage-1.luksroot")
-        (onSystems [ "x86_64-linux" ] "nixos.tests.installer-systemd-stage-1.lvm")
-        (onSystems [ "x86_64-linux" ] "nixos.tests.installer-systemd-stage-1.separateBootZfs")
-        (onSystems [ "x86_64-linux" ] "nixos.tests.installer-systemd-stage-1.separateBootFat")
-        (onSystems [ "x86_64-linux" ] "nixos.tests.installer-systemd-stage-1.separateBoot")
-        (onSystems [ "x86_64-linux" ] "nixos.tests.installer-systemd-stage-1.simpleLabels")
-        (onSystems [ "x86_64-linux" ] "nixos.tests.installer-systemd-stage-1.simpleProvided")
-        (onSystems [ "x86_64-linux" ] "nixos.tests.installer-systemd-stage-1.simpleUefiSystemdBoot")
-        (onSystems [ "x86_64-linux" ] "nixos.tests.installer-systemd-stage-1.simple")
-        (onSystems [ "x86_64-linux" ] "nixos.tests.installer-systemd-stage-1.swraid")
-        (onSystems [ "x86_64-linux" ] "nixos.tests.installer-systemd-stage-1.zfsroot")
-        (onSystems [ "x86_64-linux" ] "nixos.tests.nixos-rebuild-specialisations")
-        # Scripted stage 1 installer tests, remove in 26.11
         (onSystems [ "aarch64-linux" ] "nixos.tests.installer.simpleUefiSystemdBoot")
         (onSystems [ "x86_64-linux" ] "nixos.tests.installer.btrfsSimple")
         (onSystems [ "x86_64-linux" ] "nixos.tests.installer.btrfsSubvolDefault")
@@ -185,8 +167,6 @@ rec {
         (onSystems [ "x86_64-linux" ] "nixos.tests.oci-containers.podman")
         (onFullSupported "nixos.tests.openssh")
         (onFullSupported "nixos.tests.systemd-initrd-networkd-ssh")
-        # Scripted stage 1 SSH test, remove in 26.11
-        (onFullSupported "nixos.tests.initrd-network-ssh")
         (onFullSupported "nixos.tests.pantheon")
         (onFullSupported "nixos.tests.php.fpm")
         (onFullSupported "nixos.tests.php.httpd")
@@ -216,7 +196,7 @@ rec {
         (onSystems [ "x86_64-linux" ] "nixpkgs.mesa_i686") # i686 sanity check + useful
         [
           # Include all release-critical jobs from nixpkgs-unstable channel
-          "nixpkgs.unstable"
+          "nixpkgs.tested"
           "nixpkgs.tarball"
           "nixpkgs.release-checks"
         ]

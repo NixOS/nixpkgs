@@ -12,14 +12,12 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "asndb";
-  version = "1.1.0";
+  version = "1.1.1";
   pyproject = true;
-
-  __structuredAttrs = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-Q1qXQepm1ouBfJwQVHKfiMPV66lLlsqZGxWa1Asj0Mo=";
+    hash = "sha256-knLdKdZJzlxfX8xshDgkiBINj3VxZWgByNlw56/CoDo=";
   };
 
   build-system = [ setuptools ];

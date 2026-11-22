@@ -4,7 +4,7 @@
   fetchFromGitHub,
   wxwidgets_3_2,
   texinfo,
-  tetex,
+  texliveTeTeX,
   wrapGAppsHook3,
   autoconf-archive,
   autoreconfHook,
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     autoreconfHook
     autoconf-archive
     texinfo
-    tetex
+    texliveTeTeX
     wrapGAppsHook3
   ];
 

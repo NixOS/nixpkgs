@@ -1,5 +1,6 @@
 {
   lib,
+  libgit2,
   rustPlatform,
   fetchFromGitLab,
   openssl,
@@ -26,6 +27,7 @@ rustPlatform.buildRustPackage (final: {
   cargoHash = "sha256-/9/nTqCRi74TMToWQjtnnzQ8en+nqKT8gUipNcHTxvs=";
 
   buildInputs = [
+    libgit2
     openssl.dev
     nettle.dev
     sqlite.dev

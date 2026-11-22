@@ -14,12 +14,12 @@
 }:
 buildGo127Module (finalAttrs: {
   pname = "qui";
-  version = "1.31.1";
+  version = "1.33.1";
   src = fetchFromGitHub {
     owner = "autobrr";
     repo = "qui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NaJSVOkmzvnE6/kKYsRF/6Gf0vTge7hvEHQ/+dHRchk=";
+    hash = "sha256-OW3KXiylC2AD5vw+uXnidwaST/ujbr+9yzoLh8qNJ/E=";
   };
 
   qui-web = stdenvNoCC.mkDerivation (finalAttrs': {
@@ -55,7 +55,7 @@ buildGo127Module (finalAttrs: {
     '';
   });
 
-  vendorHash = "sha256-DZ1JAC485qDOlk6+bSp/5HY30MclP6cINWmDJ8mEZ4Y=";
+  vendorHash = "sha256-wJ2chWHNP24BH+QcIuJSWDfbMhPn0k0lc67QCN4w7uo=";
 
   preBuild = ''
     cp -r ${finalAttrs.qui-web}/* web/dist
@@ -73,9 +73,11 @@ buildGo127Module (finalAttrs: {
   # some season-pack tests use non-existent source paths (e.g. /media/...) and
   # assert on a same-filesystem check that resolves them up to /. go's
   # t.TempDir honours $TMPDIR, which defaults to /build. so just point it to
-  # something sane
+  # something sane. We use realpath, because on macOS it's symliked to
+  # /private/tmp during the build, and tests were failing when comparing
+  # non-resolved paths to resolved paths.
   preCheck = ''
-    export TMPDIR=/tmp
+    export TMPDIR="$(realpath /tmp)"
   '';
 
   checkFlags = [
@@ -109,7 +111,7 @@ buildGo127Module (finalAttrs: {
     changelog = "https://github.com/autobrr/qui/releases/tag/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [
       pta2002
-      tmarkus
+      AAAAAASomeThingsFailToEvaluate
     ];
     mainProgram = "qui";
     platforms = lib.platforms.unix;

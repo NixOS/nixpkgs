@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "adidnsdump";
-  version = "1.4.0";
+  version = "1.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dirkjanm";
     repo = "adidnsdump";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gKOIZuXYm8ltaajmOZXulPX5dI4fWz4xiZ8W0kPpcRk=";
+    hash = "sha256-9RUixcQ8l9EqHZQ3Hy+80AtLX+xZ7fdYcINMq7jCg70=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];
@@ -21,6 +21,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   dependencies = with python3.pkgs; [
     impacket
     ldap3
+    ldap3-ad-auth
   ];
 
   pythonImportsCheck = [ "adidnsdump" ];

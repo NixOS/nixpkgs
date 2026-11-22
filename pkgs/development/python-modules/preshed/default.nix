@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   cymem,
-  cython,
+  cython_3_2,
   fetchPypi,
   murmurhash,
   pytestCheckHook,
@@ -10,15 +10,15 @@
 
 buildPythonPackage rec {
   pname = "preshed";
-  version = "3.0.13";
+  version = "3.0.15";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-119xi7/ZfpkveCfg+n+vapG92cki1bqktQ1icxOWy4k=";
+    hash = "sha256-R8bM2eK1Y59Zg6FkW7Jw6IEpZMA/I+mJ7nmWxkaR/cg=";
   };
 
-  nativeBuildInputs = [ cython ];
+  nativeBuildInputs = [ cython_3_2 ];
 
   propagatedBuildInputs = [
     cymem

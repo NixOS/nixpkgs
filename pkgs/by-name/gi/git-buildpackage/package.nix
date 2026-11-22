@@ -8,30 +8,39 @@
   python3Packages,
 
   # nativeCheckInputs
+  cpio,
   debian-devscripts,
   dpkg,
   gitMinimal,
   gitSetupHook,
+  libzip,
   man,
+  rpm,
+  unzip,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "git-buildpackage";
-  version = "0.9.39";
+  version = "0.9.43";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "agx";
     repo = "git-buildpackage";
     tag = "debian/${finalAttrs.version}";
-    hash = "sha256-glj0WtlZb42wetD5sKHbWvgPOZ/lQofPYtChuk3rie0=";
+    hash = "sha256-UezdxQZu0gcZB479qtmW0F5IFDsi7WRhjl2UI1yhlY0=";
     fetchSubmodules = true;
   };
 
   postPatch = ''
-    substituteInPlace gbp/command_wrappers.py \
-    --replace-fail "/bin/true" "${lib.getExe' coreutils "true"}" \
-    --replace-fail "/bin/false" "${lib.getExe' coreutils "false"}"
+    substituteInPlace gbp/command_wrappers.py gbp/deb/changelog.py \
+      --replace-fail "/bin/true" "${lib.getExe' coreutils "true"}"
+
+    substituteInPlace gbp/deb/__init__.py \
+      --replace-fail "/usr/bin/dpkg" "${lib.getExe dpkg}"
+
+    substituteInPlace tests/test_12_deb.py \
+      --replace-fail "/tmp" "/build"
   '';
 
   build-system = [
@@ -42,21 +51,31 @@ python3Packages.buildPythonApplication (finalAttrs: {
     python-dateutil
     pyyaml
     rpm
+    notify2
+    requests
   ];
 
   pythonImportsCheck = [
     "gbp"
   ];
 
-  # don't add pytest and pytest-cov to setup_requires
-  env.WITHOUT_PYTESTS = true;
+  env = {
+    # don't add pytest and pytest-cov to setup_requires
+    WITHOUT_PYTESTS = true;
+    # fix run of dch in tests
+    DEBEMAIL = "test@example.com";
+  };
 
   nativeCheckInputs = [
+    cpio
     debian-devscripts
     dpkg
     gitMinimal
     gitSetupHook
+    libzip # for zipmerge executable
     man
+    rpm
+    unzip
   ]
   ++ (with python3Packages; [
     pytest-cov-stub
@@ -88,6 +107,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   };
 
   meta = {
+    changelog = "https://github.com/agx/git-buildpackage/blob/${finalAttrs.src.tag}/debian/changelog";
     description = "Suite to help with maintaining Debian packages in Git repositories";
     homepage = "https://honk.sigxcpu.org/piki/projects/git-buildpackage/";
     license = lib.licenses.gpl2Only;

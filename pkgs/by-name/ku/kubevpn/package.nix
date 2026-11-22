@@ -5,6 +5,7 @@
   fetchFromGitHub,
   go,
   versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildGoModule (finalAttrs: {
@@ -26,13 +27,10 @@ buildGoModule (finalAttrs: {
 
   ldflags = [
     "-X github.com/wencaiwulue/kubevpn/v2/pkg/config.Version=v${finalAttrs.version}"
-    "-X github.com/wencaiwulue/kubevpn/v2/cmd/kubevpn/cmds.OsArch=${go.GOOS}/${go.GOARCH}"
+    "-X github.com/wencaiwulue/kubevpn/v2/cmd/kubevpn/cmds.OsArch=${stdenv.hostPlatform.go.GOOS}/${stdenv.hostPlatform.go.GOARCH}"
   ];
 
-  # Resolve configuration tests, which access $HOME
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
   checkFlags =
     let

@@ -22,25 +22,25 @@ let
   par2TurboSrc = fetchFromGitHub {
     owner = "nzbgetcom";
     repo = "par2cmdline-turbo";
-    rev = "v1.4.0-20260323"; # from cmake/par2-turbo.cmake
-    hash = "sha256-oeQY7GJkaEmxEqJALpjAPFpfq+YsNWv4VajotE25xCI=";
+    rev = "v1.4.0-20260803"; # from cmake/par2-turbo.cmake
+    hash = "sha256-9fggVR2Zb9NgAuuuW5ayCyEF6kaaD7GIlX1BX6psiK0=";
   };
   rapidyencSrc = fetchFromGitHub {
     owner = "nzbgetcom";
     repo = "rapidyenc";
-    rev = "v1.1.1-20260217"; # from cmake/rapidyenc.cmake
-    hash = "sha256-1K0LrB1AhacYS/54eCn+vQFAwP6IUVUrPCqFopojXDE=";
+    rev = "v1.1.1-20260821"; # from cmake/rapidyenc.cmake
+    hash = "sha256-17nny4+BlztfMsLX36wzK/5BP6TMniRgnNbLKvDsNcA=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "nzbget";
-  version = "26.2";
+  version = "26.3";
 
   src = fetchFromGitHub {
     owner = "nzbgetcom";
     repo = "nzbget";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-0HNTEpaXD9tpMNsJ5UPPwW/XO2TX0IwibskSjpjvxHw=";
+    hash = "sha256-e8uzUjuVH237G/sajpyL2FYpyN0TcXcJQqV2KOjNFTU=";
   };
 
   patches = [

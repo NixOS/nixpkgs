@@ -3,6 +3,7 @@
   fetchFromGitHub,
   buildGoModule,
   ffmpeg,
+  makeBinaryWrapper,
   nodejs,
   npmHooks,
   fetchNpmDeps,
@@ -10,16 +11,17 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "seanime";
-  version = "3.10.2";
+  version = "3.10.4";
 
   src = fetchFromGitHub {
     owner = "5rahim";
     repo = "seanime";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YLpMsvOOqr1wrdE3buqR0DP1GFhMvIkp9+WhpfGTgTk=";
+    hash = "sha256-3vJ3gtXa5RBpHCQikY+YEmyKRjThyzPyjTHuzOuUaS4=";
   };
 
   nativeBuildInputs = [
+    makeBinaryWrapper
     nodejs
     npmHooks.npmConfigHook
   ];
@@ -28,7 +30,7 @@ buildGoModule (finalAttrs: {
     npmRoot = "seanime-web";
     npmDeps = fetchNpmDeps {
       src = "${finalAttrs.src}/seanime-web";
-      hash = "sha256-ddXxGWSHubOcMppXJTLYnF9ZCYTRhf1ffZM0Wak5O8c=";
+      hash = "sha256-fVZQADT1owzzqUjjamD8lzmEjLAJqYPatLOYvuBzSQQ=";
     };
   };
 
@@ -42,7 +44,7 @@ buildGoModule (finalAttrs: {
     rm -rf .github
   '';
 
-  vendorHash = "sha256-eTKLiwyB3bUIUlwLck8NG6oRdYaJioNs4AiSSPjADyg=";
+  vendorHash = "sha256-dCFDttoAqhXEErRtOS5Ti3CxyionxQQTglnOmsVRMto=";
 
   subPackages = [ "." ];
 
@@ -53,14 +55,11 @@ buildGoModule (finalAttrs: {
     "-w"
   ];
 
-  # for transcoding
-  makeWrapperArgs = [
-    "--prefix PATH : ${
-      lib.makeBinPath [
-        ffmpeg
-      ]
-    }"
-  ];
+  postFixup = ''
+    # for transcoding
+    wrapProgram "$out/bin/seanime" \
+      --prefix PATH : ${lib.makeBinPath [ ffmpeg ]}
+  '';
 
   passthru.updateScript = nix-update-script { };
 

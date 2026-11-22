@@ -16,7 +16,10 @@ def error(msg: str, ret: bool = False) -> bool:
 
 
 def check_derivation_name(manifest: Dict) -> bool:
-    derivation_domain = os.environ.get("domain")
+    with open(os.environ["NIX_ATTRS_JSON_FILE"]) as attrs_fd:
+        attrs = json.load(attrs_fd)
+
+    derivation_domain = attrs.get("domain")
     manifest_domain = manifest["domain"]
     if derivation_domain != manifest_domain:
         return error(

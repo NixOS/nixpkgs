@@ -14,14 +14,17 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libipuz";
-  version = "0.5.5";
+  version = "0.5.6";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "jrb";
     repo = "libipuz";
     rev = finalAttrs.version;
-    hash = "sha256-si+cc129oXLzD1o1MFcaxieIw8vPzWP8dbAnd4inF0Y=";
+    hash = "sha256-5V4tbJuDgZ7HLXCnhYvFk2DnWa7ZGUr9WcthGwLjxmU=";
   };
 
   cargoRoot = "libipuz/rust";
@@ -32,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
       version
       cargoRoot
       ;
-    hash = "sha256-NbK++me/tOrl0MyxvyTIK9UWyR0jU3pkJ6c5sNjuY2M=";
+    hash = "sha256-mkhjtgLt5lIuj32QmMcb5/TQZCai7mwLkXvTRcjO/+g=";
   };
 
   nativeBuildInputs = [
@@ -46,10 +49,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    gi-docgen
     json-glib
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Library for parsing .ipuz puzzle files";

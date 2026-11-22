@@ -97,5 +97,8 @@ buildPythonPackage {
         "onnxruntime"
       ];
 
+  # src is onnxruntime.dist: the top-level onnxruntime package is updated instead
+  passthru.updateScript = null;
+
   meta = onnxruntime.meta;
 }

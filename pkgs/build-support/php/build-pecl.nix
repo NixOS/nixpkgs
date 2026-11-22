@@ -8,65 +8,78 @@
   nix-update-script,
 }:
 
-{
-  pname,
-  version,
-  internalDeps ? [ ],
-  peclDeps ? [ ],
-  buildInputs ? [ ],
-  nativeBuildInputs ? [ ],
-  postPhpize ? "",
-  makeFlags ? [ ],
-  src ? fetchurl (
+lib.extendMkDerivation {
+  constructDrv = stdenv.mkDerivation;
+  excludeDrvArgNames = [
+    "internalDeps"
+    "peclDeps"
+    "postPhpize"
+  ];
+  extendDrvArgs =
+    finalAttrs:
     {
-      url = "https://pecl.php.net/get/${pname}-${version}.tgz";
-    }
-    // lib.filterAttrs (
-      attrName: _:
-      lib.elem attrName [
-        "sha256"
-        "hash"
+      pname,
+      version,
+      internalDeps ? [ ],
+      peclDeps ? [ ],
+      buildInputs ? [ ],
+      nativeBuildInputs ? [ ],
+      postPhpize ? "",
+      makeFlags ? [ ],
+      src ? fetchurl (
+        {
+          url = "https://pecl.php.net/get/${pname}-${version}.tgz";
+        }
+        // lib.filterAttrs (
+          attrName: _:
+          lib.elem attrName [
+            "sha256"
+            "hash"
+          ]
+        ) args
+      ),
+      passthru ? { },
+      ...
+    }@args:
+    {
+      name = "php-${pname}-${finalAttrs.version}";
+      extensionName = pname;
+
+      inherit src;
+
+      strictDeps = true;
+      nativeBuildInputs = [
+        php
+        autoreconfHook
+        re2c
       ]
-    ) args
-  ),
-  passthru ? { },
-  ...
-}@args:
+      ++ nativeBuildInputs;
+      buildInputs = [ php ] ++ peclDeps ++ buildInputs;
 
-stdenv.mkDerivation (
-  args
-  // {
-    name = "php-${pname}-${version}";
-    extensionName = pname;
+      makeFlags = [ "EXTENSION_DIR=$(out)/lib/php/extensions" ] ++ makeFlags;
 
-    inherit src;
+      autoreconfPhase = ''
+        phpize
+        ${postPhpize}
+        ${lib.concatMapStringsSep "\n" (
+          dep: "mkdir -p ext; ln -s ${dep.dev}/include ext/${dep.extensionName}"
+        ) internalDeps}
+      '';
 
-    strictDeps = true;
-    nativeBuildInputs = [
-      php
-      autoreconfHook
-      re2c
-    ]
-    ++ nativeBuildInputs;
-    buildInputs = [ php ] ++ peclDeps ++ buildInputs;
+      checkPhase = ''
+        runHook preCheck
 
-    makeFlags = [ "EXTENSION_DIR=$(out)/lib/php/extensions" ] ++ makeFlags;
+        NO_INTERACTON=yes make test TESTS="--show-diff"
 
-    autoreconfPhase = ''
-      phpize
-      ${postPhpize}
-      ${lib.concatMapStringsSep "\n" (
-        dep: "mkdir -p ext; ln -s ${dep.dev}/include ext/${dep.extensionName}"
-      ) internalDeps}
-    '';
-    checkPhase = "NO_INTERACTON=yes make test";
+        runHook postCheck
+      '';
 
-    passthru = passthru // {
-      # Thes flags were introduced for `nix-update` so that it can update
-      # PHP extensions correctly.
-      # See the corresponding PR: https://github.com/Mic92/nix-update/pull/123
-      isPhpExtension = true;
-      updateScript = passthru.updateScript or (nix-update-script { });
+      passthru = passthru // {
+        # These flags were introduced for `nix-update` so that it can update
+        # PHP extensions correctly.
+        # See the corresponding PR: https://github.com/Mic92/nix-update/pull/123
+        isPhpExtension = true;
+        updateScript = passthru.updateScript or (nix-update-script { });
+      };
     };
-  }
-)
+}

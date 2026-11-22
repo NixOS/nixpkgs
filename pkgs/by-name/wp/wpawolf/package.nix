@@ -8,7 +8,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wpawolf";
-  version = "1.3.0";
+  version = "1.4.0";
 
   __structuredAttrs = true;
 
@@ -16,10 +16,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "StrongWind1";
     repo = "WPAWolf";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-P3egLaCq9TIDcI04aFhML1chbfbThHhkKQG0auYkmhs=";
+    hash = "sha256-SmLPc8yvU8nTz2XEYIY14TzRSzS7AE+9nKGjPVA2PZc=";
   };
 
-  cargoHash = "sha256-RNZUoxj9aEABmbTwfz+EAa2SUu3Ogo11pFQsB+NxNfM=";
+  cargoHash = "sha256-QwBSCp6yG5bAikoEEsy1RDdgQtdDy7D9LlVv2IB2vHs=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 

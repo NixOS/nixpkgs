@@ -1,10 +1,14 @@
 {
   lib,
+  aiohttp,
   buildPythonPackage,
   cryptography,
   fetchFromGitHub,
   hatch-vcs,
   hatchling,
+  http-sf,
+  httpx2,
+  pytest-mypy,
   pytestCheckHook,
   requests,
   typing-extensions,
@@ -12,14 +16,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "http-message-signatures";
-  version = "2.0.1";
+  version = "3.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyauth";
     repo = "http-message-signatures";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GFOdefqcAia4ZHqt1XMS2dw2bQ3AzbY0AQm7b8niYRI=";
+    hash = "sha256-3ADx7xaAVBStvFHFqffrIKO5SrgIROMs+yFt03IcP+A=";
   };
 
   build-system = [
@@ -27,13 +31,23 @@ buildPythonPackage (finalAttrs: {
     hatch-vcs
   ];
 
-  dependencies = [ cryptography ];
+  dependencies = [
+    cryptography
+    http-sf
+  ];
+
+  optional-dependencies = {
+    aiohttp = [ aiohttp ];
+    httpx2 = [ httpx2 ];
+  };
 
   nativeCheckInputs = [
+    pytest-mypy
     pytestCheckHook
     requests
     typing-extensions
-  ];
+  ]
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   enabledTestPaths = [ "test/test.py" ];
 

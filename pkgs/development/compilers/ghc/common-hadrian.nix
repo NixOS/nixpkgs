@@ -791,7 +791,7 @@ stdenv.mkDerivation (
       # Tool used to update GHC's settings file in postInstall
       bootPkgs.ghc-settings-edit
     ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       autoSignDarwinBinariesHook
     ]
     ++ lib.optionals enableDocs [

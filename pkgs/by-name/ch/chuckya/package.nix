@@ -7,26 +7,23 @@
   patches ? [ ],
   gemset ? ./gemset.nix,
   yarnMissingHashes ? ./missing-hashes.json,
-  yarnHash ? "sha256-1kdslAHO6goCo6GwU3zPpaN6Zx9nXEXuxF3E35Xzcac=",
+  yarnHash ? "sha256-9gHfbjasIpXiOr7lbRV7Na7cu2mDXUXvkV6rTljTAvM=",
 }:
 
 let
-  src = applyPatches {
-    src = fetchFromGitHub {
-      owner = "TheEssem";
-      repo = "mastodon";
-      rev = "a7610aa2b86ffdcabc86008cca4234f135f642bd";
-      hash = "sha256-c786uMkC0fEj3h4FKTGzz+GADUOfWCfTziLOCM0xWSI=";
-    };
-    inherit patches;
+  src = fetchFromGitHub {
+    owner = "TheEssem";
+    repo = "mastodon";
+    rev = "dc850e2434c3de2396b869d910193f8d3587ce73";
+    hash = "sha256-Mgc/48YTewqEr7gjqTxT3EDIWHl3qDXEVzOWTZXrDp4=";
   };
 in
 
 (mastodon.override {
   pname = "chuckya";
-  version = "0-unstable-2026-09-25";
+  version = "0-unstable-2026-11-06";
 
-  srcOverride = src;
+  srcOverride = applyPatches { inherit src patches; };
 
   inherit gemset yarnMissingHashes yarnHash;
 }).overrideAttrs

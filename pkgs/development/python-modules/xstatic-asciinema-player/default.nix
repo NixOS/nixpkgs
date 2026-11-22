@@ -10,8 +10,6 @@ buildPythonPackage (finalAttrs: {
   version = "2.6.1.1";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     pname = "XStatic-asciinema-player";
     inherit (finalAttrs) version;

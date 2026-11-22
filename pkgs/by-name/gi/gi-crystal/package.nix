@@ -7,13 +7,13 @@
 }:
 crystal.buildCrystalPackage rec {
   pname = "gi-crystal";
-  version = "0.25.1";
+  version = "0.26.0";
 
   src = fetchFromGitHub {
     owner = "hugopl";
     repo = "gi-crystal";
     rev = "v${version}";
-    hash = "sha256-+sc36YjaVKBkrg8Ond4hCZoObnSHIU/jyMRalZ+OAwk=";
+    hash = "sha256-/N4byXwWTKvqcXcABrvN2ei2ExQqgoMhbTZr7wHvw7E=";
   };
 
   patches = [

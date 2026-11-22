@@ -18,8 +18,8 @@
   gtksourceview5,
   libadwaita,
   libglycin,
-  libxml2,
   openssl,
+  aws-lc,
   sqlite,
   webkitgtk_6_0,
   glib-networking,
@@ -29,18 +29,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "newsflash";
-  version = "5.2.5";
+  version = "6.0.2";
 
   src = fetchFromGitLab {
     owner = "news-flash";
     repo = "news_flash_gtk";
     tag = "v.${finalAttrs.version}";
-    hash = "sha256-oii3/VIV0zivHz/ZscVtJVvPm4SSlzpR+o6t0cS8JO8=";
+    hash = "sha256-9Q8XI8LvvpYk6Pt6hrvCPH9WB75jSix6la6AqImiJwY=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-hR0rfOOLTVt8FuTG0RT80iO8Tt4UwMZwk/VYsBAoLBw=";
+    hash = "sha256-zDP4NLJillL1DplAs0v6pxcdTh2cVLgFPCugyH5OEsA=";
   };
 
   postPatch = ''
@@ -77,8 +77,8 @@ stdenv.mkDerivation (finalAttrs: {
     gtksourceview5
     libadwaita
     libglycin
-    libxml2
     openssl
+    aws-lc
     sqlite
     webkitgtk_6_0
 

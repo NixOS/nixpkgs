@@ -42,10 +42,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/guppy-rs/guppy/releases/tag/${finalAttrs.src.tag}";
     description = "Command-line frontend for guppy";
     homepage = "https://github.com/guppy-rs/guppy/tree/main/cargo-guppy";
-    license = with lib.licenses; [
-      mit # or
-      asl20
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        mit
+        asl20
+      ];
     mainProgram = "cargo-guppy";
     maintainers = with lib.maintainers; [ hythera ];
   };

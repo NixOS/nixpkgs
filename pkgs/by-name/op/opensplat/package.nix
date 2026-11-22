@@ -33,7 +33,7 @@ stdenv'.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   src = fetchFromGitHub {
-    owner = "pierotofy";
+    owner = "WebODM";
     repo = "OpenSplat";
     tag = "v${finalAttrs.version}";
     hash = "sha256-u2UmD0O3sUWELYb4CjQE19i4HUjLMcaWqOinQH0PPTM=";
@@ -41,7 +41,7 @@ stdenv'.mkDerivation (finalAttrs: {
 
   patches = [
     (fetchpatch2 {
-      url = "https://github.com/pierotofy/OpenSplat/commit/7fb96e86a43ac6cfd3eb3a7f6be190c5f2dbeb73.patch";
+      url = "https://github.com/WebODM/OpenSplat/commit/7fb96e86a43ac6cfd3eb3a7f6be190c5f2dbeb73.patch";
       hash = "sha256-hWJWU/n1pRAAbExAYUap6CoSjIu2dzCToUmacSSpa0I=";
     })
   ];
@@ -142,7 +142,7 @@ stdenv'.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Production-grade 3D gaussian splatting";
-    homepage = "https://github.com/pierotofy/OpenSplat/";
+    homepage = "https://github.com/WebODM/OpenSplat/";
     license = [
       # main
       lib.licenses.agpl3Only

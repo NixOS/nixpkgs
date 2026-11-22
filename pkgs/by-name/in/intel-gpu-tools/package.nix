@@ -21,6 +21,7 @@
   elfutils,
   glib,
   gsl,
+  jansson,
   json_c,
   kmod,
   libdrm,
@@ -33,6 +34,7 @@
   libxv,
   openssl,
   peg,
+  pciutils,
   procps,
   python3,
   udev,
@@ -43,14 +45,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "intel-gpu-tools";
-  version = "2.3";
+  version = "2.6";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "drm";
     repo = "igt-gpu-tools";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CkVBImPPM93Q2SVpKzRAREd7cK+SmUgySiuq3LfO2O8=";
+    hash = "sha256-bm6CF8XsonQaWgNK+dN2hHJQ+xug7IM1SmQHybkizGQ=";
   };
 
   nativeBuildInputs = [
@@ -72,6 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
     elfutils
     glib
     gsl
+    jansson
     json_c
     kmod
     libdrm
@@ -84,6 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxv
     openssl
     peg
+    pciutils
     procps
     python3
     udev
@@ -93,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   preConfigure = ''
-    patchShebangs lib man scripts tests
+    patchShebangs docs lib man scripts tests
   '';
 
   hardeningDisable = [ "bindnow" ];

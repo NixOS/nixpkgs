@@ -34,6 +34,14 @@ postgresqlBuildExtension (finalAttrs: {
     hash = "sha256-uFbScxq21kt0jOjjyfMeO3i+bG2/kWS/Rrt3ZpOqEns=";
   };
 
+  patches = [
+    (fetchpatch {
+      name = "pgpointcloud_fix_build_with_pg19";
+      url = "https://github.com/pgpointcloud/pointcloud/commit/bf8302be04e2a98e830c7863ac010c21b62ee35c.patch";
+      hash = "sha256-Fh2uc8kT/P7Z0OZS3B0maVheAFFQbLL7JDfU2rlVgYQ=";
+    })
+  ];
+
   nativeBuildInputs = [
     autoconf
     automake

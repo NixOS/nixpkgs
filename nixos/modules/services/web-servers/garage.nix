@@ -49,7 +49,7 @@ in
       ];
       default = "info";
       example = "debug";
-      description = "Garage log level, see <https://garagehq.deuxfleurs.fr/documentation/quick-start/#launching-the-garage-server> for examples.";
+      description = "Garage log level, see <https://garagehq.deuxfleurs.fr/documentation/quick-start/#troubleshooting> for examples.";
     };
 
     settings = mkOption {
@@ -73,8 +73,8 @@ in
             ];
             type = with types; either path (listOf attrs);
             description = ''
-              The directory in which Garage will store the data blocks of objects. This folder can be placed on an HDD.
-              Since v0.9.0, Garage supports multiple data directories, refer to <https://garagehq.deuxfleurs.fr/documentation/reference-manual/configuration/#data_dir> for the exact format.
+              The directory in which Garage will store the data blocks of objects. This folder can be placed on an HDD. It is possible to have multiple data directories.
+              Refer to <https://garagehq.deuxfleurs.fr/documentation/reference-manual/configuration/#data_dir> for the exact format.
             '';
           };
         };
@@ -82,9 +82,12 @@ in
       description = "Garage configuration, see <https://garagehq.deuxfleurs.fr/documentation/reference-manual/configuration/> for reference.";
     };
 
-    package = mkOption {
-      type = types.package;
-      description = "Garage package to use, needs to be set explicitly. If you are upgrading from a major version, please read NixOS and Garage release notes for upgrade instructions.";
+    package = mkPackageOption pkgs "garage" {
+      default = null;
+      example = "garage_2";
+      extraDescription = ''
+        Needs to be set explicitly. If you are upgrading between major versions, please read NixOS and Garage release notes for upgrade instructions.
+      '';
     };
   };
 

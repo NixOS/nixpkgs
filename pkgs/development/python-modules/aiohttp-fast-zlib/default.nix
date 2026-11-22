@@ -15,7 +15,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "bdraco";
+    owner = "Bluetooth-Devices";
     repo = "aiohttp-fast-zlib";
     tag = "v${version}";
     hash = "sha256-N38eMxxovpBM3n0cb7glKyBQ9GD79uyFxq5L4pKv248=";
@@ -40,8 +40,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "Use the fastest installed zlib compatible library with aiohttp";
-    homepage = "https://github.com/bdraco/aiohttp-fast-zlib";
-    changelog = "https://github.com/bdraco/aiohttp-fast-zlib/blob/${src.rev}/CHANGELOG.md";
+    homepage = "https://github.com/Bluetooth-Devices/aiohttp-fast-zlib";
+    changelog = "https://github.com/Bluetooth-Devices/aiohttp-fast-zlib/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };

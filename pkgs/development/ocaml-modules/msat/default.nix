@@ -14,7 +14,7 @@ buildDunePackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Gbury";
     repo = "mSAT";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ER7ZUejW+Zy3l2HIoFDYbR8iaKMvLZWaeWrOAAYXjG4=";
   };
 
@@ -28,7 +28,7 @@ buildDunePackage (finalAttrs: {
 
   doCheck = true;
   checkInputs = [ containers ];
-  nativeCheckInputs = [ mdx.bin ];
+  nativeCheckInputs = [ mdx.out ];
 
   meta = {
     description = "Modular sat/smt solver with proof output";

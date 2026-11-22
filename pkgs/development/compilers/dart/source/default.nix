@@ -6,7 +6,6 @@
   dart-bin,
   debug ? false,
   fetchurl,
-  fetchpatch,
   gitMinimal,
   gitSetupHook,
   icu,
@@ -16,7 +15,6 @@
   pax-utils,
   pkg-config,
   python3,
-  ripgrep,
   stdenv,
   writableTmpDirAsHomeHook,
   writeShellScript,
@@ -25,7 +23,7 @@
 }:
 
 let
-  version = "3.13.0";
+  version = "3.14.0";
 
   tools = callPackage ../../flutter/engine/tools.nix { inherit (stdenv) hostPlatform buildPlatform; };
 
@@ -76,7 +74,7 @@ let
 
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "sha256-kw6bygtcy+yAPLX61CYzcA9l0GRZaI70hB5oY0xJEjU=";
+    outputHash = "sha256-e1I/QRomhosp0fzBHhvjabn6275smSFsNJGVdV7/TOI=";
 
     buildCommand = ''
       mkdir source
@@ -94,9 +92,10 @@ let
       python3 ${tools.depot_tools}/gclient.py sync --no-history --nohooks --noprehooks
       find sdk -name ".versions" -type d -exec rm -rf {} +
       rm --recursive --force sdk/buildtools/sysroot
-      rm --recursive --force sdk/buildtools/linux-arm64
+      rm --recursive --force sdk/buildtools/linux-*
       rm --recursive --force sdk/buildtools/reclient
       rm --recursive --force sdk/buildtools/*/clang
+      rm --recursive --force sdk/third_party/gcloud
       find sdk -type f \( -name "*.snapshot" -o -name "*.dill" -o -name "*.sym" \) -delete
       rm --recursive --force sdk/tools/sdks/dart-sdk
       find . -type l ! -exec test -e {} \; -delete
@@ -127,7 +126,6 @@ dart-bin.overrideAttrs (oldAttrs: {
     gitMinimal
     gitSetupHook
     python3
-    ripgrep
     pkg-config
   ];
 
@@ -140,16 +138,10 @@ dart-bin.overrideAttrs (oldAttrs: {
     ./gcc13.patch
     ./zlib-not-found.patch
     ./custom-flags.patch
-
-    # Remove when upgrading to Dart 3.14:
-    (fetchpatch {
-      name = "dart-ignore-binaryen-warnings.patch";
-      url = "https://github.com/dart-lang/sdk/commit/963b46dfebad01cab9e063fc8b508df227154a31.patch";
-      hash = "sha256-+JY97WFq+UWNoGikXfHIPxBwPdCWV1HYHjhi9pzqVCo=";
-    })
   ]
   ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [
     ./unbundle-icu.patch
+    ./unbundle-icu-cli-runtime.patch
   ];
 
   postPatch = ''
@@ -180,11 +172,11 @@ dart-bin.overrideAttrs (oldAttrs: {
     python3 tools/generate_sdk_version_file.py
     echo "" > tools/bots/dartdoc_footer.html
     JOBS_COUNT=''${NIX_BUILD_CORES:-2}
-    rg --no-ignore -l 'google-analytics\.com' . \
-      | rg -v "\.map\$" \
+    grep --recursive --files-with-matches --binary-files=without-match 'google-analytics\.com' . \
+      | grep --invert-match '\.map$' \
       | xargs --no-run-if-empty -t -n 1 -P "$JOBS_COUNT" \
         sed --in-place --regexp-extended 's|([^/]+\.)?google-analytics\.com|0\.0\.0\.0|g'
-    rg --no-ignore -l 'UA-[0-9]+-[0-9]+' . \
+    grep --recursive --files-with-matches --binary-files=without-match --extended-regexp 'UA-[0-9]+-[0-9]+' . \
       | xargs --no-run-if-empty -t -n 1 -P "$JOBS_COUNT" \
         sed --in-place --regexp-extended 's|UA-[0-9]+-[0-9]+|UA-2137-0|g'
   ''

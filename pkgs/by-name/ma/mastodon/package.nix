@@ -1,12 +1,12 @@
 {
   lib,
   stdenv,
-  nodejs-slim_22,
+  nodejs-slim_24,
   bundlerEnv,
   nixosTests,
   yarn-berry_4,
   callPackage,
-  ruby_3_3,
+  ruby_3_4,
   writeShellScript,
   brotli,
   python3,
@@ -22,8 +22,8 @@
   yarnMissingHashes ? srcOverride.yarnMissingHashes,
 }:
 let
-  nodejs-slim = nodejs-slim_22;
-  ruby = ruby_3_3;
+  nodejs-slim = nodejs-slim_24;
+  ruby = ruby_3_4;
   yarn-berry = yarn-berry_4.override { nodejs = nodejs-slim; };
 in
 

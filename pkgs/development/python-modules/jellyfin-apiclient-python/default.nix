@@ -12,14 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "jellyfin-apiclient-python";
-  version = "1.20.1";
+  version = "1.21.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jellyfin";
     repo = "jellyfin-apiclient-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eP5GTiR/3eK+KTQdUDo5kgHWf2G/emsFnATXQHsPNks=";
+    hash = "sha256-Uz7Z7THi3/bChS98TFrpqtbVmzgI66Csj7oYmQ7iKDg=";
   };
 
   build-system = [ setuptools ];

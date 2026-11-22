@@ -174,10 +174,9 @@ let
         hash = "sha256-uDIUHbauAmzCfaqx6aswnkUHcmgJi4X2OdMPyn4NeYU=";
       })
 
-      # litellm >= 1.101.0 exports the new VectorStoreSearchError exception at
-      # top level, which trips the strict audit in LiteLLMExceptions._load()
-      # (same failure mode as the two patches above)
-      ./add-vector-store-search-error.patch
+      # Map newer litellm exceptions so test_litellm_exceptions (_load(strict=True)) passes;
+      # upstream tracks a non-strict fallback in https://github.com/Aider-AI/aider/pull/5945
+      ./add-litellm-exceptions.patch
     ];
 
     disabledTestPaths = [
@@ -206,10 +205,6 @@ let
       "test_main_exit_calls_version_check"
       # AssertionError: assert 2 == 1
       "test_simple_send_non_retryable_error"
-      # Upstream tests incompatible with current litellm version
-      "test_max_context_tokens"
-      "test_cmd_tokens_output"
-      "test_cmd_read_only_with_image_file"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Tests fails on darwin

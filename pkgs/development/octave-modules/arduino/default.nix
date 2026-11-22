@@ -15,7 +15,7 @@ buildOctavePackage rec {
     owner = "gnu-octave";
     repo = "octave-arduino";
     tag = "release-${version}";
-    sha256 = "sha256-gYoYXJwkuoI1S2SdOu6qpemlSjgAAx7N5LYwJq9ZrU8=";
+    hash = "sha256-gYoYXJwkuoI1S2SdOu6qpemlSjgAAx7N5LYwJq9ZrU8=";
   };
 
   requiredOctavePackages = [

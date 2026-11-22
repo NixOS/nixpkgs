@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "10.10.1";
 
   src = fetchFromGitHub {
-    owner = "facebook";
+    owner = "meta";
     repo = "rocksdb";
     tag = "v${finalAttrs.version}";
     hash = "sha256-gszW+YY8ZZ7cRVCIXuahGopqqswNRnagZLUYYmRxzGY=";
@@ -32,6 +32,9 @@ stdenv.mkDerivation (finalAttrs: {
   patches = lib.optional (
     lib.versionAtLeast finalAttrs.version "6.29.3" && enableLiburing
   ) ./fix-findliburing.patch;
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
     cmake
@@ -73,9 +76,9 @@ stdenv.mkDerivation (finalAttrs: {
     "-DWITH_GFLAGS=0"
     "-DUSE_RTTI=1"
     "-DROCKSDB_INSTALL_ON_WINDOWS=YES" # harmless elsewhere
-    (lib.optional sse42Support "-DFORCE_SSE42=1")
     "-DFAIL_ON_WARNINGS=NO"
   ]
+  ++ lib.optional sse42Support "-DFORCE_SSE42=1"
   ++ lib.optional (!enableShared) "-DROCKSDB_BUILD_SHARED=0";
 
   # otherwise "cc1: error: -Wformat-security ignored without -Wformat [-Werror=format-security]"
@@ -126,7 +129,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://rocksdb.org";
     description = "Library that provides an embeddable, persistent key-value store for fast storage";
-    changelog = "https://github.com/facebook/rocksdb/raw/v${finalAttrs.version}/HISTORY.md";
+    changelog = "https://github.com/meta/rocksdb/raw/v${finalAttrs.version}/HISTORY.md";
     license =
       with lib.licenses;
       OR [

@@ -17,6 +17,7 @@
       { };
   gitDependencyTag = callPackage ./git-dependency-tag { };
   gitDependencyBranch = callPackage ./git-dependency-branch { };
+  gitDependencyCargoConfig = callPackage ./git-dependency-cargo-config { };
   maturin = maturin.tests.pyo3;
   v1 = callPackage ./v1 { };
   gitDependencyWorkspaceInheritance = callPackage ./git-dependency-workspace-inheritance {

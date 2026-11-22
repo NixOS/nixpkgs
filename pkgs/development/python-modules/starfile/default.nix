@@ -20,7 +20,6 @@ buildPythonPackage (finalAttrs: {
   pname = "starfile";
   version = "0.5.13";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "teamtomo";

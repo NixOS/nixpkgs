@@ -26,7 +26,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "corteva";
+    owner = "vylor";
     repo = "rioxarray";
     tag = finalAttrs.version;
     hash = "sha256-3zRfoCHINLZt88tIu9wSOyZGzQEryxMSWhfEBcviKSQ=";
@@ -78,7 +78,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Geospatial xarray extension powered by rasterio";
     homepage = "https://corteva.github.io/rioxarray/";
-    changelog = "https://github.com/corteva/rioxarray/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/vylor/rioxarray/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     teams = [ lib.teams.geospatial ];
   };

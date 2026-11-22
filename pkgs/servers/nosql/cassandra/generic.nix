@@ -117,6 +117,8 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
+    inherit jre;
+
     tests =
       let
         test = nixosTests.cassandra;

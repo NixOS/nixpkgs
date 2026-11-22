@@ -64,6 +64,7 @@ let
         license = lib.licenses.mit;
         platforms = lib.platforms.unix;
         maintainers = with lib.maintainers; [ notbandali ];
+        mainProgram = pname;
       };
     };
 

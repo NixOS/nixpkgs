@@ -1,12 +1,12 @@
 {
   swig,
-  pcre,
+  pcre2,
   fetchFromGitHub,
 }:
 
 ## for updating to SWIG 4, see
 ## https://github.com/GeraldWodni/swig/pull/6
-(swig.overrideAttrs (old: {
+swig.overrideAttrs (old: {
   version = "3.0.9-forth";
 
   src = fetchFromGitHub {
@@ -18,6 +18,7 @@
 
   configureFlags = old.configureFlags ++ [ "--with-forth=yes" ];
 
-  env.PCRE_CONFIG = "${pcre.dev}/bin/pcre-config";
-})).override
-  { pcre2 = pcre; }
+  env.PCRE_CONFIG = "${pcre2.dev}/bin/pcre-config";
+
+  meta.broken = true; # stuck on legacy pcre
+})

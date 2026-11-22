@@ -970,7 +970,7 @@ in
             { config =
                 { config, pkgs, ... }:
                 { services.postgresql.enable = true;
-                  services.postgresql.package = pkgs.postgresql_14;
+                  services.postgresql.package = pkgs.postgresql_18;
 
                   system.stateVersion = "${lib.trivial.release}";
                 };
@@ -1257,5 +1257,8 @@ in
     ))
   ];
 
-  meta.buildDocsInSandbox = false;
+  meta = {
+    buildDocsInSandbox = false;
+    maintainers = with lib.maintainers; [ graysontinker ];
+  };
 }

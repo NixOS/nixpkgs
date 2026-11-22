@@ -1,6 +1,7 @@
 {
   buildHomeAssistantComponent,
   ha-mcp,
+  mcp,
   nix-update-script,
   ruamel-yaml,
   voluptuous-openapi,
@@ -13,6 +14,7 @@ buildHomeAssistantComponent {
 
   dependencies = [
     ha-mcp
+    mcp
     ruamel-yaml
     voluptuous-openapi
   ];

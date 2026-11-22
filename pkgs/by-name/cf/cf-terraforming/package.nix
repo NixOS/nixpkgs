@@ -1,5 +1,5 @@
 {
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   lib,
   cf-terraforming,
@@ -8,18 +8,18 @@
   stdenv,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "cf-terraforming";
-  version = "0.29.0";
+  version = "0.31.0";
 
   src = fetchFromGitHub {
     owner = "cloudflare";
     repo = "cf-terraforming";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-jq0xBmn+ZGYF6Yup/82wVYgtuIs9RcPHviGxj9JpTF0=";
+    sha256 = "sha256-h+UdwHnfDoDitK8yqV0PpC1+0S93QxbOgMxQmsEXfME=";
   };
 
-  vendorHash = "sha256-7/VRs7BEFLCx7sqIbOFA7b7tQwlpgzeWYUdgankHNCo=";
+  vendorHash = "sha256-ddknRKskM1+zOfOTHKjsTmE3uQL2oqfDBrZEFFk+HmI=";
   ldflags = [
     "-X github.com/cloudflare/cf-terraforming/internal/app/cf-terraforming/cmd.versionString=${finalAttrs.version}"
   ];
@@ -46,7 +46,10 @@ buildGoModule (finalAttrs: {
     description = "Command line utility to facilitate terraforming your existing Cloudflare resources";
     homepage = "https://github.com/cloudflare/cf-terraforming/";
     license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ benley ];
+    maintainers = with lib.maintainers; [
+      benley
+      kamadorueda
+    ];
     mainProgram = "cf-terraforming";
   };
 })

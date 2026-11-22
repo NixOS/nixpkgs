@@ -363,5 +363,8 @@ in
     }
   );
 
-  meta.maintainers = with lib.maintainers; [ Djabx ];
+  meta.maintainers = with lib.maintainers; [
+    Djabx
+    booxter
+  ];
 }

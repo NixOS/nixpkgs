@@ -4,12 +4,15 @@
   fetchFromGitHub,
   gitMinimal,
   versionCheckHook,
+  libgit2,
   nix-update-script,
+  oniguruma,
+  pkg-config,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tuicr";
-  version = "0.27.0";
+  version = "0.29.0";
 
   __structuredAttrs = true;
 
@@ -17,10 +20,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "agavra";
     repo = "tuicr";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-kObt0MLJZYASWM1vexZTPaIeFaU2XpT9sHUSdClRz2Y=";
+    hash = "sha256-cCauvjBAwMC3r4OqLObDJ1DtVNEcmMB+6A1UFadEMVY=";
   };
 
-  cargoHash = "sha256-azgmxJP3iQO+WfJCWqfi19rCSb6D0a0luWcgEW+8Sbg=";
+  cargoHash = "sha256-DLlLJQJ/KpcDIyiF97ts5z7FGxnMnF5rSzzDBD68TFk=";
+
+  buildInputs = [
+    libgit2
+    oniguruma
+  ];
+
+  nativeBuildInputs = [ pkg-config ];
 
   nativeCheckInputs = [
     gitMinimal
@@ -35,6 +45,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     versionCheckHook
   ];
   doInstallCheck = true;
+
+  __darwinAllowLocalNetworking = true;
 
   passthru.updateScript = nix-update-script { };
 

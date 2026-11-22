@@ -13,7 +13,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hurl";
-  version = "8.0.1";
+  version = "8.1.0";
 
   __structuredAttrs = true;
 
@@ -21,10 +21,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "Orange-OpenSource";
     repo = "hurl";
     tag = finalAttrs.version;
-    hash = "sha256-DVxY7vjZpcqptq/4CUxo5WX7+Bf9o/sxGobZ7+BMXHM=";
+    hash = "sha256-bCe1PIgJTFiPz6NJ2uNpKfUBQ4KI9ejKbd6j7M6i1eY=";
   };
 
-  cargoHash = "sha256-rBn14XK1DrwRfe4Mo0aezF4lLhQf4PtsRYkuM1wcZXU=";
+  cargoHash = "sha256-LVqvOjeTyY2xredPkJ0pihaqAqcWGCMatoOev+aN0xc=";
 
   nativeBuildInputs = [
     pkg-config

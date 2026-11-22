@@ -12,14 +12,12 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "radixtarget";
-  version = "4.2.0";
+  version = "4.3.1";
   pyproject = true;
-
-  __structuredAttrs = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-xroXgy7e7XXWPOYFMnt5ou2bJKSl6unBsUGa29v6+Dk=";
+    hash = "sha256-lgGB+cVwLbIBhk1GSsC3ksZtN7kootlLPlSsNnrSEgs=";
   };
 
   postUnpack = ''
@@ -28,7 +26,7 @@ buildPythonPackage (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-opo/P7oHKcKFWjXuXIhjUoz60IQ0iqlUtqptOJXWrk4=";
+    hash = "sha256-yJ50Eg40kq78v+b3B/1XEhbmlDvieGU/zlmhgK6ooRc=";
   };
 
   build-system = [

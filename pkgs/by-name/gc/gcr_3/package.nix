@@ -15,8 +15,8 @@
   pango,
   libsecret,
   openssh,
-  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  systemd,
+  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
+  systemdLibs,
   gobject-introspection,
   wrapGAppsHook3,
   gi-docgen,
@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     openssh
   ]
   ++ lib.optionals systemdSupport [
-    systemd
+    systemdLibs
   ];
 
   propagatedBuildInputs = [

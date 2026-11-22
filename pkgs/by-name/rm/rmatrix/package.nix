@@ -6,7 +6,7 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rmatrix";
-  version = "0.3.3";
+  version = "0.4.0";
 
   __structuredAttrs = true;
 
@@ -14,10 +14,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "Tripstack-Corp";
     repo = "rmatrix";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sViNj7paMY/3x9u6dKHKf+XQRgv+EYsYsooZSTAwrA4=";
+    hash = "sha256-l1sL2uiLsXj9FXNIXJFUMd9WKHrTNBJvOsuaZSRL84A=";
   };
 
-  cargoHash = "sha256-em16fNb4BZeTsZuaT5Bu/u2cc75iSjOcSDYU0qazefM=";
+  cargoHash = "sha256-IuV1/DdowSGoxzXUHyR3DLwmvRdGidrZPfTketjxLz8=";
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];

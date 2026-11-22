@@ -14,7 +14,7 @@
   flex,
   fontforge,
   gettext,
-  makeWrapper,
+  makeBinaryWrapper,
   pkg-config,
   nixosTests,
   pnameSuffix ? "",
@@ -144,7 +144,7 @@ stdenv.mkDerivation (
         bison
         flex
         fontforge
-        makeWrapper
+        makeBinaryWrapper
         pkg-config
       ]
       ++ lib.optional gettextSupport gettext
@@ -331,14 +331,16 @@ stdenv.mkDerivation (
         # of the 32-bit and 64-bit binaries must differ only by the presence of "64" at the
         # end, due to the logic Wine uses to find the other binary (see get_alternate_loader
         # in dlls/kernel32/process.c). Therefore we do not use wrapProgram which would move
-        # the binaries to ".wine-wrapped" and ".wine64-wrapped", but use makeWrapper directly,
-        # and move the binaries to ".wine" and ".wine64".
+        # the binaries to ".wine-wrapped" and ".wine64-wrapped", but use makeBinaryWrapper
+        # directly, and move the binaries to ".wine" and ".wine64". A binary wrapper keeps
+        # bin/wine an ELF file, whose header winetricks reads to detect the WoW64 style:
+        # https://github.com/NixOS/nixpkgs/issues/338367
         for i in wine wine64 ; do
           prog="$out/bin/$i"
           if [ -e "$prog" ]; then
             hidden="$(dirname "$prog")/.$(basename "$prog")"
             mv "$prog" "$hidden"
-            makeWrapper "$hidden" "$prog" \
+            makeBinaryWrapper "$hidden" "$prog" \
               ${lib.optionalString (lib.versionAtLeast version "10.1") "--inherit-argv0"} \
               --set WINELOADER "$hidden" \
               --prefix GST_PLUGIN_SYSTEM_PATH_1_0 ":" "$GST_PLUGIN_SYSTEM_PATH_1_0"

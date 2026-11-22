@@ -57,7 +57,6 @@ let
 
       mkdir -p "$out/Applications/${appName}" "$out/bin"
       cp -R "''${apps[0]}/." "$out/Applications/${appName}"
-      /usr/bin/xattr -cr "$out/Applications/${appName}"
       makeWrapper \
         "$out/Applications/${appName}/Contents/MacOS/studio" \
         "$out/bin/studio"
@@ -145,8 +144,6 @@ let
         echo -n "$startScript" > "$appDir/MacOS/studio"
         chmod +x "$appDir/MacOS/studio"
         ln -s "../Applications/${appName}/Contents/MacOS/studio" "$out/bin/${pname}"
-
-        /usr/bin/codesign --force --sign - "$out/Applications/${appName}"
       '';
 in
 mkAndroidStudioWrapper { inherit androidStudio; }

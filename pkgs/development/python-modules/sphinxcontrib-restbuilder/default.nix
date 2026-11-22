@@ -12,7 +12,6 @@ buildPythonPackage (finalAttrs: {
   pname = "sphinxcontrib-restbuilder";
   version = "0.3";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "sphinx-contrib";

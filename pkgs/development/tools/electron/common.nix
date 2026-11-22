@@ -26,9 +26,12 @@
 let
   gclientDeps = gclient2nix.importGclientDeps info.deps;
   yarn-berry = yarn-berry_4;
+  upstream-info = info.chromium // {
+    inherit gclientDeps;
+  };
 in
 
-((chromium.override { upstream-info = info.chromium; }).mkDerivation (base: {
+((chromium.override { inherit upstream-info; }).mkDerivation (base: {
   packageName = "electron";
   inherit (info) version;
 
@@ -106,9 +109,13 @@ in
     base.patches
     ++
       # Restore fake libGLESv2.so which is patchelf'd by the chromium derivation
-      lib.optional (lib.versionAtLeast info.version "44")
-        ./0001-Revert-build-stop-shipping-dummy-ANGLE-libs-in-Linux.patch
-    ++ lib.optional (lib.versionOlder info.version "43") ./fix-electron42-glibc-2.43.patch;
+      lib.optional (
+        lib.versions.major info.version == "44"
+      ) ./0001-Revert-build-stop-shipping-dummy-ANGLE-libs-in-Linux.patch
+    ++
+      # Restore fake libGLESv2.so which is patchelf'd by the chromium derivation
+      lib.optional (lib.versionAtLeast info.version "45")
+        ./0002-electron-45-Revert-build-stop-shipping-dummy-ANGLE-libs-in-Linux.patch;
 
   postPatch = ''
     mkdir -p third_party/jdk/current/bin
@@ -192,6 +199,12 @@ in
       cd third_party/node
       grep patch update_npm_deps | sh
     )
+
+    gnFlags+=' v8_version_hash_salt_files=["//electron/patches/v8/.patches"'
+    for patch in $(cat electron/patches/v8/.patches); do
+      gnFlags+=",\"//electron/patches/v8/$patch\""
+    done
+    gnFlags+=']'
   ''
   + (base.preConfigure or "");
 
@@ -227,6 +240,8 @@ in
     enable_linux_installer = false;
     enable_pdf_save_to_drive = false;
     node_openssl_path = "//third_party/boringssl";
+    node_v8_path = "//v8";
+    node_use_v8_platform = false;
   }
   // lib.optionalAttrs (lib.versionOlder info.version "43") {
     enterprise_cloud_content_analysis = false;

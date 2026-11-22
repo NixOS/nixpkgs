@@ -19,7 +19,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "Velleman";
+    owner = "velbus";
     repo = "python-linkplay";
     tag = "v${version}";
     hash = "sha256-UGYvaprqwEDxLQZUqyl0NXaDvwx1pDRoTjpRRS1KJPc=";
@@ -44,9 +44,9 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/Velleman/python-linkplay/releases/tag/${src.tag}";
+    changelog = "https://github.com/velbus/python-linkplay/releases/tag/${src.tag}";
     description = "Python Library for Seamless LinkPlay Device Control";
-    homepage = "https://github.com/Velleman/python-linkplay";
+    homepage = "https://github.com/velbus/python-linkplay";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };

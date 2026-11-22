@@ -25,7 +25,6 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   pname = "torch-cluster";
   version = "1.6.3-unstable-2026-06-05";
   pyproject = true;
-  __structuredAttrs = true;
 
   # Last stable release is from 2023
   # Development is still active, but nothing was properly tagged on GitHub or Pypi

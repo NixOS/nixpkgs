@@ -13,7 +13,7 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "aqua";
-  version = "2.62.2";
+  version = "2.66.1";
 
   __structuredAttrs = true;
 
@@ -21,10 +21,10 @@ buildGoModule (finalAttrs: {
     owner = "aquaproj";
     repo = "aqua";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Kwa7u4UvJ4yq0MKQUz/hF+I4GLZhX+Kzx3PMivfdOpI=";
+    hash = "sha256-IrJb2TIKgcSffQ4IKmivDEeG2+YJkQN6B1j7+EEKaDk=";
   };
 
-  vendorHash = "sha256-4m0v1zLgtHq2kMg6Y/a0EytY+jE17A2qbbR1gZ4qTBs=";
+  vendorHash = "sha256-xgFQ2iVUbSRupTdCOBe258D5t7kXVP0xEwkuvm+HRgY=";
 
   subPackages = [ "cmd/aqua" ];
 

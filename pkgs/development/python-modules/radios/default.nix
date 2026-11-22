@@ -16,7 +16,7 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  syrupy_6,
+  syrupy,
 }:
 
 buildPythonPackage rec {
@@ -59,7 +59,7 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-cov-stub
     pytestCheckHook
-    syrupy_6
+    syrupy
   ];
 
   disabledTestPaths = [

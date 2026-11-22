@@ -2,6 +2,8 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  pkg-config,
+  aws-lc,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -17,6 +19,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-uch2JKnskO5W8EPK877qL0aQQ+iInHJoCrrhZbmoVRs=";
+
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
+  buildInputs = [
+    aws-lc
+  ];
 
   meta = {
     description = "Terminal-based, real-time traffic monitoring and statistics for your AdGuard Home instance";

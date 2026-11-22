@@ -19,7 +19,7 @@ maven.buildMavenPackage rec {
     hash = "sha256-LXedyREtdinbxwg4CiC2ei7w5v/bZp8H6vwwHQ3GTwg=";
   };
 
-  mvnHash = "sha256-0xc/gnodgBo6gOkvz7Oe/5AQyjh2xMgyWEeEyktFqEA=";
+  mvnHash = "sha256-PDBVNU07kCyulPZ3EFUS+RvnLxT/YpNara7RRm4npRM=";
   mvnParameters = "-Plinux";
 
   # tests want to create an X11 window which isn't often feasible

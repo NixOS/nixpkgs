@@ -25,6 +25,7 @@
   opencv,
   libseccomp,
   glycin-loaders,
+  sqlite,
 
   nix-update-script,
 }:
@@ -80,6 +81,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     libseccomp
     libglycin.setupHook
     glycin-loaders
+    sqlite
   ];
 
   strictDeps = true;

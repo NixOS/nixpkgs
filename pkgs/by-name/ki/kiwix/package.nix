@@ -39,7 +39,10 @@ stdenv.mkDerivation rec {
   ];
 
   qtWrapperArgs = [
-    "--prefix PATH : ${lib.makeBinPath [ aria2 ]}"
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [ aria2 ])
   ];
 
   passthru.updateScript = nix-update-script { };

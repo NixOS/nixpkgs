@@ -1,20 +1,20 @@
 {
   lib,
   stdenv,
-  fetchFromGitLab,
+  fetchFromGitHub,
   kdePackages,
   gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fokus";
-  version = "3.1.3";
+  version = "3.2.0";
 
-  src = fetchFromGitLab {
+  src = fetchFromGitHub {
     owner = "divinae";
     repo = "focus-plasmoid";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FQH2d1w0QjCkneLN8ZRTUfLb//+tbRo21U8379kxgoI=";
+    hash = "sha256-t8C0zLyUL2Trb7WzTm5XXgqrjsZmZ8Cxf/5C8pHXYSw=";
   };
 
   dontWrapQtApps = true;
@@ -39,16 +39,15 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  # nix-update-script would stick on v2.3.3 as this is the only Gitlab Release upstream. Releases are marked with Git tags.
+  # Releases are marked with Git tags, there are no GitHub Releases upstream.
   passthru.updateScript = gitUpdater {
-    url = "https://gitlab.com/divinae/focus-plasmoid.git";
     rev-prefix = "v";
   };
 
   meta = {
     description = "Simple pomodoro KDE Plasma plasmoid";
-    homepage = "https://gitlab.com/divinae/focus-plasmoid";
-    changelog = "https://gitlab.com/divinae/focus-plasmoid/-/blob/v${finalAttrs.version}/CHANGELOG.md";
+    homepage = "https://github.com/divinae/focus-plasmoid";
+    changelog = "https://github.com/divinae/focus-plasmoid/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ structix ];
     platforms = lib.platforms.linux;

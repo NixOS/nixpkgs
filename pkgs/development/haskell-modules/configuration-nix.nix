@@ -53,6 +53,17 @@ builtins.intersectAttrs super {
   # Apply NixOS-specific patches.
   ghc-paths = appendPatch ./patches/ghc-paths-nix.patch super.ghc-paths;
 
+  freetype2 = overrideCabal (drv: {
+    librarySystemDepends = (drv.librarySystemDepends or [ ]) ++ [ pkgs.zlib ];
+    postPatch = (drv.postPatch or "") + ''
+      # Cabal's include-dirs must not select the bundled zlib header.
+      rm freetype2/src/gzip/zlib.h
+      substituteInPlace freetype2.cabal \
+        --replace-fail '  cc-options:' \
+          $'  extra-libraries: z\n  cc-options: -DFT_CONFIG_OPTION_SYSTEM_ZLIB'
+    '';
+  }) super.freetype2;
+
   #######################################
   ### HASKELL-LANGUAGE-SERVER SECTION ###
   #######################################
@@ -1170,13 +1181,13 @@ builtins.intersectAttrs super {
     postPatch = ''
       sed -i -e 's|"abc"|"${pkgs.abc-verifier}/bin/abc"|' Data/SBV/Provers/ABC.hs
       sed -i -e 's|"bitwuzla"|"${pkgs.bitwuzla}/bin/bitwuzla"|' Data/SBV/Provers/Bitwuzla.hs
-      sed -i -e 's|"boolector"|"${pkgs.boolector}/bin/boolector"|' Data/SBV/Provers/Boolector.hs
       sed -i -e 's|"cvc4"|"${pkgs.cvc4}/bin/cvc4"|' Data/SBV/Provers/CVC4.hs
       sed -i -e 's|"cvc5"|"${pkgs.cvc5}/bin/cvc5"|' Data/SBV/Provers/CVC5.hs
       sed -i -e 's|"yices-smt2"|"${pkgs.yices}/bin/yices-smt2"|' Data/SBV/Provers/Yices.hs
       sed -i -e 's|"z3"|"${pkgs.z3}/bin/z3"|' Data/SBV/Provers/Z3.hs
 
       # Solvers we don't provide are removed from tests
+      sed -i -e 's|, boolector||' SBVTestSuite/SBVConnectionTest.hs
       sed -i -e 's|, mathSAT||' SBVTestSuite/SBVConnectionTest.hs
       sed -i -e 's|, dReal||' SBVTestSuite/SBVConnectionTest.hs
     '';
@@ -1244,6 +1255,7 @@ builtins.intersectAttrs super {
         pkgs.git
         pkgs.gnupg
         pkgs.lsof
+        pkgs.magic-wormhole # p2p pairing
         pkgs.openssh
         pkgs.perl
         pkgs.rsync
@@ -1457,7 +1469,7 @@ builtins.intersectAttrs super {
     let
       path = pkgs.lib.makeBinPath [
         pkgs.ffmpeg
-        pkgs.youtube-dl
+        pkgs.yt-dlp
       ];
     in
     overrideCabal (_drv: {
@@ -1804,7 +1816,7 @@ builtins.intersectAttrs super {
         ''
         # Prevent erroneous references to other libraries that use Paths_ modules
         # on aarch64-darwin. Note that references to the data outputs are not removed.
-        + lib.optionalString (with pkgs.stdenv; hostPlatform.isDarwin && hostPlatform.isAarch64) ''
+        + lib.optionalString pkgs.stdenv.hostPlatform.isDarwin ''
           remove-references-to -t "${self.shake.out}" "$out/bin/.nvfetcher-wrapped"
           remove-references-to -t "${self.js-jquery.out}" "$out/bin/.nvfetcher-wrapped"
           remove-references-to -t "${self.js-flot.out}" "$out/bin/.nvfetcher-wrapped"
@@ -1857,7 +1869,7 @@ builtins.intersectAttrs super {
     overrideCabal
       (old: {
         passthru = old.passthru or { } // {
-          nixPackage = pkgs.nixVersions.nix_2_31;
+          nixPackage = pkgs.nixVersions.nix_2_34;
         };
       })
       (

@@ -12,7 +12,6 @@ buildPythonPackage rec {
   pname = "djoser";
   version = "2.3.3";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "sunscrapers";

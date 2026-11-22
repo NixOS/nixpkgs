@@ -33,7 +33,7 @@ mkNginxPlugin (finalAttrs: {
     zlib
   ];
 
-  passthru.tests = nixosTests.nginx-njs;
+  passthru.tests = nixosTests.nginx.stable.njs;
   meta = {
     description = "Subset of the JavaScript language that allows extending nginx functionality";
     homepage = "https://nginx.org/en/docs/njs/";

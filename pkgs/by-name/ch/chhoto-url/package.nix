@@ -2,6 +2,9 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  pkg-config,
+  sqlite,
+  zstd,
   nixosTests,
   nix-update-script,
 }:
@@ -28,6 +31,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   cargoHash = "sha256-23nDGYjGW4gL7sKh2YPPxkTUaxIQFRbPtVUVFDUlbHo=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [
+    sqlite
+    zstd
+  ];
 
   postInstall = ''
     mkdir -p $out/share/chhoto-url

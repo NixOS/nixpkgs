@@ -1,4 +1,4 @@
-{ lib, pkgs, ... }:
+{ lib, ... }:
 {
   name = "systemd-initrd-vconsole";
 
@@ -12,10 +12,7 @@
         "systemd.log_level=warning"
       ];
 
-      boot.initrd.systemd = {
-        enable = true;
-        emergencyAccess = true;
-      };
+      boot.initrd.systemd.emergencyAccess = true;
 
       console = {
         earlySetup = true;

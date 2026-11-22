@@ -1,4 +1,5 @@
 {
+  distutils,
   lib,
   buildPythonPackage,
   fetchPypi,
@@ -13,12 +14,12 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pydy";
-  version = "0.8.0";
+  version = "0.9.4";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-G3iqMzy/W3ctz/c4T3LqYyTTMVbly1GMkmMLi96mzMc=";
+    hash = "sha256-wJ/mxocV12hssQqYKaSDZtLQbDEko/btDzCmXf1lJOo=";
   };
 
   build-system = [ setuptools ];
@@ -27,6 +28,7 @@ buildPythonPackage (finalAttrs: {
     numpy
     scipy
     sympy
+    distutils
   ];
 
   nativeCheckInputs = [

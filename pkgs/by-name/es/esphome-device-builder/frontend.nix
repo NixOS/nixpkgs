@@ -14,23 +14,21 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "esphome-device-builder-frontend";
-  version = "0.1.329";
+  version = "0.1.387";
   pyproject = true;
-
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "esphome";
     repo = "device-builder-frontend";
     tag = finalAttrs.version;
-    hash = "sha256-Zai2wwrexO9H+LCfEuckfRffuqyKOkG7p/42NeVGcsc=";
+    hash = "sha256-f4g7f7Dk2GF90W/pGIO/HYxLyUCVLkTCICYoh6F+e0M=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname src;
     inherit pnpm;
     fetcherVersion = 4;
-    hash = "sha256-w18G+v511uGXJyhQxnVvBVKfRIfnxJmOP2BCd4mcveo=";
+    hash = "sha256-L1cPOKkucTILtRseBemQ23VlUu4L+IKbgmgUKJDphF0=";
   };
 
   nativeBuildInputs = [

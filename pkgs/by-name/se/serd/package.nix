@@ -51,10 +51,10 @@ stdenv.mkDerivation (finalAttrs: {
 
       set -eu -o pipefail
 
-      # Expect the text in format of 'download.drobilla.net/serd-0.30.16.tar.xz">'
-      new_version="$(curl -s https://drobilla.net/category/serd/ |
-          pcre2grep -o1 'download.drobilla.net/serd-([0-9.]+).tar.xz' |
-          head -n1)"
+      # Expect links in format of 'serd-0.30.16.tar.xz"' in the download directory
+      new_version="$(curl -s https://download.drobilla.net/ |
+          pcre2grep -o1 'serd-([0-9.]+)\.tar\.xz' |
+          sort -V | tail -n1)"
       update-source-version ${finalAttrs.pname} "$new_version"
     '';
   };

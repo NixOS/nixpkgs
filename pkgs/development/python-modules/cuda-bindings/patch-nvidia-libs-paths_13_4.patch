@@ -66,7 +66,7 @@ index 6fc1ca20c77..6090745eb4e 100644
 +    try:
 +        handle = CDLL("libcuda.so.1")._handle
 +    except OSError:
-+        handle = CDLL("@libcuda@/lib/libcuda.so.1")._handle
++        handle = CDLL("@libcuda@/libcuda.so.1")._handle
      return <void*>handle
  
  
@@ -204,7 +204,7 @@ index 1ae37127bd1..eb7b9054cf1 100644
 +    CDLL("libcuda.so.1")
 +except OSError:
 +    try:
-+        CDLL("@libcuda@/lib/libcuda.so.1")
++        CDLL("@libcuda@/libcuda.so.1")
 +    except OSError:
 +        pass
 +

@@ -17,15 +17,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "picard";
-  version = "3.0.2";
+  version = "3.0.5";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "metabrainz";
     repo = "picard";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-Br7mBWB16jv6p7VoYipCa2TXTQabx9oV8DaS5gxIxzg=";
+    hash = "sha256-xkDQU788dcTkN6/54AI8UXNDnN+RkX4F8PlbDTlck6k=";
   };
 
   nativeBuildInputs = [

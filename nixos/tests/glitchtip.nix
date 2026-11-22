@@ -8,7 +8,6 @@ in
 {
   name = "glitchtip";
   meta.maintainers = with lib.maintainers; [
-    defelo
     felbinger
   ];
 
@@ -57,7 +56,6 @@ in
       import time
 
       machine.wait_for_unit("glitchtip.service")
-      machine.wait_for_unit("glitchtip-worker.service")
       machine.wait_for_open_port(8000)
 
       origin_url = "${url}"

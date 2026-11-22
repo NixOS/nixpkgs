@@ -30,7 +30,6 @@ buildPythonPackage {
     buildInputs
     ;
   pyproject = true;
-  __structuredAttrs = true;
 
   postPatch = (conduit.postPatch or "") + ''
     substituteInPlace pyproject.toml \

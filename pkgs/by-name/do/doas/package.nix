@@ -7,7 +7,7 @@
   libxcrypt,
   nixosTests,
 
-  withPAM ? true,
+  withPAM ? lib.meta.availableOn stdenv.hostPlatform pam,
   withTimestamp ? true,
 }:
 

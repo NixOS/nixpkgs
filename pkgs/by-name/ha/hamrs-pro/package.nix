@@ -48,7 +48,7 @@ let
     ];
   };
 
-  linux = appimageTools.wrapType2 rec {
+  linux = appimageTools.wrapType2 (finalAttrs: {
     inherit
       pname
       version
@@ -57,17 +57,13 @@ let
       meta
       ;
 
-    extraInstallCommands =
-      let
-        contents = appimageTools.extract { inherit pname version src; };
-      in
-      ''
-        install -m 444 -D ${contents}/${pname}.desktop -t $out/share/applications
-        substituteInPlace $out/share/applications/${pname}.desktop \
-          --replace-fail 'Exec=AppRun' 'Exec=${pname}'
-        cp -r ${contents}/usr/share/icons $out/share
-      '';
-  };
+    extraInstallCommands = ''
+      install -m 444 -D ${finalAttrs.contents}/hamrs-pro.desktop -t $out/share/applications
+      substituteInPlace $out/share/applications/hamrs-pro.desktop \
+        --replace-fail 'Exec=AppRun' 'Exec=hamrs-pro'
+      cp -r ${finalAttrs.contents}/usr/share/icons $out/share
+    '';
+  });
 
   darwin = stdenvNoCC.mkDerivation {
     inherit

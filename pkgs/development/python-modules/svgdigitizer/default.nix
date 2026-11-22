@@ -30,7 +30,6 @@ buildPythonPackage (finalAttrs: {
   pname = "svgdigitizer";
   version = "0.14.5";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "echemdb";
@@ -43,9 +42,11 @@ buildPythonPackage (finalAttrs: {
     setuptools
   ];
 
-  # https://github.com/echemdb/svgdigitizer/issues/298
   pythonRelaxDeps = [
+    # https://github.com/echemdb/svgdigitizer/issues/298
     "astropy"
+    # Can be removed once https://github.com/echemdb/svgdigitizer/pull/331 is released
+    "pillow"
   ];
 
   dependencies = [

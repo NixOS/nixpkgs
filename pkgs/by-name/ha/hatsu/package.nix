@@ -2,21 +2,27 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  pkg-config,
+  sqlite,
   versionCheckHook,
   nix-update-script,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hatsu";
-  version = "0.3.5";
+  version = "0.3.6";
 
   src = fetchFromGitHub {
     owner = "importantimport";
     repo = "hatsu";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ebMVk/OV0fTzj7NhPvplC4bjPoEdlYXZGs2+CDtqPhk=";
+    hash = "sha256-+UHisknNDRJU4YcQunszpUHLUZwLIZcKot2eN/iSVf8=";
   };
 
-  cargoHash = "sha256-+KNysTRSu9BCTYVHXxM4/mEm+zrU2LxdVLRAGJb2QDI=";
+  cargoHash = "sha256-bzJn7za/GQpr4VSQ/btZiq10J4e2J978aFgdJ1tEkyQ=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ sqlite ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;

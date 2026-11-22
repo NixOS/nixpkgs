@@ -2,19 +2,20 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  hatchling,
   hatch-jupyter-builder,
+  hatchling,
+  jupyter-builder,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jupyterlab-widgets";
-  version = "3.0.16";
+  version = "3.0.17";
   pyproject = true;
 
   src = fetchPypi {
     pname = "jupyterlab_widgets";
-    inherit version;
-    hash = "sha256-Qj2gUHHVXPJ6nmAiFtNaOmWj5BzfnF07ZDuBTOOMGeA=";
+    inherit (finalAttrs) version;
+    hash = "sha256-bmH+IcqKZgORgKXMUqQz4HJ50v7nnIvpY+ANVRk/F6g=";
   };
 
   # jupyterlab is required to build from source but we use the pre-build package
@@ -24,8 +25,9 @@ buildPythonPackage rec {
   '';
 
   build-system = [
-    hatchling
     hatch-jupyter-builder
+    hatchling
+    jupyter-builder
   ];
 
   # has no tests
@@ -36,7 +38,8 @@ buildPythonPackage rec {
   meta = {
     description = "Jupyter Widgets JupyterLab Extension";
     homepage = "https://github.com/jupyter-widgets/ipywidgets";
+    changelog = "https://github.com/jupyter-widgets/ipywidgets/releases/tag/${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

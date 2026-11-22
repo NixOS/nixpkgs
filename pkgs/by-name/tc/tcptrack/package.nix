@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     libpcap
   ];
 
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=cpp";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=cpp -Wno-error=unused-but-set-variable";
 
   meta = {
     inherit (finalAttrs.src.meta) homepage;

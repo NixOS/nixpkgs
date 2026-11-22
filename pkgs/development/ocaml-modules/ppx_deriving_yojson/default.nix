@@ -47,7 +47,7 @@ buildDunePackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ocaml-ppx";
     repo = "ppx_deriving_yojson";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     inherit (param) sha256;
   };
 

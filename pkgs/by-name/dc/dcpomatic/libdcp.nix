@@ -26,12 +26,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libdcp";
-  version = "1.10.63";
+  version = "1.10.64";
 
   src = fetchgit {
     url = "https://git.carlh.net/git/libdcp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-nT9wSOY/OPNRxpjnp+wblx7Jbx/S0uP7lL68zBK4NFk=";
+    hash = "sha256-aqTdMp6mUZF0uGb86WprVlHm7G8QovdH6VIet0YYYH0=";
   };
 
   # for some reason the version is not set properly upstream

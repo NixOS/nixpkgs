@@ -9,7 +9,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "tlsx";
-  version = "1.4.0";
+  version = "1.5.0";
 
   __structuredAttrs = true;
 
@@ -17,10 +17,10 @@ buildGoModule (finalAttrs: {
     owner = "projectdiscovery";
     repo = "tlsx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mr9eMFgbc8RmuADnBERxiGQ3CIq5vt3JOZ2Di1cwtW8=";
+    hash = "sha256-kTSgWRmnbYbOOZaXizIINYIw65fWmtHq99VzRTHHV/0=";
   };
 
-  vendorHash = "sha256-stTcRPCddn2S65F/QPBZdvoe56hPji1FxrIAMGW34z0=";
+  vendorHash = "sha256-DiSKAGzxRM1qcIj1UTlptE1vfWKIMtzRH71aTVwCio8=";
 
   nativeInstallCheckInputs = [
     versionCheckHook
@@ -32,7 +32,10 @@ buildGoModule (finalAttrs: {
   # Tests require network access
   doCheck = false;
 
-  doInstallCheck = true;
+  # Version is out-dated upstream
+  doInstallCheck = false;
+
+  versionCheckProgramArg = [ "-version" ];
 
   versionCheckKeepEnvironment = [ "HOME" ];
 
@@ -48,5 +51,6 @@ buildGoModule (finalAttrs: {
     changelog = "https://github.com/projectdiscovery/tlsx/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "tlsx";
   };
 })

@@ -36,15 +36,14 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "llama-cpp-python";
-  version = "0.3.36";
-  __structuredAttrs = true;
+  version = "0.3.37";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "abetlen";
     repo = "llama-cpp-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OYmCvd3hvdc7JjmfD5Nxp8l1xFk0vNI7HZsYUBfsnzI=";
+    hash = "sha256-bc86MT/5fwpX/sSVyZ0oA0SMDEikvTCgacnj0Bm+UAE=";
     fetchSubmodules = true;
   };
 

@@ -8,16 +8,16 @@ mkOpenbaoPlugin (finalAttrs: {
   plugin = "kms-ovhcloud";
   pluginType = "kms";
   pluginName = "ovhcloud";
-  version = "0.0.1";
+  version = "0.0.2";
 
   src = fetchFromGitHub {
     owner = "openbao";
     repo = "openbao-plugins";
     tag = "kms-ovhcloud-v${finalAttrs.version}";
-    hash = "sha256-6llY6SBKljQfmiYN+GxZ3aRgdSTW2PLMwviIJcnYZrw=";
+    hash = "sha256-LlwGH3C4eG3dkTb0yWaD6scmJ9OprCULvTmvU7CMvkQ=";
   };
 
-  vendorHash = "sha256-VzYdX3uV884+q+QpS6O3GIh8DhplF787RE2+2KWsOCs=";
+  vendorHash = "sha256-fY20ZgdqLkA+myIDTHKvaBzTqfu2jwu4+FJR0/yNtKU=";
 
   meta = {
     description = "OpenBao KMS plugin for Auto Unseal via OVHcloud";

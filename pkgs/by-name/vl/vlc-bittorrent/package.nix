@@ -4,7 +4,7 @@
   autoreconfHook,
   boost,
   fetchFromGitHub,
-  libtorrent-rasterbar,
+  libtorrent-rasterbar-2_0_x,
   libvlc,
   openssl,
   pkg-config,
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     boost
-    libtorrent-rasterbar
+    libtorrent-rasterbar-2_0_x
     libvlc
     openssl
   ];

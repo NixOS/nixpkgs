@@ -5,26 +5,28 @@
   pkg-config,
   openssl,
   spade,
+  zstd,
   git,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "swim";
-  version = "0.20.0";
+  version = "0.21.0";
 
   src = fetchFromCodeberg {
     owner = "spade-lang";
     repo = "swim";
     rev = "v${version}";
-    hash = "sha256-pd/ej6WCS36gHlzkHM+pSyV2e87jIAk/kR8OU+nmrDk=";
+    hash = "sha256-JwD3cehXXgLMDgu0b8kiKK/Gf25bEUyP6KSLjKLzOgA=";
   };
 
-  cargoHash = "sha256-7yQytwWDmb58aQzVb4EJZ1e7212qfaPXUhvO6fzbg/M=";
+  cargoHash = "sha256-IxEdK1bnoFXZYnTxmGI71h0WyrZ+Bu7twkUVLO7mIUo=";
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     openssl
+    zstd
   ];
 
   nativeCheckInputs = [
@@ -48,7 +50,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     description = "Build tool for spade";
-    homepage = "https://codeberg.com/spade-lang/swim";
+    homepage = "https://codeberg.org/spade-lang/swim";
     changelog = "https://codeberg.org/spade-lang/swim/src/branch/main/CHANGELOG.md";
     license = lib.licenses.eupl12;
     maintainers = with lib.maintainers; [ pbsds ];

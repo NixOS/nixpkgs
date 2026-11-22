@@ -35,6 +35,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
+  postFixup = ''
+    substituteInPlace $dev/lib/cmake/openjph/openjph-targets*.cmake \
+      --replace 'INTERFACE_INCLUDE_DIRECTORIES "''${_IMPORT_PREFIX}/include"' "INTERFACE_INCLUDE_DIRECTORIES \"$dev/include\""
+  '';
+
   passthru = {
     tests.pkg-config = testers.hasPkgConfigModules { package = finalAttrs.finalPackage; };
     updateScript = nix-update-script { };

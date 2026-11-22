@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "tensorly";
-  version = "0.9.0";
+  version = "0.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tensorly";
     repo = "tensorly";
     tag = version;
-    hash = "sha256-A6Zlp8fa7XFgf4qpg7SEtNLlYSNtDGLuRUEfzD+crQc=";
+    hash = "sha256-7jtEuD8mR7VUZI7EC5XyKrMyZM0bkGtL31Qalyk9vkI=";
   };
 
   build-system = [ setuptools ];

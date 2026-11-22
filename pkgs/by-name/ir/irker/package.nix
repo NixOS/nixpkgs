@@ -18,7 +18,7 @@ stdenv.mkDerivation {
     owner = "esr";
     repo = "irker";
     rev = "dc0f65a7846a3922338e72d8c6140053fe914b54";
-    sha256 = "1hslwqa0gqsnl3l6hd5hxpn0wlachxd51infifhlwhyhd6iwgx8p";
+    hash = "sha256-F/XHo2nQQ06hi87GUFqHTFEO7O2wNGjooFbjBxTmVMM=";
   };
 
   nativeBuildInputs = [

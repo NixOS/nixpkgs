@@ -40,6 +40,8 @@ in
       }
     ];
 
+    virtualisation.vz.idleTimeout = lib.mkDefault (10 * 60);
+
     # The guest console belongs where a Mac user looks for service logs. Switch to `file`
     # for a complete record: the unified log drops messages under bursts.
     virtualisation.vz.console = lib.mkDefault "log";

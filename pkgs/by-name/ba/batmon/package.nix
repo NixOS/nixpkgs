@@ -3,19 +3,26 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
+  versionCheckHook,
+  nix-update-script,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "batmon";
-  version = "0.2.0";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "6543";
     repo = "batmon";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3k788ckEkHi4jlSzKCebFyLJJ+UtkMERuvHInkXvSyQ=";
+    hash = "sha256-rmZ5mgZXLtX+Mx/1wC30pyVcZZK2UUQYbjHvGhMsJKk=";
   };
 
-  cargoHash = "sha256-F0lC7ELvuRCnvTWrtTEedb9j8SF2Al6XXx0PJqa7E98=";
+  cargoHash = "sha256-cpvlMPykWQblLLzQq8+GxC3l5bzz/f4lqcJvBYv5hsc=";
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Interactive batteries viewer";
@@ -28,7 +35,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.asl20;
     mainProgram = "batmon";
     platforms = with lib.platforms; unix ++ windows;
-    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
+    broken = stdenv.hostPlatform.isDarwin;
     maintainers = with lib.maintainers; [ _6543 ];
   };
 })

@@ -21,6 +21,8 @@
 
   enablePacketSocket ? true,
   enableFastHeartbeat ? false,
+
+  nix-update-script,
 }:
 
 assert enableGstPlugin -> gst_all_1 != null;
@@ -83,6 +85,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   # needed for fakegv tests
   __darwinAllowLocalNetworking = true;
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--use-github-releases" ];
+  };
 
   meta = {
     description = "Library for video acquisition using GenICam cameras";

@@ -18,13 +18,14 @@
   # tests
   distutils,
   pytest-mock,
+  pytest-timeout,
   pytest7CheckHook,
   writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "pydantic";
-  version = "1.10.24";
+  version = "1.10.27";
   pyproject = true;
 
   # https://github.com/pydantic/pydantic/pull/12263
@@ -34,7 +35,7 @@ buildPythonPackage rec {
     owner = "pydantic";
     repo = "pydantic";
     tag = "v${version}";
-    hash = "sha256-eDmVpo6tI6a1lfBOU7Bvq9Wv/+I959c7krYPzZEoQig=";
+    hash = "sha256-lfPOTJc6IrpC3UuMvxvnxNh/XdMH9VvKlwVGmlwzFMA=";
   };
 
   build-system = [
@@ -52,6 +53,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     distutils
     pytest-mock
+    pytest-timeout
     pytest7CheckHook
     writableTmpDirAsHomeHook
   ]
@@ -60,6 +62,11 @@ buildPythonPackage rec {
   enableParallelBuilding = true;
 
   pythonImportsCheck = [ "pydantic" ];
+
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+  };
 
   meta = {
     description = "Data validation and settings management using Python type hinting";

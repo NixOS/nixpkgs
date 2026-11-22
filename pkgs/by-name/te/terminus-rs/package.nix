@@ -1,5 +1,6 @@
 {
   lib,
+  aws-lc,
   fetchFromGitHub,
   nix-update-script,
   pkg-config,
@@ -23,7 +24,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ sqlite ];
+  buildInputs = [
+    aws-lc
+    sqlite
+  ];
 
   env = {
     LIBSQLITE3_SYS_USE_PKG_CONFIG = true;

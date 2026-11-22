@@ -258,6 +258,9 @@ stdenv.mkDerivation (finalAttrs: {
         ''))
         (lib.concatStringsSep "\n")
       ]}
+
+      # Create an mpi.pc symlink for scalapack
+      ln -s $dev/lib/pkgconfig/ompi.pc $dev/lib/pkgconfig/mpi.pc
     '';
 
   postFixup = ''

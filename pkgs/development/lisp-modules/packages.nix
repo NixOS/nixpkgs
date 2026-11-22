@@ -170,6 +170,7 @@ let
           ;
         nativeBuildInputs = [ pkgs.fuse ];
         nativeLibs = [ pkgs.fuse ];
+        meta.broken = true; # stuck on fuse2
       };
 
       cl-containers = build-asdf-system {

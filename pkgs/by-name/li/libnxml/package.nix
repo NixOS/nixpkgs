@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libnxml";
-  version = "0.18.5";
+  version = "0.18.6";
 
   src = fetchFromGitHub {
     owner = "bakulf";
     repo = "libnxml";
     tag = finalAttrs.version;
-    hash = "sha256-6KI1bsfDgGJ4x8Wv7fcwCKm5AILa3jLnV53JY1g9B+M=";
+    hash = "sha256-PbTTnCS4QnBBVmdri3cIxYl0CVdXM7hImA14P6r5a1k=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

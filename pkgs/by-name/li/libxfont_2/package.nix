@@ -53,6 +53,8 @@ stdenv.mkDerivation (finalAttrs: {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
+  __structuredAttrs = true;
+
   meta = {
     inherit (libxfont_1.meta) description homepage license;
     maintainers = [ ];

@@ -5,12 +5,14 @@
   fetchFromGitHub,
   pkg-config,
   cmake,
-  perl,
   makeWrapper,
   icnsify,
   nix-update-script,
   rcodesign,
+  openssl,
+  sqlcipher,
   alsa-lib,
+  pipewire,
   libGL,
   libx11,
   libxkbcommon,
@@ -35,7 +37,7 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "zapfast";
-  version = "0.19.0";
+  version = "0.21.3";
 
   __structuredAttrs = true;
 
@@ -43,15 +45,15 @@ rustPlatform.buildRustPackage rec {
     owner = "crmne";
     repo = "zapfast";
     tag = "v${version}";
-    hash = "sha256-FDB9iAkDL2uaHKpSam1ehc8yGbrYbZy2A5NqE2oXs8Q=";
+    hash = "sha256-eDXn2wSXK7zYx+6ZUBP2r2ovjsGzHxR3G7REq+ermQY=";
   };
 
-  cargoHash = "sha256-VOpJLNyR8yl2NbEg17rCw/Uzci9d65pdwChlyj7o0H0=";
+  cargoHash = "sha256-dL+TQNzkk3iQt4GvCotqgA3QBO4gXDZGLpxQ6mond0Q=";
 
   nativeBuildInputs = [
     pkg-config
     cmake
-    perl
+    rustPlatform.bindgenHook
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ makeWrapper ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
@@ -59,13 +61,17 @@ rustPlatform.buildRustPackage rec {
     icnsify
   ];
 
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-      libGL
-      libx11
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_15 ];
+  buildInputs = [
+    openssl
+    sqlcipher
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+    pipewire
+    libGL
+    libx11
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_15 ];
 
   env.ZAPFAST_TEST_RTL_FONT = "${liberation_ttf}/share/fonts/truetype/LiberationSans-Regular.ttf";
 
@@ -92,6 +98,9 @@ rustPlatform.buildRustPackage rec {
 
       install -Dm644 packaging/icons/zapfast.svg \
         $out/share/icons/hicolor/scalable/apps/zapfast.svg
+
+      install -Dm644 packaging/flatpak/rocks.zapfast.ZapFast.metainfo.xml \
+        $out/share/metainfo/rocks.zapfast.ZapFast.metainfo.xml
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       app="$out/Applications/ZapFast.app/Contents"

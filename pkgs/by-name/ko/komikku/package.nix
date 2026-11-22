@@ -25,14 +25,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "komikku";
-  version = "51.1.0";
+  version = "51.4.0";
   pyproject = false;
 
   src = fetchFromCodeberg {
     owner = "valos";
     repo = "Komikku";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-I5qu1P6X4A8w3EfdlTPlSqvon+uqNfUx4KICWXoMaQk=";
+    hash = "sha256-mvEuw/13ahIqxggZkFWQ05EOl3zDGVnMznrr3ORTQ5k=";
   };
 
   nativeBuildInputs = [
@@ -60,6 +60,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   dependencies = with python3.pkgs; [
     beautifulsoup4
     brotli
+    colorlog
     colorthief
     curl-cffi
     dateparser
@@ -99,7 +100,9 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
   # Prevent double wrapping.
   dontWrapGApps = true;
-  makeWrapperArgs = [ "\${gappsWrapperArgs[@]}" ];
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
   passthru = {
     updateScript = nix-update-script { };

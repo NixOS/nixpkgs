@@ -10,7 +10,6 @@ buildPythonPackage (finalAttrs: {
   pname = "aircot";
   version = "4.0.2";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "snstac";

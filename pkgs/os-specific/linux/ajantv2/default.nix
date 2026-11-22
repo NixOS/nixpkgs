@@ -4,6 +4,7 @@
   kernelModuleMakeFlags,
   libajantv2,
 }:
+
 stdenv.mkDerivation (finalAttrs: {
   name = "${finalAttrs.version}-${finalAttrs.version}-${kernel.version}";
   pname = "ajantv2-module";
@@ -13,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
   sourceRoot = "${libajantv2.src.name}/driver/linux";
 
   patches = [
-    ./fix-linux-6.15.patch
+    ./fix-linux-7.patch
   ];
   patchFlags = "-p3";
 
@@ -21,7 +22,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  makeFlags = kernelModuleMakeFlags;
+  makeFlags = kernelModuleMakeFlags ++ [
+    "KVER=${kernel.modDirVersion}"
+    "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+    "INSTALL_MOD_PATH=${placeholder "out"}"
+    "INSTALL_MOD_DIR=updates"
+  ];
 
   preBuild = ''
     chmod -R +w ../../
@@ -29,14 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  buildFlags = [
-    "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
-  ];
-
-  installPhase = ''
-    install -D ajantv2.ko $out/lib/modules/${kernel.modDirVersion}/misc/ajantv2.ko
-    install -D ajardma.ko $out/lib/modules/${kernel.modDirVersion}/misc/ajardma.ko
-  '';
+  installTargets = [ "modules_install" ];
 
   meta = {
     inherit (libajantv2.meta) license homepage maintainers;

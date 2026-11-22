@@ -49,7 +49,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "poljar";
+    owner = "matrix-nio";
     repo = "matrix-nio";
     tag = version;
     hash = "sha256-bypPBVArN+UnS4Zje603CgJspQsirgkkIHm6juwRigc=";
@@ -165,8 +165,8 @@ buildPythonPackage rec {
   };
 
   meta = {
-    homepage = "https://github.com/poljar/matrix-nio";
-    changelog = "https://github.com/poljar/matrix-nio/blob/${version}/CHANGELOG.md";
+    homepage = "https://github.com/matrix-nio/matrix-nio";
+    changelog = "https://github.com/matrix-nio/matrix-nio/blob/${version}/CHANGELOG.md";
     description = "Python Matrix client library, designed according to sans I/O principles";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [

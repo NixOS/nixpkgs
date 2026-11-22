@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "abseil";
     repo = "abseil-cpp";
     rev = version;
-    sha256 = "sha256-fcxPhuI2eL/fnd6nT11p8DpUNwGNaXZmd03yOiZcOT0=";
+    hash = "sha256-fcxPhuI2eL/fnd6nT11p8DpUNwGNaXZmd03yOiZcOT0=";
   };
 
   patches = [
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     # https://github.com/abseil/abseil-cpp/pull/963
     (fetchpatch {
       url = "https://github.com/abseil/abseil-cpp/commit/5bfa70c75e621c5d5ec095c8c4c0c050dcb2957e.patch";
-      sha256 = "0nhjxqfxpi2pkfinnqvd5m4npf9l1kg39mjx9l3087ajhadaywl5";
+      hash = "sha256-hXKvmoJSHQQGTV3WNN4MNLlrSS1tY2ujm1fE2x3uElo=";
     })
 
     # Bacport gcc-13 fix:
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     # https://github.com/abseil/abseil-cpp/pull/1110
     (fetchpatch {
       url = "https://github.com/abseil/abseil-cpp/commit/808bc202fc13e85a7948db0d7fb58f0f051200b1.patch";
-      sha256 = "sha256-ayY/aV/xWOdEyFSDqV7B5WDGvZ0ASr/aeBeYwP5RZVc=";
+      hash = "sha256-ayY/aV/xWOdEyFSDqV7B5WDGvZ0ASr/aeBeYwP5RZVc=";
     })
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [

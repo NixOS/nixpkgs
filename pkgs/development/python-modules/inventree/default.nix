@@ -18,7 +18,6 @@ buildPythonPackage (finalAttrs: {
   pname = "inventree";
   version = "0.23.2";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "inventree";

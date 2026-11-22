@@ -8,16 +8,15 @@
   };
 
   nodes.machine =
-    { pkgs, ... }:
+    { config, pkgs, ... }:
     {
       environment.systemPackages = [
         pkgs.jq
         pkgs.parted
-        pkgs.tzpfms
+        config.boot.zfs.tzpfms.package
       ];
 
       boot = {
-        initrd.systemd.enable = true;
         loader = {
           systemd-boot.enable = true;
           timeout = 0;

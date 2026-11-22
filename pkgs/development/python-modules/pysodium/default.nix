@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pysodium";
-  version = "0.7.18";
+  version = "0.7.19";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "stef";
     repo = "pysodium";
     tag = "v${version}";
-    hash = "sha256-F2215AAI8UIvn6UbaJ/YxI4ZolCzlwY6nS5IafTs+i4=";
+    hash = "sha256-+RW6V3KriuaWP8aq7CChk6+qqHOctHaECaWZ8Vyudr8=";
   };
 
   postPatch =

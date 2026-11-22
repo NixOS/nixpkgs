@@ -45,6 +45,9 @@ let
         ];
         dependencies = old.dependencies ++ [
           self.chroma-hnswlib
+          self.fastapi
+          self.posthog
+          self.opentelemetry-instrumentation-fastapi
         ];
 
         # The base package disables additional tests, so explicitly override
@@ -93,6 +96,8 @@ let
         ];
       });
       lsprotocol = self.lsprotocol_2023;
+      # vectorcode requires mcp<2.0.0
+      mcp = self.mcp_1;
       pygls = self.pygls_1;
     };
   };
@@ -168,12 +173,9 @@ python.pkgs.buildPythonApplication rec {
     installShellCompletion vectorcode.{bash,zsh}
   '';
 
-  makeWrapperArgs = [
-    "--prefix"
-    "PYTHONPATH"
-    ":"
-    "$PYTHONPATH"
-  ];
+  preFixup = ''
+    makeWrapperArgs+=(--prefix PYTHONPATH : "$PYTHONPATH")
+  '';
 
   pythonImportsCheck = [ "vectorcode" ];
 

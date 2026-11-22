@@ -25,7 +25,6 @@ buildPythonPackage {
   pname = "ttnn";
   inherit (tt-metal') version src;
   pyproject = true;
-  __structuredAttrs = true;
 
   # nanobind builds _ttnn.so against the stable ABI targeting python 3.12+
   disabled = pythonOlder "3.12";
@@ -87,6 +86,7 @@ buildPythonPackage {
     changelog = "https://github.com/tenstorrent/tt-metal/releases/tag/v${tt-metal'.version}";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
+    teams = [ lib.teams.tenstorrent ];
     maintainers = with lib.maintainers; [ liberodark ];
   };
 }

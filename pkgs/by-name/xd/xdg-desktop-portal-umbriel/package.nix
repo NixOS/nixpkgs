@@ -16,12 +16,22 @@
   cairo,
   tomlplusplus,
   nlohmann_json,
-  gtk4,
+  libglvnd,
+  libxkbcommon,
+  freetype,
+  fontconfig,
+  pango,
+  harfbuzz,
+  glib,
+  stb,
+  libei,
+  dbus,
+  autoAddDriverRunpath,
   unstableGitUpdater,
 }:
 stdenv.mkDerivation {
   pname = "xdg-desktop-portal-umbriel";
-  version = "0-unstable-2026-09-26";
+  version = "0-unstable-2026-11-18";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -30,8 +40,8 @@ stdenv.mkDerivation {
     owner = "noctalia-dev";
     repo = "xdg-desktop-portal-umbriel";
     # No tagged releases yet
-    rev = "d6bd72cabd83e3084fb2f2e24898d8ffa4a8c24f";
-    hash = "sha256-xDnu9icpormkETOo8Vn2Qr7Jkrz9ZqRf/jOhqADeeyg=";
+    rev = "32b8ee4ff0675c3f819c13b3f4b8651c1b887a43";
+    hash = "sha256-7VbiRCkqW8buIC7YXzWHnoS0w4qVUwbxlcsrA2OsvUU=";
   };
 
   nativeBuildInputs = [
@@ -39,6 +49,7 @@ stdenv.mkDerivation {
     ninja
     pkg-config
     wayland-scanner
+    autoAddDriverRunpath
   ];
 
   buildInputs = [
@@ -52,10 +63,21 @@ stdenv.mkDerivation {
     cairo
     tomlplusplus
     nlohmann_json
-    gtk4
+    libglvnd
+    libxkbcommon
+    freetype
+    fontconfig
+    pango
+    harfbuzz
+    glib
+    stb
   ];
 
   mesonBuildType = "release";
+
+  doCheck = true;
+  checkInputs = [ libei ];
+  nativeCheckInputs = [ dbus ];
 
   passthru.updateScript = unstableGitUpdater { };
 

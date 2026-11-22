@@ -1,6 +1,5 @@
 {
   lib,
-  php,
   stdenv,
   buildPecl,
   cargo,
@@ -11,36 +10,45 @@
   pcre2,
   valgrind,
   libiconv,
+  libddwaf,
+  llvmPackages,
+  pkg-config,
+  zstd,
 }:
 
-buildPecl rec {
+buildPecl (finalAttrs: {
   pname = "ddtrace";
-  version = "1.19.2";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "DataDog";
     repo = "dd-trace-php";
-    rev = version;
+    tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-pfhoj5a+kUVOuMnAHgL2s05Pcc6uhlTcp2t5aj1eJ0E=";
+    hash = "sha256-9MTIbbV/JnSTSerHpJIReeTZtW1lxIIeXCGR9RaCZG4=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    hash = "sha256-Onkkea1xntfSKVr2aoCy1Z9wGIdv/L7HRh7LGxv738M=";
+    inherit (finalAttrs) src;
+    hash = "sha256-97PlYf9KY0C+J1HYkJM/oqAjxwz+c8cYtF53L4EvE5I=";
   };
 
-  env.NIX_CFLAGS_COMPILE = "-O2";
+  env = {
+    NIX_CFLAGS_COMPILE = "-O2";
+    LIBDDWAF_PREFIX = libddwaf;
+    DDTRACE_SHARED_LIBADD = "-lddwaf";
+  };
 
-  # Fix double slashes in Makefile paths to prevent impure path errors during
-  # linking. The Makefile has /$(builddir)/components-rs/... but builddir is
-  # already absolute (/build/source), creating //build/source/... paths.
-  postConfigure = ''
-    substituteInPlace Makefile --replace-fail '/$(builddir)/components-rs' '$(builddir)/components-rs'
+  # Use the packaged shared library instead of building or downloading libddwaf.
+  postPatch = ''
+    substituteInPlace appsec/helper-rust/Cargo.toml \
+      --replace-fail 'features = ["ring"]' 'features = ["ring", "dynamic-link"]'
   '';
 
   nativeBuildInputs = [
     cargo
+    llvmPackages.llvm
+    pkg-config
     rustc
     rustPlatform.bindgenHook
     rustPlatform.cargoSetupHook
@@ -48,7 +56,9 @@ buildPecl rec {
 
   buildInputs = [
     curl
+    libddwaf
     pcre2
+    zstd
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     valgrind
@@ -58,8 +68,7 @@ buildPecl rec {
   ];
 
   meta = {
-    broken = lib.versionAtLeast php.version "8.6";
-    changelog = "https://github.com/DataDog/dd-trace-php/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/DataDog/dd-trace-php/blob/${finalAttrs.version}/CHANGELOG.md";
     description = "Datadog Tracing PHP Client";
     homepage = "https://github.com/DataDog/dd-trace-php";
     license = with lib.licenses; [
@@ -68,4 +77,4 @@ buildPecl rec {
     ];
     teams = [ lib.teams.php ];
   };
-}
+})

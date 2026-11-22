@@ -42,7 +42,7 @@ buildPythonPackage rec {
   meta = {
     description = "Json Formatter for the standard python logger";
     homepage = "https://github.com/madzak/python-json-logger";
-    license = lib.licenses.bsdOriginal;
+    license = lib.licenses.bsd2;
     maintainers = [ ];
   };
 }

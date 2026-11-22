@@ -16,7 +16,7 @@ buildDunePackage (finalAttrs: {
   src = fetchFromGitLab {
     owner = "irill";
     repo = "cudf";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-E4KXKnso/Q3ZwcYpKPgvswNR9qd/lafKljPMxfStedM=";
   };
 

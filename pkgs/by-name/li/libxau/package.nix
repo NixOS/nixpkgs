@@ -37,6 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Functions for handling Xauthority files and entries.";
     homepage = "https://gitlab.freedesktop.org/xorg/lib/libxau";

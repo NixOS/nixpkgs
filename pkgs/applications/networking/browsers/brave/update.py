@@ -1,6 +1,7 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i python3 -p python3
 
+import base64
 import os
 import urllib.request
 
@@ -22,6 +23,11 @@ def wget(url):
     res = urllib.request.urlopen(url)
     assert res.code == 200
     return res.read().decode("ascii")
+
+
+def sha256_to_sri(hash):
+    hash = base64.b64encode(bytes.fromhex(hash)).decode('utf-8')
+    return f"sha256-{hash}"
 
 
 def get_version(base_url):
@@ -54,11 +60,11 @@ def write_package(flavor, version):
         for arch in download_urls[flavor].keys():
             url = download_urls[flavor][arch]
             hashurl = url.replace("${version}", version) + ".sha256"
-            hash = wget(hashurl).split(" ")[0]
+            hash = sha256_to_sri(wget(hashurl).split(" ")[0])
 
             print(f"    {arch} = {{", file=f)
             print(f'      url = "{url}";', file=f)
-            print(f'      sha256 = "{hash}";', file=f)
+            print(f'      hash = "{hash}";', file=f)
             print(f"    }};", file=f)
 
         print("  };", file=f)

@@ -3,14 +3,13 @@
   buildPythonPackage,
   fetchPypi,
   setuptools,
+  pytestCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "argparse-addons";
   version = "0.12.0";
   pyproject = true;
-
-  __structuredAttrs = true;
 
   src = fetchPypi {
     pname = "argparse_addons";
@@ -21,6 +20,8 @@ buildPythonPackage (finalAttrs: {
   build-system = [ setuptools ];
 
   pythonImportsCheck = [ "argparse_addons" ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
     description = "Additional Python argparse types and actions";

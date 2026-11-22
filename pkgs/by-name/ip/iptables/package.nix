@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   autoreconfHook,
   pkg-config,
   pruneLibtoolFiles,
@@ -39,6 +40,14 @@ stdenv.mkDerivation (finalAttrs: {
     url = "https://www.netfilter.org/projects/iptables/files/iptables-${finalAttrs.version}.tar.xz";
     hash = "sha256-GvzTPano+ROs5qISZ4gWLiB+JvXV4pxlc8Dlgf/Fi5k=";
   };
+
+  # Fix build with linux-headers 7.3
+  patches = lib.optionals stdenv.hostPlatform.isAarch64 [
+    (fetchpatch {
+      url = "https://lore.kernel.org/netfilter-devel/20261024135509.4097035-1-yegorslists@googlemail.com/raw";
+      hash = "sha256-SYL0oqQObaQz03jriWbSckmGL2LwCUV4our0W4TmCus=";
+    })
+  ];
 
   outputs = [
     "out"

@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "3.4.0";
 
   src = fetchFromGitHub {
-    owner = "ProvableHQ";
+    owner = "aleo-labs-protocol";
     repo = "leo";
     tag = "v${finalAttrs.version}";
     hash = "sha256-VDhD2devY2GPa2vGbZ0hSg1tIc6WJ5pgyDM6RsSb12U=";
@@ -45,8 +45,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Functional, statically-typed programming language built for writing private applications";
-    homepage = "https://github.com/ProvableHQ/leo";
-    changelog = "https://github.com/ProvableHQ/leo/releases/tag/v${finalAttrs.version}";
+    homepage = "https://github.com/aleo-labs-protocol/leo";
+    changelog = "https://github.com/aleo-labs-protocol/leo/releases/tag/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [ anstylian ];
     mainProgram = "leo";
     license = lib.licenses.gpl3Only;

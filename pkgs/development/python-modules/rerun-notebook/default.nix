@@ -13,7 +13,6 @@ buildPythonPackage (finalAttrs: {
   pname = "rerun-notebook";
   inherit (rerun) version;
   format = "wheel";
-  __structuredAttrs = true;
 
   # Building this package from source is very cumbersome (it requires a wasm web-viewer
   # cross-compile via cargo + an npm/esbuild bundle). Using the upstream wheel for now.
@@ -22,7 +21,7 @@ buildPythonPackage (finalAttrs: {
     inherit (finalAttrs) version;
     format = "wheel";
     python = "py2.py3";
-    hash = "sha256-o21Ws8nP4BW7dF6w/lhDJKvdlMsvSMmfVyyK86Ccazc=";
+    hash = "sha256-kUrM+FCbd4xzXgT8JIHbRwnOgwYYPhepKix9hatdhb4=";
   };
 
   pythonRelaxDeps = [

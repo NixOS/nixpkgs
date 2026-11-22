@@ -15,29 +15,36 @@
   iproute2,
   pandoc,
   pipewire,
+  gitMinimal,
+  cmake,
   withICUCalendar ? false,
   withPipewire ? true,
   withNotmuch ? false,
+  withSpeedtest ? true,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "i3status-rust";
-  version = "0.36.1";
+  version = "0.40.1";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "greshake";
     repo = "i3status-rust";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tCMoYbsiVBX7GZZVhzAKuMFS1L7DITQZSUfQ6iQMofg=";
+    hash = "sha256-iYSPyL9f/kyVnI0m/9j1GoHbaSJ2LIdfAglI1mLdH5M=";
   };
 
-  cargoHash = "sha256-mnLl+JegA96z95VQqZ5d8bGYCf1PG/ip2LVyPm4HjVI=";
+  cargoHash = "sha256-R3GAQMpF6g8HLPcQBj53n6DXIh8yk4bJx3EFFCf9oJ4=";
 
   nativeBuildInputs = [
     pkg-config
     makeWrapper
     installShellFiles
     pandoc
+    gitMinimal
+    cmake
   ]
   ++ (lib.optionals withPipewire [ rustPlatform.bindgenHook ]);
 
@@ -56,11 +63,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ]
   ++ (lib.optionals withICUCalendar [ "icu_calendar" ])
   ++ (lib.optionals withPipewire [ "pipewire" ])
-  ++ (lib.optionals withNotmuch [ "notmuch" ]);
+  ++ (lib.optionals withNotmuch [ "notmuch" ])
+  ++ (lib.optionals withSpeedtest [ "speedtest" ]);
 
   prePatch = ''
     substituteInPlace src/util.rs \
-      --replace "/usr/share/i3status-rust" "$out/share"
+      --replace-fail "/usr/share" "$out/share"
   '';
 
   postBuild = ''
@@ -68,8 +76,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   postInstall = ''
-    mkdir -p $out/share
-    cp -R examples files/* $out/share
+    mkdir -p $out/share/i3status-rust
+    cp -R examples files/* $out/share/i3status-rust
     installManPage man/*
   '';
 
@@ -93,6 +101,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "i3status-rs";
     maintainers = with lib.maintainers; [
       backuitist
+      kybe236
     ];
     platforms = lib.platforms.linux;
   };

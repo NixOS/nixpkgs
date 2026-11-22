@@ -16,14 +16,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "nbxmpp";
-  version = "7.4.0";
+  version = "7.5.0";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "gajim";
     repo = "python-nbxmpp";
     tag = finalAttrs.version;
-    hash = "sha256-Xg2RFEUbvshVDjWftnAx4nbOor1q8naeG2vvukDFwHY=";
+    hash = "sha256-54zGqqY8LE39V0nuKqam6131SL+hOLKpeDlhzG2Vr9I=";
   };
 
   nativeBuildInputs = [

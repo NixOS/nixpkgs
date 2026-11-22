@@ -8,16 +8,16 @@
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "id";
-  version = "1.5.0";
+  version = "1.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "di";
     repo = "id";
-    tag = "v${version}";
-    hash = "sha256-6Vkbs/i1roAtPGwLxdM+XKDrMTo0+NfVpAUpw6GPg9U=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-qO9zUjJ2ATpulFANJw7XJexIs71XXMuEB8C0acoDnxI=";
   };
 
   build-system = [ flit-core ];
@@ -34,8 +34,8 @@ buildPythonPackage rec {
   meta = {
     description = "Tool for generating OIDC identities";
     homepage = "https://github.com/di/id";
-    changelog = "https://github.com/di/id/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/di/id/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

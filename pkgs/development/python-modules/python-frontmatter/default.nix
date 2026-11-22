@@ -18,7 +18,6 @@ buildPythonPackage (finalAttrs: {
   pname = "python-frontmatter";
   version = "1.3.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "eyeseast";
@@ -26,6 +25,11 @@ buildPythonPackage (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-b/ruWPPiKvDzMjcVhxiBtnAaMNWnWvy1v8GZxGeibyY=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.11.15,<0.12" uv_build
+  '';
 
   build-system = [ uv-build ];
 

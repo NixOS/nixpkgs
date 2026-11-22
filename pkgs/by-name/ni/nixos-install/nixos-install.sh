@@ -242,7 +242,7 @@ fi
 
 # A place to drop temporary stuff.
 tmpdir="$(mktemp -d -p "$mountPoint")"
-trap 'rm -rf $tmpdir' EXIT
+trap 'rm -rf "$tmpdir"' EXIT
 
 # store temporary files on target filesystem by default
 export TMPDIR=${TMPDIR:-$tmpdir}

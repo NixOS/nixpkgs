@@ -37,7 +37,12 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   pythonImportsCheck = [ "vcsi" ];
 
-  makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ ffmpeg ]}" ];
+  makeWrapperArgs = [
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [ ffmpeg ])
+  ];
 
   nativeCheckInputs = [
     versionCheckHook

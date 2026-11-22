@@ -15,10 +15,12 @@
   libopus,
   alsa-lib,
   libpulseaudio,
+  oniguruma,
   pipewire,
   darwin,
   versionCheckHook,
   writableTmpDirAsHomeHook,
+  zstd,
   nix-update-script,
   pipewireSupport ? stdenv.hostPlatform.isLinux,
 }:
@@ -32,7 +34,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "omp";
-  version = "18.11.1";
+  version = "19.1.0";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -41,17 +43,30 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "can1357";
     repo = "oh-my-pi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9b+QTtxCJFuAEBjsjh1OExHNpuT3mb65v/sW/c0ovRs=";
+    hash = "sha256-aBhxgL3d4R3a7Prfu/iZWyUgfCqId4XBiI2Aye1JxR0=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
-    hash = "sha256-7514KlJl4jqJV/8zg6igfdVYh11aBj9FwmrFSNdalqI=";
+    hash = "sha256-RD+qnzGe0Wu6dQDs2L1HbPkZW5OB5UpmGKaAFZWin4g=";
   };
 
   postPatch = ''
     substituteInPlace packages/coding-agent/src/cli.ts \
       --replace-fail 'if (Bun.semver.order(Bun.version, MIN_BUN_VERSION) < 0)' 'if (false)'
+
+  ''
+  + lib.optionalString (lib.versionOlder rustPlatform.rust.rustc.version "1.101") ''
+    substituteInPlace Cargo.toml \
+      --replace-fail 'rust-version = "1.101"' 'rust-version = "1.99"'
+
+    substituteInPlace crates/shell/src/bash/vm/proc.rs \
+      --replace-fail 'pub const fn has_work(&self)' 'pub fn has_work(&self)'
+
+    substituteInPlace crates/natives/src/desktop/macos/session.rs \
+      --replace-fail \
+        'displays_asleep(selector, &online_displays(), CGDisplayIsAsleep)' \
+        'displays_asleep(selector, &online_displays(), |id| CGDisplayIsAsleep(id))'
   '';
 
   # required until https://github.com/NixOS/nixpkgs/issues/255890 & https://github.com/NixOS/nixpkgs/issues/335534 are fixed
@@ -91,7 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Prevents breaking symlinks in node_modules
     dontFixup = true;
 
-    outputHash = "sha256-t5eagYY2sg+Yf2fBadrd72+lkrF06aaoTRfvzkZHGjM=";
+    outputHash = "sha256-vaHHl+2xGbMCJcV5PGhYx0EbMBJ6BdCwYt3OWXEB9Ls=";
     outputHashMode = "recursive";
   };
 
@@ -113,9 +128,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libopus
+    oniguruma
+    zstd
   ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ stdenv.cc.cc.lib ]
-  ++ lib.optionals pipewireSupport [ pipewire ];
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ stdenv.cc.cc.lib ];
+
+  appendRunpaths = lib.optionals stdenv.hostPlatform.isLinux (
+    [
+      "${lib.getLib libpulseaudio}/lib"
+      "${lib.getLib alsa-lib}/lib"
+    ]
+    ++ lib.optionals pipewireSupport [ "${lib.getLib pipewire}/lib" ]
+  );
 
   dontStrip = true;
 
@@ -135,20 +159,17 @@ stdenv.mkDerivation (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
-    echo "Building pi-natives"
-    cargo build --release -p pi-natives ${lib.optionalString pipewireSupport "--features wayland-pipewire"}
+    echo "Building omp-natives"
+    cargo build --release -p omp-natives
     install -Dm755 "target/release/libpi_natives${stdenv.hostPlatform.extensions.sharedLibrary}" \
       "packages/natives/native/${addonName}"
+    bun scripts/stamp-native-version.ts \
+      "packages/natives/native/${addonName}" \
+      --version "${finalAttrs.version}" \
+      --no-sign
 
     ${lib.optionalString stdenv.hostPlatform.isLinux ''
       autoPatchelf -- "packages/natives/native/${addonName}"
-      patchelf --add-rpath "${
-        lib.makeLibraryPath [
-          libpulseaudio
-          alsa-lib
-        ]
-      }" \
-        "packages/natives/native/${addonName}"
     ''}
     ${lib.optionalString stdenv.hostPlatform.isDarwin ''
       signIfRequired "packages/natives/native/${addonName}"
@@ -229,7 +250,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "omp";
     maintainers = with lib.maintainers; [
       malix
-      naxdy
       adamcstephens
     ];
     platforms = [

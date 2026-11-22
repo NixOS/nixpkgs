@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xepub";
-  version = "1.0.2";
+  version = "1.0.4";
 
   src = fetchFromGitHub {
     owner = "xapp-project";
     repo = "xepub";
     tag = finalAttrs.version;
-    hash = "sha256-OPCX5989u+CuDJjPOPgkhrmU8k4/HQV8Ge01q+go2Qk=";
+    hash = "sha256-BisnlJScDG17Ffcv+YUP7M9XW0fBUwYUOH8VNs2p8FI=";
   };
 
   strictDeps = true;

@@ -4,6 +4,7 @@
   fetchFromGitHub,
   gettext,
   pdfSupport ? true,
+  writableTmpDirAsHomeHook,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -41,12 +42,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
     parameterized
     pytestCheckHook
     pyftpdlib
+    writableTmpDirAsHomeHook
   ];
-
-  # Needed for tests to be able to create a ~/.local/share/linkchecker/plugins directory
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   disabledTests = [
     "test_timeit2" # flakey, and depends sleep being precise to the milisecond

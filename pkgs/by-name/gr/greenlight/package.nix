@@ -6,7 +6,7 @@
   fetchNpmDeps,
   nodejs_26,
   npmHooks,
-  ruby_3_3,
+  ruby_3_4,
   makeWrapper,
   which,
   nixosTests,
@@ -15,7 +15,7 @@
 }:
 
 let
-  ruby = ruby_3_3;
+  ruby = ruby_3_4;
   nodejs = nodejs_26;
 in
 stdenv.mkDerivation (finalAttrs: {

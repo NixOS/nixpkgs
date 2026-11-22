@@ -12,7 +12,6 @@ buildPythonPackage (finalAttrs: {
   pname = "sqlite-migrate";
   version = "0.2";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "simonw";
@@ -21,12 +20,17 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-0fU3yOujqc4mZS4XcsM9xH2iK9fFX5MUsmuc/o+I+nY=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.9.18,<0.12.0" "uv_build"
+  '';
+
   build-system = [
     setuptools
     uv-build
   ];
 
-  propagatedBuildInputs = [ sqlite-utils ];
+  dependencies = [ sqlite-utils ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "klayout";
-  version = "0.30.12";
+  version = "0.30.13";
 
   src = fetchFromGitHub {
     owner = "KLayout";
     repo = "klayout";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZNljSRX7zAS8owzc6qxwsU2CBjS7j1IFzKeNh1DOlBU=";
+    hash = "sha256-XPHV0pfHnRuwnMU5FLwPFyJramP23dLxPbCRc7NcGMs=";
   };
 
   __structuredAttrs = true;
@@ -89,8 +89,9 @@ stdenv.mkDerivation (finalAttrs: {
       installBin $out/lib/klayout
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      mkdir -p $out/Applications
+      mkdir -p $out/Applications $out/bin
       mv $out/lib/klayout.app $out/Applications/
+      ln -s $out/Applications/klayout.app/Contents/MacOS/klayout $out/bin/klayout
     '';
 
   preFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''

@@ -15,8 +15,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.0.43";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "michalc";
     repo = "stream-inflate";

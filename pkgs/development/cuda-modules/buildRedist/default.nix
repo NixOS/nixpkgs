@@ -14,11 +14,13 @@
   lib,
   manifests,
   markForCudatoolkitRootHook,
+  patchelf,
   removeStubsFromRunpathHook,
   srcOnly,
   stdenv,
   stdenvNoCC,
   zstd,
+  testers,
 }:
 let
   inherit (backendStdenv) hostRedistSystem;
@@ -277,6 +279,17 @@ extendMkDerivation {
 
       nativeBuildInputs = [
         ./buildRedistHook.bash
+        # patchelf 0.19.2 aborts in shiftFile when addDriverRunpath re-patches binaries (e.g. libcufile, cuda_nvcc).
+        # FIXME: drop once https://github.com/NixOS/patchelf/pull/672 is in the default patchelf
+        (patchelf.overrideAttrs (
+          finalAttrs: _: {
+            version = "0.15.2";
+            src = fetchurl {
+              url = "https://github.com/NixOS/patchelf/releases/download/${finalAttrs.version}/patchelf-${finalAttrs.version}.tar.bz2";
+              hash = "sha256-F3RfVkFZyOIo/EEtplogSLhGxLa0Igt3y/IkFuAvLXw=";
+            };
+          }
+        ))
         autoPatchelfHook
         # This hook will make sure libcuda can be found
         # in typically /lib/opengl-driver by adding that
@@ -380,6 +393,19 @@ extendMkDerivation {
 
         supportedRedistSystems =
           passthru.supportedRedistSystems or (naturalSort (attrNames finalAttrs.passthru.supportedReleases));
+
+        tests =
+          passthru.tests or { }
+          // optionalAttrs (meta ? cmakeConfigModules) {
+            cmake-config = testers.hasCmakeConfigModules {
+              package = finalAttrs.finalPackage;
+            };
+          }
+          // optionalAttrs (meta ? pkgConfigModules) {
+            pkg-config = testers.hasPkgConfigModules {
+              package = finalAttrs.finalPackage;
+            };
+          };
 
         # NOTE: Downstream may expand this to include other outputs, but they must remember to set the appropriate
         # outputNameVarFallbacks!

@@ -65,8 +65,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
     tesseract5
   ];
 
-  unittestFlagsArray = [
-    "tests"
+  unittestFlags = [
+    "--start-directory=tests"
     "-v"
   ];
 

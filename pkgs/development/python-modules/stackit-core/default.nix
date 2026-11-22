@@ -13,16 +13,16 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "stackit-core";
-  version = "0.3.1";
+  version = "0.6.0";
   pyproject = true;
-
-  __structuredAttrs = true;
 
   src = fetchPypi {
     pname = "stackit_core";
     inherit (finalAttrs) version;
-    hash = "sha256-YWmYZbYK7Kh3hD6AcsrDgzuOP0acBDswZQfsyWYSQwE=";
+    hash = "sha256-HtUDPx+iT8g2SCQ9ZPGis1+Y1fcTBBrIfgZcJwoMZd0=";
   };
+
+  pythonRelaxDeps = [ "urllib3" ];
 
   build-system = [ hatchling ];
 

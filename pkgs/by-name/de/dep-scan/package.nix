@@ -1,25 +1,32 @@
 {
   lib,
   fetchFromGitHub,
+  fetchurl,
   python3Packages,
   writableTmpDirAsHomeHook,
   cdxgen,
-  nixosTests,
+  jq,
+  runCommand,
+  versionCheckHook,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "dep-scan";
-  version = "6.3.0";
+  version = "6.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "owasp-dep-scan";
     repo = "dep-scan";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DQo8GLO2d9QqS44zwkAt5I3GWk/pi4HAF/CChKf1SB4=";
+    hash = "sha256-sStziMmhZz5yytaU5rUDTcdQCEsXL19FI/gpSIVxI0o=";
   };
 
   build-system = with python3Packages; [ setuptools ];
+
+  pythonRelaxDeps = [
+    "defusedxml"
+  ];
 
   dependencies = with python3Packages; [
     appthreat-vulnerability-db
@@ -30,6 +37,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     ds-reporting-lib
     ds-server-lib
     ds-xbom-lib
+    httpx
     jinja2
     oras
     packageurl-python
@@ -49,11 +57,21 @@ python3Packages.buildPythonApplication (finalAttrs: {
     writableTmpDirAsHomeHook
   ];
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
+  versionCheckProgramArg = "--version";
+  versionCheckKeepEnvironment = [ "HOME" ];
+  doInstallCheck = true;
+
   pythonImportsCheck = [ "depscan" ];
 
   disabledTests = [
     # Test is not present
     "test_query_metadata2"
+    # AssertionError
+    "test_validate_remote_url_accepts_plain_public_url"
   ];
 
   # depscan --src shiftleft/scan-slim -o containertests -t docker
@@ -63,14 +81,58 @@ python3Packages.buildPythonApplication (finalAttrs: {
   # INFO [2025-07-28 20:17:35,654] Generating Software Bill-of-Materials for container image shiftleft/scan-slim. This might take a few mins ...
   # WARNING [2025-07-28 20:17:35,654] Unable to locate cdxgen command.
   makeWrapperArgs = [
-    "--prefix PATH : ${
-      lib.makeBinPath [
-        cdxgen
-      ]
-    }"
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [
+      cdxgen
+    ])
   ];
 
-  passthru.tests = { inherit (nixosTests) dep-scan; };
+  passthru = {
+    # Huggingface has a habit of removing their pinned commit dataset urls
+    # so an update script exists to keep these models up to date
+    updateScript = ./update.sh;
+    vdb = {
+      index = fetchurl {
+        url = "https://huggingface.co/datasets/AppThreat/vdb/resolve/207ab805b2656679bb649b2ff6aef4fa875fade5/app-2y/data.index.vdb6";
+        hash = "sha256-PVWyNVV+vHWELLA0QxI47fhCbrlvXJXM2llL14vMtg4=";
+      };
+      data = fetchurl {
+        url = "https://huggingface.co/datasets/AppThreat/vdb/resolve/207ab805b2656679bb649b2ff6aef4fa875fade5/app-2y/data.vdb6";
+        hash = "sha256-Q/+xYfq5BtSH+c0RMwUDBu10kcmjnDeKD3kH5oVUxzM=";
+      };
+      meta = fetchurl {
+        url = "https://huggingface.co/datasets/AppThreat/vdb/resolve/207ab805b2656679bb649b2ff6aef4fa875fade5/app-2y/vdb.meta";
+        hash = "sha256-l8BJHoetvxV2YJQLPo9n/3AB01XvSKgj5HbQc2hSqxY=";
+      };
+    };
+
+    tests.scan =
+      runCommand "dep-scan-test"
+        {
+          nativeBuildInputs = [
+            finalAttrs.finalPackage
+            jq
+          ];
+        }
+        ''
+          mkdir -p vdb
+          cp ${finalAttrs.passthru.vdb.index} vdb/data.index.vdb6
+          cp ${finalAttrs.passthru.vdb.data} vdb/data.vdb6
+          cp ${finalAttrs.passthru.vdb.meta} vdb/vdb.meta
+
+          export VDB_HOME=$(pwd)/vdb
+          export VDB_AGE_HOURS=999999
+          export HOME=$(pwd)/home
+          mkdir -p "$HOME" reports
+
+          depscan --src ${finalAttrs.src} --reports-dir reports
+          jq . reports/*.json
+
+          touch $out
+        '';
+  };
 
   meta = {
     description = "Security and risk audit tool based on known vulnerabilities, advisories, and license limitations for project dependencies";

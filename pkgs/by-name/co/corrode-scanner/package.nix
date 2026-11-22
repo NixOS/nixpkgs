@@ -1,5 +1,7 @@
 {
   lib,
+  aws-lc,
+  pkg-config,
   rustPlatform,
   fetchFromGitHub,
   nix-update-script,
@@ -8,7 +10,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "corrode-scanner";
-  version = "0.5.3";
+  version = "0.6.0";
 
   __structuredAttrs = true;
 
@@ -16,10 +18,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "ul0gic";
     repo = "corrode";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ucMNdl4TIl4TnGrkQXxO9ZNkYXrDD5Kto8NbWeT3IKI=";
+    hash = "sha256-f0EQ2m8yJEAUN7GFsdalVSwTDUfrOvLtX5HebHz7+Pg=";
   };
 
-  cargoHash = "sha256-0iKzigRLfnepGs2DMnYEWA4FwfRUegu+i64EbE881Qs=";
+  cargoHash = "sha256-1NGrkhYaq4OD8gW0KltCLQjOkgACqkwXCnV68LZzwxM=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ aws-lc ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 

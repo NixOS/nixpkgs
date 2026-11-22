@@ -57,13 +57,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "crun";
-  version = "1.30.1";
+  version = "1.31";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "crun";
     tag = finalAttrs.version;
-    hash = "sha256-SHhmtAySMkVCxPW++zThVEaO5zXoPTMbLqBZRm2CSDY=";
+    hash = "sha256-2HJBv5Rsq1+Q7OMB5U8yDm06TdqP+ZGx+pQp7O83Wno=";
     fetchSubmodules = true;
     leaveDotGit = true;
     postFetch = ''

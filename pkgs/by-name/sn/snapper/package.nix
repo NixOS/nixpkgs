@@ -99,7 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://snapper.io";
     license = lib.licenses.gpl2Only;
     mainProgram = "snapper";
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.booxter ];
     platforms = lib.platforms.linux;
   };
 })

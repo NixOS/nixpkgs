@@ -10,7 +10,7 @@
   makeDesktopItem,
   rustPlatform,
 
-  electron_42,
+  electron_43,
   ente-web,
   ffmpeg,
   imagemagick,
@@ -38,7 +38,7 @@ let
     hash = "sha256-H6ac1xcoQsxftREukIHpcYc8lFxnvmyxS9xNcr8H3/U=";
   };
 
-  electron = electron_42;
+  electron = electron_43;
 
   resourcesDir =
     if stdenv.hostPlatform.isDarwin then
@@ -193,7 +193,6 @@ buildNpmPackage (finalAttrs: {
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
       pinpox
-      yuka
       Br1ght0ne
       wrench-exile-legacy
     ];

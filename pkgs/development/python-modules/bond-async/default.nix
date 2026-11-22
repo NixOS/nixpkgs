@@ -16,8 +16,6 @@ buildPythonPackage (finalAttrs: {
 
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "bondhome";
     repo = "bond-async";

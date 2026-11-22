@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bear";
-  version = "4.2.3";
+  version = "4.2.4";
 
   src = fetchFromGitHub {
     owner = "rizsotto";
     repo = "bear";
     rev = finalAttrs.version;
-    hash = "sha256-W0t4UfTytoIXQ39LjHvA9U5owZJMsZNQd+fZ21DvsIg=";
+    hash = "sha256-5aiJHO9O7PMDtUpajRrpod5qDiMQPC5zhWxzXgeKb3g=";
   };
 
-  cargoHash = "sha256-ckWcNHR8D1FUWCFiP1SHdCzsDWppBbuZ/YG0hRj3F+4=";
+  cargoHash = "sha256-nV+exH84tvHOUmzxytAK/rINNKc0u7tBONPVAJRphZo=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -31,11 +31,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # error-only, hiding warnings the tests assert on.
   env.RUST_LOG = "info";
 
+  # Run tests serially to reduce contention around their fixed startup deadlines.
+  dontUseCargoParallelTests = true;
+
   postInstall = ''
     install -d $out/libexec/bear/bin $out/libexec/bear/lib
     mv $out/bin/bear-driver $out/libexec/bear/bin/
     mv $out/bin/bear-wrapper $out/libexec/bear/bin/
-    mv $out/lib/libexec.so $out/libexec/bear/lib/
+    mv $out/lib/libexec${stdenv.hostPlatform.extensions.sharedLibrary} $out/libexec/bear/lib/
 
     makeWrapper $out/libexec/bear/bin/bear-driver $out/bin/bear
 

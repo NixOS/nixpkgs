@@ -2,6 +2,7 @@
   lib,
   fetchFromSourcehut,
   rustPlatform,
+  writableTmpDirAsHomeHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -24,9 +25,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # don't build swayrbar
   buildAndTestSubdir = finalAttrs.pname;
 
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
   meta = {
     description = "Window switcher (and more) for sway";

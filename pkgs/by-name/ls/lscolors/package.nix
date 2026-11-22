@@ -24,10 +24,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Rust library and tool to colorize paths using LS_COLORS";
     homepage = "https://github.com/sharkdp/lscolors";
     changelog = "https://github.com/sharkdp/lscolors/releases/tag/v${finalAttrs.version}";
-    license = with lib.licenses; [
-      asl20 # or
-      mit
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
     mainProgram = "lscolors";
   };

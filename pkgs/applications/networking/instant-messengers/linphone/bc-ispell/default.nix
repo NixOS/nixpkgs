@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "public/external";
     repo = "ispell";
     rev = "05574fe160222c3d0b6283c1433c9b087271fad1";
-    sha256 = "sha256-YoRLiMjk2BxoI27xc2nzucxfHV9UbouFRSECb3RdHGo=";
+    hash = "sha256-YoRLiMjk2BxoI27xc2nzucxfHV9UbouFRSECb3RdHGo=";
   };
 
   patches = [

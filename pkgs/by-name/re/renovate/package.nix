@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   makeWrapper,
-  nodejs_24,
+  nodejs_26,
   pnpm_11,
   fetchPnpmDeps,
   pnpmConfigHook,
@@ -17,12 +17,12 @@
 }:
 
 let
-  nodejs = nodejs_24;
+  nodejs = nodejs_26;
   pnpm = pnpm_11;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "renovate";
-  version = "44.151.2";
+  version = "44.247.1";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "renovatebot";
     repo = "renovate";
     tag = finalAttrs.version;
-    hash = "sha256-vLZofovZvrlcJllCCCA46cl6wKGX46dDLX9rXZYrCV4=";
+    hash = "sha256-P0tlgSjt3OY6UymMoPobz1NAUmh5gLm2NqpL9JG91fM=";
   };
 
   postPatch = ''
@@ -55,8 +55,8 @@ stdenv.mkDerivation (finalAttrs: {
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
-    fetcherVersion = 4;
-    hash = "sha256-DKkJ2SqDdpU/Qhs9xHv1WDPSDEipftyX704pUraNm3k=";
+    fetcherVersion = 5;
+    hash = "sha256-KM5vpUTleTwzsIgmHp3qRNy4FBa0INURWXAlvDq33KI=";
   };
 
   env.COREPACK_ENABLE_STRICT = 0;

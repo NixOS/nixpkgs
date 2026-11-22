@@ -3,27 +3,24 @@
   nix-update-script,
   buildNpmPackage,
   fetchFromCodeberg,
-  nodejs_22,
   kwin,
   kpackage,
   zip,
 }:
 buildNpmPackage (finalAttrs: {
   pname = "krohnkite";
-  version = "0.9.9.2";
+  version = "0.9.11.0";
 
   src = fetchFromCodeberg {
     owner = "anametologin";
     repo = "Krohnkite";
     rev = finalAttrs.version;
-    hash = "sha256-gulKg23BeWL270B2omRYJIuAHIsKu1cBVpimgButM9I=";
+    hash = "sha256-n3TQFLf4FeJjJ5on8U+VPFqZE553x+uKktsuRtWQZR4=";
   };
 
-  npmDepsHash = "sha256-6+meI602VKIzqunTOwNRLZOO7/LscjNm545icc2WN0c=";
+  npmDepsHash = "sha256-oyXwDSR6e0dKtvHTm2Y+/2Ad33UeqHWyEe/e1OAwTqo=";
 
   dontWrapQtApps = true;
-
-  nodejs = nodejs_22;
 
   nativeBuildInputs = [
     kpackage

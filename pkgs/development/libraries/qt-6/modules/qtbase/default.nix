@@ -239,23 +239,14 @@ stdenv.mkDerivation {
     ./use-cmake-from-path.patch
 
     # macdeployqt fixes
-    # get qmlimportscanner location from environment variable
-    ./find-qmlimportscanner.patch
-    # pass QML2_IMPORT_PATH from environment to qmlimportscanner
-    ./qmlimportscanner-import-path.patch
-    # don't pass qtbase's QML directory to qmlimportscanner if it's empty
-    ./skip-missing-qml-directory.patch
+    # FIXME: these should probably be a wrapper
+    ./macdeployqt-fixes.patch
 
-    # another crash fix
+    # backport touchpad scrolling fix
+    # FIXME: remove in 6.12.1
     (fetchpatch {
-      url = "https://github.com/qt/qtbase/commit/515cbbacfba9f4259c9c3b0714a31222c2b4c879.diff";
-      hash = "sha256-93tzp4O7dZxRZv7ilN/gbQSVmaeOGmxpYgM7aomN0n8=";
-    })
-
-    # icon loading fix
-    (fetchpatch {
-      url = "https://github.com/qt/qtbase/commit/85420d5d4f78a6ba4cf70ed8ee092e0ef4fb9a54.diff";
-      hash = "sha256-BFL1mtwzEH0uUYbeUZDC2Fcp9pjBhtSYOaSxxVILe30=";
+      url = "https://github.com/qt/qtbase/commit/ddf0f49dc949beab8485b3bfb8e88616e4bd8076.diff";
+      hash = "sha256-fWTHLU0IQxOknxPitqhHN8VVVPz/tLQlGzF2t7rYdFc=";
     })
   ];
 

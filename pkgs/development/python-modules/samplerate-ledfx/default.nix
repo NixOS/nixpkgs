@@ -20,7 +20,7 @@ buildPythonPackage (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "LedFx";
-    repo = "python-samplerate-ledfx";
+    repo = "samplerate-ledfx";
     tag = "v${finalAttrs.version}";
     hash = "sha256-SLmaWSq/Ou23BfdWKlzE9gIfORgF9skUVEw1Tzpd5b4=";
   };
@@ -65,7 +65,7 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Bindings for libsamplerate based on CFFI and NumPy";
-    homepage = "https://github.com/LedFx/python-samplerate-ledfx";
+    homepage = "https://github.com/LedFx/samplerate-ledfx";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };

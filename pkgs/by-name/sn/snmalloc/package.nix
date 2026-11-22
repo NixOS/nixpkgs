@@ -28,6 +28,8 @@ clangStdenv.mkDerivation (finalAttrs: {
     cmake
   ];
 
+  doCheck = true;
+
   passthru.updateScript = nix-update-script { };
 
   meta = {

@@ -31,26 +31,22 @@ stdenv.mkDerivation (finalAttrs: {
 
   outputs = [
     "out"
+    "dev"
+    "scripts"
   ]
   ++ lib.optionals withManPages [
     "man"
-  ]
-  ++ [
-    "dev"
-    "scripts"
   ];
 
   nativeBuildInputs = [
     cmake
+    pkg-config
+    python3
+    udevCheckHook
   ]
   ++ lib.optionals withManPages [
     docutils
     pandoc
-  ]
-  ++ [
-    pkg-config
-    python3
-    udevCheckHook
   ];
 
   buildInputs = [
@@ -63,6 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DCMAKE_INSTALL_RUNDIR=/run"
     "-DCMAKE_INSTALL_SHAREDSTATEDIR=/var/lib"
     "-DSYSUSERS_DIR=${placeholder "out"}/lib/sysusers.d"
+    (lib.cmakeFeature "Python_EXECUTABLE" python3.pythonOnBuildForHost.interpreter)
   ]
   ++ lib.optionals (!withManPages) [
     "-DNO_MAN_PAGES=1"

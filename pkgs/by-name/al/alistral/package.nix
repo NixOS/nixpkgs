@@ -6,6 +6,9 @@
   nix-update-script,
   pkg-config,
   openssl,
+  aws-lc,
+  sqlite,
+  zstd,
   installShellFiles,
   writableTmpDirAsHomeHook,
 }:
@@ -39,6 +42,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     openssl
+    aws-lc
+    sqlite
+    zstd
   ];
 
   # Wants to create config file where it s not allowed

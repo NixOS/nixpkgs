@@ -9,14 +9,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "heatzypy";
-  version = "2.6.1";
+  version = "2.6.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Cyr-ius";
     repo = "heatzypy";
     tag = finalAttrs.version;
-    hash = "sha256-7hoei8uFDmSeqKSBmhmVoF5lZNuDkNqSFT+YjKPnJlk=";
+    hash = "sha256-sYBSLrPTkxvJRZY3wsp6QWHA2HDeiufyIvBVN7XjNPs=";
   };
 
   build-system = [

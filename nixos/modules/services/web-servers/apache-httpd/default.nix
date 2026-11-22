@@ -248,6 +248,8 @@ let
       </VirtualHost>
     '';
 
+  escapeFileName = replaceString "/" "-";
+
   mkVHostCommonConf =
     hostOpts:
     let
@@ -281,8 +283,8 @@ let
     in
     ''
       ${optionalString cfg.logPerVirtualHost ''
-        ErrorLog ${cfg.logDir}/error-${hostOpts.hostName}.log
-        CustomLog ${cfg.logDir}/access-${hostOpts.hostName}.log ${hostOpts.logFormat}
+        ErrorLog ${cfg.logDir}/error-${escapeFileName hostOpts.hostName}.log
+        CustomLog ${cfg.logDir}/access-${escapeFileName hostOpts.hostName}.log ${hostOpts.logFormat}
       ''}
 
       ${optionalString (hostOpts.robotsEntries != "") ''
@@ -425,10 +427,19 @@ let
 
   # Generate the PHP configuration file.  Should probably be factored
   # out into a separate module.
+  toPhpIni =
+    v:
+    if isString v then
+      v
+    else
+      generators.toKeyValue { mkKeyValue = generators.mkKeyValueDefault { } " = "; } (
+        filterAttrs (_: v: v != null) v
+      );
+
   phpIni =
     pkgs.runCommand "php.ini"
       {
-        options = cfg.phpOptions;
+        options = toPhpIni cfg.phpOptions;
         preferLocalBuild = true;
       }
       ''
@@ -725,13 +736,40 @@ in
       enablePerl = mkEnableOption "the Perl module (mod_perl)";
 
       phpOptions = mkOption {
-        type = types.lines;
-        default = "";
-        example = ''
-          date.timezone = "CET"
+        type =
+          with types;
+          either lines (
+            attrsOf (
+              nullOr (oneOf [
+                bool
+                int
+                float
+                str
+              ])
+            )
+          );
+        default = { };
+        example = literalExpression ''
+          {
+            "date.timezone" = "CET";
+          }
         '';
         description = ''
-          Options appended to the PHP configuration file {file}`php.ini`.
+          Structured options appended to the PHP configuration file
+          {file}`php.ini`.
+
+          For backwards compatibility, a string in
+          {file}`php.ini` format is also accepted, but deprecated.
+          It will be removed in a future release. Please migrate to
+          the attribute set format:
+
+          ```nix
+          {
+            services.httpd.phpOptions = {
+              "date.timezone" = "CET";
+            };
+          }
+          ```
         '';
       };
 
@@ -836,9 +874,13 @@ in
       }
     ) vhostCertNames;
 
-    warnings = mapAttrsToList (name: hostOpts: ''
-      Using config.services.httpd.virtualHosts."${name}".servedFiles is deprecated and will become unsupported in a future release. Your configuration will continue to work as is but please migrate your configuration to config.services.httpd.virtualHosts."${name}".locations before the 20.09 release of NixOS.
-    '') (filterAttrs (name: hostOpts: hostOpts.servedFiles != [ ]) cfg.virtualHosts);
+    warnings =
+      mapAttrsToList (name: hostOpts: ''
+        Using config.services.httpd.virtualHosts."${name}".servedFiles is deprecated and will become unsupported in a future release. Your configuration will continue to work as is but please migrate your configuration to config.services.httpd.virtualHosts."${name}".locations before the 20.09 release of NixOS.
+      '') (filterAttrs (name: hostOpts: hostOpts.servedFiles != [ ]) cfg.virtualHosts)
+      ++ optional (isString cfg.phpOptions) ''
+        Using a string for `services.httpd.phpOptions` is deprecated and will become unsupported in a future release. Please migrate to the attribute set format, e.g. `services.httpd.phpOptions = { "date.timezone" = "CET"; };`.
+      '';
 
     users.users = optionalAttrs (cfg.user == "wwwrun") {
       wwwrun = {
@@ -898,15 +940,14 @@ in
       };
     };
 
-    services.httpd.phpOptions = ''
-      ; Don't advertise PHP
-      expose_php = off
-    ''
-    + optionalString (config.time.timeZone != null) ''
-
-      ; Apparently PHP doesn't use $TZ.
-      date.timezone = "${config.time.timeZone}"
-    '';
+    services.httpd.phpOptions = {
+      # Don't advertise PHP
+      expose_php = "off";
+    }
+    // optionalAttrs (config.time.timeZone != null) {
+      # Apparently PHP doesn't use $TZ.
+      "date.timezone" = config.time.timeZone;
+    };
 
     services.httpd.extraModules = mkBefore [
       # HTTP authentication mechanisms: basic and digest.

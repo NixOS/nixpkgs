@@ -23,6 +23,6 @@ buildPythonPackage rec {
     description = "TLV (tag length lavue) data parser, especially useful for EMV tags parsing";
     homepage = "https://github.com/timgabets/pytlv";
     license = lib.licenses.lgpl2;
-    maintainers = with lib.maintainers; [ flokli ];
+    maintainers = [ ];
   };
 }

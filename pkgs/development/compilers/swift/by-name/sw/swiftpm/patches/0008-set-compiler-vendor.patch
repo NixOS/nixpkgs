@@ -8,10 +8,10 @@ Subject: [PATCH 08/11] set-compiler-vendor
  1 file changed, 6 deletions(-)
 
 diff --git a/Sources/PackageModel/UserToolchain.swift b/Sources/PackageModel/UserToolchain.swift
-index 39d7333c5..b63997bad 100644
+index 45e5f05d4..a40c5eae6 100644
 --- a/Sources/PackageModel/UserToolchain.swift
 +++ b/Sources/PackageModel/UserToolchain.swift
-@@ -409,13 +409,7 @@ public final class UserToolchain: Toolchain {
+@@ -469,13 +469,7 @@ public final class UserToolchain: Toolchain {
      }
  
      public func _isClangCompilerVendorApple() throws -> Bool? {

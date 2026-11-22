@@ -6,17 +6,20 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "dnsdiag";
-  version = "2.9.4";
+  version = "2.10.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "farrokhi";
     repo = "dnsdiag";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-R/yv3cPohMQ+DoUj1cvm96Ts2+QFy+SQQoji+HADf8U=";
+    hash = "sha256-x8XuSTxN2rfdaPQEZFu3x3npvmCOma+PwEnD3qopDJY=";
   };
 
-  pythonRelaxDeps = [ "cryptography" ];
+  pythonRelaxDeps = [
+    "cryptography"
+    "dnspython"
+  ];
 
   build-system = with python3.pkgs; [ setuptools ];
 
@@ -26,7 +29,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     cymruwhois
     dnspython
     h2
-    httpx
+    httpx2
   ];
 
   # Project has no tests

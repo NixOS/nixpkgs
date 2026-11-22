@@ -9,7 +9,7 @@
   home-assistant,
   openccu-data,
   openccu-loom-client,
-  pytest-homeassistant-custom-component,
+  pytest-homeassistant,
   pytest-xdist,
   pytestCheckHook,
 }:
@@ -17,13 +17,13 @@
 buildHomeAssistantComponent rec {
   owner = "SukramJ";
   domain = "homematicip_local";
-  version = "2.11.1";
+  version = "2.12.3";
 
   src = fetchFromGitHub {
     owner = "SukramJ";
     repo = "custom_homematic";
     tag = version;
-    hash = "sha256-sL8qBrhNPWvReeGClHpk4rhT7jAI7vkGbv5avPFEA/Q=";
+    hash = "sha256-/6jZH9LJSayaUg3wy+AiBnYQ2SikLDdMu+FEUc1ixtk=";
   };
 
   postPatch = ''
@@ -43,7 +43,8 @@ buildHomeAssistantComponent rec {
   nativeCheckInputs = [
     aiohomematic-test-support
     async-upnp-client
-    pytest-homeassistant-custom-component
+    home-assistant
+    pytest-homeassistant
     pytest-xdist
     pytestCheckHook
   ];

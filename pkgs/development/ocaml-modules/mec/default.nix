@@ -17,7 +17,7 @@ buildDunePackage (finalAttrs: {
   version = "0.1.0";
   src = fetchzip {
     url = "https://gitlab.com/nomadic-labs/cryptography/ocaml-ec/-/archive/${finalAttrs.version}/ocaml-ec-${finalAttrs.version}.tar.bz2";
-    sha256 = "sha256-uIcGj/exSfuuzsv6C/bnJXpYRu3OY3dcKMW/7+qwi2U=";
+    hash = "sha256-uIcGj/exSfuuzsv6C/bnJXpYRu3OY3dcKMW/7+qwi2U=";
   };
 
   duneVersion = "3";

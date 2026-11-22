@@ -1,5 +1,6 @@
 {
   lib,
+  aws-lc,
   fetchFromGitHub,
   krb5,
   nix-update-script,
@@ -14,17 +15,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nxc-rs";
-  version = "0.4.8";
+  version = "0.4.9";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "thrive-spectrexq";
     repo = "nxc-rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-h0OUv5CrGomXv9Yf4MkSFCOOl4YZ0Yy62mTkrqNUa8c=";
+    hash = "sha256-/k+o8G2sMGJbf8lHET3jjwg9KVfEoKDKHD7zY2Hc4/s=";
   };
 
-  cargoHash = "sha256-HKQCs1feFE1stHf3fiNAu8eZLd1WcWw6GnnbrDv+al4=";
+  cargoHash = "sha256-A2ex+4xuT/CcIZfsyad3RLmmiuwKzDvUkZIfmGgQHKY=";
 
   nativeBuildInputs = [
     krb5
@@ -33,6 +34,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
     krb5
     openssl
     sqlite

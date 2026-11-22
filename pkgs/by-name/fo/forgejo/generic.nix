@@ -26,6 +26,7 @@
   runCommand,
   stdenv,
   fetchFromCodeberg,
+  fetchpatch,
   buildNpmPackage,
   writableTmpDirAsHomeHook,
 }:
@@ -83,7 +84,18 @@ buildGoModule rec {
 
   patches = [
     ./static-root-path.patch
+
+    (fetchpatch {
+      name = "go_1_27.patch";
+      url = "https://codeberg.org/forgejo/forgejo/commit/cb7b3bacd473302856f44db440f334e5bc4ff3c2.patch";
+      includes = [
+        "modules/avatar/hash_test.go"
+        "modules/packages/alpine/metadata_test.go"
+      ];
+      hash = "sha256-orSzsV7ophjmTC8EHjRgGanXNnGt07YazofLnIuqmcc=";
+    })
   ];
+
   postPatch = ''
     substituteInPlace modules/setting/server.go --subst-var data
   '';
@@ -149,6 +161,9 @@ buildGoModule rec {
         "TestMigrateWhiteBlocklist" # requires network: gitlab.com (DNS)
         "TestURLAllowedSSH/Pushmirror_URL" # requires network git.gay (DNS)
         "TestBleveDeleteIssue" # Known Flake-y https://github.com/NixOS/nixpkgs/issues/509878
+      ]
+      ++ lib.optionals (lib.versionAtLeast version "17") [
+        "TestActivityPubMatchesList" # requires local network, which is not available in sandbox
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];

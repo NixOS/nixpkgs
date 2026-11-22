@@ -19,10 +19,9 @@ buildPythonPackage (finalAttrs: {
   pname = "jmp";
   version = "0.0.4";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
-    owner = "deepmind";
+    owner = "google-deepmind";
     repo = "jmp";
     tag = "v${finalAttrs.version}";
     hash = "sha256-+PefZU1209vvf1SfF8DXiTvKYEnZ4y8iiIr8yKikx9Y=";
@@ -47,7 +46,7 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "This library implements support for mixed precision training in JAX";
-    homepage = "https://github.com/deepmind/jmp";
+    homepage = "https://github.com/google-deepmind/jmp";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ndl ];
   };

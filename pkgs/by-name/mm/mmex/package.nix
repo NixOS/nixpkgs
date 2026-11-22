@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   appstream,
   cmake,
   gettext,
@@ -32,6 +33,15 @@ stdenv.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
     hash = "sha256-DE235wSfq20X3qh2L0KfFLk/54CW6l4Qn1K5r9nePQg=";
   };
+
+  patches = [
+    # https://github.com/moneymanagerex/moneymanagerex/pull/8534
+    (fetchpatch {
+      name = "appstream-1.2-compat.patch";
+      url = "https://github.com/moneymanagerex/moneymanagerex/commit/7835f3d532b53c1e8d87d0a71fceada9975ede65.patch";
+      hash = "sha256-S3bMo247euH+7pZlpNpNIzniQXHbBviNVOrjuyalJ/Y=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace src/dbwrapper.cpp src/model/Model_Report.cpp \

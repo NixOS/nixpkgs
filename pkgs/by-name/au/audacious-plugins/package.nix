@@ -46,13 +46,15 @@
 
 stdenv.mkDerivation rec {
   pname = "audacious-plugins";
-  version = "4.6.1";
+  version = "4.6.2";
 
+  # Updated together with audacious-bare through audacious-bare's updateScript.
+  # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "audacious-media-player";
     repo = "audacious-plugins";
     rev = "${pname}-${version}";
-    hash = "sha256-Gglg7ncrdlMdy8b16+CXxVeQinWrPaz0EoBebY6A8pk=";
+    hash = "sha256-t1LcgugzV7ko8xZBM6x1ZdX+p5rwZulwDx0KY2CIdXw=";
   };
 
   patches = [

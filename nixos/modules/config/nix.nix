@@ -168,8 +168,15 @@ in
         default = pkgs.nix;
         defaultText = lib.literalExpression "pkgs.nix";
         description = ''
-          This option specifies the Nix package instance to use throughout the system.
+          This option specifies the Nix package to use throughout the system.
+          It can be used to set a specific version or alternative implementation.
         '';
+        example = [
+          "pkgs.nixVersions.git"
+          "pkgs.nixVersions.latest"
+          "pkgs.nixStatic"
+          "pkgs.lixPackageSets.git.lix"
+        ];
       };
 
       checkConfig = mkOption {
@@ -336,7 +343,7 @@ in
               example = [ "hydra.nixos.org-1:CNHJZBh9K4tP3EKF6FkkgeVYsS3ohTl+oS0Qa8bezVs=" ];
               description = ''
                 List of public keys used to sign binary caches. If
-                {option}`nix.settings.trusted-public-keys` is enabled,
+                {option}`nix.settings.require-sigs` is enabled,
                 then Nix will use a binary from a binary cache if and only
                 if it is signed by *any* of the keys
                 listed here. By default, only the key for

@@ -73,6 +73,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/prospector-dev/prospector";
     changelog = "https://github.com/prospector-dev/prospector/blob/v${version}/CHANGELOG.rst";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ kamadorueda ];
+    maintainers = [ ];
   };
 }

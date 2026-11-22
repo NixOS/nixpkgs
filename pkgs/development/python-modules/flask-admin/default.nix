@@ -52,14 +52,14 @@
 
 buildPythonPackage rec {
   pname = "flask-admin";
-  version = "2.2.0";
+  version = "2.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "flask-admin";
+    owner = "pallets-eco";
     repo = "flask-admin";
     tag = "v${version}";
-    hash = "sha256-lRLyGvCat6nBixFKkrn4NxeVF52Hl32admAL37mf9wc=";
+    hash = "sha256-Bxcj/BwEMd/Qzhs9cI2sAPzmQ0Ge/Gw2LztS7IrSCA4=";
   };
 
   build-system = [ flit-core ];
@@ -130,6 +130,7 @@ buildPythonPackage rec {
     optional-dependencies.sqlalchemy-with-utils
     optional-dependencies.mongoengine
     optional-dependencies.peewee
+    optional-dependencies.azure-blob-storage
     optional-dependencies.images
     optional-dependencies.export
     optional-dependencies.translation
@@ -151,8 +152,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "Admin interface framework for Flask";
-    homepage = "https://github.com/flask-admin/flask-admin/";
-    changelog = "https://github.com/flask-admin/flask-admin/releases/tag/v${version}";
+    homepage = "https://github.com/pallets-eco/flask-admin/";
+    changelog = "https://github.com/pallets-eco/flask-admin/releases/tag/v${version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ nickcao ];
   };

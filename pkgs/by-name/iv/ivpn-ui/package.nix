@@ -2,13 +2,16 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
-  electron_42,
+  electron_44,
   copyDesktopItems,
   makeDesktopItem,
   nix-update-script,
   makeWrapper,
   ivpn-service,
 }:
+let
+  electron = electron_44;
+in
 buildNpmPackage (finalAttrs: {
   pname = "ivpn-ui";
   version = "3.16.1";
@@ -40,13 +43,13 @@ buildNpmPackage (finalAttrs: {
 
   postBuild = ''
     electron_dist="$(mktemp -d)"
-    cp -r ${electron_42.dist}/. "$electron_dist"
+    cp -r ${electron.dist}/. "$electron_dist"
     chmod -R u+w "$electron_dist"
 
     npm exec electron-builder -- \
       --dir \
       -c.electronDist="$electron_dist" \
-      -c.electronVersion=${electron_42.version} \
+      -c.electronVersion=${electron.version} \
       --config electron-builder.config.js
   '';
 
@@ -58,7 +61,7 @@ buildNpmPackage (finalAttrs: {
 
     install -Dm644 $src/ui/References/Linux/ui/ivpnicon.svg $out/share/icons/hicolor/scalable/apps/ivpn-ui.svg
 
-    makeWrapper ${lib.getExe electron_42} $out/bin/ivpn-ui \
+    makeWrapper ${lib.getExe electron} $out/bin/ivpn-ui \
       --prefix PATH : ${lib.makeBinPath [ ivpn-service ]} \
       --add-flags $out/share/ivpn-ui/resources/app.asar \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \

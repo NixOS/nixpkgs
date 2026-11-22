@@ -13,19 +13,19 @@
   pytestCheckHook,
   python-dateutil,
   setuptools,
-  syrupy_6,
+  syrupy,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "ical";
-  version = "14.3.0";
+  version = "14.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "allenporter";
     repo = "ical";
     tag = finalAttrs.version;
-    hash = "sha256-u7LaDj+ZcV3AUNInTTDHHfQmPjwBilyCZR/dXitreQs=";
+    hash = "sha256-PqFeb+dPKC3BhHHREjME9PRVz6fU4W3EFok90Z8ETWU=";
   };
 
   build-system = [ setuptools ];
@@ -47,7 +47,7 @@ buildPythonPackage (finalAttrs: {
     pytest-aiohttp
     pytest-benchmark
     pytestCheckHook
-    syrupy_6
+    syrupy
   ]
   ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 

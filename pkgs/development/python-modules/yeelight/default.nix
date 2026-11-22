@@ -7,16 +7,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "yeelight";
-  version = "0.7.16";
+  version = "0.7.17";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "stavros";
     repo = "python-yeelight";
-    tag = "v${version}";
-    hash = "sha256-WLEXTDVcSpGCmfEI31cQXGf9+4EIUCkcaeaj25f4ERU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-TrajX5a67MJhtixjnnCJ4aw5NleNHg0gwAORz0NaXiU=";
   };
 
   build-system = [ flit-core ];
@@ -32,8 +32,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for controlling YeeLight RGB bulbs";
     homepage = "https://gitlab.com/stavros/python-yeelight/";
-    changelog = "https://gitlab.com/stavros/python-yeelight/-/blob/v${version}/CHANGELOG.md";
+    changelog = "https://gitlab.com/stavros/python-yeelight/-/blob/v${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ nyanloutre ];
   };
-}
+})

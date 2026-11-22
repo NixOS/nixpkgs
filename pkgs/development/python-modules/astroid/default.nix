@@ -14,7 +14,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "PyCQA";
+    owner = "pylint-dev";
     repo = "astroid";
     tag = "v${finalAttrs.version}";
     hash = "sha256-PwKGAk9tiQzxWydEREg0l0cF4J56SNRwhGRCVjmRoCo=";
@@ -42,9 +42,9 @@ buildPythonPackage (finalAttrs: {
   };
 
   meta = {
-    changelog = "https://github.com/PyCQA/astroid/blob/${finalAttrs.src.tag}/ChangeLog";
+    changelog = "https://github.com/pylint-dev/astroid/blob/${finalAttrs.src.tag}/ChangeLog";
     description = "Abstract syntax tree for Python with inference support";
-    homepage = "https://github.com/PyCQA/astroid";
+    homepage = "https://github.com/pylint-dev/astroid";
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };

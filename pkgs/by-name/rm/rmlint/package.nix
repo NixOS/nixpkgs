@@ -4,16 +4,14 @@
   cairo,
   elfutils,
   fetchFromGitHub,
-  fetchpatch,
   glib,
   gobject-introspection,
-  gtksourceview3,
+  gtksourceview4,
   json-glib,
   makeWrapper,
   pango,
   pkg-config,
-  polkit,
-  python3,
+  python3Packages,
   scons,
   util-linux,
   wrapGAppsHook3,
@@ -24,34 +22,32 @@ assert withGui -> !stdenv.hostPlatform.isDarwin;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rmlint";
-  version = "2.10.2";
+  version = "2.11.0";
 
   src = fetchFromGitHub {
     owner = "sahib";
     repo = "rmlint";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-pOo1YfeqHUU6xyBRFbcj2lX1MHJ+a5Hi31BMC1nYZGo=";
+    hash = "sha256-U6D11BWKP5kK2UXhnD0hiflTTb7qKjSpJwYQt0U+i3Q=";
   };
 
   patches = [
     # pass through NIX_* environment variables to scons.
     ./scons-nix-env.patch
-    # fixes https://github.com/sahib/rmlint/issues/664
-    (fetchpatch {
-      url = "https://github.com/sahib/rmlint/commit/f0ca57ec907f7199e3670038d60b4702d1e1d8e2.patch";
-      hash = "sha256-715X+R2BcQIaUV76hoO+EXPfNheOfw4OIHsqSoruIUI=";
-    })
   ];
 
   nativeBuildInputs = [
     pkg-config
-    python3.pkgs.sphinx
+    python3Packages.sphinx
     scons
   ]
   ++ lib.optionals withGui [
     makeWrapper
     wrapGAppsHook3
     gobject-introspection
+    python3Packages.build
+    python3Packages.installer
+    python3Packages.setuptools
   ];
 
   buildInputs = [
@@ -61,34 +57,41 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals withGui [
     cairo
-    gtksourceview3
+    gtksourceview4
     pango
-    polkit
-    python3
-    python3.pkgs.pygobject3
+    python3Packages.pygobject3
+    python3Packages.colorlog
+    python3Packages.parsedatetime
   ]
   ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [
     elfutils
   ];
 
-  prePatch = ''
-    # remove sources of nondeterminism
-    substituteInPlace lib/cmdline.c \
-      --replace "__DATE__" "\"Jan  1 1970\"" \
-      --replace "__TIME__" "\"00:00:00\""
-    substituteInPlace docs/SConscript \
-      --replace "gzip -c " "gzip -cn "
-  '';
+  # gcc false positive in the vendored blake3 on aarch64, upstream builds with -Werror
+  env = lib.optionalAttrs (stdenv.cc.isGNU && stdenv.hostPlatform.isAarch64) {
+    NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error=stringop-overflow"
+      "-Wno-error=array-bounds"
+    ];
+  };
 
-  # Otherwise tries to access /usr.
-  prefixKey = "--prefix=";
+  # Otherwise the install would use upstream's default prefix /usr/local.
+  prefixKey = "PREFIX=";
 
-  sconsFlags = lib.optionals (!withGui) [ "--without-gui" ];
+  sconsFlags =
+    lib.optionals (!withGui) [ "--without-gui" ]
+    ++ lib.optionals withGui [ "--allow-externally-managed" ];
 
   # in GUI mode, this shells out to itself, and tries to import python modules
   postInstall = lib.optionalString withGui ''
-    gappsWrapperArgs+=(--prefix PATH : "$out/bin")
-    gappsWrapperArgs+=(--prefix PYTHONPATH : "$(toPythonPath $out):$(toPythonPath ${python3.pkgs.pygobject3}):$(toPythonPath ${python3.pkgs.pycairo})")
+    gappsWrapperArgs+=(
+      --prefix PATH : "$out/bin"
+      --prefix PYTHONPATH : "$(toPythonPath $out)"
+      --prefix PYTHONPATH : "$(toPythonPath ${python3Packages.pygobject3})"
+      --prefix PYTHONPATH : "$(toPythonPath ${python3Packages.pycairo})"
+      --prefix PYTHONPATH : "$(toPythonPath ${python3Packages.colorlog})"
+      --prefix PYTHONPATH : "$(toPythonPath ${python3Packages.parsedatetime})"
+    )
   '';
 
   meta = {

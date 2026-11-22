@@ -20,7 +20,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "iterative";
+    owner = "treeverse";
     repo = "dvc-task";
     tag = finalAttrs.version;
     hash = "sha256-bRQJLncxCigYPEtlvKjUtKqhcBkB7erEtoJQ30yGamE=";
@@ -56,8 +56,8 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Celery task queue used in DVC";
-    homepage = "https://github.com/iterative/dvc-task";
-    changelog = "https://github.com/iterative/dvc-task/releases/tag/${finalAttrs.src.tag}";
+    homepage = "https://github.com/treeverse/dvc-task";
+    changelog = "https://github.com/treeverse/dvc-task/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };

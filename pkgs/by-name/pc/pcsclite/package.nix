@@ -21,11 +21,12 @@
   pname ? "pcsclite",
   polkitSupport ? false,
   nixosTests,
+  runCommand,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;
-  version = "2.4.1";
+  version = "2.5.2";
 
   outputs = [
     "out"
@@ -40,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "rousseau";
     repo = "PCSC";
     tag = finalAttrs.version;
-    hash = "sha256-I4kWToLixfkP0XaONiWqNLXXmz+3n+LafbITfZOxLZw=";
+    hash = "sha256-7C710Z44tySox3aJ14EZWYT9ITdqMJtVCZFqN0FHvuk=";
   };
 
   mesonFlags = [
@@ -86,6 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     # pcsc-spy is a debugging utility and it drags python into the closure
     moveToOutput bin/pcsc-spy "$dev"
+    patchShebangs --host "$dev/bin/pcsc-spy"
   '';
 
   __structuredAttrs = true;
@@ -117,6 +119,13 @@ stdenv.mkDerivation (finalAttrs: {
         package = finalAttrs.finalPackage;
         command = "pcscd --version";
       };
+      pcsc-spy = runCommand "pcsc-spy-test" { } ''
+        status=0
+        ${finalAttrs.finalPackage.dev}/bin/pcsc-spy --help > help.txt 2>&1 || status=$?
+        test "$status" -eq 1
+        grep -F "Usage: pcsc-spy" help.txt
+        touch "$out"
+      '';
     };
     updateScript = nix-update-script { };
   };

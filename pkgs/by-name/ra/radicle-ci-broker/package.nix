@@ -2,6 +2,8 @@
   lib,
   rustPlatform,
   fetchFromRadicle,
+  pkg-config,
+  libgit2,
   stdenv,
   jq,
   gitMinimal,
@@ -39,6 +41,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail 'PATH: /bin' "" \
       --replace-fail '"PATH": "/bin"' ""
   '';
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ libgit2 ];
 
   preCheck = ''
     export SUBPLOT_DIR="$PWD/target/${stdenv.hostPlatform.rust.rustcTarget}/$cargoBuildType"

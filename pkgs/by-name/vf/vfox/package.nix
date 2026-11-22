@@ -4,24 +4,30 @@
   fetchFromGitHub,
   writableTmpDirAsHomeHook,
   nix-update-script,
+  bashInteractive,
+  zsh,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "vfox";
-  version = "1.0.11";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "version-fox";
     repo = "vfox";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dTs+GY3R01pUWINLnZqGg3HBWVsLvSlhxrnecznXeZk=";
+    hash = "sha256-j7MprO2ko3dLbWrgEbaiVnpKBP5fjEBZD5uD30mFPCc=";
   };
 
   vendorHash = "sha256-494nqL6KiUk4VeKlG9YHFpgACgaYC3SR1I1EViD71Jw=";
 
   __darwinAllowLocalNetworking = true;
 
-  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
+  nativeCheckInputs = [
+    bashInteractive
+    writableTmpDirAsHomeHook
+    zsh
+  ];
 
   checkFlags =
     let

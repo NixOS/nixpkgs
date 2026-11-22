@@ -37,7 +37,6 @@ buildPythonPackage (finalAttrs: {
   pname = "insightface";
   version = "1.0.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   # No tags on GitHub
   src = fetchPypi {

@@ -13,14 +13,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "textile";
-  version = "4.0.4";
+  version = "4.0.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "textile";
     repo = "python-textile";
     tag = finalAttrs.version;
-    hash = "sha256-fHji+TOIFVljkvlOaRp/8EnZ6KYgMu/DLpg6PmOSEbk=";
+    hash = "sha256-wbR/IGbJkoGk1E6ymEhmqR3GUMymLPExnclYOP39yts=";
   };
 
   build-system = [

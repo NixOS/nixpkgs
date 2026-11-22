@@ -70,6 +70,8 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     # Don't build the libvideo2x shared library, we only need the CLI tool
     (lib.cmakeBool "BUILD_SHARED_LIBS" false)
+    # Fails to build with C++20 which is the GCC 16 default
+    (lib.cmakeFeature "CMAKE_CXX_STANDARD" "17")
   ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
@@ -87,6 +89,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.agpl3Plus;
     platforms = [ "x86_64-linux" ];
     mainProgram = "video2x";
-    maintainers = [ lib.maintainers.matteopacini ];
+    maintainers = [ ];
   };
 })

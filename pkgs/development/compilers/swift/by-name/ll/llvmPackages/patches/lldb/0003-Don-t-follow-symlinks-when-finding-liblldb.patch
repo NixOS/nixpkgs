@@ -1,7 +1,7 @@
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Randy Eckenrode <randy@largeandhighquality.com>
 Date: Wed, 5 Aug 2026 07:36:33 -0400
-Subject: [PATCH 3/4] =?UTF-8?q?Don=E2=80=99t=20follow=20symlinks=20when=20?=
+Subject: [PATCH 3/5] =?UTF-8?q?Don=E2=80=99t=20follow=20symlinks=20when=20?=
  =?UTF-8?q?finding=20liblldb?=
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -19,10 +19,10 @@ toolchain when running the Swift REPL.
  4 files changed, 11 insertions(+), 5 deletions(-)
 
 diff --git a/include/lldb/Host/Host.h b/include/lldb/Host/Host.h
-index 23d5383163ff..4a17900be75d 100644
+index 4e19d15b0674..60ff13617e0f 100644
 --- a/include/lldb/Host/Host.h
 +++ b/include/lldb/Host/Host.h
-@@ -120,7 +120,7 @@ public:
+@@ -139,7 +139,7 @@ public:
    ///     \b A file spec with the module that contains \a host_addr,
    ///     which may be invalid if \a host_addr doesn't fall into
    ///     any valid module address range.
@@ -32,17 +32,16 @@ index 23d5383163ff..4a17900be75d 100644
    /// If you have an executable that is in a bundle and want to get back to
    /// the bundle directory from the path itself, this function will change a
 diff --git a/source/Host/common/Host.cpp b/source/Host/common/Host.cpp
-index 04380c6255f1..2510f2d7b54e 100644
+index 5992b54318f7..ef2f0d994b7a 100644
 --- a/source/Host/common/Host.cpp
 +++ b/source/Host/common/Host.cpp
-@@ -344,14 +344,16 @@ bool Host::ResolveExecutableInBundle(FileSpec &file) { return false; }
+@@ -343,13 +343,15 @@ bool Host::ResolveExecutableInBundle(FileSpec &file) { return false; }
  
  #ifndef _WIN32
  
 -FileSpec Host::GetModuleFileSpecForHostAddress(const void *host_addr) {
 +FileSpec Host::GetModuleFileSpecForHostAddress(const void *host_addr, bool resolvePath) {
    FileSpec module_filespec;
- #if !defined(__ANDROID__)
    Dl_info info;
    if (::dladdr(host_addr, &info)) {
      if (info.dli_fname) {
@@ -53,12 +52,12 @@ index 04380c6255f1..2510f2d7b54e 100644
 +      }
      }
    }
- #endif
+   return module_filespec;
 diff --git a/source/Host/common/HostInfoBase.cpp b/source/Host/common/HostInfoBase.cpp
-index 5c44c2f38b28..cb10bded1470 100644
+index 89dfe4a9e9ba..fc1e9926717e 100644
 --- a/source/Host/common/HostInfoBase.cpp
 +++ b/source/Host/common/HostInfoBase.cpp
-@@ -249,10 +249,14 @@ bool HostInfoBase::ComputeSharedLibraryDirectory(FileSpec &file_spec) {
+@@ -251,10 +251,14 @@ bool HostInfoBase::ComputeSharedLibraryDirectory(FileSpec &file_spec) {
    // On other posix systems, we will get .../lib(64|32)?/liblldb.so.
  
    FileSpec lldb_file_spec(Host::GetModuleFileSpecForHostAddress(
@@ -75,10 +74,10 @@ index 5c44c2f38b28..cb10bded1470 100644
    // Remove the filename so that this FileSpec only represents the directory.
    file_spec.SetDirectory(lldb_file_spec.GetDirectory());
 diff --git a/source/Host/windows/Host.cpp b/source/Host/windows/Host.cpp
-index e8973a3fb937..5955cf742059 100644
+index a7369e7eade3..455514366380 100644
 --- a/source/Host/windows/Host.cpp
 +++ b/source/Host/windows/Host.cpp
-@@ -113,7 +113,7 @@ void Host::Kill(lldb::pid_t pid, int signo) {
+@@ -110,7 +110,7 @@ void Host::Kill(lldb::pid_t pid, int signo) {
  
  const char *Host::GetSignalAsCString(int signo) { return NULL; }
  

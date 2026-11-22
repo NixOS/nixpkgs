@@ -1,6 +1,9 @@
 {
   asciidoctor,
   fetchFromRadicle,
+  pkg-config,
+  libgit2,
+  zstd,
   git,
   installShellFiles,
   lib,
@@ -15,30 +18,41 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "radicle-httpd";
-  version = "0.28.0";
+  version = "0.31.0";
 
-  env.RADICLE_VERSION = finalAttrs.version;
+  __structuredAttrs = true;
+
+  env.RADICLE_HTTPD_VERSION = finalAttrs.version;
 
   src = fetchFromRadicle {
-    seed = "seed.radicle.dev";
+    # seed.radicle.dev currently doesn't update its canonical release tags correctly
+    seed = "oak.radicle.garden";
     repo = "z4V1sjrXqjvFdnCUbxPFqd5p4DtH5";
-    tag = "releases/${finalAttrs.version}";
+    tag = "releases/httpd/${finalAttrs.version}";
     nonConeMode = true;
     sparseCheckout = [
-      "/crates"
-      "/Cargo.toml"
-      "/Cargo.lock"
+      "/explorer/crates"
+      "/explorer/Cargo.toml"
+      "/explorer/Cargo.lock"
     ];
-    hash = "sha256-D15u6aU6lKch/bEa1J6PBntb42NMHWYChIgprbJM+4M=";
+    rootDir = "explorer";
+    hash = "sha256-/H9fhYruAvDtxHm8ShNwGQIhi+cFFpVKwkh41qO+oFk=";
   };
 
-  cargoHash = "sha256-z/ddTzoitMOsfndleM8Wu2sOn156ZTg8w/3/AJYw8wE=";
+  cargoHash = "sha256-GDnQzjp4Ov5jvNGiGOO0pdJi2gcPQFlKIcs69xOLgmc=";
 
   nativeBuildInputs = [
     asciidoctor
     installShellFiles
     makeWrapper
+    pkg-config
   ];
+
+  buildInputs = [
+    libgit2
+    zstd
+  ];
+
   nativeCheckInputs = [ git ];
 
   doCheck = stdenv.hostPlatform.isLinux;
@@ -80,7 +94,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       repositories on a Radicle node via their web browser.
     '';
     homepage = "https://radicle.dev";
-    changelog = "https://radicle.network/nodes/seed.radicle.dev/rad:z4V1sjrXqjvFdnCUbxPFqd5p4DtH5/tree/CHANGELOG.md";
+    changelog = "https://radicle.network/nodes/seed.radicle.dev/rad:z4V1sjrXqjvFdnCUbxPFqd5p4DtH5/tree/explorer/CHANGELOG.md";
     # cargo.toml says MIT and asl20, LICENSE file says GPL3
     license = with lib.licenses; [
       gpl3Only

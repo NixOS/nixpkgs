@@ -2,12 +2,10 @@
 
 grafanaPlugin {
   pname = "grafana-metricsdrilldown-app";
-  version = "2.5.1";
-  zipHash = "sha256-vsrDbQhRkAHZayBFCVM7zu9bMji+I7XO+AxZL6y0TaU=";
+  inherit (lib.importTOML ./sources.toml) version packages;
   meta = {
     description = "Queryless experience for browsing Prometheus-compatible metrics. Quickly find related metrics without writing PromQL queries";
     license = lib.licenses.agpl3Only;
     maintainers = [ lib.maintainers.marcel ];
-    platforms = lib.platforms.unix;
   };
 }

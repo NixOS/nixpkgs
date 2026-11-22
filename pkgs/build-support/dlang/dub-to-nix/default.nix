@@ -19,6 +19,7 @@ runCommand "dub-to-nix"
     version = lib.trivial.release;
     nativeBuildInputs = [ makeWrapper ];
     buildInputs = [ python3 ];
+    meta.license = lib.licenses.mit;
   }
   ''
     install -Dm755 ${./dub-to-nix.py} "$out/bin/dub-to-nix"

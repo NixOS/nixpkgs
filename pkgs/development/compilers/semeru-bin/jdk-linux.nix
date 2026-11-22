@@ -2,7 +2,12 @@
 
 let
   sources = (lib.importJSON ./sources.json).openj9.linux;
-  common = opts: callPackage (import ./jdk-linux-base.nix opts) { };
+  common =
+    opts:
+    callPackage (import ./jdk-linux-base.nix opts) {
+      # TODO: drop once semeru is updated; OpenJ9 0.44 cannot start on glibc >= 2.41, so keytool cannot run.
+      regenerateCacerts = false;
+    };
 
 in
 # EOL = [ "This JDK/JRE version has reached End of Life." ];

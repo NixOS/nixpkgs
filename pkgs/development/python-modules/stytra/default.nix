@@ -18,6 +18,7 @@
   opencv4,
   pandas,
   pims,
+  pkg-resources-backport,
   pyqt5,
   pyqtgraph,
   pyserial,
@@ -71,6 +72,7 @@ buildPythonPackage rec {
     imageio-ffmpeg
     arrayqueues
     av
+    pkg-resources-backport
   ];
 
   nativeCheckInputs = [
@@ -87,6 +89,8 @@ buildPythonPackage rec {
     description = "Modular package to control stimulation and track behaviour";
     homepage = "https://github.com/portugueslab/stytra";
     license = lib.licenses.gpl3Plus;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      debtquity
+    ];
   };
 }

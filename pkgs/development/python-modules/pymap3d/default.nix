@@ -24,7 +24,6 @@ buildPythonPackage (finalAttrs: {
   pname = "pymap3d";
   version = "3.2.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "geospace-code";

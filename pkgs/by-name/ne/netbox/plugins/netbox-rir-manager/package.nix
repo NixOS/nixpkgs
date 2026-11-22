@@ -14,7 +14,6 @@ buildPythonPackage (finalAttrs: {
   pname = "netbox-rir-manager";
   version = "0.4.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "jsenecal";

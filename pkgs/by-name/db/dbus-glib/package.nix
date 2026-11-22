@@ -13,11 +13,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dbus-glib";
-  version = "0.114";
+  version = "0.116";
 
   src = fetchurl {
     url = "https://dbus.freedesktop.org/releases/dbus-glib/dbus-glib-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-wJxcCFsqDjkbjufXg6HWP+RE6WcXzBgU1htej8KCenw=";
+    sha256 = "sha256-4/PUSH4og4AHcO1Yme0RG9xLpwVq80olXExGrYokhvM=";
   };
 
   outputs = [
@@ -55,6 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = { inherit dbus glib; };
 
   meta = {
+    changelog = "https://gitlab.freedesktop.org/dbus/dbus-glib/-/blob/dbus-glib-${finalAttrs.version}/NEWS";
     homepage = "https://dbus.freedesktop.org";
     license = with lib.licenses; [
       afl21

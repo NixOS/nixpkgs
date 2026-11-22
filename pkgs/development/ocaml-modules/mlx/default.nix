@@ -8,7 +8,7 @@
 
 buildDunePackage (finalAttrs: {
   pname = "mlx";
-  version = "0.11";
+  version = if lib.versionAtLeast ppxlib.version "0.38" then "0.12" else "0.11";
 
   minimalOCamlVersion = "4.14";
 
@@ -16,7 +16,12 @@ buildDunePackage (finalAttrs: {
     owner = "ocaml-mlx";
     repo = "mlx";
     tag = finalAttrs.version;
-    hash = "sha256-6cz/nbFGSxE1minncJujZi14TmM8ctDygJP4rmewYgo=";
+    hash =
+      {
+        "0.12" = "sha256-7CiSa7YYCnoK1wSVQYyX8WwuWCCtXFKGJabpGameMbU=";
+        "0.11" = "sha256-6cz/nbFGSxE1minncJujZi14TmM8ctDygJP4rmewYgo=";
+      }
+      ."${finalAttrs.version}";
   };
 
   buildInputs = [

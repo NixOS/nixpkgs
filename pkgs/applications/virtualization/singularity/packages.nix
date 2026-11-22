@@ -9,14 +9,14 @@ let
     callPackage
       (import ./generic.nix rec {
         pname = "apptainer";
-        version = "1.5.4";
+        version = "1.5.5";
         projectName = "apptainer";
 
         src = fetchFromGitHub {
           owner = "apptainer";
           repo = "apptainer";
           tag = "v${version}";
-          hash = "sha256-ru0dAuR6Q6NoYnLtEGm9/SiXPk6u1Lw3dcckkuqB7Cs=";
+          hash = "sha256-oV1LzCBYbMFbKGhli6eCbpMoyB1KeccnaEi+xHJ431g=";
         };
 
         # Override vendorHash with overrideAttrs.
@@ -43,22 +43,22 @@ let
       };
 
   singularity =
-    callPackage
+    (callPackage
       (import ./generic.nix rec {
         pname = "singularity-ce";
-        version = "4.4.1";
+        version = "4.6.0";
         projectName = "singularity";
 
         src = fetchFromGitHub {
           owner = "sylabs";
           repo = "singularity";
           tag = "v${version}";
-          hash = "sha256-lFnxh+cs5y6F/1f5uyQ3vA1E8uBKJOyOYbJy6081I5U=";
+          hash = "sha256-fh2MTS44V79AjI9T753TzezbXSnjphNy0CsZXoaJk9A=";
         };
 
         # Override vendorHash with overrideAttrs.
         # See https://nixos.org/manual/nixpkgs/unstable/#buildGoModule-vendorHash
-        vendorHash = "sha256-uqEzYj8JmZWi2Rceh+JMJ5kzUmJ4T3JAt0rto1NewlM=";
+        vendorHash = "sha256-cx9lIbQKVE2IzeW4GJkhinDYE53e49IZoyu9Fv4WrK0=";
 
         extraConfigureFlags = [
           # Do not build squashfuse from the Git submodule sources, use Nixpkgs provided version
@@ -68,7 +68,21 @@ let
         ];
 
         extraDescription = " (Sylabs Inc's fork of Singularity, a.k.a. SingularityCE)";
-        extraMeta.homepage = "https://sylabs.io/";
+        extraMeta = {
+          homepage = "https://sylabs.io/";
+          problems = {
+            deprecated = {
+              message = ''
+                Sylabs Inc. has discontinued its development of its fork SingularityCE and the commercial versin SingularityPRO.
+                SingularityCE 4.6.0 was the last release, which incorporates code that was previously part of SingularityPRO only.
+                Use Apptainer (`apptainer`) instead.
+              '';
+              urls = [
+                "https://sylabs.io/"
+              ];
+            };
+          };
+        };
       })
       {
         # Sylabs SingularityCE builders defaults to set the SUID flag
@@ -82,8 +96,28 @@ let
           "internal/pkg/util/env/clean.go" = [
             "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
           ];
+          # Since 4.4.2, SingularityCE locates helper binaries (mount,
+          # mksquashfs, fusermount, ...) only via the "root search path" and
+          # "user search path" directives, no longer via env.DefaultPath.
+          # root search path (user search path is handled in postPatch below)
+          "pkg/util/singularityconf/config.go" = [
+            "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+          ];
         };
-      };
+      }
+    ).overrideAttrs
+      (prevAttrs: {
+        postPatch =
+          prevAttrs.postPatch or ""
+          # Inject the Nixpkgs binary paths into the default user search path,
+          # after "$PATH" to keep the pre-4.4.2 lookup order.
+          + ''
+            substituteInPlace pkg/util/singularityconf/config.go \
+              --replace-fail \
+                '"$PATH:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"' \
+                "\"\$PATH:$systemDefaultPath''${systemDefaultPath:+:}/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin''${inputsDefaultPath:+:}$inputsDefaultPath\""
+          '';
+      });
 
   genOverridenNixos =
     package: packageName:

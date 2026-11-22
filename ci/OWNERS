@@ -48,6 +48,10 @@
 /lib/options.nix            @infinisil @roberth @hsjobeki @llakala
 /lib/tests/modules.sh       @infinisil @roberth @hsjobeki
 /lib/tests/modules          @infinisil @roberth @hsjobeki
+## Libraries / Nix-implementation-dependent tests
+/lib/tests/release.nix       @NixOS/lix-maintainers @xokdvium
+/lib/tests/test-with-nix.nix @NixOS/lix-maintainers @xokdvium
+/lib/tests/strings.sh        @NixOS/lix-maintainers @xokdvium
 
 # Nixpkgs Internals
 /default.nix                                     @Ericson2314
@@ -81,6 +85,7 @@
 
 # Nixpkgs build-support
 /pkgs/build-support/writers @lassulus
+/pkgs/build-support/proton @Mistyttm
 
 # Nix, the package manager
 # @raitobezarius is not "code owner", but is listed here to be notified of changes
@@ -92,6 +97,7 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @Artturin @Ericson2314 @lo
 
 # Nixpkgs documentation
 /doc                             @NixOS/documentation-team
+/doc/release-notes
 /maintainers/scripts/db-to-md.sh @jtojnar @ryantm
 /maintainers/scripts/doc @jtojnar @ryantm
 
@@ -116,7 +122,7 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @Artturin @Ericson2314 @lo
 
 # NixOS Render Docs
 /pkgs/by-name/ni/nixos-render-docs @GetPsyched @hsjobeki
-/doc/redirects.json                @GetPsyched @NixOS/documentation-team
+/doc/redirects.json                @GetPsyched
 /nixos/doc/manual/redirects.json   @GetPsyched
 
 # NixOS QEMU virtualisation
@@ -237,7 +243,9 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @Artturin @Ericson2314 @lo
 /pkgs/applications/networking/browsers/firefox/update.nix
 /pkgs/applications/networking/browsers/firefox/packages/firefox.nix @mweinelt
 /pkgs/applications/networking/browsers/firefox/packages/firefox-esr-*.nix @mweinelt
+/pkgs/applications/networking/browsers/brave @bachp @buckley310 @JeffLabonte @rachalaraj @uskudnik
 /pkgs/applications/networking/browsers/chromium @emilylange @networkException
+/pkgs/applications/networking/mailreaders/thunderbird/wrapper.nix @booxter
 /nixos/tests/chromium.nix @emilylange @networkException
 
 # Certificate Authorities
@@ -253,7 +261,7 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /pkgs/top-level/java-packages.nix @NixOS/java
 
 # Jetbrains
-/pkgs/applications/editors/jetbrains @leona-ya @theCapypara
+/pkgs/applications/editors/jetbrains @theCapypara
 
 # Licenses
 /lib/licenses @alyssais @emilazy @jopejoe1
@@ -389,9 +397,9 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /doc/build-helpers/images/dockertools.section.md @roberth @jhol @NixOS/documentation-team
 
 # Go
-/doc/languages-frameworks/go.section.md @kalbasit @Mic92 @NixOS/documentation-team
-/pkgs/build-support/go @kalbasit @Mic92
-/pkgs/development/compilers/go @kalbasit @Mic92
+/doc/languages-frameworks/go.section.md @NixOS/golang @NixOS/documentation-team
+/pkgs/build-support/go @NixOS/golang
+/pkgs/development/compilers/go @NixOS/golang
 
 # GNOME
 /pkgs/desktops/gnome                              @NixOS/gnome
@@ -524,6 +532,7 @@ pkgs/by-name/wa/warp-terminal/  @emilytrau @imadnyc @4evy @johnrtitor
 /nixos/lib/testing                                          @NixOS/test-driver
 /nixos/tests/nixos-test-driver                              @NixOS/test-driver
 /nixos/modules/virtualisation/nspawn-container/run-nspawn   @NixOS/test-driver
+/nixos/modules/virtualisation/run-virtiofsd-qemu            @NixOS/test-driver
 
 # Boot security
 /pkgs/by-name/au/autopen    @NixOS/boot-security

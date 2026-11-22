@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ols";
-  version = "dev-2026-10";
+  version = "dev-2026-11";
 
   src = fetchFromGitHub {
     owner = "DanielGavin";
     repo = "ols";
     tag = finalAttrs.version;
-    hash = "sha256-tVg9g5aN4ovUElpDzTSLpTQUq3OEiYUaq3YO98ex8wA=";
+    hash = "sha256-D4Dpg9dQXb27zivEsgg/sjukfcfLaZC7XpCpNMMZoe8=";
   };
 
   postPatch = ''

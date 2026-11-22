@@ -1,30 +1,42 @@
 {
   lib,
-  rustPackages,
+  rustPlatform,
   fetchFromGitHub,
-  pkg-config,
+  gitMinimal,
+  versionCheckHook,
 }:
 
-rustPackages.rustPlatform.buildRustPackage (finalAttrs: {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hawkeye";
-  version = "6.5.1";
+  version = "7.3.0";
 
   src = fetchFromGitHub {
-    owner = "korandoru";
+    owner = "fast";
     repo = "hawkeye";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TBWPpfSr5ONr7HzEzPr3TbQo3fl4Szj/7cl3NafyYms=";
+    hash = "sha256-gI22g+cm3sOEoB/wWcDI9tSZZfuTg56Vp6eiGz3yX40=";
   };
 
-  cargoHash = "sha256-5fUNyNYm0p44Xs4mK+nhrsUrA3LJkaO8gZrmXyRqiSo=";
+  cargoHash = "sha256-eRiEeRHcqAw0FB2sRiUIlzI0Z5Rzgnv8PtFHAan53Ks=";
 
-  nativeBuildInputs = [
-    pkg-config
+  cargoBuildFlags = [ "--package=hawkeye" ];
+  cargoTestFlags = finalAttrs.cargoBuildFlags;
+
+  logLevel = "warn";
+
+  nativeCheckInputs = [
+    gitMinimal
   ];
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+
   meta = {
-    homepage = "https://github.com/korandoru/hawkeye";
-    description = "Simple license header checker and formatter, in multiple distribution forms";
+    homepage = "https://github.com/fast/hawkeye";
+    changelog = "https://github.com/fast/hawkeye/blob/v${finalAttrs.version}/CHANGELOG.md";
+    description = "License header checker and formatter";
     license = lib.licenses.asl20;
     mainProgram = "hawkeye";
     maintainers = with lib.maintainers; [ matthiasbeyer ];

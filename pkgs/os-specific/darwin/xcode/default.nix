@@ -136,6 +136,8 @@ lib.makeExtensible (self: {
   xcode_26_6 = requireXcode "26.6_Universal" "sha256-D2xuCXVhTLJLScQ1sxaVH8nANfgkm7/+9iYdi7/FCLI=";
   xcode_26_6_Apple_silicon = requireXcode "26.6_Apple_silicon" "sha256-UOtZRrSPNhwCLGgpNJTPrdOrVKq+7UHnUJjlxakZmOA=";
   xcode_27 = requireXcode "27" "sha256-k0YuMjPbP5Adnnx6KhQXGRi8kRLPpXJN+EUxpqYHwOE=";
+  xcode_27_1 = requireXcode "27.1" "sha256-u+/q95LSsKNpUU+CxEi6+EwO6r/dCCXHbxRUOUnIfb4=";
+  xcode_27_2 = requireXcode "27.2" "sha256-zs5OMdddog5+11qHlkkDMC7liJ4qllxmF4qiVy4zdf8=";
   xcode =
     self."xcode_${
       lib.replaceStrings [ "." ] [ "_" ] (

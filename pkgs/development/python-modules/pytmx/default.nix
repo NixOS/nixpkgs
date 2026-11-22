@@ -19,7 +19,6 @@ buildPythonPackage {
   pname = "pytmx";
   version = "3.32";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "bitcraft";

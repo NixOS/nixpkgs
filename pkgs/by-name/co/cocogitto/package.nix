@@ -1,5 +1,7 @@
 {
   lib,
+  libz,
+  pkg-config,
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
@@ -10,6 +12,8 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cocogitto";
   version = "7.0.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "cocogitto";
@@ -24,9 +28,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # and might be failing to create the test repository it works in.
   doCheck = false;
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+  ];
 
-  buildInputs = [ libgit2 ];
+  buildInputs = [
+    libgit2
+    libz
+  ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd cog \

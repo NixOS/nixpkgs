@@ -157,6 +157,14 @@ let
     in
     attrs: lib.concatStringsSep " " (lib.attrValues (lib.mapAttrs toFlag attrs));
 
+  # Our libxslt is vulnerable to [CVE-2026-125350] (zero-day) and other CVEs the vendored
+  # version in chromium carries [patches] for. Exclude electron for now to spare us some
+  # rebuilds and because electon did not backport and release the fix for CVE-2026-125350 yet.
+  #
+  # [CVE-2026-125350]: https://chromium-review.googlesource.com/c/chromium/src/+/8762073
+  # [patches]: https://chromium.googlesource.com/chromium/src/+/refs/tags/157.0.8103.50/third_party/libxslt/chromium/
+  withSystemXslt = isElectron;
+
   # https://source.chromium.org/chromium/chromium/src/+/master:build/linux/unbundle/replace_gn_files.py
   gnSystemLibraries = [
     # TODO:
@@ -170,8 +178,12 @@ let
     # //third_party/libavif:libavif_enc(//build/toolchain/linux/unbundle:default)
     #   needs //third_party/libwebp:libwebp_sharpyuv(//build/toolchain/linux/unbundle:default)
     # "libwebp"
+  ]
+  ++ lib.optionals withSystemXslt [
     "libxml"
     "libxslt" # depends on libxml, always remove or re-add as a pair
+  ]
+  ++ [
     # "opus"
   ];
 
@@ -208,22 +220,31 @@ let
 
   _crubit =
     {
-      "154" = {
-        rev = "69b85cba43f85a6439dc0be86a6fe424bb07a100";
-        hash = "sha256-hSN4ZW3LsN3cerv3h3whAYLDZuoE6YaLuR9WY48P3E0=";
-        cargoHash = "sha256-xJWYE0gfEkf0WvrkaDkXiOYwvrlQGqa7QxkosXKH6UQ=";
-      };
-      "155" = {
+      "156" = {
+        version = "0-unstable-2026-09-09";
         rev = "a355b02da81bc9f350925c73ec0322ce4d5140f1";
         hash = "sha256-Z2wsYe2Tln+CeAV9naC1QRnmvrz3HZXF06cNIp1RqU4=";
         cargoHash = "sha256-5EB6yTk+eGffjUK/TXf6ZxCU0p05Dh1nL8q3Nl6TiiY=";
+      };
+      "157" = {
+        version = "0-unstable-2026-09-30";
+        rev = "20dc640430bd60ff2f7f8dbf69c311c5f807adde";
+        hash = "sha256-rfqmDsqdABuUIDHOu+pLjExbWMbhdvB5U82oxvCTBHA=";
+        cargoHash = "sha256-oTuGEb0NK+pC9X6kwt6C6qFW6sIWp6j+m5ySv3VXgVA=";
+      };
+      "158" = {
+        version = "0-unstable-2026-10-15";
+        rev = "d757594f6f7ac27c0cf9c8ea63d9136f8e1f77ae";
+        hash = "sha256-0I3zO0Kit6Cu2AuEXJ7Gr1wa5tVlvS+b8kw3NUBfvns=";
+        cargoHash = "sha256-yp57PHbCMy4YDXfsqdt9ZPSL5ZDYylM2DQxQYJng7fA=";
       };
     }
     .${lib.versions.major upstream-info.version};
 
   crubit = rustPlatform.buildRustPackage (finalAttrs: {
     pname = "crubit";
-    version = "0-unstable-2026-09-11";
+
+    inherit (_crubit) version cargoHash;
 
     src = fetchFromGitiles {
       url = "https://chromium.googlesource.com/external/github.com/google/crubit.git";
@@ -231,7 +252,25 @@ let
       inherit (_crubit) rev hash;
     };
 
-    inherit (_crubit) cargoHash;
+    patches =
+      lib.optionals (!chromiumVersionAtLeast "157") [
+        (fetchpatch {
+          # needed for patch below
+          name = "partial-rustfmt.patch";
+          # https://github.com/google/crubit/pull/2151
+          url = "https://github.com/google/crubit/commit/3ed0fa613223e09172e22363953f6587fe5d8bb7.patch";
+          includes = [ "cc_bindings_from_rs/rustversion_impl.rs" ];
+          hash = "sha256-+JMYo6ujPF4lQNUUAXwV6D2A4Ss39y8fh+V9lv8BZ2I=";
+        })
+      ]
+      ++ lib.optionals (!chromiumVersionAtLeast "158") [
+        (fetchpatch {
+          name = "fix-rust-1.99-compat.patch";
+          # https://github.com/google/crubit/pull/2204
+          url = "https://github.com/google/crubit/commit/943b515b25ca3868050b3ea3410b0b979ccc28a2.patch";
+          hash = "sha256-pgoAX+pjliRM230w2GS07hbrR2USe5heQP4ETjiacrA=";
+        })
+      ];
 
     buildInputs = [
       buildPackages.rustc.llvmPackages.llvm
@@ -253,8 +292,11 @@ let
     pname = "gnrt";
     version = "0-unstable";
 
-    src = chromiumDeps."src";
-    sourceRoot = "tools/crates/gnrt";
+    # TODO: Rework how chromium and electron pass src to gnrt or offload gnrt entirely
+    src = upstream-info.gclientDeps."src".path or chromiumDeps."src";
+    sourceRoot =
+      lib.optionalString (!finalAttrs.src.unpack or false) "${finalAttrs.src.name}/"
+      + "tools/crates/gnrt";
 
     # -vendor-staging does not inherit zstd from top-level, so we need
     # to use rustPlatform.fetchCargoVendor despite rustPlatform.buildRustPackage
@@ -266,7 +308,7 @@ let
         sourceRoot
         ;
       nativeBuildInputs = [ zstd ];
-      hash = "sha256-RO1fJ4Qgt5CxcEwtZT+7SZx7XqiaAmURK3DdEnzIP2k=";
+      hash = "sha256-hb/HSco4PeudjnZFGb2+IHw4rQ7ShI42XWqKOwdgrb4=";
     };
 
     nativeBuildInputs = [
@@ -283,28 +325,15 @@ let
 
   # esbuild binary needs to match the version in the vendored node_modules:
   # https://chromium.googlesource.com/devtools/devtools-frontend/+/66df492aaa0129d090937e933dd44c5389ab24d2/package.json#57
-  _esbuild =
-    {
-      "154" = {
-        version = "0.25.1";
-        hash = "sha256-vrhtdrvrcC3dQoJM6hWq6wrGJLSiVww/CNPlL1N5kQ8=";
-      };
-      "155" = {
-        version = "0.28.2";
-        hash = "sha256-I1u+9U5Oj/KzxSjCxwyitwSuDKimatkbC3R2OtaUsfM=";
-      };
-    }
-    .${lib.versions.major upstream-info.version};
-
   esbuild = buildGoModule (finalAttrs: {
     pname = "esbuild";
-    inherit (_esbuild) version;
+    version = "0.28.2";
 
     src = fetchFromGitHub {
       owner = "evanw";
       repo = "esbuild";
       tag = "v${finalAttrs.version}";
-      inherit (_esbuild) hash;
+      hash = "sha256-I1u+9U5Oj/KzxSjCxwyitwSuDKimatkbC3R2OtaUsfM=";
     };
 
     vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
@@ -385,13 +414,28 @@ let
     ) chromiumDeps
   );
 
-  bidi = fetchzip {
-    # https://chromium.googlesource.com/chromium/src/+/155.0.8059.39/third_party/chromium-bidi/DEPS#64
-    # FIXME: We cannot use fetchNpmDeps here because the package-lock.json uses airlock-proxy.uplink.goog:999 a bunch of times
-    url = "https://commondatastorage.googleapis.com/chromium-nodejs/chromium-bidi/e7aab7e5ac29d62f5c023d7e8ba5eedc09a11945a88b0e174fc42f64c0820071";
+  npmDeps_chromium-bidi =
+    (fetchNpmDeps {
+      src = chromiumDeps."src";
+      sourceRoot = "${chromiumDeps."src".name}/third_party/chromium-bidi";
+      hash = "sha256-VSIoits97mKHHhLRxh7zVLn8p3ZN9LGL8jRQsKmCyEE=";
+    }).overrideAttrs
+      (_: {
+        # TODO: npmRegistryOverridesString does not appear to work for airlock-proxy.uplink.goog:999
+        postPatch = ''
+          substituteInPlace package-lock.json \
+            --replace-fail "http://airlock-proxy.uplink.goog:999/npm/artifact-foundry-prod/ah-3p-staging-npm/" "https://registry.npmjs.org/"
+        '';
+      });
+
+  # FIXME: We can't use fetchNpmDeps for third_party/devtools-frontend because of:
+  # "warning: 755 out of 759 packages (99.5%) are missing 'resolved' URLs and will not be cached."
+  npmDeps_devtools-frontend = fetchzip {
+    # https://chromium.googlesource.com/devtools/devtools-frontend/+/047c90eca37c7170d826d72245d5df9281989cf3/DEPS#273
+    url = "https://commondatastorage.googleapis.com/chromium-nodejs/devtools-frontend/c67f72622077f8d20a0d641e63f95772120577b846ace3e3d434db9f13188350";
     extension = "tar.gz";
     stripRoot = false;
-    hash = "sha256-Td9MpgNDdHTlqvmlu7v2JwkhCbN9NvSlzcbnHSSjieA=";
+    hash = "sha256-mNnTa+1IcJzCDV7rrpgQ2XabvcO6b/ltr8o09UXeZhY=";
   };
 
   base = rec {
@@ -412,10 +456,16 @@ let
     npmDeps =
       (fetchNpmDeps {
         src = chromiumDeps."src";
-        sourceRoot = npmRoot;
+        sourceRoot =
+          lib.optionalString (!chromiumDeps."src".unpack or false) "${chromiumDeps."src".name}/" + npmRoot;
         hash = upstream-info.deps.npmHash;
       }).overrideAttrs
         (p: {
+          # TODO: npmRegistryOverridesString does not appear to work for airlock-proxy.uplink.goog:999
+          postPatch = lib.optionalString (chromiumVersionAtLeast "157") ''
+            substituteInPlace package-lock.json \
+              --replace-fail "http://airlock-proxy.uplink.goog:999/npm/artifact-foundry-prod/ah-3p-staging-npm/" "https://registry.npmjs.org/"
+          '';
           nativeBuildInputs = p.nativeBuildInputs or [ ] ++ [ zstd ];
         });
 
@@ -470,8 +520,12 @@ let
       libusb1
       re2
       ffmpeg
+    ]
+    ++ lib.optionals withSystemXslt [
       libxslt
       libxml2
+    ]
+    ++ [
       nasm
       nspr
       nss
@@ -527,8 +581,12 @@ let
       libusb1
       re2
       ffmpeg
+    ]
+    ++ lib.optionals withSystemXslt [
       libxslt
       libxml2
+    ]
+    ++ [
       nasm
       nspr
       nss
@@ -752,7 +810,7 @@ let
       # clang++: error: unknown argument: '-fsanitize-ignore-for-ubsan-feature=unreachable'
       ./patches/chromium-155-llvm-22.patch
     ]
-    ++ lib.optionals (chromiumVersionAtLeast "149" && stdenv.hostPlatform.isAarch64) [
+    ++ lib.optionals (versionRange "149" "158" && stdenv.hostPlatform.isAarch64) [
       # [43731/56364] CXX obj/media/gpu/sandbox/sandbox/hardware_video_decoding_sandbox_hook_linux.o
       # FAILED: [code=1] obj/media/gpu/sandbox/sandbox/hardware_video_decoding_sandbox_hook_linux.o
       # clang++ -MD -MF obj/media/gpu/sandbox/sandbox/hardware_video_decoding_sandbox_hook_linux.o.d [...]
@@ -803,7 +861,7 @@ let
       # both (all) architectures instead.
       ./patches/chromium-151-dawn-use-Go-from-PATH.patch
     ]
-    ++ lib.optionals (chromiumVersionAtLeast "151.0.7922.169" && !ungoogled) [
+    ++ lib.optionals (versionRange "151.0.7922.169" "157" && !ungoogled) [
       # Don't show misleading Terms of Service dialog on first run that literally says [^1]
       #
       # > This Space Intentionally Blank
@@ -815,6 +873,8 @@ let
       # actually worthwhile, we can drop this revert and update our VM test to handle this dialog.
       # Exclude ungoogled-chromium, as it ships its own variant of this patch.
       # [^1]: https://chromium.googlesource.com/chromium/src/+/151.0.7922.169/components/resources/terms/terms_chromium.txt
+      #
+      # Fixed in M157+ thanks to https://chromium-review.googlesource.com/c/chromium/src/+/8500082
       (fetchpatch {
         name = "chromium-151-revert-Show-Linux-first-run-terms-of-service-dialog-by-default.patch";
         # https://chromium-review.googlesource.com/c/chromium/src/+/8257374
@@ -1040,9 +1100,17 @@ let
 
         ${lib.getExe buildPackages.rustc} -V > third_party/rust-toolchain/VERSION
       ''
+      + lib.optionalString (chromiumVersionAtLeast "158") ''
+        cp -r ${npmDeps_devtools-frontend} third_party/devtools-frontend/src/node_modules
+        patchShebangs third_party/devtools-frontend/src/node_modules
+      ''
+      + lib.optionalString (!isElectron && chromiumVersionAtLeast "157") ''
+        substituteInPlace third_party/node/package-lock.json \
+          --replace-fail "http://airlock-proxy.uplink.goog:999/npm/artifact-foundry-prod/ah-3p-staging-npm/" "https://registry.npmjs.org/"
+      ''
       + lib.optionalString (packageName == "chromedriver") ''
-        cp -r ${bidi} third_party/chromium-bidi/node_modules
-        patchShebangs third_party/chromium-bidi/node_modules
+        substituteInPlace third_party/chromium-bidi/package-lock.json \
+          --replace-fail "http://airlock-proxy.uplink.goog:999/npm/artifact-foundry-prod/ah-3p-staging-npm/" "https://registry.npmjs.org/"
       ''
       +
         lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform && stdenv.hostPlatform.isAarch64)
@@ -1140,9 +1208,13 @@ let
         # TODO: remove opt-out of https://chromium.googlesource.com/chromium/src/+/main/docs/modules.md
         use_clang_modules = false;
       }
-      // lib.optionalAttrs (chromiumVersionAtLeast "155") {
+      // lib.optionalAttrs (versionRange "155" "157") {
         # https://chromium-review.googlesource.com/c/v8/v8/+/8365609
         v8_use_metagen_instance_types = false;
+      }
+      // lib.optionalAttrs (chromiumVersionAtLeast "157") {
+        # https://chromium-review.googlesource.com/c/v8/v8/+/8524366
+        v8_use_metagen = false;
       }
       // lib.optionalAttrs (chromiumVersionAtLeast "150") {
         # ERROR at //build/modules/BUILD.gn:80:23: Directory does not exist: /usr/include/
@@ -1218,6 +1290,9 @@ let
       # error TS2352: Conversion of type 'Node[]' to type 'TSPropertySignature[]' [...]
       + lib.optionalString (chromiumVersionAtLeast "148") ''
         rm -r third_party/node/node_modules/@types/estree
+      ''
+      + lib.optionalString (packageName == "chromedriver") ''
+        npmRoot=third_party/chromium-bidi npmDeps=${npmDeps_chromium-bidi} npmConfigHook
       ''
       + lib.optionalString (chromiumVersionAtLeast "154") ''
         ${lib.getExe gnrt} gen --for-std "third_party/rust-toolchain/lib/rustlib/src/rust"

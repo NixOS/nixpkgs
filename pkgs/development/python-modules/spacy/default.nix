@@ -49,15 +49,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "spacy";
-  version = "3.8.16";
+  version = "3.8.19";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "explosion";
     repo = "spaCy";
     tag = "release-v${finalAttrs.version}";
-    hash = "sha256-EFzzb9hMBjFh3hD+xId7uxkTVsg92WNiUaCKBRa0bnw=";
+    hash = "sha256-NpW6QrtmG/2X6AVWBw0W+P38ZcXOfESYAdy8N6VMirc=";
   };
 
   build-system = [
@@ -139,6 +138,13 @@ buildPythonPackage (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # AssertionError: assert 'V' == 'N'
     "test_tok2vec_frozen_overfitting"
+
+    # AttributeError: Can't get local object 'test_doc_retokenize_merge_extension_attrs_invalid.<locals>.<lambda>'
+    "test_entity_ruler_multiprocessing"
+
+    # Throws ValueError and leaves several lambdas hanging on the nlp pipeline, making future tests flaky
+    # https://github.com/explosion/spaCy/issues/14081
+    "test_doc_retokenize_merge_extension_attrs_invalid"
   ];
 
   pythonImportsCheck = [ "spacy" ];

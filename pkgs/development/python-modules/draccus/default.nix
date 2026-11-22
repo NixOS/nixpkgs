@@ -21,7 +21,6 @@ buildPythonPackage (finalAttrs: {
   pname = "draccus";
   version = "0.11.6";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "marin-community";
@@ -38,9 +37,7 @@ buildPythonPackage (finalAttrs: {
         '_arg_options["type"] = tpe if callable(tpe) else str'
   '';
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     mergedeep
@@ -59,6 +56,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Framework for simple dataclass-based configurations based on Pyrallis";
     homepage = "https://github.com/marin-community/draccus";
+    changelog = "https://github.com/marin-community/draccus/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };

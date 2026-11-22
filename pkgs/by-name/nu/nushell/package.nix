@@ -11,6 +11,7 @@
   libx11,
   nghttp2,
   libgit2,
+  sqlite,
   withDefaultFeatures ? true,
   additionalFeatures ? (p: p),
   nix-update-script,
@@ -34,7 +35,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-b62ICCP7Li88obcju4xBNVw7D+6TtRURrOUvzqcjHis=";
   };
 
-  cargoHash = "sha256-+81FRwTlR5NSJuoaH7KCK6Qy1DiU5/JKNqfaAhZmMes=";
+  patches = [
+    # `version check` used ureq's default webpki-roots store instead of the system store.
+    ./version-check-system-roots.patch
+  ];
+
+  cargoPatches = [
+    # webpki-roots 1.0.10 removes emSign ECC Root CA - G3.
+    # rustls-webpki 0.103.16 blocks the revoked eMudhra intermediates.
+    ./bump-webpki.patch
+  ];
+
+  cargoHash = "sha256-FBBC70/tk9/maqUgIg7BSHY2UuxHYD6CRlwW/wRMijk=";
 
   nativeBuildInputs = [
     pkg-config
@@ -44,13 +56,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     zstd
+    libgit2
+    sqlite
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ zlib ]
   ++ lib.optionals (withDefaultFeatures && stdenv.hostPlatform.isLinux) [ libx11 ]
-  ++ lib.optionals (withDefaultFeatures && stdenv.hostPlatform.isDarwin) [
-    nghttp2
-    libgit2
-  ];
+  ++ lib.optionals (withDefaultFeatures && stdenv.hostPlatform.isDarwin) [ nghttp2 ];
 
   buildNoDefaultFeatures = !withDefaultFeatures;
   buildFeatures = additionalFeatures [ ];

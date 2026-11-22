@@ -49,6 +49,12 @@ let
       hash = "sha256-J4gz4rnydu8JlzqNC/OIoVoRcgeFd6B1Qboxu5drOKY=";
     };
   };
+
+  # Cemu's BOSS requests lead to a 403 error with Pretendo when curl negotiates HTTP/2.
+  # This makes games that rely on it fail to download their data.
+  # Example is Splatoon with the Rotation Schedules
+  # Workaround is to build against curl without HTTP/2 support until it's fixed upstream.
+  curl' = curl.override { http2Support = false; };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "cemu";
@@ -89,7 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
     SDL2
     boost
     cubeb
-    curl
+    curl'
     fmt_9
     glm
     glslang
@@ -144,8 +150,6 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s $out/bin/Cemu $out/bin/cemu
 
     mkdir -p $out/share/applications
-    substitute ../dist/linux/info.cemu.Cemu.desktop $out/share/applications/info.cemu.Cemu.desktop \
-      --replace "Exec=Cemu" "Exec=$out/bin/Cemu"
 
     install -Dm644 ../dist/linux/info.cemu.Cemu.metainfo.xml -t $out/share/metainfo
     install -Dm644 ../src/resource/logo_icon.png $out/share/icons/hicolor/128x128/apps/info.cemu.Cemu.png

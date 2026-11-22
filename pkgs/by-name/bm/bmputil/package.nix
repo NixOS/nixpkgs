@@ -7,6 +7,8 @@
   versionCheckHook,
   udevCheckHook,
   pkg-config,
+  aws-lc,
+  oniguruma,
   udev,
 }:
 rustPlatform.buildRustPackage rec {
@@ -24,7 +26,11 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+  buildInputs = [
+    aws-lc
+    oniguruma
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     udev
   ];
 
@@ -48,7 +54,7 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "bmputil-cli";
     maintainers = [
       lib.maintainers.shimun
-      lib.maintainers.carlossless
+      lib.maintainers.karstx
     ];
   };
 }

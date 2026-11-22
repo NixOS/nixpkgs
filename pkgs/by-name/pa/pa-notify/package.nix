@@ -11,13 +11,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "pa-notify";
-  version = "1.5.0";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "ikrivosheev";
     repo = "pa-notify";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-356qwSxxxAUNJajsVjH3zqGAZQwMOcoLPSKPZdsCmBM=";
+    hash = "sha256-8wWRW92UyYQOHlE8WK6NR6xQ6qtrwPIakr0Df+dvzm0=";
   };
 
   nativeBuildInputs = [

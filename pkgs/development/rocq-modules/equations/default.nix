@@ -1,22 +1,22 @@
 {
   lib,
-  mkCoqDerivation,
-  coq,
+  mkRocqDerivation,
+  rocq-core,
   stdlib,
   version ? null,
 }:
 
-(mkCoqDerivation {
+(mkRocqDerivation {
   pname = "equations";
-  owner = "mattam82";
-  repo = "Coq-Equations";
+  owner = "rocq-prover";
+  repo = "equations";
   opam-name = "rocq-equations";
   inherit version;
   defaultVersion =
     let
       case = case: out: { inherit case out; };
     in
-    lib.switch coq.coq-version [
+    lib.switch rocq-core.rocq-version [
       (case "9.3" "1.3.2+9.3")
       (case "9.2" "1.3.2+9.2")
       (case "9.1" "1.3.1+9.1")
@@ -96,6 +96,8 @@
 
   propagatedBuildInputs = [ stdlib ];
 
+  useCoqifVersion = v: v != null && v != "dev" && lib.versions.isLe "1.3.2+9.2" v;
+
   meta = {
     homepage = "https://mattam82.github.io/Coq-Equations/";
     description = "Plugin for Coq to add dependent pattern-matching";
@@ -106,12 +108,12 @@
     o:
     if o.version != null && o.version != "dev" && !(lib.versionAtLeast o.version "1.3.1+9.0") then
       {
-        preBuild = "coq_makefile -f _CoqProject -o Makefile${
+        preBuild = "rocq makefile -f _CoqProject -o Makefile${
           lib.optionalString (lib.versionAtLeast o.version "1.2.1" || o.version == "dev") ".coq"
         }";
       }
     else
       {
-        propagatedBuildInputs = o.propagatedBuildInputs ++ [ coq.ocamlPackages.ppx_optcomp ];
+        propagatedBuildInputs = o.propagatedBuildInputs ++ [ rocq-core.ocamlPackages.ppx_optcomp ];
       }
   )

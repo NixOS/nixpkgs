@@ -40,6 +40,10 @@ in
     target = {
       systemd.sysupdate = {
         enable = true;
+        timerConfig = {
+          OnActiveSec = 0;
+          RandomizedDelaySec = 0;
+        };
         transfers = {
           "text-file" = {
             Source = {
@@ -66,6 +70,13 @@ in
 
     server.wait_for_unit("nginx.service")
     target.wait_for_unit("network-online.target")
+
+    def update_done(_last_try: bool) -> bool:
+        info = target.get_unit_info("systemd-sysupdate-update.service")
+        return info["InactiveEnterTimestampMonotonic"] != "0"
+    retry(update_done, timeout=dt.timedelta(seconds=60))
+    assert "nixos" in target.wait_until_succeeds("cat /nixos_1.txt", timeout=dt.timedelta(seconds=5))
+    target.succeed("rm /nixos_1.txt");
 
     print(target.succeed("updatectl list"))
     target.succeed("updatectl update")

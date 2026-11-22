@@ -11,13 +11,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "ijq";
-  version = "1.4.0";
+  version = "1.4.2";
 
   src = fetchFromCodeberg {
     owner = "gpanders";
     repo = "ijq";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-iZkDGmWmpuVNAY6HfyhcC70K2DMUb0sUBbt9wxgqHwU=";
+    hash = "sha256-qvT8iREi8bi5T5/Ixli961cSNdymUe4z7xW7evng7sQ=";
   };
 
   vendorHash = "sha256-aU/0CIbI49OwgY6ioT50uPxld/rHAve3+KoILgPpWSQ=";

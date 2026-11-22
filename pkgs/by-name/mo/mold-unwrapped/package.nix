@@ -4,12 +4,17 @@
   fetchFromGitHub,
   gccStdenv,
   hello,
+  installShellFiles,
   lib,
   mold,
+  mold-unwrapped,
   nix-update-script,
+  pkg-config,
+  runCommand,
   runCommandCC,
   rustPlatform,
   stdenv,
+  zstd,
   useMoldLinker,
   versionCheckHook,
 }:
@@ -27,12 +32,29 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-DgCFmTz+qulwXu1Oax8gBnc/6HIT6TlY8+xzBRGFvu0=";
 
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+  ];
+
+  buildInputs = [ zstd ];
+
   # Upstream integration tests are way to finicky to keep around. Our internal
   # linking tests should suffice.
   doCheck = false;
 
   postInstall = ''
-    cp $out/bin/{mold,ld.mold}
+    ln -s $out/bin/{,ld.}mold
+
+    ${lib.optionalString stdenv.targetPlatform.isLinux ''
+      mkdir -p $out/lib/mold
+      mv $out/lib/mold-wrapper.so $out/lib/mold
+    ''}
+
+    installManPage docs/mold.1
+    ln -s $out/share/man/man1/{,ld.}mold.1.gz
   '';
 
   doInstallCheck = true;
@@ -40,13 +62,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru = {
     updateScript = nix-update-script { };
-    tests =
+    tests = lib.optionalAttrs stdenv.hostPlatform.isLinux (
       let
+        emulator = stdenv.hostPlatform.emulator buildPackages;
         helloTest =
           name: helloMold:
           let
             command = "$READELF -p .comment ${lib.getExe helloMold}";
-            emulator = stdenv.hostPlatform.emulator buildPackages;
           in
           runCommandCC "mold-${name}-test" { passthru = { inherit helloMold; }; } ''
             echo "Testing running the 'hello' binary which should be linked with 'mold'" >&2
@@ -72,7 +94,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
             fi
           '';
       in
-      lib.optionalAttrs stdenv.hostPlatform.isLinux {
+      {
         adapter-gcc = helloTest "adapter-gcc" (
           hello.override (old: {
             stdenv = useMoldLinker gccStdenv;
@@ -89,7 +111,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
             env.NIX_CFLAGS_LINK = toString (previousAttrs.NIX_CFLAGS_LINK or "") + " -fuse-ld=mold";
           })
         );
-      };
+        run = runCommand "mold-run-test" { } ''
+          ${emulator} ${lib.getExe mold-unwrapped} -run true
+          if [[ "$?" == 0 ]]; then
+            touch $out
+          fi
+        '';
+      }
+    );
   };
 
   meta = {

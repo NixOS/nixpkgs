@@ -38,6 +38,8 @@ stdenv.mkDerivation (finalAttrs: {
     "GUILE_AUTO_COMPILE=0"
   ];
 
+  guileImportsCheck = [ "fibers" ];
+
   meta = {
     homepage = "https://codeberg.org/guile/fibers";
     description = "Concurrent ML-like concurrency for Guile";

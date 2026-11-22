@@ -1,18 +1,18 @@
 {
-  "version": "2026.1.3",
-  "buildNumber": "261.26222.84",
+  "version": "2026.1.3.1",
+  "buildNumber": "261.27258.145",
   "urls": {
     "x86_64-linux": {
-      "url": "https://download.jetbrains.com/python/dataspell-2026.1.3.tar.gz",
-      "hash": "sha256-57ExydRnfCiYCQj61Xo/omKAIbKZFykjqDSOuEdkgGg="
+      "url": "https://download.jetbrains.com/python/dataspell-2026.1.3.1.tar.gz",
+      "hash": "sha256-2YfeqW/fHD+SsZSZnBxqitRVq4oEovBr1GGKr3yyq6s="
     },
     "aarch64-linux": {
-      "url": "https://download.jetbrains.com/python/dataspell-2026.1.3-aarch64.tar.gz",
-      "hash": "sha256-bcgJWYryfh9vEf2xjemGEU15+SfZRMQxEivLh+PPoww="
+      "url": "https://download.jetbrains.com/python/dataspell-2026.1.3.1-aarch64.tar.gz",
+      "hash": "sha256-OKnwjskJn794zmwT8BDgn1CI1dhhh2OKSVCLL9I7FCs="
     },
     "aarch64-darwin": {
-      "url": "https://download.jetbrains.com/python/dataspell-2026.1.3-aarch64.dmg",
-      "hash": "sha256-EFkZRmtvsdJB8QP4hn6mUrSTyNBIK7UUkn4N3m0jGtY="
+      "url": "https://download.jetbrains.com/python/dataspell-2026.1.3.1-aarch64.dmg",
+      "hash": "sha256-qQ9gqK2I43xErsDMdwmU3FJxuaRnaWsp36HsMeQV/Zk="
     }
   }
 }

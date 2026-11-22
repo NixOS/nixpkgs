@@ -17,7 +17,6 @@ buildPythonPackage (finalAttrs: {
   pname = "slicer";
   version = "0.0.8";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "interpretml";

@@ -8,6 +8,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   paho-mqtt,
+  pythonOlder,
   pyprojectVersionPatchHook,
   pytest-asyncio,
   pytest-mock,
@@ -18,14 +19,16 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "whirlpool-sixth-sense";
-  version = "2.1.0";
+  version = "2.2.0";
   pyproject = true;
+
+  disabled = pythonOlder "3.14";
 
   src = fetchFromGitHub {
     owner = "abmantis";
     repo = "whirlpool-sixth-sense";
     tag = finalAttrs.version;
-    hash = "sha256-D7rI4FEBXhx4czY/JTgjga1lW1WLSCV9d+5N2js2t3E=";
+    hash = "sha256-Tw+Denbgr1poQ8btQdvE34Flb7kpwfON8MZeqf9A1BQ=";
   };
 
   build-system = [ setuptools ];
@@ -49,6 +52,8 @@ buildPythonPackage (finalAttrs: {
   ];
 
   pythonImportsCheck = [ "whirlpool" ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Python library for Whirlpool 6th Sense appliances";

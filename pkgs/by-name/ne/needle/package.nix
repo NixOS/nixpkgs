@@ -30,6 +30,9 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ sqlite ];
 
+  # Using Swift Build doesn’t work. It fails to build Swift Syntax when it references its SPIs.
+  swiftpmFlags = [ "--build-system=native" ];
+
   configurePhase = generated.configure;
 
   installPhase = ''
@@ -43,7 +46,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/uber/needle";
     license = lib.licenses.asl20;
     mainProgram = "needle";
-    maintainers = with lib.maintainers; [ matteopacini ];
+    maintainers = [ ];
     platforms = lib.platforms.darwin;
   };
 }

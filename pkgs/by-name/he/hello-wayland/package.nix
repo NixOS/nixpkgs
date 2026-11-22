@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  fetchFromGitHub,
+  fetchFromGitLab,
   imagemagick,
   pkg-config,
   wayland-scanner,
@@ -14,7 +14,8 @@ stdenv.mkDerivation {
   pname = "hello-wayland";
   version = "0-unstable-2026-04-14";
 
-  src = fetchFromGitHub {
+  src = fetchFromGitLab {
+    domain = "gitlab.freedesktop.org";
     owner = "emersion";
     repo = "hello-wayland";
     rev = "14231ae0a7f12e0041e81f749ae509d07e88fbe5";
@@ -44,7 +45,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Hello world Wayland client";
-    homepage = "https://github.com/emersion/hello-wayland";
+    homepage = "https://gitlab.freedesktop.org/emersion/hello-wayland";
     maintainers = with lib.maintainers; [ qyliss ];
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;

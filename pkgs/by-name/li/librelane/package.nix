@@ -23,15 +23,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "librelane";
-  version = "3.0.14";
+  version = "3.0.17";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "librelane";
     repo = "librelane";
     tag = finalAttrs.version;
-    hash = "sha256-/ZzATYRi9JH6YyFWnI4lLkQ2/e2B0xa7WEI65a/ArJI=";
+    hash = "sha256-/vJzgyBtaBqN2pfTz7gt+a6eXma09one5wZdN30sa3I=";
   };
 
   build-system = [
@@ -47,6 +46,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
     # librelane pins ciel<3; only Family.by_name/get_ciel_home/fetch()
     # (unchanged in ciel 3.0.0) are used, so the pin is safe to relax.
     "ciel"
+    # yamlcore 0.1 only makes libyaml optional; CCoreLoader is unchanged.
+    "yamlcore"
   ];
 
   dependencies = with python3Packages; [
@@ -54,7 +55,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     cloup
     deprecated
     httpx
-    libparse-python
+    lln-libparse
     lxml
     numpy
     pandas

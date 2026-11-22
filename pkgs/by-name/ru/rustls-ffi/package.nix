@@ -7,6 +7,7 @@
   cargo-c,
   validatePkgConfig,
   buildPackages,
+  aws-lc,
   libiconv,
   curl,
   apacheHttpd,
@@ -15,19 +16,23 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rustls-ffi";
-  version = "0.15.5";
+  version = "0.15.7";
 
   src = fetchFromGitHub {
     owner = "rustls";
     repo = "rustls-ffi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SJhm/krDU7dMH99ULJ0EOMCxP69/ueQKCWrt00G3m8g=";
+    hash = "sha256-HwcK6av6LKZ34QK41izBXGrGS3p5E819yw4TUuqdHEo=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-hiBMosPc77z0Z6xeP9wnh0B9mFDTXQ7nZ3OExO4leTs=";
+    hash = "sha256-kzAvxC1YAlzXJD0ku99ASJ7wbBJ3dI/d8h7VIT+vBSo=";
   };
+
+  buildInputs = [
+    aws-lc
+  ];
 
   propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv

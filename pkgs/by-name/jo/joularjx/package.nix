@@ -17,7 +17,7 @@ maven.buildMavenPackage rec {
     hash = "sha256-hr8a3Qr1LdFfGBLVJVkm6hhCW7knG4VpXj7nCtcptuU=";
   };
 
-  mvnHash = "sha256-XXqpajmHCjDxMZvYnW7EiCsPIuWF8tsE7RmI/gt3iZQ=";
+  mvnHash = "sha256-AZqYh7Qt+ReP04btjAxotFEG61L/QzmEjTyUSlrwu1g=";
 
   mvnParameters = "-DskipTests -Dmaven.javadoc.skip=true";
 

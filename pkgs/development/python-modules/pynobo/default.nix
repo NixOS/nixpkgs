@@ -7,14 +7,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pynobo";
-  version = "1.9.0";
+  version = "1.9.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "echoromeo";
     repo = "pynobo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7saIhGkcRkT+HATpnL+DcIWarZue7UCp1lTyfgzLfl8=";
+    hash = "sha256-MXJC8H8ACVtcccQzan6X1INSspBF7rU/K5rWe+TpzKQ=";
   };
 
   build-system = [ setuptools ];

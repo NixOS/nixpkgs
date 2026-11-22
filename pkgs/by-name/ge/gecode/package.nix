@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gecode";
-  version = "6.4.0";
+  version = "6.6.0";
 
   src = fetchFromGitHub {
     owner = "Gecode";
     repo = "gecode";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-WhMN7QC+VQfvHUV1LLaW7I7fG++/fznh1ZDUY/Q8zD8=";
+    hash = "sha256-k9zUA5plo2t7TUHq6FEXfiziY2G9UQu6Zhb9N34+xB4=";
   };
 
   enableParallelBuilding = true;

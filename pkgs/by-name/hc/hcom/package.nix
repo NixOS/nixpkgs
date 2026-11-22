@@ -2,6 +2,8 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  pkg-config,
+  sqlite,
   writableTmpDirAsHomeHook,
   versionCheckHook,
   nix-update-script,
@@ -20,6 +22,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-cGhssU75BrNmHqxYWvqRcjNxB70rxYHXBz3hZDY+was=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ sqlite ];
 
   doCheck = true;
   nativeCheckInputs = [ writableTmpDirAsHomeHook ];

@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0.5.2";
 
   src = fetchFromGitHub {
-    owner = "tudurom";
+    owner = "tudxor";
     repo = "windowchef";
     rev = "v${finalAttrs.version}";
     sha256 = "1m4vly7w2f28lrj26rhh3x9xsp3d97m5cxj91fafgh5rds4ygyhp";
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Stacking window manager that cooks windows with orders from the Waitron";
-    homepage = "https://github.com/tudurom/windowchef";
+    homepage = "https://github.com/tudxor/windowchef";
     maintainers = with lib.maintainers; [ bhougland ];
     license = lib.licenses.isc;
     platforms = lib.platforms.linux;

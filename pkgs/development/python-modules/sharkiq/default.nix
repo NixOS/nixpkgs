@@ -15,7 +15,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "JeffResc";
+    owner = "sharkiqlibs";
     repo = "sharkiq";
     tag = "v${finalAttrs.version}";
     hash = "sha256-24/cJJ4RaM6twVorJ0pQ/LDHZBTP/rxCiwNozNLS82M=";
@@ -44,8 +44,8 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Python API for Shark IQ robots";
-    homepage = "https://github.com/JeffResc/sharkiq";
-    changelog = "https://github.com/JeffResc/sharkiq/releases/tag/${finalAttrs.src.tag}";
+    homepage = "https://github.com/sharkiqlibs/sharkiq";
+    changelog = "https://github.com/sharkiqlibs/sharkiq/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };

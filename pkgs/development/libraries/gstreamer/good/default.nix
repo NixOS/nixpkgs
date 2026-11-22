@@ -24,7 +24,6 @@
   libshout,
   cairo,
   gdk-pixbuf,
-  aalib,
   libcaca,
   libsoup_3,
   libpulseaudio,
@@ -81,7 +80,7 @@ assert raspiCameraSupport -> hostSupportsRaspiCamera;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gst-plugins-good";
-  version = "1.28.7";
+  version = "1.28.8";
 
   outputs = [
     "out"
@@ -90,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/gst-plugins-good/gst-plugins-good-${finalAttrs.version}.tar.xz";
-    hash = "sha256-hyVpacgs87yFdDAfPnBEqQ3grFAKWifYujjE3eiU3Ys=";
+    hash = "sha256-p2cO2QDT0DvnRNJcGHOyOYlumoLObRf4/rxv/7rulSE=";
   };
 
   patches = [
@@ -154,7 +153,6 @@ stdenv.mkDerivation (finalAttrs: {
     taglib
     cairo
     gdk-pixbuf
-    aalib
     libcaca
     libsoup_3
     libshout
@@ -237,6 +235,8 @@ stdenv.mkDerivation (finalAttrs: {
       ximagesrc = enableX11; # Linux-only
       jack = enableJack;
 
+      aalib = false;
+
       # Linux only
       dv1394 = enableFireWire;
       oss = enableOSS;
@@ -307,7 +307,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.lgpl2Plus;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
-    maintainers = with lib.maintainers; [ tmarkus ];
+    maintainers = with lib.maintainers; [ AAAAAASomeThingsFailToEvaluate ];
     identifiers.cpeParts = gstreamer.passthru.gstreamerCpeParts finalAttrs.version;
   };
 })

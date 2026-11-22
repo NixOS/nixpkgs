@@ -1,5 +1,7 @@
 {
   lib,
+  aws-lc,
+  pkg-config,
   rustPlatform,
   fetchFromGitHub,
   cacert,
@@ -22,6 +24,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-SW1AKnvzVLkiYnCoiEdZKfWw89y7VbFFRhoGxvIPGG8=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ aws-lc ];
 
   nativeCheckInputs = [
     cacert

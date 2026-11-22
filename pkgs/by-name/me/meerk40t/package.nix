@@ -5,6 +5,7 @@
   python3Packages,
   gtk3,
   wrapGAppsHook3,
+  writableTmpDirAsHomeHook,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -18,6 +19,9 @@ python3Packages.buildPythonApplication rec {
     tag = version;
     hash = "sha256-KvXX4s+oKj7nksQyb4U827A2JQ1z6hwrBxBAg4RfW8s=";
   };
+
+  # https://github.com/meerk40t/MeerK40t/pull/3247 adapted to the moved file; remove with the next release
+  patches = [ ./numpy-2.3-cross.patch ];
 
   nativeBuildInputs = [
     wrapGAppsHook3
@@ -69,11 +73,8 @@ python3Packages.buildPythonApplication rec {
 
   nativeCheckInputs = with python3Packages; [
     unittestCheckHook
+    writableTmpDirAsHomeHook
   ];
-
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
 
   meta = {
     changelog = "https://github.com/meerk40t/meerk40t/releases/tag/${src.tag}";

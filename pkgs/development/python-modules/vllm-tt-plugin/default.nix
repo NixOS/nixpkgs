@@ -20,7 +20,6 @@ buildPythonPackage (finalAttrs: {
   pname = "vllm-tt-plugin";
   version = "0.1.0-unstable-2026-10-09";
   pyproject = true;
-  __structuredAttrs = true;
 
   disabled = pythonAtLeast "3.14";
 
@@ -85,6 +84,7 @@ buildPythonPackage (finalAttrs: {
     description = "Tenstorrent backend plugin for vLLM";
     homepage = "https://github.com/tenstorrent/vllm-tt-plugin";
     license = lib.licenses.asl20;
+    teams = [ lib.teams.tenstorrent ];
     maintainers = with lib.maintainers; [ liberodark ];
     platforms = lib.platforms.linux;
     problems = lib.optionalAttrs (!lib.elem vllm.version supportedVllmVersions) {

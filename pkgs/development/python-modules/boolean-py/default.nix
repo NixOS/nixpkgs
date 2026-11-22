@@ -11,8 +11,6 @@ buildPythonPackage (finalAttrs: {
   version = "5.0";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "bastikr";
     repo = "boolean.py";

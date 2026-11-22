@@ -38,6 +38,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       amar1729
+      givikuna
     ];
   };
 })

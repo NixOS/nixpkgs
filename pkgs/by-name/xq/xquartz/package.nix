@@ -300,7 +300,7 @@ stdenv.mkDerivation {
 
   meta = {
     platforms = lib.platforms.darwin;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.booxter ];
     license = lib.licenses.mit;
   };
 }

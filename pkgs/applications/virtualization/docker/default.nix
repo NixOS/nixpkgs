@@ -64,8 +64,6 @@ let
       versionCheckHook,
     }:
     let
-      systemdLibs' = systemdLibs.override { withCompression = true; };
-
       docker-meta = {
         license = lib.licenses.asl20;
         maintainers = with lib.maintainers; [
@@ -171,6 +169,8 @@ let
           pname = "moby";
           inherit version;
 
+          __structuredAttrs = true;
+
           src = moby-src;
 
           vendorHash = null;
@@ -190,7 +190,7 @@ let
           ++ lib.optionals (lib.versionAtLeast version "29.0.0") [ nftables ]
           ++ lib.optionals withLvm [ lvm2 ]
           ++ lib.optionals withBtrfs [ btrfs-progs ]
-          ++ lib.optionals withSystemd [ systemdLibs' ]
+          ++ lib.optionals withSystemd [ systemdLibs ]
           ++ lib.optionals withSeccomp [ libseccomp ];
 
           postPatch = ''
@@ -273,6 +273,8 @@ let
       {
         pname = "docker";
         inherit version;
+
+        __structuredAttrs = true;
 
         src = fetchFromGitHub {
           owner = "docker";
@@ -426,18 +428,18 @@ in
 
   docker_29 =
     let
-      version = "29.8.2";
+      version = "29.9.3";
     in
     callPackage dockerGen {
       inherit version;
       cliRev = "v${version}";
-      cliHash = "sha256-d8wZ9F1bsmS4rwQP3KDi65bZQiybpaKcXFdKGwhgavk=";
+      cliHash = "sha256-Wb1JRfML8olvQtOoMbcBwFsYKnejX5k6JH+tfXSPRAI=";
       mobyRev = "docker-v${version}";
-      mobyHash = "sha256-SRMl6jRWIznKYpb+Hw8uvfB26LgUBh9qRGHbPTueMl4=";
+      mobyHash = "sha256-xtLqR9pOw53vlKE0E+1wVrRgV0ag22A94NXq/FUqW6A=";
       runcRev = "v1.5.2";
       runcHash = "sha256-DOEnEK/1KlMCzJHW5bWCVChfBUzWOgbgPJn7GMatwAc=";
-      containerdRev = "v2.3.6";
-      containerdHash = "sha256-kpX4c/K3UM0uFvxPvoA0oKTNel4WpjYb09XuYxStT2A=";
+      containerdRev = "v2.4.2";
+      containerdHash = "sha256-RP1qn/dlfVCAwe3ZxASStzGZmuYwdUVwfPGG8XByNNk=";
       tiniRev = "369448a167e8b3da4ca5bca0b3307500c3371828";
       tiniHash = "sha256-jCBNfoJAjmcTJBx08kHs+FmbaU82CbQcf0IVjd56Nuw=";
     };

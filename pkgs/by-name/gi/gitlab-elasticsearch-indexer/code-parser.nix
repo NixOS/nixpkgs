@@ -4,6 +4,8 @@
   rustPlatform,
   pkg-config,
   openssl,
+  oniguruma,
+  zstd,
   clang,
 }:
 
@@ -27,6 +29,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
   buildInputs = [
     openssl.dev
+    oniguruma
+    zstd
   ];
 
   preInstall = ''

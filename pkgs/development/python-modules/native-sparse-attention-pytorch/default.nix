@@ -18,7 +18,6 @@ buildPythonPackage (finalAttrs: {
   pname = "native-sparse-attention-pytorch";
   version = "0.2.3";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "lucidrains";

@@ -13,7 +13,7 @@ buildOctavePackage rec {
     owner = "gnu-octave";
     repo = "instrument-control";
     tag = "release-${version}";
-    sha256 = "sha256-eXlH7BFRh4Vq/2LiBsmTvZNhXm4IbeCHK+OsKMQI0tY=";
+    hash = "sha256-eXlH7BFRh4Vq/2LiBsmTvZNhXm4IbeCHK+OsKMQI0tY=";
   };
 
   passthru.updateScript = nix-update-script {

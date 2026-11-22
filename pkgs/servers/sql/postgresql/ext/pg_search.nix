@@ -6,6 +6,8 @@
   lib,
   nix-update-script,
   openblas,
+  zstd,
+  aws-lc,
   pkg-config,
   postgresql,
   stdenv,
@@ -87,7 +89,11 @@ buildPgrxExtension (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ openblas ];
+  buildInputs = [
+    zstd
+    aws-lc
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ openblas ];
 
   # pgrx tests try to install the extension into postgresql nix store
   doCheck = false;

@@ -19,7 +19,7 @@
   libxml2,
   pkg-config,
   polkit,
-  systemd,
+  systemdLibs,
   wrapGAppsHook3,
 }:
 
@@ -73,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     libgweather
     libwnck
     polkit
-    systemd
+    systemdLibs
   ];
 
   configureFlags = [

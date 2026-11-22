@@ -8,14 +8,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "meraki";
-  version = "4.6.0";
+  version = "4.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "meraki";
     repo = "dashboard-api-python";
     tag = finalAttrs.version;
-    hash = "sha256-bEzSrsZm0uNH0JMes+aNrsixCP3KhxcynOcYxLvI9HA=";
+    hash = "sha256-L8J92qy1h0oDArQdg4TLAYMjp6rT9Zi//fk+Ddsdeqg=";
   };
 
   build-system = [ hatchling ];

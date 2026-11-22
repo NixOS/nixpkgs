@@ -23,13 +23,23 @@ let
         ;
     in
     {
-      inherit mkLibraryFile mkDerivation;
+      inherit withPackages mkLibraryFile mkDerivation;
 
-      lib = lib.extend (final: prev: import ../build-support/agda/lib.nix { lib = prev; });
+      lib = lib.extend (
+        final: prev:
+        import ../build-support/agda/lib.nix {
+          lib = prev;
+          inherit Agda;
+        }
+      );
 
-      agda = withPackages [ ];
+      ${Agda.meta.mainProgram} = withPackages [ ];
 
       standard-library = callPackage ../development/libraries/agda/standard-library { };
+
+      standard-library-classes = callPackage ../development/libraries/agda/standard-library-classes { };
+
+      standard-library-meta = callPackage ../development/libraries/agda/standard-library-meta { };
 
       iowa-stdlib = callPackage ../development/libraries/agda/iowa-stdlib { };
 

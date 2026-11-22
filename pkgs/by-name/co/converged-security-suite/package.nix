@@ -34,9 +34,9 @@ buildGoModule (finalAttrs: {
     "-w"
   ];
 
-  checkPhase = ''
-    go test -v ./pkg/...
-  '';
+  checkFlags = [
+    "./pkg/..."
+  ];
 
   meta = {
     homepage = "https://github.com/9elements/converged-security-suite";

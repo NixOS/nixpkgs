@@ -11,18 +11,18 @@
 }:
 
 let
-  stdenvOpts = {
-    targetPlatform.system = "aarch64-none-elf";
-    targetPlatform.rust.rustcTarget = "${stdenv.hostPlatform.parsed.cpu.name}-unknown-none-softfloat";
-    targetPlatform.rust.rustcTargetSpec = "${stdenv.hostPlatform.parsed.cpu.name}-unknown-none-softfloat";
+  # m1n1's Rust code targets bare-metal AArch64 without an FPU.
+  targetPlatform = lib.systems.elaborate {
+    config = "${stdenv.hostPlatform.parsed.cpu.name}-none-elf";
+    rust.rustcTarget = "${stdenv.hostPlatform.parsed.cpu.name}-unknown-none-softfloat";
   };
   rust = buildPackages.rust.override {
-    stdenv = lib.recursiveUpdate buildPackages.stdenv stdenvOpts;
+    stdenv = buildPackages.stdenv.override { inherit targetPlatform; };
   };
   rustPackages = rust.packages.stable.overrideScope (
     f: p: {
       rustc-unwrapped = p.rustc-unwrapped.override {
-        stdenv = lib.recursiveUpdate p.rustc-unwrapped.stdenv stdenvOpts;
+        stdenv = p.rustc-unwrapped.stdenv.override { inherit targetPlatform; };
       };
     }
   );
@@ -31,13 +31,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "m1n1";
-  version = "2.0.0";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "AsahiLinux";
     repo = "m1n1";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-h+gRa1Msdbb7CCYWo2Wo5Q1MwPfIXBBBpdAGWLbRDdk=";
+    hash = "sha256-gDRCgDEOl87EbbZh0QMOQHPgY2YZSpLFgNsg8XzRuMk=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {

@@ -52,6 +52,7 @@ rustPlatform.buildRustPackage {
       "x86_64-linux"
       "x86-linux"
       "aarch64-linux"
+      "riscv64-linux"
     ];
     maintainers = [ lib.maintainers.cmm ];
   };

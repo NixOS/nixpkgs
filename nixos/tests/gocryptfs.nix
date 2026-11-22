@@ -38,7 +38,7 @@
 
     # Drop a canary file and unmount
     machine.succeed("echo success > /plain/data.txt")
-    machine.succeed("fusermount -u /plain")
+    machine.succeed("fusermount3 -u /plain")
 
     # Switch to a specialisation that has this in /etc/fstab
     machine.succeed("/run/current-system/specialisation/fstab-test/bin/switch-to-configuration switch")

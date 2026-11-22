@@ -1,16 +1,18 @@
 {
   buildNpmPackage,
+  cacert,
   dart-sass,
   fetchFromGitHub,
+  fetchpatch2,
   ffmpeg,
   lib,
   nix-update-script,
   nixosTests,
   nodejs_24,
-  python313Packages,
+  python3Packages,
   unar,
 }:
-python313Packages.buildPythonApplication (finalAttrs: {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "bazarr";
   version = "1.6.2";
 
@@ -21,7 +23,37 @@ python313Packages.buildPythonApplication (finalAttrs: {
     hash = "sha256-5bhNbLfuL1wzraO3UypRRstC1+ULTaFVNJC++Qov6AE=";
   };
 
-  dependencies = with python313Packages; [
+  patches = [
+    (fetchpatch2 {
+      name = "CVE-2026-130156-1.patch";
+      url = "https://github.com/morpheus65535/bazarr/commit/4bd29252feebd0803e84cc3ce1bdd24c3a076ed4.patch?full_index=1";
+      hash = "sha256-B3fumL5keOIaP5xh0NmABij/vI3vKnwpZ/4eKJ4vjNQ=";
+    })
+    (fetchpatch2 {
+      name = "CVE-2026-130156-2.patch";
+      url = "https://github.com/morpheus65535/bazarr/commit/d84777c61a34a90a37238cfb566e7e8cd102d303.patch?full_index=1";
+      excludes = [ "tests/*" ];
+      hash = "sha256-yAOe40qOBib+8PeQP0827rZm3wGGZvr4BjrbS4h7FNs=";
+    })
+    (fetchpatch2 {
+      name = "CVE-2026-130156-3.patch";
+      url = "https://github.com/morpheus65535/bazarr/commit/768a5259202ea7bfa5a395d6b39a9e8eac88f817.patch?full_index=1";
+      excludes = [ "tests/*" ];
+      hash = "sha256-nKw26Jvd8Tlf3fEUI2BTvNPRJqVPnMV923nibXrY26k=";
+    })
+    (fetchpatch2 {
+      name = "GHSA-cf4p-fcvr-78pp-1.patch";
+      url = "https://github.com/morpheus65535/bazarr/commit/884bdf345464e14bf743c4cdab6d26b356227257.patch?full_index=1";
+      hash = "sha256-/IpbRGd3eju+lJel4Rfk01wtUGv5ZcESC2TcIJDqlhs=";
+    })
+    (fetchpatch2 {
+      name = "GHSA-cf4p-fcvr-78pp-2.patch";
+      url = "https://github.com/morpheus65535/bazarr/commit/e6c247edf7f9c94e6a953f9ed28c87ee975ee94e.patch?full_index=1";
+      hash = "sha256-X4yNLjFsbsEKCjk/P8Njb/jTz3mT6Zg8NsxozxF86uw=";
+    })
+  ];
+
+  dependencies = with python3Packages; [
     lxml
     numpy
     pillow
@@ -30,7 +62,6 @@ python313Packages.buildPythonApplication (finalAttrs: {
     webrtcvad
   ];
 
-  __structuredAttrs = true;
   dontBuild = true;
   dontWrapPythonPrograms = true;
   pyproject = false;
@@ -53,7 +84,7 @@ python313Packages.buildPythonApplication (finalAttrs: {
       }
     }" > $out/lib/bazarr/package_info
 
-    makeWrapper ${lib.getExe python313Packages.python} $out/bin/bazarr \
+    makeWrapper ${lib.getExe python3Packages.python} $out/bin/bazarr \
       --add-flags $out/lib/bazarr/bazarr.py \
       --prefix PATH : ${
         lib.makeBinPath [
@@ -61,10 +92,15 @@ python313Packages.buildPythonApplication (finalAttrs: {
           unar
         ]
       } \
-      --prefix PYTHONPATH : ${python313Packages.makePythonPath finalAttrs.passthru.dependencies} \
+      --prefix PYTHONPATH : ${python3Packages.makePythonPath finalAttrs.passthru.dependencies} \
       --set PYTHONNOUSERSITE true
 
     runHook postInstall
+  '';
+
+  postFixup = ''
+    rm $out/lib/bazarr/libs/certifi/cacert.pem
+    ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $out/lib/bazarr/libs/certifi/cacert.pem
   '';
 
   passthru = {
@@ -99,7 +135,10 @@ python313Packages.buildPythonApplication (finalAttrs: {
     tests.smoke-test = nixosTests.bazarr;
 
     updateScript = nix-update-script {
-      extraArgs = lib.cli.toCommandLineGNU { } { subpackage = "frontend"; };
+      extraArgs = lib.cli.toCommandLineGNU { } {
+        subpackage = "frontend";
+        use-github-releases = true;
+      };
     };
   };
 

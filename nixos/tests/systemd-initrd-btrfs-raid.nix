@@ -20,10 +20,7 @@
       boot.loader.efi.canTouchEfiVariables = true;
 
       environment.systemPackages = with pkgs; [ btrfs-progs ];
-      boot.initrd.systemd = {
-        enable = true;
-        emergencyAccess = true;
-      };
+      boot.initrd.systemd.emergencyAccess = true;
 
       specialisation.boot-btrfs-raid.configuration = {
         fileSystems = lib.mkVMOverride {

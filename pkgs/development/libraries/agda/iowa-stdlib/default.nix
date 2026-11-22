@@ -12,7 +12,7 @@ mkDerivation rec {
     owner = "cedille";
     repo = "ial";
     rev = "v${version}";
-    sha256 = "0dlis6v6nzbscf713cmwlx8h9n2gxghci8y21qak3hp18gkxdp0g";
+    hash = "sha256-D9zW50PhwjEVDsKjyODrT9gEUae8shGOY3p9a7bRkTY=";
   };
 
   libraryFile = "";

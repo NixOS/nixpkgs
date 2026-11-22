@@ -10,11 +10,14 @@ stdenv.mkDerivation {
   version = "4-beta";
   nativeBuildInputs = [ unzip ];
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   hardeningDisable = [ "stackprotector" ];
 
   src = fetchurl {
     url = "https://people.maths.ox.ac.uk/nanda/source/perseus_4_beta.zip";
-    sha256 = "sha256-cnkJEIC4tu+Ni7z0cKdjmLdS8QLe8iKpdA8uha2MeSU=";
+    hash = "sha256-cnkJEIC4tu+Ni7z0cKdjmLdS8QLe8iKpdA8uha2MeSU=";
   };
 
   sourceRoot = ".";
@@ -25,12 +28,16 @@ stdenv.mkDerivation {
 
   env.NIX_CFLAGS_COMPILE = toString [ "-std=c++14" ];
   buildPhase = ''
+    runHook preBuild
     g++ Pers.cpp -O3 -fpermissive -o perseus
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin
     cp perseus $out/bin
+    runHook postInstall
   '';
 
   meta = {
@@ -45,7 +52,10 @@ stdenv.mkDerivation {
     '';
     homepage = "https://people.maths.ox.ac.uk/nanda/perseus/index.html";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ erikryb ];
+    maintainers = with lib.maintainers; [
+      erikryb
+      coolcuber
+    ];
     platforms = lib.platforms.linux;
   };
 }

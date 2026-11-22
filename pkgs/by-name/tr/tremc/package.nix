@@ -37,9 +37,12 @@ python3Packages.buildPythonApplication {
   makeFlags = [ "DESTDIR=${placeholder "out"}" ];
 
   makeWrapperArgs = [
-    "--prefix PATH : ${
-      lib.makeBinPath (lib.optional x11Support xclip ++ lib.optional stdenv.hostPlatform.isDarwin pbcopy)
-    }"
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath (
+      lib.optional x11Support xclip ++ lib.optional stdenv.hostPlatform.isDarwin pbcopy
+    ))
   ];
 
   meta = {

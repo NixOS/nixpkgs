@@ -28,22 +28,13 @@
       };
 
       virtualisation = {
-        emptyDiskImages = [ 256 ];
-
-        # Mount an ext4 as the upper layer of the Nix store.
         fileSystems = {
-          "/nix/store" = lib.mkForce {
-            device = "/dev/vdb"; # the above disk image
-            fsType = "ext4";
-
-            # data=journal always displays after errors=remount-ro; this is only needed because of the overlay
-            # and #375257 will trigger with `errors=remount-ro` on a non-overlaid store:
-            # see ordering in https://github.com/torvalds/linux/blob/v6.12/fs/ext4/super.c#L2974
-            options = [
-              "defaults"
-              "errors=remount-ro"
-              "data=journal"
-            ];
+          "/nix/store".overlay.lowerdir = [ (lib.mkForce "/nix/ro") ];
+          "/nix/ro" = {
+            fsType = "none";
+            options = [ "bind" ];
+            device = "/sysroot/nix/.ro-store";
+            neededForBoot = true;
           };
         };
       };
@@ -54,41 +45,30 @@
 
       boot = {
         initrd = {
-          # TODO: Switch to systemd initrd
-          systemd.enable = false;
-
-          # Format the upper Nix store.
-          postDeviceCommands = ''
-            ${pkgs.e2fsprogs}/bin/mkfs.ext4 /dev/vdb
-          '';
-
           # Overlay the RO store onto it.
           # Note that bug #375257 can be triggered without an overlay,
           # using the errors=remount-ro option (or similar) or with an overlay where any of the
           # paths ends in 'ro'. The offending mountpoint also has to be the last (top) one
           # if an option ending in 'ro' is the last in the list, so test both cases here.
-          postMountCommands = ''
-            mkdir -p /mnt-root/nix/store/ro /mnt-root/nix/store/rw /mnt-root/nix/store/work
-            mount --bind /mnt-root/nix/.ro-store /mnt-root/nix/store/ro
-            mount -t overlay overlay \
-              -o lowerdir=/mnt-root/nix/store/ro,upperdir=/mnt-root/nix/store/rw,workdir=/mnt-root/nix/store/work \
-              /mnt-root/nix/store
+          systemd.services.evil-files = {
+            requiredBy = [ "initrd.target" ];
+            after = [ "initrd-fs.target" ];
+            serviceConfig.Type = "oneshot";
+            script = ''
+              # Be very rude and try to put suid files and/or devices into the store.
+              evil=/sysroot/nix/store/evil
+              mkdir -p $evil/bin $evil/dev
 
-            # Be very rude and try to put suid files and/or devices into the store.
-            evil=/mnt-root/nix/store/evil
-            mkdir -p $evil/bin $evil/dev
+              echo "making evil suid..." >&2
+              cp /sysroot/${builtins.unsafeDiscardStringContext "${uid}"}/bin/uid $evil/bin/suid
+              chmod 4755 $evil/bin/suid
+              [ -u $evil/bin/suid ] || exit 1
 
-            echo "making evil suid..." >&2
-            cp /mnt-root/${builtins.unsafeDiscardStringContext "${uid}"}/bin/uid $evil/bin/suid
-            chmod 4755 $evil/bin/suid
-            [ -u $evil/bin/suid ] || exit 1
-
-            echo "making evil devzero..." >&2
-            mknod -m 666 $evil/dev/zero c 1 5
-            [ -c $evil/dev/zero ] || exit 1
-          '';
-
-          kernelModules = [ "overlay" ];
+              echo "making evil devzero..." >&2
+              mknod -m 666 $evil/dev/zero c 1 5
+              [ -c $evil/dev/zero ] || exit 1
+            '';
+          };
         };
 
         postBootCommands = ''

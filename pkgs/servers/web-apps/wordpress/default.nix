@@ -2,15 +2,15 @@
 builtins.mapAttrs (_: callPackage ./generic.nix) rec {
   wordpress = wordpress_7_1;
   wordpress_6_9 = {
-    version = "6.9.10";
-    hash = "sha256-ocDcEuInHGr6q/Mp1a96l2+NLIxZJ3MXiluq6vwtT0o=";
+    version = "6.9.12";
+    hash = "sha256-mjwLBMsFGG9rLK2VW9aw1wnqIZhUdsis5CX/0zb8tRM=";
   };
   wordpress_7_0 = {
-    version = "7.0.7";
-    hash = "sha256-5PEraQhT5M9lqmdNAYU21cRqWGmDE8WZfKDF0sa4ug0=";
+    version = "7.0.9";
+    hash = "sha256-eGvy/Hst+g4sxdeDOx42C/7DBNVrroQWJrW7mGPlrIw=";
   };
   wordpress_7_1 = {
-    version = "7.1.3";
-    hash = "sha256-0qCay2oV47nEcdclV3U8Jm1vQaee0Zv+BMv+SeKDsqU=";
+    version = "7.1.5";
+    hash = "sha256-BThX2YDq7ocCxhfGhZSL7Lm+JSO6DcvJjk27IwA2fHk=";
   };
 }

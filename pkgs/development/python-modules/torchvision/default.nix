@@ -28,15 +28,14 @@ let
 in
 buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   pname = "torchvision";
-  version = "0.28.0";
+  version = "0.29.2";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "vision";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rku0QAW7RTkCjD4RorY7DeYfr6PDvqdm+6Yw9wBjGHU=";
+    hash = "sha256-rNWO8wyofMEmd5cB8NbmpDKUQioup5sukygXbqayPMk=";
   };
 
   nativeBuildInputs = [
@@ -69,6 +68,9 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   ];
 
   env = {
+    # Otherwise, the version is read from `version.txt` (`0.29.1a0`)
+    BUILD_VERSION = finalAttrs.version;
+
     TORCHVISION_INCLUDE = "${libjpeg_turbo.dev}/include/";
     TORCHVISION_LIBRARY = "${libjpeg_turbo}/lib/";
   }

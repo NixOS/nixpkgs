@@ -11,10 +11,10 @@ index ef100a4..47f54f4 100644
  LOCALSTATEDIR = @LOCALSTATEDIR@
  CHRONYVARDIR = @CHRONYVARDIR@
  DESTDIR =
-@@ -86,9 +86,7 @@ getdate :
+@@ -86,9 +86,6 @@ getdate :
  
  install: chronyd chronyc
- 	[ -d $(DESTDIR)$(SYSCONFDIR) ] || mkdir -p $(DESTDIR)$(SYSCONFDIR)
+-	[ -d $(DESTDIR)$(SYSCONFDIR) ] || mkdir -p $(DESTDIR)$(SYSCONFDIR)
 -	[ -d $(DESTDIR)$(SBINDIR) ] || mkdir -p $(DESTDIR)$(SBINDIR)
  	[ -d $(DESTDIR)$(BINDIR) ] || mkdir -p $(DESTDIR)$(BINDIR)
 -	[ -d $(DESTDIR)$(CHRONYVARDIR) ] || mkdir -p $(DESTDIR)$(CHRONYVARDIR)

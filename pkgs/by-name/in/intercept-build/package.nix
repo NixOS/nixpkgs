@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
   pyproject = false;
 
-  src = clang-unwrapped + "/bin";
+  src = clang-unwrapped.python + "/bin";
 
   dontUnpack = true;
 

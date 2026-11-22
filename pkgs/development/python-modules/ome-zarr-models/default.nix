@@ -9,6 +9,7 @@
   hatchling,
 
   # dependencies
+  numpy,
   pydantic,
   pydantic-zarr,
   zarr,
@@ -17,22 +18,24 @@
   aiohttp,
   fsspec,
   pytest-cov-stub,
+  pytest-doctestplus,
   pytest-vcr,
   pytestCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "ome-zarr-models";
-  version = "1.7";
+  version = "1.9.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
-    owner = "ome-zarr-models";
+    owner = "ome-zarr-py";
     repo = "ome-zarr-models-py";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-UT/LvbTGo6UueEUwELqnfhERvxtg04Ukrcpo1yTa80c=";
+    hash = "sha256-vDGXnDFbvXllfSb4SO1h4ubG//UvOboQ0AwCuPUF9Xs=";
   };
+
+  pythonRelaxDeps = [ "pydantic" ];
 
   build-system = [
     hatch-vcs
@@ -40,6 +43,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   dependencies = [
+    numpy
     pydantic
     pydantic-zarr
     zarr
@@ -51,14 +55,19 @@ buildPythonPackage (finalAttrs: {
     aiohttp
     fsspec
     pytest-cov-stub
+    pytest-doctestplus
     pytest-vcr
     pytestCheckHook
   ];
+
+  pytestFlags = [ "--override-ini=testpaths=tests" ];
 
   disabledTests = [
     # Require internet connection
     "test_bioformats2raw_get_image"
     "test_load_remote_data"
+    # AssertionError
+    "test_get_all_zarrs"
   ]
   ++ lib.optionals (pythonAtLeast "3.14") [
     # pydantic.errors.PydanticUserError: `Image` is not fully defined; you should define all
@@ -87,8 +96,8 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Minimal Python package for reading, writing and validating OME-Zarr (meta)data";
     homepage = "https://ome-zarr-models-py.readthedocs.io/en/stable";
-    downloadPage = "https://github.com/ome-zarr-models/ome-zarr-models-py";
-    changelog = "https://github.com/ome-zarr-models/ome-zarr-models-py/releases/tag/${finalAttrs.src.tag}";
+    downloadPage = "https://github.com/ome-zarr-py/ome-zarr-models-py";
+    changelog = "https://github.com/ome-zarr-py/ome-zarr-models-py/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };

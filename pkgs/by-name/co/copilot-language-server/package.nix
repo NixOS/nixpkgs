@@ -13,14 +13,14 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "copilot-language-server";
-  version = "1.552.0";
+  version = "1.570.0";
 
   strictDeps = true;
   __structuredAttrs = true;
 
   src = fetchzip {
     url = "https://github.com/github/copilot-language-server-release/releases/download/${finalAttrs.version}/copilot-language-server-js-${finalAttrs.version}.zip";
-    hash = "sha256-F0q8GmUeLGjOq1mKI3t3USoHQ1Ism5cKkGwQ4V0OlOI=";
+    hash = "sha256-78wfV4pmaX8VBwWPX1RYI+ytZqPS/vIYTXffTBix91w=";
     stripRoot = false;
   };
 
@@ -41,8 +41,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     cp -r ./* $server/
 
     find "$server/node_modules/@github" -mindepth 1 -maxdepth 1 \
-      \( -name 'copilot-linux-*' -o -name 'copilot-darwin-*' -o -name 'copilot-win32-*' \) \
-      ! -name "copilot-${platform}-${arch}" -exec rm -rf {} +
+      -name 'copilot-sdk-*' \
+      ! -name "copilot-sdk-${platform}-${arch}" -exec rm -rf {} +
 
     find "$server/bin" "$server/compiled" -mindepth 1 -maxdepth 1 ! -name "${platform}" -exec rm -rf {} +
     find "$server/bin/${platform}" "$server/compiled/${platform}" -mindepth 1 -maxdepth 1 ! -name "${arch}" -exec rm -rf {} +

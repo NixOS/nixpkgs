@@ -53,7 +53,6 @@ buildPythonPackage (finalAttrs: {
   pname = "msticpy";
   version = "3.0.2";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "microsoft";

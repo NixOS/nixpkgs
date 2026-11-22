@@ -82,10 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
       lgpl2Plus
     ];
     homepage = "https://hamlib.sourceforge.net";
-    maintainers = with lib.maintainers; [
-      relrod
-      fstracke
-    ];
+    maintainers = with lib.maintainers; [ fstracke ];
     platforms = with lib.platforms; unix;
   };
 })

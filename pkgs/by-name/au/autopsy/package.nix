@@ -3,6 +3,7 @@
   lib,
   makeWrapper,
   fetchzip,
+  cacert,
   testdisk,
   imagemagick,
   jdk,
@@ -60,6 +61,15 @@ stdenv.mkDerivation (finalAttrs: {
       }"
 
     runHook postInstall
+  '';
+
+  postInstall = ''
+    for f in \
+      $out/autopsy/plaso/plaso-20180818-amd64/certifi/cacert.pem \
+      $out/autopsy/gstreamer/1.0/x86_64/etc/ssl/certs/ca-certificates.crt; do
+      rm $f
+      ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $f
+    done
   '';
 
   meta = {

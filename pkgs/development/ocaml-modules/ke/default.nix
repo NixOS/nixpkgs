@@ -13,7 +13,7 @@ buildDunePackage (finalAttrs: {
 
   src = fetchurl {
     url = "https://github.com/mirage/ke/releases/download/v${finalAttrs.version}/ke-${finalAttrs.version}.tbz";
-    sha256 = "sha256-YSFyB+IgCwSxd1lzZhD/kggmmmR/hUy1rnLNrA1nIwU=";
+    hash = "sha256-YSFyB+IgCwSxd1lzZhD/kggmmmR/hUy1rnLNrA1nIwU=";
   };
 
   propagatedBuildInputs = [ fmt ];

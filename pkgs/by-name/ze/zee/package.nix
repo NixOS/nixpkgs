@@ -4,6 +4,7 @@
   fetchFromGitHub,
   pkg-config,
   openssl,
+  libgit2,
   stdenv, # for meta.broken
 }:
 
@@ -27,12 +28,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [
+    openssl
+    libgit2
+  ];
 
-  # disable downloading and building the tree-sitter grammars at build time
-  # grammars can be configured in a config file and installed with `zee --build`
-  # see https://github.com/zee-editor/zee#syntax-highlighting
-  env.ZEE_DISABLE_GRAMMAR_BUILD = 1;
+  env = {
+    # disable downloading and building the tree-sitter grammars at build time
+    # grammars can be configured in a config file and installed with `zee --build`
+    # see https://github.com/zee-editor/zee#syntax-highlighting
+    ZEE_DISABLE_GRAMMAR_BUILD = 1;
+
+    LIBGIT2_NO_VENDOR = 1;
+  };
 
   meta = {
     # last successful hydra build on darwin was in 2024

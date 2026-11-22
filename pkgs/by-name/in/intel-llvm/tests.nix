@@ -26,6 +26,12 @@ let
       name = "spir64";
       flags = [ ];
     }
+    # ...unless the new offload driver is used, which links them at compile
+    # time and errors out if they can't be found.
+    {
+      name = "spir64-new-offload-driver";
+      flags = [ "--offload-new-driver" ];
+    }
   ]
   ++ lib.optional (lib.elem "native_cpu" backends) {
     name = "native_cpu";

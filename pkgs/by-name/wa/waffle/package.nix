@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Mesa";
     repo = "waffle";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-VvkSZOddxTPukyPpngi4vxni/OqmMGJV7voiiM0uHXo=";
+    hash = "sha256-VvkSZOddxTPukyPpngi4vxni/OqmMGJV7voiiM0uHXo=";
   };
 
   buildInputs = [

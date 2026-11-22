@@ -119,7 +119,12 @@ buildDotnetModule rec {
     pcre2
     xz
   ];
-  makeWrapperArgs = [ "--prefix LD_LIBRARY_PATH : ${libPath}" ];
+  makeWrapperArgs = [
+    "--prefix"
+    "LD_LIBRARY_PATH"
+    ":"
+    libPath
+  ];
 
   postInstall =
     lib.optionalString stdenv.hostPlatform.isLinux ''

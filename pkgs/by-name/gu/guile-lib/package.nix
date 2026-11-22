@@ -50,6 +50,8 @@ stdenv.mkDerivation (finalAttrs: {
     "$(dirname $(echo ${lib.getLib stdenv.cc.cc}/lib*/libgcc_s.so))''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
   '';
 
+  guileImportsCheck = [ "htmlprag" ];
+
   meta = {
     homepage = "https://www.nongnu.org/guile-lib/";
     description = "Collection of useful Guile Scheme modules";

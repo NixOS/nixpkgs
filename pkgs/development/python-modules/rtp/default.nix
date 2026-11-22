@@ -9,13 +9,14 @@
 
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "rtp";
   version = "0.0.3";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "rtp";
+    inherit (finalAttrs) version;
     hash = "sha256-I5k3uF5lSLDdCWjBEQC4kl2dWyAKcHEJIYwqnEvJDBI=";
   };
 
@@ -24,9 +25,8 @@ buildPythonPackage rec {
     unittestCheckHook
   ];
 
-  unittestFlagsArray = [
-    "-s"
-    "tests"
+  unittestFlags = [
+    "--start-directory=tests"
     "-v"
   ];
 
@@ -38,4 +38,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fleaz ];
   };
-}
+})

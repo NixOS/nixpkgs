@@ -4,6 +4,7 @@
   fetchurl,
   callPackage,
   ncurses,
+  pixman,
   bash,
   gawk,
   gettext,
@@ -19,7 +20,7 @@
 let
   common = callPackage ./common.nix { inherit stdenv; };
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vim";
 
   inherit (common)
@@ -40,6 +41,7 @@ stdenv.mkDerivation {
   ];
   buildInputs = [
     ncurses
+    pixman
     bash
     gawk
   ];
@@ -94,4 +96,6 @@ stdenv.mkDerivation {
   '';
 
   __impureHostDeps = [ "/dev/ptmx" ];
-}
+
+  passthru.tests.test-suite = callPackage ./test-suite.nix { vim = finalAttrs.finalPackage; };
+})

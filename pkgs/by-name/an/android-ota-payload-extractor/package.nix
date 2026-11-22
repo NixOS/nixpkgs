@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule (finallAttrs: {
+buildGoModule (finalAttrs: {
   pname = "android-ota-payload-extractor";
   version = "1.1";
 
   src = fetchFromGitHub {
     owner = "tobyxdd";
     repo = "android-ota-payload-extractor";
-    tag = "v${finallAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Ln9HSM3mmba5XrzPCmgdn+erGK1v/POz586K/D4krnY=";
   };
 

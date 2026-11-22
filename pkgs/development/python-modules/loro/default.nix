@@ -8,17 +8,17 @@
 
 buildPythonPackage rec {
   pname = "loro";
-  version = "1.16.2";
+  version = "1.17.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-s+MLjZqtxgBmKs0x6Qrk2puEyYkAIlqgRNTCjBQKEs4=";
+    hash = "sha256-aXFyehLvLYwjLjrVTZ0Ao/vQR3TROwrg50TQpgtlGEM=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-qBew1JPbuDVqzoeBvKHARhwgnXNkjDBtrXKZU/dfbaY=";
+    hash = "sha256-/sApOFiC+n3yKhVW8v8FhT1k5BcS0xhiBaCHMfUyKgc=";
   };
 
   build-system = [

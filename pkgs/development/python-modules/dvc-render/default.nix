@@ -20,7 +20,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "iterative";
+    owner = "treeverse";
     repo = "dvc-render";
     tag = finalAttrs.version;
     hash = "sha256-V4QVZu4PSOW9poT6YUWbgTjJpIJ8YUtGDAE4Ijgm5Ac=";
@@ -57,8 +57,8 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Library for rendering DVC plots";
-    homepage = "https://github.com/iterative/dvc-render";
-    changelog = "https://github.com/iterative/dvc-render/releases/tag/${finalAttrs.version}";
+    homepage = "https://github.com/treeverse/dvc-render";
+    changelog = "https://github.com/treeverse/dvc-render/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };

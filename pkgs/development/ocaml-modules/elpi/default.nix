@@ -16,13 +16,7 @@
   ppx_deriving_0_33,
   ppx_optcomp,
   rocqPackages,
-  version ?
-    if lib.versionAtLeast ocaml.version "4.13" then
-      "3.8.0"
-    else if lib.versionAtLeast ocaml.version "4.08" then
-      "1.20.0"
-    else
-      "1.15.2",
+  version ? if lib.versionAtLeast ocaml.version "4.13" then "4.0.1" else "1.20.0",
 }:
 
 let
@@ -34,6 +28,8 @@ in
 
 let
   fetched = rocqPackages.metaFetch {
+    release."4.0.1".hash = "sha256-jtWC3orRI2S/QEiF0NHUYz20MPO0nxePJrvp7s9fDi8=";
+    release."3.9.2".hash = "sha256-aagDRp1wKfz7lOpM7fOezX8Tr5Dln2nn9ciWdPVwd8E=";
     release."3.8.0".hash = "sha256-hMJ9CX0CRHiWRDHM8t8oWvKSRip9Z0OyyKX4vV8vDNQ=";
     release."3.7.1".hash = "sha256-AQn0T9bAj17tAcVZdl3PTj4ri0fCXQJvAVN1dFn19GY=";
     release."3.6.2".hash = "sha256-BDE4L5qYZfaMt+6JivNBJIaJGeDSf5E+Kw1Wera/WFk=";

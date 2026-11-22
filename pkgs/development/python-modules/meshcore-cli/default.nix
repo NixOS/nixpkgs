@@ -15,14 +15,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "meshcore-cli";
-  version = "1.5.0";
+  version = "1.6.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "meshcore-dev";
     repo = "meshcore-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wby97e9Xulk2pwNJ9mnvKxWlTsWmH4n3zlTtYi7WS6I=";
+    hash = "sha256-FwqlVbhV7bWHaBA9dgr/G8e40q+H07a7PLNxbIHrXas=";
   };
 
   build-system = [ hatchling ];
@@ -39,8 +39,6 @@ buildPythonPackage (finalAttrs: {
   ];
 
   doCheck = false; # no tests
-
-  __structuredAttrs = true;
 
   meta = {
     changelog = "https://github.com/meshcore-dev/meshcore-cli/releases/tag/${finalAttrs.src.tag}";

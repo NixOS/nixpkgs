@@ -2,6 +2,7 @@
 # the names of dependencies from that package set directly to avoid evaluation errors
 # in the case redistributable packages are not available.
 {
+  autoAddDriverRunpath,
   backendStdenv,
   _cuda,
   cccl,
@@ -15,12 +16,20 @@
   mpi,
   mpiSupport ? false,
   nccl,
+  nccl-tests,
+  removeReferencesTo,
   which,
 }:
 let
   inherit (_cuda.lib) _mkMetaBroken;
   inherit (lib) licenses maintainers teams;
-  inherit (lib.attrsets) getBin getInclude getLib;
+  inherit (lib.attrsets)
+    getBin
+    getDev
+    getInclude
+    getLib
+    getOutput
+    ;
   inherit (lib.lists) optionals;
 in
 backendStdenv.mkDerivation (finalAttrs: {
@@ -35,7 +44,7 @@ backendStdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "nccl-tests";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-elcboLj+5NWbtOieMsj5skOUsozPPnde2Qs/XN8szwo=";
   };
 
@@ -50,6 +59,11 @@ backendStdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     which
     cuda_nvcc
+    removeReferencesTo
+  ]
+  ++ optionals mpiSupport [
+    # The GIN device API benchmarks link against libcuda (see env.NIX_LDFLAGS below).
+    autoAddDriverRunpath
   ];
 
   buildInputs = [
@@ -71,6 +85,14 @@ backendStdenv.mkDerivation (finalAttrs: {
   ]
   ++ optionals mpiSupport [ "MPI=1" ];
 
+  env = lib.optionalAttrs mpiSupport {
+    NIX_LDFLAGS = toString [
+      # With MPI, the GIN device API benchmarks (src/device_api/gin) are built too, and link with
+      # `-lcuda`: the stub at build time, the driver's libcuda.so.1 at run time.
+      "-L${getOutput "stubs" cuda_cudart}/lib/stubs"
+    ];
+  };
+
   enableParallelBuilding = true;
 
   installPhase = ''
@@ -82,6 +104,16 @@ backendStdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  # Some binaries embed the path of an NCCL header (from `__FILE__`, e.g. in assertions), which
+  # would make NCCL's dev output a runtime dependency.
+  postFixup = ''
+    remove-references-to -t "${getDev nccl}" "$out"/bin/*
+  '';
+
+  disallowedRequisites = [
+    (getDev nccl)
+  ];
+
   passthru = {
     brokenAssertions = [
       {
@@ -89,6 +121,11 @@ backendStdenv.mkDerivation (finalAttrs: {
         assertion = mpiSupport -> mpi != null;
       }
     ];
+
+    tests = {
+      # Not built by default: keeps the extra MPI-only link step from regressing unnoticed.
+      withMpi = nccl-tests.override { mpiSupport = true; };
+    };
 
     updateScript = gitUpdater {
       inherit (finalAttrs) pname version;

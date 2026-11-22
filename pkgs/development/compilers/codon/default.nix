@@ -136,7 +136,7 @@ stdenv.mkDerivation {
     description = "High-performance, zero-overhead, extensible Python compiler using LLVM";
     homepage = "https://docs.exaloop.io/codon";
     maintainers = [ ];
-    license = lib.licenses.bsl11;
+    license = lib.licenses.asl20;
     platforms = lib.platforms.all;
     broken = true; # `codon-llvm` build fails on darwin and linux
   };

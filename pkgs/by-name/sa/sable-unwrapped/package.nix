@@ -24,7 +24,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "SableClient";
-    repo = "Sable";
+    repo = "Sable-Legacy";
     tag = "v${finalAttrs.version}";
     hash = "sha256-RwYKaJ4k2lqXjVSPN/o0Qw8GIGnXfb6acCpva36qQoM=";
   };
@@ -69,8 +69,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   meta = {
     description = "An almost stable Matrix client";
-    homepage = "https://github.com/SableClient/Sable";
-    changelog = "https://github.com/SableClient/Sable/releases/tag/v${finalAttrs.version}";
+    homepage = "https://github.com/SableClient/Sable-Legacy";
+    changelog = "https://github.com/SableClient/Sable-Legacy/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.agpl3Only;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [

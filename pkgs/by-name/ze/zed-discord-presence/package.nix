@@ -2,12 +2,16 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  pkg-config,
+  libgit2,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zed-discord-presence";
   version = "0.12.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "xhyrom";
@@ -16,8 +20,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-E/W3HeQMvHuGgGI21It0nqsKUwCLrVmLGf3bSa8arwU=";
   };
 
-  cargoBuildFlags = [ "--package discord-presence-lsp" ];
+  cargoBuildFlags = [ "--package=discord-presence-lsp" ];
   cargoHash = "sha256-oSUrQ6d5A4grI69j0NBr06WtIUnwV9AEkZuqW2IzKSQ=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ libgit2 ];
 
   passthru.updateScript = nix-update-script { };
 

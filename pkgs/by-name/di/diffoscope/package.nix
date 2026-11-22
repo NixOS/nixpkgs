@@ -112,12 +112,12 @@ in
 # Note: when upgrading this package, please run the list-missing-tools.sh script as described below!
 python.pkgs.buildPythonApplication rec {
   pname = "diffoscope";
-  version = "333";
+  version = "339";
   pyproject = true;
 
   src = fetchurl {
     url = "https://diffoscope.org/archive/diffoscope-${version}.tar.bz2";
-    hash = "sha256-KHjYLCd2f5DRQRhG0L97Og8b20dZUyJq4BtWShVKFos=";
+    hash = "sha256-57jsc5s2kP/nfy73t+GxTrZ6ZI0OxwXPRWiQncysfjI=";
   };
 
   outputs = [
@@ -126,7 +126,6 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   patches = [
-    ./androguard-4.1.4.patch
     ./ignore_links.patch
   ];
 
@@ -277,10 +276,16 @@ python.pkgs.buildPythonApplication rec {
 
   makeWrapperArgs = lib.optionals enableBloat (
     [
-      "--prefix PATH : ${lib.makeBinPath [ hdf5 ]}"
+      "--prefix"
+      "PATH"
+      ":"
+      (lib.makeBinPath [ hdf5 ])
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "--prefix DYLD_LIBRARY_PATH : ${lib.makeLibraryPath [ hdf5 ]}"
+      "--prefix"
+      "DYLD_LIBRARY_PATH"
+      ":"
+      (lib.makeLibraryPath [ hdf5 ])
     ]
   );
 
@@ -323,6 +328,8 @@ python.pkgs.buildPythonApplication rec {
     "tests/comparators/test_macho.py"
     # OSError: AF_UNIX path too long
     "tests/comparators/test_sockets.py"
+    # Attempts a recursive call to pytestCheckHook
+    "tests/comparators/test_rpm.py"
   ];
 
   passthru = {

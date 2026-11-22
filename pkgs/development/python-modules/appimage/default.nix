@@ -7,14 +7,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "appimage";
-  version = "1.2.0";
+  version = "2.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ssh-mitm";
     repo = "appimage";
     tag = finalAttrs.version;
-    hash = "sha256-aL0JcA6R2FUMcXykbXaSaUEz1ERs3iKh4c0cbRAClSY=";
+    hash = "sha256-QIwacwix/qM0/sjEuQsVUdX04aMkWy2lor8qHBALeso=";
   };
 
   build-system = [ hatchling ];

@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ratatouille-lv2";
-  version = "0.9.11";
+  version = "0.9.12";
 
   src = fetchFromGitHub {
     owner = "brummer10";
     repo = "Ratatouille.lv2";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mig3yUGSNz1xuyz6ljKqJUjNqmEcsbXSH1vTxTGdOFk=";
+    hash = "sha256-Emxpdc9Hx1rKgn3sGjS926/EWlhidOqCzZ3gS/RCKxU=";
     fetchSubmodules = true;
   };
 

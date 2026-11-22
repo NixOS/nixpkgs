@@ -36,7 +36,7 @@ let
 
     src = lib.sources.sourceFilesBySuffices ./. [ "pom.xml" ];
 
-    mvnHash = "sha256-6pezqcTIPR5NYFQUmLZ5Y3TOd+XRcB/eRmNSAEoBmls=";
+    mvnHash = "sha256-LuCWlC/0l0cOIZ17cVjROHZGInYxrTKzIqIWXQkTHy8=";
 
     installPhase = ''
       mkdir -p $out/share/java
@@ -55,7 +55,7 @@ let
         cd $out
         unzip ${src}/application/abevjava.jar \
           hu/piller/enykp/niszws/ClientStubBuilder.class
-        shopt -s globstar; ${python3}/bin/python ${./patch_paths.py} **/*.class
+        shopt -s globstar; ${python3}/bin/python -P ${./patch_paths.py} **/*.class
       '';
 
   # This script can be used to run template installation jars (or use the Szervíz -> Telepítés menu)

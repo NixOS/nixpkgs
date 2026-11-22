@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   cmake,
   pkg-config,
   ncurses,
@@ -10,14 +10,13 @@
 
 stdenv.mkDerivation {
   pname = "sealcurses";
-  version = "0-unstable-2026-03-22"; # No release yet
+  version = "0-unstable-2026-11-07"; # No release yet
 
-  src = fetchFromGitea {
-    domain = "git.skyjake.fi";
+  src = fetchFromCodeberg {
     owner = "skyjake";
     repo = "sealcurses";
-    rev = "35c2e0332301f7aa14d3a849b30a844d65fa81bd";
-    hash = "sha256-ILskZo5BNw4JK6n0ig2ULkUI7k9mdPjuk4VVEB7jx8c=";
+    rev = "bdfc65f5270a734a238f93736eb3d9c82ad4848e";
+    hash = "sha256-K1CIRldPr1+E/Pd2OE1ixILaWbm+C2cG74DgopHGAsU=";
   };
 
   nativeBuildInputs = [
@@ -34,7 +33,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "SDL Emulation and Adaptation Layer for Curses (ncursesw)";
-    homepage = "https://git.skyjake.fi/skyjake/sealcurses";
+    homepage = "https://codeberg.org/skyjake/sealcurses";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ sikmir ];
     platforms = lib.platforms.unix;

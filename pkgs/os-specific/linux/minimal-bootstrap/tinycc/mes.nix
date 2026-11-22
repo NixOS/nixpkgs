@@ -18,8 +18,8 @@ let
   rev = "cb41cbfe717e4c00d7bb70035cda5ee5f0ff9341";
 
   tarball = fetchurl {
-    url = "https://repo.or.cz/tinycc.git/snapshot/${rev}.tar.gz";
-    hash = "sha256-MRuqq3TKcfIahtUWdhAcYhqDiGPkAjS8UTMsDE+/jGU=";
+    url = "https://github.com/tinycc/tinycc/archive/${rev}.tar.gz";
+    hash = "sha256-c4H5RKqSVc1WDoGSxbAkEkbSyD7qVLjrMXECmS/h4rs=";
   };
   src =
     (kaem.runCommand "tinycc-${version}-source" { } ''
@@ -29,7 +29,7 @@ let
       untar --file ''${NIX_BUILD_TOP}/tinycc.tar
 
       # Patch
-      cd tinycc-${builtins.substring 0 7 rev}
+      cd tinycc-${rev}
       # Static link by default
       replace --file libtcc.c --output libtcc.c --match-on "s->ms_extensions = 1;" --replace-with "s->ms_extensions = 1; s->static_link = 1;"
       replace --file i386-asm.c --output i386-asm.c --match-on "switch(size)" --replace-with "if (reg >= 8) { cstr_printf(add_str, \"%%r%d%c\", reg, (size == 1) ? 'b' : ((size == 2) ? 'w' : ((size == 4) ? 'd' : ' '))); return; } switch(size)"
@@ -37,7 +37,7 @@ let
       # If performing ptr + (-1) for example, the offset should be ptrdiff_t and not size_t
       replace --file tccgen.c --output tccgen.c --match-on "vpush_type_size(pointed_type(&vtop[-1].type), &align);" --replace-with "vpush_type_size(pointed_type(&vtop[-1].type), &align); if (!(vtop[-1].type.t & VT_UNSIGNED)) gen_cast_s(VT_PTRDIFF_T);"
     '')
-    + "/tinycc-${builtins.substring 0 7 rev}";
+    + "/tinycc-${rev}";
 
   meta = {
     description = "Small, fast, and embeddable C compiler and interpreter";

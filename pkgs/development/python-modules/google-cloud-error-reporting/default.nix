@@ -17,9 +17,10 @@
   mock,
   pytest-asyncio,
   pytestCheckHook,
+  pythonOlder,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "google-cloud-error-reporting";
   version = "1.14.0";
   pyproject = true;
@@ -27,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "python-error-reporting";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-do/pxm+Bo2c57ehg1cRlpax+UggSUMv8WSK30sXhHpo=";
   };
 
@@ -56,6 +57,18 @@ buildPythonPackage rec {
     "test_report_exception"
     # Import is already tested
     "test_namespace_package_compat"
+    # AssertionError: assert None is <Mock id='140737266022256'>
+    "test_error_group_service_client_get_mtls_endpoint_and_cert_source"
+    ":test_report_errors_service_client_get_mtls_endpoint_and_cert_source"
+    "test_report_errors_service_client_get_mtls_endpoint_and_cert_source"
+    "test_error_stats_service_client_get_mtls_endpoint_and_cert_source"
+  ];
+
+  #
+  disabledTestPaths = lib.optionals (pythonOlder "3.14") [
+    "tests/unit/gapic/errorreporting_v1beta1/test_error_group_service.py"
+    "tests/unit/gapic/errorreporting_v1beta1/test_error_stats_service.py"
+    "tests/unit/gapic/errorreporting_v1beta1/test_report_errors_service.py"
   ];
 
   preCheck = ''
@@ -71,8 +84,8 @@ buildPythonPackage rec {
   meta = {
     description = "Stackdriver Error Reporting API client library";
     homepage = "https://github.com/googleapis/python-error-reporting";
-    changelog = "https://github.com/googleapis/python-error-reporting/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/googleapis/python-error-reporting/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.sarahec ];
   };
-}
+})

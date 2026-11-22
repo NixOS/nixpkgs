@@ -2,11 +2,13 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  aws-lc,
   pkg-config,
   protobuf,
   bzip2,
   openssl,
   sqlite,
+  rust-jemalloc-sys-unprefixed,
   foundationdb,
   zstd,
   stdenv,
@@ -30,7 +32,6 @@ let
     python3Packages.buildPythonApplication {
       pname = "migrate_v016";
       inherit src version;
-      __structuredAttrs = true;
       format = "other";
       dontBuild = true;
       dependencies = [
@@ -51,7 +52,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stalwart" + (lib.optionalString stalwartEnterprise "-enterprise");
-  version = "0.16.26";
+  version = "0.16.27";
 
   __structuredAttrs = true;
 
@@ -59,16 +60,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "stalwartlabs";
     repo = "stalwart";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CJ8XOWojIOD0/xBMDnZq0oS68vd77AEXkbT1nZx7bzY=";
+    hash = "sha256-QaPhmiHFIFTdOai0+dfIZaXCctphYTm2h9lB2gcye5c=";
   };
 
-  cargoHash = "sha256-fE4+Dq6SGDA6FVDPO1Zf/Ow2VUALRQlPxGk+iETxqts=";
+  cargoHash = "sha256-imB0ItaQdHCJ5beJ0NOkl/8LdTF1Ocf6YPqSbjsn+Ps=";
 
   env = {
-    # https://docs.rs/openssl/latest/openssl/#manual
-    OPENSSL_NO_VENDOR = true;
-    OPENSSL_DIR = lib.getDev openssl;
-    OPENSSL_LIB_DIR = "${lib.getLib openssl}/lib";
     ZSTD_SYS_USE_PKG_CONFIG = true;
     ROCKSDB_INCLUDE_DIR = "${rocksdb}/include";
     ROCKSDB_LIB_DIR = "${rocksdb}/lib";
@@ -78,7 +75,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       (stdenv.hostPlatform.isLinux && (stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isArmv7))
       {
         # Required to fix Stalwart on ARM systems with 16 KB page size.
-        # Using rust-jemalloc-sys causes segmentation faults on x86_64.
         JEMALLOC_SYS_WITH_LG_PAGE = 16;
       };
 
@@ -88,13 +84,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   nativeBuildInputs = [
+    pkg-config
     protobuf
     rustPlatform.bindgenHook
   ];
 
   buildInputs = [
+    aws-lc
     bzip2
     openssl
+    rust-jemalloc-sys-unprefixed
     sqlite
     zstd
   ]
@@ -111,6 +110,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "redis"
     "azure"
     "nats"
+    "tikv-jemallocator/unprefixed_malloc_on_supported_platforms"
   ]
   ++ lib.optionals withFoundationdb [ "foundationdb" ]
   ++ lib.optionals stalwartEnterprise [ "enterprise" ];

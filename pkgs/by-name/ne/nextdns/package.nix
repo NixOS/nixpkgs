@@ -1,33 +1,44 @@
 {
+  lib,
   buildGoModule,
   fetchFromGitHub,
-  lib,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "nextdns";
-  version = "1.48.0";
+  version = "1.50.2";
+
+  __structuredAttrs = true;
+
+  __darwinAllowLocalNetworking = true;
 
   src = fetchFromGitHub {
     owner = "nextdns";
     repo = "nextdns";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-iTo96BabjPJLe2E4iThDLJJ4VZ/XjUgKB6vqWA/VyWw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-RR63A3+RXlEodNl6Bn0KyYyZSgSjicLmfR8pbu5/eOk=";
   };
 
-  vendorHash = "sha256-K4KbV4Tg30bCMksVMV3xx2sseAB2ery6u+K1V2c0mxQ=";
+  vendorHash = "sha256-3Evnbwg3Q2SrmJUrPIEirMeHYnySofS4EEGvd7x6H7E=";
 
   ldflags = [
     "-s"
-    "-w"
     "-X main.version=${finalAttrs.version}"
   ];
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "version";
 
   meta = {
     description = "NextDNS DNS/53 to DoH Proxy";
     homepage = "https://nextdns.io";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pnelson ];
+    maintainers = with lib.maintainers; [
+      pnelson
+      stepbrobd
+    ];
     mainProgram = "nextdns";
   };
 })

@@ -23,14 +23,14 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "pywiim";
-  version = "2.3.9";
+  version = "3.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mjcumming";
     repo = "pywiim";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-q7kVJjt7e1PCTdlzjhp+c6lUujEQCaOnzK18G3pOWr8=";
+    hash = "sha256-3KnRiTDXWxIpVg+FQZOlH61pgmgkMe83GKTvtVuEFh8=";
   };
 
   build-system = [

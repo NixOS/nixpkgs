@@ -20,6 +20,11 @@ buildPythonPackage rec {
     hash = "sha256-QenoMyVFs8MEDPoMV6TT6XfzktfN/gAMIHR0Scq11wk=";
   };
 
+  postPatch = ''
+    substituteInPlace src/modules.cpp \
+      --replace-fail "PyModuleDef_HEAD_INIT," ".m_base = PyModuleDef_HEAD_INIT,"
+  '';
+
   propagatedBuildInputs = [ digiham ];
   buildInputs = [
     codecserver

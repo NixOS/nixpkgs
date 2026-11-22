@@ -7,6 +7,7 @@
   libosmocore,
   libosmoabis,
   libosmo-netif,
+  enableOrtp ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -34,6 +35,8 @@ stdenv.mkDerivation (finalAttrs: {
     libosmoabis
     libosmo-netif
   ];
+
+  configureFlags = lib.optional (!enableOrtp) "--disable-ortp";
 
   enableParallelBuilding = true;
 

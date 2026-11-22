@@ -374,8 +374,8 @@ let
           )
           if [ -n "$CL_SOURCE_REGISTRY" ]; then
             wrapperArgs+=(
-              --prefix CL_SOURCE_REGISTRY : "$CL_SOURCE_REGISTRY:"
-              --prefix ASDF_OUTPUT_TRANSLATIONS : "$(echo $CL_SOURCE_REGISTRY | sed s,//:,::,g):"
+              --prefix-unchecked CL_SOURCE_REGISTRY : "$CL_SOURCE_REGISTRY:"
+              --prefix-unchecked ASDF_OUTPUT_TRANSLATIONS : "$(echo $CL_SOURCE_REGISTRY | sed s,//:,::,g):"
             )
           fi
           if [ -n "$LD_LIBRARY_PATH" ]; then

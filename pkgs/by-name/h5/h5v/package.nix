@@ -5,6 +5,7 @@
   cmake,
   pkg-config,
   fontconfig,
+  zstd,
   nix-update-script,
   versionCheckHook,
 }:
@@ -35,6 +36,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     fontconfig
+    zstd
   ];
 
   checkFlags = [

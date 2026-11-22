@@ -17,17 +17,23 @@
   xxhash,
   zlib,
   zstd,
+  versionCheckHook,
+  nix-update-script,
+  fuse3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "partclone";
-  version = "0.3.48";
+  version = "0.3.54";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "Thomas-Tsai";
     repo = "partclone";
     rev = finalAttrs.version;
-    hash = "sha256-mN4hIIFBHCawpHq6qGcSmBTsuQk2/gngSgnXMka1HTA=";
+    hash = "sha256-6ahyj5kGDsnBNDIhCmW0uwySeyh+uvtbf2nljtZ9Dqg=";
   };
 
   nativeBuildInputs = [
@@ -49,23 +55,25 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   buildInputs = [
-    e2fsprogs
-    liburcu
-    libuuid
-    stdenv.cc.libc
-    nilfs-utils
-    ntfs3g
     openssl
     xxhash
     zlib
     zstd
-    (lib.getOutput "static" stdenv.cc.libc)
+    liburcu
+    libuuid
+
+    fuse3
+    e2fsprogs
+    ntfs3g
+    nilfs-utils
   ];
 
   configureFlags = [
+    "--enable-fuse"
     "--enable-xfs"
     "--enable-extfs"
     "--enable-hfsp"
+    "--enable-apfs"
     "--enable-fat"
     "--enable-exfat"
     "--enable-ntfs"
@@ -77,6 +85,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
+  # partclone has many executables, however testing one should be enough
+  versionCheckProgram = "${placeholder "out"}/bin/partclone.chkimg";
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Utilities to save and restore used blocks on a partition";
     longDescription = ''
@@ -87,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://partclone.org";
     license = lib.licenses.gpl2Plus;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ daimond113 ];
     platforms = lib.platforms.linux;
   };
 })

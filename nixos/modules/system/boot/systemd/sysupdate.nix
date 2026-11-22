@@ -131,18 +131,25 @@ in
     systemd.additionalUpstreamSystemUnits = [
       "systemd-sysupdate.service"
       "systemd-sysupdate.timer"
+      "systemd-sysupdate-update.service"
+      "systemd-sysupdate-update.timer"
       "systemd-sysupdate-reboot.service"
       "systemd-sysupdate-reboot.timer"
       "systemd-sysupdated.service"
     ];
 
-    systemd.services.systemd-sysupdated = {
-      aliases = [ "dbus-org.freedesktop.sysupdate1.service" ];
-      path = [ pkgs.gnupgMinimal ];
+    systemd.services = {
+      systemd-sysupdated = {
+        aliases = [ "dbus-org.freedesktop.sysupdate1.service" ];
+        path = [ pkgs.gnupgMinimal ];
+      };
+      systemd-sysupdate-update = {
+        path = [ pkgs.gnupgMinimal ];
+      };
     };
 
     systemd.timers = {
-      "systemd-sysupdate" = {
+      "systemd-sysupdate-update" = {
         wantedBy = [ "timers.target" ];
         timerConfig = cfg.timerConfig;
       };

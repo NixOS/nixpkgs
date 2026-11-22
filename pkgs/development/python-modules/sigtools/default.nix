@@ -4,11 +4,10 @@
   buildPythonPackage,
   fetchFromGitHub,
   mock,
+  pytestCheckHook,
   repeated-test,
   setuptools-scm,
   sphinx,
-  unittestCheckHook,
-  pythonAtLeast,
 }:
 buildPythonPackage (finalAttrs: {
   pname = "sigtools";
@@ -28,15 +27,23 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     mock
+    pytestCheckHook
     repeated-test
     sphinx
-    unittestCheckHook
   ];
 
-  unittestFlags = lib.optionals (pythonAtLeast "3.14") [
-    "-s sigtools/tests"
-    # python314 only: NameError: name 'o' is not defined
-    "-k [!RoundTripTests.test_locals]"
+  disabledTestPaths = [
+    # Tests are out-dated
+    "sigtools/tests/test_forwards.py"
+    "sigtools/tests/test_mask.py"
+    "sigtools/tests/test_merge.py"
+    "sigtools/tests/test_autoforwards_pep563.py"
+    "sigtools/tests/test_embed.py"
+  ];
+
+  disabledTests = [
+    # NameError: name 'o' is not defined
+    "test_locals"
   ];
 
   pythonImportsCheck = [ "sigtools" ];
@@ -44,6 +51,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Utilities for working with inspect.Signature objects";
     homepage = "https://sigtools.readthedocs.io/";
+    changelog = "https://github.com/epsy/sigtools/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = [ ];
   };

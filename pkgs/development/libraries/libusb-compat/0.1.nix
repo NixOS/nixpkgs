@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     owner = "libusb";
     repo = "libusb-compat-0.1";
     rev = "v${version}";
-    sha256 = "sha256-pAPERYSxoc47gwpPUoMkrbK8TOXyx03939vlFN0hHRg=";
+    hash = "sha256-pAPERYSxoc47gwpPUoMkrbK8TOXyx03939vlFN0hHRg=";
   };
 
   patches = lib.optional stdenv.hostPlatform.isMusl ./fix-headers.patch;

@@ -22,7 +22,6 @@ buildPythonPackage (finalAttrs: {
   pname = "django-otp-webauthn";
   version = "0.10.3";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Stormbase";

@@ -8,15 +8,14 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "tt-smi";
-  version = "6.7.0";
+  version = "6.8.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "tenstorrent";
     repo = "tt-smi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5mdqLFARALnbTlmfFRJHwTMtteqmIDLyg2Dl3TlYqpM=";
+    hash = "sha256-5rTDapc4GtpB1I1/rGLuaVu8m8DtiKCZXsoRg/UPunY=";
   };
 
   build-system = with python3Packages; [ setuptools ];
@@ -51,6 +50,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     description = "Tenstorrent console based hardware information program";
     homepage = "https://github.com/tenstorrent/tt-smi";
     changelog = "https://github.com/tenstorrent/tt-smi/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    teams = [ lib.teams.tenstorrent ];
     maintainers = with lib.maintainers; [ RossComputerGuy ];
     license = lib.licenses.asl20;
   };

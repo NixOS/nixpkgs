@@ -25,7 +25,6 @@ buildPythonPackage (finalAttrs: {
   pname = "llguidance";
   version = "1.8.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "guidance-ai";

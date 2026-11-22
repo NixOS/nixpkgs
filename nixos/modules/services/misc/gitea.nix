@@ -382,15 +382,15 @@ in
       minioAccessKeyId = mkOption {
         type = types.nullOr types.str;
         default = null;
-        example = "/var/lib/secrets/gitea/minio_access_key_id";
-        description = "Path to a file containing the Minio access key id.";
+        example = "/var/lib/secrets/gitea_s3_access_key";
+        description = "Path to a file containing the S3 Access Key.";
       };
 
       minioSecretAccessKey = mkOption {
         type = types.nullOr types.str;
         default = null;
-        example = "/var/lib/secrets/gitea/minio_secret_access_key";
-        description = "Path to a file containing the Minio secret access key.";
+        example = "/var/lib/secrets/gitea_s3_secret_key";
+        description = "Path to a file containing the S3 Secret Key.";
       };
 
       settings = mkOption {

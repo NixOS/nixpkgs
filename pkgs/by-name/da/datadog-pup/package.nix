@@ -1,16 +1,21 @@
 {
   lib,
+  aws-lc,
   cacert,
   fetchFromGitHub,
+  installShellFiles,
   nix-update-script,
+  pkg-config,
   rustPlatform,
   stdenv,
   versionCheckHook,
+  writableTmpDirAsHomeHook,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "datadog-pup";
-  version = "1.27.1";
+  version = "2.5.2";
 
   __structuredAttrs = true;
 
@@ -18,14 +23,42 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "DataDog";
     repo = "pup";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-r3F5IsE0t7vnwnANxWFhNxrP1BAV6oyCDZhsH3jgiCg=";
+    hash = "sha256-ZUmxodD1he2KwGqHgP6uKFsrSjVfS/8VVNsPk6V3HQQ=";
   };
 
-  cargoHash = "sha256-8J1wkf3CARi5Jxh1DupSezHLMczwqkFRvZSyCIQsKBA=";
+  cargoHash = "sha256-/pJH+ECuPB10oW0ugWK0W9Zws+0FGIbyIA/SrVEHF/A=";
+
+  postPatch = ''
+    # Set SSL_CERT_FILE again after clearing the environment in this test, otherwise it fails
+    substituteInPlace tests/governance_cli.rs \
+      --replace-fail '.env_clear()' '.env_clear().env("SSL_CERT_FILE", std::env::var("SSL_CERT_FILE").unwrap_or_default())'
+  '';
 
   checkType = "debug";
   dontUseCargoParallelTests = true;
   __darwinAllowLocalNetworking = true;
+
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+  ];
+
+  buildInputs = [
+    aws-lc
+    zstd
+  ];
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd pup \
+      --bash <($out/bin/pup completions bash) \
+      --zsh <($out/bin/pup completions zsh) \
+      --fish <($out/bin/pup completions fish)
+  '';
+
+  nativeCheckInputs = [
+    cacert
+    writableTmpDirAsHomeHook
+  ];
 
   checkFlags = [
     # These tests fail when stdout is a tty, due to ANSI color codes from comfy-table
@@ -45,10 +78,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   doInstallCheck = true;
-
-  preCheck = ''
-    export SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
-  '';
 
   passthru.updateScript = nix-update-script { };
 

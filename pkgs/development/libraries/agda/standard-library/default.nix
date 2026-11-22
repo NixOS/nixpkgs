@@ -7,13 +7,13 @@
 
 mkDerivation rec {
   pname = "standard-library";
-  version = "2.3";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     repo = "agda-stdlib";
     owner = "agda";
     rev = "v${version}";
-    hash = "sha256-JOeoek6OfyIk9vwTj5QUJU6LnRzwfiG0e0ysW6zbhZ8=";
+    hash = "sha256-7TFjdpqG6tv6qTtWdaGhVXXR7RJYL1R4QlKkYaWdVvI=";
   };
 
   passthru.tests = { inherit (nixosTests) agda; };

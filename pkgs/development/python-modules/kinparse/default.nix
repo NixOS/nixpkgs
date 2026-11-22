@@ -13,7 +13,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "xesscorp";
+    owner = "devbisme";
     repo = "kinparse";
     tag = version;
     hash = "sha256-170e2uhqpk6u/hahivWYubr3Ptb8ijymJSxhxrAfuyI=";
@@ -43,7 +43,7 @@ buildPythonPackage rec {
   meta = {
     description = "Parser for KiCad EESCHEMA netlists";
     mainProgram = "kinparse";
-    homepage = "https://github.com/xesscorp/kinparse";
+    homepage = "https://github.com/devbisme/kinparse";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ matthuszagh ];
   };

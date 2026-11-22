@@ -35,7 +35,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "mwouts";
+    owner = "jupytext";
     repo = "jupytext";
     tag = "v${finalAttrs.version}";
     hash = "sha256-Zu06i29qOW6cRu966Q3D7uGoLyO0yQEetzrLOrwOmKc=";
@@ -120,8 +120,8 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Jupyter notebooks as Markdown documents, Julia, Python or R scripts";
-    homepage = "https://github.com/mwouts/jupytext";
-    changelog = "https://github.com/mwouts/jupytext/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    homepage = "https://github.com/jupytext/jupytext";
+    changelog = "https://github.com/jupytext/jupytext/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     teams = [ lib.teams.jupyter ];
     mainProgram = "jupytext";

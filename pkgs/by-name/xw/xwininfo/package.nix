@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
       hpndSellVariant
     ];
     mainProgram = "xwininfo";
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.booxter ];
     platforms = lib.platforms.unix;
   };
 })

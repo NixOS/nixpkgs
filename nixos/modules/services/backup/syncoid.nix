@@ -435,7 +435,7 @@ in
               BindPaths = [
                 "/dev/zfs"
                 # Required if outside of /var
-                config.users.users.syncoid.home
+                config.users.users.${cfg.user}.home
               ];
               BindReadOnlyPaths = [
                 builtins.storeDir

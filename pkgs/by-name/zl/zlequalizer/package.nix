@@ -14,19 +14,13 @@
 
   # buildInputs
   alsa-lib,
-  curl,
-  expat,
   fontconfig,
   freetype,
-  libGL,
   libxcursor,
   libxext,
   libxi,
   libxinerama,
   libxrandr,
-  libepoxy,
-  libjack2,
-  libxkbcommon,
   lv2,
   # Highway is built static-dispatch only upstream (HWY_COMPILE_ONLY_STATIC is
   # forced ON), so exactly one ISA is baked in -- there is no runtime dispatch.
@@ -45,7 +39,7 @@ assert lib.assertOneOf "simdTarget" simdTarget [
 ];
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "zlequalizer";
-  version = "1.4.1";
+  version = "1.4.2";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -54,7 +48,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     owner = "ZL-Audio";
     repo = "ZLEqualizer";
     tag = finalAttrs.version;
-    hash = "sha256-odAT/EFwS+N9FBIew9AbDO4hJGQN2t3P2DPp7d+nflE=";
+    hash = "sha256-2bthcY/nK3Noxm0TiZJgb6cUbcN9tDPDRz8M2afxVBA=";
     fetchSubmodules = true;
   };
 
@@ -68,23 +62,17 @@ clangStdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals clangStdenv.hostPlatform.isDarwin [ darwin.sigtool ];
 
   buildInputs = [
-    curl
-    expat
     fontconfig
     freetype
     lv2
   ]
   ++ lib.optionals clangStdenv.hostPlatform.isLinux [
     alsa-lib
-    libGL
     libxcursor
     libxext
     libxi
     libxinerama
     libxrandr
-    libepoxy
-    libjack2
-    libxkbcommon
   ];
 
   env = lib.optionalAttrs clangStdenv.hostPlatform.isLinux {

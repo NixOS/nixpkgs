@@ -15,7 +15,7 @@ buildDunePackage (finalAttrs: {
 
   src = fetchurl {
     url = "https://github.com/johnwhitington/ppx_blob/releases/download/${finalAttrs.version}/ppx_blob-${finalAttrs.version}.tbz";
-    sha256 = "sha256-8RXpCl8Qdc7cnZMKuRJx+GcOzk3uENwRR6s5uK+1cOQ=";
+    hash = "sha256-8RXpCl8Qdc7cnZMKuRJx+GcOzk3uENwRR6s5uK+1cOQ=";
   };
 
   checkInputs = [ alcotest ];

@@ -3,6 +3,8 @@
   buildPythonPackage,
   fetchFromGitHub,
   rustPlatform,
+  pkg-config,
+  oniguruma,
   pytestCheckHook,
   versionCheckHook,
 }:
@@ -11,7 +13,6 @@ buildPythonPackage (finalAttrs: {
   pname = "tlparse";
   version = "0.4.8";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "meta-pytorch";
@@ -31,6 +32,10 @@ buildPythonPackage (finalAttrs: {
     rustPlatform.maturinBuildHook
   ];
 
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ oniguruma ];
+
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
 
@@ -41,6 +46,8 @@ buildPythonPackage (finalAttrs: {
       version
       src
       cargoHash
+      nativeBuildInputs
+      buildInputs
       ;
   };
 

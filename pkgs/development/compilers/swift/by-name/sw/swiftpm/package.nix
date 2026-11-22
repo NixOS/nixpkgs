@@ -3,8 +3,6 @@
   callPackage,
   cmake,
   fetchFromGitHub,
-  fetchpatch2,
-  llvmPackages,
   ninja,
   replaceVars,
   sqlite,
@@ -20,6 +18,7 @@
   swift-llbuild,
   swift-syntax,
   swift-system,
+  swift-tools-protocols,
   swift-tools-support-core,
   swiftpmHook,
   swift_release,
@@ -41,8 +40,16 @@ let
     swift-llbuild
     swift-syntax-no-toolchain
     swift-system
+    swift-tools-protocols
     swift-tools-support-core
   ];
+
+  swiftPlatform = stdenv.hostPlatform.swift.platform;
+
+  swift' = swift.override {
+    enableRepl = false;
+    enableSourceKitLSP = false;
+  };
 in
 
 stdenv.mkDerivation (finalAttrs: {
@@ -63,8 +70,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./patches/0001-gnu-install-dirs.patch
-    # Use swift-corelibs-xctest even on Darwin (because XCTest.framework is not available in nixpkgs).
-    ./patches/0002-darwin-swift-corelibs-xctest.patch
     # SwiftPM tries to use `sandbox-exec` for sandboxing, which will fail when it is run in the Nix sandbox.
     ./patches/0003-disable-sandbox.patch
     # SwiftPM falls back to looking for manifests and plugins in the Swift compiler location. Find them in $out.
@@ -79,21 +84,14 @@ stdenv.mkDerivation (finalAttrs: {
     ./patches/0008-set-compiler-vendor.patch
     # A couple of required libraries are missing from the `CMakeLists.txt` files.
     ./patches/0009-add-missing-libraries.patch
-    # SwiftPM tries to load IndexStoreDB from the toolchain, but load it from the store instead.
-    (replaceVars ./patches/0010-Load-IndexStore-from-the-store.patch {
-      libclang = lib.getLib llvmPackages.libclang;
-    })
     # SwiftPM tries to find Clang via `CC`, but that can be GCC on Linux, which doesn’t actually work with SwiftPM.
     ./patches/0011-Always-find-Clang-in-the-toolchain.patch
-    # Build missing `swift-package-collection` and `swift-package-registry` binaries.
-    (fetchpatch2 {
-      url = "https://github.com/swiftlang/swift-package-manager/commit/e1910f814cc1be40c709c3987a29488b9bee2f92.patch?full_index=1";
-      hash = "sha256-4Ew/cKlk+Zn8cIQvh0jQy4Fz+xGYBYwch4+SBu1nKpI=";
-    })
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Include the Darwin testing helper in the CMake-built package.
-    ./patches/0012-darwin-testing-helper.patch
+    ./patches/0012-Build-and-install-the-Darwin-testing-helper-for-the-.patch
+    # SwiftPM makes assumptions about where the toolchain is that don’t hold in Nixpkgs.
+    (replaceVars ./patches/0013-Help-SwiftPM-find-the-toolchain-in-the-store.patch {
+      store-dir = builtins.storeDir;
+    })
   ];
 
   postPatch = ''
@@ -111,6 +109,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
+  # Needed for rpath fixups to work on Darwin.
+  env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-headerpad_max_install_names";
+
   preConfigure = ''
     appendToVar cmakeFlags -DCMAKE_Swift_COMPILER_TARGET=${stdenv.hostPlatform.swift.triple}
     appendToVar cmakeFlags -DCMAKE_Swift_FLAGS=-module-cache-path\ "$NIX_BUILD_TOP/module-cache"
@@ -119,7 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     ninja
-    swift
+    swift'
   ];
 
   propagatedBuildInputs = [ swiftpmHook ];
@@ -136,33 +137,63 @@ stdenv.mkDerivation (finalAttrs: {
     swift-llbuild
     swift-syntax-no-toolchain
     swift-system
+    swift-tools-protocols
     swift-tools-support-core
   ];
 
-  postInstall =
-    lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # Replace `@rpath` with absolute paths on Darwin. For some reason, this isn’t always done during installation.
-      # `fixDarwinDylibNames` doesn’t work either.
-      IFS= readarray -d "" dylibs < <(find "$out" -type f -and -name '*.dylib' -print0)
-      declare -a mappings
+  postInstall = ''
+    declare -a staticLibs=(
+      LLBuildManifest
+      PackageFingerprint
+      PackageRegistry
+      PackageSigning
+      SourceKitLSPAPI
+      SPMLLBuild
+    )
 
-      for dylib in "''${dylibs[@]}"; do
-        mappings+=(-change "@rpath/$(basename "$dylib")" "$dylib")
-      done
+    # Install the swiftmodules.
+    mkdir -p "''${!outputDev}/lib/swift/${swiftPlatform}" "''${!outputDev}/lib/swift_static/${swiftPlatform}"
+    for f in "''${staticLibs[@]}"; do
+      mv -v swift/$f.swiftmodule "''${!outputDev}/lib/swift_static/${swiftPlatform}"
+    done
+    cp -v swift/*.swiftmodule "''${!outputDev}/lib/swift/${swiftPlatform}"
 
-      for dylib in "''${dylibs[@]}"; do
-        install_name_tool "$dylib" ''${mappings[@]}
-      done
-    ''
-    + lib.optionalString stdenv.hostPlatform.isElf ''
-      for output in "''${outputs[@]}"; do
-        while IFS= read -d "" f; do
-          if isELF "$f"; then
-            patchelf --add-rpath ${lib.escapeShellArg rpaths} "$f"
-          fi
-        done < <(find "$output" -type f -print0)
-      done
-    '';
+    # Install the static libraries.
+    for f in "''${staticLibs[@]}"; do
+      cp -v lib/lib$f${stdenv.hostPlatform.extensions.staticLibrary} "''${!outputDev}/lib"
+    done
+
+    # Install CMake config file for the SwiftPM library.
+    mkdir -p "''${!outputDev}/lib/cmake/SwiftPM"
+    substitute ${./files/SwiftPMConfig.cmake} "''${!outputDev}/lib/cmake/SwiftPM/SwiftPMConfig.cmake" \
+      --replace-fail '@buildType@' ${if stdenv.hostPlatform.isStatic then "STATIC" else "SHARED"} \
+      --replace-fail '@dev@' "''${!outputDev}" \
+      --replace-fail '@lib@' "''${!outputLib}" \
+      --replace-fail '@swiftPlatform@' ${swiftPlatform}
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # Replace `@rpath` with absolute paths on Darwin. For some reason, this isn’t always done during installation.
+    # `fixDarwinDylibNames` doesn’t work either.
+    IFS= readarray -d "" dylibs < <(find "$out" -type f -and -name '*.dylib' -print0)
+    declare -a mappings
+
+    for dylib in "''${dylibs[@]}"; do
+      mappings+=(-change "@rpath/$(basename "$dylib")" "$dylib")
+    done
+
+    for dylib in "''${dylibs[@]}"; do
+      install_name_tool "$dylib" ''${mappings[@]}
+    done
+  ''
+  + lib.optionalString stdenv.hostPlatform.isElf ''
+    for output in "''${outputs[@]}"; do
+      while IFS= read -d "" f; do
+        if isELF "$f"; then
+          patchelf --add-rpath ${lib.escapeShellArg rpaths} "$f"
+        fi
+      done < <(find "$output" -type f -print0)
+    done
+  '';
 
   passthru.tests = lib.packagesFromDirectoryRecursive {
     inherit callPackage;

@@ -32,10 +32,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "rust-script";
     homepage = "https://rust-script.org";
     changelog = "https://github.com/fornwall/rust-script/releases/tag/${finalAttrs.version}";
-    license = with lib.licenses; [
-      mit # or
-      asl20
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        mit
+        asl20
+      ];
     maintainers = [ lib.maintainers.progrm_jarvis ];
   };
 })

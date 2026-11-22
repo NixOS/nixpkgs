@@ -8,17 +8,18 @@
   prisma_7,
   prisma-engines_7,
   runtimeShell,
+  nixosTests,
 }:
 
 buildNpmPackage (finalAttrs: {
   pname = "ghostfolio";
-  version = "3.79.0";
+  version = "3.100.0";
 
   src = fetchFromGitHub {
     owner = "ghostfolio";
     repo = "ghostfolio";
     tag = finalAttrs.version;
-    hash = "sha256-ZWipbs14CiEJKSUUc4rUc/hRtC2bgsAPCEIPyZIpIak=";
+    hash = "sha256-QmjganNelRxqu1R1E47NdLDXh59EkAsjk6Ip5blla4k=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -28,7 +29,7 @@ buildNpmPackage (finalAttrs: {
     '';
   };
 
-  npmDepsHash = "sha256-UzYEVKWfPpVp7HvI0b+hjEB6J0VOzjn4b/ijoQ/3BTo=";
+  npmDepsHash = "sha256-uSWdPSNE3/vnJZD8Yav5rOP1kzCo6gfbOHT5onS0SWU=";
 
   postPatch = ''
     substituteInPlace replace.build.mjs \
@@ -118,6 +119,10 @@ buildNpmPackage (finalAttrs: {
       "$apiModules"/typescript \
       "$apiModules"/.{bin,cache} \
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) ghostfolio;
+  };
 
   meta = {
     description = "Open Source Wealth Management Software";

@@ -6,7 +6,6 @@
 }:
 let
   cfg = config.boot.initrd.clevis;
-  systemd = config.boot.initrd.systemd;
   supportedFs = [
     "zfs"
     "bcachefs"
@@ -73,43 +72,17 @@ in
         [ ];
 
     boot.initrd = {
-      extraUtilsCommands = lib.mkIf (!systemd.enable) ''
-        copy_bin_and_libs ${pkgs.jose}/bin/jose
-        copy_bin_and_libs ${pkgs.curl}/bin/curl
-        copy_bin_and_libs ${pkgs.bashNonInteractive}/bin/bash
-        copy_bin_and_libs ${pkgs.cryptsetup}/bin/cryptsetup
-        copy_bin_and_libs ${pkgs.gnused}/bin/sed
-        copy_bin_and_libs ${pkgs.gnugrep}/bin/grep
-
-        copy_bin_and_libs ${pkgs.tpm2-tools}/bin/.tpm2-wrapped
-        mv $out/bin/{.tpm2-wrapped,tpm2}
-        cp {${pkgs.tpm2-tss},$out}/lib/libtss2-tcti-device.so.0
-
-        copy_bin_and_libs ${cfg.package}/bin/.clevis-wrapped
-        mv $out/bin/{.clevis-wrapped,clevis}
-
-        for BIN in ${cfg.package}/bin/clevis-decrypt*; do
-          copy_bin_and_libs $BIN
-        done
-
-        for BIN in $out/bin/clevis{,-decrypt{,-null,-tang,-tpm2}}; do
-          sed -i $BIN -e 's,${pkgs.bashNonInteractive},,' -e 's,${pkgs.coreutils},,'
-        done
-
-        sed -i $out/bin/clevis-decrypt-tpm2 -e 's,tpm2_,tpm2 ,'
-      '';
-
       secrets = lib.mapAttrs' (
         name: value: lib.nameValuePair "/etc/clevis/${name}.jwe" value.secretFile
       ) cfg.devices;
 
       systemd = {
-        extraBin = lib.mkIf systemd.enable {
+        extraBin = {
           clevis = "${cfg.package}/bin/clevis";
           curl = "${pkgs.curl}/bin/curl";
         };
 
-        storePaths = lib.mkIf systemd.enable [
+        storePaths = [
           cfg.package
           "${pkgs.jose}/bin/jose"
           "${pkgs.curl}/bin/curl"

@@ -11,13 +11,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "stellarsolver";
-  version = "2.8";
+  version = "2.9";
 
   src = fetchFromGitHub {
     owner = "rlancaste";
     repo = "stellarsolver";
     rev = finalAttrs.version;
-    sha256 = "sha256-bc/IkPg5IhkZ0Y5fOlyDi/m+ibHciaaaeC8KWrhkdi0=";
+    sha256 = "sha256-ez0YAVEKG42bjRkxhTkYNJTGpPbSvLDf+RzmTJURJyo=";
   };
 
   nativeBuildInputs = [ cmake ];

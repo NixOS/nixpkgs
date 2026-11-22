@@ -7,22 +7,26 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "rclip";
-  version = "4.0.1";
+  version = "4.1.2";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "yurijmikhalevich";
     repo = "rclip";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JP3c/OZWXqOi6Y2shBes7A2kh5jcaRS6YSRVkdzMUYY=";
+    hash = "sha256-5jG95v1fMhjaHnDe1BcoIcmk+xfgSbkCnptgrGhT2GE=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml --replace-fail "uv_build>=0.11.12,<0.12.0" "uv-build"
+  '';
 
   build-system = with python3Packages; [
     uv-build
   ];
 
   pythonRelaxDeps = [
+    "huggingface-hub"
     "numpy"
     "pillow"
     "rawpy"
@@ -62,6 +66,12 @@ python3Packages.buildPythonApplication (finalAttrs: {
     # requires rclip to be built with uv before inspecting the artifacts
     "test_sdist_includes_compliance_inputs"
     "test_wheel_includes_clip_legal_files"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # NativeHeifDecodeError: macOS could not render the HEIF image (in the sandbox)
+    "test_decode_path_downscales_large_heic_to_min_side"
+    "test_decode_path_returns_the_full_frame_by_default"
+    "test_thumbnail_decode_matches_the_full_frame_decode"
   ];
 
   disabledTestPaths = [

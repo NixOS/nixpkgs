@@ -2,7 +2,6 @@
   lib,
   buildNpmPackage,
   mullvad,
-  nodejs_22,
   replaceVars,
   electron,
   copyDesktopItems,
@@ -15,9 +14,9 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "mullvad-vpn";
+  # nixpkgs-update: no auto update
   inherit (mullvad) src version;
 
-  nodejs = nodejs_22;
   npmDepsHash = "sha256-CKhPOV0Nd/YoTXqbTQOFrKp3QUacrTJ/B+oEkuFMWsM=";
 
   __structuredAttrs = true;
@@ -112,7 +111,11 @@ buildNpmPackage (finalAttrs: {
     terminal = false;
   });
 
-  passthru.hasMullvadGUI = true;
+  passthru = {
+    hasMullvadGUI = true;
+    # Updates mullvad and this package together.
+    inherit (mullvad) updateScript;
+  };
 
   meta = {
     homepage = "https://mullvad.net/";

@@ -10,8 +10,6 @@ buildPythonPackage (finalAttrs: {
   version = "1.0.8";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     pname = "types-ipaddress";
     inherit (finalAttrs) version;

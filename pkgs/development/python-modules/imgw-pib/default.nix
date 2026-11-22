@@ -12,7 +12,7 @@
   pytest-asyncio,
   pytestCheckHook,
   setuptools,
-  syrupy_6,
+  syrupy,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -51,7 +51,7 @@ buildPythonPackage (finalAttrs: {
     freezegun
     pytest-asyncio
     pytestCheckHook
-    syrupy_6
+    syrupy
   ];
 
   meta = {

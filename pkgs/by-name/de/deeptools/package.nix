@@ -12,7 +12,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pname = "deeptools";
   version = "3.5.6";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "deeptools";

@@ -58,7 +58,6 @@ let
 
   cfg = config.systemd;
   lndir = "${pkgs.buildPackages.lndir}/bin/lndir";
-  systemd = cfg.package;
 in
 rec {
 
@@ -347,6 +346,9 @@ rec {
       "true"
     else if x == false then
       "false"
+    else if builtins.isPath x then
+      # preserve string context; toString on a path drops it
+      "${x}"
     else
       toString x;
 
@@ -697,14 +699,7 @@ rec {
     { config, ... }:
     {
       imports = [ serviceConfig ];
-      # Default path for systemd services. Should be quite minimal.
-      config.path = mkIf config.enableDefaultPath (mkAfter [
-        pkgs.coreutils
-        pkgs.findutils
-        pkgs.gnugrep
-        pkgs.gnused
-        systemd
-      ]);
+      config.path = mkIf config.enableDefaultPath (mkAfter cfg.defaultPath);
     };
 
   stage1ServiceConfig = serviceConfig;

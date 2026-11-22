@@ -15,11 +15,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pgbouncer";
-  version = "1.25.2";
+  version = "1.26.1";
 
   src = fetchurl {
     url = "https://www.pgbouncer.org/downloads/files/${finalAttrs.version}/pgbouncer-${finalAttrs.version}.tar.gz";
-    hash = "sha256-kkrTURP9CnHI4tvoW10DRFUy4rezep+KSJg77qI4szI=";
+    hash = "sha256-AIhqKZS0hEzTcRCXDfd3dyz8QqdMQAUiyC+6UJo/Qtk=";
   };
 
   nativeBuildInputs = [

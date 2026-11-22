@@ -1,19 +1,23 @@
 {
   lib,
   stdenv,
+  aws-lc,
   darwin,
   fetchFromGitHub,
   libusb1,
   nix-update-script,
   perl,
   pkg-config,
+  rust-jemalloc-sys,
   rustPlatform,
+  sqlite,
   versionCheckHook,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "foundry";
-  version = "1.8.4";
+  version = "1.8.6";
 
   __structuredAttrs = true;
 
@@ -21,10 +25,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "foundry-rs";
     repo = "foundry";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-iLbz8pOKNDNlhINLn/lK5F0vEsQ8PWFu9gKvckJpyAE=";
+    hash = "sha256-BpyYQai8iR75wDKcKccuqhrwFxu/JChVxCTvpV2mYt8=";
   };
 
-  cargoHash = "sha256-1R/NQg1nLKWRciiAyQWOE5FkU9jZ8Bj181718FYV2HA=";
+  cargoHash = "sha256-2spjGbWSg1NpEgojA9tBeheqrYwlYMfablZfo9pAG/E=";
 
   nativeBuildInputs = [
     # `sha3-asm`'s build script runs cryptogams perl scripts to generate
@@ -34,7 +38,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.DarwinTools ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libusb1 ];
+  buildInputs = [
+    aws-lc
+    rust-jemalloc-sys
+    sqlite
+    zstd
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ libusb1 ];
 
   # Tests are run upstream, and many perform I/O
   # incompatible with the nix build sandbox.

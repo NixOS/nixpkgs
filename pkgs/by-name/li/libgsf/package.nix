@@ -20,7 +20,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libgsf";
-  version = "1.14.58";
+  version = "1.14.60";
 
   outputs = [
     "out"
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "GNOME";
     repo = "libgsf";
     tag = "LIBGSF_${lib.replaceString "." "_" finalAttrs.version}";
-    hash = "sha256-0QQas3AsH46OOCSuezoBSeIQSilaenl50stpNwNJsKc=";
+    hash = "sha256-URMXRIcsRn7Hi+ZhCqY+thBdLG6k4wPynuJR325Q0+Q=";
   };
 
   postPatch = ''
@@ -101,7 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.gnome.org/GNOME/libgsf";
     changelog = "https://gitlab.gnome.org/GNOME/libgsf/-/blob/${finalAttrs.src.tag}/ChangeLog";
     license = lib.licenses.lgpl21Only;
-    maintainers = [ ];
+    teams = [ lib.teams.gnome ];
     platforms = lib.platforms.unix;
 
     longDescription = ''

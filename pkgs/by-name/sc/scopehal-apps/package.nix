@@ -115,7 +115,7 @@ stdenv.mkDerivation {
     mainDarwinApp = "ngscopeclient.app";
     maintainers = with lib.maintainers; [
       bgamari
-      carlossless
+      karstx
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };

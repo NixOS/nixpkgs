@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   makeDesktopItem,
-  writeShellScriptBin,
   copyDesktopItems,
   stdenv,
   makeWrapper,
@@ -13,7 +12,6 @@
   nodejs,
   electron,
   jq,
-  tsx,
   python3,
   cmake,
   xcodebuild,
@@ -24,33 +22,25 @@
 let
   pnpm = pnpm_10;
 
-  fake-git = writeShellScriptBin "git" (lib.readFile ./fake-git.sh);
-
   libsession-util-nodejs = stdenv.mkDerivation (finalAttrs: {
     pname = "libsession-util-nodejs";
-    version = "0.6.17"; # find version in pnpm-lock.yaml
+    version = "0.7.5"; # find version in pnpm-lock.yaml
     src = fetchFromGitHub {
       owner = "session-foundation";
       repo = "libsession-util-nodejs";
       tag = "v${finalAttrs.version}";
       fetchSubmodules = true;
-      deepClone = true; # need git rev for all submodules
-      hash = "sha256-j7smb0Rgjdqs4l3ahUV2bFXyvieV6Mcoti6wjSRovLo=";
-      # fetchgit is not reproducible with deepClone + fetchSubmodules:
-      # https://github.com/NixOS/nixpkgs/issues/100498
-      postFetch = ''
-        find $out -name .git -type d -prune | while read -r gitdir; do
-          pushd "$(dirname "$gitdir")"
-          git rev-parse HEAD > .gitrev
-          popd
-        done
-        find $out -name .git -type d -prune -exec rm -rf {} +
-      '';
+      hash = "sha256-jM070usyclJp59E/AIRu7IYGjIEFPJXCcL9SeYPwLgI=";
     };
 
-    postPatch = ''
-      sed -i -E 's/--runtime-version=[^[:space:]]*/--runtime-version=${electron.version}/' package.json
-    '';
+    patches = [
+      # On darwin `libcxxhardeningfast` turns dereferencing an std::optional without checking its value into a SIGTRAP
+      # This results in the app crashing when trying to send a message.
+      # https://github.com/NixOS/nixpkgs/blob/b1d9a62b561edeb70393d75fdcb7978f07e4ae61/doc/stdenv/stdenv.chapter.md#libcxxhardeningfast-libcxxhardeningfast
+      ./libsession-darwin-crash.patch
+    ];
+
+    env.LIBSESSION_RUNTIME_VERSION = electron.version;
 
     nativeBuildInputs = [
       pnpmConfigHook
@@ -58,7 +48,6 @@ let
       nodejs
       cmake
       python3
-      fake-git # used in update_version.sh, libsession-util/external/oxen-libquic/cmake/check_submodule.cmake, etc.
     ];
 
     dontUseCmakeConfigure = true;
@@ -66,8 +55,8 @@ let
     pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs) pname version src;
       inherit pnpm;
-      fetcherVersion = 3;
-      hash = "sha256-oadNQJsSmwR/ADWO6Zu+Ji3CwkwupmQFX8OfUgKDtEU=";
+      fetcherVersion = 4;
+      hash = "sha256-e5gB/8P/OrgfR4T/xwE2QdUCu+A2sC34qrJoCuPdgdY=";
     };
 
     preBuild = ''
@@ -88,9 +77,9 @@ let
     installPhase = ''
       runHook preInstall
 
-      mkdir -p $out/lib/node_modules
-      cp -r . $out/lib/node_modules/libsession_util_nodejs
-      # TODO: clean up unnecessary files
+      mkdir -p $out/build/Release
+      cp -r package.json index.js index.d.ts types $out
+      cp build/Release/libsession_util_nodejs.node $out/build/Release
 
       runHook postInstall
     '';
@@ -106,30 +95,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "session-desktop";
-  version = "1.18.1";
-  src =
-    (fetchFromGitHub {
-      owner = "session-foundation";
-      repo = "session-desktop";
-      tag = "v${finalAttrs.version}";
-      fetchSubmodules = true;
-      leaveDotGit = true;
-      postFetch = ''
-        pushd $out
-        git rev-parse HEAD > .gitrev
-        rm -rf .git
-        popd
-      '';
-      hash = "sha256-z60TQuZHrg7PW3CkNSvsWuYKoMW5ACJNf9I/R+wR4e8=";
-    }).overrideAttrs
-      (oldAttrs: {
-        # https://github.com/NixOS/nixpkgs/issues/195117#issuecomment-1410398050
-        env = oldAttrs.env or { } // {
-          GIT_CONFIG_COUNT = 1;
-          GIT_CONFIG_KEY_0 = "url.https://github.com/.insteadOf";
-          GIT_CONFIG_VALUE_0 = "git@github.com:";
-        };
-      });
+  version = "1.18.4";
+  src = fetchFromGitHub {
+    owner = "session-foundation";
+    repo = "session-desktop";
+    tag = "v${finalAttrs.version}";
+    fetchSubmodules = true;
+    hash = "sha256-sEre5hlz/mNwOXhTk0nJu9tw2wIGxr+Fp4M/Y1zOfkg=";
+  };
 
   # This upstream release's lockfile lacks integrity fields required by pnpm >= 10.34.1.
   # Remove this packaging patch when updating to a source lockfile that includes them.
@@ -139,9 +112,6 @@ stdenv.mkDerivation (finalAttrs: {
     # too restrictive Node version requirement
     jq 'del(.engines)' package.json > package.json.new
     mv package.json.new package.json
-
-    # use tsx from nixpkgs instead of using pnpx to download it
-    substituteInPlace package.json --replace-fail 'pnpx tsx' '${lib.getExe tsx}'
   '';
 
   nativeBuildInputs = [
@@ -152,7 +122,6 @@ stdenv.mkDerivation (finalAttrs: {
     nodejs
     jq
     python3
-    fake-git # see build/updateLocalConfig.js
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     cctools # provides libtool needed for better-sqlite3
@@ -174,8 +143,8 @@ stdenv.mkDerivation (finalAttrs: {
       version
       ;
     inherit pnpm;
-    fetcherVersion = 3;
-    hash = "sha256-OHCiE2FtbQT0zo88n4aABnLS2gpi33rDCSMNc2FJLVc=";
+    fetcherVersion = 4;
+    hash = "sha256-lzuQCWsWYWNmGg+9xPrORbC06ECk7haGHbjlFeUb6Bo=";
   };
 
   buildPhase = ''
@@ -187,10 +156,8 @@ stdenv.mkDerivation (finalAttrs: {
     libsession_util_nodejs_path=$(readlink -f node_modules/libsession_util_nodejs)
     rm -r $libsession_util_nodejs_path
     pnpm rebuild --verbose
-    rm -r $libsession_util_nodejs_path
-    cp -r "${finalAttrs.passthru.libsession-util-nodejs}/lib/node_modules/libsession_util_nodejs" $libsession_util_nodejs_path
-    chmod -R +w $libsession_util_nodejs_path
-    rm -r $libsession_util_nodejs_path/node_modules
+    rm -rf $libsession_util_nodejs_path
+    cp -r --no-preserve=mode ${libsession-util-nodejs} $libsession_util_nodejs_path
 
     # some important things that did not run because of --ignore-scripts
     pnpm run postinstall
@@ -203,10 +170,13 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
+    CI=true pnpm prune --prod --ignore-scripts
+    rm -rf app/node_modules
+
     phome=$out/lib/node_modules/session-desktop
     mkdir -p $(dirname $phome)
     cp -r app $phome
-    cp -r node_modules $phome # TODO: exclude unnecessary files
+    cp -r node_modules $phome
     cp package.json $phome
 
     makeWrapper ${lib.getExe electron} $out/bin/session-desktop \

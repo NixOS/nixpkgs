@@ -10,8 +10,6 @@ buildPythonPackage (finalAttrs: {
   version = "5.3.8.0";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     pname = "xstatic_bootstrap";
     inherit (finalAttrs) version;

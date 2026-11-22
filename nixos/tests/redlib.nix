@@ -6,7 +6,6 @@ in
 {
   name = "redlib";
   meta.maintainers = with lib.maintainers; [
-    bpeetz
     Guanran928
   ];
 

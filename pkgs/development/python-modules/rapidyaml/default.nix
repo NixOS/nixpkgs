@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   swig,
+  gitMinimal,
   cmake-build-extension,
   setuptools,
   setuptools-git,
@@ -15,7 +16,6 @@ buildPythonPackage (finalAttrs: {
   pname = "rapidyaml";
   version = "0.15.2";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "biojppm";
@@ -30,6 +30,7 @@ buildPythonPackage (finalAttrs: {
     cmake-build-extension
     setuptools-scm
     setuptools-git
+    gitMinimal
     swig
   ];
 

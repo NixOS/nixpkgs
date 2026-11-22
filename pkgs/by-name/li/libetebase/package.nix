@@ -2,6 +2,7 @@
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
+  libsodium,
   openssl,
   lib,
   stdenv,
@@ -21,9 +22,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-ZLQFERi38+0SUxWaYAL4AepgVuAQKo9pxjcMkzA55BM=";
 
+  env.SODIUM_USE_PKG_CONFIG = true;
+
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [
+    libsodium
+    openssl
+  ];
 
   postInstall = ''
     install -d $out/lib/pkgconfig

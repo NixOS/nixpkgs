@@ -13,7 +13,7 @@
   libx11,
   freetype,
   harfbuzz,
-  ffmpeg,
+  ffmpeg_8,
   cacert,
   zlib,
   writeShellScript,
@@ -74,7 +74,7 @@ stdenv.mkDerivation {
     SDL2_ttf
     freetype
     harfbuzz
-    ffmpeg
+    ffmpeg_8 # https://github.com/vivictorg/vivictpp/issues/86
     zlib
   ];
 

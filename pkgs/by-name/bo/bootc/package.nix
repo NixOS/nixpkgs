@@ -16,6 +16,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bootc";
   version = "1.6.0";
 
+  __structuredAttrs = true;
+
   cargoHash = "sha256-KGwXQ6+/w3uHuPqSADsqJSip+SMdC104dfW7tNxGwnc=";
   doInstallCheck = true;
 
@@ -56,7 +58,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=test_tar_write_tar_layer"
   ];
 
-  cargoBuildFlags = [ "-p bootc" ];
+  cargoBuildFlags = [
+    "-p"
+    "bootc"
+  ];
 
   nativeInstallCheckInputs = [
     versionCheckHook

@@ -3,7 +3,6 @@
   stdenv,
   bash,
   fetchFromGitHub,
-  fetchpatch,
   libiconv,
   makeWrapper,
   openssl,
@@ -14,25 +13,18 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "websocat";
-  version = "1.14.0";
+  version = "1.14.2";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "vi";
     repo = "websocat";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-v5+9cbKe3c12/SrW7mgN6tvQIiAuweqvMIl46Ce9f2A=";
+    hash = "sha256-dPlnY63oKG+ZJsgkWM+OQTl+rqQaM0gKVEDbR6YKRAY=";
   };
 
-  # Fix build with Rust 1.87
-  # FIXME: remove in next update
-  cargoPatches = [
-    (fetchpatch {
-      url = "https://github.com/vi/websocat/commit/d4455623e777231d69b029d69d7a17c0de2bafe7.diff";
-      hash = "sha256-OUQQ+3eESE3XcGgToErqvF8ItpT8YCMAZhbvRzkFKpc=";
-    })
-  ];
-
-  cargoHash = "sha256-3m7Gg//vjNjYlesEjKsdqjU48dAtgSeugxingr8OJyY=";
+  cargoHash = "sha256-qfMheEKUrNFhbY360u1gRz4UZVvT1Ad6uL+UQDiuwhs=";
 
   nativeBuildInputs = [
     pkg-config
@@ -46,13 +38,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libiconv
   ];
 
-  nativeInstallCheckInputs = [ versionCheckHook ];
-
-  buildFeatures = [ "ssl" ];
-
-  # Needed to get openssl-sys to use pkg-config.
-  env.OPENSSL_NO_VENDOR = 1;
-
   # The wrapping is required so that the "sh-c" option of websocat works even
   # if sh is not in the PATH (as can happen, for instance, when websocat is
   # started as a systemd service).
@@ -61,15 +46,20 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --prefix PATH : ${lib.makeBinPath [ bash ]}
   '';
 
+  # Darwin requires local networking for the checks
+  __darwinAllowLocalNetworking = true;
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
 
   meta = {
     description = "Command-line client for WebSockets (like netcat/socat)";
     homepage = "https://github.com/vi/websocat";
-    changelog = "https://github.com/vi/websocat/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/vi/websocat/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       thoughtpolice
+      kybe236
     ];
     mainProgram = "websocat";
   };

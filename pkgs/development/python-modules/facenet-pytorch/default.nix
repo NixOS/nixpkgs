@@ -16,7 +16,6 @@ buildPythonPackage (finalAttrs: {
   pname = "facenet-pytorch";
   version = "2.5.3";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "timesler";
@@ -24,6 +23,13 @@ buildPythonPackage (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-3YVyqKgVLD5aePwyVQA8kOiqx32kqg9lxU2uwPWGkCU=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail \
+        "VERSION = '2.5.2'" \
+        "VERSION = '${finalAttrs.version}'"
+  '';
 
   build-system = [
     setuptools

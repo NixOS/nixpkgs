@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "starlink-grpc-core";
-  version = "1.2.5";
+  version = "1.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sparky8512";
     repo = "starlink-grpc-tools";
     tag = "v${version}";
-    hash = "sha256-+KQ0zzgbqnzeQZXBTxnclJQbRioirK8Ym4EjJSQA3ZE=";
+    hash = "sha256-dAm243jg+FViW/ai4MP+afQulLOy1kVFcn4YksRWZ20=";
   };
 
   pypaBuildFlags = [ "packaging" ];

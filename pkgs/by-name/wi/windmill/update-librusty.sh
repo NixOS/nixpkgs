@@ -34,8 +34,8 @@ fetchLibrustyV8 {
   version = "$NEW_VERSION";
   shas = {
     # NOTE; Follows supported platforms of package (see meta.platforms attribute)!
-    x86_64-linux = "$(nix-prefetch-url --type sha256 https://github.com/denoland/rusty_v8/releases/download/v"$NEW_VERSION"/librusty_v8_release_x86_64-unknown-linux-gnu.a.gz)";
-    aarch64-linux = "$(nix-prefetch-url --type sha256 https://github.com/denoland/rusty_v8/releases/download/v"$NEW_VERSION"/librusty_v8_release_aarch64-unknown-linux-gnu.a.gz)";
+    x86_64-linux = "$(nix-prefetch-url --type sha256 https://github.com/denoland/rusty_v8/releases/download/v"$NEW_VERSION"/librusty_v8_simdutf_release_x86_64-unknown-linux-gnu.a.gz)";
+    aarch64-linux = "$(nix-prefetch-url --type sha256 https://github.com/denoland/rusty_v8/releases/download/v"$NEW_VERSION"/librusty_v8_simdutf_release_aarch64-unknown-linux-gnu.a.gz)";
   };
 }
 EOF

@@ -183,15 +183,6 @@ with lib.maintainers;
     github = "cuda-maintainers";
   };
 
-  danklinux = {
-    members = [
-      luckshiba
-      marcusramberg
-    ];
-    scope = "Maintain DankMaterialShell and related packages and modules from Dank Linux.";
-    shortName = "Dank Linux";
-  };
-
   darwin = {
     github = "darwin-core";
     enableFeatureFreezePing = true;
@@ -231,6 +222,15 @@ with lib.maintainers;
     ];
     scope = "Maintainers of the .NET build tools and packages";
     shortName = "dotnet";
+  };
+
+  duxlabs = {
+    members = [
+      luckshiba
+      marcusramberg
+    ];
+    scope = "Maintain Dux Shell and related packages and modules from Dux Labs.";
+    shortName = "Dux Labs";
   };
 
   electron = {
@@ -379,7 +379,6 @@ with lib.maintainers;
 
   jetbrains = {
     members = [
-      leona
       theCapypara
       jamesward
     ];
@@ -433,6 +432,7 @@ with lib.maintainers;
   libretro = {
     members = [
       aanderse
+      iedame
       igorcafe
       thiagokokada
     ];
@@ -600,9 +600,7 @@ with lib.maintainers;
   };
 
   node = {
-    members = [ winter ];
-    scope = "Maintain Node.js runtimes and build tooling.";
-    shortName = "Node.js";
+    github = "node";
     enableFeatureFreezePing = true;
   };
 
@@ -766,6 +764,10 @@ with lib.maintainers;
   systemd = {
     github = "systemd";
     enableFeatureFreezePing = true;
+  };
+
+  tenstorrent = {
+    github = "tenstorrent";
   };
 
   test-driver = {

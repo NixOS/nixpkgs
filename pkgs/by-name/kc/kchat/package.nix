@@ -6,12 +6,12 @@
 
 appimageTools.wrapType2 rec {
   pname = "kchat";
-  version = "3.5.1";
+  version = "3.5.3";
 
   src = fetchurl {
     url = "https://download.storage5.infomaniak.com/kchat/kchat-desktop-${version}-linux-x86_64.AppImage";
     name = "kchat-${version}.AppImage";
-    hash = "sha256-3vF2a0Ej/io+045SywTKCQSfteTNhxSgoVbb5oAJN1Q=";
+    hash = "sha256-1WlOKVjazzmPuAbJR5woP0sE9EkSxmcsJnZrmTotFYg=";
   };
 
   extraInstallCommands =

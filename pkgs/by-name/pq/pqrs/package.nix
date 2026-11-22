@@ -2,6 +2,8 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  zstd,
+  pkg-config,
   versionCheckHook,
 }:
 
@@ -21,16 +23,27 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-P3yTmECj0K0mjWUiWlQCwuQVbnbVR1xFV5cE8Uo3U90=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
+
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
+  buildInputs = [
+    zstd
+  ];
+
   doInstallCheck = true;
 
   meta = {
     description = "CLI tool to inspect Parquet files";
     mainProgram = "pqrs";
     homepage = "https://github.com/manojkarthick/pqrs";
-    license = with lib.licenses; [
-      mit # or
-      asl20
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        mit
+        asl20
+      ];
     maintainers = [ lib.maintainers.manojkarthick ];
   };
 })

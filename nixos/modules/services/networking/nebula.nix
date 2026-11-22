@@ -33,14 +33,24 @@ let
       listen = {
         host = netCfg.listen.host;
         port = resolveFinalPort netCfg;
+      }
+      // lib.optionalAttrs (netCfg.listen.udpOffloads != null) {
+        udp_offloads = netCfg.listen.udpOffloads;
       };
       tun = {
         disabled = netCfg.tun.disable;
         dev = netCfg.tun.device;
+      }
+      // lib.optionalAttrs (netCfg.tun.useOffloads != null) {
+        use_offloads = netCfg.tun.useOffloads;
       };
       firewall = {
         inbound = netCfg.firewall.inbound;
         outbound = netCfg.firewall.outbound;
+      };
+      local_api = {
+        control.socket = "/var/run/nebula/${netName}/ctl.sock";
+        info.socket = "/var/run/nebula/${netName}/info.sock";
       };
     } netCfg.settings;
   format = pkgs.formats.yaml { };
@@ -65,6 +75,9 @@ let
       if (netCfg.isLighthouse || netCfg.isRelay) then 4242 else 0
     else
       netCfg.listen.port;
+
+  # Default for tun.use_offloads and listen.udp_offloads. null means unset.
+  defaultOffload = netCfg: if lib.versionAtLeast netCfg.package.version "1.12.0" then true else null;
 in
 {
   # Interface
@@ -201,6 +214,18 @@ in
                   description = "Port number to listen on.";
                 };
 
+                listen.udpOffloads = lib.mkOption {
+                  type = lib.types.nullOr lib.types.bool;
+                  default = defaultOffload cfg.networks.${name};
+                  defaultText = "true if cfg.package is at least 1.12, else null";
+                  description = ''
+                    Enables UDP Generic Segmentation Offload (GSO, Linux kernel 4.18+)
+                    and Generic Receive Offload (GRO) on the UDP socket(s).
+                    Supported from Nebula 1.12, where it defaults to true. null means unset.
+                    See: https://nebula.defined.net/docs/config/listen/#listenudp_offloads
+                  '';
+                };
+
                 tun.disable = lib.mkOption {
                   type = lib.types.bool;
                   default = false;
@@ -213,6 +238,17 @@ in
                   type = lib.types.nullOr lib.types.str;
                   default = "nebula.${name}";
                   description = "Name of the tun device. Defaults to nebula.\${networkName}.";
+                };
+
+                tun.useOffloads = lib.mkOption {
+                  type = lib.types.nullOr lib.types.bool;
+                  default = defaultOffload cfg.networks.${name};
+                  defaultText = "true if cfg.package is at least 1.12, else null";
+                  description = ''
+                    Enable segment offloading on the tun device.
+                    Supported from Nebula 1.12, where it defaults to true. null means unset.
+                    See: https://nebula.defined.net/docs/config/tun/#tunuse_offloads
+                  '';
                 };
 
                 firewall.outbound = lib.mkOption {
@@ -364,6 +400,7 @@ in
               ProtectSystem = true;
               RestrictNamespaces = true;
               RestrictSUIDSGID = true;
+              RuntimeDirectory = "nebula/${netName}";
               User = netCfg.user;
               Group = netCfg.group;
             };

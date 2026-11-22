@@ -7,18 +7,18 @@
 
 rustPlatform.buildRustPackage {
   pname = "uefisettings";
-  version = "0-unstable-2026-10-02";
+  version = "0.1.6-unstable-2026-11-05";
 
   src = fetchFromGitHub {
     owner = "linuxboot";
     repo = "uefisettings";
-    rev = "bfd6e9c74719ce26a2f6c8cc5be8913b62dac3cb";
-    hash = "sha256-kcVwK8kOlT/9OcL+6BBhn7wDCtrySo42BAIQu5EUP+U=";
+    rev = "51b4472c8b6d0bcbaafe248a6fb267bd4d01ff07";
+    hash = "sha256-LOx5KJIoP8NHVPq5B9QgiaiJUXjpcCkoSgcmBbgWvRE=";
   };
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch=main" ]; };
 
-  cargoHash = "sha256-qxWC/OmHwsdLa4CefrJIJD6AEBx19zyQNrSAE+lX6uU=";
+  cargoHash = "sha256-BBZWF069TH06J9c6imYlNEeef2hGlv0qAdIKojAdYCs=";
 
   checkFlags = [
     # Expects filesystem access to /proc and rootfs

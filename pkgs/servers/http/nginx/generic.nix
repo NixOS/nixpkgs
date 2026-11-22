@@ -8,6 +8,7 @@ outer@{
   pcre2,
   libxml2,
   libxslt,
+  libxcrypt,
   nginx-doc,
 
   nixosTests,
@@ -32,6 +33,7 @@ outer@{
   pname ? "nginx",
   version,
   nginxVersion ? version,
+  flavor ? "stable",
   src ? null, # defaults to upstream nginx ${version}
   hash ? null, # when not specifying src
   configureFlags ? [ ],
@@ -114,13 +116,13 @@ mkDerivation {
     pcre2
     libxml2
     libxslt
-    perl
+    libxcrypt
   ]
   ++ buildInputs
   ++ mapModules "buildInputs"
   ++ lib.optional withGeoIP geoip
-  ++ lib.optional withImageFilter gd;
-
+  ++ lib.optional withImageFilter gd
+  ++ lib.optional withPerl perl;
   dontAddStaticConfigureFlags = true;
 
   configureFlags = [
@@ -313,25 +315,31 @@ mkDerivation {
     postInstall + dynamicPost;
 
   passthru = {
-    inherit modules dynamicModules;
+    inherit modules dynamicModules flavor;
     tests =
       passthru.tests or {
-        inherit (nixosTests)
-          nginx
-          nginx-auth
-          nginx-dynamic-modules
-          nginx-etag
-          nginx-etag-compression
-          nginx-globalredirect
-          nginx-http3
-          nginx-lua
-          nginx-proxyprotocol
-          nginx-pubhtml
-          nginx-sso
-          nginx-status-page
-          nginx-unix-socket
+        inherit (nixosTests.nginx.${flavor})
+          auth
+          basic
+          etag
+          etag-compression
+          dynamic-modules
+          http3
+          globalredirect
+          grpc-error-pages
+          lua
+          mime
+          modsecurity
+          moreheaders
+          njs
+          otel
+          proxyprotocol
+          pubhtml
+          sso
+          status-page
+          tmpdir
+          unix-socket
           ;
-        variants = lib.recurseIntoAttrs nixosTests.nginx-variants;
         acme-integration = nixosTests.acme.nginx;
         acme-integration-without-reload = nixosTests.acme.nginx-without-reload;
       };

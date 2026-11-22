@@ -3,7 +3,9 @@
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
+  libgit2,
   openssl,
+  sqlite,
   stdenv,
   installShellFiles,
   nix-update-script,
@@ -27,7 +29,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pkg-config
     installShellFiles
   ];
-  buildInputs = [ openssl.dev ];
+  buildInputs = [
+    libgit2
+    openssl.dev
+    sqlite
+  ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd dioxionary \

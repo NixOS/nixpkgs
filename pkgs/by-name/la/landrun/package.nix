@@ -105,7 +105,7 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = [
       lib.maintainers.fliegendewurst
-      lib.maintainers.bpeetz
+      lib.maintainers.soispha
     ];
     platforms = lib.platforms.linux;
   };

@@ -1,21 +1,22 @@
 {
   lib,
-  flutter335,
+  flutter347,
   fetchFromGitHub,
   autoPatchelfHook,
   zenity,
   ninja,
+  libserialport,
 }:
 
-flutter335.buildFlutterApplication rec {
+flutter347.buildFlutterApplication rec {
   pname = "chameleonultragui";
-  version = "1.3";
+  version = "1.4";
 
   src = fetchFromGitHub {
     owner = "GameTec-live";
     repo = "ChameleonUltraGUI";
     tag = version;
-    hash = "sha256-9Hwjx1nt/QD520eLMAB5xyFjOGfjZSwS83ARNn8GsFo=";
+    hash = "sha256-4TgnHnymipSaC0Gi4tmWwNrXGyfWG5alNaqBbr6nw7Y=";
   };
 
   sourceRoot = "${src.name}/chameleonultragui";
@@ -31,12 +32,12 @@ flutter335.buildFlutterApplication rec {
   buildInputs = [
     zenity
     ninja
+    libserialport
   ];
 
-  postPatch = ''
-    substituteInPlace linux/main.cc \
-      --replace-fail '"../shared", "librecovery.so"' '"lib", "librecovery.so"'
-  '';
+  runtimeDependencies = [
+    libserialport
+  ];
 
   postInstall = ''
     install -Dm0644 aur/chameleonultragui.desktop $out/share/applications/chameleonultragui.desktop

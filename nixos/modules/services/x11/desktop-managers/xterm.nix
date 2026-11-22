@@ -15,6 +15,8 @@ let
 in
 
 {
+  meta.maintainers = [ maintainers.booxter ];
+
   options = {
 
     services.xserver.desktopManager.xterm.enable = mkOption {

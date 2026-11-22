@@ -20,6 +20,7 @@
   odbcSupport ? false,
   parallelBuild ? true,
 
+  coreutils,
   fetchFromGitHub,
   gawk,
   gnum4,
@@ -72,6 +73,7 @@ let
       systemdSupport;
 
   runtimePath = lib.makeBinPath [
+    coreutils
     gawk
     gnused
   ];
@@ -133,9 +135,7 @@ stdenv.mkDerivation {
   ++ optional odbcSupport "--with-odbc=${unixodbc}"
   ++ optional wxSupport "--enable-wx"
   ++ optional enableSystemd "--enable-systemd"
-  ++ optional stdenv.hostPlatform.isDarwin "--enable-darwin-64bit"
-  # make[3]: *** [yecc.beam] Segmentation fault: 11
-  ++ optional (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) "--disable-jit";
+  ++ optional stdenv.hostPlatform.isDarwin "--enable-darwin-64bit";
 
   installTargets = [
     "install"

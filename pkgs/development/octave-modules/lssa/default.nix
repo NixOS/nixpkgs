@@ -10,7 +10,7 @@ buildOctavePackage rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "10h9lzsi7pqh93i7y50b618g05fnbw9n0i505bz5kz4avfa990zh";
+    hash = "sha256-8IOUlNuK/Fn+KqBEYBNf1hXwUDALFH/iSBDfE/WnCYI=";
   };
 
   meta = {

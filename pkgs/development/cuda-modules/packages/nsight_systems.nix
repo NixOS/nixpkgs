@@ -2,6 +2,7 @@
   backendStdenv,
   boost178,
   boost186,
+  boost191,
   buildRedist,
   cudaAtLeast,
   e2fsprogs,
@@ -48,7 +49,13 @@ buildRedist (
         lib.getLib qt.qtwayland;
     qtWaylandPlugins = "${qtwayland}/${qt.qtbase.qtPluginPrefix}";
     inherit (qt) wrapQtAppsHook qtwebengine;
-    boost = if cudaAtLeast "13.4" then boost186 else boost178;
+    boost =
+      if cudaAtLeast "13.5" then
+        boost191
+      else if cudaAtLeast "13.4" then
+        boost186
+      else
+        boost178;
   in
   {
     redistName = "cuda";

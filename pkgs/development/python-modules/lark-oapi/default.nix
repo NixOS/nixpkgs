@@ -14,14 +14,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "lark-oapi";
-  version = "1.7.3";
+  version = "1.7.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "larksuite";
     repo = "oapi-sdk-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JO5xhGEwRBGOw8jXjaVKJPjB3P7yPhBQrHOg+t38Enc=";
+    hash = "sha256-NR/6xYWrhBhAGTj09i57qqR5zIYqSJPHfoT7gBokBdc=";
   };
 
   build-system = [ setuptools ];

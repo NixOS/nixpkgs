@@ -5,6 +5,8 @@
   fetchFromGitHub,
   rustPlatform,
   pkgs,
+  pkg-config,
+  zstd,
 
   # tests
   pytestCheckHook,
@@ -29,9 +31,12 @@ buildPythonPackage (finalAttrs: {
   };
 
   nativeBuildInputs = [
+    pkg-config
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
   ];
+
+  buildInputs = [ zstd ];
 
   env = {
     # libclang.so
@@ -46,17 +51,15 @@ buildPythonPackage (finalAttrs: {
     # Disable all default features to get rid of "lto"
     "--no-default-features"
     # Manually re-enable bindgen-runtime
-    "--features bindgen-runtime"
+    "--features"
+    "bindgen-runtime"
   ];
 
   pythonImportsCheck = [ "rocksdict" ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
-  enabledTestPaths = [
-    "test"
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  enabledTestPaths = [ "test" ];
 
   # Trace/BPT Trap 5 calling `pytest` on darwin.
   doCheck = !stdenv.hostPlatform.isDarwin;

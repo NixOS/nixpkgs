@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.freedesktop.org/xorg/app/xdpyinfo";
     license = lib.licenses.mitOpenGroup;
     mainProgram = "xdpyinfo";
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.booxter ];
     platforms = lib.platforms.unix;
   };
 })

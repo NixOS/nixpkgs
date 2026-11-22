@@ -2,6 +2,7 @@
   lib,
   stdenv,
   buildPythonPackage,
+  pythonOlder,
   celery,
   fetchFromGitHub,
   flit-core,
@@ -24,14 +25,16 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "django-health-check";
-  version = "4.8.0";
+  version = "4.10.0";
   pyproject = true;
+
+  disabled = pythonOlder "3.14";
 
   src = fetchFromGitHub {
     owner = "codingjoe";
     repo = "django-health-check";
     tag = finalAttrs.version;
-    hash = "sha256-nz6ymaUz9FsNexFfMebVZ7+a1zExXCaDRC52Ly/OgP4=";
+    hash = "sha256-l4/C6Z6SbNP4AZXDTl8WE45MXO6CN+RBwAOqsBhhZFQ=";
   };
 
   build-system = [

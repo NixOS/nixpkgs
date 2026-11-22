@@ -47,6 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script {
     extraArgs = [
       "--url=https://github.com/JetBrains/kotlin-toolchain"
+      "--version-regex=^v(\\d+\\.\\d+\\.\\d+)$"
     ];
   };
 

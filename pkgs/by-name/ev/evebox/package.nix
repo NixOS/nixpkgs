@@ -3,6 +3,8 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
+  pkg-config,
+  sqlite,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -18,12 +20,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-b3PQQlSRt1ysnJIkBXdG1KRUdEJ8h1WLzbmZXx9VjqU=";
 
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ sqlite ];
+
   meta = {
     description = "Web Based Event Viewer (GUI) for Suricata EVE Events in Elastic Search";
     homepage = "https://evebox.org/";
     changelog = "https://github.com/jasonish/evebox/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ felbinger ];
-    broken = stdenv.hostPlatform.isDarwin;
   };
 })

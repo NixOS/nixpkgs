@@ -13,11 +13,11 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xmag";
-  version = "1.0.8";
+  version = "1.0.9";
 
   src = fetchurl {
     url = "mirror://xorg/individual/app/xmag-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Mm08WD15W7U6xgnRROf3+xSZurp+rsFLjmzSMuoGlTI=";
+    hash = "sha256-h9gsDAjATvGpmIcFo1BilWUHd7Jt6ul62pahcgmCwCQ=";
   };
 
   strictDeps = true;

@@ -23,12 +23,12 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "apprise";
-  version = "1.13.0";
+  version = "2.2.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-mlaWS/PKAEs+DbmKuKjYf60FHY7bN3vBZtxL6CZmbIE=";
+    hash = "sha256-cROCt8Nm5XUnaGPacvVHPjTbFzWpmA9t9GSzN6gAPrw=";
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -58,6 +58,9 @@ buildPythonPackage (finalAttrs: {
     pytest-mock
     pytestCheckHook
   ];
+
+  # HTTP tests start local servers.
+  __darwinAllowLocalNetworking = true;
 
   postInstall = ''
     installManPage packaging/man/apprise.1

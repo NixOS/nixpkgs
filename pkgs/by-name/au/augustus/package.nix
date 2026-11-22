@@ -54,7 +54,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
       Thra11
-      matteopacini
     ];
   };
 })

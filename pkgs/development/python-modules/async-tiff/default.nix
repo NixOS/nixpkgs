@@ -9,6 +9,8 @@
   llvmPackages,
   maturin,
   obspec,
+  pkg-config,
+  pkgsHostTarget,
 
   # tests dependencies
   pytestCheckHook,
@@ -36,7 +38,10 @@ buildPythonPackage (finalAttrs: {
 
   buildSystem = [ maturin ];
 
-  buildInputs = [ llvmPackages.libclang ];
+  buildInputs = [
+    llvmPackages.libclang
+    pkgsHostTarget.zstd
+  ];
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     pname = finalAttrs.pname;
@@ -53,6 +58,7 @@ buildPythonPackage (finalAttrs: {
     cargoSetupHook
     maturinBuildHook
     rustPlatform.bindgenHook
+    pkg-config
   ];
 
   dependencies = [

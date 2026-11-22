@@ -1,26 +1,33 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   oslotest,
-  stestr,
   pbr,
   setuptools,
+  stestrCheckHook,
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "oslo-context";
   version = "6.5.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit version;
-    pname = "oslo_context";
-    hash = "sha256-fh+wPGqXFnlZ832TAwAVTg7oN+zbhXmMK76IeLVsqq8=";
+  src = fetchFromGitHub {
+    owner = "openstack";
+    repo = "oslo.context";
+    tag = finalAttrs.version;
+    hash = "sha256-T5mDtkDLVZORNQZA84StgqEQAKIF0aK1R0zIObIeWf4=";
   };
 
+  # Manually set version since pbr wants to get it from git (not in a tarball)
+  env.PBR_VERSION = finalAttrs.version;
+
   postPatch = ''
+    # pbr needs git to ship subpackages and package data
+    echo "recursive-include oslo_context *" > MANIFEST.in
+
     # only a small portion of the listed packages are actually needed for running the tests
     # so instead of removing them one by one remove everything
     rm test-requirements.txt
@@ -35,14 +42,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     oslotest
-    stestr
+    stestrCheckHook
   ];
-
-  checkPhase = ''
-    runHook preCheck
-    stestr run
-    runHook postCheck
-  '';
 
   pythonImportsCheck = [ "oslo_context" ];
 
@@ -52,4 +53,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     teams = [ lib.teams.openstack ];
   };
-}
+})

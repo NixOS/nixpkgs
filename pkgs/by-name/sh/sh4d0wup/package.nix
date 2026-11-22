@@ -1,5 +1,6 @@
 {
   lib,
+  aws-lc,
   fetchFromGitHub,
   gcc,
   go,
@@ -36,6 +37,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pkg-config
   ];
   buildInputs = [
+    aws-lc
     openssl
     pcsclite
     xz
@@ -47,6 +49,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   checkInputs = [ sequoia-sq ];
+  checkFlags = [
+    # Ignored upstream, remove with the next release
+    # https://github.com/kpcyrd/sh4d0wup/commit/8c891c976de90d4bc00a264bad19262d28bd3f45
+    "--skip=sign::pgp::tests::test_sign_cleartext"
+  ];
   preCheck = ''
     export XDG_DATA_DIRS=$XDG_DATA_DIRS:${shared-mime-info}/share
   '';

@@ -30,7 +30,6 @@ buildPythonPackage (finalAttrs: {
   pname = "deepsearch-toolkit";
   version = "2.0.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "DS4SD";

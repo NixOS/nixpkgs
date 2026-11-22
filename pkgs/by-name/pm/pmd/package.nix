@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pmd";
-  version = "6.55.0";
+  version = "7.28.0";
 
   src = fetchurl {
-    url = "https://github.com/pmd/pmd/releases/download/pmd_releases/${finalAttrs.version}/pmd-bin-${finalAttrs.version}.zip";
-    hash = "sha256-Iaz5bUPLQNWRyszMHCCmb8eW6t32nqYYEllER7rHoR0=";
+    url = "https://github.com/pmd/pmd/releases/download/pmd_releases/${finalAttrs.version}/pmd-dist-${finalAttrs.version}-bin.zip";
+    hash = "sha256-+XS6Vx97wBxz//4Rut4l+8H0OGmPnpwA5Bbo1l6fusI=";
   };
 
   nativeBuildInputs = [
@@ -27,16 +27,10 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    install -Dm755 bin/run.sh $out/libexec/pmd
-    install -Dm644 lib/*.jar -t $out/lib/pmd
-
-    wrapProgram $out/libexec/pmd \
-        --prefix PATH : ${jdk8.jre}/bin \
-        --set LIB_DIR $out/lib/pmd
-
-    for app in pmd cpd cpdgui designer bgastviewer designerold ast-dump; do
-        makeWrapper $out/libexec/pmd $out/bin/$app --argv0 $app --add-flags $app
-    done
+    mkdir -p $out/bin
+    install -m755 bin/pmd $out/bin/pmd
+    cp -r lib conf $out/
+    wrapProgram $out/bin/pmd --suffix PATH : ${jdk8.jre}/bin
 
     runHook postInstall
   '';

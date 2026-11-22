@@ -1,7 +1,9 @@
 {
   lib,
   buildPythonPackage,
+  cacert,
   fetchFromGitHub,
+  python,
   blinker,
   flask,
 }:
@@ -20,6 +22,11 @@ buildPythonPackage rec {
 
   # requires outdated dependencies which have no official support for python 3.4
   doCheck = false;
+
+  postFixup = ''
+    rm $out/${python.sitePackages}/raven/data/cacert.pem
+    ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $out/${python.sitePackages}/raven/data/cacert.pem
+  '';
 
   pythonImportsCheck = [ "raven" ];
 

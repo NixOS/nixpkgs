@@ -4,6 +4,7 @@
   python3,
   testers,
   jrnl,
+  writableTmpDirAsHomeHook,
 }:
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
@@ -52,11 +53,8 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     pytest-xdist
     (pytestCheckHook.override { pytest = pytest_7; })
     toml
+    writableTmpDirAsHomeHook
   ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d);
-  '';
 
   pythonImportsCheck = [ "jrnl" ];
 

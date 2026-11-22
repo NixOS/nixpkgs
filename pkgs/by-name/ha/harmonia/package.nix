@@ -2,6 +2,8 @@
   lib,
   fetchFromGitHub,
   openssl,
+  zstd,
+  sqlite,
   pkg-config,
   rustPlatform,
   nix-update-script,
@@ -28,6 +30,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     openssl
+    zstd
+    sqlite
   ];
 
   passthru = {

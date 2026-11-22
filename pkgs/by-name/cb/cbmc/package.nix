@@ -67,6 +67,10 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace src/solvers/CMakeLists.txt \
      --replace-fail "@srccadical@" "$PWD/srccadical" \
      --replace-fail "@srcglucose@" "$PWD/srcglucose"
+
+    # libc++ 22 rejects the hardcoded macOS deployment target 10.15
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "set(CMAKE_OSX_DEPLOYMENT_TARGET 10.15)" ""
   ''
   + lib.optionalString (!stdenv.cc.isGNU) ''
     # goto-gcc rely on gcc

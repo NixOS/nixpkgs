@@ -18,14 +18,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "xiaomi-ble";
-  version = "1.17.0";
+  version = "1.22.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = "xiaomi-ble";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wzl2E3LOPALnj40luIE16Kxj+2qHx3iNzmaGL4umxvE=";
+    hash = "sha256-I7iTreeJp9RxKVWHHTBf21TO2GanFAvDJNj+Va8KKHg=";
   };
 
   build-system = [ poetry-core ];
@@ -55,7 +55,7 @@ buildPythonPackage (finalAttrs: {
     description = "Library for Xiaomi BLE devices";
     homepage = "https://github.com/Bluetooth-Devices/xiaomi-ble";
     changelog = "https://github.com/Bluetooth-Devices/xiaomi-ble/releases/tag/${finalAttrs.src.tag}";
-    license = lib.licenses.mit;
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
 })

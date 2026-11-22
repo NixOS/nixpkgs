@@ -14,8 +14,6 @@ buildPythonPackage (finalAttrs: {
   version = "3.4";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "ValvePython";
     repo = "vdf";

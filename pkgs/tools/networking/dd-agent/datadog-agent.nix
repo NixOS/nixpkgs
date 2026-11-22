@@ -24,8 +24,6 @@ let
   repo = "datadog-agent";
   goPackagePath = "github.com/${owner}/${repo}";
   version = "7.75.0";
-  # TODO: remove when https://github.com/NixOS/nixpkgs/pull/571072 hits master
-  systemdLibs' = systemdLibs.override { withCompression = true; };
 
   src = fetchFromGitHub {
     inherit owner repo;
@@ -64,7 +62,7 @@ buildGoModule rec {
     pkg-config
     makeWrapper
   ];
-  buildInputs = [ rtloader ] ++ lib.optionals withSystemd [ systemdLibs' ];
+  buildInputs = [ rtloader ] ++ lib.optionals withSystemd [ systemdLibs ];
 
   proxyVendor = true;
 
@@ -116,7 +114,7 @@ buildGoModule rec {
       --set PYTHONPATH "$out/${python.sitePackages}"''
   + lib.optionalString withSystemd " --prefix LD_LIBRARY_PATH : ${
      lib.makeLibraryPath [
-       (lib.getLib systemdLibs')
+       (lib.getLib systemdLibs)
        rtloader
      ]
    }";
@@ -132,7 +130,10 @@ buildGoModule rec {
       -- v6 new golang implementation.
     '';
     homepage = "https://www.datadoghq.com";
-    license = lib.licenses.bsd3;
+    license = lib.licenses.AND [
+      lib.licenses.asl20
+      lib.licenses.gpl2Only
+    ];
     maintainers = with lib.maintainers; [
       thoughtpolice
     ];

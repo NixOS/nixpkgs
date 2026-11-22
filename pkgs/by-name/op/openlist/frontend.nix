@@ -12,18 +12,18 @@
 }:
 buildNpmPackage (finalAttrs: {
   pname = "openlist-frontend";
-  version = "4.2.6";
+  version = "4.2.10";
 
   src = fetchFromGitHub {
     owner = "OpenListTeam";
     repo = "OpenList-Frontend";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-m/5DoGnmOAVv8PGWwUWEUntiQNAzUbJ5pIhP4JsRt+s=";
+    hash = "sha256-vR+2vhmJKw8VeG5eLGlu6sIC+XrvgPyEW6M60FlP/Qc=";
   };
 
   i18n = fetchzip {
     url = "https://github.com/OpenListTeam/OpenList-Frontend/releases/download/v${finalAttrs.version}/i18n.tar.gz";
-    hash = "sha256-0+y4/stjTMek65Poq8Qfxadta0UrLefdFHxk6S9MGbM=";
+    hash = "sha256-ekm55QngHhmOXcZpA0oFDD5CszrIr4Afr7VIiCz8n8Y=";
     stripRoot = false;
   };
 
@@ -41,7 +41,7 @@ buildNpmPackage (finalAttrs: {
     inherit (finalAttrs) pname version src;
     pnpm = openlistPnpm;
     fetcherVersion = 4;
-    hash = "sha256-06zs01JrlsCFuOWvREEOGuk/6bR7lwGh7cV7ZeBunzQ=";
+    hash = "sha256-nT5Zmh4MDnrY2FDiTpcAOcYFovmN4nJ8yQ4FBMmfrc8=";
   };
 
   npmConfigHook = pnpmConfigHook;
@@ -49,13 +49,6 @@ buildNpmPackage (finalAttrs: {
   # [plugin vite:legacy-generate-polyfill-chunk]
   # Error: getaddrinfo ENOTFOUND localhost
   __darwinAllowLocalNetworking = true;
-
-  preBuild = ''
-    rm -rf node_modules/mpegts.js
-    cp -R ${finalAttrs.passthru.mpegts-js}/lib/node_modules/mpegts.js node_modules/mpegts.js
-    chmod -R u+w node_modules/mpegts.js
-    test -f node_modules/mpegts.js/dist/mpegts.js
-  '';
 
   installPhase = ''
     runHook preInstall
@@ -65,25 +58,6 @@ buildNpmPackage (finalAttrs: {
 
     runHook postInstall
   '';
-
-  passthru = {
-    # OpenList depends on a forked mpegts.js git package whose source does not include the generated dist/
-    mpegts-js = buildNpmPackage {
-      pname = "mpegts-js-openlist";
-      version = "1.8.1-unstable-2026-05-16";
-
-      src = fetchFromGitHub {
-        owner = "OpenListTeam";
-        repo = "mpegts.js";
-        rev = "1e51e0f6f918cf08e05dfae9c7bfcf658d6b4ac2";
-        hash = "sha256-z+S3iSYqrMuxFRGa5JZIfGMyi7IErpnluwZUVLxqz2o=";
-      };
-
-      npmDepsHash = "sha256-UDI0iPK/ouVgpzscGrQXNnVUseLWYmR0W9THpBm4WqA=";
-
-      meta.license = lib.licenses.asl20;
-    };
-  };
 
   meta = {
     description = "Frontend of OpenList";

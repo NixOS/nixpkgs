@@ -289,33 +289,6 @@ with self;
     ];
   };
 
-  bonsai = janePackage {
-    pname = "bonsai";
-    hash = "150zx2g1dmhyrxwqq8j7f2m3hjpmk5bk182ihx2gdbarhw1ainpm";
-    meta.description = "Library for building dynamic webapps, using Js_of_ocaml";
-    buildInputs = [ ppx_pattern_bind ];
-    nativeBuildInputs = [
-      js_of_ocaml-compiler
-      ocaml-embed-file
-    ];
-    propagatedBuildInputs = [
-      async
-      async_extra
-      async_rpc_websocket
-      cohttp-async
-      core_bench
-      fuzzy_match
-      incr_dom
-      js_of_ocaml-ppx
-      patdiff
-      ppx_css
-      ppx_typed_fields
-      profunctor
-      textutils
-    ];
-    patches = [ ./bonsai_jsoo_4_0.patch ];
-  };
-
   cinaps = janePackage {
     pname = "cinaps";
     version = "0.15.1";
@@ -620,7 +593,7 @@ with self;
       # remove on next release
       (fetchpatch {
         url = "https://github.com/janestreet/jst-config/commit/e5fdac6e5df9ba93e014a4d2db841fdbf209446f.patch";
-        sha256 = "sha256-8hVC76z5ilYD/++xRHVswy/l+zzDt63jH4hfSJ/rPaA=";
+        hash = "sha256-8hVC76z5ilYD/++xRHVswy/l+zzDt63jH4hfSJ/rPaA=";
       })
     ];
   };
@@ -662,23 +635,6 @@ with self;
       base
       sexplib0
     ];
-  };
-
-  patdiff = janePackage {
-    pname = "patdiff";
-    hash = "0623a7n5r659rkxbp96g361mvxkcgc6x9lcbkm3glnppplk5kxr9";
-
-    # Used by patdiff-git-wrapper.  Providing it here also causes the shebang
-    # line to be automatically patched.
-    buildInputs = [ bash ];
-    propagatedBuildInputs = [
-      core_unix
-      patience_diff
-      ocaml_pcre
-    ];
-    meta = {
-      description = "File Diff using the Patience Diff algorithm";
-    };
   };
 
   patience_diff = janePackage {

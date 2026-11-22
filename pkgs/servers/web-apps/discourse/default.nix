@@ -12,6 +12,8 @@
 
   defaultGemConfig,
   ruby_3_4,
+  pkg-config,
+  oniguruma,
   fetchzip,
   gzip,
   gnutar,
@@ -40,7 +42,7 @@
   buildRubyGem,
   rustc,
   cargo,
-  pnpm_10,
+  pnpm_12,
   fetchPnpmDeps,
   pnpmConfigHook,
   svgo,
@@ -54,16 +56,16 @@
 }:
 
 let
-  version = "2026.9.0";
+  version = "2026.10.2";
 
   src = fetchFromGitHub {
     owner = "discourse";
     repo = "discourse";
     tag = "v${version}";
-    hash = "sha256-xOZyoDA+/UPV/art5z8lNSM7RfNejeYcZAL+JzrPk7A=";
+    hash = "sha256-MhNm5htlCXXO/oCKzyr2EZxXQczqsWhjtM0KUcJ/S1Q=";
   };
 
-  pnpm = pnpm_10;
+  pnpm = pnpm_12;
 
   ruby = ruby_3_4;
 
@@ -99,6 +101,7 @@ let
   runtimeEnv = {
     HOME = "/run/discourse/home";
     RAILS_ENV = "production";
+    RAILS_LOG_TO_STDOUT = "1";
     UNICORN_LISTENER = "/run/discourse/sockets/unicorn.sock";
   };
 
@@ -250,8 +253,13 @@ let
           nativeBuildInputs = [
             cargo
             rustc
+            pkg-config
             rustPlatform.cargoSetupHook
             rustPlatform.bindgenHook
+          ];
+
+          buildInputs = [
+            oniguruma
           ];
 
           disallowedReferences = [
@@ -349,8 +357,8 @@ let
     pnpmDeps = fetchPnpmDeps {
       pname = "discourse-assets";
       inherit version src pnpm;
-      fetcherVersion = 3;
-      hash = "sha256-oahr5SJzHfIfcB7NFxeeEYDf3Q4m/iC/JMpNjlEWgSE=";
+      fetcherVersion = 4;
+      hash = "sha256-gi0mf6NtwhjeDE7zb5inCUg28V+bcbqq7AfuNWCOOYI=";
     };
 
     nativeBuildInputs = runtimeDeps ++ [
@@ -369,7 +377,7 @@ let
 
     outputs = [
       "out"
-      "node_modules"
+      "runtime_node_modules"
       "generated"
       "frontend"
     ];
@@ -448,6 +456,7 @@ let
 
       patchShebangs script/
       patchShebangs bin/
+      node script/copy_vendored_assets.mjs
       bundle exec rake assets:precompile
 
       runHook postBuild
@@ -458,17 +467,16 @@ let
 
       mv public/assets $out
 
-      mv node_modules $node_modules
+      # https://github.com/discourse/discourse/blob/v2026.10.2/.github/workflows/tests.yml#L294-L297
+      # cleanup node_modules the same way as discourse does it. This removes broken symlinks.
+      find . -name node_modules -type d -prune -not -path './tmp/*' -print0 | xargs -0 rm -rf
+      mv vendor/runtime_node_modules $runtime_node_modules
 
       mv app/assets/generated $generated
       mv frontend $frontend
 
       runHook postInstall
     '';
-
-    # The node_modules output by design has broken symlinks, as it refers to the source code.
-    # They are resolved in the primary discourse derivation.
-    dontCheckForBrokenSymlinks = true;
   };
 
   voiceAssets = rubyEnv.gems.discourse_voice_assets;
@@ -523,8 +531,15 @@ let
       # in the imagemagick sandbox, symlinks permissions are checked (as you would hope) but this causes other problems..
       ./optimize-image-fix.patch
 
-      # Skip voice plugin asset symlink removal/recreation at runtime.
-      ./voice-plugin-assets.patch
+      # Skip live plugin asset symlink removal/recreation at runtime.
+      ./live-plugin-assets.patch
+
+      # Change the location of the vips worker socket to
+      # /run/discourse/sockets/vips.sock because otherwise it tries to allocate
+      # it in the Nix store, which exceeds the maximum length (108 bytes) for
+      # UNIX socket path. Also prevents the code that spawn the socket from
+      # restricting permissions to the sockets directory
+      ./vips-socket-path.patch
     ];
 
     postPatch = ''
@@ -561,9 +576,9 @@ let
       ln -sf /run/discourse/config $out/share/discourse/config
       ln -sf /run/discourse/public $out/share/discourse/public
       ln -sf /run/discourse/assets-generated $out/share/discourse/app/assets/generated
-      ln -sf ${assets.node_modules} $out/share/discourse/node_modules
+      ln -sf ${assets.runtime_node_modules} $out/share/discourse/vendor/runtime_node_modules
       ln -sf ${assets} $out/share/discourse/public.dist/assets
-      # This needs to be copied because it contains symlinks to node_modules
+      # Discourse doesn't like when this is a symlink.
       rm -r $out/share/discourse/frontend
       cp -r ${assets.frontend} $out/share/discourse/frontend
       ${lib.concatMapStringsSep "\n" (
@@ -573,10 +588,10 @@ let
       # The voice plugin creates its asset symlink below its source tree. That
       # works during the asset build, but the package source tree is read-only
       # at runtime..
-      mkdir -p $out/share/discourse/plugins/voice/public/javascripts
+      mkdir -p $out/share/discourse/plugins/live/public/javascripts
       ln -sf \
         ${voiceAssets}/lib/ruby/gems/${rubyEnv.ruby.version.libDir}/gems/discourse_voice_assets-${voiceAssets.version}/vendor \
-        $out/share/discourse/plugins/voice/public/javascripts/${voiceAssets.version}
+        $out/share/discourse/plugins/live/public/javascripts/${voiceAssets.version}
 
       runHook postInstall
     '';

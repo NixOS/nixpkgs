@@ -15,19 +15,19 @@
 
 let
   pname = "bcompare";
-  version = "5.2.4.32425";
+  version = "5.2.7.32913";
 
   throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
   srcs = {
     x86_64-linux = fetchurl {
       url = "https://www.scootersoftware.com/files/bcompare-${version}_amd64.deb";
-      sha256 = "sha256-gXmz7ZgTLPNzqckzKV7r+B8V0oS10/GQNTM0/0EYs3s=";
+      hash = "sha256-eIPukT6BtXe8CS5EUeaz2xOPMSJ+bt/CtYpdOs0VcfQ=";
     };
 
     aarch64-darwin = fetchurl {
       url = "https://www.scootersoftware.com/files/BCompareOSX-${version}.zip";
-      sha256 = "sha256-CzAARAKDBSORI/zCELEdA8VRdWXHq+sMHGPkr3wV+G8=";
+      hash = "sha256-djhYz2ZadvZEasMZQjsedoMvAXyykMJvZeZu/HE3TCc=";
     };
   };
 
@@ -67,10 +67,16 @@ let
         substituteInPlace $out/bin/bcompare \
           --replace-fail "/usr/lib/beyondcompare" "$out/lib/beyondcompare" \
           --replace-fail "ldd" "${glibc.bin}/bin/ldd" \
-          --replace-fail "/bin/bash" "${runtimeShell}"
+          --replace-fail "/bin/bash" "${runtimeShell}" \
+          --replace-fail "QT_QPA_PLATFORM=xcb" 'QT_QPA_PLATFORM="''${QT_QPA_PLATFORM:-wayland;xcb}"'
 
         substituteInPlace $out/lib/beyondcompare/bcmount.sh \
           --replace-fail "python3" "${python.interpreter}"
+      '';
+
+      postFixup = ''
+        # redirect /usr/share/zoneinfo to /etc/zoneinfo (exact 19 bytes) to fix profiles hang
+        sed --in-place "s|/usr/share/zoneinfo|/etc/./././zoneinfo|g" $out/lib/beyondcompare/BCompare
       '';
 
       nativeBuildInputs = [

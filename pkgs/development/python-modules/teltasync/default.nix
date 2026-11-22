@@ -12,14 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "teltasync";
-  version = "0.4.0";
+  version = "0.4.1";
   pyproject = true;
 
   src = fetchFromCodeberg {
     owner = "dmho";
     repo = "teltasync";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xR4Rh2TnnsXAqicRDBQyhwpUh5zl5cWS6BuyxY/RFsE=";
+    hash = "sha256-T364eXkmvNQSNVVh3qKyK9QSkvI1SNMSGD5b2WzHHZ4=";
   };
 
   postPatch = ''

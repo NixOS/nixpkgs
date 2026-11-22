@@ -7,6 +7,9 @@
   nix-update-script,
   tzdata,
   fuse3,
+  aws-lc,
+  zstd,
+  pkg-config,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -25,9 +28,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildFeatures = lib.optionals stdenv.hostPlatform.isLinux [ "mount" ];
   checkFeatures = lib.subtractLists [ "mount" ] finalAttrs.buildFeatures; # we do not want `mount` during unit tests because it breaks rustic's test snapshots
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+  ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ fuse3 ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ fuse3 ] ++ [
+    aws-lc
+    zstd
+  ];
 
   nativeCheckInputs = [ tzdata ];
 

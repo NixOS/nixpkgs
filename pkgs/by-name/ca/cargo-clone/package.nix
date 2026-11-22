@@ -5,6 +5,7 @@
   pkg-config,
   libgit2,
   openssl,
+  sqlite,
   zlib,
 }:
 
@@ -28,6 +29,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     libgit2
     openssl
+    sqlite
     zlib
   ];
 

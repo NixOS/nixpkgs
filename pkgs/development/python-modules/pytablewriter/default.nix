@@ -33,6 +33,8 @@ buildPythonPackage rec {
     hash = "sha256-YuuSMKTSG3oybvA6TDWNnGg4EiDAw2tRlM0S9mBQlkc=";
   };
 
+  pythonRelaxDeps = [ "typepy" ];
+
   build-system = [ setuptools-scm ];
 
   dependencies = [

@@ -41,7 +41,7 @@ python3Packages.buildPythonApplication {
 
   meta = {
     description = "Simple tool to allow storage of signed, encrypted, incremental backups using Amazon's Glacier storage";
-    license = lib.licenses.lgpl2;
+    license = lib.licenses.gpl2Plus;
     homepage = "https://github.com/mrworf/iceshelf";
     maintainers = with lib.maintainers; [ mmahut ];
     mainProgram = "iceshelf";

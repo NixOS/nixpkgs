@@ -1,4 +1,9 @@
-{ buildRedist }:
+{
+  buildRedist,
+  cuda_cudart,
+  cudaAtLeast,
+  lib,
+}:
 buildRedist {
   redistName = "cuda";
   pname = "libcurand";
@@ -11,6 +16,9 @@ buildRedist {
     "static"
     "stubs"
   ];
+
+  # From CUDA 13.5 (cuRAND 10.4.5), libcurand.so links against libcudart.so.
+  buildInputs = lib.optionals (cudaAtLeast "13.5") [ cuda_cudart ];
 
   meta = {
     description = "GPU-accelerated random number generation library";

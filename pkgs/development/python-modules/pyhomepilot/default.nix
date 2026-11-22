@@ -10,11 +10,10 @@ buildPythonPackage (finalAttrs: {
   pname = "pyhomepilot";
   version = "0.0.3";
 
-  __structuredAttrs = true;
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "nico0302";
+    owner = "ngres";
     repo = "pyhomepilot";
     tag = "v${finalAttrs.version}";
     hash = "sha256-nscfONzo+numYygUBRO35rWM3/UoU8tYLKFpzlDH9QE=";
@@ -31,7 +30,7 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Python module to communicate with the Rademacher HomePilot API";
-    homepage = "https://github.com/nico0302/pyhomepilot";
+    homepage = "https://github.com/ngres/pyhomepilot";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };

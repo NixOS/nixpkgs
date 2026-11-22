@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cgreen";
-  version = "1.6.5";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "cgreen-devs";
     repo = "cgreen";
     rev = finalAttrs.version;
-    sha256 = "sha256-/D06k4c6xu9bL8z/DGnOLvgzOstTeR9PxW/J6a42rZs=";
+    sha256 = "sha256-YkHhEHr+ZSa2nlLtnTVB5dAdwtGd03mtijiqnnc1914=";
   };
 
   postPatch = ''

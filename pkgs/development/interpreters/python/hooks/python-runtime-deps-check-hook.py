@@ -79,9 +79,9 @@ def test_requirement(requirement: Requirement) -> bool:
         return False
 
     # Allow prereleases, to give to give us some wiggle-room
-    requirement.specifier.prereleases = True
-
-    if requirement.specifier and package.version not in requirement.specifier:
+    if requirement.specifier and not requirement.specifier.contains(
+        package.version, prereleases=True
+    ):
         error(
             f"{package_name}{requirement.specifier} not satisfied by version {package.version}"
         )

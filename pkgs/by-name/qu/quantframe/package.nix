@@ -17,6 +17,7 @@
   gtk3,
   gst_all_1,
   nix-update-script,
+  sqlite,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "quantframe";
@@ -74,6 +75,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
+    sqlite
   ];
 
   cargoRoot = "src-tauri";

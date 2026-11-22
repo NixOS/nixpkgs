@@ -1,22 +1,27 @@
 {
   lib,
   stdenv,
+  criterion,
   fetchFromGitHub,
   libpcap,
   nix-update-script,
-  testers,
-  ubridge,
+  nixosTests,
+  pkg-config,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ubridge";
-  version = "1.2.3";
+  version = "1.3.2";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "GNS3";
     repo = "ubridge";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-d/5E3JRel5/DGsowg10YxRX7JzcmuwtdP3Jo38GjwEc=";
+    hash = "sha256-KNhzRJB141KcTCa22BtIn7IzdY+/z8V8jysvfh56cws=";
   };
 
   postPatch = ''
@@ -36,11 +41,17 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  doCheck = true;
+  nativeCheckInputs = [ pkg-config ];
+  checkInputs = [ criterion ];
+  checkTarget = "test";
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+  versionCheckProgramArg = "-v";
+
   passthru = {
-    tests.version = testers.testVersion {
-      package = ubridge;
-      command = "ubridge -v";
-    };
+    tests.nixos = nixosTests.gns3-server;
     updateScript = nix-update-script { };
   };
 
@@ -58,6 +69,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       anthonyroussel
     ];
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    platforms = lib.platforms.linux;
   };
 })

@@ -11,7 +11,6 @@ buildPythonPackage (finalAttrs: {
   pname = "jsonpatch";
   version = "1.33";
 
-  __structuredAttrs = true;
   pyproject = true;
 
   src = fetchFromGitHub {

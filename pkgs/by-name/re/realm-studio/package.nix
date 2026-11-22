@@ -29,7 +29,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "Visual tool to view, edit, and model Realm databases";
     homepage = "https://www.mongodb.com/docs/atlas/device-sdks/studio/";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ matteopacini ];
+    maintainers = [ ];
     platforms = lib.platforms.darwin;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };

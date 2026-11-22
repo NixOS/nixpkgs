@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "BUILD_TESTS" finalAttrs.finalPackage.doCheck)
   ];
 
-  doCheck = true;
+  doCheck = lib.meta.availableOn stdenv.buildPlatform nodejs;
 
   __structuredAttrs = true;
   strictDeps = true;

@@ -6,40 +6,43 @@
   buildGoModule,
 }:
 let
-  name = "broadcast-box";
-  version = "0-unstable-2025-06-04";
+  pname = "broadcast-box";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     repo = "broadcast-box";
     owner = "Glimesh";
-    rev = "a091f147f750759084a2c9d25a12e815e2feebf8";
-    hash = "sha256-Evhye+DYtFM/VjxqmhH5kU32khvEFUxTUgH9DXytIbo=";
+    tag = "v${version}";
+    hash = "sha256-7SseHl5ii1kE5PYYal8ZIbP6tJeZjMwP063Ia/++u1E=";
   };
 
-  frontend = buildNpmPackage {
-    inherit version;
-    pname = "${name}-web";
-    src = "${src}/web";
-    npmDepsHash = "sha256-e1cCezmF20Q6JEXwPb1asRSXuC/GGaR+ImvrTabLl5c=";
-    preBuild = ''
-      # The VITE_API_PATH environment variable is needed
-      cp "${src}/.env.production" ../
-    '';
-    installPhase = ''
-      mkdir -p $out
-      cp -r build $out
-    '';
-  };
+  mkFrontend =
+    finalAttrs:
+    buildNpmPackage {
+      inherit (finalAttrs) version;
+      pname = "${finalAttrs.pname}-web";
+      src = "${finalAttrs.src}/web";
+      npmDepsHash = "sha256-eDbq/jhbPq98TmfYuh6rBid+HG7NxkPVufWC7YFtcKo=";
+
+      installPhase = ''
+        runHook preInstall
+
+        mkdir -p $out
+        cp -r build $out
+
+        runHook postInstall
+      '';
+    };
 in
-buildGoModule {
-  inherit version src frontend;
-  pname = name;
-  vendorHash = "sha256-Jpee7UmG9AB9SOoTv2fPP2l5BmkDPPdciGFu9Naq9h8=";
+buildGoModule (finalAttrs: {
+  inherit pname version src;
+  vendorHash = "sha256-0LyylgNtAD/HT/ojhyI2eo5e8G4+4BU1jO4zXkohAIs=";
   proxyVendor = true; # fixes darwin/linux hash mismatch
 
-  patches = [ ./allow-no-env.patch ];
+  frontend = mkFrontend finalAttrs;
+
   postPatch = ''
-    substituteInPlace main.go \
+    substituteInPlace internal/environment/environment.go \
       --replace-fail './web/build' '${placeholder "out"}/share'
   '';
 
@@ -47,7 +50,7 @@ buildGoModule {
     runHook preInstall
 
     mkdir -p $out/share
-    cp -r $frontend/build/* $out/share
+    ln -s $frontend/build/* $out/share
 
     install -Dm755 $GOPATH/bin/broadcast-box -t $out/bin
 
@@ -62,8 +65,11 @@ buildGoModule {
     description = "WebRTC broadcast server";
     homepage = "https://github.com/Glimesh/broadcast-box";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ JManch ];
+    maintainers = with lib.maintainers; [
+      JManch
+      joturk
+    ];
     platforms = lib.platforms.unix;
     mainProgram = "broadcast-box";
   };
-}
+})

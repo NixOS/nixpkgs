@@ -7,6 +7,7 @@
   protoc-gen-js,
   protobuf,
   tantivy-go,
+  zstd,
 }:
 
 let
@@ -25,7 +26,7 @@ buildGoModule (finalAttrs: {
 
   # Use only versions specified in anytype-ts middleware.version file:
   #  https://github.com/anyproto/anytype-ts/blob/v<anytype-ts-version>/middleware.version
-  version = "0.51.5";
+  version = "0.51.7";
 
   # Update only together with 'anytype' package.
   # nixpkgs-update: no auto update
@@ -33,10 +34,10 @@ buildGoModule (finalAttrs: {
     owner = "anyproto";
     repo = "anytype-heart";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RVtUquNuNm4tPoOEMagBSFN+kF6RNkBraVkjujdGfsE=";
+    hash = "sha256-r/V5L1RswCq/llka8u08ciqENasI08dWfnX8j4PeV3c=";
   };
 
-  vendorHash = "sha256-I9F1PKjVYcAqTw+g1X9ff3EzG/79j93m7JktqUJutXU=";
+  vendorHash = "sha256-57Mz/NZQPX70KxmEnV0xiAhldOxf9AjFbGYSVZAdGvs=";
 
   subPackages = [ "cmd/grpcserver" ];
   tags = [
@@ -46,6 +47,9 @@ buildGoModule (finalAttrs: {
 
   env.CGO_ENABLED = 1;
   proxyVendor = true;
+
+  buildInputs = [ zstd ];
+  env.NIX_LDFLAGS = "-lzstd";
 
   nativeBuildInputs = [
     protoc-gen-grpc-web

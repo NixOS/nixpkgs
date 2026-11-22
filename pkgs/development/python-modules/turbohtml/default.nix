@@ -15,6 +15,7 @@
   pytest-codspeed,
   pytest-mock,
   pytestCheckHook,
+  python-sbom,
   tenacity,
   tinycss2,
 }:
@@ -29,14 +30,14 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "turbohtml";
-  version = "1.15.1";
+  version = "1.16.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tox-dev";
     repo = "turbohtml";
     tag = finalAttrs.version;
-    hash = "sha256-9UttEgGVRTdgd4tPQ5cNBnTkqyFAgYn6v5YlSa52iDU=";
+    hash = "sha256-gvkHxP1+XSCwxhu7SmkAC6WxRrjrbmroCdzYYdNtaqc=";
   };
 
   postPatch = ''
@@ -46,7 +47,7 @@ buildPythonPackage (finalAttrs: {
     patchShebangs tools
 
     substituteInPlace pyproject.toml \
-      --replace-fail 'meson-python>=0.22.1' meson-python
+      --replace-fail "\"patchelf>=0.11; sys_platform=='linux'\"," ""
   '';
 
   nativeBuildInputs = [
@@ -57,6 +58,7 @@ buildPythonPackage (finalAttrs: {
     meson
     meson-python
     ninja
+    python-sbom
   ];
 
   pythonImportsCheck = [ "turbohtml" ];
@@ -78,13 +80,21 @@ buildPythonPackage (finalAttrs: {
   disabledTestPaths = [
     # tests modify $PYTHONPATH
     "tests/test_fuzz_release_diff.py"
-    # requires building with `pypaBuildFlags = [ "-Csetup-args=-Dfuzzing=true" ]`
-    "tests/test_fuzz_self_test.py"
     # we cannot generate the version from git
     "tests/build/test_generate_version.py"
     # tests depend on submodules
+    "tests/_html/url/test_idna.py"
     "tests/conformance"
     "tests/url/test_idna.py"
+  ];
+
+  disabledTests = [
+    # tests expect turbohtml to be imported from src
+    "test_reachability_cli"
+    "test_reachability_matches_path_suffix_only"
+    "test_reachability_target_functions_follow_registry"
+    "test_reachability_unreached_names_zero_coverage"
+    "test_reachability_uses_public_function_source"
   ];
 
   meta = {

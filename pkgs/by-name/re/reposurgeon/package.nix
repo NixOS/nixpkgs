@@ -45,7 +45,10 @@ buildGoModule (finalAttrs: {
     description = "Tool for editing version-control repository history";
     license = lib.licenses.bsd3;
     homepage = "http://www.catb.org/esr/reposurgeon/";
-    maintainers = with lib.maintainers; [ dfoxfranke ];
+    maintainers = with lib.maintainers; [
+      dfoxfranke
+      suominen
+    ];
     platforms = lib.platforms.all;
   };
 })

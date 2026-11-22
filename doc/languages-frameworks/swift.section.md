@@ -64,7 +64,7 @@ While `swiftpm2nix` is not deprecated, using `fetchSwiftPMDeps` is preferred bec
 
 ### Packaging with `fetchSwiftPMDeps` {#ssec-swift-packaging-with-fetch-swiftpm-deps}
 
-Swift provides a fetcher that will download all of your dependencies based on the `Package.resolved` shipped by your package.
+Swift provides a fetcher that will download all of your dependencies, and the XCFramework and artifact bundle binary targets they declare, based on the `Package.resolved` shipped by your package.
 If your package does not ship one, you will have to generate it yourself and provide it with your package.
 Otherwise, set `swiftpmDeps` as follows:
 
@@ -78,7 +78,7 @@ Otherwise, set `swiftpmDeps` as follows:
 ```
 
 The `src` attribute is required as is the `hash`.
-The first time you build your  package, you will need to set `hash` to an empty value by using `lib.fakeHash` to get the hash for your dependencies.
+The hash in most cases can be calculated using [`prefetch-swiftpm-deps`](#ssec-swiftpm-prefetch-dependencies).
 The following optional attributes can also be used:
 
 - `name`: Sets the name of the vendored dependencies fixed-output derivation.
@@ -165,6 +165,24 @@ stdenv.mkDerivation (finalAttrs: {
 })
 ```
 
+#### prefetch-swiftpm-deps {#ssec-swiftpm-prefetch-dependencies}
+
+`prefetch-swiftpm-deps` is a package in Nixpkgs that calculates the hash required by `fetchSwiftPMDeps`.
+It is intended for use in update scripts.
+If you perform non-trivial manipulations of or apply patches to `Package.resolved` in `fetchSwiftPMDeps`, you must perform the same manipulations in your update script before passing it to `prefetch-swiftpm-deps`.
+
+```console
+$ ls
+Package.resolved  Package.swift  Sources
+$ prefetch-swiftpm-deps Package.resolved
+...
+sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
+```
+
+Note: `prefetch-swiftpm-deps` takes an optional third argument for where to save the dependencies.
+This is used in the implementation of `fetchSwiftPMDeps` and is not intended for general use.
+You can (and should) omit it in your update scripts.
+
 #### Patching dependencies {#ssec-swiftpm-patching-dependencies}
 
 In some cases, it may be necessary to patch a SwiftPM dependency.
@@ -226,6 +244,46 @@ To disable the SwiftPM install phase, include the following in your derivation:
 
 ```nix
 { dontUseSwiftpmInstall = true; }
+```
+
+## Swift Macros {#ssec-swift-macros}
+
+Nixpkgs includes the stdlib macros (ObservationMacros and SwiftMacros) and FoundationMacros in the toolchain.
+Packages that need macros for Apple frameworks on Darwin have two options:
+- `open-apple-macros` provides open-source implementations of FoundationModelsMacros and SwiftUIMacros; or
+- `darwin.xcode-macros` provides macro libraries from Xcode not otherwise included in the toolchain, but they are unfree.
+
+Add the appropriate package to `buildInputs`.
+If you need to manually specify the path for a package because it or its build system invokes `swiftc` directly:
+
+### `open-apple-macros` {#ssec-swift-macros-open-apple-macros}
+```nix
+{
+  buildPhase = ''
+    runHook preBuild
+    swiftc \
+      -external-plugin-path ${open-apple-macros}/lib/swift/host/plugins#${open-apple-macros}/libexec/swift/plugins/OpenAppleMacrosServer \
+      -disable-sandbox \
+      *.swift \
+      -o the_binary
+    runHook postBuild
+  '';
+}
+```
+
+### `darwin.xcode-macros` {#ssec-swift-macros-xcode-macros}
+```nix
+{
+  # For `darwin.xcode-macros`
+  buildPhase = ''
+    runHook preBuild
+    swiftc \
+      -plugin-path ${darwin.xcode-macros}/lib/swift/host/plugins \
+      *.swift \
+      -o the_binary
+    runHook postBuild
+  '';
+}
 ```
 
 ## Hooks {#ssec-swift-hooks}

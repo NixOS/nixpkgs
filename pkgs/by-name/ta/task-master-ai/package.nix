@@ -24,7 +24,12 @@ buildNpmPackage (finalAttrs: {
 
   npmFlags = [ "--ignore-scripts" ];
 
-  makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ nodejs ]}" ];
+  makeWrapperArgs = [
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [ nodejs ])
+  ];
 
   passthru.updateScript = nix-update-script { };
 

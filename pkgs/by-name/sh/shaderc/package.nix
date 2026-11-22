@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.autoSignDarwinBinariesHook
   ];
 

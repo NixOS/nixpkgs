@@ -8,14 +8,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "asysocks";
-  version = "0.2.18";
+  version = "0.2.19";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-zGGW6CyK3Is84jId3fY1UAx2AxbaS3zKMhtTLLs9/fU=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-yP+hVK18pGqqBsH4bzR7wg87jGlhhrCPxBk3kSErK+w=";
   };
 
   build-system = [ setuptools ];
@@ -34,8 +34,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python Socks4/5 client and server library";
     homepage = "https://github.com/skelsec/asysocks";
-    changelog = "https://github.com/skelsec/asysocks/releases/tag/${version}";
+    changelog = "https://github.com/skelsec/asysocks/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

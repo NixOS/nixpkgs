@@ -1,7 +1,7 @@
 {
   buildPythonPackage,
   debtcollector,
-  stestr,
+  stestrCheckHook,
 }:
 
 buildPythonPackage {
@@ -20,10 +20,6 @@ buildPythonPackage {
 
   nativeCheckInputs = [
     debtcollector
-    stestr
+    stestrCheckHook
   ];
-
-  checkPhase = ''
-    stestr run
-  '';
 }

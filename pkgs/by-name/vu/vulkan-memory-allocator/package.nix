@@ -8,13 +8,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "vulkan-memory-allocator";
-  version = "3.4.0";
+  version = "3.5.0";
 
   src = fetchFromGitHub {
     owner = "GPUOpen-LibrariesAndSDKs";
     repo = "VulkanMemoryAllocator";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LBZJcom7G7maF9wpUVeVEJQAJwGy6365INk3VD0/0PM=";
+    hash = "sha256-MQg4Bzqj6lLz6W7sRmjC3gxtddWlwEPsED+2Dwk8KII=";
   };
 
   # A compiler is only required for the samples. This lets us use stdenvNoCC.

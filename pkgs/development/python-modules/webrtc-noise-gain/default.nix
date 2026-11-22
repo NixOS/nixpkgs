@@ -21,7 +21,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "rhasspy";
+    owner = "OHF-Voice";
     repo = "webrtc-noise-gain";
     tag = "v${finalAttrs.version}";
     hash = "sha256-EfMqmtdW7k7DDPWxpOOsnpH9H4ifGQORnNlO+pnoLRk=";
@@ -55,8 +55,8 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Tiny wrapper around webrtc-audio-processing for noise suppression/auto gain only";
-    homepage = "https://github.com/rhasspy/webrtc-noise-gain";
-    changelog = "https://github.com/rhasspy/webrtc-noise-gain/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    homepage = "https://github.com/OHF-Voice/webrtc-noise-gain";
+    changelog = "https://github.com/OHF-Voice/webrtc-noise-gain/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
   };

@@ -6,7 +6,7 @@
   dotnetCorePackages,
   sqlite,
   withFFmpeg ? true, # replace bundled ffprobe binary with symlink to ffmpeg package.
-  servarr-ffmpeg,
+  openur-ffmpeg,
   fetchYarnDeps,
   yarn,
   fixup-yarn-lock,
@@ -21,7 +21,7 @@
   applyPatches,
 }:
 let
-  version = "4.0.20.3014";
+  version = "5.0.0.2997";
   # The dotnet8 compatibility patches also change `yarn.lock`, so we must pass
   # the already patched lockfile to `fetchYarnDeps`.
   src = applyPatches {
@@ -29,10 +29,12 @@ let
       owner = "Sonarr";
       repo = "Sonarr";
       tag = "v${version}";
-      hash = "sha256-XEGGcrMAZd/9ta02QlMQD2nwogJSgNCBswlYwyMTRzo=";
+      hash = "sha256-eKJcGCTqLNVxW1Ejk0D/4z0/Z6cSO6MRiqO51FA+HvU=";
     };
     postPatch = ''
       mv src/NuGet.Config NuGet.Config
+      substituteInPlace global.json \
+        --replace-fail '10.0.404' '10.0.403'
     '';
     patches = lib.optionals (lib.versionOlder version "5.0") [
       # Prerequisite for .NET 8 patches, some commits
@@ -84,10 +86,10 @@ buildDotnetModule {
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-YkBFvv+g4p22HdM/GQAHVGGW1yLYGWpNtRq7+QJiLIw=";
+    hash = "sha256-nbXSMPS02jGSJpzBpG+yhatIQGB1s8QS3JWARn3RO5U=";
   };
 
-  ffprobe = lib.optionalDrvAttr withFFmpeg (lib.getExe' servarr-ffmpeg "ffprobe");
+  ffprobe = lib.optionalDrvAttr withFFmpeg (lib.getExe' openur-ffmpeg "ffprobe");
 
   postConfigure = ''
     yarn config --offline set yarn-offline-mirror "$yarnOfflineCache"
@@ -96,7 +98,7 @@ buildDotnetModule {
     patchShebangs --build node_modules
   '';
   postBuild = ''
-    yarn --offline run build --env production
+    yarn --offline run build
   '';
   postInstall =
     let
@@ -121,8 +123,8 @@ buildDotnetModule {
 
   runtimeDeps = [ sqlite ];
 
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
-  dotnet-runtime = dotnetCorePackages.aspnetcore_8_0;
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
+  dotnet-runtime = dotnetCorePackages.aspnetcore_10_0;
 
   doCheck = true;
 
@@ -153,7 +155,7 @@ buildDotnetModule {
   ];
 
   dotnetFlags = [
-    "--property:TargetFramework=net8.0"
+    "--property:TargetFramework=net10.0"
     "--property:EnableAnalyzers=false"
     "--property:SentryUploadSymbols=false" # Fix Sentry upload failed warnings
     # Override defaults in src/Directory.Build.props that use current time.

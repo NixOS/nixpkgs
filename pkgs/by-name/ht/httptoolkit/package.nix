@@ -10,12 +10,12 @@
   makeWrapper,
   xcbuild,
 
-  electron_42,
+  electron_43,
   httptoolkit-server,
 }:
 
 let
-  electron = electron_42;
+  electron = electron_43;
 in
 buildNpmPackage (finalAttrs: {
   pname = "httptoolkit";

@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "1.4.10";
 
   src = fetchFromGitHub {
-    owner = "MercuryTechnologies";
+    owner = "mercury";
     repo = "nix-your-shell";
     tag = "v${finalAttrs.version}";
     hash = "sha256-u94lxsvJrvpKitDDVCoolqHyZMfnQTGtyBwlCegv7Ro=";
@@ -31,8 +31,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     mainProgram = "nix-your-shell";
     description = "`nix` and `nix-shell` wrapper for shells other than `bash`";
-    homepage = "https://github.com/MercuryTechnologies/nix-your-shell";
-    changelog = "https://github.com/MercuryTechnologies/nix-your-shell/releases/tag/v${finalAttrs.version}";
+    homepage = "https://github.com/mercury/nix-your-shell";
+    changelog = "https://github.com/mercury/nix-your-shell/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ _9999years ];
   };

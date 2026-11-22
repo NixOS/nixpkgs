@@ -1,6 +1,5 @@
 {
   lib,
-  go,
   buildGoModule,
   callPackage,
   fetchFromGitHub,
@@ -20,19 +19,23 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "alertmanager";
-  version = "0.33.1";
+  version = "0.35.0";
 
   src = fetchFromGitHub {
     owner = "prometheus";
     repo = "alertmanager";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LGjBuZ7kbtABunEk2YyCKILsPS/0FlS/6Mf/2qVpseI=";
+    hash = "sha256-5LvztWE9NyidvondMWQtDG1N2HpGHV3Urz9kNrUk7B0=";
   };
 
   postPatch = ''
     cp -r ${elmUi}/. ui/app/dist
   '';
-  vendorHash = "sha256-t5jQtccln3dfcHlnEOnLQHfjzfU9kY9Y7q+r4AigvBE=";
+
+  # don't copy elmUi into go vendor
+  overrideModAttrs.postPatch = "";
+
+  vendorHash = "sha256-0pqugpISejz+OGSFShD/pGQQGloGvbiVUaW8Pv/rqpk=";
 
   subPackages = [
     "cmd/alertmanager"
@@ -49,7 +52,7 @@ buildGoModule (finalAttrs: {
       "-X ${t}.Branch=unknown"
       "-X ${t}.BuildUser=nix@nixpkgs"
       "-X ${t}.BuildDate=unknown"
-      "-X ${t}.GoVersion=${lib.getVersion go}"
+      "-X ${t}.GoVersion=${lib.getVersion finalAttrs.passthru.go}"
     ];
 
   nativeBuildInputs = [ installShellFiles ];
@@ -84,8 +87,7 @@ buildGoModule (finalAttrs: {
         nixfmt elm-srcs.nix
         popd
 
-        nix-update prometheus-alertmanager --version "''${TAG#v}"
-        nix-update prometheus-alertmanager.elmUi
+        nix-update prometheus-alertmanager --version "''${TAG#v}" --subpackage elmUi
       '';
     });
   };

@@ -4,6 +4,7 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
+  writableTmpDirAsHomeHook,
 }:
 
 buildGoModule (finalAttrs: {
@@ -28,9 +29,7 @@ buildGoModule (finalAttrs: {
     "-X github.com/solo-io/gloo/pkg/version.Version=${finalAttrs.version}"
   ];
 
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
   postInstall = ''
     mv $out/bin/cmd $out/bin/glooctl

@@ -10,27 +10,27 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "json-repair";
-  version = "0.63.5";
+  version = "0.64.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mangiucugna";
     repo = "json_repair";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hqVSZoTqhMEQhymhX+prUYWOXogEJ0XPK7r5DdPwg44=";
+    hash = "sha256-ceWp6dz8YovvktIUIOAUP5pUIrBGbwiik9LaClRzLmo=";
   };
 
   build-system = [ setuptools ];
-
-  nativeCheckInputs = [
-    pytestCheckHook
-    jsonschema
-  ];
 
   optional-dependencies.schema = [
     jsonschema
     pydantic
   ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ]
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   disabledTestPaths = [
     # Disable benchmark tests

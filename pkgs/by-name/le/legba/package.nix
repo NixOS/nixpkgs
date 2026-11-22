@@ -6,6 +6,8 @@
   pkg-config,
   openssl,
   samba,
+  sqlite,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -28,6 +30,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     openssl.dev
     samba
+    sqlite
+    zstd
   ];
 
   # Paho C test fails due to permission issue

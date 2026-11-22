@@ -26,6 +26,8 @@ buildPythonPackage rec {
     httpx
   ];
 
+  pythonRelaxDeps = [ "authlib" ];
+
   pythonImportsCheck = [ "pysenz" ];
 
   # upstream has no tests

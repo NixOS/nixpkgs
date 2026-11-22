@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "uammd";
-  version = "3.1.0";
+  version = "3.1.1";
   __structuredAttrs = true;
   strictDeps = true;
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "UAMMD";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-TgGtjERxor/82ueWbl4zW712MyoI7N7f6qloJg+mXRM=";
+    hash = "sha256-ua85pcT9kpaZYp3IDO6aGwcigRYTxgzMDWClczCcclY=";
   };
 
   nativeBuildInputs = [

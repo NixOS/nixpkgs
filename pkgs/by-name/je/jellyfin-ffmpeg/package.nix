@@ -5,7 +5,7 @@
 }:
 
 let
-  version = "8.1.2-5";
+  version = "8.1.3-2";
 in
 
 (ffmpeg_8-full.override {
@@ -14,7 +14,7 @@ in
     owner = "jellyfin";
     repo = "jellyfin-ffmpeg";
     tag = "v${version}";
-    hash = "sha256-fU/w3Bh0hFidmbcNmA6KCxrmxlzf6Awh4Qlthyks9Aw=";
+    hash = "sha256-m6A/d7WszBzAqRAVkzN0PL0do9vZlceucDBgwT5VILE=";
   };
   buildFfplay = false; # requires SDL2 which gets disabled
   buildFfprobe = true; # required by various programs like Immich
@@ -40,6 +40,11 @@ in
       done
 
       ${old.postPatch or ""}
+
+      # Avoid a collision with libc++'s <version> on case-insensitive filesystems.
+      mv VERSION{,.bak}
+      substituteInPlace ffbuild/version.sh \
+        --replace-fail "cat VERSION" "cat VERSION.bak"
     '';
 
     meta = {

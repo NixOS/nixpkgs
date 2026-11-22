@@ -14,7 +14,7 @@ buildDunePackage (finalAttrs: {
 
   src = fetchurl {
     url = "https://github.com/mirage/metrics/releases/download/v${finalAttrs.version}/metrics-${finalAttrs.version}.tbz";
-    sha256 = "sha256-3zVjgJCdBkYbzQl+9gY8qfPFE2X0dqeXwDZktTwFcV0=";
+    hash = "sha256-3zVjgJCdBkYbzQl+9gY8qfPFE2X0dqeXwDZktTwFcV0=";
   };
 
   propagatedBuildInputs = [ fmt ];

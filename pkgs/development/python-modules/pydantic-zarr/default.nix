@@ -23,7 +23,6 @@ buildPythonPackage (finalAttrs: {
   pname = "pydantic-zarr";
   version = "0.10.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "zarr-developers";
@@ -50,6 +49,11 @@ buildPythonPackage (finalAttrs: {
     pytest-examples
     pytestCheckHook
     xarray
+  ];
+
+  pytestFlags = [
+    "-W"
+    "ignore::pytest.PytestRemovedIn10Warning"
   ];
 
   meta = {

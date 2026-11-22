@@ -1,26 +1,26 @@
 generic: {
   v74 = generic {
-    version = "7.4.15";
-    hash = "sha256-Xh2bN0fr+bgdXWLYzgDvmz9/TAgTlK0Rot0YiXok85Q=";
-    emberPlusHash = "sha256-/uTOwNFhAvYM1dsB3SblA72B9il0DLiDdk5lZNBwYTs=";
-    mongodbHash = "sha256-JZ9GyDHd1bhsJcqhjsWKJdLjmjzTIs+l+JV1XTDycko=";
-    mssqlHash = "sha256-P1bcG/uXnl+viFhWGTTcYV/VpMIxKPXWWqqHplKyJ68=";
-    postgresqlHash = "sha256-xofvvAc1Mn3r+KvziF6gWecGz5Ctalgb3THQNpSSMiA=";
+    version = "7.4.16";
+    hash = "sha256-Diw5HcGErM6ONCUOcyalHhnIvO4x5nuEl/VSYkfs0mE=";
+    emberPlusHash = "sha256-1ALn7tWKnzbnyn6cnUOoep9MPNh4LwgQWfHCM91nsGA=";
+    mongodbHash = "sha256-A1CrnCd8PJkqGrQ3h2xVULyoxdf3z9ukgu8KSktb4gU=";
+    mssqlHash = "sha256-9eMaUKIFRE2VrAWfDeiYcqvlZ4W+XNNLzCjn/7mysTw=";
+    postgresqlHash = "sha256-V7cqak3V4Dl54YI03QhOwUo+tFjn2a5HUL0lI+ORFbc=";
   };
   v70 = generic {
-    version = "7.0.31";
-    hash = "sha256-nfEGmqHP32e3Ex6T8vX+bQrQBeQWyZAgFv2Mto8zDow=";
-    emberPlusHash = "sha256-qPewZCfDbDFkX+So26d91fC41gsdnLidynJQVTSKd9M=";
-    mongodbHash = "sha256-JiWL9zg+EZFwc9OjnjcUIUF75bDgeiswsTT7mY7SOrM=";
-    mssqlHash = "sha256-5Er0oKgIPFs/NE4XrQjqBkZ6w5iIDaQgq9z4RbiPU+0=";
-    postgresqlHash = "sha256-FgqUGgRADSlYzlZSuYmE7DUZWXR1lKozwHtVdbRIbyw=";
+    version = "7.0.32";
+    hash = "sha256-6tWwcjrZZesOefmNXSuJCI58iYrhlO66dn5dH7LVCpY=";
+    emberPlusHash = "sha256-m2MWrXMBw5yX6r6n1qJNgvLuG8F0EOKNwqAvafJ9kOE=";
+    mongodbHash = "sha256-p4BYbsGmD0dxpXEXqT5OG7l+UPXNr67GFCCz5T8msd8=";
+    mssqlHash = "sha256-KFBQ6Zyt11Zwc9nxPyHBsvCSGenc3T7tKkfJYxbq7Ko=";
+    postgresqlHash = "sha256-uD2QNJ1YoPQVac69zWHDi0hHF+7T8PKDi88OKg0hERw=";
   };
   v60 = generic {
-    version = "6.0.48";
-    hash = "sha256-cIibBi7O1e5YKjznoyli/lq7gX/UhoPEc8K8a1kDZJw=";
-    emberPlusHash = "sha256-KtypkgjExw0aajGGr8gFi6VCpofaI/fd+BgBUqdvgBQ=";
-    mongodbHash = "sha256-5RC9rYj4/2MkGPpCmR/hVERp1NxDSTcyn0DZRarFAIM=";
-    mssqlHash = "sha256-UoIHydaa8CPRF2uXXLQAGnX+ImMyMqE3vdMB8e8Zn1c=";
-    postgresqlHash = "sha256-uBkcF5J9BgmqNPTiMPGf4EgUHbidqrLygud7dHFLSe0=";
+    version = "6.0.49";
+    hash = "sha256-AiLoioosRKmamGvGy3lRM6My1UuowyeyvGSUoX0WH2s=";
+    emberPlusHash = "sha256-MKHX1ZCKZUOQLoAUdUDujd1ios0Q7flFZixuXVq5eXI=";
+    mongodbHash = "sha256-Il289I5Va+6713GFF1lw/ABcTFopRXJHiWjFgW6roQc=";
+    mssqlHash = "sha256-kvW5uDAZUetbCn0m9Bdw64g7/6ZWIzmCvxpjVDGGxEQ=";
+    postgresqlHash = "sha256-K/nuxo4n9+YpLlLi4GPs62P+uY/DvKF4S+/bv7La2qA=";
   };
 }

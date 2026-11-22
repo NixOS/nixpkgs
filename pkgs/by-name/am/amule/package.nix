@@ -58,20 +58,14 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString enableDaemon "-daemon"
     + lib.optionalString client "-gui"
     + lib.optionalString textClient "-cmd";
-  version = "3.1.0";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "amule-org";
     repo = "amule";
     tag = finalAttrs.version;
-    hash = "sha256-IO0sAqCEWNsLtf7jQUHOAbCs50M13KN1vVSO2lBG7d0=";
+    hash = "sha256-CgJf3wG3Ry8CE+9nr0vLRltaaWjdiSdYtlKwF4UQAGE=";
   };
-
-  patches = [
-    # https://github.com/amule-org/amule/commit/d7f492d029b4fab1eacddb72278c82b29cf56dcd
-    # Remove once a release includes https://github.com/amule-org/amule/pull/1711.
-    ./amuleapi-kad-bootstrap-byte-order.patch
-  ];
 
   __structuredAttrs = true;
   strictDeps = true;

@@ -16,6 +16,7 @@ let
     ;
 
   cfg = config.security.polkit;
+  pamService = config.security.pam.services.polkit-1;
 
   iniFmt = pkgs.formats.ini { };
 in
@@ -40,7 +41,7 @@ in
       type = types.submodule {
         freeformType = iniFmt.type;
         options.Polkitd.ExpirationSeconds = lib.mkOption {
-          description = "Expiration timeout of authenticated sesssions.";
+          description = "Expiration timeout of authenticated sessions.";
           type = types.ints.positive;
           default = 300; # current polkit upstream default
         };
@@ -140,7 +141,7 @@ in
       # The upstream unit uses PrivateDevices=yes and ProtectHome=yes,
       # which prevents PAM modules from accessing hardware (e.g. FIDO
       # tokens via /dev/hidraw*) or reading key files from home directories.
-      (mkIf config.security.pam.u2f.enable {
+      (mkIf pamService.u2f.enable {
         # Override upstream PrivateDevices=yes to allow access to /dev/hidraw*
         PrivateDevices = false;
         DeviceAllow = [
@@ -151,7 +152,7 @@ in
         # ~/.config/Yubico/u2f_keys (the default key file location)
         ProtectHome = "read-only";
       })
-      (mkIf config.security.pam.yubico.enable {
+      (mkIf pamService.yubicoAuth {
         # Override upstream PrivateDevices=yes to allow access to /dev/hidraw*
         PrivateDevices = false;
         DeviceAllow = [ "char-hidraw rw" ];

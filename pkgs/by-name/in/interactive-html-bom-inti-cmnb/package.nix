@@ -22,7 +22,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   dependencies = [
     python3Packages.jsonschema
-    python3Packages.wxpython
+    python3Packages.wxpython_4_3
     python3Packages.kicad
   ];
 
@@ -50,8 +50,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   postInstall = ''
     ln -s $out/bin/generate_interactive_bom $out/bin/generate_interactive_bom.py
   '';
-
-  __structuredAttrs = true;
 
   meta = {
     description = "Interactive HTML BOM generation for KiCad, EasyEDA, Eagle, Fusion360 and Allegro PCB designer";

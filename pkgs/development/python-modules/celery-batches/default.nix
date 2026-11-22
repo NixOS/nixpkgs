@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "celery-batches";
-  version = "0.11";
+  version = "0.12";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "clokep";
     repo = "celery-batches";
     tag = "v${version}";
-    hash = "sha256-+1cpauali+MjDox0esw0+bveOEroIQ0DkuHQuwm/i4Q=";
+    hash = "sha256-rnxh1RnZ9hr1z9DBqU2mSzGbmEv8dk7Ol3Ub/KzhyqU=";
   };
 
   build-system = [ setuptools ];
@@ -37,6 +37,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/clokep/celery-batches";
     changelog = "https://github.com/clokep/celery-batches/blob/${src.tag}/CHANGELOG.rst";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ defelo ];
+    maintainers = [ ];
   };
 }

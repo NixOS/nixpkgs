@@ -4,6 +4,7 @@
   fetchFromGitHub,
 
   pkg-config,
+  aws-lc,
   openssl,
   crate ? "cli",
 }:
@@ -32,7 +33,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl ];
+  buildInputs = [
+    aws-lc
+    openssl
+  ];
 
   # Since most tests were removed, just skip testing
   doCheck = false;

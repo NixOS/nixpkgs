@@ -4,7 +4,9 @@
   fetchFromGitHub,
   stdenvNoCC,
   pkg-config,
+  libgit2,
   openssl,
+  sqlite,
   nix-update-script,
 }:
 
@@ -23,7 +25,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [
+    libgit2
+    openssl
+    sqlite
+  ];
 
   passthru.updateScript = nix-update-script { };
 
@@ -33,10 +39,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Proposed plumbing commands for cargo";
     homepage = "https://github.com/crate-ci/cargo-plumbing";
     changelog = "https://github.com/crate-ci/cargo-plumbing/blob/v${finalAttrs.version}/CHANGELOG.md";
-    license = with lib.licenses; [
-      asl20 # or
-      mit
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
     maintainers = with lib.maintainers; [
       secona
     ];

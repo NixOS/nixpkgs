@@ -3,6 +3,7 @@
   fetchFromGitHub,
   stdenv,
   rustPlatform,
+  just,
   makeBinaryWrapper,
   adw-gtk3,
   pkg-config,
@@ -12,6 +13,7 @@
   udev,
   libxkbcommon,
   wayland,
+  zstd,
   openssl,
   nixosTests,
   nix-update-script,
@@ -19,14 +21,14 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-settings-daemon";
-  version = "1.9.0";
+  version = "1.11.0";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-settings-daemon";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-0xacJ7NivwME4w079Tu+Jdm2CTmnSp0cPpviAVs4yQU=";
+    hash = "sha256-icTGIcs9W7KNJE/2ULikbWM7RsMBN11vIeTJCuqgpmw=";
   };
 
   postPatch = ''
@@ -34,12 +36,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail '/usr/share/themes/adw-gtk3' '${adw-gtk3}/share/themes/adw-gtk3'
   '';
 
-  cargoHash = "sha256-ba3JKWTC5f0DSIILayUFmQQfA3oHaq477AzL3qo3CDE=";
+  cargoHash = "sha256-19GGcZmxq/Yp0A6wnR6Y4zKwZ9EiQBj1i5+D9lDAFz8=";
 
   separateDebugInfo = true;
   __structuredAttrs = true;
 
   nativeBuildInputs = [
+    just
     pkg-config
     rustPlatform.bindgenHook
     makeBinaryWrapper
@@ -53,14 +56,20 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pipewire
     libxkbcommon
     wayland
+    zstd
   ];
 
-  makeFlags = [
-    "prefix=$(out)"
-    "CARGO_TARGET_DIR=target/${stdenv.hostPlatform.rust.cargoShortTarget}"
-  ];
+  dontUseJustBuild = true;
+  dontUseJustCheck = true;
 
-  dontCargoInstall = true;
+  justFlags = [
+    "--set"
+    "prefix"
+    (placeholder "out")
+    "--set"
+    "cargo-target-dir"
+    "target/${stdenv.hostPlatform.rust.cargoShortTarget}"
+  ];
 
   postFixup = ''
     wrapProgram $out/bin/cosmic-settings-daemon \

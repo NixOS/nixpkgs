@@ -39,5 +39,8 @@ makeSetupHook {
     swiftPlatform = stdenv.hostPlatform.swift.platform;
     install_name_tool = lib.getExe' llvmPackages_upstream.llvm "llvm-install-name-tool";
     jq = lib.getExe jq;
+    # XCTest on Darwin requires the XCTest framework from Xcode, which we can’t distribute.
+    # Fortunately, pure Swift Testing can work without using XCTest.
+    disableXCTest = stdenv.hostPlatform.isDarwin;
   };
 } ./setup-hook.sh

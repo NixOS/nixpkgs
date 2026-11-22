@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "idasen-ha";
-  version = "3.0.1";
+  version = "3.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "abmantis";
     repo = "idasen-ha";
     tag = version;
-    hash = "sha256-Je7zwPkwAJ1gOWV8wL0utbqC+RkLB10B+IZUFoUFeY4=";
+    hash = "sha256-yTuHiLJX26D4QSUAqigrqs/83GVlqmUvpL2hrfWoQPY=";
   };
 
   nativeBuildInputs = [ pyprojectVersionPatchHook ];

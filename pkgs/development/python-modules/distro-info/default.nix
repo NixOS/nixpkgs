@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "distro-info";
-  version = "1.14";
+  version = "1.20";
   pyproject = true;
 
   # Not using fetchFromGitLab because it incorrectly sets
   # SOURCE_DATE_EPOCH=315619200 (1980-01-02) and breaks tests.
   src = fetchurl {
     url = "https://salsa.debian.org/debian/distro-info/-/archive/debian/${version}/distro-info-debian-${version}.tar.gz";
-    hash = "sha256-nRLTlDPnll1jvwfg9FSxs9TmImvQkn9DVqSRSOKTAGI=";
+    hash = "sha256-b2vrarnSAiPCiKLymwPANpvldCHyWoh5LZJU3BzpQ60=";
   };
 
   postPatch = ''

@@ -15,14 +15,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "helium";
-  version = "7.0.3";
+  version = "7.0.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mherrmann";
     repo = "helium";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-I3qLp3v6aIwGIelzNE5gRnvp/eHVPfzJijUxlT28Wqs=";
+    hash = "sha256-Mk8ZWE7zP0XfHvMpiCZ4nPg5REnFk3SxfiulZocQCPw=";
   };
 
   build-system = [ setuptools ];

@@ -4,16 +4,15 @@
   fetchFromGitHub,
   ghostscript,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "lout";
-  version = "3.43.4";
+  version = "3.43.5";
 
   src = fetchFromGitHub {
     owner = "william8000";
     repo = "lout";
     rev = finalAttrs.version;
-    hash = "sha256-tozvedvIW4e/DRXliEdPmHUCPkMKM7tHNInDXSOrRic=";
+    hash = "sha256-UAAIAQ2BPF51mQPakN4Tvydr5PibP1JerM04d0bg0QQ=";
   };
 
   buildInputs = [ ghostscript ];
@@ -51,6 +50,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Plus;
 
     platforms = lib.platforms.all;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ l0r3v ];
   };
 })

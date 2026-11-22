@@ -1,6 +1,5 @@
 {
   pkgs,
-  systemdStage1,
   ...
 }:
 
@@ -20,7 +19,6 @@ in
 
   nodes.machine = {
     services.envfs.enable = true;
-    boot.initrd.systemd.enable = systemdStage1;
   };
 
   testScript = ''

@@ -7,7 +7,8 @@
   patchNupkgs,
   nugetPackageHook,
   callPackage,
-  overrides ? callPackage ./overrides.nix { },
+  allowSdkPackages ? false,
+  overrides ? callPackage ./overrides.nix { inherit allowSdkPackages; },
 }:
 lib.makeOverridable (
   {

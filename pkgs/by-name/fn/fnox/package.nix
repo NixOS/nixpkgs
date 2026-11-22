@@ -5,7 +5,9 @@
   rustPlatform,
   perl,
   pkg-config,
+  aws-lc,
   openssl,
+  sqlcipher,
   dbus,
   udev,
   cacert,
@@ -15,7 +17,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fnox";
-  version = "1.36.0";
+  version = "1.42.1";
 
   __structuredAttrs = true;
   __darwinAllowLocalNetworking = true;
@@ -24,10 +26,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "jdx";
     repo = "fnox";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-md01KJsbDxdjjgPLKpwNwfK3LeiY7Ds+lUM1Q8inIxQ=";
+    hash = "sha256-Hsl0MYwRkZpixeeyWFB7MY9c93Z/FuHQqCWfG06C0go=";
   };
 
-  cargoHash = "sha256-m8H4HrWSu9FF3gBDlQ1Ytl3U3UK9zpenXxHIAdlcRgo=";
+  cargoHash = "sha256-pqkwjWftAP8K7vEopAcPiauUro8XsEwHZS2DcPHgR9c=";
 
   nativeBuildInputs = [
     perl
@@ -35,7 +37,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
     openssl
+    sqlcipher
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     dbus

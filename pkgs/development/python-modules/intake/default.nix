@@ -44,7 +44,6 @@ buildPythonPackage (finalAttrs: {
   pname = "intake";
   version = "2.0.9";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "intake";

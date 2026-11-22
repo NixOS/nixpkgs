@@ -7,16 +7,16 @@ php.buildComposerProject2 (finalAttrs: {
   __structuredAttrs = true;
   strictDeps = true;
   pname = "terminus";
-  version = "4.3.3";
+  version = "4.3.5";
 
   src = fetchFromGitHub {
     owner = "pantheon-systems";
     repo = "terminus";
     tag = finalAttrs.version;
-    hash = "sha256-3+bNCHOkWqw2a2ZteIRpPNkZ1e/zttPPhA2QRLuvYzE=";
+    hash = "sha256-LF3MGmy/lrVzzTtfdGjTIkxB7bzBAzrocrAdWFXvVHM=";
   };
 
-  vendorHash = "sha256-rMzUiL3UO2RYZ8Rzu5war6iIBwdGBV+BvM75ygrRJHA=";
+  vendorHash = "sha256-T97sVpokwEWoHPfLbcKw8W02QTuPLTyfzwSnrN+NAR8=";
 
   meta = {
     description = "Standalone utility for performing operations on the Pantheon Platform";

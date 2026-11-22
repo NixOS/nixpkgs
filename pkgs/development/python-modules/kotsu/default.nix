@@ -33,6 +33,13 @@ buildPythonPackage rec {
     pytest-mock
     scikit-learn
   ];
+
+  disabledTests = [
+    # AssertionError: Attributes of DataFrame.iloc[:, 0] (column name="validation_id") are different
+    "test_form_results"
+    "test_force_rerun"
+  ];
+
   pythonImportsCheck = [ "kotsu" ];
 
   meta = {

@@ -137,6 +137,18 @@ Details not covered by the title and links to existing related issues should go 
 
 When a PR is created, it will be pre-populated with some checkboxes.
 
+Check only the entries that describe what you actually did.
+Entries that cannot apply to your change may be left unchecked, or removed if your summary reads better without them: a change that does not touch NixOS cannot be tested with a NixOS test.
+
+Neither leaving such an entry unchecked nor removing it is a merge requirement, and [reviewers][pr-review] are asked not to make it one.
+Keep the section headings and the template itself in place, so that summaries stay comparable between pull requests.
+
+You are also welcome to add entries that are specific to your change: an `stdenv`
+change may warrant a note on the compilers and bootstrapping stages exercised,
+a bootloader change on the machines it was actually booted on. Keep such
+entries short and checkable, and explain anything longer in the summary at the
+top.
+
 #### Tested using sandboxing
 
 When sandbox builds are enabled, Nix will set up an isolated environment for each build process.
@@ -204,9 +216,14 @@ It's important to test a modified package's executables.
 Look into `./result/bin` and run all files in there, or at a minimum, the main executable.
 For example, if you make a change to `texlive`, you probably would only check the binaries associated with the change you made, rather than testing all of them.
 
+#### Release notes
+
+The last two entries are about [release notes](#release-notes).
+Only check the first one when a package update is major or breaking, and the second one when a NixOS module is added or receives a significant update.
+
 #### Meets Nixpkgs contribution standards
 
-The last two checkboxes are about whether it fits the guidelines in this `CONTRIBUTING.md` file.
+The first two checkboxes are about whether the change fits the guidelines in this `CONTRIBUTING.md` file together with the READMEs of the areas it touches, and whether it follows the [automation/AI policy](#automationai-policy).
 This document details our standards for commit messages, reviews, licensing of contributions, etc...
 Everyone should read and understand these standards before submitting a pull request.
 
@@ -298,6 +315,7 @@ When doing a review:
 - Aim to drive the proposal to a timely conclusion.
 - Focus on the proposed changes and keep the scope narrow.
 - Help the contributor prioritise their efforts towards getting their change merged.
+- Leave the [pull request template][pr-template] alone: which entries are ticked, and whether inapplicable ones were removed, is not a merge requirement and not worth review time.
 
 If you find anything related that could be improved but is not immediately required for acceptance, consider:
 - Implementing the changes yourself in a follow-up pull request,
@@ -918,11 +936,16 @@ As the inner workings of LLM‐based AI tools cannot be sufficiently understood 
 When automation is used to verify output, the verification tooling itself must be disclosed and reviewed in line with this policy.
 
 This policy applies equally to any further discussion of a contribution.
-Comments and reviews must separately satisfy the same requirements of understanding, review, and disclosure.
 Contributors are expected to be able to answer questions about their contribution and respond to feedback appropriately, without simply forwarding messages back and forth to automated tools.
 
 It is not permitted to submit automated contributions without any manual review or intervention, outside of standard community automation.
 Automation without any manual review must not be used as the sole arbiter of whether to merge a change.
+
+## Use of LLM output in prose
+[use-of-llm-output-in-prose]: #use-of-llm-output-in-prose
+
+In general, and subject to the exemptions below, prose in pull request descriptions, comments, and reviews, as well as in commit message bodies (after the first line), must not contain LLM output.
+Manually selected quotes of relevant code, discussion, or documentation (e.g. from an upstream) are exempt from this.
 
 ## Transparency
 
@@ -942,16 +965,24 @@ The following situations are fully or partially exempt:
 
 * Use of standard community automation is exempt, such as `nix-update`, the official Nixpkgs CI bots, the @r-ryantm update bot, other maintainer‐approved bots that run update scripts, and the Nixpkgs security tracker bot.
 
-* Use of AI tools for research, testing, debugging, or private review is out of scope, if no substantial amount of their output is included in the resulting contribution.
+* Use of AI tools for research, testing, debugging, or private review (for feedback on code or prose writing) is out of scope, if no substantial amount of their output is included in the resulting contribution.
   However, if these tools had a significant technical influence on your contribution, you are still responsible for it per the Accountability section, and are expected to disclose this where relevant.
 
-* Use of machine translation is exempt from the requirement to understand the translated output.
+* Use of machine translation is exempt from the requirement to understand the translated output, and from the ban in the ["Use of LLM output in prose" section above](#use-of-llm-output-in-prose).
   However, the requirements of appropriate confidence in the original text, responsibility, and disclosure still apply, and you are encouraged to additionally include the original untranslated contribution.
 
 * Use of automation in a contribution clearly marked as not being ready for merge (e.g. a draft pull request) is exempt from the requirement for full self‐review, as long as some amount of review has been done and it is expected that the requirements will be met by the time it is marked as ready.
   This does not waive any other requirement.
 
 * Use of automated tools to develop upstream software packaged inside Nixpkgs is not in scope.
+
+* Any form of automation (including LLMs) may be used to generate the subject (first line) or trailers (e.g. `Changelog: ...`, `Assisted-by: ...`) of a commit message.
+  Disclosure of this is not required.
+  Whether automation is used or not, adhering to our [commit conventions](#commit-conventions) remains required.
+
+* Contributors may trigger LLM-based automated reviews on their own draft PRs.
+  Before marking their PR ready for review, they must summarise, in their own words, all issues raised by automated reviews that they judge to be still outstanding.
+  If possible, they must also mark as resolved or hide issues that they consider resolved, irrelevant, or otherwise not worth addressing.
 
 ## Enforcement
 

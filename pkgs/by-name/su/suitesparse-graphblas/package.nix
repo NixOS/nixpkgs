@@ -4,11 +4,12 @@
   fetchFromGitHub,
   cmake,
   gnum4,
+  writableTmpDirAsHomeHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "suitesparse-graphblas";
-  version = "10.5.1";
+  version = "10.5.3";
 
   outputs = [
     "out"
@@ -19,17 +20,14 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "DrTimothyAldenDavis";
     repo = "GraphBLAS";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-gjAxEqYLH6JNNETwA6N9K+MSO8h8W/KJ2jD9qMfE9ow=";
+    hash = "sha256-s59DgzCCCfuBpiyW1MuHYdjLvdEj8AQfPrdz6LxeCKc=";
   };
 
   nativeBuildInputs = [
     cmake
     gnum4
+    writableTmpDirAsHomeHook
   ];
-
-  preConfigure = ''
-    export HOME=$(mktemp -d)
-  '';
 
   cmakeFlags = [
     (lib.cmakeBool "GRAPHBLAS_USE_JIT" (

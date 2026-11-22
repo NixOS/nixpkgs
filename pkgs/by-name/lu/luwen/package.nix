@@ -25,6 +25,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Tenstorrent system interface tools";
     homepage = "https://github.com/tenstorrent/luwen";
+    teams = [ lib.teams.tenstorrent ];
     maintainers = with lib.maintainers; [ RossComputerGuy ];
     license = lib.licenses.asl20;
   };

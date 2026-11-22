@@ -7,6 +7,7 @@
   nixosTests,
   pkg-config,
   openssl,
+  zstd,
   libiconv,
   dbBackend ? "sqlite_system",
   libmysqlclient,
@@ -20,16 +21,16 @@ in
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "vaultwarden";
-  version = "1.37.4";
+  version = "1.37.5";
 
   src = fetchFromGitHub {
     owner = "dani-garcia";
     repo = "vaultwarden";
     tag = finalAttrs.version;
-    hash = "sha256-zwcFtx08e5zl9TtHSPf5yyF83rRTbLF9TPfH+LU4+Ck=";
+    hash = "sha256-7r4vTThc98coMIOxPA61X/A8pLiAfPVJxJlWQY8yELw=";
   };
 
-  cargoHash = "sha256-xnqJwz0n/Ru+/lisbeUTeVXXT63E6c+91qSkAtl9tMw=";
+  cargoHash = "sha256-onyxPAt3bVsF9Zj0Z+rnXoUA0NQLabYxxGqzhnVHz/E=";
 
   # used for "Server Installed" version in admin panel
   env.VW_VERSION = finalAttrs.version;
@@ -37,13 +38,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     openssl
+    zstd
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
   ]
   ++ lib.optional (dbBackend == "mysql") libmysqlclient
   ++ lib.optional (dbBackend == "postgresql") libpq
-  ++ lib.optional (dbBackend == "sqlite_system") sqlite;
+  ++ lib.optional (dbBackend == "sqlite" || dbBackend == "sqlite_system") sqlite;
 
   buildFeatures = dbBackend;
 

@@ -28,6 +28,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ jbedo ];
     license = lib.licenses.mit;
     homepage = "https://github.com/GregoryFaust/samblaster";
-    platforms = lib.platforms.x86_64;
+    platforms = lib.platforms.linux;
   };
 })

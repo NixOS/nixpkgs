@@ -29,7 +29,11 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/lurcher/unixODBC/releases/tag/v${finalAttrs.version}";
     description = "ODBC driver manager for Unix";
     homepage = "https://www.unixodbc.org/";
-    license = lib.licenses.lgpl2;
+    license = with lib.licenses; [
+      lgpl21Plus # "All libraries" according to README
+      gpl2Plus # "All programs" according to README
+      lgpl2Plus # v2 in some file headers
+    ];
     maintainers = with lib.maintainers; [ hythera ];
     platforms = lib.platforms.unix;
   };

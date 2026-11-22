@@ -7,7 +7,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pname = "ghcherry";
   version = "1.6.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "PerchunPak";

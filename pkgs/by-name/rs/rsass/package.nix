@@ -21,10 +21,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "rsass";
     homepage = "https://github.com/kaj/rsass";
     changelog = "https://github.com/kaj/rsass/blob/v${finalAttrs.version}/CHANGELOG.md";
-    license = with lib.licenses; [
-      mit # or
-      asl20
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        mit
+        asl20
+      ];
     maintainers = [ ];
   };
 })

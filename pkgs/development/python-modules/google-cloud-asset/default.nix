@@ -61,6 +61,11 @@ buildPythonPackage (finalAttrs: {
     pytestCheckHook
   ];
 
+  disabledTests = [
+    # AssertionError: assert None is <Mock id='...
+    "test_asset_service_client_get_mtls_endpoint_and_cert_source"
+  ];
+
   pythonImportsCheck = [
     "google.cloud.asset"
     "google.cloud.asset_v1"

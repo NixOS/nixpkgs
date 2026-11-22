@@ -7,6 +7,7 @@
   cmake,
   git,
   level-zero,
+  openvino-intel-npu-compiler,
   pkg-config,
   fetchFromGitHub,
 }:
@@ -45,6 +46,11 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     rm third_party/cmake/level-zero.cmake
+
+    # Load the compiler from its store path instead of next to the driver.
+    substituteInPlace umd/level_zero_driver/source/ext/vcl_symbols.hpp \
+      --replace-fail 'getDriverLibDir() /' \
+        'std::filesystem::path("${lib.getLib openvino-intel-npu-compiler}/lib") /'
 
     substituteInPlace third_party/yaml-cpp/CMakeLists.txt --replace-fail \
       "cmake_minimum_required" \

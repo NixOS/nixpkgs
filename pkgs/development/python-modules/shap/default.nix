@@ -42,10 +42,9 @@ buildPythonPackage (finalAttrs: {
   pname = "shap";
   version = "0.52.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
-    owner = "slundberg";
+    owner = "shap";
     repo = "shap";
     tag = "v${finalAttrs.version}";
     hash = "sha256-/U/FdJlsLcu4m1X4R5rr4S7Q79L57Q6MKIVQppW/LR0=";
@@ -159,8 +158,8 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Unified approach to explain the output of any machine learning model";
-    homepage = "https://github.com/slundberg/shap";
-    changelog = "https://github.com/slundberg/shap/releases/tag/${finalAttrs.src.tag}";
+    homepage = "https://github.com/shap/shap";
+    changelog = "https://github.com/shap/shap/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       evax

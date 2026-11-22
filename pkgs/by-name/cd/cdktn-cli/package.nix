@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cdktn-cli";
-  version = "0.24.0";
+  version = "0.25.0";
 
   src = fetchFromGitHub {
     owner = "open-constructs";
     repo = "cdk-terrain";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8vUGGg31MkuXdyvZo83GIoLZeJlOKIFgg3KlYU2F8hY=";
+    hash = "sha256-TgLhIiv6v4jH8afqX907sOtejXD0TH1InOThNPCum1o=";
   };
 
   pnpmWorkspaces = [ "cdktn-cli..." ];
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
       pnpmWorkspaces
       ;
     fetcherVersion = 3;
-    hash = "sha256-2DTexRQg/n454cKaYitFT3KAT8BR+153KxlYMaa1NXM=";
+    hash = "sha256-zo5zwdxRXKbFSeiOBBekie/ky1qyAk9UugPWB5j5S40=";
     pnpm = pnpm_10;
   };
 
@@ -80,10 +80,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
-    # Fix tests (workaround for https://github.com/open-constructs/cdk-terrain/issues/381)
-    substituteInPlace jest.preset.js \
-      --replace-fail "...nxPreset," "...nxPreset, transform: {},"
-
     patchShebangs packages
   '';
 
@@ -108,11 +104,16 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   doCheck = true;
+  __darwinAllowLocalNetworking = true;
   checkPhase = ''
     runHook preCheck
 
-    # Skip tests that require terraform (unfree)
+    # The tests use this variable, rather than $HOME, so we can't use writableTmpDirAsHomeHook here
+    export CDKTF_HOME=$(mktemp -d)
+
+    # Skip tests that require terraform (unfree). At least two workers are required for the tests to work
     pnpm --filter cdktn-cli exec jest \
+      --maxWorkers=$(( NIX_BUILD_CORES > 2 ? NIX_BUILD_CORES : 2 )) \
       --testPathIgnorePatterns \
        "src/test/cmds/convert.test.ts"
 
@@ -122,7 +123,10 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    pnpm install --force --offline --production --ignore-scripts --shamefully-hoist --filter "cdktn-cli..."
+    # pnpm prune breaks the application, so remove node_modules and reinstall prod deps from the lockfile, as recommended
+    # for monorepos in the docs (https://pnpm.io/10.x/cli/prune)
+    find . -name node_modules -type d -prune -exec rm -rf {} +
+    pnpm install --frozen-lockfile --offline --production --ignore-scripts --shamefully-hoist --filter "cdktn-cli..."
 
     mkdir -p "$out/lib/cdktn"
     cp -r node_modules packages package.json "$out/lib/cdktn/"

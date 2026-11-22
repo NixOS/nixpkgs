@@ -41,10 +41,11 @@ for url_and_key in "${url_and_key_list[@]}"; do
 
   echo "prefetching ${url}..."
   hash=$(nix-prefetch-url $url)
+  hash=$(nix-hash --type sha256 --to-sri $hash)
 
   echo "$key = {" >> $hashfile
   echo "  url = \"$url\";" >> $hashfile
-  echo "  sha256 = \"$hash\";" >> $hashfile
+  echo "  hash = \"$hash\";" >> $hashfile
   echo "};" >> $hashfile
 
   echo

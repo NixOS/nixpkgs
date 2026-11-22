@@ -18,6 +18,7 @@
   libxkbcommon,
   ulfius,
   yaml-cpp,
+  jsoncpp,
   udevCheckHook,
   versionCheckHook,
   makeBinaryWrapper,
@@ -30,11 +31,11 @@
 assert builtins.isBool enableDefaultConfig;
 
 let
-  version = "2.7.23.b246bcd";
+  version = "2.8.1.8e6a88d";
 
   platformio-deps-native = fetchzip {
     url = "https://github.com/meshtastic/firmware/releases/download/v${version}/platformio-deps-native-tft-${version}.zip";
-    hash = "sha256-Jr8/KnzNedGvMfMEjrqBv5HwKZS0jZpHFfp/saQEnng=";
+    hash = "sha256-9VFnbSgWLO7dqZjZDU/SL/WrwrCMf4REI/dc/LNAQQ8=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -44,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "meshtastic";
     repo = "firmware";
-    hash = "sha256-oNV6ZP5aSAFBcn9Y+yEzVTtMKg40eXcvDw5LlyZAft4=";
+    hash = "sha256-lhm4Dwg0Wk7Z0otQWa20eFRoZVWQ7cLJloWNreiMV68=";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
   };
@@ -77,6 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxkbcommon
     ulfius
     yaml-cpp
+    jsoncpp
   ];
 
   preConfigure = ''

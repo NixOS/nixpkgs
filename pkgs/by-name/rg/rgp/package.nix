@@ -3,6 +3,7 @@
   stdenv,
   makeWrapper,
   fetchurl,
+  patchelf,
   autoPatchelfHook,
   dbus,
   directx-shader-compiler,
@@ -28,19 +29,29 @@
 }:
 
 let
-  buildNum = "2026-05-28-1806";
+  buildNum = "2026-10-02-1872";
 in
 stdenv.mkDerivation {
   pname = "rgp";
-  version = "2.7";
+  version = "2.7.1";
 
   src = fetchurl {
     url = "https://gpuopen.com/download/RadeonDeveloperToolSuite-${buildNum}.tgz";
-    hash = "sha256-hMUAo72JVfDEv8Rp0/0YZDXX7p8ioVH40WtK/PQnRb8=";
+    hash = "sha256-FJZH18yvBPYzBlYIlp9MRCUOFeXth0RZeax4zsP58C0=";
   };
 
   nativeBuildInputs = [
     makeWrapper
+    #FIXME: avoid pulling explicit patchelf after resolving https://github.com/NixOS/patchelf/pull/672
+    (patchelf.overrideAttrs (
+      finalAttrs: previousAttrs: {
+        version = "0.15.2";
+        src = fetchurl {
+          url = "https://github.com/NixOS/patchelf/releases/download/${finalAttrs.version}/patchelf-${finalAttrs.version}.tar.bz2";
+          hash = "sha256-F3RfVkFZyOIo/EEtplogSLhGxLa0Igt3y/IkFuAvLXw=";
+        };
+      }
+    ))
     autoPatchelfHook
   ];
 

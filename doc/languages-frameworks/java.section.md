@@ -72,7 +72,7 @@ script to run it using a JRE. You can use `makeWrapper` for this:
     runHook preInstall
 
     mkdir -p $out/bin
-    makeWrapper ${jre}/bin/java $out/bin/foo \
+    makeWrapper ${lib.getExe jre} $out/bin/foo \
       --add-flags "-cp $out/share/java/foo.jar org.foo.Main"
 
     runHook postInstall

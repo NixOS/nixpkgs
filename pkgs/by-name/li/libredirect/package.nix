@@ -43,7 +43,7 @@ else
       runHook preBuild
 
       ${
-        if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 then
+        if stdenv.hostPlatform.isDarwin then
           ''
             # We need the unwrapped binutils and clang:
             # We also want to build a fat library with x86_64, arm64, arm64e in there.
@@ -93,7 +93,7 @@ else
       install -vD "$libName" "$out/lib/$libName"
 
     ''
-    + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
       # dylib will be rejected unless dylib rpath gets explicitly set
       install_name_tool \
         -change $libName $out/lib/$libName \

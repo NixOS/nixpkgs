@@ -22,21 +22,28 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  preBuild = ''
+  # Allow changing BASEDIR with -C
+  postPatch = ''
     substituteInPlace src/Makefile --replace-fail "BASEDIR :=" "BASEDIR ?="
-    substituteInPlace src/Makefile --replace-fail "modules_install" "INSTALL_MOD_PATH=$out modules_install"
   '';
 
   makeFlags = kernelModuleMakeFlags ++ [
     "BASEDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}"
+    "INSTALL_MOD_PATH=${placeholder "out"}"
+    "INSTALL_MOD_DIR=kernel/drivers/net/ethernet/realtek"
+    "INSTALL_MOD_STRIP=1"
+    "DEPMOD=true"
   ];
 
   buildFlags = [ "modules" ];
 
-  installPhase = ''
-    mkdir -p $out/lib/modules/${kernel.modDirVersion}/kernel/drivers/net/ethernet/realtek
-    cp src/r8125.ko $out/lib/modules/${kernel.modDirVersion}/kernel/drivers/net/ethernet/realtek/
-  '';
+  installTargets = [ "modules_install" ];
+
+  installFlags = [
+    "-C"
+    "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+    "M=$(PWD)/src"
+  ];
 
   meta = {
     homepage = "https://salsa.debian.org/debian/r8125";

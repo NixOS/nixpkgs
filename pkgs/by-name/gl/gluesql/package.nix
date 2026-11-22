@@ -6,6 +6,8 @@
   python3,
   gitMinimal,
   versionCheckHook,
+  pkg-config,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -20,8 +22,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   nativeBuildInputs = [
+    pkg-config
     python3
   ];
+
+  buildInputs = [ zstd ];
 
   nativeCheckInputs = [
     gitMinimal

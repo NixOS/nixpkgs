@@ -25,9 +25,6 @@ buildPythonPackage rec {
 
   build-system = [ flit-core ];
 
-  # z3 does not provide a dist-info, so python-runtime-deps-check will fail
-  pythonRemoveDeps = [ "z3-solver" ];
-
   dependencies = [
     z3-solver
     astroid

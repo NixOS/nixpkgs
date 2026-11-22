@@ -5,17 +5,18 @@
   stdenv,
   installShellFiles,
   nix-update-script,
+  writableTmpDirAsHomeHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "globalping-cli";
-  version = "1.6.0";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "jsdelivr";
     repo = "globalping-cli";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-mzfskgv9w5jMNvALpvLTgCzHhcexyaZUnrLQi76z2gE=";
+    hash = "sha256-FReil6gaz0mZFz216aQ0G5ghl6C6e8hSPbo16pHYwgg=";
   };
 
   vendorHash = "sha256-HFgWH6kcCv3voyiWkcaNiK3NvnQlgop9DLC1o0xeSN0=";
@@ -30,9 +31,7 @@ buildGoModule (finalAttrs: {
     "-X main.version=${finalAttrs.version}"
   ];
 
-  preCheck = ''
-    export HOME="$TMPDIR"
-  '';
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
   checkFlags =
     let

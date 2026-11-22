@@ -9,17 +9,14 @@
   fetchpatch,
 }:
 
-let
+buildPecl (finalAttrs: {
   version = "1.5.4";
-in
-buildPecl {
-  inherit version;
   pname = "gnupg";
 
   src = fetchFromGitHub {
     owner = "php-gnupg";
     repo = "php-gnupg";
-    rev = "gnupg-${version}";
+    tag = "gnupg-${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-g9w0v9qc/Q5qjB9/ekZyheQ1ClIEqMEoBc32nGWhXYA=";
   };
@@ -65,7 +62,7 @@ buildPecl {
   doCheck = true;
 
   meta = {
-    changelog = "https://github.com/php-gnupg/php-gnupg/releases/tag/gnupg-${version}";
+    changelog = "https://github.com/php-gnupg/php-gnupg/releases/tag/gnupg-${finalAttrs.version}";
     broken = lib.versionAtLeast php.version "8.6";
     description = "PHP wrapper for GpgME library that provides access to GnuPG";
     license = lib.licenses.bsd3;
@@ -73,4 +70,4 @@ buildPecl {
     maintainers = with lib.maintainers; [ taikx4 ];
     teams = [ lib.teams.php ];
   };
-}
+})

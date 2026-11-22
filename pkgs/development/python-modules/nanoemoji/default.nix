@@ -2,6 +2,7 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
+  addBinToPathHook,
   pytestCheckHook,
   setuptools,
   setuptools-scm,
@@ -70,24 +71,21 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    addBinToPathHook
     pytestCheckHook
     ninja
     picosvg
   ];
 
   makeWrapperArgs = [
-    "--prefix PATH : ${
-      lib.makeBinPath [
-        pngquant
-        resvg
-      ]
-    }"
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [
+      pngquant
+      resvg
+    ])
   ];
-
-  preCheck = ''
-    # make sure the built binaries (nanoemoji/maximum_color) can be found by the test
-    export PATH="$out/bin:$PATH"
-  '';
 
   meta = {
     description = "Wee tool to build color fonts";

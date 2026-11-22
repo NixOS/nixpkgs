@@ -21,7 +21,6 @@ buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } (finalAttrs
   pname = "cupy";
   version = "14.2.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "cupy";
@@ -38,8 +37,15 @@ buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } (finalAttrs
   ];
 
   postPatch =
-    # Inject absolute path to nvcc instead of relying on runtime discovery heuristics
+    # Relax cython constraint
     ''
+      substituteInPlace pyproject.toml \
+        --replace-fail \
+          '"Cython>=3.2,<3.3",' \
+          '"Cython>=3.2",'
+    ''
+    # Inject absolute path to nvcc instead of relying on runtime discovery heuristics
+    + ''
       substituteInPlace cupy/_environment.py \
         --replace-fail \
           "nvcc_path = os.environ.get('NVCC', None)" \
@@ -134,7 +140,7 @@ buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } (finalAttrs
     cuda_cudart # cuda.h, cuda_runtime.h, libcudart_static.a
     cuda_cuxxfilt # nv_decode.h
     cuda_nvrtc # nvrtc.h
-    cuda_nvtx # nvToolsExt.h
+    nvtx # nvToolsExt.h
     cuda_profiler_api # cuda_profiler_api.h
     libcublas # cublas_v2.h
     libcufft # cufft.h

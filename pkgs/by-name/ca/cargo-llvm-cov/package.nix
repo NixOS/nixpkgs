@@ -18,19 +18,18 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
-  llvmPackages_22,
   gitMinimal,
   writableTmpDirAsHomeHook,
 }:
 
 let
   pname = "cargo-llvm-cov";
-  version = "0.9.0";
+  version = "0.9.2";
 
   owner = "taiki-e";
   homepage = "https://github.com/${owner}/${pname}";
 
-  inherit (llvmPackages_22) llvm;
+  inherit (rustPlatform.rust.rustc.llvmPackages) llvm;
 in
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -42,7 +41,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     inherit owner;
     repo = "cargo-llvm-cov";
     rev = "v${version}";
-    sha256 = "sha256-tPW36leXKuJCaZYOXF0mTd+WYHfGnHNg8foSQ2N+8kU=";
+    hash = "sha256-spVSDO4a07gA4ReLSZA+81LN5JXB9wTQbj7NG5AJ9xQ=";
   };
 
   # Upstream doesn't include the lockfile so we need to add it back
@@ -53,7 +52,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "test-helper-0.0.0" = "sha256-nPNYhfGVL6rNdfCoWLNJuVeP6Gt4m1CwEOyPtFYIXfk=";
+      "test-helper-0.0.0" = "sha256-wu7AEPeEFiwwV94Ys08dx69NKw/AGuPNLuoxsAG/H08=";
     };
   };
 
@@ -90,10 +89,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
       tools-preview` or install the `llvm-tools-preview` component using your Nix
       library (e.g. fenix or rust-overlay)
     '';
-    license = with lib.licenses; [
-      asl20 # or
-      mit
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
     maintainers = with lib.maintainers; [
       wucke13
       matthiasbeyer

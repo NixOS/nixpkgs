@@ -4,21 +4,23 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
-  testers,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "terraform-docs";
-  version = "0.24.0";
+  version = "0.25.1";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "terraform-docs";
     repo = "terraform-docs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9bTri27VyZgpCsgKoClQh9PCHK5WkARdp1DphlGKxeA=";
+    hash = "sha256-SN93J74qeNwARrZ5CPRxWgsybOjo22KG/7afsg7Qqj4=";
   };
 
-  vendorHash = "sha256-k4xypyNk80EXH823oItjc45kkupjTSXHybnMrKEgFvs=";
+  vendorHash = "sha256-LpkgDSPiKaIO7RowuizfvHOSzVSbwrE/fr1CTurgR6E=";
 
   ldflags = [
     "-s"
@@ -38,15 +40,14 @@ buildGoModule (finalAttrs: {
     installShellCompletion terraform-docs.{bash,fish,zsh}
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
-    version = "v${finalAttrs.version}";
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "Utility to generate documentation from Terraform modules in various output formats";
     mainProgram = "terraform-docs";
     homepage = "https://github.com/terraform-docs/terraform-docs/";
+    changelog = "https://github.com/terraform-docs/terraform-docs/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       zimbatm

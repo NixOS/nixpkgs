@@ -23,8 +23,6 @@ buildPythonPackage rec {
   version = "0.1.12";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "ratoaq2";
     repo = "pgsrip";

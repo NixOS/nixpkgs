@@ -4,6 +4,8 @@
   rustPlatform,
   pkg-config,
   openssl,
+  libgit2,
+  aws-lc,
   nix-update-script,
 }:
 
@@ -22,7 +24,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [
+    libgit2
+    openssl
+  ];
+
+  checkInputs = [ aws-lc ];
 
   checkFlags = [
     # integration tests, need docker

@@ -45,6 +45,8 @@ stdenv.mkDerivation (finalAttrs: {
   # tests fail on darwin
   doCheck = !stdenv.hostPlatform.isDarwin;
 
+  guileImportsCheck = [ "lzlib" ];
+
   meta = {
     description = "GNU Guile library providing bindings to lzlib";
     homepage = "https://notabug.org/guile-lzlib/guile-lzlib";

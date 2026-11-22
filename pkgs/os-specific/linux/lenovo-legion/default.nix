@@ -26,6 +26,15 @@ stdenv.mkDerivation {
     "INSTALLDIR=${placeholder "out"}/lib/modules/${kernel.modDirVersion}/kernel/drivers/platform/x86"
     "MODDESTDIR=${placeholder "out"}/lib/modules/${kernel.modDirVersion}/kernel/drivers/platform/x86"
     "DKMSDIR=${placeholder "out"}/lib/modules/${kernel.modDirVersion}/misc"
+    "INSTALL_MOD_PATH=${placeholder "out"}"
+    "DEPMOD=true"
+  ];
+
+  installTargets = [ "modules_install" ];
+  installFlags = [
+    "-C"
+    "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+    "M=$(PWD)"
   ];
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
@@ -35,7 +44,11 @@ stdenv.mkDerivation {
     homepage = "https://github.com/johnfanv2/LenovoLegionLinux";
     license = lib.licenses.gpl2Only;
     platforms = [ "x86_64-linux" ];
-    maintainers = [ lib.maintainers.ulrikstrid ];
+    maintainers = with lib.maintainers; [
+      ulrikstrid
+      malix
+      shadowrz
+    ];
     broken = kernel.kernelOlder "5.15";
   };
 }

@@ -5,22 +5,21 @@
   installShellFiles,
   lib,
   stdenv,
-  stern,
-  testers,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "stern";
-  version = "1.34.0";
+  version = "1.35.0";
 
   src = fetchFromGitHub {
     owner = "stern";
     repo = "stern";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-zr3htHOxoE+9LE+nR1Lr9gEYL7M5qBpXFd0RIt9OaS4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-E5LydpORm2uGFG6b7XWBzhWkGkDUdU20hoH+X5Xa9tE=";
   };
 
-  vendorHash = "sha256-CN0xMhGusZmA/MGKIjNH6orXcUttfZ+3vNbz2tAnuOo=";
+  vendorHash = "sha256-a76DtJOd8SDDToiulu5Ybw9/K7p/UcVaP2xe7P/MD6E=";
 
   subPackages = [ "." ];
 
@@ -43,9 +42,8 @@ buildGoModule (finalAttrs: {
       done
     '';
 
-  passthru.tests.version = testers.testVersion {
-    package = stern;
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "Multi pod and container log tailing for Kubernetes";
@@ -53,9 +51,6 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/stern/stern";
     license = lib.licenses.asl20;
     mainProgram = "stern";
-    maintainers = with lib.maintainers; [
-      mbode
-      preisschild
-    ];
+    maintainers = with lib.maintainers; [ preisschild ];
   };
 })

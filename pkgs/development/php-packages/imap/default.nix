@@ -1,7 +1,6 @@
 {
   buildPecl,
   fetchFromGitHub,
-  fetchpatch,
   lib,
   php,
   libkrb5,
@@ -12,17 +11,14 @@
   uwimap,
 }:
 
-let
+buildPecl (finalAttrs: {
   version = "1.0.3";
-in
-buildPecl {
-  inherit version;
   pname = "imap";
 
   src = fetchFromGitHub {
     owner = "php";
     repo = "pecl-mail-imap";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-eDrznw5OtQXJZa7dR9roUiJyINXFZI5qmS+cyoaGHnk=";
   };
 
@@ -51,4 +47,4 @@ buildPecl {
     license = lib.licenses.php301;
     teams = [ lib.teams.php ];
   };
-}
+})

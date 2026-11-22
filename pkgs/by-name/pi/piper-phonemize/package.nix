@@ -24,6 +24,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-pj1DZUhy3XWGn+wNtxKKDWET9gsfofEB0NZ+EEQz9q0=";
   };
 
+  postPatch = ''
+    # GCC 16 deletes ostream << char32_t
+    substituteInPlace src/test.cpp \
+      --replace-fail "std::cerr << phoneme << " "std::cerr << static_cast<uint32_t>(phoneme) << "
+  '';
+
   nativeBuildInputs = [
     cmake
     pkg-config

@@ -59,7 +59,7 @@ in
           description = "Pebble ACME challenge test server";
           wantedBy = [ "network.target" ];
           serviceConfig = {
-            ExecStart = "${lib.getExe' pkgs.pebble "pebble-challtestsrv"} -dns01 ':53' -defaultIPv6 '' -defaultIPv4 '${nodes.VPS.networking.primaryIPAddress}'";
+            ExecStart = "${lib.getExe' pkgs.pebble "pebble-challtestsrv"} -dnsserver ':53' -defaultIPv6 '' -defaultIPv4 '${nodes.VPS.networking.primaryIPAddress}'";
             # Required to bind on privileged ports.
             AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
           };

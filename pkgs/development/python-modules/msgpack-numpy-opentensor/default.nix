@@ -13,8 +13,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.5.0";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   # The GitHub repo does not tag the same releases as PyPi, so we use PyPi directly instead.
   src = fetchPypi {
     inherit (finalAttrs) pname version;

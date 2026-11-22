@@ -27,15 +27,10 @@ tupleStdenv.mkDerivation {
 
   dontUnpack = !isDarwin;
 
-  nativeBuildInputs =
-    if isDarwin then
-      [
-        installShellFiles
-      ]
-    else
-      [
-        makeWrapper
-      ];
+  nativeBuildInputs = [
+    installShellFiles
+    makeWrapper
+  ];
 
   installPhase =
     if isDarwin then
@@ -62,6 +57,12 @@ tupleStdenv.mkDerivation {
 
         makeWrapper $out/bin/.tuple-wrapped $out/bin/tuple \
           --set-default SSL_CERT_FILE ${cacert}/etc/ssl/certs/ca-bundle.crt
+
+        export XDG_RUNTIME_DIR=/run/user/$UID
+        $out/bin/tuple completion bash >tuple.bash
+        $out/bin/tuple completion fish >tuple.fish
+        $out/bin/tuple completion zsh >tuple.zsh
+        installShellCompletion tuple.{bash,fish,zsh}
 
         runHook postInstall
       '';

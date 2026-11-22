@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gbsplay";
-  version = "0.0.102";
+  version = "0.0.104";
 
   src = fetchFromGitHub {
     owner = "mmitch";
     repo = "gbsplay";
     tag = finalAttrs.version;
-    hash = "sha256-kjIjJVenemlUGptEFQhm3wxhbjlYdqKGDWhGdTtGUI4=";
+    hash = "sha256-36aCxgZ4S0lYI3/Cd/qkXj5PVLRnKYw4cb8FE2mhI+0=";
   };
 
   configureFlags = [

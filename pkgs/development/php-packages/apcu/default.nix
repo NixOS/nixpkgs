@@ -6,18 +6,15 @@
   fetchpatch,
 }:
 
-let
-  version = "5.1.28";
-in
-buildPecl {
-  inherit version;
+buildPecl (finalAttrs: {
   pname = "apcu";
+  version = "5.1.28";
 
   src = fetchFromGitHub {
     owner = "krakjoe";
     repo = "apcu";
-    rev = "v${version}";
-    sha256 = "sha256-L8bGSPUuBsZXsJdeY6cVA0DvI2+0wEbNHH6IcfT+cFU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-L8bGSPUuBsZXsJdeY6cVA0DvI2+0wEbNHH6IcfT+cFU=";
   };
 
   # PHP 8.6 compatibility, backported from upstream master
@@ -52,10 +49,10 @@ buildPecl {
   __darwinAllowLocalNetworking = true;
 
   meta = {
-    changelog = "https://github.com/krakjoe/apcu/releases/tag/v${version}";
+    changelog = "https://github.com/krakjoe/apcu/releases/tag/v${finalAttrs.version}";
     description = "Userland cache for PHP";
     homepage = "https://pecl.php.net/package/APCu";
     license = lib.licenses.php301;
     teams = [ lib.teams.php ];
   };
-}
+})

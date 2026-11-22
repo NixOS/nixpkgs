@@ -15,7 +15,6 @@
     bridge =
       { config, lib, ... }:
       {
-        boot.initrd.systemd.enable = true;
         boot.initrd.network.enable = true;
         boot.initrd.systemd.services.boot-blocker = {
           before = [ "initrd.target" ];

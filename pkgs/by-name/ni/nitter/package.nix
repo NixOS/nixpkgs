@@ -45,6 +45,7 @@ buildNimPackage (
     };
 
     meta = {
+      broken = true; # requires pcre support, but nim only supports pcre v1
       homepage = "https://github.com/zedeus/nitter";
       description = "Alternative Twitter front-end";
       license = lib.licenses.agpl3Only;

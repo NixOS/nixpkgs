@@ -61,7 +61,6 @@ buildPythonPackage (finalAttrs: {
   pname = "py-key-value-aio";
   version = "0.4.5";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "strawgate";
@@ -75,12 +74,11 @@ buildPythonPackage (finalAttrs: {
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail \
-        '"-n=auto",' \
-        ""
-    substituteInPlace pyproject.toml \
+        '"-n=auto",' "" \
       --replace-fail \
-        '"--dist=loadfile",' \
-        ""
+        '"--dist=loadfile",' "" \
+      --replace-fail \
+        "uv_build>=0.11.4,<0.12" uv_build
   '';
 
   build-system = [

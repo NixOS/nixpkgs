@@ -1,13 +1,9 @@
 {
-  gnupg,
-  gpgme,
   isLuaJIT,
   lib,
-  libgpg-error,
   lua,
   lux-cli,
   nix,
-  openssl,
   perl,
   pkg-config,
   rustPlatform,
@@ -24,26 +20,20 @@ toLuaModule (
   rustPlatform.buildRustPackage rec {
     pname = "lux-lua";
 
-    version = lux-cli.version;
-
-    src = lux-cli.src;
+    inherit (lux-cli)
+      version
+      src
+      cargoHash
+      buildInputs
+      ;
 
     buildAndTestSubdir = "lux-lua";
     buildNoDefaultFeatures = true;
     buildFeatures = [ luaFeature ];
 
-    cargoHash = lux-cli.cargoHash;
-
     nativeBuildInputs = [
       perl
       pkg-config
-    ];
-
-    buildInputs = [
-      gnupg
-      gpgme
-      libgpg-error
-      openssl
     ];
 
     propagatedBuildInputs = [

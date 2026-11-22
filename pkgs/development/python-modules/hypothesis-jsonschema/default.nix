@@ -14,8 +14,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.23.1";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   # no git tags
   src = fetchPypi {
     inherit (finalAttrs) pname version;

@@ -14,7 +14,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "aio-libs";
+    owner = "aio-libs-abandoned";
     repo = "async-timeout";
     tag = "v${version}";
     hash = "sha256-lsSoIv2SnAJbv7V1eRognjv0cCQONwJMlb6fum9wQ/s=";

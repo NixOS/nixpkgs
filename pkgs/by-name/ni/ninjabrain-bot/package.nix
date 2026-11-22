@@ -6,6 +6,7 @@
   makeWrapper,
   copyDesktopItems,
   makeDesktopItem,
+  jdk,
   jre,
   libxkbcommon,
   libx11,
@@ -46,7 +47,10 @@ maven.buildMavenPackage (finalAttrs: {
   };
 
   mvnParameters = "assembly:single";
-  mvnHash = "sha256-k/bhq3TyiG+PvUogBeFGpgx+vBFdkEge6UnmnVPUjjg=";
+  mvnHash = "sha256-Zkw9kHMe2VNyHW/X6Xy0qvlibKPTV7pArA5M1YgnVLA=";
+
+  # UI tests need AWT, missing from maven's default jdk_headless
+  mvnJdk = jdk;
 
   nativeBuildInputs = [
     makeWrapper

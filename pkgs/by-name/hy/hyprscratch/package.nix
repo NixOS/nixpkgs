@@ -7,17 +7,17 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hyprscratch";
-  version = "0.6.5";
+  version = "0.7.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "sashetophizika";
     repo = "hyprscratch";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-y3OnhY3GzHhxabxOcXWP5PJ/HZhaNOO0UgYM5Kzqkc8=";
+    hash = "sha256-0zSlqkPXu+IBpS4bnkzwaieIzSYbIgpT0mtVwrsas9Y=";
   };
 
-  cargoHash = "sha256-Sms+Nx2xQilN9IROVyuO1pl7fFGF8LYN6EhFcYQBLQs=";
+  cargoHash = "sha256-UImnXfkn9LBEywbm/sud1obXSn99HZmxNWBEYIqUhn0=";
 
   nativeBuildInputs = [ versionCheckHook ];
 
