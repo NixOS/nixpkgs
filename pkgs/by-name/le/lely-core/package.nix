@@ -28,6 +28,8 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=unused-but-set-variable";
+
   outputs = [
     "out"
     "dev"
