@@ -11,14 +11,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aioaquarite";
-  version = "0.13.1";
+  version = "0.14.0b1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fdebrus";
     repo = "aioaquarite";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CxbBErzTN3+CnCgHRgoc9SufhyUg+bUPJA9o4e+e2+A=";
+    hash = "sha256-gJ5GufLHqDRYhHxrxaudIkwapeWWqW+D7G3IPvQig30=";
   };
 
   build-system = [ setuptools ];
