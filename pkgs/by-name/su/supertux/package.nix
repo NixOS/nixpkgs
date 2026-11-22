@@ -25,11 +25,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "supertux";
-  version = "0.7.0";
+  version = "0.7.0.2";
 
   src = fetchurl {
     url = "https://github.com/SuperTux/supertux/releases/download/v${finalAttrs.version}/SuperTux-v${finalAttrs.version}-Source.tar.gz";
-    hash = "sha256-MvxbmbmZTtWOWDQdbyHekldks4ElbhCFkRNt5TvDHaU=";
+    hash = "sha256-43hF4cPvpaCV8qH179WfHUR+Meo9s3/G3LljykOPvIc=";
   };
 
   nativeBuildInputs = [
