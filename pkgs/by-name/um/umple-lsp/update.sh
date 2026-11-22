@@ -30,4 +30,4 @@ echo "Updating to $latestVersion"
 
 # Update source version and use nix-update to handle the rest
 update-source-version umple-lsp "$latestVersion" --rev="$revision"
-nix-update umple-lsp --version=skip --generate-lockfile
+nix-update umple-lsp --version=skip --no-src --generate-lockfile
