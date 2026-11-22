@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dethrace";
-  version = "0.10.1";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "dethrace-labs";
     repo = "dethrace";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SGQGErlmsJEhjdvZa2YPJWwNFuZR4RL81W7meilw8t0=";
+    hash = "sha256-0gow6Dc64MrFTzeZgzT/NHw9XSE98KS5+opGNKwrioM=";
     fetchSubmodules = true;
   };
 
