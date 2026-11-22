@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "pym3u8downloader";
-  version = "0.1.8";
+  version = "0.1.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "coldsofttech";
     repo = "pym3u8downloader";
     tag = version;
-    hash = "sha256-VfNzHysvEVUNx8OK28v2l3QYTMn0ydE/LH+DBXpLfE8=";
+    hash = "sha256-ylUxHG7iyY8f0SG3f1af9elL41Gj3LAjwMtUhI4cIIw=";
   };
 
   build-system = [ setuptools ];
