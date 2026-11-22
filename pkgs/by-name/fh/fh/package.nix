@@ -3,32 +3,40 @@
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
+  pkg-config,
+  aws-lc,
   stdenv,
   gcc,
   cacert,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
+  __structuredAttrs = true;
+
   pname = "fh";
-  version = "0.1.27";
+  version = "0.1.28";
 
   src = fetchFromGitHub {
     owner = "DeterminateSystems";
     repo = "fh";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EUCV7/J9wJRroCGW5JqonFJIqcvJEBAwB7l3eWYxiSk=";
+    hash = "sha256-AhWJPz50o+vlZiMbUr/0wcCsgHDfZjjrQGgyQzhjKBw=";
   };
 
-  cargoHash = "sha256-HOQqUNd0I85lAD6YVWT9baEj31JpjIgq9Ujfn4ys/3o=";
+  cargoHash = "sha256-JQ/AGfikMUYskRPyyo0AD2CD6jJ6eqPkgh6gyKRcfnw=";
 
   nativeBuildInputs = [
     installShellFiles
+    pkg-config
     rustPlatform.bindgenHook
   ];
 
   checkInputs = [ cacert ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+  buildInputs = [
+    aws-lc
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     gcc.cc.lib
   ];
 
