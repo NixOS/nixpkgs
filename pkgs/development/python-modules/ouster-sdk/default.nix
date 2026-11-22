@@ -47,6 +47,7 @@ buildPythonPackage (finalAttrs: {
   patches = [
     ./nix-compat.patch
     ./rosbags-compat.patch
+    ./deterministic-bag-splits.patch
   ];
 
   postPatch = ''
