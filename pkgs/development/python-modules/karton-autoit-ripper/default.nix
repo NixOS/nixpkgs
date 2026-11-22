@@ -25,6 +25,7 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     "autoit-ripper"
+    "karton-core"
     "malduck"
     "regex"
   ];
