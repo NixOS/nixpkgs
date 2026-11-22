@@ -14655,7 +14655,7 @@ with self;
       TryTiny
       WebScraper
       XMLLibXML
-      libwwwperl
+      LWP
     ];
     meta = {
       homepage = "https://finance-quote.sourceforge.net/";
@@ -19051,8 +19051,6 @@ with self;
       license = lib.licenses.artistic2;
     };
   };
-
-  libwwwperl = LWP;
 
   libxml_perl = buildPerlPackage {
     pname = "libxml-perl";
@@ -39793,7 +39791,7 @@ with self;
       URI
       XMLXPathEngine
       YAML
-      libwwwperl
+      LWP
     ];
     meta = {
       homepage = "https://github.com/miyagawa/web-scraper";
@@ -40049,6 +40047,7 @@ with self;
   IOstringy = self.IOStringy;
   libintl_perl = self.libintl-perl;
   libintlperl = self.libintl-perl;
+  libwwwperl = self.LWP; # Accidental duplicate of the identical package was introduced under a different name
   LWPProtocolconnect = self.LWPProtocolConnect;
   LWPProtocolhttps = self.LWPProtocolHttps;
   LWPUserAgent = self.LWP;
