@@ -34,7 +34,7 @@
 # configure: error: --enable-dmeventd requires --enable-cmdlib to be used as well
 assert enableDmeventd -> enableCmdlib;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname =
     "lvm2"
     + lib.optionalString enableDmeventd "-with-dmeventd"
@@ -45,8 +45,8 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     urls = [
-      "https://mirrors.kernel.org/sourceware/lvm2/LVM2.${version}.tgz"
-      "ftp://sourceware.org/pub/lvm2/LVM2.${version}.tgz"
+      "https://mirrors.kernel.org/sourceware/lvm2/LVM2.${finalAttrs.version}.tgz"
+      "ftp://sourceware.org/pub/lvm2/LVM2.${finalAttrs.version}.tgz"
     ];
     hash = "sha256-1YARuEXfjsE4FsoT6mw51Ms9A4zS19OHrN9Wga19Zjc=";
   };
@@ -233,7 +233,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     changelog = "https://gitlab.com/lvmteam/lvm2/-/blob/v${
-      lib.replaceString "." "_" version
+      lib.replaceString "." "_" finalAttrs.version
     }/WHATS_NEW";
     homepage = "http://sourceware.org/lvm2/";
     description = "Tools to support Logical Volume Management (LVM) on Linux";
@@ -248,4 +248,4 @@ stdenv.mkDerivation rec {
       ajs124
     ];
   };
-}
+})
