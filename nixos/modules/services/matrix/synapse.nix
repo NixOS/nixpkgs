@@ -1171,6 +1171,9 @@ in
                     {
                       server_name = "matrix.org";
                     }
+                    {
+                      server_name = "nixos.org";
+                    }
                   ];
                   description = ''
                     The trusted servers to download signing keys from.
