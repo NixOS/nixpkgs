@@ -25,14 +25,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pydocket";
-  version = "0.28.0";
+  version = "0.31.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "chrisguidry";
     repo = "docket";
     tag = "python/v${finalAttrs.version}";
-    hash = "sha256-X9lOHTw5lvcklMgR0wRUcYJCI9qVhy2Bs2FXsCI8g84=";
+    hash = "sha256-Fhk4AF6XnWO1iw12wcLrCEwpOiTtqn64wpQ4InzG/d4=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/python";
