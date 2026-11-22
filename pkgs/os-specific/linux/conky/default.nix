@@ -46,7 +46,7 @@
   imlib2 ? null,
 
   luaSupport ? true,
-  lua ? null,
+  lua5_5 ? null,
   luaImlib2Support ? luaSupport && imlib2Support,
   luaCairoSupport ? luaSupport && (x11Support || waylandSupport),
   cairo ? null,
@@ -71,7 +71,9 @@
   versionCheckHook,
   expat,
 }:
-
+let
+  lua = lua5_5;
+in
 assert docsSupport -> pandoc != null && python3 != null;
 
 assert ncursesSupport -> ncurses != null;
