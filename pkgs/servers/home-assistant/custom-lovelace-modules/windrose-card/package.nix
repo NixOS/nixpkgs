@@ -7,13 +7,13 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "windrose-card";
-  version = "2.7.0";
+  version = "2.8.1";
 
   src = fetchFromGitHub {
     owner = "aukedejong";
     repo = "lovelace-windrose-card";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hnrhMCKCJRZXWVs7vW4RjHqOwvwOXmxmGqT0zzqz8cU=";
+    hash = "sha256-0g4YU6xdAUuzNygojS5As9HAvKHF5gQkdB0jUu4Qq8Y=";
   };
 
   npmDepsHash = "sha256-lqp6U4HY/oHuiJnd5b7bULmBApij003YY5Pse9d6CI4=";
