@@ -13,6 +13,7 @@ import ./make-test-python.nix {
         enable = true;
         enableSubmission = true;
         enableSubmissions = true;
+        mapFiles.not-root-owned = "/etc/postfix-not-root-owned";
         settings.main = {
           smtp_tls_CAfile = "${certs.ca.cert}";
           smtpd_tls_chain_files = [
@@ -40,6 +41,16 @@ import ./make-test-python.nix {
         };
       };
       services.saslauthd.enable = true;
+
+      # for checking how postmap handles a source not owned by root, which
+      # occurs say when run from a guest that gets the nix store shared from a
+      # host without idmap shift.
+      environment.etc.postfix-not-root-owned = {
+        text = "probe@localhost OK\n";
+        user = "nobody";
+        group = "nogroup";
+        mode = "0644";
+      };
 
       security.pki.certificateFiles = [
         certs.ca.cert
@@ -140,6 +151,7 @@ import ./make-test-python.nix {
 
   testScript = ''
     machine.wait_for_unit("postfix.service")
+    machine.succeed("postmap -q probe@localhost /var/lib/postfix/conf/not-root-owned | grep -x OK")
     machine.succeed("send-testmail")
     machine.succeed("send-testmail-starttls")
     machine.succeed("send-testmail-smtps")
