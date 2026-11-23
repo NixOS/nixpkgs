@@ -1,0 +1,11 @@
+--- a/darcs.cabal	1970-01-01 01:00:01.000000000 +0100
++++ b/darcs.cabal	2026-11-23 14:19:46.935827774 +0100
+@@ -444,7 +444,7 @@
+     else
+       build-depends:  attoparsec        >= 0.14.4 && < 0.15
+ 
+-    build-depends:    zip-archive       >= 0.3 && < 0.5,
++    build-depends:    zip-archive       >= 0.3 && < 0.6,
+                       async             >= 2.0.2 && < 2.3,
+                       constraints       >= 0.11 && < 0.15,
+                       unix-compat       >= 0.6 && < 0.8,
