@@ -15692,6 +15692,8 @@ self: super: with self; {
 
   pyloggermanager = callPackage ../development/python-modules/pyloggermanager { };
 
+  pylondonair = callPackage ../development/python-modules/pylondonair { };
+
   pylookyloo = callPackage ../development/python-modules/pylookyloo { };
 
   pylpsd = callPackage ../development/python-modules/pylpsd { };
