@@ -12,22 +12,20 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "seshat-node";
-  version = "4.0.1";
+  version = "6.0.1-unstable-2026-11-19";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "seshat";
-    tag = finalAttrs.version;
-    hash = "sha256-2v/qXMCD+r+CSQHtP/YT62p4GoApbGz33kcZfJAKbOU=";
+    rev = "d1e66b56712597e38246d9122630a9fa6b97e32b";
+    hash = "sha256-axYa86vbpqc3gXNLJa1rUrB4lJZhN2HQI3hMC5uSNWU=";
   };
 
-  sourceRoot = "${finalAttrs.src.name}/seshat-node";
-
-  cargoHash = "sha256-krSm1wy7HkCOLEHPPHCx6V9Mj+FiavyhO6bLOz2/3Qw=";
+  cargoHash = "sha256-tXDzI8Z1GKKL7E62XLI5mJeBg3Hilar92xnWrsjJBN8=";
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = finalAttrs.src + "/seshat-node/yarn.lock";
-    hash = "sha256-hh9n8By/dNdKS55rcZkzCxmJWwQa6Ovt+4M3YP3/hDs=";
+    hash = "sha256-HigLBXDy29ki+HAHJoM6DKH7VSE6EanV4DbegPZnd1A=";
   };
 
   nativeBuildInputs = [
@@ -37,13 +35,28 @@ rustPlatform.buildRustPackage (finalAttrs: {
     yarnBuildHook
   ];
 
+  preConfigure = ''
+    cp seshat-node/yarn.lock yarn.lock
+    cp seshat-node/package.json package.json
+  '';
+
   buildInputs = [ sqlcipher ];
+
+  buildPhase = ''
+    PATH=$PATH:$PWD/node_modules/.bin
+    yarn --offline --cwd=seshat-node build
+  '';
+
+  checkFlags = [
+    # thread panicks with IOError DirectoryNotEmpty
+    "--skip=delete"
+  ];
 
   installPhase = ''
     runHook preInstall
 
     mkdir -p "$out"
-    mv "index."{node,js} "$out"
+    mv "seshat-node/index."{node,js} "$out"
 
     runHook postInstall
   '';
