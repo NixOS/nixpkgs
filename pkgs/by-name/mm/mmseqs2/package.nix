@@ -4,6 +4,8 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  cargo,
+  rustc,
   xxd,
   perl,
   installShellFiles,
@@ -26,17 +28,19 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mmseqs2";
-  version = "18-8cc5c";
+  version = "20-ae60e";
 
   src = fetchFromGitHub {
     owner = "soedinglab";
     repo = "mmseqs2";
     tag = finalAttrs.version;
-    hash = "sha256-xOdtAE6qpEOH13ubs7KEFAEwsYbB3a5t+QXTC+QxgLs=";
+    hash = "sha256-grBp+j8C9SaftCj45yzAEMX/AJxFHJui60fvtqr23nA=";
   };
 
   nativeBuildInputs = [
     cmake
+    cargo
+    rustc
     xxd
     perl
     installShellFiles
@@ -46,6 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
+    (lib.cmakeFeature "VERSION_OVERRIDE" finalAttrs.version)
     (lib.cmakeBool "HAVE_AVX2" enableAvx2)
     (lib.cmakeBool "HAVE_SSE4_1" enableSse4_1)
     (lib.cmakeBool "HAVE_MPI" enableMpi)
