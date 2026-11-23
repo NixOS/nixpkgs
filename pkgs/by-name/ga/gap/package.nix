@@ -8,6 +8,7 @@
   gmp,
   pari,
   zlib,
+  testers,
   # one of
   # - "minimal" (~400M):
   #     Install the bare minimum of packages required by gap to start.
@@ -151,6 +152,8 @@ stdenv.mkDerivation rec {
     rm -rf pkg
   '';
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   meta = {
     description = "Computational discrete algebra system";
     # We are also grateful to ChrisJefferson for previous work on the package,
@@ -164,5 +167,6 @@ stdenv.mkDerivation rec {
     hydraPlatforms = lib.optionals (!keepAllPackages) meta.platforms;
     license = lib.licenses.gpl2;
     homepage = "https://www.gap-system.org";
+    pkgConfigModules = [ "libgap" ];
   };
 }
