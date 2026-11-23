@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "itch-dl";
-  version = "1.0.0";
+  version = "1.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "DragoonAethis";
     repo = "itch-dl";
     tag = finalAttrs.version;
-    hash = "sha256-var0iT10MT/QjCkF9GUlLufXdMi5tweH8HAlhqXckpU=";
+    hash = "sha256-bG35d8OsGA27RaSgbsgbK9AynzLbACs09506NJPt+kg=";
   };
 
   nativeBuildInputs = with python3Packages; [
