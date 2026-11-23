@@ -15,12 +15,12 @@
 }:
 buildGo127Module (finalAttrs: {
   pname = "qui";
-  version = "1.35.0";
+  version = "1.36.1";
   src = fetchFromGitHub {
     owner = "autobrr";
     repo = "qui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-siNanqbdoYBPRCAznE5GrjSxdpGET6kzIVLrOsT3Yao=";
+    hash = "sha256-xsWSDXJAUHcK2x0+ljK372bB2FG4gvdr+713mypczTo=";
   };
 
   qui-web = stdenvNoCC.mkDerivation (finalAttrs': {
@@ -45,7 +45,7 @@ buildGo127Module (finalAttrs: {
         ;
       pnpm = pnpm_11;
       fetcherVersion = 4;
-      hash = "sha256-mSuYyypzioQ2H/CZG/LonTZvtZONk9gJk+5n5rJEO6I=";
+      hash = "sha256-2gDYiO/tBJMAUR93jy8L9bG1IU8/Ebv4K+g6Gs7KT5k=";
     };
 
     postBuild = ''
@@ -57,7 +57,7 @@ buildGo127Module (finalAttrs: {
     '';
   });
 
-  vendorHash = "sha256-p5dDcPhFgeA75Mi0Gv+F80H+TAQdjPqzmQSIQDMOnPQ=";
+  vendorHash = "sha256-j4KkQXCJFy+m9GG09CtPGIlBdHdsxhE/6Vn/vWr8ykQ=";
 
   preBuild = ''
     cp -r ${finalAttrs.qui-web}/* web/dist
@@ -83,8 +83,9 @@ buildGo127Module (finalAttrs: {
   '';
 
   checkFlags = [
-    # broken in sandbox for some reason
-    "-skip=TestRollback"
+    # TestRollback fails in the sandbox. The capture tests need go-qbittorrent
+    # fixtures from the module cache, which go mod vendor does not include.
+    "-skip=TestRollback|^(TestStatusRuleMatchesQBittorrent|TestCategoryAndTagRulesMatchQBittorrent|TestCapabilityTableMatchesCaptures)$"
   ];
 
   nativeInstallCheckInputs = [
