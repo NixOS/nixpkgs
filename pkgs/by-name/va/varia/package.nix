@@ -15,14 +15,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "varia";
-  version = "2025.10.14-1";
+  version = "2026.11.16";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "giantpinkrobots";
     repo = "varia";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Spx9boNNeOXGr82uVKSpHCbimflKKjbjur+aKsNZFhY=";
+    hash = "sha256-FmOIP6+B6eaa8Eg1Ueh/2EjxRlzQZnwYL4bipRtj+PU=";
   };
 
   nativeBuildInputs = [
