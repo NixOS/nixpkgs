@@ -1,0 +1,5 @@
+--- a/autotest/ogr/ogr_gml.py
++++ b/autotest/ogr/ogr_gml.py
+@@ -2605 +2605 @@ def test_ogr_gml_billion_laugh(parser):
+-    if parser == "EXPAT":
++    if True:

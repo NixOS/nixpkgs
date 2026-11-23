@@ -1,25 +1,22 @@
 {
   buildPythonPackage,
   lib,
-  fetchPypi,
+  fetchFromGitHub,
   setuptools,
   setuptools-scm,
-  glibcLocales,
-  isPy3k,
   pytestCheckHook,
-  curio,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sniffio";
   version = "1.3.1";
   pyproject = true;
 
-  disabled = !isPy3k;
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-9DJO3GcKD0l1CoG4lfNcOtuEPMpG8FMPefwbq7I3idw=";
+  src = fetchFromGitHub {
+    owner = "python-trio";
+    repo = "sniffio";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Hp3i0NP57Z0OvLzRxu9+kiWF0+ye8y7J4HZoxeherv0=";
   };
 
   build-system = [
@@ -27,16 +24,14 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  buildInputs = [ glibcLocales ];
-
   nativeCheckInputs = [
-    curio
     pytestCheckHook
   ];
 
   meta = {
     homepage = "https://github.com/python-trio/sniffio";
+    changelog = "https://github.com/python-trio/sniffio/blob/${finalAttrs.src.tag}/docs/source/history.rst";
     license = lib.licenses.asl20;
     description = "Sniff out which async library your code is running under";
   };
-}
+})

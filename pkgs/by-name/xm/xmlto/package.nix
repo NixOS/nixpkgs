@@ -78,6 +78,8 @@ stdenv.mkDerivation (finalAttrs: {
     package = finalAttrs.finalPackage;
   };
 
+  __structuredAttrs = true;
+
   meta = {
     changelog = "https://pagure.io/xmlto/blob/master/f/ChangeLog";
     description = "Front-end to an XSL toolchain";

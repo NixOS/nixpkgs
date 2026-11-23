@@ -15,8 +15,8 @@ mkDerivation {
   version = "0.19.0.0";
   src = fetchgit {
     url = "https://github.com/hercules-ci/optparse-applicative.git";
-    sha256 = "068rsq9j0afrywbcqf6vg4ivfxbb68ab7f0lvg1na81mfn7sfakk";
-    rev = "b55bb38a2aea0cf776aec707cdce7c7418146077";
+    sha256 = "sha256-tO0V+TKS+ng6OJ8BztKwmV0tV4TnUXOD01ocTyO0sq0=";
+    rev = "0.19.0.0-fork-1";
     fetchSubmodules = true;
   };
   libraryHaskellDepends = [

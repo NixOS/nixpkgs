@@ -17,14 +17,14 @@
   regex-applicative,
   frontmatter,
 }:
-mkDerivation rec {
+mkDerivation {
   pname = "changelog-d";
-  version = "1.0.2";
+  version = "1.0.2-unstable-2026-10-25";
   src = fetchFromCodeberg {
     owner = "fgaz";
     repo = "changelog-d";
-    rev = "v${version}";
-    hash = "sha256-nPvuAkcFfK/NKXNBv8D2ePnB88WnjvmAIbzQHVvEXtk=";
+    rev = "99905fe1603a518300ac9b61e58ead8ba183c0cd";
+    hash = "sha256-XWM3hgjvW7zP3wfgZGxnUjflDwdh+fpKYlJ8j7L7o84=";
   };
   isLibrary = false;
   isExecutable = true;

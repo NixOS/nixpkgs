@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   meson,
   ninja,
   pkg-config,
@@ -30,6 +31,15 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash = "sha256-dAWKDF5hegvKhUZ4JW2J/P9uSs4xNrZLNinhAff6NSc=";
   };
+
+  # Fix build with SWIG 4.5
+  # FIXME: remove after update
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/libratbag/libratbag/commit/1f4efda9553a5efbbd5be49def22f993ef1410ca.diff";
+      hash = "sha256-MXfEJdjUWNp7VfAqe+5rDS7rbZwfhXm/fBV46h7ZJkY=";
+    })
+  ];
 
   nativeBuildInputs = [
     meson

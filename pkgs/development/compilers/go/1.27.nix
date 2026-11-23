@@ -8,10 +8,10 @@ let
   mkGoDerivation = callPackage ./generic.nix { };
 in
 mkGoDerivation (finalAttrs: {
-  version = "1.27.3";
+  version = "1.27.4";
   src = fetchurl {
     url = "https://go.dev/dl/go${finalAttrs.version}.src.tar.gz";
-    hash = "sha256-bndJA1zzYPBrJXXRYup535/ajvZxiJ5cN1+OUHd/Jrs=";
+    hash = "sha256-c8+4VxrsDAEXdofbhxY9Rqog6XeWcncokaoXZU2aYJk=";
   };
   patches = [
     # This patch is never used in tree, and very rarely out-of-tree. The one exception is in

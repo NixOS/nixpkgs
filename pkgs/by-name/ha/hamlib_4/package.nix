@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   perl,
   swig,
   autoreconfHook,
@@ -32,6 +33,14 @@ stdenv.mkDerivation (finalAttrs: {
     tag = finalAttrs.version;
     hash = "sha256-t1GgCYH+AJE5UZKQu+9uqx7fJDv4zuT0OzWxicZFfdQ=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "fix-python-bindings-swig-4.5.patch";
+      url = "https://github.com/Hamlib/Hamlib/commit/251815bbe505b51677ad3828cff9f071988e473c.patch";
+      hash = "sha256-9P9h4pgxNxC1wkOv4d+QeZaNCZTkAL9HOrRwhOrISkA=";
+    })
+  ];
 
   strictDeps = true;
   depsBuildBuild = [ buildPackages.stdenv.cc ];
