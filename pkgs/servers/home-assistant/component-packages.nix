@@ -4192,7 +4192,8 @@
       ];
     "libresync" =
       ps: with ps; [
-      ]; # missing inputs: aiolibresync
+        aiolibresync
+      ];
     "lichess" =
       ps: with ps; [
         aiolichess
@@ -4667,7 +4668,8 @@
       ];
     "mijn_farmad_apotheek" =
       ps: with ps; [
-      ]; # missing inputs: aiofarmad
+        aiofarmad
+      ];
     "mijndomein_energie" =
       ps: with ps; [
       ];
@@ -5039,7 +5041,8 @@
       ];
     "nature_remo" =
       ps: with ps; [
-      ]; # missing inputs: aionatureremo
+        aionatureremo
+      ];
     "neato" =
       ps: with ps; [
         pybotvac
@@ -5355,12 +5358,13 @@
         home-assistant-intents
         ifaddr
         mutagen
+        okokscale
         pymicro-vad
         pysmlight
         pyspeex-noise
         serialx
         zeroconf
-      ]; # missing inputs: okokscale
+      ];
     "olimpia_splendid" =
       ps: with ps; [
       ];
@@ -6257,7 +6261,8 @@
       ];
     "rainbowminer" =
       ps: with ps; [
-      ]; # missing inputs: rainbowminer-api-client
+        rainbowminer-api-client
+      ];
     "rainforest_eagle" =
       ps: with ps; [
         aioeagle
@@ -9417,6 +9422,7 @@
     "lg_tv_rs232"
     "libre_hardware_monitor"
     "librenms"
+    "libresync"
     "lichess"
     "lidarr"
     "liebherr"
@@ -9492,6 +9498,7 @@
     "microsoft"
     "midea"
     "miele"
+    "mijn_farmad_apotheek"
     "mikrotik"
     "mill"
     "min_max"
@@ -9540,6 +9547,7 @@
     "namecheapdns"
     "nanoleaf"
     "nasweb"
+    "nature_remo"
     "neato"
     "nederlandse_spoorwegen"
     "neopool"
@@ -9589,6 +9597,7 @@
     "occupancy"
     "octoprint"
     "ohme"
+    "okok_scale"
     "ollama"
     "omie"
     "omnilogic"
@@ -9706,6 +9715,7 @@
     "radio_frequency"
     "radiotherm"
     "rainbird"
+    "rainbowminer"
     "rainforest_eagle"
     "rainforest_raven"
     "rainmachine"

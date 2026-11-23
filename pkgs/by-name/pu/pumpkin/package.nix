@@ -10,7 +10,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pumpkin";
-  version = "0.2.0+26.3-26.51";
+  version = "0.2.2+26.3-26.60";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
