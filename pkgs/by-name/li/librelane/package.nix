@@ -43,6 +43,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   pythonRelaxDeps = [
     "click"
+    # librelane pins cloup<4; every name it imports from cloup still exists in
+    # cloup 4.0.0.
+    "cloup"
     # librelane pins ciel<3; only Family.by_name/get_ciel_home/fetch()
     # (unchanged in ciel 3.0.0) are used, so the pin is safe to relax.
     "ciel"
