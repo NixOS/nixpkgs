@@ -18,8 +18,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ zlib ];
 
+  strictDeps = true;
+
   enableParallelBuilding = true;
   doCheck = true;
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://potrace.sourceforge.net/";
