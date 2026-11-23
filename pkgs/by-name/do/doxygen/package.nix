@@ -44,6 +44,9 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     flex
     bison
+  ]
+  ++ lib.optionals withGui [
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -54,9 +57,10 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals withGui [
     qt6.qtbase
-    qt6.wrapQtAppsHook
     qt6.qtsvg
   ];
+
+  strictDeps = true;
 
   cmakeFlags = [
     "-Duse_sys_spdlog=ON"
@@ -74,6 +78,8 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     cp -r ../examples $examples
   '';
+
+  __structuredAttrs = true;
 
   meta = {
     license = lib.licenses.gpl2Plus;
