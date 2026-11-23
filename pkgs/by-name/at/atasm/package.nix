@@ -61,5 +61,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/CycoPH/atasm/releases/tag/V${finalAttrs.version}";
     maintainers = [ ];
     platforms = with lib.platforms; unix;
+    mainProgram = "atasm";
   };
 })
