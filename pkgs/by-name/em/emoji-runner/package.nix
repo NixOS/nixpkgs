@@ -9,13 +9,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "emoji-runner";
-  version = "3.0.6";
+  version = "3.0.8";
 
   src = fetchFromGitHub {
     owner = "alex1701c";
     repo = "EmojiRunner";
     tag = finalAttrs.version;
-    hash = "sha256-bATM93BreumyKbyYwPZ8nXL44B3sfSPn7Ob6qHcbGhY=";
+    hash = "sha256-3uMk4PaKE3rTnhJueu7L6u4BX7ev+SSDak8o0l6enQU=";
   };
 
   dontWrapQtApps = true;

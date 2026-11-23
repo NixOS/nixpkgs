@@ -20,7 +20,7 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "omniroute";
-  version = "3.8.53";
+  version = "3.8.54";
   __structuredAttrs = true;
   strictDeps = true;
 
@@ -28,7 +28,7 @@ buildNpmPackage (finalAttrs: {
     owner = "cheaper-inference";
     repo = "OmniRoute";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+ImTZzi10hvj02qTWlO9J0XF6Y95JHUSFUHv/wdCddQ=";
+    hash = "sha256-KDxELGSEZx33UPTykC2Fh5t3BAvrcCoSWwEiA1qEuvc=";
   };
 
   patches = [
@@ -42,7 +42,7 @@ buildNpmPackage (finalAttrs: {
   ];
 
   npmDepsFetcherVersion = 2;
-  npmDepsHash = "sha256-+0Fo13X8JzFLS+KZNl3Gs2yEFsq6jXTKSu2XxO3F93M=";
+  npmDepsHash = "sha256-j4FY5YaIN+PqI1BurtfI5DRdQif3tKIsTpthOo+7A/Q=";
 
   env = {
     # Prevent onnxruntime-node to download GPU support files

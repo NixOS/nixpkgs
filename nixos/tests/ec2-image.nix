@@ -26,6 +26,19 @@ let
         ../modules/profiles/qemu-guest.nix
         {
           ec2.bootMode = lib.mkIf (bootMode != null) bootMode;
+          amazonImage.registerImage = lib.mkIf (bootMode == "uefi") {
+            TpmSupport = "v2.0";
+            # Smaller than the image, so register-image.json has to raise it.
+            BlockDeviceMappings = [
+              {
+                DeviceName = "/dev/xvda";
+                Ebs = {
+                  VolumeType = "gp3";
+                  VolumeSize = 1;
+                };
+              }
+            ];
+          };
           # The default variant already covers the channel.
           nix.channel.enable = bootMode != "uefi";
           amazonImage.format = "qcow2";
@@ -64,6 +77,14 @@ let
 
   image = "${imageCfg.system.build.amazonImage}/${imageCfg.image.fileName}";
 
+  # Hashing the store takes a while, so one variant covers it.
+  verifyFlags = lib.optionalString (bootMode == "uefi") " --check-contents";
+
+  registerImage = imageCfg.amazonImage.registerImage;
+  expectedRegisterImage = lib.filterAttrs (
+    name: value: value != null && name != "BlockDeviceMappings"
+  ) registerImage;
+
 in
 {
   _module.args.bootMode = lib.mkDefault null;
@@ -97,6 +118,7 @@ in
   testScript =
     { nodes, ... }:
     ''
+      import json
       import os
       import re
       import subprocess
@@ -307,11 +329,31 @@ in
               machine.succeed("test -d /sys/firmware/efi")
               machine.succeed("findmnt ${imageCfg.boot.loader.efi.efiSysMountPoint}")
               machine.succeed("test $(stat -c %a ${imageCfg.boot.loader.efi.efiSysMountPoint}) = 700")
-              machine.succeed("findmnt / -o SIZE -n | grep -E '[0-9]+G'")
+              # The test resizes the disk to 10G, so the root file system must grow past the image.
+              root_bytes = int(machine.succeed("findmnt / -n -b -o SIZE"))
+              assert root_bytes > 8 * 1024**3, f"root file system did not grow: {root_bytes} bytes"
+
+          with subtest("Image metadata"):
+              nix_support = "${imageCfg.system.build.amazonImage}/nix-support"
+              with open(f"{nix_support}/image-info.json") as f:
+                  image_info = json.load(f)
+              assert isinstance(image_info["logical_bytes"], str), image_info
+              assert image_info["disks"]["root"]["logical_bytes"] == image_info["logical_bytes"], image_info
+              assert image_info["format"] == "QCOW2", image_info
+              with open(f"{nix_support}/register-image.json") as f:
+                  args = json.load(f)
+              expected = json.loads('${builtins.toJSON expectedRegisterImage}')
+              assert expected.items() <= args.items(), args
+              assert None not in args.values(), args
+              [root] = [m for m in args["BlockDeviceMappings"] if m["DeviceName"] == args["RootDeviceName"]]
+              size_gib = root["Ebs"]["VolumeSize"]
+              # RegisterImage rejects a root volume smaller than the snapshot.
+              assert size_gib * 1024**3 >= int(image_info["logical_bytes"]), args
+              assert size_gib >= ${toString (lib.head registerImage.BlockDeviceMappings).Ebs.VolumeSize}, args
 
           with subtest("Store paths and profiles"):
               machine.succeed("nix-store --check-validity ${imageCfg.system.build.toplevel}")
-              machine.succeed("nix-store --verify")
+              machine.succeed("nix-store --verify${verifyFlags}")
               machine.succeed("test $(readlink -f /nix/var/nix/profiles/system) = ${imageCfg.system.build.toplevel}")
               machine.fail("test -e /nix/var/nix/profiles/system-2-link")
               ${lib.optionalString imageCfg.nix.channel.enable ''

@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ffmpegthumbnailer";
-  version = "2.4.1";
+  version = "2.4.2";
 
   src = fetchFromGitHub {
     owner = "dirkvdb";
     repo = "ffmpegthumbnailer";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LvurrguCs/NOs4pZ+zbvWFGJ25pYeKO9vblfwEtC/LE=";
+    hash = "sha256-dRZQPws0iBzO/nMHCZYuO02VRkoAFUWebq9B43beYvY=";
   };
 
   nativeBuildInputs = [
