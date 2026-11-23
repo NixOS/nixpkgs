@@ -3111,6 +3111,18 @@ with haskellLib;
     simple-get-opt = self.simple-get-opt_0_4;
   };
 
+  # Make test suite work with Setup.hs / from Hackage tarball
+  # https://github.com/goldfirere/singletons/pull/636
+  singletons-base = appendPatches [
+    (pkgs.fetchpatch {
+      name = "singletons-base-absolute-package-db-path.patch";
+      url = "https://github.com/goldfirere/singletons/commit/7c0f6e2253824d1dcc2dfcea12bfec22e9cd68d2.patch";
+      hash = "sha256-IzBvCK+yJhGR6ISm+GAAhYrSPZlRplkmkqx50RzOFJw=";
+      relative = "singletons-base";
+      excludes = [ "CHANGES.md" ];
+    })
+  ] super.singletons-base;
+
   # 2025-04-23: jailbreak to allow megaparsec >= 9.7
   # 2025-04-23: test data missing from tarball
   crucible-syntax = doJailbreak (dontCheck super.crucible-syntax);
