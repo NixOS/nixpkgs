@@ -4,6 +4,7 @@
   fetchurl,
   jdk_headless,
   makeWrapper,
+  nix-update-script,
   stdenvNoCC,
   testers,
 }:
@@ -68,6 +69,15 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       inherit mkBuildMavenPackage;
 
       buildMavenPackage = mkBuildMavenPackage finalAttrs.finalPackage;
+
+      updateScript = nix-update-script {
+        extraArgs = [
+          "--url"
+          "https://github.com/apache/maven"
+          "--version-regex"
+          "maven-(3\\..*)"
+        ];
+      };
 
       tests = {
         version = testers.testVersion {
