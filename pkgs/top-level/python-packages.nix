@@ -10670,6 +10670,8 @@ self: super: with self; {
 
   mapclassify = callPackage ../development/python-modules/mapclassify { };
 
+  marantz-rs232 = callPackage ../development/python-modules/marantz-rs232 { };
+
   mariadb = callPackage ../development/python-modules/mariadb { };
 
   marimo = callPackage ../development/python-modules/marimo { };
@@ -15691,6 +15693,8 @@ self: super: with self; {
   pyloadapi = callPackage ../development/python-modules/pyloadapi { };
 
   pyloggermanager = callPackage ../development/python-modules/pyloggermanager { };
+
+  pylondonair = callPackage ../development/python-modules/pylondonair { };
 
   pylookyloo = callPackage ../development/python-modules/pylookyloo { };
 
