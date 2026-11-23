@@ -24,6 +24,8 @@ runCommand "fc-cache"
   {
     preferLocalBuild = true;
     allowSubstitutes = false;
+    strictDeps = true;
+    __structuredAttrs = true;
   }
   ''
     export FONTCONFIG_FILE=$(pwd)/fonts.conf
