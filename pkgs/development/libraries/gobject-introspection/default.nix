@@ -91,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
     docbook-xsl-nons
     docbook_xml_dtd_45
     # Build definition checks for the Python modules needed at runtime by importing them.
-    (buildPackages.python3.withPackages pythonModules)
+    (python3.withPackages pythonModules)
     finalAttrs.setupHook # move .gir files
     # can't use canExecute, we need prebuilt when cross
   ]
