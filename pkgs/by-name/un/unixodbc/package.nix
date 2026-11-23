@@ -2,6 +2,7 @@
   lib,
   stdenv,
   autoreconfHook,
+  libtool,
   fetchFromGitHub,
 }:
 
@@ -20,10 +21,18 @@ stdenv.mkDerivation (finalAttrs: {
     autoreconfHook
   ];
 
+  buildInputs = [
+    libtool
+  ];
+
+  strictDeps = true;
+
   configureFlags = [
     "--disable-gui"
     "--sysconfdir=/etc"
   ];
+
+  __structuredAttrs = true;
 
   meta = {
     changelog = "https://github.com/lurcher/unixODBC/releases/tag/v${finalAttrs.version}";
