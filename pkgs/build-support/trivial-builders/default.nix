@@ -274,7 +274,9 @@ rec {
   # or https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-writeShellApplication
   writeShellApplication =
     {
-      name,
+      name ? "${pname}-${version}",
+      pname ? null,
+      version ? null,
       text,
       runtimeInputs ? [ ],
       runtimeEnv ? null,
@@ -292,9 +294,11 @@ rec {
       inheritPath ? true,
     }@args:
     writeTextFile {
-      pos = builtins.unsafeGetAttrPos "name" args;
+      pos = builtins.unsafeGetAttrPos (if pname != null then "pname" else "name") args;
       inherit
         name
+        pname
+        version
         meta
         passthru
         derivationArgs
