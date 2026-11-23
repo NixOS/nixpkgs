@@ -70,13 +70,13 @@ stdenv.mkDerivation (finalAttrs: {
         version = "tangd ${finalAttrs.version}";
       };
     };
-    updateScript = gitUpdater { };
+    updateScript = gitUpdater { rev-prefix = "v"; };
   };
 
   meta = {
     description = "Server for binding data to network presence";
     homepage = "https://github.com/latchset/tang";
-    changelog = "https://github.com/latchset/tang/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/latchset/tang/releases/tag/${finalAttrs.src.tag}";
     maintainers = with lib.maintainers; [ fpletz ];
     license = lib.licenses.gpl3Plus;
     mainProgram = "tangd";
