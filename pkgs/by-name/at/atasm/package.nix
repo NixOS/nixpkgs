@@ -29,29 +29,30 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  preBuild = ''
-    makeFlagsArray+=(
-      -C ./src
-      CC=cc
-      USEZ="-DZLIB_CAPABLE -I${zlib}/include"
-      ZLIB="-L${zlib}/lib -lz"
-      UNIX="-DUNIX"
-    )
-  '';
+  makeFlags = [
+    "--directory=./src"
+    "CC=cc"
+    "USEZ=-DZLIB_CAPABLE -I${zlib}/include"
+    "ZLIB=-L${zlib}/lib -lz"
+    "UNIX=-DUNIX"
+  ];
+
+  installFlags = [
+    "DESTDIR=$(out)/bin/"
+    "DOCDIR=$(out)/share/doc/atasm"
+    "MANDIR=$(out)/man/man1"
+  ];
 
   preInstall = ''
     mkdir -p $out/bin/
-    install -d $out/share/doc/${pname} $out/man/man1
-    installFlagsArray+=(
-      DESTDIR=$out/bin/
-      DOCDIR=$out/share/doc/${pname}
-      MANDIR=$out/man/man1
-    )
+    install -d $out/share/doc/atasm $out/man/man1
   '';
 
   postInstall = ''
-    mv docs/* $out/share/doc/${pname}
+    mv docs/* $out/share/doc/atasm
   '';
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://github.com/CycoPH/atasm";
