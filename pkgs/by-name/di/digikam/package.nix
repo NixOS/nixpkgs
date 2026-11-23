@@ -36,6 +36,7 @@
   x265,
   libGLX,
   libGLU,
+  llama-cpp,
   cudaPackages,
   enableCuda ? config.cudaSupport,
 
@@ -63,19 +64,15 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "digikam";
-  version = "9.1.0";
+  version = "9.2.0";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "graphics";
     repo = "digikam";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rrAqHSG7AsyG8DM0zYfyuGyu6jI/ZDmSYco91nhdmhQ=";
+    hash = "sha256-fTngfAOLJdI1RUXXRTsemxKzmScdydUIMlqi7IcLp9g=";
   };
-
-  patches = [
-    ./disable-tests-download.patch
-  ];
 
   strictDeps = true;
 
@@ -125,6 +122,7 @@ stdenv.mkDerivation (finalAttrs: {
     x265
     libGLX
     libGLU
+    llama-cpp
 
     kdePackages.qtbase
     kdePackages.qtnetworkauth
@@ -156,24 +154,24 @@ stdenv.mkDerivation (finalAttrs: {
 
   checkInputs = [ kdePackages.qtdeclarative ];
 
-  postConfigure = lib.optionalString finalAttrs.finalPackage.doCheck ''
-    ln -s ${testData} $cmakeDir/test-data
+  preConfigure = lib.optionalString finalAttrs.finalPackage.doCheck ''
+    ln -s ${testData} ./test-data
   '';
 
   postPatch = ''
     substituteInPlace \
       core/dplugins/bqm/custom/userscript/userscript.cpp \
-      core/utilities/import/backend/cameracontroller.cpp \
+      core/utilities/import/backend/cameracontroller_execute.cpp \
       --replace-fail '"/bin/bash"' ${lib.escapeShellArg "\"${runtimeShell}\""}
   '';
 
   cmakeFlags = [
-    (lib.cmakeBool "BUILD_WITH_QT6" true)
     (lib.cmakeBool "BUILD_TESTING" finalAttrs.finalPackage.doCheck)
     (lib.cmakeBool "ENABLE_KFILEMETADATASUPPORT" true)
     #(lib.cmakeBool "ENABLE_AKONADICONTACTSUPPORT" true)
     (lib.cmakeBool "ENABLE_MEDIAPLAYER" true)
     (lib.cmakeBool "ENABLE_APPSTYLES" true)
+    (lib.cmakeBool "ENABLE_NLSEARCH_LLAMACPP" true)
   ]
   ++ lib.optionals enableCuda [
     (lib.cmakeFeature "CUDA_TOOLKIT_ROOT_DIR" cudaPackages.cuda_nvcc.outPath)
