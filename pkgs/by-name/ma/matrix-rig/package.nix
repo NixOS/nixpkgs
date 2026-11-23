@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nix-update-script,
 }:
 buildGoModule (finalAttrs: {
   pname = "matrix-rig";
@@ -17,6 +18,8 @@ buildGoModule (finalAttrs: {
   };
 
   vendorHash = "sha256-Ovpb2exTFWP7BuQIo+e/CPqgYOE/SYL1K7gUygZVK8A=";
+
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch=main" ]; };
 
   meta = {
     description = "Vanity room ID generator for Matrix room v12 (MSC4291)";
