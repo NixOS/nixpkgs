@@ -17,7 +17,7 @@
 }:
 let
   pname = "turbo-unwrapped";
-  version = "2.11.10";
+  version = "2.11.13";
 
   ghostty-src = fetchFromGitHub {
     owner = "ghostty-org";
@@ -33,17 +33,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "vercel";
     repo = "turborepo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AK1I+bf0IUFLlcctcyUVmK1XChzC3IUL3noUvXC9Tpc=";
+    hash = "sha256-OoQfMDSp1EE9J2M9Yel1FsXuQwxTLFqR02NQQ6PkYF4=";
   };
 
-  patches = [
-    # Zig has removed the ability to use `--global-cache-dir` with
-    # `zig build`. It only allows the global cache dir to be passed
-    # with `ZIG_GLOBAL_CACHE_DIR`.
-    ./fix-zig-global-cache-dir.patch
-  ];
-
-  cargoHash = "sha256-HOzHVpDud/4BIYL2VMiPTFdi4ISz0jdC5U0VLJXnH/U=";
+  cargoHash = "sha256-SxMcMDWrIqwVFJWTXCFVYlKmtm8kQMtCq3BNpEI4wxE=";
 
   nativeBuildInputs = [
     capnproto
