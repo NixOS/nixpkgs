@@ -646,6 +646,15 @@ with haskellLib;
   # Fixed upstream, but unreleased: https://github.com/fumieval/mason/pull/14
   mason = (warnAfterVersion "0.2.6") (doJailbreak super.mason);
 
+  network = overrideCabal (drv: {
+    # Presumably flaky test added in 3.2.13.0 already fails in connect, reliably on busy machines
+    # https://github.com/haskell/network/issues/666
+    testFlags = drv.testFlags or [ ] ++ [
+      "--skip"
+      "/Network.Socket/a connection the peer resets/is reported as ResourceVanished/"
+    ];
+  }) super.network;
+
   # Missing test file https://gitlab.com/dpwiz/hs-jpeg-turbo/-/issues/1
   jpeg-turbo = dontCheck super.jpeg-turbo;
   JuicyPixels-jpeg-turbo = dontCheck super.JuicyPixels-jpeg-turbo;
