@@ -32,11 +32,10 @@ stdenv.mkDerivation (finalAttrs: {
     rapidjson
   ];
 
-  cmakeFlags = [ "-DCCLS_VERSION=${finalAttrs.version}" ];
-
-  preConfigure = ''
-    cmakeFlagsArray+=(-DCMAKE_CXX_FLAGS="-fvisibility=hidden -fno-rtti")
-  '';
+  cmakeFlags = [
+    "-DCCLS_VERSION=${finalAttrs.version}"
+    "-DCMAKE_CXX_FLAGS=-fvisibility=hidden -fno-rtti"
+  ];
 
   postFixup = ''
     export wrapped=".ccls-wrapped"
@@ -48,6 +47,8 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail '@out@' "$out"
     chmod --reference=$out/bin/$wrapped $out/bin/ccls
   '';
+
+  __structuredAttrs = true;
 
   meta = {
     description = "C/c++ language server powered by clang";
