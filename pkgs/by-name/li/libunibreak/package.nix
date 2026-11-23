@@ -26,6 +26,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ autoreconfHook ];
 
+  passthru.updateScript = ./update.sh;
+
   meta = {
     homepage = "https://github.com/adah1972/libunibreak";
     changelog = "https://github.com/adah1972/libunibreak/blob/${finalAttrs.src.tag}/NEWS";
