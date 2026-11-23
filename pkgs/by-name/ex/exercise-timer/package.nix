@@ -6,7 +6,9 @@
   desktop-file-utils,
   fetchFromGitLab,
   glib,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
   gtk4,
   json-glib,
   libadwaita,
@@ -44,9 +46,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
-    gst_all_1.gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gstreamer
     json-glib
     libadwaita
   ];

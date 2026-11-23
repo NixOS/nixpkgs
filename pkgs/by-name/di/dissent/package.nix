@@ -2,7 +2,11 @@
   buildGoModule,
   fetchFromGitHub,
   gobject-introspection,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-ugly,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
   lib,
   libadwaita,
   libcanberra-gtk3,
@@ -32,11 +36,11 @@ buildGoModule (finalAttrs: {
 
   buildInputs = [
     # Optional according to upstream but required for sound and video
-    gst_all_1.gst-plugins-bad
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
-    gst_all_1.gst-plugins-ugly
-    gst_all_1.gstreamer
+    gst-plugins-bad
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-ugly
+    gstreamer
     libadwaita
     libcanberra-gtk3
     sound-theme-freedesktop

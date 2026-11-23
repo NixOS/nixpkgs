@@ -7,7 +7,10 @@
   gobject-introspection,
   gtk3,
   glib,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
 }:
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
@@ -44,10 +47,10 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     # TODO: add avahi support
     gtk3
     glib
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
-    (gst_all_1.gst-plugins-good.override { gtkSupport = true; })
-    (gst_all_1.gst-plugins-bad.override { enableZbar = true; }) # for zbar plug-in
+    gstreamer
+    gst-plugins-base
+    (gst-plugins-good.override { gtkSupport = true; })
+    (gst-plugins-bad.override { enableZbar = true; }) # for zbar plug-in
   ];
 
   propagatedBuildInputs = with python3.pkgs; [

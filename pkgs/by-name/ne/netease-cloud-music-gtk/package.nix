@@ -14,7 +14,11 @@
   dbus,
   libadwaita,
   glib-networking,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-ugly,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
   libxml2,
 }:
 
@@ -58,13 +62,13 @@ stdenv.mkDerivation (finalAttrs: {
     libadwaita
     glib-networking
   ]
-  ++ (with gst_all_1; [
+  ++ [
     gstreamer
     gst-plugins-base
     gst-plugins-good
     gst-plugins-bad
     gst-plugins-ugly
-  ]);
+  ];
 
   meta = {
     description = "Rust + GTK based netease cloud music player";

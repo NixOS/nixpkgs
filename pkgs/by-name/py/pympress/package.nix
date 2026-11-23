@@ -9,7 +9,12 @@
   libcanberra-gtk3,
   poppler_gi,
   withGstreamer ? stdenv.hostPlatform.isLinux,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-ugly,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
+  gst-libav,
   withVLC ? stdenv.hostPlatform.isLinux,
 }:
 
@@ -50,12 +55,12 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ]
   ++ lib.optionals withGstreamer [
     libcanberra-gtk3
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-bad
-    gst_all_1.gst-plugins-ugly
-    (gst_all_1.gst-plugins-good.override { gtkSupport = true; })
-    gst_all_1.gst-libav
+    gstreamer
+    gst-plugins-base
+    gst-plugins-bad
+    gst-plugins-ugly
+    (gst-plugins-good.override { gtkSupport = true; })
+    gst-libav
   ];
 
   doCheck = false; # there are no tests

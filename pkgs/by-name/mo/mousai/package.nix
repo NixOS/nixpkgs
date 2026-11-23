@@ -8,7 +8,10 @@
   desktop-file-utils,
   glib,
   glib-networking,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
   gtk4,
   libadwaita,
   libpulseaudio,
@@ -52,10 +55,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     dbus
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
-    gst_all_1.gst-plugins-bad
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
     glib
     glib-networking
     gtk4

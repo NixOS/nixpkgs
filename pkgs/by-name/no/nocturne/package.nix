@@ -21,7 +21,10 @@
   gobject-introspection,
   libglycin,
   libsecret,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
   xdg-user-dirs,
   gnome,
   librsvg,
@@ -72,10 +75,10 @@ stdenv.mkDerivation (finalAttrs: {
     libsecret
     python3
     glib-networking
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
-    gst_all_1.gst-plugins-bad
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
   ];
 
   pythonDependencies = [

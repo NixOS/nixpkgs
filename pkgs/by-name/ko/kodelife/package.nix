@@ -8,7 +8,8 @@
   alsa-lib,
   curl,
   avahi,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-base,
   libxcb,
   libx11,
   libxcursor,
@@ -77,8 +78,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     (lib.getLib stdenv.cc.cc)
     alsa-lib
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
+    gstreamer
+    gst-plugins-base
   ];
 
   installPhase = ''

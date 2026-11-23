@@ -3,7 +3,9 @@
   stdenv,
   buildGoModule,
   fetchzip,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
   gtkmm3,
   hidapi,
   makeWrapper,
@@ -79,7 +81,7 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    gst_all_1.gstreamer
+    gstreamer
     gtkmm3
     hidapi
   ];
@@ -92,8 +94,8 @@ stdenv.mkDerivation {
   postFixup =
     let
       GST_PLUGIN_PATH = lib.makeSearchPathOutput "lib" "lib/gstreamer-1.0" [
-        gst_all_1.gst-plugins-base
-        (gst_all_1.gst-plugins-good.override { gtkSupport = true; })
+        gst-plugins-base
+        (gst-plugins-good.override { gtkSupport = true; })
       ];
     in
     lib.optionalString stdenv.hostPlatform.isLinux ''

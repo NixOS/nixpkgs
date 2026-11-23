@@ -11,7 +11,8 @@
   expat,
   ipu6-camera-bins,
   libtool,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-base,
   libdrm,
 
   # Pick one of
@@ -65,8 +66,8 @@ stdenv.mkDerivation {
     expat
     ipu6-camera-bins
     libtool
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
+    gstreamer
+    gst-plugins-base
     libdrm
   ];
 

@@ -21,7 +21,7 @@
   pango,
   gdk-pixbuf,
   cairo,
-  gst_all_1,
+  gst-plugins-base,
   makeWrapper,
   libsForQt5,
   profiles ? {
@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxcb-render-util
     libsForQt5.qtbase
     libsForQt5.qtmultimedia
-    gst_all_1.gst-plugins-base
+    gst-plugins-base
     fontconfig
     freetype
     libGL

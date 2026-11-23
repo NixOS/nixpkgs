@@ -18,7 +18,10 @@
   SDL2_mixer,
   angle,
   withGstreamer ? true,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
   pygments,
   requests,
   filetype,
@@ -71,16 +74,13 @@ buildPythonPackage (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     angle
   ]
-  ++ lib.optionals withGstreamer (
-    with gst_all_1;
-    [
-      # NOTE: The degree to which gstreamer actually works is unclear
-      gstreamer
-      gst-plugins-base
-      gst-plugins-good
-      gst-plugins-bad
-    ]
-  );
+  ++ lib.optionals withGstreamer [
+    # NOTE: The degree to which gstreamer actually works is unclear
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+  ];
 
   dependencies = [
     kivy-garden

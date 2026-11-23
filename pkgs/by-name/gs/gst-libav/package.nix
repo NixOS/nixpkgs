@@ -1,40 +1,29 @@
 {
-  lib,
   stdenv,
+  lib,
   fetchurl,
   meson,
   ninja,
   pkg-config,
   python3,
-  bash-completion,
-  gst-plugins-base,
-  gst-plugins-bad,
-  gst-devtools,
-  libxml2,
-  flex,
-  gettext,
-  gobject-introspection,
-  # for passthru.gstreamerCpeParts
   gstreamer,
+  gst-plugins-base,
+  gettext,
+  ffmpeg-headless,
   # Checks meson.is_cross_build(), so even canExecute isn't enough.
   enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform,
   hotdoc,
   directoryListingUpdater,
-  apple-sdk_gstreamer,
+  apple-sdk,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "gst-editing-services";
+  pname = "gst-libav";
   version = "1.28.8";
 
-  outputs = [
-    "out"
-    "dev"
-  ];
-
   src = fetchurl {
-    url = "https://gstreamer.freedesktop.org/src/gst-editing-services/gst-editing-services-${finalAttrs.version}.tar.xz";
-    hash = "sha256-TZPSMJt9AVKc1eM3X5m/fmnC4yz1nORTOzGlxxGbm1g=";
+    url = "https://gstreamer.freedesktop.org/src/gst-libav/gst-libav-${finalAttrs.version}.tar.xz";
+    hash = "sha256-mK09f4kyxJXiaHCJA/HDOI1fJqDbNHJ6n4Ye4jtyQXc=";
   };
 
   separateDebugInfo = true;
@@ -45,35 +34,27 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     meson
     ninja
-    pkg-config
     gettext
-    gobject-introspection
+    pkg-config
     python3
-    flex
   ]
   ++ lib.optionals enableDocumentation [
     hotdoc
   ];
 
   buildInputs = [
-    bash-completion
-    libxml2
-    gst-devtools
-    python3
+    gstreamer
+    gst-plugins-base
+    ffmpeg-headless
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    apple-sdk_gstreamer
+    apple-sdk
   ];
 
-  propagatedBuildInputs = [
-    gst-plugins-base
-    gst-plugins-bad
-  ];
-
-  mesonFlags = [
-    (lib.mesonEnable "doc" enableDocumentation)
-    (lib.mesonEnable "tests" finalAttrs.finalPackage.doCheck)
-  ];
+  mesonFlags = lib.mapAttrsToList lib.mesonEnable {
+    doc = enableDocumentation;
+    tests = finalAttrs.finalPackage.doCheck;
+  };
 
   postPatch = ''
     patchShebangs \
@@ -89,8 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "Library for creation of audio/video non-linear editors";
-    mainProgram = "ges-launch-1.0";
+    description = "FFmpeg plugin for GStreamer";
     homepage = "https://gstreamer.freedesktop.org";
     license = lib.licenses.lgpl2Plus;
     platforms = lib.platforms.unix;

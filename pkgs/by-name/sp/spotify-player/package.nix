@@ -14,7 +14,10 @@
   portaudio,
   libjack2,
   SDL2,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-devtools,
   dbus,
   fontconfig,
   libsixel,
@@ -89,10 +92,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ]
   ++ lib.optionals (withAudioBackend == "sdl") [ SDL2 ]
   ++ lib.optionals (withAudioBackend == "gstreamer") [
-    gst_all_1.gstreamer
-    gst_all_1.gst-devtools
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
+    gstreamer
+    gst-devtools
+    gst-plugins-base
+    gst-plugins-good
   ];
 
   buildNoDefaultFeatures = true;

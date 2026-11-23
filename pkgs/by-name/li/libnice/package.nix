@@ -9,7 +9,8 @@
   pkg-config,
   glib,
   gupnp-igd,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-base,
   gnutls,
   enableDocumentation ? stdenv.buildPlatform == stdenv.hostPlatform,
   gtk-doc,
@@ -84,8 +85,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
+    gstreamer
+    gst-plugins-base
     gnutls
     gupnp-igd
   ];

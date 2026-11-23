@@ -14,7 +14,8 @@
   glib,
   glib-networking,
   gnutls,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-base,
   json-glib,
   libadwaita,
   libglycin,
@@ -56,8 +57,8 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     glib-networking
     gnutls
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
+    gstreamer
+    gst-plugins-base
     json-glib
     libadwaita
     libglycin

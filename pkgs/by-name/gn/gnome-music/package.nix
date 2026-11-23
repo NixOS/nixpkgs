@@ -23,7 +23,12 @@
   appstream-glib,
   itstool,
   gnome,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-ugly,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
+  gst-libav,
   libsoup_3,
   libadwaita,
   gsettings-desktop-schemas,
@@ -69,14 +74,14 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     gsettings-desktop-schemas
     tinysparql
   ]
-  ++ (with gst_all_1; [
+  ++ [
     gstreamer
     gst-plugins-base
     gst-plugins-good
     gst-plugins-bad
     gst-plugins-ugly
     gst-libav
-  ]);
+  ];
 
   pythonPath = with python3.pkgs; [
     pycairo

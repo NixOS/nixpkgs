@@ -9,7 +9,12 @@
   wrapGAppsHook4,
   glib,
   granite7,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-ugly,
+  gst-plugins-rs,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
   gtk4,
   libadwaita,
   libcanberra,
@@ -39,12 +44,12 @@ stdenv.mkDerivation rec {
   buildInputs = [
     glib
     granite7
-    gst_all_1.gst-plugins-bad
-    gst_all_1.gst-plugins-base
-    (gst_all_1.gst-plugins-good.override { gtkSupport = true; })
-    gst_all_1.gst-plugins-rs # GTK 4 sink
-    gst_all_1.gst-plugins-ugly
-    gst_all_1.gstreamer
+    gst-plugins-bad
+    gst-plugins-base
+    (gst-plugins-good.override { gtkSupport = true; })
+    gst-plugins-rs # GTK 4 sink
+    gst-plugins-ugly
+    gstreamer
     gtk4
     libadwaita
     libcanberra

@@ -20,7 +20,12 @@
   clapper-unwrapped,
   clapper-enhancers,
   gettext,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-ugly,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
+  gst-libav,
   glib-networking,
   gnome,
   libjxl,
@@ -68,12 +73,12 @@ stdenv.mkDerivation (finalAttrs: {
     sqlite
     clapper-unwrapped
     clapper-enhancers
-    gst_all_1.gstreamer
-    gst_all_1.gst-libav
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
-    gst_all_1.gst-plugins-bad
-    gst_all_1.gst-plugins-ugly
+    gstreamer
+    gst-libav
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+    gst-plugins-ugly
     glib-networking # For GIO_EXTRA_MODULES. Fixes "TLS support is not available"
   ];
 

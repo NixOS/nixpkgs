@@ -13,7 +13,8 @@
   libevent,
   libyaml,
   libyuv,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-base,
   gtest,
   python3,
   python3Packages,
@@ -81,8 +82,8 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
 
     # gstreamer integration
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
+    gstreamer
+    gst-plugins-base
 
     # cam integration
     libevent

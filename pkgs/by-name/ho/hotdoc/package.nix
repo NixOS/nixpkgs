@@ -12,7 +12,8 @@
   json-glib,
   libxml2,
   llvmPackages,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-base,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -109,7 +110,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   passthru.tests = {
-    inherit (gst_all_1) gstreamer gst-plugins-base;
+    inherit gstreamer gst-plugins-base;
   };
 
   meta = {

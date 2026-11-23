@@ -19,7 +19,10 @@
   libsoup_3,
   webkitgtk_6_0,
   json-glib,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
   libnotify,
   gtk4,
   gsettings-desktop-schemas,
@@ -68,12 +71,12 @@ stdenv.mkDerivation rec {
     glib-networking
     libnotify
   ]
-  ++ (with gst_all_1; [
+  ++ [
     gstreamer
     gst-plugins-base
     gst-plugins-good
     gst-plugins-bad
-  ]);
+  ];
 
   enableParallelBuilding = true;
 

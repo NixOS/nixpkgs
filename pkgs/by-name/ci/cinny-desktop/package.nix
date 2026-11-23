@@ -12,7 +12,12 @@
   openssl,
   glib-networking,
   webkitgtk_4_1,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-ugly,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
+  gst-libav,
   jq,
   moreutils,
   nix-update-script,
@@ -76,12 +81,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     glib-networking
     openssl
     webkitgtk_4_1
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
-    gst_all_1.gst-plugins-bad
-    gst_all_1.gst-plugins-ugly
-    gst_all_1.gst-libav
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+    gst-plugins-ugly
+    gst-libav
   ];
 
   buildNoDefaultFeatures = true;

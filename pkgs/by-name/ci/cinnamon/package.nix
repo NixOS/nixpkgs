@@ -51,7 +51,7 @@
   libnma,
   meson,
   ninja,
-  gst_all_1,
+  gstreamer,
   perl,
 }:
 
@@ -123,7 +123,7 @@ stdenv.mkDerivation (finalAttrs: {
     pythonEnv
     libxml2
     libgnomekbd
-    gst_all_1.gstreamer
+    gstreamer
 
     # bindings
     cairo

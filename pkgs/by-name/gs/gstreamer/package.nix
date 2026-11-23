@@ -32,7 +32,7 @@
   enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform,
   hotdoc,
   directoryListingUpdater,
-  apple-sdk_gstreamer,
+  apple-sdk,
 }:
 
 let
@@ -99,7 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
     libunwind
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    apple-sdk_gstreamer
+    apple-sdk
   ];
 
   propagatedBuildInputs = [

@@ -12,7 +12,10 @@
   gdk-pixbuf,
   glib,
   glib-networking,
-  gst_all_1,
+
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
   gtk4,
   libadwaita,
   libfido2,
@@ -56,24 +59,21 @@ stdenv.mkDerivation {
     lz4
     pcsclite
     protobufc
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
+    gstreamer
+    gst-plugins-base
   ];
 
   installPhase =
     let
-      gst_plugin_system_path = lib.makeSearchPath "lib/gstreamer-1.0/" (
-        with gst_all_1;
-        [
-          gstreamer
-          gst-plugins-base
-          gst-plugins-good
-        ]
-      );
+      gst_plugin_system_path = lib.makeSearchPath "lib/gstreamer-1.0/" [
+        gstreamer
+        gst-plugins-base
+        gst-plugins-good
+      ];
       fixPathsPatch = replaceVars ./fix-paths.patch {
         basedir = null;
         gio_extra_modules = "${glib-networking}/lib/gio/modules";
-        gst_plugin_scanner = "${gst_all_1.gstreamer.out}/libexec/gstreamer-1.0/gst-plugin-scanner";
+        gst_plugin_scanner = "${gstreamer.out}/libexec/gstreamer-1.0/gst-plugin-scanner";
         gst_plugin_system_path = gst_plugin_system_path;
         dcv_sasl_plugin_dir = "${cyrus_sasl.out}/lib/sasl2";
       };

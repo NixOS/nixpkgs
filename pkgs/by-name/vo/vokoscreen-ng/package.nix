@@ -3,7 +3,11 @@
   stdenv,
   fetchFromGitHub,
   pkg-config,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-ugly,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
   libx11,
   pipewire,
   pulseaudio,
@@ -32,17 +36,17 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    gst_all_1.gstreamer
+    gstreamer
     libx11
     pulseaudio
     qt6.qtbase
     qt6.qtmultimedia
     wayland
     pipewire
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
-    gst_all_1.gst-plugins-bad
-    gst_all_1.gst-plugins-ugly
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+    gst-plugins-ugly
   ];
 
   # TODO: translations don't get built by the qmake project

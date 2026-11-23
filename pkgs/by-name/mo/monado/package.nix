@@ -13,7 +13,8 @@
   eigen,
   elfutils,
   glslang,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-base,
   hidapi,
   libbsd,
   libdrm,
@@ -104,8 +105,8 @@ stdenv.mkDerivation (finalAttrs: {
     dbus
     eigen
     elfutils
-    gst_all_1.gst-plugins-base
-    gst_all_1.gstreamer
+    gst-plugins-base
+    gstreamer
     hidapi
     libbsd
     libdrm

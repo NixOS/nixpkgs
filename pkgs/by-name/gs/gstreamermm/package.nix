@@ -6,9 +6,9 @@
   pkg-config,
   file,
   glibmm_2_4,
-  gst_all_1,
+  gst-plugins-base,
   gnome,
-  apple-sdk_gstreamer,
+  apple-sdk,
   testers,
 }:
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    apple-sdk_gstreamer
+    apple-sdk
   ];
 
   nativeBuildInputs = [
@@ -48,14 +48,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   propagatedBuildInputs = [
     glibmm_2_4
-    gst_all_1.gst-plugins-base
+    gst-plugins-base
   ];
 
   enableParallelBuilding = true;
 
   passthru = {
     updateScript = gnome.updateScript {
-      attrPath = "gst_all_1.gstreamermm";
+      attrPath = "gstreamermm";
       packageName = "gstreamermm";
       versionPolicy = "odd-unstable";
     };

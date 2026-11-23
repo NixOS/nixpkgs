@@ -59,7 +59,8 @@
   vulkan-headers,
   vulkan-volk,
   sqlite,
-  gst_all_1,
+  gst-plugins-base,
+  gst-plugins-bad,
   bubblewrap,
   libseccomp,
   libbacktrace,
@@ -156,8 +157,8 @@ clangStdenv.mkDerivation (finalAttrs: {
     libepoxy
     libjxl
     gnutls
-    gst_all_1.gst-plugins-bad
-    gst_all_1.gst-plugins-base
+    gst-plugins-bad
+    gst-plugins-base
     harfbuzzFull
     hyphen
     icu

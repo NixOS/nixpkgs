@@ -13,7 +13,10 @@
   libadwaita,
   desktop-file-utils,
   openssl,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-base,
+  gst-plugins-bad,
+  gst-libav,
   clapper-unwrapped,
 }:
 
@@ -49,10 +52,10 @@ stdenv.mkDerivation rec {
     libadwaita
     desktop-file-utils
     clapper-unwrapped
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-libav
-    gst_all_1.gst-plugins-bad
+    gstreamer
+    gst-plugins-base
+    gst-libav
+    gst-plugins-bad
   ];
 
   meta = {

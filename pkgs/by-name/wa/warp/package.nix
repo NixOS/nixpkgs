@@ -18,7 +18,12 @@
   libadwaita,
   libcamera,
   pipewire,
-  gst_all_1,
+
+  gstreamer,
+  gst-plugins-rs,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
   nix-update-script,
 }:
 
@@ -64,18 +69,18 @@ stdenv.mkDerivation rec {
     libcamera
     pipewire
   ]
-  ++ (with gst_all_1; [
+  ++ [
     gstreamer
     gst-plugins-base
     gst-plugins-bad
     gst-plugins-good # multifilesink
     gst-plugins-rs # gst-plugin-gtk4
-  ]);
+  ];
 
   preFixup = ''
     gappsWrapperArgs+=(
       # vp8enc preset
-      --prefix GST_PRESET_PATH : ${gst_all_1.gst-plugins-good}/share/gstreamer-1.0/presets
+      --prefix GST_PRESET_PATH : ${gst-plugins-good}/share/gstreamer-1.0/presets
     )
   '';
 

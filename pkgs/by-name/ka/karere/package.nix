@@ -14,7 +14,11 @@
   libadwaita,
   webkitgtk_6_0,
   glib-networking,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
+  gst-libav,
   nix-update-script,
 }:
 
@@ -53,13 +57,13 @@ stdenv.mkDerivation (finalAttrs: {
     webkitgtk_6_0
     glib-networking
   ]
-  ++ (with gst_all_1; [
+  ++ [
     gstreamer
     gst-plugins-base
     gst-plugins-good
     gst-plugins-bad
     gst-libav
-  ]);
+  ];
 
   preFixup = ''
     gappsWrapperArgs+=(

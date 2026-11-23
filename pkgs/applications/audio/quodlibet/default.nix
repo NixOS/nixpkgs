@@ -34,7 +34,12 @@
   # backends
   withGstPlugins ? withGstreamerBackend,
   withGstreamerBackend ? true,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-ugly,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
+  gst-libav,
   withXineBackend ? !withGstreamerBackend,
   xine-lib,
 
@@ -98,7 +103,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   ]
   ++ lib.optionals withXineBackend [ xine-lib ]
   ++ lib.optionals withGstreamerBackend (
-    with gst_all_1;
     [
       gst-plugins-base
       gstreamer

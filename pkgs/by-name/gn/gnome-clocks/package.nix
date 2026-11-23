@@ -19,7 +19,9 @@
   gnome,
   gdk-pixbuf,
   geoclue2,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
   icu,
   libgweather,
   libadwaita,
@@ -60,12 +62,12 @@ stdenv.mkDerivation (finalAttrs: {
     libgweather
     libadwaita
   ]
-  ++ (with gst_all_1; [
+  ++ [
     # GStreamer plugins needed for Alarms
     gstreamer
     gst-plugins-base
     gst-plugins-good
-  ]);
+  ];
 
   doCheck = true;
 

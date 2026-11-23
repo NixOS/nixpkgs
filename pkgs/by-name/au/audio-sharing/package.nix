@@ -6,7 +6,10 @@
   fetchFromGitLab,
   git,
   glib,
-  gst_all_1,
+  gstreamer,
+  gst-rtsp-server,
+  gst-plugins-good,
+  gst-plugins-base,
   gtk4,
   lib,
   libadwaita,
@@ -55,10 +58,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     glib
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good # pulsesrc
-    gst_all_1.gst-rtsp-server
-    gst_all_1.gstreamer
+    gst-plugins-base
+    gst-plugins-good # pulsesrc
+    gst-rtsp-server
+    gstreamer
     gtk4
     libadwaita
     dbus

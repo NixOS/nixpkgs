@@ -32,11 +32,10 @@ let
         (cfg.settings.mediagoblin.plugins ? "mediagoblin.media_types.audio")
         || (cfg.settings.mediagoblin.plugins ? "mediagoblin.media_types.video");
     in
-    with pkgs.gst_all_1;
     [
       pkgs.glib
-      gst-plugins-base
-      gstreamer
+      pkgs.gst-plugins-base
+      pkgs.gstreamer
     ]
     # audio and video share most dependencies, so we can just take audio
     ++ lib.optionals needsGst cfg.package.optional-dependencies.audio;

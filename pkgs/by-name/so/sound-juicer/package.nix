@@ -13,7 +13,11 @@
   libcanberra-gtk3,
   gnome,
   adwaita-icon-theme,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
+  gst-libav,
   libmusicbrainz,
   libdiscid,
   isocodes,
@@ -49,11 +53,11 @@ stdenv.mkDerivation rec {
     libmusicbrainz
     libdiscid
     isocodes
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
-    gst_all_1.gst-plugins-bad
-    gst_all_1.gst-libav
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+    gst-libav
   ];
 
   passthru = {

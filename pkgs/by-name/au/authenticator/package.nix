@@ -13,7 +13,11 @@
   wrapGAppsHook4,
   gdk-pixbuf,
   glib,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-rs,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
   gtk4,
   libadwaita,
   openssl,
@@ -59,11 +63,11 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     gdk-pixbuf
     glib
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
-    (gst_all_1.gst-plugins-bad.override { enableZbar = true; })
-    gst_all_1.gst-plugins-good
-    gst_all_1.gst-plugins-rs
+    gstreamer
+    gst-plugins-base
+    (gst-plugins-bad.override { enableZbar = true; })
+    gst-plugins-good
+    gst-plugins-rs
     gtk4
     libadwaita
     openssl
@@ -76,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
   preFixup = ''
     gappsWrapperArgs+=(
       # vp8enc preset
-      --prefix GST_PRESET_PATH : "${gst_all_1.gst-plugins-good}/share/gstreamer-1.0/presets"
+      --prefix GST_PRESET_PATH : "${gst-plugins-good}/share/gstreamer-1.0/presets"
     )
   '';
 

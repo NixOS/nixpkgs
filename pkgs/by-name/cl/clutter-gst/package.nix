@@ -11,7 +11,8 @@
   gnome,
   gdk-pixbuf,
   gobject-introspection,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-base,
 }:
 
 stdenv.mkDerivation rec {
@@ -50,8 +51,8 @@ stdenv.mkDerivation rec {
     glib
     cogl
     gdk-pixbuf
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
+    gstreamer
+    gst-plugins-base
   ];
 
   postBuild = "rm -rf $out/share/gtk-doc";

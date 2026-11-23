@@ -6,7 +6,7 @@
   fetchFromGitHub,
   gitUpdater,
   graphviz,
-  gst_all_1,
+  gstreamer,
   perl,
   pkg-config,
   testers,
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = [ gst_all_1.gstreamer ];
+  buildInputs = [ gstreamer ];
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))

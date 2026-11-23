@@ -7,7 +7,12 @@
   pkg-config,
   python3,
   gtk3,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-ugly,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
+  gst-libav,
   libhandy,
   libsecret,
   libsoup_3,
@@ -51,27 +56,26 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     wrapGAppsHook3
   ];
 
-  buildInputs =
-    (with gst_all_1; [
-      gst-libav
-      gst-plugins-bad
-      gst-plugins-base
-      gst-plugins-good
-      gst-plugins-ugly
-      gstreamer
+  buildInputs = [
+    gst-libav
+    gst-plugins-bad
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-ugly
+    gstreamer
 
-    ])
-    ++ [
-      gdk-pixbuf
-      glib
-      glib-networking
-      gtk3
-      libhandy
-      libsoup_3
-      pango
-      totem-pl-parser
-    ]
-    ++ lib.optional lastFMSupport libsecret;
+  ]
+  ++ [
+    gdk-pixbuf
+    glib
+    glib-networking
+    gtk3
+    libhandy
+    libsoup_3
+    pango
+    totem-pl-parser
+  ]
+  ++ lib.optional lastFMSupport libsecret;
 
   propagatedBuildInputs =
     (with python3.pkgs; [

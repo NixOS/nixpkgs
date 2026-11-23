@@ -9,7 +9,8 @@
   # Dynamic Libraries
   curl,
   glib,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-base,
   libGL,
   libx11,
   libxext,
@@ -57,8 +58,8 @@ stdenv.mkDerivation {
   buildInputs = [
     curl
     glib
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
+    gstreamer
+    gst-plugins-base
     libGL
     libx11
     libxext

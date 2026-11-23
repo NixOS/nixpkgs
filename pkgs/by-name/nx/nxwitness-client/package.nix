@@ -6,7 +6,8 @@
   dpkg,
   fetchurl,
   glib,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-base,
   libGL,
   libgudev,
   libudev-zero,
@@ -28,8 +29,8 @@ let
 
   buildInputs = [
     glib
-    gst_all_1.gst-plugins-base
-    gst_all_1.gstreamer
+    gst-plugins-base
+    gstreamer
     libGL
     libgudev
     libudev-zero

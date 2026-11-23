@@ -15,7 +15,9 @@
   libsoup_3,
   libayatana-appindicator,
   gtk3,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
   nix-update-script,
   sqlite,
 }:
@@ -72,9 +74,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     gtk3
     libayatana-appindicator
     webkitgtk_4_1
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
     sqlite
   ];
 

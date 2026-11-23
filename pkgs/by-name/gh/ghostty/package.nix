@@ -10,7 +10,9 @@
   freetype,
   glib,
   glslang,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
   gtk4-layer-shell,
   harfbuzz,
   libadwaita,
@@ -78,9 +80,9 @@ stdenv.mkDerivation (finalAttrs: {
     libadwaita
     libx11
     gtk4-layer-shell
-    gst_all_1.gstreamer # Used for playing audio, e.g. audible bells
-    gst_all_1.gst-plugins-good
-    gst_all_1.gst-plugins-base
+    gstreamer # Used for playing audio, e.g. audible bells
+    gst-plugins-good
+    gst-plugins-base
 
     # OpenGL renderer
     glslang

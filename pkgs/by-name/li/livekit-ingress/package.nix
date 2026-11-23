@@ -5,7 +5,12 @@
   pkg-config,
   makeWrapper,
   glib,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-ugly,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
+  gst-libav,
 }:
 
 buildGoModule (finalAttrs: {
@@ -33,7 +38,7 @@ buildGoModule (finalAttrs: {
     makeWrapper
   ];
 
-  buildInputs = with gst_all_1; [
+  buildInputs = [
     glib
     gstreamer
     gst-plugins-base

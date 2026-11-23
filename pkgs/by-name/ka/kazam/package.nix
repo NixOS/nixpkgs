@@ -3,7 +3,9 @@
   fetchFromGitHub,
   replaceVars,
   python3Packages,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
   wrapGAppsHook3,
   gobject-introspection,
   gtk3,
@@ -35,9 +37,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   buildInputs = [
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
     gtk3
     libwnck
     keybinder3

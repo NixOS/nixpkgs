@@ -13,7 +13,10 @@
   gdk-pixbuf,
   nix-update-script,
   wrapGAppsHook3,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -40,10 +43,10 @@ stdenv.mkDerivation (finalAttrs: {
     gdk-pixbuf
     glib
     (lib.getLib stdenv.cc.cc)
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
-    gst_all_1.gst-plugins-bad
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
   ];
 
   installPhase = ''

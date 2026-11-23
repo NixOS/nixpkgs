@@ -23,7 +23,10 @@
   sqlite,
   webkitgtk_6_0,
   glib-networking,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
   nix-update-script,
 }:
 
@@ -85,13 +88,13 @@ stdenv.mkDerivation (finalAttrs: {
     # TLS support for loading external content in webkitgtk WebView
     glib-networking
   ]
-  ++ (with gst_all_1; [
+  ++ [
     # Audio & video support for webkitgtk WebView
     gstreamer
     gst-plugins-base
     gst-plugins-good
     gst-plugins-bad
-  ]);
+  ];
 
   # For https://gitlab.com/news-flash/news_flash_gtk/-/blob/v.4.2.1/src/meson.build#L48
   env.CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTargetSpec;

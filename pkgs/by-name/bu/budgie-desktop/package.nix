@@ -11,7 +11,8 @@
   gnome-desktop,
   gnome-settings-daemon,
   gobject-introspection,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-base,
   gtk-doc,
   gtk3,
   gtk-layer-shell,
@@ -90,8 +91,8 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     gnome-desktop
     gnome-settings-daemon
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
+    gstreamer
+    gst-plugins-base
     gtk3
     gtk-layer-shell
     libcanberra-gtk3

@@ -11,7 +11,9 @@
   libadwaita,
   libglycin,
   libglycin-gtk4,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
   meson,
   ninja,
   pkg-config,
@@ -56,9 +58,9 @@ stdenv.mkDerivation (finalAttrs: {
     libglycin
     libglycin-gtk4
     # Sound playback, not checked at build time.
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
   ];
 
   preFixup = ''

@@ -12,7 +12,12 @@
   glib-networking,
   gnome-desktop,
   gobject-introspection,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-ugly,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
+  gst-libav,
   gtk3,
   libnotify,
   pango,
@@ -104,14 +109,14 @@ python3Packages.buildPythonApplication (finalAttrs: {
     pango
     webkitgtk_4_1
   ]
-  ++ (with gst_all_1; [
+  ++ [
     gst-libav
     gst-plugins-bad
     gst-plugins-base
     gst-plugins-good
     gst-plugins-ugly
     gstreamer
-  ]);
+  ];
 
   # See `install_requires` in https://github.com/lutris/lutris/blob/master/setup.py
   dependencies = with python3Packages; [

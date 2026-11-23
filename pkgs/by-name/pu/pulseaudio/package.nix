@@ -31,7 +31,10 @@
   speexdsp,
   systemdLibs,
   webrtc-audio-processing_1,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
   check,
   libintl,
   meson,
@@ -163,7 +166,7 @@ stdenv.mkDerivation rec {
     # aptX and LDAC codecs are in gst-plugins-bad so far, rtpldacpay is in -good
     ++ lib.optionals (bluetoothSupport && advancedBluetoothCodecs) (
       builtins.attrValues {
-        inherit (gst_all_1)
+        inherit
           gst-plugins-bad
           gst-plugins-good
           gst-plugins-base

@@ -15,7 +15,10 @@
   sqlite,
   pkg-config,
   gnome,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-libav,
   libgudev,
   libraw,
   glib,
@@ -66,10 +69,10 @@ stdenv.mkDerivation (finalAttrs: {
     libsoup_3
     libxml2
     sqlite
-    gst_all_1.gstreamer
-    gst_all_1.gst-libav
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
+    gstreamer
+    gst-libav
+    gst-plugins-base
+    gst-plugins-good
     libgee
     libgudev
     gexiv2_0_16

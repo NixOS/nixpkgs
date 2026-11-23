@@ -10,7 +10,11 @@
   desktop-file-utils,
   gobject-introspection,
   libadwaita,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-ugly,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -46,13 +50,13 @@ python3Packages.buildPythonApplication (finalAttrs: {
   buildInputs = [
     libadwaita
   ]
-  ++ (with gst_all_1; [
+  ++ [
     gstreamer
     gst-plugins-good
     gst-plugins-ugly
     gst-plugins-base
     gst-plugins-bad
-  ]);
+  ];
 
   propagatedBuildInputs = with python3Packages; [
     distro

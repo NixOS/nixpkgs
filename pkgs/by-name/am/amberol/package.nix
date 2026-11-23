@@ -16,7 +16,12 @@
   wrapGAppsHook4,
   glib,
   gtk4,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-ugly,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
+  gst-libav,
   libadwaita,
   dbus,
   nix-update-script,
@@ -64,14 +69,14 @@ stdenv.mkDerivation (finalAttrs: {
     gtk4
     libadwaita
   ]
-  ++ (with gst_all_1; [
+  ++ [
     gstreamer
     gst-plugins-base
     gst-plugins-good
     gst-plugins-bad
     gst-plugins-ugly
     gst-libav
-  ]);
+  ];
 
   passthru = {
     updateScript = nix-update-script { };

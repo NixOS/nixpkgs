@@ -4,7 +4,11 @@
   fetchFromGitHub,
   cmake,
   glib,
-  gst_all_1,
+
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-libav,
   makeWrapper,
   pkg-config,
   python3,
@@ -42,7 +46,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     glib
-    gst_all_1.gstreamer
+    gstreamer
     SDL2
     SDL2_image
     SDL2_mixer
@@ -50,11 +54,11 @@ stdenv.mkDerivation {
     sqlite
     zlib
   ]
-  ++ (with gst_all_1; [
+  ++ [
     gst-libav
     gst-plugins-base
     gst-plugins-good
-  ]);
+  ];
 
   configurePhase = ''
     runHook preConfigure

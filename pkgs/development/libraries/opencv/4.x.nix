@@ -63,7 +63,10 @@
   ffmpeg_8-headless,
   enableGStreamer ? true,
   elfutils,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
   orc,
   libunwind,
   zstd,
@@ -399,9 +402,9 @@ effectiveStdenv.mkDerivation {
   ]
   ++ optionals (enableGStreamer && effectiveStdenv.hostPlatform.isLinux) [
     elfutils
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
-    gst_all_1.gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gstreamer
     libunwind
     orc
     zstd
@@ -642,7 +645,7 @@ effectiveStdenv.mkDerivation {
     cudaSupport = enableCuda;
 
     tests = {
-      inherit (gst_all_1) gst-plugins-bad;
+      inherit gst-plugins-bad;
 
       opencv4-tests = callPackage ./tests.nix {
         inherit

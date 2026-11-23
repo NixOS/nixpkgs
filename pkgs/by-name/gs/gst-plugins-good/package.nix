@@ -67,7 +67,7 @@
   hotdoc,
   gst-plugins-good,
   directoryListingUpdater,
-  apple-sdk_gstreamer,
+  apple-sdk,
 }:
 
 let
@@ -208,7 +208,7 @@ stdenv.mkDerivation (finalAttrs: {
     libiec61883
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    apple-sdk_gstreamer
+    apple-sdk
   ]
   ++ lib.optionals enableWayland [
     wayland

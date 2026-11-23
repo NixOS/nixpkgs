@@ -119,8 +119,8 @@ let
           freetype
           gdk-pixbuf
           glib
-          gst_all_1.gst-plugins-base
-          gst_all_1.gstreamer
+          gst-plugins-base
+          gstreamer
           gtk3-x11
           harfbuzz
           liberation_ttf

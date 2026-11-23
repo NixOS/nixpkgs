@@ -5,14 +5,19 @@
   autoreconfHook,
   pkg-config,
   makeWrapper,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-ugly,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
+  gst-libav,
   libupnp,
 }:
 
 let
   version = "0.3.1";
 
-  inherit (gst_all_1)
+  inherit
     gstreamer
     gst-plugins-base
     gst-plugins-good

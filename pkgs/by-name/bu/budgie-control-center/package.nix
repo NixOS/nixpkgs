@@ -17,7 +17,7 @@
   glib-networking,
   glibc,
   gnome,
-  gst_all_1,
+  gstreamer,
   gnome-desktop,
   gnome-settings-daemon,
   gnome-tecla,
@@ -112,7 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
     glib-networking
     gnome-desktop
     gnome-tecla
-    gst_all_1.gstreamer
+    gstreamer
     gnome-settings-daemon
     gsettings-desktop-schemas
     gsound

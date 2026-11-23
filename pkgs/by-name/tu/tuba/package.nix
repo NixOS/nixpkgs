@@ -28,7 +28,11 @@
   webkitgtk_6_0,
   webp-pixbuf-loader,
   icu,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
+  gst-libav,
   clapper-enhancers,
   clapper-unwrapped,
   clapperSupport ? true,
@@ -74,13 +78,13 @@ stdenv.mkDerivation (finalAttrs: {
     webkitgtk_6_0
     icu
   ]
-  ++ (with gst_all_1; [
+  ++ [
     gstreamer
     gst-libav
     gst-plugins-base
     (gst-plugins-good.override { gtkSupport = true; })
     gst-plugins-bad
-  ])
+  ]
   ++ lib.optionals clapperSupport [
     clapper-unwrapped
   ];

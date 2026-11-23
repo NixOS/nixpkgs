@@ -11,7 +11,7 @@
   libgbm,
   pipewire,
   zstd,
-  gst_all_1,
+  gstreamer,
   cosmic-wallpapers,
   nix-update-script,
   nixosTests,
@@ -51,7 +51,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     zstd
   ];
 
-  checkInputs = [ gst_all_1.gstreamer ];
+  checkInputs = [ gstreamer ];
 
   postPatch = ''
     substituteInPlace src/screenshot.rs src/widget/screenshot.rs \

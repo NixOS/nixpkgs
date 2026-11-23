@@ -11,7 +11,9 @@
   clang,
   cmake,
   gitMinimal,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
   libcap,
   libclang,
   libopus,
@@ -41,9 +43,9 @@ let
   supportsVoice =
     stdenv.hostPlatform.isDarwin || (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isGnu);
   voiceRuntimeRoots = [
-    (lib.getLib gst_all_1.gstreamer)
-    (lib.getLib gst_all_1.gst-plugins-base)
-    (lib.getLib gst_all_1.gst-plugins-good)
+    (lib.getLib gstreamer)
+    (lib.getLib gst-plugins-base)
+    (lib.getLib gst-plugins-good)
   ];
   # Voice loads a fixed package-relative runtime, ignoring GStreamer discovery.
   voiceRuntime =
@@ -58,16 +60,16 @@ let
     in
     linkFarm "codex-voice-runtime" [
       {
-        path = "${lib.getLib gst_all_1.gstreamer}/lib/libgstreamer-1.0.${coreSuffix}";
+        path = "${lib.getLib gstreamer}/lib/libgstreamer-1.0.${coreSuffix}";
         name = "lib/libgstreamer-1.0.${coreSuffix}";
       }
-      (plugin gst_all_1.gstreamer "coreelements")
-      (plugin gst_all_1.gst-plugins-base "app")
-      (plugin gst_all_1.gst-plugins-base "audioconvert")
-      (plugin gst_all_1.gst-plugins-base "audioresample")
-      (plugin gst_all_1.gst-plugins-base "opus")
-      (plugin gst_all_1.gst-plugins-good "rtp")
-      (plugin gst_all_1.gst-plugins-good "rtpmanager")
+      (plugin gstreamer "coreelements")
+      (plugin gst-plugins-base "app")
+      (plugin gst-plugins-base "audioconvert")
+      (plugin gst-plugins-base "audioresample")
+      (plugin gst-plugins-base "opus")
+      (plugin gst-plugins-good "rtp")
+      (plugin gst-plugins-good "rtpmanager")
     ];
 in
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -176,9 +178,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     zstd
   ]
   ++ lib.optionals supportsVoice [
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
     libopus
   ]
   ++ lib.optionals (supportsVoice && stdenv.hostPlatform.isLinux) [

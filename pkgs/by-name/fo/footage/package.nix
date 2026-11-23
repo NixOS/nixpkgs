@@ -10,7 +10,14 @@
   desktop-file-utils,
   gettext,
   glib,
-  gst_all_1,
+
+  gstreamer,
+  gst-plugins-ugly,
+  gst-plugins-rs,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
+  gst-editing-services,
   gtk4,
   libadwaita,
   meson,
@@ -72,7 +79,7 @@ stdenv.mkDerivation rec {
     svt-av1
     libmpeg2
   ]
-  ++ (with gst_all_1; [
+  ++ [
     gst-plugins-base
     gst-plugins-good
     gst-plugins-rs
@@ -81,11 +88,11 @@ stdenv.mkDerivation rec {
     gst-plugins-ugly
     gstreamer
     gst-editing-services
-  ]);
+  ];
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix PATH : "${lib.makeBinPath [ gst_all_1.gstreamer ]}"
+      --prefix PATH : "${lib.makeBinPath [ gstreamer ]}"
     )
   '';
 

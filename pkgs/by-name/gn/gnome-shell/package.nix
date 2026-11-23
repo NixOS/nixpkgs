@@ -47,7 +47,9 @@
   systemdLibs,
   pipewire,
   libgudev,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
   adwaita-icon-theme,
   glycin-loaders,
   gnome-bluetooth,
@@ -164,9 +166,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     # recording
     pipewire
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
 
     # not declared at build time, but typelib is needed at runtime
     libgudev

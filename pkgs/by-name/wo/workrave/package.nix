@@ -25,7 +25,9 @@
   cairomm_1_0,
   dbus,
   dbus-glib,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
   libsigcxx_2_0,
   boost,
   python3Packages,
@@ -70,9 +72,9 @@ stdenv.mkDerivation (finalAttrs: {
     cairomm_1_0
     dbus
     dbus-glib
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
     libsigcxx_2_0
     boost
   ];

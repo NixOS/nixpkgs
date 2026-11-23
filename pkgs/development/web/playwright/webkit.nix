@@ -17,7 +17,9 @@
   freetype,
   glib,
   glib-networking,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-base,
+  gst-plugins-bad,
   harfbuzz,
   harfbuzzFull,
   hyphen,
@@ -151,9 +153,9 @@ let
       glib
       brotli
       libjxl'
-      gst_all_1.gst-plugins-bad
-      gst_all_1.gst-plugins-base
-      gst_all_1.gstreamer
+      gst-plugins-bad
+      gst-plugins-base
+      gstreamer
       harfbuzz
       harfbuzzFull
       hyphen

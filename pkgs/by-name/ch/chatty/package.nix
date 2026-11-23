@@ -17,7 +17,7 @@
   gspell,
   gtk4,
   gtksourceview5,
-  gst_all_1,
+  gstreamer,
   libcmatrix,
   libadwaita,
   libphonenumber,
@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     gspell
     gtk4
     gtksourceview5
-    gst_all_1.gstreamer
+    gstreamer
     libcmatrix
     libadwaita
     libphonenumber

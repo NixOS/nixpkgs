@@ -12,7 +12,12 @@
   wrapGAppsHook4,
   python3,
   # Not native
-  gst_all_1,
+  gstreamer,
+  gst-rtsp-server,
+  gst-plugins-ugly,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
   gsettings-desktop-schemas,
   gtk4,
   avahi,
@@ -53,12 +58,12 @@ stdenv.mkDerivation (finalAttrs: {
     gtk4
     glib
     gsettings-desktop-schemas
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
-    gst_all_1.gst-plugins-bad
-    gst_all_1.gst-plugins-ugly
-    gst_all_1.gst-rtsp-server
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+    gst-plugins-ugly
+    gst-rtsp-server
     pipewire
     networkmanager
     json-glib
@@ -80,9 +85,9 @@ stdenv.mkDerivation (finalAttrs: {
     21 | #include <gst/rtsp/gstrtspurl.h>
 
     Hence, this is not necessarily an upstream issue, but could be something
-    wrong with how our gst_all_1 depend on each other.
+    wrong with how our gstreamer suff depends on each other.
   */
-  env.CFLAGS = "-I${gst_all_1.gst-plugins-base.dev}/include/gstreamer-1.0";
+  env.CFLAGS = "-I${gst-plugins-base.dev}/include/gstreamer-1.0";
 
   preConfigure = ''
     patchShebangs ./build-aux/meson/postinstall.py

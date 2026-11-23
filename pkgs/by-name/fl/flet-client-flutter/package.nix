@@ -3,7 +3,10 @@
   fetchFromGitHub,
   pkg-config,
   flutter338,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-base,
+  gst-plugins-bad,
+  gst-libav,
   libunwind,
   makeWrapper,
   mimalloc,
@@ -49,10 +52,10 @@ flutter338.buildFlutterApplication rec {
 
   buildInputs = [
     mpv-unwrapped
-    gst_all_1.gst-libav
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-bad
-    gst_all_1.gstreamer
+    gst-libav
+    gst-plugins-base
+    gst-plugins-bad
+    gstreamer
     libunwind
     orc
     mimalloc

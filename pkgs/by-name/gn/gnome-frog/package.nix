@@ -19,7 +19,7 @@
   librsvg,
   tesseract5,
   zbar,
-  gst_all_1,
+  gstreamer,
 }:
 
 let
@@ -73,7 +73,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     libportal
     zbar
     tesseract5
-    gst_all_1.gstreamer
+    gstreamer
   ];
 
   propagatedBuildInputs = with pythonPackages; [

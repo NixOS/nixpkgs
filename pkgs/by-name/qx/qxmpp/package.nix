@@ -7,7 +7,10 @@
   kdePackages,
   ctestCheckHook,
   withGstreamer ? true,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
   withOmemo ? true,
   libomemo-c,
   withEncryption ? true,
@@ -34,15 +37,12 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
   buildInputs =
-    lib.optionals withGstreamer (
-      with gst_all_1;
-      [
-        gstreamer
-        gst-plugins-bad
-        gst-plugins-base
-        gst-plugins-good
-      ]
-    )
+    lib.optionals withGstreamer [
+      gstreamer
+      gst-plugins-bad
+      gst-plugins-base
+      gst-plugins-good
+    ]
     ++ lib.optionals withOmemo [
       kdePackages.qtbase
       kdePackages.qca

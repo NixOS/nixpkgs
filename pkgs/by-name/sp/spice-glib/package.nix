@@ -9,7 +9,8 @@
   gettext,
   gi-docgen,
   gobject-introspection,
-  gst_all_1,
+  gst-plugins-good,
+  gst-plugins-base,
   gtk3,
   hwdata,
   json-glib,
@@ -128,8 +129,8 @@ stdenv.mkDerivation (finalAttrs: {
   );
 
   buildInputs = [
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
+    gst-plugins-base
+    gst-plugins-good
     cyrus_sasl
     json-glib
     libcacard

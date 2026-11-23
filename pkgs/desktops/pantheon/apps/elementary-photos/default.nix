@@ -16,7 +16,11 @@
   gexiv2_0_16,
   libgphoto2,
   granite,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-ugly,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
   libgudev,
   libraw,
   sqlite,
@@ -58,13 +62,13 @@ stdenv.mkDerivation rec {
     libwebp
     sqlite
   ]
-  ++ (with gst_all_1; [
+  ++ [
     gst-plugins-bad
     gst-plugins-base
     gst-plugins-good
     gst-plugins-ugly
     gstreamer
-  ]);
+  ];
 
   passthru = {
     updateScript = nix-update-script { };

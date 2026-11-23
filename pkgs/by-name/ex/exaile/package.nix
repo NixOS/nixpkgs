@@ -6,7 +6,12 @@
   makeWrapper,
   wrapGAppsHook3,
   gtk3,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-ugly,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
+  gst-libav,
   python3,
   gettext,
   adwaita-icon-theme,
@@ -61,14 +66,14 @@ stdenv.mkDerivation (finalAttrs: {
     iconTheme
     gtk3
   ]
-  ++ (with gst_all_1; [
+  ++ [
     gstreamer
     gst-plugins-base
     gst-plugins-good
     gst-plugins-bad
     gst-plugins-ugly
     gst-libav
-  ])
+  ]
   ++ (with python3.pkgs; [
     berkeleydb
     dbus-python

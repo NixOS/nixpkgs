@@ -10,7 +10,8 @@
   pkg-config,
   glib,
   libshumate,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-base,
   gtk4,
   libadwaita,
   pipewire,
@@ -54,8 +55,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     glib
     gtk4
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
+    gstreamer
+    gst-plugins-base
     libadwaita
     pipewire
     wayland

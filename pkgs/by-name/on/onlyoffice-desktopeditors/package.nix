@@ -13,7 +13,8 @@
   dpkg,
   gcc-unwrapped,
   glibc,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-base,
   libGL,
   libnotify,
   libpulseaudio,
@@ -88,8 +89,8 @@ let
 
     buildInputs = [
       alsa-lib
-      gst_all_1.gst-plugins-base
-      gst_all_1.gstreamer
+      gst-plugins-base
+      gstreamer
       libnotify
       libpulseaudio
       nspr

@@ -7,7 +7,11 @@
   qt6Packages,
   ninja,
   pkg-config,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
+  gst-libav,
   makeDesktopItem,
   copyDesktopItems,
   mpv-unwrapped,
@@ -48,16 +52,13 @@ stdenv.mkDerivation (finalAttrs: {
     "--prefix"
     "GST_PLUGIN_PATH"
     ":"
-    (lib.makeSearchPathOutput "lib" "lib/gstreamer-1.0" (
-      with gst_all_1;
-      [
-        gst-plugins-bad
-        gst-plugins-good
-        gst-plugins-base
-        gst-libav
-        gstreamer
-      ]
-    ))
+    (lib.makeSearchPathOutput "lib" "lib/gstreamer-1.0" [
+      gst-plugins-bad
+      gst-plugins-good
+      gst-plugins-base
+      gst-libav
+      gstreamer
+    ])
   ];
 
   nativeBuildInputs = [
@@ -75,13 +76,13 @@ stdenv.mkDerivation (finalAttrs: {
     qt6Packages.qtmultimedia
     mpv-unwrapped.dev
   ]
-  ++ (with gst_all_1; [
+  ++ [
     gst-plugins-bad
     gst-plugins-good
     gst-plugins-base
     gst-libav
     gstreamer
-  ]);
+  ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir $out/Applications

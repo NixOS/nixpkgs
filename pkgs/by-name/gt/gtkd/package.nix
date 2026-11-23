@@ -7,7 +7,9 @@
   cairo,
   dcompiler ? ldc,
   gdk-pixbuf,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-base,
+  gst-plugins-bad,
   ldc,
   librsvg,
   glib,
@@ -21,7 +23,7 @@
 }:
 
 let
-  inherit (gst_all_1) gstreamer gst-plugins-base gst-plugins-bad;
+  inherit gstreamer gst-plugins-base gst-plugins-bad;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gtkd";

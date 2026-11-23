@@ -15,7 +15,12 @@
   getopt,
   glib,
   gobject-introspection,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-ugly,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
+  gst-libav,
   gtk3,
   libappindicator,
   libfakexinerama,
@@ -157,14 +162,14 @@ effectiveBuildPythonApplication (finalAttrs: {
     libxtst
     xorgproto
   ]
-  ++ (with gst_all_1; [
+  ++ [
     gst-libav
     gst-plugins-ugly
     gst-plugins-bad
     gst-plugins-base
     gst-plugins-good
     gstreamer
-  ])
+  ]
   ++ [
     atk.out
     cairo

@@ -9,7 +9,9 @@
   curl,
   ffmpeg,
   gdk-pixbuf,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
   libaio,
   libmtp,
   libsysprof-capture,
@@ -69,11 +71,11 @@ stdenv.mkDerivation (finalAttrs: {
     ktexteditor
     threadweaver
   ])
-  ++ (with gst_all_1; [
+  ++ [
     gstreamer
     gst-plugins-base
     gst-plugins-good
-  ]);
+  ];
 
   nativeBuildInputs = [
     cmake

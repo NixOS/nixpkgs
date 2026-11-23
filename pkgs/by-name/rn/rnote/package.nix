@@ -10,7 +10,7 @@
   desktop-file-utils,
   dos2unix,
   glib,
-  gst_all_1,
+  gstreamer,
   gtk4,
   libadwaita,
   libxml2,
@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     appstream
     glib
-    gst_all_1.gstreamer
+    gstreamer
     gtk4
     libadwaita
     libxml2

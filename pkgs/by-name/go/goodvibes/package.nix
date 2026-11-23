@@ -10,7 +10,11 @@
   gtk3,
   libsoup_3,
   keybinder3,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-ugly,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
   wrapGAppsHook3,
   appstream-glib,
   desktop-file-utils,
@@ -44,13 +48,13 @@ stdenv.mkDerivation (finalAttrs: {
     libsoup_3
     keybinder3
   ]
-  ++ (with gst_all_1; [
+  ++ [
     gstreamer
     gst-plugins-base
     gst-plugins-good
     gst-plugins-bad
     gst-plugins-ugly
-  ]);
+  ];
 
   postPatch = ''
     patchShebangs scripts
