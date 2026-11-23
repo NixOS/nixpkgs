@@ -4,6 +4,7 @@
   fetchurl,
   fetchzip,
   perl,
+  bashNonInteractive,
   ncurses,
 
   # for tests
@@ -45,7 +46,12 @@ stdenv.mkDerivation rec {
   buildInputs = [
     ncurses
     perl
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform bashNonInteractive) [
+    bashNonInteractive
   ];
+
+  strictDeps = true;
 
   doCheck = true;
 
