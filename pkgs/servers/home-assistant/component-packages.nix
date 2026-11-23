@@ -6666,7 +6666,8 @@
       ];
     "seafile" =
       ps: with ps; [
-      ]; # missing inputs: aioseafile
+        aioseafile
+      ];
     "search" =
       ps: with ps; [
       ];
@@ -9785,6 +9786,7 @@
     "scrape"
     "screenlogic"
     "script"
+    "seafile"
     "search"
     "season"
     "select"
