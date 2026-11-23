@@ -4192,7 +4192,8 @@
       ];
     "libresync" =
       ps: with ps; [
-      ]; # missing inputs: aiolibresync
+        aiolibresync
+      ];
     "lichess" =
       ps: with ps; [
         aiolichess
@@ -9420,6 +9421,7 @@
     "lg_tv_rs232"
     "libre_hardware_monitor"
     "librenms"
+    "libresync"
     "lichess"
     "lidarr"
     "liebherr"
