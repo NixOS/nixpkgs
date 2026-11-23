@@ -135,6 +135,8 @@ stdenv.mkDerivation (finalAttrs: {
     export SOURCE_DATE_EPOCH=$(date -d ${finalAttrs.version} +%s)
   '';
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Font editor";
     homepage = "https://fontforge.github.io";
