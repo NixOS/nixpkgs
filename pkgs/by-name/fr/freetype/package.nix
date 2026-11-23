@@ -146,7 +146,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  # pkgsCross.mingwW64.pkg-config doesn't build
+  # pkgsCross.mingw-msvcrt-x86_64.pkg-config doesn't build
   # makeWrapper doesn't cross-compile to windows #120726
   postInstall = ''
     substituteInPlace $dev/bin/freetype-config \

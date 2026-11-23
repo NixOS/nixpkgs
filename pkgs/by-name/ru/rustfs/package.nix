@@ -110,6 +110,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     });
   };
 
+  # can take over 5 hours on 2 cores and can consume significant RAM
+  requiredSystemFeatures = [ "big-parallel" ];
+
   meta = {
     description = "S3-compatible high-performance object storage system supporting migration and coexistence with other S3-compatible platforms such as MinIO and Ceph";
     homepage = "https://github.com/rustfs/rustfs";

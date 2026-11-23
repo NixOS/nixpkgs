@@ -7,6 +7,7 @@
   protobuf,
   fontconfig,
   aws-lc,
+  apple-sdk_26,
   libgit2,
   openssl,
   sqlite,
@@ -176,6 +177,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libxext
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_26
     # required by installPhase
     git
   ];

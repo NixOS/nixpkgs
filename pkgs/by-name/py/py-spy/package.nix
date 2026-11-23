@@ -24,17 +24,17 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "py-spy";
-  version = "0.4.2";
+  version = "0.4.4";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "benfred";
     repo = "py-spy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5T6R2Neslw8rNYWJbXncLH78kH1o42fR6kidhip6/Bg=";
+    hash = "sha256-zvdhdcnSF2s14VOAELf6U7x4A46tCFMjmAvJKy1Ytf8=";
   };
 
-  cargoHash = "sha256-ZhtQjX15pZe3CM898LBj/79kXa6ESgPOSFkNghq0Ywo=";
+  cargoHash = "sha256-2syTneviYPr72qAyVqX3on0rgjzoHaoOKZJW7OA3lts=";
 
   buildFeatures = lib.optionals supportsUnwind [
     "unwind"

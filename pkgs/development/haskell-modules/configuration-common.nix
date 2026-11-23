@@ -516,6 +516,10 @@ with haskellLib;
   # There are numerical tests on random data, that may fail occasionally
   lapack = dontCheck super.lapack;
 
+  # HiGHS >= 1.16 makes querying the solution of an infeasible model an error.
+  # https://hub.darcs.net/thielema/highs-lp/patch/2bd559ad5108c16e2ec9fa401d206ea20fa79889
+  highs-lp = appendPatch ./patches/highs-lp-highs-1.16.patch super.highs-lp;
+
   # Missing files necessary for test suite compilation
   # https://github.com/brandonchinn178/kdl-hs/issues/33
   kdl-hs = dontCheck super.kdl-hs;

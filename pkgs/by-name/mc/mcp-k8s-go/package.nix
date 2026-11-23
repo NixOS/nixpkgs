@@ -7,16 +7,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "mcp-k8s-go";
-  version = "0.6.0";
+  version = "0.6.7";
 
   src = fetchFromGitHub {
     owner = "strowk";
     repo = "mcp-k8s-go";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/5tmKngZTp5n8jDZwKAaG4ad+MPRFEJfgV/A5TMVLlM=";
+    hash = "sha256-BvFpQy87WcilxgIf+KUMaTl7HhCBgdbI7s/PYzxsRY0=";
   };
 
-  vendorHash = "sha256-WULy61Ntra9Jz4fhSVOzftzWyQxvPFyBfjuKlKTORqI=";
+  vendorHash = "sha256-kMQGjNaHMaW1KNiCMY8iI3J7BSfwPgF80AYTZKtqJAg=";
 
   doCheck = false;
 

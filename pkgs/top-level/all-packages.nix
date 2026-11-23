@@ -1890,11 +1890,6 @@ with pkgs;
     mkFranzDerivation = callPackage ../applications/networking/instant-messengers/franz/generic.nix { };
   };
 
-  inherit (callPackages ../tools/filesystems/garage { })
-    garage_1
-    garage_2
-    ;
-
   gaugePlugins = recurseIntoAttrs (callPackage ../by-name/ga/gauge/plugins { });
 
   gawd = python3Packages.toPythonApplication python3Packages.gawd;
@@ -3362,6 +3357,8 @@ with pkgs;
   happy = haskell.lib.compose.justStaticExecutables haskellPackages.happy;
 
   hscolour = haskell.lib.compose.justStaticExecutables haskellPackages.hscolour;
+
+  cabal-gild = haskell.lib.compose.justStaticExecutables haskellPackages.cabal-gild;
 
   cabal-install = haskell.lib.compose.justStaticExecutables haskellPackages.cabal-install;
 

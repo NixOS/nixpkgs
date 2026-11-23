@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "toolblex";
-  version = "0.17";
+  version = "0.18";
 
   src = fetchFromGitHub {
     owner = "emericg";
     repo = "toolBLEx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bDRrUm/3ZHi+L8o+2XIUyPJh5KFcsgxLC6610qdSwCY=";
+    hash = "sha256-NPx7TrkQKu9Hb1rtZomkoyhpj2h0WNZdWuNAbjykY0c=";
   };
 
   nativeBuildInputs = [

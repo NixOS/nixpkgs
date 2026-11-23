@@ -19,9 +19,9 @@
 let
   sources = {
     lts-36 = {
-      version = "36.0.20";
-      hash = "sha256-KDqK5ri0vazHXDPyXLsNpenpRAIc/T9PQ0h+ikCIFuw=";
-      cargoHash = "sha256-V9ZZdO9piR2Cn5MjND0N78G+dPQhiIGxFl9lVAtTT50=";
+      version = "36.0.23";
+      hash = "sha256-OLZi2p67aLYw8lLajzR/vmBZ/Y+Z+jGkvpZE0GBqs6g=";
+      cargoHash = "sha256-+sDjlI1XHWrXZw50B11Y4A2bJwFCgFMgnCh26i5Jpfg=";
     };
     lts-48 = {
       version = "48.0.10";
@@ -29,9 +29,9 @@ let
       cargoHash = "sha256-wLU/Y2rrOGW3pucBlhgShc1/pkN1Pm9L1u7x2alFUNE=";
     };
     main = {
-      version = "50.0.1";
-      hash = "sha256-M9WcDyxyBYxDyzDKe2KgdPraCIQHDp1DIPH1m5emRHE=";
-      cargoHash = "sha256-MIXFZtLQHDHX9e/mJMpSbzj8GlqLpTn4jYdNyw9B/uo=";
+      version = "51.0.0";
+      hash = "sha256-hROwfTF1d8GqrTBiyzC6CZjGf4T2GlEAV8r7LJgXzlg=";
+      cargoHash = "sha256-58vWC7dGupYs+RUBD6dYxIIuki1CHkNm4t65lu2EC18=";
     };
   };
   source = sources.${variant};

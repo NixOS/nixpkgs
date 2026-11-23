@@ -803,6 +803,7 @@ mapAliases {
   EBTKS = throw "'EBTKS' has been renamed to/replaced by 'ebtks'"; # Converted to throw 2025-10-27
   ec2-utils = throw "'ec2-utils' has been renamed to/replaced by 'amazon-ec2-utils'"; # Converted to throw 2025-10-27
   ecryptfs = throw "'ecryptfs' has been removed due to lack of maintenance. Consider using 'fscrypt' or 'gocryptfs' instead."; # Added 2026-01-14
+  ed-odyssey-materials-helper = throw "'ed-odyssey-materials-helper' has been removed due to upstream license violation, as it can no longer be built from source."; # Added 2026-11-22
   edid-decode = v4l-utils; # Added 2025-06-20
   eidolon = throw "eidolon was removed as it is unmaintained upstream."; # Added 2025-05-28
   eintopf = throw "'eintopf' has been renamed to/replaced by 'lauti'"; # Converted to throw 2025-10-27
@@ -876,6 +877,7 @@ mapAliases {
   Fabric = fabric; # Added 2026-06-29
   fabs = throw "'fabs' has been removed due to being broken for more than a year; see RFC 180"; # Added 2026-02-05
   falcon = throw "'falcon' has been removed as it is unmaintained and depends on pcre, which is deprecated"; # Added 2026-06-16
+  falkor = throw "'falkor' has been removed because upstream archived the project in July 2025 and its API servers are gone"; # Added 2026-11-21
   fancontrol-gui = throw "'fancontrol-gui' has been removed due to outdated KF5 dependencies"; # Added 2026-05-01
   fancy-motd = throw "'fancy-motd' has been removed because upstream archived the project in September 2025."; # Added 2026-09-02
   fast-cli = throw "'fast-cli' has been removed because it was unmaintainable in nixpkgs"; # Added 2025-11-17
@@ -2429,6 +2431,7 @@ mapAliases {
   rke2_1_33 = throw "'rke2_1_33' has been removed from nixpkgs as it has reached end of life"; # Added 2026-09-02
   rl_json = throw "'rl_json' has been renamed to/replaced by 'tclPackages.rl_json'"; # Converted to throw 2025-10-27
   rmfuse = throw "'rmfuse' has been removed from nixpkgs because it's not working with the upstream service anymore"; # Added 2026-11-08
+  rnsapi = throw "'rnsapi' has been removed as it is unmaintained upstream."; # Added 2026-11-21
   roam-research = throw "'roam-research' has been removed from nixpkgs due to lack of maintenance"; # Added 2026-08-14
   robo = throw "'robo' was removed due to lack of in-tree maintenance"; # Added 2026-10-18
   rockbox_utility = throw "'rockbox_utility' has been renamed to/replaced by 'rockbox-utility'"; # Converted to throw 2025-10-27

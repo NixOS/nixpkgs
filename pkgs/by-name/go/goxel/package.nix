@@ -32,12 +32,16 @@ stdenv.mkDerivation (finalAttrs: {
     libpng
   ];
 
-  dontUseSconsBuild = true;
+  sconsFlags = [
+    "mode=release"
+    # Blanket -Werror breaks on new GCC warnings
+    "werror=no"
+  ];
+  enableParallelBuilding = true;
+
+  # The SConstruct has no install target; the Makefile's install target is used instead
   dontUseSconsInstall = true;
-
   makeFlags = [ "PREFIX=$(out)" ];
-
-  buildFlags = [ "release" ];
 
   meta = {
     description = "Open Source 3D voxel editor";

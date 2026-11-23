@@ -14,14 +14,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "gflanguages";
-  version = "0.7.11";
+  version = "0.7.12";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googlefonts";
     repo = "lang";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-skybvMeSP+F3Bz3PJEB7ZIEVhLdwBc8+VemDcC+1FZc=";
+    hash = "sha256-vXLe/KkWe4CMepYkOKMiE4H3PGV3ocgn/66Ul2Qw4fE=";
   };
 
   # Relax the dependency on protobuf 3. Other packages in the Google Fonts

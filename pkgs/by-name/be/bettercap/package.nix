@@ -12,16 +12,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "bettercap";
-  version = "2.41.7";
+  version = "2.42.0";
 
   src = fetchFromGitHub {
     owner = "bettercap";
     repo = "bettercap";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-oiJPZW0ywrRlKq9kfKilCxbq9WN5VhhY2T/5iDe78RM=";
+    sha256 = "sha256-oNPa+QThiQ5vJwUa9pCQUYS/uYAwRzEmIgtfOTWToPs=";
   };
 
-  vendorHash = "sha256-ssNGy40KMJ9P33uEGyYOer92QRS2T6DQlKaf/3XMFwQ=";
+  vendorHash = "sha256-LVl105ItFXVLXdGLGtO3LaYl9mrMbIHd515Huv7gGHs=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [

@@ -36,6 +36,12 @@ stdenv.mkDerivation (finalAttrs: {
       patch = "ftbfs_gcc14.patch";
       hash = "sha256-eMx/RlUpq5Ez+1L8VZo40Y3h2ZKkqiQEmKTlkZRMXnI=";
     })
+    # Let the Qt interface find its fonts and themes on darwin
+    # https://github.com/garglk/garglk/pull/1047
+    ./macos-qt-datadir.patch
+    # Backport of the fixes for CVE-2026-131873 and CVE-2026-131874 in the Plus interpreter,
+    # which upstream fixed with a rewrite in https://github.com/garglk/garglk/pull/1041
+    ./plus-cve-2026-131873-131874.patch
   ];
 
   postPatch = ''
@@ -71,10 +77,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "INTERFACE" "QT")
     (lib.cmakeFeature "SOUND" "QT")
     (lib.cmakeBool "WITH_QT6" true)
-    # fatal error: 'macglk_startup.h' file not found
-    (lib.cmakeBool "WITH_AGILITY" (!stdenv.hostPlatform.isDarwin))
-    (lib.cmakeBool "WITH_LEVEL9" (!stdenv.hostPlatform.isDarwin))
-    (lib.cmakeBool "WITH_MAGNETIC" (!stdenv.hostPlatform.isDarwin))
   ];
 
   meta = {
@@ -83,6 +85,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Interactive fiction interpreter GUI";
     mainProgram = "gargoyle";
     platforms = lib.platforms.unix;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ iedame ];
   };
 })

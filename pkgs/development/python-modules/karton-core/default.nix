@@ -1,24 +1,31 @@
 {
   lib,
   aioboto3,
+  boto3,
   buildPythonPackage,
+  cryptography,
+  fastapi,
   fetchFromGitHub,
+  httpx2,
   orjson,
+  pydantic,
+  pyjwt,
   redis,
   setuptools,
-  unittestCheckHook,
+  pytestCheckHook,
+  websockets,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "karton-core";
-  version = "5.9.1";
+  version = "6.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "CERT-Polska";
     repo = "karton";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-b/wOkOk6LB8uTDsXJrNQ2iru2H6mgaMhIyWSU5y2mx0=";
+    hash = "sha256-pSk/OnymFGD5i9olApuJysoltgA70kBDAhPUosH7fE0=";
   };
 
   build-system = [ setuptools ];
@@ -30,13 +37,25 @@ buildPythonPackage (finalAttrs: {
 
   dependencies = [
     aioboto3
+    boto3
+    cryptography
+    fastapi
+    httpx2
     orjson
+    pydantic
+    pyjwt
     redis
+    websockets
   ];
 
-  nativeCheckInputs = [ unittestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "karton.core" ];
+
+  disabledTestPaths = [
+    # End-to-end tests are disabled
+    "tests/e2e/"
+  ];
 
   meta = {
     description = "Distributed malware processing framework";

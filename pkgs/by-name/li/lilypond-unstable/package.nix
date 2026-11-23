@@ -7,11 +7,11 @@
 
 lilypond.overrideAttrs (
   finalAttrs: prevAttrs: {
-    version = "2.27.4";
+    version = "2.27.5";
 
     src = fetchzip {
       url = "https://lilypond.org/download/sources/v${lib.versions.majorMinor finalAttrs.version}/lilypond-${finalAttrs.version}.tar.gz";
-      hash = "sha256-qQw8Z4v5/GPHHg1vPEfJU8nOprKdeMmYYdU2QDXIpH0=";
+      hash = "sha256-yA43ToU4zI8nnasZs7Jl6M325IYlEhklUs1rBjYCqCA=";
     };
 
     patches = [ ];

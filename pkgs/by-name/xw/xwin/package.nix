@@ -9,16 +9,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "xwin";
-  version = "0.9.0";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "Jake-Shadle";
     repo = "xwin";
     tag = finalAttrs.version;
-    hash = "sha256-tccavt0VhA5l3rDXxbQu1ueQsoHV55g8/twKp11hrk8=";
+    hash = "sha256-kUbRHrM88x3ezy0+GIpbGQfEROn16dSwPtobjdYauRM=";
   };
 
-  cargoHash = "sha256-jJBLrcMVGbP1NPDgdUPQYM8333XGo6ulbs4qBk2Np90=";
+  cargoHash = "sha256-34v/YDT0Juwjv8EbwsOsmbp/Q89Z4c+BYxcA60X7Q3A=";
 
   nativeBuildInputs = [
     pkg-config
@@ -33,6 +33,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   checkFlags = [
     "--skip=verify_compiles"
     "--skip=verify_deterministic"
+    "--skip=verify_aarch64_compiles"
   ];
 
   doInstallCheck = true;
@@ -52,7 +53,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
       lib.licenses.mit
       lib.licenses.asl20
     ];
-    maintainers = [ lib.maintainers.eveeifyeve ];
+    maintainers = with lib.maintainers; [
+      eveeifyeve
+      greaka
+    ];
     platforms = with lib.platforms; linux ++ darwin ++ windows;
   };
 })

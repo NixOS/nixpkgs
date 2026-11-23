@@ -14,7 +14,7 @@
 # That is handled by the kiro-cli package, which wraps this one in an FHS env.
 stdenv.mkDerivation (finalAttrs: {
   pname = "kiro-cli-unwrapped";
-  version = "3.3.0";
+  version = "3.5.0";
 
   __structuredAttrs = true;
 
@@ -23,17 +23,17 @@ stdenv.mkDerivation (finalAttrs: {
       # Since 3.0, macOS ships as a single universal tarball.
       darwin = fetchurl {
         url = "https://desktop-release.q.us-east-1.amazonaws.com/${finalAttrs.version}/kirocli-universal-darwin.tar.gz";
-        hash = "sha256-PXOKl/HAwYHQD2YCnpkddu++I3SNIxHrdfIFyLnJx5c=";
+        hash = "sha256-byb1H+iy8m2wWORa0tT4vOd6SRZ7J9otzmcClSo2MNs=";
       };
     in
     {
       x86_64-linux = fetchurl {
         url = "https://desktop-release.q.us-east-1.amazonaws.com/${finalAttrs.version}/kirocli-x86_64-linux.tar.gz";
-        hash = "sha256-uIFCqgJ4lQSsd/327oKfD0vcnOLl3QzHMIThBQA8j8M=";
+        hash = "sha256-mPAWt0azQtgzeg6TfKvsw4EDfi6SDqD/quZJ5R71nU4=";
       };
       aarch64-linux = fetchurl {
         url = "https://desktop-release.q.us-east-1.amazonaws.com/${finalAttrs.version}/kirocli-aarch64-linux.tar.gz";
-        hash = "sha256-GHIPfcU2hImxZziMJ8R2gIkgMmGcT20JnP3cF2EeA54=";
+        hash = "sha256-NERP7gMpRANygsdi30/2kppR6CfdctQCy3qK++yzPn8=";
       };
       aarch64-darwin = darwin;
     }

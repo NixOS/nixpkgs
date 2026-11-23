@@ -42,7 +42,7 @@ index 9f0789b..7a4a88a 100644
      )
      lines = result.stdout.decode("utf-8").split("\n")
 diff --git a/tests/conftest.py b/tests/conftest.py
-index 2c39730..d78128f 100644
+index 404758f..e4d8969 100644
 --- a/tests/conftest.py
 +++ b/tests/conftest.py
 @@ -179,7 +179,7 @@ def steam_runtime_dir(steam_dir):

@@ -12,14 +12,14 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "fileseq";
-  version = "3.4.1";
+  version = "3.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "justinfx";
     repo = "fileseq";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dAyN5agv2ON6TkiD4Llth2aYFS9IubOIa49cRJOKKno=";
+    hash = "sha256-BO/2VwItRuef0wJNqU+q91JxgNMbZiiCW89XYoKmuHo=";
   };
 
   build-system = [

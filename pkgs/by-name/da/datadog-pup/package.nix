@@ -3,6 +3,7 @@
   aws-lc,
   cacert,
   fetchFromGitHub,
+  installShellFiles,
   nix-update-script,
   pkg-config,
   rustPlatform,
@@ -38,6 +39,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   __darwinAllowLocalNetworking = true;
 
   nativeBuildInputs = [
+    installShellFiles
     pkg-config
   ];
 
@@ -45,6 +47,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     aws-lc
     zstd
   ];
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd pup \
+      --bash <($out/bin/pup completions bash) \
+      --zsh <($out/bin/pup completions zsh) \
+      --fish <($out/bin/pup completions fish)
+  '';
 
   nativeCheckInputs = [
     cacert

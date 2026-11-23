@@ -14,16 +14,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "worktrunk";
-  version = "0.81.0";
+  version = "0.83.0";
 
   src = fetchFromGitHub {
     owner = "max-sixty";
     repo = "worktrunk";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Sgim8WgH5nGr1GhSZRtwkRu87b/S2W9gp7eHgtTGBAo=";
+    hash = "sha256-yAdnbLzbNtWvDbEK4vKSutKxO8fGXlShjaHleFtkzTg=";
   };
 
-  cargoHash = "sha256-cJ5rd4+5IIxuUTWWAe5DF2cDU+lyZVMUq+l+I029peU=";
+  cargoHash = "sha256-hPFVoWhWv04mxOhKHbMSwNYDqaKmVcZFB0GujcbVk/c=";
 
   cargoBuildFlags = [ "--package=worktrunk" ];
 
@@ -56,6 +56,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --nushell <($out/bin/wt config shell completions nu) \
       --zsh <($out/bin/wt config shell completions zsh)
   '';
+
+  # URL status tests bind to loopback addresses.
+  __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
     gitMinimal

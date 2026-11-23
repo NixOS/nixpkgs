@@ -5,12 +5,12 @@
 }:
 
 appimageTools.wrapType2 (finalAttrs: {
-  version = "1.6.4";
+  version = "1.6.5";
   pname = "gsender";
 
   src = fetchurl {
     url = "https://github.com/Sienci-Labs/gsender/releases/download/v${finalAttrs.version}/gSender-${finalAttrs.version}-Linux-Intel-64Bit.AppImage";
-    hash = "sha256-N8jAy5+2UPC7trtUF7kVztDA3aiFyHEAcyfcCobIRe4=";
+    hash = "sha256-TyNpwJWdY8NO0BHznrsTPu/EbOh73Jih4BhkN8S7xZY=";
   };
 
   extraInstallCommands = ''

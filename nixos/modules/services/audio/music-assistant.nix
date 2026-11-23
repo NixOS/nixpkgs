@@ -58,7 +58,7 @@ in
       default = false;
       description = ''
         Whether to open required ports for the configured providers.
-        Currently AirPlay, Sendspin, Snapcast, Squeezelite and Spotify Connect need port(s) to be opened to properly function.
+        Currently AirPlay, AirPlay Receiver, AriaCast Receiver, Sendspin, Snapcast, Squeezelite and Spotify Connect need port(s) to be opened to properly function.
 
         ::: {.note}
         AirPlay and Spotify Connect must open all random high UDP or TCP ports respectively to function.
@@ -114,6 +114,8 @@ in
           5000 # AirPlay 1/RAOP
           7000 # AirPlay 2
         ]
+        # https://github.com/AriaCast/AriaCast-Protocol-Spec/blob/main/spec/discovery.md#ports
+        ++ lib.optional (lib.elem "ariacast_receiver" cfg.providers) 12889
         # https://www.music-assistant.io/player-support/sendspin/#connecting-external-sendspin-clients
         ++ lib.optional (lib.elem "sendspin" cfg.providers) 8927
         # https://www.music-assistant.io/player-support/snapcast/#known-issues--notes
@@ -126,28 +128,48 @@ in
           9090 # Slimproto CLI
         ];
       allowedTCPPortRanges =
+        # AirPlay2 ports
+        # https://github.com/music-assistant/server/blob/2.11.0b7/music_assistant/providers/airplay_receiver/provider.py#L68-L75
+        lib.optionals (lib.elem "airplay_receiver" cfg.providers) [
+          {
+            from = 7000;
+            to = 7999;
+          }
+        ]
         # Music Assistant does not configure the zeroconf_port, so all ephemeral ports are used
         # https://github.com/devgianlu/go-librespot#example-minimal-zeroconf-configuration
-        lib.optionals (lib.elem "spotify_connect" cfg.providers) [
+        ++ lib.optionals (lib.elem "spotify_connect" cfg.providers) [
           {
             from = 32768;
             to = 65535;
           }
         ];
-      allowedUDPPorts = lib.optionals (lib.elem "squeezelite" cfg.providers) [
-        # https://lyrion.org/reference/slimproto-protocol/
-        3483 # Slimproto discovery
-      ];
-      # The information published by Apple 1 seem to not apply to libraop.
-      # The closest we could find that represents the port range being used as observed by tcpdump is the ephemeral port range.
-      # 1: https://support.apple.com/en-us/103229#:~:text=49152%E2%80%93-,65535,-TCP%2C%20UDP
-      # 2: https://en.wikipedia.org/wiki/Ephemeral_port#Range
-      allowedUDPPortRanges = lib.mkIf (lib.elem "airplay" cfg.providers) [
-        {
-          from = 32768;
-          to = 65535;
-        }
-      ];
+      allowedUDPPorts =
+        #  https://github.com/AriaCast/AriaCast-Protocol-Spec/blob/main/spec/discovery.md#ports
+        lib.optional (lib.elem "ariacast_receiver" cfg.providers) 12888
+        ++ lib.optionals (lib.elem "squeezelite" cfg.providers) [
+          # https://lyrion.org/reference/slimproto-protocol/
+          3483 # Slimproto discovery
+        ];
+      allowedUDPPortRanges =
+        # AirPlay1 ports
+        # https://github.com/mikebrady/shairport-sync/blob/5.6.3/scripts/shairport-sync.conf#L44-L45
+        lib.optionals (lib.elem "airplay_receiver" cfg.providers) [
+          {
+            from = 6001;
+            to = 6011;
+          }
+        ]
+        # The information published by Apple 1 seem to not apply to libraop.
+        # The closest we could find that represents the port range being used as observed by tcpdump is the ephemeral port range.
+        # 1: https://support.apple.com/en-us/103229#:~:text=49152%E2%80%93-,65535,-TCP%2C%20UDP
+        # 2: https://en.wikipedia.org/wiki/Ephemeral_port#Range
+        ++ lib.optionals (lib.elem "airplay" cfg.providers) [
+          {
+            from = 32768;
+            to = 65535;
+          }
+        ];
     };
 
     services = {

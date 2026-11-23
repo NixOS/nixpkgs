@@ -12,18 +12,27 @@ let
   };
   unfree = import nixpkgs { config.allowUnfree = true; };
   cpu = free.xla.override { cudaSupport = false; };
-  gpu = unfree.xla.override { cudaSupport = true; };
+  # The default CUDA release is newer than this XLA pin's rules_ml_toolchain supports.
+  gpu = unfree.xla.override {
+    cudaSupport = true;
+    cudaPackages = unfree.cudaPackages_12_9;
+  };
   rejected = builtins.tryEval ((free.xla.override { cudaSupport = true; }).drvPath);
   configured =
     capabilities: forwardCompat:
-    (import nixpkgs {
-      config = {
-        allowUnfree = true;
-        cudaCapabilities = capabilities;
-        cudaForwardCompat = forwardCompat;
+    let
+      pkgs = import nixpkgs {
+        config = {
+          allowUnfree = true;
+          cudaCapabilities = capabilities;
+          cudaForwardCompat = forwardCompat;
+        };
       };
-    }).xla.override
-      { cudaSupport = true; };
+    in
+    pkgs.xla.override {
+      cudaSupport = true;
+      cudaPackages = pkgs.cudaPackages_12_9;
+    };
   forward = configured [ "8.0" "8.9" ] true;
   noForward = configured [ "8.0" "8.9" ] false;
   ordered = configured [ "9.0" "8.0" ] true;
@@ -68,6 +77,7 @@ let
   gpuExpected = unfree.callPackage ./default.nix {
     xla = gpuOverridden;
     cudaSupport = true;
+    cudaPackages = unfree.cudaPackages_12_9;
   };
 in
 assert (builtins.tryEval cpu.drvPath).success;
@@ -76,7 +86,7 @@ assert builtins.all (license: license.free) cpu.meta.license;
 assert builtins.elem unfree.lib.licenses.nvidiaCudaRedist gpu.meta.license;
 assert builtins.all (
   license: builtins.elem license gpu.meta.license
-) unfree.cudaPackages.cudnn.meta.license;
+) unfree.cudaPackages_12_9.cudnn.meta.license;
 assert cpu.tests.cuda == { } && cpu.testers.cuda == { };
 assert gpu.tests.cuda.pjrt.requiredSystemFeatures == [ "cuda" ];
 assert gpu.tests.cuda.hlo.requiredSystemFeatures == [ "cuda" ];
@@ -94,16 +104,16 @@ assert hasCapabilities "sm_90,compute_80" ordered;
 assert hasCapabilities "compute_90a" accelerated;
 assert hasCapabilities "sm_75,sm_80,sm_86,sm_89,sm_90,sm_100,compute_120" selected;
 assert !(familyRejected false).success && !(familyRejected true).success;
-assert unfree.lib.hasInfix "--cuda_version=12.9.1" gpu.preConfigure;
-assert unfree.lib.hasInfix "--cudnn_version=9.22.0" gpu.preConfigure;
-assert hasCompiledDefault unfree.cudaPackages.cuda_nvcc gpu;
-assert !(containsPath unfree.cudaPackages.cuda_nvcc cpu.postConfigure);
+assert unfree.lib.hasInfix "--cuda_version=12.9.2" gpu.preConfigure;
+assert unfree.lib.hasInfix "--cudnn_version=9.27.0" gpu.preConfigure;
+assert hasCompiledDefault unfree.cudaPackages_12_9.cuda_nvcc gpu;
+assert !(containsPath unfree.cudaPackages_12_9.cuda_nvcc cpu.postConfigure);
 assert !(builtins.tryEval selected.drvPath).success;
 assert (builtins.tryEval selectedWithHash.drvPath).success;
 assert selectedConfigureOverride.success;
 assert selectedWithHash.tests.cuda.configureOverride.deps.drvPath == selectedWithHash.deps.drvPath;
 assert selectedWithHash.testers.cuda.pjrt.drvPath == selectedExpected.testers.cuda.pjrt.drvPath;
-assert unfree.lib.hasInfix "--cuda_version=12.8.1" selectedWithHash.preConfigure;
+assert unfree.lib.hasInfix "--cuda_version=12.8.2" selectedWithHash.preConfigure;
 assert hasCompiledDefault unfree.cudaPackages_12_8.cuda_nvcc selectedWithHash;
 assert forward.deps.outPath == gpu.deps.outPath;
 assert noForward.deps.outPath == gpu.deps.outPath;

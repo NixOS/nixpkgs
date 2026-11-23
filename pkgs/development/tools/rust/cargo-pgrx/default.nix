@@ -71,9 +71,9 @@ in
   # Not to be used with buildPgrxExtension, where it should be pinned.
   # When you make an extension use the latest version, *copy* this to a separate pinned attribute.
   cargo-pgrx = generic {
-    version = "0.19.3";
-    hash = "sha256-TyViMU+ZLUHNK5CRi8CN3tThFNUJQnuWTeCxT2JTYG0=";
-    cargoHash = "sha256-43B3zl/mJXuBD/w8x+lek7Wtg/lZ/bZWuJdv5v9ImSE=";
+    version = "0.19.4";
+    hash = "sha256-ePwf0BrzjZGlYda8OBIZ15QBTtbDEu7I69lF/llA1v4=";
+    cargoHash = "sha256-ZUxcx6AXzv5IahiKl3YfqPh9A9PL/QbL6qcGBdp/hNc=";
   };
 }
 // lib.mapAttrs (_: generic) (import ./pinned.nix)

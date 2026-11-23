@@ -545,6 +545,13 @@ in
     '';
   };
 
+  lua-resty-http = prev.lua-resty-http.overrideAttrs (old: {
+    # https://github.com/ledgetech/lua-resty-http/issues/352
+    propagatedBuildInputs = old.propagatedBuildInputs ++ [
+      final.lua-resty-string
+    ];
+  });
+
   lua-resty-jwt = prev.lua-resty-jwt.overrideAttrs (old: {
     src = old.src.override {
       fetchSubmodules = true;

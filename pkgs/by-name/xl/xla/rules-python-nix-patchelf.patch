@@ -7,7 +7,7 @@ and applied after rules_python is fetched.
 
 --- a/python/private/python_repository.bzl
 +++ b/python/private/python_repository.bzl
-@@ -96,6 +96,20 @@
+@@ -96,6 +96,26 @@
      if patches:
          for patch in patches:
              rctx.patch(patch, strip = rctx.attr.patch_strip)
@@ -17,11 +17,17 @@ and applied after rules_python is fetched.
 +    # exist in nix. Use patchelf to set the correct dynamic linker.
 +    nix_dynamic_linker = rctx.os.environ.get("NIX_DYNAMIC_LINKER", "")
 +    if nix_dynamic_linker and "linux" in platform:
++        # Keep pristine copies so fetchAttrs.installPhase can restore them:
++        # patchelf output depends on the patchelf version and the glibc store
++        # path name, which must not leak into the fixed-output archive.
 +        python_bin = "bin/python{}.{}".format(*python_version_info[:2])
++        rctx.execute(["cp", "-p", python_bin, python_bin + ".nix-unpatched"])
 +        res = rctx.execute(["patchelf", "--set-interpreter", nix_dynamic_linker, python_bin])
 +        if res.return_code != 0:
++            rctx.delete(python_bin + ".nix-unpatched")
 +            # Also try the install-only layout
 +            python_bin = "python/bin/python{}.{}".format(*python_version_info[:2])
++            rctx.execute(["cp", "-p", python_bin, python_bin + ".nix-unpatched"])
 +            rctx.execute(["patchelf", "--set-interpreter", nix_dynamic_linker, python_bin])
 +        # Also patch shared libraries
 +        rctx.execute(["find", ".", "-name", "*.so*", "-exec", "patchelf", "--set-interpreter", nix_dynamic_linker, "{}", ";"], quiet = True)

@@ -9,9 +9,10 @@
   libxaw,
   libxmu,
   libxt,
+  makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xedit";
   version = "1.2.5";
 
@@ -19,7 +20,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.freedesktop.org";
     owner = "xorg/app";
     repo = "xedit";
-    rev = "${pname}-${version}";
+    tag = "${finalAttrs.pname}-${finalAttrs.version}";
     hash = "sha256-+nWtoqm+5ie2U5nFJRioftMkxJFNtws09kTelmWhqgA=";
   };
 
@@ -34,6 +35,7 @@ stdenv.mkDerivation rec {
     autoreconfHook
     pkg-config
     util-macros
+    makeWrapper
   ];
   buildInputs = [
     libx11
@@ -42,9 +44,13 @@ stdenv.mkDerivation rec {
     libxt
   ];
 
+  postInstall = ''
+    wrapProgram $out/bin/xedit \
+      --set-default XAPPLRESDIR $out/share/X11/app-defaults'';
+
   configureFlags = [
-    "--with-lispdir=$out/share/X11/xedit/lisp"
-    "--with-appdefaultdir=$out/share/X11/app-defaults"
+    "--with-lispdir=${placeholder "out"}/share/X11/xedit/lisp"
+    "--with-appdefaultdir=${placeholder "out"}/share/X11/app-defaults"
   ];
 
   meta = {
@@ -54,6 +60,7 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     # never built on aarch64-darwin, x86_64-darwin since first introduction in nixpkgs
     broken = stdenv.hostPlatform.isDarwin;
+    maintainers = with lib.maintainers; [ Holiu618 ];
     mainProgram = "xedit";
   };
-}
+})

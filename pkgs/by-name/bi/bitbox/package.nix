@@ -10,6 +10,7 @@
   qt5,
   qt6,
   udevCheckHook,
+  wrapGAppsHook3,
 }:
 
 let
@@ -24,14 +25,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "bitbox";
-  version = "4.52.0";
+  version = "4.53.0";
 
   src = fetchFromGitHub {
     owner = "BitBoxSwiss";
     repo = "bitbox-wallet-app";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-urQjnrBcqTwP+xpcM0L8IpE/Vc+CQiN/2hE5jlBnzdU=";
+    hash = "sha256-mTQRh5GkEDLZpDi07q3V2cXjlY4khM3aZ3z321iYjfQ=";
   };
 
   postPatch = ''
@@ -51,7 +52,7 @@ stdenv.mkDerivation rec {
     inherit version;
     inherit src;
     sourceRoot = "${src.name}/frontends/web";
-    npmDepsHash = "sha256-G8ZhBG9zdiFvkMVgjLFJcbFFpbqh6+q1xezv9fwwaAg=";
+    npmDepsHash = "sha256-OPIlmPvlt2Ellxiin5VKl2SqGQB5mwd7euEL+zkIS60=";
     installPhase = "cp -r build $out";
   };
 
@@ -93,6 +94,7 @@ stdenv.mkDerivation rec {
     qt6.wrapQtAppsHook
     rcc
     udevCheckHook
+    wrapGAppsHook3
   ];
 
   doInstallCheck = true;

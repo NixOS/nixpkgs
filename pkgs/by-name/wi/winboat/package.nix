@@ -47,7 +47,7 @@ buildNpmPackage (finalAttrs: {
   npmDepsHash = "sha256-38hDI0z3lrdSvMTUZAotIuT7Kt/NZcl8UdrYpum1i1M=";
   makeCacheWritable = true;
 
-  guest-server = pkgsCross.mingwW64.callPackage ./guest-server.nix {
+  guest-server = pkgsCross.mingw-msvcrt-x86_64.callPackage ./guest-server.nix {
     winboat = finalAttrs.finalPackage;
   };
   passthru = {

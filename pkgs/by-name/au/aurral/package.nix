@@ -8,6 +8,8 @@
   procps,
   fetchFromGitHub,
   gitMinimal,
+  patchelf,
+  cacert,
   nix-update-script,
   nodejs_26,
   sqlite,
@@ -31,7 +33,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "aurral";
-  version = "2.13.0";
+  version = "3.0.1";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -40,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "lklynet";
     repo = "aurral";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-covP+bdzYNxAo+DFL2Ck2A3XCltsHz431PFdrs2cWO0=";
+    hash = "sha256-4F/bwmTYB1qC68VPiXh3tjLQdNNVwftpy05i7B8poTE=";
   };
 
   postPatch = relaxNodeVersion;
@@ -50,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit pnpm;
     postPatch = relaxNodeVersion;
     fetcherVersion = 5;
-    hash = "sha256-WdhVTDDuuwCjC6izOWb6g0bmIR8RNKHvlw8bK1NoZEE=";
+    hash = "sha256-o9BTUedHn9nuUPWaXTKSKa/pvEB7Pq2Fw8ehgi6h0RU=";
   };
 
   nativeBuildInputs = [
@@ -79,10 +81,16 @@ stdenv.mkDerivation (finalAttrs: {
   nativeCheckInputs = [
     ffmpeg
     gitMinimal
+    patchelf
     procps
   ];
   checkPhase = ''
     runHook preCheck
+    # The Hub tests start Cloudflare's prebuilt workerd to provide a local D1 database.
+    patchelf --set-interpreter ${stdenv.cc.bintools.dynamicLinker} \
+      --set-rpath ${lib.makeLibraryPath [ stdenv.cc.libc ]} \
+      node_modules/.pnpm/@cloudflare+workerd-linux-*/node_modules/@cloudflare/workerd-linux-*/bin/workerd
+    export SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
     # Test forks start background workers, so bound their concurrency as well.
     testWorkers=$((NIX_BUILD_CORES < 2 ? NIX_BUILD_CORES : 2))
     pnpm test --maxWorkers="$testWorkers"
@@ -150,7 +158,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "Aurral is the Lidarr companion for self-hosted music discovery";
+    description = "Self-hosted music discovery, library management, and streaming";
     mainProgram = "aurral";
     homepage = "https://aurral.org";
     changelog = "https://github.com/lklynet/aurral/releases/tag/${finalAttrs.src.tag}";

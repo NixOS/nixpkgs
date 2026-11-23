@@ -4,9 +4,7 @@
   callPackage,
   lib,
   fetchFromGitHub,
-  # OctoPrint requires Python >=3.7, <3.14, so it cannot use the default python3
-  # while that points at 3.14.
-  python313,
+  python3,
   replaceVars,
   nix-update-script,
   nixosTests,
@@ -15,7 +13,7 @@
 }:
 let
 
-  py = python313.override {
+  py = python3.override {
     self = py;
     packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) [
       # Built-in dependency
@@ -77,14 +75,14 @@ let
       (self: super: {
         octoprint = self.buildPythonPackage rec {
           pname = "OctoPrint";
-          version = "1.11.8";
+          version = "2.0.1";
           format = "setuptools";
 
           src = fetchFromGitHub {
             owner = "OctoPrint";
             repo = "OctoPrint";
             rev = version;
-            hash = "sha256-yTHzBqwVxAP6EokiWqD/SR6P2X4gIGyiyzNH0UzzDB4=";
+            hash = "sha256-VNKc+bsWd5Pjt7s6k1kiWuYPnoxRxKeFIH74mztF+n8=";
           };
 
           propagatedBuildInputs =
@@ -105,14 +103,11 @@ let
               flask-login
               flask-limiter
               frozendict
-              itsdangerous
-              jinja2
               libpass
               limits
               markdown
               markupsafe
               netaddr
-              netifaces
               octoprint-filecheck
               octoprint-firmwarecheck
               packaging
@@ -126,7 +121,6 @@ let
               pyyaml
               regex
               requests
-              rsa
               sarge
               semantic-version
               sentry-sdk
@@ -140,8 +134,8 @@ let
               wrapt
               zeroconf
               zipstream-ng
-              class-doc
               pydantic
+              html-sanitizer
             ]
             ++ lib.optionals stdenv.hostPlatform.isDarwin [ py.pkgs.appdirs ]
             ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ octoprint-pisupport ];

@@ -6,11 +6,12 @@
 }:
 let
   cfg = config.services.aurral;
+  libraryFolder = cfg.environment.LIBRARY_FOLDER or (cfg.environment.DOWNLOAD_FOLDER or null);
 in
 {
   options = {
     services.aurral = {
-      enable = lib.mkEnableOption "Aurral is the Lidarr companion for self-hosted music discovery";
+      enable = lib.mkEnableOption "Aurral, a self-hosted music discovery, library management, and streaming service";
 
       package = lib.mkPackageOption pkgs "aurral" { };
 
@@ -18,8 +19,8 @@ in
         type = lib.types.listOf lib.types.externalPath;
         default = [ ];
         description = ''
-          Directories that Aurral needs access to. Other directories won't be visible by the app.
-          Environment variable `DOWNLOAD_FOLDER` is added automatically.
+          Additional directories to expose to Aurral.
+          The module also exposes the path in `LIBRARY_FOLDER`, falling back to the deprecated `DOWNLOAD_FOLDER`.
           See BindPaths in {manpage}`systemd.exec(5)`.
         '';
       };
@@ -66,7 +67,7 @@ in
         type = lib.types.attrsOf lib.types.str;
         default = { };
         example = {
-          DOWNLOAD_FOLDER = "/media/downloads";
+          LIBRARY_FOLDER = "/media/music";
           TRUST_PROXY = "true";
         };
         description = ''
@@ -99,7 +100,8 @@ in
 
       serviceConfig = {
         Type = "simple";
-        ExecStart = lib.getExe cfg.package;
+        # Reap orphaned plugin and download processes inside the private PID namespace.
+        ExecStart = "${lib.getExe pkgs.catatonit} -- ${lib.getExe cfg.package}";
         Restart = "always";
         User = cfg.user;
         Group = cfg.group;
@@ -112,7 +114,7 @@ in
           cfg.dataDir
         ]
         ++ (lib.map (x: "-" + x) cfg.directories)
-        ++ lib.optional (cfg.environment ? DOWNLOAD_FOLDER) cfg.environment.DOWNLOAD_FOLDER;
+        ++ lib.optional (libraryFolder != null) libraryFolder;
         BindReadOnlyPaths = [
           builtins.storeDir
           "${config.security.pki.caBundle}:/etc/ssl/certs/ca-certificates.crt"
@@ -158,8 +160,8 @@ in
       confinement.enable = true;
     };
 
-    systemd.tmpfiles.settings."10-aurral" = lib.mkIf (cfg.environment ? DOWNLOAD_FOLDER) {
-      ${cfg.environment.DOWNLOAD_FOLDER}.d = {
+    systemd.tmpfiles.settings."10-aurral" = lib.mkIf (libraryFolder != null) {
+      ${libraryFolder}.d = {
         inherit (cfg) user group;
         mode = "0770";
       };

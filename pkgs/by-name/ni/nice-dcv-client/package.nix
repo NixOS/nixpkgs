@@ -14,7 +14,9 @@
   glib-networking,
   gst_all_1,
   gtk4,
+  libadwaita,
   libfido2,
+  libproxy,
   libva,
   lz4,
   pcsclite,
@@ -22,14 +24,14 @@
 }:
 let
   pname = "nice-dcv-client";
-  version = "2025.0.8846-1";
+  version = "2026.0.14555-1";
 in
 stdenv.mkDerivation {
   inherit version pname;
 
   src = fetchurl {
     url = "https://d1uj6qtbmh3dt5.cloudfront.net/${lib.versions.majorMinor version}/Clients/nice-dcv-viewer-${version}.el9.x86_64.rpm";
-    sha256 = "sha256-JYvOxwSQQKjTLvpfpAQe1tqHS4QsshYJyzC5kIFEZLc=";
+    sha256 = "sha256-r9FNZEa2fIQjcJdMFm7XDLgBh3kEbLktw4blZl4Syvk=";
   };
 
   nativeBuildInputs = [
@@ -47,7 +49,9 @@ stdenv.mkDerivation {
     cyrus_sasl
     gdk-pixbuf
     gtk4
+    libadwaita
     libfido2
+    libproxy
     libva
     lz4
     pcsclite
@@ -94,10 +98,9 @@ stdenv.mkDerivation {
 
       mkdir -p $out/lib64/dcvviewer
       mv \
-        ./usr/lib64/dcvviewer/libavcodec.so.61 \
-        ./usr/lib64/dcvviewer/libavutil.so.59 \
+        ./usr/lib64/dcvviewer/libavcodec.so.62 \
+        ./usr/lib64/dcvviewer/libavutil.so.60 \
         ./usr/lib64/dcvviewer/libdcv.so \
-        ./usr/lib64/dcvviewer/libsoup-3.0.so.0 \
         $out/lib64/dcvviewer
 
       mv usr/share $out/

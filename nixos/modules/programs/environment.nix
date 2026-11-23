@@ -16,7 +16,6 @@ in
 
     environment.variables = {
       NIXPKGS_CONFIG = "/etc/nix/nixpkgs-config.nix";
-      EDITOR = lib.mkDefault "nano";
     };
 
     environment.profiles = lib.mkAfter [

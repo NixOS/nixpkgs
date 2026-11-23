@@ -3,10 +3,12 @@
   stdenv,
   buildNpmPackage,
   fetchFromGitHub,
+  fetchzip,
   makeWrapper,
   # Both upstream stable and latest releases often stay on EOL Electron.
   electron,
   cacert,
+  darwin,
   makeDesktopItem,
   copyDesktopItems,
   commandLineArgs ? [ ],
@@ -18,6 +20,14 @@
   jq,
 }:
 
+let
+  # electron-builder downloads this icon toolset (JavaScript and WebAssembly) to convert
+  # the app icon for macOS
+  iconsToolset = fetchzip {
+    url = "https://github.com/electron-userland/electron-builder-binaries/releases/download/icons@1.2.3/icons-bundle.tar.gz";
+    hash = "sha256-onqiTAO2NU+obW43RdqUOyR45PqqRFelOborKng0TCs=";
+  };
+in
 buildNpmPackage (finalAttrs: {
   pname = "shogihome";
   version = "1.30.0";
@@ -54,12 +64,19 @@ buildNpmPackage (finalAttrs: {
   // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     # Prevent "unable to get local issuer certificate" error
     NODE_EXTRA_CA_CERTS = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+    ELECTRON_BUILDER_ICONS_TOOLSET_DIR = iconsToolset;
   };
 
-  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
-    makeWrapper
-    copyDesktopItems
-  ];
+  nativeBuildInputs =
+    lib.optionals stdenv.hostPlatform.isLinux [
+      makeWrapper
+      copyDesktopItems
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # Replaces upstream's signMacApp (disabled in postPatch, codesign isn't available in the
+      # sandbox): binaries modified by Electron Fuses must be signed again or the app is killed
+      darwin.autoSignDarwinBinariesHook
+    ];
 
   makeCacheWritable = true;
 
@@ -163,6 +180,7 @@ buildNpmPackage (finalAttrs: {
         asl20 # for icons
       ];
     maintainers = with lib.maintainers; [
+      iedame
       kachick
     ];
     mainProgram = "shogihome";

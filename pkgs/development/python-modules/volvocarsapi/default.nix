@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "volvocarsapi";
-  version = "0.5.0";
+  version = "0.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "thomasddn";
     repo = "volvo-cars-api";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KxDgtGe7SrrYdj+dT4/C/xH85mkih9PDzFxj6QqFleU=";
+    hash = "sha256-vAbsgyzvndLATIKLxtiVk5+Xgc8o94LK+5q5SPlGz6s=";
   };
 
   nativeBuildInputs = [ pyprojectVersionPatchHook ];

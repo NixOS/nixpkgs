@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "qrcp";
-  version = "0.11.7";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "claudiodangelis";
     repo = "qrcp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1b+Npxoih41KIXsMCP3v5CXrjD6Tc7vssAcBi749Th8=";
+    hash = "sha256-2NbLv5bDg4jiMSM7z3kPcVeHZqOmgfvJ2kJPAMXgn3U=";
   };
 
-  vendorHash = "sha256-caWENdKmZCuvXkw4jAABYDmyEr6+LvZc0glpI83XhdM=";
+  vendorHash = "sha256-owEM11NgWLtP4hqHlaxtWtwDCxCgPkTccq+rKGIN9X4=";
 
   subPackages = [ "." ];
 

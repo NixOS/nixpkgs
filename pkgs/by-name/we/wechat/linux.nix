@@ -34,6 +34,7 @@
   libglvnd,
   libjack2,
   libpulseaudio,
+  libsecret,
   libxcb,
   libxcb-keysyms,
   libxkbcommon,
@@ -41,10 +42,13 @@
   nspr,
   nss,
   pango,
+  pciutils,
   pipewire,
   systemd,
   util-linuxMinimal,
   wayland,
+  which,
+  xdg-utils,
   xkeyboard-config,
   zlib,
 
@@ -64,10 +68,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       touch netrc
 
       url=${lib.escapeShellArg finalAttrs.passthru.source.upstream.url}
-      crc=${lib.escapeShellArg finalAttrs.passthru.source.upstream."x-cos-hash-crc64ecma"}
-      ver=${lib.escapeShellArg finalAttrs.passthru.source.upstream."x-cos-version-id"}
+      crc=${lib.escapeShellArg (finalAttrs.passthru.source.upstream."x-cos-hash-crc64ecma" or "")}
+      ver=${lib.escapeShellArg (finalAttrs.passthru.source.upstream."x-cos-version-id" or "")}
 
-      if actual=$(curl -fsSIL -o /dev/null -w '%header{x-cos-hash-crc64ecma}:%header{x-cos-version-id}' "$url") && [[ "$actual" == "$crc:$ver" ]]; then
+      if [[ -n "$crc" && -n "$ver" ]] && actual=$(curl -fsSIL -o /dev/null -w '%header{x-cos-hash-crc64ecma}:%header{x-cos-version-id}' "$url") && [[ "$actual" == "$crc:$ver" ]]; then
         urls=("$url")
       fi
     '';
@@ -135,7 +139,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     gtk3
     libglvnd
     libpulseaudio
+    libsecret
     libxcursor
+    pciutils
     pipewire
     systemd
     wayland
@@ -151,6 +157,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     substituteInPlace "$out/share/applications/wechat.desktop" \
       --replace-fail "/usr/bin/wechat" "wechat"
 
+    substituteInPlace "$out/share/applications/com.tencent.wechatappex.desktop" \
+      --replace-fail "/opt/wechat/RadiumWMPF/runtime/WeChatAppEx" "$out/opt/wechat/RadiumWMPF/runtime/WeChatAppEx"
+
     sed -i 's|^Icon=.*|Icon=wechat|' "$out/share/applications/wechat.desktop"
 
     runHook postInstall
@@ -163,6 +172,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     makeShellWrapper "$out/opt/wechat/wechat" "$out/bin/wechat" \
       "''${gappsWrapperArgs[@]}" \
+      --suffix PATH : "${
+        lib.makeBinPath [
+          dbus
+          glib
+          which
+          xdg-utils
+        ]
+      }" \
       --prefix LD_PRELOAD : "${lib.getLib libredirect}/lib/libredirect.so" \
       --prefix NIX_REDIRECTS : "/usr/bin/lsblk=${lib.getExe' util-linuxMinimal "lsblk"}" \
       --set XKB_CONFIG_ROOT "${xkeyboard-config}/share/X11/xkb" \
@@ -203,14 +220,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       libffmpeg.so \
       "$out/opt/wechat/RadiumWMPF/runtime/libffmpeg.so" \
       "$out/opt/wechat/RadiumWMPF/runtime/WeChatAppEx"
-
-    wrapProgramShell "$out/opt/wechat/RadiumWMPF/runtime/WeChatAppEx" \
-      --run '
-        if [ -n "''${NIXOS_OZONE_WL:-}" ] && [ -n "''${WAYLAND_DISPLAY:-}" ]; then
-          export GDK_BACKEND=wayland
-          set -- --ozone-platform=wayland "$@"
-        fi
-      '
   '';
 
   passthru = passthru finalAttrs;
