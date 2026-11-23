@@ -4802,12 +4802,12 @@ final: prev: {
 
   deepwhite-nvim = buildVimPlugin {
     pname = "deepwhite.nvim";
-    version = "0-unstable-2024-09-30";
+    version = "0.2.0";
     src = fetchFromGitHub {
       owner = "Verf";
       repo = "deepwhite.nvim";
-      rev = "ccad56bb5eb7d29258980cfc0a716eb87bcad69e";
-      hash = "sha256-3j1VSBVNKIlOzDMcvwN78we+sBus/bv5P/wj9eIYq3U=";
+      tag = "v0.2.0";
+      hash = "sha256-cOhObYSiFUb/sulUMfPTAt+OnUjc7FBGXLigMngN1Gk=";
     };
     meta.homepage = "https://github.com/Verf/deepwhite.nvim/";
     meta.license = getLicenseFromSpdxId "MIT";
