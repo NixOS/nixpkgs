@@ -272,88 +272,116 @@ rec {
 
   # See doc/build-helpers/trivial-build-helpers.chapter.md
   # or https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-writeShellApplication
-  writeShellApplication =
-    {
-      name,
-      text,
-      runtimeInputs ? [ ],
-      runtimeEnv ? null,
-      meta ? { },
-      passthru ? { },
-      checkPhase ? null,
-      excludeShellChecks ? [ ],
-      extraShellCheckFlags ? [ ],
-      bashOptions ? [
-        "errexit"
-        "nounset"
-        "pipefail"
-      ],
-      derivationArgs ? { },
-      inheritPath ? true,
-    }@args:
-    writeTextFile {
-      pos = builtins.unsafeGetAttrPos "name" args;
-      inherit
-        name
-        meta
-        passthru
-        derivationArgs
-        ;
-      executable = true;
-      destination = "/bin/${name}";
-      allowSubstitutes = true;
-      preferLocalBuild = false;
-      text = ''
-        #!${runtimeShell}
-        ${lib.concatMapStringsSep "\n" (option: "set -o ${option}") bashOptions}
-      ''
-      + lib.optionalString (runtimeEnv != null) (
-        lib.concatMapAttrsStringSep "" (name: value: ''
-          ${lib.toShellVar name value}
-          export ${name}
-        '') runtimeEnv
-      )
-      + ''
+  writeShellApplication = lib.extendMkDerivation {
+    constructDrv = writeTextFile;
+    excludeDrvArgNames = [
+      "derivationArgs"
+      "runtimeInputs"
+      "runtimeEnv"
+      "excludeShellCheckFlags"
+      "bashOptions"
+      "inheritPath"
+    ];
+    extendDrvArgs =
+      finalAttrs:
+      {
+        pname ? null,
+        version ? null,
+        name ? "${pname}-${version}",
+        text,
+        runtimeInputs ? [ ],
+        runtimeEnv ? null,
+        meta ? { },
+        passthru ? { },
+        checkPhase ? null,
+        excludeShellChecks ? [ ],
+        extraShellCheckFlags ? [ ],
+        bashOptions ? [
+          "errexit"
+          "nounset"
+          "pipefail"
+        ],
+        derivationArgs ? { },
+        inheritPath ? true,
+        pos ? builtins.unsafeGetAttrPos (if pname != null then "pname" else "name") args,
+      }@args:
+      {
+        inherit
+          pos
+          name
+          pname
+          version
+          meta
+          passthru
+          ;
 
-        export PATH="${
-          lib.concatStringsSep ":" (
-            (lib.optionals (runtimeInputs != [ ]) [ (lib.makeBinPath runtimeInputs) ])
-            ++ (lib.optionals inheritPath [ "$PATH" ])
-          )
-        }"
-      ''
+        derivationArgs = derivationArgs // {
+          inherit
+            runtimeInputs
+            runtimeEnv
+            excludeShellChecks
+            extraShellCheckFlags
+            bashOptions
+            inheritPath;
+        };
 
-      + ''
+        executable = true;
+        destination = "/bin/${name}";
+        allowSubstitutes = true;
+        preferLocalBuild = false;
+        text = ''
+          #!${runtimeShell}
+          ${lib.concatMapStringsSep "\n" (option: "set -o ${option}") bashOptions}
+        ''
+        + lib.optionalString (runtimeEnv != null) (
+          lib.concatMapAttrsStringSep "" (name: value: ''
+            ${lib.toShellVar name value}
+            export ${name}
+          '') runtimeEnv
+        )
+        + ''
 
-        ${text}
-      '';
+          export PATH="${
+            lib.concatStringsSep ":" (
+              (lib.optionals (runtimeInputs != [ ]) [ (lib.makeBinPath runtimeInputs) ])
+              ++ (lib.optionals inheritPath [ "$PATH" ])
+            )
+          }"
+        ''
 
-      checkPhase =
-        let
-          excludeFlags = lib.optionals (excludeShellChecks != [ ]) [
-            "--exclude"
-            (lib.concatStringsSep "," excludeShellChecks)
-          ];
-          # GHC (=> shellcheck) isn't supported on some platforms (such as risc-v)
-          # but we still want to use writeShellApplication on those platforms
-          shellcheckCommand = lib.optionalString shellcheck-minimal.compiler.bootstrapAvailable ''
-            # use shellcheck which does not include docs
-            # pandoc takes long to build and documentation isn't needed for just running the cli
-            ${lib.getExe shellcheck-minimal} ${
-              lib.escapeShellArgs (excludeFlags ++ extraShellCheckFlags)
-            } "$target"
-          '';
-        in
-        if checkPhase == null then
-          ''
-            runHook preCheck
-            ${stdenv.shellDryRun} "$target"
-            ${shellcheckCommand}
-            runHook postCheck
-          ''
-        else
-          checkPhase;
-    };
+        + ''
+
+          ${text}
+        '';
+
+        checkPhase =
+          let
+            excludeFlags = lib.optionals (excludeShellChecks != [ ]) [
+              "--exclude"
+              (lib.concatStringsSep "," excludeShellChecks)
+            ];
+            # GHC (=> shellcheck) isn't supported on some platforms (such as risc-v)
+            # but we still want to use writeShellApplication on those platforms
+            shellcheckCommand = lib.optionalString shellcheck-minimal.compiler.bootstrapAvailable ''
+              # use shellcheck which does not include docs
+              # pandoc takes long to build and documentation isn't needed for just running the cli
+              ${lib.getExe shellcheck-minimal} ${
+                lib.escapeShellArgs (excludeFlags ++ extraShellCheckFlags)
+              } "$target"
+            '';
+          in
+          if checkPhase == null then
+            ''
+              runHook preCheck
+              ${stdenv.shellDryRun} "$target"
+              ${shellcheckCommand}
+              runHook postCheck
+            ''
+          else
+            checkPhase;
+      };
+    inheritFunctionArgs = false;
+  };
 
   # Create a C binary
   # TODO: add to writers? pkgs/build-support/writers
