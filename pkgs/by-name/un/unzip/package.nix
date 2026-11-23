@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchDebianPatch,
   bzip2,
   bashNonInteractive,
   enableNLS ? false,
@@ -34,14 +35,25 @@ stdenv.mkDerivation (finalAttrs: {
     ./CVE-2014-9636.diff
     ./CVE-2015-7696.diff
     ./CVE-2015-7697.diff
-    ./CVE-2014-9913.patch
-    ./CVE-2016-9844.patch
+    (fetchDebianPatch {
+      inherit (finalAttrs) pname version;
+      debianRevision = "31";
+      patch = "cve-2014-9913-unzip-buffer-overflow.patch";
+      hash = "sha256-UV0n33iLzTd7irfOZIm1GsHpIHj8OFQOyMRgpla0vy4=";
+    })
+    (fetchDebianPatch {
+      inherit (finalAttrs) pname version;
+      debianRevision = "31";
+      patch = "cve-2016-9844-zipinfo-buffer-overflow.patch";
+      hash = "sha256-9POOO+jJpa4yF2ovBN42UeGdRSoKLAXqQJeb6CR1wQQ=";
+    })
     ./CVE-2018-18384.patch
     ./dont-hardcode-cc.patch
-    (fetchurl {
-      url = "https://sources.debian.org/data/main/u/unzip/6.0-31/debian/patches/cve-2018-1000035-unzip-buffer-overflow.patch";
-      name = "CVE-2018-1000035-unzip-buffer-overflow.patch";
-      hash = "sha256-TqvD+u3dVuvD1QU0hrYfh1jYQJAnJf1VXTRyz/sJRDc=";
+    (fetchDebianPatch {
+      inherit (finalAttrs) pname version;
+      debianRevision = "31";
+      patch = "cve-2018-1000035-unzip-buffer-overflow.patch";
+      hash = "sha256-d6kewEGQZXzKftFqN5MoqVhM6g1uTM5knzukcZCGY28=";
     })
     (fetchurl {
       url = "https://github.com/madler/unzip/commit/41beb477c5744bc396fa1162ee0c14218ec12213.patch";
@@ -58,12 +70,61 @@ stdenv.mkDerivation (finalAttrs: {
       name = "CVE-2019-13232-3.patch";
       sha256 = "1jvs7dkdqs97qnsqc6hk088alhv8j4c638k65dbib9chh40jd7pf";
     })
-    ./06-initialize-the-symlink-flag.patch
-    ./28-cve-2022-0529-and-cve-2022-0530.patch
+    (fetchDebianPatch {
+      inherit (finalAttrs) pname version;
+      debianRevision = "31";
+      patch = "initialize-the-symlink-flag.patch";
+      hash = "sha256-C+QiqxKRK9xehfDMCrMrZRJsI3ycF1jdv+vYTITUzNI=";
+    })
+    (fetchDebianPatch {
+      inherit (finalAttrs) pname version;
+      debianRevision = "31";
+      patch = "cve-2022-0529-and-cve-2022-0530.patch";
+      hash = "sha256-s9q/GDbaq6gkKFUwBoBShgQHp/N3I0LV0ePNtodKJd8=";
+    })
     # Clang 16 makes implicit declarations an error by default for C99 and newer, causing the
     # configure script to fail to detect errno and the directory libraries on Darwin.
     ./implicit-declarations-fix.patch
     ./CVE-2021-4217.patch
+    # The next two patches are prerequisites for can-2026-2034440.patch, but are
+    # also useful in their own right.
+    (fetchDebianPatch {
+      # https://bugs.debian.org/689212
+      inherit (finalAttrs) pname version;
+      debianRevision = "31";
+      patch = "fix-uid-gid-handling.patch";
+      hash = "sha256-jMLUyZcEdGxiz/RmhJbHKaZgH6MNno2WHCAx14aRTDM=";
+    })
+    (fetchDebianPatch {
+      # https://bugs.debian.org/842993
+      inherit (finalAttrs) pname version;
+      debianRevision = "31";
+      patch = "restore-unix-timestamps-accurately.patch";
+      hash = "sha256-nD3CZkz2+DoOIBCngyK5Aw1UHPfZwxIzMxA+ouAe6gE=";
+    })
+    # The three patches below patch this vulnerability:
+    # https://www.debian.org/security/2026/dsa-6440
+    (fetchDebianPatch {
+      # https://bugs.debian.org/1142904
+      inherit (finalAttrs) pname version;
+      debianRevision = "31";
+      patch = "can-2026-2034440.patch";
+      hash = "sha256-PrJ5DhVFTIUDTEtF5UC+x2a847oM5SwYz6OdlG95fZw=";
+    })
+    (fetchDebianPatch {
+      # https://bugs.debian.org/1142905
+      inherit (finalAttrs) pname version;
+      debianRevision = "31";
+      patch = "can-2026-2034443.patch";
+      hash = "sha256-lMrngOnBLGFJEzI0oTdYwWX+AMxL7d9951vpjQUpvLc=";
+    })
+    (fetchDebianPatch {
+      # https://bugs.debian.org/1142906
+      inherit (finalAttrs) pname version;
+      debianRevision = "31";
+      patch = "can-2026-2034442.patch";
+      hash = "sha256-3rXixqyb0WmUnBIoejXa2J/xodxoe9B87ql6E6K8r3s=";
+    })
   ]
   ++ lib.optional enableNLS (fetchurl {
     url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/app-arch/unzip/files/unzip-6.0-natspec.patch?id=56bd759df1d0c750a065b8c845e93d5dfa6b549d";
