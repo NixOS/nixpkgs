@@ -5,6 +5,7 @@
   cmake,
   python3Packages,
   unstableGitUpdater,
+  testers,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "canokey-qemu";
@@ -73,7 +74,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
+  passthru = {
+    updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
+    tests.pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+      version = "1";
+    };
+  };
 
   __structuredAttrs = true;
 
@@ -83,5 +90,6 @@ stdenv.mkDerivation (finalAttrs: {
     longDescription = "A virtual OPENPGP and FIDO2 card. Only for testing purpose. There is no warranty on security.";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ symphorien ];
+    pkgConfigModules = [ "canokey-qemu" ];
   };
 })
