@@ -69,6 +69,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   env.pnpm_config_virtual_store_dir = "extensions/html-language-features/server/node_modules/.pnpm";
 
+  # Upstream reads TypeScript's lib .d.ts files from VS Code's extensions/node_modules
+  preBuild = ''
+    substituteInPlace extensions/html-language-features/server/src/modes/javascriptLibs.ts \
+      --replace-fail "'../../node_modules/typescript/lib'" "'node_modules/typescript/lib'"
+  '';
+
   buildPhase = ''
     runHook preBuild
 
@@ -94,7 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
       --frozen-lockfile
 
     mkdir -p $out/lib/node_modules/vscode-html-languageserver
-    cp -r extensions/html-language-features/server/{package.json,out,node_modules} \
+    cp -r extensions/html-language-features/server/{package.json,out,lib,node_modules} \
       $out/lib/node_modules/vscode-html-languageserver
 
     # The server loads TypeScript at runtime for JavaScript in <script>.
