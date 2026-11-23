@@ -286,6 +286,7 @@ let
         hscolour
         hugs
         icepeak
+        idris
         ihaskell
         jacinda
         jl
