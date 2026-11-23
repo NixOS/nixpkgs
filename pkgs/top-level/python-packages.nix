@@ -9126,6 +9126,8 @@ self: super: with self; {
 
   jupyter-lsp = callPackage ../development/python-modules/jupyter-lsp { };
 
+  jupyter-mimetypes = callPackage ../development/python-modules/jupyter-mimetypes { };
+
   jupyter-nbextensions-configurator =
     callPackage ../development/python-modules/jupyter-nbextensions-configurator
       { };
