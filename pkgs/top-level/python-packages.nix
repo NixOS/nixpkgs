@@ -18598,6 +18598,8 @@ self: super: with self; {
 
   ritassist = callPackage ../development/python-modules/ritassist { };
 
+  ritualsgenie = callPackage ../development/python-modules/ritualsgenie { };
+
   rivet = toPythonModule (pkgs.rivet.override { python3 = python; });
 
   rjpl = callPackage ../development/python-modules/rjpl { };
