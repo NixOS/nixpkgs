@@ -1572,7 +1572,8 @@ mapAliases {
   libXext = libxext; # Added 2026-02-06
   libXfixes = libxfixes; # Added 2026-02-06
   libXfont2 = libxfont_2; # Added 2026-02-06
-  libXfont = libxfont_1; # Added 2026-01-19
+  libXfont = throw "'libXfont' has been removed as it was unmaintained upstream and had many likely security issues. Consider upgrading to 'libxfont_2' instead."; # Added 2026-11-23
+  libxfont_1 = throw "'libxfont_1' has been removed as it was unmaintained upstream and had many likely security issues. Consider upgrading to 'libxfont_2' instead."; # Added 2026-11-23
   libXft = libxft; # Added 2026-02-06
   libXi = libxi; # Added 2026-02-06
   libXinerama = libxinerama; # Added 2026-02-06
