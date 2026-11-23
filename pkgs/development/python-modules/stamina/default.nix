@@ -11,7 +11,7 @@
   tenacity,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "stamina";
   version = "26.2.0";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hynek";
     repo = "stamina";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-lwE9bxGPy/AI5uxPJ4DL3EuO43t2pOLJ5jZIg/8+31Y=";
   };
 
@@ -29,9 +29,7 @@ buildPythonPackage rec {
     hatchling
   ];
 
-  dependencies = [
-    tenacity
-  ];
+  dependencies = [ tenacity ];
 
   nativeCheckInputs = [
     anyio
@@ -44,8 +42,8 @@ buildPythonPackage rec {
   meta = {
     description = "Production-grade retries for Python";
     homepage = "https://github.com/hynek/stamina";
-    changelog = "https://github.com/hynek/stamina/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/hynek/stamina/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})
