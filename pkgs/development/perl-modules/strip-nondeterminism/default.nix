@@ -27,7 +27,6 @@ buildPerlPackage rec {
     hash = "sha256-C/812td9BX1YRqFpD9QYgBfzE+biZeAKgxoNcxpb6UU=";
   };
 
-  strictDeps = true;
   buildInputs = [
     ArchiveZip
     ArchiveCpio

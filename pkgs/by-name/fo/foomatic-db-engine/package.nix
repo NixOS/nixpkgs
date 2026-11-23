@@ -31,9 +31,6 @@ perlPackages.buildPerlPackage rec {
 
   outputs = [ "out" ];
 
-  strictDeps = true;
-  __structuredAttrs = true;
-
   propagatedBuildInputs = [
     perlPackages.Clone
     perlPackages.DBI
