@@ -4327,7 +4327,8 @@
       ];
     "london_air" =
       ps: with ps; [
-      ]; # missing inputs: pylondonair
+        pylondonair
+      ];
     "london_underground" =
       ps: with ps; [
         london-tube-status
@@ -4448,8 +4449,9 @@
         aiohasupervisor
         aiousbwatcher
         ifaddr
+        marantz-rs232
         serialx
-      ]; # missing inputs: marantz-rs232
+      ];
     "marketplace" =
       ps: with ps; [
         aiogithubapi
@@ -9438,6 +9440,7 @@
     "logbook"
     "logger"
     "lojack"
+    "london_air"
     "london_underground"
     "lookin"
     "loqed"
@@ -9457,6 +9460,7 @@
     "manual_mqtt"
     "map_tiles"
     "marantz_infrared"
+    "marantz_rs232"
     "marketplace"
     "marytts"
     "mastodon"

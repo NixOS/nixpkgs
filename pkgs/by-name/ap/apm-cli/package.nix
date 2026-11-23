@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "apm-cli";
-  version = "0.35.0";
+  version = "0.38.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "apm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bMitX/+lDi1ba+TuorfYdN5eSJb0U/vrDuEGLelDwxw=";
+    hash = "sha256-3rMTcqLq/mjOaXUS4/9LRI1vvoi3ad8gIMyCZmGOCPg=";
   };
 
   pythonRelaxDeps = [
