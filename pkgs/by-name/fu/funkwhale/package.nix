@@ -50,9 +50,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     # unicode-slugify was dropped from nixpkgs (#448893); replace with python-slugify
     ./replace-unicode-slugify.patch
 
-    # mock filesystem access in tests to avoid probing / in the build sandbox
-    ./fix-root-filesystem-tests.patch
-
     # compatibility with django-allauth >= 65.18
     ./django-allauth-compat.patch
 
