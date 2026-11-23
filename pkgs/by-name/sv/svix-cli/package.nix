@@ -8,18 +8,18 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "svix-cli";
-  version = "2.8.0";
+  version = "2.11.0";
 
   src = fetchFromGitHub {
     owner = "svix";
     repo = "svix-webhooks";
     rev = "v${version}";
-    hash = "sha256-uMqutf42/clBgDKb67FnSlyexH3SAe7rE1MJAKkZWZg=";
+    hash = "sha256-1lf9OyoLlEaeTTsWTnfNOBUyNf2p0LNrnus/LiuRzb8=";
   };
 
   sourceRoot = "${src.name}/svix-cli";
 
-  cargoHash = "sha256-hDRHsKMAs/5+giGJZcbgeHY2gnA8NoZZKFCcbHmz++4=";
+  cargoHash = "sha256-3TiYMEC9Gc1ehetJcP2TowCnVtyISu/28YDGqmzoVMc=";
 
   nativeBuildInputs = [ pkg-config ];
 
