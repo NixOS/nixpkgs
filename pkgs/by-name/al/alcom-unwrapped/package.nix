@@ -33,6 +33,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ./unity-fhsenv.patch
   ];
 
+  __structuredAttrs = true;
+
   nativeBuildInputs = [
     cargo-about
     cargo-tauri.hook
