@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rapidjson";
-  version = "1.1.0-unstable-2025-02-05";
+  version = "1.1.0-unstable-2026-11-03";
 
   outputs = [
     "out"
@@ -22,8 +22,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Tencent";
     repo = "rapidjson";
-    rev = "24b5e7a8b27f42fa16b96fc70aade9106cf7102f";
-    hash = "sha256-oHHLYRDMb7Y/k0CwsdsxPC5lglr2IChQi0AiOMiFn78=";
+    rev = "297637bc0a0f00dc504dbc1a47ebdaa577f8ae19";
+    hash = "sha256-VW7nkgByMJseWWPsSklzdtUiX0tPVWfLj1Tr3x11TT4=";
   };
 
   patches = [

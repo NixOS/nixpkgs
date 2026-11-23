@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  jq,
+  buildPackages,
   fetchYarnDeps,
 
   yarn,
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
       sed -i 's|\./|./server/|' $out/server/package.json
 
       # combine both package.json files
-      ${lib.getExe jq} -s '.[0] * .[1]' \
+      ${lib.getExe buildPackages.jq} -s '.[0] * .[1]' \
         $out/server/package.json \
         $out/package.json \
         > package.json

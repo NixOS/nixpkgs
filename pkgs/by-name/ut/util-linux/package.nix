@@ -159,6 +159,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     zlib
     libxcrypt
+  ]
+  ++ lib.optionals withLastlog [
     sqlite
   ]
   ++ lib.optionals (cryptsetupSupport == true) [ cryptsetup ]

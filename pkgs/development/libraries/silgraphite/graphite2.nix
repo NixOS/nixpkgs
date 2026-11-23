@@ -41,16 +41,18 @@ stdenv.mkDerivation (finalAttrs: {
     }
   );
 
+  strictDeps = true;
+
   patches = lib.optionals stdenv.hostPlatform.isDarwin [ ./macosx.patch ];
   postPatch = ''
     # disable broken 'nametabletest' test, fails on gcc-13:
     #   https://github.com/silnrsi/graphite/pull/74
     substituteInPlace tests/CMakeLists.txt \
-      --replace 'add_subdirectory(nametabletest)' '#add_subdirectory(nametabletest)'
+      --replace-fail 'add_subdirectory(nametabletest)' '#add_subdirectory(nametabletest)'
 
     # support cross-compilation by using target readelf binary:
     substituteInPlace Graphite.cmake \
-      --replace 'readelf' "${stdenv.cc.targetPrefix}readelf"
+      --replace-fail 'readelf' "${stdenv.cc.targetPrefix}readelf"
 
     # headers are located in the dev output:
     substituteInPlace CMakeLists.txt \
@@ -74,6 +76,8 @@ stdenv.mkDerivation (finalAttrs: {
       package = finalAttrs.finalPackage;
     };
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Advanced font engine";

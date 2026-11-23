@@ -1555,6 +1555,50 @@ let
     };
   };
 
+  # dhcpcd is only used by the scripted backend.
+  scriptedTestCases = {
+    dhcpReadGroup = {
+      name = "ReadGroupDHCP";
+      nodes.router = router;
+      nodes.client = clientConfig {
+        virtualisation.interfaces.enp1s0.vlan = 1;
+        virtualisation.interfaces.enp2s0.vlan = 2;
+        networking = {
+          interfaces.enp1s0.useDHCP = true;
+          # A static IPv6 address puts an `interface enp2s0` block in
+          # dhcpcd.conf, which must not swallow the global readgroup.
+          interfaces.enp2s0.ipv6.addresses = [
+            {
+              address = "fd00:1234:5678:2::42";
+              prefixLength = 64;
+            }
+          ];
+          dhcpcd.readGroup = "dhcpcd-read";
+        };
+        # Merges with the group the dhcpcd module creates.
+        users.groups.dhcpcd-read.members = [ "alice" ];
+        users.users.alice.isNormalUser = true;
+        users.users.bob.isNormalUser = true;
+      };
+      testScript = ''
+        start_all()
+        client.wait_for_unit("dhcpcd.service")
+        client.wait_until_succeeds("ip addr show dev enp1s0 | grep -q '192.168.1'")
+
+        with subtest("The control socket belongs to the read group"):
+            client.succeed("test \"$(stat -c '%a %G' /run/dhcpcd/sock)\" = '660 dhcpcd-read'")
+
+        with subtest("Root and members of the read group can read leases"):
+            client.succeed("dhcpcd -U enp1s0 | grep -q '^ip_address=192.168.1'")
+            client.succeed("runuser -u alice -- dhcpcd -U enp1s0 | grep -q '^ip_address=192.168.1'")
+            client.succeed("runuser -u alice -- dhcpcd --dumplease enp1s0 | grep -q '^ip_address=192.168.1'")
+
+        with subtest("Other users cannot"):
+            client.fail("runuser -u bob -- dhcpcd -U enp1s0")
+      '';
+    };
+  };
+
 in
 lib.mapAttrs (lib.const (
   attrs:
@@ -1565,4 +1609,4 @@ lib.mapAttrs (lib.const (
       meta.maintainers = with lib.maintainers; [ rnhmjoj ];
     }
   )
-)) testCases
+)) (testCases // lib.optionalAttrs (!networkd) scriptedTestCases)

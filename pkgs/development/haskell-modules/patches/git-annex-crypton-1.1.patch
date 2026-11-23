@@ -1,0 +1,64 @@
+From 7ec76d40250b1762f28adf34c38ece382bf52340 Mon Sep 17 00:00:00 2001
+From: sterni <sternenseemann@systemli.org>
+Date: Thu, 10 Sep 2026 12:18:13 +0200
+Subject: [PATCH] Use ram when interacting with crypton (>= 1.1)
+
+This is a very simple patch for use in Nixpkgs which ships crypton >= 1.1
+and thus requires packages to use ram over memory when interacting with
+crypton. It makes no effort to preserve compat with older versions of
+crypton nor tries to eliminate the dependency on memory for simplicity's
+sake.
+
+Joey Hess plans to add support for crypton >= 1.1 soon, but is waiting
+on fixes in other dependencies so it can actually be used with unmodified
+Hackage dependencies. Since we've already patched those issues, we
+can implement this stop gap solution.
+---
+ Annex/Balanced.hs       | 2 +-
+ Utility/Hash/Crypton.hs | 2 +-
+ git-annex.cabal         | 3 ++-
+ 3 files changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/Annex/Balanced.hs b/Annex/Balanced.hs
+index 9005440ad6..5c085ea186 100644
+--- a/Annex/Balanced.hs
++++ b/Annex/Balanced.hs
+@@ -17,7 +17,7 @@ import Data.Maybe
+ import qualified Data.List as L
+ import Data.Bits (shiftL)
+ import qualified Data.Set as S
+-import qualified "memory" Data.ByteArray as BA
++import qualified "ram" Data.ByteArray as BA
+ 
+ -- The Int is how many UUIDs to pick.
+ type BalancedPicker = S.Set UUID -> Key -> Int -> [UUID]
+diff --git a/Utility/Hash/Crypton.hs b/Utility/Hash/Crypton.hs
+index 4d290d0150..07e5351cfa 100644
+--- a/Utility/Hash/Crypton.hs
++++ b/Utility/Hash/Crypton.hs
+@@ -69,7 +69,7 @@ module Utility.Hash.Crypton (
+ import qualified Data.ByteString as S
+ import qualified Data.ByteString.Lazy as L
+ import Data.IORef
+-import qualified "memory" Data.ByteArray as BA
++import qualified "ram" Data.ByteArray as BA
+ import "crypton" Crypto.Hash
+ 
+ import Utility.Hash.Types
+diff --git a/git-annex.cabal b/git-annex.cabal
+index 270541a008..c649a50972 100644
+--- a/git-annex.cabal
++++ b/git-annex.cabal
+@@ -289,7 +289,8 @@ Executable git-annex
+    servant-client-core,
+    warp (>= 3.2.8),
+    warp-tls (>= 3.2.2),
+-   crypton,
++   crypton (>= 1.1),
++   ram,
+    crypton-connection (>= 0.4.3),
+    crypton-x509-store,
+    tls,
+-- 
+2.55.0
+

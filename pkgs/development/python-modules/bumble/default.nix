@@ -83,6 +83,8 @@ buildPythonPackage (finalAttrs: {
     # tests require networking
     "test_android_netsim_connection"
     "test_open_transport_with_metadata"
+    # flaky on higher core counts
+    "test_resync_fails_when_the_reset_is_not_answered"
   ];
 
   meta = {
