@@ -6,13 +6,13 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "wavinsentio";
   version = "0.5.6";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-tbyS6C16Ojkl5Dkh2325awXHI9P28wlz/dV3gTs27YU=";
   };
 
@@ -31,4 +31,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
