@@ -5039,7 +5039,8 @@
       ];
     "nature_remo" =
       ps: with ps; [
-      ]; # missing inputs: aionatureremo
+        aionatureremo
+      ];
     "neato" =
       ps: with ps; [
         pybotvac
@@ -9541,6 +9542,7 @@
     "namecheapdns"
     "nanoleaf"
     "nasweb"
+    "nature_remo"
     "neato"
     "nederlandse_spoorwegen"
     "neopool"
