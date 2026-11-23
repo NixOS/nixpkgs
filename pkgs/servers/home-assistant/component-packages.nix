@@ -7016,7 +7016,8 @@
       ];
     "smartyplants" =
       ps: with ps; [
-      ]; # missing inputs: pysmartyplants
+        pysmartyplants
+      ];
     "smhi" =
       ps: with ps; [
         pysmhi
@@ -9819,6 +9820,7 @@
     "smartthings"
     "smarttub"
     "smarty"
+    "smartyplants"
     "smhi"
     "smlight"
     "smtp"
