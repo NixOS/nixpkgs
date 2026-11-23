@@ -6,6 +6,8 @@
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
+  __structuredAttrs = true;
+
   pname = "cargo-wizard";
   version = "0.2.3";
 

@@ -6,6 +6,8 @@
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
+  __structuredAttrs = true;
+
   pname = "near-facsimile";
   version = "1.0.9";
 
