@@ -68,6 +68,8 @@ stdenv.mkDerivation (finalAttrs: {
   # - Regenerate for cross fix patch
   nativeBuildInputs = [ autoreconfHook ];
 
+  strictDeps = true;
+
   doCheck = true;
 
   enableParallelBuilding = true;
