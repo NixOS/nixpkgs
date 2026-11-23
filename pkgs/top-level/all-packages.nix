@@ -7224,14 +7224,6 @@ with pkgs;
 
   open-vm-tools-headless = open-vm-tools.override { withX = false; };
 
-  pam =
-    if stdenv.hostPlatform.isLinux then
-      linux-pam
-    else if stdenv.hostPlatform.isFreeBSD then
-      freebsd.libpam
-    else
-      openpam;
-
   # pam_bioapi ( see http://www.thinkwiki.org/wiki/How_to_enable_the_fingerprint_reader )
 
   procps =
