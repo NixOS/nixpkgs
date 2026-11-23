@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url =
       with finalAttrs;
-      "https://gitlab.freedesktop.org/wayland/wayland/-/releases/${version}/downloads/${pname}-${version}.tar.xz";
+      "https://gitlab.freedesktop.org/wayland/wayland/-/releases/${version}/downloads/wayland-${version}.tar.xz";
     hash = "sha256-ZBduqkbklpkD4ob45e+DMa/8F/3wOsm1g4HSsjFit6M=";
   };
 
@@ -86,11 +86,15 @@ stdenv.mkDerivation (finalAttrs: {
     docbook_xml_dtd_42
   ];
 
+  strictDeps = true;
+
   passthru = {
     tests.pkg-config = testers.hasPkgConfigModules {
       package = finalAttrs.finalPackage;
     };
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Core Wayland window system code and protocol";
