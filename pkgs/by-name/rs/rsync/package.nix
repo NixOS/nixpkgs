@@ -11,6 +11,7 @@
   libidn2,
   zlib,
   popt,
+  unixtools,
 
   config,
 
@@ -104,6 +105,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeCheckInputs = [
     python3
+  ]
+  # output-control-chars_test.py runs `locale -a`, which is missing from PATH
+  # on Darwin and when cross-compiling (e.g. pkgsStatic).
+  # TODO: add unconditionally; kept conditional to avoid rebuilds on Linux.
+  ++ lib.optionals (stdenv.buildPlatform.isDarwin || stdenv.buildPlatform != stdenv.hostPlatform) [
+    unixtools.locale
   ];
 
   # These require set-id, chown, xattrs, or unrestricted /proc/self/fd,

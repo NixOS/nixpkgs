@@ -37,14 +37,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "nemo-relay";
-  version = "0.11.1";
+  version = "0.11.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "nemo-relay";
     tag = finalAttrs.version;
-    hash = "sha256-BwoeCwHbvVNtx4fkR1uIRh95T63UBMbvrJtiE6+/BWY=";
+    hash = "sha256-xP4MTwHVpks4ItKucIvF1ChWdlCOmTZ6kHg489efuoo=";
   };
 
   postPatch = ''
@@ -58,7 +58,7 @@ buildPythonPackage (finalAttrs: {
       version
       src
       ;
-    hash = "sha256-xjImAQmLLOzSuO0LMRnoIZ5SoYMv7WBFSkJxgL+AOX4=";
+    hash = "sha256-ng5UYXMXHVA3jG9PRk2L4W9FVM6XAcHoOyeWkMS702I=";
   };
 
   nativeBuildInputs = [

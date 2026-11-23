@@ -312,6 +312,8 @@ self: super: with self; {
 
   aioextensions = callPackage ../development/python-modules/aioextensions { };
 
+  aiofarmad = callPackage ../development/python-modules/aiofarmad { };
+
   aiofile = callPackage ../development/python-modules/aiofile { };
 
   aiofiles = callPackage ../development/python-modules/aiofiles { };
@@ -426,6 +428,8 @@ self: super: with self; {
 
   aiolibrenms = callPackage ../development/python-modules/aiolibrenms { };
 
+  aiolibresync = callPackage ../development/python-modules/aiolibresync { };
+
   aiolichess = callPackage ../development/python-modules/aiolichess { };
 
   aiolifx = callPackage ../development/python-modules/aiolifx { };
@@ -465,6 +469,8 @@ self: super: with self; {
   aionanoleaf = callPackage ../development/python-modules/aionanoleaf { };
 
   aionanoleaf2 = callPackage ../development/python-modules/aionanoleaf2 { };
+
+  aionatureremo = callPackage ../development/python-modules/aionatureremo { };
 
   aionotion = callPackage ../development/python-modules/aionotion { };
 
@@ -10670,6 +10676,8 @@ self: super: with self; {
 
   mapclassify = callPackage ../development/python-modules/mapclassify { };
 
+  marantz-rs232 = callPackage ../development/python-modules/marantz-rs232 { };
+
   mariadb = callPackage ../development/python-modules/mariadb { };
 
   marimo = callPackage ../development/python-modules/marimo { };
@@ -12672,6 +12680,8 @@ self: super: with self; {
   oic = callPackage ../development/python-modules/oic { };
 
   oinker = callPackage ../development/python-modules/oinker { };
+
+  okokscale = callPackage ../development/python-modules/okokscale { };
 
   okonomiyaki = callPackage ../development/python-modules/okonomiyaki { };
 
@@ -15692,6 +15702,8 @@ self: super: with self; {
 
   pyloggermanager = callPackage ../development/python-modules/pyloggermanager { };
 
+  pylondonair = callPackage ../development/python-modules/pylondonair { };
+
   pylookyloo = callPackage ../development/python-modules/pylookyloo { };
 
   pylpsd = callPackage ../development/python-modules/pylpsd { };
@@ -18129,6 +18141,8 @@ self: super: with self; {
   radon = callPackage ../development/python-modules/radon { };
 
   railroad-diagrams = callPackage ../development/python-modules/railroad-diagrams { };
+
+  rainbowminer-api-client = callPackage ../development/python-modules/rainbowminer-api-client { };
 
   raincloudy = callPackage ../development/python-modules/raincloudy { };
 

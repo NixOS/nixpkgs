@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "open62541";
     repo = "open62541";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-R6v8tCtrqrrUcqs9/ZN0uV85IUA13csIoxUazvJ1+xo=";
     fetchSubmodules = true;
   };
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
 
   cmakeFlags = [
-    (lib.cmakeFeature "OPEN62541_VERSION" finalAttrs.src.rev)
+    (lib.cmakeFeature "OPEN62541_VERSION" finalAttrs.src.tag)
     (lib.cmakeFeature "UA_NAMESPACE_ZERO" "FULL")
     (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
 
@@ -90,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
   # Tests must run sequentially to avoid port collisions on localhost
   enableParallelChecking = false;
 
-  preCheck =
+  checkFlags =
     let
       disabledTests = [
         # error "Could not create a raw Ethernet socket (are you root?)"
@@ -132,9 +132,9 @@ stdenv.mkDerivation (finalAttrs: {
       ];
       regex = "^(${builtins.concatStringsSep "|" disabledTests})\$";
     in
-    lib.optionalString (disabledTests != [ ]) ''
-      checkFlagsArray+=(ARGS="-E ${lib.escapeRegex regex}")
-    '';
+    lib.optionals (disabledTests != [ ]) [
+      "ARGS=-E ${lib.escapeRegex regex}"
+    ];
 
   postInstall =
     lib.optionalString withDoc ''

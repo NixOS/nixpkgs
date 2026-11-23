@@ -96,6 +96,11 @@ stdenv.mkDerivation (finalAttrs: {
   disabledTests = [
     "hsts-test"
     "hsts-db-test"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.is32bit [
+    # Test allocates too much memory in one allocation for 32-bit platforms
+    # https://gitlab.gnome.org/GNOME/libsoup/-/work_items/556
+    "logger-test"
   ];
 
   separateDebugInfo = true;

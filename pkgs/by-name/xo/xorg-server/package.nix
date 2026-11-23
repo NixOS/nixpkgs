@@ -33,7 +33,6 @@
   libxdmcp,
   libxext,
   libxfixes,
-  libxfont_1,
   libxfont_2,
   libxkbfile,
   libxshmfence,
@@ -140,7 +139,6 @@ stdenv.mkDerivation (finalAttrs: {
     libGLU
     libunwind
     libxext
-    libxfont_1
     libxfont_2
     libxshmfence
     pixman

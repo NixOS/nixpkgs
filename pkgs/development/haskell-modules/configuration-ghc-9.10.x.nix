@@ -75,6 +75,9 @@ in
   # “Unfortunately we are unable to support GHC 9.10.”
   apply-refact = dontDistribute (markBroken super.apply-refact);
 
+  # since expression is generated for 9.12, ghc-lib dep needs to be added manually
+  ghc-tags = doDistribute (addBuildDepends [ self.ghc-lib ] super.ghc-tags);
+
   #
   # Version upgrades
   #

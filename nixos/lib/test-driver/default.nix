@@ -73,10 +73,27 @@ buildPythonApplication {
   ];
 
   # containers tests require extra nix features that are not available in ofborg.
-  passthru.tests = removeAttrs nixosTests.nixos-test-driver [
-    "containers"
-    "nspawn-interactive"
-  ];
+  passthru = {
+    tests = removeAttrs nixosTests.nixos-test-driver [
+      "containers"
+      "nspawn-interactive"
+    ];
+
+    # Not only test-driver specific things, but also tests verifying
+    # correct integration with other components of the test-driver stack, most
+    # notably virtualisation.qemu.
+    # Intended to have a simple way as maintainer to verify that features didn't regress
+    # without intimate knowledge which tests make use of which features.
+    qa = lib.recurseIntoAttrs {
+      inherit (nixosTests)
+        credentials-smbios
+        qemu-vm-shared-directories
+        qemu-vm-external-disk-image
+        ;
+
+      nixos-test-driver = lib.recurseIntoAttrs nixosTests.nixos-test-driver;
+    };
+  };
 
   doCheck = true;
 
@@ -87,8 +104,8 @@ buildPythonApplication {
   ];
 
   checkPhase = ''
-    echo -e "\x1b[32m## run doctests\x1b[0m"
-    pytest --doctest-modules -p no:cacheprovider test_driver
+    echo -e "\x1b[32m## run tests\x1b[0m"
+    pytest --doctest-modules -p no:cacheprovider test_driver tests
     echo -e "\x1b[32m## run ty\x1b[0m"
     # Installation adds the driver to PYTHONPATH; keep ty imports in the source tree.
     PYTHONPATH=".:$PYTHONPATH" ty check --error-on-warning test_driver extract-docstrings.py

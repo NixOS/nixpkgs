@@ -218,6 +218,9 @@ stdenv'.mkDerivation (finalAttrs: {
     # Blender supplies its own FindAlembic.cmake (incompatible with the Alembic-supplied config file)
     (lib.cmakeFeature "ALEMBIC_INCLUDE_DIR" "${lib.getDev alembic}/include")
     (lib.cmakeFeature "ALEMBIC_LIBRARY" "${lib.getLib alembic}/lib/libAlembic${stdenv.hostPlatform.extensions.sharedLibrary}")
+
+    # FIXME: work around cmake 4.5 weirdness
+    (lib.cmakeBool "WITH_DOC_MANPAGE" false)
   ]
   ++ lib.optionals cudaSupport [
     (lib.cmakeFeature "CYCLES_CUDA_BINARIES_ARCH" (lib.concatStringsSep ";" cudaArches))

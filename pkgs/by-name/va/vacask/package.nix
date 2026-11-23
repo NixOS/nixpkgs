@@ -1,19 +1,20 @@
 {
   lib,
   stdenv,
-  fetchFromCodeberg,
+  fetchgit,
   nix-update-script,
-  runCommand,
 
   # build-time
   bison,
   cmake,
+  ctestCheckHook,
   flex,
   openvaf,
   python3,
 
   # run-time
   boost188,
+  openblasCompat,
   suitesparse,
   tomlplusplus,
 
@@ -50,6 +51,7 @@
 let
   pyEnv = python3.withPackages (
     ps: with ps; [
+      matplotlib
       numpy
       scipy
     ]
@@ -58,15 +60,14 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vacask";
-  version = "0.3.3";
+  version = "0.3.4";
   __structuredAttrs = true;
   strictDeps = true;
 
-  src = fetchFromCodeberg {
-    owner = "arpadbuermen";
-    repo = "VACASK";
+  src = fetchgit {
+    url = "https://codeberg.org/arpadbuermen/VACASK.git";
     tag = "_${finalAttrs.version}";
-    hash = "sha256-eU3SuJPqxqc8QO5k4Jb/9zc8V2JQ1VP1bPEoJ6KCi/c=";
+    hash = "sha256-lJLJr6nk3po2T7zzrFmTI+9iEjSYpSSS8haVO+3QDGE=";
   };
 
   postPatch = ''
@@ -90,6 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     boost188
+    openblasCompat
     suitesparse
     tomlplusplus
   ];
@@ -103,8 +105,24 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
 
   nativeCheckInputs = [
+    ctestCheckHook
     openvaf
     pyEnv
+  ];
+
+  disabledTests = [
+    # needs unmerged OpenVAF features (idt fix and OSDI 0.5 absdelay)
+    "test_behavop.sim"
+    "test_delay.sim"
+    "test_delayvar.sim"
+    "test_delayhb.sim"
+    "test_delayhbac.sim"
+  ];
+
+  checkFlags = [
+    # upstream skips these in CI
+    "--label-exclude"
+    "requires_ihp_pdk"
   ];
 
   passthru.updateScript = nix-update-script { };

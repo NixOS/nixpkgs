@@ -69,6 +69,7 @@ self: super:
   hsakamai = dontCheck super.hsakamai;
   hw-fingertree-strict = dontCheck super.hw-fingertree-strict;
   hw-packed-vector = dontCheck super.hw-packed-vector;
+  hw-prim = dontCheck super.hw-prim;
   hw-xml = dontCheck super.hw-xml;
   meep = dontCheck super.meep;
   orbits = dontCheck super.orbits;
