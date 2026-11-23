@@ -32,6 +32,8 @@ stdenv.mkDerivation (finalAttrs: {
     nspr
   ];
 
+  strictDeps = true;
+
   cmakeFlags = [
     "-DCMAKE_BUILD_TYPE="
     "-DCMAKE_C_FLAGS=-O3 ${lib.optionalString (!debug) "-DNDEBUG"}"
