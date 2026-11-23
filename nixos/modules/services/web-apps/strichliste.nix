@@ -487,6 +487,24 @@ in
             "doctrine:migrations:migrate"
             "--allow-no-migration"
             "--no-interaction"
+
+          ];
+        };
+      };
+
+      systemd.services.strichliste-cache-clear = {
+        wantedBy = [ "phpfpm-strichliste.service" ];
+        before = [ "phpfpm-strichliste.service" ];
+        restartTriggers = [ settingsFile ];
+        inherit (cfg) environment;
+        serviceConfig = {
+          Type = "oneshot";
+          User = "strichliste";
+          Group = "strichliste";
+          EnvironmentFile = cfg.environmentFiles;
+          ExecStart = toString [
+            (lib.getExe cfg.packages.backend)
+            "cache:clear"
           ];
         };
       };
@@ -494,11 +512,6 @@ in
       systemd.services.phpfpm-strichliste = {
         inherit (cfg) environment;
         serviceConfig.EnvironmentFile = cfg.environmentFiles;
-        restartTriggers = [ settingsFile ];
-        preStart = toString [
-          (lib.getExe cfg.packages.backend)
-          "cache:clear"
-        ];
       };
 
       services.phpfpm.pools.strichliste = {
