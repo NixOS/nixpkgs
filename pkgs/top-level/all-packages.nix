@@ -7032,14 +7032,6 @@ with pkgs;
     enableExperimental = true;
   };
 
-  conky = callPackage ../os-specific/linux/conky (
-    {
-      lua = lua5_5;
-      inherit (linuxPackages.nvidia_x11.settings) libXNVCtrl;
-    }
-    // config.conky or { }
-  );
-
   # Darwin package set
   #
   # Even though this is a set of packages not single package, use `callPackage`
