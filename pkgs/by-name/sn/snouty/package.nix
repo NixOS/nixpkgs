@@ -5,7 +5,8 @@
   fetchFromGitHub,
   installShellFiles,
   pkg-config,
-  openssl,
+  aws-lc,
+  sqlite,
   writableTmpDirAsHomeHook,
   cacert,
   podman,
@@ -17,16 +18,23 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "snouty";
-  version = "0.9.1";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "antithesishq";
     repo = "snouty";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wm0AtZr63kiuyQ7QfNFaGiSx48jbn2XkbDeE7VyvcOY=";
+    hash = "sha256-Pz2a+xnssydcOngfpKOtJ+RKE4fPn/uBoiE7WqVh4jU=";
   };
 
-  cargoHash = "sha256-hYnPz3aMS9iEWepJ3LEW0fr274LRgsWw2cnqCjsjDrQ=";
+  # Upstream bumps their `rust-version` to latest stable quicker than we can bump our own toolchain.
+  postPatch = ''
+    shopt -s globstar
+    sed -i '/rust\-version[\. ]/d' **/Cargo.toml
+    shopt -u globstar
+  '';
+
+  cargoHash = "sha256-TiLEtrN/tbPauP9QCXeqwUANDMMoE4kMcoCJlSgJJKs=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -34,12 +42,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
-    openssl
+    aws-lc
+    sqlite
   ];
 
-  env.OPENSSL_NO_VENDOR = true;
-
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  # Docker and Podman run the credential helper as docker-credential-snouty,
+  # and snouty acts as the helper when it is started by that name.
+  postInstall = ''
+    ln -s snouty $out/bin/docker-credential-snouty
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd snouty \
       --bash <($out/bin/snouty completions bash) \
       --fish <($out/bin/snouty completions fish) \

@@ -26,8 +26,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "AdoptOpenJDK";
     repo = "IcedTea-Web";
-    rev = "icedtea-web-${finalAttrs.version}";
-    sha256 = "sha256-hpEVWG9ltNDL/0EFJjgQRRce+BLcCO4ZERULYZxyC1o=";
+    tag = "icedtea-web-${finalAttrs.version}";
+    hash = "sha256-hpEVWG9ltNDL/0EFJjgQRRce+BLcCO4ZERULYZxyC1o=";
   };
 
   nativeBuildInputs = [
@@ -35,19 +35,17 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     bc
     makeWrapper
-  ];
-  buildInputs = [
     cargo
     rustc
+    zip
+  ];
+  buildInputs = [
     glib
     firefox-unwrapped
-    zip
     npapi_sdk
   ];
 
-  preConfigure = ''
-    configureFlagsArray+=("BIN_BASH=${bash}/bin/bash")
-  '';
+  strictDeps = true;
 
   patches = [ ./patches/0001-make-cargo-work-with-nix-build-on-linux.patch ];
 
@@ -73,6 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-itw-libs=DISTRIBUTION"
     "--with-jdk-home=${jdk.home}"
     "--disable-docs"
+    "BIN_BASH=${bash}/bin/bash"
   ];
 
   mozillaPlugin = "/lib";
@@ -84,6 +83,8 @@ stdenv.mkDerivation (finalAttrs: {
       wrapProgram "$out/bin/$p" --set JAVA_HOME ${jdk.home}
     done
   '';
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Java web browser plugin and an implementation of Java Web Start";

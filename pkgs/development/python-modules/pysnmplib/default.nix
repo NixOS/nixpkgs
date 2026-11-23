@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  poetry-core,
+  hatchling,
   pycryptodomex,
   pysnmp-pyasn1,
   pysnmp-pysmi,
@@ -10,17 +10,17 @@
 
 buildPythonPackage rec {
   pname = "pysnmplib";
-  version = "5.0.24";
+  version = "6.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pysnmp";
     repo = "pysnmp";
     tag = "v${version}";
-    hash = "sha256-AtQqXiy943cYhHDsyz9Yk5uA4xK7Q4p21CT3X3zYzrQ=";
+    hash = "sha256-mF+fHDJ1xkFKDB0DOJHh501xTlrAzC52BzSSJ+edVTc=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ hatchling ];
 
   propagatedBuildInputs = [
     pysnmp-pysmi

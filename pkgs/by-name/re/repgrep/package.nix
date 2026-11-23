@@ -10,6 +10,8 @@
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
+  __structuredAttrs = true;
+
   pname = "repgrep";
   version = "0.17.1";
 

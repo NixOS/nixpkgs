@@ -47,6 +47,8 @@ let
 in
 
 stdenv.mkDerivation (finalAttrs: {
+  __structuredAttrs = true;
+
   pname = "stellar-core";
   version = "30.0.0";
 

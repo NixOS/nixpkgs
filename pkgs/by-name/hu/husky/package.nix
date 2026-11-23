@@ -7,6 +7,8 @@
 }:
 
 buildNpmPackage (finalAttrs: {
+  __structuredAttrs = true;
+
   pname = "husky";
   version = "9.1.7";
 
