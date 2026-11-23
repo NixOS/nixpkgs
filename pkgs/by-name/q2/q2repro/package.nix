@@ -32,7 +32,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "q2repro";
-  version = "0-unstable-2026-10-07";
+  version = "0-unstable-2026-11-18";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -40,14 +40,14 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Paril";
     repo = "q2repro";
-    rev = "2f77156bc0a98e62a866043af7a3ee01a75b48af";
+    rev = "d9b759715e798cdba37200998607152480231850";
     fetchSubmodules = true;
-    hash = "sha256-x4q5c2BJaY9+2ujEdQwpWe6KmdOk6fEt4Bm7Y0l+teg=";
+    hash = "sha256-mE1N25XITm/N6d8nAaaIJ0ZaOeqFZjmaVR6df9GtzLI=";
   };
 
   # build date and rev number is displayed in the game's console
-  revCount = "4621"; # git rev-list --count ${src.rev}
-  env.SOURCE_DATE_EPOCH = "1791403645"; # git show -s --format=%ct ${src.rev}
+  revCount = "4627"; # git rev-list --count ${src.rev}
+  env.SOURCE_DATE_EPOCH = "1795036704"; # git show -s --format=%ct ${src.rev}
 
   nativeBuildInputs = [
     meson
