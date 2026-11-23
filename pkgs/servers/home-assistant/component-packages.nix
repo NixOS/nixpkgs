@@ -5353,12 +5353,13 @@
         home-assistant-intents
         ifaddr
         mutagen
+        okokscale
         pymicro-vad
         pysmlight
         pyspeex-noise
         serialx
         zeroconf
-      ]; # missing inputs: okokscale
+      ];
     "olimpia_splendid" =
       ps: with ps; [
       ];
@@ -9585,6 +9586,7 @@
     "occupancy"
     "octoprint"
     "ohme"
+    "okok_scale"
     "ollama"
     "omie"
     "omnilogic"
