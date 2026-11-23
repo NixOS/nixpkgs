@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  flit-core,
+  flit-core_3,
 }:
 
 buildPythonPackage {
@@ -17,7 +17,7 @@ buildPythonPackage {
     hash = "sha256-RgTs17TxLhmexkWjPTWMcERVrmPkhMZfVL195JVToU0=";
   };
 
-  build-system = [ flit-core ];
+  build-system = [ flit-core_3 ];
 
   # Circular dependency with aocd
 
