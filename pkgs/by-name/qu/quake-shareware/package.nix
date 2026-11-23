@@ -7,6 +7,7 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   name = "pak0.pak";
+  pname = "quake-shareware";
   version = "1.06";
 
   src = fetchurl {
