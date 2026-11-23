@@ -2353,12 +2353,12 @@ final: prev: {
 
   carderne-pi-nvim = buildVimPlugin {
     pname = "carderne-pi-nvim";
-    version = "0.2.6";
+    version = "0.2.7";
     src = fetchFromGitHub {
       owner = "carderne";
       repo = "pi-nvim";
-      tag = "v0.2.6";
-      hash = "sha256-+aToqE10rq8mebxMfkf8r+aIrZpE/rdF4xdWol41lV0=";
+      tag = "v0.2.7";
+      hash = "sha256-AQo/g8ZgqDL17+XuNSO1JZpWzxmQMefqFs7sjfWJENo=";
     };
     meta.homepage = "https://github.com/carderne/pi-nvim/";
     meta.license = getLicenseFromSpdxId "MIT";
