@@ -137,6 +137,10 @@ buildFHSEnv {
 
   runScript = "sidequest";
 
+  passthru = {
+    inherit (sidequest) src;
+  };
+
   meta = {
     description = "Open app store and side-loading tool for Android-based VR devices such as the Oculus Go, Oculus Quest or Moverio BT 300";
     homepage = "https://github.com/SideQuestVR/SideQuest";
