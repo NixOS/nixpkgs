@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch2,
   rustPlatform,
   protobuf,
   pkg-config,
@@ -22,30 +21,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "easytier";
-  version = "2.7.0";
+  version = "2.7.1";
 
   src = fetchFromGitHub {
     owner = "EasyTier";
     repo = "EasyTier";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-t/a4V1pMoqr9fVfMGHJUfJPk8VD+mbOxB2Cvb2lsX9Q=";
+    hash = "sha256-dJzOUiun3Gg+lnMMmkEZkYRfwr5N0K2Y6r9aazVngWI=";
   };
 
-  cargoHash = "sha256-/dVCPkDGgvDEUnCb1EfH2Y0Yn48h4mYuUben0GNwvoo=";
-
-  patches = [
-    # TODO: remove after next release
-    # `dep:` in easytier-core drops the implicit `smoltcp` feature that
-    # cargo-auditable expects; see rust-secure-code/cargo-auditable#124.
-    (fetchpatch2 {
-      name = "expose-smoltcp-feature.patch";
-      url = "https://github.com/EasyTier/EasyTier/commit/3a0acccf46eff19c88d372a4b06749eccc9fa708.patch?full_index=1";
-      hash = "sha256-tV7TtBF8WPmVnVYp7KiaS8Ek48Y/6BmRSICF38Q2ESc=";
-    })
-    # Building easytier-web next to the CLI enables two rustls backends, which
-    # makes HTTPS peer discovery panic; backport of EasyTier/EasyTier#2648.
-    ./0002-rustls-select-ring-provider-explicitly.patch
-  ];
+  cargoHash = "sha256-1GRH5lZjYtdLKJh1Re2ym7F1JJDI9rILYD/djX6p9DY=";
 
   nativeBuildInputs = [
     protobuf
