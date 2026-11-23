@@ -128,6 +128,13 @@ stdenv.mkDerivation (finalAttrs: {
     # as build steps (not just at runtime) to embed web/report assets.
     patchShebangs src/web/src/
 
+    # swig 4.5 dropped the Python 2 aliases; map them like swig 4.4 did.
+    sed -i -E \
+      -e 's/\bPyInt_(Check|FromLong)\b/PyLong_\1/g' \
+      -e 's/\bPyString_AsString\b/PyBytes_AsString/g' \
+      -e 's/\bPyString_FromString\b/PyUnicode_FromString/g' \
+      src/odb/src/swig/python/*.i
+
     # Disable CutGTests because it misses core manager implementation
     # and fails under strict Nix linking. Filed as issue #9563.
     if [ -f src/cut/test/cpp/CMakeLists.txt ]; then
