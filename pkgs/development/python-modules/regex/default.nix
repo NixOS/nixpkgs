@@ -8,14 +8,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "regex";
-  version = "2026.9.29";
+  version = "2026.11.19";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mrabarnett";
     repo = "mrab-regex";
     tag = finalAttrs.version;
-    hash = "sha256-9WiynNc25LhHzooLEU4AubVFc6fXAJnBjqPIvfk/l44=";
+    hash = "sha256-1ac/P+CS3P96+3Fsw0urhbkHFVlDh1mu/jGMuy2jdzU=";
   };
 
   build-system = [ setuptools ];
