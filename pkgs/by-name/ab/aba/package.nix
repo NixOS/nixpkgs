@@ -33,19 +33,19 @@ rustPlatform.buildRustPackage {
     sed -i '/strip[[:space:]]*=[[:space:]]*true/s/true/false/' ./Cargo.toml
   '';
 
-  preBuild = ''
-    justFlagsArray+=(
-      PREFIX=${placeholder "out"}
-      MANIFEST_OPTS="--frozen --locked --profile=release"
-      INSTALL_OPTS="--no-track"
-    )
-  '';
+  justFlags = [
+    "PREFIX=${placeholder "out"}"
+    "MANIFEST_OPTS=--frozen --locked --profile=release"
+    "INSTALL_OPTS=--no-track"
+  ];
 
   # There are no tests
   doCheck = false;
   dontUseJustCheck = true;
 
   passthru.updateScript = nix-update-script { };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Address book for aerc";
