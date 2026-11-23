@@ -10,8 +10,6 @@
   zlib,
   writeScript,
   testers,
-  # for inheriting the meta attributes
-  libxfont_1,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libxfont_2";
@@ -56,7 +54,17 @@ stdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
 
   meta = {
-    inherit (libxfont_1.meta) description homepage license;
+    description = "X font handling library for server & utilities";
+    homepage = "https://gitlab.freedesktop.org/xorg/lib/libxfont";
+    license = with lib.licenses; [
+      mit
+      mitOpenGroup
+      hpnd
+      hpndSellVariant
+      # this was originally BSD-3-Clause-UC, however the University of California rescinded
+      # clause 3, the advertising clause, in 1999 effectively reverting it to a BSD-3-Clause
+      bsd3
+    ];
     maintainers = [ ];
     pkgConfigModules = [ "xfont2" ];
     platforms = lib.platforms.unix;

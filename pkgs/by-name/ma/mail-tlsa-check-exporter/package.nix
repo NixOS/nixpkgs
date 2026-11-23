@@ -21,11 +21,6 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-5c3epExz3tv6gRiIfpDyV1pkfcRVWjtNpl93LWsYKdk=";
   };
 
-  patches = [
-    # https://github.com/ietf-tools/mail-tlsa-check-exporter/pull/7
-    ./smtp-shutdown.patch
-  ];
-
   nativeBuildInputs = [
     makeWrapper
   ];

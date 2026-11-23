@@ -9,17 +9,17 @@
 
 buildGoModule (finalAttrs: {
   pname = "gotools";
-  version = "0.52.0";
+  version = "0.53.0";
 
   # using GitHub instead of https://go.googlesource.com/tools because Gitiles UI is too basic to browse
   src = fetchFromGitHub {
     owner = "golang";
     repo = "tools";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-invRApL81q9uIUCbBUhWGyS+14OKK6HZYdONzhHGKP4=";
+    hash = "sha256-Iyx5KuCqePmn2gbSEcoiTWiFQu4iT5rWvV0jnMbR9Y4=";
   };
 
-  vendorHash = "sha256-+1/eKOwN4yUvLCgGRJbW6MTleIEodfcIoEHCBRHd2MQ=";
+  vendorHash = "sha256-sxzCiyFzZJh8KXpTd+cxM+Uh2GYhSMpx3d4hkTotESU=";
 
   nativeBuildInputs = [ makeWrapper ];
 

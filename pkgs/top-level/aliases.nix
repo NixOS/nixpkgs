@@ -1573,7 +1573,8 @@ mapAliases {
   libXext = libxext; # Added 2026-02-06
   libXfixes = libxfixes; # Added 2026-02-06
   libXfont2 = libxfont_2; # Added 2026-02-06
-  libXfont = libxfont_1; # Added 2026-01-19
+  libXfont = throw "'libXfont' has been removed as it was unmaintained upstream and had many likely security issues. Consider upgrading to 'libxfont_2' instead."; # Added 2026-11-23
+  libxfont_1 = throw "'libxfont_1' has been removed as it was unmaintained upstream and had many likely security issues. Consider upgrading to 'libxfont_2' instead."; # Added 2026-11-23
   libXft = libxft; # Added 2026-02-06
   libXi = libxi; # Added 2026-02-06
   libXinerama = libxinerama; # Added 2026-02-06
@@ -2398,6 +2399,7 @@ mapAliases {
   rar2fs = throw "'rar2fs' has been removed as it is unmaintained, and depends on the unmaintained fuse2 library"; # Added 2026-05-19
   rates = throw "'rates' has been removed as it was broken and unmaintained upstream"; # Added 2026-08-24
   raycast-beta = throw "'raycast-beta' has been removed because Raycast 2.0 is out of beta. Use 'raycast' instead."; # Added 2026-08-24
+  rdesktop = throw "'rdesktop' has been removed due to a lack of maintenance upstream"; # Added 2026-11-22
   react-native-debugger = throw "'react-native-debugger' has been removed as it was unmaintained upstream and vendoring an EOL version of Electron"; # Added 2026-09-02
   react-static = throw "'react-static' has been removed due to lack of maintenance upstream"; # Added 2025-11-04
   recapp = throw "'recapp' is unmaintained and has been removed"; # Added 2026-05-25
