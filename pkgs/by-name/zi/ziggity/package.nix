@@ -17,13 +17,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ziggity";
-  version = "0.62.0";
+  version = "0.66.0";
 
   src = fetchFromGitHub {
     owner = "simoarpe";
     repo = "ziggity";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QnG99z3v9Eba3XAfH0+SSsDpp0D2UyQyIGDl00yW5wg=";
+    hash = "sha256-QAW2cXr2pBLDD08rPye2ALWk0VvXoped3c0OtDb02W4=";
   };
 
   zigDeps = zig.fetchDeps {
