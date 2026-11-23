@@ -1,8 +1,14 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
+  sphinxHook,
+  pallets-sphinx-themes,
+  sphinxcontrib-log-cabinet,
+  sphinx-tabs,
+  myst-parser,
 
   # large-rebuild downstream dependencies and applications
   flask,
@@ -13,7 +19,7 @@
   flit-core,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "click";
   version = "8.4.2";
   pyproject = true;
@@ -21,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pallets";
     repo = "click";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-66JFGGwPXeCU7Fbqsrsq3giv6qsea1ZKGmZYPu9rcog=";
   };
 
@@ -41,6 +47,25 @@ buildPythonPackage rec {
     "test_file_surrogates"
   ];
 
+  # Separate derivation; `myst-parser` indirectly depends on `click`
+  passthru.doc = stdenv.mkDerivation {
+    inherit (finalAttrs) src meta;
+    name = "${finalAttrs.finalPackage.name}-doc";
+
+    nativeBuildInputs = [
+      sphinxHook
+      pallets-sphinx-themes
+      sphinxcontrib-log-cabinet
+      sphinx-tabs
+      myst-parser
+      finalAttrs.finalPackage
+    ];
+
+    postInstallSphinx = ''
+      mv $out/share/doc/${finalAttrs.finalPackage.name}-doc $out/share/doc/${finalAttrs.finalPackage.name}
+    '';
+  };
+
   passthru.tests = {
     inherit
       black
@@ -52,7 +77,7 @@ buildPythonPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/pallets/click/blob/${src.tag}/CHANGES.rst";
+    changelog = "https://github.com/pallets/click/blob/${finalAttrs.version}/CHANGES.rst";
     homepage = "https://click.palletsprojects.com/";
     description = "Create beautiful command line interfaces in Python";
     longDescription = ''
@@ -62,4 +87,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ nickcao ];
   };
-}
+})
