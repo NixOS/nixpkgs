@@ -13,7 +13,6 @@
   libxcrypt,
   bash,
   bashNonInteractive,
-  nixosTests,
   meson,
   pkg-config,
   systemdLibs,
@@ -24,7 +23,6 @@
   w3m-batch,
   findXMLCatalogs,
   docbook_xsl_ns,
-  nix-update-script,
   withLogind ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
   withAudit ?
     lib.meta.availableOn stdenv.hostPlatform audit
@@ -32,6 +30,10 @@
     && lib.meta.availableOn stdenv.buildPlatform linuxHeaders,
   debugMode ? false, # warning: slower execution due to debug makes VM tests fail!
   withSelinux ? false,
+  # passthru
+  nixosTests,
+  testers,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -140,12 +142,18 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     tests = {
       inherit (nixosTests)
+        login
+        login-nosuid
         pam-oath-login
         pam-u2f
         pam-lastlog
         shadow
         sssd-ldap
         ;
+      pkg-config = testers.hasPkgConfigModules {
+        package = finalAttrs.finalPackage;
+        versionCheck = true;
+      };
     };
     updateScript = nix-update-script { };
   };
@@ -156,7 +164,13 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Pluggable Authentication Modules, a flexible mechanism for authenticating user";
     platforms = lib.platforms.linux;
     license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ grimmauld ];
     badPlatforms = [ lib.systems.inspect.platformPatterns.isStatic ];
     identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "linux-pam" finalAttrs.version;
+    pkgConfigModules = [
+      "pamc"
+      "pam_misc"
+      "pam"
+    ];
   };
 })
