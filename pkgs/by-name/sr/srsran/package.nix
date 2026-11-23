@@ -23,14 +23,15 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "srsran";
-  version = "25_10";
+  version = "26.10";
   __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "srsran";
     repo = "srsRAN_4G";
     tag = "release_${builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
-    sha256 = "sha256-DwQ4u17m8D5RqX3OIYSyeE5+51sLah1qchRcwlX5i0A=";
+    sha256 = "sha256-1Bd4vtdOSZFsZ7isVQ+u19u+CoGeAV7ZmMwH8INKaxw=";
   };
 
   outputs = [
@@ -55,17 +56,6 @@ stdenv.mkDerivation (finalAttrs: {
     libbladeRF
     zeromq
   ];
-
-  # boost 1.89 removed the boost_system stub library
-  postPatch = ''
-    substituteInPlace cmake/modules/FindUHD.cmake --replace-fail \
-      'set(CMAKE_REQUIRED_LIBRARIES uhd boost_program_options boost_system)' \
-      'set(CMAKE_REQUIRED_LIBRARIES uhd boost_program_options)'
-    substituteInPlace lib/src/phy/rf/CMakeLists.txt --replace-fail \
-      '/usr/lib/x86_64-linux-gnu/libboost_system.so' ""
-    substituteInPlace CMakeLists.txt --replace-fail \
-      'list(APPEND BOOST_REQUIRED_COMPONENTS "system")' ""
-  '';
 
   cmakeFlags = [
     (lib.cmakeBool "ENABLE_WERROR" false)

@@ -11,17 +11,19 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "nix-update";
-  version = "1.16.0";
+  version = "1.17.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = "nix-update";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LT66e5NtAJRp0E8QXKeePdTCNpH+CMvJNF1ayzBr4rw=";
+    hash = "sha256-TCOhUWb53V3nrJRD3JuADly1U9fNi0Z79QMcjhbefHg=";
   };
 
-  build-system = [ python3Packages.setuptools ];
+  build-system = [ python3Packages.hatchling ];
+
+  dependencies = [ python3Packages.ast-grep-py ];
 
   makeWrapperArgs = [
     "--prefix"

@@ -7,16 +7,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "glauth";
-  version = "2.5.4";
+  version = "2.5.5";
 
   src = fetchFromGitHub {
     owner = "glauth";
     repo = "glauth";
     tag = "GLAuth-v${finalAttrs.version}";
-    hash = "sha256-b5R3aXrvHyKDoRhNIXIZncnkIV5DuWr4pPQCv0I36JU=";
+    hash = "sha256-GZhp0IQ89zm31ysZr9oA7wExmg/r2jCa5UDq61ubAH0=";
   };
 
-  vendorHash = "sha256-T0nzmnnM7Cps9nmt4Rfzn4nl2+i/1baP0AwIrjk4hXk=";
+  vendorHash = "sha256-cVqXkTCnVCHfUuJBzH7/cvZ5AdhiBiIlalNmH2vaOVA=";
 
   # Builds without go workspace fail with mysterious errors
   overrideModAttrs = _: {
