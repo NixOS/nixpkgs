@@ -8,28 +8,26 @@
   pytest,
   python,
   pybind11,
-  setuptools-scm,
+  meson-python,
+  versioningit,
 }:
 
 buildPythonPackage rec {
   pname = "pyamg";
-  version = "5.3.0";
+  version = "5.4.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-UyPQ8aTNmZviRqkNWAyeHptYS5iIf2KY05dhEIfvhgs=";
+    hash = "sha256-tYKc45aHZVzmjbRBXJPuFxBWu05B57eY705un5+Tvq4=";
   };
 
-  # removed by next version, https://github.com/pyamg/pyamg/pull/420
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail \
-        'setuptools_scm[toml]==8.3.0' \
-        'setuptools_scm>=8.3.0' \
-  '';
-
-  nativeBuildInputs = [ setuptools-scm ];
+  nativeBuildInputs = [
+    meson-python
+    pybind11
+    numpy
+    versioningit
+  ];
 
   propagatedBuildInputs = [
     numpy
