@@ -91,6 +91,11 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/lib/node_modules/basedpyright/node_modules
+    cp -rL packages/pyright/node_modules/fsevents $out/lib/node_modules/basedpyright/node_modules/
+  '';
+
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
 
