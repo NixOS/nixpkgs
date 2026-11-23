@@ -55,12 +55,10 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  preConfigure = ''
-    configureFlagsArray=(
-      --enable-pkglibdir=$out/lib/aspell
-      --enable-pkgdatadir=$out/lib/aspell
-    );
-  '';
+  configureFlags = [
+    "--enable-pkglibdir=$(out)/lib/aspell"
+    "--enable-pkgdatadir=$(out)/lib/aspell"
+  ];
 
   # Include u-deva.cmap and u-deva.cset in the aspell package
   # to avoid conflict between 'mr' and 'hi' dictionaries as they
@@ -84,6 +82,8 @@ stdenv.mkDerivation rec {
           touch $out
         '';
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Spell checker for many languages";
