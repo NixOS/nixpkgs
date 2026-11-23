@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchgit,
+  gitUpdater,
 
   wafHook,
   python3,
@@ -32,6 +33,15 @@ stdenv.mkDerivation (finalAttrs: {
     boost
     fmt
   ];
+
+  passthru.updateScript =
+    gitUpdater {
+      rev-prefix = "v";
+      attrPath = "dcpomatic.libttf";
+    }
+    // {
+      supportedFeatures = [ ];
+    };
 
   __structuredAttrs = true;
   strictDeps = true;

@@ -2,11 +2,14 @@
   stdenv,
   lib,
   fetchgit,
+  unstableGitUpdater,
+
   wafHook,
   python3,
   gitMinimal,
   pkg-config,
   libsndfile,
+  coreutils,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -29,6 +32,17 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libsndfile
   ];
+
+  passthru.updateScript = [
+    "${coreutils}/bin/env"
+    "UPDATE_NIX_ATTR_PATH=dcpomatic.leqm-nrt"
+    "UPDATE_NIX_PNAME=leqm-nrt"
+    "UPDATE_NIX_OLD_VERSION=${finalAttrs.version}"
+  ]
+  ++ unstableGitUpdater {
+    tagPrefix = "v";
+    branch = "carl";
+  };
 
   __structuredAttrs = true;
   strictDeps = true;

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchgit,
+  gitUpdater,
 
   wafHook,
   python3,
@@ -70,6 +71,15 @@ stdenv.mkDerivation (finalAttrs: {
   propagatedBuildInputs = [
     asdcplib
   ];
+
+  passthru.updateScript =
+    gitUpdater {
+      rev-prefix = "v";
+      attrPath = "dcpomatic.libdcp";
+    }
+    // {
+      supportedFeatures = [ ];
+    };
 
   __structuredAttrs = true;
 
