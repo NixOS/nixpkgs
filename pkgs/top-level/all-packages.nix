@@ -7230,8 +7230,6 @@ with pkgs;
     else
       unixtools.net-tools;
 
-  open-vm-tools-headless = open-vm-tools.override { withX = false; };
-
   pam =
     if stdenv.hostPlatform.isLinux then
       linux-pam
