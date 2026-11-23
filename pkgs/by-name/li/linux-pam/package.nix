@@ -164,6 +164,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Pluggable Authentication Modules, a flexible mechanism for authenticating user";
     platforms = lib.platforms.linux;
     license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ grimmauld ];
     badPlatforms = [ lib.systems.inspect.platformPatterns.isStatic ];
     identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "linux-pam" finalAttrs.version;
     pkgConfigModules = [
