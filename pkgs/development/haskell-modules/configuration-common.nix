@@ -1701,6 +1701,17 @@ with haskellLib;
   servant-auth-server = doJailbreak super.servant-auth-server;
   servant-openapi3 = doJailbreak super.servant-openapi3;
 
+  # Stale constraint on quickcheck-instances < 0.4
+  servant = warnAfterVersion "0.20.3.0" (doJailbreak super.servant);
+
+  # Allow quickcheck-instances >= 0.4
+  # https://github.com/nikita-volkov/text-builder/issues/6
+  text-builder = doJailbreak super.text-builder;
+
+  # Allow quickcheck-instances >= 0.4
+  # https://github.com/haskell-hvr/cassava/issues/252
+  cassava = doJailbreak super.cassava;
+
   # 2026-06-29: allow doctest 0.25
   # https://github.com/sellout/yaya/issues/91
   yaya = doJailbreak super.yaya;
