@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
   + lib.optionalString doSymlink ''
     cd $out/bin
     for file in poly class cws nef mori; do
-      ln -sf $file-6d.x $file.x
+      ln -sf $file-${dim}d.x $file.x
     done
   '';
 
