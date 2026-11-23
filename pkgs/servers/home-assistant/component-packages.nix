@@ -4667,7 +4667,8 @@
       ];
     "mijn_farmad_apotheek" =
       ps: with ps; [
-      ]; # missing inputs: aiofarmad
+        aiofarmad
+      ];
     "mijndomein_energie" =
       ps: with ps; [
       ];
@@ -9494,6 +9495,7 @@
     "microsoft"
     "midea"
     "miele"
+    "mijn_farmad_apotheek"
     "mikrotik"
     "mill"
     "min_max"
