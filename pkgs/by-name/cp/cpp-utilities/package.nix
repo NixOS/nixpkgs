@@ -5,6 +5,7 @@
   cmake,
   cppunit,
   libiconv,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -38,6 +39,8 @@ stdenv.mkDerivation (finalAttrs: {
   # tests fail on Darwin
   doCheck = !stdenv.hostPlatform.isDarwin;
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   __structuredAttrs = true;
 
   meta = {
@@ -46,5 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ doronbehar ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    pkgConfigModules = [ "c++utilities" ];
   };
 })
