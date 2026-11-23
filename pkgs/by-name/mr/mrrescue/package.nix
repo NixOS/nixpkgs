@@ -11,28 +11,22 @@
   zip,
 }:
 
-let
-  lua = lua5_2_compat;
-  icon = fetchurl {
-    url = "http://tangramgames.dk/img/thumb/mrrescue.png";
-    sha256 = "1y5ahf0m01i1ch03axhvp2kqc6lc1yvh59zgvgxw4w7y3jryw20k";
-  };
+stdenv.mkDerivation (finalAttrs: {
+  pname = "mrrescue";
+  version = "1.02d-unstable-2018-08-18";
 
   desktopItem = makeDesktopItem {
     name = "mrrescue";
     exec = "mrrescue";
-    icon = icon;
+    icon = fetchurl {
+      url = "http://tangramgames.dk/img/thumb/mrrescue.png";
+      hash = "sha256-Ewjusxz+cML72++nArcPjBqGp7gbdjUAZCEGUIGDqvg=";
+    };
     comment = "Arcade-style fire fighting game";
     desktopName = "Mr. Rescue";
     genericName = "mrrescue";
     categories = [ "Game" ];
   };
-
-in
-
-stdenv.mkDerivation {
-  pname = "mrrescue";
-  version = "1.02d-unstable-2018-08-18";
 
   src = fetchFromGitHub {
     owner = "SimonLarsen";
@@ -42,7 +36,7 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [
-    lua
+    lua5_2_compat
     love
     makeWrapper
     strip-nondeterminism
@@ -66,7 +60,7 @@ stdenv.mkDerivation {
 
     chmod +x $out/bin/mrrescue
     mkdir -p $out/share/applications
-    ln -s ${desktopItem}/share/applications/* $out/share/applications/
+    ln -s ${finalAttrs.desktopItem}/share/applications/* $out/share/applications/
   '';
 
   meta = {
@@ -79,4 +73,4 @@ stdenv.mkDerivation {
     downloadPage = "http://tangramgames.dk/games/mrrescue";
   };
 
-}
+})

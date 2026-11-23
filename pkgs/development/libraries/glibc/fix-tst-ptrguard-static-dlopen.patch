@@ -1,0 +1,11 @@
+diff -ubr a/elf/Makefile b/elf/Makefile
+--- a/elf/Makefile	2026-10-14 21:26:27.744173355 +0100
++++ b/elf/Makefile	2026-10-14 21:26:55.922866628 +0100
+@@ -3240,6 +3240,7 @@
+ 
+ $(objpfx)tst-ptrguard-static-dlopen.out: \
+   $(objpfx)tst-ptrguard-static-dlopen-mod.so
++tst-ptrguard-static-dlopen-ENV = $(static-dlopen-environment)
+ 
+ $(objpfx)tst-dlmopen-gethostbyname.out: $(objpfx)tst-dlmopen-gethostbyname-mod.so
+ 

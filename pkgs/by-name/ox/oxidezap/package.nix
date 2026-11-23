@@ -27,19 +27,18 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "oxidezap";
-  version = "0-unstable-2026-11-01";
+  version = "0-unstable-2026-11-16";
 
   __structuredAttrs = true;
 
-  # The following revision raises the minimum Rust version to 1.99.1.
   src = fetchFromGitHub {
     owner = "oxidezap";
     repo = "client";
-    rev = "ad9f63c5f3d262a5d7677d78c55d2d7d90197c34";
-    hash = "sha256-hYeFWi5qa9h4ni8e7fuc6I9IGgl4t3ES7pUIOT/uA2o=";
+    rev = "075bcd4d08be58db6612b6429df0dde405c0c478";
+    hash = "sha256-/NHRVS9aK6Ad7KYnAKF9HIjaU54i+cN0Ip39z3UiC+4=";
   };
 
-  cargoHash = "sha256-68zpLVhfXwaxy0t+gHs606+fLX1Exml3IBOecMytS6o=";
+  cargoHash = "sha256-QznXAPrVqXw7dlSn2ApjV3qbXfQYqurxmP3iKBiUt88=";
 
   nativeBuildInputs = [
     pkg-config
@@ -65,6 +64,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   dontUseCmakeConfigure = true;
 
   postPatch = ''
+    # The native workspace still builds with the Rust version in Nixpkgs.
+    substituteInPlace Cargo.toml \
+      --replace-fail 'rust-version = "1.100.0"' 'rust-version = "1.99.1"'
+
     # Use the Nixpkgs linker and system SQLite configuration.
     rm .cargo/config.toml
 

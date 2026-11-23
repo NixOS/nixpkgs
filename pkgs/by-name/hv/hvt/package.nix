@@ -1,24 +1,31 @@
 {
   lib,
-  rustPlatform,
+  aws-lc,
   fetchFromGitHub,
   nix-update-script,
+  pkg-config,
+  rustPlatform,
   versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hvt";
-  version = "0.2.0";
+  version = "0.2.1";
+
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "affolter-engineering";
     repo = "hvt";
     tag = finalAttrs.version;
-    hash = "sha256-CIPxM1cdUpb8KyKj3DpM/bGpZmRH7b2xwEOTt5/623g=";
+    hash = "sha256-v2OKuUxl8bAM1CuFUw67ZPS4hjNmYxBJOB0vP7+mTlk=";
   };
 
-  cargoHash = "sha256-tPcE6DbnXcZ2mS8czfVRFQ6OaRyeju925zagOP0ytQM=";
+  cargoHash = "sha256-dXFeeJuIZX/FKQgB99n4e8Rh4UavlTh8BjGWJ8DQRVw=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ aws-lc ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
