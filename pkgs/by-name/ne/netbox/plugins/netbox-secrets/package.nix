@@ -22,6 +22,10 @@ buildPythonPackage (finalAttrs: {
 
   build-system = [ setuptools ];
 
+  pythonRelaxDeps = [
+    "pycryptodome"
+  ];
+
   dependencies = [ pycryptodome ];
 
   nativeCheckInputs = [ netbox ];
