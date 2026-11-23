@@ -20,13 +20,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "p4est";
-  version = "2.8.7";
+  version = "2.8.8";
 
   src = fetchFromGitHub {
     owner = "cburstedde";
     repo = "p4est";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8JvKaYOP4IO1Xmim74KNHvMLOV3y9VRoT76RBCaRyhI=";
+    hash = "sha256-JMKKT70s74ptR6zf4GD1H9EmXUqjiqYCrgcXVQ7/ja0=";
   };
 
   strictDeps = true;
