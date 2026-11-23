@@ -18134,6 +18134,8 @@ self: super: with self; {
 
   railroad-diagrams = callPackage ../development/python-modules/railroad-diagrams { };
 
+  rainbowminer-api-client = callPackage ../development/python-modules/rainbowminer-api-client { };
+
   raincloudy = callPackage ../development/python-modules/raincloudy { };
 
   ramlfications = callPackage ../development/python-modules/ramlfications { };
