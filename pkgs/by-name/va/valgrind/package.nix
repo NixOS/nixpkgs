@@ -6,15 +6,16 @@
   autoreconfHook,
   perl,
   gdb,
+  bashNonInteractive,
   writeScript,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "valgrind";
   version = "3.27.1";
 
   src = fetchurl {
-    url = "https://sourceware.org/pub/valgrind/valgrind-${version}.tar.bz2";
+    url = "https://sourceware.org/pub/valgrind/valgrind-${finalAttrs.version}.tar.bz2";
     hash = "sha256-XViRUuuAccAv6rjOarcZ5DGh+8PisXAPVDJjKouSZNw=";
   };
 
@@ -55,18 +56,22 @@ stdenv.mkDerivation rec {
     "stackprotector"
   ];
 
-  # GDB is needed to provide a sane default for `--db-command'.
   # Perl is needed for `callgrind_{annotate,control}'.
   buildInputs = [
-    gdb
     perl
+    bashNonInteractive
   ];
 
   # Perl is also a native build input.
+  # GDB is needed to provide a sane default for `--db-command',
+  # but it can be null (e.g. for valgrind-light).
   nativeBuildInputs = [
     autoreconfHook
     perl
+    gdb
   ];
+
+  strictDeps = true;
 
   enableParallelBuilding = true;
   separateDebugInfo = stdenv.hostPlatform.isLinux;
@@ -99,9 +104,11 @@ stdenv.mkDerivation rec {
       #  'Current release: <a href="/downloads/current.html#current">valgrind-3.19.0</a>'
       new_version="$(curl -s https://valgrind.org/ |
           pcre2grep -o1 'Current release: .*>valgrind-([0-9.]+)</a>')"
-      update-source-version ${pname} "$new_version"
+      update-source-version valgrind "$new_version"
     '';
   };
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://valgrind.org/";
@@ -132,4 +139,4 @@ stdenv.mkDerivation rec {
     # history if you want to fix this.
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})
