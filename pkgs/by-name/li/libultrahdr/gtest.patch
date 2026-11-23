@@ -1,8 +1,8 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 5128335..bacf495 100644
+index a6ed814..11fb01b 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -536,16 +536,6 @@ if(UHDR_BUILD_TESTS)
+@@ -564,16 +564,6 @@ if(UHDR_BUILD_TESTS)
      set(GTEST_LIB_PREFIX ${GTEST_BINARY_DIR}/lib/)
    endif()
    set(GTEST_BOTH_LIBRARIES ${GTEST_LIB_PREFIX}${GTEST_LIB} ${GTEST_LIB_PREFIX}${GTEST_LIB_MAIN})
@@ -17,13 +17,16 @@ index 5128335..bacf495 100644
 -      INSTALL_COMMAND ""
 -  )
  endif()
- 
+
  if(UHDR_BUILD_BENCHMARK)
-@@ -675,16 +665,15 @@ endif()
- 
+@@ -807,22 +797,21 @@ endif()
+
  if(UHDR_BUILD_TESTS)
    add_executable(ultrahdr_unit_test ${UHDR_TEST_SRCS_LIST})
 -  add_dependencies(ultrahdr_unit_test ${GTEST_TARGET_NAME} ${UHDR_CORE_LIB_NAME})
+   if(TARGET libheif)
+     add_dependencies(ultrahdr_unit_test ${LIBHEIF_TARGET_NAME})
+   endif()
    target_compile_options(ultrahdr_unit_test PRIVATE ${UHDR_WERROR_FLAGS})
    target_include_directories(ultrahdr_unit_test PRIVATE
      ${PRIVATE_INCLUDE_DIR}
@@ -33,7 +36,12 @@ index 5128335..bacf495 100644
    if(UHDR_BUILD_FUZZERS)
      target_link_options(ultrahdr_unit_test PRIVATE -fsanitize=fuzzer-no-link)
    endif()
--  target_link_libraries(ultrahdr_unit_test ${UHDR_CORE_LIB_NAME} ${GTEST_BOTH_LIBRARIES})
-+  target_link_libraries(ultrahdr_unit_test ${UHDR_CORE_LIB_NAME} -lgtest -lgtest_main)
-   add_test(NAME UHDRUnitTests, COMMAND ultrahdr_unit_test)
- endif()
+   if(UHDR_ENABLE_SMPTE2094_50)
+-    target_link_libraries(ultrahdr_unit_test ${UHDR_CORE_LIB_NAME} ${GTEST_BOTH_LIBRARIES} smpte2094_50_utils ${PRIVATE_LINK_LIBS})
++    target_link_libraries(ultrahdr_unit_test ${UHDR_CORE_LIB_NAME} -lgmock -lgtest -lgtest_main smpte2094_50_utils ${PRIVATE_LINK_LIBS})
+   else()
+-    target_link_libraries(ultrahdr_unit_test ${UHDR_CORE_LIB_NAME} ${GTEST_BOTH_LIBRARIES} ${PRIVATE_LINK_LIBS})
++    target_link_libraries(ultrahdr_unit_test ${UHDR_CORE_LIB_NAME} -lgmock -lgtest -lgtest_main ${PRIVATE_LINK_LIBS})
+   endif()
+   if(LIBHEIF_LIB_PREFIX)
+     set_target_properties(ultrahdr_unit_test PROPERTIES BUILD_RPATH "${LIBHEIF_LIB_PREFIX}")
