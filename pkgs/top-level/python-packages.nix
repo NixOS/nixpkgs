@@ -19803,6 +19803,8 @@ self: super: with self; {
 
   solo-python = callPackage ../development/python-modules/solo-python { };
 
+  solyx-energy-api-client = callPackage ../development/python-modules/solyx-energy-api-client { };
+
   somajo = callPackage ../development/python-modules/somajo { };
 
   somfy-mylink-synergy = callPackage ../development/python-modules/somfy-mylink-synergy { };
