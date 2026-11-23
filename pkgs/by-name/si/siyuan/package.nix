@@ -2,28 +2,33 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchurl,
   buildGoModule,
   replaceVars,
   pandoc,
   nodejs,
-  pnpm_11,
+  pnpm_12,
   fetchPnpmDeps,
   pnpmConfigHook,
   pnpmBuildHook,
-  electron,
+  electron_44,
   makeWrapper,
   makeDesktopItem,
   copyDesktopItems,
-  nix-update-script,
   xdg-utils,
   zip,
+  python3,
+  onnxruntime,
   darwin,
 }:
 
 let
   inherit (stdenv.hostPlatform) isLinux isDarwin system;
 
-  pnpm = pnpm_11;
+  # app/package.json pins pnpm 12 and Electron 44; nixpkgs' default Electron 43
+  # breaks pasting.
+  pnpm = pnpm_12;
+  electron = electron_44;
 
   platformIds = {
     "x86_64-linux" = "linux";
@@ -33,8 +38,8 @@ let
 
   platformId = platformIds.${system} or (throw "Unsupported platform: ${system}");
 
-  # The pandoc archive that electron-builder expects for each platform. We build
-  # it from the Nix pandoc binary, so only the current platform's archive is needed.
+  # electron-builder looks for a pandoc archive with this name; its contents
+  # are a placeholder replaced in installPhase.
   pandocArchives = {
     "linux" = "pandoc-linux-amd64.zip";
     "linux-arm64" = "pandoc-linux-arm64.zip";
@@ -42,38 +47,77 @@ let
   };
 
   pandocArchive = pandocArchives.${platformId};
+
+  # Upstream's beforePack hook downloads the OCR models, which the sandbox
+  # cannot do. This is a copy of upstream's scripts/ocr-assets.json, refreshed
+  # by update.sh.
+  ocrManifest = builtins.fromJSON (builtins.readFile ./ocr-assets.json);
+
+  # Where prepare-ocr.py expects the runtime library, per platform.
+  ocrTarget =
+    {
+      "linux" = "linux-amd64";
+      "linux-arm64" = "linux-arm64";
+      "darwin-arm64" = "darwin-arm64";
+    }
+    .${platformId};
+
+  # Model data only (onnx weights and yml); nothing here is executed.
+  ocrModels = map (entry: {
+    path = entry.path;
+    file = fetchurl {
+      url = entry.url;
+      sha256 = entry.sha256;
+    };
+  }) ocrManifest.models;
+
+  # Place the models where prepare-ocr.py checks them against the manifest.
+  ocrModelCopies = lib.concatMapStringsSep "\n" (m: ''
+    mkdir -p "$(dirname "stage/ocr/models/${m.path}")"
+    cp -f ${m.file} "stage/ocr/models/${m.path}"
+  '') ocrModels;
+
+  dedupePandoc = resourcesDir: ''
+    rm -rf ${resourcesDir}/pandoc
+    mkdir -p ${resourcesDir}/pandoc/bin
+    ln -s ${lib.getExe pandoc} ${resourcesDir}/pandoc/bin/pandoc
+  '';
+
+  # The kernel loads onnxruntime through OrtGetApiBase, whose C API is
+  # backwards compatible, so the Nix library can replace the bundled one.
+  dedupeOnnxruntime = resourcesDir: ''
+    ocrRuntimeDir=${resourcesDir}/stage/ocr/runtime/${ocrTarget}
+    mkdir -p "$ocrRuntimeDir"
+    ortLib=${lib.getLib onnxruntime}/lib/libonnxruntime.${if isDarwin then "dylib" else "so"}
+    test -e "$ortLib" || {
+      echo "onnxruntime library missing: $ortLib"
+      exit 1
+    }
+    ln -sfn "$ortLib" "$ocrRuntimeDir/libonnxruntime.${if isDarwin then "dylib" else "so"}"
+  '';
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "siyuan";
-  version = "3.8.2";
+  version = "3.8.12";
 
   src = fetchFromGitHub {
     owner = "siyuan-note";
     repo = "siyuan";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MzsfeAWApHLDt4+aC9/O+5Dl8OD8p0l+/8tb2ZZyTos=";
+    hash = "sha256-pEvpq/kohY94SDGw8oVAXoHDPxnyaPcV1M644psiY/o=";
   };
 
   kernel = buildGoModule {
     name = "${finalAttrs.pname}-${finalAttrs.version}-kernel";
     inherit (finalAttrs) src;
     sourceRoot = "${finalAttrs.src.name}/kernel";
-    vendorHash = "sha256-x8saxKDLeZdEbTBjNXnOBU9zkliZXm6D92Mom8CUCbs=";
+    vendorHash = "sha256-KNeqEDMcyLJBQpVwtvTI1B32/BaLpMPyRKdCvmcbuZ8=";
 
     patches = [
       (replaceVars ./set-pandoc-path.patch {
         pandoc_path = lib.getExe pandoc;
       })
     ];
-
-    # this patch makes it so that file permissions are not kept when copying files using the gulu package
-    # this fixes a problem where it was copying files from the store and keeping their permissions
-    # hopefully this doesn't break other functionality
-    modPostBuild = ''
-      chmod +w vendor/github.com/88250/gulu
-      substituteInPlace vendor/github.com/88250/gulu/file.go \
-          --replace-fail "os.Chmod(dest, sourceinfo.Mode())" "os.Chmod(dest, 0644)"
-    '';
 
     # Set flags and tags as per upstream's Dockerfile
     ldflags = [
@@ -83,14 +127,19 @@ stdenv.mkDerivation (finalAttrs: {
     tags = [
       "fts5"
       "sqlcipher"
+    ]
+    ++ lib.optionals isLinux [
+      # The Nix kernel is dynamically linked, so it can load onnxruntime.
+      "ocr_inprocess"
     ];
+
+    # `./...` also builds apigen and harmony, ~180 MiB of unused binaries.
+    subPackages = [ "." ];
 
     env.CGO_ENABLED = "1";
 
-    # Tests are skipped here because many upstream tests make assumptions that
-    # do not hold in the Nix sandbox (system MIME table, missing model.Conf
-    # initialization, missing system fonts, our set-pandoc-path.patch, etc.).
-    # They are run as a separate derivation via passthru.tests.kernel.
+    # Many upstream tests need the system MIME table, fonts or model.Conf;
+    # run them as passthru.tests.kernel instead.
     doCheck = false;
   };
 
@@ -98,10 +147,11 @@ stdenv.mkDerivation (finalAttrs: {
     nodejs
     pnpmConfigHook
     pnpm
+    pnpmBuildHook
     zip
+    python3
   ]
   ++ lib.optionals isLinux [
-    pnpmBuildHook
     makeWrapper
     copyDesktopItems
   ]
@@ -117,46 +167,64 @@ stdenv.mkDerivation (finalAttrs: {
       sourceRoot
       ;
     inherit pnpm;
-    fetcherVersion = 4;
-    hash = "sha256-ACWwXIwuiLp/e+1dwlClzAi8ZC6oEQc3ETFK/WvVnGk=";
+    fetcherVersion = 5;
+    hash = "sha256-GjJmx1uyhTpY5DmxGh9mMNLsXUsZpH68074CB6nIEF8=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/app";
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
-  postConfigure = ''
-    # Remove the prebuilt pandoc archives; we provide our own built from the
-    # Nix pandoc binary below, and keep pandoc-resources for the kernel.
-    rm -f pandoc/pandoc-*.zip
+  # afterPack builds an optional Quick Look extension with swiftc. The package
+  # does not ship it, so skip the Darwin-only Swift build.
+  postPatch = lib.optionalString isDarwin ''
+    substituteInPlace scripts/quicklook.js \
+      --replace-fail \
+        'const compileQuickLook = async (appPath, version, run = execFileSync) => {' \
+        'const compileQuickLook = async (appPath, version, run = execFileSync) => { return; // not shipped'
+  '';
 
-    # Build the current platform's pandoc archive from the Nix pandoc binary so
-    # the electron-builder afterPack hook can extract it. The kernel itself uses
-    # the Nix pandoc directly via set-pandoc-path.patch.
+  postConfigure = ''
+    # Upstream's prebuilt archives are untrusted and get replaced by a symlink.
+    rm -f pandoc/pandoc-*.zip
+    mkdir -p pandoc/bin
+    printf 'placeholder: replaced by a store symlink in installPhase\n' > pandoc/bin/pandoc
     (
       cd pandoc
-      mkdir -p .tmp/bin
-      cp ${lib.getExe pandoc} .tmp/bin/pandoc
-      (
-        cd .tmp
-        zip -qr ../${pandocArchive} bin/pandoc
-      )
-      rm -rf .tmp
+      zip -qr ${pandocArchive} bin/pandoc
     )
+    rm -rf pandoc/bin
 
-    # link kernel into the correct starting place so that electron-builder can copy it to it's final location
+    # Where electron-builder looks for the kernel.
     mkdir kernel-${platformId}
     ln -s ${finalAttrs.kernel}/bin/kernel kernel-${platformId}/SiYuan-Kernel
 
-    cp -r ${electron.dist} electron-dist
-    chmod -R u+w electron-dist
+    # The app build recreates electron-dist, so keep the runtime elsewhere.
+    cp -r ${electron.dist} electron-runtime
+    chmod -R u+w electron-runtime
+
+    # prepare-ocr.py locates its manifest and staging directory relative to
+    # the repository root, and expects a writable tree. Mirror the parts it
+    # needs, run it here, and make the hook a no-op.
+    mkdir -p ocr-layout/scripts
+    cp ${finalAttrs.src}/scripts/prepare-ocr.py ocr-layout/scripts/
+    cp ${./ocr-assets.json} ocr-layout/scripts/ocr-assets.json
+    ln -s "$PWD" ocr-layout/app
+
+    ${ocrModelCopies}
+    python3 ocr-layout/scripts/prepare-ocr.py
+
+    cat > scripts/beforePack.js <<'OCR_EOF'
+    // OCR resources were staged in postConfigure.
+    module.exports = async function beforePack() {};
+    OCR_EOF
   '';
 
   postBuild = ''
     electronBuilderArgs=(
       --dir
       --config electron-builder-${platformId}.yml
-      -c.electronDist=electron-dist
+      -c.electronDist=electron-runtime
       -c.electronVersion=${electron.version}
       -c.mac.identity=null
     )
@@ -172,6 +240,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     cp -R build/mac*/*.app $out/Applications/SiYuan.app
 
+    ${dedupePandoc "$out/Applications/SiYuan.app/Contents/Resources"}
+    ${dedupeOnnxruntime "$out/Applications/SiYuan.app/Contents/Resources"}
+
     cat > $out/bin/siyuan << EOF
     #!${stdenv.shell}
     exec open -na "$out/Applications/SiYuan.app" --args "\$@"
@@ -183,11 +254,13 @@ stdenv.mkDerivation (finalAttrs: {
 
     cp -r build/*-unpacked/{locales,resources{,.pak}} $out/share/siyuan
 
+    ${dedupePandoc "$out/share/siyuan/resources"}
+    ${dedupeOnnxruntime "$out/share/siyuan/resources"}
+
+    # Relative path arguments resolve against process.cwd().
     makeWrapper ${lib.getExe electron} $out/bin/siyuan \
-        --chdir $out/share/siyuan/resources \
         --add-flags $out/share/siyuan/resources/app \
         --set ELECTRON_FORCE_IS_PACKAGED 1 \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
         --suffix PATH : ${lib.makeBinPath [ xdg-utils ]} \
         --inherit-argv0
 
@@ -209,25 +282,17 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     kernel = finalAttrs.kernel;
 
-    updateScript = nix-update-script {
-      extraArgs = [
-        "--version-regex"
-        "^v(\\d+\\.\\d+\\.\\d+)$"
-        "--subpackage=kernel"
-      ];
-    };
+    # Updates the version, hashes and ocr-assets.json; see update.sh.
+    updateScript = ./update.sh;
 
-    # Upstream kernel tests require model.Conf initialization, system fonts,
-    # pandoc, and other assumptions that do not hold in the Nix sandbox during
-    # the main build. Run them as a separate derivation so the package build
-    # stays reliable while test results remain available via
-    # nix-build -A siyuan.passthru.tests.kernel.
+    # The kernel tests do not pass in the sandbox; keep them runnable
+    # separately.
     tests.kernel = finalAttrs.kernel.overrideAttrs {
       pname = "${finalAttrs.pname}-kernel-test";
       doCheck = true;
       checkPhase = ''
         runHook preCheck
-        go test -vet=off -tags=fts5,sqlcipher ./...
+        go test -vet=off -tags=fts5,sqlcipher${lib.optionalString isLinux ",ocr_inprocess"} ./...
         runHook postCheck
       '';
       installPhase = "touch $out";
