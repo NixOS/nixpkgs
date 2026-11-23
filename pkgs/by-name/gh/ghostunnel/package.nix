@@ -3,6 +3,7 @@
   fetchFromGitHub,
   lib,
   nixosTests,
+  stdenv,
 }:
 
 buildGo127Module (finalAttrs: {
@@ -25,6 +26,10 @@ buildGo127Module (finalAttrs: {
     # Needed for config files in the store, for instance.
     # Not offered upstream yet.
     ./landlock-allow-read.patch
+    # A flag to exit when the landlock sandbox cannot be set up, where
+    # upstream logs a warning and runs without it.
+    # Not offered upstream yet.
+    ./require-landlock.patch
   ];
 
   checkFlags = [
@@ -37,6 +42,44 @@ buildGo127Module (finalAttrs: {
     # reason they aren't working though.
     "-skip=^TestACMEInitialIssuance"
   ];
+
+  # The flags are Linux-only, like the sandbox.
+  doInstallCheck = stdenv.hostPlatform.isLinux;
+  # With --require-landlock, ghostunnel must exit when it would run without
+  # the sandbox: with --disable-landlock, with PKCS#11, or when the setup
+  # fails, here because of a bad --landlock-allow-read.
+  installCheckPhase = ''
+    runHook preInstallCheck
+    last_error() {
+      local output
+      if output=$($out/bin/ghostunnel --require-landlock "$@" server --listen localhost:8443 --target localhost:8080 --disable-authentication 2>&1); then
+        echo "ghostunnel did not exit with an error: $*"
+        exit 1
+      fi
+      echo "''${output##*$'\n'}"
+    }
+    expect() {
+      local actual
+      actual=$(last_error "''${@:2}")
+      if [[ $actual != "$1" ]]; then
+        echo "expected: $1"
+        echo "actual: $actual"
+        exit 1
+      fi
+    }
+    expect "error: --require-landlock conflicts with --disable-landlock" --disable-landlock
+    # ghostunnel checks the conflict before it loads the module.
+    touch "$TMPDIR/empty.so"
+    expect "error: --require-landlock conflicts with pkcs11, which skips landlock" --pkcs11-module="$TMPDIR/empty.so"
+    if [[ $(last_error --landlock-allow-read="$TMPDIR") == "error: unable to set up landlock: kernel does not support landlock: "* ]]; then
+      echo "skipping the checks that need landlock, because the build kernel does not support it"
+    else
+      touch "$TMPDIR/not-a-dir"
+      expect "error: unable to set up landlock: populating ruleset for \"$TMPDIR/not-a-dir\" with access {read_file,read_dir}: landlock_add_rule: inconsistent access rights (using directory access rights on a regular file?): invalid argument" --landlock-allow-read="$TMPDIR/not-a-dir"
+      expect "error: unable to set up landlock: populating ruleset for \"$TMPDIR/missing\" with access {read_file,read_dir}: open: no such file or directory" --landlock-allow-read="$TMPDIR/missing"
+    fi
+    runHook postInstallCheck
+  '';
 
   passthru.tests = {
     nixos = nixosTests.ghostunnel;
@@ -60,7 +103,11 @@ buildGo127Module (finalAttrs: {
       Nixpkgs build adds a `--landlock-allow-read` flag, which lets the sandbox
       read files and list directories in a further path. On NixOS, many paths
       in /etc are symlinks into the Nix store, so run ghostunnel with
-      `--landlock-allow-read=/nix/store` there.
+      `--landlock-allow-read=/nix/store` there. When ghostunnel cannot set up
+      the sandbox, for example because a `--landlock-allow-read` path is a file
+      or does not exist, it logs a warning and runs without the sandbox. The
+      Nixpkgs build adds a `--require-landlock` flag, which makes it exit
+      instead.
     '';
     homepage = "https://github.com/ghostunnel/ghostunnel#readme";
     changelog = "https://github.com/ghostunnel/ghostunnel/releases/tag/${finalAttrs.src.rev}";
