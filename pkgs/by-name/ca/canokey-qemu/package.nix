@@ -6,7 +6,7 @@
   python3Packages,
   unstableGitUpdater,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "canokey-qemu";
   version = "0-unstable-2026-03-24";
   rev = "41044ec17ddb835b3e5acb385a2e429aa74af627";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "canokeys";
     repo = "canokey-qemu";
-    inherit rev;
+    inherit (finalAttrs) rev;
     fetchSubmodules = true;
     hash = "sha256-eunhMRp3HJ80kCCZbiMGNjA9b0uUMzOsSeNh61d1iJU=";
   };
@@ -82,4 +82,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ symphorien ];
   };
-}
+})
