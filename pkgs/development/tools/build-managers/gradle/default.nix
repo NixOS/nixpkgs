@@ -151,8 +151,7 @@ let
       writeText,
       autoPatchelfHook,
       buildPackages,
-      cacert,
-      zip,
+      google-api-java-client,
 
       # The JDK/JRE used for running Gradle.
       java ? defaultJava,
@@ -178,7 +177,6 @@ let
       nativeBuildInputs = [
         makeWrapper
         unzip
-        zip
       ]
       ++ lib.optionals stdenv.hostPlatform.isLinux [
         autoPatchelfHook
@@ -212,25 +210,18 @@ let
           cp -av lib/ $gradleLibexec
           [ -f $gradleLibexec/lib/gradle-launcher-*.jar ] || { echo "No Gradle launcher jar found!" >&2 && exit 1; }
 
-          # google-api-client (GCS repositories and build cache) trusts only its bundled google.p12.
-          # Replace it with a store made from cacert. Nothing reads google.jks.
+          # google-api-client (GCS repositories and build cache) trusts only
+          # the trust store bundled in its jar. Replace the distribution's jar
+          # with a build of the client library whose store is generated from
+          # cacert, see pkgs/by-name/go/google-api-java-client.
           for jar in $gradleLibexec/lib/plugins/google-api-client-*.jar; do
-            unzip -l "$jar" com/google/api/client/googleapis/google.p12 >/dev/null
-            work="$(mktemp -d)"
-            pushd "$work"
-            export JAVA_TOOL_OPTIONS="-Dkeystore.pkcs12.certProtectionAlgorithm=NONE -Dkeystore.pkcs12.macAlgorithm=NONE"
-            ${buildPackages.jre-generate-cacerts} ${buildPackages.jdk}/bin/keytool ${cacert}/etc/ssl/certs/ca-bundle.crt
-            mkdir -p com/google/api/client/googleapis
-            ${buildPackages.jdk}/bin/keytool -importkeystore -noprompt \
-              -srckeystore cacerts -srcstorepass changeit \
-              -destkeystore com/google/api/client/googleapis/google.p12 \
-              -deststoretype PKCS12 -deststorepass notasecret
-            unset JAVA_TOOL_OPTIONS
-            touch -d @315619200 com/google/api/client/googleapis/google.p12
-            zip -q -d "$jar" com/google/api/client/googleapis/google.jks
-            zip -q -X "$jar" com/google/api/client/googleapis/google.p12
-            popd
-            rm -r "$work"
+            ourJar="google-api-client-${google-api-java-client.version}.jar"
+            if [ "$(basename "$jar")" != "$ourJar" ]; then
+              echo "Gradle bundles $(basename "$jar"), expected $ourJar." >&2
+              echo "Update pkgs/by-name/go/google-api-java-client to the version Gradle bundles." >&2
+              exit 1
+            fi
+            cp -v ${google-api-java-client}/share/java/"$ourJar" "$jar"
           done
 
           # Set up toolchain paths in the gradle.properties.
