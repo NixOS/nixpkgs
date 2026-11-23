@@ -353,10 +353,14 @@ let
     "--with-strip=${stdenv.cc.bintools.targetPrefix}strip"
   ]
   ++ optional doHaddock "--with-haddock=${ghc.targetPrefix}haddock"
-  ++ optionals (!isHaLVM) [
-    "--hsc2hs-option=--cross-compile"
-    (optionalString enableHsc2hsViaAsm "--hsc2hs-option=--via-asm")
-  ]
+  ++ optionals (!isHaLVM) (
+    [
+      "--hsc2hs-option=--cross-compile"
+    ]
+    ++ optionals enableHsc2hsViaAsm [
+      "--hsc2hs-option=--via-asm"
+    ]
+  )
   ++ optional (allPkgconfigDepends != [ ]) "--with-pkg-config=${pkg-config.targetPrefix}pkg-config"
 
   ++ optionals enableExternalInterpreter (
@@ -373,7 +377,7 @@ let
     )
   );
 
-  makeGhcOptions = opts: lib.concatStringsSep " " (map (opt: "--ghc-option=${opt}") opts);
+  makeGhcOptions = map (opt: "--ghc-option=${opt}");
 
   defaultConfigureFlags = [
     "--verbose"
@@ -381,36 +385,42 @@ let
     # Note: This must be kept in sync manually with mkGhcLibdir
     ("--libdir=\\$prefix/lib/\\$compiler" + lib.optionalString (ghc ? hadrian) "/lib")
     "--libsubdir=\\$abi/\\$libname"
-    (optionalString enableSeparateDataOutput "--datadir=${placeholder "data"}/share/${ghcNameWithPrefix}")
-    (optionalString enableSeparateDocOutput "--docdir=${docdir (placeholder "doc")}")
+  ]
+  ++ optionals enableSeparateDataOutput [
+    "--datadir=${placeholder "data"}/share/${ghcNameWithPrefix}"
+  ]
+  ++ optionals enableSeparateDocOutput [
+    "--docdir=${docdir (placeholder "doc")}"
   ]
   ++ optionals stdenv.hasCC [
     "--with-gcc=${lib.getExe stdenv.cc}" # Clang won't work without that extra information.
   ]
+  ++ optionals (enableSharedExecutables && stdenv.hostPlatform.isLinux) [
+    "--ghc-option=-optl=-Wl,-rpath=${placeholder "out"}/${ghcLibdir}/${pname}-${version}"
+  ]
+  ++ optionals (enableSharedExecutables && stdenv.hostPlatform.isDarwin) [
+    "--ghc-option=-optl=-Wl,-headerpad_max_install_names"
+  ]
+  ++ optionals enableParallelBuilding (makeGhcOptions [
+    "+RTS"
+    "-A64M"
+    "-RTS"
+  ])
+  ++ optionals useCpphs (
+    [ "--with-cpphs=${cpphs}/bin/cpphs" ]
+    ++ (makeGhcOptions [
+      "-cpp"
+      "-pgmP${cpphs}/bin/cpphs"
+      "-optP--cpp"
+    ])
+  )
   ++ [
-    (optionalString (
-      enableSharedExecutables && stdenv.hostPlatform.isLinux
-    ) "--ghc-option=-optl=-Wl,-rpath=${placeholder "out"}/${ghcLibdir}/${pname}-${version}")
-    (optionalString (
-      enableSharedExecutables && stdenv.hostPlatform.isDarwin
-    ) "--ghc-option=-optl=-Wl,-headerpad_max_install_names")
-    (optionalString enableParallelBuilding (makeGhcOptions [
-      "+RTS"
-      "-A64M"
-      "-RTS"
-    ]))
-    (optionalString useCpphs (
-      "--with-cpphs=${cpphs}/bin/cpphs "
-      + (makeGhcOptions [
-        "-cpp"
-        "-pgmP${cpphs}/bin/cpphs"
-        "-optP--cpp"
-      ])
-    ))
     (enableFeature enableLibraryProfiling "library-profiling")
-    (optionalString (
-      enableExecutableProfiling || enableLibraryProfiling
-    ) "--profiling-detail=${profilingDetail}")
+  ]
+  ++ optionals (enableExecutableProfiling || enableLibraryProfiling) [
+    "--profiling-detail=${profilingDetail}"
+  ]
+  ++ [
     (enableFeature enableExecutableProfiling "profiling")
     (enableFeature enableSharedLibraries "shared")
     (enableFeature doCoverage "coverage")
