@@ -6,10 +6,15 @@
   cmake,
   common-updater-scripts,
   curl,
+  darwin,
   fetchFromGitHub,
   ffmpeg_7,
   jq,
+  libicns,
   libpulseaudio,
+  librsvg,
+  makeWrapper,
+  moltenvk,
   ninja,
   openssl,
   pkg-config,
@@ -40,6 +45,8 @@ clangStdenv.mkDerivation (finalAttrs: {
     ./use-system-sdl3.patch
     ./use-system-ffmpeg.patch
     ./install-datadir-assets.patch
+    ./use-system-moltenvk.patch
+    ./optional-macos-tools.patch
   ];
 
   postPatch = ''
@@ -60,20 +67,30 @@ clangStdenv.mkDerivation (finalAttrs: {
     python3
     qt6.qttools
     qt6.wrapQtAppsHook
+  ]
+  ++ lib.optionals clangStdenv.hostPlatform.isDarwin [
+    # mig, for dynarmic's macOS exception handler
+    darwin.bootstrap_cmds
+    libicns
+    librsvg
+    makeWrapper
   ];
 
   buildInputs = [
-    alsa-lib
     boost
     curl
     ffmpeg_7
-    libpulseaudio
     openssl
     qt6.qtbase
     qt6.qtmultimedia
     qt6.qtsvg
     sdl3
-  ];
+  ]
+  ++ lib.optionals clangStdenv.hostPlatform.isLinux [
+    alsa-lib
+    libpulseaudio
+  ]
+  ++ lib.optionals clangStdenv.hostPlatform.isDarwin [ moltenvk ];
 
   cmakeFlags = [
     # clang-scan-deps runs outside the cc wrapper and can't find the headers
@@ -83,17 +100,41 @@ clangStdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "VITA3K_FORCE_SYSTEM_BOOST" true)
     (lib.cmakeBool "VITA3K_USE_SYSTEM_FFMPEG" true)
     (lib.cmakeBool "VITA3K_USE_SYSTEM_SDL" true)
+  ]
+  ++ lib.optionals clangStdenv.hostPlatform.isDarwin [
+    (lib.cmakeBool "VITA3K_USE_SYSTEM_MOLTENVK" true)
+    # macdeployqt would copy Qt into the bundle, and the linker already signs it
+    (lib.cmakeBool "CODESIGN_EXECUTABLE" false)
+    (lib.cmakeBool "MACDEPLOYQT_EXECUTABLE" false)
+    # the icon is built in postInstall
+    (lib.cmakeBool "ICONUTIL_EXECUTABLE" false)
+    (lib.cmakeBool "SIPS_EXECUTABLE" false)
+    (lib.cmakeFeature "MACOSX_BUNDLE_ICON_FILE" "Vita3K")
   ];
 
   postInstall = ''
     # headers, static libraries and CMake files of the bundled dependencies
     rm -r $out/include $out/lib $out/share/cmake
-    # the command of the AppImage-based package
+  ''
+  # upstream's CMake only installs on Linux; on macOS the bundle stays in the build directory
+  + lib.optionalString clangStdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/Applications
+    cp -r bin/Vita3K.app $out/Applications
+    # so wrapQtAppsHook doesn't take the library for a program
+    chmod -x $out/Applications/Vita3K.app/Contents/Frameworks/libMoltenVK.dylib
+    for size in 16 32 128 256 512 1024; do
+      rsvg-convert -w $size -h $size ../vita3k/org.vita3k.vita3k.svg -o icon_$size.png
+    done
+    png2icns $out/Applications/Vita3K.app/Contents/Resources/Vita3K.icns icon_*.png
+    makeWrapper $out/Applications/Vita3K.app/Contents/MacOS/Vita3K $out/bin/Vita3K
+  ''
+  # the command of the AppImage-based package; macOS file systems ignore case
+  + lib.optionalString clangStdenv.hostPlatform.isLinux ''
     ln -s Vita3K $out/bin/vita3k
   '';
 
   # libvulkan.so.1 is loaded with dlopen
-  qtWrapperArgs = [
+  qtWrapperArgs = lib.optionals clangStdenv.hostPlatform.isLinux [
     "--prefix"
     "LD_LIBRARY_PATH"
     ":"
@@ -123,6 +164,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ ekisu ];
     platforms = [
+      "aarch64-darwin"
       "aarch64-linux"
       "x86_64-linux"
     ];
