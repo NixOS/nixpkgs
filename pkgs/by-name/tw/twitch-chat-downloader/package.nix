@@ -6,7 +6,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "twitch-chat-downloader";
-  version = "2.5.5";
+  version = "2.5.6";
   pyproject = true;
 
   # NOTE: Using maintained fork because upstream has stopped working, and it has
@@ -16,17 +16,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "TheDrHax";
     repo = "twitch-chat-downloader";
     rev = finalAttrs.version;
-    hash = "sha256-9wIp0uttVBOdexOMb8VvpUEEdZ97SGSlZcFQ4jM/tqM=";
+    hash = "sha256-OhnAUboA/LjiB7AVqbNEVZIDSMePV1kOsMZPFB43S44=";
   };
 
   build-system = [ python3Packages.setuptools ];
-
-  postPatch = ''
-    # Update client ID for Twitch changes
-    # See: <https://github.com/TheDrHax/Twitch-Chat-Downloader/pull/16>
-    substituteInPlace tcd/example.settings.json \
-      --replace-fail jzkbprff40iqj646a697cyrvl0zt2m6 kd1unb4b3q4t58fwlpcbzcbnm76a8fp
-  '';
 
   dependencies = with python3Packages; [
     iso8601
