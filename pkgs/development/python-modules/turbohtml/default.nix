@@ -30,14 +30,14 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "turbohtml";
-  version = "1.16.3";
+  version = "1.16.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tox-dev";
     repo = "turbohtml";
     tag = finalAttrs.version;
-    hash = "sha256-gvkHxP1+XSCwxhu7SmkAC6WxRrjrbmroCdzYYdNtaqc=";
+    hash = "sha256-syxJdXQClkp0PdWwbZitA0EljzLY3jsM4CJNhHfCDoo=";
   };
 
   postPatch = ''
