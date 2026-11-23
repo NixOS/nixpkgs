@@ -18,6 +18,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   build-system = [ python3Packages.poetry-core ];
 
+  # ciel pins click<8.5, still in 3.3.0, but only calls the public API of
+  # click: its decorators, Context, the Parameter classes and their errors.
+  pythonRelaxDeps = [ "click" ];
+
   dependencies = with python3Packages; [
     pyyaml
     click
