@@ -1,0 +1,71 @@
+diff --git a/bin/init-db.js b/bin/init-db.js
+index b27bf66..d052858 100755
+--- a/bin/init-db.js
++++ b/bin/init-db.js
+@@ -102,35 +102,37 @@ const initTables = async sql => {
+  * @param {string} postgresUrl - postgres://username:password@host:port/database
+  */
+ async function init (postgresUrl) {
+-  log.info({ postgres: postgresUrl ? describeUrl(postgresUrl) : 'configured from env' }, 'initializing database')
+-  // Extract database from URL path
+-  const database = new URL(postgresUrl).pathname.slice(1)
+-  if (database !== '') {
+-    // Step 1: Create database if URL includes one
+-    log.info({ database }, 'ensuring database exists')
+-    // Connect to default 'postgres' database for admin operations
+-    // Preserve query parameters (like ssl=require) when switching database
+-    const url = new URL(postgresUrl)
+-    url.pathname = '/postgres'
+-    const adminDbUrl = url.toString()
+-    const adminSql = postgres(adminDbUrl, { max: 1 })
+-    try {
+-      const dbExists = await adminSql`
+-        SELECT EXISTS (
+-          SELECT FROM pg_database WHERE datname = ${database}
+-        );
+-      `
+-      if (!dbExists || dbExists.length === 0 || !dbExists[0].exists) {
+-        log.info({ database }, 'creating database')
+-        await adminSql.unsafe(`CREATE DATABASE "${database}"`)
+-        log.info({ database }, 'database created')
+-      } else {
+-        log.info({ database }, 'database already exists')
+-      }
+-    } finally {
+-      await adminSql.end({ timeout: 5 })
+-    }
+-  }
++  // NOTE: We disable the following as accessing "postgres.pg_database" might not always
++  //       be possible. When using createLocally this will be ensured by the module.
++  // log.info({ postgres: postgresUrl ? describeUrl(postgresUrl) : 'configured from env' }, 'initializing database')
++  // // Extract database from URL path
++  // const database = new URL(postgresUrl).pathname.slice(1)
++  // if (database !== '') {
++  //   // Step 1: Create database if URL includes one
++  //   log.info({ database }, 'ensuring database exists')
++  //   // Connect to default 'postgres' database for admin operations
++  //   // Preserve query parameters (like ssl=require) when switching database
++  //   const url = new URL(postgresUrl)
++  //   url.pathname = '/postgres'
++  //   const adminDbUrl = url.toString()
++  //   const adminSql = postgres(adminDbUrl, { max: 1 })
++  //   try {
++  //     const dbExists = await adminSql`
++  //       SELECT EXISTS (
++  //         SELECT FROM pg_database WHERE datname = ${database}
++  //       );
++  //     `
++  //     if (!dbExists || dbExists.length === 0 || !dbExists[0].exists) {
++  //       log.info({ database }, 'creating database')
++  //       await adminSql.unsafe(`CREATE DATABASE "${database}"`)
++  //       log.info({ database }, 'database created')
++  //     } else {
++  //       log.info({ database }, 'database already exists')
++  //     }
++  //   } finally {
++  //     await adminSql.end({ timeout: 5 })
++  //   }
++  // }
+ 
+   // Step 2: Create tables
+   log.info('creating tables')

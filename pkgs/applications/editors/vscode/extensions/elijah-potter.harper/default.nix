@@ -18,7 +18,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
     # it does not matter which binary is fetched. Using only a single
     # hash makes this easier to maintain.
     arch = "linux-x64";
-    hash = "sha256-u6/+s52s85imsJxNMMV22uKNz9/hDAM/9Tmf8FQmDms=";
+    hash = "sha256-zANHyrwcpfSLsp32dohZPZjn/MzvKT/jJvxtvw7ovAU=";
   };
 
   nativeBuildInputs = [

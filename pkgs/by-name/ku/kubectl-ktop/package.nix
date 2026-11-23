@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "kubectl-ktop";
-  version = "0.5.3";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "vladimirvivien";
     repo = "ktop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CUMQsgXhypSSR1MC7hJtkZgRcM2/x6jsPVudIvRy9qM=";
+    hash = "sha256-8y+E5FjBJES+h8uAA63lk3bHh+wGyAoeoZPlmDoo088=";
   };
 
-  vendorHash = "sha256-kSDbQFiZ8XMKyW7aYKe1s0pq038YC+RORCtMXFI+knA=";
+  vendorHash = "sha256-xJm8XCShiPPPPguU89bmpjmYGuRlegcvtV178Vi77i0=";
 
   excludedPackages = [ ".ci" ];
 

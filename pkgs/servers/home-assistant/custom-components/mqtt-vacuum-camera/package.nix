@@ -8,13 +8,13 @@
 buildHomeAssistantComponent (finalAttrs: {
   owner = "sca075";
   domain = "mqtt_vacuum_camera";
-  version = "2026.10.0";
+  version = "2026.11.0";
 
   src = fetchFromGitHub {
     owner = "sca075";
     repo = "mqtt_vacuum_camera";
     tag = finalAttrs.version;
-    hash = "sha256-/xTjgIG6UOqbHNE7A2VYIeZcHVSG1vJdJiZWMjIj7d0=";
+    hash = "sha256-AAVd/pPPWuq2DGOWWxFuWT8MohTgFNLlBoT72cbyN9M=";
   };
 
   dependencies = [ valetudo-map-parser ];

@@ -4,20 +4,18 @@
   fetchurl,
 }:
 
-appimageTools.wrapType2 rec {
+appimageTools.wrapType2 (finalAttrs: {
   pname = "xlights";
   version = "2026.18";
 
   src = fetchurl {
-    url = "https://github.com/smeighan/xLights/releases/download/${version}/xLights-${version}-x86_64.AppImage";
+    url = "https://github.com/smeighan/xLights/releases/download/${finalAttrs.version}/xLights-${finalAttrs.version}-x86_64.AppImage";
     hash = "sha256-Yq/7iLmpsDz1Fkl0rGm87+NcVZcZ0VezNk5NSlq0IUs=";
   };
 
-  appimageContents = appimageTools.extract { inherit pname version src; };
-
   extraInstallCommands = ''
-    install -m 444 -D ${appimageContents}/xlights.desktop $out/share/applications/xlights.desktop
-    install -m 444 -D ${appimageContents}/usr/share/icons/hicolor/256x256/apps/xlights.png \
+    install -m 444 -D ${finalAttrs.contents}/xlights.desktop $out/share/applications/xlights.desktop
+    install -m 444 -D ${finalAttrs.contents}/usr/share/icons/hicolor/256x256/apps/xlights.png \
       $out/share/icons/hicolor/256x256/apps/xlights.png
     substituteInPlace $out/share/applications/xlights.desktop \
       --replace-fail 'Exec=xLights' 'Exec=xlights'
@@ -31,4 +29,4 @@ appimageTools.wrapType2 rec {
     platforms = lib.platforms.linux;
     mainProgram = "xlights";
   };
-}
+})

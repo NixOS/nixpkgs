@@ -20,7 +20,7 @@
   gitUpdater,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "langchain-chroma";
   version = "1.1.0";
   pyproject = true;
@@ -28,11 +28,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    tag = "langchain-chroma==${version}";
+    tag = "langchain-chroma==${finalAttrs.version}";
     hash = "sha256-WyW5QNLzbqI+kXIVCDyXLyqpShNOSk7tyBTdNoXGQZ0=";
   };
 
-  sourceRoot = "${src.name}/libs/partners/chroma";
+  sourceRoot = "${finalAttrs.src.name}/libs/partners/chroma";
 
   build-system = [ hatchling ];
 
@@ -67,7 +67,7 @@ buildPythonPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/langchain-ai/langchain/releases/tag/${src.tag}";
+    changelog = "https://github.com/langchain-ai/langchain/releases/tag/${finalAttrs.src.tag}";
     description = "Integration package connecting Chroma and LangChain";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/partners/chroma";
     license = lib.licenses.mit;
@@ -76,4 +76,4 @@ buildPythonPackage rec {
       sarahec
     ];
   };
-}
+})

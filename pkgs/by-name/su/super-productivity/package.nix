@@ -19,13 +19,13 @@ let
 in
 buildNpmPackage (finalAttrs: {
   pname = "super-productivity";
-  version = "19.3.1";
+  version = "20.0.0";
 
   src = fetchFromGitHub {
     owner = "super-productivity";
     repo = "super-productivity";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RlDpD+dfJiMjXlbVq1hW16eyt+S/IFGiJvoce6ZWAEM=";
+    hash = "sha256-EWABP8wTr/dJbQhugyEa8a3KE+qbxbbi9CBLm2o8ERE=";
   };
 
   # Use custom fetcher for deps because super-productivity uses multiple
@@ -71,7 +71,7 @@ buildNpmPackage (finalAttrs: {
       dontInstall = true;
 
       outputHashMode = "recursive";
-      hash = "sha256-q0mj8EJ2RE/i6u5FjT/Fm+7GyMLnF2FqIxsfKQO2SNU=";
+      hash = "sha256-4QvCAjQ6B2J5Ln5JVS7olS4HdLs1mFoM3EQzIh/5Fio=";
     }
   );
 

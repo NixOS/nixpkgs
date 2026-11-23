@@ -33,14 +33,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "elastic-apm";
-  version = "6.26.2";
+  version = "6.26.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "elastic";
     repo = "apm-agent-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KfZbRwIQ+DW3gfCkJeo7oSUs4LRsUnvtzbyB7BgGA7E=";
+    hash = "sha256-/GtW5/vNUFPuaZWOsUSdcnQoqQWSTWlOtGSDBlmIwXc=";
   };
 
   build-system = [ setuptools ];
@@ -80,6 +80,7 @@ buildPythonPackage (finalAttrs: {
     "tests/contrib/asyncio/tornado/tornado_tests.py"
     # Exclude starlette test
     "tests/contrib/asyncio/starlette_tests.py"
+    "tests/contrib/asyncio/starlette_instrument_disabled_tests.py"
     # Exclude client tests
     "tests/instrumentation/asyncio_tests/aiohttp_client_tests.py"
   ]
@@ -91,6 +92,7 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [ "elasticapm" ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
+
   doInstallCheck = true;
 
   meta = {

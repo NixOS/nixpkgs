@@ -229,7 +229,8 @@ stdenv.mkDerivation (finalAttrs: {
   # -lpetsc, which is not available in the checkPhase, which is executed before
   # the installPhase. The installCheckPhase comes after the installPhase, so
   # the library is installed and available.
-  doInstallCheck = true;
+  # Sandbox has no GPU
+  doInstallCheck = !(mpiSupport && (mpi.rocmSupport or false));
   installCheckTarget = "check_install";
   # check_install is defined in PETSc's top-level makefile. Select it directly
   # instead of the default GNUmakefile wrapper, then check the installed prefix

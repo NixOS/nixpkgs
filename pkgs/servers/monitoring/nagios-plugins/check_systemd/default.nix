@@ -42,7 +42,7 @@ python3Packages.buildPythonApplication rec {
     changelog = "https://github.com/Josef-Friedrich/check_systemd/releases";
     description = "Nagios / Icinga monitoring plugin to check systemd for failed units";
     homepage = "https://github.com/Josef-Friedrich/check_systemd";
-    license = lib.licenses.lgpl2Only;
+    license = lib.licenses.lgpl21Only;
     mainProgram = "check_systemd";
     maintainers = with lib.maintainers; [ symphorien ];
     platforms = lib.platforms.linux;

@@ -7,7 +7,7 @@
   libexif,
   libfm-qt,
   lxqt-qtplugin,
-  menu-cache,
+  lxqt-build-tools,
   qtbase,
   wrapQtAppsHook,
   gitUpdater,
@@ -16,17 +16,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xdg-desktop-portal-lxqt";
-  version = "1.4.0";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "xdg-desktop-portal-lxqt";
     tag = finalAttrs.version;
-    hash = "sha256-GtpOBnRa10xFpd0FHWJge9RtS58hdOawFQmDH6yD1yU=";
+    hash = "sha256-oDGVmIHhDGlV1uQFhIT1uC6ejb6iLRz+GL2Cv6/DpRI=";
   };
 
   nativeBuildInputs = [
     cmake
+    lxqt-build-tools
     wrapQtAppsHook
   ];
 
@@ -35,7 +36,6 @@ stdenv.mkDerivation (finalAttrs: {
     libexif
     libfm-qt
     lxqt-qtplugin
-    menu-cache
     qtbase
   ]
   ++ extraQtStyles;

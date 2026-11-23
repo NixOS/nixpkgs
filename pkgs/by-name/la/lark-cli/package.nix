@@ -8,7 +8,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "lark-cli";
-  version = "1.0.99";
+  version = "1.0.100";
 
   __structuredAttrs = true;
 
@@ -16,7 +16,7 @@ buildGoModule (finalAttrs: {
     owner = "larksuite";
     repo = "cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9QRpUgsoUSCArlXMh8dRaVIeqV+HtTgoUuxI9uZvhRY=";
+    hash = "sha256-MU99dRgey9VtVXfXx1vVVnK2ysk5HEE/65w8hvy2PZI=";
   };
 
   vendorHash = "sha256-5ecTHuvSeSUVVC3hI/nzZsRFjl7ppgTY3NHuHB4pojA=";

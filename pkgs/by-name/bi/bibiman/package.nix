@@ -3,6 +3,7 @@
   lib,
   nix-update-script,
   rustPlatform,
+  stdenv,
   versionCheckHook,
 }:
 
@@ -19,9 +20,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-AvbJmo9S0rKZPDzbTsUxEpB7eQPTpl/ShYEu/ANA94I=";
 
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
+  nativeInstallCheckInputs = lib.optionals (
+    # Error: Operation not permitted (os error 1)
+    !stdenv.hostPlatform.isDarwin
+  ) [ versionCheckHook ];
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
@@ -32,6 +34,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ clementpoiret ];
     mainProgram = "bibiman";
-    platforms = lib.platforms.linux;
+    platforms = with lib.platforms; linux ++ darwin;
   };
 })

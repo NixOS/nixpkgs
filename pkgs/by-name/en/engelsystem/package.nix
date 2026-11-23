@@ -66,7 +66,7 @@ php.buildComposerProject2 (finalAttrs: {
     homepage = "https://engelsystem.de";
     license = lib.licenses.gpl2Only;
     mainProgram = "migrate";
-    maintainers = with lib.maintainers; [ tmarkus ];
+    maintainers = with lib.maintainers; [ AAAAAASomeThingsFailToEvaluate ];
     platforms = lib.platforms.all;
   };
 })

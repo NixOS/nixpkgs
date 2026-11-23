@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sv-lang";
-  version = "12.0";
+  version = "12.1";
 
   src = fetchFromGitHub {
     owner = "MikePopoloski";
     repo = "slang";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-s52DzaOdVdXLahJ5fn92V5VhTgzdd3xYuIlWByq58+0=";
+    hash = "sha256-8WffLY3IhsCkiYUMfe2aZy1zzOqEBHX4MTMai2dZFI0=";
   };
 
   cmakeFlags = [

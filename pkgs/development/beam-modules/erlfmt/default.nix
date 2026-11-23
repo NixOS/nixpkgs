@@ -7,13 +7,13 @@
 
 rebar3Relx rec {
   pname = "erlfmt";
-  version = "1.8.0";
+  version = "1.9.0";
   releaseType = "escript";
 
   src = fetchFromGitHub {
     owner = "WhatsApp";
     repo = "erlfmt";
-    hash = "sha256-0guZxRStVHnUCh9+tmP+/FzgZF+TUgB2oCZu+P4FJBs=";
+    hash = "sha256-uiZawnGyHqqp0RKPh6et84+0jehII0ou0xcw2PDNh8g=";
     tag = "v${version}";
   };
 

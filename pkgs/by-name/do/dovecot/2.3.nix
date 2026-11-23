@@ -1,6 +1,9 @@
 import ./generic.nix {
   version = "2.3.21.1";
   hash = "sha256-1THBB401r6AnZbnHGhIq+o+nR8v94O0mIX68Pv0miiE=";
+  knownVulnerabilities = [
+    "Dovecot CE 2.3 is end of life upstream and has had no release since 2.3.21.1 (2024-08), which is affected by later CVEs. Consider switching to pkgs.dovecot (2.4.x)."
+  ];
   patches = fetchpatch: [
     # Fix loading extended modules.
     ./load-extended-modules.patch

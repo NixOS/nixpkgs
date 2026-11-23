@@ -35,7 +35,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gridcraft";
-  version = "0.17.0";
+  version = "0.19.1";
 
   __structuredAttrs = true;
 
@@ -43,10 +43,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "storytold";
     repo = "gridcraft";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-95YijEgD9A5DJpBTuPWpM8q3PasnLFChJOSICmtpRC4=";
+    hash = "sha256-/dkhjj+BcL/+b/psYpRdO/vEG0zpiAt5fpIqkG7WLMw=";
   };
 
-  cargoHash = "sha256-Mb3HBd3fquTqMYkJ6m+j/+V7Yx5zg2a2LU3b98QEab4=";
+  cargoHash = "sha256-vkNDu60fJy9GOqQSqZItees+XOmta1qB5x5ibm8nBuM=";
 
   env = {
     CRAFT_FONTS_DIR = craft-fonts;
@@ -73,6 +73,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # The gridcraft crate runs live GPU tests. MCP tests talk over loopback.
   cargoTestFlags = [
     "--package=gridcraft-cli"
+  ];
+
+  # apps/gridcraft-cli/tests/it/sandbox.rs (new in 0.19.x): confined-launcher tests
+  # hardcode FHS paths (/usr/bin/cat, …) and need host Landlock outside the Nix sandbox.
+  checkFlags = [
+    "--skip=sandbox::"
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -111,7 +117,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
       lib.licenses.mit
       lib.licenses.asl20
     ];
-    maintainers = with lib.maintainers; [ sophronesis ];
+    maintainers = with lib.maintainers; [
+      cleboost
+      sophronesis
+    ];
     mainProgram = "gridcraft";
   };
 })

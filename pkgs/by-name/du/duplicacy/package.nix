@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "duplicacy";
-  version = "3.3.0";
+  version = "3.3.1";
 
   src = fetchFromGitHub {
     owner = "gilbertchen";
     repo = "duplicacy";
     rev = "v${version}";
-    hash = "sha256-Alx82nweg9UrOoZfJv/YODKhr6PweLTw0ATL1koOIQs=";
+    hash = "sha256-WxCbKIgGKDughloRWXGqj/IPKVOhpFmYOjJyoiEb6Yk=";
   };
 
   vendorHash = "sha256-PxzwISwBGUte4cyCMxmL1K0iuHvutC51uBo2PX91kWA=";

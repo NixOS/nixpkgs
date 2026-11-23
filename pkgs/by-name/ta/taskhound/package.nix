@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "taskhound";
-  version = "1.1.5";
+  version = "1.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "1r0BIT";
     repo = "TaskHound";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OVCHdhfMkeFUgdvVY6uMBqWpJNIHE4cHFzy1XstvnyU=";
+    hash = "sha256-V5jyB1uufpdM2L647REmwAHWR2vBxtebvrfTnXBp5Jo=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];
@@ -26,6 +26,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     ldap3
     neo4j
     pycryptodome
+    python-registry
     requests
     rich
     rich-argparse

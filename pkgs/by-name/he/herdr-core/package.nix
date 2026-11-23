@@ -23,7 +23,7 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "herdr-core";
-  version = "0.1.18";
+  version = "0.1.20";
 
   __structuredAttrs = true;
 
@@ -32,10 +32,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     repo = "herdr-core";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-MSq0Tzlv0/aOQvuXkeuVuGx3vpUauxI1YAeLpKy7WG4=";
+    hash = "sha256-YzKVuMPt8CPns3q+1gnD6AcoDhuuqeh5zNMOq79aZ0o=";
   };
 
-  cargoHash = "sha256-d3dTX5qvikpkIABz0ecDjPu1pA0LsSmPu5j4Oum6R3c=";
+  cargoHash = "sha256-v+0gGNHJX1tWTBBg4F5kUeu7QHHG9A+0ZagvpiIeQeE=";
 
   # zig.fetchDeps fails in the Darwin sandbox with CertificateBundleLoadFailure:
   # Zig reads its root certificates from the system keychains, which the
@@ -139,6 +139,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
         --replace-fail '.env("PATH", "/usr/bin:/bin")' '.env("PATH", "${installerBin}")' \
         --replace-fail '"{}:/usr/bin:/bin"' '"{}:${installerBin}"'
 
+      # The agent script in this test starts with #!/bin/bash, which the sandbox
+      # lacks; drop this once https://github.com/herdrdev/herdr-core/pull/229 is released.
+      substituteInPlace crates/herdr-core/tests/foreground.rs \
+        --replace-fail 'run(&s, &[&agent])' 'run(&s, &["bash", &agent])'
+
       # tests/distribution.rs runs this python3 script.
       patchShebangs scripts/manifest
     '';
@@ -165,10 +170,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doCheck = !stdenv.hostPlatform.isDarwin;
 
   # postPatch makes hc download a release build for every machine it sets up,
-  # and these two tests try to set one up. The sandbox has no network.
+  # and these tests try to set one up. The sandbox has no network.
   checkFlags = [
     "--skip=a_box_without_hc_gets_this_one_when_you_say_yes"
     "--skip=a_machine_reached_through_any_command_works_like_one_over_ssh"
+    "--skip=interactive_add_uses_the_same_ssh_target_for_login_and_install"
   ];
 
   # Upstream CI's settings for slow runners: a test binary aborts after 30 s

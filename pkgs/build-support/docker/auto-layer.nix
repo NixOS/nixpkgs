@@ -48,5 +48,5 @@ runCommand "layers.json"
 
     jq .graph "$NIX_ATTRS_JSON_FILE" > referencesGraph
     ${lib.optionalString debug "export DEBUG=1"}
-    python3 ${./auto-layer.py} referencesGraph $excludePathsFile $availableLayers > $out
+    python3 -P ${./auto-layer.py} referencesGraph $excludePathsFile $availableLayers > $out
   ''

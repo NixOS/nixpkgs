@@ -10,12 +10,12 @@
 }:
 
 let
-  version = "2024.9.10";
+  version = "2026.9.0";
   src = fetchFromGitHub {
     owner = "cortezaproject";
     repo = "corteza";
     tag = version;
-    hash = "sha256-Q80uFf3mb1yIfG6HrMKbMpi8pncnSKhg4Bgc8BLtSmM=";
+    hash = "sha256-v5OZ2gW8Yqq317AdTPgh3vcpLxMB8U+NQ6OYv1CPdVI=";
   };
   meta = {
     description = "Low-code platform";
@@ -47,28 +47,27 @@ let
     };
 
   webApps = lib.mapAttrs mkWebApp {
-    admin = "sha256-TjgdG+MNojJDmgv1oEb4lzP4EzHBMKbY+Ep0jrnxxKI=";
-    compose = "sha256-XxAjyYU/zlHNf+OKbMX3eGnXEI5/Fdz0rbjgsTqTTsk=";
-    discovery = "sha256-YN6co0Pixau6x2ulm32PYgmtGMpysHT2KnPcJMol3XU=";
-    one = "sha256-uTuQD2+PZ8NrG6rM7V8KiV/3+bY+xYsvhWJdHTHLhI4=";
-    privacy = "sha256-PsJnWW5D8a0O8zXwEtR6xhRxyJWJX/xrAC66Y27UG+0=";
-    reporter = "sha256-YZoVEsM6nlJbs+pIjIktQ6FYpSgs6GArUywZzUug/ZY=";
-    workflow = "sha256-4oM13BVvW/9hQozfqNCjANMZpSZhpDf+YvPZm8Yxj/c=";
+    admin = "sha256-8ZVTNwpAAFaAZcreTdGJE94fP6ZLfsbMhUjKeOBGhrI=";
+    compose = "sha256-ETIE5REdE32HQ8MVey4HSbAuswb0dkX0iw3LM5EJb6Y=";
+    discovery = "sha256-lZBoTC0d9zj/Kcy4gNdDZQHGIqN0PmaAwj2Z0OXrVUI=";
+    one = "sha256-URbxBXQelvXwuZV1Nj9r3fPgH9+I6kbmpVPLvyC3DVQ=";
+    privacy = "sha256-wtr+yEGQ8MEuD5fDHT3sefKCVX5fS/KZpTnGaV4w0nA=";
+    reporter = "sha256-OZgbTYMbe+H5Y6IT/wjpSqlNmBYggGkoYd9kCEre9pA=";
+    workflow = "sha256-VHjAuZlpHOcttW1MgrcWYnfPR8V43jbMKfRFip7IjME=";
   };
 
   server-webconsole = callPackage ./buildYarnDistOnly.nix {
     inherit version src meta;
     pname = "corteza-server-webconsole";
     sourceDir = "server/webconsole";
-    yarnLock = ./server-webconsole-yarn.lock;
-    hash = "sha256-GMXrQtplreg/3bWfRwQQwDNiHQNl6YHF5nhmFNCYsiM=";
+    hash = "sha256-WhhPMsQmsUpNIbFPkM2wU7pIYNTfwzrSuZDQYFVZArQ=";
   };
 
   corteza-locale = fetchFromGitHub {
     owner = "cortezaproject";
     repo = "corteza-locale";
-    rev = "57b1f2403207c44055ebce19d95cedd5573f39df";
-    hash = "sha256-j+mfWG6tED8AACkUcRWpol2G05qknTxp8b+kwu7c2NA=";
+    rev = "1e859351bbf78c9052de64bccd06f6c8c237aac5";
+    hash = "sha256-BUH+R686plBkhR7VVb/oWXNHKaVwwUDq+a7FaHYoKWE=";
   };
 
   corteza-webapp = stdenvNoCC.mkDerivation (finalAttrs: {

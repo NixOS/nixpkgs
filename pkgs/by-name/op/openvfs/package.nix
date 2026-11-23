@@ -13,7 +13,7 @@
 #
 stdenv.mkDerivation (finalAttrs: {
   pname = "openvfs";
-  version = "0-unstable-2026-10-21";
+  version = "0-unstable-2026-11-09";
 
   outputs = [
     "out"
@@ -24,8 +24,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "opencloud-eu";
     repo = "openvfs";
-    rev = "c20c0fe4925607cb835a2d98f29632e954c558dd";
-    hash = "sha256-e2r+L1jUV/iSVuVbf9bvgSCiyxbuUvNej+ynZre8+dM=";
+    rev = "e3ea395145da8cfa4d16609310300982a4aeba6b";
+    hash = "sha256-pGBpWcDqKeGT8W8g84RLdKXjYyFV9AAwH/645CrPCw0=";
   };
 
   __structuredAttrs = true;

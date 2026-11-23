@@ -23,6 +23,7 @@
   protobuf,
   pydantic,
   python-dotenv,
+  python-multipart,
   pyyaml,
   requests,
   sqlparse,
@@ -40,7 +41,7 @@ buildPythonPackage (finalAttrs: {
     owner = "mlflow";
     repo = "mlflow";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-myWmiBc6TuoVuS10TLqWZoCmPJdzynDJS7ImwkHP5Lk=";
+    hash = "sha256-GSgyzG8V84Z103WjBqQV3hTxhkdkMpZLJ5yL2yDyvsc=";
   };
 
   postPatch = ''
@@ -70,6 +71,7 @@ buildPythonPackage (finalAttrs: {
     protobuf
     pydantic
     python-dotenv
+    python-multipart
     pyyaml
     requests
     sqlparse

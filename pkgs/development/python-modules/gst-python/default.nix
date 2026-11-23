@@ -102,6 +102,6 @@ buildPythonPackage rec {
     homepage = "https://gstreamer.freedesktop.org";
     description = "Python bindings for GStreamer";
     license = lib.licenses.lgpl2Plus;
-    maintainers = with lib.maintainers; [ tmarkus ];
+    maintainers = with lib.maintainers; [ AAAAAASomeThingsFailToEvaluate ];
   };
 }

@@ -6,8 +6,8 @@
   };
   "athena-negotiation" = {
     url = "https://github.com/athena-framework/negotiation.git";
-    rev = "v0.1.1";
-    sha256 = "1vkk59lqrxb0l8kyzs114i3c18zb2bdiah2xhazkk8q7x6fz4yzk";
+    rev = "v0.2.0";
+    sha256 = "1rs79czg0v2bp1m5cxwkcg98qwn3rmr5wj2k1p4xr19cnfi4izav";
   };
   "backtracer" = {
     url = "https://github.com/sija/backtracer.cr.git";
@@ -26,8 +26,8 @@
   };
   "http_proxy" = {
     url = "https://github.com/mamantoha/http_proxy.git";
-    rev = "v0.10.3";
-    sha256 = "1hgghjy611m9bbmq8drvzs30mymkq2s4d18lp19543qls58h80vs";
+    rev = "v0.17.0";
+    sha256 = "0a2xkw02542npnqz3wp2gqv9ypxavj8h5cm0jvsgx6i8bmf0f2ak";
   };
   "kemal" = {
     url = "https://github.com/kemalcr/kemal.git";

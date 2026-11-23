@@ -7,16 +7,16 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ruyaml";
-  version = "0.91.0";
+  version = "0.92.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pycontribs";
     repo = "ruyaml";
-    tag = "v${version}";
-    hash = "sha256-A37L/voBrn2aZ7xT8+bWdZJxbWRjnxbstQtSyUeN1sA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-UurUbq0wq0fob2Xv3O3cpSkUX1QqYm2cXMcsH3FB+1c=";
   };
 
   postPatch = ''
@@ -26,9 +26,9 @@ buildPythonPackage rec {
       --replace '"setuptools_scm_git_archive >= 1.1",' ""
   '';
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [ distro ];
+  dependencies = [ distro ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -43,13 +43,19 @@ buildPythonPackage rec {
     "test_issue_60"
     "test_issue_60_1"
     "test_issue_61"
+    "test_qualified_name00"
   ];
+
+  preCheck = ''
+    # Without this, pytest treats _test as a package
+    rm _test/__init__.py
+  '';
 
   meta = {
     description = "YAML 1.2 loader/dumper package for Python";
     homepage = "https://ruyaml.readthedocs.io/";
-    changelog = "https://github.com/pycontribs/ruyaml/releases/tag/v${version}";
+    changelog = "https://github.com/pycontribs/ruyaml/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

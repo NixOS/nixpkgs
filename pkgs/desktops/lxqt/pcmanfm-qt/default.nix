@@ -8,7 +8,6 @@
   libfm-qt,
   lxqt-build-tools,
   lxqt-menu-data,
-  menu-cache,
   pkg-config,
   qtbase,
   qtimageformats,
@@ -21,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pcmanfm-qt";
-  version = "2.4.1";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "pcmanfm-qt";
     rev = version;
-    hash = "sha256-c3DLzaTcdfWWnsjrYV552zNAHIfE/oF3mmQ73kjQXA0=";
+    hash = "sha256-PhSvyo0Alz7W6SikUOY+E9myDbJBe/wSwDVgH8b8xlA=";
   };
 
   nativeBuildInputs = [
@@ -43,7 +42,6 @@ stdenv.mkDerivation rec {
     libexif
     libfm-qt
     lxqt-menu-data
-    menu-cache
     qtbase
     qtimageformats # add-on module to support more image file formats
     qtwayland

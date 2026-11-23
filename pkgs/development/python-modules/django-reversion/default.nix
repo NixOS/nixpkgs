@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "django-reversion";
-  version = "6.5.1";
+  version = "6.5.2";
   pyproject = true;
 
   src = fetchPypi {
     pname = "django_reversion";
     inherit version;
-    hash = "sha256-6wEx24IEFrYfq7ddDoE8xA2Mwwq0WiXfbIeskZImZ4Y=";
+    hash = "sha256-EA+nIum/nLaIZbZ4+Q5UFRZsN5jYOeEPj87WNr9jwJ0=";
   };
 
   build-system = [ setuptools ];

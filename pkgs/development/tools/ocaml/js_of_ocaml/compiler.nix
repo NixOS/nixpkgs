@@ -59,6 +59,7 @@ buildDunePackage {
     maintainers = [ lib.maintainers.vbgl ];
     mainProgram = "js_of_ocaml";
     broken =
-      (ocaml.version == "4.14.3" || ocaml.version == "4.14.4") && !lib.versionAtLeast version "6.0.0";
+      (ocaml.version == "4.14.3" || ocaml.version == "4.14.4" || ocaml.version == "4.14.5")
+      && !lib.versionAtLeast version "6.0.0";
   };
 }

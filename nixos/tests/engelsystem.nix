@@ -4,7 +4,7 @@
   meta = with pkgs.lib.maintainers; {
     maintainers = [
       talyz
-      tmarkus
+      AAAAAASomeThingsFailToEvaluate
     ];
   };
 

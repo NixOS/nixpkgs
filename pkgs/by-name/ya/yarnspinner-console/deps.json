@@ -841,12 +841,17 @@
   },
   {
     "pname": "YarnSpinner",
-    "version": "3.2.1",
-    "hash": "sha256-4fH3XpJKRTeJk6fcfnbCxbgLdZcxDCHcUh6tsee9H+o="
+    "version": "3.3.0",
+    "hash": "sha256-ii3q6XOyIWkghVoGWraly6fFHjM4wObYklvj2d6cyFk="
   },
   {
     "pname": "YarnSpinner.Compiler",
-    "version": "3.2.1",
-    "hash": "sha256-+Uq2QcIkNbu9RA8zcSor+EZRxs7XT5SlGsEq+9wGazs="
+    "version": "3.3.0",
+    "hash": "sha256-UWmMaGRLlMjRiBXZ6hzx9EQbuL4eN1NYdD6hwPoGonA="
+  },
+  {
+    "pname": "YarnSpinner.Shared",
+    "version": "3.3.0.5",
+    "hash": "sha256-m7hYVomzjCvbPoJ/9rDFjTkucxR1hac1eLKwe+AxLNc="
   }
 ]

@@ -105,7 +105,7 @@ async def amain():
             )
         )
 
-        proc = await asyncio.create_subprocess_exec(*qemu_args)
+        proc = await asyncio.create_subprocess_exec(*qemu_args, close_fds=False)
         loop = asyncio.get_running_loop()
         loop.add_signal_handler(signal.SIGTERM, lambda: proc.terminate())
         loop.add_signal_handler(signal.SIGINT, lambda: proc.terminate())

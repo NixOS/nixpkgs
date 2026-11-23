@@ -8,9 +8,13 @@
   application ? "browser",
   applicationName ? "Firefox",
   branding ? null,
-  src,
+  src ? null,
+  srcs ? null,
+  sourceRoot ? null,
   unpackPhase ? null,
+  dontMakeSourcesWritable ? null,
   extraPatches ? [ ],
+  extraPostUnpack ? null,
   extraPostPatch ? "",
   extraNativeBuildInputs ? [ ],
   extraConfigureFlags ? [ ],
@@ -137,6 +141,7 @@ in
   enableAddonSideload ? false,
 
   ## Optimizations
+  enableRustSimd ? true,
   enableElfhack ?
     isElfhackPlatform stdenv && !(stdenv.hostPlatform.isMusl && stdenv.hostPlatform.isAarch64),
   enableLTO ? (
@@ -298,7 +303,15 @@ buildStdenv.mkDerivation {
   pname = "${pname}-unwrapped";
   version = packageVersion;
 
-  inherit src unpackPhase;
+  inherit
+    unpackPhase
+    src
+    srcs
+    dontMakeSourcesWritable
+    sourceRoot
+    ;
+
+  postUnpack = extraPostUnpack;
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -503,6 +516,7 @@ buildStdenv.mkDerivation {
     (enableFeature enableCrashReporter "crashreporter")
     (enableFeature enableNeckoWiFi "necko-wifi")
     (enableFeature enableWebRTC "webrtc")
+    (enableFeature enableRustSimd "rust-simd")
 
     (enableFeature enableDebug "debug")
     (if enableDebug then "--enable-profiling" else "--enable-optimize")

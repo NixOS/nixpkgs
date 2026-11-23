@@ -7,15 +7,15 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "starlark-rust";
-  version = "0.14.0";
+  version = "0.14.2";
 
   src = fetchCrate {
     pname = "starlark_bin";
     inherit (finalAttrs) version;
-    hash = "sha256-uNhMtBpfkTQdWNyjklP6NC3aXwXqH23PN4MWOjaR49w=";
+    hash = "sha256-2Fqy/ZyL45NasK5iMuJVG+2J7HUQ7UlXNfdKuuCKnJk=";
   };
 
-  cargoHash = "sha256-1x0QESkxze/MP7/E0whPwx3zSv+JC2OH7pz5adO1JFk=";
+  cargoHash = "sha256-FYzDYs/c/7T4RHnSqOImOIoS1uxXZpfOcUrrP3tMJFY=";
 
   buildInputs = [ sqlite ];
 

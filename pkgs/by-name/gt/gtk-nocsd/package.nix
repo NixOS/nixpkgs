@@ -6,6 +6,7 @@
   patchelf,
   pkg-config,
   fetchFromGitea,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -49,6 +50,8 @@ stdenv.mkDerivation rec {
       } \
       "$out/lib/libgtk-nocsd.so.0"
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "LD_PRELOAD library to disable CSD in GTK3/4, LibHandy, and LibAdwaita apps";

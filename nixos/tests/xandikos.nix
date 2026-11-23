@@ -19,7 +19,7 @@
       services.xandikos.enable = true;
       services.xandikos.address = "localhost";
       services.xandikos.port = 8080;
-      services.xandikos.routePrefix = "/xandikos-prefix/";
+      services.xandikos.routePrefix = "/xandikos/";
       services.xandikos.extraOptions = [
         "--defaults"
       ];
@@ -30,7 +30,7 @@
           serverName = "xandikos.local";
           basicAuth.xandikos = "snakeOilPassword";
           locations."/xandikos/" = {
-            proxyPass = "http://localhost:8080/xandikos-prefix/";
+            proxyPass = "http://localhost:8080/xandikos/";
           };
         };
       };

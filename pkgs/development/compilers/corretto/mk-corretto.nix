@@ -12,6 +12,7 @@
   jre-generate-cacerts,
   nixpkgs-openjdk-updater,
   extraConfig ? [ ],
+  libarchive,
   rsync,
   runCommand,
   testers,
@@ -56,6 +57,7 @@ jdk.overrideAttrs (
     nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [
       jdk
       gradle
+      libarchive # `bsdtar`
       rsync
     ];
 
@@ -130,6 +132,16 @@ jdk.overrideAttrs (
         # overrides Corretto's, and the nix-corretto-version specific flags in
         # extra_config come last and can override ours.
         gradleFlagsArray+=(-Pcorretto.extra_config="--with-cacerts-file=$NIX_BUILD_TOP/cacerts-gen/cacerts ${extra_config}")
+
+        # The tar packaging expects commitId.txt, which git checkouts don't
+        # have.
+        substituteInPlace build.gradle --replace-warn "'README.md', 'commitId.txt', 'version.txt'" "'README.md', 'version.txt'"
+
+        # The tar packaging also expects README.JAVASE, which is missing too.
+        # N.B.: build.gradle says
+        # "If this is a certified release build, exclude the README.JAVASE file"
+        # The Nix build is not "certified" but we do not have that file anyhow.
+        gradleFlagsArray+=(-Pcorretto.excludeReadmeJavaSE=true)
       '';
 
     # since we dontConfigure, we must run this manually

@@ -10,13 +10,13 @@
 
 postgresqlBuildExtension (finalAttrs: {
   pname = "orioledb";
-  version = "1.10.2";
+  version = "1.10.3";
 
   src = fetchFromGitHub {
     owner = "orioledb";
     repo = "orioledb";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/0qX8vvLxdWpP7RFvThWRO4g+XEEtyaFJedAttFg06c=";
+    hash = "sha256-fqIOSJqq/u2XdXgELtB27F5v+T5dpzVR3LL+zM9EXiY=";
   };
 
   buildInputs = postgresql.buildInputs ++ [

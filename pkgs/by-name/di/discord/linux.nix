@@ -140,7 +140,7 @@ let
         wayland
         ;
 
-      inherit (pkgs.stdenv.cc) cc;
+      cc = lib.getLib pkgs.stdenv.cc.cc;
     })
     ++ lib.optionals withTTS [ pkgs.speechd-minimal ]
     # nss is intentionally NOT in libPath: it would leak via LD_LIBRARY_PATH
@@ -285,7 +285,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   desktopItem = makeDesktopItem {
     name = pname;
-    exec = binaryName;
+    exec = "${binaryName} --url -- %u";
     icon = pname;
     inherit desktopName;
     comment = meta.description;

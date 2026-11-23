@@ -3,6 +3,7 @@
   stdenv,
   buildGoModule,
   fetchFromGitHub,
+  fetchpatch,
   installShellFiles,
   nixosTests,
   externalPlugins ? [ ],
@@ -22,6 +23,16 @@ buildGoModule (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-/r0OBNg7VlsUZkojyGT1lwca3E1ZQZ5IroVwV8y4iME=";
   };
+
+  patches = [
+    # https://github.com/coredns/coredns/pull/8769
+    # Merged upstream, remove when updating to the release after 1.15.0.
+    (fetchpatch {
+      name = "fix-racy-port-allocation-in-view-test.patch";
+      url = "https://github.com/coredns/coredns/commit/d6cd28412bcb2783e84e28c7dab4596769874ca4.patch";
+      hash = "sha256-ZvFZu3Fl3dwbX4ZVv0zz7/L5/0Sh7vHE/OcwyUPm3q4=";
+    })
+  ];
 
   inherit vendorHash;
 

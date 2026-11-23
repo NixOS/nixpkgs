@@ -26,6 +26,10 @@ buildPythonPackage (finalAttrs: {
 
   build-system = [ setuptools-scm ];
 
+  # dtc's Meson build installs libfdt without Python distribution metadata.
+  # The module is provided by libfdt below, but cannot be detected as pylibfdt.
+  pythonRemoveDeps = [ "pylibfdt" ];
+
   dependencies = [
     jsonschema
     rfc3987
@@ -33,7 +37,10 @@ buildPythonPackage (finalAttrs: {
     libfdt
   ];
 
-  pythonImportsCheck = [ "dtschema" ];
+  pythonImportsCheck = [
+    "dtschema"
+    "libfdt"
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook

@@ -9,13 +9,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "vi-mongo";
-  version = "0.3.1";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "kopecmaciej";
     repo = "vi-mongo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-iOYJlrQMYYoe+G8131kcr9okAgBMfvUFSh/7yIk/EZ0=";
+    hash = "sha256-gz+SHBp1XPuR72lfIld0pGa6yTlN02MVSQZhXALnBmc=";
   };
 
   vendorHash = "sha256-CuFoH6crS6BOsSj2hNGw7loi4RixHbyJGySfxglUUmg=";

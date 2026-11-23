@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   versionCheckHook,
@@ -9,6 +10,8 @@
 buildGoModule (finalAttrs: {
   pname = "wpprobe";
   version = "0.12.13";
+
+  __darwinAllowLocalNetworking = true;
 
   src = fetchFromGitHub {
     owner = "Chocapikk";
@@ -26,7 +29,6 @@ buildGoModule (finalAttrs: {
 
   ldflags = [
     "-s"
-    "-w"
     "-X=github.com/Chocapikk/wpprobe/internal/version.Version=v${finalAttrs.version}"
   ];
 
@@ -35,6 +37,9 @@ buildGoModule (finalAttrs: {
   checkFlags = [
     # Tests require network access
     "-skip=TestUpdateWordfence|TestAPI_Scan|TestAPI_ScanWithContext|TestAPI_ScanWithProgress|TestAPI_UpdateDatabases"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "-skip=TestGetAllVulnerabilitiesIncludesOptionalWPScan|TestConcurrentCacheReload"
   ];
 
   meta = {

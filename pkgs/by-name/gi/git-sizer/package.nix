@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "git-sizer";
-  version = "1.5.0";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "github";
     repo = "git-sizer";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-On7QBTzKfnuuzwMQ8m1odxGqfIKL+EDg5V05Kxuhmqw=";
+    sha256 = "sha256-bY7Es7aE/UsiTrZkR6+gCuTukMaLML5l6k8DWWUnlCc=";
   };
 
-  vendorHash = "sha256-oRlsD99XiI/0ZWibjyRcycmGab+vMbXrV5hIdIyUDYg=";
+  vendorHash = "sha256-Lt1BFnZaN3sffYzyXL6bRIVp3hoQlQoNxZS9tOXLTus=";
 
   ldflags = [
     "-s"

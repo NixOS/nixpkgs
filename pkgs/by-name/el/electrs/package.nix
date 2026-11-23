@@ -12,18 +12,18 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "electrs";
-  version = "0.12.0";
+  version = "0.12.1";
 
   src = fetchFromGitHub {
     owner = "romanz";
     repo = "electrs";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-jsZ1rgIjw4M2IM57wJGk0MLV74npm51vAeunGTm/aCI=";
+    hash = "sha256-Z/Pl3AGXGU6WY/mre1rH4UXQ5qaaYv1Bbi9qpYQxsUA=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-0DfrN6LOT4FQ6nU1lRgwlDAP6EBtbUds4RrZTXkSgsI=";
+    hash = "sha256-8UFZSg2nOjIBJ0dtudNh4Lo/AZFkq5BxN9GSI6eFd/Q=";
   };
 
   # needed for librocksdb-sys

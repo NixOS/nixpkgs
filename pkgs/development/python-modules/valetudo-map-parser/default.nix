@@ -6,19 +6,22 @@
   numpy,
   pillow,
   poetry-core,
+  psutil,
+  pytest-asyncio,
+  pytestCheckHook,
   scipy,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "valetudo-map-parser";
-  version = "0.3.5";
+  version = "0.3.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sca075";
     repo = "Python-package-valetudo-map-parser";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9u7LnACkj6LiIFQ+JktqCTbiB4yw7Y31NwuEJlZ1FNE=";
+    hash = "sha256-NZlWON+1H+sgYXQmzwj6q8P7O+04+GBah3BiNQk+ZD0=";
   };
 
   build-system = [ poetry-core ];
@@ -30,8 +33,11 @@ buildPythonPackage (finalAttrs: {
     scipy
   ];
 
-  # The upstream's test suite is not well maintained
-  doCheck = false;
+  nativeCheckInputs = [
+    psutil
+    pytest-asyncio
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [
     "valetudo_map_parser"

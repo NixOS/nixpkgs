@@ -11,14 +11,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aiotractive";
-  version = "2.0.0";
+  version = "2.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zhulik";
     repo = "aiotractive";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mYf8WoY2GNaVuLnDMYhbLK4h1CUvZsKKegiM0hXfWtQ=";
+    hash = "sha256-aQJ9TWkX42Svv2q3KPVwlqE8jgCD+yQTLT9xBHMFDEY=";
   };
 
   build-system = [ setuptools ];

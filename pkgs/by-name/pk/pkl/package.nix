@@ -18,13 +18,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "pkl";
-  version = "0.32.1";
+  version = "0.32.2";
 
   src = fetchFromGitHub {
     owner = "apple";
     repo = "pkl";
     tag = finalAttrs.version;
-    hash = "sha256-jO18ugPyHv7NsaZyJYHFusoYRqR6SJm2JgPvVZkF/Nw=";
+    hash = "sha256-7z2vFfFaZD2APcijl9AWepD4YmJ/YKyDJ6T0KTbPbAk=";
     leaveDotGit = true;
     postFetch = ''
       pushd $out

@@ -29,6 +29,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     rustPlatform.bindgenHook
   ];
 
+  env = {
+    # Always build the bundled
+    # rice-proto C library, which is not packaged in nixpkgs.
+    SYSTEM_DEPS_RICE_PROTO_BUILD_INTERNAL = "always";
+  };
+
   buildInputs = [
     openssl
   ];

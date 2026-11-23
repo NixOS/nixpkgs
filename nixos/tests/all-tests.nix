@@ -335,6 +335,7 @@ in
   benchexec = runTest ./benchexec.nix;
   bentopdf = handleTest ./bentopdf { };
   beszel = runTest ./beszel.nix;
+  bifrost = runTest ./bifrost.nix;
   binary-cache = runTest {
     imports = [ ./binary-cache.nix ];
     _module.args.compression = "zstd";
@@ -549,7 +550,6 @@ in
   deconz = runTest ./deconz.nix;
   deluge = runTest ./deluge.nix;
   dendrite = runTest ./matrix/dendrite.nix;
-  dep-scan = runTest ./dep-scan.nix;
   dependency-track = runTest ./dependency-track.nix;
   devpi-server = runTest ./devpi-server.nix;
   dex-oidc = runTest ./dex-oidc.nix;
@@ -603,6 +603,10 @@ in
   easytier-modular = runTest ./easytier-modular.nix;
   ec2-config = (handleTestOn [ "x86_64-linux" ] ./ec2.nix { }).boot-ec2-config or { };
   ec2-image = runTest ./ec2-image.nix;
+  ec2-image-systemd-boot = runTest {
+    imports = [ ./ec2-image.nix ];
+    _module.args.bootMode = "uefi";
+  };
   ec2-nixops = (handleTestOn [ "x86_64-linux" ] ./ec2.nix { }).boot-ec2-nixops or { };
   echoip = runTest ./echoip.nix;
   ejabberd = runTest ./xmpp/ejabberd.nix;
@@ -653,6 +657,7 @@ in
   ferretdb = import ./ferretdb.nix { inherit pkgs runTest; };
   fider = runTest ./fider.nix;
   filebrowser = runTest ./filebrowser.nix;
+  filesender = import ./filesender { inherit runTest; };
   filesystems-overlayfs = runTest ./filesystems-overlayfs.nix;
   firefly-iii = runTest ./firefly-iii.nix;
   firefly-iii-data-importer = runTest ./firefly-iii-data-importer.nix;
@@ -745,6 +750,7 @@ in
   gerrit = runTest ./gerrit.nix;
   getaddrinfo = runTest ./getaddrinfo.nix;
   geth = runTest ./geth.nix;
+  ghostfolio = runTest ./ghostfolio.nix;
   ghostunnel = runTest ./ghostunnel.nix;
   ghostunnel-modular = runTest ./ghostunnel-modular.nix;
   git-pages-modular = runTest ./git-pages.nix;
@@ -1032,7 +1038,7 @@ in
   libinput = runTest ./libinput.nix;
   librechat = runTest ./librechat.nix;
   librenms = runTest ./librenms.nix;
-  libreqos = runTestOn [ "x86_64-linux" ] ./libreqos.nix;
+  libreqos = runTest ./libreqos.nix;
   libresprite = runTest ./libresprite.nix;
   libreswan = runTest ./libreswan.nix;
   libreswan-nat = runTest ./libreswan-nat.nix;
@@ -1127,7 +1133,9 @@ in
   };
   meilisearch = runTest ./meilisearch.nix;
   memcached = runTest ./memcached.nix;
+  memgraph = runTest ./memgraph.nix;
   merecat = runTest ./merecat.nix;
+  mesh-llm = runTest ./mesh-llm.nix;
   meshtasticd = runTest ./networking/meshtasticd.nix;
   metabase = runTest ./metabase.nix;
   mihomo = runTest ./mihomo.nix;
@@ -1249,7 +1257,7 @@ in
   networking.scripted = handleTest ./networking/networkd-and-scripted.nix { networkd = false; };
   # TODO: put in networking.nix after the test becomes more complete
   networkingProxy = runTest ./networking-proxy.nix;
-  nextcloud = handleTest ./nextcloud { };
+  nextcloud = import ./nextcloud { inherit runTest lib; };
   nextflow = runTestOn [ "x86_64-linux" ] ./nextflow.nix;
   nextjs-ollama-llm-ui = runTest ./web-apps/nextjs-ollama-llm-ui.nix;
   nexus = runTest ./nexus.nix;
@@ -1334,6 +1342,11 @@ in
   ocsinventory-agent = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./ocsinventory-agent.nix { };
   octoprint = runTest ./octoprint.nix;
   oddjobd = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./oddjobd.nix { };
+  odhcpd = {
+    dhcp = runTest ./odhcpd/dhcp.nix;
+    interfaces = runTest ./odhcpd/interfaces.nix;
+    ra = runTest ./odhcpd/ra.nix;
+  };
   odoo17 = runTest {
     imports = [ ./odoo/single-process.nix ];
     _module.args.package = pkgs.odoo17;
@@ -1491,6 +1504,7 @@ in
   pihole-ftl = import ./pihole-ftl { inherit runTest; };
   pinnwand = runTest ./pinnwand.nix;
   pixelfed = import ./web-apps/pixelfed { inherit runTestOn; };
+  plann = import ./plann.nix { inherit pkgs lib; };
   plantuml-server = runTest ./plantuml-server.nix;
   plasma6 = runTest ./plasma6.nix;
   plausible = import ./plausible.nix { inherit runTest; };
@@ -1621,6 +1635,7 @@ in
   restic = runTest ./restic.nix;
   restic-rest-server = runTest ./restic-rest-server.nix;
   retroarch = runTest ./retroarch.nix;
+  retroarch-wrapper = runTest ./retroarch-wrapper.nix;
   ringboard = runTest ./ringboard.nix;
   rke2 = import ./rancher {
     inherit lib pkgs;
@@ -1688,7 +1703,6 @@ in
   shadow = import ./shadow { inherit runTest; };
   shadowsocks = handleTest ./shadowsocks { };
   shadps4 = runTest ./shadps4.nix;
-  sharkey = runTest ./web-apps/sharkey.nix;
   shattered-pixel-dungeon = runTest ./shattered-pixel-dungeon.nix;
   shelfmark = runTest ./shelfmark.nix;
   shiori = runTest ./shiori.nix;
@@ -1700,7 +1714,6 @@ in
   sing-box = runTest ./sing-box.nix;
   sks = runTest ./sks.nix;
   slimserver = runTest ./slimserver.nix;
-  slipshow = runTest ./slipshow.nix;
   slurm = runTest ./slurm.nix;
   slurm-pam = runTest ./slurm-pam.nix;
   smokeping = runTest ./smokeping.nix;
@@ -2021,7 +2034,6 @@ in
   watt = runTest ./watt.nix;
   webhook = runTest ./webhook.nix;
   weblate = runTest ./web-apps/weblate.nix;
-  wg-access-server = runTest ./wg-access-server.nix;
   whisparr_2 = runTest {
     imports = [ ./whisparr.nix ];
     _module.args.getPackage = pkgs: pkgs.whisparr_2;

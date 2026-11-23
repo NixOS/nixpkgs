@@ -8,14 +8,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pwneye";
-  version = "1.3.2";
+  version = "1.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Hackerest";
     repo = "pwneye";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CF0A4o+J7KQByoWNRbl2OGh4saqKAf6jJCGgtVQ3y6o=";
+    hash = "sha256-4IDilhe4y7PipnuwqtiWKqyE5mW9IyzaeL07I778ExU=";
   };
 
   pythonRelaxDeps = true;

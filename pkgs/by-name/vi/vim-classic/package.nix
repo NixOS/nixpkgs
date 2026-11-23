@@ -7,7 +7,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "vim-classic";
-  version = "8.3.0";
+  version = "8.3.1";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "~sircmpwn";
     repo = "vim-classic";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BJuxs7pOMmPVew+W3d/6KFEah6I8TQoRJ4SK8/4daas=";
+    hash = "sha256-KXabZtkjYX8SfbDXsFZhSdAf9IcFy/5x2BFQqzSxiu8=";
   };
 
   buildInputs = [

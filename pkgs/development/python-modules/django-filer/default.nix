@@ -27,6 +27,8 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
+  pythonRelaxDeps = [ "svglib" ];
+
   dependencies = [
     django
     django-polymorphic
@@ -53,6 +55,9 @@ buildPythonPackage rec {
     changelog = "https://github.com/django-cms/django-filer/blob/${src.tag}/CHANGELOG.rst";
     description = "File management application for Django";
     homepage = "https://github.com/django-cms/django-filer";
+    knownVulnerabilities = [
+      "CVE-2026-69131"
+    ];
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.onny ];
   };

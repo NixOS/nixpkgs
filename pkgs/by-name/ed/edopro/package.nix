@@ -55,7 +55,6 @@ let
 
   maintainers = with lib.maintainers; [
     OPNA2608
-    redhawk
   ];
 
   deps = import ./deps.nix;

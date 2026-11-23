@@ -1,9 +1,13 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
+  libgit2,
+  libssh2,
   pkg-config,
   openssl,
+  sqlite,
   nix-update-script,
 }:
 
@@ -22,7 +26,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [
+    libgit2
+    libssh2
+    openssl
+    sqlite
+  ];
+
+  checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+    # The sandbox's open-file soft limit is above kern.maxfilesperproc, so
+    # "raising" it to the capped maximum lowers it
+    "--skip=rlimit::tests::raise_does_not_lower_limit"
+  ];
 
   passthru.updateScript = nix-update-script { };
 

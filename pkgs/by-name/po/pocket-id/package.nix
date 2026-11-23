@@ -108,7 +108,7 @@ buildGo127Module (finalAttrs: {
     maintainers = with lib.maintainers; [
       gepbird
       marcusramberg
-      tmarkus
+      AAAAAASomeThingsFailToEvaluate
       ymstnt
       esch
     ];

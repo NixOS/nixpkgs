@@ -1,4 +1,5 @@
 {
+  fetchpatch,
   lib,
   stdenv,
   fetchFromGitHub,
@@ -23,6 +24,14 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash = "sha256-kNVdE42JFzl6HO84b793gseMhcDyiGzQCmhh6zh2epc=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "fix-identicon-with-c++20.patch";
+      url = "https://github.com/bkueng/qMasterPassword/commit/2b222bc2dba70b3f77e8cd8b4862f47ac170e2b6.patch";
+      hash = "sha256-HnDtMyDoYOsxtvXhq42uZfm+hhr+G4FCGy1m+SYui7U=";
+    })
+  ];
 
   buildInputs = [
     qt6.qtbase

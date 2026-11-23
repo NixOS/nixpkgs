@@ -153,6 +153,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "evolution";
     teams = [ lib.teams.gnome ];
     license = lib.licenses.lgpl2Plus;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "gnome" finalAttrs.version;
     platforms = lib.platforms.linux;
   };
 })

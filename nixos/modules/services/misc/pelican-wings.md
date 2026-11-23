@@ -34,6 +34,17 @@ a YAML configuration file, which you only need the `uuid`, `token` and `token_id
 
 The `secretConfigurationFile` option has to be set to the absolute path of a file that exists. Please use a [proper secret management scheme](https://wiki.nixos.org/wiki/Comparison_of_secret_managing_schemes) to provide it.
 
+## Using Podman instead of Docker {#module-pelican-wings-podman}
+
+To use Podman instead of Docker as container backend you can simply change [](#opt-services.pelican-wings.containerBackend) to `"podman"`.
+
+:::note
+If you do so, keep the OOM killer enabled on every server.
+Podman uses cgroup v2, which can't disable it, so a server with the OOM killer disabled fails to install or start with cannot disable OOM killer with cgroupv2.
+:::
+
+More information to this topic can be found [here](https://pelican.dev/docs/wings/optional-config#running-on-podman).
+
 ## Using traefik as a reverse proxy {#module-pelican-wings-traefik}
 
 To run Wings in production, you should configure a reverse proxy. For example, this could look like this if you're using Traefik:

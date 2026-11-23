@@ -15,17 +15,17 @@
 }:
 buildNpmPackage (finalAttrs: {
   pname = "send";
-  version = "3.5.0";
+  version = "3.5.1";
 
   src = fetchFromGitLab {
     owner = "timvisee";
     repo = "send";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zdCyCAr7Ex983OzUwl+YTZSfopZRdpNLUISOlag5PuQ=";
+    hash = "sha256-fAvhivzjjE8Jxu5o8AaqvyUzJbguWkGcLv5qvVkFFug=";
   };
 
   npmDepsFetcherVersion = 2;
-  npmDepsHash = "sha256-zYRl/8kMMiI6D2TARvqK6ebYBzICJFCgw3HaM8pPUcs=";
+  npmDepsHash = "sha256-mbHBXYkr3cZo0V60ixemNccPp8FAHlzrT+SXvmwykRY=";
 
   nativeBuildInputs = [
     esbuild

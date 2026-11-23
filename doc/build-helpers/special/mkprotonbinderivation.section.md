@@ -31,6 +31,15 @@ Without the patch, Wine skips `wine.inf` on upgrades, because every file in the 
 
   _Default value:_ `pname`.
 
+`userSettings` (Attribute set of strings; _optional_)
+
+: Environment variables written to the tool's `user_settings.py`, which Proton applies to every game run with it.
+  Variables already set in the environment, for example in a game's launch options, take precedence.
+  Only has an effect on tools that ship a `proton` script.
+  Can be changed with `overrideAttrs`.
+
+  _Default value:_ `{ }`, which writes no `user_settings.py`.
+
 ## Update script {#sec-pkgs-mkProtonBinDerivation-update-script}
 
 `pkgs.proton-bin-update-script` creates a `passthru.updateScript` for packages built with `mkProtonBinDerivation`.
@@ -103,6 +112,26 @@ mkProtonBinDerivation (finalAttrs: {
 {
   programs.steam.extraCompatPackages = [
     (pkgs.proton-ge-bin.overrideAttrs { steamDisplayName = "GE-Proton (Nix)"; })
+  ];
+}
+```
+
+:::
+
+:::{.example #ex-pkgs-mkProtonBinDerivation-userSettings}
+
+# Setting environment variables for every game
+
+```nix
+{ pkgs, ... }:
+{
+  programs.steam.extraCompatPackages = [
+    (pkgs.proton-ge-bin.overrideAttrs {
+      userSettings = {
+        PROTON_LOG = "1";
+        DXVK_HUD = "devinfo,fps";
+      };
+    })
   ];
 }
 ```

@@ -9,7 +9,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "usacloud";
-  version = "1.22.8";
+  version = "1.22.12";
 
   __structuredAttrs = true;
 
@@ -17,10 +17,10 @@ buildGoModule (finalAttrs: {
     owner = "sacloud";
     repo = "usacloud";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0RXlFmH1vvm0qIvxnVJ0RBXVO2qvz8ClL5OTSfE5Ns0=";
+    hash = "sha256-CiP0KhFfCZJZ8ueuePBqcK4V8Gm0i+PQZXJ9TzyB6d4=";
   };
 
-  vendorHash = "sha256-5hMDkGvbm6x34HrhyNs2ycgNm9nW6nOIKJtKLMura0g=";
+  vendorHash = "sha256-H+SgpbuIjeAhvH4WBqMTWe+C3pucHzZW6+vJp3Dp9hg=";
 
   ldflags = [
     "-s"

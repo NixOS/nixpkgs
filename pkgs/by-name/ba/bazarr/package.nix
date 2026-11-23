@@ -3,6 +3,7 @@
   cacert,
   dart-sass,
   fetchFromGitHub,
+  fetchpatch2,
   ffmpeg,
   lib,
   nix-update-script,
@@ -21,6 +22,36 @@ python3Packages.buildPythonApplication (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-5bhNbLfuL1wzraO3UypRRstC1+ULTaFVNJC++Qov6AE=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      name = "CVE-2026-130156-1.patch";
+      url = "https://github.com/morpheus65535/bazarr/commit/4bd29252feebd0803e84cc3ce1bdd24c3a076ed4.patch?full_index=1";
+      hash = "sha256-B3fumL5keOIaP5xh0NmABij/vI3vKnwpZ/4eKJ4vjNQ=";
+    })
+    (fetchpatch2 {
+      name = "CVE-2026-130156-2.patch";
+      url = "https://github.com/morpheus65535/bazarr/commit/d84777c61a34a90a37238cfb566e7e8cd102d303.patch?full_index=1";
+      excludes = [ "tests/*" ];
+      hash = "sha256-yAOe40qOBib+8PeQP0827rZm3wGGZvr4BjrbS4h7FNs=";
+    })
+    (fetchpatch2 {
+      name = "CVE-2026-130156-3.patch";
+      url = "https://github.com/morpheus65535/bazarr/commit/768a5259202ea7bfa5a395d6b39a9e8eac88f817.patch?full_index=1";
+      excludes = [ "tests/*" ];
+      hash = "sha256-nKw26Jvd8Tlf3fEUI2BTvNPRJqVPnMV923nibXrY26k=";
+    })
+    (fetchpatch2 {
+      name = "GHSA-cf4p-fcvr-78pp-1.patch";
+      url = "https://github.com/morpheus65535/bazarr/commit/884bdf345464e14bf743c4cdab6d26b356227257.patch?full_index=1";
+      hash = "sha256-/IpbRGd3eju+lJel4Rfk01wtUGv5ZcESC2TcIJDqlhs=";
+    })
+    (fetchpatch2 {
+      name = "GHSA-cf4p-fcvr-78pp-2.patch";
+      url = "https://github.com/morpheus65535/bazarr/commit/e6c247edf7f9c94e6a953f9ed28c87ee975ee94e.patch?full_index=1";
+      hash = "sha256-X4yNLjFsbsEKCjk/P8Njb/jTz3mT6Zg8NsxozxF86uw=";
+    })
+  ];
 
   dependencies = with python3Packages; [
     lxml

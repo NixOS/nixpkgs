@@ -60,6 +60,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       killercup
       defelo
+      mfrw
     ];
     mainProgram = "dua";
   };

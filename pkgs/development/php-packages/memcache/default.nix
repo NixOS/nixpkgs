@@ -7,14 +7,14 @@
   pkg-config,
 }:
 
-buildPecl rec {
+buildPecl (finalAttrs: {
   pname = "memcache";
   version = "8.2";
 
   src = fetchFromGitHub {
     owner = "websupport-sk";
     repo = "pecl-memcache";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-77GvQ59XUpIZmdYZP6IhtjdkYwXKuNBSG+LBScz2BtI=";
   };
 
@@ -33,4 +33,4 @@ buildPecl rec {
     teams = [ lib.teams.php ];
     broken = lib.versionAtLeast php.version "8.5";
   };
-}
+})

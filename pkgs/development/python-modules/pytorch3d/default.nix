@@ -30,6 +30,14 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     hash = "sha256-k+hqAy0T5ZReJ8jWuKJ/VTzjqd4qo8rrcFo8y4LJhhY=";
   };
 
+  # pytorch3d assumes c++17, pytorch now requires c++20 or later
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail \
+        'extra_compile_args = {"cxx": ["-std=c++17"]}' \
+        'extra_compile_args = {"cxx": ["-std=c++20"]}'
+  '';
+
   nativeBuildInputs = lib.optionals cudaSupport [
     cudaPackages.cuda_nvcc
   ];
@@ -62,7 +70,13 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   pythonImportsCheck = [ "pytorch3d" ];
 
   passthru.tests.rotations-cuda =
-    cudaPackages.writeGpuTestPython { libraries = ps: [ ps.pytorch3d ]; }
+    cudaPackages.writeGpuTestPython
+      {
+        libraries = ps: [
+          ps.numpy
+          ps.pytorch3d
+        ];
+      }
       ''
         import pytorch3d.transforms as p3dt
 

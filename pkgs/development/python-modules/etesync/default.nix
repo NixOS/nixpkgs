@@ -10,7 +10,7 @@
   idna,
   orderedmultidict,
   packaging,
-  peewee_3,
+  peewee,
   py,
   pyasn1,
   pycparser,
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     idna
     orderedmultidict
     packaging
-    peewee_3
+    peewee
     py
     pyasn1
     pycparser
@@ -64,6 +64,7 @@ buildPythonPackage rec {
   '';
 
   meta = {
+    broken = lib.versionAtLeast peewee.version "4";
     homepage = "https://www.etesync.com/";
     description = "Python API to interact with an EteSync server";
     license = lib.licenses.lgpl3;

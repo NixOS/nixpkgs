@@ -26,13 +26,13 @@
   gettext,
 }:
 let
-  # Based on wine 11.19
+  # Based on wine 11.21
   kombuchaPatches = fetchFromGitHub {
     name = "kombucha";
     owner = "vinegarhq";
     repo = "kombucha";
-    rev = "f72e02afb19b400d29958fde0cf2b183a92bb300";
-    hash = "sha256-FLFKL9h+8LUCVTk6aG3UY7M0EhdhOtdSCcObPpGvi94=";
+    tag = "20261112181801";
+    hash = "sha256-9EOE+mTvoeykfN2v/A4jlcxXTU9irI2TDEbyE6r8HP4=";
     meta.license = lib.licenses.lgpl21Only;
   };
 
@@ -46,48 +46,31 @@ let
       alsaSupport = false;
     }).overrideAttrs
       (oldAttrs: {
-        # https://github.com/vinegarhq/kombucha/blob/f72e02afb19b400d29958fde0cf2b183a92bb300/.github/workflows/build.yml
-        configureFlags = lib.remove "--enable-win64" (oldAttrs.configureFlags or [ ]) ++ [
-          "--disable-dxdiagn"
-          "--disable-mscoree"
-          "--disable-mshtml"
-          "--disable-tests"
-          "--disable-win16"
-          "--disable-winedbg"
-          "--disable-winemenubuilder"
-          "--enable-archs=x86_64"
-          "--with-mingw"
-          "--without-alsa"
-        ];
-
+        # https://github.com/vinegarhq/kombucha/blob/20261112181801/.github/workflows/build.yml
+        configureFlags =
+          lib.remove "--enable-win64" (oldAttrs.configureFlags or [ ])
+          ++ import ./kombucha-configure-flags.nix;
         patches =
           oldAttrs.patches or [ ]
-          ++ map (name: "${kombuchaPatches}/patches/stable/${name}") [
-            "0001-explorer-Enable-virtual-desktop-shell-by-default.patch"
-            "0002-ntdll-Add-kombucha_hacks.patch"
-            "0003-ntdll-Keep-more-LFH-block-groups-alive.patch"
-            "0004-ntdll-HACK-Search-for-ucrtbase-using-common-rules.patch"
-            "0005-ntdll-Use-default-loadorder-for-DXVK-DLLs.patch"
-            "0006-server-Force-persistence-to-0-seconds.patch"
-            "0007-server-Notify-if-ntsync-is-unavailable.patch"
-            "0008-win32u-Apply-work-area-changes-to-virtual-desktop-mo.patch"
-            "0009-explorer-Account-for-the-actual-size-of-the-taskbar-.patch"
-            "0010-explorer-Update-system-work-area-rect-to-exclude-tas.patch"
-            "0011-win32u-Don-t-load-bitmap-only-TTF-fonts-without-bitm.patch"
-            "0012-wine.inf-Add-KombuchaOverrides.patch"
-            "0013-wineboot-Add-WINEBOOT_HIDE_DIALOG-environment-variab.patch"
-            "0014-winewayland-Add-warning-regarding-experimental-statu.patch"
-            "0015-winex11.drv-Move-Xfixes-extension-query-to-process_a.patch"
-            "0016-winex11-Use-XFixes-to-hide-cursor-before-warping-it.patch"
-            "0017-winex11-Don-t-hide-cursor-under-X11-sessions.patch"
-            "0018-winex11-Raise-hidden-windows-above-siblings-in-virtu.patch"
-            "0019-server-print-tag-and-wine-commit-to-stdout.patch"
+          ++ map (name: "${kombuchaPatches}/patches/${name}") [
+            "0001-win32u-Apply-work-area-changes-to-virtual-desktop-mo.patch"
+            "0002-explorer-Account-for-the-actual-size-of-the-taskbar-.patch"
+            "0003-explorer-Update-system-work-area-rect-to-exclude-tas.patch"
+            "0004-winex11.drv-Move-Xfixes-extension-query-to-process_a.patch"
+            "0005-winex11-Use-XFixes-to-hide-cursor-before-warping-it.patch"
+            "0006-explorer-Enable-virtual-desktop-shell-by-default.patch"
+            "0007-ntdll-Add-kombucha_hacks.patch"
+            "0008-ntdll-HACK-Search-for-ucrtbase-using-common-rules.patch"
+            "0009-ntdll-Keep-more-LFH-block-groups-alive.patch"
+            "0010-ntdll-Use-default-loadorder-for-DXVK-DLLs.patch"
+            "0011-server-wineboot-Remove-syswow64-support-and-unnecess.patch"
+            "0012-win32u-Don-t-load-bitmap-only-TTF-fonts-without-bitm.patch"
+            "0013-wine.inf-Add-KombuchaOverrides.patch"
+            "0014-wineboot-Add-WINEBOOT_HIDE_DIALOG-environment-variab.patch"
+            "0015-winex11-Raise-hidden-windows-above-siblings-in-virtu.patch"
+            "0016-winex11.drv-Use-the-Win32-move-loop-under-Xwayland.patch"
+            "0017-winex11.drv-Don-t-let-the-WM-override-a-withdrawn-de.patch"
           ];
-
-        postPatch = (oldAttrs.postPatch or "") + ''
-          substituteInPlace server/main.c \
-            --replace-fail 'using TAG, built from WINE_COMMIT.' 'using stable+20261009201837, built from Wine ${oldAttrs.version}.'
-        '';
       });
 in
 buildGoModule (finalAttrs: {
@@ -202,7 +185,10 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/vinegarhq/vinegar";
     license = lib.licenses.gpl3Only;
     mainProgram = "vinegar";
-    maintainers = with lib.maintainers; [ HeitorAugustoLN ];
+    maintainers = with lib.maintainers; [
+      HeitorAugustoLN
+      jerryx77
+    ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = [ lib.sourceTypes.fromSource ];
   };

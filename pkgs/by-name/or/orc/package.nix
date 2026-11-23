@@ -95,6 +95,6 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "gstreamer" finalAttrs.version;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ tmarkus ];
+    maintainers = with lib.maintainers; [ AAAAAASomeThingsFailToEvaluate ];
   };
 })

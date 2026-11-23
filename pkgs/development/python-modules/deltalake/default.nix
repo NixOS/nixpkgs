@@ -9,8 +9,10 @@
   pkg-config,
 
   # buildInputs
-  openssl,
+  aws-lc,
   libiconv,
+  openssl,
+  zstd,
 
   # dependencies
   arro3-core,
@@ -58,6 +60,11 @@ buildPythonPackage (finalAttrs: {
     rm -r python/.cargo
   '';
 
+  # keeps tikv-jemalloc-sys on its vendored static jemalloc
+  postConfigure = ''
+    unset JEMALLOC_OVERRIDE
+  '';
+
   env = {
     OPENSSL_NO_VENDOR = 1;
     # Previously set in python/.cargo/config.toml
@@ -78,7 +85,9 @@ buildPythonPackage (finalAttrs: {
   ]);
 
   buildInputs = [
+    aws-lc
     openssl
+    zstd
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv

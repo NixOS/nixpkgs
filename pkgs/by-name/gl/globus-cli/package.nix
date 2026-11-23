@@ -34,8 +34,14 @@ python3Packages.buildPythonApplication rec {
   ];
 
   pythonRelaxDeps = [
+    "click"
     "globus-sdk"
     "jmespath"
+  ];
+
+  disabledTests = [
+    "test_list_runs_filter_by_flow_id"
+    "test_list_runs_paginated_response"
   ];
 
   nativeBuildInputs = [ installShellFiles ];

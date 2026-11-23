@@ -8,17 +8,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ldapin";
-  version = "0.1.1";
+  version = "0.1.2";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "affolter-engineering";
     repo = "ldapin";
     tag = finalAttrs.version;
-    hash = "sha256-bo0TY9EVIe2etJKeVJBbhYdS7DEe4XgeClkYq8NGDfA=";
+    hash = "sha256-XYuGoF3bqp6e8pBj9Se+8xgoHhrhO5ThAq0WzmpTJfY=";
   };
 
-  cargoHash = "sha256-0wKHutC6ZXPKQT7ucjZSXd6VbrzrzTlXGjI0ll0ZQvU=";
+  cargoHash = "sha256-aVRXceO6t7z4FfHu5L/gl2I+LngmFvuQqW7gLoUs1bA=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 

@@ -9,7 +9,7 @@ in
   name = "esphome";
   meta.maintainers = with lib.maintainers; [
     oddlama
-    tmarkus
+    AAAAAASomeThingsFailToEvaluate
   ];
 
   nodes = {

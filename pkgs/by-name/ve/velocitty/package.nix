@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "velocitty";
-  version = "1.0.7";
+  version = "1.0.8";
 
   src = fetchFromGitHub {
     owner = "xapp-project";
     repo = "velocitty";
     tag = finalAttrs.version;
-    hash = "sha256-s5i8RbZx4A+hXPj2aFZIeAqruja70/mXSqVZOQhMhaQ=";
+    hash = "sha256-kn/X4uFcpeXHHJdsZzQG3i3EppLZvpnd2CJjn+hWQ/w=";
   };
 
   strictDeps = true;

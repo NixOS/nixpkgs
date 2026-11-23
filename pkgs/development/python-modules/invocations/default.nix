@@ -34,7 +34,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "semantic_version>=2.4,<2.7" "semantic_version"
+      --replace-fail "semantic_version>=2.4,<2.7" "semantic_version" \
+      --replace-fail "pip~=25.2" "pip>=25.2"
   '';
 
   build-system = [ setuptools ];

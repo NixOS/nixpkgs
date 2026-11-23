@@ -13,6 +13,7 @@
   libxrandr,
   stdenv,
   writeText,
+  allowSdkPackages ? false,
 }:
 {
   # e.g.
@@ -105,3 +106,18 @@
       }
     );
 }
+// lib.optionalAttrs (!allowSdkPackages) (
+  let
+    banned =
+      package:
+      # some packages still use e.g. Microsoft.AspNetCore.App.Ref 6.0.36
+      if (lib.versionAtLeast package.version "8") then
+        lib.warn "${package} is not allowed without 'allowSdkPackages'" package
+      else
+        package;
+  in
+  lib.genAttrs' [ "NETCore" "AspNetCore" "WindowsDesktop" ] (runtime: {
+    name = "Microsoft.${runtime}.App.Ref";
+    value = banned;
+  })
+)

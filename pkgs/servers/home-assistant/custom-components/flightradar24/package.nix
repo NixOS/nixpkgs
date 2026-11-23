@@ -3,21 +3,22 @@
   buildHomeAssistantComponent,
   fetchFromGitHub,
   flightradarapi,
+  home-assistant,
   pycountry,
-  pytest-homeassistant-custom-component,
+  pytest-homeassistant,
   pytestCheckHook,
 }:
 
 buildHomeAssistantComponent (finalAttrs: {
   owner = "AlexandrErohin";
   domain = "flightradar24";
-  version = "2.4.2";
+  version = "2.6.0";
 
   src = fetchFromGitHub {
     owner = "AlexandrErohin";
     repo = "home-assistant-flightradar24";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-r/SPeTv9W1PZY6qC3iAEKxvzsNneAQMvjwiGHR4NXOE=";
+    hash = "sha256-4tFzzNoh6iFfAqp+MEqYa7wMFvDGK6eiLQGjU/NSuXM=";
   };
 
   ignoreVersionRequirement = [
@@ -31,7 +32,8 @@ buildHomeAssistantComponent (finalAttrs: {
   ];
 
   nativeCheckInputs = [
-    pytest-homeassistant-custom-component
+    home-assistant
+    pytest-homeassistant
     pytestCheckHook
   ];
 

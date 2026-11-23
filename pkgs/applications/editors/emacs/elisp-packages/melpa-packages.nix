@@ -953,6 +953,9 @@ let
           # needs network during compilation
           consult-gh-with-pr-review = ignoreCompilationError super.consult-gh-with-pr-review;
 
+          # tightly coupled to ghostel (from manual-packages), use the same source
+          consult-ghostel = externalSrc super.consult-ghostel self.ghostel;
+
           counsel-gtags = ignoreCompilationError super.counsel-gtags; # elisp error
 
           # https://github.com/fuxialexander/counsel-notmuch/issues/3

@@ -23,13 +23,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "corsix-th";
-  version = "0.70.2";
+  version = "0.70.3";
 
   src = fetchFromGitHub {
     owner = "CorsixTH";
     repo = "CorsixTH";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-GlCHqnWeF3/qf9ww09oz106X/9ENqUz4//k7PuQDqc0=";
+    hash = "sha256-Uo1kLbsSlV86Hws7r8PCDgcDI7cjUq6nDG9LscGUKtM=";
   };
 
   patches = [

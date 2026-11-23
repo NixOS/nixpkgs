@@ -89,6 +89,31 @@
         priority = 1;
       };
 
+      jq = {
+        command = lib.getExe (
+          pkgs.writeShellApplication {
+            name = "jq-wrapper";
+            runtimeInputs = [
+              pkgs.jq
+              pkgs.diffutils
+            ];
+            text = ''
+              tmp=$(mktemp)
+              trap 'rm -f "$tmp"' EXIT
+              for file in "$@"; do
+                jq --sort-keys . "$file" >"$tmp"
+                if ! cmp -s "$tmp" "$file"; then
+                  cp "$tmp" "$file"
+                fi
+              done
+            '';
+          }
+        );
+        includes = [
+          "pkgs/applications/networking/cluster/terraform-providers/providers.json"
+        ];
+      };
+
       keep-sorted = {
         command = lib.getExe pkgs.keep-sorted;
         includes = [ "*" ];

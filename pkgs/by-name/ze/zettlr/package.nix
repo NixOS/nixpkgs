@@ -7,20 +7,15 @@
 }:
 
 # Based on https://gist.github.com/msteen/96cb7df66a359b827497c5269ccbbf94 and joplin-desktop nixpkgs.
-let
+appimageTools.wrapType2 (finalAttrs: {
+
   pname = "zettlr";
-  version = "4.9.0";
+  version = "4.10.0";
 
   src = fetchurl {
-    url = "https://github.com/Zettlr/Zettlr/releases/download/v${version}/Zettlr-${version}-x86_64.appimage";
-    hash = "sha256-2WOabu+DR18pl3FsFc7tXx1H98ynMkZbUs885QfAaHM=";
+    url = "https://github.com/Zettlr/Zettlr/releases/download/v${finalAttrs.version}/Zettlr-${finalAttrs.version}-x86_64.appimage";
+    hash = "sha256-v290WMI3eBjV1O0AinIcKVvsLCXVcM+PVNBT+IGVCPw=";
   };
-  appimageContents = appimageTools.extract {
-    inherit pname version src;
-  };
-in
-appimageTools.wrapType2 rec {
-  inherit pname version src;
 
   extraPkgs = pkgs: [
     pkgs.texliveMedium
@@ -32,10 +27,10 @@ appimageTools.wrapType2 rec {
   extraInstallCommands = ''
     wrapProgram $out/bin/zettlr \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
-    install -m 444 -D ${appimageContents}/Zettlr.desktop $out/share/applications/Zettlr.desktop
-    install -m 444 -D ${appimageContents}/Zettlr.png $out/share/icons/hicolor/512x512/apps/Zettlr.png
+    install -m 444 -D ${finalAttrs.contents}/Zettlr.desktop $out/share/applications/Zettlr.desktop
+    install -m 444 -D ${finalAttrs.contents}/Zettlr.png $out/share/icons/hicolor/512x512/apps/Zettlr.png
     substituteInPlace $out/share/applications/Zettlr.desktop \
-      --replace-fail 'Exec=AppRun' 'Exec=${pname}'
+      --replace-fail 'Exec=AppRun' 'Exec=zettlr'
   '';
 
   passthru.updateScript = nix-update-script { };
@@ -48,4 +43,4 @@ appimageTools.wrapType2 rec {
     license = lib.licenses.gpl3;
     mainProgram = "zettlr";
   };
-}
+})

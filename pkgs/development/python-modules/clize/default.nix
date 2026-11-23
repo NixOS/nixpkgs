@@ -39,6 +39,11 @@ buildPythonPackage (finalAttrs: {
     # the simulated old docutils only ignores the 0.21 wording of these deprecation warnings
     substituteInPlace clize/tests/test_help.py \
       --replace-fail '"message": r".*Option.*\b0\.21\b.*"' '"message": r"The frontend\.Option(Parser)? class .*"'
+
+    # annotations are evaluated lazily on Python 3.14 and cannot see the locals passed to f()
+    substituteInPlace clize/tests/test_help.py \
+      --replace-fail "locals={'a': parser.use_class(named=CustParam, name=\"cust\")})" \
+        "globals={'a': parser.use_class(named=CustParam, name=\"cust\")})"
   '';
 
   nativeCheckInputs = [

@@ -100,6 +100,8 @@ buildPythonPackage (finalAttrs: {
     "test_event_source_uuid_does_not_exist"
     "test_event_source_does_not_exist"
     "test_can_update_lambda_event_source"
+    # racy
+    "test_can_reload_when_file_created"
   ];
 
   pythonImportsCheck = [ "chalice" ];

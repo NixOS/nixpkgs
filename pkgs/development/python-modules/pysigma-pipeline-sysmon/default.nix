@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pysigma-pipeline-sysmon";
-  version = "2.0.0";
+  version = "3.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SigmaHQ";
     repo = "pySigma-pipeline-sysmon";
     tag = "v${version}";
-    hash = "sha256-W0KNsawcJ1XmQ2Tmh+aD8EUL2LenCQUEUgx9shQhRDQ=";
+    hash = "sha256-yEehuQerF6xNILI6VvDNNd9CUPz2jEvzDJRb/XOmNUs=";
   };
 
   build-system = [ poetry-core ];

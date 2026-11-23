@@ -33,16 +33,16 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gyroflow";
-  version = "1.6.3";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "gyroflow";
     repo = "gyroflow";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ncGbM8wIwnyLHp+oArgDnKCCGIeywdH7YGZPgRBLiJM=";
+    hash = "sha256-eZ87AurjMyHlijILbIMvtmMlLy9ufMNxuqigKGerImQ=";
   };
 
-  cargoHash = "sha256-9UamQxrKVMSivhZ/cvRRCliaf3eFeHg5XPPtuaRKrg0=";
+  cargoHash = "sha256-bVX1NzDJfC/j6BWsDSr6gqW0MmOWRN72c9lgwOzvSZw=";
 
   __structuredAttrs = true;
 

@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "ad-miner";
-  version = "1.8.1";
+  version = "1.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "AD-Security";
     repo = "AD_Miner";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-iI7jiENPYCIVJnIG/M4ft4dkR2Ja21gzR+ISeyZvUEo=";
+    hash = "sha256-OCNwX72LgFRXdz2DrM64kHSfHtQchk5MAzQRyUZTV+w=";
   };
 
   # All requirements are pinned
@@ -25,6 +25,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     neo4j
     numpy
     pytz
+    requests
     tqdm
   ];
 

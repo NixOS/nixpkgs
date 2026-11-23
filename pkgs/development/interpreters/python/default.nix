@@ -87,7 +87,7 @@
     };
 
     python316 = callPackage ./cpython {
-      self = __splicedPackages.python315;
+      self = __splicedPackages.python316;
       sourceVersion = {
         major = "3";
         minor = "16";

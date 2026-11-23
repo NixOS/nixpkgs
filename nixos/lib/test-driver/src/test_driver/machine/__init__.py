@@ -433,6 +433,9 @@ class BaseMachine(ABC):
     def is_up(self) -> bool: ...
 
     @abstractmethod
+    def requires_sync(self) -> bool: ...
+
+    @abstractmethod
     def start(self) -> None:
         """
         Start the machine. This method is asynchronous --- it does
@@ -1169,6 +1172,11 @@ class QemuMachine(BaseMachine):
     def is_up(self) -> bool:
         return self.booted and self.connected
 
+    def requires_sync(self) -> bool:
+        # The guest has its own page cache. Without a sync, its dirty pages do
+        # not get to the disk image.
+        return True
+
     def wait_for_monitor_prompt(self) -> str:
         assert self.monitor is not None
         answer = ""
@@ -1576,6 +1584,8 @@ class QemuMachine(BaseMachine):
                 readable = sel.select(1)
                 if readable:
                     conn, _ = sock.accept()
+                    # accept() inherits O_NONBLOCK on darwin
+                    conn.setblocking(True)
                     return conn
                 rc = self.process.poll()
                 if rc is not None:
@@ -1905,7 +1915,7 @@ class NspawnMachine(BaseMachine):
 
     def ssh_backdoor_command(self) -> str:
         # documented in systemd-ssh-generator(8) and https://systemd.io/CONTAINER_INTERFACE/
-        socket_path = f"/run/systemd/nspawn/unix-export/{self.name}/ssh"
+        socket_path = f"/run/systemd/nspawn/{self.name}/unix-export/ssh"
         proxy_cmd = f"socat - UNIX-CLIENT:{socket_path}"
         return f'ssh -o User=root -o ProxyCommand="{proxy_cmd}" bash'
 
@@ -1935,6 +1945,12 @@ class NspawnMachine(BaseMachine):
 
     def is_up(self) -> bool:
         return self.process is not None
+
+    def requires_sync(self) -> bool:
+        # The container uses the page cache of the host, thus the host sees its
+        # writes without a sync. sync() is not namespaced: it waits for the
+        # writeback of all disks of the host.
+        return False
 
     @staticmethod
     def _parse_sd_notify(data: bytes) -> tuple[bool, int | None]:

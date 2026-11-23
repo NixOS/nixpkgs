@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mjolnir";
-  version = "1.12.1";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "mjolnir";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PWPtp1KVOBNH7lu99Yy3hmj8wGOZe+YKjPq/SyO7oLM=";
+    hash = "sha256-vn2/j8RfIK+K3ieWTuauN9Tnaw5FDs9h7PkDSD0E2b4=";
   };
 
   patches = [
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-M4gsuzSxKOIDPL4J2HnveRDjviB0RPBmLVYBlTVz788=";
+    hash = "sha256-pjvEPuo7dZktJ2vCO/VYxmIWrmZGPxIe0HYwrt5GIFQ=";
   };
 
   nativeBuildInputs = [

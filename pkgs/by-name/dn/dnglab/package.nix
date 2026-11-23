@@ -1,9 +1,10 @@
 {
   fetchFromGitHub,
+  installShellFiles,
   lib,
+  nix-update-script,
   rustPlatform,
   versionCheckHook,
-  nix-update-script,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dnglab";
@@ -23,8 +24,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
 
+  nativeBuildInputs = [ installShellFiles ];
+
   postInstall = ''
     rm $out/bin/benchmark $out/bin/identify
+    installManPage bin/dnglab/manpages/*
+    installShellCompletion --zsh bin/dnglab/completions/_dnglab
+    installShellCompletion bin/dnglab/completions/dnglab.{fish,bash}
   '';
 
   passthru.updateScript = nix-update-script {

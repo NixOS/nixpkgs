@@ -14,17 +14,17 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mdbook-rss-feed";
-  version = "2.0.0";
+  version = "3.0.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "saylesss88";
     repo = "mdbook-rss-feed";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1NQ9prk+MvTj7vMJelCfHhs/0/HiHk0/tQURPVjtYh4=";
+    hash = "sha256-fE7yd53pmaloOEcpCGnsHhBfosAnvU6GcMs94DY1rRo=";
   };
 
-  cargoHash = "sha256-4qZQ2EH+GBb08GwNnTDAZsjVK6EPKUqL/+wrMH88D4c=";
+  cargoHash = "sha256-n+E8vrOiz3p7r7X1aJBOHKD0ZxQwWiAhSZIuzg5b9GE=";
 
   inherit buildFeatures;
 

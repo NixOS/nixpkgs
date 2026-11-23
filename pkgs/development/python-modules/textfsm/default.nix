@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "textfsm";
-  version = "2.1.0";
+  version = "2.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "textfsm";
     tag = "v${version}";
-    hash = "sha256-ygVcDdT85mRN+qYfTZqraRVyp2JlLwwujBW1e/pPJNc=";
+    hash = "sha256-24jQQ3Y6v2G+bQLMGgL5dSK9nYjHLYpCqiyUgze7NKc=";
   };
 
   build-system = [ setuptools ];

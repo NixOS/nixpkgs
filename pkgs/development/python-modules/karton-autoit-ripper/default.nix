@@ -9,7 +9,7 @@
   regex,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "karton-autoit-ripper";
   version = "1.2.0";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "CERT-Polska";
     repo = "karton-autoit-ripper";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-D+M3JsIN8LUWg8GVweEzySHI7KaBb6cNHHn4pXoq55M=";
   };
 
@@ -25,6 +25,7 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     "autoit-ripper"
+    "karton-core"
     "malduck"
     "regex"
   ];
@@ -45,8 +46,8 @@ buildPythonPackage rec {
     description = "AutoIt script ripper for Karton framework";
     mainProgram = "karton-autoit-ripper";
     homepage = "https://github.com/CERT-Polska/karton-autoit-ripper";
-    changelog = "https://github.com/CERT-Polska/karton-autoit-ripper/releases/tag/v${version}";
+    changelog = "https://github.com/CERT-Polska/karton-autoit-ripper/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

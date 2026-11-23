@@ -47,7 +47,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "autopush";
-  version = "1.83.1";
+  version = "1.86.0";
 
   __structuredAttrs = true;
 
@@ -60,12 +60,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "mozilla-services";
     repo = "autopush-rs";
     tag = finalAttrs.version;
-    hash = "sha256-T1FLDDAIU+YEdDRY11XzUvxKQS3ETqufDC7B4U5vyFk=";
+    hash = "sha256-7qK+pkW6/L5WaOln1EGgkIadHUfVU58As0PXMX8bMZQ=";
   };
 
   patches = [ ./0001-delete-acked-messages.patch ]; # See https://github.com/mozilla-services/autopush-rs/pull/1234
 
-  cargoHash = "sha256-a413jA5s6EcjwF6Jxf8Mnqxv4ULVwXRzpUTnLv2CkCg=";
+  cargoHash = "sha256-UAdDTy2zHJHFreqKp0njt/3Pml4K1ZFlhhi5SI4dHh8=";
 
   nativeBuildInputs = [
     pkg-config
@@ -84,9 +84,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # by default only google bigtable is supported as a db
   buildNoDefaultFeatures = true;
   buildFeatures = [
-    "postgres"
-    "redis"
-    "reliable_report"
+    "enterprise"
   ];
 
   env = {

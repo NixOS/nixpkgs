@@ -4,7 +4,6 @@
   fetchFromGitHub,
   ghostscript,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "lout";
   version = "3.43.5";
@@ -51,6 +50,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Plus;
 
     platforms = lib.platforms.all;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ l0r3v ];
   };
 })

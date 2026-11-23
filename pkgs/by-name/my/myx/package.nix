@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "myx";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "HaseebKhalid1507";
     repo = "Myx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dOcQgiq+XHXEoMvQjjwKhJ4ciMDKYCAEWVxrLxlk8yA=";
+    hash = "sha256-qSOpK+k1Rw7yJvMhaG4LbG7bfTtkuBw6BCzN9UkGrGY=";
   };
 
-  cargoHash = "sha256-rA6s8yE2CTfR9in+NUnvDm/1+Zhs4u5eTe2QfSI/xK8=";
+  cargoHash = "sha256-InX9HtZI686ukKLfLp4qOOWGg6DdKVMv8LsBOYf8M+c=";
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     pkg-config

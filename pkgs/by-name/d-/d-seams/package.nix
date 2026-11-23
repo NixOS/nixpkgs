@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Deferred Structural Elucidation Analysis for Molecular Simulations";
     homepage = "https://dseams.info";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ iedame ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
     mainProgram = "seams";
   };

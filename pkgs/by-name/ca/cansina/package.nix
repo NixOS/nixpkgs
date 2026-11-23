@@ -1,10 +1,10 @@
 {
   lib,
-  python3,
+  python3Packages,
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication (finalAttrs: {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "cansina";
   version = "0.9";
   pyproject = true;
@@ -16,18 +16,14 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     hash = "sha256-vDlYJSRBVFtEdE/1bN8PniFYkpggIKMcEakphHmaTos=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
-    setuptools
-  ];
+  build-system = with python3Packages; [ setuptools ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3Packages; [
     asciitree
     requests
   ];
 
-  pythonImportsCheck = [
-    "cansina"
-  ];
+  pythonImportsCheck = [ "cansina" ];
 
   meta = {
     description = "Web Content Discovery Tool";

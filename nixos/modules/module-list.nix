@@ -185,6 +185,7 @@
   ./programs/bazecor.nix
   ./programs/bcc.nix
   ./programs/benchexec.nix
+  ./programs/brave.nix
   ./programs/browserpass.nix
   ./programs/btrfs-heatmap.nix
   ./programs/calls.nix
@@ -400,6 +401,7 @@
   ./programs/xscreensaver/sonar.nix
   ./programs/xscreensaver/xscreensaver.nix
   ./programs/xss-lock.nix
+  ./programs/xtool.nix
   ./programs/xwayland.nix
   ./programs/yazi.nix
   ./programs/ydotool.nix
@@ -573,6 +575,7 @@
   ./services/databases/kvrocks.nix
   ./services/databases/lldap.nix
   ./services/databases/memcached.nix
+  ./services/databases/memgraph.nix
   ./services/databases/monetdb.nix
   ./services/databases/mongodb.nix
   ./services/databases/mysql.nix
@@ -695,7 +698,6 @@
   ./services/hardware/actkbd.nix
   ./services/hardware/amdgpu.nix
   ./services/hardware/argonone.nix
-  ./services/hardware/arsenik.nix
   ./services/hardware/asusd.nix
   ./services/hardware/auto-cpufreq.nix
   ./services/hardware/auto-epp.nix
@@ -723,6 +725,7 @@
   ./services/hardware/iptsd.nix
   ./services/hardware/irqbalance.nix
   ./services/hardware/joycond.nix
+  ./services/hardware/kanata-config-aekeynox.nix
   ./services/hardware/kanata.nix
   ./services/hardware/keyd.nix
   ./services/hardware/kmonad.nix
@@ -879,6 +882,7 @@
   ./services/misc/beanstalkd.nix
   ./services/misc/bees.nix
   ./services/misc/bepasty.nix
+  ./services/misc/bifrost.nix
   ./services/misc/blenderfarm.nix
   ./services/misc/calibre-server.nix
   ./services/misc/canto-daemon.nix
@@ -958,6 +962,7 @@
   ./services/misc/mbpfan.nix
   ./services/misc/mediatomb.nix
   ./services/misc/memos.nix
+  ./services/misc/mesh-llm.nix
   ./services/misc/metabase.nix
   ./services/misc/minuspod.nix
   ./services/misc/mollysocket.nix
@@ -1401,6 +1406,7 @@
   ./services/networking/nullidentdmod.nix
   ./services/networking/nylon.nix
   ./services/networking/ocserv.nix
+  ./services/networking/odhcpd.nix
   ./services/networking/ofono.nix
   ./services/networking/oidentd.nix
   ./services/networking/oink.nix
@@ -1521,7 +1527,6 @@
   ./services/networking/vwifi.nix
   ./services/networking/webhook.nix
   ./services/networking/websockify.nix
-  ./services/networking/wg-access-server.nix
   ./services/networking/wg-netmanager.nix
   ./services/networking/wg-quick.nix
   ./services/networking/wgautomesh.nix
@@ -1732,6 +1737,7 @@
   ./services/web-apps/feishin.nix
   ./services/web-apps/fider.nix
   ./services/web-apps/filebrowser.nix
+  ./services/web-apps/filesender.nix
   ./services/web-apps/firefly-iii-data-importer.nix
   ./services/web-apps/firefly-iii.nix
   ./services/web-apps/flame.nix
@@ -1740,10 +1746,12 @@
   ./services/web-apps/freescout.nix
   ./services/web-apps/freshrss.nix
   ./services/web-apps/froide-govplan.nix
+  ./services/web-apps/galene-stt.nix
   ./services/web-apps/galene.nix
   ./services/web-apps/gancio.nix
   ./services/web-apps/geoserver.nix
   ./services/web-apps/gerrit.nix
+  ./services/web-apps/ghostfolio.nix
   ./services/web-apps/glance.nix
   ./services/web-apps/glitchtip.nix
   ./services/web-apps/go-httpbin.nix
@@ -1869,7 +1877,6 @@
   ./services/web-apps/screego.nix
   ./services/web-apps/selfoss.nix
   ./services/web-apps/sftpgo.nix
-  ./services/web-apps/sharkey.nix
   ./services/web-apps/shiori.nix
   ./services/web-apps/sillytavern.nix
   ./services/web-apps/silverbullet.nix

@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     cd $out/share/dictd
 
     source_date=$(date --utc --date=@$SOURCE_DATE_EPOCH "+%F %T")
-    faketime -f "$source_date" ${python3.interpreter} -O ${./wiktionary2dict.py} "${src}"
+    faketime -f "$source_date" ${python3.interpreter} -P -O ${./wiktionary2dict.py} "${src}"
     faketime -f "$source_date" dictzip wiktionary-en.dict
     echo en_US.UTF-8 > locale
   '';

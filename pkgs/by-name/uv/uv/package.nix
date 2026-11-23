@@ -22,17 +22,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "uv";
-  version = "0.13.7";
+  version = "0.13.9";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "uv";
     tag = finalAttrs.version;
-    hash = "sha256-RD86hXLYt62Bx9mdC8ZETzHL++rLOt7Mtrg3sR2qwIk=";
+    hash = "sha256-D+NUKgwVCfsc8t4egZ7Tq8pjqHm0vYlJbqnH7D1I0ZU=";
   };
 
-  cargoHash = "sha256-i+8Ll37ArxSNYKYzjtuzX32e/FGtd07KD9lwiBmv+yw=";
+  cargoHash = "sha256-nmUByTBYI4dzj+ohszZ3x8jOb5yacMInAPnP5Fn2zOA=";
 
   buildInputs = [
     aws-lc

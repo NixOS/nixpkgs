@@ -10,7 +10,8 @@ let
   pkg = pkgs.matrix-appservice-irc;
   bin = "${pkg}/bin/matrix-appservice-irc";
 
-  jsonType = (pkgs.formats.json { }).type;
+  jsonFormat = pkgs.formats.json { };
+  jsonType = jsonFormat.type;
 
   configFile =
     pkgs.runCommand "matrix-appservice-irc.yml"
@@ -22,8 +23,7 @@ let
         ];
         preferLocalBuild = true;
 
-        config = builtins.toJSON cfg.settings;
-        passAsFile = [ "config" ];
+        configPath = jsonFormat.generate "config.json" cfg.settings;
       }
       ''
         # The schema is given as yaml, we need to convert it to json

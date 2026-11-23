@@ -8,14 +8,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "gitlabform";
-  version = "6.3.2";
+  version = "6.3.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gitlabform";
     repo = "gitlabform";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0zerTSgJZNESO6SbiryRJz0TyPd5XbE2yTL7BPtxG2k=";
+    hash = "sha256-AJSaS8YjXJvU0OmkhGJg0gqBHdovthSmDTtrLmjq5og=";
   };
 
   postPatch = ''

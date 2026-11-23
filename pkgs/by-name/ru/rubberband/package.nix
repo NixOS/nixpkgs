@@ -13,6 +13,7 @@
   meson,
   ninja,
   boost,
+  enableJri ? lib.meta.availableOn stdenv.buildPlatform jdk_headless,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -38,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
   ]
-  ++ lib.optionals (!stdenv.hostPlatform.isx86_32) [
+  ++ lib.optionals enableJri [
     jdk_headless
   ];
 
@@ -59,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   mesonFlags = [
-    (lib.mesonEnable "jni" (!stdenv.hostPlatform.isx86_32))
+    (lib.mesonEnable "jni" enableJri)
     (lib.mesonEnable "ladspa" true)
     (lib.mesonEnable "lv2" true)
     (lib.mesonEnable "vamp" true)

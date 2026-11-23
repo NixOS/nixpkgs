@@ -1,0 +1,61 @@
+--- a/docker/concat.c
++++ b/docker/concat.c
+@@ -152,8 +152,8 @@
+ #define TOANG 0.52917706
+ static int tmpon = 0;
+ static char home_dir[MAXSTRLEN] = " ";
+-static char molden_root[MAXSTRLEN] = " ";
+-static char molden_rootb[MAXSTRLEN] = " ";
++static char molden_root[PATH_MAX] = " ";
++static char molden_rootb[PATH_MAX] = " ";
+ static char dckout[MAXPATHLEN] = "dock.mol2";
+ 
+ #define MEXCL 10
+--- a/src/ambfor/alloc.c
++++ b/src/ambfor/alloc.c
+@@ -18,9 +18,9 @@
+ #define MAXCMD5 512
+ 
+ static int tmpon = 1;
+-static char molden_root[MAXSTRLEN] = " ";
+-static char molden_rootb[MAXSTRLEN] = " ";
+-static char tmpstr[MAXSTRLEN+5] = " ";
++static char molden_root[PATH_MAX] = " ";
++static char molden_rootb[PATH_MAX] = " ";
++static char tmpstr[PATH_MAX] = " ";
+ static char cmdtmp[MAXSTRLEN+5] = " ";
+ static char *olddir;
+ 
+--- a/src/xwin.c
++++ b/src/xwin.c
+@@ -1873,9 +1873,9 @@
+ static int nhframes = 0;
+ static int tmpon = 0;
+ static char home_dir[MAXSTRLEN] = " ";
+-static char molden_root[MAXSTRLEN] = " ";
+-static char molden_rootb[MAXSTRLEN] = " ";
+-static char TMPdir[MAXPATHLEN] = " ";
++static char molden_root[PATH_MAX] = " ";
++static char molden_rootb[PATH_MAX] = " ";
++static char TMPdir[PATH_MAX] = " ";
+ static char jobname[MAXSTRLEN] = " ";
+ static char *olddir;
+ 
+@@ -66861,7 +66861,7 @@
+    char **hetz;
+    char *strp;
+    char *wwwstr = "ftp://ftp.ebi.ac.uk/pub/databases/msd/pdbechem/files/cml/";
+-   char resolved[MAXSTRLEN];
++   char resolved[PATH_MAX];
+ 
+    aihet = abs(ihet);
+ 
+@@ -82209,7 +82209,7 @@
+ {
+     char cmdfil[MAXCMD5];
+     char cmdfil2[MAXCMD5];
+-    char resolved[MAXCMD5];
++    char resolved[PATH_MAX];
+     char qsarlog[MAXCMD5];
+     char qsarinp[MAXCMD5];
+ 

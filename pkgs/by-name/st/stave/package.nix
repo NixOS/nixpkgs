@@ -8,7 +8,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "stave";
-  version = "0.0.3";
+  version = "0.0.4";
 
   __structuredAttrs = true;
 
@@ -16,17 +16,14 @@ buildGoModule (finalAttrs: {
     owner = "sufield";
     repo = "stave";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Lq3u5/M9jJl7KLWzu4LRsB1xTn9QjOB4SrlZoF3Ye40=";
+    hash = "sha256-GL6SCqBKHCWMJx1UsLpXUt9jEJK03FU/C7DwhJ8gM6c=";
   };
 
   vendorHash = null;
 
   ldflags = [
     "-s"
-    "-X=github.com/sufield/stave/internal/version.Version=v${finalAttrs.version}"
-    "-X=github.com/sufield/stave/internal/version.Commit=${finalAttrs.src.rev}"
-    "-X=github.com/sufield/stave/internal/version.Date=1970-01-01T00:00:00Z"
-    "-X=github.com/sufield/stave/internal/version.BuiltBy=nixpkgs"
+    "-X=github.com/sufield/stave/internal/version.String=${finalAttrs.version}"
   ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];

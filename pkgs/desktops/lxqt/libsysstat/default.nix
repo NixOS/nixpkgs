@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libsysstat";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "libsysstat";
     rev = version;
-    hash = "sha256-CwQz0vaBhMe32xBoSgFkxSwx3tnIHutp9Vs32FvTNVU=";
+    hash = "sha256-HhiEkubUI3WsHU3JUPDjTvIfHmx5UMkUjY4uO0Vl2w0=";
   };
 
   nativeBuildInputs = [

@@ -6,8 +6,11 @@
   pysail,
   sail,
 
+  aws-lc,
+  pkg-config,
   protoc,
   protobuf,
+  zstd,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -26,11 +29,14 @@ buildPythonPackage (finalAttrs: {
   nativeBuildInputs = with rustPlatform; [
     cargoSetupHook
     maturinBuildHook
+    pkg-config
     protoc
   ];
 
   buildInputs = [
+    aws-lc
     protobuf
+    zstd
   ];
 
   pythonImportsCheck = [

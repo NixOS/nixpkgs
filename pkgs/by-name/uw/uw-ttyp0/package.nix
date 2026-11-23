@@ -71,10 +71,14 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Monospace bitmap screen fonts for X11";
     homepage = "https://people.mpi-inf.mpg.de/~uwe/misc/uw-ttyp0/";
-    license = with lib.licenses; [
-      free
-      mit
-    ];
+    license =
+      with lib.licenses;
+      AND [
+        # fonts and associated files
+        ttyp0
+        # utilities and manpages
+        mit
+      ];
     maintainers = with lib.maintainers; [ rnhmjoj ];
   };
 

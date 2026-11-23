@@ -86,7 +86,7 @@ in
 # https://webkitgtk.org/2024/10/04/webkitgtk-2.46.html recommends building with clang.
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "webkitgtk";
-  version = "2.54.2";
+  version = "2.54.3";
   name = "webkitgtk-${finalAttrs.version}+abi=${abiVersion}";
 
   outputs = [
@@ -101,13 +101,19 @@ clangStdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://webkitgtk.org/releases/webkitgtk-${finalAttrs.version}.tar.xz";
-    hash = "sha256-p2NFs5G+9iEftats+rLoayhdGM2hfLua3llfElK4YGU=";
+    hash = "sha256-J3nBtG+Idi6EAGUCcboURS3E4ws3BZmBVS2LVit9CGI=";
   };
 
   patches = lib.optionals clangStdenv.hostPlatform.isLinux [
     (replaceVars ./fix-bubblewrap-paths.patch {
       inherit (builtins) storeDir;
       inherit (addDriverRunpath) driverLink;
+    })
+
+    # WebKit uses `dlopen` instead of linking against flite
+    # See: https://commits.webkit.org/324648@main
+    (replaceVars ./fix-flite-dlopen-paths.patch {
+      fliteLib = "${lib.getLib flite}/lib";
     })
 
     # Workaround to fix cross-compilation for RiscV
@@ -276,6 +282,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     mainProgram = "WebKitWebDriver";
     homepage = "https://webkitgtk.org/";
     license = lib.licenses.bsd2;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "webkitgtk" finalAttrs.version;
     pkgConfigModules =
       if lib.versionAtLeast abiVersion "6.0" then
         [

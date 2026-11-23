@@ -226,7 +226,7 @@ rec {
           mkdir -p $dst
 
           TOUCH_IF_DB=$dst/.used-docbook \
-          python ${./mergeJSON.py} \
+          python -P ${./mergeJSON.py} \
             ${lib.optionalString warningsAreErrors "--warnings-are-errors"} \
             $baseJSON $optionsPath \
             > $dst/options.json

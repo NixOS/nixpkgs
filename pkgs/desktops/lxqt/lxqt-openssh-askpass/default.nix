@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lxqt-openssh-askpass";
-  version = "2.4.0";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "lxqt-openssh-askpass";
     rev = version;
-    hash = "sha256-87soVKVcC3B6Wm7iRy15k/rjLb9OX/2se0btIOyKA6Q=";
+    hash = "sha256-Mynslfv3rxStTRxWhcfjMF2X0/b85B18QEzTgMPAM8M=";
   };
 
   nativeBuildInputs = [

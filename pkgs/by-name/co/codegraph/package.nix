@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "codegraph";
-  version = "1.6.2";
+  version = "1.6.3";
 
   src =
     finalAttrs.passthru.sources.${stdenv.hostPlatform.system}
@@ -67,15 +67,15 @@ stdenv.mkDerivation (finalAttrs: {
     sources = {
       "aarch64-darwin" = fetchurl {
         url = "https://github.com/colbymchenry/codegraph/releases/download/v${finalAttrs.version}/codegraph-darwin-arm64.tar.gz";
-        hash = "sha256-100b+0Bg22PsPCtyxOF/dsMZeK87rWrOQ3DRUBrAZi4=";
+        hash = "sha256-1AvDBNHePTdNcLRrDkCV3RJKDGuBAQrNL0m3tPvelIM=";
       };
       "aarch64-linux" = fetchurl {
         url = "https://github.com/colbymchenry/codegraph/releases/download/v${finalAttrs.version}/codegraph-linux-arm64.tar.gz";
-        hash = "sha256-yMa+KSviHQDeomutiyjUNHMc9hL7jMR13BD1swOLW2Q=";
+        hash = "sha256-i6KeBK+i+4W2cYlm31UApjPjEDtv+YcmB15lnzXdYho=";
       };
       "x86_64-linux" = fetchurl {
         url = "https://github.com/colbymchenry/codegraph/releases/download/v${finalAttrs.version}/codegraph-linux-x64.tar.gz";
-        hash = "sha256-7wr0FgkhKPsczHI3hgALft9KaXH+YErNCL+Wbk83uCg=";
+        hash = "sha256-q/bntBHGzvHdVd1BsfNBL6lgEwB5PoZ4cPhcIm7sZYc=";
       };
     };
     updateScript = writeShellScript "update-codegraph" ''

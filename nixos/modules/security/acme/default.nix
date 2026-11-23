@@ -252,8 +252,10 @@ let
               "--dns"
               data.dnsProvider
             ]
-            ++ lib.optionals (!data.dnsPropagationCheck) [
+            ++ lib.optionals (!data.dnsAuthoritativePropagationCheck) [
               "--dns.propagation.disable-ans"
+            ]
+            ++ lib.optionals (!data.dnsRecursivePropagationCheck) [
               "--dns.propagation.disable-rns"
             ]
             ++ lib.optionals (data.dnsResolver != null) [
@@ -673,6 +675,25 @@ let
       };
     in
     {
+      imports = [
+        ../../misc/assertions.nix
+        (lib.mkRemovedOptionModule [ "dnsPropagationCheck" ] ''
+          This option has been split into `dnsAuthoritativePropagationCheck`
+          and `dnsRecursivePropagationCheck`
+
+          The authoritative check queries the zone's authoritative nameservers
+          directly to verify that they serve the updated DNS records. The
+          recursive check queries your locally configured DNS resolvers, which
+          may still return cached records until their TTL expires.
+
+          If you previously disabled `dnsPropagationCheck`, review
+          which propagation checks you intended to skip and disable the
+          corresponding new options. To preserve the previous behavior, you
+          may need to disable both `dnsAuthoritativePropagationCheck` and
+          `dnsRecursivePropagationCheck`.
+        '')
+      ];
+
       options = {
         validMinDays = lib.mkOption {
           type = lib.types.nullOr lib.types.int;
@@ -860,12 +881,28 @@ let
           '';
         };
 
-        dnsPropagationCheck = lib.mkOption {
+        dnsAuthoritativePropagationCheck = lib.mkOption {
           type = lib.types.bool;
-          inherit (defaultAndText "dnsPropagationCheck" true) default defaultText;
+          inherit (defaultAndText "dnsAuthoritativePropagationCheck" true) default defaultText;
           description = ''
-            Toggles lego DNS propagation check, which is used alongside DNS-01
-            challenge to ensure the DNS entries required are available.
+            Toggles lego's authoritative DNS propagation check, which is used
+            alongside DNS-01 challenge to ensure the DNS entries required are
+            available.
+          '';
+        };
+
+        dnsRecursivePropagationCheck = lib.mkOption {
+          type = lib.types.bool;
+          inherit (defaultAndText "dnsRecursivePropagationCheck" false) default defaultText;
+          description = ''
+            Toggles lego's recursive DNS propagation check, which is used
+            alongside DNS-01 challenge to ensure the DNS entries required are
+            available.
+
+            :::{.warning}
+            Recursive DNS queries can result in negative caching, which can
+            break the propagation check.
+            :::
           '';
         };
 
@@ -1141,7 +1178,12 @@ in
         let
           certs = lib.attrValues cfg.certs;
         in
-        [
+        cfg.defaults.assertions
+        ++ (lib.foldlAttrs (
+          assertions: _: cert:
+          assertions ++ cert.assertions
+        ) [ ] cfg.certs)
+        ++ [
           {
             assertion = cfg.acceptTerms;
             message = ''

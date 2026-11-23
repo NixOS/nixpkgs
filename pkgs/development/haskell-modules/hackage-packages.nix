@@ -118198,7 +118198,7 @@ self: {
       license = lib.licenses.mit;
       hydraPlatforms = lib.platforms.none;
     }
-  ) { inherit (pkgs) boolector; };
+  ) { boolector = null; };
 
   boolexpr = callPackage (
     {
@@ -129245,7 +129245,10 @@ self: {
       description = "Formats package descriptions";
       license = lib.meta.getLicenseFromSpdxId "MIT";
       mainProgram = "cabal-gild";
-      maintainers = [ lib.maintainers.turion ];
+      maintainers = [
+        lib.maintainers.tfausak
+        lib.maintainers.turion
+      ];
     }
   ) { };
 
@@ -193333,6 +193336,7 @@ self: {
       ];
       description = "You do not have to write variable names twice in Debug.Trace";
       license = lib.licenses.mit;
+      maintainers = [ lib.maintainers.ncaq ];
     }
   ) { };
 
@@ -318645,6 +318649,7 @@ self: {
       license = lib.licenses.mit;
       hydraPlatforms = lib.platforms.none;
       mainProgram = "haskell-import-graph";
+      maintainers = [ lib.maintainers.ncaq ];
       broken = true;
     }
   ) { };
@@ -345240,6 +345245,7 @@ self: {
       license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
       hydraPlatforms = lib.platforms.none;
       mainProgram = "example-anomaly-monitor";
+      maintainers = [ lib.maintainers.ncaq ];
       broken = true;
     }
   ) { };
@@ -356463,6 +356469,7 @@ self: {
       ];
       license = lib.licenses.mit;
       mainProgram = "homura-stopwatch";
+      maintainers = [ lib.maintainers.ncaq ];
     }
   ) { };
 
@@ -647204,6 +647211,7 @@ self: {
       description = "compile es2015";
       license = lib.licenses.publicDomain;
       hydraPlatforms = lib.platforms.none;
+      maintainers = [ lib.maintainers.ncaq ];
       broken = true;
     }
   ) { };
@@ -691311,6 +691319,7 @@ self: {
       ];
       description = "simple and easy haskell string transform wrapper";
       license = lib.licenses.mit;
+      maintainers = [ lib.maintainers.ncaq ];
     }
   ) { };
 
@@ -748693,6 +748702,7 @@ self: {
       description = "uniq-deep";
       license = lib.licenses.mit;
       mainProgram = "uniq-deep";
+      maintainers = [ lib.maintainers.ncaq ];
     }
   ) { };
 
@@ -795800,6 +795810,7 @@ self: {
       ];
       description = "renderBootstrap4";
       license = lib.licenses.mit;
+      maintainers = [ lib.maintainers.ncaq ];
     }
   ) { };
 
@@ -797437,6 +797448,7 @@ self: {
       ];
       description = "yesod recaptcha2";
       license = lib.licenses.mit;
+      maintainers = [ lib.maintainers.ncaq ];
     }
   ) { };
 

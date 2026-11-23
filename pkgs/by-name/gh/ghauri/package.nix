@@ -6,25 +6,24 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "ghauri";
-  version = "1.3.8";
+  version = "1.4.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "r0oth3x49";
     repo = "ghauri";
     tag = finalAttrs.version;
-    hash = "sha256-GEUuQMtp8XO32uOIILWiMfngPXx/3vCKk+YbA0E13rg=";
+    hash = "sha256-sZooW50kvgz52xAy1xCdzL+6g4Az914ZcFfdxZllTts=";
   };
 
-  build-system = with python3.pkgs; [
-    setuptools
-  ];
+  build-system = with python3.pkgs; [ setuptools ];
 
   dependencies = with python3.pkgs; [
     chardet
     colorama
     requests
     tldextract
+    ua-generator
   ];
 
   # Project has no tests

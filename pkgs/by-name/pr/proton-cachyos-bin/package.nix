@@ -10,9 +10,6 @@ mkProtonBinDerivation (finalAttrs: {
   pname = "proton-cachyos-bin";
   version = "11.0-20261015";
 
-  strictDeps = true;
-  __structuredAttrs = true;
-
   variants = {
     "x86_64-linux" = {
       toolName = "proton-cachyos-${finalAttrs.version}-slr-x86_64";

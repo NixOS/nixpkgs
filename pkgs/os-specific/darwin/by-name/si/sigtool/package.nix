@@ -5,6 +5,7 @@
   pkg-config,
   openssl,
   libplist,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -25,6 +26,8 @@ stdenv.mkDerivation rec {
   ];
 
   installFlags = [ "PREFIX=$(out)" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Tool for working with embedded signatures in Mach-O files";

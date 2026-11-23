@@ -11,14 +11,22 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "unrar-free";
-  version = "0.3.4";
+  version = "0.4.0";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitLab {
     owner = "bgermann";
     repo = "unrar-free";
     tag = finalAttrs.version;
-    hash = "sha256-Eg5yGDtmaJLmUHWY5jdvhFtyPxMWWuWBrKR8noZqZw8=";
+    hash = "sha256-XjcwKkPHptIr+hr+kzXhDUzE62gqTXquv0SzRoWBM14=";
   };
+
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -51,6 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
       special care has been taken to ensure it meets most user's needs.
     '';
     homepage = "https://gitlab.com/bgermann/unrar-free";
+    changelog = "https://gitlab.com/bgermann/unrar-free/-/blob/${finalAttrs.version}/ChangeLog";
     license = lib.licenses.gpl2Plus;
     mainProgram = "unrar-free";
     maintainers = with lib.maintainers; [

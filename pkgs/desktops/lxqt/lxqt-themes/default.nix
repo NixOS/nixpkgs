@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lxqt-themes";
-  version = "2.4.0";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "lxqt-themes";
     rev = version;
-    hash = "sha256-whMW4fMiIcL4Qb/VNynVGBTIyObTMlf6AaWCnBYikZI=";
+    hash = "sha256-6RnW2C88jPPYlNxp1JZAYOGXBRj0TrwEnq8EgU0lZB4=";
   };
 
   nativeBuildInputs = [

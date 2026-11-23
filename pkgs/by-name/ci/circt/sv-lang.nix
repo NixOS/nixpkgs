@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "MikePopoloski";
     repo = "slang";
     rev = "44dc55f99b9c64971893013e7931e643fbedcf23";
-    hash = "sha256-tKse5rV5kHZmCOb8Zb8k4bOw4wN3pDfY5exdpva57bU=";
+    hash = "sha256-lp1rG/p3cnr6BYqIqsinF0dNo3ihzMWMHAuH1HgPM6s=";
   };
 
   __structuredAttrs = true;

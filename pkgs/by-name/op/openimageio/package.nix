@@ -16,6 +16,7 @@
   libwebp,
   opencolorio,
   openexr,
+  openjpeg,
   openjph,
   ptex,
   python3Packages,
@@ -60,6 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     libultrahdr
     opencolorio
     openexr
+    openjpeg
     openjph
     ptex
     robin-map

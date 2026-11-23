@@ -4,7 +4,11 @@ import json
 import subprocess
 import urllib.request
 
-fonts_file = "fonts.nix"
+from pathlib import Path
+
+SCRIPT_DIR = Path(__file__).resolve().parent
+
+fonts_file = SCRIPT_DIR / "fonts.nix"
 fonts_data = json.loads(
     subprocess.check_output(["nix", "eval", "--json", "-f", fonts_file])
 )
@@ -18,7 +22,7 @@ for font in fonts_data.keys():
     current_version = fonts_data.get(font, {}).get("version")
 
     latest_release = next(
-        (r for r in releases if r["tag_name"].lower().startswith(font_tag)), None
+        (r for r in releases if r["tag_name"].lower().startswith(font_tag) or r["name"].lower().startswith(font_tag)), None
     )
 
     if latest_release is None:

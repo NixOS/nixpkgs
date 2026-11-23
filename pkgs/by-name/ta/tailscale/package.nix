@@ -191,7 +191,8 @@ buildGo127Module (finalAttrs: {
     installShellCompletion --cmd tailscale \
       --bash <($out/bin/tailscale completion bash) \
       --fish <($out/bin/tailscale completion fish) \
-      --zsh <($out/bin/tailscale completion zsh)
+      --zsh <($out/bin/tailscale completion zsh) \
+      --powershell <($out/bin/tailscale completion powershell)
   '';
 
   passthru.tests =

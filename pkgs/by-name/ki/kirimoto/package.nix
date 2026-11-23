@@ -4,27 +4,21 @@
   fetchurl,
 }:
 
-let
+appimageTools.wrapType2 (finalAttrs: {
   version = "4.7.3";
   pname = "kirimoto";
 
   src = fetchurl {
-    url = "https://github.com/GridSpace/grid-apps/releases/download/${version}/KiriMoto-linux-x86_64.AppImage";
+    url = "https://github.com/GridSpace/grid-apps/releases/download/${finalAttrs.version}/KiriMoto-linux-x86_64.AppImage";
     hash = "sha256-XPF9JbBM2Hoxyed+2tYyb4FU6/a8bCoKnyTuTG7/iXE=";
   };
 
-  appimageContents = appimageTools.extract { inherit pname version src; };
-
-in
-appimageTools.wrapType2 rec {
-  inherit pname version src;
-
   extraInstallCommands = ''
-    install -Dm444 ${appimageContents}/grid-apps.desktop -t $out/share/applications/
-    install -Dm444 ${appimageContents}/grid-apps.png -t $out/share/icons/hicolor/512x512/apps/
+    install -Dm444 ${finalAttrs.contents}/grid-apps.desktop -t $out/share/applications/
+    install -Dm444 ${finalAttrs.contents}/grid-apps.png -t $out/share/icons/hicolor/512x512/apps/
 
     substituteInPlace $out/share/applications/grid-apps.desktop \
-      --replace-fail 'Exec=AppRun' 'Exec=${meta.mainProgram} --no-sandbox --ozone-platform=x11 --disable-gpu-sandbox --in-process-gpu'
+      --replace-fail 'Exec=AppRun' 'Exec=kirimoto --no-sandbox --ozone-platform=x11 --disable-gpu-sandbox --in-process-gpu'
   '';
 
   meta = {
@@ -38,4 +32,4 @@ appimageTools.wrapType2 rec {
     platforms = [ "x86_64-linux" ];
     mainProgram = "kirimoto";
   };
-}
+})

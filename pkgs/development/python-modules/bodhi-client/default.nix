@@ -13,13 +13,13 @@
 
 buildPythonPackage rec {
   pname = "bodhi-client";
-  version = "26.4.0";
+  version = "26.11.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "bodhi_client";
     inherit version;
-    hash = "sha256-PhC+t3P+9cRbi+ROAWlEvUhjenlKJ+yBorYp4Wz1OxE=";
+    hash = "sha256-T/O2JLuqrY8wYBPF0Pwz8scUP+8JRkFOFmGS0Z2cmFc=";
   };
 
   build-system = [ poetry-core ];

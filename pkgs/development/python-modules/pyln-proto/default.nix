@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "pyln-proto";
-  version = "26.06.9";
+  version = "26.06.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ElementsProject";
     repo = "lightning";
     tag = "v${version}";
-    hash = "sha256-RhCe8m0/1ge0r6pNa3oQENg2wu8UvRtERqX5QJsHQjo=";
+    hash = "sha256-NMy7nr2xfP7JX2QY/zYvnxWQYtyhcb2uvqGljyTgYjM=";
   };
 
   postUnpack = ''

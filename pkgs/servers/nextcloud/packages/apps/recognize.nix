@@ -2,7 +2,7 @@
   stdenv,
   fetchurl,
   lib,
-  nodejs_22,
+  nodejs_26,
   node-pre-gyp,
   node-gyp,
   python3,
@@ -15,7 +15,7 @@
   ncVersion,
 }:
 let
-  nodejs = nodejs_22;
+  nodejs = nodejs_26;
   latestVersionForNc = {
     "32" = {
       version = "10.0.7";
@@ -78,16 +78,22 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # Make it clear we are not reading the node in settings
     sed -i "/'node_binary'/s:'""':'Nix Controlled':" recognize/lib/Service/SettingsService.php
+    sed -i "/'ffmpeg_binary'/s:'""':'Nix Controlled':" recognize/lib/Service/SettingsService.php
 
-    # Replace all occurrences of node (and check that we actually removed them all)
+    # Replace all occurrences of node and ffmpeg (and check that we actually removed them all)
     test "$(grep "get[a-zA-Z]*('node_binary'" recognize/lib/**/*.php | wc -l)" -gt 0
+    test "$(grep "get[a-zA-Z]*('ffmpeg_binary'" recognize/lib/**/*.php | wc -l)" -gt 0
     substituteInPlace recognize/lib/**/*.php \
       --replace-quiet "\$this->settingsService->getSetting('node_binary')" "'${lib.getExe nodejs}'" \
       --replace-quiet "\$this->config->getAppValueString('node_binary', '""')" "'${lib.getExe nodejs}'" \
       --replace-quiet "\$this->config->getAppValueString('node_binary')" "'${lib.getExe nodejs}'" \
       --replace-quiet "\$this->config->getAppValueString('node_binary', ''', lazy: true)" "'${lib.getExe nodejs}'" \
-      --replace-quiet "\$this->config->getAppValueString('node_binary', lazy: true)" "'${lib.getExe nodejs}'"
+      --replace-quiet "\$this->config->getAppValueString('node_binary', lazy: true)" "'${lib.getExe nodejs}'" \
+      --replace-quiet "\$this->settingsService->getSetting('ffmpeg_binary')" "'${lib.getExe ffmpeg-headless}'" \
+      --replace-quiet "\$this->config->getAppValueString('ffmpeg_binary', ''', lazy: true)" "'${lib.getExe ffmpeg-headless}'" \
+      --replace-quiet "\$this->config->getAppValueString('ffmpeg_binary', lazy: true)" "'${lib.getExe ffmpeg-headless}'"
     test "$(grep "get[a-zA-Z]*('node_binary'" recognize/lib/**/*.php | wc -l)" -eq 0
+    test "$(grep "get[a-zA-Z]*('ffmpeg_binary'" recognize/lib/**/*.php | wc -l)" -eq 0
 
     # Skip trying to install it... (less warnings in the log)
     sed  -i '/public function run/areturn ; //skip' recognize/lib/Migration/InstallDeps.php

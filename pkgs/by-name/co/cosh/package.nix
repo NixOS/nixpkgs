@@ -10,7 +10,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosh";
-  version = "0.4.1";
+  version = "0.4.2";
 
   __structuredAttrs = true;
 
@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "tomhrr";
     repo = "cosh";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Yx+6tuaASCUrUcnq++JvkufH1DZB1gwnVtS2YVfEOuM=";
+    hash = "sha256-IGLLOBT+UxdB4PUVvnGGvLu4zh+rUdq6jdIQk+wFiQ4=";
   };
 
   cargoHash = "sha256-UeqgD7gQXllkIUXKTVtXi/NTBhRNNkHSesFECR+vbrs=";

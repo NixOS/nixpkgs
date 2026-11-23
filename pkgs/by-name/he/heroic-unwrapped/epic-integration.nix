@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    pkgsCross.mingwW64.buildPackages.gcc
+    pkgsCross.mingw-msvcrt-x86_64.buildPackages.gcc
   ];
 
   cmakeFlags = [ (lib.cmakeFeature "CMAKE_TOOLCHAIN_FILE" "../windows.cmake") ];

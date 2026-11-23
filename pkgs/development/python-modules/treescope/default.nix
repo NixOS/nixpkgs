@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
 
   # build-system
   flit-core,
@@ -26,25 +25,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "treescope";
-  version = "0.1.10";
+  version = "0.1.11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "google-deepmind";
     repo = "treescope";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SfycwuI/B7S/rKkaqxtnJI26q89313pvj/Xsomg6qyA=";
+    hash = "sha256-tFv/hb+xgur/ntrJxDY2cZy8mwy9p9vhAwTlkUAQFu4=";
   };
-
-  patches = [
-    # Handle PyTorch versions without named tensor support (removed in torch 2.13):
-    # https://github.com/google-deepmind/treescope/pull/72
-    (fetchpatch {
-      name = "torch-without-named-tensors.patch";
-      url = "https://github.com/google-deepmind/treescope/commit/20a94822d0c4c0a55c10eaa8fed96a77757f4068.patch";
-      hash = "sha256-amv4AG2G7TXnzGYBE14mARQh8IYuH3RswtbywTmi4b4=";
-    })
-  ];
 
   build-system = [ flit-core ];
 

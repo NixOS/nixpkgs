@@ -39,7 +39,7 @@ in
     runCommand "cloudflared-${version}-runs-through-wine"
       {
         nativeBuildInputs = [ wine ];
-        exe = "${pkgsCross.mingw32.cloudflared}/bin/cloudflared.exe";
+        exe = "${pkgsCross.mingw-msvcrt-i686.cloudflared}/bin/cloudflared.exe";
       }
       ''
         export HOME="$(mktemp -d)"
@@ -52,7 +52,7 @@ in
     runCommand "cloudflared-${version}-runs-through-wine64"
       {
         nativeBuildInputs = [ wine64 ];
-        exe = "${pkgsCross.mingwW64.cloudflared}/bin/cloudflared.exe";
+        exe = "${pkgsCross.mingw-msvcrt-x86_64.cloudflared}/bin/cloudflared.exe";
       }
       ''
         export HOME="$(mktemp -d)"

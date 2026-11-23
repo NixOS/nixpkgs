@@ -6,17 +6,14 @@
   php,
 }:
 
-let
-  version = "0.19.1";
-in
-buildPecl {
+buildPecl (finalAttrs: {
   pname = "vld";
-  inherit version;
+  version = "0.19.1";
 
   src = fetchFromGitHub {
     owner = "derickr";
     repo = "vld";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-fNmDH5jUwwYYgIpDSvb+NVcg+q97QzKCcx1uaMBwDrs=";
   };
 
@@ -32,4 +29,4 @@ buildPecl {
     maintainers = [ ];
     broken = lib.versionOlder php.version "8.2";
   };
-}
+})

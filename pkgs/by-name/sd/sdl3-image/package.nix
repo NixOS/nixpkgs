@@ -7,6 +7,7 @@
   stdenv,
   cmake,
   fetchFromGitHub,
+  fetchpatch,
   validatePkgConfig,
   libpng,
   libjpeg,
@@ -35,7 +36,16 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-knu9AXyCrO9WDcJwu3+1MmkJDYkli5bbwnqpMErIIzs=";
   };
 
+  patches = [
+    (fetchpatch {
+      name = "CVE-2026-117557.patch";
+      url = "https://github.com/libsdl-org/SDL_image/commit/5cfbe85f3a783417eec4d5aa0660b40c2cff5292.patch";
+      hash = "sha256-mcwXphjE5haGrWmH0oQBUY3TigJas4dRRD2Rd7PJ1vI=";
+    })
+  ];
+
   strictDeps = true;
+  __structuredAttrs = true;
   doCheck = true;
 
   nativeBuildInputs = [

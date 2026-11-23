@@ -10,13 +10,13 @@
 buildHomeAssistantComponent (finalAttrs: {
   owner = "sfortis";
   domain = "openai_tts";
-  version = "3.11";
+  version = "3.12";
 
   src = fetchFromGitHub {
     inherit (finalAttrs) owner;
     repo = "openai_tts";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eBSp1gKPB7NE2zJgs8+czdUrEN1qg7vsKSzr+5484pk=";
+    hash = "sha256-KM8S8ypbn3s1ninuW64/FEOIW/BIcv6B32GhGvKr0R4=";
   };
 
   dependencies = [ sentence-stream ];

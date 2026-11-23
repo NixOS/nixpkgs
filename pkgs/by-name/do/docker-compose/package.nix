@@ -7,17 +7,17 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "docker-compose";
-  version = "5.7.0";
+  version = "5.7.1";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "docker";
     repo = "compose";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GMXHVWZaJ/fx/jhe3HOkLaKIRHvjiUvlrq9/FrWde6M=";
+    hash = "sha256-wLs2QPEP2lmB4rh5qktE4f7g1PefET5ftY9IgPzkSZs=";
   };
 
-  vendorHash = "sha256-FWTZtRToK47uii081j9PeW+Jkjd4kMTL3sU6FNH8OAg=";
+  vendorHash = "sha256-piqswZpDyIgiYhBFy0g+5tWgzBlahhcOYM7cFFbrAFE=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 

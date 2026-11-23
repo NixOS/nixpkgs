@@ -1,6 +1,7 @@
 {
+  lib,
+  stdenv,
   buildPythonPackage,
-  pythonOlder,
   hatchling,
   opentelemetry-instrumentation,
   opentelemetry-api,
@@ -27,6 +28,14 @@ buildPythonPackage {
   nativeCheckInputs = [
     opentelemetry-test-utils
     pytestCheckHook
+  ];
+
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # AttributeError: <class 'psutil.Process'> does not have the attribute 'io_counters'
+    # in unittest/mock.py causes some measurements to abort unexpectedly
+    "test_process_disk_io"
+    "test_process_metrics_instrument"
+    "test_system_metrics_instrument"
   ];
 
   pythonImportsCheck = [ "opentelemetry.instrumentation.system_metrics" ];

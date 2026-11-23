@@ -64,7 +64,7 @@ buildPythonPackage (finalAttrs: {
     runHook preCheck
 
     export HOME=$TMPDIR
-    xvfb-run --auto-display ${python.interpreter} ${./square.py}
+    xvfb-run --auto-display ${python.interpreter} -P ${./square.py}
 
     runHook postCheck
   '';

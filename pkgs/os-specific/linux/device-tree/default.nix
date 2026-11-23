@@ -42,7 +42,7 @@
         (python3.pythonOnBuildForHost.withPackages (ps: [ ps.libfdt ]))
       ];
       buildCommand = ''
-        python ${./apply_overlays.py} --source ${base} --destination $out --overlays ${writers.writeJSON "overlays.json" overlays'}
+        python -P ${./apply_overlays.py} --source ${base} --destination $out --overlays ${writers.writeJSON "overlays.json" overlays'}
       '';
     }
   );

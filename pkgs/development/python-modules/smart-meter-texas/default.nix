@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "smart-meter-texas";
-  version = "0.5.6";
+  version = "0.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "grahamwetzler";
     repo = "smart-meter-texas";
     tag = "v${version}";
-    hash = "sha256-Jk3kWfiidflzLgkp2BGgTfkaYrLwyQx+IimnkzBVwRw=";
+    hash = "sha256-g0AqbI3YZaHw5oHj6QjlpiAS/jbA9ZbbCAvDrzSwb9c=";
   };
 
   postPatch = ''

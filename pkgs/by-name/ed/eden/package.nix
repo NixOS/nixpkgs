@@ -11,6 +11,7 @@
   enet,
   fetchFromGitea,
   fetchFromGitHub,
+  fetchpatch,
   fetchurl,
   ffmpeg-headless,
   # FIXME: unpin when upstream supports fmt 12
@@ -82,6 +83,15 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-79/JmIRWysoc3psJqMFyiNc2gjTY4VhJfdNaiTvisMk=";
   };
+
+  patches = [
+    # Fix aarch64-linux build with Linux 7.3 headers, remove with the next release
+    (fetchpatch {
+      url = "https://git.eden-emu.dev/eden-emu/eden/commit/305f40100d76ec57b13c2f03eafd490db83691cb.patch";
+      includes = [ "src/core/arm/nce/arm_nce_asm_definitions.h" ];
+      hash = "sha256-mF8p82VZa+aYnC5pDBfOnaLJn7hTT6gOWWdTLn8qT44=";
+    })
+  ];
 
   strictDeps = true;
   __structuredAttrs = true;

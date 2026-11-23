@@ -28,11 +28,11 @@ def generate_sources(assets, feature_version, out):
         if binary["heap_size"] != "normal": continue
         if binary["architecture"] not in arch_to_nixos: continue
 
-        version = ".".join(str(v) for v in [
-            asset["version"]["major"],
-            asset["version"]["minor"],
-            asset["version"]["security"]
-        ])
+        version_info = asset["version"]
+        version_parts = [version_info["major"], version_info["minor"], version_info["security"]]
+        if version_info.get("patch"):
+            version_parts.append(version_info["patch"])
+        version = ".".join(map(str, version_parts))
         build = str(asset["version"]["build"])
 
         arch_map = (

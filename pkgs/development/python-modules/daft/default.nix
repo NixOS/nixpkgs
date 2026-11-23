@@ -13,6 +13,9 @@
   rustc,
   nasm,
 
+  # buildInputs
+  zstd,
+
   # dependencies
   packaging,
   pyarrow,
@@ -131,7 +134,16 @@ buildPythonPackage (finalAttrs: {
     nasm
   ];
 
+  buildInputs = [
+    zstd
+  ];
+
   dontUseCmakeConfigure = true;
+
+  # keeps tikv-jemalloc-sys on its vendored static jemalloc
+  postConfigure = ''
+    unset JEMALLOC_OVERRIDE
+  '';
 
   env = {
     DAFT_RUNNER = "native";

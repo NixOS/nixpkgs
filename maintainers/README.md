@@ -24,6 +24,11 @@ In case of critical security updates, the [security team](https://nixos.org/comm
 In case of conflict, the maintainer takes priority and is allowed to revert the changes.
 This can happen for example if the maintainer was on holiday.
 
+> [!NOTE]
+> In accordance with the [Automation/AI policy](../CONTRIBUTING.md#automationai-policy), each contribution needs to have a responsible person in the loop.
+> This policy extends to maintainers especially, requiring all maintainers to be a person capable of taking on responsibility for the packages in nixpkgs they maintain.
+> Therefore, LLM agents are not considered eligible to become maintainers.
+
 ### How to become a maintainer
 
 We encourage people who care about a package to assign themselves as a maintainer.

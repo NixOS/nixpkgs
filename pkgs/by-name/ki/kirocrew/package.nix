@@ -10,13 +10,13 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "kirocrew";
-  version = "0.11.2";
+  version = "0.12.2";
 
   src = fetchFromGitHub {
     owner = "kirodotdev";
     repo = "KiroCrew";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lNvpPz+oWsCfxBX3b/nGcGlYsSbYiGB5KrgRr2k5Jgs=";
+    hash = "sha256-r582DkzVUZC8xl6zT5kB7FKYk25CV35wMkKeEmnjJOk=";
   };
 
   pyproject = true;
@@ -29,6 +29,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     with python3.pkgs;
     [
       aiohttp
+      httpx
       yarl
       multidict
       slack-sdk
@@ -58,7 +59,8 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       truststore
     ]
-    ++ qrcode.optional-dependencies.pil;
+    ++ qrcode.optional-dependencies.pil
+    ++ httpx.optional-dependencies.http2;
 
   # We do not need pysqlite3-binary, because the stdlib sqlite3 works because FTS5 is enabled unconditionally.
   # rjieba is not in nixpkgs. kirocrew imports it lazily and, when it is missing,
@@ -106,6 +108,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   passthru = {
     frontend = callPackage ./frontend.nix { kirocrew = finalAttrs.finalPackage; };
     optional-dependencies = with python3.pkgs; {
+      bedrock = [ boto3 ];
       voice = [
         boto3
         # amazon-transcribe not yet available in nixpkgs

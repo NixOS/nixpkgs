@@ -11,19 +11,19 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "logurich";
-  version = "0.9.3";
+  version = "1.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PakitoSec";
     repo = "logurich";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VYlmwDws8YjjcWGugD/CMqCoutKQj0W7J8NHkMzsX8U=";
+    hash = "sha256-WkbE1bUWQWd/Zb9Nkv0HMNp9FK6QRceWmdm0zplD9HU=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "uv_build>=0.9.20,<0.10.0" "uv_build"
+      --replace-fail "uv_build>=0.12.1,<0.13.0" "uv_build"
   '';
 
   pythonRelaxDeps = [ "rich" ];
@@ -36,9 +36,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   optional-dependencies = {
-    click = [
-      click
-    ];
+    click = [ click ];
   };
 
   nativeCheckInputs = [ pytestCheckHook ];

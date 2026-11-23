@@ -20,7 +20,7 @@
   exceptiongroup,
   glom,
   jsonschema,
-  mcp_1,
+  mcp,
   opentelemetry-api,
   opentelemetry-exporter-otlp-proto-http,
   opentelemetry-instrumentation-requests,
@@ -133,7 +133,7 @@ buildPythonPackage (finalAttrs: {
     exceptiongroup
     glom
     jsonschema
-    mcp_1
+    mcp
     opentelemetry-api
     opentelemetry-exporter-otlp-proto-http
     opentelemetry-instrumentation-requests
@@ -203,6 +203,7 @@ buildPythonPackage (finalAttrs: {
   };
 
   meta = common.meta // {
+    broken = lib.versionAtLeast mcp.version "2";
     description = common.meta.description + " - cli";
     inherit (semgrep-core.meta) platforms;
     mainProgram = "semgrep";

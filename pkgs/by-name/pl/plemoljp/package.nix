@@ -38,9 +38,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://github.com/yuru7/PlemolJP";
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [
-      kachick
-      yvnth
-    ];
+    maintainers = with lib.maintainers; [ kachick ];
   };
 })

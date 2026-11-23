@@ -22,4 +22,6 @@ in
       url = "mirror://mozilla/firefox/releases/${src.firefox.version}/source/firefox-${src.firefox.version}.source.tar.xz";
     }
   );
+
+  firefoxVersion = src.firefox.version;
 }

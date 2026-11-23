@@ -20,6 +20,17 @@ buildGoModule {
 
   vendorHash = null;
 
+  # kube-openapi's vendored go-json-experiment makes errors.Is walk long error
+  # chains exponentially (SemanticError.Is recurses despite also having Unwrap),
+  # hanging Go 1.27's json/v2-backed encoding/json on cyclic CRD schemas.
+  postPatch = ''
+    substituteInPlace \
+      vendor/k8s.io/kube-openapi/pkg/internal/third_party/go-json-experiment/json/errors.go \
+      --replace-fail \
+      'return e == target || target == Error || errors.Is(e.Err, target)' \
+      'return e == target || target == Error'
+  '';
+
   # Disable the download tool.
   # Disable network based tests.
   preBuild = ''

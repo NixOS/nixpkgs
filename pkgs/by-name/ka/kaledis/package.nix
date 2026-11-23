@@ -14,17 +14,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kaledis";
-  version = "4.1.0";
+  version = "4.1.1";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "orpos";
     repo = "kaledis";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SHjjhPnmovFWem3UEvnldbP/4vhlJqruo9EwDFDiDvM=";
+    hash = "sha256-GekS+p+3j3VY+ftuUcCfHUX18LczpWvSE0B7YTAWCFc=";
   };
 
-  cargoHash = "sha256-UHUqSuI/r3Fv5Fh1l8u+9QGi73oTut9Ij/G6NGc89FA=";
+  cargoHash = "sha256-I9Xw0HILgGINx2Obc8MN/7m7VL7wXbh8fpsQHN9qJXs=";
 
   # We exclude doctests as they're broken in the upstream release
   cargoTestFlags = [

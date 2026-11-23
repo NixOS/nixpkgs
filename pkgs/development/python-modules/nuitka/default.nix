@@ -48,7 +48,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python compiler with full language support and CPython compatibility";
-    license = lib.licenses.asl20;
+    license = lib.licenses.agpl3Plus;
     homepage = "https://nuitka.net/";
     # never built on darwin since first introduction in nixpkgs
     broken = stdenv.hostPlatform.isDarwin;

@@ -43,9 +43,10 @@ stdenv.mkDerivation (finalAttrs: {
     vulkan-validation-layers
   ];
 
-  # GCC 16 false positive in std::sort/std::vector::resize (https://gcc.gnu.org/bugzilla/show_bug.cgi?id=124945),
-  # turned fatal by upstream's -Werror: https://github.com/Try/OpenGothic/issues/1010
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=array-bounds";
+  # GCC 16 false positives turned fatal by upstream's -Werror: https://github.com/Try/OpenGothic/issues/1010
+  # array-bounds in std::sort/std::vector::resize (https://gcc.gnu.org/bugzilla/show_bug.cgi?id=124945),
+  # stringop-overflow in the bounds-checked string_frm::implWrite (aarch64 only)
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=array-bounds -Wno-error=stringop-overflow";
 
   installPhase = ''
     runHook preInstall

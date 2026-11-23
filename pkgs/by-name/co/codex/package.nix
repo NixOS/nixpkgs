@@ -72,21 +72,21 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "codex";
-  version = "0.169.0";
+  version = "0.171.0";
 
   src = fetchFromGitHub {
     owner = "openai";
     repo = "codex";
     rev = finalAttrs.buildCommit;
-    hash = "sha256-p8Vw0Vu8ufPY35k/RkcKE6HOTMJta2J9W33ei/7in+A=";
+    hash = "sha256-Q0fxlAU4oJZOHJtsVVaJJ28XuupzpCYGO4IKn9TAwl0=";
   };
 
   # Matching client/helper stamps; build_id() requires a full commit SHA.
-  buildCommit = "d32063f96c2dff1dc96af839b3952abb6acfeda4";
+  buildCommit = "ccf9be8cc458bd6b8336fe84d68d8893f2691a5e";
 
   sourceRoot = "${finalAttrs.src.name}/codex-rs";
 
-  cargoHash = "sha256-+YSkZwmAP88AOFmNWav4ye4ObbDYAIo0mzeQEzTqDm8=";
+  cargoHash = "sha256-57GGsc4vgmQnnOXOPf2QaqrW8+02cpc/zotb8Y+rRio=";
   # Disable bundled Opus so OPUS_LIB_DIR selects nixpkgs' libopus.
   cargoDeps =
     (rustPlatform.fetchCargoVendor {
@@ -157,8 +157,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     substituteInPlace Cargo.toml \
       --replace-fail 'lto = "thin"' "" \
       --replace-fail 'codegen-units = 4' ""
-
-    sed -i '1i#![recursion_limit = "256"]' chatgpt/src/lib.rs
   '';
 
   nativeBuildInputs = [

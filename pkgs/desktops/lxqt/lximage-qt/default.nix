@@ -9,7 +9,6 @@
   libfm-qt,
   libpthread-stubs,
   lxqt-build-tools,
-  menu-cache,
   qtbase,
   qtimageformats,
   qtsvg,
@@ -21,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lximage-qt";
-  version = "2.4.0";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "lximage-qt";
     rev = version;
-    hash = "sha256-ThP7MuAKysJ/Q/JSO12CuwCt6mCU5tZ2DiKEO0Nfg3U=";
+    hash = "sha256-WAVJAysGjwTH12KXAGC732AdCkn+2QCmLey4hQbd98w=";
   };
 
   nativeBuildInputs = [
@@ -43,7 +42,6 @@ stdenv.mkDerivation rec {
     libexif
     libfm-qt
     libpthread-stubs
-    menu-cache
     qtbase
     qtimageformats # add-on module to support more image file formats
     qtsvg

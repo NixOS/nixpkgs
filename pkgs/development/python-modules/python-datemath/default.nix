@@ -4,24 +4,24 @@
   buildPythonPackage,
   fetchFromGitHub,
   freezegun,
+  hatchling,
   pytestCheckHook,
   pytz,
-  setuptools,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "python-datemath";
-  version = "3.0.3";
+  version = "3.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nickmaccarthy";
     repo = "python-datemath";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VwdY6Gmbmoy7EKZjUlWj56uSiE0OdegPiQv+rmigkq8=";
+    hash = "sha256-UmjcIA16WSACSDx4DlxFT8UxOIxcTMdHRMy6vfo9f5E=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
   dependencies = [ arrow ];
 
@@ -30,8 +30,6 @@ buildPythonPackage (finalAttrs: {
     pytestCheckHook
     pytz
   ];
-
-  enabledTestPaths = [ "tests.py" ];
 
   pythonImportsCheck = [ "datemath" ];
 

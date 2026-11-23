@@ -11,7 +11,7 @@ buildPythonPackage (finalAttrs: {
   pname = "archinfo";
   # Keep angr-management, angr, archinfo, cle, and pyvex in sync.
   # nixpkgs-update: no auto update
-  version = "10.0.5";
+  version = "10.0.7";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -20,7 +20,7 @@ buildPythonPackage (finalAttrs: {
     owner = "angr";
     repo = "archinfo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-iM1w+H+MNoWOjSn0ugGztl0Bn2VoxIkasmna9L43KPc=";
+    hash = "sha256-+0mWoJ4k4yp1fMbS/YgnXoxEx50lIjDUZJji/xnU/xU=";
   };
 
   build-system = [ setuptools ];

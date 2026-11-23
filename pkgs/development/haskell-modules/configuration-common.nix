@@ -505,6 +505,10 @@ with haskellLib;
   # There are numerical tests on random data, that may fail occasionally
   lapack = dontCheck super.lapack;
 
+  # HiGHS >= 1.16 makes querying the solution of an infeasible model an error.
+  # https://hub.darcs.net/thielema/highs-lp/patch/2bd559ad5108c16e2ec9fa401d206ea20fa79889
+  highs-lp = appendPatch ./patches/highs-lp-highs-1.16.patch super.highs-lp;
+
   # Missing files necessary for test suite compilation
   # https://github.com/brandonchinn178/kdl-hs/issues/33
   kdl-hs = dontCheck super.kdl-hs;
@@ -3630,31 +3634,36 @@ with haskellLib;
 # Manually maintained
 // (
   let
-    version = "1.12.1";
+    version = "1.15.0";
 
     src = pkgs.fetchFromGitHub {
       owner = "cachix";
       repo = "cachix";
       tag = "v${version}";
-      hash = "sha256-OUB6hPlFBB9FRdZgZXSye4lDOg+fbrqKe8ePv2IM7NY=";
+      hash = "sha256-ftyytmVYzl0oUnMTmCBNS7TTMSjqCsHNlnGbswGxYY8=";
     };
   in
   {
-    # Switch cachix-api from memory to ram to match crypton >= 1.1
     cachix-api = lib.pipe super.cachix-api [
       (overrideSrc {
         inherit version;
         src = src + "/cachix-api";
       })
-      (appendPatches [ ./patches/cachix-api-crypton-1.1-and-ram.patch ])
+      (addBuildDepend self.openapi3)
     ];
 
-    # Switch cachix from memory to ram to match crypton >= 1.1
     cachix = lib.pipe super.cachix [
       (overrideSrc {
         inherit version;
         src = src + "/cachix";
       })
+      # The test suite spawns the built cachix binary.
+      (overrideCabal (drv: {
+        preCheck = ''
+          export PATH="$PWD/dist/build/cachix:$PATH"
+        ''
+        + (drv.preCheck or "");
+      }))
       (
         drv:
         drv.override {

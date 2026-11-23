@@ -128,6 +128,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     homepage = "https://www.pango.org/";
     license = lib.licenses.lgpl2Plus;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "gnome" finalAttrs.version;
 
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.unix;

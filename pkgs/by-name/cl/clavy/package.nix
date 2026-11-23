@@ -3,6 +3,8 @@
   fetchFromGitHub,
   rustPlatform,
   git,
+  libgit2,
+  pkg-config,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -22,7 +24,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     git # Git2 support
+    pkg-config
   ];
+
+  buildInputs = [ libgit2 ];
 
   meta = {
     description = "Input source switching daemon for macOS";

@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  fetchpatch,
   pkg-config,
   python3,
   libffi,
@@ -12,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "micropython";
-  version = "1.27.0";
+  version = "1.29.0";
 
   src = fetchFromGitHub {
     owner = "micropython";
     repo = "micropython";
     tag = "v${version}";
-    hash = "sha256-q1lpWEZbguH9EbDKa121C1Rro2Rjn6duVKcwj8RZtdQ=";
+    hash = "sha256-eTp7XuVG5X/2WlwDzB8e85YXUd1LIHLwm7VhGHsXPY4=";
     fetchSubmodules = true;
 
     # remove unused libraries from rp2 port's SDK. we leave this and the other
@@ -32,28 +31,7 @@ stdenv.mkDerivation rec {
     '';
   };
 
-  patches = [
-    # Fixes Mbed TLS submodule build with GCC 14.
-    #
-    # See:
-    # * <https://github.com/openwrt/openwrt/pull/15479>
-    # * <https://github.com/Mbed-TLS/mbedtls/issues/9003>
-    (fetchpatch {
-      url = "https://raw.githubusercontent.com/openwrt/openwrt/52b6c9247997e51a97f13bb9e94749bc34e2d52e/package/libs/mbedtls/patches/100-fix-gcc14-build.patch";
-      stripLen = 1;
-      extraPrefix = "lib/mbedtls/";
-      hash = "sha256-Sllp/iWWEhykMJ3HALw5KzR4ta22120Jcl51JZCkZE0=";
-    })
-    ./fix-cross-compilation.patch
-    ./fix-mpy-cross-path.patch
-    # fix CVE-2026-1998
-    # https://github.com/micropython/micropython/issues/18639
-    # https://github.com/micropython/micropython/pull/18671
-    (fetchpatch {
-      url = "https://github.com/dpgeorge/micropython/commit/570744d06c5ba9dba59b4c3f432ca4f0abd396b6.patch";
-      hash = "sha256-j8xr4oqmrsYumJvyA71bx+/dg2HiUxSxdjKUR/2sclI=";
-    })
-  ];
+  patches = [ ./fix-cross-compilation.patch ];
 
   postPatch = ''
     # Fix cross-compilation by replacing uname and pkg-config

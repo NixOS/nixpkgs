@@ -1,0 +1,80 @@
+--- a/partition_map.c
++++ b/partition_map.c
+@@ -25,6 +25,11 @@
+  * WITH THE USE OR PERFORMANCE OF THIS SOFTWARE. 
+  */
+ 
++//
++// Defines
++//
++// #define TEST_COMPUTE
++
+ #include <stdio.h>
+ #include <string.h>
+ #include <stdlib.h>
+@@ -36,6 +41,10 @@
+ #include <sys/ioctl.h>
+ #include "kernel-defs.h"
+ #include <sys/stat.h>
++#ifdef TEST_COMPUTE
++#include <linux/fs.h>
++#endif
++
+ #endif
+ 
+ #include "partition_map.h"
+@@ -45,10 +54,6 @@
+ #include "errors.h"
+ 
+ 
+-//
+-// Defines
+-//
+-// #define TEST_COMPUTE
+ 
+ 
+ //
+@@ -666,7 +671,7 @@
+     loff_t pos;
+ #endif
+     char* data;
+-    unsigned long l, r, x;
++    unsigned long long l, r, x;
+     int valid;
+ 
+ #ifdef TEST_COMPUTE
+@@ -720,9 +725,11 @@
+ 	    } else {
+ 		r = r * 2;
+ 	    }
+-	    if (r >= (1024*1024*1024)) {
+-		break;
+-	    }
++// 	    There's no explanation for this, but I suspect the author was trying to
++// 	    prevent going over the 32 bit size
++//	    if (r >= (1024*1024*1024*2)) {
++//		break;
++//	    }
+ 	}
+ 	// binary search for end
+ 	while (l <= r) {
+@@ -740,11 +747,17 @@
+ 	if (valid != 0) {
+ 	    x = x + 1;
+ 	}
+-	// printf("size in blocks = %d\n", x);
++#ifdef TEST_COMPUTE
++	printf("size in blocks = %d\n", x);
++#endif
+ 	free(data);
+     }
++    
++    // Add a warning just in case...
++    if(x > 0x80000000)
++    	printf("Warning: Large disks may not work with this tool!\n");
+ 
+-    return x;
++    return (unsigned long) x;
+ }
+ 
+ 

@@ -6,13 +6,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "der-ascii";
-  version = "0.8.0";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "der-ascii";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-/9Go4fAwXmA3SLl0bP7aLy6fEItPZoscQ4pdA2GZuyM=";
+    sha256 = "sha256-I15y7d+nVt6VAdjqvNbMp06OjfAxoG4WLvNumhvPZ1o=";
   };
   vendorHash = null;
 

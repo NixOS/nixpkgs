@@ -29,6 +29,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-6Y2+4WUrbtzHin0UhTy6Iw4J7eY1glZU9CCv2mv10gI=";
   };
 
+  postPatch = ''
+    # gresource includes the generated metainfo file but doesn't depend on it, which races under low parallelism
+    substituteInPlace src/meson.build \
+      --replace-fail "dependencies: blueprints," "dependencies: [blueprints, metainfo_file],"
+  '';
+
   nativeBuildInputs = [
     meson
     ninja

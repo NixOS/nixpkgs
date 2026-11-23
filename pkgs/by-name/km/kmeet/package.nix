@@ -6,12 +6,12 @@
 
 appimageTools.wrapType2 rec {
   pname = "kmeet";
-  version = "2.0.2";
+  version = "2.1.0";
 
   src = fetchurl {
     url = "https://download.storage5.infomaniak.com/meet/kmeet-desktop-${version}-linux-x86_64.AppImage";
     name = "kmeet-${version}.AppImage";
-    hash = "sha256-lHbdfaLqn1QG2cfZCu9i0B1PZ3dDWZNi82PstxX29MI=";
+    hash = "sha256-VkiDS6r+myAu4CfC9RV2HVdoxnOLTHC4xqKSgqyZy30=";
   };
 
   extraInstallCommands =

@@ -5,7 +5,8 @@
   fetchFromGitHub,
   installShellFiles,
   pkg-config,
-  openssl,
+  aws-lc,
+  cacert,
   buildNpmPackage,
   nodejs,
   nix-update-script,
@@ -15,13 +16,13 @@
 let
   pname = "rqbit";
 
-  version = "9.0.1";
+  version = "9.1.0";
 
   src = fetchFromGitHub {
     owner = "ikatson";
     repo = "rqbit";
     rev = "v${version}";
-    hash = "sha256-biF8AtHl2aYdxmuu0UNqN3Id2R0WoCOb5nKpdhCnKNY=";
+    hash = "sha256-qY40Yx+OyiwNP/pht0RFMJhgcFsKPz4rymUmANEJOBw=";
   };
 
   rqbit-webui = buildNpmPackage {
@@ -46,14 +47,23 @@ in
 rustPlatform.buildRustPackage {
   inherit pname version src;
 
-  cargoHash = "sha256-BnHAv1PnsNmqVNxiA7KRHvl89cHISUMhITQ8DZu73zA=";
+  cargoHash = "sha256-nG2phD/dwNxas5fGtSqtRxpAniXjv1KbvVDuRF7fiSg=";
 
   nativeBuildInputs = [
     installShellFiles
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
+    pkg-config
+  ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ openssl ];
+  buildInputs = [
+    aws-lc
+  ];
+
+  # so we dont need openssl and aws-lc
+  buildNoDefaultFeatures = true;
+  buildFeatures = [
+    "rust-tls"
+    "webui"
+  ];
 
   preConfigure = ''
     mkdir -p crates/librqbit/webui/dist
@@ -72,18 +82,12 @@ rustPlatform.buildRustPackage {
     done
   '';
 
+  nativeCheckInputs = [ cacert ];
+
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
   doInstallCheck = true;
-
-  checkFlags = [
-    # skip these tests since they require internet access
-    "--skip=tests::e2e::test_e2e_download_tcp"
-    "--skip=tests::e2e::test_e2e_download_utp"
-    "--skip=tests::e2e_stream::test_e2e_stream"
-    "--skip=upnp_server_adapter::tests::test_browse"
-  ];
 
   # required by test `read_buf::tests::can_read_long_metainfo_correctlyv` in `aarch64-darwin`(sandbox=relaxed)
   __darwinAllowLocalNetworking = true;

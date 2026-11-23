@@ -79,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
     util-linux
     zfs
     cockpit.passthru.python3Packages.pyudev
-    cockpit.passthru.python3Packages.py-libzfs
+    cockpit.passthru.python3Packages.libzfs
   ];
 
   env = {

@@ -8,8 +8,10 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "tautulli";
-  version = "2.18.2";
+  version = "2.19.1";
   pyproject = false;
+
+  disabled = python3Packages.pythonOlder "3.11";
 
   pythonPath = [ python3Packages.setuptools ];
   nativeBuildInputs = [
@@ -21,7 +23,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "Tautulli";
     repo = "Tautulli";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-mfQwuLRbMBxp0RWzNCNL38BWtVGos0wYK5UKOEwe88c=";
+    sha256 = "sha256-6ObEmi3J2PfcrQ4pKZu00H5LapLpC/dIYHf+EtMuKag=";
   };
 
   postPatch = ''

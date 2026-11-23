@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xprintidle";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "g0hl1n";
     repo = "xprintidle";
     rev = finalAttrs.version;
-    sha256 = "sha256-MawkT4RconRDDCNnaWMxU18lK34ywcebbiHlYeZn/lc=";
+    sha256 = "sha256-I5lCIlQVvmZ5RM5ECXGbwtiWi9hXCQz2sil03AGlnlE=";
   };
 
   nativeBuildInputs = [

@@ -17,17 +17,18 @@
     stdenv.hostPlatform.isLinux && stdenv.buildPlatform == stdenv.hostPlatform, # xdg-utils doesn't cross-compile
   xdg-utils,
   autoreconfHook,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openconnect";
-  version = "9.12-unstable-2025-11-03";
+  version = "9.21";
 
   src = fetchFromGitLab {
     owner = "openconnect";
     repo = "openconnect";
-    rev = "0dcdff87db65daf692dc323732831391d595d98d";
-    hash = "sha256-AvowUEDkXvR+QkhJbZU759fZjIqj/mO8HjP2Ka3lH1U=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Jtd4cIR6BWSQPmLm8UOvlEcC1g6QlMgFw/aM7cokOCw=";
   };
 
   outputs = [
@@ -63,6 +64,8 @@ stdenv.mkDerivation {
     autoreconfHook
   ];
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "VPN Client for Cisco's AnyConnect SSL VPN";
     homepage = "https://www.infradead.org/openconnect/";
@@ -70,8 +73,9 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [
       tricktron
       pentane
+      jeffdess
     ];
     platforms = lib.platforms.unix;
     mainProgram = "openconnect";
   };
-}
+})

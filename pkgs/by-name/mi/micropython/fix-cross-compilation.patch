@@ -1,6 +1,6 @@
 --- a/ports/unix/Makefile
 +++ b/ports/unix/Makefile
-@@ -31,7 +31,7 @@
+@@ -38,7 +38,7 @@
  QSTR_GLOBAL_DEPENDENCIES += $(VARIANT_DIR)/mpconfigvariant.h
  
  # OS name, for simple autoconfig
@@ -9,7 +9,7 @@
  
  # include py core make definitions
  include $(TOP)/py/py.mk
-@@ -151,7 +151,7 @@
+@@ -156,7 +156,7 @@
  # If the variant enables it, enable modbluetooth.
  ifeq ($(MICROPY_PY_BLUETOOTH),1)
  ifeq ($(MICROPY_BLUETOOTH_BTSTACK),1)
@@ -18,8 +18,8 @@
  
  # Figure out which BTstack transport to use.
  ifeq ($(HAVE_LIBUSB),1)
-@@ -180,8 +180,8 @@
-  endif
+@@ -181,8 +181,8 @@
+ LIBFFI_LDFLAGS = $(BUILD)/lib/libffi/out/lib/libffi.a
  else
  # Use system version of libffi.
 -LIBFFI_CFLAGS := $(shell pkg-config --cflags libffi)

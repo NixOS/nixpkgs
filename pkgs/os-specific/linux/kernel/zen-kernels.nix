@@ -12,13 +12,13 @@ let
   # override options if they need using lib.mkForce (that has 50 priority)
   mkKernelOverride = lib.mkOverride 90;
 
-  suffix = "zen2";
+  suffix = "zen1";
 in
 
 buildLinux (
   args
   // rec {
-    version = "7.3.4";
+    version = "7.3.5";
     pname = "linux-zen";
     modDirVersion = lib.versions.pad 3 "${version}-${suffix}";
     isZen = true;
@@ -27,7 +27,7 @@ buildLinux (
       owner = "zen-kernel";
       repo = "zen-kernel";
       rev = "v${version}-${suffix}";
-      sha256 = "1v2ghlfd9mqr3kvxlhw8wyckr7hzn3hn6wbyjm8l8lvamximnnwk";
+      sha256 = "1bn95l3lkplp079ayaa9h5s76vrlpmfh2ywylk0sf13972ln51aj";
     };
 
     # This is based on the following source:

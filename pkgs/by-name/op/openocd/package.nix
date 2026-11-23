@@ -22,7 +22,8 @@ let
 
   # OpenOCD needs JimTcl 0.82 and fails to build with the latest version (0.84).
   # When updating OpenOCD, check which JimTcl version its jimtcl submodule uses.
-  jimtcl_0_82 = jimtcl.overrideAttrs (oldAttrs: rec {
+  # OpenOCD does not use Jim's SDL extension, so leave SDL out of the closure.
+  jimtcl_0_82 = (jimtcl.override { SDLSupport = false; }).overrideAttrs (oldAttrs: rec {
     version = "0.82";
     src = oldAttrs.src.override {
       rev = version;

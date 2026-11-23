@@ -12,32 +12,19 @@
   pname = "corn";
   inherit version;
   defaultVersion =
+    let
+      case = case: out: { inherit case out; };
+    in
     with lib.versions;
     lib.switch coq.coq-version [
-      {
-        case = (range "8.18" "8.20");
-        out = "8.20.0";
-      }
-      {
-        case = (range "8.17" "8.20");
-        out = "8.19.0";
-      }
-      {
-        case = (range "8.14" "8.18");
-        out = "8.18.0";
-      }
-      {
-        case = (range "8.11" "8.17");
-        out = "8.16.0";
-      }
-      {
-        case = (range "8.7" "8.15");
-        out = "8.13.0";
-      }
-      {
-        case = "8.6";
-        out = "8.8.1";
-      }
+      (case (range "8.19" "9.2") "9.2.0")
+      (case (range "8.18" "9.0") "9.0.0")
+      (case (range "8.18" "8.20") "8.20.0")
+      (case (range "8.17" "8.20") "8.19.0")
+      (case (range "8.14" "8.18") "8.18.0")
+      (case (range "8.11" "8.17") "8.16.0")
+      (case (range "8.7" "8.15") "8.13.0")
+      (case (range "8.6" "8.6") "8.8.1")
     ] null;
   release = {
     "8.8.1".hash = "sha256:0gh32j0f18vv5lmf6nb87nr5450w6ai06rhrnvlx2wwi79gv10wp";
@@ -47,6 +34,8 @@
     "8.18.0".hash = "sha256-ow3mfarZ1PvBGf5WLnI8LdF3E+8A6fN7cOcXHrZJLo0=";
     "8.19.0".hash = "sha256-h5MlfRuv2hTbxGmpLUEGQO1YqQTwUNEHZzCfvdOU1TA=";
     "8.20.0".hash = "sha256-tl68REU6xTbSOzhPucQPd9A3YnnaMNbSY8gl4Seyp10=";
+    "9.0.0".hash = "sha256-MF1PBo+JBwa0019tFktF3JNNGn7QuJJKUgxJ3Zba19k=";
+    "9.2.0".hash = "sha256-I1r/ADtAK2AHfK/IBhgiKuUtl6zusE3+gD5zKS1YAj4=";
   };
 
   configureScript = "./configure.sh";

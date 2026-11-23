@@ -120,7 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       silvanshade
       thoughtpolice
-      tmarkus
+      AAAAAASomeThingsFailToEvaluate
     ];
   };
 })

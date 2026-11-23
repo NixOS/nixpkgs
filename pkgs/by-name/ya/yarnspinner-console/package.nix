@@ -7,13 +7,13 @@
 }:
 buildDotnetModule (finalAttrs: {
   pname = "yarnspinner-console";
-  version = "3.2.2";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "YarnSpinnerTool";
     repo = "YarnSpinner-Console";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-2MEJAdg08wmseiXnA66oSyuZn8s6l6sE/3qxm7Zd50s=";
+    hash = "sha256-Y0NtlZlVI6SJ6NSdyBd/4nfe7pyGY7AAKraK2GAyoPs=";
   };
 
   __structuredAttrs = true;

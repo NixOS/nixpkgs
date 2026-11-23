@@ -4,25 +4,35 @@
   fetchFromGitHub,
   rustPlatform,
   installShellFiles,
+  pkg-config,
+  aws-lc,
+  zstd,
   versionCheckHook,
   nix-update-script,
   cacert,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "openstack-rs";
-  version = "0.13.7";
+  version = "0.14.0";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "gtema";
     repo = "openstack";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cpx35OT/x/2XJD4RzaWX/yKM4nwBgl6/gVrEtgyljEI=";
+    hash = "sha256-L0JRa3OjHa9Ira783Ef05qKE24a84nvOZ7VBjrH9nZs=";
   };
 
-  cargoHash = "sha256-LwN+7LkE/nFbiUlcSjQRxIg0BtO4XLuf/wPS1Vdvx+M=";
+  cargoHash = "sha256-PNp83X4AoOFEdHfw35LRfJ6WRzZn3xS0MxVi/qRBl4M=";
 
   nativeBuildInputs = [
     installShellFiles
+    pkg-config
+  ];
+
+  buildInputs = [
+    aws-lc
+    zstd
   ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
@@ -35,6 +45,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeCheckInputs = [
     cacert
   ];
+
+  preBuild = ''
+    # Needed to write data during tests
+    export HOME=$(mktemp -d)
+  '';
 
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";

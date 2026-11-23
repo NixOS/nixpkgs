@@ -5,7 +5,7 @@
   nix-update-script,
 }:
 
-buildPecl rec {
+buildPecl (finalAttrs: {
   version = "1.1.1-unstable-2022-03-25";
   pname = "meminfo";
 
@@ -16,7 +16,7 @@ buildPecl rec {
     hash = "sha256-MO+B+ZNg6OAnxkOtdA15o+G41XbsG1N1WBz7thMCjck=";
   };
 
-  sourceRoot = "${src.name}/extension";
+  sourceRoot = "${finalAttrs.src.name}/extension";
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
@@ -26,4 +26,4 @@ buildPecl rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

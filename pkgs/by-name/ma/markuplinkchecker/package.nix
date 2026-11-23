@@ -6,7 +6,7 @@
   openssl,
 }:
 let
-  version = "1.3.0";
+  version = "2.0.0";
 in
 rustPlatform.buildRustPackage {
   pname = "markuplinkchecker";
@@ -16,10 +16,10 @@ rustPlatform.buildRustPackage {
     owner = "becheran";
     repo = "mlc";
     rev = "v${version}";
-    hash = "sha256-mAE4wpR8pY2ZdfpXy9flM+WiyJim/X458xyxwBUmPtI=";
+    hash = "sha256-QwESHW57WsVII42gBOnk+SqNLylLtX6SKfn0mzmYh3Q=";
   };
 
-  cargoHash = "sha256-YjYGfSPGdB7A9tO1zH157spq38J0XiTAajDK/Xa5Bow=";
+  cargoHash = "sha256-4Nfd5LzyU67+Vw9A5FwV6YCBpIweBx2xRWrX1pW+oPY=";
 
   nativeBuildInputs = [ pkg-config ];
 

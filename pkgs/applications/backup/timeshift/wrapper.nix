@@ -6,6 +6,7 @@
   librsvg,
   lndir,
   shared-mime-info,
+  xapp-symbolic-icons,
 }:
 
 timeshift-unwrapped: runtimeDeps:
@@ -43,6 +44,7 @@ stdenvNoCC.mkDerivation {
           gdk-pixbuf
           librsvg
           shared-mime-info
+          xapp-symbolic-icons
         ]
       }"
       "''${makeWrapperArgs[@]}"

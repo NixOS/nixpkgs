@@ -14,7 +14,7 @@ maven.buildMavenPackage (finalAttrs: {
     hash = "sha256-dhWBnieXVsFyBoaCBzQIVo7iLWrO6l5y0v1KK1xC/es=";
   };
 
-  mvnHash = "sha256-vj6TVBN78pQ3C06LVqHK6J5VqZI0fuVBEsmmB+OU7kA=";
+  mvnHash = "sha256-kMOrmkzLfe/V/boTkFKHcsom3A9GHWk5cuQ/AQ3f760=";
 
   installPhase = ''
     runHook preInstall

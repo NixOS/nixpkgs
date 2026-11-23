@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "strictdoc";
-  version = "0.27.1";
+  version = "0.30.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "strictdoc-project";
     repo = "strictdoc";
     tag = finalAttrs.version;
-    hash = "sha256-z9e/ZkKeiuNgkn0FoAYX2fxo60TH5hqsLRzpaVvS2u4=";
+    hash = "sha256-5YG59SvgCPT7V2VX/QyLuai+bNcs1VbfJcUxg/W5+nE=";
   };
 
   build-system = [
@@ -72,6 +72,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   };
 
   pythonRelaxDeps = [
+    "pypdf"
     "python-datauri"
     "xlsxwriter"
   ];

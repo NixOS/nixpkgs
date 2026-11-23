@@ -97,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
       nh2
-      tmarkus
+      AAAAAASomeThingsFailToEvaluate
     ];
   };
 })

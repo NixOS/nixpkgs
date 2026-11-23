@@ -14,6 +14,8 @@ buildGoModule (finalAttrs: {
   pname = "git-lfs";
   version = "3.8.1";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "git-lfs";
     repo = "git-lfs";

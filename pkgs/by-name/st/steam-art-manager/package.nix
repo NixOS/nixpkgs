@@ -6,10 +6,10 @@
 
 appimageTools.wrapType2 (finalAttrs: {
   pname = "steam-art-manager";
-  version = "3.23.2";
+  version = "3.31.0";
   src = fetchurl {
     url = "https://github.com/Tormak9970/Steam-Art-Manager/releases/download/v${finalAttrs.version}/steam-art-manager.AppImage";
-    hash = "sha256-pu++TG4GwniZYl2SOGjVzRmrQQfJRgwZkfznmX5j/Hg=";
+    hash = "sha256-30hBqHgMVELi42CuS2kzL2w9O/J1CrDMeu5ajEKUaVo=";
   };
 
   extraInstallCommands = ''

@@ -5,7 +5,10 @@
   dmidecode,
   fetchFromGitHub,
   iproute2,
+  meson,
+  ninja,
   openssh,
+  pkg-config,
   python3,
   shadow,
   systemd,
@@ -17,8 +20,8 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "cloud-init";
-  version = "25.2";
-  pyproject = true;
+  version = "26.2";
+  pyproject = false;
 
   namePrefix = "";
 
@@ -26,7 +29,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     owner = "canonical";
     repo = "cloud-init";
     tag = finalAttrs.version;
-    hash = "sha256-Ww76dhfoGrIbxPiXHxDjpgPsinmfrs42NnGmzhBeGC0=";
+    hash = "sha256-OFgn1zOoWivNB5JPszFjhSzmILDRJ9aR9A9y81oBwMk=";
   };
 
   patches = [
@@ -35,8 +38,10 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   ];
 
   prePatch = ''
-    substituteInPlace setup.py \
-      --replace /lib/systemd $out/lib/systemd
+    substituteInPlace meson.build \
+      --replace-fail "systemd.get_variable(pkgconfig: 'systemdsystemunitdir')" "'$out/lib/systemd/system'" \
+      --replace-fail "systemd.get_variable(pkgconfig: 'systemdsystemgeneratordir')" "'$out/lib/systemd/system-generators'" \
+      --replace-fail "udev.get_variable(pkgconfig: 'udevdir')" "'$out/lib/udev'"
 
     substituteInPlace cloudinit/net/networkd.py \
       --replace '["/usr/sbin", "/bin"]' '["/usr/sbin", "/bin", "${iproute2}/bin", "${systemd}/bin"]'
@@ -45,19 +50,27 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
       --replace '["/usr/sbin", "/bin"]' \
         '["/usr/sbin", "/bin", "${iproute2}/bin", "${systemd}/bin"]'
 
-    substituteInPlace tests/unittests/cmd/test_clean.py \
-      --replace "/bin/bash" "/bin/sh"
+    patchShebangs tools/render-template
   '';
 
   postInstall = ''
-    install -D -m755 ./tools/write-ssh-key-fingerprints $out/libexec/cloud-init/write-ssh-key-fingerprints
     for i in $out/libexec/cloud-init/*; do
       wrapProgram $i --prefix PATH : "${lib.makeBinPath [ openssh ]}"
     done
   '';
 
-  build-system = with python3.pkgs; [
-    setuptools
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+  ];
+
+  buildInputs = [ systemd ];
+
+  mesonFlags = [
+    "--sysconfdir=${placeholder "out"}/etc"
+    (lib.mesonOption "python.install_env" "prefix")
+    (lib.mesonBool "bash_completion" false)
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -81,6 +94,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     shadow
     responses
     pytest-mock
+    pyfakefs
     coreutils
     procps
   ];
@@ -107,6 +121,8 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     # tries to read from /etc/ca-certificates.conf while inside the sandbox
     "test_handler_ca_certs"
     "TestRemoveDefaultCaCerts"
+    # The sandbox prohibits setting the setuid bit.
+    "test_special_permission_bits"
     # Doesn't work in the sandbox
     "TestEphemeralDhcpNoNetworkSetup"
     "TestHasURLConnectivity"
@@ -129,6 +145,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   ];
 
   preCheck = ''
+    cd "$NIX_BUILD_TOP/$sourceRoot"
     # TestTempUtils.test_mkdtemp_default_non_root does not like TMPDIR=/build
     export TMPDIR=/tmp
   '';

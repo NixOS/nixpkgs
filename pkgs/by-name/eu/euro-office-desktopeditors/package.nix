@@ -87,11 +87,11 @@ let
 
   derivation = stdenv.mkDerivation (finalAttrs: {
     pname = "euro-office-desktopeditors";
-    version = "9.3.6";
+    version = "9.3.8";
     src =
       (fetchurl {
         url = "https://github.com/Euro-Office/DesktopEditors/releases/download/v${finalAttrs.version}/euro-office-euro-office_${sourceVersion finalAttrs.version}_amd64.deb";
-        hash = "sha256-+AWZ9ArJEoEEYBiLkWVoiwise+4zcl/2W7XOuXxay4E=";
+        hash = "sha256-GBbEzV1YBrdXRow9xX7HbCOs0eoIUtRB5Q1qVJ0hfaE=";
       })
       // {
         # Hint for nix-update, only consider stable releases

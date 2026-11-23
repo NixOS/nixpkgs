@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   bash,
   replaceVars,
   rustPlatform,
@@ -9,6 +10,7 @@
   pkg-config,
   rust-jemalloc-sys,
   zstd,
+  installShellFiles,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pyrefly";
@@ -25,7 +27,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-PQ4O4gBDXouiKaBgH7RFrWSdM9gcBFBGJxcSA+n/BwI=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    installShellFiles
+  ];
 
   buildInputs = [
     rust-jemalloc-sys
@@ -49,6 +54,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
   checkFlags = [
     "--skip=test::lsp::lsp_interaction::file_watcher::test_incremental_pattern_addition"
   ];
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd pyrefly \
+      --bash <($out/bin/pyrefly completion --shell bash) \
+      --fish <($out/bin/pyrefly completion --shell fish) \
+      --zsh <($out/bin/pyrefly completion --shell zsh) \
+      --powershell <($out/bin/pyrefly completion --shell powershell)
+  '';
 
   # avoid autoupdates for *-dev.* tags
   passthru.updateScript = nix-update-script {

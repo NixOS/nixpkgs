@@ -7,34 +7,34 @@
   hatchling,
   pytest-asyncio,
   pytestCheckHook,
-  requests,
-  responses,
+  httpx,
+  respx,
 }:
 
 buildPythonPackage rec {
   pname = "todoist-api-python";
-  version = "3.2.1";
+  version = "4.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Doist";
     repo = "todoist-api-python";
     tag = "v${version}";
-    hash = "sha256-udYFWTrWW2G6JBKQUkiqKpyBz1D4dwq7Pix6bzuWnDY=";
+    hash = "sha256-rZKmDnVkIFX573bcvj8F9KTALBbX1y+E9NZHwKoGjDk=";
   };
 
   build-system = [ hatchling ];
 
   dependencies = [
     annotated-types
+    httpx
     dataclass-wizard
-    requests
   ];
 
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
-    responses
+    respx
   ];
 
   pythonImportsCheck = [ "todoist_api_python" ];

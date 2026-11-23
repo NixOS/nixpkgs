@@ -13,13 +13,13 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-postgresqlflexibleservers";
-  version = "3.0.0b1";
+  version = "3.0.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "azure_mgmt_postgresqlflexibleservers";
     inherit version;
-    hash = "sha256-Vo1/vuxAAgVznCppDZCTygNFAMl5uopc3QbiEeFbLv8=";
+    hash = "sha256-U9tpQlPhB3xBknvK6WYuTn4E8EWA3e67w3mZ2/LyjdY=";
   };
 
   build-system = [

@@ -48,7 +48,7 @@ stdenv.mkDerivation {
   buildCommand = ''
     mkdir -p $out/nar
 
-    python ${./make-binary-cache.py} --compression "${compression}"
+    python -P ${./make-binary-cache.py} --compression "${compression}"
 
     # These directories must exist, or Nix might try to create them in LocalBinaryCacheStore::init(),
     # which fails if mounted read-only

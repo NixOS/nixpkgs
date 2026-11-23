@@ -50,8 +50,8 @@ writeScript "update-librewolf" ''
   srcDir=$(jq -r .path < $prefetchOut)
   srcHash=$(nix --extra-experimental-features nix-command hash convert --to sri --hash-algo sha256 $(jq -r .sha256 < $prefetchOut))
 
-  ffVersion=$(<$srcDir/version)
-  lwRelease=$(<$srcDir/release)
+  ffVersion=$(grep VERSION $srcDir/Makefile | cut -d "=" -f 2 | sed 's/^[[:blank:]]*//' | head -n1)
+  lwRelease=$(grep RELEASE $srcDir/Makefile | cut -d "=" -f 2 | sed 's/^[[:blank:]]*//' | head -n1)
   lwVersion="$ffVersion-$lwRelease"
   echo "lwVersion=$lwVersion"
   echo "ffVersion=$ffVersion"

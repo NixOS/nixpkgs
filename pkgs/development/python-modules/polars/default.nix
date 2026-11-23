@@ -196,7 +196,6 @@ buildPythonPackage (finalAttrs: {
         ps.hypothesis
         ps.jax
         ps.jaxlib
-        (ps.kuzu or null)
         ps.matplotlib
         ps.moto
         ps.nest-asyncio
@@ -228,7 +227,7 @@ buildPythonPackage (finalAttrs: {
       "--dist=loadgroup"
     ];
     disabledTests = [
-      "test_read_kuzu_graph_database" # kuzu
+      "test_read_kuzu_graph_database" # kuzu was dropped from nixpkgs
       "test_read_database_cx_credentials" # connectorx
 
       # adbc_driver_.*

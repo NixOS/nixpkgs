@@ -10,17 +10,14 @@
   fetchFromGitHub,
 }:
 
-let
-  version = "6.2.3";
-in
-buildPecl {
-  inherit version;
+buildPecl (finalAttrs: {
   pname = "swoole";
+  version = "6.2.3";
 
   src = fetchFromGitHub {
     owner = "swoole";
     repo = "swoole-src";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-VAtFR90bnS0ipta/BSOmmcEGTB+rzIQ83hm4lmrPJVI=";
   };
 
@@ -43,11 +40,11 @@ buildPecl {
   doCheck = false;
 
   meta = {
-    changelog = "https://github.com/swoole/swoole-src/releases/tag/v${version}";
+    changelog = "https://github.com/swoole/swoole-src/releases/tag/v${finalAttrs.version}";
     description = "Coroutine-based concurrency library for PHP";
     homepage = "https://www.swoole.com";
     license = lib.licenses.asl20;
     teams = [ lib.teams.php ];
     broken = lib.versionAtLeast php.version "8.5";
   };
-}
+})

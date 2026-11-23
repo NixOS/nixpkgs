@@ -507,7 +507,7 @@ in
       };
 
       "pihole/versions".text = ''
-        CORE_VERSION=${cfg.piholePackage.src.src.tag}
+        CORE_VERSION=${cfg.piholePackage.src.tag}
         FTL_VERSION=${cfg.package.src.tag}
       '';
     };

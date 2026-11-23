@@ -1,8 +1,11 @@
 {
   lib,
+  aws-lc,
+  pkg-config,
   fetchFromGitHub,
   rustPlatform,
   perl,
+  openssl,
   cacert,
 }:
 
@@ -21,7 +24,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-A0gA56I+3vsGH0i6joXCsZiLjGct9m1F/Wx/pT2Mjws=";
 
-  nativeBuildInputs = [ perl ];
+  nativeBuildInputs = [
+    perl
+    pkg-config
+  ];
+
+  buildInputs = [
+    aws-lc
+    openssl
+  ];
 
   env.SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 

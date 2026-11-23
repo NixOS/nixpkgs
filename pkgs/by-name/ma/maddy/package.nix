@@ -12,16 +12,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "maddy";
-  version = "0.9.7";
+  version = "0.9.8";
 
   src = fetchFromGitHub {
     owner = "foxcpp";
     repo = "maddy";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-2FjuyIqI/tLX79m+E+2ev0yZwF0JNF3hlGtANmS8Xg8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ngpfFDuCq1AK3bFNcEEjvad0n8R3v6disBvuu6dey9Q=";
   };
 
-  vendorHash = "sha256-3f7FKtZpTTjvL6HRdSyivJe+QrMtzSkwJv81wNxRWqk=";
+  vendorHash = "sha256-C37OlonhH/aKTdixEhfcEQBkSVk2mz0w9HyDDuEQARU=";
 
   tags = [ "libpam" ];
 
@@ -75,6 +75,7 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "Composable all-in-one mail server";
     homepage = "https://maddy.email";
+    changelog = "https://github.com/foxcpp/maddy/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ nickcao ];
     mainProgram = "maddy";

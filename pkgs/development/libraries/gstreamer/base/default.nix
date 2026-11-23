@@ -239,7 +239,7 @@ stdenv.mkDerivation (finalAttrs: {
       ++ lib.optional (enableGl && enableX11) "gl-x11"
     );
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ tmarkus ];
+    maintainers = with lib.maintainers; [ AAAAAASomeThingsFailToEvaluate ];
     identifiers.cpeParts = gstreamer.passthru.gstreamerCpeParts finalAttrs.version;
   };
 })

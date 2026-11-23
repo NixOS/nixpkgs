@@ -12,11 +12,11 @@
 }:
 let
   pname = "maptool";
-  version = "1.18.7";
+  version = "1.18.8";
   repoBase = "https://github.com/RPTools/maptool";
   src = fetchurl {
     url = "${repoBase}/releases/download/${version}/maptool-${version}-x86_64.pkg.tar.zst";
-    hash = "sha256-XJnSShnfrseJsKNT8X0R+qoojOUdjf1MCXRFXpL21rU=";
+    hash = "sha256-2Hg6ISjjV+wt5VA2qmB+4ZsYEOJVv2DlDAtM6qsnLtY=";
   };
 
   meta = {

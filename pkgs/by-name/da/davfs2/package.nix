@@ -1,9 +1,10 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   autoreconfHook269,
   neon,
+  po4a,
   procps,
   replaceVars,
   zlib,
@@ -14,13 +15,16 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "davfs2";
   version = "1.7.3";
 
-  src = fetchurl {
-    url = "mirror://savannah/davfs2/davfs2-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-pTaBYetQVWUdfl6BgMFgbaleeMlBtruKkobfeSPPy6k=";
+  src = fetchFromGitHub {
+    owner = "alisarctl";
+    repo = "davfs2";
+    tag = "rel-${lib.replaceString "." "-" finalAttrs.version}";
+    hash = "sha256-ZKHqrQwaCByMA3msOe+V6+0SWIMF64GW3SGlp9HfYyk=";
   };
 
   nativeBuildInputs = [
     autoreconfHook269
+    po4a
   ];
 
   buildInputs = [
@@ -43,8 +47,12 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-neon=${lib.getLib neon}"
   ];
 
+  postConfigure = ''
+    (cd man && po4a po4a.conf)
+  '';
+
   meta = {
-    homepage = "https://savannah.nongnu.org/projects/davfs2";
+    homepage = "https://github.com/alisarctl/davfs2";
     description = "Mount WebDAV shares like a typical filesystem";
     license = lib.licenses.gpl3Plus;
 

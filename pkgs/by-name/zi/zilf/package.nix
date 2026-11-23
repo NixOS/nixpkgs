@@ -7,14 +7,14 @@
 }:
 buildDotnetModule (finalAttrs: {
   pname = "zilf";
-  version = "1.8";
+  version = "1.10";
 
   src = fetchFromGitLab {
     domain = "foss.heptapod.net";
     owner = "zilf";
     repo = "zilf";
     tag = finalAttrs.version;
-    hash = "sha256-SO8neu893ruZJcdbg/97mVFI5EGvz6dhKKX6gzIUJ0A=";
+    hash = "sha256-5yPcIiC5QYMeqB4Jb1Fc13KgFekd9xcI5Oze7u1H3d4=";
   };
 
   postPatch = ''

@@ -7,14 +7,14 @@
   pkg-config,
 }:
 
-buildPecl rec {
+buildPecl (finalAttrs: {
   pname = "phalcon";
   version = "5.23.0";
 
   src = fetchFromGitHub {
     owner = "phalcon";
     repo = "cphalcon";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Eh52Hnf6GB4T3a68lqWQTDAQ+WAEWEPrQn0eh3XKZxI=";
   };
 
@@ -30,7 +30,7 @@ buildPecl rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ pcre2 ];
 
-  sourceRoot = "${src.name}/build/phalcon";
+  sourceRoot = "${finalAttrs.src.name}/build/phalcon";
 
   meta = {
     description = "Phalcon is a full stack PHP framework offering low resource consumption and high performance";
@@ -40,4 +40,4 @@ buildPecl rec {
     teams = [ lib.teams.php ];
     broken = lib.versionAtLeast php.version "8.5";
   };
-}
+})

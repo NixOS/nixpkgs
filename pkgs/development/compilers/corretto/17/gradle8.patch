@@ -1,5 +1,5 @@
 diff --git a/build.gradle b/build.gradle
-index f678379aa..62df526d4 100644
+index f706cc8..05c8e15 100644
 --- a/build.gradle
 +++ b/build.gradle
 @@ -231,7 +231,7 @@ project(':prebuild') {
@@ -34,10 +34,10 @@ index f678379aa..62df526d4 100644
              include 'LICENSE',
                      'ADDITIONAL_LICENSE_INFO',
 diff --git a/installers/linux/al2/spec/build.gradle b/installers/linux/al2/spec/build.gradle
-index a5a1b9a7c..201283213 100644
+index 0fb03d0..744732a 100644
 --- a/installers/linux/al2/spec/build.gradle
 +++ b/installers/linux/al2/spec/build.gradle
-@@ -62,8 +62,8 @@ task inflateRpmSpec {
+@@ -65,8 +65,8 @@ task inflateRpmSpec {
  
  task copySourceTar(type: Tar) {
      dependsOn project.configurations.compile, inflateRpmSpec
@@ -49,7 +49,7 @@ index a5a1b9a7c..201283213 100644
          include "java-${project.version.major}-amazon-corretto.spec"
          into 'rpm'
 diff --git a/installers/linux/alpine/tar/build.gradle b/installers/linux/alpine/tar/build.gradle
-index d0f95bd42..60bc9d40a 100644
+index fd83b1b..f6f15ab 100644
 --- a/installers/linux/alpine/tar/build.gradle
 +++ b/installers/linux/alpine/tar/build.gradle
 @@ -132,9 +132,9 @@ task bundleThirdPartyBinaries {
@@ -95,7 +95,7 @@ index d0f95bd42..60bc9d40a 100644
          include 'ADDITIONAL_LICENSE_INFO'
          include 'ASSEMBLY_EXCEPTION'
 diff --git a/installers/linux/universal/deb/build.gradle b/installers/linux/universal/deb/build.gradle
-index 118ad0b74..54f7e0c50 100644
+index f748b11..73f9bb7 100644
 --- a/installers/linux/universal/deb/build.gradle
 +++ b/installers/linux/universal/deb/build.gradle
 @@ -20,7 +20,7 @@
@@ -107,13 +107,10 @@ index 118ad0b74..54f7e0c50 100644
  }
  
  dependencies {
-@@ -54,22 +54,22 @@ def jinfoName = ".${jdkInstallationDirName}.jinfo"
- ospackage {
-     // Valid version must start with a digit and only contain [A-Za-z0-9.+:~-]
-     // See http://manpages.ubuntu.com/manpages/artful/en/man5/deb-version.5.html
--    version project.version.upstream
--    release project.version.revision
--
+@@ -57,19 +57,19 @@ ospackage {
+     version = project.version.full
+     release = project.version.revision
+ 
 -    url "${packageInfo.url}"
 -    vendor "${packageInfo.vendor}"
 -    packager "${packageInfo.packager}"
@@ -127,9 +124,6 @@ index 118ad0b74..54f7e0c50 100644
 -    epoch 1
 -    arch arch_deb
 -    multiArch SAME
-+    version = project.version.upstream
-+    release = project.version.revision
-+
 +    url = "${packageInfo.url}"
 +    vendor = "${packageInfo.vendor}"
 +    packager = "${packageInfo.packager}"
@@ -165,7 +159,7 @@ index 118ad0b74..54f7e0c50 100644
      postInstall file("$buildRoot/scripts/postin_jdk.sh")
      preUninstall file("$buildRoot/scripts/preun_jdk.sh")
 diff --git a/installers/linux/universal/rpm/build.gradle b/installers/linux/universal/rpm/build.gradle
-index 2883b16ac..ed914b679 100644
+index 56f94d1..abb257f 100644
 --- a/installers/linux/universal/rpm/build.gradle
 +++ b/installers/linux/universal/rpm/build.gradle
 @@ -20,7 +20,7 @@
@@ -177,13 +171,10 @@ index 2883b16ac..ed914b679 100644
  }
  
  dependencies {
-@@ -48,20 +48,20 @@ def jdkBinaryDir = "${buildRoot}/${project.correttoJdkArchiveName}"
- def jdkPackageName = "java-${project.version.major}-amazon-corretto-devel"
+@@ -51,17 +51,17 @@ ospackage {
+     version = project.version.full
+     release = project.version.revision
  
- ospackage {
--    version project.version.upstream
--    release project.version.revision
--
 -    url "${packageInfo.url}"
 -    vendor "${packageInfo.vendor}"
 -    packager "${packageInfo.packager}"
@@ -195,9 +186,6 @@ index 2883b16ac..ed914b679 100644
 -    arch arch_redline
 -    os LINUX
 -    type BINARY
-+    version = project.version.upstream
-+    release = project.version.revision
-+
 +    url = "${packageInfo.url}"
 +    vendor = "${packageInfo.vendor}"
 +    packager = "${packageInfo.packager}"
@@ -212,7 +200,7 @@ index 2883b16ac..ed914b679 100644
  }
  
  /**
-@@ -97,14 +97,14 @@ task inflateRpmScriptTemplate(type: Copy) {
+@@ -97,12 +97,12 @@ task inflateRpmScriptTemplate(type: Copy) {
   * distributions folder.
   */
  task generateJdkRpm(type: Rpm) {
@@ -228,13 +216,10 @@ index 2883b16ac..ed914b679 100644
 +    summary = "Amazon Corretto ${project.version.major} development environment"
 +    packageGroup = 'Development/Tools'
      // Remove after https://github.com/nebula-plugins/gradle-ospackage-plugin/issues/401 is merged and released
--    sourcePackage "${jdkPackageName}-${project.version.major}.${project.version.minor}.${project.version.security}.${project.version.build}-${project.version.revision}.src.rpm"
-+    sourcePackage = "${jdkPackageName}-${project.version.major}.${project.version.minor}.${project.version.security}.${project.version.build}-${project.version.revision}.src.rpm"
+     sourcePackage = "${jdkPackageName}-${project.version.full}-${project.version.revision}.src.rpm"
  
-     prefix(jdkHome)
-     postInstall file("$buildRoot/scripts/postin_java.sh")
 diff --git a/installers/linux/universal/tar/build.gradle b/installers/linux/universal/tar/build.gradle
-index 17491d830..9ec3280e6 100644
+index 17491d8..9ec3280 100644
 --- a/installers/linux/universal/tar/build.gradle
 +++ b/installers/linux/universal/tar/build.gradle
 @@ -122,9 +122,9 @@ task bundleThirdPartyBinaries {

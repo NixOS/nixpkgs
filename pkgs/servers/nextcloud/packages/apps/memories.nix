@@ -20,9 +20,9 @@ let
       vendorHash = null;
     };
     "34" = {
-      version = "11.1.1";
-      appHash = "sha256-Wei3mzl/MrMHzIjmPV/gdt9p+Gk20rQH8VyAzX8nqzU=";
-      srcHash = "sha256-tVrWVxWtSCfo/Ao4JaYcgVxF2/CY2UgBmfzoDvTd/w4=";
+      version = "11.1.4";
+      appHash = "sha256-ObXsa/F1M0Qy6MQJoEhNqGb/+QPGNJQsyzxBgJ+QY1M=";
+      srcHash = "sha256-8ZGPfx3bQyUHoh0huuYgA5utCl69SVkRYz0+tumGOGY=";
       vendorHash = "sha256-rEJXO55TKg3GMV5/5JQsRf0tktzNQovY9ONtDFuznqk=";
     };
     "35" = latestVersionForNc."34";
@@ -35,7 +35,7 @@ let
     homepage = "https://apps.nextcloud.com/apps/memories";
     changelog = "https://github.com/pulsejet/memories/blob/v${currentVersionInfo.version}/CHANGELOG.md";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ SuperSandro2000 ];
+    maintainers = with lib.maintainers; [ rahoni ];
   };
 
   go-vod = buildGo127Module rec {

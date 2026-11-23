@@ -24,19 +24,21 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "langchain-mistralai";
-  version = "1.1.6";
+  version = "1.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-mistralai==${finalAttrs.version}";
-    hash = "sha256-FkldUvLhbOS0FwRQaAZHebUv1jUSWMXMuIx780B6R+8=";
+    hash = "sha256-eEmnkvqJSYR+jcnLOEc6ALsKK4uXdl70o7CmLyyUpW0=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/libs/partners/mistralai";
 
   build-system = [ hatchling ];
+
+  pythonRelaxDeps = [ "langchain-core" ];
 
   dependencies = [
     langchain-core

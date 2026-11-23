@@ -15,6 +15,12 @@ buildGoModule (finalAttrs: {
     hash = "sha256-6OUhRB2d8k7h9tI3IPKy9f1KoEx1mvGbxQZF1sCngqs=";
   };
 
+  # Go 1.27 changed DEFLATE output, breaking the byte-for-byte ZIP comparison.
+  # https://go.dev/doc/go1.27#compressflatepkgcompressflate
+  preCheck = ''
+    rm models/attachment_test.go
+  '';
+
   vendorHash = "sha256-2seQCVALU35l+aAsfag0W19FWlSTlEsSmxTmKKi3A+0=";
 
   meta = {

@@ -5,17 +5,20 @@
   fetchFromGitHub,
 
   # build-time
-  qt5,
+  qt6,
 
   # build-system
   setuptools,
 
   # dependencies
+  datalab-capsule,
   fastapi,
   guidata,
+  jedi,
   numpy,
   packaging,
   pandas,
+  pip,
   plotpy,
   psutil,
   pydantic,
@@ -23,6 +26,7 @@
   scikit-image,
   scipy,
   sigima,
+  sigimax,
   uvicorn,
 
   # optional-dependencies
@@ -40,41 +44,46 @@
   sphinx-intl,
   sphinx-sitemap,
   sphinxcontrib-svg2pdfconverter,
+  sphinxext-opengraph,
   opencv-python-headless,
   pyinstaller,
-  pyqt5,
-  httpx,
-  pytest,
-  pytest-xvfb,
+  pyqt6,
 
   # tests
+  httpx2,
+  pytest,
+  pytest-xvfb,
   pytestCheckHook,
+  pyyaml,
+  versionCheckHook,
+  websockets,
+
+  fullTestSuite ? false,
+  datalab-platform, # self
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "datalab-platform";
-  version = "1.2.2";
+  version = "1.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "DataLab-Platform";
     repo = "DataLab";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-c9ze/Qw6FZ78JEkoQzJSESf/0tWvbL9wHuE2xlzKlv8=";
+    hash = "sha256-hbGXTjuSScPgC/nIocIqJWiO5w7DEjCGwh0+iNZTWk0=";
   };
 
-  # NOTE: DataLab is compatible with qt6, but it's apparently not perfect as
-  # the executable segfaults on startup. For now, let's use qt5 which works and
-  # migrate in the future.
   nativeBuildInputs = [
-    qt5.wrapQtAppsHook
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qt5.qtbase
+    qt6.qtbase
+    qt6.qtsvg
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    qt5.qtwayland
+    qt6.qtwayland
   ];
 
   build-system = [
@@ -82,11 +91,18 @@ buildPythonPackage (finalAttrs: {
   ];
 
   dependencies = [
+    datalab-capsule
     fastapi
     guidata
+    jedi
     numpy
     packaging
     pandas
+    # pip is used only in an isolated child processes with `--isolated --no-index --target`
+    # to install pinned plugin wheels into a profile (`~/.config/.DataLab_v1/installed_plugins/`)
+    # leaving the nix store, and global pip directory untouched.
+    # Without this the plugin's functionality is diminished
+    pip
     plotpy
     psutil
     pydantic
@@ -94,11 +110,17 @@ buildPythonPackage (finalAttrs: {
     scikit-image
     scipy
     sigima
+    sigimax
     uvicorn
   ]
+  ++ uvicorn.optional-dependencies.standard
   ++ finalAttrs.passthru.optional-dependencies.qt
-  # required for `bin/datalab-{demo,tests}`
-  ++ finalAttrs.passthru.optional-dependencies.test;
+  ++ lib.optionals fullTestSuite [
+    # test dependencies - required for bin/datalab-tests
+    pytest
+    httpx2
+    pyyaml
+  ];
 
   optional-dependencies = {
     dev = [
@@ -118,44 +140,54 @@ buildPythonPackage (finalAttrs: {
       sphinx-intl
       sphinx-sitemap
       sphinxcontrib-svg2pdfconverter
+      sphinxext-opengraph
     ];
     exe = [
       opencv-python-headless
       pyinstaller
-      pyqt5
+      pyqt6
     ];
     opencv = [
       opencv-python-headless
     ];
     qt = [
-      pyqt5
-    ];
-    test = [
-      httpx
-      pytest
-      pytest-xvfb
+      pyqt6
     ];
   };
-
-  pythonRelaxDeps = [
-    "guidata"
-    "numpy"
-    "plotpy"
-    "scipy"
-  ];
 
   pythonImportsCheck = [
     "datalab"
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ]
-  ++ finalAttrs.passthru.optional-dependencies.test;
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
 
-  pytestFlags = [
+  preCheck = ''
+    export QT_PLUGIN_PATH="${lib.getBin qt6.qtbase}/${qt6.qtbase.qtPluginPrefix}:${qt6.qtsvg}/${qt6.qtbase.qtPluginPrefix}"
+  '';
+
+  nativeCheckInputs = [
+    httpx2
+    pytestCheckHook
+    pyyaml
+  ]
+  ++ lib.optionals fullTestSuite [
+    pytest-xvfb
+    ruff
+    websockets
+  ];
+
+  # running the full test suite takes ~20 minutes, moved to passthru.tests
+  pytestFlags = lib.optionals (!fullTestSuite) [
     "--collect-only"
   ];
+
+  passthru.tests.full = datalab-platform.override { fullTestSuite = true; };
+
+  postInstall = lib.optionalString (!fullTestSuite) ''
+    rm $out/bin/datalab-tests
+  '';
 
   dontWrapQtApps = true;
 

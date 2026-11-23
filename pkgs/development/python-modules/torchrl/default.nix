@@ -357,6 +357,9 @@ buildPythonPackage (finalAttrs: {
 
     # Very slow, timing out under load
     "test/test_distributed.py::TestSyncCollector"
+
+    # torch._dynamo.exc.FailOnRecompileLimitHit: Hard failure due to fullgraph=True
+    "test/transforms/test_observation_transforms.py::TestObservationNorm::test_compile_fullgraph[True]"
   ];
 
   meta = {

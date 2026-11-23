@@ -4,13 +4,20 @@
   rustPlatform,
   fetchFromGitHub,
   fetchNpmDeps,
+
+  # native build inputs
   cargo-tauri,
   nodejs,
   npmHooks,
   pkg-config,
   wrapGAppsHook3,
+
+  # build-inputs
   openssl,
   webkitgtk_4_1,
+  zstd,
+
+  # check-inputs, passthru
   versionCheckHook,
   nix-update-script,
   gitMinimal,
@@ -51,6 +58,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     openssl
+    zstd
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     webkitgtk_4_1

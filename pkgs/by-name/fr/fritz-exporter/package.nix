@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "fritz-exporter";
-  version = "4.0.1";
+  version = "4.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pdreker";
     repo = "fritz_exporter";
     tag = "fritzexporter-v${finalAttrs.version}";
-    hash = "sha256-zvmQGtBfRMsmUfLh51xqxpSfVzyJQIlJWqm/ozPXr7A=";
+    hash = "sha256-bt5ab3ozAISsM3NiUiOHhFdwXtopKaops3jps7Bu7UQ=";
   };
 
   postPatch = ''

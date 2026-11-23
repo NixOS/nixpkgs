@@ -13,16 +13,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "debos";
-  version = "1.1.7";
+  version = "1.1.8";
 
   src = fetchFromGitHub {
     owner = "go-debos";
     repo = "debos";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Bu0rLrRp1oeWSMm78DhNM6MsBeG+vAkoRbbqKTThD/8=";
+    hash = "sha256-eO+H5zf4oYk7MhgnuDyG3L8vjD79orS7SiSXOXdg6+0=";
   };
 
-  vendorHash = "sha256-+3PAqCOFtR8HC4uNNxH1cKk/qkD13zuydTsZte1mQ+c=";
+  vendorHash = "sha256-E6BhKCwhaEN0qkJ8hLXb/rUoceypMGN3cg5qKNoNAa8=";
 
   nativeBuildInputs = [
     dpkg

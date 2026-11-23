@@ -37,9 +37,7 @@ let
       '';
 
       passthru = {
-        tests = lib.filterAttrs (
-          key: _: (lib.hasSuffix (lib.versions.major version) key)
-        ) nixosTests.nextcloud;
+        tests = nixosTests.nextcloud."nextcloud${lib.versions.major version}";
         inherit packages;
       };
 

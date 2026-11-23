@@ -122,7 +122,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fwupd";
-  version = "2.1.9";
+  version = "2.1.10";
 
   # libfwupd goes to lib
   # daemon, plug-ins and libfwupdplugin go to out
@@ -140,7 +140,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "fwupd";
     repo = "fwupd";
     tag = finalAttrs.version;
-    hash = "sha256-q1fAAb8uwPBd2kunXX271uTo5vkKeRlaMzKN3kGnCy8=";
+    hash = "sha256-6LIgkvueYPRrqCW83pmUuFvIYuQ+RSEMHAJnaEfCjlI=";
   };
 
   patches = [

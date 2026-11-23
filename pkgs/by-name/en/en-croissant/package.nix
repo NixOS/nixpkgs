@@ -18,6 +18,7 @@
   openssl,
   webkitgtk_4_1,
   gst_all_1,
+  zstd,
 
   nix-update-script,
 }:
@@ -75,7 +76,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isLinux [ wrapGAppsHook3 ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ makeBinaryWrapper ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+  buildInputs = [
+    zstd
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     openssl
     webkitgtk_4_1
 
@@ -84,6 +88,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     gst_all_1.gst-plugins-good
     gst_all_1.gst-plugins-bad
   ];
+
+  # vite resolves localhost during the frontend build
+  __darwinAllowLocalNetworking = true;
 
   doCheck = false; # many scoring tests fail
 

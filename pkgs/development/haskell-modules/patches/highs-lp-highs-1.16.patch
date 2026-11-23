@@ -1,0 +1,43 @@
+diff -ru a/src/Numeric/HiGHS/LP/Private.hs b/src/Numeric/HiGHS/LP/Private.hs
+--- a/src/Numeric/HiGHS/LP/Private.hs
++++ b/src/Numeric/HiGHS/LP/Private.hs
+@@ -18,13 +18,14 @@
+ import qualified Data.Traversable as Trav
+ import Data.Array.Comfort.Storable (Array)
+ import Data.Foldable (for_)
++import Data.Maybe.HT (toMaybe)
+ import Data.Tuple.HT (mapPair)
+ 
+ import qualified Control.Monad.Trans.Reader as MR
+ import qualified Control.Monad.Trans.Cont as MC
+ import qualified Control.Applicative.HT as AppHT
+ import qualified Control.Functor.HT as FuncHT
+-import Control.Monad (guard, when)
++import Control.Monad (when)
+ import Control.Applicative (liftA2, liftA3)
+ 
+ import qualified Foreign.Marshal.Array.Guarded as ForeignArray
+@@ -242,7 +243,19 @@
+ 
+ examineStatus :: (Shape.C sh) =>
+    Query sh a -> sh -> Ptr Highs -> Highs.Status -> IO (ModelStatus, Maybe a)
+-examineStatus (Query query) shape model status =
+-   liftA2 (,) (fmap modelStatusFromC $ Highs.getModelStatus model) $
+-   Trav.for (guard (status /= Highs.statusError)) $ \() ->
+-      MR.runReaderT query (shape,model)
++examineStatus (Query query) shape model status = do
++   modelStatus <- Highs.getModelStatus model
++   {-
++   HiGHs considers a proof of infeasibility as success
++   and returns kHighsStatusOk.
++   However, in case of infeasibility we must not query a solution.
++   -}
++   result <-
++      Trav.traverse (MR.runReaderT query) $
++      toMaybe
++         (status /= Highs.statusError &&
++          modelStatus /= Highs.modelStatusInfeasible &&
++          modelStatus /= Highs.modelStatusUnboundedOrInfeasible)
++         (shape,model)
++
++   return (modelStatusFromC modelStatus, result)

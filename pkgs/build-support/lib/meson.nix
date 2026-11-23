@@ -9,6 +9,8 @@ let
     with platform;
     if isAarch32 then
       "arm"
+    else if isAarch64 then
+      "aarch64"
     else if isx86_32 then
       "x86"
     else if isPower64 then

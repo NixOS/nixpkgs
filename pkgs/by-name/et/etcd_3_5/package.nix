@@ -1,6 +1,7 @@
 {
   buildGoModule,
   fetchFromGitHub,
+  fetchpatch,
   lib,
   nixosTests,
   symlinkJoin,
@@ -47,6 +48,17 @@ let
     vendorHash = etcdServerVendorHash;
 
     modRoot = "./server";
+
+    patches = [
+      (fetchpatch {
+        name = "go_1_27.patch";
+        url = "https://github.com/etcd-io/etcd/commit/b5b40fba5e69f6662fff673d1ffe5c2ce2e3b863.patch";
+        includes = [
+          "server/embed/config_test.go"
+        ];
+        hash = "sha256-mNboTMWuK9Y6/7bBXflOcxGIPnBjTqIctBKNXgKzSCU=";
+      })
+    ];
 
     preInstall = ''
       mv $GOPATH/bin/{server,etcd}

@@ -23,24 +23,30 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "papra";
-  version = "26.6.1";
+  version = "26.7.1";
 
   src = fetchFromGitHub {
     owner = "papra-hq";
     repo = "papra";
     tag = "@papra/app@${finalAttrs.version}";
-    hash = "sha256-4Kcfv6bcKM7SXTmKn0cjXjhUXEZSypSFWyr7jIP/4+E=";
+    hash = "sha256-LiGEo+aANVJdBnGDuU/2Iir8gSTYHcbCqAHPMnKvg8E=";
   };
 
+  pnpmWorkspaces = [
+    "@papra/app-client..."
+    "@papra/app-server..."
+  ];
+
   pnpmDeps = fetchPnpmDeps {
-    inherit (finalAttrs) pname version src;
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      pnpmWorkspaces
+      ;
     pnpm = pnpm;
     fetcherVersion = 4;
-    hash = "sha256-1Iv8vvGFQuxBFM8YB8sYulmU4SxE4G9Yyh67BBzEoZo=";
-    pnpmWorkspaces = [
-      "@papra/app-client..."
-      "@papra/app-server..."
-    ];
+    hash = "sha256-iZIZFRjzeLUSKneyGwX++IUDgIZ079JgNo74RcHh/4E=";
   };
 
   nativeBuildInputs = [

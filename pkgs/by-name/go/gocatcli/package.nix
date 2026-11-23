@@ -10,13 +10,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "gocatcli";
-  version = "1.3.2";
+  version = "1.3.4";
 
   src = fetchFromGitHub {
     owner = "deadc0de6";
     repo = "gocatcli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vHi4VF/rRrJm1GRkWW+NpWhamSHlBecvaqqLcbnBUxs=";
+    hash = "sha256-bEovnkfLL/XaqwQYeuFzkpuFTXjnBArb8dYra/Fk6lQ=";
   };
 
   vendorHash = "sha256-Zp9m0v/F4AJ9b3GH3/SoZx1jijHGR854f8KhhcIPjS8=";

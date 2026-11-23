@@ -1,0 +1,23 @@
+Make the ICU data dependency of the Dart CLI runtime conditional on
+dart_embed_icu_data, like it already is for the other runtime targets.
+
+This allows building the SDK against the system ICU library.
+
+--- a/runtime/bin/BUILD.gn
++++ b/runtime/bin/BUILD.gn
+@@ -1041,12 +1041,14 @@
+       "..:dart_aotruntime_config",
+       "..:add_empty_macho_section_config",
+     ]
+     extra_defines = [ "DART_CLI_RUNTIME" ]
+     extra_deps = [
+-      ":icudtl_cc",
+       "..:libdart_aotruntime",
+       "../platform:libdart_platform_aotruntime",
+     ]
++    if (dart_embed_icu_data) {
++      extra_deps += [":icudtl_cc"]
++    }
+     extra_sources = [
+       "common_options.h",
+       "gzip.cc",

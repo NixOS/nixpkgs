@@ -8,20 +8,19 @@
 
 buildGoModule (finalAttrs: {
   pname = "galene";
-  version = "1.2.1";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "jech";
     repo = "galene";
     tag = "galene-${finalAttrs.version}";
-    hash = "sha256-1427Jnr8GJAVaVJiUdhWzsuG68eCp6QCUYvzXq5EwT0=";
+    hash = "sha256-VX/k0Ho092VjL+GIPVDgdlHxLWtTE24QHPMGCLjF6Ew=";
   };
 
-  vendorHash = "sha256-gDn46qIYjAnPn8KmKpIIQrf6vZVtCHhAQ/+OvvWe37Q=";
+  vendorHash = "sha256-v10z9i6sDTXmH6Dp+4O3uAl00dkr9Ig0EaQ2ydQX9as=";
 
   ldflags = [
     "-s"
-    "-w"
   ];
   preCheck = "export TZ=UTC";
 
@@ -49,6 +48,7 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     teams = [ lib.teams.ngi ];
+    mainProgram = "galene";
     maintainers = with lib.maintainers; [
       rgrunbla
       erdnaxe

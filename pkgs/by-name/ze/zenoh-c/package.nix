@@ -45,12 +45,6 @@ stdenv.mkDerivation (finalAttrs: {
     rustc
   ];
 
-  # ref. https://github.com/eclipse-zenoh/zenoh-c/pull/1314
-  postInstall = ''
-    substituteInPlace $out/lib/cmake/zenohc/zenohcConfig.cmake \
-      --replace-fail "''${PACKAGE_PREFIX_DIR}" "$out"
-  '';
-
   strictDeps = true;
   __structuredAttrs = true;
 

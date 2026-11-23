@@ -29,19 +29,15 @@ with py.pkgs;
 
 buildPythonApplication {
   pname = "zulip-term";
-  version = "0.7.0-unstable-2026-02-10";
+  version = "0.7.0-unstable-2026-10-26";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zulip";
     repo = "zulip-terminal";
-    rev = "6a799870eccc00d612e25ff881d18f4ff66d92fa";
-    hash = "sha256-saimbccJ5iJITs/Bw97bOkGrVcko1kAl61nlxNwBrms=";
+    rev = "dedc62d6b96a0302b3b084b0c60abc029e6066ae";
+    hash = "sha256-3WeYUfLw4l8TKhLspYw6xaYqsP7CojZbMRlNp97Lex4=";
   };
-
-  patches = [
-    ./pytest-executable-name.patch
-  ];
 
   build-system = with py.pkgs; [
     setuptools

@@ -320,6 +320,10 @@ in
 
         gtp5g = callPackage ../os-specific/linux/gtp5g { };
 
+        hailo1x = callPackage ../os-specific/linux/hailo1x { };
+
+        hailo8 = callPackage ../os-specific/linux/hailo8 { };
+
         hyperv-daemons = callPackage ../os-specific/linux/hyperv-daemons { };
 
         iio-utils =

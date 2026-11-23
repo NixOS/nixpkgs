@@ -8,15 +8,15 @@
 
 postgresqlBuildExtension (finalAttrs: {
   pname = "tds_fdw";
-  version = "2.0.5";
+  version = "2.0.5-unstable-2026-07-21";
 
   buildInputs = [ freetds ];
 
   src = fetchFromGitHub {
     owner = "tds-fdw";
     repo = "tds_fdw";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-4ecdErksaZ7SyCKzvSY5sD7rrKljq7BMn+gI9Yz49r0=";
+    rev = "6916ee63eca26311d7072c4977d9292b696ab049";
+    hash = "sha256-9lOCHU3Gl/mOeXJaCv2psoQM9pW4UuvrfHNcXipaHbc=";
   };
 
   meta = {

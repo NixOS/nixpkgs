@@ -19,8 +19,8 @@ stdenvNoCC.mkDerivation (
         (final: prev: { threads = null; })
       ];
 
-    pkgsMingw32 = useWin32ThreadModel pkgsCross.mingw32;
-    pkgsMingwW64 = useWin32ThreadModel pkgsCross.mingwW64;
+    pkgsMingw32 = useWin32ThreadModel pkgsCross.mingw-msvcrt-i686;
+    pkgsMingwW64 = useWin32ThreadModel pkgsCross.mingw-msvcrt-x86_64;
 
     dxvk32 =
       if stdenvNoCC.hostPlatform.isDarwin then

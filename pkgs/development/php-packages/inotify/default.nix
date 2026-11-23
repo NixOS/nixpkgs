@@ -3,8 +3,8 @@
 buildPecl {
   pname = "inotify";
 
-  version = "3.0.0";
-  sha256 = "sha256-xxt4ZEwBFVecx5T1jnhEFEF1HXgEC52dGiI9Ppwtcj0=";
+  version = "3.0.1";
+  sha256 = "sha256-+7ckCrrlAuqPSzxoJkxkJftGZHQCqPk5FkgoRTlK0SQ=";
 
   doCheck = true;
 

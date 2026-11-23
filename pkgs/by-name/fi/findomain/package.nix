@@ -1,17 +1,20 @@
 {
   lib,
+  aws-lc,
   fetchFromGitHub,
   installShellFiles,
   nix-update-script,
   openssl,
   pkg-config,
   rustPlatform,
+  rustfmt,
+  sqlite,
   versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "findomain";
-  version = "10.0.1";
+  version = "11.0.0";
 
   __structuredAttrs = true;
 
@@ -19,17 +22,22 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "findomain";
     repo = "findomain";
     tag = finalAttrs.version;
-    hash = "sha256-qMSVj+qhrx1LPuXWXKzo0v4yirNW2x/o/blNkSVU3Tg=";
+    hash = "sha256-rFEBvbX/mC7D3RyYNqZs5ikqKS14ObUJbDX5bYmPsEU=";
   };
 
-  cargoHash = "sha256-uYhCTjVzkW8menf67pnZfYCMIcNZadoGJvtDmsDDxP8=";
+  cargoHash = "sha256-foEngHn/TAuOkkIwI258mEu23bSU4UYgEDSxNQIBPGc=";
 
   nativeBuildInputs = [
     installShellFiles
     pkg-config
+    rustfmt
   ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [
+    aws-lc
+    openssl
+    sqlite
+  ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 

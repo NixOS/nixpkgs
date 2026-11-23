@@ -18,15 +18,20 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "soco";
-  version = "0.32.1";
+  version = "0.32.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SoCo";
     repo = "SoCo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lGHhhZ7zRM06Fnm7yb5gQSWOQUbsBYW3T1/WfQX2PdA=";
+    hash = "sha256-m7THP4vlQm2x2N+BxyZ0GOFCEzW/SZu4WZrfgNhnHyk=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools >= 84.1.0" "setuptools"
+  '';
 
   build-system = [ setuptools ];
 

@@ -12,13 +12,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "sendspin-go";
-  version = "1.8.0";
+  version = "1.8.2";
 
   src = fetchFromGitHub {
     owner = "Sendspin";
     repo = "sendspin-go";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-T0lOczyUi6YvlMqbrdAnWpFmTqJ7fVKm5yOeZueLwkg=";
+    hash = "sha256-CRo5OrcrB6ih07DcN7ofFOMb1FwzyxqFM9ksboxp+VI=";
   };
 
   __structuredAttrs = true;
@@ -38,12 +38,6 @@ buildGoModule (finalAttrs: {
   env.CGO_LDFLAGS = "-lm";
 
   ldflags = [ "-s" ];
-
-  preCheck = ''
-    # Tests require network features that are not available in the sandbox
-    substituteInPlace pkg/discovery/mdns_test.go \
-      --replace-fail "TestGetLocalIPs" "Skip_TestGetLocalIPs"
-  '';
 
   meta = {
     description = "Sendspin server and client";

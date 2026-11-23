@@ -8,14 +8,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "git-big-picture";
-  version = "1.3.0";
+  version = "1.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "git-big-picture";
     repo = "git-big-picture";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-aBwSw7smeRkkXSPY02Cs+jFI1wvgj1JisUny+R8G59E=";
+    hash = "sha256-xK8gh62B8tnPfBW3Tdae9H2CeRhQhTNbAQNfWr0hCaw=";
   };
 
   build-system = with python3Packages; [ setuptools ];

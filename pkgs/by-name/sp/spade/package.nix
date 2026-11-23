@@ -18,18 +18,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "spade";
-  version = "0.20.0";
+  version = "0.21.0";
 
   src = fetchFromCodeberg {
     owner = "spade-lang";
     repo = "spade";
     rev = "v${version}";
-    hash = "sha256-POMt+uTSaP+XADFbAwWLxzm6FZiyoMIrDFfTtBMPIgs=";
+    hash = "sha256-NzPF0AtqylQTgFVDtipHZt06rGRPXkHfR708UoxOpHE=";
     # only needed for vatch, which contains test data
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-j/h9UzcsojELd/bYX6/w54PwuqMViEAOKE9tsmQOhXY=";
+  cargoHash = "sha256-PFupzHsIv8X1umYFcvXK5+tMBANw7d5La5VAPtKe4X8=";
 
   # TODO: somehow respect https://nixos.org/manual/nixpkgs/stable/#var-passthru-updateScript-commit
   passthru.updateScript = _experimental-update-script-combinators.sequence [
@@ -79,7 +79,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     description = "Better hardware description language";
-    homepage = "https://codeberg/spade-lang/spade";
+    homepage = "https://codeberg.org/spade-lang/spade";
     changelog = "https://codeberg.org/spade-lang/spade/src/branch/main/CHANGELOG.md";
     # compiler is eupl12, spade-lang stdlib is both asl20 and mit
     license = with lib.licenses; [

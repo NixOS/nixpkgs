@@ -32,6 +32,9 @@
   libjpeg,
   libtiff,
   SDL2,
+
+  # for passthru.tests
+  pipewire,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -166,7 +169,10 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     updateScript = nix-update-script { };
 
-    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    tests = {
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+      inherit pipewire;
+    };
   };
 
   meta = {
@@ -181,7 +187,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     maintainers = with lib.maintainers; [
       citadelcore
-      tmarkus
+      AAAAAASomeThingsFailToEvaluate
     ];
     platforms = lib.platforms.linux;
     badPlatforms = [

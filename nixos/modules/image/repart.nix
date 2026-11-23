@@ -320,7 +320,7 @@ in
         version = config.image.repart.version;
         versionInfix = if version != null then "_${version}" else "";
       in
-      cfg.name + versionInfix;
+      lib.mkDefault (cfg.name + versionInfix);
     image.extension =
       let
         compressionSuffix =
@@ -333,7 +333,7 @@ in
             ."${cfg.compression.algorithm}";
 
       in
-      "raw" + compressionSuffix;
+      lib.mkDefault ("raw" + compressionSuffix);
 
     image.repart =
       let
@@ -442,7 +442,7 @@ in
         );
       };
 
-    system.build.image = cfg.image;
+    system.build.image = lib.mkDefault cfg.image;
   };
 
   meta.maintainers = with lib.maintainers; [

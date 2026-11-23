@@ -173,7 +173,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
       diogotcorreia
-      tmarkus
+      AAAAAASomeThingsFailToEvaluate
     ];
     platforms = lib.platforms.linux;
   };

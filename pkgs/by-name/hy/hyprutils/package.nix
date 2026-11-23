@@ -10,13 +10,13 @@
 
 gcc16Stdenv.mkDerivation (finalAttrs: {
   pname = "hyprutils";
-  version = "0.14.3";
+  version = "0.14.4";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprutils";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7l2+xIZ7IU9r4h9ngSrGH7oQs8XZj0NR0V+96wkN8zk=";
+    hash = "sha256-zZSHWK0+H8agBhM9rDAEw1qg9I3XwLSHaKi2cSEYQlo=";
   };
 
   nativeBuildInputs = [

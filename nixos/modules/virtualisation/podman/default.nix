@@ -254,7 +254,18 @@ in
         ''
       ];
 
-      environment.systemPackages = [ cfg.package ] ++ lib.optional cfg.dockerCompat dockerCompat;
+      environment = {
+        systemPackages = [ cfg.package ] ++ lib.optional cfg.dockerCompat dockerCompat;
+        # To provide helper binaries (e.g. catatonit) with stable paths.
+        pathsToLink = [ "/libexec/podman" ];
+      };
+
+      virtualisation.containers = {
+        enable = true;
+        containersConf.settings = {
+          containers.init_path = lib.mkDefault "/run/current-system/sw/libexec/podman/catatonit";
+        };
+      };
 
       # https://github.com/containers/podman/blob/097cc6eb6dd8e598c0e8676d21267b4edb11e144/docs/tutorials/basic_networking.md#default-network
       environment.etc."containers/networks/podman.json" = lib.mkIf (cfg.defaultNetwork.settings != { }) {
@@ -276,8 +287,6 @@ in
             lib.optional (dns_enabled && (!lib.hasPrefix "podman" network_interface)) network_interface
             ++ lib.singleton (if isNftables then "podman*" else "podman+")
           );
-
-      virtualisation.containers.enable = true;
 
       systemd.packages = [ cfg.package ];
 

@@ -470,7 +470,7 @@ stdenv.mkDerivation (finalAttrs: {
       hash = "sha256-tp7MW+8ExivGKKWjLy60lxWNf2hXF+jCD0pajo+YbVo=";
     })
   ]
-  ++ lib.optionals (lib.versionAtLeast version "26.8" && lib.versionOlder version "26.8.999") [
+  ++ lib.optionals (lib.versionAtLeast version "26.8" && lib.versionOlder version "26.8.3") [
     ./26.8-add-dir-prereq.patch
   ];
 

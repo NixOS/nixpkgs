@@ -12,6 +12,7 @@
   zlib,
   symlinkJoin,
   pkg-config,
+  removeReferencesTo,
   config,
   autoAddDriverRunpath,
   enableCuda ? config.cudaSupport,
@@ -44,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   pname = "ucx";
-  version = "1.22.0";
+  version = "1.23.2";
 
   src = fetchFromGitHub {
     owner = "openucx";
@@ -53,16 +54,8 @@ stdenv.mkDerivation (finalAttrs: {
     # Otherwise compilation fails with:
     #   fatal error: gpunetio/common/doca_gpunetio_verbs_def.h: No such file or directory
     fetchSubmodules = true;
-    hash = "sha256-R/uUjkYLPtY9c3vZWrkzKaSgK9Z/cppJCwQ1V1cuwPc=";
+    hash = "sha256-eQFUoVtcLRRnNn5Zyp0FcLTWOLWx5m+fU93YxURg+b0=";
   };
-
-  # UCX uses the `#pragma omp master` declaration which is deprecated since
-  # OpenMP 5.1. Since UCX builds with -Werror by default, this causes build
-  # failures in GCC 16 which introduced the `deprecated-openmp` warning.
-  # Accordingly, we replace it with the new `#pragma omp masked` version in
-  # compilers which support OpenMP 5.1.
-  # https://github.com/openucx/ucx/pull/11697
-  patches = [ ./deprecated-openmp-pragma.patch ];
 
   postPatch = ''
     patchShebangs config/nvcc_wrap.sh
@@ -78,6 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     autoreconfHook
     doxygen
     pkg-config
+    removeReferencesTo
   ]
   ++ lib.optionals enableCuda [
     cudaPackages.cuda_nvcc
@@ -137,6 +131,19 @@ stdenv.mkDerivation (finalAttrs: {
     moveToOutput bin/ucx_info $dev
 
     moveToOutput share/ucx/examples $doc
+  ''
+  # libucp embeds the configure flags (for a debug log message) since
+  # https://github.com/openucx/ucx/pull/11758
+  # This creates an out -> dev cycle and leaks build-time paths into the runtime closure.
+  + ''
+    remove-references-to -t $dev ${
+      lib.concatMapStringsSep " " (p: "-t ${p}") (
+        [ (lib.getDev rdma-core) ]
+        ++ lib.optionals enableCuda [ cudaPackages.cuda_nvcc ]
+        ++ lib.optionals withGdrcopy [ (lib.getDev cudaPackages.gdrcopy) ]
+        ++ lib.optionals enableRocm [ rocm ]
+      )
+    } $out/lib/libucp.so.*.*.*
   '';
 
   enableParallelBuilding = true;

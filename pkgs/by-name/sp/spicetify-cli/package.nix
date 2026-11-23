@@ -9,13 +9,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "spicetify-cli";
-  version = "2.46.4";
+  version = "2.46.7";
 
   src = fetchFromGitHub {
     owner = "spicetify";
     repo = "cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qFYm81InlHQJGQKtfuGg0/jBNMxvU6keT0ouvwtAg6o=";
+    hash = "sha256-TO6YD22EvBG9QgkgVlXHxxLYpN42jcPPDlVSmrSd9RU=";
   };
 
   vendorHash = "sha256-F16qjdsdHbPMhdeTK1gDboLLwz729PzmNt0D6VsmFfU=";

@@ -1,82 +1,53 @@
 {
   lib,
-  python313Packages,
+  python314Packages,
   fetchFromGitHub,
   nix-update-script,
   testers,
   icloudpd,
 }:
 
-python313Packages.buildPythonApplication (finalAttrs: {
+python314Packages.buildPythonApplication (finalAttrs: {
   pname = "icloudpd";
-  version = "1.32.3";
+  version = "1.34.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "icloud-photos-downloader";
     repo = "icloud_photos_downloader";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-u7fG/rPNzeru+DU84G/77BqrLHONz8yEg18xG3gsP70=";
+    hash = "sha256-wMexR4222bsmZH058uyKngYCORAfgpzU6xBB5i/1FDU=";
   };
 
   pythonRelaxDeps = true;
 
-  dependencies = with python313Packages; [
+  dependencies = with python314Packages; [
     certifi
-    click
     flask
     keyring
     keyrings-alt
     piexif
-    python-dateutil
     pytz
     requests
     schema
-    six
     srp
     tqdm
     typing-extensions
     tzlocal
     urllib3
     waitress
-    wheel
+    tzdata
+    fido2
   ];
 
-  build-system = with python313Packages; [ setuptools ];
+  build-system = with python314Packages; [ setuptools ];
 
-  nativeCheckInputs = with python313Packages; [
+  nativeCheckInputs = with python314Packages; [
     freezegun
     mock
     pytest-timeout
     pytestCheckHook
     vcrpy
-  ];
-
-  disabledTests = [
-    # touches network
-    "test_autodelete_photos"
-    "test_download_autodelete_photos"
-    "test_retry_delete_after_download_session_error"
-    "test_retry_fail_delete_after_download_session_error"
-    "test_retry_delete_after_download_internal_error"
-    "test_autodelete_photos_dry_run"
-    "test_retry_fail_delete_after_download_internal_error"
-    "test_autodelete_invalid_creation_date"
-    "test_all_http_methods_covered"
-    "test_builtin_timeout_error_handling"
-    "test_connection_error_handling"
-    "test_new_connection_error_handling"
-    "test_normal_request"
-    "test_other_exceptions_pass_through"
-    "test_timeout_error_handling"
-    "test_response_to_har_entry_with_large_streaming_response"
-    "test_response_to_har_entry_with_real_json_response"
-    "test_response_to_har_entry_with_real_streaming_response"
-    "test_response_to_har_entry_with_real_text_response"
-    "test_streaming_vs_non_streaming_behavior"
-    # touches non-existing folders
-    "test_folder_structure_de_posix"
-    "test_missing_directory"
   ];
 
   passthru = {
@@ -86,8 +57,8 @@ python313Packages.buildPythonApplication (finalAttrs: {
 
   preBuild = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools==80.9.0" "setuptools" \
-      --replace-fail "wheel==0.45.1" "wheel"
+      --replace-fail "setuptools==84.2.1" "setuptools" \
+      --replace-fail "wheel==0.48.0" "wheel"
 
     substituteInPlace src/foundation/__init__.py \
       --replace-fail "0.0.1" "${finalAttrs.version}"

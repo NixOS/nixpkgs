@@ -4,7 +4,7 @@
   buildGo127Module,
   fetchFromGitHub,
   makeWrapper,
-  llvmPackages_22,
+  llvmPackages_23,
   go_1_27,
   xar,
   binaryen,
@@ -21,7 +21,7 @@ let
   buildGoModule = buildGo127Module;
   go = go_1_27;
   llvmMajor = lib.versions.major llvm.version;
-  inherit (llvmPackages_22)
+  inherit (llvmPackages_23)
     llvm
     clang
     compiler-rt
@@ -38,7 +38,7 @@ in
 
 buildGoModule (finalAttrs: {
   pname = "tinygo";
-  version = "0.43.0";
+  version = "0.44.0";
 
   __structuredAttrs = true;
 
@@ -46,7 +46,7 @@ buildGoModule (finalAttrs: {
     owner = "tinygo-org";
     repo = "tinygo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TB0M1MCDIsDGfNHm5XJu9Cip/M6XxQ6zjcjRI+W5o/I=";
+    hash = "sha256-Qf8/PtNaUdZEz8nn8oYdj0MWoSGzzHPC3AsjNo7zmRs=";
     fetchSubmodules = true;
     # The public hydra server on `hydra.nixos.org` is configured with
     # `max_output_size` of 3GB. The purpose of this `postFetch` step
@@ -57,7 +57,7 @@ buildGoModule (finalAttrs: {
     '';
   };
 
-  vendorHash = "sha256-GkFyLorvYJ6pr1eNqV7AodilnJxitncnaaZDEav6jCo=";
+  vendorHash = "sha256-PWU4bZOPdFFXDPG6FN8LbdJ0nKAri8o03nizvZ5rSWM=";
 
   patches = [
     ./Makefiles.patch

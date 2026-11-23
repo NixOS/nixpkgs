@@ -5,14 +5,14 @@
   fetchFromGitHub,
 }:
 
-buildPecl rec {
+buildPecl (finalAttrs: {
   pname = "pinba";
   version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "tony2001";
     repo = "pinba_extension";
-    tag = "RELEASE_${lib.replaceStrings [ "." ] [ "_" ] version}";
+    tag = "RELEASE_${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
     hash = "sha256-XiK7U770RIn7QX+336z3da+WYGgLnqG4ijyUpQ3GDHM=";
   };
 
@@ -31,4 +31,4 @@ buildPecl rec {
     homepage = "http://pinba.org/";
     teams = [ lib.teams.php ];
   };
-}
+})

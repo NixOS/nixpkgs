@@ -5,10 +5,11 @@
   version ? null,
 }:
 
-mkCoqDerivation {
+(mkCoqDerivation {
   pname = "unicoq";
   owner = "unicoq";
   inherit version;
+  opam-name = "coq-unicoq";
   defaultVersion =
     let
       case = case: out: { inherit case out; };
@@ -29,7 +30,14 @@ mkCoqDerivation {
     description = "Enhanced unification algorithm for Coq";
     license = lib.licenses.mit;
   };
-  preBuild = ''
-    coq_makefile -f _CoqProject -o Makefile
-  '';
-}
+  useDuneifVersion = v: v != null && (v == "dev" || lib.versions.isGt "1.6-9.1" v);
+}).overrideAttrs
+  (
+    o:
+    lib.optionalAttrs (o.version != null && o.version != "dev" && lib.versions.isLe "1.6-9.1" o.version)
+      {
+        preBuild = ''
+          coq_makefile -f _CoqProject -o Makefile
+        '';
+      }
+  )

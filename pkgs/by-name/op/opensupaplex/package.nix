@@ -2,42 +2,39 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchurl,
-  makeDesktopItem,
-  copyDesktopItems,
-  testers,
-  opensupaplex,
   SDL2,
   SDL2_mixer,
   desktopToDarwinBundle,
+  nix-update-script,
+  ruby,
+  runCommand,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
-let
-  # Doesn't seem to be included in tagged releases, but does exist on master.
-  icon = fetchurl {
-    url = "https://raw.githubusercontent.com/sergiou87/open-supaplex/b102548699cf16910b59559f689ecfad88d2a7d2/open-supaplex.svg";
-    sha256 = "sha256-nKeSBUGjSulbEP7xxc6smsfCRjyc/xsLykH0o3Rq5wo=";
-  };
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "opensupaplex";
-  version = "7.1.2";
+  version = "7.2.2";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "sergiou87";
     repo = "open-supaplex";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hP8dJlLXE5J/oxPhRkrrBl1Y5e9MYbJKi8OApFM3+GU=";
+    hash = "sha256-4q4li0TT/tZkrreRFIVCth9Db6eCKORe2HMK2ETO/CY=";
   };
 
   patches = [
+    # LC_UUID is non-deterministic on Darwin
     ./reproducible-build.patch
+    # nixpkgs SDL2_mixer has no framework layout
     ./darwin.patch
   ];
 
   nativeBuildInputs = [
     SDL2 # For "sdl2-config"
-    copyDesktopItems
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     desktopToDarwinBundle
@@ -45,62 +42,70 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ SDL2_mixer ];
 
-  enableParallelBuilding = true;
+  makeFlags = [
+    "-C"
+    "linux"
+  ];
 
   env.NIX_CFLAGS_COMPILE = toString [
     "-DFILE_DATA_PATH=${placeholder "out"}/lib/opensupaplex"
     "-DFILE_FHS_XDG_DIRS"
   ];
 
-  preBuild = ''
-    # Makefile is located in this directory
-    pushd linux
-  '';
-
-  postBuild = ''
-    popd
-  '';
-
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/{bin,lib,share/icons/hicolor/scalable/apps}
-
-    install -D ./linux/opensupaplex $out/bin/opensupaplex
-    cp -R ./resources $out/lib/opensupaplex
-    cp ${icon} $out/share/icons/hicolor/scalable/apps/open-supaplex.svg
+    install -Dm755 linux/opensupaplex -t $out/bin
+    mkdir -p $out/lib
+    cp -R resources $out/lib/opensupaplex
+    install -Dm644 linux/assets/io.github.sergiou87.open-supaplex.desktop -t $out/share/applications
+    install -Dm644 linux/assets/io.github.sergiou87.open-supaplex.metainfo.xml -t $out/share/metainfo
+    install -Dm644 linux/assets/io.github.sergiou87.open-supaplex.svg -t $out/share/icons/hicolor/scalable/apps
 
     runHook postInstall
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = opensupaplex;
-    command = "opensupaplex --help";
-    version = "v${finalAttrs.version}";
-  };
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
-  desktopItems = [
-    (makeDesktopItem {
-      name = "opensupaplex";
-      exec = finalAttrs.meta.mainProgram;
-      icon = "open-supaplex";
-      desktopName = "OpenSupaplex";
-      comment = finalAttrs.meta.description;
-      categories = [
-        "Game"
-      ];
-    })
-  ];
-
+  enableParallelBuilding = true;
   # Strip only the main binary, not the data files which would corrupt them.
   stripExclude = [ "lib/opensupaplex/*" ];
+
+  versionCheckProgramArg = "--help";
+
+  passthru = {
+    tests.demos =
+      runCommand "opensupaplex-demos"
+        {
+          env = {
+            SDL_AUDIODRIVER = "dummy";
+            SDL_VIDEODRIVER = "dummy";
+          };
+          nativeBuildInputs = [
+            ruby
+            writableTmpDirAsHomeHook
+          ];
+        }
+        ''
+          cd ${finalAttrs.src}/tests
+          ruby run-tests.rb ${lib.getExe finalAttrs.finalPackage}
+          touch $out
+        '';
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Decompilation of Supaplex in C and SDL";
     homepage = "https://github.com/sergiou87/open-supaplex";
     changelog = "https://github.com/sergiou87/open-supaplex/blob/master/changelog/v${finalAttrs.version}.txt";
-    license = lib.licenses.gpl3Only;
-    maintainers = [ ];
+    license =
+      with lib.licenses;
+      AND [
+        gpl3Only
+        mit
+      ];
+    maintainers = with lib.maintainers; [ keenanweaver ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "opensupaplex";
   };

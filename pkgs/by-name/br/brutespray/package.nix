@@ -14,7 +14,7 @@ buildGoModule (finalAttrs: {
     owner = "x90skysn3k";
     repo = "brutespray";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-USWN1PXRwTxI8D/3omca9xuCJMKgBgwpYlgrJHgsHgc=";
+    hash = "sha256-ZR/PxOp7lFby804E13k35W1WwDkb7zkGpeK61gOR+34=";
   };
 
   vendorHash = "sha256-nwece9Xd1qyzFx49d6OTp6H2ls/+eWVXBKcXnh8PI1o=";

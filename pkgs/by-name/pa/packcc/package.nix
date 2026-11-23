@@ -25,6 +25,10 @@ stdenv.mkDerivation (finalAttrs: {
     rm -rf \
       tests/ast-calc.v3.d \
       tests/style.d
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # use clang on darwin
+    substituteInPlace tests/test.sh --replace-fail "export CC=gcc" "export CC=cc"
   '';
 
   nativeBuildInputs = [

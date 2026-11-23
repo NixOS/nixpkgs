@@ -7,16 +7,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "goldilocks";
-  version = "4.15.1";
+  version = "4.16.3";
 
   src = fetchFromGitHub {
     owner = "FairwindsOps";
     repo = "goldilocks";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ubfhj9pYSFpfWkYO1LkA+sW8wwh/dDgQnH91GhKMwKA=";
+    hash = "sha256-WeYpAbDPf1eal3m3n0AnpeN2mTqcjzWuMWXf9uZie8A=";
   };
 
-  vendorHash = "sha256-dtVNxumYkzWihfI42R7LuXLGtELg5EnxH9FUMCL4u/4=";
+  vendorHash = "sha256-SIqPB2W1vScH2r6OYD6qVecTdzhtyIaFM2gsHrocIOY=";
 
   __structuredAttrs = true;
 

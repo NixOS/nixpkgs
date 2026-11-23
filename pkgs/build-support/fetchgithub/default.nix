@@ -5,38 +5,65 @@
   fetchzip,
 }@args:
 let
-  # Here defines fetchFromGitHub arguments that determines useFetchGit,
+  inherit (lib)
+    all
+    attrNames
+    functionArgs
+    intersectAttrs
+    makeOverridable
+    mapAttrs
+    optionalAttrs
+    optionalString
+    revOrTag
+    setFunctionArgs
+    unsafeGetAttrPos
+    ;
+
+  removedPassthruBaseNames = [
+    "owner"
+    "repo"
+    "tag"
+    "rev"
+    "functionName"
+    "private"
+    "githubBase"
+    "varPrefix"
+  ];
+  # fetchZipDefaults to exclude from automatic passing.
+  # Other fetchZipDefaults will pass down to fetchgit.
+  excludedFetchGitArgs = [
+    "forceFetchGit"
+  ];
+
+  removedPassthruFetchGitNames = removedPassthruBaseNames ++ excludedFetchGitArgs;
+  removedPassthruFetchZipNames = removedPassthruBaseNames ++ attrNames fetchZipDefaults;
+
+  # Here defines fetchFromGitHub arguments that determines useFetchZip,
   # The attribute value is their default values.
   # As fetchFromGitHub prefers fetchzip for hash stability,
-  # `defaultFetchGitArgs` attributes should lead to `useFetchGit = false`.
-  useFetchGitArgsDefault = {
+  # `fetchZipDefaults` attributes should lead to `useFetchZip = true`.
+  fetchZipDefaults = {
     deepClone = false;
     fetchSubmodules = false; # This differs from fetchgit's default
     fetchLFS = false;
     forceFetchGit = false;
-    leaveDotGit = null;
+    leaveDotGit = false;
     postCheckout = "";
     rootDir = "";
-    sparseCheckout = null;
-  };
-  useFetchGitArgsDefaultNullable = {
-    leaveDotGit = false;
     sparseCheckout = [ ];
   };
+  fetchZipNullableArgs = {
+    leaveDotGit = null;
+    sparseCheckout = null;
+  };
+  fetchZipDefaultsNulled = fetchZipDefaults // fetchZipNullableArgs;
 
-  useFetchGitargsDefaultNonNull = useFetchGitArgsDefault // useFetchGitArgsDefaultNullable;
+  fetchGitDefaults = removeAttrs fetchZipDefaultsNulled excludedFetchGitArgs;
+  fetchGitFunctionArgs = mapAttrs (_: _: true) fetchZipDefaults;
 
-  # useFetchGitArgsWD to exclude from automatic passing.
-  # Other useFetchGitArgsWD will pass down to fetchgit.
-  excludeUseFetchGitArgNames = [
-    "forceFetchGit"
-  ];
+  adjustFunctionArgs = f: setFunctionArgs f (fetchGitFunctionArgs // functionArgs f);
 
-  faUseFetchGit = lib.mapAttrs (_: _: true) useFetchGitArgsDefault;
-
-  adjustFunctionArgs = f: lib.setFunctionArgs f (faUseFetchGit // lib.functionArgs f);
-
-  decorate = f: lib.makeOverridable (adjustFunctionArgs f);
+  decorate = f: makeOverridable (adjustFunctionArgs f);
 
   # fetchzip may not be overridable when using external tools, for example nix-prefetch
   fetchzip =
@@ -59,81 +86,109 @@ decorate (
     ... # For hash agility and additional fetchgit arguments
   }@args:
 
-  assert (
-    lib.xor (tag == null) (rev == null)
-    || throw "${functionName} requires one of either `rev` or `tag` to be provided (not both)."
-  );
+  assert
+    (tag == null) != (rev == null)
+    || throw "${functionName} requires one of either `rev` or `tag` to be provided (not both).";
 
   let
-    useFetchGit =
-      lib.mapAttrs (
-        name: nonNullDefault:
-        if args ? ${name} && (useFetchGitArgsDefaultNullable ? ${name} -> args.${name} != null) then
-          args.${name}
-        else
-          nonNullDefault
-      ) useFetchGitargsDefaultNonNull != useFetchGitargsDefaultNonNull;
-
-    useFetchGitArgsWDPassing = lib.overrideExisting (removeAttrs useFetchGitArgsDefault excludeUseFetchGitArgNames) args;
+    useFetchZip = all (
+      arg:
+      # this argument doesn't matter for choosing fetchzip/fetchgit
+      !fetchZipDefaults ? ${arg}
+      # or it's equal to the fetchzip default
+      || fetchZipDefaults.${arg} == args.${arg}
+      # or it's null and therefore ignored
+      || (args.${arg} == null && fetchZipNullableArgs ? ${arg})
+    ) (attrNames args);
 
     position = (
       if args.meta.description or null != null then
-        builtins.unsafeGetAttrPos "description" args.meta
+        unsafeGetAttrPos "description" args.meta
       else if tag != null then
-        builtins.unsafeGetAttrPos "tag" args
+        unsafeGetAttrPos "tag" args
       else
-        builtins.unsafeGetAttrPos "rev" args
+        unsafeGetAttrPos "rev" args
     );
-    baseUrl = "https://${githubBase}/${owner}/${repo}";
-    newMeta =
-      meta
-      // {
-        homepage = meta.homepage or baseUrl;
-        identifiers = {
-          purlParts =
-            if githubBase == "github.com" then
-              {
-                type = "github";
-                # https://github.com/package-url/purl-spec/blob/18fd3e395dda53c00bc8b11fe481666dc7b3807a/types-doc/github-definition.md
-                spec = "${owner}/${repo}@${(lib.revOrTag rev tag)}";
-              }
+    varBase = "NIX${optionalString (varPrefix != null) "_${varPrefix}"}_GITHUB_PRIVATE_";
+  in
+  # We prefer fetchzip in cases we don't need submodules as the hash
+  # is more stable in that case.
+  (if useFetchZip then fetchzip else fetchgit) (
+    finalAttrs:
+    let
+      # Follow `overrideAttrs` on `githubBase`, `owner` and `repo`.
+      baseUrl = "https://${finalAttrs.githubBase}/${finalAttrs.owner}/${finalAttrs.repo}";
+    in
+    removeAttrs args (
+      if useFetchZip then removedPassthruFetchZipNames else removedPassthruFetchGitNames
+    )
+    // (
+      if useFetchZip then
+        {
+          # Use the API endpoint for private repos, as the archive URI doesn't
+          # support access with GitHub's fine-grained access tokens.
+          #
+          # Use the archive URI for non-private repos, as the API endpoint has
+          # relatively restrictive rate limits for unauthenticated users.
+          url =
+            if private then
+              let
+                endpoint = "/repos/${finalAttrs.owner}/${finalAttrs.repo}/tarball/${finalAttrs.rev}";
+              in
+              if finalAttrs.githubBase == "github.com" then
+                "https://api.github.com${endpoint}"
+              else
+                "https://${finalAttrs.githubBase}/api/v3${endpoint}"
             else
-              {
-                type = "generic";
-                # https://github.com/package-url/purl-spec/blob/18fd3e395dda53c00bc8b11fe481666dc7b3807a/types-doc/generic-definition.md
-                spec = "${repo}?vcs_url=https://${githubBase}/${owner}/${repo}@${(lib.revOrTag rev tag)}";
-              };
+              "${baseUrl}/archive/${finalAttrs.rev}.tar.gz";
+          extension = "tar.gz";
+          derivationArgs = {
+            inherit
+              githubBase
+              owner
+              repo
+              tag
+              ;
+            rev = fetchgit.getRevWithTag {
+              inherit (finalAttrs) tag;
+              rev = finalAttrs.revCustom;
+            };
+            revCustom = rev;
+            ${if position != null then "pos" else null} = position;
+          };
+          passthru = {
+            gitRepoUrl = "${baseUrl}.git";
+          }
+          // passthru;
         }
-        // meta.identifiers or { };
-      }
-      // lib.optionalAttrs (position != null) {
-        # to indicate where derivation originates, similar to make-derivation.nix's mkDerivation
-        position = "${position.file}:${toString position.line}";
-      };
-    passthruAttrs = removeAttrs args (
-      [
-        "owner"
-        "repo"
-        "tag"
-        "rev"
-        "functionName"
-        "private"
-        "githubBase"
-        "varPrefix"
-      ]
-      ++ (if useFetchGit then excludeUseFetchGitArgNames else lib.attrNames faUseFetchGit)
-    );
-    varBase = "NIX${lib.optionalString (varPrefix != null) "_${varPrefix}"}_GITHUB_PRIVATE_";
-    # We prefer fetchzip in cases we don't need submodules as the hash
-    # is more stable in that case.
-    fetcher = if useFetchGit then fetchgit else fetchzip;
-    privateAttrs = lib.optionalAttrs private {
+      else
+        fetchGitDefaults
+        // intersectAttrs fetchGitDefaults args
+        // {
+          inherit tag rev;
+          url = "${baseUrl}.git";
+          inherit passthru;
+          derivationArgs = {
+            inherit
+              githubBase
+              owner
+              repo
+              ;
+            ${if position != null then "pos" else null} = position;
+          };
+        }
+    )
+    // optionalAttrs private {
       netrcPhase =
         # When using private repos:
         # - Fetching with git works using https://github.com but not with the GitHub API endpoint
         # - Fetching a tarball from a private repo requires to use the GitHub API endpoint
         let
-          machineName = if githubBase == "github.com" && !useFetchGit then "api.github.com" else githubBase;
+          machineName =
+            if finalAttrs.githubBase == "github.com" && useFetchZip then
+              "api.github.com"
+            else
+              finalAttrs.githubBase;
         in
         ''
           if [ -z "''$${varBase}USERNAME" -o -z "''$${varBase}PASSWORD" ]; then
@@ -150,78 +205,36 @@ decorate (
         "${varBase}USERNAME"
         "${varBase}PASSWORD"
       ];
-    };
-
-    gitRepoUrl = "${baseUrl}.git";
-
-    fetcherArgs =
-      finalAttrs:
-      passthruAttrs
-      // (
-        if useFetchGit then
-          useFetchGitArgsWDPassing
-          // {
-            inherit tag rev;
-            url = gitRepoUrl;
-            inherit passthru;
-            derivationArgs = {
-              inherit
-                githubBase
-                owner
-                repo
-                ;
-            };
-          }
-        else
-          let
-            revWithTag = finalAttrs.rev;
-          in
-          {
-            # Use the API endpoint for private repos, as the archive URI doesn't
-            # support access with GitHub's fine-grained access tokens.
-            #
-            # Use the archive URI for non-private repos, as the API endpoint has
-            # relatively restrictive rate limits for unauthenticated users.
-            url =
-              if private then
-                let
-                  endpoint = "/repos/${finalAttrs.owner}/${finalAttrs.repo}/tarball/${revWithTag}";
-                in
-                if githubBase == "github.com" then
-                  "https://api.github.com${endpoint}"
-                else
-                  "https://${githubBase}/api/v3${endpoint}"
-              else
-                "${baseUrl}/archive/${revWithTag}.tar.gz";
-            extension = "tar.gz";
-            derivationArgs = {
-              inherit
-                githubBase
-                owner
-                repo
-                tag
-                ;
-              rev = fetchgit.getRevWithTag {
-                inherit (finalAttrs) tag;
-                rev = finalAttrs.revCustom;
+    }
+    // {
+      # TODO(@ShamrockLee): Change back to `inherit name;` after reconstruction with lib.extendMkDerivation
+      name =
+        args.name
+          or (repoRevToNameMaybe finalAttrs.repo (revOrTag finalAttrs.revCustom finalAttrs.tag) "github");
+      meta = meta // {
+        homepage = meta.homepage or baseUrl;
+        identifiers = {
+          purlParts =
+            let
+              # Follow `overrideAttrs` like the URLs do. Prefer the tag, since
+              # finalAttrs.rev is `refs/tags/<tag>` on the fetchzip path.
+              version = revOrTag finalAttrs.rev finalAttrs.tag;
+            in
+            if finalAttrs.githubBase == "github.com" then
+              {
+                type = "github";
+                # https://github.com/package-url/purl-spec/blob/18fd3e395dda53c00bc8b11fe481666dc7b3807a/types-doc/github-definition.md
+                spec = "${finalAttrs.owner}/${finalAttrs.repo}@${version}";
+              }
+            else
+              {
+                type = "generic";
+                # https://github.com/package-url/purl-spec/blob/18fd3e395dda53c00bc8b11fe481666dc7b3807a/types-doc/generic-definition.md
+                spec = "${finalAttrs.repo}?vcs_url=${baseUrl}@${version}";
               };
-              revCustom = rev;
-            };
-            passthru = {
-              inherit gitRepoUrl;
-            }
-            // passthru;
-          }
-      )
-      // privateAttrs
-      // {
-        # TODO(@ShamrockLee): Change back to `inherit name;` after reconstruction with lib.extendMkDerivation
-        name =
-          args.name
-            or (repoRevToNameMaybe finalAttrs.repo (lib.revOrTag finalAttrs.revCustom finalAttrs.tag) "github");
-        meta = newMeta;
+        }
+        // meta.identifiers or { };
       };
-  in
-
-  fetcher fetcherArgs
+    }
+  )
 )

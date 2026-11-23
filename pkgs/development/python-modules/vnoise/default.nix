@@ -5,6 +5,7 @@
   numpy,
   pytestCheckHook,
   setuptools,
+  pkg-resources-backport,
 }:
 
 buildPythonPackage rec {
@@ -19,7 +20,10 @@ buildPythonPackage rec {
     hash = "sha256-nflAh3vj48wneM0wy/+M+XD6GC63KZEIFb1x4SS46YI=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  nativeBuildInputs = [
+    setuptools
+    pkg-resources-backport
+  ];
 
   propagatedBuildInputs = [ numpy ];
 

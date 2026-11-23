@@ -24,7 +24,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-mayPiVV9F6yxDnRyNLrZSiDSPsIRILsaF53Qm7SISg0=";
   };
 
-  patches = [ ./dont_fetch_dependencies.patch ];
+  patches = [
+    ./dont_fetch_dependencies.patch
+    # calls `app.setDesktopFileName` - distros that don't wrap the binary apparently don't need this.
+    ./desktop-filename.patch
+  ];
 
   nativeBuildInputs = [
     cmake

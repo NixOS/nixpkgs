@@ -16,7 +16,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "axis";
-  version = "74";
+  version = "75";
   pyproject = true;
 
   disabled = pythonOlder "3.14";
@@ -25,13 +25,13 @@ buildPythonPackage (finalAttrs: {
     owner = "Kane610";
     repo = "axis";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fWhQe4NklAva4znXUwYhrMdC/VCu4oZgwsyGuGd9csk=";
+    hash = "sha256-VQ1voiVwRGOvCN8gpMRfOxTgD0DTww6ir9tqUFfoxjo=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools==82.0.1" "setuptools" \
-      --replace-fail "wheel==0.47.0" "wheel"
+      --replace-fail "setuptools==84.2.1" "setuptools" \
+      --replace-fail "wheel==0.48.0" "wheel"
   '';
 
   build-system = [ setuptools ];

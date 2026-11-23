@@ -64,7 +64,7 @@ While `swiftpm2nix` is not deprecated, using `fetchSwiftPMDeps` is preferred bec
 
 ### Packaging with `fetchSwiftPMDeps` {#ssec-swift-packaging-with-fetch-swiftpm-deps}
 
-Swift provides a fetcher that will download all of your dependencies based on the `Package.resolved` shipped by your package.
+Swift provides a fetcher that will download all of your dependencies, and the XCFramework and artifact bundle binary targets they declare, based on the `Package.resolved` shipped by your package.
 If your package does not ship one, you will have to generate it yourself and provide it with your package.
 Otherwise, set `swiftpmDeps` as follows:
 
@@ -253,7 +253,7 @@ Packages that need macros for Apple frameworks on Darwin have two options:
 - `open-apple-macros` provides open-source implementations of FoundationModelsMacros and SwiftUIMacros; or
 - `darwin.xcode-macros` provides macro libraries from Xcode not otherwise included in the toolchain, but they are unfree.
 
-Add the appropriate package to `depsBuildBuild` (because they are compiler plugins that run on the build platform).
+Add the appropriate package to `buildInputs`.
 If you need to manually specify the path for a package because it or its build system invokes `swiftc` directly:
 
 ### `open-apple-macros` {#ssec-swift-macros-open-apple-macros}

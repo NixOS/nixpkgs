@@ -70,8 +70,9 @@ let
       "x86_64-linux"
     ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    license = lib.licenses.gpl2Only;
+    license = lib.licenses.gpl2Plus;
     mainProgram = "scilab";
+    maintainers = with lib.maintainers; [ VZstless ];
     changelog = "https://help.scilab.org/docs/${version}/en_US/CHANGES.html";
   };
 

@@ -22,13 +22,13 @@ backendStdenv.mkDerivation (finalAttrs: {
   # NOTE: Depends on the CUDA package set, so use cudaNamePrefix.
   name = "${cudaNamePrefix}-${finalAttrs.pname}-${finalAttrs.version}";
   pname = "gdrcopy";
-  version = "2.6";
+  version = "2.7";
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "gdrcopy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Waq/Of0LcLDqyaWaU47lorJcG30CijcdTsvf9nMqgrg=";
+    hash = "sha256-FJ6vF/nzehfCv1ft2zT3OQzazfSpgifB5umhtk1FgwQ=";
   };
 
   outputs = [ "out" ];
@@ -108,6 +108,7 @@ backendStdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Fast GPU memory copy library based on NVIDIA GPUDirect RDMA technology";
     homepage = "https://github.com/NVIDIA/gdrcopy";
+    changelog = "https://github.com/NVIDIA/gdrcopy/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = licenses.mit;
     platforms = [
       "aarch64-linux"

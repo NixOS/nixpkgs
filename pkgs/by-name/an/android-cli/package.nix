@@ -9,19 +9,19 @@
 }:
 
 let
-  version = "1.1.16717390";
+  version = "1.1.16919734";
   platformData = {
     x86_64-linux = fetchurl {
       url = "https://dl.google.com/android/cli/${version}/linux_x86_64/android-cli";
-      hash = "sha256-s07Quu7/oqruJyDYJJG5dYNWluLlaEBEkHi+yIVDZWQ=";
+      hash = "sha256-mAN4Td8k1GmZKe7OUZ/6iwZq+pork71YdJs8bSyq7uw=";
     };
     aarch64-linux = fetchurl {
       url = "https://dl.google.com/android/cli/${version}/linux_arm64/android-cli";
-      hash = "sha256-QvH7k3OjmM5ytl+h1z3ctrekGavfRc8KKTtRvqEojqU=";
+      hash = "sha256-qmCxPQ7yLmci3oVn4GbOYDtasRFX2jsh162I7v4gTD0=";
     };
     aarch64-darwin = fetchurl {
       url = "https://dl.google.com/android/cli/${version}/darwin_arm64/android-cli";
-      hash = "sha256-6cbhn17YFC4ol+C2i0duF2hjPldAqlS/wjR2fMJkAf4=";
+      hash = "sha256-tVnIuHNztDvTtLukVkyICJgcG3S8fhiqQfVb9q88P1s=";
     };
   };
 

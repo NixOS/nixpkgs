@@ -6,13 +6,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "passdetective";
-  version = "1.0.7";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "aydinnyunus";
     repo = "PassDetective";
     rev = finalAttrs.version;
-    hash = "sha256-ln+nKESCYNQwTB6njNQBNUGmF+NXqgzmM1sb/d6ZBcU=";
+    hash = "sha256-v+jI6bTCoqwV9VRVPXOwDdG7+eG9oKnbvfeOl2yXMoI=";
   };
 
   vendorHash = "sha256-4FF0aQiuVN382RBCYI7SpoB8U8MZoXTomuFEvcbcREg=";

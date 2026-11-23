@@ -3,7 +3,7 @@
   name = "systemd-credentials-tpm2";
 
   meta = {
-    maintainers = with pkgs.lib.maintainers; [ tmarkus ];
+    maintainers = with pkgs.lib.maintainers; [ AAAAAASomeThingsFailToEvaluate ];
   };
 
   nodes.machine =

@@ -430,7 +430,6 @@ in
         enable = true;
         recommendedGzipSettings = mkDefault true;
         recommendedOptimisation = mkDefault true;
-        recommendedProxySettings = mkDefault true;
         recommendedTlsSettings = mkDefault true;
         upstreams.pretix.servers."unix:/run/pretix/pretix.sock" = { };
         virtualHosts.${cfg.nginx.domain} = {
@@ -440,7 +439,14 @@ in
             more_set_headers X-Content-Type-Options nosniff;
           '';
           locations = {
-            "/".proxyPass = "http://pretix";
+            "/" = {
+              proxyPass = "http://pretix";
+              extraConfig = ''
+                proxy_set_header Host $host;
+                proxy_set_header X-Forwarded-For $remote_addr;
+                proxy_set_header X-Forwarded-Proto $scheme;
+              '';
+            };
             "/media/" = {
               alias = "${cfg.settings.pretix.datadir}/media/";
               extraConfig = ''
@@ -448,7 +454,7 @@ in
                 expires 7d;
               '';
             };
-            "^~ (/media/(cachedfiles|invoices)|/static/(staticfiles.json|CACHE/manifest.json))" = {
+            "~ ^/(media/(cachedfiles|invoices)|static/(staticfiles\\.json|CACHE/manifest\\.json))" = {
               extraConfig = ''
                 deny all;
                 return 404;

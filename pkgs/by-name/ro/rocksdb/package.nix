@@ -33,6 +33,9 @@ stdenv.mkDerivation (finalAttrs: {
     lib.versionAtLeast finalAttrs.version "6.29.3" && enableLiburing
   ) ./fix-findliburing.patch;
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   nativeBuildInputs = [
     cmake
     ninja
@@ -73,9 +76,9 @@ stdenv.mkDerivation (finalAttrs: {
     "-DWITH_GFLAGS=0"
     "-DUSE_RTTI=1"
     "-DROCKSDB_INSTALL_ON_WINDOWS=YES" # harmless elsewhere
-    (lib.optional sse42Support "-DFORCE_SSE42=1")
     "-DFAIL_ON_WARNINGS=NO"
   ]
+  ++ lib.optional sse42Support "-DFORCE_SSE42=1"
   ++ lib.optional (!enableShared) "-DROCKSDB_BUILD_SHARED=0";
 
   # otherwise "cc1: error: -Wformat-security ignored without -Wformat [-Werror=format-security]"

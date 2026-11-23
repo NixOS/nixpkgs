@@ -7,9 +7,6 @@
 let
   cfg = config.services.pelican-panel;
 
-  inherit (cfg) package;
-  inherit (package.passthru) php;
-
   inherit (lib)
     mkOption
     mkEnableOption
@@ -23,11 +20,13 @@ let
     pipe
     isString
     match
+    optionalAttrs
+    getExe
     ;
 
   artisan = pkgs.writeShellScriptBin "pelican-artisan" ''
-    cd /var/lib/pelican/www
-    exec ${pkgs.sudo}/bin/sudo -u pelican ${php}/bin/php artisan "$@"
+    cd ${cfg.stateDir}/www
+    exec ${getExe pkgs.sudo} -u pelican ${getExe cfg.phpPackage} artisan "$@"
   '';
 
   autoConfig = {
@@ -35,6 +34,8 @@ let
     APP_ENV = "production";
     APP_INSTALLED = true;
     APP_URL = cfg.domain;
+
+    PANEL_DASHBOARD_UPDATE_ENABLED = false;
 
     DB_DATABASE = "pelican";
     DB_USERNAME = "pelican";
@@ -75,15 +76,9 @@ let
   setupScript = pkgs.writeShellScript "pelican-setup" ''
     set -euo pipefail
 
-    STATE="/var/lib/pelican"
+    STATE="${cfg.stateDir}"
     WWW="$STATE/www"
-    STORE="${package}"
-
-    # Create persistent state directories
-    mkdir -p \
-      $STATE/storage/{app/public,framework/{cache/data,sessions,views},logs/install} \
-      $STATE/plugins \
-      $STATE/bootstrap-cache
+    STORE="${cfg.package}"
 
     # Rebuild the working webroot when the panel package changes
     if [ "$(cat $WWW/.nix-store-path 2>/dev/null || true)" != "$STORE" ]; then
@@ -106,8 +101,8 @@ let
     chmod -R o+rX "$WWW/public"
     chown -R pelican:pelican "$STATE"
 
-    ${artisan}/bin/pelican-artisan migrate --force
-    ${artisan}/bin/pelican-artisan filament:optimize
+    ${getExe artisan} migrate --force
+    ${getExe artisan} filament:optimize
   '';
 in
 {
@@ -146,6 +141,13 @@ in
 
     package = mkPackageOption pkgs "pelican-panel" { };
 
+    phpPackage = mkOption {
+      type = types.package;
+      default = cfg.package.passthru.php;
+      defaultText = lib.literalExpression "config.services.pelican-panel.package.passthru.php";
+      description = "The php package to use.";
+    };
+
     openFirewall = mkEnableOption "firewall rules for Pelican";
 
     port = mkOption {
@@ -174,6 +176,40 @@ in
       example = lib.literalExpression ":\${toString config.pelican-panel.port}";
     };
 
+    stateDir = mkOption {
+      type = types.path;
+      default = "/var/lib/pelican";
+      description = "The state directory for Pelican Panel.";
+    };
+
+    user = lib.mkOption {
+      default = "pelican";
+      type = types.str;
+      description = ''
+        User account under which the Pelican Panel runs.
+
+        ::: {.note}
+        If left as the default value this user will automatically be created
+        on system activation, otherwise the sysadmin is responsible for
+        ensuring the user exists before the Pelican Panel service starts.
+        :::
+      '';
+    };
+
+    group = lib.mkOption {
+      default = "pelican";
+      type = types.str;
+      description = ''
+        Group under which the Pelican Panel runs.
+
+        ::: {.note}
+        If left as the default value this group will automatically be created
+        on system activation, otherwise the sysadmin is responsible for
+        ensuring the group exists before the Pelican Panel service starts.
+        :::
+      '';
+    };
+
     environment = mkOption {
       type = types.attrsOf (
         types.oneOf [
@@ -198,15 +234,34 @@ in
         assertion = (cfg.domain == null || match "https?://.*" cfg.domain != null);
         message = "`services.pelican-panel.domain` must be `null` or a valid URL";
       }
+      {
+        assertion =
+          !(
+            cfg.database.type == "pgsql"
+            && (mergedConfig.DB_USERNAME != mergedConfig.DB_DATABASE)
+            && cfg.database.createLocally
+          );
+        message = "`services.pelican-panel.environment.DB_USERNAME` must match `services.pelican-panel.environment.DB_DATABASE` when using postgresql locally";
+      }
+      {
+        assertion =
+          !(
+            cfg.database.type == "pgsql" && (mergedConfig.DB_USERNAME != cfg.user) && cfg.database.createLocally
+          );
+        message = "`services.pelican-panel.environment.DB_USERNAME` must match `services.pelican-panel.user` when using postgresql locally";
+      }
     ];
 
-    users = {
-      users.pelican = {
+    users.users = optionalAttrs (cfg.user == "pelican") {
+      pelican = {
         isSystemUser = true;
-        group = "pelican";
-        home = "/var/lib/pelican";
+        inherit (cfg) group;
+        home = cfg.stateDir;
       };
-      groups.pelican = { };
+    };
+
+    users.groups = optionalAttrs (cfg.group == "pelican") {
+      pelican = { };
     };
 
     services = {
@@ -239,9 +294,7 @@ in
       };
 
       phpfpm.pools.pelican = {
-        phpPackage = php;
-        user = "pelican";
-        group = "pelican";
+        inherit (cfg) phpPackage user group;
 
         settings = mkMerge [
           {
@@ -250,7 +303,7 @@ in
             "pm.start_servers" = 2;
             "pm.min_spare_servers" = 2;
             "pm.max_spare_servers" = 5;
-            "chdir" = "/var/lib/pelican/www";
+            "chdir" = "${cfg.stateDir}/www";
             "catch_workers_output" = "yes";
             "decorate_workers_output" = "no";
             "env[LOG_CHANNEL]" = "stderr";
@@ -275,7 +328,7 @@ in
         enable = true;
 
         virtualHosts."${cfg.caddy.domain}".extraConfig = ''
-          root * /var/lib/pelican/www/public
+          root * ${cfg.stateDir}/www/public
           encode gzip
           file_server
           php_fastcgi unix//run/phpfpm/pelican.sock
@@ -330,10 +383,10 @@ in
             wantedBy = [ "multi-user.target" ];
 
             serviceConfig = {
-              User = "pelican";
-              Group = "pelican";
-              WorkingDirectory = "/var/lib/pelican/www";
-              ExecStart = "${php}/bin/php artisan queue:work --tries=3";
+              User = cfg.user;
+              Group = cfg.group;
+              WorkingDirectory = "${cfg.stateDir}/www";
+              ExecStart = "${getExe cfg.phpPackage} artisan queue:work --tries=3";
               Restart = "on-failure";
               RestartSec = "5s";
             };
@@ -345,10 +398,10 @@ in
 
             serviceConfig = {
               Type = "oneshot";
-              User = "pelican";
-              Group = "pelican";
-              WorkingDirectory = "/var/lib/pelican/www";
-              ExecStart = "${php}/bin/php artisan schedule:run";
+              User = cfg.user;
+              Group = cfg.group;
+              WorkingDirectory = "${cfg.stateDir}/www";
+              ExecStart = "${getExe cfg.phpPackage} artisan schedule:run";
             };
           };
         };
@@ -360,6 +413,25 @@ in
             Persistent = true;
           };
         };
+
+        # Create persistent state directories
+        tmpfiles.settings."10-pelican-panel" =
+          let
+            stateDirList =
+              list:
+              lib.attrsets.genAttrs' list (
+                dir: lib.nameValuePair (cfg.stateDir + "/" + dir) { d = { inherit (cfg) user group; }; }
+              );
+          in
+          stateDirList [
+            "plugins"
+            "bootstrap-cache"
+            "storage/app/public"
+            "storage/framework/cache/data"
+            "storage/framework/sessions"
+            "storage/framework/views"
+            "storage/logs/install"
+          ];
       };
 
     networking.firewall = mkIf cfg.openFirewall {

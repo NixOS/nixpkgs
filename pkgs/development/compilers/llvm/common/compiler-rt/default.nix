@@ -139,9 +139,10 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs =
     lib.optionals
       # python3 is only used to patch shebangs for helper scripts, only include it if possible
-      (havePython3 && !stdenv.hostPlatform.useLLVM)
+      # Using it in cross-compilation causes infinite recursion through stdenv
+      (havePython3 && !stdenv.hostPlatform.useLLVM && stdenv.hostPlatform == stdenv.buildPlatform)
       [
-        python3 # FIXME: infinite recursion for pkgsLLVM
+        python3
       ]
     ++ lib.optional (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isRiscV) linuxHeaders
     ++ lib.optional (stdenv.hostPlatform.isFreeBSD) freebsd.include;

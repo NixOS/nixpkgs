@@ -1,6 +1,5 @@
 {
   lib,
-  applyPatches,
   fetchFromGitHub,
   stdenv,
   fetchYarnDeps,
@@ -14,19 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lasuite-docs-yhub-server";
-  version = "6.0.4";
+  version = "6.1.0";
 
-  src = applyPatches {
-    src = fetchFromGitHub {
-      owner = "suitenumerique";
-      repo = "docs";
-      tag = "v${finalAttrs.version}";
-      hash = "sha256-3tAH9apdBhxrwfn5+rFfs0O8YRt4RivcY4ou6opS3xQ=";
-    };
-
-    patches = [
-      ./forked-yhub.patch
-    ];
+  src = fetchFromGitHub {
+    owner = "suitenumerique";
+    repo = "docs";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-H43DGVYqUnhi3K7hKZhJBZ5Lfx2RczB7S9yO8Oe19ZQ=";
   };
 
   strictDeps = true;
@@ -36,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/src/yhub-server/yarn.lock";
-    hash = "sha256-luqVKWLcWJ9IZC4V+dAgx8BhW4EFEWEYyXCH0x4w+FM=";
+    hash = "sha256-OSGTfwVnQ8MVV4GRuj9O5zY1/C8LyMbdybj1SqQB/Qg=";
   };
 
   nativeBuildInputs = [
@@ -50,22 +43,33 @@ stdenv.mkDerivation (finalAttrs: {
 
   yarnBuildScript = "build";
 
-  installPhase = ''
-    runHook preInstall
+  installPhase =
+    let
+      yhubPatches = [
+        ./allow-db-configuration-without-postgres-conf-parameter.patch
+        ./disable-db-creation.patch
+      ];
+    in
+    ''
+      runHook preInstall
 
-    mkdir -p $out/{lib,bin}
-    cp -r dist node_modules $out/lib
+      mkdir -p $out/{lib,bin}
+      cp -r dist node_modules $out/lib
 
-    makeWrapper ${lib.getExe nodejs} "$out/bin/yhub-server" \
-      --add-flags "--import $out/lib/dist/sentry.js $out/lib/dist/server.js" \
-      --set NODE_PATH "$out/lib/node_modules"
+      pushd $out/lib/node_modules/@y/hub
+      ${lib.concatStringsSep "\n" (map (patch: "patch --strip=1 -i ${patch}") yhubPatches)}
+      popd
 
-    makeWrapper ${lib.getExe nodejs} $out/bin/y-init-db \
-      --add-flags "$out/lib/node_modules/@y/hub/bin/init-db.js" \
-      --set NODE_PATH "$out/lib/node_modules"
+      makeWrapper ${lib.getExe nodejs} "$out/bin/yhub-server" \
+        --add-flags "--import $out/lib/dist/sentry.js $out/lib/dist/server.js" \
+        --set NODE_PATH "$out/lib/node_modules"
 
-    runHook postInstall
-  '';
+      makeWrapper ${lib.getExe nodejs} $out/bin/y-init-db \
+        --add-flags "$out/lib/node_modules/@y/hub/bin/init-db.js" \
+        --set NODE_PATH "$out/lib/node_modules"
+
+      runHook postInstall
+    '';
 
   meta = {
     description = "Collaborative note taking, wiki and documentation platform";

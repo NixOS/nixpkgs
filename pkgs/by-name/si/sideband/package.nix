@@ -7,7 +7,7 @@
 
 python313Packages.buildPythonApplication (finalAttrs: {
   pname = "sideband";
-  version = "2.2.0";
+  version = "2.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {

@@ -23,6 +23,12 @@ buildPythonPackage rec {
     hash = "sha256-UWtCPdKrGE93NNjCroct5fPhq1pWIkngXXtRb+BHm8k=";
   };
 
+  patches = [
+    # Importing the deprecated `fitz` module prints a warning to stdout, which
+    # corrupts the output of every `llm` command once this plugin is loaded.
+    ./import-pymupdf-instead-of-fitz.patch
+  ];
+
   build-system = [ setuptools ];
 
   dependencies = [

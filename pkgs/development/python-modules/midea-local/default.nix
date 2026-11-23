@@ -19,14 +19,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "midea-local";
-  version = "15.0.0";
+  version = "15.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "midea-lan";
     repo = "midea-local";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-I192LNuG2Efxdv4JwN2bLqmSm4E5M0q4ksMwC3t3bvk=";
+    hash = "sha256-4DdprfO+sJeckTEkubfIp2OiM3Qscag4kwGv03L1U1c=";
   };
 
   postPatch = ''
@@ -46,6 +46,11 @@ buildPythonPackage (finalAttrs: {
     pycryptodome
     platformdirs
     typing-extensions
+  ];
+
+  pythonRelaxDeps = [
+    "pycryptodome"
+    "platformdirs"
   ];
 
   nativeCheckInputs = [

@@ -18,13 +18,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "karakeep";
-  version = "0.34.0";
+  version = "0.35.0";
 
   src = fetchFromGitHub {
     owner = "karakeep-app";
     repo = "karakeep";
     tag = "cli/v${finalAttrs.version}";
-    hash = "sha256-UgsT5tVB8AmXzpO6KynH3kT38RCX8LEHMTDhQZBii+8=";
+    hash = "sha256-YjpgGinZe8kekSEQ9x6ASHbNx3jzY2XM9RzhhqbUnLo=";
   };
 
   patches = [
@@ -33,6 +33,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
+    # we don't care about git hooks
+    substituteInPlace package.json \
+      --replace-fail '"prepare": "husky",' ""
+
     ln -s ${inter}/share/fonts/truetype ./apps/web/app/fonts
 
     substituteInPlace apps/cli/src/commands/dump.ts \
@@ -60,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     pnpm = pnpm_11;
     fetcherVersion = 4;
-    hash = "sha256-0l84j5g33ngDHYyzefXRkic3mpqZ4cXP1MEZfyWEGt8=";
+    hash = "sha256-U/dnNYmYXl6ZJq+w1tZmloi26YcSnFbLTDprHu6RacY=";
   };
   buildPhase = ''
     runHook preBuild

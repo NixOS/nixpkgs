@@ -9,14 +9,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pybraendstofpriser";
-  version = "2.2.0";
+  version = "2.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "MTrab";
     repo = "pybraendstofpriser";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-U3apX4t4c4Gb14b9KznVJdYmlGyuzjG6fzpseT1v2+U=";
+    hash = "sha256-qS3qO7dnGkcTe9s21Ob4K1LicW0cbqJchtVvPAB7PfM=";
   };
 
   nativeBuildInputs = [ pyprojectVersionPatchHook ];

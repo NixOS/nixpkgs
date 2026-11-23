@@ -3,6 +3,7 @@
   mkCoqDerivation,
   coq,
   stdlib,
+  rocq-elpi,
   version ? null,
 }:
 
@@ -25,7 +26,10 @@ mkCoqDerivation {
   };
   releaseRev = v: "v${v}";
 
-  propagatedBuildInputs = [ stdlib ];
+  propagatedBuildInputs = [
+    stdlib
+    rocq-elpi
+  ];
 
   mlPlugin = true;
 

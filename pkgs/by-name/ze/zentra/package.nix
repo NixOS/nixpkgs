@@ -14,17 +14,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zentra";
-  version = "0.15.3";
+  version = "0.16.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "johannus22";
     repo = "zentra";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yVQmpFYNE/AQ9uETRfmHA3b19TEf7+gxGM4yQBfGisc=";
+    hash = "sha256-W4gKg91pVMHHiJiorpNwojhfwSO652eGzAYcn1bojHI=";
   };
 
-  cargoHash = "sha256-0q2aWcwBiGNormTaT0KfsfN1xI1+8SmnBO8HLjj4vAc=";
+  cargoHash = "sha256-nWw0Llc8+lomBMKcf0MJ86ASqHpmIfXdWTKSAtL6K/A=";
 
   nativeBuildInputs = [
     gitMinimal

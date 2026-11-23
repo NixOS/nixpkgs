@@ -58,14 +58,14 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rustfs";
-  version = "1.0.5";
+  version = "1.0.6";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "rustfs";
     repo = "rustfs";
     tag = finalAttrs.version;
-    hash = "sha256-Id6rkdyFtiMj+0v7HJaT7ZXgzOhIOy0qnymXg6ZOyjo=";
+    hash = "sha256-QggJsZgmjXs8n10rbS1UgepUJjNdJnGZx8SaeVTqtuE=";
   };
 
   postPatch = ''
@@ -73,7 +73,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     cp -rL ${finalAttrs.console} ./rustfs/static
   '';
 
-  cargoHash = "sha256-+K4mCUlor2vEYUupKI39gVNN5RI1zyOY+EeiESeYNqE=";
+  cargoHash = "sha256-KFnkCQojiqVIv8K7EoSVWu8mpmDjLtl1ZJHbTVHkk98=";
 
   nativeBuildInputs = [
     pkg-config
@@ -109,6 +109,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
       '';
     });
   };
+
+  # can take over 5 hours on 2 cores and can consume significant RAM
+  requiredSystemFeatures = [ "big-parallel" ];
 
   meta = {
     description = "S3-compatible high-performance object storage system supporting migration and coexistence with other S3-compatible platforms such as MinIO and Ceph";

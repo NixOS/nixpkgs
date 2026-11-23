@@ -1,0 +1,65 @@
+diff --git a/fdisk.c b/fdisk.c
+index d77619b..540879a 100644
+--- a/fdisk.c
++++ b/fdisk.c
+@@ -192,13 +192,21 @@ char read_char(char *mesg);
+ 
+ jmp_buf listingbuf;
+ 
+-inline unsigned short __swap16(unsigned short x) {
++static inline unsigned short __swap16(unsigned short x) {
+ 	return (((__u16)(x) & 0xFF) << 8) | (((__u16)(x) & 0xFF00) >> 8);
+ }
+-inline __u32 __swap32(__u32 x) {
++static inline __u32 __swap32(__u32 x) {
+ 	return (((__u32)(x) & 0xFF) << 24) | (((__u32)(x) & 0xFF00) << 8) | (((__u32)(x) & 0xFF0000) >> 8) | (((__u32)(x) & 0xFF000000) >> 24);
+ }
+ 
++#if BYTE_ORDER == BIG_ENDIAN
++#define SWAP16(x) __swap16(x)
++#define SWAP32(x) __swap32(x)
++#else
++#define SWAP16(x) ((__u16)x)
++#define SWAP32(x) ((__u32)x)
++#endif
++
+ void fatal(enum failure why)
+ {
+ 	char	error[LINE_LENGTH],
+@@ -1242,7 +1250,7 @@ void new_partition(void)
+ 			else
+ 				printf("Invalid partition number "
+ 				       "for type `%c'\n", c);
+-		
++
+ 	}
+ }
+ 
+@@ -1339,7 +1347,7 @@ void move_begin(int i)
+ 	}
+ 	first = rounded(calculate(p->head, p->sector, p->cyl), SWAP32(p->start_sect) +
+ 		offsets[i]);
+-	new = read_int(first, first, 
++	new = read_int(first, first,
+ 		       SWAP32(p->start_sect) + SWAP32(p->nr_sects) + offsets[i] - 1,
+ 		       lower, "New beginning of data") - offsets[i];
+ 
+diff --git a/fdisk.h b/fdisk.h
+index 2b6ddc8..9d3ab25 100644
+--- a/fdisk.h
++++ b/fdisk.h
+@@ -12,14 +12,6 @@ typedef long long ext2_loff_t;
+ typedef long      ext2_loff_t;
+ #endif
+ 
+-#if BYTE_ORDER == BIG_ENDIAN
+-#define SWAP16(x) __swap16(x)
+-#define SWAP32(x) __swap32(x)
+-#else
+-#define SWAP16(x) ((__u16)x)
+-#define SWAP32(x) ((__u32)x)
+-#endif
+-
+ enum failure {usage, unable_to_open, unable_to_read, unable_to_seek,
+ 	unable_to_write, out_of_memory};
+ 

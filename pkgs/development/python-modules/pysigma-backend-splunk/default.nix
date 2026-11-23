@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pysigma-backend-splunk";
-  version = "2.1.0";
+  version = "3.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SigmaHQ";
     repo = "pySigma-backend-splunk";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OIW/ylN4QlguKnY2/yLICEu3Ix41lfXN5qil5dD+eTM=";
+    hash = "sha256-4nxFAlCU0GbyCnLRPWffP1kdXecmxVw71SLvOh0JuEw=";
   };
 
   build-system = [ poetry-core ];

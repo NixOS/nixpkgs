@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "fontfeatures";
-  version = "1.9.0";
+  version = "1.10.2";
 
   pyproject = true;
   build-system = [ setuptools-scm ];
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "fontfeatures";
     inherit version;
-    hash = "sha256-3PpUgaTXyFcthJrFaQqeUOvDYYFosJeXuRFnFrwp0R8=";
+    hash = "sha256-QC4zli+MkUXmlUvXR8JiCid9Q3purzlmY03EXR1/t8E=";
   };
 
   dependencies = [

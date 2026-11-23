@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jwasm";
-  version = "2.20";
+  version = "2.21";
 
   src = fetchFromGitHub {
     owner = "Baron-von-Riedesel";
     repo = "JWasm";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ZwSXX/vlAlbRFpWtCmSCGoMT5lu8qz870PZPVktHGRo=";
+    hash = "sha256-a91A2AXNYaZQ7Q1/C8ghD49POqA5vn9bJuXu7E1W8Jg=";
   };
 
   outputs = [
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "MASM-compatible x86 assembler";
     changelog = "https://github.com/Baron-von-Riedesel/JWasm/releases/tag/${finalAttrs.src.rev}";
     mainProgram = "jwasm";
-    license = lib.licenses.gpl2Plus;
+    license = lib.licenses.watcom;
     maintainers = [ ];
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;

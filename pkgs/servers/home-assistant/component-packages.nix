@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2026.11.1";
+  version = "2026.11.2";
   components = {
     "3_day_blinds" =
       ps: with ps; [
@@ -13,6 +13,7 @@
       ];
     "abrp" =
       ps: with ps; [
+        aioabrp
         aiohasupervisor
         aiousbwatcher
         bleak
@@ -38,7 +39,7 @@
         pyturbojpeg
         securetar
         serialx
-      ]; # missing inputs: aioabrp
+      ];
     "acaia" =
       ps: with ps; [
         aioacaia
@@ -118,6 +119,7 @@
       ps:
       with ps;
       [
+        aerosmart-modbus
         aiohasupervisor
         aiousbwatcher
         ifaddr
@@ -126,7 +128,7 @@
         serialx
         tmodbus
       ]
-      ++ modbus-connection.optional-dependencies.tmodbus; # missing inputs: aerosmart-modbus
+      ++ modbus-connection.optional-dependencies.tmodbus;
     "aftership" =
       ps: with ps; [
         pyaftership
@@ -357,7 +359,8 @@
       ];
     "any_list" =
       ps: with ps; [
-      ]; # missing inputs: aioanylist
+        aioanylist
+      ];
     "aosmith" =
       ps: with ps; [
         py-aosmith
@@ -909,11 +912,12 @@
       ps:
       with ps;
       [
+        bluetti-modbus
         modbus-connection
         pymodbus
         tmodbus
       ]
-      ++ modbus-connection.optional-dependencies.tmodbus; # missing inputs: bluetti-modbus
+      ++ modbus-connection.optional-dependencies.tmodbus;
     "bmw_connected_drive" =
       ps: with ps; [
       ];
@@ -933,7 +937,8 @@
       ];
     "bosch_smart_camera" =
       ps: with ps; [
-      ]; # missing inputs: bosch-shc-camera-client
+        bosch-shc-camera-client
+      ];
     "brands" =
       ps: with ps; [
       ];
@@ -1186,9 +1191,14 @@
         chess-com-api
       ];
     "chirpstack" =
-      ps: with ps; [
+      ps:
+      with ps;
+      [
         chirpstack-api
-      ]; # missing inputs: lorawan-connection lorawan-connection
+        lorawan-connection
+        lorawan-connection
+      ]
+      ++ lorawan-connection.optional-dependencies.chirpstack;
     "cielo_home" =
       ps: with ps; [
         cielo-connect-api
@@ -1766,7 +1776,8 @@
       ];
     "ecosmart" =
       ps: with ps; [
-      ]; # missing inputs: aioecosmart
+        aioecosmart
+      ];
     "ecospar" =
       ps: with ps; [
       ];
@@ -2097,7 +2108,9 @@
         evohome-async
       ];
     "exicom_spin_ble" =
-      ps: with ps; [
+      ps:
+      with ps;
+      [
         aioesphomeapi
         aiohasupervisor
         aioruuvigateway
@@ -2123,8 +2136,10 @@
         pysmlight
         pyspeex-noise
         serialx
+        spinev-ble
         zeroconf
-      ]; # missing inputs: spinev-ble
+      ]
+      ++ spinev-ble.optional-dependencies.bleak;
     "ezviz" =
       ps: with ps; [
         ha-ffmpeg
@@ -2313,12 +2328,13 @@
         home-assistant-intents
         ifaddr
         mutagen
+        pyflic-ble
         pymicro-vad
         pysmlight
         pyspeex-noise
         serialx
         zeroconf
-      ]; # missing inputs: pyflic-ble
+      ];
     "flipr" =
       ps: with ps; [
       ];
@@ -2364,7 +2380,8 @@
       ];
     "foreca" =
       ps: with ps; [
-      ]; # missing inputs: pyforeca
+        pyforeca
+      ];
     "forecast_solar" =
       ps: with ps; [
         forecast-solar
@@ -2438,11 +2455,12 @@
       with ps;
       [
         fronius-modbus
+        fronius-solarapi
         modbus-connection
         pymodbus
         tmodbus
       ]
-      ++ modbus-connection.optional-dependencies.tmodbus; # missing inputs: fronius-solarapi
+      ++ modbus-connection.optional-dependencies.tmodbus;
     "frontend" =
       ps: with ps; [
         home-assistant-frontend
@@ -2725,14 +2743,16 @@
       ];
     "google_travel_time" =
       ps: with ps; [
-      ]; # missing inputs: python-google-maps-routing-api
+        python-google-maps-routing-api
+      ];
     "google_weather" =
       ps: with ps; [
         python-google-weather-api
       ];
     "google_wifi" =
       ps: with ps; [
-      ]; # missing inputs: googlewifiapi
+        googlewifiapi
+      ];
     "govee_ble" =
       ps: with ps; [
         aioesphomeapi
@@ -2777,7 +2797,8 @@
       ];
     "grandstream_home" =
       ps: with ps; [
-      ]; # missing inputs: grandstream-home-api
+        grandstream-home-api
+      ];
     "graphite" =
       ps: with ps; [
       ];
@@ -2866,7 +2887,8 @@
       ];
     "hase_iq" =
       ps: with ps; [
-      ]; # missing inputs: pyhaseiq
+        pyhaseiq
+      ];
     "hassio" =
       ps: with ps; [
         aiohasupervisor
@@ -2880,7 +2902,8 @@
       ];
     "haven_iaq" =
       ps: with ps; [
-      ]; # missing inputs: haveniaq
+        haveniaq
+      ];
     "hddtemp" =
       ps: with ps; [
       ];
@@ -2912,7 +2935,8 @@
       ];
     "helty_cloud" =
       ps: with ps; [
-      ]; # missing inputs: pyheltycloud
+        pyheltycloud
+      ];
     "heos" =
       ps: with ps; [
         pyheos
@@ -3138,7 +3162,8 @@
       ];
     "hp_printer" =
       ps: with ps; [
-      ]; # missing inputs: aiohpprinter
+        aiohpprinter
+      ];
     "hr_energy_qube" =
       ps: with ps; [
         ifaddr
@@ -4302,7 +4327,8 @@
       ];
     "london_air" =
       ps: with ps; [
-      ]; # missing inputs: pylondonair
+        pylondonair
+      ];
     "london_underground" =
       ps: with ps; [
         london-tube-status
@@ -4342,7 +4368,8 @@
       ];
     "lorawan" =
       ps: with ps; [
-      ]; # missing inputs: lorawan-connection
+        lorawan-connection
+      ];
     "lovelace" =
       ps: with ps; [
       ];
@@ -4422,8 +4449,9 @@
         aiohasupervisor
         aiousbwatcher
         ifaddr
+        marantz-rs232
         serialx
-      ]; # missing inputs: marantz-rs232
+      ];
     "marketplace" =
       ps: with ps; [
         aiogithubapi
@@ -6652,7 +6680,8 @@
       ];
     "sensecap_lorawan" =
       ps: with ps; [
-      ]; # missing inputs: lorawan-connection sensecap-lorawan
+        lorawan-connection
+      ]; # missing inputs: sensecap-lorawan
     "sensibo" =
       ps: with ps; [
         pysensibo
@@ -7715,8 +7744,13 @@
         ttn-client
       ];
     "thethingsnetwork_lorawan" =
-      ps: with ps; [
-      ]; # missing inputs: lorawan-connection lorawan-connection
+      ps:
+      with ps;
+      [
+        lorawan-connection
+        lorawan-connection
+      ]
+      ++ lorawan-connection.optional-dependencies.tts;
     "thingspeak" =
       ps: with ps; [
         thingspeak
@@ -8819,6 +8853,7 @@
   # components listed in tests/components for which all dependencies are packaged
   supportedComponentsWithTests = [
     "abode"
+    "abrp"
     "acaia"
     "accuweather"
     "acmeda"
@@ -8827,6 +8862,7 @@
     "adguard"
     "advantage_air"
     "aemet"
+    "aerosmart"
     "aftership"
     "agent_dvr"
     "ai_task"
@@ -8867,6 +8903,7 @@
     "anova"
     "anthemav"
     "anthropic"
+    "any_list"
     "aosmith"
     "apache_kafka"
     "apcupsd"
@@ -8928,10 +8965,12 @@
     "bluetooth"
     "bluetooth_adapters"
     "bluetooth_le_tracker"
+    "bluetti_modbus"
     "bmw_connected_drive"
     "bond"
     "bosch_alarm"
     "bosch_shc"
+    "bosch_smart_camera"
     "brands"
     "braviatv"
     "bring"
@@ -8957,6 +8996,7 @@
     "chacon_dio"
     "chef_iq"
     "chess_com"
+    "chirpstack"
     "cielo_home"
     "citybikes"
     "clicksend_tts"
@@ -9043,6 +9083,7 @@
     "ecobee"
     "ecoforest"
     "econet"
+    "ecosmart"
     "ecovacs"
     "ecowitt"
     "edifier_infrared"
@@ -9089,6 +9130,7 @@
     "everlights"
     "evil_genius_labs"
     "evohome"
+    "exicom_spin_ble"
     "ezviz"
     "faa_delays"
     "facebook"
@@ -9115,6 +9157,7 @@
     "flexit"
     "flexit_bacnet"
     "flic"
+    "flic_button"
     "flipr"
     "flo"
     "flow_it"
@@ -9125,6 +9168,7 @@
     "folder"
     "folder_watcher"
     "foobot"
+    "foreca"
     "forecast_solar"
     "forked_daapd"
     "foscam"
@@ -9136,6 +9180,7 @@
     "fritz"
     "fritzbox"
     "fritzbox_callmonitor"
+    "fronius"
     "frontend"
     "frontier_silicon"
     "fuelprices_dk"
@@ -9184,11 +9229,14 @@
     "google_sheets"
     "google_tasks"
     "google_translate"
+    "google_travel_time"
     "google_weather"
+    "google_wifi"
     "govee_ble"
     "govee_light_local"
     "gpsd"
     "gpslogger"
+    "grandstream_home"
     "graphite"
     "gree"
     "gree_infrared"
@@ -9207,12 +9255,15 @@
     "hardware"
     "harman_luxury"
     "harmony"
+    "hase_iq"
     "hassio"
+    "haven_iaq"
     "hddtemp"
     "hdfury"
     "hdmi_cec"
     "hegel"
     "helty"
+    "helty_cloud"
     "heos"
     "here_travel_time"
     "hikvision"
@@ -9243,6 +9294,7 @@
     "honeywell_string_lights"
     "hortimax"
     "hotspring"
+    "hp_printer"
     "hr_energy_qube"
     "html5"
     "http"
@@ -9388,9 +9440,11 @@
     "logbook"
     "logger"
     "lojack"
+    "london_air"
     "london_underground"
     "lookin"
     "loqed"
+    "lorawan"
     "lovelace"
     "luci"
     "luftdaten"
@@ -9406,6 +9460,7 @@
     "manual_mqtt"
     "map_tiles"
     "marantz_infrared"
+    "marantz_rs232"
     "marketplace"
     "marytts"
     "mastodon"
@@ -9849,6 +9904,7 @@
     "thermobeacon"
     "thermopro"
     "thethingsnetwork"
+    "thethingsnetwork_lorawan"
     "thread"
     "threema"
     "threshold"

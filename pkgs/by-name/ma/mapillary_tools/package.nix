@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mapillary-tools";
-  version = "0.15.0";
+  version = "0.15.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mapillary";
     repo = "mapillary_tools";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hrHenORxGgjOCuEl6IIRhWvAXXeHPkRNoFKdsmlxlIc=";
+    hash = "sha256-vjt8BQLS22wrcRfPedC5gqwz5V/e5GpnMEbjstGyGiY=";
   };
 
   build-system = with python3Packages; [

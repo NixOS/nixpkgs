@@ -15,7 +15,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "restic";
-  version = "0.19.1";
+  version = "0.20.0";
 
   __structuredAttrs = true;
 
@@ -23,19 +23,10 @@ buildGoModule (finalAttrs: {
     owner = "restic";
     repo = "restic";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lj2+SZFvZl/WcC4aV7yZMEYVOyDNMFeHJbUWS53usqg=";
+    hash = "sha256-gw6lxLeuD33KGpUurYERK4AgntBHe38lmG6coQlFIR0=";
   };
 
-  patches = [
-    # The TestRestoreWithPermissionFailure test fails in Nix’s build sandbox
-    ./0001-Skip-testing-restore-with-permission-failure.patch
-
-    # Remove in next release
-    # https://github.com/restic/restic/pull/22000
-    ./0002-mount-bump-anacrolix-fuse-for-fusermount3-support.patch
-  ];
-
-  vendorHash = "sha256-2YlLMzV2OJEwGxM8XgIRTWEf9Jf1BfNhMhxUq0MLFWU=";
+  vendorHash = "sha256-0X3DE/thqkDe0dKLboz9YrN5xTMwroovEbmjq2PNyek=";
 
   subPackages = [ "cmd/restic" ];
 
@@ -45,6 +36,11 @@ buildGoModule (finalAttrs: {
   ];
 
   nativeCheckInputs = [ python3 ];
+
+  checkFlags = [
+    # test fails in sandboxed builds
+    "-skip=TestRestoreWithPermissionFailure"
+  ];
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];

@@ -3,30 +3,19 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
 
   # build-system
-  torch,
   setuptools,
 
-  # buildInputs
-  openmp,
-
   # dependencies
+  mslk,
   numpy,
   nvidia-ml-py,
+  torch,
 
   # tests
-  einops,
-  fairscale,
-  hydra-core,
-  networkx,
-  pytest-cov-stub,
-  pytest-timeout,
   pytestCheckHook,
   scipy,
-  timm,
-  transformers,
   triton,
   python,
 
@@ -35,32 +24,19 @@
   writableTmpDirAsHomeHook,
 }:
 let
-  inherit (torch) cudaCapabilities cudaPackages cudaSupport;
-
-  effectiveStdenv = if cudaSupport then cudaPackages.backendStdenv else stdenv;
+  inherit (torch) cudaSupport;
 in
-buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
+buildPythonPackage (finalAttrs: {
   pname = "xformers";
-  version = "0.0.35";
+  version = "0.0.36";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "facebookresearch";
     repo = "xformers";
     tag = "v${finalAttrs.version}";
-    fetchSubmodules = true;
-    hash = "sha256-UqpRHLN0INpW6sA8DbQCSeL8uhS+IoW60UPVUIh1NY0=";
+    hash = "sha256-ZQquwtDluyFOWLUVayNWW4E1wdAqgYUdNsRiwCK4KN4=";
   };
-
-  patches = [
-    # Fix `IndexError: list assignment index out of range` with torch >= 2.13
-    # https://github.com/facebookresearch/xformers/commit/f06b9a7b0db97a78913ca8dc1652468a0527dc80
-    (fetchpatch {
-      name = "xformers-fix-tests-pytorch-2.13.patch";
-      url = "https://github.com/facebookresearch/xformers/commit/f06b9a7b0db97a78913ca8dc1652468a0527dc80.patch";
-      hash = "sha256-QE3hmwXI3yJBgRWOHKoDUaEsFO+vuqV+DTMW7sjuURU=";
-    })
-  ];
 
   # ModuleNotFoundError: No module named 'xformers.components'
   postPatch = ''
@@ -73,42 +49,8 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
     torch
   ];
 
-  preBuild = ''
-    export MAX_JOBS=$NIX_BUILD_CORES
-  '';
-
-  env = lib.attrsets.optionalAttrs cudaSupport {
-    # Don't silently fallback to a non-CUDA build
-    FORCE_CUDA = 1;
-
-    TORCH_CUDA_ARCH_LIST = "${lib.concatStringsSep ";" cudaCapabilities}";
-  };
-
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isDarwin [
-      openmp
-    ]
-    ++ lib.optionals cudaSupport (
-      with cudaPackages;
-      [
-        cuda_cudart # cuda_runtime_api.h
-        libcusparse # cusparse.h
-        cccl # nv/target
-        libcublas # cublas_v2.h
-        libcusolver # cusolverDn.h
-        libcurand # curand_kernel.h
-      ]
-    );
-
-  nativeBuildInputs =
-    lib.optionals cudaSupport [
-      cudaPackages.cuda_nvcc
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      openmp.dev
-    ];
-
   dependencies = [
+    mslk
     numpy
     torch
   ]
@@ -123,25 +65,15 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
   ];
 
   nativeCheckInputs = [
-    einops
-    fairscale
-    hydra-core
-    networkx
-    pytest-cov-stub
-    pytest-timeout
     pytestCheckHook
     scipy
-    timm
-    transformers
   ]
   ++ lib.optionals cudaSupport [
     triton
   ];
 
   preCheck =
-    # Otherwise the CPP bindings are not available and the GPU tests fail with:
-    # `fa2F@2.5.7-pt` is not supported because:
-    #     xFormers wasn't build with CUDA support: False
+    # Make sure the tests run against the installed package
     ''
       rm -rf xformers
     ''
@@ -152,16 +84,6 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
 
   enabledTestPaths = [
     "tests"
-  ];
-
-  disabledTestPaths = [
-    # Those tests require access to the GPU and should be tagged accordingly:
-    # https://github.com/facebookresearch/xformers/pull/1385
-    "tests/test_fwbw_overlap.py"
-  ]
-  ++ lib.optionals (!cudaSupport) [
-    # AttributeError: module 'torch._C' has no attribute '_set_print_stack_traces'
-    "tests/test_multiprocessing_utils.py"
   ];
 
   disabledTests =
@@ -183,11 +105,15 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
       "test_dispatch_decoding_bmghk"
     ];
 
+  disabledTestPaths = lib.optionals (!lib.meta.availableOn stdenv.hostPlatform triton) [
+    # ModuleNotFoundError: No module named 'triton'
+    "tests/test_mslk_compat.py::test_reexports_exist_in_mslk[xformers.ops.fmha._triton.splitk_kernels]"
+  ];
+
+  __darwinAllowLocalNetworking = true;
+
   passthru.gpuCheck = xformers.overridePythonAttrs (old: {
     requiredSystemFeatures = [ "cuda" ];
-
-    # Run all tests, including the ones that need a GPU
-    disabledTestPaths = [ ];
 
     disabledTests = (old.disabledTests or [ ]) ++ [
       # `fa3F@0.0.0` is not supported because:
@@ -212,9 +138,22 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
       # AssertionError: Legacy CUDA profiling requires use_cpu=True
       "test_profiler_dispatcher_stream_workaround"
 
-      # RuntimeError: two_four_sgemm_cutlass, /build/source/xformers/csrc/sparse24/gemm.cu:190,
-      # Got CUTLASS error: Error Internal
-      "test_linearw24"
+      # torch.AcceleratorError: CUDA error: out of memory (in cuStreamCreateWithPriority)
+      "test_cuda_streams"
+    ];
+
+    disabledTestPaths = (old.disabledTestPaths or [ ]) ++ [
+      # ValueError: `flydslF` is not supported because: FlyDSL unavailable on this device/arch
+      # (FlyDSL is a ROCm-only backend)
+      "tests/test_mem_eff_attention.py::test_unsupported_stride_alignment[flydslF]"
+      "tests/test_mem_eff_attention.py::test_unsupported_stride_lastdim[flydslF]"
+
+      # AssertionError: memory_efficient_attention: 0.0 flops, expected 3221225472
+      "tests/test_profiler.py::test_analyze_prof_memeff[-flash]"
+      "tests/test_profiler.py::test_analyze_prof_memeff[causal-flash]"
+
+      # RuntimeError: NCCL split failed: unhandled cuda error
+      "tests/test_sequence_parallel_fused_ops.py::test_sequence_parallel_fused[compile-fp32-ugly-shapes-all-gather-singleton]"
     ];
 
     nativeCheckInputs = old.nativeCheckInputs ++ [

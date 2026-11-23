@@ -28,13 +28,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "vector";
-  version = "0.61.0";
+  version = "0.62.0";
 
   src = fetchFromGitHub {
     owner = "vectordotdev";
     repo = "vector";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mbfD8mcn3O+dewq7VG9l3es6za0C47pk1xxBRDm2ybs=";
+    hash = "sha256-6036j5ZmzVQVwqxlyguGm3gU2SMvU5ufUe4ZXJZKupo=";
   };
 
   cargoPatches = [
@@ -49,7 +49,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ./mongodb-metrics-system-ca.patch
   ];
 
-  cargoHash = "sha256-FOqW75iqSbYtPmVefUKIlkzzrS4AmR3wxzSMFqfAf8s=";
+  cargoHash = "sha256-L5IFgM/xC3fIXylASYGSMUvAER67dRAyGQhZhuBgdkA=";
 
   # cargo-auditable passes Vector's aws-config feature to vdev, which has no such feature.
   auditable = false;

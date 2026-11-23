@@ -11,7 +11,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "spellchecker-cli";
-  version = "7.0.4";
+  version = "7.0.6";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -20,12 +20,12 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "tbroadley";
     repo = "spellchecker-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+5hg7f8gV5CmRqD7RC/qnRNPkCOsAh65IE5QyQNUv7s=";
+    hash = "sha256-/kes+UOXmuwfDKkPQAMZ+06n+kCEkypysrjfcQyw1nA=";
   };
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = finalAttrs.src + "/yarn.lock";
-    hash = "sha256-lv72SIcf/xcNEEyLP1wgjiL/6Xi2GPMWT74B+MrK1m8=";
+    hash = "sha256-Jv9+4rB9vql+juEz4MnjyY8xNyHOg735EZUvBnKCc6w=";
   };
 
   nativeBuildInputs = [

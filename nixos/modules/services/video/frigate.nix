@@ -145,10 +145,25 @@ let
 
   # Discover configured detectors for acceleration support
   detectors = attrValues cfg.settings.detectors or { };
-  withCoralUSB = any (d: d.type == "edgetpu" && hasPrefix "usb" d.device or "") detectors;
-  withCoralPCI = any (d: d.type == "edgetpu" && hasPrefix "pci" d.device or "") detectors;
+  hasDetector =
+    {
+      type,
+      devicePrefix ? null,
+    }:
+    any (
+      d: d.type == type && (devicePrefix == null || hasPrefix devicePrefix (d.device or ""))
+    ) detectors;
+
+  withCoralUSB = hasDetector {
+    type = "edgetpu";
+    devicePrefix = "usb";
+  };
+  withCoralPCI = hasDetector {
+    type = "edgetpu";
+    devicePrefix = "pci";
+  };
   withCoral = withCoralPCI || withCoralUSB;
-  withOpenVINO = any (d: d.type == "openvino") detectors;
+  withOpenVINO = hasDetector { type = "openvino"; };
 in
 
 {
@@ -285,7 +300,6 @@ in
       additionalModules = with pkgs.nginxModules; [
         develkit
         rtmp
-        secure-token
         set-misc
         vod
       ];
@@ -322,6 +336,8 @@ in
             recommendedProxySettings = true;
             extraConfig = ''
               internal;
+              # $go2rtc_stream_proxy is only set by the go2rtc stream locations
+              uninitialized_variable_warn off;
 
               # Strip all request headers
               proxy_pass_request_headers off;
@@ -374,21 +390,24 @@ in
               # Smaller segments, faster generation, better browser compatibility
               vod_hls_container_format fmp4;
 
-              secure_token $args;
-              secure_token_types application/vnd.apple.mpegurl;
+              # fMP4 playlists use EXT-X-MAP, which requires HLS protocol
+              # version 6 (RFC 8216 section 7); the module default is 4
+              vod_hls_version 6;
+
+              # Pass the playlist's query args (e.g. Home Assistant's authSig) on
+              # to every URL in it. These match the only URL endings vod writes
+              # with fmp4 and no subtitles.
+              sub_filter_types application/vnd.apple.mpegurl;
+              sub_filter_once off;
+              sub_filter '.m3u8' '.m3u8$is_args$args';
+              sub_filter '.m4s' '.m4s$is_args$args';
+              sub_filter '.mp4"' '.mp4$is_args$args"';
 
               add_header Cache-Control "no-store";
               expires off;
 
               keepalive_disable safari;
-
-              # vod module returns 502 for non-existent media
-              # https://github.com/kaltura/nginx-vod-module/issues/468
-              error_page 502 =404 /vod-not-found;
             '';
-          };
-          "/vod-not-found" = {
-            return = 404;
           };
           "/stream/" = {
             alias = "/var/cache/frigate/stream/";
@@ -647,7 +666,6 @@ in
           listen 127.0.0.1:5000;
 
           # vod settings
-          vod_hls_version 6;
           vod_base_url "";
           vod_segments_base_url "";
           vod_mode mapped;

@@ -24,7 +24,7 @@ appimageTools.wrapType2 {
 
   extraInstallCommands = ''
     install -m 444 -D ${appimageContents}/HiFile.desktop $out/share/applications/HiFile.desktop
-    install -m 444 -D ${appimageContents}/HiFile.png $out/share/icons/hicolor/512x512/apps/HiFile.png
+    install -m 444 -D ${appimageContents}/HiFile.png $out/share/icons/hicolor/256x256/apps/HiFile.png
     substituteInPlace $out/share/applications/HiFile.desktop \
       --replace-fail 'Exec=HiFile' 'Exec=hifile'
     echo "StartupWMClass=app.hifile.www.HiFile" >> $out/share/applications/HiFile.desktop

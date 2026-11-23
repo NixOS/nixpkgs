@@ -48,6 +48,7 @@ libc = CDLL("libc.so.6")
 limine_install_dir: Optional[str] = None
 can_use_direct_paths = False
 paths: Dict[str, bool] = {}
+entry_payloads: dict[str, str] = {}
 
 
 def config(*path: str) -> Optional[Any]:
@@ -312,10 +313,11 @@ def xen_config_entry(
     return entry
 
 
-def config_entry(levels: int, bootspec: BootSpec, label: str, time: str) -> str:
-    entry = "/" * levels + label + "\n"
-    entry += "protocol: linux\n"
-    entry += f"comment: {bootspec.label}, built on {time}\n"
+def config_entry_payload(bootspec: BootSpec, label: str) -> str:
+    if bootspec.toplevel in entry_payloads:
+        return entry_payloads[bootspec.toplevel]
+
+    entry = "protocol: linux\n"
     entry += "kernel_path: " + get_kernel_uri(bootspec.kernel) + "\n"
     entry += (
         "cmdline: "
@@ -362,10 +364,32 @@ def config_entry(levels: int, bootspec: BootSpec, label: str, time: str) -> str:
             entry += "module_path: " + get_kernel_uri(initrd_secrets_path) + "\n"
 
         os.umask(old_umask)
+    entry_payloads[bootspec.toplevel] = entry
     return entry
 
 
-def generate_config_entry(profile: str, gen: str, special: bool) -> str:
+def config_entry(
+    levels: int,
+    bootspec: BootSpec,
+    label: str,
+    time: str | None,
+    generation: str | None = None,
+) -> str:
+    entry = "/" * levels + label + "\n"
+    entry += "comment: "
+    if generation is not None:
+        entry += generation + ", "
+    entry += bootspec.label
+    if time is not None:
+        entry += f", built on {time}"
+    entry += "\n"
+    entry += config_entry_payload(bootspec, label)
+    return entry
+
+
+def generate_config_entry(
+    profile: str, gen: str, special: bool, current_system: str
+) -> Tuple[str, List[Tuple[str, str]]]:
     time = datetime.datetime.fromtimestamp(
         os.stat(get_system_path(profile, gen), follow_symlinks=False).st_mtime
     ).strftime("%F %H:%M:%S")
@@ -373,6 +397,13 @@ def generate_config_entry(profile: str, gen: str, special: bool) -> str:
         open(os.path.join(get_system_path(profile, gen), "boot.json"), "r")
     )
     boot_spec = bootjson_to_bootspec(boot_json)
+
+    current_entries = []
+    generation = f"Generation {gen}"
+    if profile != "system":
+        generation += f" (profile '{profile}')"
+    if boot_spec.toplevel == current_system:
+        current_entries.append((generation, time))
 
     specialisation_list = boot_spec.specialisations.items()
     depth = 2
@@ -399,8 +430,10 @@ def generate_config_entry(profile: str, gen: str, special: bool) -> str:
 
     for spec, spec_boot_spec in specialisation_list:
         entry += config_entry(depth, spec_boot_spec, f"{spec}", str(time))
+        if spec_boot_spec.toplevel == current_system:
+            current_entries.append((f"{generation} (specialisation '{spec}')", time))
 
-    return entry
+    return entry, current_entries
 
 
 def find_disk_device(part: str) -> str:
@@ -550,11 +583,10 @@ def install_bootloader() -> None:
     hash_mismatch_panic = bool_to_yes_no(config("panicOnChecksumMismatch"))
     graphics = bool_to_yes_no(config("style", "graphicalTerminal", "enable"))
 
-    last_gen = get_gens()[-1]
-    last_gen_json = json.load(
-        open(os.path.join(get_system_path("system", last_gen), "boot.json"), "r")
-    )
-    last_gen_boot_spec = bootjson_to_bootspec(last_gen_json)
+    current_system = sys.argv[1]
+    with open(os.path.join(current_system, "boot.json"), "r") as file:
+        current_system_json = json.load(file)
+    current_system_boot_spec = bootjson_to_bootspec(current_system_json)
 
     config_file = str(config("extraConfig")) + "\n"
     config_file += textwrap.dedent(f"""
@@ -562,7 +594,7 @@ def install_bootloader() -> None:
         editor_enabled: {editor_enabled}
         hash_mismatch_panic: {hash_mismatch_panic}
         graphics: {graphics}
-        default_entry: {3 if len(last_gen_boot_spec.specialisations.items()) > 0 else 2}
+        default_entry: 1
     """)
 
     for wallpaper in config("style", "wallpapers"):
@@ -627,17 +659,31 @@ def install_bootloader() -> None:
         # {config("distroName")} boot entries start here
     """)
 
+    config_header = config_file
+    config_file = ""
+    current_entries = []
     for profile, gens in profiles:
         group_name = (
-            "default profile" if profile == "system" else f"profile '{profile}'"
+            "generations" if profile == "system" else f"profile '{profile}'"
         )
         config_file += f"/+{config('distroName')} {group_name}\n"
 
         isFirst = True
 
         for gen in sorted(gens, key=lambda x: x, reverse=True):
-            config_file += generate_config_entry(profile, gen, isFirst)
+            entry, matches = generate_config_entry(
+                profile, gen, isFirst, current_system_boot_spec.toplevel
+            )
+            config_file += entry
+            current_entries += matches
             isFirst = False
+
+    # Only describe a generation when the installer target has a unique match.
+    generation, time = current_entries[0] if len(current_entries) == 1 else (None, None)
+    config_header += config_entry(
+        1, current_system_boot_spec, str(config("distroName")), time, generation
+    )
+    config_file = config_header + config_file
 
     config_file_path = os.path.join(limine_install_dir, "limine.conf")
     config_file += f"\n# {config('distroName')} boot entries end here\n\n"

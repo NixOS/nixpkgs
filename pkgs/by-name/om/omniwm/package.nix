@@ -7,11 +7,11 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "omniwm";
-  version = "0.7.6";
+  version = "0.8.0";
 
   src = fetchurl {
     url = "https://github.com/OmniNull/OmniWM/releases/download/v${finalAttrs.version}/OmniWM-v${finalAttrs.version}.zip";
-    hash = "sha256-7IxhRqbyGnnhxArHDWESF2K5PPU80wjmPrROis4g/Nw=";
+    hash = "sha256-b3+z4hHeOoPncrExgAaAyz0g1MY4gRofAhIP0iXwPMc=";
   };
 
   sourceRoot = "OmniWM.app";
@@ -51,6 +51,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     mainProgram = "OmniWM";
     platforms = [ "aarch64-darwin" ];
     maintainers = with lib.maintainers; [
+      iamppborah
       mmfallacy
       samiser
     ];

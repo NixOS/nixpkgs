@@ -39,16 +39,19 @@ else
     ''
     + lib.optionalString stdenv.hostPlatform.isAarch64 ''
       substituteInPlace source/Irrlicht/Makefile \
-        --replace "-DIRRLICHT_EXPORTS=1" "-DIRRLICHT_EXPORTS=1 -DPNG_ARM_NEON_OPT=0"
+        --replace-fail "-DIRRLICHT_EXPORTS=1" "-DIRRLICHT_EXPORTS=1 -DPNG_ARM_NEON_OPT=0"
     '';
 
     preConfigure = ''
       cd source/Irrlicht
     '';
 
-    preBuild = ''
-      makeFlagsArray+=(sharedlib NDEBUG=1 LDFLAGS="-lX11 -lGL -lXxf86vm")
-    '';
+    buildFlags = [ "sharedlib" ];
+
+    makeFlags = [
+      "NDEBUG=1"
+      "LDFLAGS=-lX11 -lGL -lXxf86vm"
+    ];
 
     enableParallelBuilding = true;
 

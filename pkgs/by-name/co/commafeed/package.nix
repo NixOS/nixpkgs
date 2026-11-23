@@ -55,7 +55,7 @@ maven.buildMavenPackage {
 
   pname = "commafeed";
 
-  mvnHash = "sha256-ikhd6X6MuglWPMFNW+Z5aulBqjZMzjEFfy9o6iw2TiA=";
+  mvnHash = "sha256-HxQaFyRngXYq9WaPCSgeTiuAcxwSuZS/9o3HLrDaIsg=";
   mvnJdk = jdk25;
 
   mvnParameters = lib.escapeShellArgs [

@@ -5,6 +5,8 @@
   setuptools,
   google-api-core,
   grpcio,
+  grpcio-tools,
+  protobuf,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -19,19 +21,32 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-be2RT+lQvZc0+GbihpLwPgMXb4qOF+xWQ45tuvul0Rg=";
   };
 
-  sourceRoot = "${finalAttrs.src.name}/api/python/src";
-
   build-system = [ setuptools ];
+
+  nativeBuildInputs = [ grpcio-tools ];
+
+  preBuild = ''
+    make -C api/python pre-build common gw api integration stream
+    cd api/python/src
+  '';
 
   dependencies = [
     google-api-core
     grpcio
+    protobuf
   ];
 
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [ "chirpstack_api" ];
+  pythonImportsCheck = [
+    "chirpstack_api"
+    "chirpstack_api.api"
+    "chirpstack_api.common"
+    "chirpstack_api.gw"
+    "chirpstack_api.integration"
+    "chirpstack_api.stream"
+  ];
 
   meta = {
     description = "ChirpStack gRPC API message and service wrappers for Python";

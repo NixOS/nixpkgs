@@ -13,9 +13,7 @@ let
   # are supported by its CUDA version. Doing so would cause evaluation of every package set to fail when any package
   # set does not support the requested capabilities, since the manifests of each package set are compared against
   # those of the default package set. The default capabilities never include Jetson capabilities.
-  hasJetsonCudaCapability = lib.any (
-    cudaCapability: _cuda.db.cudaCapabilityToInfo.${cudaCapability}.isJetson or false
-  ) (config.cudaCapabilities or [ ]);
+  hasJetsonCudaCapability = _cuda.lib._cudaCapabilitiesIncludeJetson (config.cudaCapabilities or [ ]);
 
   mkCudaPackages =
     manifestVersions:

@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "llama-index-readers-txtai";
-  version = "0.6.0";
+  version = "0.7.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "llama_index_readers_txtai";
     inherit version;
-    hash = "sha256-X8cf/3KrDNQeVj4zPgRi2CmTbrPxZerLzIJZc9Ln4To=";
+    hash = "sha256-35UmkaPfdQWT6AmZ2H+5Ka8bzlzhYTRVBoAc8E10QgI=";
   };
 
   build-system = [ hatchling ];

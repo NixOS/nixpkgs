@@ -4,29 +4,27 @@
   fetchFromGitHub,
 }:
 
-buildGoModule {
+buildGoModule (finalAttrs: {
   pname = "galah";
-  version = "0-unstable-2024-04-28";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "0x4D31";
     repo = "galah";
-    rev = "69346522df6e5849ca808546d40f1ee0a70f56d8";
-    hash = "sha256-9Muo08AYtpMmLvpWl2W/WbvyFl8h364BzDbmcJteIAg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-dGUsZs7rZsCwtwP4WI5JWWC/DyXb+5hQSMAXLRM+PZg=";
   };
 
-  vendorHash = "sha256-+I4K5T6fQcS7KJexFGxpjq5QUX9VnopK8i81veeP6Cw=";
+  vendorHash = "sha256-ZyO2PJgc4KYltiiYMOwxVwTuB+yjtxC7BP1QMrVwEQ4=";
 
-  ldflags = [
-    "-s"
-    "-w"
-  ];
+  ldflags = [ "-s" ];
 
   meta = {
     description = "LLM-powered web honeypot using the OpenAI API";
     homepage = "https://github.com/0x4D31/galah";
+    changelog = "https://github.com/0x4D31/galah/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "galah";
   };
-}
+})

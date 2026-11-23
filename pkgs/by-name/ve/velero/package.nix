@@ -8,34 +8,45 @@
 
 buildGoModule (finalAttrs: {
   pname = "velero";
-  version = "1.18.3";
+  version = "1.18.4";
 
   src = fetchFromGitHub {
     owner = "velero-io";
     repo = "velero";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lvHbR+GaN6DeSv2UkIyR+aN3UWt3fYTCnvZyYhK+wzw=";
+    hash = "sha256-ftFq6F6lHzHDHRFr5Z2t08rL8t8JhrgfedpE8GiYViY=";
   };
 
   ldflags = [
     "-s"
-    "-w"
     "-X github.com/vmware-tanzu/velero/pkg/buildinfo.Version=v${finalAttrs.version}"
     "-X github.com/vmware-tanzu/velero/pkg/buildinfo.ImageRegistry=velero"
     "-X github.com/vmware-tanzu/velero/pkg/buildinfo.GitTreeState=clean"
     "-X github.com/vmware-tanzu/velero/pkg/buildinfo.GitSHA=none"
   ];
 
-  vendorHash = "sha256-mVCy+9ApfxLxEl73gDsb/x5sdrMu3t/zw3H47EwpAxw=";
+  vendorHash = "sha256-mi/aiYUzyPpJIaN3XSlN+24fcpF1Lb2gtc7QBV4tyjY=";
 
+  # test/e2e and test/perf need a cluster. pkg/controller needs envtest.
   excludedPackages = [
     "issue-template-gen"
     "release-tools"
     "v1"
     "velero-restic-restore-helper"
+    "test/e2e"
+    "test/perf"
+    "pkg/controller"
   ];
 
-  doCheck = false; # Tests expect a running cluster see https://github.com/velero-io/velero/tree/main/test/e2e
+  checkFlags = [
+    "-short"
+    "-skip=TestSnapshotSource" # stats /var, absent in the sandbox
+  ];
+
+  # Tests start HTTP servers which need to bind to local addresses:
+  # panic: httptest: failed to listen on a port: listen tcp6 [::1]:0: bind: operation not permitted
+  __darwinAllowLocalNetworking = true;
+
   doInstallCheck = true;
   installCheckPhase = ''
     $out/bin/velero version --client-only | grep ${finalAttrs.version} > /dev/null
@@ -43,16 +54,24 @@ buildGoModule (finalAttrs: {
 
   nativeBuildInputs = [ installShellFiles ];
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    $out/bin/velero completion bash > velero.bash
-    $out/bin/velero completion zsh > velero.zsh
-    installShellCompletion velero.{bash,zsh}
+    for shell in bash fish zsh; do
+      installShellCompletion --cmd velero \
+        --$shell <($out/bin/velero completion $shell)
+    done
   '';
 
   meta = {
-    description = "Utility for managing disaster recovery, specifically for your Kubernetes cluster resources and persistent volumes";
+    description = "Backup and migrate Kubernetes applications and their persistent volumes";
+    longDescription = ''
+      Tools to back up and restore Kubernetes cluster resources and persistent
+      volumes, on a public cloud or on-premises. It can also migrate resources
+      between clusters and replicate a production cluster for development and
+      testing.
+    '';
     homepage = "https://velero.io/";
     changelog = "https://github.com/velero-io/velero/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ iamanaws ];
+    mainProgram = "velero";
   };
 })

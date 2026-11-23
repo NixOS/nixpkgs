@@ -24,14 +24,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "langchain-fireworks";
-  version = "1.6.1";
+  version = "1.7.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-fireworks==${finalAttrs.version}";
-    hash = "sha256-tJduBjY+JcG9bhZYsOi7+2TdR4DTi/ZCTIaNZ87R8JM=";
+    hash = "sha256-ylAEmkwQ89xFhDyBnGrKJoYAhiZydQgJD3iVpadsOWU=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/libs/partners/fireworks";
@@ -58,6 +58,11 @@ buildPythonPackage (finalAttrs: {
   ];
 
   enabledTestPaths = [ "tests/unit_tests" ];
+
+  disabledTestPaths = [
+    # Requires langchain, which depends on this package
+    "tests/unit_tests/middleware/test_prompt_caching.py"
+  ];
 
   disabledTests = [
     # Fails when langchain-core gets ahead of this package

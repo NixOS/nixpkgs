@@ -12,13 +12,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "gitlab-runner";
-  version = "19.5.2";
+  version = "19.5.3";
 
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitlab-runner";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4iBgXjvt0ZfyJdElv/kcItcdij8SjDhWkOk+PSjxWko=";
+    hash = "sha256-O7HAmoF3b3RdWgfxN+R6zgyvyidTwqzpV7xZd+CIBpU=";
   };
 
   vendorHash = "sha256-Op1yK76t/v6zNn0D7hAf8QDdRPK0VcQP0Voy8Zt8J7c=";
@@ -52,13 +52,6 @@ buildGoModule (finalAttrs: {
       --replace-fail \
         '[]byte(shells.BashDetectShellScript)' \
         '[]byte("exec bash \"$@\"\n")'
-  ''
-  + lib.optionalString (!stdenv.buildPlatform.isx86_64) ''
-    # Kubernetes tests actually work fine inside the network sandbox (they don't
-    # expect real Kubernetes), but they fail on aarch64-linux because their
-    # mocks expect x86_64
-    rm executors/kubernetes/kubernetes_test.go
-    rm executors/kubernetes/overwrites_test.go
   ''
   + lib.optionalString stdenv.buildPlatform.isDarwin ''
     # Darwin's sandbox blocks sendfile(2) during local HTTP PUT uploads
@@ -102,6 +95,12 @@ buildGoModule (finalAttrs: {
   nativeCheckInputs = [
     gitMinimal
     writableTmpDirAsHomeHook
+  ];
+
+  # Expects the x86_64 helper image on every platform, while autoset picks the
+  # build platform's architecture
+  checkFlags = lib.optionals (!stdenv.buildPlatform.isx86_64) [
+    "-skip=^TestPrepare/autoset_helper_arch_and_os_on_non_windows_does_not_need_windows_kernel_version$"
   ];
 
   preCheck = ''

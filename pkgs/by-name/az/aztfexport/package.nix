@@ -7,16 +7,16 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "aztfexport";
-  version = "0.20.0";
+  version = "0.21.0";
 
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "aztfexport";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wHI/osu2Jq85zCgh1HfOTuO81mYtQJcSbvlDnXd7Duc=";
+    hash = "sha256-2MK+2EFUXYdU2wfCJ4t3qP6G44vqQCL6HmxlD1sFShQ=";
   };
 
-  vendorHash = "sha256-QDpoOlu1qGNK0ennplusXBgeQWZP3EH7aSStllP8uzw=";
+  vendorHash = "sha256-cbhAtX3CNJSRJTqwyI0lgRqrPuBvlqVnuLAcA73ZfXE=";
 
   ldflags = [
     "-s"

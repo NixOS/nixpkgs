@@ -1,22 +1,22 @@
 {
   lib,
-  buildGo126Module,
+  buildGo127Module,
   fetchFromGitHub,
 }:
 
-buildGo126Module (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "vuls";
-  version = "0.42.0";
+  version = "0.43.0";
 
   src = fetchFromGitHub {
     owner = "future-architect";
     repo = "vuls";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RLA2TH9Ewy1Tr4JT0Ya9GKCb/tKrdWecY1Csj1olUgY=";
+    hash = "sha256-I8tSCqKnVwCkAHRaLYLI4MX+jQR94iQVfCTYhBtm28w=";
     fetchSubmodules = true;
   };
 
-  vendorHash = "sha256-1fngQuwYGKGJXValuOfpN6MGBYmc99ljrU4Zhd/xUD8=";
+  vendorHash = "sha256-xYmMtO04N1tMXBOrd67WRpfDQSr+GXYyQfhTMQCX4YA=";
 
   # The vendored `github.com/aquasecurity/trivy` 0.74 imports `encoding/json/v2`.
   # Go 1.26 has this package only with `GOEXPERIMENT=jsonv2`, and trivy 0.74

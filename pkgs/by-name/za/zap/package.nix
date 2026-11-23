@@ -6,6 +6,7 @@
   makeDesktopItem,
   copyDesktopItems,
   runtimeShell,
+  unzip,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -32,7 +33,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ jre ];
 
-  nativeBuildInputs = [ copyDesktopItems ];
+  nativeBuildInputs = [
+    copyDesktopItems
+    unzip
+  ];
 
   # From https://github.com/zaproxy/zaproxy/blob/master/zap/src/main/java/org/parosproxy/paros/Constant.java
   version_tag = "20012000";
@@ -45,6 +49,12 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/{bin,share}
 
     cp -pR . "$out/share/zap/"
+
+    for size in 16 32 48 64 128 256 512 1024; do
+      iconDir="$out/share/icons/hicolor/''${size}x''${size}/apps"
+      mkdir -p "$iconDir"
+      unzip -p "zap-${finalAttrs.version}.jar" "resource/zap''${size}x''${size}.png" > "$iconDir/zap.png"
+    done
 
     cat >> "$out/bin/zap" << EOF
     #!${runtimeShell}

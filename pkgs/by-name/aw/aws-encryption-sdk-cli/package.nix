@@ -18,6 +18,12 @@ python3Packages.buildPythonApplication (finalAttrs: {
     hash = "sha256-FfLgR7gocZ0cLV7bxqvKNI+Fs7kQF0XhR3zf6tHXwOE=";
   };
 
+  patches = [
+    # Python 3.14 forbids nested mutually exclusive argparse groups
+    # https://github.com/aws/aws-encryption-sdk-cli/issues/434
+    ./python314-argparse.patch
+  ];
+
   pythonRelaxDeps = [ "aws-encryption-sdk" ];
 
   build-system = with python3Packages; [
@@ -28,7 +34,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     attrs
     aws-encryption-sdk
     base64io
-    setuptools # for pkg_resources
     urllib3
   ];
 

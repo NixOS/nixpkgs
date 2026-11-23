@@ -137,6 +137,7 @@ let
     reolink = [
       # [2026.11.0] fixture wants a bare path to ffmpeg
       "tests/components/reolink/test_services.py::test_snapshot_past_service"
+      "tests/components/reolink/test_views.py::test_playback_baichuan"
     ];
     systemmonitor = [
       # sandbox doesn't grant access to /sys/class/power_supply

@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   rustPlatform,
   nix-update-script,
@@ -17,6 +18,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-aeJKosJNmpbhcjXcbudgw20+q/oBmPgqJItNCTGjH2A=";
+
+  # The tests call GNU patch by its Homebrew name on macOS; stdenv's patch is GNU patch
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace src/utils.rs \
+      --replace-fail '"gpatch"' '"patch"'
+  '';
 
   checkFlags = [
     # called `Result::unwrap()` on an `Err` value: Os { code: 2, kind: NotFound, message: "No such file or directory" }

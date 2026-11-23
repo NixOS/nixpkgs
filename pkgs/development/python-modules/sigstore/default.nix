@@ -50,6 +50,7 @@ buildPythonPackage (finalAttrs: {
 
   pythonRelaxDeps = [
     "rich"
+    "sigstore-models"
     "tuf"
   ];
 

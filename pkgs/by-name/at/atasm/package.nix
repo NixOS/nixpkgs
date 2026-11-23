@@ -7,20 +7,18 @@
 
 stdenv.mkDerivation rec {
   pname = "atasm";
-  version = "1.29";
+  version = "1.32";
 
   src = fetchFromGitHub {
     owner = "CycoPH";
     repo = "atasm";
     rev = "V${version}";
-    hash = "sha256-TGSmlNz8kxsHlIhq4ZNDBU8uhpsZGK0oEp2qD4SndE8=";
+    hash = "sha256-PaMnBKdQJ6NuzgWrjSUyWUV8x6z7Ymmqv5fjDXxfLV0=";
   };
 
   makefile = "Makefile";
 
   patches = [
-    # make install fails because atasm.txt was moved; report to upstream
-    ./0000-file-not-found.diff
     # select flags for compilation
     ./0001-select-flags.diff
   ];

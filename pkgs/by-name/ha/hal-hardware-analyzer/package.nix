@@ -9,6 +9,7 @@
   llvmPackages,
   ninja,
   nlohmann_json,
+  perl,
   pkg-config,
   python3Packages,
   libsForQt5,
@@ -43,6 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     ninja
+    perl
     pkg-config
     libsForQt5.wrapQtAppsHook
   ];

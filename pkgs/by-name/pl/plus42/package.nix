@@ -11,11 +11,11 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "plus42";
-  version = "1.5.1";
+  version = "1.5.3";
 
   src = fetchurl {
     url = "https://thomasokken.com/plus42/upstream/plus42-upstream-${finalAttrs.version}.tgz";
-    hash = "sha256-hCM+nZw5yyZ1tIQ5JB5kTyjGChm9mxyYfhKlxfpQkbw=";
+    hash = "sha256-ZxXmlPpWwtjQxw6nE4QP54EkduQkqCuJr9pVBCBV1/I=";
   };
 
   nativeBuildInputs = [

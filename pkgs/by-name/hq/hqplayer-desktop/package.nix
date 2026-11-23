@@ -48,6 +48,7 @@ stdenvNoCC.mkDerivation (
     src = with stdenvNoCC.hostPlatform; srcs.${system} or (throw "Unsupported system: ${system}");
 
     meta = {
+      broken = true; # src 404s
       homepage = "https://www.signalyst.com";
       description = "High-end upsampling multichannel software HD-audio player";
       license = lib.licenses.unfree;

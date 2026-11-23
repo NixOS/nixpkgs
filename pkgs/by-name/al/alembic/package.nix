@@ -76,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
       guibou
-      tmarkus
+      AAAAAASomeThingsFailToEvaluate
     ];
   };
 })

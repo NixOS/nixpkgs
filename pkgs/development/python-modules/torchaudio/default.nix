@@ -179,6 +179,9 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     # RuntimeError: illegal immediate parameter (range error)
     "test_lfilter_shape_4"
     "test_lfilter_shape_6"
+
+    # Fatal Python error: Aborted (in torch.autograd backward pass)
+    "test_tacotron2_backward"
   ];
 
   passthru.gpuCheck = torchaudio.overridePythonAttrs (old: {

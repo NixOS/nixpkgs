@@ -6,7 +6,7 @@
 
 stdenvNoCC.mkDerivation {
   pname = "craft-i18n";
-  version = "0-unstable-2026-11-04";
+  version = "0-unstable-2026-11-11";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -14,8 +14,8 @@ stdenvNoCC.mkDerivation {
   src = fetchFromGitHub {
     owner = "storytold";
     repo = "craft-i18n";
-    rev = "9d6d54d6d9ff603cc41e12e5f6ba51af3554ab66";
-    hash = "sha256-Y9/L81MircA76USE4GSbRqei8XHQhxlvov1jhkhOaB8=";
+    rev = "74e77706491d260c868bec6df686f92b90baae38";
+    hash = "sha256-DdiTpSIguH9XU5TdonpqB/CLvtpX6Bt10Sub4DL2AMs=";
   };
 
   installPhase = ''

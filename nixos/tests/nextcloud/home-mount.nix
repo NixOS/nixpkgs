@@ -1,29 +1,29 @@
 {
   name,
-  pkgs,
   testBase,
-  system,
+  package,
+  flavor ? "nodes",
   ...
 }:
 
-with import ../../lib/testing-python.nix { inherit system pkgs; };
-runTest (
-  { config, lib, ... }:
-  {
-    inherit name;
-    meta.maintainers = lib.teams.nextcloud.members;
+assert flavor == "nodes";
 
-    imports = [ testBase ];
+{ config, lib, ... }:
+{
+  inherit name;
+  meta.maintainers = lib.teams.nextcloud.members;
 
-    nodes.nextcloud = {
-      fileSystems."/mnt" = {
-        fsType = "tmpfs";
-        device = "tmpfs";
-      };
-      services.nextcloud = {
-        config.dbtype = "sqlite";
-        home = "/mnt/nextcloud";
-      };
+  imports = [ testBase ];
+
+  ${flavor}.nextcloud = { pkgs, ... }: {
+    fileSystems."/mnt" = {
+      fsType = "tmpfs";
+      device = "tmpfs";
     };
-  }
-)
+    services.nextcloud = {
+      config.dbtype = "sqlite";
+      package = package pkgs;
+      home = "/mnt/nextcloud";
+    };
+  };
+}

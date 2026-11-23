@@ -20,6 +20,7 @@
   docbook5,
   libxslt,
   libxml2,
+  libselinux,
   w3m-batch,
   findXMLCatalogs,
   docbook_xsl_ns,
@@ -30,6 +31,7 @@
     # cross-compilation only works from platforms with linux headers
     && lib.meta.availableOn stdenv.buildPlatform linuxHeaders,
   debugMode ? false, # warning: slower execution due to debug makes VM tests fail!
+  withSelinux ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -51,6 +53,9 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/linux-pam/linux-pam/commit/dd62bac17221911106de165607c6925ea54b18d1.patch?full_index=1";
       hash = "sha256-ddgDYdVfdXfTaMFV1hO3RJX9w1NHmE7yi3PxsHOdpvY=";
     })
+  ]
+  ++ lib.optionals withSelinux [
+    ./selinux-lockdir.patch
   ];
 
   # patching unix_chkpwd is required as the nix store entry does not have the necessary bits
@@ -95,6 +100,9 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals withLogind [
     systemdLibs
+  ]
+  ++ lib.optionals withSelinux [
+    libselinux
   ];
 
   enableParallelBuilding = true;
@@ -108,7 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonOption "sysconfdir" "etc") # relative to meson prefix, which is $out
     (lib.mesonEnable "elogind" false)
     (lib.mesonEnable "econf" false)
-    (lib.mesonEnable "selinux" false)
+    (lib.mesonEnable "selinux" withSelinux)
     (lib.mesonEnable "nis" false)
     (lib.mesonBool "xtests" false)
     (lib.mesonBool "examples" false)

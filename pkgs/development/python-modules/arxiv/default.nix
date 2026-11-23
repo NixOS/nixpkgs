@@ -17,14 +17,14 @@
 }:
 buildPythonPackage rec {
   pname = "arxiv";
-  version = "4.0.2";
+  version = "4.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lukasschwab";
     repo = "arxiv.py";
     tag = version;
-    hash = "sha256-j3pqn7mb7Luq+V6wHmMuxxFflM08a7kmqdDT2E7NggU=";
+    hash = "sha256-hmGE2unTZoo5R9bTWX6iUwiKphD0a6T6uZLu+Fu/e8Q=";
   };
 
   build-system = [

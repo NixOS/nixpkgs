@@ -7,6 +7,13 @@ addHarepath() {
     fi
 }
 
+addHareToolpath() {
+  local -r toolpath="${1-}/libexec/hare"
+  if [[ -d "$toolpath" ]]; then
+    addToSearchPath HARE_TOOLPATH "$toolpath"
+  fi
+}
+
 # Hare's stdlib should come after its third party libs, since the latter may
 # expand or shadow the former.
 readonly hareSetStdlibPhase='
@@ -34,3 +41,4 @@ HARECACHE="$(mktemp -d)"
 export HARECACHE
 
 addEnvHooks "$hostOffset" addHarepath
+addEnvHooks "$hostOffset" addHareToolpath

@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nawk";
-  version = "20260426";
+  version = "20261106";
 
   src = fetchFromGitHub {
     owner = "onetrueawk";
     repo = "awk";
     rev = finalAttrs.version;
-    hash = "sha256-ndhSOl4xEwbDQ51g7yuwe3MOfmQrzePuanmyXYhWp+I=";
+    hash = "sha256-v1xTlB780Wnappw3sj4+xkX+2G1jZWyVVVrJz0L6Va8=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];

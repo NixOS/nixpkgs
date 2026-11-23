@@ -33,13 +33,13 @@ assert lib.assertOneOf "appName" appName [
 ];
 stdenv.mkDerivation (finalAttrs: {
   pname = appName;
-  version = "0-unstable-2026-07-16";
+  version = "0-unstable-2026-11-13";
 
   src = fetchFromGitHub {
     owner = "TheAssemblyArmada";
     repo = "Vanilla-Conquer";
-    rev = "ce83b59edd99cccac6cebaae054ca04962c744b7";
-    hash = "sha256-jjiqW3J1XQr4+cNd86yXO0dFpt5VEKmxtMywBjTceTc=";
+    rev = "29e68a39dbe86a48ae54976d3e9b27c6b2ab26ee";
+    hash = "sha256-fwKLH0W0p8jVjvKaOFVAWxLvR32QFVRn43+Ucxe+kxc=";
 
   };
 

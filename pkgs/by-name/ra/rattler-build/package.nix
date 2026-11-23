@@ -4,7 +4,9 @@
   fetchFromGitHub,
   rustPlatform,
 
+  aws-lc,
   openssl,
+  zstd,
   pkg-config,
   installShellFiles,
   buildPackages,
@@ -15,6 +17,8 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rattler-build";
   version = "0.77.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "prefix-dev";
@@ -28,7 +32,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doCheck = false; # test requires network access
 
   buildInputs = [
+    aws-lc
     openssl
+    zstd
   ];
 
   nativeBuildInputs = [
@@ -36,7 +42,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installShellFiles
   ];
 
-  cargoBuildFlags = [ "--bin rattler-build" ]; # other bin like `generate-cli-docs` shouldn't be distributed.
+  cargoBuildFlags = [ "--bin=rattler-build" ]; # other bin like `generate-cli-docs` shouldn't be distributed.
 
   postInstall = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
     let

@@ -10,6 +10,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "trippy";
   version = "0.13.0";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "fujiapple852";
     repo = "trippy";
@@ -21,7 +23,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-kVqj+rYPxfv/9h+HDdSL5jU6DoU5KoJVVQot4O4WVNc=";
 
-  cargoBuildFlags = [ "--package trippy" ];
+  cargoBuildFlags = [ "--package=trippy" ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     local INSTALL="$out/bin/trip"

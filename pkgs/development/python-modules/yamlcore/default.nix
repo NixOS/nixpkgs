@@ -9,14 +9,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "yamlcore";
-  version = "0.0.4";
+  version = "0.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "perlpunk";
     repo = "pyyaml-core";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TBVNmuhBfEo9HmDkalnn6VDVHF+sh/MIZ8f46Zdyxw8=";
+    hash = "sha256-nPvYc2ZedzjlaQqyQYu9pHigEiLoEVYDlzM2q5PCwqc=";
   };
 
   build-system = [

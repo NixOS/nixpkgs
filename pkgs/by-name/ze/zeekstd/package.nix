@@ -13,6 +13,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zeekstd";
   version = "0.4.6";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "rorosen";
     repo = "zeekstd";
@@ -21,7 +23,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-fyqgPFTEyuEj+FZlIwqgfseefbCmAlxzUkoV+QU5S+s=";
-  cargoBuildFlags = [ "--package zeekstd_cli" ];
+  cargoBuildFlags = [ "--package=zeekstd_cli" ];
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ zstd ];

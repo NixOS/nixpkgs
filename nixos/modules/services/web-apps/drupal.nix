@@ -202,6 +202,8 @@ let
         if [ ! -f "$settings_file" ]; then
           default_settings_file="${cfg.stateDir}/sites/default/default.settings.php";
           cp "$default_settings_file" "$settings_file"
+          # See: https://www.drupal.org/docs/administering-a-drupal-site/security-in-drupal/securing-file-permissions-and-ownership#special-considerations-for-settings-php
+          chmod 0644 "$settings_file"
         fi
 
         if ! grep -qF "require dirname(__FILE__) . '/settings.nixos-${hostName}.php';" ${cfg.stateDir}/sites/default/settings.php; then

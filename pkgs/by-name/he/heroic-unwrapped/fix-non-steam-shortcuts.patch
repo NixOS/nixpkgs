@@ -1,5 +1,26 @@
+diff --git a/src/backend/shortcuts/nonesteamgame/__tests__/nonesteamgame.test.ts b/src/backend/shortcuts/nonesteamgame/__tests__/nonesteamgame.test.ts
+index eaf0cee..8dade05 100644
+--- a/src/backend/shortcuts/nonesteamgame/__tests__/nonesteamgame.test.ts
++++ b/src/backend/shortcuts/nonesteamgame/__tests__/nonesteamgame.test.ts
+@@ -263,7 +263,7 @@ describe('NonSteamGame', () => {
+     }
+   })
+ 
+-  test('Searches for Heroic wrapper if executable is not `heroic`', async () => {
++  test('Uses the heroic wrapper on PATH if executable is not `heroic`', async () => {
+     const game = makeGameMock()
+ 
+     const getPathSpy = jest
+@@ -274,6 +274,6 @@ describe('NonSteamGame', () => {
+     await addNonSteamGame(game)
+ 
+     expect(getPathSpy).toHaveBeenCalled()
+-    expect(searchExeSpy).toHaveBeenCalledWith('heroic')
++    expect(searchExeSpy).not.toHaveBeenCalledWith('heroic')
+   })
+ })
 diff --git a/src/backend/shortcuts/nonesteamgame/nonesteamgame.ts b/src/backend/shortcuts/nonesteamgame/nonesteamgame.ts
-index 41730f1..495282b 100644
+index 41730f1..885a78d 100644
 --- a/src/backend/shortcuts/nonesteamgame/nonesteamgame.ts
 +++ b/src/backend/shortcuts/nonesteamgame/nonesteamgame.ts
 @@ -326,11 +326,8 @@ async function buildShortcutEntryConfig(gameInfo: GameInfo): Promise<{

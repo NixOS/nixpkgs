@@ -11,6 +11,8 @@ buildDunePackage {
 
   buildInputs = [
     cmdliner
+  ];
+  propagatedBuildInputs = [
     re
     ocamlformat-mlx-lib
   ];

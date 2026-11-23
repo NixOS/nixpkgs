@@ -10,6 +10,6 @@ runCommand "test-torchlensmaker"
     ];
   }
   ''
-    python ${./landscape.py}
+    python -P ${./landscape.py}
     mv landscape.json $out
   ''

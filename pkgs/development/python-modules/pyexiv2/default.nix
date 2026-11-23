@@ -12,14 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyexiv2";
-  version = "2.16.0";
+  version = "2.16.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "LeoHsiao1";
     repo = "pyexiv2";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FH5nbbh0vaErJzBl6L2HPh0SQXkQ558abTBml7nSLU8=";
+    hash = "sha256-B8U4MHnsrJbXG2LJzVmuOf+5xwz+TiTSQW4svrLchAM=";
   };
 
   build-system = [

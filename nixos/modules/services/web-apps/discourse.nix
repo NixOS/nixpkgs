@@ -28,6 +28,23 @@ let
   databaseActuallyCreateLocally = cfg.database.createLocally && cfg.database.host == null;
 
   tlsEnabled = cfg.enableACME || cfg.sslCertificate != null || cfg.sslCertificateKey != null;
+
+  discordConsoleWrapper = pkgs.writeShellApplication {
+    name = "discourse-console";
+    runtimeInputs = with pkgs; [
+      util-linux
+    ];
+    text = ''
+      cd ${cfg.package}/share/discourse
+      exec runuser ${
+        lib.cli.toCommandLineShellGNU { } {
+          user = "discourse";
+          group = "discourse";
+        }
+      } -- ${lib.getExe' cfg.package.rubyEnv "bundle"} \
+         exec rails console -e production
+    '';
+  };
 in
 {
   options = {
@@ -1103,9 +1120,7 @@ in
       settings.main = {
         smtpd_recipient_restrictions = "check_policy_service unix:private/discourse-policy";
         append_dot_mydomain = lib.mkDefault false;
-        compatibility_level = "2";
         smtputf8_enable = false;
-        smtpd_banner = lib.mkDefault "ESMTP server";
         smtpd_tls_chain_files =
           lib.optionals (cfg.sslCertificate != null && cfg.sslCertificateKey != null)
             [
@@ -1114,7 +1129,6 @@ in
             ];
         myhostname = lib.mkDefault cfg.hostname;
         mydestination = lib.mkDefault "localhost";
-        myorigin = cfg.hostname;
         relay_domains = [ cfg.hostname ];
       };
       transport = ''
@@ -1161,6 +1175,7 @@ in
 
     environment.systemPackages = [
       cfg.package.rake
+      discordConsoleWrapper
     ];
   };
 

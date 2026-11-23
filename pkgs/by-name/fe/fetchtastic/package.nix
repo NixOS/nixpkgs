@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "fetchtastic";
-  version = "0.11.4";
+  version = "0.11.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jeremiah-k";
     repo = "fetchtastic";
     tag = finalAttrs.version;
-    hash = "sha256-lENZNA1dMDBVKxF2wTiwpgTT0/PFVmxidJfEV9j1SyY=";
+    hash = "sha256-D/qCqjgG3weVV2hBnOTEmtlsmhHo869/FeeX/zG+mV4=";
   };
 
   pythonRelaxDeps = [ "platformdirs" ];
@@ -42,10 +42,18 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
   pythonImportsCheck = [ "fetchtastic" ];
 
-  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+  disabledTests = [
+    "test_cli_cold_import_in_fresh_interpreter"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "test_download_firmware_success"
     "test_get_target_path_for_release"
     "test_platform_functions"
+  ];
+
+  disabledTestPaths = [
+    # Tests requires bash, pip, uv, etc.
+    "tests/test_install_scripts.py"
   ];
 
   meta = {

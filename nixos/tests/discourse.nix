@@ -113,10 +113,7 @@ in
       services.postfix = {
         enable = true;
         settings.main = {
-          compatibility_level = "2";
-          mydestination = [ clientDomain ];
           myhostname = clientDomain;
-          origin = clientDomain;
           relay_domains = [ clientDomain ];
           smtpd_banner = "ESMTP server";
         };
@@ -218,5 +215,10 @@ in
       discourse.succeed(
           'curl -sS -f https://${discourseDomain}/t/$(<topic_id) -H "Accept: application/json" -H "Api-Key: $(<api_key)" -H "Api-Username: system" | jq -e \'if .post_stream.posts[1].cooked == "<p>Test reply.</p>" then true else null end\' '
       )
+
+      with subtest("Test discourse-console wrapper"):
+        discourse.log(discourse.succeed(
+            "echo 'puts UserEmail.find_by(email: \"${nodes.discourse.services.discourse.admin.email}\")&.user&.attributes; exit' | discourse-console"
+        ))
     '';
 }

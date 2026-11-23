@@ -2,17 +2,18 @@
   lib,
   python3Packages,
   fetchFromGitHub,
+  nixosTests,
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "qlever-control";
-  version = "0.5.48";
+  version = "0.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "qlever-dev";
     repo = "qlever-control";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mjWMRXRo2iU8C8fArXTcuVmts67MuCq8nR9dD87nR1g=";
+    hash = "sha256-mi2GH9/mIVg6i9txKO29lUrjM8KlBi/QG0UlUFRV7rc=";
   };
 
   build-system = with python3Packages; [
@@ -26,7 +27,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
     pyyaml
     rdflib
     requests-sse
+    rich
     termcolor
+    textual
+    textual-plotext
     tqdm
   ];
 
@@ -37,6 +41,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pythonImportsCheck = [
     "qlever"
   ];
+
+  passthru.tests = nixosTests.qlever;
 
   meta = {
     description = "Command-line tool for controlling the QLever graph database";

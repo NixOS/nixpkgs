@@ -1604,6 +1604,11 @@ lib.mapAttrs mkLicense (
       fullName = "Tomorrow Open Source Technology License 1.0";
     };
 
+    ttyp0 = {
+      spdxId = "TTYP0";
+      fullName = "TTYP0 License";
+    };
+
     ubdlException = {
       spdxId = "UBDL-exception";
       fullName = "Unmodified Binary Distribution exception";

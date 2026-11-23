@@ -53,6 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
     teams = [ lib.teams.gnome ];
     license = lib.licenses.lgpl21Plus;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "gnome" finalAttrs.version;
     description = "Library to integrate compressed files management with GNOME";
   };
 })

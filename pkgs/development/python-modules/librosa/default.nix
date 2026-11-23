@@ -33,7 +33,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "librosa";
-  version = "1.0.0";
+  version = "1.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -41,7 +41,7 @@ buildPythonPackage (finalAttrs: {
     repo = "librosa";
     tag = finalAttrs.version;
     fetchSubmodules = true; # for test data
-    hash = "sha256-+RjGbnAP0rYjRe/QVwKsCUIhRZM8DzY1JnmoJvDagwM=";
+    hash = "sha256-A3Pc33UMegFFe30H3J35+t5yKoVRGRV74VoWVUBDmy0=";
   };
 
   build-system = [ setuptools ];
@@ -75,11 +75,6 @@ buildPythonPackage (finalAttrs: {
     writableTmpDirAsHomeHook
   ]
   ++ finalAttrs.passthru.optional-dependencies.display;
-
-  # Prevents 'Fatal Python error: Aborted' on darwin during checkPhase
-  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    export MPLBACKEND="Agg"
-  '';
 
   disabledTests = [
     # requires network access

@@ -6,13 +6,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "bazelisk";
-  version = "1.29.0";
+  version = "1.30.0";
 
   src = fetchFromGitHub {
     owner = "bazelbuild";
     repo = "bazelisk";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NijRYjJyWOqSkfDKOdki3nrc1OIhfooKLhusuiMY/Js=";
+    hash = "sha256-1WZuycxXZ7jiu7GX8ZfwcgnNEengGTUBN09jht+cTZA=";
   };
 
   vendorHash = "sha256-oycCqzUAn/lNFjeLjM+PQfYNscaTi5E9D7Pnv8jrO8M=";

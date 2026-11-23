@@ -5,7 +5,7 @@
   attrs,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools_80,
+  setuptools,
   jre_minimal,
   pydevd,
   pytest-mock,
@@ -15,25 +15,22 @@
   replaceVars,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "omegaconf";
-  version = "2.3.0";
+  version = "2.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hydra-ecosystem";
     repo = "omegaconf";
-    tag = "v${version}";
-    hash = "sha256-Qxa4uIiX5TAyQ5rFkizdev60S4iVAJ08ES6FpNqf8zI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-HvK6bNInPIkfdpNh8DifH7Wxt8m9uR+Y/qL3voIUw6w=";
   };
 
   patches = [
     (replaceVars ./antlr4.patch {
       antlr_jar = "${antlr4.out}/share/java/antlr-${antlr4.version}-complete.jar";
     })
-
-    # https://github.com/hydra-ecosystem/omegaconf/pull/1137
-    ./0000-add-support-for-dataclasses_missing_type.patch
   ];
 
   postPatch = ''
@@ -44,7 +41,7 @@ buildPythonPackage rec {
     sed -i 's/antlr4-python3-runtime==.*/antlr4-python3-runtime/' requirements/base.txt
   '';
 
-  build-system = [ setuptools_80 ];
+  build-system = [ setuptools ];
 
   nativeBuildInputs = [ jre_minimal ];
 
@@ -81,8 +78,8 @@ buildPythonPackage rec {
   meta = {
     description = "Framework for configuring complex applications";
     homepage = "https://github.com/hydra-ecosystem/omegaconf";
-    changelog = "https://github.com/hydra-ecosystem/omegaconf/blob/v${version}/NEWS.md";
+    changelog = "https://github.com/hydra-ecosystem/omegaconf/blob/${finalAttrs.src.tag}/NEWS.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };
-}
+})

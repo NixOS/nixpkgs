@@ -13,14 +13,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "thermopro-ble";
-  version = "1.1.4";
+  version = "1.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bluetooth-devices";
     repo = "thermopro-ble";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-goTJwTMaWBm5gc0/LOkjpKeRTkLStHkKJYsbE5Wj/X4=";
+    hash = "sha256-0CqH6gVEU+Se5huRMkJ3S11qIYSovqEeAD2axlGK1sA=";
   };
 
   build-system = [ poetry-core ];

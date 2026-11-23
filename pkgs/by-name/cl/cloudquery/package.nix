@@ -85,19 +85,19 @@ lib.makeOverridable (
   finalAttrs:
   buildGoModule (cliAttrs: {
     pname = "cloudquery";
-    version = "6.43.0";
+    version = "6.51.0";
     __structuredAttrs = true;
 
     src = fetchFromGitHub {
       owner = "cloudquery";
       repo = "cloudquery";
       tag = "v${cliAttrs.version}";
-      hash = "sha256-wTuMBiKjvG4bfH3gSIjG9cV6dsZ4Vn1QuLeiHTZT+qM=";
+      hash = "sha256-/gumCPuPm1lWaqy6MhRoHwIeuk1+jK9E6yMQvSUeb4g=";
     };
 
     modRoot = "cli";
 
-    vendorHash = "sha256-F8iQmZ0n/rPmcDO+3SNLC4s4CRB/0HA45pGM+Nf6g2g=";
+    vendorHash = "sha256-gNvSSFX7iJwXYoaqisw9byly1ikYyng4H7jrFqzrdEM=";
 
     subPackages = [
       "."

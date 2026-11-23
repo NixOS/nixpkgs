@@ -7,13 +7,13 @@
 
 buildDunePackage (finalAttrs: {
   pname = "pure-html";
-  version = "3.11.2";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "yawaramin";
     repo = "dream-html";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/I233A86T+QEb2qbSHucgzRzYEjS08eKezSXOwz2ml0=";
+    hash = "sha256-pZdeNbCXhEjOMxTf69bYJTTxcNFFQYunxmSyce1fvV0=";
   };
 
   doCheck = true;

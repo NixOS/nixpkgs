@@ -151,6 +151,8 @@ let
       writeText,
       autoPatchelfHook,
       buildPackages,
+      cacert,
+      zip,
 
       # The JDK/JRE used for running Gradle.
       java ? defaultJava,
@@ -176,6 +178,7 @@ let
       nativeBuildInputs = [
         makeWrapper
         unzip
+        zip
       ]
       ++ lib.optionals stdenv.hostPlatform.isLinux [
         autoPatchelfHook
@@ -208,6 +211,27 @@ let
           mkdir -vp $gradleLibexec
           cp -av lib/ $gradleLibexec
           [ -f $gradleLibexec/lib/gradle-launcher-*.jar ] || { echo "No Gradle launcher jar found!" >&2 && exit 1; }
+
+          # google-api-client (GCS repositories and build cache) trusts only its bundled google.p12.
+          # Replace it with a store made from cacert. Nothing reads google.jks.
+          for jar in $gradleLibexec/lib/plugins/google-api-client-*.jar; do
+            unzip -l "$jar" com/google/api/client/googleapis/google.p12 >/dev/null
+            work="$(mktemp -d)"
+            pushd "$work"
+            export JAVA_TOOL_OPTIONS="-Dkeystore.pkcs12.certProtectionAlgorithm=NONE -Dkeystore.pkcs12.macAlgorithm=NONE"
+            ${buildPackages.jre-generate-cacerts} ${buildPackages.jdk}/bin/keytool ${cacert}/etc/ssl/certs/ca-bundle.crt
+            mkdir -p com/google/api/client/googleapis
+            ${buildPackages.jdk}/bin/keytool -importkeystore -noprompt \
+              -srckeystore cacerts -srcstorepass changeit \
+              -destkeystore com/google/api/client/googleapis/google.p12 \
+              -deststoretype PKCS12 -deststorepass notasecret
+            unset JAVA_TOOL_OPTIONS
+            touch -d @315619200 com/google/api/client/googleapis/google.p12
+            zip -q -d "$jar" com/google/api/client/googleapis/google.jks
+            zip -q -X "$jar" com/google/api/client/googleapis/google.p12
+            popd
+            rm -r "$work"
+          done
 
           # Set up toolchain paths in the gradle.properties.
           echo ${lib.escapeShellArg toolchainPaths} > $gradleLibexec/gradle.properties
@@ -396,16 +420,16 @@ rec {
   # https://docs.gradle.org/current/userguide/compatibility.html
 
   gradle_9 = mkGradle {
-    version = "9.9.1";
-    hash = "sha256-2KGKeoQd1d+CXTWmhfrW8tfxKsDCgOV7Z8J7SlILoig=";
+    version = "9.9.2";
+    hash = "sha256-lx/NcVDKS6BIUsCyyg0tCrlGjhSwNHPqsZUogJkUx2s=";
     defaultJava = jdk25;
     updateScriptMajorVersion = "9";
     extraNativePlatformJars =
       if stdenv.hostPlatform.isRiscV64 then gradle-native-platform-m29 else null;
   };
   gradle_8 = mkGradle {
-    version = "8.14.7";
-    hash = "sha256-kDv8S8diIyMSQFTBD1CSRiEqGQKUi9rybDecyoc16FY=";
+    version = "8.14.8";
+    hash = "sha256-lNqJaS/Dym0tDOa7SFSHYuoPGJe6REKG9cfzdZx69lE=";
     defaultJava = jdk21;
     updateScriptMajorVersion = "8";
     extraNativePlatformJars = if stdenv.hostPlatform.isRiscV64 then gradle-native-platform else null;

@@ -157,6 +157,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Mail client for GNOME 3";
     teams = [ lib.teams.gnome ];
     license = lib.licenses.lgpl21Plus;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "gnome" finalAttrs.version;
     platforms = lib.platforms.linux;
   };
 })

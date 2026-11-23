@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "pystrich";
-  version = "0.20";
+  version = "0.21";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mmulqueen";
     repo = "pyStrich";
     tag = version;
-    hash = "sha256-08IKFJfcK0I+phUejUY7FHh2a7efR+UKrj+tsKEwSJ4=";
+    hash = "sha256-14EedgmrqqXdP9DY+xW/VBz63KW3560t/Ugm1vadnLk=";
   };
 
   build-system = [ hatchling ];

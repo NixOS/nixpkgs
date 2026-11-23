@@ -29,6 +29,9 @@ stdenv.mkDerivation {
     buildInputs
     ;
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   postPatch =
     let
       libnameBase = lib.optionalString stdenv.hostPlatform.isLinux "lib" + depname;

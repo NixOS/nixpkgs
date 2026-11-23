@@ -6,13 +6,13 @@
 }:
 mkLibretroCore (finalAttrs: {
   core = "virtualjaguar";
-  version = "3.12.0";
+  version = "3.13.1";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "virtualjaguar-libretro";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-UaRk6BxjtMEoygyor1SwzCAhtMSz3GullKvvSqGztJw=";
+    hash = "sha256-dF+uUy32ycieE+scQXfCMNzLqhW1Sad+4myR031J+rY=";
   };
 
   postPatch = ''

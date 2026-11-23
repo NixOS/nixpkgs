@@ -1,6 +1,5 @@
 {
   lib,
-  fetchpatch,
   buildPythonPackage,
   click,
   fetchFromGitHub,
@@ -13,23 +12,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "ssdp";
-  version = "1.3.2";
+  version = "1.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "codingjoe";
     repo = "ssdp";
     tag = finalAttrs.version;
-    hash = "sha256-1LO5+lfykaepp+MfS/2mlngobhcV1nZvU19Jb0sbVzk=";
+    hash = "sha256-FwauyVDNTgWlXe6Sm6XNoZ6RMLSV6alq+mVCfVs0vLI=";
   };
-
-  patches = [
-    # Fix CLI test skipping under pytest >= 9.1
-    (fetchpatch {
-      url = "https://github.com/lukegb/ssdp/commit/e5570a13342a2b7271acae1408b37a49e0729e3c.patch";
-      hash = "sha256-RwpsrGRn6rEowwHc39bLO8dVTKJP3d3v7Rr1d8sKYvM=";
-    })
-  ];
 
   build-system = [
     flit-core

@@ -6,7 +6,7 @@ set -euo pipefail
 # This script updates both server and node packages since they share the same version
 
 SCRIPT_DIR="$(dirname "${BASH_SOURCE[0]}")"
-COMMON_FILE="$SCRIPT_DIR/common.nix"
+PACKAGE_FILE="$SCRIPT_DIR/package.nix"
 SERVER_FILE="$SCRIPT_DIR/server.nix"
 NODE_FILE="$SCRIPT_DIR/node.nix"
 
@@ -21,8 +21,8 @@ fi
 
 echo "Latest version: $LATEST_VERSION" >&2
 
-# Use the current version injected by update.nix, falling back to grepping common.nix for standalone use
-CURRENT_VERSION="${UPDATE_NIX_OLD_VERSION:-$(grep -oP '(?<=version = ")[^"]+' "$COMMON_FILE")}"
+# Use the current version injected by update.nix, falling back to grepping package.nix for standalone use
+CURRENT_VERSION="${UPDATE_NIX_OLD_VERSION:-$(grep -oP '(?<=version = ")[^"]+' "$PACKAGE_FILE")}"
 
 if [[ "$CURRENT_VERSION" == "$LATEST_VERSION" ]]; then
     echo "Tdarr packages are already on the latest version ($LATEST_VERSION)" >&2
@@ -55,7 +55,7 @@ node_linux_x64=$(fetch_and_convert "https://storage.tdarr.io/versions/$LATEST_VE
 node_linux_arm64=$(fetch_and_convert "https://storage.tdarr.io/versions/$LATEST_VERSION/linux_arm64/Tdarr_Node.zip")
 node_darwin_arm64=$(fetch_and_convert "https://storage.tdarr.io/versions/$LATEST_VERSION/darwin_arm64/Tdarr_Node.zip")
 
-# Update common.nix version
+# Update package.nix version
 tmpfile=$(mktemp)
 awk -v ver="$LATEST_VERSION" '
 /^  version = / {
@@ -63,9 +63,9 @@ awk -v ver="$LATEST_VERSION" '
     next
 }
 { print }
-' "$COMMON_FILE" > "$tmpfile"
-mv "$tmpfile" "$COMMON_FILE"
-echo "Updated version in $COMMON_FILE" >&2
+' "$PACKAGE_FILE" > "$tmpfile"
+mv "$tmpfile" "$PACKAGE_FILE"
+echo "Updated version in $PACKAGE_FILE" >&2
 
 # Update server.nix hashes
 tmpfile=$(mktemp)
@@ -107,7 +107,7 @@ cat << EOF
     "attrPath": "tdarr",
     "oldVersion": "$CURRENT_VERSION",
     "newVersion": "$LATEST_VERSION",
-    "files": ["$COMMON_FILE", "$SERVER_FILE", "$NODE_FILE"]
+    "files": ["$PACKAGE_FILE", "$SERVER_FILE", "$NODE_FILE"]
   }
 ]
 EOF

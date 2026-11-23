@@ -9,13 +9,13 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "copr-cli";
-  version = "2.6";
+  version = "2.9";
   pyproject = true;
 
   src = fetchPypi {
     pname = "copr_cli";
     inherit (finalAttrs) version;
-    hash = "sha256-smNR1kg8IcN0p2iVFZlNMpHy1GqhEQJEAv04qdvhBLM=";
+    hash = "sha256-U/0aX5CaAJchQhBEP2DZjXPVzfkUgB22vWCT7fXr598=";
   };
 
   build-system = with python3Packages; [ setuptools ];

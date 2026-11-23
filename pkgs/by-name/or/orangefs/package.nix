@@ -1,8 +1,7 @@
 {
   lib,
   stdenv,
-  fetchurl,
-  fetchpatch,
+  fetchFromGitHub,
   bison,
   flex,
   autoreconfHook,
@@ -10,27 +9,19 @@
   db,
   attr,
   perl,
-  tcsh,
   nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "orangefs";
-  version = "2.9.8";
+  version = "2.10.1";
 
-  src = fetchurl {
-    url = "http://download.orangefs.org/current/source/orangefs-${finalAttrs.version}.tar.gz";
-    hash = "sha256-WJ97bEyOqblrYUJ/kAWtC+JYy0NwK0fZ8wTIEoyiXjA=";
+  src = fetchFromGitHub {
+    owner = "waltligon";
+    repo = "orangefs";
+    tag = finalAttrs.version;
+    hash = "sha256-bWQFr/37dmGyz9wmzGhmBI44CgAhBLlbKGMXf25c7zY=";
   };
-
-  patches = [
-    # Pull upstream fix for -fno-common toolchains
-    (fetchpatch {
-      name = "fno-common.patch";
-      url = "https://github.com/waltligon/orangefs/commit/f472beb50356bea657d1c32f1ca8a73e4718fd57.patch";
-      hash = "sha256-UTUIVBFW+y5P42T7somLi9uDMoLI69Yik9W/3pwLWEk=";
-    })
-  ];
 
   nativeBuildInputs = [
     bison
@@ -42,7 +33,6 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
     db
     attr
-    tcsh
   ];
 
   postPatch = ''
@@ -54,10 +44,16 @@ stdenv.mkDerivation (finalAttrs: {
 
     # perl interpreter needs to be fixed or build fails
     patchShebangs ./src/apps/admin/pvfs2-genconfig
-
-    # symlink points to a location in /usr
-    rm ./src/client/webpack/ltmain.sh
   '';
+
+  # m4 macros are not in the default search path
+  autoreconfFlags = [
+    "--install"
+    "--force"
+    "--verbose"
+    "-I"
+    "maint/config"
+  ];
 
   configureFlags = [
     "--sysconfdir=/etc/orangefs"
@@ -74,10 +70,6 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postFixup = ''
-    for f in pvfs2-getmattr pvfs2-setmattr; do
-      substituteInPlace $out/bin/$f --replace '#!/bin/csh' '#!${tcsh}/bin/tcsh'
-    done
-
     sed -i 's:openssl:${openssl}/bin/openssl:' $out/bin/pvfs2-gen-keys.sh
   '';
 

@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dart";
-  version = "3.13.0";
+  version = "3.14.0";
 
   src =
     let
@@ -25,10 +25,10 @@ stdenv.mkDerivation (finalAttrs: {
         aarch64-darwin = "macos-arm64";
       };
       hash = selectSystem {
-        x86_64-linux = "sha256-h5Alc/rNisrKx+4f5z+o0GaOBgZQFgaOLtbFyZxrHuA=";
-        aarch64-linux = "sha256-IBQaBlMyeTm7IMS4eyMSJr66ESjYqa7bswy1rxonkNQ=";
-        riscv64-linux = "sha256-VmvqaHCVsXv9W8+YdgnWAaW+THuDcc851O/6czx7WFE=";
-        aarch64-darwin = "sha256-GBLWAq7Qqc9ygck/UUoeGuz2DcNFxDN9uk/yj6jTmMo=";
+        x86_64-linux = "sha256-kPf9df4h4WQ3d434gvKAkQ2bvUgJyQAk8h3oJDXd7R0=";
+        aarch64-linux = "sha256-K7mhlBjO2Nn1zJ5/qi3LvH3JOIKyh7jNjbhZ76GRyIg=";
+        riscv64-linux = "sha256-xv/dbLYKIxYR7keqOtdE82lJ93YYw2rcHLulh3BQ6vU=";
+        aarch64-darwin = "sha256-hM5+UPGKck1qKbM69cShaxYOn7ZGIuEtV1s8njQgUJs=";
       };
     in
     fetchurl {

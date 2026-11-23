@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "proto";
-  version = "0.63.2";
+  version = "0.64.0";
 
   src = fetchFromGitHub {
     owner = "moonrepo";
     repo = "proto";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-tH+lgtFXHswFBxbzX61EOseYNBMB4TM3jJeacaZzYCM=";
+    hash = "sha256-XnydyEquTRxCMq8fCkddMwg3ZJrrqPOSFF/eU3iSAQQ=";
   };
 
-  cargoHash = "sha256-01FRY1sNxEgajZPvFk9WIywvJwlKb5pTPQALhSZtZ0s=";
+  cargoHash = "sha256-oz2VEsq0ZMSVIFhlsI9v5sobptLJnVucNfqk+vRDmlU=";
 
   buildInputs = [
     aws-lc

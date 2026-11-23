@@ -10,12 +10,24 @@ let
   user = "hydra-builder";
 
   format = pkgs.formats.toml { };
+
+  otel = import ./otel.nix { inherit lib; };
 in
 {
   options.services.hydra-builder = {
     enable = lib.mkEnableOption "the Hydra build agent, which connects to the queue runner over gRPC and executes builds";
 
-    package = lib.mkPackageOption pkgs "hydra-builder" { };
+    package = otel.mkPackageOption {
+      inherit pkgs;
+      name = "hydra-builder";
+      otelCfg = cfg.otel;
+      otelPath = "services.hydra-builder.otel";
+    };
+
+    otel = otel.mkOtelOption {
+      component = "the builder";
+      binary = "hydra-builder";
+    };
 
     queueRunnerAddr = lib.mkOption {
       type = lib.types.singleLineStr;
@@ -206,7 +218,8 @@ in
         RUST_BACKTRACE = "1";
         # nix-store wants $HOME for its cache dir.
         HOME = "/run/hydra-builder";
-      };
+      }
+      // otel.otelEnv cfg.otel;
 
       path = [ config.nix.package ];
 

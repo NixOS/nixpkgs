@@ -2,19 +2,17 @@
   lib,
   fetchFromGitHub,
   python3Packages,
-  withTeXLive ? true,
-  texliveSmall,
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "cgt-calc";
-  version = "3.0.0";
+  version = "4.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cgt-calc";
     repo = "capital-gains-calculator";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ApmMnNL5l5W4IA8lWqtcDJM78Zt2vvdXfKaaDZzC8GM=";
+    hash = "sha256-VqrdPvBaQb+C6FNu+RggjtrF6zieB/DL/4rm+O2UjoU=";
   };
 
   patches = [
@@ -27,6 +25,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   dependencies = with python3Packages; [
     colorama
     defusedxml
+    hatch-vcs
     iso4217parse
     jinja2
     openpyxl
@@ -34,8 +33,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
     pdfplumber
     pyrate-limiter
     requests
+    setuptools-scm
     shtab
     types-requests
+    typst
     xlrd
     yfinance
   ];
@@ -44,13 +45,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "pandas"
     "shtab"
     "yfinance"
-  ];
-
-  makeWrapperArgs = lib.optionals withTeXLive [
-    "--prefix"
-    "PATH"
-    ":"
-    "${lib.getBin texliveSmall}/bin"
   ];
 
   meta = {

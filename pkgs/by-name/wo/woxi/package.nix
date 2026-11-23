@@ -7,16 +7,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "woxi";
-  version = "0.3.0";
+  version = "0.4.0";
 
   __structuredAttrs = true;
 
   src = fetchCrate {
     inherit (finalAttrs) pname version;
-    hash = "sha256-gw2pudFKAFJ6MXzpqg7p5pHPhmQMTPH6hjlEPK6wr60=";
+    hash = "sha256-iXDRJbzA1IQ3EnphipIU8WaTHONkxID+Tuy/NRB2uFQ=";
   };
 
-  cargoHash = "sha256-mNA54ukwF6vsbm3sZnlfTENU/Hl2JAXfcZyDfj7LjY4=";
+  cargoHash = "sha256-xAtHqYoPldgQ1JYn3u0TNg6H16uf3QllvE2q8pkDgyU=";
 
   # The test suite compares Woxi's output against the proprietary
   # `wolframscript` engine, which is unavailable in the sandbox.

@@ -47,7 +47,7 @@ buildGoModule (finalAttrs: {
 
   passthru = {
     tests = {
-      win = pkgsCross.mingwW64.ligolo-ng or null;
+      win = pkgsCross.mingw-msvcrt-x86_64.ligolo-ng or null;
       linux64 = pkgsCross.gnu64.ligolo-ng or null;
     };
     updateScript = nix-update-script { };

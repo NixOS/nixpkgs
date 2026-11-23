@@ -20,20 +20,20 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "seerr";
-  version = "3.5.1";
+  version = "3.5.2";
 
   src = fetchFromGitHub {
     owner = "seerr-team";
     repo = "seerr";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qbKHypQy1laLRqC2BAfM4AAQsxfjY/kXTHTCiF3tDxA=";
+    hash = "sha256-kwbGwWiB0F4GbI+/Q4NKW9hrbIn8yaS5FmA8eImIFVA=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
     fetcherVersion = 3;
-    hash = "sha256-9eO0wAfScNIG673Mh4HR5PY3LS59uX1zgsRKheiuEJM=";
+    hash = "sha256-NiptqZ+r8JsH47sapaKPo3D3DojCn6j0g/OXkhmjNuU=";
   };
 
   buildInputs = [ sqlite ];

@@ -57,12 +57,6 @@ let
     jre
     which
   ];
-  # FIXME: Makes hash stable across platforms and convert to a single hash.
-  mvnHashByPlatform = {
-    "x86_64-linux" = "sha256-8uvkatwAjvMkP5yjHtCgqJ0O+vnzjXTDCDHJeVowhwQ=";
-    "aarch64-linux" = "sha256-8uvkatwAjvMkP5yjHtCgqJ0O+vnzjXTDCDHJeVowhwQ=";
-    "aarch64-darwin" = "sha256-GInIr2XG2852aDk1EaGdrgj7qDlioKVLdj8HrP2xgPc=";
-  };
   wrapperArgs = [
     "\${gappsWrapperArgs[@]}"
     "--prefix"
@@ -99,10 +93,7 @@ maven.buildMavenPackage {
 
   mvnJdk = jdk;
 
-  mvnHash = (
-    mvnHashByPlatform.${stdenv.system}
-      or (lib.warn "Missing mvnHash for ${stdenv.system}, using lib.fakeHash" lib.fakeHash)
-  );
+  mvnHash = "sha256-RGUxSR2pKhBBjHF7Num5KIK+anXg+v94L1Vqeuim9kU=";
 
   mvnParameters = mvnParams;
   mvnDepsParameters = mvnParams;
@@ -121,7 +112,7 @@ maven.buildMavenPackage {
         -Dmaven.repo.local=$out/.m2
     '';
     postInstall = ''
-      rm -rf $out/.m2/repository/org/eclipse/swt
+      rm -rf $out/.m2/org/eclipse/swt
       find $out -type f -name "maven-metadata-*.xml" -delete
     '';
   };
@@ -225,7 +216,11 @@ maven.buildMavenPackage {
       ardumont
       mio
     ];
-    platforms = builtins.attrNames mvnHashByPlatform;
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "aarch64-darwin"
+    ];
     mainProgram = "tuxguitar";
   };
 }

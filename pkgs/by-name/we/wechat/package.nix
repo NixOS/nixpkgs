@@ -36,6 +36,7 @@
   libglvnd,
   libjack2,
   libpulseaudio,
+  libsecret,
   libxcb,
   libxcb-keysyms,
   libxkbcommon,
@@ -43,10 +44,13 @@
   nspr,
   nss,
   pango,
+  pciutils,
   pipewire,
   systemd,
   util-linuxMinimal,
   wayland,
+  which,
+  xdg-utils,
   xkeyboard-config,
   zlib,
 }@args:
@@ -55,6 +59,7 @@ let
 
   passthru = finalAttrs: {
     sources = lib.importJSON ./sources.json;
+    # nixpkgs-update: no auto update
     updateScript = ./update.py;
     source =
       finalAttrs.passthru.sources.${stdenvNoCC.hostPlatform.system}

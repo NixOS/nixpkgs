@@ -1,6 +1,5 @@
 {
   addBinToPathHook,
-  blessed,
   buildPythonPackage,
   fetchFromGitHub,
   hatchling,
@@ -18,24 +17,19 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "telnetlib3";
-  version = "5.0.1";
+  version = "5.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jquast";
     repo = "telnetlib3";
     tag = finalAttrs.version;
-    hash = "sha256-l7tu68mCAOikD9G1OY9c6RvYC155+bBdHt5VbVIe97s=";
+    hash = "sha256-ev4drBlRfHEwpScEO7XcOPm7+Qc2eKT4tGn220wqxe4=";
   };
 
   build-system = [ hatchling ];
 
-  pythonRelaxDeps = [
-    "wcwidth"
-  ];
-
   dependencies = [
-    blessed
     wcwidth
   ];
 
@@ -58,6 +52,8 @@ buildPythonPackage (finalAttrs: {
     pytestCheckHook
     trustme
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     changelog = "https://github.com/jquast/telnetlib3/blob/${finalAttrs.src.tag}/docs/history.rst";

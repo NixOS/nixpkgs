@@ -8,27 +8,22 @@
 
 buildGoModule (finalAttrs: {
   pname = "rdpgw";
-  version = "2.2.0";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "bolkedebruin";
     repo = "rdpgw";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-V0TmRo0MBYrpyn7kmazU93prMOvkkI5/x15P7gV88lA=";
+    hash = "sha256-shOv/fJrFGQspK2kyO5yX483trnSjwMjsd0UE6glYAI=";
   };
 
-  patches = [ ./go-sum.patch ];
-
-  vendorHash = "sha256-KH3c8IAFkXCDLleRTiTnXx+q6LpLl6oTswwmLZPUUSI=";
+  vendorHash = "sha256-i2CsuC0X9qoQCwNyvKhiVbbRQ2GCJwpDfVfN7HI4U0A=";
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ pam ];
 
-  ldflags = [
-    "-s"
-    "-w"
-  ];
+  ldflags = [ "-s" ];
 
   meta = {
     description = "Remote Desktop Gateway";

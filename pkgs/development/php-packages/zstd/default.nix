@@ -6,17 +6,14 @@
   fetchFromGitHub,
 }:
 
-let
-  version = "0.18.0";
-in
-buildPecl {
-  inherit version;
+buildPecl (finalAttrs: {
   pname = "zstd";
+  version = "0.18.0";
 
   src = fetchFromGitHub {
     owner = "kjdev";
     repo = "php-ext-zstd";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-3uTuAfHSeLKMbaRkUMUo3WWA4oGT7nXqXWlB1DUfzao=";
   };
 
@@ -32,4 +29,4 @@ buildPecl {
     homepage = "https://github.com/kjdev/php-ext-zstd";
     maintainers = [ ];
   };
-}
+})
