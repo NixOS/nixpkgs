@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "param";
-  version = "2.4.1";
+  version = "2.5.0b5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "holoviz";
     repo = "param";
     tag = "v${version}";
-    hash = "sha256-7TbxpGDkDJqG7Ssoo96hemBWAq/iymzjrm7KO7+OXPU=";
+    hash = "sha256-ODIh2suTCJpVrBaVxAS0098kON4AGSYB7kcD0qIUaBk=";
   };
 
   build-system = [
