@@ -39,14 +39,14 @@
 }:
 let
   pname = "sidequest";
-  version = "1.4.1";
+  version = "1.4.2";
 
   sidequest = stdenv.mkDerivation {
     inherit pname version;
 
     src = fetchurl {
       url = "https://github.com/SideQuestVR/SideQuest/releases/download/v${version}/SideQuest-${version}.tar.xz";
-      hash = "sha256-R0jE3sr3QRBffGiVE1oNaYmg0irHVmS67Bb/WOLP5I4=";
+      hash = "sha256-1bCvcfnqpSkYt6csOzhzuDsofXT5x/Gy+TV7S7Sn4YA=";
     };
 
     nativeBuildInputs = [
@@ -154,7 +154,7 @@ buildFHSEnv {
     platforms = [ "x86_64-linux" ];
     mainProgram = "sidequest";
     knownVulnerabilities = [
-      "Uses EOL Electron 29, many known CVEs."
+      "Uses EOL Electron 41, many known CVEs."
     ];
   };
 }
