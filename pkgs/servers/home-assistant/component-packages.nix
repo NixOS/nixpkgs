@@ -6453,7 +6453,8 @@
       ];
     "rituals_perfume_genie" =
       ps: with ps; [
-      ]; # missing inputs: ritualsgenie
+        ritualsgenie
+      ];
     "rmvtransport" =
       ps: with ps; [
         pyrmvtransport
@@ -9746,6 +9747,7 @@
     "ridwell"
     "ring"
     "risco"
+    "rituals_perfume_genie"
     "rmvtransport"
     "roborock"
     "roku"
