@@ -14,6 +14,8 @@
   openssl,
   prisma_6,
   prisma-engines_6,
+  runCommand,
+  nixosTests,
   nix-update-script,
 }:
 
@@ -225,7 +227,18 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    tests = {
+      inherit (nixosTests) openathlete;
+
+      migrate-help =
+        runCommand "openathlete-migrate-help" { nativeBuildInputs = [ finalAttrs.finalPackage ]; }
+          ''
+            openathlete-migrate --help | grep -F 'prisma migrate deploy' > $out
+          '';
+    };
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Self-hostable endurance training platform for athletes and coaches";

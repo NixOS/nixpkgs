@@ -1384,6 +1384,7 @@ in
   open-webui = runTest ./open-webui.nix;
   openafs = runTest ./openafs.nix;
   openarena = runTest ./openarena.nix;
+  openathlete = runTest ./openathlete.nix;
   openbao = runTest ./openbao.nix;
   openbao-agent = runTest ./openbao-agent.nix;
   opencloud = runTest {
