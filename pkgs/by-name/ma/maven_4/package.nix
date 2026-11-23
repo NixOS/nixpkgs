@@ -4,6 +4,7 @@
   jdk25_headless,
   makeWrapper,
   maven,
+  nix-update-script,
   stdenvNoCC,
   testers,
 }:
@@ -46,6 +47,19 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     # Reuse maven's builder so build-maven-package.nix is not duplicated.
     buildMavenPackage = maven.mkBuildMavenPackage finalAttrs.finalPackage;
+
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--url"
+        "https://github.com/apache/maven"
+        "--use-github-releases"
+        "--version-regex"
+        "maven-(4\\..*)"
+        # required as long as Maven 4 only releases RC versions. Remove once
+        # Maven 4 goes GA
+        "--version=unstable"
+      ];
+    };
 
     tests = {
       version = testers.testVersion {
