@@ -61,7 +61,12 @@ let
 
         configurePlatforms = [ ];
 
-        preBuild = "makeFlagsArray=(dictdir=$out/lib/aspell datadir=$out/lib/aspell)";
+        makeFlags = [
+          "dictdir=$(out)/lib/aspell"
+          "datadir=$(out)/lib/aspell"
+        ];
+
+        __structuredAttrs = true;
 
         meta = {
           description = "Aspell dictionary for ${fullName}";
