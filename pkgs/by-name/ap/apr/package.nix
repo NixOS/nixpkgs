@@ -4,6 +4,7 @@
   fetchurl,
   buildPackages,
   autoreconfHook,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -74,6 +75,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   __structuredAttrs = true;
 
   meta = {
@@ -83,5 +86,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.all;
     license = lib.licenses.asl20;
     maintainers = [ ];
+    pkgConfigModules = [ "apr-1" ];
   };
 })
