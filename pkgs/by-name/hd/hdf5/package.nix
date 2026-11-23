@@ -84,9 +84,13 @@ stdenv.mkDerivation (finalAttrs: {
     # HDF5_INSTALL_INCLUDE_DIR is absolute (CMAKE_INSTALL_INCLUDEDIR), so prefixing
     # it with $<INSTALL_PREFIX> yields ''${_IMPORT_PREFIX}//nix/store/... in the
     # exported targets. INSTALL_INTERFACE handles relative paths on its own.
-    for f in $(grep -rlF --include=CMakeLists.txt '$<INSTALL_PREFIX>/''${HDF5_INSTALL_INCLUDE_DIR}' .); do
-      substituteInPlace "$f" \
-        --replace-fail '$<INSTALL_PREFIX>/''${HDF5_INSTALL_INCLUDE_DIR}' "\''${HDF5_INSTALL_INCLUDE_DIR}"
+    # The same applies to HDF5_INSTALL_MODULE_DIR (Fortran modules), which is
+    # derived from HDF5_INSTALL_INCLUDE_DIR.
+    for dir in HDF5_INSTALL_INCLUDE_DIR HDF5_INSTALL_MODULE_DIR; do
+      for f in $(grep -rlF --include=CMakeLists.txt "\$<INSTALL_PREFIX>/\''${$dir}" .); do
+        substituteInPlace "$f" \
+          --replace-fail "\$<INSTALL_PREFIX>/\''${$dir}" "\''${$dir}"
+      done
     done
 
     # The hardcoded relative "include" is resolved against $out, which has no headers.
