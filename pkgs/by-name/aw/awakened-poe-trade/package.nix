@@ -4,7 +4,7 @@
   stdenv,
   appimageTools,
   makeWrapper,
-  electron,
+  electron_43,
   libxtst,
   libxt,
 
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postFixup = ''
-    makeWrapper ${lib.getExe electron} $out/bin/awakened-poe-trade \
+    makeWrapper ${lib.getExe electron_43} $out/bin/awakened-poe-trade \
       --add-flags $out/share/awakened-poe-trade/resources/app.asar \
       ${
         lib.optionalString (commandLineArgs != [ ]) "--add-flags ${lib.escapeShellArgs commandLineArgs}"
