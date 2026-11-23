@@ -47,13 +47,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rspamd";
-  version = "4.3.0";
+  version = "4.3.1";
 
   src = fetchFromGitHub {
     owner = "rspamd";
     repo = "rspamd";
     tag = finalAttrs.version;
-    hash = "sha256-NayoyFtWLDbQ/ZMDEprQ8e6VGS3Oce9z9hGoNO9at5Y=";
+    hash = "sha256-pHAJ5PyZsru4jryYDTYSoFY7QwfK9/AV3TzfNGCzvcY=";
   };
 
   nativeBuildInputs = [
