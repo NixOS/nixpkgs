@@ -195,6 +195,7 @@ clangStdenv.mkDerivation rec {
     license = lib.licenses.gpl3;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
+      eclairevoyant
       hzeller
       pca006132
       raskin
