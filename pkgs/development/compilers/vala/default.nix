@@ -8,6 +8,7 @@
   libxslt,
   autoconf,
   autoreconfHook,
+  bashNonInteractive,
   gnome,
   graphviz,
   glib,
@@ -18,6 +19,7 @@
   replaceVars,
   vala,
   gobject-introspection,
+  testers,
 }:
 
 let
@@ -41,7 +43,7 @@ let
       disableGraphviz = !withGraphviz;
 
     in
-    stdenv.mkDerivation rec {
+    stdenv.mkDerivation (finalAttrs: {
       pname = "vala";
       inherit version;
 
@@ -50,7 +52,7 @@ let
       };
 
       src = fetchurl {
-        url = "mirror://gnome/sources/vala/${lib.versions.majorMinor version}/vala-${version}.tar.xz";
+        url = "mirror://gnome/sources/vala/${lib.versions.majorMinor finalAttrs.version}/vala-${finalAttrs.version}.tar.xz";
         inherit hash;
       };
 
@@ -67,7 +69,7 @@ let
       # so add the build vala in nativeBuildInputs
       preBuild = lib.optionalString (
         disableGraphviz && (stdenv.buildPlatform == stdenv.hostPlatform)
-      ) "buildFlagsArray+=(\"VALAC=$(pwd)/compiler/valac\")";
+      ) "buildFlags+=(\"VALAC=$(pwd)/compiler/valac\")";
 
       outputs = [
         "out"
@@ -87,12 +89,15 @@ let
       ++ extraNativeBuildInputs;
 
       buildInputs = [
+        bashNonInteractive
         glib
         libiconv
         libintl
       ]
       ++ lib.optional withGraphviz graphviz
       ++ extraBuildInputs;
+
+      strictDeps = true;
 
       enableParallelBuilding = true;
 
@@ -104,11 +109,14 @@ let
             let
               roundUpToEven = num: num + lib.mod num 2;
             in
-            "vala_${lib.versions.major version}_${toString (roundUpToEven (lib.toInt (lib.versions.minor version)))}";
+            "vala_${lib.versions.major finalAttrs.version}_${toString (roundUpToEven (lib.toInt (lib.versions.minor finalAttrs.version)))}";
           packageName = "vala";
           freeze = true;
         };
+        tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       };
+
+      __structuredAttrs = true;
 
       meta = {
         description = "Compiler for GObject type system";
@@ -124,8 +132,14 @@ let
           lib.teams.gnome
           lib.teams.pantheon
         ];
+        pkgConfigModules = [
+          "vapigen"
+          "libvala-${lib.versions.majorMinor finalAttrs.version}"
+          "valadoc-${lib.versions.majorMinor finalAttrs.version}"
+          "vapigen-${lib.versions.majorMinor finalAttrs.version}"
+        ];
       };
-    }
+    })
   );
 
 in
