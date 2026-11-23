@@ -36,6 +36,9 @@ index 00000000000..d19fac1d4b3
 +// SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 +#pragma once
 +
++#include "llvm/TargetParser/Host.h"
++#include "llvm/TargetParser/Triple.h"
++
 +#include <string>
 +#include <vector>
 +
