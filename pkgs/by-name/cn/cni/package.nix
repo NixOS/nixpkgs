@@ -34,9 +34,6 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [
       vdemeester
     ];
-    platforms = [
-      "x86_64-linux"
-      "aarch64-linux"
-    ];
+    platforms = lib.platforms.linux;
   };
 }
