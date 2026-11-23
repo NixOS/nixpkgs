@@ -3116,7 +3116,7 @@ with haskellLib;
   singletons-base = appendPatches [
     (pkgs.fetchpatch {
       name = "singletons-base-absolute-package-db-path.patch";
-      url = "https://github.com/goldfirere/singletons/commit/7c0f6e2253824d1dcc2dfcea12bfec22e9cd68d2.patch";
+      url = "https://github.com/goldfirere/singletons/commit/66e04b19e14dc173b1017ca5930f49d2e1f06a5f.patch";
       hash = "sha256-IzBvCK+yJhGR6ISm+GAAhYrSPZlRplkmkqx50RzOFJw=";
       relative = "singletons-base";
       excludes = [ "CHANGES.md" ];
