@@ -18,6 +18,7 @@ my $debug = $ENV{'DEBUG'};
 my $autoModules = $ENV{'AUTO_MODULES'};
 my $preferBuiltin = $ENV{'PREFER_BUILTIN'};
 my $ignoreConfigErrors = $ENV{'ignoreConfigErrors'};
+my $ignoreMissingN = $ENV{'ignoreMissingN'};
 my $buildRoot = $ENV{'BUILD_ROOT'};
 my $makeFlags = $ENV{'MAKE_FLAGS'};
 $SIG{PIPE} = 'IGNORE';
@@ -175,7 +176,15 @@ my $ret = 0;
 foreach my $name (sort (keys %answers)) {
     my $f = $requiredAnswers{$name} && $ignoreConfigErrors ne "1"
         ? sub { warn "error: " . $_[0]; $ret = -1; } : sub { warn "warning: " . $_[0]; };
-    &$f("unused option: $name\n") unless defined $config{$name};
+    unless (defined $config{$name}) {
+        # kconfig omits symbols whose dependencies are unmet, so they never
+        # appear in .config and are effectively disabled. When IGNORE_MISSING_N
+        # is set, treat a wanted-'n' answer for such an absent option as
+        # satisfied instead of reporting it as unused.
+        next if ($ignoreMissingN // "0") eq "1" && $answers{$name} eq "n";
+        &$f("unused option: $name\n");
+        next;
+    }
     &$f("option not set correctly: $name (wanted '$answers{$name}', got '$config{$name}')\n")
         if $config{$name} && $config{$name} ne $answers{$name};
 }
