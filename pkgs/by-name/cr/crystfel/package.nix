@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   fetchFromGitHub,
+  fetchFromGitLab,
   fetchpatch,
   fetchzip,
   cmake,
@@ -123,9 +124,12 @@ let
   xgandalf = stdenv.mkDerivation rec {
     pname = "xgandalf";
     version = "8a63600ec778b155031adc3c151424aaced6a0cc";
-    src = fetchurl {
-      url = "https://gitlab.desy.de/thomas.white/xgandalf/-/archive/${version}/xgandalf-${version}.tar.gz";
-      hash = "sha256-UhFbpv+4qMwxEQIJpVpMzSg46P0vm0dkEyJDzxVu6XY=";
+    src = fetchFromGitLab {
+      owner = "thomas.white";
+      repo = "xgandalf";
+      domain = "gitlab.desy.de";
+      rev = version;
+      hash = "sha256-DPHU0UF0vxoROu5L4r4RLgFJMnuBSNqT5umNMl5dgvQ=";
     };
 
     nativeBuildInputs = [
@@ -139,9 +143,12 @@ let
   pinkIndexer = stdenv.mkDerivation rec {
     pname = "pinkindexer";
     version = "85f3883f8c1fe98a03e5f3d371f2da4fee97894e";
-    src = fetchurl {
-      url = "https://gitlab.desy.de/thomas.white/pinkindexer/-/archive/${version}/pinkindexer-${version}.tar.gz";
-      hash = "sha256-W4COYdeESP0S2KhB2UdaJSbxNiFm5yyapKkmICDtP0A=";
+    src = fetchFromGitLab {
+      owner = "thomas.white";
+      repo = "pinkIndexer";
+      domain = "gitlab.desy.de";
+      rev = version;
+      hash = "sha256-9xyB69RUbT8Sgbbj/DRLrqZMfvQqzZJtLrvnwk4bVF8=";
     };
 
     nativeBuildInputs = [
@@ -155,9 +162,12 @@ let
   fdip = stdenv.mkDerivation rec {
     pname = "fdip";
     version = "631792e90ed2c3e226dce77bf97917305293ac66";
-    src = fetchurl {
-      url = "https://gitlab.desy.de/thomas.white/fdip/-/archive/${version}/fdip-${version}.tar.gz";
-      hash = "sha256-nnvOPl35NgtJ13fgWWAuVhtWT/JOk2DyYmBgI0ojZ2o=";
+    src = fetchFromGitLab {
+      owner = "thomas.white";
+      repo = "fdip";
+      domain = "gitlab.desy.de";
+      rev = version;
+      hash = "sha256-7hFaPwLGzitwHwaaYIp2kVCUreo6ILwbQqYPAyyiDNU=";
     };
 
     nativeBuildInputs = [
@@ -208,9 +218,12 @@ let
   millepede-ii = stdenv.mkDerivation rec {
     pname = "millepede-ii";
     version = "04-13-06";
-    src = fetchurl {
-      url = "https://gitlab.desy.de/claus.kleinwort/millepede-ii/-/archive/V${version}/millepede-ii-V${version}.tar.gz";
-      hash = "sha256-aFoo8AGBsUEN2u3AmnSpTqJ6JeNV6j9vkAFTZ34I+sI=";
+    src = fetchFromGitLab {
+      owner = "claus.kleinwort";
+      repo = "millepede-ii";
+      domain = "gitlab.desy.de";
+      rev = "V${version}";
+      hash = "sha256-VMj6vmoNJ76zD9BZEPaohOTGUqe7wmA4P6H9R+Yl1jI=";
     };
 
     nativeBuildInputs = [ gfortran ];
@@ -222,9 +235,12 @@ in
 stdenv.mkDerivation rec {
   pname = "crystfel";
   version = "0.13.0";
-  src = fetchurl {
-    url = "https://www.desy.de/~twhite/crystfel/crystfel-${version}.tar.gz";
-    sha256 = "sha256-6Fz7W8kRKlaTmnL+21t20UgkTjr3oC08IOzAGOseaQU=";
+  src = fetchFromGitLab {
+    owner = "thomas.white";
+    repo = "crystfel";
+    domain = "gitlab.desy.de";
+    rev = version;
+    sha256 = "sha256-KYzR0TxhRvsqVPMccZywoCUZEn2ShRmNaT7u56vs/Pw=";
   };
   nativeBuildInputs = [
     meson
@@ -285,9 +301,9 @@ stdenv.mkDerivation rec {
       - Many patterns (thousands) are required - high throughput is needed.
       - The crystal orientations in each pattern are random and uncorrelated.
       - Merging into lower symmetry point groups may require the resolution of indexing ambiguities.'';
-    homepage = "https://www.desy.de/~twhite/crystfel/";
-    changelog = "https://www.desy.de/~twhite/crystfel/changes.html";
-    downloadPage = "https://www.desy.de/~twhite/crystfel/download.html";
+    homepage = "https://crystfel.pages.desy.de";
+    changelog = "https://crystfel.pages.desy.de/changes.html";
+    downloadPage = "https://crystfel.pages.desy.de/download.html";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ pmiddend ];
     platforms = lib.platforms.unix;

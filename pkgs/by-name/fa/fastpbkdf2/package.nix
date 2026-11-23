@@ -12,21 +12,25 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ctz";
     repo = "fastpbkdf2";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "09ax0h4ik3vhvp3s98lic93l3g9f4v1jkr5k6z4g1lvm7s3lrha2";
   };
 
   buildInputs = [ openssl ];
 
-  preBuild = ''
-    makeFlagsArray=(CFLAGS="-std=c99 -O3 -g")
-  '';
+  strictDeps = true;
+
+  makeFlags = [
+    "CFLAGS=-std=c99 -O3 -g"
+  ];
 
   installPhase = ''
     mkdir -p $out/{lib,include/fastpbkdf2}
     cp *.a $out/lib
     cp fastpbkdf2.h $out/include/fastpbkdf2
   '';
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Fast PBKDF2-HMAC-{SHA1,SHA256,SHA512} implementation in C";

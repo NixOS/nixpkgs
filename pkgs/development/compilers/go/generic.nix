@@ -15,12 +15,18 @@ lib.extendMkDerivation {
   constructDrv = stdenv.mkDerivation;
   excludeDrvArgNames = [
     "buildGoModule"
+    "internalPIESupport"
   ];
   extendDrvArgs =
     finalAttrs:
     {
       patches ? [ ],
       buildGoModule,
+      # An attrset representing the platforms the toolchain supports
+      # PIE with internal linking for. The key is the GOOS; the value
+      # is a list of GOARCHes.
+      # Sourced from src/internal/platform/supported.go:InternalLinkPIESupported()
+      internalPIESupport ? { },
       ...
     }:
     let
@@ -178,6 +184,11 @@ lib.extendMkDerivation {
           go = finalAttrs.finalPackage;
           inherit buildGoModule;
         };
+
+        # Tests whether this version of Go supports PIE when internally linking.
+        # Internally linking is required when CGo is disabled, so this can be used to
+        # determine if you should pass the flag enabling PIE.
+        internalPIESupported = goAttrs: lib.elem goAttrs.GOARCH (internalPIESupport.${goAttrs.GOOS} or [ ]);
       };
 
       __structuredAttrs = true;
