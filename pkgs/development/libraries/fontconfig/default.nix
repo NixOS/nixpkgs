@@ -120,6 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
+    changelog = "https://gitlab.freedesktop.org/fontconfig/fontconfig/-/releases/${finalAttrs.version}";
     description = "Library for font customization and configuration";
     homepage = "http://fontconfig.org/";
     license = lib.licenses.bsd2; # custom but very bsd-like
