@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "pyprecice";
-  version = "3.4.0";
+  version = "3.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "precice";
     repo = "python-bindings";
     tag = "v${version}";
-    hash = "sha256-fKpedgdgXTRVHcTdU996xbIi/b2GlCued8xnL41KHVg=";
+    hash = "sha256-9TsIi7dyLOXDZ/lgZpVFvC93u1TcZE2fdhqLClaGCGQ=";
   };
 
   build-system = [
