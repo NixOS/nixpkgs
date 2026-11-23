@@ -12673,6 +12673,8 @@ self: super: with self; {
 
   oinker = callPackage ../development/python-modules/oinker { };
 
+  okokscale = callPackage ../development/python-modules/okokscale { };
+
   okonomiyaki = callPackage ../development/python-modules/okonomiyaki { };
 
   okta = callPackage ../development/python-modules/okta { };
