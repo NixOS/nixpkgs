@@ -25,7 +25,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "megacmd";
-  version = "2.7.0";
+  version = "2.7.1";
 
   src = fetchFromGitHub {
     owner = "meganz";
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "${finalAttrs.version}_Linux";
     fetchSubmodules = true;
     postCheckout = "git -C $out/sdk rev-parse --short HEAD > $out/sdk/.gitrev";
-    hash = "sha256-UCjGfxr4BmRfcevmbsFmx1NjgCBNksh4qxYhw9Z3M3g=";
+    hash = "sha256-tG/V/xy0ga8umMhpsAQ6tzxJuSJc28X8f1FXH2FfBwc=";
   };
 
   __structuredAttrs = true;

@@ -517,8 +517,8 @@ let
         mktplcRef = {
           publisher = "batisteo";
           name = "vscode-django";
-          version = "1.15.0";
-          hash = "sha256-WBZsZNcq9OY30uaksfcRmCvHcugemMhsJ6d6/IncR5s=";
+          version = "1.19.0";
+          hash = "sha256-30Qxj5HPHNHJa0+3PHArlotuoKVWD4SfrIDtYQa9Nyk=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/batisteo.vscode-django/changelog";
@@ -2365,8 +2365,8 @@ let
         mktplcRef = {
           name = "vscode-vibrancy-continued";
           publisher = "illixion";
-          version = "1.6.0";
-          hash = "sha256-UE7NtvKDSSF7kXzevg8NTlVj1JDtSdv9EItjaXeVhQY=";
+          version = "1.6.2";
+          hash = "sha256-+DHXEwh0cdjw8ccGzmK3GFY4nxnWOxdlvUg2IuTfEHo=";
         };
         meta = {
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=illixion.vscode-vibrancy-continued";
