@@ -14,18 +14,18 @@
   perl,
 }:
 let
-  version = "0.4.8";
+  version = "0.5.0";
   src = fetchFromGitHub {
     owner = "yetone";
     repo = "avante.nvim";
     tag = "v${version}";
-    hash = "sha256-Ss+l+ZHWPbYRkBEqJMUj3qb6eZFzb3HJsk3e2+ogvXQ=";
+    hash = "sha256-HwCLzqKdVtg1FqaTraDbGvbxsOHA9vYrvGNOrjE8Bbo=";
   };
   avante-nvim-lib = rustPlatform.buildRustPackage {
     pname = "avante-nvim-lib";
     inherit version src;
 
-    cargoHash = "sha256-D+5CFU1gejqNTXG8F1Y7Dx8sTyfeLYmHAZYgAoDo+G0=";
+    cargoHash = "sha256-pUJgkGL5CQJPvJTo9AEnF77bZZmpcXAZkoxSm4zTw/E=";
 
     nativeBuildInputs = [
       pkg-config

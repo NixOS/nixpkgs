@@ -11,14 +11,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pytouchline-extended";
-  version = "1.1.2";
+  version = "1.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "brondum";
     repo = "pytouchline";
     tag = finalAttrs.version;
-    hash = "sha256-sIrHvC+IkJWgNksgS5lB4IFP37xggVypMLmGjjLlaVQ=";
+    hash = "sha256-96kdzMwMVm2mxdVjofolJSriyDznaniw/1AinDC5bGE=";
   };
 
   postPatch = ''

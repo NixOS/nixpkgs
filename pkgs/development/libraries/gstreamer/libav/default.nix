@@ -19,11 +19,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gst-libav";
-  version = "1.28.8";
+  version = "1.28.9";
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/gst-libav/gst-libav-${finalAttrs.version}.tar.xz";
-    hash = "sha256-mK09f4kyxJXiaHCJA/HDOI1fJqDbNHJ6n4Ye4jtyQXc=";
+    hash = "sha256-Sz3yH6cJcqgIkdIpjPMsFKYsPbRIPVRcesAYIwOZGGs=";
   };
 
   separateDebugInfo = true;

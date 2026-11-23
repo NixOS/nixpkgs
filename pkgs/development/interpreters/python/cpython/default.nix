@@ -30,6 +30,7 @@
   withSqlite ? !withMinimalDeps,
   sqlite,
   xz,
+  withZlib ? !withMinimalDeps,
   zlib,
   withZstd ? !withMinimalDeps,
   zstd,
@@ -275,7 +276,6 @@ let
       libuuid
       ncurses
       xz
-      zlib
     ]
     ++ optionals withLibxcrypt [
       libxcrypt
@@ -291,6 +291,9 @@ let
     ]
     ++ optionals withExpat [
       expat
+    ]
+    ++ optionals withZlib [
+      zlib
     ]
     ++ optionals (withZstd && passthru.pythonAtLeast "3.14") [
       zstd

@@ -20,9 +20,13 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ cmake ];
   buildInputs = lib.optional stdenv.hostPlatform.isFreeBSD freebsd.libstdthreads;
 
+  strictDeps = true;
+
   env = lib.optionalAttrs stdenv.hostPlatform.isFreeBSD {
     NIX_LDFLAGS = "-lstdthreads";
   };
+
+  __structuredAttrs = true;
 
   meta = {
     changelog = "https://github.com/intel/libipt/releases/tag/v${finalAttrs.version}";

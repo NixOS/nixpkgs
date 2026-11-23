@@ -1213,11 +1213,18 @@ with haskellLib;
   idris = lib.pipe super.idris [
     dontCheck
     doJailbreak
-    (appendPatch (fetchpatch {
-      name = "idris-bumps.patch";
-      url = "https://github.com/idris-lang/Idris-dev/compare/c99bc9e4af4ea32d2172f873152b76122ee4ee14...cf78f0fb337d50f4f0dba235b6bbe67030f1ff47.patch";
-      hash = "sha256-RCMIRHIAK1PCm4B7v+5gXNd2buHXIqyAxei4bU8+eCk=";
-    }))
+    (appendPatches (
+      [
+        (fetchpatch {
+          name = "idris-bumps.patch";
+          url = "https://github.com/idris-lang/Idris-dev/compare/c99bc9e4af4ea32d2172f873152b76122ee4ee14...cf78f0fb337d50f4f0dba235b6bbe67030f1ff47.patch";
+          hash = "sha256-RCMIRHIAK1PCm4B7v+5gXNd2buHXIqyAxei4bU8+eCk=";
+        })
+      ]
+      ++ lib.optionals (lib.versionAtLeast self.ghc.version "9.12") [
+        ./patches/idris-Setup-symbolic-paths.patch
+      ]
+    ))
   ];
 
   # https://hydra.nixos.org/build/42769611/nixlog/1/raw
@@ -2241,6 +2248,15 @@ with haskellLib;
   # https://github.com/phadej/cabal-fmt/issues/98
   cabal-fmt = doJailbreak super.cabal-fmt;
 
+  # https://github.com/cdornan/fmt/issues/41
+  fmt = appendPatches [
+    (pkgs.fetchpatch {
+      name = "fmt-fix-doctest-prop-ghc-9.12.5.patch";
+      url = "https://github.com/cdornan/fmt/commit/039b85cee5826e4b276ffd7d2c2c1526f136e746.patch";
+      hash = "sha256-iPK7l/akM/9qiZjr28pe8fXQJo6t5BnvUUgS9hCaPyI=";
+    })
+  ] super.fmt;
+
   # Pick bound changes from development branch, same commit also adds support for Cabal >= 3.14
   glirc = lib.pipe super.glirc [
     (warnAfterVersion "2.41")
@@ -3100,6 +3116,18 @@ with haskellLib;
     simple-get-opt = self.simple-get-opt_0_4;
   };
 
+  # Make test suite work with Setup.hs / from Hackage tarball
+  # https://github.com/goldfirere/singletons/pull/636
+  singletons-base = appendPatches [
+    (pkgs.fetchpatch {
+      name = "singletons-base-absolute-package-db-path.patch";
+      url = "https://github.com/goldfirere/singletons/commit/66e04b19e14dc173b1017ca5930f49d2e1f06a5f.patch";
+      hash = "sha256-IzBvCK+yJhGR6ISm+GAAhYrSPZlRplkmkqx50RzOFJw=";
+      relative = "singletons-base";
+      excludes = [ "CHANGES.md" ];
+    })
+  ] super.singletons-base;
+
   # 2025-04-23: jailbreak to allow megaparsec >= 9.7
   # 2025-04-23: test data missing from tarball
   crucible-syntax = doJailbreak (dontCheck super.crucible-syntax);
@@ -3672,7 +3700,6 @@ with haskellLib;
           hnix-store-nar = self.hnix-store-nar;
         }
       )
-      (appendPatches [ ./patches/cachix-crypton-1.1-and-ram.patch ])
     ];
   }
 )

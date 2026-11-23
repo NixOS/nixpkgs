@@ -7,6 +7,7 @@
   radicle-node,
   gitMinimal,
   versionCheckHook,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -34,7 +35,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
 
-  passthru.updateScript = ./update.sh;
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Create, update, and query Radicle Job Collaborative Objects";
