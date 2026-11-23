@@ -56,6 +56,25 @@ let
     hash = "sha256-lnUqjQ3zopearXndqbrpATpM2e2z9H3/RB0JSFGWz0E=";
   };
 
+  # Replaces the empty X11 class hint GDK sets when GLib's program name is unset.
+  wmClassShim = ''
+    #include <X11/Xlib.h>
+    #include <X11/Xutil.h>
+    #include <dlfcn.h>
+
+    static const char kName[] = "harmony";
+
+    int XSetClassHint(Display *display, Window window, XClassHint *hint) {
+      static int (*real)(Display *, Window, XClassHint *);
+      if (!real) real = dlsym(RTLD_NEXT, "XSetClassHint");
+      if (hint) {
+        if (!hint->res_name || !*hint->res_name) hint->res_name = (char *)kName;
+        if (!hint->res_class || !*hint->res_class) hint->res_class = (char *)kName;
+      }
+      return real(display, window, hint);
+    }
+  '';
+
   # dlopen'd by Chromium/CEF, not listed in any DT_NEEDED entry (getLib picks
   # the runtime output; libva's default output is "dev").
   dlopenLibs = [
@@ -153,8 +172,23 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+  buildPhase = ''
+    runHook preBuild
+    # winit-gtk4 builds the GtkApplication without g_application_run, so GLib's
+    # program name stays unset (g_get_prgname() is NULL) and GDK gives the window
+    # an empty WM_CLASS (""/""). KWin then cannot match harmony.desktop and falls
+    # back to the opaque white icon embedded in the binary, so fill the class
+    # hint in at load time instead of rebuilding the prebuilt bundle.
+    # shortcut: LD_PRELOAD shim, drop it once winit or tauri-runtime-cef set the
+    # program name (or a GTK application id) themselves.
+    $CC -shared -fPIC -o wmclass.so ${lib.toFile "wmclass.c" wmClassShim} -ldl
+    runHook postBuild
+  '';
+
   installPhase = ''
     runHook preInstall
+
+    install -Dm755 wmclass.so $out/lib/harmony/wmclass.so
 
     mkdir -p $out/libexec/harmony
     cp -a usr/share/Harmony/. $out/libexec/harmony/
@@ -183,9 +217,18 @@ stdenv.mkDerivation (finalAttrs: {
     makeShellWrapper $out/libexec/harmony/harmony $out/bin/harmony \
       "''${gappsWrapperArgs[@]}" \
       --set CHROME_WRAPPER harmony \
+      --run 'export LD_PRELOAD="'$out'/lib/harmony/wmclass.so''${LD_PRELOAD:+:$LD_PRELOAD}"' \
       --run 'if [ -x /run/wrappers/bin/chrome-sandbox ]; then
                export CHROME_DEVEL_SANDBOX=/run/wrappers/bin/chrome-sandbox
              fi'
+  '';
+
+  # `Icon=harmony` needs an icon-theme lookup, which the task manager can miss
+  # (the profile's hicolor has no index.theme, and KDE caches lookups). Point it
+  # at the installed PNG so it never depends on the theme or its cache.
+  postFixup = ''
+    substituteInPlace $out/share/applications/harmony.desktop \
+      --replace-fail "Icon=harmony" "Icon=$out/share/icons/hicolor/512x512/apps/harmony.png"
   '';
 
   meta = {
