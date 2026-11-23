@@ -121,6 +121,7 @@ Unless you understand how the fetcher you're using calculates the hash from the 
    - `bzr`
    - `svn`
    - `darcs`
+   - `fossil`
    - `pijul`
 
    The hash is printed to stdout.
