@@ -4,13 +4,14 @@
   fetchFromGitHub,
   pkg-config,
   oniguruma,
+  stdenv,
   versionCheckHook,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "treemd";
-  version = "0.10.0";
+  version = "0.11.0";
 
   __structuredAttrs = true;
 
@@ -18,14 +19,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "Epistates";
     repo = "treemd";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5zbYuyXdccq+cr/b3JLuaC6uE6YCWowW9j0a7Hyv3Wo=";
+    hash = "sha256-55HsSUYOmnxIoPCZ9hLMg3Tb9ywEnyxzMNjXMg8B4ZQ=";
   };
 
-  cargoHash = "sha256-tFNEytLFpB990yAc632qwPwVXtYHhAe4zL6rdDxmr+I=";
+  cargoHash = "sha256-RW/a4j+sZ4r1RZCJty+IPUPSs4khQuTVrkZ+cWS1hvo=";
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ oniguruma ];
+
+  checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+    # FSEvents cannot start a stream inside the Darwin build sandbox
+    "--skip=tui::watcher::tests::only_events_for_the_watched_file_count"
+  ];
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
