@@ -162,7 +162,10 @@ clangStdenv.mkDerivation (finalAttrs: {
     description = "Experimental PlayStation Vita emulator";
     homepage = "https://vita3k.org/";
     license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ ekisu ];
+    maintainers = with lib.maintainers; [
+      ekisu
+      iedame
+    ];
     platforms = [
       "aarch64-darwin"
       "aarch64-linux"
