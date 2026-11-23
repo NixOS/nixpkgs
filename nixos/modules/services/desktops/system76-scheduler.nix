@@ -300,6 +300,52 @@ in
         BusName = "com.system76.Scheduler";
         ExecStart = "${cfg.package}/bin/system76-scheduler daemon";
         ExecReload = "${cfg.package}/bin/system76-scheduler daemon reload";
+
+        PrivateTmp = true;
+        PrivateDevices = true;
+        NoNewPrivileges = true;
+        RestrictAddressFamilies = [
+          "AF_UNIX"
+          "AF_NETLINK"
+        ];
+        IPAddressDeny = "any";
+        RestrictNamespaces = true;
+        RestrictSUIDSGID = true;
+        LockPersonality = true;
+        SystemCallArchitectures = "native";
+        ProtectHostname = true;
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        UMask = "0077";
+        CapabilityBoundingSet = [
+          "~CAP_AUDIT_CONTROL"
+          "~CAP_AUDIT_READ"
+          "~CAP_AUDIT_WRITE"
+          "~CAP_BLOCK_SUSPEND"
+          "~CAP_CHOWN"
+          "~CAP_FSETID"
+          "~CAP_SETFCAP"
+          "~CAP_IPC_LOCK"
+          "~CAP_KILL"
+          "~CAP_LEASE"
+          "~CAP_LINUX_IMMUTABLE"
+          "~CAP_MAC_ADMIN"
+          "~CAP_MAC_OVERRIDE"
+          "~CAP_MKNOD"
+          "~CAP_NET_BIND_SERVICE"
+          "~CAP_NET_BROADCAST"
+          "~CAP_NET_RAW"
+          "~CAP_SETGID"
+          "~CAP_SETPCAP"
+          "~CAP_SETUID"
+          "~CAP_SYS_BOOT"
+          "~CAP_SYS_CHROOT"
+          "~CAP_SYS_PACCT"
+          "~CAP_SYS_RAWIO"
+          "~CAP_SYS_TIME"
+          "~CAP_SYS_TTY_CONFIG"
+          "~CAP_WAKE_ALARM"
+        ];
       };
     };
 
