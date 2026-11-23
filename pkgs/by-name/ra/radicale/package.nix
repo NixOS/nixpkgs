@@ -22,19 +22,23 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     setuptools
   ];
 
+  pythonRemoveDeps = [
+    "libpass" # replaced with passlib
+  ];
+
   dependencies =
     with python3.pkgs;
     [
       defusedxml
-      libpass
+      passlib
       vobject
       pika
       requests
       ldap3
       python-pam
     ]
-    ++ libpass.optional-dependencies.argon2
-    ++ libpass.optional-dependencies.bcrypt;
+    ++ passlib.optional-dependencies.argon2
+    ++ passlib.optional-dependencies.bcrypt;
 
   optional-dependencies = {
     h2 = [ python3.pkgs.hypercorn ];
