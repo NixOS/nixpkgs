@@ -6,17 +6,14 @@
   rustPlatform,
   scdoc,
 }:
-let
-  version = "0.8.0";
-in
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "aba";
-  inherit version;
+  version = "0.8.0";
 
   src = fetchFromSourcehut {
     owner = "~onemoresuza";
     repo = "aba";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-2zVQNchL4DFh2v2/kwupJTBSmXiKqlxzUMrP9TbfCMs=";
   };
 
@@ -51,9 +48,9 @@ rustPlatform.buildRustPackage {
     description = "Address book for aerc";
     homepage = "https://sr.ht/~onemoresuza/aba/";
     changelog = "https://git.sr.ht/~onemoresuza/aba/tree/main/item/CHANGELOG.md";
-    downloadPage = "https://git.sr.ht/~onemoresuza/aba/refs/${version}";
+    downloadPage = "https://git.sr.ht/~onemoresuza/aba/refs/${finalAttrs.version}";
     maintainers = with lib.maintainers; [ onemoresuza ];
     license = lib.licenses.isc;
     mainProgram = "aba";
   };
-}
+})
