@@ -16,6 +16,7 @@
   requests,
   requests-toolbelt,
   setuptools,
+  tenacity,
   vcrpy,
   websockets,
   yarl,
@@ -23,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "gql";
-  version = "4.0.0";
+  version = "4.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "graphql-python";
     repo = "gql";
     tag = "v${version}";
-    hash = "sha256-bPdlFN6MRT6G9Mw2g2BBfsOGpQmT7pbRatpqa7CImSs=";
+    hash = "sha256-JsW+bbMWa7lQcebbAczbfKS4uzmI8Q9uU/tvq6aoevE=";
   };
 
   build-system = [ setuptools ];
@@ -39,6 +40,7 @@ buildPythonPackage rec {
     anyio
     backoff
     graphql-core
+    tenacity
     yarl
   ];
 

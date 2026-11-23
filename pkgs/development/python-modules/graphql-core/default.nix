@@ -24,7 +24,7 @@ buildPythonPackage rec {
   postPatch = ''
     # avoid big pytest-benchmark dependency
     substituteInPlace pyproject.toml \
-      --replace-fail "addopts = \"--benchmark-disable\"" ""
+      --replace-fail 'addopts = "--benchmark-disable"' ""
   '';
 
   build-system = [
