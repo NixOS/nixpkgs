@@ -15,7 +15,6 @@ lib.extendMkDerivation {
       pname ? "cargo-auditable",
       auditable ? true,
       hash ? "",
-      cargoHash ? "",
       passthru ? { },
       ...
     }:
@@ -66,7 +65,8 @@ lib.extendMkDerivation {
             asl20
           ];
         maintainers = with lib.maintainers; [ RossSmyth ];
-        broken = stdenv.hostPlatform != stdenv.buildPlatform;
+        broken =
+          stdenv.hostPlatform != stdenv.buildPlatform || stdenv.targetPlatform.isUefi;
       };
     };
 }

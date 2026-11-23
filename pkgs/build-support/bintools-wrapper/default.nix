@@ -80,7 +80,6 @@ let
     optionalAttrs
     optionals
     optionalString
-    platforms
     removePrefix
     replaceStrings
     ;
@@ -381,7 +380,7 @@ stdenvNoCC.mkDerivation {
       hardening_unsupported_flags+=" pic"
     ''
 
-    + optionalString (targetPlatform.isAvr || targetPlatform.isWindows) ''
+    + optionalString (targetPlatform.isAvr || targetPlatform.isPE) ''
       hardening_unsupported_flags+=" relro bindnow"
     ''
 
