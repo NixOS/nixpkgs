@@ -192,6 +192,10 @@ jdk.overrideAttrs (
       in
       oldAttrs.passthru
       // {
+        updateScript = [
+          ./update.sh
+          sourceFile
+        ];
         tests = {
           version = testers.testVersion { package = pkg; };
           vendor = runCommand "${pname}-vendor" { nativeBuildInputs = [ pkg ]; } ''
