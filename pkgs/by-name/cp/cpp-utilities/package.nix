@@ -31,13 +31,14 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ];
 
   # Otherwise, tests fail since the resulting shared object libc++utilities.so is only available in PWD of the make files
-  preCheck = ''
-    checkFlagsArray+=(
-      "LD_LIBRARY_PATH=$PWD"
-    )
-  '';
+  checkFlags = [
+    "LD_LIBRARY_PATH=$(PWD)"
+  ];
+
   # tests fail on Darwin
   doCheck = !stdenv.hostPlatform.isDarwin;
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://github.com/Martchus/cpp-utilities";
