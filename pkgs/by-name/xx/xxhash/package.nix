@@ -24,6 +24,38 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeDir = "../build/cmake";
 
+  # The CMake build only installs xxhsum, whereas upstream's Makefile also
+  # installs the xxh32sum, xxh64sum, xxh128sum and xxh3sum aliases and their
+  # man pages. xxhsum selects its algorithm from argv[0], so symlinks suffice.
+  postInstall = ''
+    for alias in xxh32sum xxh64sum xxh128sum xxh3sum; do
+      ln -sf xxhsum${stdenv.hostPlatform.extensions.executable} \
+        "$out/bin/$alias${stdenv.hostPlatform.extensions.executable}"
+      ln -sf xxhsum.1 "$out/share/man/man1/$alias.1"
+    done
+  '';
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    echo xxhash > input
+    for spec in 0:xxh32sum 1:xxh64sum 2:xxh128sum 3:xxh3sum; do
+      algo=''${spec%%:*}
+      alias=''${spec#*:}
+      expected=$("$out/bin/xxhsum" -H"$algo" input)
+      actual=$("$out/bin/$alias" input)
+      if [ "$actual" != "$expected" ]; then
+        echo "$alias: got '$actual', expected '$expected' (xxhsum -H$algo)"
+        exit 1
+      fi
+      "$out/bin/$alias" input > "input.$alias"
+      "$out/bin/$alias" --check "input.$alias"
+    done
+
+    runHook postInstallCheck
+  '';
+
   meta = {
     description = "Extremely fast hash algorithm";
     longDescription = ''
