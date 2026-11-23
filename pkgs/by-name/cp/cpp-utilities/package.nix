@@ -19,7 +19,11 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [ cmake ];
-  nativeCheckInputs = [ cppunit ];
+
+  checkInputs = [ cppunit ];
+
+  strictDeps = true;
+
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv # needed on Darwin, see https://github.com/Martchus/cpp-utilities/issues/4
   ];
