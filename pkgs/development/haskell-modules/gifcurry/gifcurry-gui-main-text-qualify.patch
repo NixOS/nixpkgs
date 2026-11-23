@@ -1,0 +1,12 @@
+--- a/src/gui/Main.hs
++++ b/src/gui/Main.hs
+@@ -17,7 +17,8 @@
+ import Text.Printf
+ import Data.Maybe
+ import Data.Either
+-import Data.Text
++import Data.Text (Text, pack)
++import qualified Data.Text as Data.Text
+ import Data.List
+ import Data.IORef
+ import Data.Int
