@@ -129,6 +129,16 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
+    assertions = [
+      {
+        assertion =
+          config.networking.networkmanager.enable
+          || config.networking.dhcpcd.enable
+          || config.networking.useNetworkd;
+        message = "captive-browser only works with NetworkManager, dhcpcd or networkd.";
+      }
+    ];
+
     environment.systemPackages = [
       (pkgs.runCommand "captive-browser-desktop-item" { } ''
         install -Dm444 -t $out/share/applications ${desktopItem}/share/applications/*.desktop
@@ -149,7 +159,8 @@ in
         else if config.networking.useNetworkd then
           "${cfg.package}/bin/systemd-networkd-dns ${iface [ ]}"
         else
-          throw "programs.captive-browser.dhcp-dns must be set"
+          # this is caught by the assertion
+          ""
       );
   };
 }
