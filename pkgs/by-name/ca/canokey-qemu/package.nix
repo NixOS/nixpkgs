@@ -71,6 +71,8 @@ stdenv.mkDerivation (finalAttrs: {
     python3Packages.jinja2
   ];
 
+  strictDeps = true;
+
   passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
 
   __structuredAttrs = true;
