@@ -875,6 +875,7 @@ lib.fix (
         local -a haskellBuildFlagsArray
         concatTo haskellBuildFlagsArray buildFlags
 
+        echo buildFlags: "''${haskellBuildFlagsArray[@]}"
         ${setupCommand} build ${buildTarget} "''${haskellBuildFlagsArray[@]}"
         runHook postBuild
       '';
@@ -903,6 +904,7 @@ lib.fix (
         concatTo haskellCheckFlagsArray checkFlags checkFlagsArray
 
         export NIX_GHC_PACKAGE_PATH_FOR_TEST="''${NIX_GHC_PACKAGE_PATH_FOR_TEST:-$packageConfDir:}"
+        echo checkFlags: "''${haskellCheckFlagsArray[@]}"
         ${setupCommand} test ${testTargetsString} "''${haskellCheckFlagsArray[@]}"
 
         runHook postCheck
@@ -915,6 +917,7 @@ lib.fix (
           local -a haddockFlagsArray
           concatTo haddockFlagsArray haddockFlags
 
+          echo haddockFlags: "''${haddockFlagsArray[@]}"
           ${setupCommand} haddock --html \
             ${optionalString doHoogle "--hoogle"} \
             ${optionalString doHaddockQuickjump "--quickjump"} \
