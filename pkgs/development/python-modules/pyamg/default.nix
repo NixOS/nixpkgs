@@ -22,18 +22,20 @@ buildPythonPackage rec {
     hash = "sha256-tYKc45aHZVzmjbRBXJPuFxBWu05B57eY705un5+Tvq4=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     meson-python
     pybind11
     numpy
     versioningit
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
     scipy
+  ];
+
+  nativeCheckInputs = [
     pytest
-    pybind11
   ];
 
   checkPhase = ''
