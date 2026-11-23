@@ -19528,6 +19528,8 @@ self: super: with self; {
 
   sklearn2pmml = callPackage ../development/python-modules/sklearn2pmml { };
 
+  skoda-public-api = callPackage ../development/python-modules/skoda-public-api { };
+
   skops = callPackage ../development/python-modules/skops { };
 
   skorch = callPackage ../development/python-modules/skorch { };
