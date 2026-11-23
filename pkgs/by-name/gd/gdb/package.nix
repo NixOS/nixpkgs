@@ -219,6 +219,8 @@ stdenv.mkDerivation (finalAttrs: {
     '';
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "GNU Project debugger";
     mainProgram = "${targetPrefix}gdb";
