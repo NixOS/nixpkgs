@@ -3,11 +3,15 @@
 alephone.makeWrapper {
   pname = "marathon-pheonix";
   desktopName = "Marathon-Pheonix";
-  version = "1.3";
+  version = "1.4.2.3";
 
+  # upstream only offers it on ModDB, which can't be fetched without a browser
   zip = fetchurl {
-    url = "http://simplici7y.com/version/file/998/Marathon_Phoenix_1.3.zip";
-    hash = "sha256-EicLN54di18sarKyJm2GaEJJIsvaRmlHS/TUiT6YBuQ=";
+    urls = [
+      "https://slackware.uk/~urchlay/src/Marathon_Phoenix_1.4.2.3.zip"
+      "https://web.archive.org/web/20260422175653id_/https://slackware.uk/~urchlay/src/Marathon_Phoenix_1.4.2.3.zip"
+    ];
+    hash = "sha256-LhTaCWUzJ5YHnUxC9drTOOuyQx+BS0XdKmLhTMlAMUE=";
   };
 
   meta = {
