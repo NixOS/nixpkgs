@@ -29,6 +29,8 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ];
 
+  strictDeps = true;
+
   makeFlags = [
     "--directory=./src"
     "CC=cc"
