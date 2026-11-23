@@ -40,7 +40,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "herdr-desktop";
-  version = "0.1.15";
+  version = "0.1.16";
 
   __structuredAttrs = true;
 
@@ -49,10 +49,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     repo = "herdr-app";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-CNktD+tQrMMN4vpzFPZkZWnwDalaTkUV0A2UiLVeO3E=";
+    hash = "sha256-yR8tu/a5TXJktYTdb9mkqXY4jKPGljfTQbYraP/S8Ss=";
   };
 
-  cargoHash = "sha256-usCdairGam65XVKtb1jJpRC0tNXnoafAnMFQjPgvgqQ=";
+  cargoHash = "sha256-mO00lakVFzV2pDsMVR9l1N8IBSkFiMCN3Agk66/ePoQ=";
 
   # zig.fetchDeps fails in the Darwin sandbox with CertificateBundleLoadFailure:
   # Zig reads its root certificates from the system keychains, which the
@@ -129,7 +129,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
           '"Managed by nix: update it there."'
 
       # The tests use /var/tmp, which the sandbox lacks.
-      for f in src/{mod_files.rs,mods.rs,mods/lifecycle_tests.rs,mods/render_tests.rs,update_notes.rs,window.rs}; do
+      for f in src/{main.rs,mods/lifecycle_tests.rs,update_notes.rs,window.rs}; do
         substituteInPlace "$f" --replace-fail /var/tmp "$TMPDIR"
       done
 
