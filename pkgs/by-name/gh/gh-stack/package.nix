@@ -42,6 +42,14 @@ buildGoModule (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
 
+  # By default, a "test" binary is installed in the bin directory.  That
+  # doesn't seem to be useful for end users, and can conflict with the "test"
+  # binary that some applications expect to find on the PATH as provided by
+  # coreutils or similar.
+  fixupPhase = ''
+    rm "$out"/bin/test
+  '';
+
   passthru.updateScript = nix-update-script { };
 
   meta = {

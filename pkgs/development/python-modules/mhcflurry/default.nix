@@ -16,6 +16,7 @@
   mhcgnomes,
   numpy,
   pandas,
+  platformdirs,
   pyyaml,
   scikit-learn,
   threadpoolctl,
@@ -31,14 +32,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "mhcflurry";
-  version = "2.3.31";
+  version = "2.3.32";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openvax";
     repo = "mhcflurry";
     tag = finalAttrs.version;
-    hash = "sha256-IEzk4FUD4KfjwPyvdAsbTUpy4UeKeO2YH8RhKcg6H2Q=";
+    hash = "sha256-Jrgvg8wU3dClo9sHErp6Jku4E/QLdxTGVdJdh+HBJeE=";
   };
 
   build-system = [
@@ -54,6 +55,7 @@ buildPythonPackage (finalAttrs: {
     mhcgnomes
     numpy
     pandas
+    platformdirs
     pyyaml
     scikit-learn
     threadpoolctl
