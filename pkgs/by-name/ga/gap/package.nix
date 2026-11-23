@@ -145,6 +145,8 @@ stdenv.mkDerivation (finalAttrs: {
     rm -r "$out/share/gap/pkg"
     cp -ar pkg tst "$out/share/gap"
     cp -a etc/Makefile.gappkg "$out/share/gap/etc"
+    # log files contain impurities like the build date
+    find $out -name "*.log" -delete
   '';
 
   preFixup = ''
