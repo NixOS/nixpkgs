@@ -107,8 +107,11 @@
 
     passthru.tests = {
       test = tests.rust-hooks.cargoSetupHook;
+      pkgConfig = tests.rust-hooks.cargoSetupHookPkgConfig;
       ${if stdenv.hostPlatform.isLinux then "testCross" else null} =
         pkgsCross.riscv64.tests.rust-hooks.cargoSetupHook;
+      ${if stdenv.hostPlatform.isLinux then "pkgConfigCross" else null} =
+        pkgsCross.aarch64-multiplatform.tests.rust-hooks.cargoSetupHookPkgConfig;
     };
     meta.license = lib.licenses.mit;
   } ./cargo-setup-hook.sh;
