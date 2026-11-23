@@ -16,14 +16,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "extract-msg";
-  version = "0.58.2";
+  version = "0.58.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "TeamMsgExtractor";
     repo = "msg-extractor";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-btWCtinF5/WtnCBWxenpwMtCzmRh8AYRigIm9KMEEes=";
+    hash = "sha256-fXQ0PRk7Fndbxfl/swoNsKZH5uiJWLikdHD70M9c2u0=";
   };
 
   pythonRelaxDeps = [
