@@ -1846,7 +1846,13 @@ in
       delaycompress = true;
       # Run postrotate script only once after rotation of all log files:
       sharedscripts = true;
-      postrotate = "[ ! -f /var/run/nginx/nginx.pid ] || kill -USR1 `cat /var/run/nginx/nginx.pid`";
+      # systemd picks the process to signal. nginx writes its PID once it handles signals,
+      # so a non-empty PID file only shows that nginx is ready (nginx -t leaves it empty).
+      postrotate = ''
+        if ${config.systemd.package}/bin/systemctl --quiet is-active nginx.service && [ -s /run/nginx/nginx.pid ]; then
+          ${config.systemd.package}/bin/systemctl kill --kill-whom=main --signal=USR1 nginx.service
+        fi
+      '';
     };
   };
   meta.maintainers = [
