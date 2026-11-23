@@ -466,6 +466,8 @@ self: super: with self; {
 
   aionanoleaf2 = callPackage ../development/python-modules/aionanoleaf2 { };
 
+  aionatureremo = callPackage ../development/python-modules/aionatureremo { };
+
   aionotion = callPackage ../development/python-modules/aionotion { };
 
   aiontfy = callPackage ../development/python-modules/aiontfy { };
