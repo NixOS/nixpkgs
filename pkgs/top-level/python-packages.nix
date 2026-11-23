@@ -16580,6 +16580,8 @@ self: super: with self; {
 
   pysmarty2 = callPackage ../development/python-modules/pysmarty2 { };
 
+  pysmartyplants = callPackage ../development/python-modules/pysmartyplants { };
+
   pysmb = callPackage ../development/python-modules/pysmb { };
 
   pysmbc = callPackage ../development/python-modules/pysmbc { };
