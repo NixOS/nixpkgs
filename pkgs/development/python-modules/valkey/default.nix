@@ -26,7 +26,7 @@
   uvloop,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "valkey";
   version = "6.2.0";
   pyproject = true;
@@ -34,7 +34,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "valkey-io";
     repo = "valkey-py";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-xGQvJwDu3SYuGhaB/WNaorV+AGXxceKPMxptQhsTlPY=";
   };
 
@@ -76,7 +76,7 @@ buildPythonPackage rec {
     ujson
     uvloop
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   disabledTestMarks = [
     "onlycluster"
@@ -110,8 +110,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python client for Redis key-value store";
     homepage = "https://github.com/valkey-io/valkey-py";
-    changelog = "https://github.com/valkey-io/valkey-py/releases/tag/${src.tag}";
+    changelog = "https://github.com/valkey-io/valkey-py/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})
