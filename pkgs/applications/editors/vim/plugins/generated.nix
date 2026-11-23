@@ -15557,12 +15557,12 @@ final: prev: {
 
   pum-vim = buildVimPlugin {
     pname = "pum.vim";
-    version = "2.0-unstable-2026-10-30";
+    version = "2.1";
     src = fetchFromGitHub {
       owner = "Shougo";
       repo = "pum.vim";
-      rev = "5e8d57ca472e8b0cf08a1428233320dd1e1376a2";
-      hash = "sha256-h0gjT30TQv4oK7Eur/RY9gfUtWq4zj1eL/BfqFH9xK0=";
+      tag = "2.1";
+      hash = "sha256-Ip6cSTKFtsTC/s+RCn2hEnFfF7Nt6rUzDagjlL7H+Zc=";
     };
     meta.homepage = "https://github.com/Shougo/pum.vim/";
     meta.license = getLicenseFromSpdxId "MIT";
