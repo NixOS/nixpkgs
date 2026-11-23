@@ -2,12 +2,11 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   buildPythonPackage,
   pythonOlder,
 
   # build-system
-  setuptools,
+  hatchling,
 
   # optional-dependencies
   cryptography,
@@ -29,37 +28,23 @@
 
 buildPythonPackage rec {
   pname = "valkey";
-  version = "6.1.1";
+  version = "6.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "valkey-io";
     repo = "valkey-py";
     tag = "v${version}";
-    hash = "sha256-woJYfgLNIVzTYj9q8IjXo+SXhQZkQdB/Ofv5StGy9Rc=";
+    hash = "sha256-xGQvJwDu3SYuGhaB/WNaorV+AGXxceKPMxptQhsTlPY=";
   };
 
   patches = [
-    # valkey 9.0 compat
-    (fetchpatch {
-      url = "https://github.com/valkey-io/valkey-py/commit/c01505e547f614f278b882a016557b6ed652bb9f.patch";
-      hash = "sha256-rvA65inIioqdc+QV4KaaUv1I/TMZUq0TWaFJcJiy8NU=";
-    })
-    # valkey 9.1 compat
-    (fetchpatch {
-      url = "https://github.com/valkey-io/valkey-py/commit/df5c44903dc8e2dda733e5576324ba0ff8c4c6a0.patch";
-      hash = "sha256-0wsWuaOYWBgf6BjlJuciZYRbugYfchTU2khQX7rtRJg=";
-    })
-    (fetchpatch {
-      url = "https://github.com/valkey-io/valkey-py/commit/046c7fb9e8260c2d69d05141b1519903c4e40efe.patch";
-      hash = "sha256-/yN1y0hbmBR6o6ab4h0qkn/qhU6jASOIeqWhxUi5w/I=";
-    })
     # valkey 9.2 compat, backport of
     # https://github.com/valkey-io/valkey-py/commit/e87c922292a3d199ef6a2a1502a0607e14fe8b39
     ./valkey-9.2-module-load-error.patch
   ];
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
   optional-dependencies = {
     libvalkey = [ libvalkey ];
@@ -99,9 +84,6 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # valkey.sentinel.MasterNotFoundError: No master found for 'valkey-py-test'
-    "test_get_from_cache"
-    "test_cache_decode_response"
     # Expects another valkey instance on port 6380 *shrug*
     "test_psync"
     # valkey 9.2 reports the stream length as lag for a group positioned
