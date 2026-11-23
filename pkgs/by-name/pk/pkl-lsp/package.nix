@@ -5,9 +5,12 @@
   gradle_9,
   jdk25_headless,
   makeBinaryWrapper,
-  nix-update-script,
   versionCheckHook,
   zig_0_16,
+  writeShellApplication,
+  common-updater-scripts,
+  nix,
+  nix-update,
 }:
 
 let
@@ -18,13 +21,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "pkl-lsp";
-  version = "0.8.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "apple";
     repo = "pkl-lsp";
     tag = finalAttrs.version;
-    hash = "sha256-kXBEZU6WBMHV3Nidu3kJEI+4MWFIrqT/Qmm+Cuki844=";
+    hash = "sha256-BMxftlafCAu1JHwPd4Wf706wRHwr2p+0eXHTXQctxRk=";
     leaveDotGit = true;
     postFetch = ''
       pushd $out
@@ -38,25 +41,40 @@ stdenv.mkDerivation (finalAttrs: {
   treeSitterSrc = fetchFromGitHub {
     owner = "tree-sitter";
     repo = "tree-sitter";
-    rev = "v0.25.3";
-    hash = "sha256-xafeni6Z6QgPiKzvhCT2SyfPn0agLHo47y+6ExQXkzE=";
+    rev = "v0.26.8";
+    hash = "sha256-fcFEfoALrbpBD6rWogxJ7FNVlvDQgswoX9ylRgko+8Q=";
   };
   treeSitterPklSrc = fetchFromGitHub {
     owner = "apple";
     repo = "tree-sitter-pkl";
-    rev = "f9405e40597d7dac637a6b49e7d26c4515cb2a34";
-    hash = "sha256-U2e9RDAdVWPoZRoWQD0icBCHjH2TFyGD0TPwgn9Kg2A=";
+    rev = "v0.22.0";
+    hash = "sha256-2quZj51vgNbqxWxEdwkqasPXUvz1+AXJOQI+byUU9q0=";
   };
 
+  # - Remove pklSourceBundle, which is only used for upstream's native-image releases. Under the gradle setup hook,
+  #   its tasks resolve the GraalVM/OpenJDK source tarballs while build.gradle.kts is still being evaluated, which fails the build.
+  # - Exclude tests that need network access (download packages from pkg.pkl-lang.org) or run the pkl CLI
+  #   (the prebuilt binary from Maven expects /lib64/ld-linux-*.so, so it can't run in the Linux sandbox).
   postPatch = ''
     substituteInPlace buildSrc/src/main/kotlin/BuildInfo.kt \
       --replace-fail 'val executable: Path get() = installDir.resolve(if (os.isWindows) "zig.exe" else "zig")' \
                      'val executable: Path get() = java.nio.file.Path.of("${lib.getExe zig}")' \
 
     substituteInPlace build.gradle.kts \
+      --replace-fail 'pklSourceBundle' "" \
       --replace-fail 'dependsOn(setupTreeSitterRepo)' "" \
       --replace-fail 'dependsOn(setupTreeSitterPklRepo)' "" \
-      --replace-fail 'dependsOn(tasks.named("installZig"))' ""
+      --replace-fail 'dependsOn(tasks.installZig)' ""
+
+    cat >> build.gradle.kts << 'EOF'
+    tasks.test {
+      filter {
+        excludeTestsMatching("org.pkl.lsp.GoToDefinitionPackagesTest")
+        excludeTestsMatching("org.pkl.lsp.SyncProjectsTest")
+        excludeTestsMatching("org.pkl.lsp.completion.ModuleNameCompletionTest")
+      }
+    }
+    EOF
 
     mkdir -p build/repos/{tree-sitter,tree-sitter-pkl}
     cp -r $treeSitterSrc/* build/repos/tree-sitter/
@@ -88,19 +106,13 @@ stdenv.mkDerivation (finalAttrs: {
     gradleFlagsArray+=(-DcommitId=$(cat .commit-hash))
   '';
 
-  # - Ensure all pkl-cli platform variants are cached. Otherwise, deps.json only includes the current system's pkl-cli, and the tests fail.
-  # - Pin the Kotlin plugin's Bouncy Castle modules to a static version: it requests them as ranges but forbids dynamic versions (failOnNonReproducibleResolution), so fetchDeps' eager resolve fails.
+  # Ensure all pkl-cli platform variants are cached. Otherwise, deps.json only includes the current system's pkl-cli, and the tests fail.
   preGradleUpdate = ''
     cat >> build.gradle.kts << 'GRADLE_PATCH'
     val pklCliAllPlatforms by configurations.creating
     dependencies {
-      for (platform in listOf("linux-amd64", "linux-aarch64", "macos-amd64", "macos-aarch64")) {
+      for (platform in listOf("linux-amd64", "linux-aarch64", "macos-aarch64")) {
         pklCliAllPlatforms("org.pkl-lang:pkl-cli-$platform:''${libs.versions.pkl.get()}")
-      }
-    }
-    configurations.named("kotlinBouncyCastleConfiguration") {
-      resolutionStrategy.eachDependency {
-        if (requested.group == "org.bouncycastle") useVersion("1.80")
       }
     }
     GRADLE_PATCH
@@ -130,7 +142,26 @@ stdenv.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = lib.getExe (writeShellApplication {
+    name = "pkl-lsp-update";
+    runtimeInputs = [
+      common-updater-scripts
+      nix
+      nix-update
+    ];
+    text = ''
+      nix-update pkl-lsp
+
+      src=$(nix-build --no-out-link -A pkl-lsp.src)
+      for name in treeSitter treeSitterPkl; do
+        newRev=$(nix eval --raw --impure --expr "(builtins.fromTOML (builtins.readFile $src/gradle/libs.versions.toml)).versions.''${name}Repo")
+        oldRev=$(nix eval --raw --file . "pkl-lsp.''${name}Src.rev")
+        if [[ $newRev != "$oldRev" ]]; then
+          update-source-version pkl-lsp --source-key="''${name}Src" --rev="$newRev" --ignore-same-version
+        fi
+      done
+    '';
+  });
 
   meta = {
     description = "The Pkl Language Server";
