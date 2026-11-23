@@ -133,6 +133,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/shadow-maint/shadow";
+    changelog = "https://github.com/shadow-maint/shadow/releases/tag/${finalAttrs.src.tag}";
     description = "Suite containing authentication-related tools such as passwd and su";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ mdaniels5757 ];
