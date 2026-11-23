@@ -8,7 +8,6 @@
   perl,
   python3,
   libiconv,
-  libidn2,
   zlib,
   popt,
   unixtools,
@@ -17,6 +16,9 @@
 
   enableACLs ? config.rsync.enableACLs or (lib.meta.availableOn stdenv.hostPlatform acl),
   acl,
+  enableIDN ? config.rsync.enableIDN or true,
+  libidn2,
+  libunistring,
   enableLZ4 ? config.rsync.enableLZ4 or true,
   lz4,
   enableOpenSSL ? config.rsync.enableOpenSSL or true,
@@ -41,6 +43,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [ ];
 
+  # Remove with the first upstream release that links t_acl against the snprintf fallback.
+  postPatch = ''
+    substituteInPlace Makefile.in \
+      --replace-fail 'T_ACL_OBJ = t_acl.o lib/acl.o' 'T_ACL_OBJ = t_acl.o lib/acl.o lib/snprintf.o'
+  '';
+
   preBuild = ''
     patchShebangs ./runtests.py ./support/rrsync
 
@@ -62,17 +70,18 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     bashNonInteractive
     libiconv
-    libidn2
     zlib
     popt
   ]
   ++ lib.optional enableACLs acl
+  ++ lib.optionals enableIDN ([ libidn2 ] ++ lib.optional stdenv.hostPlatform.isStatic libunistring)
   ++ lib.optional enableZstd zstd
   ++ lib.optional enableLZ4 lz4
   ++ lib.optional enableOpenSSL openssl
   ++ lib.optional enableXXHash xxhash;
 
   configureFlags = [
+    (lib.enableFeature enableIDN "idn")
     (lib.enableFeature enableLZ4 "lz4")
     (lib.enableFeature enableOpenSSL "openssl")
     (lib.enableFeature enableXXHash "xxhash")
@@ -89,6 +98,11 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals (stdenv.hostPlatform.isMusl && stdenv.hostPlatform.isx86_64) [
     # fix `multiversioning needs 'ifunc' which is not supported on this target` error
     "--disable-roll-simd"
+  ]
+  # configure probes idn2_lookup_ul with only -lidn2, which cannot resolve
+  # libidn2.a's libunistring symbols when linking statically.
+  ++ lib.optionals (enableIDN && stdenv.hostPlatform.isStatic) [
+    "LIBS=-lunistring"
   ]
   # Linux can hard-link symlinks; configure defaults this check to "no" when
   # cross-compiling (e.g. pkgsStatic) because it cannot run the probe.
@@ -139,6 +153,7 @@ stdenv.mkDerivation (finalAttrs: {
         ++ lib.optional stdenv.hostPlatform.isMusl "misc-coverage"
         # These require a native compiler and dynamic interposition.
         ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+          "hardlinks-emlink-recovery"
           "link-dest-symlink-enotsup"
           "partial-protected-regular-retry-linux"
         ]
