@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   pkg-config,
   libfontenc,
   xorgproto,
@@ -24,6 +25,27 @@ stdenv.mkDerivation (finalAttrs: {
     url = "mirror://xorg/individual/lib/libXfont-${finalAttrs.version}.tar.bz2";
     hash = "sha256-Gn90kHdMh/IFLRRtHg5kUY0y5oSBhKGGVOjQu1eIMkI=";
   };
+
+  patches = [
+    # https://lists.x.org/archives/xorg-announce/2026-November/003765.html
+    (fetchpatch {
+      name = "CVE-2026-109909.patch";
+      url = "https://gitlab.freedesktop.org/xorg/lib/libxfont/-/commit/dc6c313071c8b2929b1bc165e40c8ba62737b576.patch";
+      excludes = [ "Makefile.am" ]; # we don't even run tests
+      hash = "sha256-0MZXbPQ4Rmr2gD9QGE8Bdg5fSyBMnhWiw+8vU+iOPWw=";
+    })
+    (fetchpatch {
+      name = "CVE-2026-109920.patch";
+      url = "https://gitlab.freedesktop.org/xorg/lib/libxfont/-/commit/539f716dabe0137097ed6b8492cae1c3321c4d69.patch";
+      excludes = [ "Makefile.am" ]; # we don't even run tests
+      hash = "sha256-PyBmpYvHgXnBmqjLnICMBIRksg35yaQDuwvZxw8H2LQ=";
+    })
+  ];
+
+  # necessary for CVE-2026-109920.patch
+  postPatch = ''
+    sed -e '1i #include <limits.h>' -i src/bitmap/pcfread.c
+  '';
 
   strictDeps = true;
 
