@@ -4448,8 +4448,9 @@
         aiohasupervisor
         aiousbwatcher
         ifaddr
+        marantz-rs232
         serialx
-      ]; # missing inputs: marantz-rs232
+      ];
     "marketplace" =
       ps: with ps; [
         aiogithubapi
@@ -9457,6 +9458,7 @@
     "manual_mqtt"
     "map_tiles"
     "marantz_infrared"
+    "marantz_rs232"
     "marketplace"
     "marytts"
     "mastodon"

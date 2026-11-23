@@ -10670,6 +10670,8 @@ self: super: with self; {
 
   mapclassify = callPackage ../development/python-modules/mapclassify { };
 
+  marantz-rs232 = callPackage ../development/python-modules/marantz-rs232 { };
+
   mariadb = callPackage ../development/python-modules/mariadb { };
 
   marimo = callPackage ../development/python-modules/marimo { };
