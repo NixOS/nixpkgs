@@ -1,15 +1,17 @@
-{ lib, ... }:
+{ pkgs, ... }:
 
 {
   name = "matterjs-server";
-  meta.maintainers = with lib.maintainers; [ kranzes ];
+  meta = {
+    inherit (pkgs.matterjs-server.meta) maintainers;
+  };
 
-  nodes.machine.services.matterjs-server.enable = true;
+  containers.machine.services.matterjs-server.enable = true;
 
   testScript =
-    { nodes, ... }:
+    { containers, ... }:
     let
-      inherit (nodes.machine.services.matterjs-server) listenAddress port package;
+      inherit (containers.machine.services.matterjs-server) listenAddress port package;
     in
     ''
       import json
