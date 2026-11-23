@@ -3,24 +3,28 @@
   buildPythonPackage,
   fetchFromGitHub,
   hatchling,
+  pytest-asyncio,
   pytestCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "pysnmp-pyasn1";
-  version = "1.2.0";
+  version = "2.0.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pysnmp";
     repo = "pyasn1";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-o+YVlLs0xIKOcpFANGlSSpbK3YGBDDNOdlYvH1OliYM=";
+    hash = "sha256-kgnIuPX1eA1oK61oKIPAdix7qrKWYQ9dtgGnTXqVsnE=";
   };
 
-  nativeBuildInputs = [ hatchling ];
+  build-system = [ hatchling ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-asyncio
+  ];
 
   pythonImportsCheck = [ "pyasn1" ];
 

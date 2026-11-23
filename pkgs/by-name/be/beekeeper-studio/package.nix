@@ -40,6 +40,9 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
+  __structuredAttrs = true;
+  strictDeps = true;
+
   pname = "beekeeper-studio";
   version = "6.3.0";
 

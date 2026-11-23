@@ -12,7 +12,7 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "oxicloud";
-  version = "0.10.0";
+  version = "0.10.1";
 
   __structuredAttrs = true;
 
@@ -20,10 +20,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "AtalayaLabs";
     repo = "OxiCloud";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XTZm/uazuRvgwmzD3tg6iC2OlBxJIfFof3NUrjRXYxA=";
+    hash = "sha256-o0MF4Jaoe7FFNaPsaJUCNglwk1y2MpmeGpzKHHs8AGY=";
   };
 
-  cargoHash = "sha256-4ydOabvaY+bm8Dp5NIpRSnX4ss81rGzOzkmiuS2whEU=";
+  cargoHash = "sha256-AS8DZ1cV11nVRgFKqQieXf3m4Qh+6Hq+PxGS9Ggbv3M=";
 
   nativeBuildInputs = [
     pkg-config

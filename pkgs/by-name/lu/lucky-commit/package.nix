@@ -8,6 +8,8 @@
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
+  __structuredAttrs = true;
+
   pname = "lucky-commit";
   version = "2.2.5";
 

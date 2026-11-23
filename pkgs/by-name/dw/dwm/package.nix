@@ -34,14 +34,15 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ extraLibs;
 
-  preBuild = ''
-    makeFlagsArray+=(
-      "PREFIX=$out"
-      "CC=$CC"
-      ${lib.optionalString stdenv.hostPlatform.isStatic ''
-        LDFLAGS="$(${stdenv.cc.targetPrefix}pkg-config --static --libs x11 xinerama xft)"
-      ''}
-    )
+  strictDeps = true;
+
+  makeFlags = [
+    "PREFIX=$(out)"
+    "CC:=$(CC)"
+  ];
+
+  preBuild = lib.optionalString stdenv.hostPlatform.isStatic ''
+    makeFlags+=(LDFLAGS="$(${stdenv.cc.targetPrefix}pkg-config --static --libs x11 xinerama xft)")
   '';
 
   # Allow users set their own list of patches
@@ -58,6 +59,8 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = gitUpdater {
     url = "git://git.suckless.org/dwm";
   };
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://dwm.suckless.org/";
