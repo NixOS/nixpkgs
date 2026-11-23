@@ -558,6 +558,8 @@ self: super: with self; {
 
   aiosaj = callPackage ../development/python-modules/aiosaj { };
 
+  aioseafile = callPackage ../development/python-modules/aioseafile { };
+
   aiosendspin = callPackage ../development/python-modules/aiosendspin { };
 
   aiosendspin-mpris = callPackage ../development/python-modules/aiosendspin-mpris { };
