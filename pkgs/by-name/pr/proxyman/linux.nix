@@ -7,11 +7,11 @@
   meta,
 }:
 let
-  version = "3.16.1";
+  version = "26.3.0";
 
   src = fetchurl {
     url = "https://github.com/ProxymanApp/proxyman-windows-linux/releases/download/${version}/Proxyman-${version}.AppImage";
-    hash = "sha256-rykOZVrh3MATFDzwLS7gEj5sMD9udsWAi+68Quqzk0c=";
+    hash = "sha256-l8Iv3tNoWBkpktLQbFUPI5dSwQn25R4yRK1GdRsXz4E=";
   };
 
   appimageContents = appimageTools.extract {

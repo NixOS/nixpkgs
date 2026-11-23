@@ -9,6 +9,8 @@
 }:
 
 buildGoModule (finalAttrs: {
+  __structuredAttrs = true;
+
   pname = "sq";
   version = "0.55.0";
 

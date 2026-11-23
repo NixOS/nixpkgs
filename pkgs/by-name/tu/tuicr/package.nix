@@ -8,11 +8,12 @@
   nix-update-script,
   oniguruma,
   pkg-config,
+  ps,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tuicr";
-  version = "0.29.0";
+  version = "0.30.0";
 
   __structuredAttrs = true;
 
@@ -20,10 +21,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "agavra";
     repo = "tuicr";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cCauvjBAwMC3r4OqLObDJ1DtVNEcmMB+6A1UFadEMVY=";
+    hash = "sha256-NmQGLpZrwaI0jEz6Nj7y7E5bLfM6cXVS2ASM+p3Iusw=";
   };
 
-  cargoHash = "sha256-DLlLJQJ/KpcDIyiF97ts5z7FGxnMnF5rSzzDBD68TFk=";
+  cargoHash = "sha256-bAHBnC0AmlETp262/Wx9INBv9QX7WUw6c3tXQ3K8x5s=";
 
   buildInputs = [
     libgit2
@@ -34,6 +35,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeCheckInputs = [
     gitMinimal
+    ps
   ];
 
   checkFlags = [

@@ -7,6 +7,8 @@
   nix-update-script,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
+  __structuredAttrs = true;
+
   pname = "nixpkgs-hammering";
   version = "0-unstable-2026-10-22";
 
