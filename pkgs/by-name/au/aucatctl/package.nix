@@ -22,6 +22,8 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optional (!isBSDLike) libbsd;
 
+  strictDeps = true;
+
   outputs = [
     "out"
     "man"
