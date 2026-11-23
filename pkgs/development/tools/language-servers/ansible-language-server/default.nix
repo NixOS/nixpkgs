@@ -12,13 +12,13 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "ansible-language-server";
   version = finalAttrs.vscodeAnsibleVersion; # Language server version from the repo at packages/ansible-language-server/package.json is stuck at 0.0.0
-  vscodeAnsibleVersion = "26.6.0"; # vscode-ansible version
+  vscodeAnsibleVersion = "26.11.0"; # vscode-ansible version
 
   src = fetchFromGitHub {
     owner = "ansible";
     repo = "vscode-ansible";
     tag = "v${finalAttrs.vscodeAnsibleVersion}";
-    hash = "sha256-GmeEVZumm+dfQFYLL8+Lf5usPw17a0vOZIe7ApTzFGI=";
+    hash = "sha256-p+0GHLQDMnSLKq8fvI7RM+P2V8EHnyyyS16ypFbjwqo=";
   };
 
   nativeBuildInputs = [
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     pnpm = pnpm_11;
     fetcherVersion = 4;
-    hash = "sha256-BJkPE4dNDNIUL6+LeFXTTCWNf5njItHuM/rHMkmxLJk=";
+    hash = "sha256-SSRcA4GQ8yAQ7l5hoB52RuuFjSMrmKCKpDM/QksoZUo=";
   };
 
   buildPhase = ''
