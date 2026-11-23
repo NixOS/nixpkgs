@@ -3,6 +3,8 @@
   stdenv,
   fetchgit,
   callPackage,
+  gitUpdater,
+  _experimental-update-script-combinators,
 
   wafHook,
   wrapGAppsHook3,
@@ -103,6 +105,37 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s ${openssl}/bin/openssl $out/bin/dcpomatic2_openssl
     ln -s ${libdcp}/share/libdcp $out/share/libdcp
   '';
+
+  passthru = {
+    inherit
+      libcxml
+      asdcplib
+      leqm-nrt
+      libttf
+      libsub
+      libdcp
+      ;
+
+    updateScript = _experimental-update-script-combinators.sequence [
+      (
+        (gitUpdater {
+          attrPath = "dcpomatic";
+          rev-prefix = "v";
+          # 2.19.x is a pre-release
+          ignoredVersions = "^2\\.19\\.";
+        })
+        // {
+          supportedFeatures = [ ];
+        }
+      )
+      libcxml.updateScript
+      asdcplib.updateScript
+      leqm-nrt.updateScript
+      libttf.updateScript
+      libsub.updateScript
+      libdcp.updateScript
+    ];
+  };
 
   __structuredAttrs = true;
   strictDeps = true;
