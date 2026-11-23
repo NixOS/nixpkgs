@@ -20,6 +20,12 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ obs-studio ];
 
+  postPatch = ''
+    substituteInPlace src/plugin-main.c \
+      --replace-fail 'obs_properties_add_button(props, S_RESET, T_RESET,' 'obs_properties_add_button2(props, S_RESET, T_RESET,' \
+      --replace-fail 'reset_logo_position);' 'reset_logo_position, NULL);'
+  '';
+
   meta = {
     description = "DVD screen saver for OBS Studio";
     homepage = "https://github.com/wimpysworld/obs-dvd-screensaver";
