@@ -16,17 +16,17 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "arnis";
-  version = "3.4.0";
+  version = "3.5.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "louis-e";
     repo = "arnis";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-oD61x47w1s8fzFYyzA7/NbIR0J7TXDiPnO71JjuQjF4=";
+    hash = "sha256-nKkVIzSdcmT/2+ttZodQ/zqWgmECLinZzkuf5HvVnKI=";
   };
 
-  cargoHash = "sha256-+1S3RVZTFSkmw3FzS+h/Kiy/l4JhSGt8OreHQ6FfT9o=";
+  cargoHash = "sha256-m8sFlnHSKCIxjriyQF97+noti/esfAU4t1xn7ukG+8g=";
 
   env.AWS_LC_SYS_USE_SYSTEM = true;
 
