@@ -5,6 +5,7 @@
   installShellFiles,
   sqlite,
   fetchFromGitHub,
+  fetchpatch2,
   nix-update-script,
   buildPackages,
   sudo,
@@ -23,6 +24,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-MZk0y+/pHzZahqL162aLfTaHaeNVa4rONRyRFnPPsGs=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      name = "Fall back to systemd-run --pipe before systemd 261";
+      url = "https://github.com/nix-community/nh/pull/878.patch";
+      excludes = [ "CHANGELOG.md" ];
+      hash = "sha256-O/Bv2n6JnBN/QbgH2ND4IFvnAUzFn9ykAI9ptcZ4k/E=";
+    })
+  ];
 
   __structuredAttrs = true;
 
