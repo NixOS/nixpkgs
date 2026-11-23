@@ -18,16 +18,23 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "snouty";
-  version = "0.10.0";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "antithesishq";
     repo = "snouty";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bW2B2LRan2amJxrNKjg6AGaNExSqaqmZWsFBu8g62yQ=";
+    hash = "sha256-Pz2a+xnssydcOngfpKOtJ+RKE4fPn/uBoiE7WqVh4jU=";
   };
 
-  cargoHash = "sha256-hfBMPhGK+pUqNXcLCLdIxQE2g1BFaYA6YgRjkGrPiEY=";
+  # Upstream bumps their `rust-version` to latest stable quicker than we can bump our own toolchain.
+  postPatch = ''
+    shopt -s globstar
+    sed -i '/rust\-version[\. ]/d' **/Cargo.toml
+    shopt -u globstar
+  '';
+
+  cargoHash = "sha256-TiLEtrN/tbPauP9QCXeqwUANDMMoE4kMcoCJlSgJJKs=";
 
   nativeBuildInputs = [
     installShellFiles
