@@ -127,5 +127,8 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/LibreTranslate/LibreTranslate/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ misuzu ];
+    knownVulnerabilities = [
+      "CVE-2026-92803"
+    ];
   };
 })
