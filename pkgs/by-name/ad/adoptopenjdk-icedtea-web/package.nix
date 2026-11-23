@@ -35,19 +35,20 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     bc
     makeWrapper
-  ];
-  buildInputs = [
     cargo
     rustc
+    zip
+  ];
+  buildInputs = [
     glib
     firefox-unwrapped
-    zip
     npapi_sdk
   ];
 
   preConfigure = ''
     configureFlagsArray+=("BIN_BASH=${bash}/bin/bash")
   '';
+  strictDeps = true;
 
   patches = [ ./patches/0001-make-cargo-work-with-nix-build-on-linux.patch ];
 
