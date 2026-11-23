@@ -19,7 +19,7 @@
 
 buildGoModule rec {
   pname = "skopeo";
-  version = "1.25.1";
+  version = "1.25.2";
 
   __structuredAttrs = true;
 
@@ -27,7 +27,7 @@ buildGoModule rec {
     rev = "v${version}";
     owner = "podman-container-tools";
     repo = "skopeo";
-    hash = "sha256-NR8XW81BmcKQvvLIMLGFVHJLVYV03SPGo4BTjXH7E1U=";
+    hash = "sha256-Q8TGnkAP18QESgEn85pLjI6rec6lRM4kxY4KlSeEHXs=";
   };
 
   outputs = [
