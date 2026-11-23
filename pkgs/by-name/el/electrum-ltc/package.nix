@@ -1,68 +1,74 @@
 {
   lib,
   stdenv,
-  fetchurl,
   fetchFromGitHub,
-  python3,
-  zbar,
-  secp256k1,
+  buildGoModule,
+  gettext,
+  python3Packages,
+  zxing-cpp,
   enableQt ? true,
-  qt5,
+  qt6,
+  enablePythonEcdsa ? false,
+  writableTmpDirAsHomeHook,
+  nix-update-script,
 }:
 
 let
-  version = "4.2.2.1";
+  version = "4.8.3.1";
 
-  libsecp256k1_name =
-    if stdenv.hostPlatform.isLinux then
-      "libsecp256k1.so.0"
-    else if stdenv.hostPlatform.isDarwin then
-      "libsecp256k1.0.dylib"
-    else
-      "libsecp256k1${stdenv.hostPlatform.extensions.sharedLibrary}";
+  mwebdLibName = if stdenv.hostPlatform.isDarwin then "libmwebd.0.dylib" else "libmwebd.so.0";
 
-  libzbar_name =
-    if stdenv.hostPlatform.isLinux then
-      "libzbar.so.0"
-    else if stdenv.hostPlatform.isDarwin then
-      "libzbar.0.dylib"
-    else
-      "libzbar${stdenv.hostPlatform.extensions.sharedLibrary}";
-
-  # Not provided in official source releases, which are what upstream signs.
-  tests = fetchFromGitHub {
-    owner = "pooler";
+  src = fetchFromGitHub {
+    owner = "ltc-electrum";
     repo = "electrum-ltc";
-    rev = version;
-    sha256 = "sha256-qu72LIV07pgHqvKv+Kcw9ZmNk6IBz+4/vdJELlT5tE4=";
-
-    postFetch = ''
-      mv $out ./all
-      mv ./all/electrum_ltc/tests $out
-    '';
+    tag = version;
+    fetchSubmodules = true;
+    hash = "sha256-cXzBUlfjWqVfwQJ1xQE2eewPOb8Qd1YbMiFHR95ka4Y=";
   };
 
+  mwebd = buildGoModule {
+    pname = "libmwebd";
+    inherit src version;
+
+    modRoot = "contrib/mwebd";
+    # go mod vendor drops the vendored secp256k1 C sources
+    proxyVendor = true;
+    vendorHash = "sha256-LXuTA20Nk6rC0uFM/BD9qtobdPRhnOU1/HPA21zDyyQ=";
+
+    buildPhase = ''
+      runHook preBuild
+      go build -buildmode=c-shared -ldflags="-buildid=" -o ${mwebdLibName} .
+      runHook postBuild
+    '';
+
+    installPhase = ''
+      runHook preInstall
+      install -Dm755 ${mwebdLibName} $out/lib/${mwebdLibName}
+      runHook postInstall
+    '';
+
+    doCheck = false;
+  };
 in
 
-python3.pkgs.buildPythonApplication {
+python3Packages.buildPythonApplication {
   pname = "electrum-ltc";
-  inherit version;
-  format = "setuptools";
+  inherit version src;
+  pyproject = true;
+  __structuredAttrs = true;
 
-  src = fetchurl {
-    url = "https://electrum-ltc.org/download/Electrum-LTC-${version}.tar.gz";
-    hash = "sha256-7F28cve+HD5JDK5igfkGD/NvTCfA33g+DmQJ5mwPM9Q=";
-  };
+  build-system = [ python3Packages.setuptools ];
 
-  postUnpack = ''
-    # can't symlink, tests get confused
-    cp -ar ${tests} $sourceRoot/electrum_ltc/tests
-  '';
+  nativeBuildInputs = [
+    gettext
+    python3Packages.pythonRelaxDepsHook
+  ]
+  ++ lib.optionals enableQt [ qt6.wrapQtAppsHook ];
 
-  nativeBuildInputs = lib.optionals enableQt [ qt5.wrapQtAppsHook ];
+  buildInputs = lib.optional (stdenv.hostPlatform.isLinux && enableQt) qt6.qtwayland;
 
-  propagatedBuildInputs =
-    with python3.pkgs;
+  dependencies =
+    with python3Packages;
     [
       aiohttp
       aiohttp-socks
@@ -72,119 +78,123 @@ python3.pkgs.buildPythonApplication {
       certifi
       cryptography
       dnspython
+      electrum-aionostr
+      electrum-ecc
+      grpcio
+      jsonpatch
       jsonrpclib-pelix
-      matplotlib
       pbkdf2
       protobuf
       pysocks
       qrcode
       requests
-      scrypt
       # plugins
-      btchip-python
+      cbor2
+      ledger-bitcoin
+      pyserial
+      trezor
+    ]
+    ++ lib.optionals enablePythonEcdsa [
+      # these plugins depend on python-ecdsa, which is affected by CVE-2024-23342
+      bitbox02
       ckcc-protocol
       keepkey
-      trezor
-      distutils
     ]
     ++ lib.optionals enableQt [
-      pyqt5
+      matplotlib
+      pyqt6
       qdarkstyle
     ];
 
-  patches = [
-    # electrum-ltc attempts to pin to aiorpcX < 0.23, but nixpkgs
-    # has moved to newer versions.
-    #
-    # electrum-ltc hasn't been updated in some time, so we replicate
-    # the patch from electrum (BTC) and alter it to be usable with
-    # electrum-ltc.
-    #
-    # Similar to the BTC patch, we need to overwrite the symlink
-    # at electrum_ltc/electrum-ltc with the patched run_electrum
-    # in postPatch.
-    ./ltc-aiorpcX-version-bump.patch
-  ];
+  pythonRelaxDeps = [ "dnspython" ];
 
   postPatch = ''
-    # copy the patched `/run_electrum` over `/electrum/electrum`
-    # so the aiorpcx compatibility patch is used
-    cp run_electrum electrum_ltc/electrum-ltc
+    install -Dm755 ${mwebd}/lib/${mwebdLibName} ./electrum/${mwebdLibName}
 
-    # refresh stale generated code, per electrum_ltc/paymentrequest.py line 40
-    protoc --proto_path=electrum_ltc/ --python_out=electrum_ltc/ electrum_ltc/paymentrequest.proto
+    # the locale files are a submodule that only ships .po sources
+    patchShebangs contrib/locale
+    substituteInPlace contrib/locale/build_locale.sh \
+      --replace-fail "which msgfmt" "command -v msgfmt"
+    bash contrib/locale/build_locale.sh electrum/locale/locale electrum/locale/locale
+  ''
+  + lib.optionalString enableQt ''
+    substituteInPlace ./electrum/qrreader/zxing.py \
+      --replace-fail "LIBNAMES = (" "LIBNAMES = ('${lib.getLib zxing-cpp}/lib/libZXing${stdenv.hostPlatform.extensions.sharedLibrary}',"
+  ''
+  + lib.optionalString (!enableQt) ''
+    sed -i '/qdarkstyle/d' contrib/requirements/requirements.txt
   '';
 
-  preBuild = ''
-    sed -i 's,usr_share = .*,usr_share = "'$out'/share",g' setup.py
-    substituteInPlace ./electrum_ltc/ecc_fast.py \
-      --replace ${libsecp256k1_name} ${secp256k1}/lib/libsecp256k1${stdenv.hostPlatform.extensions.sharedLibrary}
+  postInstall = ''
+    install -Dm755 ${mwebd}/lib/${mwebdLibName} $out/${python3Packages.python.sitePackages}/electrum/${mwebdLibName}
   ''
-  + (
-    if enableQt then
-      ''
-        substituteInPlace ./electrum_ltc/qrscanner.py \
-          --replace ${libzbar_name} ${zbar.lib}/lib/libzbar${stdenv.hostPlatform.extensions.sharedLibrary}
-      ''
-    else
-      ''
-        sed -i '/qdarkstyle/d' contrib/requirements/requirements.txt
-      ''
-  );
-
-  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
-    # Despite setting usr_share above, these files are installed under
-    # $out/nix ...
-    mv $out/${python3.sitePackages}/nix/store"/"*/share $out
-    rm -rf $out/${python3.sitePackages}/nix
-
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace $out/share/applications/electrum-ltc.desktop \
-      --replace 'Exec=sh -c "PATH=\"\\$HOME/.local/bin:\\$PATH\"; electrum-ltc %u"' \
-                "Exec=$out/bin/electrum-ltc %u" \
-      --replace 'Exec=sh -c "PATH=\"\\$HOME/.local/bin:\\$PATH\"; electrum-ltc --testnet %u"' \
-                "Exec=$out/bin/electrum-ltc --testnet %u"
-
+      --replace-fail "Exec=electrum-ltc %u" "Exec=$out/bin/electrum-ltc %u" \
+      --replace-fail "Exec=electrum-ltc --testnet %u" "Exec=$out/bin/electrum-ltc --testnet %u"
   '';
 
   postFixup = lib.optionalString enableQt ''
     wrapQtApp $out/bin/electrum-ltc
   '';
 
-  nativeCheckInputs = with python3.pkgs; [
-    pytestCheckHook
-    pyaes
-    pycryptodomex
-  ];
-  buildInputs = lib.optional stdenv.hostPlatform.isLinux qt5.qtwayland;
+  passthru.updateScript = nix-update-script { };
 
-  enabledTestPaths = [ "electrum_ltc/tests" ];
+  nativeCheckInputs =
+    with python3Packages;
+    [
+      pyaes
+      pycryptodomex
+      pytestCheckHook
+    ]
+    ++ [
+      # avoid homeless-shelter error in tests
+      writableTmpDirAsHomeHook
+    ];
 
-  disabledTests = [
-    "test_loop" # test tries to bind 127.0.0.1 causing permission error
-    "test_is_ip_address" # fails spuriously https://github.com/spesmilo/electrum/issues/7307
-    # electrum_ltc.lnutil.RemoteMisbehaving: received commitment_signed without pending changes
-    "test_reestablish_replay_messages_rev_then_sig"
-    "test_reestablish_replay_messages_sig_then_rev"
-    # stuck on hydra
-    "test_reestablish_with_old_state"
+  # The rest of the fork's test suite still uses Bitcoin addresses and units
+  # and fails on Litecoin.
+  enabledTestPaths = [
+    "tests/plugins/test_revealer.py"
+    "tests/test_address_synchronizer.py"
+    "tests/test_blockchain.py"
+    "tests/test_callbackmgr.py"
+    "tests/test_contacts.py"
+    "tests/test_fee_policy.py"
+    "tests/test_i18n.py"
+    "tests/test_jsondb.py"
+    "tests/test_lnhtlc.py"
+    "tests/test_lnpeermgr.py"
+    "tests/test_lnrouter.py"
+    "tests/test_lntransport.py"
+    "tests/test_lnurl.py"
   ];
 
   postCheck = ''
     $out/bin/electrum-ltc help >/dev/null
+    ${python3Packages.python.interpreter} -c 'from electrum.mwebd import scrypt; scrypt(b"test")'
+  ''
+  + lib.optionalString enableQt ''
+    ${python3Packages.python.interpreter} -c 'from electrum.qrreader import get_qr_reader; get_qr_reader()'
   '';
 
   meta = {
-    description = "Lightweight Litecoin Client";
-    mainProgram = "electrum-ltc";
+    description = "Lightweight Litecoin client";
     longDescription = ''
       Electrum-LTC is a simple, but powerful Litecoin wallet. A unique secret
-      phrase (or “seed”) leaves intruders stranded and your peace of mind
+      phrase (or "seed") leaves intruders stranded and your peace of mind
       intact. Keep it on paper, or in your head... and never worry about losing
       your litecoins to theft or hardware failure.
     '';
-    homepage = "https://electrum-ltc.org/";
+    homepage = "https://ltc-electrum.github.io/";
+    downloadPage = "https://github.com/ltc-electrum/electrum-ltc/releases";
+    changelog = "https://github.com/ltc-electrum/electrum-ltc/blob/master/RELEASE-NOTES";
     license = lib.licenses.mit;
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ bbjubjub ];
+    platforms = lib.platforms.unix;
+    mainProgram = "electrum-ltc";
+    maintainers = with lib.maintainers; [
+      bbjubjub
+      surfaceflinger
+    ];
   };
 }
