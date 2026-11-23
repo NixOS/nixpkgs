@@ -7,11 +7,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "claude-usage-tracker";
-  version = "3.3.0";
+  version = "3.4.0";
 
   src = fetchzip {
     url = "https://github.com/hamed-elfayome/Claude-Usage-Tracker/releases/download/v${finalAttrs.version}/Claude-Usage.zip";
-    hash = "sha256-aej/qj8g9cm+ns8FbCdWB8bq488x2Hgs/AL8aBIYm5I=";
+    hash = "sha256-P3BA1L5tRScJWgsgCPU6283AusEkpEBGhedMEhHxDBw=";
     stripRoot = false;
   };
 
