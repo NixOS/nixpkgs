@@ -4,6 +4,7 @@
   fetchFromGitHub,
   pkg-config,
   autoreconfHook,
+  cctools,
   zlib,
   boost186,
   openssl,
@@ -73,6 +74,15 @@ stdenv.mkDerivation {
 
   preConfigure = ''
     configureFlagsArray+=('PYTHON_INSTALL_PARAMS=--prefix=$(DESTDIR)$(prefix) --single-version-externally-managed --record=installed-files.txt')
+  ''
+  # the python bindings build with b2's darwin toolset, which defaults to g++
+  # and to the GNU libtool that autoreconfHook puts on PATH;
+  # boostPython is built untagged, the -mt name is MacPorts'
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace Jamfile \
+      --replace-fail '<name>boost_system-mt' '<name>boost_system'
+    echo "using darwin : : ${stdenv.cc.targetPrefix}c++ : <archiver>${lib.getExe' cctools "libtool"} ;" > "$NIX_BUILD_TOP/user-config.jam"
+    export BOOST_BUILD_USER_CONFIG="$NIX_BUILD_TOP/user-config.jam"
   '';
 
   postInstall = ''
@@ -98,7 +108,6 @@ stdenv.mkDerivation {
     description = "C++ BitTorrent implementation focusing on efficiency and scalability";
     license = lib.licenses.bsd3;
     maintainers = [ ];
-    broken = stdenv.hostPlatform.isDarwin;
     platforms = lib.platforms.unix;
   };
 }
