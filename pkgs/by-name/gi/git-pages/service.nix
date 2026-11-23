@@ -13,6 +13,30 @@ let
   settingsFormat = formats.toml { };
   configFile = "git-pages.toml";
   configOutPath = config.configData.${configFile}.path;
+
+  hardeningOptions = {
+    # systemd service hardening
+    ProtectHome = true;
+    MemoryDenyWriteExecute = true;
+    PrivateDevices = true;
+    PrivateTmp = true;
+    ProtectSystem = "strict";
+    ProtectControlGroups = true;
+    RestrictSUIDSGID = true;
+    RestrictRealtime = true;
+    RestrictAddressFamilies = "AF_INET AF_INET6 AF_UNIX";
+    RestrictNamespaces = true;
+    LockPersonality = true;
+    ProtectKernelLogs = true;
+    ProtectKernelTunables = true;
+    ProtectHostname = true;
+    ProtectKernelModules = true;
+    PrivateUsers = true;
+    ProtectClock = true;
+    SystemCallArchitectures = "native";
+    SystemCallErrorNumber = "EPERM";
+    SystemCallFilter = "@system-service";
+  };
 in
 {
   _class = "service";
@@ -43,6 +67,21 @@ in
       default = null;
       type = lib.types.nullOr lib.types.str;
     };
+
+    cleanupInterval = lib.mkOption {
+      description = ''
+        Systemd calendar event (e.g. `weekly`, `*:0/15`) to run the `git-pages -expire-sites` cleanup job.
+
+        ::: {.note}
+        Set to `null` to disable cleanup.
+
+        Existing deployments without expiry set, cannot be made to be expired.
+        :::
+      '';
+      type = lib.types.nullOr lib.types.str;
+      default = null;
+    };
+
     settings = lib.mkOption {
       type = settingsFormat.type;
       description = ''
@@ -57,6 +96,8 @@ in
   };
 
   config = {
+    git-pages.settings.features = lib.mkIf (cfg.cleanupInterval != null) [ "expiration" ];
+    git-pages.settings.limits.allow-expiration = lib.mkIf (cfg.cleanupInterval != null) true;
     git-pages.settings.storage.fs.root = lib.mkDefault "/var/lib/${name}/data";
 
     process.argv = [
@@ -88,28 +129,35 @@ in
 
         User = name;
         DynamicUser = true;
+      }
+      // hardeningOptions;
+    };
 
-        # systemd service hardening
-        ProtectHome = true;
-        MemoryDenyWriteExecute = true;
-        PrivateDevices = true;
-        PrivateTmp = true;
-        ProtectSystem = "strict";
-        ProtectControlGroups = true;
-        RestrictSUIDSGID = true;
-        RestrictRealtime = true;
-        RestrictAddressFamilies = "AF_INET AF_INET6 AF_UNIX";
-        RestrictNamespaces = true;
-        LockPersonality = true;
-        ProtectKernelLogs = true;
-        ProtectKernelTunables = true;
-        ProtectHostname = true;
-        ProtectKernelModules = true;
-        PrivateUsers = true;
-        ProtectClock = true;
-        SystemCallArchitectures = "native";
-        SystemCallErrorNumber = "EPERM";
-        SystemCallFilter = "@system-service";
+    systemd.services.expire = lib.mkIf (cfg.cleanupInterval != null) {
+      description = "git-pages expire sites job";
+      after = [ "network.target" ];
+      serviceConfig = {
+        Type = "oneshot";
+        ExecStart = "${lib.getExe cfg.package} -config ${configOutPath} -expire-sites";
+
+        WorkingDirectory = "%S/${name}";
+        StateDirectory = name;
+        BindReadOnlyPaths = [ configOutPath ];
+
+        LoadCredential = lib.optional (cfg.secretFile != null) "secrets.toml:${cfg.secretFile}";
+
+        User = name;
+        DynamicUser = true;
+      }
+      // hardeningOptions;
+    };
+
+    systemd.timers.expire = lib.mkIf (cfg.cleanupInterval != null) {
+      description = "git-pages expire sites timer";
+      wantedBy = [ "timers.target" ];
+      timerConfig = {
+        OnCalendar = cfg.cleanupInterval;
+        Persistent = true;
       };
     };
   };
