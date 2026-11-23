@@ -393,6 +393,8 @@ stdenv.mkDerivation (finalAttrs: {
     }
   );
 
+  strictDeps = true;
+
   mesonBuildType = "release";
 
   mesonFlags = [
