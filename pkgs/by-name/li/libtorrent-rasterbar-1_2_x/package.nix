@@ -15,7 +15,7 @@
 }:
 
 let
-  version = "1.2.19";
+  version = "1.2.20";
 
   # Make sure we override python, so the correct version is chosen
   # for the bindings, if overridden
@@ -43,9 +43,15 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "arvidn";
     repo = "libtorrent";
-    rev = "v${version}";
-    hash = "sha256-HkpaOCBL+0Kc7M9DmnW2dUGC+b60a7n5n3i1SyRfkb4=";
+    tag = "v${version}";
+    hash = "sha256-ImiCxOXIBXJ0L2NdPCVUUd73y6/OekwQZcjChVANc1M=";
   };
+
+  # 1.2.20 quotes the version, which setuptools can't parse
+  postPatch = ''
+    substituteInPlace bindings/python/setup.cfg \
+      --replace-fail 'version = "${version}",' 'version = ${version}'
+  '';
 
   enableParallelBuilding = true;
 
