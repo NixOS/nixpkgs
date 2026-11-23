@@ -26,6 +26,7 @@
   libGL,
   libpulseaudio,
   libva,
+  libwebp,
   libx11,
   libxcb,
   libxcomposite,
@@ -46,6 +47,15 @@
 }:
 
 let
+  version = "1.9.7";
+
+  # The deb's hicolor PNGs have a white background and a smaller bear. Use the
+  # transparent 512px icon that the web manifest ships, converted to PNG below.
+  pwaIcon = fetchurl {
+    url = "https://raw.githubusercontent.com/y4my4my4m/harmony/v${version}/public/img/app_icon_square.webp";
+    hash = "sha256-lnUqjQ3zopearXndqbrpATpM2e2z9H3/RB0JSFGWz0E=";
+  };
+
   # dlopen'd by Chromium/CEF, not listed in any DT_NEEDED entry (getLib picks
   # the runtime output; libva's default output is "dev").
   dlopenLibs = [
@@ -60,7 +70,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "harmony";
-  version = "1.9.7";
+  inherit version;
 
   src = fetchurl {
     url = "https://github.com/y4my4my4m/harmony/releases/download/v${finalAttrs.version}/Harmony_Linux_V${finalAttrs.version}.deb";
@@ -72,6 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     dpkg
+    libwebp
     autoPatchelfHook
     makeWrapper
     wrapGAppsHook4
@@ -156,12 +167,8 @@ stdenv.mkDerivation (finalAttrs: {
       exit 1
     }
 
-    install -Dm644 usr/share/icons/hicolor/32x32/apps/harmony.png \
-      $out/share/icons/hicolor/32x32/apps/harmony.png
-    install -Dm644 usr/share/icons/hicolor/128x128/apps/harmony.png \
-      $out/share/icons/hicolor/128x128/apps/harmony.png
-    install -Dm644 usr/share/icons/hicolor/256x256@2/apps/harmony.png \
-      $out/share/icons/hicolor/256x256@2/apps/harmony.png
+    dwebp -quiet ${pwaIcon} -o harmony.png
+    install -Dm644 harmony.png $out/share/icons/hicolor/512x512/apps/harmony.png
 
     runHook postInstall
   '';
