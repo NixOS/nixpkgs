@@ -33,6 +33,6 @@ buildPythonPackage (finalAttrs: {
     description = "Links recognition library with full unicode support";
     homepage = "https://github.com/tsutsu3/linkify-it-py";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ colinxu2020 ];
   };
 })
