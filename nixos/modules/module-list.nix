@@ -983,6 +983,7 @@
   ./services/misc/ombi.nix
   ./services/misc/omnom.nix
   ./services/misc/open-webui.nix
+  ./services/misc/opencode.nix
   ./services/misc/orthanc.nix
   ./services/misc/osrm.nix
   ./services/misc/owncast.nix
