@@ -6257,7 +6257,8 @@
       ];
     "rainbowminer" =
       ps: with ps; [
-      ]; # missing inputs: rainbowminer-api-client
+        rainbowminer-api-client
+      ];
     "rainforest_eagle" =
       ps: with ps; [
         aioeagle
@@ -9706,6 +9707,7 @@
     "radio_frequency"
     "radiotherm"
     "rainbird"
+    "rainbowminer"
     "rainforest_eagle"
     "rainforest_raven"
     "rainmachine"
