@@ -32,16 +32,20 @@ stdenv.mkDerivation (finalAttrs: {
     nspr
   ];
 
+  cmakeFlags = [
+    "-DCMAKE_BUILD_TYPE="
+    "-DCMAKE_C_FLAGS=-O3 ${lib.optionalString (!debug) "-DNDEBUG"}"
+  ];
+
   preConfigure = ''
     find . -name '*.sh' -exec sed -e 's@#!/bin/sh@${stdenv.shell}@' -i '{}' ';'
     find . -name '*.sh' -exec sed -e 's@#!/bin/bash@${bash}/bin/bash@' -i '{}' ';'
-    cmakeFlagsArray=("-DCMAKE_BUILD_TYPE=" "-DCMAKE_C_FLAGS=-O3 ${
-      lib.optionalString (!debug) "-DNDEBUG"
-    }");
     sed -e \
       's/cmake_minimum_required(VERSION 2[.]8)/cmake_minimum_required(VERSION 3.5)/' \
       -i CMakeLists.txt
   '';
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Set of network-related (mostly VPN-related) tools";
