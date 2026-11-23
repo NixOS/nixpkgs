@@ -122,7 +122,10 @@ clangStdenv.mkDerivation (finalAttrs: {
     homepage = "https://vita3k.org/";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ ekisu ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [
+      "aarch64-linux"
+      "x86_64-linux"
+    ];
     mainProgram = "Vita3K";
   };
 })
