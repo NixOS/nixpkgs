@@ -4,20 +4,22 @@
   fetchFromGitHub,
   gitUpdater,
   nix,
+  testers,
   writeShellApplication,
   _experimental-update-script-combinators,
   cmake,
+  doctest,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libmt32emu";
-  version = "2.8.5";
+  version = "2.8.6";
 
   src = fetchFromGitHub {
     owner = "munt";
     repo = "munt";
     tag = "libmt32emu_${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
-    hash = "sha256-4OgDQ018K4RolmvDnpteZFQoqkWS7n9/o/MziifGDdQ=";
+    hash = "sha256-vCOec3DwYeQqSDpvGGON5IxI1lueuJM9d8XAufgCL9w=";
   };
 
   outputs = [
@@ -25,22 +27,48 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
+  postPatch = ''
+    substituteInPlace mt32emu/src/mt32emu.pc.in \
+      --replace-fail \
+        'libdir=''${exec_prefix}/@CMAKE_INSTALL_LIBDIR@' \
+        'libdir=@CMAKE_INSTALL_FULL_LIBDIR@' \
+      --replace-fail \
+        'includedir=''${prefix}/@CMAKE_INSTALL_INCLUDEDIR@' \
+        'includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@'
+  '';
+
+  __structuredAttrs = true;
+  strictDeps = true;
+
   nativeBuildInputs = [
     cmake
   ];
 
-  cmakeFlags = [
-    "-Dmunt_WITH_MT32EMU_SMF2WAV=OFF"
-    "-Dmunt_WITH_MT32EMU_QT=OFF"
+  checkInputs = [
+    doctest
   ];
 
-  postFixup = ''
-    substituteInPlace "$dev"/lib/pkgconfig/mt32emu.pc \
-      --replace '=''${exec_prefix}//' '=/' \
-      --replace "$dev/$dev/" "$dev/"
-  '';
+  cmakeFlags = [
+    (lib.strings.cmakeBool "munt_WITH_MT32EMU_SMF2WAV" false)
+    (lib.strings.cmakeBool "munt_WITH_MT32EMU_QT" false)
+    (lib.strings.cmakeFeature "libmt32emu_MATH_TYPE_FOR_FLOAT_RENDERER" "Standard") # best accuracy
+    (lib.strings.cmakeBool "libmt32emu_TESTS_DETAILED" true)
+  ];
+
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   passthru = {
+    tests = {
+      cmake = testers.hasCmakeConfigModules {
+        package = finalAttrs.finalPackage;
+        versionCheck = true;
+      };
+      pkg-config = testers.hasPkgConfigModules {
+        package = finalAttrs.finalPackage;
+        versionCheck = true;
+      };
+    };
+
     # Otherwise x.y.z in version != x_y_z in tag, and bump to same version is attempted
     unfixVersionScript = writeShellApplication {
       name = "unfix-libmt32emu-version";
@@ -98,5 +126,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [ OPNA2608 ];
     platforms = lib.platforms.unix; # Not tested on ReactOS yet :)
+    cmakeConfigModules = [ "MT32Emu" ];
+    pkgConfigModules = [ "mt32emu" ];
   };
 })
