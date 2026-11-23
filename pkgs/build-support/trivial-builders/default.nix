@@ -577,7 +577,10 @@ rec {
             if path == null then
               null
             else if isList path then
-              mapPaths f path
+              warn ''
+                ${toString path} is a nested list in attribute 'paths' for symlinkJoin.
+                This is deprecated as of Nixpkgs release 26.11, and support will
+                be removed in a future nixpkgs release.'' (mapPaths f path)
             else
               f path
           );
