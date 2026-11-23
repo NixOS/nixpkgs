@@ -1,11 +1,11 @@
 {
+  lib,
   buildPythonPackage,
   colormath,
   cycler,
-  fetchPypi,
+  fetchFromGitLab,
   h5py,
   joblib,
-  lib,
   more-itertools,
   numpy,
   pandas,
@@ -20,17 +20,19 @@
   semver,
   setuptools,
   verilogae,
+  writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dmt-core";
   version = "2.1.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit version;
-    pname = "DMT_core";
-    hash = "sha256-489E+uNn4NgyCwxsUMEPH/1ZuM+5uNq4zx8F88rkHMU=";
+  src = fetchFromGitLab {
+    owner = "dmt-development";
+    repo = "dmt-core";
+    tag = "Version_${finalAttrs.version}";
+    hash = "sha256-w+xGp34oXvyii977u0b1j57BtYnbOrZ5QZ6U/0PBOfw=";
   };
 
   build-system = [
@@ -43,36 +45,41 @@ buildPythonPackage rec {
     h5py
     joblib
     more-itertools
+    numpy
     pandas
     pint
     pyarrow
     pytest
     pyyaml
+    reprint
     requests
     scikit-rf
     scipy
-    setuptools
-    numpy
     semver
-  ];
-
-  nativeBuildInputs = [
-    reprint
+    setuptools
     verilogae
   ];
 
-  preConfigure = ''
-    export HOME=$(mktemp -d)
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail 'version="9.9.9"' 'version="${finalAttrs.version}"'
+    substituteInPlace DMT/config/__init__.py \
+      --replace-fail 'pkgutil.get_loader("DMT.extraction")' 'None'
+    substituteInPlace DMT/core/__init__.py \
+      --replace-fail 'pkgutil.find_loader("DMT.extraction")' 'raise ImportError' \
+      --replace-fail 'pkgutil.find_loader("DMT.hl2")' 'raise ImportError'
   '';
+
+  nativeBuildInputs = [
+    writableTmpDirAsHomeHook
+  ];
 
   pythonImportsCheck = [
     "DMT.core"
-    "reprint"
-    "verilogae"
   ];
 
   meta = {
-    changelog = "https://gitlab.com/dmt-development/dmt-core/-/blob/Version_${version}/CHANGELOG?ref_type=tags";
+    changelog = "https://gitlab.com/dmt-development/dmt-core/-/blob/Version_${finalAttrs.version}/CHANGELOG?ref_type=tags";
     description = "Tool to help modeling engineers extract model parameters, run circuit and TCAD simulations and automate infrastructure";
     homepage = "https://gitlab.com/dmt-development/dmt-core";
     license = lib.licenses.gpl3Plus;
@@ -82,4 +89,4 @@ buildPythonPackage rec {
     ];
     teams = with lib.teams; [ ngi ];
   };
-}
+})
