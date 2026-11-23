@@ -16994,7 +16994,7 @@ final: prev: {
       hash = "sha256-hkv+Bf/k65elRPdtkJh0JdBGPNAlKET3FCp0a9l3N7Q=";
     };
     meta.homepage = "https://github.com/srcery-colors/srcery-vim/";
-    meta.license = unfree;
+    meta.license = getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
