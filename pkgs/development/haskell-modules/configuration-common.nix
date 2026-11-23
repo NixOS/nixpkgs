@@ -1697,6 +1697,10 @@ with haskellLib;
   # Stale constraint on quickcheck-instances < 0.4
   servant = warnAfterVersion "0.20.3.0" (doJailbreak super.servant);
 
+  # Allow quickcheck-instances >= 0.4
+  # https://github.com/nikita-volkov/text-builder/issues/6
+  text-builder = doJailbreak super.text-builder;
+
   # 2026-06-29: allow doctest 0.25
   # https://github.com/sellout/yaya/issues/91
   yaya = doJailbreak super.yaya;
