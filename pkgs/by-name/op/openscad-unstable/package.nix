@@ -159,7 +159,7 @@ clangStdenv.mkDerivation rec {
     mkdir $out/Applications
     mv $out/bin/*.app $out/Applications
     rm $out/bin/* || true
-    ln -s $out/Applications/OpenSCAD.app/Contents/MacOS/OpenSCAD $out/bin/openscad-unstable
+    ln -s $out/Applications/OpenSCAD.app/Contents/MacOS/OpenSCAD $out/bin/openscad
   '';
 
   nativeCheckInputs = [
