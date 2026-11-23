@@ -517,8 +517,8 @@ let
         mktplcRef = {
           publisher = "batisteo";
           name = "vscode-django";
-          version = "1.15.0";
-          hash = "sha256-WBZsZNcq9OY30uaksfcRmCvHcugemMhsJ6d6/IncR5s=";
+          version = "1.19.0";
+          hash = "sha256-30Qxj5HPHNHJa0+3PHArlotuoKVWD4SfrIDtYQa9Nyk=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/batisteo.vscode-django/changelog";
