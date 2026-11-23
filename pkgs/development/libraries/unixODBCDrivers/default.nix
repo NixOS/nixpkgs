@@ -45,14 +45,14 @@
 
   duckdb = duckdb-odbc;
 
-  mariadb = stdenv.mkDerivation rec {
+  mariadb = stdenv.mkDerivation (finalAttrs: {
     pname = "mariadb-connector-odbc";
     version = "3.2.6";
 
     src = fetchFromGitHub {
       owner = "mariadb-corporation";
       repo = "mariadb-connector-odbc";
-      rev = version;
+      tag = finalAttrs.version;
       hash = "sha256-FdnA3/xDxnk2910LCMPWQTcUUSYfUsnnZ3Hqj0uey5s=";
       # this driver only seems to build correctly when built against the mariadb-connect-c subrepo
       # (see https://github.com/NixOS/nixpkgs/issues/73258)
@@ -83,6 +83,8 @@
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ libkrb5 ];
 
+    strictDeps = true;
+
     cmakeFlags = [
       "-DWITH_EXTERNAL_ZLIB=ON"
       "-DODBC_LIB_DIR=${lib.getLib unixodbc}/lib"
@@ -106,20 +108,22 @@
       driver = "lib/libmaodbc${stdenv.hostPlatform.extensions.sharedLibrary}";
     };
 
+    __structuredAttrs = true;
+
     meta = {
       description = "MariaDB ODBC database driver";
       homepage = "https://downloads.mariadb.org/connector-odbc/";
       license = lib.licenses.gpl2;
       platforms = lib.platforms.linux ++ lib.platforms.darwin;
     };
-  };
+  });
 
-  sqlite = stdenv.mkDerivation rec {
+  sqlite = stdenv.mkDerivation (finalAttrs: {
     pname = "sqlite-connector-odbc";
     version = "0.99991";
 
     src = fetchurl {
-      url = "http://www.ch-werner.de/sqliteodbc/sqliteodbc-${version}.tar.gz";
+      url = "http://www.ch-werner.de/sqliteodbc/sqliteodbc-${finalAttrs.version}.tar.gz";
       hash = "sha256-TZStuNPN4fqUoorrDfzHvnMUW8383z1eIlQ02zHcilw=";
     };
 
@@ -138,6 +142,8 @@
       zlib
       libxml2
     ];
+
+    strictDeps = true;
 
     configureFlags = [
       "--with-odbc=${unixodbc}"
@@ -159,6 +165,8 @@
       driver = "lib/libsqlite3odbc.so";
     };
 
+    __structuredAttrs = true;
+
     meta = {
       description = "ODBC driver for SQLite";
       homepage = "http://www.ch-werner.de/sqliteodbc";
@@ -167,7 +175,7 @@
       platforms = lib.platforms.unix;
       maintainers = [ ];
     };
-  };
+  });
 
   msodbcsql17 = stdenv.mkDerivation rec {
     pname = "msodbcsql17";
