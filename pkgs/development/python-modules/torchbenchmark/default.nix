@@ -62,15 +62,15 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "torchbenchmark";
-  version = "0-unstable-2026-03-06";
+  version = "0-unstable-2026-08-21";
   pyproject = true;
 
   # PyTorch pins the TorchBench commit its CI runs against; this is the pin for torch 2.14
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "benchmark";
-    rev = "0fff8bf35400ec7b733d5080628fc79551205e36";
-    hash = "sha256-SKXkSAXSU/hHlZzgN8vDShZAeKG6YmB0X1+Hs6YgURI=";
+    rev = "c5ea24d7b94f95f6e8b2c402152583b5892eecab";
+    hash = "sha256-hIZKJc2uQOYX2JmuQnTTn9PdBx6eNPHQcUtVAW7kckk=";
   };
 
   postPatch =
