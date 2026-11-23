@@ -110,6 +110,14 @@ stdenv.mkDerivation rec {
   doInstallCheck = true;
   installCheckTarget = "check";
 
+  # like the defaults the Makefile, but use gap from PATH instead of the
+  # one from builddir
+  installCheckFlags = [
+    "TESTGAPcore=gap --quitonbreak -b -q -r"
+    "TESTGAPauto=gap --quitonbreak -b -q -r -m 100m -o 1g -x 80"
+    "TESTGAP=gap --quitonbreak -b -q -r -m 100m -o 1g -x 80 -A"
+  ];
+
   preInstallCheck = ''
     # gap tests check that the home directory exists
     export HOME="$TMP/gap-home"
@@ -120,14 +128,6 @@ stdenv.mkDerivation rec {
 
     # make sure we don't accidentally use the wrong gap binary
     rm -r bin
-
-    # like the defaults the Makefile, but use gap from PATH instead of the
-    # one from builddir
-    installCheckFlagsArray+=(
-      "TESTGAPcore=gap --quitonbreak -b -q -r"
-      "TESTGAPauto=gap --quitonbreak -b -q -r -m 100m -o 1g -x 80"
-      "TESTGAP=gap --quitonbreak -b -q -r -m 100m -o 1g -x 80 -A"
-    )
   '';
 
   postBuild = ''
@@ -153,6 +153,8 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Computational discrete algebra system";
