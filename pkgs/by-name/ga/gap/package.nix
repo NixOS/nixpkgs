@@ -3,10 +3,12 @@
   lib,
   fetchurl,
   makeWrapper,
+  bashNonInteractive,
   readline,
   gmp,
   pari,
   zlib,
+  testers,
   # one of
   # - "minimal" (~400M):
   #     Install the bare minimum of packages required by gap to start.
@@ -68,13 +70,13 @@ let
       -exec rm -r '{}' \;
     '';
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gap";
   # https://www.gap-system.org/Releases/
   version = "4.15.1";
 
   src = fetchurl {
-    url = "https://github.com/gap-system/gap/releases/download/v${version}/gap-${version}.tar.gz";
+    url = "https://github.com/gap-system/gap/releases/download/v${finalAttrs.version}/gap-${finalAttrs.version}.tar.gz";
     hash = "sha256-YEnVPpmxLiXC2EjbIaxKBjgKRv5MQVckPVVv4GkwBCw=";
   };
 
@@ -84,6 +86,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
+    bashNonInteractive
     readline
     gmp
     zlib
@@ -97,6 +100,8 @@ stdenv.mkDerivation rec {
     pari # used at runtime by the alnuth package
   ];
 
+  strictDeps = true;
+
   # "teststandard" is a superset of the tests run by "check". it takes ~20min
   # instead of ~1min. tests are run twice, once with all packages loaded and
   # once without.
@@ -104,6 +109,14 @@ stdenv.mkDerivation rec {
 
   doInstallCheck = true;
   installCheckTarget = "check";
+
+  # like the defaults the Makefile, but use gap from PATH instead of the
+  # one from builddir
+  installCheckFlags = [
+    "TESTGAPcore=gap --quitonbreak -b -q -r"
+    "TESTGAPauto=gap --quitonbreak -b -q -r -m 100m -o 1g -x 80"
+    "TESTGAP=gap --quitonbreak -b -q -r -m 100m -o 1g -x 80 -A"
+  ];
 
   preInstallCheck = ''
     # gap tests check that the home directory exists
@@ -115,14 +128,6 @@ stdenv.mkDerivation rec {
 
     # make sure we don't accidentally use the wrong gap binary
     rm -r bin
-
-    # like the defaults the Makefile, but use gap from PATH instead of the
-    # one from builddir
-    installCheckFlagsArray+=(
-      "TESTGAPcore=gap --quitonbreak -b -q -r"
-      "TESTGAPauto=gap --quitonbreak -b -q -r -m 100m -o 1g -x 80"
-      "TESTGAP=gap --quitonbreak -b -q -r -m 100m -o 1g -x 80 -A"
-    )
   '';
 
   postBuild = ''
@@ -140,12 +145,18 @@ stdenv.mkDerivation rec {
     rm -r "$out/share/gap/pkg"
     cp -ar pkg tst "$out/share/gap"
     cp -a etc/Makefile.gappkg "$out/share/gap/etc"
+    # log files contain impurities like the build date
+    find $out -name "*.log" -delete
   '';
 
   preFixup = ''
     # patchelf won't strip references to the build dir if it still exists
     rm -rf pkg
   '';
+
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Computational discrete algebra system";
@@ -157,8 +168,9 @@ stdenv.mkDerivation rec {
     # keeping all packages increases the package size considerably, which is
     # why a local build is preferable in that situation. The timeframe is
     # reasonable and that way the binary cache doesn't get overloaded.
-    hydraPlatforms = lib.optionals (!keepAllPackages) meta.platforms;
+    hydraPlatforms = lib.optionals (!keepAllPackages) finalAttrs.meta.platforms;
     license = lib.licenses.gpl2;
     homepage = "https://www.gap-system.org";
+    pkgConfigModules = [ "libgap" ];
   };
-}
+})
