@@ -15,6 +15,7 @@
 }:
 
 let
+  # nixpkgs-update: no auto update
   version = "1.2.20";
 
   # Make sure we override python, so the correct version is chosen
