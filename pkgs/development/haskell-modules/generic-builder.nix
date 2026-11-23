@@ -383,8 +383,8 @@ let
     "--verbose"
     "--prefix=${placeholder "out"}"
     # Note: This must be kept in sync manually with mkGhcLibdir
-    ("--libdir=\\$prefix/lib/\\$compiler" + lib.optionalString (ghc ? hadrian) "/lib")
-    "--libsubdir=\\$abi/\\$libname"
+    ("--libdir=$prefix/lib/$compiler" + lib.optionalString (ghc ? hadrian) "/lib")
+    "--libsubdir=$abi/$libname"
   ]
   ++ optionals enableSeparateDataOutput [
     "--datadir=${placeholder "data"}/share/${ghcNameWithPrefix}"
@@ -726,7 +726,6 @@ lib.fix (
 
         setupCompileFlags="${concatStringsSep " " setupCompileFlags}"
 
-        configureFlags="${concatStringsSep " " defaultConfigureFlags} $configureFlags"
         # Pass in configure flags that are only known at this phase
         prependToVar configureFlags "--package-db=$packageConfDir"
         ${optionalString enableParallelBuilding ''
@@ -829,7 +828,13 @@ lib.fix (
 
       # Cabal takes flags like `--configure-option=--host=...` instead
       configurePlatforms = [ ];
-      inherit configureFlags buildFlags;
+      inherit
+        # Standard flags the builder sets which are kept when the user overrides configureFlags.
+        # These are used only in the configurePhase, so no hooks can see them in configureFlags.
+        defaultConfigureFlags
+        configureFlags
+        buildFlags
+        ;
 
       # Note: the options here must be always added, regardless of whether the
       # package specifies `hardeningDisable`.
@@ -840,8 +845,11 @@ lib.fix (
       configurePhase = ''
         runHook preConfigure
 
-        echo configureFlags: $configureFlags
-        ${setupCommand} configure $configureFlags 2>&1 | ${coreutils}/bin/tee "$NIX_BUILD_TOP/cabal-configure.log"
+        local -a haskellConfigureFlagsArray
+        concatTo haskellConfigureFlagsArray defaultConfigureFlags configureFlags
+
+        echo configureFlags: "''${haskellConfigureFlagsArray[@]}"
+        ${setupCommand} configure "''${haskellConfigureFlagsArray[@]}" 2>&1 | ${coreutils}/bin/tee "$NIX_BUILD_TOP/cabal-configure.log"
         ${lib.optionalString (!allowInconsistentDependencies) ''
           if grep -E -q -z 'Warning:.*depends on multiple versions' "$NIX_BUILD_TOP/cabal-configure.log"; then
             echo >&2 "*** abort because of serious configure-time warning from Cabal"
