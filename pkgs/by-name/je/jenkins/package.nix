@@ -6,14 +6,13 @@
   coreutils,
   git,
   gnused,
-  makeWrapper,
   nix,
-  jdk25,
   writeScript,
   nixosTests,
   jq,
   cacert,
   curl,
+  unzip,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -28,19 +27,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-2YAy0kAcVAo1YTqC7TWJIfzzFm1ebqqvYKeUGEW+MlE=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ unzip ];
 
   buildCommand = ''
-    mkdir -p "$out/bin" "$out/share" "$out/webapps"
+    mkdir -p "$out/share" "$out/webapps"
 
     cp "$src" "$out/webapps/jenkins.war"
 
-    # Create the `jenkins-cli` command.
-    ${jdk25}/bin/jar -xf "$src" WEB-INF/lib/cli-${finalAttrs.version}.jar \
-      && mv WEB-INF/lib/cli-${finalAttrs.version}.jar "$out/share/jenkins-cli.jar"
-
-    makeWrapper "${jdk25}/bin/java" "$out/bin/jenkins-cli" \
-      --add-flags "-jar $out/share/jenkins-cli.jar"
+    # Extract jenkins-cli tool
+    unzip -j "$src" "WEB-INF/lib/cli-${finalAttrs.version}.jar" -d "$out/share"
+    mv "$out/share/cli-${finalAttrs.version}.jar" "$out/share/jenkins-cli.jar"
   '';
 
   passthru = {

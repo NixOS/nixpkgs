@@ -7,6 +7,10 @@
 let
   cfg = config.services.jenkins;
   jenkinsUrl = "http://${cfg.listenAddress}:${toString cfg.port}${cfg.prefix}";
+
+  scriptJenkinsCli = pkgs.writeShellScriptBin "jenkins-cli" ''
+    ${cfg.javaPackage}/bin/java -jar ${cfg.package}/share/jenkins-cli.jar "$@"
+  '';
 in
 {
   options = {
@@ -170,7 +174,7 @@ in
       systemPackages = [
         pkgs.dejavu_fonts
       ]
-      ++ lib.optional cfg.withCLI cfg.package;
+      ++ lib.optional cfg.withCLI scriptJenkinsCli;
 
       variables =
         { }
