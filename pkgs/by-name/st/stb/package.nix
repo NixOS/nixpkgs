@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "stb";
-  version = "0-unstable-2026-04-15";
+  version = "0-unstable-2026-11-19";
 
   src = fetchFromGitHub {
     owner = "nothings";
     repo = "stb";
-    rev = "31c1ad37456438565541f4919958214b6e762fb4";
-    hash = "sha256-m2yNUlA37hDkKQVrQ+R8nufHfW/cXLnMo+n1X1Cyun0=";
+    rev = "6b5799bae8a1fe3792691ef4b72ae26434c3e799";
+    hash = "sha256-mfsRj/uWJ6NQpwbndGjHwDwqNomAWgaC+/kVR9nPL98=";
   };
 
   nativeBuildInputs = [ copyPkgconfigItems ];
