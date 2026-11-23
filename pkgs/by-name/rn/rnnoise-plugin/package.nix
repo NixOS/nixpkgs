@@ -13,7 +13,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "rnnoise-plugin";
-  version = "1.10";
+  version = "1.22";
   outputs = [
     "out"
     "ladspa"
@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "werman";
     repo = "noise-suppression-for-voice";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-sfwHd5Fl2DIoGuPDjELrPp5KpApZJKzQikCJmCzhtY8=";
+    sha256 = "sha256-gUNU35yrJd4t2RenPH4IwBnZtV8kd05nwVT1vzokkzM=";
   };
 
   nativeBuildInputs = [
