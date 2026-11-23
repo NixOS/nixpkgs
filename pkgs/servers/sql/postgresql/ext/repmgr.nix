@@ -26,6 +26,9 @@ postgresqlBuildExtension (finalAttrs: {
     json_c
   ];
 
+  # Remove when https://github.com/EnterpriseDB/repmgr/issues/916 is solved.
+  env.NIX_CFLAGS_COMPILE = "-std=gnu11";
+
   meta = {
     homepage = "https://repmgr.org/";
     description = "Replication manager for PostgreSQL cluster";
