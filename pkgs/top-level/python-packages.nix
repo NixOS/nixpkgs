@@ -312,6 +312,8 @@ self: super: with self; {
 
   aioextensions = callPackage ../development/python-modules/aioextensions { };
 
+  aiofarmad = callPackage ../development/python-modules/aiofarmad { };
+
   aiofile = callPackage ../development/python-modules/aiofile { };
 
   aiofiles = callPackage ../development/python-modules/aiofiles { };
