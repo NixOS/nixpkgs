@@ -68,6 +68,12 @@ buildPythonPackage (finalAttrs: {
       url = "https://github.com/pymupdf/PyMuPDF/commit/b2c8f3a859fed35c379a44df566f770dc3e18605.patch";
       hash = "sha256-YW1UtGhDJh69YKPCtZS7MqsisbltEKZeGMFU3RUQVHw=";
     })
+    # SWIG 4.5 dropped Py2 compatibility macros; pymupdf patched its code accordingly
+    (fetchpatch {
+      name = "swig-4.5-compat.patch";
+      url = "https://github.com/pymupdf/PyMuPDF/commit/d2ddf9032d61f8344cd06ab2c4bb077771047e22.patch";
+      hash = "sha256-O3Si7is6gtGs0d/K8P0VrnZzWBGaC/7xKSm7ag1N6AY=";
+    })
   ];
 
   # swig is not wrapped as Python package
