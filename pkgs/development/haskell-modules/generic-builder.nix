@@ -896,7 +896,7 @@ lib.fix (
           ${lib.escapeShellArgs (map (opt: "--test-option=${opt}") testFlags)}
         )
         export NIX_GHC_PACKAGE_PATH_FOR_TEST="''${NIX_GHC_PACKAGE_PATH_FOR_TEST:-$packageConfDir:}"
-        ${setupCommand} test ${testTargetsString} $checkFlags ''${checkFlagsArray:+"''${checkFlagsArray[@]}"}
+        ${setupCommand} test ${testTargetsString} $checkFlags "''${checkFlagsArray[@]}"
         runHook postCheck
       '';
 
