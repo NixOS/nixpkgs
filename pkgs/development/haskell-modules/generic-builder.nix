@@ -834,6 +834,7 @@ lib.fix (
         defaultConfigureFlags
         configureFlags
         buildFlags
+        haddockFlags
         ;
 
       # Note: the options here must be always added, regardless of whether the
@@ -871,7 +872,10 @@ lib.fix (
         find dist/build -exec touch -d '1970-01-01T00:00:00Z' {} +
       ''
       + ''
-        ${setupCommand} build ${buildTarget} $buildFlags
+        local -a haskellBuildFlagsArray
+        concatTo haskellBuildFlagsArray buildFlags
+
+        ${setupCommand} build ${buildTarget} "''${haskellBuildFlagsArray[@]}"
         runHook postBuild
       '';
 
@@ -895,22 +899,31 @@ lib.fix (
           "--test-wrapper=${testWrapperScript}"
           ${lib.escapeShellArgs (map (opt: "--test-option=${opt}") testFlags)}
         )
+        local -a haskellCheckFlagsArray
+        concatTo haskellCheckFlagsArray checkFlags checkFlagsArray
+
         export NIX_GHC_PACKAGE_PATH_FOR_TEST="''${NIX_GHC_PACKAGE_PATH_FOR_TEST:-$packageConfDir:}"
-        ${setupCommand} test ${testTargetsString} $checkFlags "''${checkFlagsArray[@]}"
+        ${setupCommand} test ${testTargetsString} "''${haskellCheckFlagsArray[@]}"
+
         runHook postCheck
       '';
 
       haddockPhase = ''
         runHook preHaddock
+
         ${optionalString (doHaddock && isLibrary) ''
+          local -a haddockFlagsArray
+          concatTo haddockFlagsArray haddockFlags
+
           ${setupCommand} haddock --html \
             ${optionalString doHoogle "--hoogle"} \
             ${optionalString doHaddockQuickjump "--quickjump"} \
             ${optionalString (isLibrary && hyperlinkSource) "--hyperlink-source"} \
             ${optionalString enableParallelBuilding "--haddock-option=-j$NIX_BUILD_CORES"} \
             --haddock-option=--no-tmp-comp-dir \
-            ${lib.concatStringsSep " " haddockFlags}
+            "''${haddockFlagsArray[@]}"
         ''}
+
         runHook postHaddock
       '';
 
