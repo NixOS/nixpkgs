@@ -49,12 +49,12 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "dcpomatic";
-  version = "2.18.51";
+  version = "2.18.52";
 
   src = fetchgit {
     url = "https://git.carlh.net/git/dcpomatic";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BIUcNYq9m6on1nxPHLGEdjHVZLYN9fu6lqgeLqtdw38=";
+    hash = "sha256-cO6DDtVpjOl9yzaP1YFvfFcIP5gg5LlVXxOMtQNBgwA=";
   };
 
   nativeBuildInputs = [
