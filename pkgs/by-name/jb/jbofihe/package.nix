@@ -22,6 +22,9 @@ stdenv.mkDerivation (finalAttrs: {
     # fix build with gcc14:
     # https://github.com/lojban/jbofihe/pull/19
     ./fix-gcc14-errors.patch
+    # fix linking on aarch64-darwin:
+    # https://github.com/lojban/jbofihe/pull/21
+    ./fix-unaligned-pointers.patch
   ];
 
   nativeBuildInputs = [
@@ -29,6 +32,8 @@ stdenv.mkDerivation (finalAttrs: {
     flex
     perl
   ];
+
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   doCheck = true;
   checkPhase = ''
