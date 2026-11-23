@@ -1,83 +1,37 @@
 {
-  aws-lc,
-  cargo-about,
-  cargo-tauri,
-  fetchFromGitHub,
-  fetchNpmDeps,
-  glib-networking,
+  alcom-unwrapped,
   lib,
-  libsoup_3,
   makeBinaryWrapper,
-  nodejs,
-  npmHooks,
-  openssl,
-  pkg-config,
-  rustPlatform,
-  stdenv,
-  webkitgtk_4_1,
-  wrapGAppsHook4,
+  runCommand,
+  unityhub,
 }:
 let
-  subdir = "vrc-get-gui";
+  fhsEnv = unityhub.fhsEnv.override {
+    dieWithParent = false;
+  };
 in
-rustPlatform.buildRustPackage (finalAttrs: {
-  pname = "alcom";
-  version = "1.1.9";
-  src = fetchFromGitHub {
-    owner = "vrc-get";
-    repo = "vrc-get";
-    tag = "gui-v${finalAttrs.version}";
-    hash = "sha256-90FLIJDawG9KoVgk6jxrvwjnue7OJYAxMLLmNhsWlto=";
-  };
+runCommand "alcom-${alcom-unwrapped.version}"
+  {
+    pname = "alcom";
+    inherit (alcom-unwrapped) version;
 
-  nativeBuildInputs = [
-    cargo-about
-    cargo-tauri.hook
-    nodejs
-    npmHooks.npmConfigHook
-    wrapGAppsHook4
-    pkg-config
-  ];
+    __structuredAttrs = true;
+    strictDeps = true;
 
-  buildInputs = [
-    aws-lc
-    openssl
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    glib-networking
-    libsoup_3
-    makeBinaryWrapper
-    webkitgtk_4_1
-  ];
+    nativeBuildInputs = [ makeBinaryWrapper ];
 
-  cargoHash = "sha256-h+tblYrLpuUwDDZV2rS3h9q2UuZtZ/5/S2rh4BzFnHg=";
-  buildFeatures = [ "no-self-updater" ];
-  buildAndTestSubdir = subdir;
+    meta = alcom-unwrapped.meta // {
+      priority = (alcom-unwrapped.meta.priority or lib.meta.defaultPriority) - 1;
+      longDescription = ''
+        Experimental GUI application to manage VRChat Unity Projects
 
-  postInstall = ''
-    install -Dm644 ${subdir}/icons/icon.png $out/share/icons/hicolor/512x512/apps/ALCOM.png
-    for size in 32x32 64x64 128x128 128x128@2x; do
-      install -Dm644 ${subdir}/icons/$size.png $out/share/icons/hicolor/''${size%x}/apps/ALCOM.png
-    done
-  '';
+        This wrapped package makes ALCOM launch Unity under unityhub's fhsEnv.
+      '';
+    };
+  }
+  ''
+    mkdir -p "$out/bin"
+    makeWrapper ${alcom-unwrapped}/bin/ALCOM "$out/bin/ALCOM" --set NIXPKGS_UNITYHUB_FHSENV ${lib.getExe fhsEnv}
 
-  npmDeps = fetchNpmDeps {
-    name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
-    inherit (finalAttrs) src;
-    sourceRoot = "${finalAttrs.src.name}/${subdir}";
-    hash = "sha256-flWM2ctaGak/KaTZ5sCj3Z28vIqOeiX8VJMTaIxg2fw=";
-  };
-  npmRoot = subdir;
-
-  meta = {
-    description = "Experimental GUI application to manage VRChat Unity Projects";
-    homepage = "https://github.com/vrc-get/vrc-get";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      Scrumplex
-      ImSapphire
-    ];
-    broken = stdenv.hostPlatform.isDarwin;
-    mainProgram = "ALCOM";
-  };
-})
+    ln -s ${alcom-unwrapped}/share "$out/share"
+  ''
