@@ -7,6 +7,7 @@
   tcl,
   fontconfig,
   tk,
+  bashNonInteractive,
   ncurses,
   libxt,
   libxext,
@@ -48,6 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    bashNonInteractive
     ncurses
     fontconfig
     libx11.dev
@@ -60,6 +62,8 @@ stdenv.mkDerivation (finalAttrs: {
     file
     makeWrapper
   ];
+
+  strictDeps = true;
 
   # skip interactive browser check
   buildFlags = [ "nobrowsers" ];
