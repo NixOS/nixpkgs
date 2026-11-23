@@ -4327,7 +4327,8 @@
       ];
     "london_air" =
       ps: with ps; [
-      ]; # missing inputs: pylondonair
+        pylondonair
+      ];
     "london_underground" =
       ps: with ps; [
         london-tube-status
@@ -9439,6 +9440,7 @@
     "logbook"
     "logger"
     "lojack"
+    "london_air"
     "london_underground"
     "lookin"
     "loqed"
