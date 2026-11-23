@@ -185,6 +185,7 @@
       "samuela": 226872
     },
     "members": {
+      "81reap": 20740005,
       "ethancedwards8": 60861925
     },
     "name": "cuda-maintainers"
@@ -950,7 +951,9 @@
     "members": {
       "dramforever": 2818072,
       "fgaz": 8182846,
-      "jonhermansen": 660911
+      "jonhermansen": 660911,
+      "ju1m": 21160136,
+      "liberodark": 4238928
     },
     "name": "RISC-V"
   },
