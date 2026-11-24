@@ -4,6 +4,7 @@
   fetchurl,
   fetchpatch2,
   updateAutotoolsGnuConfigScriptsHook,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -12,10 +13,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://ftp.osuosl.org/pub/rpm/popt/releases/popt-1.x/popt-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-wlpIOPyOTByKrLi9Yg7bMISj1jv4mH/a08onWMYyQPk=";
+    hash = "sha256-wlpIOPyOTByKrLi9Yg7bMISj1jv4mH/a08onWMYyQPk=";
   };
 
   nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
+
+  strictDeps = true;
 
   patches =
     lib.optionals stdenv.hostPlatform.isCygwin [
@@ -54,6 +57,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = false; # fails
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://github.com/rpm-software-management/popt";
     description = "Command line option parsing library";
@@ -64,5 +71,6 @@ stdenv.mkDerivation (finalAttrs: {
       type = "github";
       spec = "rpm-software-management/popt@popt-${finalAttrs.version}-release";
     };
+    pkgConfigModules = [ "popt" ];
   };
 })
