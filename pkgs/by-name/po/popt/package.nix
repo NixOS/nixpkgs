@@ -56,6 +56,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = false; # fails
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://github.com/rpm-software-management/popt";
     description = "Command line option parsing library";
