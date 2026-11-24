@@ -26,7 +26,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   inherit (opencode)
     version
     src
-    node_modules
     patches
     ;
 
@@ -58,8 +57,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     '';
 
   nativeBuildInputs = [
-    bun
-    nodejs # for patchShebangs node_modules
+    bun.configHook
     makeBinaryWrapper
     writableTmpDirAsHomeHook
   ]
@@ -84,15 +82,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     OPENCODE_VERSION = finalAttrs.version;
   };
 
-  configurePhase = ''
-    runHook preConfigure
-
-    cp -R "$node_modules"/. .
-    patchShebangs node_modules
-    patchShebangs packages/*/node_modules
-
-    runHook postConfigure
-  '';
+  bunWorkspaces = [ "./packages/desktop" ];
+  bunDeps = bun.fetchDeps {
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      bunWorkspaces
+      ;
+    hash = "";
+  };
 
   preBuild = lib.optionalString stdenvNoCC.hostPlatform.isDarwin ''
     # Patch electron-builder to skip code signing on macOS.
