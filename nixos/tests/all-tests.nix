@@ -197,6 +197,7 @@ in
     busybox = runTest ./nixos-test-driver/busybox.nix;
     ssh-backdoor = runTestOn [ "x86_64-linux" ] ./nixos-test-driver/ssh-backdoor.nix;
     console-log = runTest ./nixos-test-driver/console-log.nix;
+    backdoor = runTest ./nixos-test-driver/backdoor.nix;
     containers = runTest ./nixos-test-driver/containers.nix;
     nspawn-interactive = runTest ./nixos-test-driver/nspawn-interactive.nix;
     nspawn-daemon-reexec-dbus = runTest ./nspawn-daemon-reexec-dbus.nix;

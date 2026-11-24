@@ -1,11 +1,12 @@
 # This module allows the test driver to connect to the virtual machine
-# via a root shell attached to a virtio console.
+# via a root shell attached to a virtio serial port.
 
 {
   options,
   config,
   lib,
   pkgs,
+  utils,
   ...
 }:
 
@@ -16,13 +17,40 @@ let
 
   qemu-common = import ../../lib/qemu-common.nix { inherit (pkgs) lib stdenv; };
 
+  # Named by the test driver's `-device virtserialport`, linked here by udev
+  backdoorPort = "/dev/virtio-ports/org.nixos.test.backdoor";
+
+  # Set up the test backdoor
+  # This is run in `script` so that it has a tty on stdio
+  backdoorShell = pkgs.writeScript "backdoor-shell" ''
+    #!${pkgs.bashNonInteractive}/bin/bash
+    # Keep stderr out of the output the test driver reads.
+    exec 2> /dev/${qemu-common.qemuSerialDevice}
+    stty raw -echo # prevent nl -> cr/nl conversion
+    # The following line is essential since it signals to
+    # the test driver that the shell is ready.
+    # See: the connect method in the Machine class.
+    echo "Spawning backdoor root shell..."
+    # Passing the terminal device makes bash run non-interactively.
+    # Otherwise we get errors on the terminal because bash tries to
+    # set up things like job control.
+    # Note: calling bash explicitly here instead of sh makes sure that
+    # we can also run non-NixOS guests during tests. This, however, is
+    # mostly futureproofing as the test instrumentation is still very
+    # tightly coupled to NixOS.
+    # SHELL was set for `script` only; this script's caller. Bash sets it
+    # from root's passwd entry when it is unset.
+    unset SHELL
+    PS1="" exec ${pkgs.bashNonInteractive}/bin/bash --norc /dev/tty
+  '';
+
   backdoorService = {
     requires = [
-      "dev-hvc0.device"
+      "${utils.escapeSystemdPath backdoorPort}.device"
       "dev-${qemu-common.qemuSerialDevice}.device"
     ];
     after = [
-      "dev-hvc0.device"
+      "${utils.escapeSystemdPath backdoorPort}.device"
       "dev-${qemu-common.qemuSerialDevice}.device"
     ];
     script = ''
@@ -52,22 +80,16 @@ let
       export PAGER=
 
       cd /tmp
-      exec < /dev/hvc0 > /dev/hvc0
+      # Linux allows one open of the port at a time, so stdin and stdout
+      # share one read-write open.
+      exec 0<> ${backdoorPort} 1>&0
       while ! exec 2> /dev/${qemu-common.qemuSerialDevice}; do sleep 0.1; done
       echo "connecting to host..." >&2
-      stty -F /dev/hvc0 raw -echo # prevent nl -> cr/nl conversion
-      # The following line is essential since it signals to
-      # the test driver that the shell is ready.
-      # See: the connect method in the Machine class.
-      echo "Spawning backdoor root shell..."
-      # Passing the terminal device makes bash run non-interactively.
-      # Otherwise we get errors on the terminal because bash tries to
-      # setup things like job control.
-      # Note: calling bash explicitly here instead of sh makes sure that
-      # we can also run non-NixOS guests during tests. This, however, is
-      # mostly futureproofing as the test instrumentation is still very
-      # tightly coupled to NixOS.
-      PS1="" exec ${pkgs.bashNonInteractive}/bin/bash --norc /dev/hvc0
+      # The port is not a terminal. `script` relays it to a pty, which
+      # becomes the shell's stdin and controlling terminal. `script` runs
+      # its command line with `$SHELL -c`, hence a single path and SHELL.
+      export SHELL=${pkgs.bashNonInteractive}/bin/bash
+      exec ${pkgs.util-linux}/bin/script --quiet --echo never /dev/null -- ${backdoorShell}
     '';
     serviceConfig.KillSignal = "SIGHUP";
   };
@@ -108,7 +130,7 @@ in
       {
         assertion = config.boot.isContainer -> !cfg.backdoor;
         message = ''
-          `testing.backdoor` uses virtio console, which does not work with
+          `testing.backdoor` uses a virtio serial port, which does not work with
           containers (we use `nsenter` instead).
         '';
       }
@@ -176,15 +198,16 @@ in
 
         storePaths = [
           "${pkgs.coreutils}/bin/env"
+          "${pkgs.util-linux}/bin/script"
+          backdoorShell
         ];
       })
     ];
 
     # Prevent agetty from being instantiated on the serial device, since it
     # interferes with the backdoor (writes to it will randomly fail
-    # with EIO).  Likewise for hvc0.
+    # with EIO).
     systemd.services."serial-getty@${qemu-common.qemuSerialDevice}".enable = false;
-    systemd.services."serial-getty@hvc0".enable = false;
 
     # Only set these settings when the options exist. Some tests (e.g. those
     # that do not specify any nodes, or an empty attr set as nodes) will not

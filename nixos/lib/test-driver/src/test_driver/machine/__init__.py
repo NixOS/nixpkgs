@@ -301,8 +301,10 @@ class QemuStartCommand:
         # qemu options
         qemu_opts = (
             " -device virtio-serial"
-            # Note: virtconsole will map to /dev/hvc0 in Linux guests
-            " -device virtconsole,chardev=shell"
+            # QEMU holds the guest's writes to this port until the test driver
+            # reads them. The guest's udev links it as
+            # /dev/virtio-ports/org.nixos.test.backdoor.
+            " -device virtserialport,chardev=shell,name=org.nixos.test.backdoor"
             " -device virtio-rng-pci"
             " -serial stdio"
         )
