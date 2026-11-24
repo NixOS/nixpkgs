@@ -14,6 +14,7 @@
   meson,
   ninja,
   zlib,
+  openssl,
 }:
 
 let
@@ -58,13 +59,14 @@ stdenv.mkDerivation (finalAttrs: {
     xz
     zstd
     zlib
+    openssl
   ];
 
   mesonFlags = [
     (lib.mesonOption "sysconfdir" "/etc")
     (lib.mesonEnable "xz" true)
     (lib.mesonEnable "zstd" true)
-    (lib.mesonEnable "openssl" false)
+    (lib.mesonEnable "openssl" true)
     (lib.mesonOption "modulesdirs" modulesDirs)
     (lib.mesonBool "docs" withDevdoc)
     (lib.mesonBool "manpages" true)
