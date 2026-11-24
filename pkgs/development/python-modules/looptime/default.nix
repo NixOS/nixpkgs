@@ -12,14 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "looptime";
-  version = "0.7";
+  version = "0.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nolar";
     repo = "looptime";
     tag = finalAttrs.version;
-    hash = "sha256-nQNGE/o5QNAw4OSs+O5oWiq+JX+ShV6njOHkn1IlvtE=";
+    hash = "sha256-fhqf7S+wjai9ZwYr88TbWXOxudw5MavhpKB+azwIxUA=";
   };
 
   build-system = [
