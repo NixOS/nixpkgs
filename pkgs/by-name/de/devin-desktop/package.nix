@@ -56,6 +56,8 @@ in
       "x86_64-linux"
     ];
     sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
+    # They have stopped offering older downloads (404 error). Support ticket sent.
+    broken = true;
   };
 }).overrideAttrs
   (oldAttrs: {
