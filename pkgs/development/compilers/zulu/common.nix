@@ -69,6 +69,13 @@ let
     __structuredAttrs = true;
     strictDeps = true;
 
+    outputs = [
+      "out"
+    ]
+    ++ lib.optionals (lib.versionOlder dist.jdkVersion "11") [
+      "jre"
+    ];
+
     src = fetchurl {
       inherit (dist) url hash;
       curlOpts = "-H Referer:https://www.azul.com/downloads/zulu/";
