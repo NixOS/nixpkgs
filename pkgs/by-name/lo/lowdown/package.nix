@@ -13,6 +13,7 @@
   nix,
   lix,
   lowdown-unsandboxed,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -111,6 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests = {
     # most important consumers in nixpkgs
     inherit nix lix lowdown-unsandboxed;
+    pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
   __structuredAttrs = true;
@@ -121,5 +123,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.isc;
     maintainers = [ lib.maintainers.sternenseemann ];
     platforms = lib.platforms.unix;
+    pkgConfigModules = [ "lowdown" ];
   };
 })
