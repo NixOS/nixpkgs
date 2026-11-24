@@ -13,14 +13,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "smartthings-local";
-  version = "0.1.24";
+  version = "0.1.25";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "QuiteYellow";
     repo = "SmartThings-Local";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YXQeNZDntIZQXs6yII1NNhDe7PCpvNlJzvLr/UA0SL0=";
+    hash = "sha256-Wy7HaTfbwmvJ2hi65BR+g2iW1fjhKBqf9qtV/Cn3hXc=";
   };
 
   build-system = [
