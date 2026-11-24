@@ -17,13 +17,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "tomlkit";
-  version = "0.15.2";
+  version = "0.15.3";
   pyproject = true;
 
-  # github fetcher causes infinite recursion via gtk-doc
+  # github fetcher with `fetchSubmodules = true` causes infinite recursion via gtk-doc
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-g+MnVbodINk0C9Bp7pfp9iMrojRrY//LpCXeAffjJ6Y=";
+    hash = "sha256-s8MCDsGkvUadEuMftNqTjn9rp1jNvsP9kEfbYxIOr4E=";
   };
 
   build-system = [ poetry-core ];
