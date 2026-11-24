@@ -136,8 +136,9 @@ lib.extendMkDerivation {
         in
         # When we're cross-compiling to another OS or architecture, Go puts our architecture's binaries as bin/go{,fmt},
         # and their binaries as bin/$goos_$goarch/go{,fmt}. We only want the host binaries, so when build/host GOOS/GOARCH differ,
-        # move the host binaries over the build binaries. Also remove other stuff just for the build platform.
+        # remove the build binaries and move over the host binaries. Also remove other stuff just for the build platform.
         lib.optionalString isCrossGo ''
+          find bin -maxdepth 1 -type f -delete
           mv bin/*_*/* bin
           rmdir bin/*_*
           rm -rf pkg/${GOHOSTOS}_${GOHOSTARCH} pkg/tool/${GOHOSTOS}_${GOHOSTARCH}
