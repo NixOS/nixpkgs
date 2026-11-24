@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://dbacl.sourceforge.net/";
     longDescription = "a digramic Bayesian classifier for text recognition.";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ kamadorueda ];
     license = lib.licenses.gpl3;
     platforms = lib.platforms.unix;
   };
