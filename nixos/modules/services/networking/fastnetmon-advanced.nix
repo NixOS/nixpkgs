@@ -168,6 +168,10 @@ in
           RuntimeDirectory = "fastnetmon"; # for gobgpd config
           StateDirectory = "fastnetmon"; # for license file
         };
+        environment = {
+          LD_PRELOAD = "${pkgs.libredirect}/lib/libredirect.so";
+          NIX_REDIRECTS = "/etc/fastnetmon/license.lic=/var/lib/fastnetmon/license.lic";
+        };
       };
 
       security.polkit.enable = true;
