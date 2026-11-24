@@ -10,7 +10,6 @@
   fetchPnpmDeps,
   gtk3,
   libGL,
-  libpulseaudio,
   librsvg,
   libx11,
   libxcursor,
@@ -174,13 +173,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
       # The opener plugin uses xdg-open to launch the browser for OAuth.
       --prefix PATH : "${lib.makeBinPath [ xdg-utils ]}"
 
-      # CEF dlopens PulseAudio; ANGLE needs libGL and GPU drivers.
+      # ANGLE needs libGL and GPU drivers.
       # Provide search paths for loads originating in the separate CEF libraries.
       --prefix LD_LIBRARY_PATH : "${
         lib.makeLibraryPath [
           addDriverRunpath.driverLink
           libGL
-          libpulseaudio
         ]
       }"
     )
