@@ -5,6 +5,7 @@
   avahi,
   bison,
   cairo,
+  dav1d,
   dbus,
   faad2,
   fetchFromGitLab,
@@ -137,6 +138,7 @@ stdenv.mkDerivation (finalAttrs: {
     alsa-lib
     avahi
     cairo
+    dav1d
     dbus
     faad2
     ffmpeg_8

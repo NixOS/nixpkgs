@@ -76,6 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     chafa
+    glib
     imagemagick
     sqlite
     yyjson
@@ -85,7 +86,6 @@ stdenv.mkDerivation (finalAttrs: {
     dconf
     ddcutil
     enlightenment.efl
-    glib
     libdrm
     libelf
     libglvnd

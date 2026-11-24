@@ -20567,6 +20567,14 @@
     matrix = "@philip:matrix.munksgaard.me";
     keys = [ { fingerprint = "5658 4D09 71AF E45F CC29 6BD7 4CE6 2A90 EFC0 B9B2"; } ];
   };
+  MuntasirSZN = {
+    name = "Muntasir Mahmud";
+    email = "muntasir.joypurhat@gmail.com";
+    github = "MuntasirSZN";
+    githubId = 161931072;
+    matrix = "@muntasirszn:matrix.org";
+    keys = [ { fingerprint = "DAF9 E3E0 3AA8 70A9 E180  7AE1 E7FE 5EC8 7673 4CA2"; } ];
+  };
   mupdt = {
     email = "nix+mupdt@pdtpartners.com";
     github = "mupdt";
@@ -21055,6 +21063,11 @@
     github = "ndenissov";
     githubId = 70575593;
     name = "Nikita Denissov";
+  };
+  ndgigliotti = {
+    github = "ndgigliotti";
+    githubId = 12902796;
+    name = "Nicholas Gigliotti";
   };
   ndl = {
     email = "ndl@endl.ch";

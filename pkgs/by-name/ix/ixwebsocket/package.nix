@@ -9,12 +9,12 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "ixwebsocket";
-  version = "12.0.1";
+  version = "12.1.0";
   src = fetchFromGitHub {
     owner = "machinezone";
     repo = "IXWebSocket";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2QWIpLVIs2vGuMEhewDyihYdDQBz7SsOtfZ6pE67j2Q=";
+    hash = "sha256-nw8BhVzO4eNrTUals9GMY33BDzfgt0yPOGT+n+X1gRY=";
   };
 
   cmakeFlags = [

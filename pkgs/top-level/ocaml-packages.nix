@@ -271,8 +271,6 @@ let
 
         chrome-trace = callPackage ../development/ocaml-modules/chrome-trace { };
 
-        cil = callPackage ../development/ocaml-modules/cil { };
-
         clap = callPackage ../development/ocaml-modules/clap { };
 
         class_group_vdf = callPackage ../development/ocaml-modules/class_group_vdf { };
@@ -1489,10 +1487,6 @@ let
 
         ### O ###
 
-        ocaml_cairo = callPackage ../development/ocaml-modules/ocaml-cairo { };
-
-        ocaml_cryptgps = callPackage ../development/ocaml-modules/cryptgps { };
-
         ocaml_expat = callPackage ../development/ocaml-modules/expat { };
 
         ocaml_gettext = callPackage ../development/ocaml-modules/ocaml-gettext { };
@@ -1823,8 +1817,6 @@ let
         ppx_blob = callPackage ../development/ocaml-modules/ppx_blob { };
 
         ppx_cstruct = callPackage ../development/ocaml-modules/cstruct/ppx.nix { };
-
-        ppx_cstubs = callPackage ../development/ocaml-modules/ppx_cstubs { };
 
         ppx_derivers = callPackage ../development/ocaml-modules/ppx_derivers { };
 

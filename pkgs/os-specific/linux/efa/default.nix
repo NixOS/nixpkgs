@@ -12,7 +12,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "efa";
-  version = "3.4.0";
+  version = "3.4.1";
   name = "${finalAttrs.pname}-${finalAttrs.version}-${kernel.version}";
 
   __structuredAttrs = true;
@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "amzn";
     repo = "amzn-drivers";
     tag = "${rev-prefix}${finalAttrs.version}";
-    hash = "sha256-F7ysRtUW+8xdrQDQN08/c21iF72aB1lhKAQrjYymbcQ=";
+    hash = "sha256-EtOTdGGhSgif1rzl9w4T1qxUZf3e+qtQwR9e57aZ4HY=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/kernel/linux/efa";

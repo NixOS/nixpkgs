@@ -1,6 +1,7 @@
 {
   lib,
   runCommand,
+  writeText,
   python3Packages,
   makeWrapper,
   writableTmpDirAsHomeHook,
@@ -35,9 +36,8 @@ let
           "name"
         ]
         // {
-          inherit content;
+          contentPath = writeText "${name}.py" content;
           nativeBuildInputs = args.nativeBuildInputs or [ ] ++ [ makeWrapper ];
-          passAsFile = args.passAsFile or [ ] ++ [ "content" ];
         }
       )
       ''

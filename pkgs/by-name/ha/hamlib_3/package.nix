@@ -30,6 +30,14 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "10788mgrhbc57zpzakcxv5aqnr2819pcshml6fbh8zvnkja562y9";
   };
 
+  # https://github.com/Hamlib/Hamlib/pull/2173
+  # fixes py bindings with swig 4.5
+  # substituteInPlace because the hamlib 4.x patch does not cleanly apply on 3.3
+  postPatch = ''
+    substituteInPlace bindings/hamlib.swg \
+      --replace-fail 'PyInt_FromLong(' 'PyLong_FromLong('
+  '';
+
   strictDeps = true;
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [

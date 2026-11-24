@@ -8,13 +8,13 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "openfreebuds";
-  version = "0.18.0";
+  version = "0.18.1";
 
   src = fetchFromGitHub {
     owner = "melianmiko";
     repo = "OpenFreebuds";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wl+peoklWEC/k99ZfPACvM0HvgTtvbHCXqdwKOAv7Bg=";
+    hash = "sha256-OSFYe3IZXyVy+bJZbGmmDIrLS0EtdsHrJkvgMoEPYNE=";
   };
 
   pyproject = true;
@@ -51,6 +51,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     psutil
     pynput
     pyqt6
+    pyyaml
     qasync
   ];
 

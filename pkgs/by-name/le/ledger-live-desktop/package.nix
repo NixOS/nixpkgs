@@ -6,35 +6,28 @@
   imagemagick,
 }:
 
-let
+appimageTools.wrapType2 (finalAttrs: {
   pname = "ledger-live-desktop";
   version = "4.28.0";
 
   src = fetchurl {
-    url = "https://download.live.ledger.com/${pname}-${version}-linux-x86_64.AppImage";
+    url = "https://download.live.ledger.com/ledger-live-desktop-${finalAttrs.version}-linux-x86_64.AppImage";
     hash = "sha256-kaRhYhfcI5aOXaAPt3QtFm4X+a2DTHRANbn+lmY4jZo=";
   };
-
-  appimageContents = appimageTools.extract {
-    inherit pname version src;
-  };
-in
-appimageTools.wrapType2 rec {
-  inherit pname version src;
 
   nativeBuildInputs = [ makeWrapper ];
 
   extraInstallCommands = ''
-    install -m 444 -D ${appimageContents}/ledger-live-desktop.desktop $out/share/applications/ledger-live-desktop.desktop
-    install -m 444 -D ${appimageContents}/ledger-live-desktop.png $out/share/icons/hicolor/1024x1024/apps/ledger-live-desktop.png
-    ${imagemagick}/bin/convert ${appimageContents}/ledger-live-desktop.png -resize 512x512 ledger-live-desktop_512.png
+    install -m 444 -D ${finalAttrs.contents}/ledger-live-desktop.desktop $out/share/applications/ledger-live-desktop.desktop
+    install -m 444 -D ${finalAttrs.contents}/ledger-live-desktop.png $out/share/icons/hicolor/1024x1024/apps/ledger-live-desktop.png
+    ${imagemagick}/bin/convert ${finalAttrs.contents}/ledger-live-desktop.png -resize 512x512 ledger-live-desktop_512.png
     install -m 444 -D ledger-live-desktop_512.png $out/share/icons/hicolor/512x512/apps/ledger-live-desktop.png
 
-    wrapProgram "$out/bin/${pname}" \
+    wrapProgram "$out/bin/ledger-live-desktop" \
        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
 
     substituteInPlace $out/share/applications/ledger-live-desktop.desktop \
-      --replace 'Exec=AppRun' 'Exec=${pname}'
+      --replace 'Exec=AppRun' 'Exec=ledger-live-desktop'
   '';
 
   meta = {
@@ -52,4 +45,4 @@ appimageTools.wrapType2 rec {
     mainProgram = "ledger-live-desktop";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
-}
+})

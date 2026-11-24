@@ -7,6 +7,8 @@
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
+  __structuredAttrs = true;
+
   pname = "wasmi";
   version = "2.0.2";
 
