@@ -204,6 +204,8 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
   passthru = {
     python = python3;
+    # prevents additional rebuild of package when toPythonModule is used in the NixOS module
+    pythonModule = python3;
     tests = {
       inherit (nixosTests) funkwhale;
     };
