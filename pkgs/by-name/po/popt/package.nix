@@ -4,6 +4,7 @@
   fetchurl,
   fetchpatch2,
   updateAutotoolsGnuConfigScriptsHook,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -56,6 +57,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = false; # fails
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   __structuredAttrs = true;
 
   meta = {
@@ -68,5 +71,6 @@ stdenv.mkDerivation (finalAttrs: {
       type = "github";
       spec = "rpm-software-management/popt@popt-${finalAttrs.version}-release";
     };
+    pkgConfigModules = [ "popt" ];
   };
 })
