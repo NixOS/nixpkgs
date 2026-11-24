@@ -2,17 +2,17 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  buildPackages,
+  cmakeMinimal,
   bashNonInteractive,
   gnugrep,
   fixDarwinDylibNames,
   file,
+  versionCheckHook,
   legacySupport ? false,
   static ? stdenv.hostPlatform.isStatic, # generates static libraries *only*
   enableStatic ? static,
   # these need to be ran on the host, thus disable when cross-compiling
-  buildContrib ? stdenv.hostPlatform == stdenv.buildPlatform,
-  doCheck ? stdenv.hostPlatform == stdenv.buildPlatform,
+  buildContrib ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
   nix-update-script,
 
   # for passthru.tests
@@ -42,14 +42,6 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-bzIcrgp7uYeJ+LEv6Nb9Nd41jGfJvUvDZ0nxQBu5Tvo=";
   };
 
-  nativeBuildInputs = [
-    buildPackages.cmakeMinimal
-  ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
-  buildInputs = lib.optional stdenv.hostPlatform.isUnix bashNonInteractive;
-
-  strictDeps = true;
-
   patches = [
     # This patches makes sure we do not attempt to use the MD5 implementation
     # of the host platform when running the tests
@@ -66,16 +58,13 @@ stdenv.mkDerivation (finalAttrs: {
       tests/playTests.sh
   '';
 
-  cmakeFlags =
-    lib.attrsets.mapAttrsToList (name: value: "-DZSTD_${name}:BOOL=${if value then "ON" else "OFF"}")
-      {
-        BUILD_SHARED = !static;
-        BUILD_STATIC = enableStatic;
-        BUILD_CONTRIB = buildContrib;
-        PROGRAMS_LINK_SHARED = !static;
-        LEGACY_SUPPORT = legacySupport;
-        BUILD_TESTS = doCheck;
-      };
+  nativeBuildInputs = [
+    cmakeMinimal
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ fixDarwinDylibNames ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isUnix [ bashNonInteractive ];
+
+  strictDeps = true;
 
   cmakeDir = "../build/cmake";
   dontUseCmakeBuildDir = true;
@@ -83,8 +72,17 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p build_ && cd $_
   '';
 
+  cmakeFlags = [
+    (lib.cmakeBool "ZSTD_BUILD_CONTRIB" buildContrib)
+    (lib.cmakeBool "ZSTD_BUILD_SHARED" (!static))
+    (lib.cmakeBool "ZSTD_BUILD_STATIC" enableStatic)
+    (lib.cmakeBool "ZSTD_BUILD_TESTS" finalAttrs.finalPackage.doCheck)
+    (lib.cmakeBool "ZSTD_PROGRAMS_LINK_SHARED" (!static))
+    (lib.cmakeBool "ZSTD_LEGACY_SUPPORT" legacySupport)
+  ];
+
+  doCheck = true;
   nativeCheckInputs = [ file ];
-  inherit doCheck;
   checkPhase = ''
     runHook preCheck
     # Patch shebangs for playTests
@@ -94,36 +92,37 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   preInstall = ''
-    mkdir -p $bin/bin
     substituteInPlace ../programs/zstdgrep \
-      --replace ":-grep" ":-${gnugrep}/bin/grep" \
-      --replace ":-zstdcat" ":-$bin/bin/zstdcat"
+      --replace-fail ":-grep" ":-${gnugrep}/bin/grep" \
+      --replace-fail ":-zstdcat" ":-$bin/bin/zstdcat"
 
     substituteInPlace ../programs/zstdless \
-      --replace "zstdcat" "$bin/bin/zstdcat"
-  ''
-  + lib.optionalString buildContrib (
-    ''
-      cp contrib/pzstd/pzstd $bin/bin/pzstd
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      install_name_tool -change @rpath/libzstd.1.dylib $out/lib/libzstd.1.dylib $bin/bin/pzstd
-    ''
-  );
+      --replace-fail ":-zstd" ":-$bin/bin/zstd"
+  '';
 
+  postInstall = ''
+    moveToOutput bin/pzstd $bin
+  ''
+  + lib.optionalString (buildContrib && stdenv.hostPlatform.isDarwin) ''
+    install_name_tool -change @rpath/libzstd.1.dylib $out/lib/libzstd.1.dylib $bin/bin/pzstd
+  ''
   # replace invalid symlinks when executable suffix is .exe
-  postInstall = lib.optionalString stdenv.hostPlatform.isCygwin ''
+  + lib.optionalString stdenv.hostPlatform.isCygwin ''
     for link in unzstd zstdcat zstdmt; do
       ln -sf zstd.exe $bin/bin/$link
     done
   '';
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
   outputs = [
     "bin"
     "dev"
+    "out"
   ]
-  ++ lib.optional stdenv.hostPlatform.isUnix "man"
-  ++ [ "out" ];
+  ++ lib.optionals buildContrib [ "doc" ]
+  ++ lib.optionals stdenv.hostPlatform.isUnix [ "man" ];
 
   passthru = {
     updateScript = nix-update-script { };
@@ -159,7 +158,10 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://facebook.github.io/zstd/";
     changelog = "https://github.com/meta/zstd/blob/v${finalAttrs.version}/CHANGELOG";
-    license = lib.licenses.bsd3; # Or, at your opinion, GPL-2.0-only.
+    license = lib.licenses.OR [
+      lib.licenses.bsd3
+      lib.licenses.gpl2Only
+    ];
     mainProgram = "zstd";
     platforms = lib.platforms.all;
     identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "facebook" finalAttrs.version // {
