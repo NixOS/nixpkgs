@@ -13,13 +13,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "peacock";
-  version = "8.9.0";
+  version = "8.10.2";
 
   src = fetchFromGitHub {
     owner = "thepeacockproject";
     repo = "Peacock";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-uVK9ABA5JoDU9Cmtjo2ZqIRwMvhZdDgdmkIpily/wk8=";
+    hash = "sha256-Ob7MJ0Xlj9QyphyP1l5PLLtwJjTG39KBdZkyG3B48C4=";
   };
 
   patches = [
@@ -82,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
   missingHashes = ./missing-hashes.json;
   offlineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes patches;
-    hash = "sha256-9u/w/zy4f51uPFfkzf0fDZlsj8GFXAfw7RGR9owo5n8=";
+    hash = "sha256-HbSkQhWHXqFuD3UOLwAulksxedNigGkhFn9/6xCHxF0=";
   };
 
   meta = {
