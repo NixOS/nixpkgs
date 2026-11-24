@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Broken substitution is used for `perl/config.pl', which leaves literal
     # `$prefix' in it.
     substituteInPlace "perl/config.pl"       \
-      --replace '${"\$" + "{prefix}"}' "$out"
+      --replace-fail '${"\$" + "{prefix}"}' "$out"
   '';
 
   doCheck = false; # fails a lot of tests
@@ -88,6 +88,8 @@ stdenv.mkDerivation (finalAttrs: {
     wrapProgram $out/bin/sgml2xml-isoent --prefix PATH : \
       "${gnused}/bin"
   '';
+
+  __structuredAttrs = true;
 
   meta = {
     longDescription = ''
