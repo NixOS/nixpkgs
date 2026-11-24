@@ -2,7 +2,7 @@
   lib,
   annexremote,
   buildPythonPackage,
-  datalad,
+  datalad-core,
   datasalad,
   distutils,
   fetchFromGitHub,
@@ -25,17 +25,22 @@
 
 buildPythonPackage {
   pname = "datalad-next";
-  version = "1.6.0-unstable-2025-07-04";
+  version = "1.6.0-unstable-2026-11-11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "datalad";
     repo = "datalad-next";
-    rev = "2d2b1526c1e396964dd3ffdbb37597adefe7682d";
-    hash = "sha256-47cRxaxOGzR6hDfiW2hS3MNHp2aP9rxtWNxV+33PPfs=";
+    rev = "0bd61817041b4be298055fa687a0b82c8231a3ad";
+    hash = "sha256-uuLempOqrEVuDkb8Bzut+kjH27NdRK0vpXDoPZmcNsY=";
   };
 
   env.SETUPTOOLS_SCM_PRETEND_VERSION = "1.6.0";
+
+  # add "flaky" as marker, since `strict-markers` is enabled
+  postPatch = ''
+    substituteInPlace pyproject.toml --replace-fail "\"without_http_proxy\"," "\"without_http_proxy\",  \"flaky\","
+  '';
 
   nativeBuildInputs = [ git ];
 
@@ -47,7 +52,7 @@ buildPythonPackage {
   dependencies = [
     annexremote
     datasalad
-    datalad
+    datalad-core
     humanize
     more-itertools
   ];
@@ -60,7 +65,7 @@ buildPythonPackage {
   };
 
   nativeCheckInputs = [
-    datalad
+    datalad-core
     git-annex
     openssh
     psutil
@@ -68,6 +73,10 @@ buildPythonPackage {
     unzip
     webdavclient3
     writableTmpDirAsHomeHook
+  ];
+
+  pytestFlags = [
+    "-Wignore::DeprecationWarning"
   ];
 
   disabledTests = [
@@ -104,16 +113,24 @@ buildPythonPackage {
     "test_ls_file_collection_tarfile"
     "test_push_wanted"
     "test_transparent_decompression"
+    "test_download_basic_auth"
+    "test_download_bearer_token_auth"
+    "test_download_digest_auth"
+    "test_download_explicit_credential"
+    "test_download_auth_after_redirect"
+    "test_download_no_credential_leak_to_http"
+    "test_download_new_bearer_token"
+    "test_download_new_bearer_token_nosave"
+    "test_download_404"
+    "test_tararchive_basics"
+    "test_tararchive_contain"
+    "test_tararchive_iterator"
+    "test_open"
+
   ]
   ++ lib.optionals (pythonAtLeast "3.13") [
     # RuntimeError
     "test_tree_with_broken_symlinks"
-  ];
-
-  disabledTestPaths = [
-    # Tests require internet access
-    "datalad_next/commands/tests/test_download.py"
-    "datalad_next/archive_operations/tests/test_tarfile.py"
   ];
 
   pythonImportsCheck = [ "datalad_next" ];
@@ -124,8 +141,5 @@ buildPythonPackage {
     homepage = "https://github.com/datalad/datalad-next";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ gador ];
-    # fails with 'flaky' not found in `markers` configuration option
-    # while applying internal patches
-    broken = true;
   };
 }
