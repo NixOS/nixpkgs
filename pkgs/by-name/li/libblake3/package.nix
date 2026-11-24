@@ -4,6 +4,7 @@
   cmake,
   fetchFromGitHub,
   onetbb,
+  testers,
 
   useTBB ? lib.meta.availableOn stdenv.hostPlatform onetbb,
 }:
@@ -32,10 +33,16 @@ stdenv.mkDerivation (finalAttrs: {
     onetbb
   ];
 
+  strictDeps = true;
+
   cmakeFlags = [
     (lib.cmakeBool "BLAKE3_USE_TBB" useTBB)
     (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
   ];
+
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Official C implementation of BLAKE3";
@@ -50,5 +57,6 @@ stdenv.mkDerivation (finalAttrs: {
       silvanshade
     ];
     platforms = lib.platforms.all;
+    pkgConfigModules = [ "libblake3" ];
   };
 })
