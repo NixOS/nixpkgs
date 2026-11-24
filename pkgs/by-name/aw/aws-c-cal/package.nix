@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-c-cal";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-7oKJcvoMpHVsajVkBYkAypBn1IXsddylN9Sq9KDYLwM=";
   };
 
@@ -27,6 +27,8 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
   ];
 
+  strictDeps = true;
+
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
   ];
@@ -34,6 +36,8 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests = {
     inherit nix;
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "AWS Crypto Abstraction Layer";
