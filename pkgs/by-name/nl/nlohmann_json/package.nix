@@ -4,6 +4,7 @@
   fetchFromGitHub,
   fetchpatch,
   cmake,
+  testers,
 }:
 let
   testData = fetchFromGitHub {
@@ -63,6 +64,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = "rm -rf $out/lib64";
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   __structuredAttrs = true;
 
   meta = {
@@ -72,5 +75,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ miniharinn ];
+    pkgConfigModules = [ "nlohmann_json" ];
   };
 })
