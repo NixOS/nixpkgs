@@ -39,6 +39,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
+  cargoBuildFlags = [
+    "--package=syd"
+    "--package=pandora_box"
+  ];
+
+  # pandora's integration tests expect test binaries directly in target/
+  postPatch = ''
+    substituteInPlace pandora/Cargo.toml \
+      --replace-fail 'name = "tests"' $'name = "tests"\ntest = false'
+  '';
+
   checkFlags = [
     "--exact"
 
@@ -81,7 +92,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=dl::tests::test_has_vdso_symbol_1"
   ];
 
-  cargoTestFlags = [
+  cargoTestFlags = finalAttrs.cargoBuildFlags ++ [
     "--no-fail-fast"
   ];
 
