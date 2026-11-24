@@ -81,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Collection of helpful datatypes and algorithms for MPEG-H software";
     homepage = "https://github.com/Fraunhofer-IIS/ilo";
-    license = lib.licenses.fraunhofer-fdk;
+    license = lib.licenses.fraunhofer-fdk-mpeg-h;
     maintainers = [ lib.maintainers.jopejoe1 ];
     pkgConfigModules = [ "ilo" ];
   };

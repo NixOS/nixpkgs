@@ -96,7 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "C/C++ implementation of the MPEG-H Audio standard as defined in ISO/IEC 23008-3:2022";
     homepage = "https://github.com/Fraunhofer-IIS/mpeghdec";
-    license = lib.licenses.fraunhofer-fdk;
+    license = lib.licenses.fraunhofer-fdk-mpeg-h;
     maintainers = [ lib.maintainers.jopejoe1 ];
     pkgConfigModules = [ "mpeghdec" ];
   };
