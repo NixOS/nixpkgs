@@ -4,6 +4,7 @@
   fetchFromGitHub,
   autoreconfHook,
   nix-update-script,
+  testers,
   ncurses ? null,
 
   # Enable `termcap` (`ncurses`) support.
@@ -50,7 +51,13 @@ stdenv.mkDerivation (finalAttrs: {
     "doc"
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+      version = "1.17.2-pre";
+    };
+  };
 
   meta = {
     homepage = "https://troglobit.com/projects/editline/";
@@ -58,5 +65,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsdOriginal;
     maintainers = with lib.maintainers; [ oxalica ];
     platforms = lib.platforms.all;
+    pkgConfigModules = [ "libeditline" ];
   };
 })
