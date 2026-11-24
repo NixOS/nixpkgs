@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-c-io";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-gdu1v6ui9y5Y+tp0K0fpbE2e2O4Ky/WPEekphWbhUDQ=";
   };
 
@@ -29,6 +29,8 @@ stdenv.mkDerivation (finalAttrs: {
     s2n-tls
   ];
 
+  strictDeps = true;
+
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
   ];
@@ -36,6 +38,8 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests = {
     inherit nix;
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "AWS SDK for C module for IO and TLS";
