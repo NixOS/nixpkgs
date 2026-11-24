@@ -7,7 +7,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "apkscope";
-  version = "0.10.0";
+  version = "0.12.0";
 
   __structuredAttrs = true;
 
@@ -15,13 +15,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "suffixing";
     repo = "apkscope";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QdxF7V33eJN8KtsvQhF5C4EAs+ZEuKz6uQIPqkZpqQw=";
+    hash = "sha256-alTpsr3RKXuorum9sulfWzHdE1/rANLQSJX+1BvRzSY=";
   };
 
-  cargoHash = "sha256-DwVcYu02yEvOCIi0c9w4k5eI71rU4W7RkU87SVaIr7A=";
+  cargoHash = "sha256-QAjTD1s6DJ5ASgUtVBJcBc1WdLTn+8n3OZYi5isc62g=";
 
   # The upstream vendor was generated on a non-Linux platform
   buildNoDefaultFeatures = true;
+
+  checkFlags = [
+    # Test tries to extract an .apkm archive
+    "--skip=session::tests::apkm_extract_picks_base_apk"
+  ];
 
   passthru.updateScript = nix-update-script { };
 
