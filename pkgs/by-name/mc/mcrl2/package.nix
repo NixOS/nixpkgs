@@ -12,13 +12,13 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "202507";
+  version = "202607";
   build_nr = "0";
   pname = "mcrl2";
 
   src = fetchurl {
     url = "https://www.mcrl2.org/download/release/mcrl2-${version}.${build_nr}.tar.gz";
-    hash = "sha256-Ur7GGXbYvVmrEUq/CTRyuVNLDHKfFrYHJibo0JvYhyM=";
+    hash = "sha256-s1kOKEWiTvChp+nPUf06I2bpoH7zQY4UonG+5QbS4ok=";
   };
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''

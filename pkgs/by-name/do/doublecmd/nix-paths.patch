@@ -1,0 +1,43 @@
+1. Use the packaged Lazarus and libssh2. Keep the Lua library path relative
+to the executable so user configurations do not retain Nix store paths.
+2. Skip DMG assets. We don't produce DMG so they're not needed.
+
+diff --git a/build.sh b/build.sh
+--- a/build.sh
++++ b/build.sh
+@@ -12,3 +12,3 @@
+ # path to lazbuild
+-export lazbuild=$(which lazbuild)
++export lazbuild="@lazarus@/bin/lazbuild --lazarusdir=@lazarus@/share/lazarus"
+ 
+diff --git a/src/platform/lua.pas b/src/platform/lua.pas
+--- a/src/platform/lua.pas
++++ b/src/platform/lua.pas
+@@ -29,5 +29,5 @@
+ {$ELSEIF DEFINED(DARWIN)}
+-  LuaDLL = 'liblua5.1.dylib';
++  LuaDLL = '%COMMANDER_PATH%/liblua.dylib';
+ {$ELSEIF DEFINED(UNIX)}
+-  LuaDLL = 'liblua5.1.so.0';
++  LuaDLL = '%COMMANDER_PATH%/liblua.so';
+ {$ENDIF}
+diff --git a/install/darwin/install.sh b/install/darwin/install.sh
+--- a/install/darwin/install.sh
++++ b/install/darwin/install.sh
+@@ -88,5 +88,2 @@
+ 
+-# Install instruction
+-cp -r install/darwin/dmg/. $1
+-
+ # Update icon-theme.cache time
+diff --git a/plugins/wfx/ftp/src/sftp/libssh.pas b/plugins/wfx/ftp/src/sftp/libssh.pas
+--- a/plugins/wfx/ftp/src/sftp/libssh.pas
++++ b/plugins/wfx/ftp/src/sftp/libssh.pas
+@@ -364,5 +364,5 @@
+     {$ELSEIF DEFINED(DARWIN)}
+-    'libssh2.dylib'
++    '@libssh2@/lib/libssh2.dylib'
+     {$ELSEIF DEFINED(UNIX)}
+-    'libssh2.so.1'
++    '@libssh2@/lib/libssh2.so.1'
+     {$ENDIF}
