@@ -1,0 +1,88 @@
+{
+  "packages": {
+    "characters": {
+      "dependency": "direct main",
+      "description": {
+        "name": "characters",
+        "sha256": "faf38497bda5ead2a8c7615f4f7939df04333478bf32e4173fcb06d428b5716b",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "1.4.1"
+    },
+    "collection": {
+      "dependency": "direct main",
+      "description": {
+        "name": "collection",
+        "sha256": "2f5709ae4d3d59dd8f7cd309b4e023046b57d8a6c82130785d2b0e5868084e76",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "1.19.1"
+    },
+    "flutter": {
+      "dependency": "direct main",
+      "description": "flutter",
+      "source": "sdk",
+      "version": "0.0.0"
+    },
+    "material_color_utilities": {
+      "dependency": "direct main",
+      "description": {
+        "name": "material_color_utilities",
+        "sha256": "9c337007e82b1889149c82ed242ed1cb24a66044e30979c44912381e9be4c48b",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "0.13.0"
+    },
+    "meta": {
+      "dependency": "direct main",
+      "description": {
+        "name": "meta",
+        "sha256": "c82594181e3312f3d0695fc95aaaf7758d75b8d4ae2bbecf223b9fd5109a059d",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "1.18.3"
+    },
+    "nix_legacy_plugin": {
+      "dependency": "direct main",
+      "description": {
+        "path": "legacy_plugin",
+        "relative": true
+      },
+      "source": "path",
+      "version": "0.0.1"
+    },
+    "nix_test_plugin": {
+      "dependency": "direct main",
+      "description": {
+        "path": "plugin",
+        "relative": true
+      },
+      "source": "path",
+      "version": "0.0.1"
+    },
+    "sky_engine": {
+      "dependency": "transitive",
+      "description": "flutter",
+      "source": "sdk",
+      "version": "0.0.0"
+    },
+    "vector_math": {
+      "dependency": "direct main",
+      "description": {
+        "name": "vector_math",
+        "sha256": "1d774bbdf6b72a0b12122fc1560c9c2d2a67db5a4a4cc2bd8a5c990ab20e3188",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "2.4.0"
+    }
+  },
+  "sdks": {
+    "dart": ">=3.13.3 <4.0.0",
+    "flutter": ">=3.47.4"
+  }
+}

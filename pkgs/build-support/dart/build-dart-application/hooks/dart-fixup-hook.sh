@@ -22,12 +22,21 @@ dartFixupHook() {
         wrapProgramArgs+=("$extraWrapProgramArgs")
     fi
 
-    if [ ${#wrapProgramArgs[@]} -ne 0 ]; then
-        for f in "$out"/bin/*; do
+    for f in "$out"/bin/*; do
+        if [[ @isDarwin@ == true && -L "$f" ]]; then
+            echo "Wrapping $f..."
+            # macOS locates application resources relative to the executable
+            # path. Execute the bundle binary directly, rather than moving
+            # the symlink to bin/.name-wrapped and launching through it.
+            local executable
+            executable=$(realpath "$f")
+            unlink "$f"
+            eval "makeWrapper \"\$executable\" \"\$f\" ${wrapProgramArgs[@]}"
+        elif [ ${#wrapProgramArgs[@]} -ne 0 ]; then
             echo "Wrapping $f..."
             eval "wrapProgram \"$f\" ${wrapProgramArgs[@]}"
-        done
-    fi
+        fi
+    done
 
     echo "Finished dartFixupHook"
 }
