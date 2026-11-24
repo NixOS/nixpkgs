@@ -30,6 +30,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ gperf ];
   buildInputs = [ getopt ];
 
+  strictDeps = true;
+
   postPatch = ''
     patchShebangs .
   '';
