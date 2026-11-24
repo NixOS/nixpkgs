@@ -102,6 +102,7 @@ in
   # Extra environment variables to set during the build.
   # See: `../../../doc/languages-frameworks/haskell.section.md`
   env ? { },
+  __structuredAttrs ? true,
   buildDepends ? [ ],
   setupHaskellDepends ? [ ],
   libraryHaskellDepends ? [ ],
@@ -685,6 +686,7 @@ lib.fix (
           LOCALE_ARCHIVE = "${buildPackages.glibcLocales}/lib/locale/locale-archive";
         }
         // env';
+      inherit __structuredAttrs;
 
       prePatch =
         optionalString (editedCabalFile != null) ''
@@ -724,6 +726,7 @@ lib.fix (
         packageConfDir="$builddir/package.conf.d"
         mkdir -p $packageConfDir
 
+        # Not a derivation attribute, therefore untouched by __structuredAttrs
         setupCompileFlags="${concatStringsSep " " setupCompileFlags}"
 
         # Pass in configure flags that are only known at this phase
