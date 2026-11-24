@@ -2,6 +2,7 @@
   lib,
   llvmPackages,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   ninja,
   pkg-config,
@@ -130,6 +131,14 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
         External/vixl/test
     '';
   };
+
+  patches = [
+    # CMake 4.5 rejects the DEPENDS argument to install(CODE)
+    (fetchpatch {
+      url = "https://github.com/FEX-Emu/FEX/commit/e1ae133ddd31959b9050b619714950996f21c4ac.patch";
+      hash = "sha256-CCjLsfyTeY9ZnCMnGbdQxY77JXOgXLgEJDizqscANIk=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace FEXCore/include/git_version.h.in \
