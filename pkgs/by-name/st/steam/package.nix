@@ -84,6 +84,10 @@ let
             # not documented, used for network status things in Big Picture
             # FIXME: figure out how to only build libnm?
             libcap # not documented, required by srt-bwrap
+
+            # not documented, needed for Remote Play Together
+            libxtst
+            libvdpau
           ]
           ++ extraLibraries pkgs;
 
