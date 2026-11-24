@@ -31,7 +31,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags = [
     "--localstatedir=/var"
-    "--enable-netloc"
   ];
 
   # XXX: libx11 is not directly needed, but needed as a propagated dep of Cairo.
