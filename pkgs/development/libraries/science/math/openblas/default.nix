@@ -179,7 +179,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "OpenMathLib";
     repo = "OpenBLAS";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-EArf0K2Gs+w8IRD5wkMOQv79e8yMoTgQfa9kzjXKn3Y=";
   };
 
@@ -241,6 +241,8 @@ stdenv.mkDerivation (finalAttrs: {
     buildPackages.gfortran
     buildPackages.stdenv.cc
   ];
+
+  strictDeps = true;
 
   cmakeFlags = [
     (lib.cmakeFeature "TARGET" config.TARGET)
@@ -337,6 +339,8 @@ stdenv.mkDerivation (finalAttrs: {
     };
     aarch64-multiplatform = pkgsCross.aarch64-multiplatform.openblas;
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Basic Linear Algebra Subprograms";
