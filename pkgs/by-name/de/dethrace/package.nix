@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "dethrace-labs";
     repo = "dethrace";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0gow6Dc64MrFTzeZgzT/NHw9XSE98KS5+opGNKwrioM=";
+    hash = "sha256-yo5AXLMSEFlWe/BV/At7XL2yJQ9hgcMZfC3hu5KEF8Y=";
     fetchSubmodules = true;
   };
 
