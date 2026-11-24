@@ -6,7 +6,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "paste";
   version = "3.11.0";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pasteorg";
     repo = "paste";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-5eQU9pHazxKX9zMEd7oghKCke//uN4BVnmwYMR5lnSE=";
   };
 
@@ -38,8 +38,8 @@ buildPythonPackage rec {
   meta = {
     description = "Tools for using a Web Server Gateway Interface stack";
     homepage = "https://pythonpaste.readthedocs.io/";
-    changelog = "https://github.com/pasteorg/paste/blob/${version}/docs/news.txt";
+    changelog = "https://github.com/pasteorg/paste/blob/${finalAttrs.version}/docs/news.txt";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})
