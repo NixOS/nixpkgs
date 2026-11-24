@@ -47,7 +47,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildNoDefaultFeatures = stdenv.hostPlatform.isMips;
-  buildFeatures = lib.optional stdenv.hostPlatform.isMips "mips" ++ lib.optional withQuic "quic";
+  buildFeatures = [
+    "system-certificates"
+  ]
+  ++ lib.optional stdenv.hostPlatform.isMips "mips"
+  ++ lib.optional withQuic "quic";
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd easytier-cli \
