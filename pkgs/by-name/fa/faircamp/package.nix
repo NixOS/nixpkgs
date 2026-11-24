@@ -98,7 +98,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
     homepage = "https://faircamp.org/";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ fgaz ];
+    maintainers = with lib.maintainers; [
+      fgaz
+      niklaskorz
+    ];
     platforms = lib.platforms.all;
   };
 })
