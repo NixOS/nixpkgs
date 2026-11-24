@@ -9,12 +9,12 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "rebulk";
-  version = "6.0.1";
+  version = "6.0.3";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-1t8MjIluFgCHxpgfN3DtUT7Jc6n0BmueSwYU6wi6DOE=";
+    hash = "sha256-J57gK7g9a5wr0aVIBe8Nsw4HIdDHZT/lnEVltH4qCAA=";
   };
 
   postPatch = ''
