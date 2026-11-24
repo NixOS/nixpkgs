@@ -25,6 +25,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
+  strictDeps = true;
+
   cmakeFlags = [
     (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
     (lib.cmakeBool "RC_INSTALL_ALL_EXTRAS" true)
@@ -34,6 +36,8 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = unstableGitUpdater { };
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "C++ framework for property based testing inspired by QuickCheck";
