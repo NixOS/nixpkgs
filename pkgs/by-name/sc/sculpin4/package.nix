@@ -22,6 +22,13 @@ php.buildComposerProject2 rec {
 
   vendorHash = "sha256-V+dL22TYv6YR17Lt/0Vq0V5HslEjTXTZMSh+aKx1tsY=";
 
+  postPatch = ''
+    substituteInPlace bin/sculpin.php \
+      --replace-fail \
+        '$application = new Application($kernel);' \
+        '$application = new Application($kernel); $application->setVersion("${version}");'
+  '';
+
   meta = {
     description = "PHP static site generator";
     license = lib.licenses.mit;
