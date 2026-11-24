@@ -1183,6 +1183,7 @@
   ./services/network-filesystems/webdav-server-rs.nix
   ./services/network-filesystems/webdav.nix
   ./services/network-filesystems/yandex-disk.nix
+  ./services/networking/0wm.nix
   ./services/networking/3proxy.nix
   ./services/networking/acme-dns.nix
   ./services/networking/adguardhome.nix
