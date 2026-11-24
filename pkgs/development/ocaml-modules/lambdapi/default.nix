@@ -35,6 +35,12 @@ buildDunePackage (finalAttrs: {
       url = "https://github.com/Deducteam/lambdapi/commit/8e27c0f668915fbd49e32bdac246d6d515a64dd0.patch";
       hash = "sha256-9CkvH1o81T9LP+IPogKGhoiIDP76/nRfq59ttU7r0fI=";
     })
+    # Compatibility with dream ≥ 1.0.0
+    (fetchpatch {
+      url = "https://github.com/Deducteam/lambdapi/commit/72cc2f10d391932fe078ba5a401765e29a1d4cb7.patch";
+      includes = [ "*.ml" ];
+      hash = "sha256-XL4ECrkeuLtbXiZCUDmT5vruSy+JV8KZxlADLVEGQjA=";
+    })
   ];
 
   nativeBuildInputs = [
