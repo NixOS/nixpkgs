@@ -7,6 +7,8 @@
 }:
 
 buildNpmPackage (finalAttrs: {
+  __structuredAttrs = true;
+
   pname = "opencommit";
   version = "3.3.11";
 

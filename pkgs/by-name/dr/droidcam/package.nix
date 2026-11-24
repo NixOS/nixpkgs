@@ -19,8 +19,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "dev47apps";
     repo = "droidcam-linux-client";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-W9C6OPv/6KbIINPpSix3XM2rUnaFAcQTucBdZ40Mbx4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-W9C6OPv/6KbIINPpSix3XM2rUnaFAcQTucBdZ40Mbx4=";
   };
 
   nativeBuildInputs = [
@@ -37,17 +37,19 @@ stdenv.mkDerivation (finalAttrs: {
     libappindicator
   ];
 
+  strictDeps = true;
+
   postPatch = ''
     substituteInPlace src/droidcam.c \
-      --replace "/opt/droidcam-icon.png" "$out/share/icons/hicolor/96x96/apps/droidcam.png"
+      --replace-fail "/opt/droidcam-icon.png" "$out/share/icons/hicolor/96x96/apps/droidcam.png"
     substituteInPlace droidcam.desktop \
-      --replace "/opt/droidcam-icon.png" "droidcam" \
-      --replace "/usr/local/bin/droidcam" "droidcam"
+      --replace-fail "/opt/droidcam-icon.png" "droidcam" \
+      --replace-fail "/usr/local/bin/droidcam" "droidcam"
   '';
 
   preBuild = ''
-    makeFlagsArray+=("JPEG=$(pkg-config --libs --cflags libturbojpeg)")
-    makeFlagsArray+=("USBMUXD=$(pkg-config --libs --cflags libusbmuxd-2.0)")
+    makeFlags+=("JPEG=$(pkg-config --libs --cflags libturbojpeg)")
+    makeFlags+=("USBMUXD=$(pkg-config --libs --cflags libusbmuxd-2.0)")
   '';
 
   installPhase = ''
@@ -59,6 +61,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Linux client for DroidCam app";

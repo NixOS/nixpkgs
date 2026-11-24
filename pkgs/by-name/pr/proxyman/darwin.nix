@@ -9,13 +9,13 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   inherit pname;
-  version = "6.14.0";
+  version = "26.5.1";
   # Keep update tools from treating the wrapper as the source package.
   pos = __curPos;
 
   src = fetchurl {
     url = "https://github.com/ProxymanApp/Proxyman/releases/download/${finalAttrs.version}/Proxyman_${finalAttrs.version}.dmg";
-    hash = "sha256-bdIitfbr5Pr0glJcVDMfE/1ehpbRy5/pwXmUz0ivuvo=";
+    hash = "sha256-MaAsGEpECuwRoT2XGjLl/Ziv9isFjKxOZ1aIdFLEtqA=";
   };
 
   sourceRoot = ".";

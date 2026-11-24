@@ -1,5 +1,6 @@
 {
   _experimental-update-script-combinators,
+  bash,
   cmake,
   fetchFromGitHub,
   pkg-config,
@@ -36,18 +37,18 @@ let
 
   ferriscope-wsi = rustPlatform.buildRustPackage (finalAttrs: {
     pname = "ferriscope-wsi";
-    version = "0.1.0";
+    version = "0.2.2";
 
     src = fetchFromGitHub {
       owner = "hgaiser";
       repo = "ferriscope";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-JvJgK9Gh9Poq201M5cGST+W8CNuWayynBBtd6b31TXE=";
+      hash = "sha256-f0yhxc3kNgnx2Iklrb+vNoGXS3WIzJEyOkxQjkAQ1Qw=";
     };
 
     __structuredAttrs = true;
 
-    cargoHash = "sha256-gRBSukYIqCxwX8VVLLciHILctbQg7Og8Tw4PZYveT2Q=";
+    cargoHash = "sha256-hAE3eEX59c0l+nWwhsAXtLFlkqcBCvvJFS+6Bk7aLMs=";
 
     nativeBuildInputs = [
       pkg-config
@@ -92,18 +93,18 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "moonshine";
-  version = "0.18.0";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "hgaiser";
     repo = "moonshine";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bg32tFTJCNkihOvTEOsVyUt91OgEAAmL+IpRptTasNk=";
+    hash = "sha256-9nHJpSQg/yK9RgTSnxPPpKcIYzAZONTMyD9DNpPbKZw=";
   };
 
   __structuredAttrs = true;
 
-  cargoHash = "sha256-hLjJMtEtmCEtZxDSu9TpETtoYMZiQ6yutAaK5k1RpLQ=";
+  cargoHash = "sha256-hcx6XWb86rwT+aFCEr1r8ynJtYRbRTi0A8EYBAqP0ho=";
 
   cargoBuildFlags = [
     "-p"
@@ -118,6 +119,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     aws-lc
+    bash
     libevdev
     libgbm
     libopus
@@ -143,6 +145,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   postInstall = ''
+    install -Dm755 dist/moonshine-gamescope "$out/bin/moonshine-gamescope"
+
     install -Dm644 -t "$out/share/vulkan/implicit_layer.d" \
       "${ferriscope-wsi}/share/vulkan/implicit_layer.d/VkLayer_FERRISCOPE_wsi.${wsiArch}.json"
 

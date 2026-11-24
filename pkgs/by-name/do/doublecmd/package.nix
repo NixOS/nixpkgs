@@ -11,6 +11,7 @@
   libsForQt5,
   lua5_5,
   libssh2,
+  replaceVars,
   writableTmpDirAsHomeHook,
 }:
 
@@ -29,6 +30,13 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-pl/0YmZxPZfb+nubzig9DmyGonvnitVPr5f4n8ll3Bs=";
   };
+
+  patches = [
+    (replaceVars ./nix-paths.patch {
+      inherit lazarus;
+      libssh2 = lib.getLib libssh2;
+    })
+  ];
 
   nativeBuildInputs = [
     fpc
@@ -49,35 +57,13 @@ stdenv.mkDerivation (finalAttrs: {
   env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isLinux "--as-needed -rpath ${lib.makeLibraryPath finalAttrs.buildInputs}";
 
   postPatch = ''
-    patchShebangs build.sh
-    substituteInPlace build.sh \
-      --replace-warn '$(which lazbuild)' '"${lazarus}/bin/lazbuild --lazarusdir=${lazarus}/share/lazarus"'
-
-    ${
-      if stdenv.hostPlatform.isDarwin then
-        ''
-          patchShebangs install/darwin/install.sh
-
-          # Double Commander saves this default into the user's configuration, so use
-          # the symlink installed next to the executable instead of a store path.
-          substituteInPlace src/platform/lua.pas \
-            --replace-fail "LuaDLL = 'liblua5.1.dylib';" "LuaDLL = '%COMMANDER_PATH%/liblua.dylib';"
-          substituteInPlace plugins/wfx/ftp/src/sftp/libssh.pas \
-            --replace-fail "'libssh2.dylib'" "'${lib.getLib libssh2}/lib/libssh2.dylib'"
-        ''
-      else
-        ''
-          patchShebangs install/linux/install.sh
-          substituteInPlace install/linux/install.sh \
-            --replace-warn '$DC_INSTALL_PREFIX/usr' '$DC_INSTALL_PREFIX'
-
-          # Same as on Darwin: use the symlink installed next to the executable.
-          substituteInPlace src/platform/lua.pas \
-            --replace-fail "LuaDLL = 'liblua5.1.so.0';" "LuaDLL = '%COMMANDER_PATH%/liblua.so';"
-          substituteInPlace plugins/wfx/ftp/src/sftp/libssh.pas \
-            --replace-fail "'libssh2.so.1'" "'${lib.getLib libssh2}/lib/libssh2.so.1'"
-        ''
-    }
+    substituteInPlace src/platform/udcversion.pas \
+      --replace-fail '{$I %DATE%}' "'$(date -u -d "@$SOURCE_DATE_EPOCH" +%Y/%m/%d)'"
+    substituteInPlace install/linux/install.sh \
+      --replace-fail '$DC_INSTALL_PREFIX/usr' '$DC_INSTALL_PREFIX'
+    patchShebangs build.sh install/${
+      if stdenv.hostPlatform.isDarwin then "darwin" else "linux"
+    }/install.sh
   '';
 
   buildPhase = ''
@@ -95,13 +81,12 @@ stdenv.mkDerivation (finalAttrs: {
       if stdenv.hostPlatform.isDarwin then
         ''
           rm -f doublecmd.app/Contents/MacOS/doublecmd
-          install/darwin/install.sh "$TMPDIR"
-          mkdir -p $out/Applications
-          mv "$TMPDIR/doublecmd.app" $out/Applications/
-          cd $out/Applications/doublecmd.app/Contents/MacOS
+          install/darwin/install.sh "$out/Applications"
+          mv "$out/Applications/doublecmd.app" "$out/Applications/Double Commander.app"
+          cd "$out/Applications/Double Commander.app/Contents/MacOS"
           ln -vs ${lib.getLib lua}/lib/liblua.${lua.version}.dylib ./liblua.dylib
           mkdir -p $out/bin
-          ln -s $out/Applications/doublecmd.app/Contents/MacOS/doublecmd $out/bin/doublecmd
+          ln -s "../Applications/Double Commander.app/Contents/MacOS/doublecmd" $out/bin/doublecmd
         ''
       else
         ''
@@ -125,4 +110,3 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })
-# TODO: deal with other platforms too

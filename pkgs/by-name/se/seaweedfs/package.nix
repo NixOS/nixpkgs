@@ -3,13 +3,14 @@
   fetchFromGitHub,
   installShellFiles,
   lib,
-  nix-update-script,
+  nix-update,
+  writeShellScript,
   stdenv,
   versionCheckHook,
 }:
 buildGoModule (finalAttrs: {
   pname = "seaweedfs";
-  version = "4.53";
+  version = "4.55";
 
   src = fetchFromGitHub {
     owner = "seaweedfs";
@@ -22,10 +23,10 @@ buildGoModule (finalAttrs: {
       find "$out" -name .git -print0 | xargs -0 rm -rf
       popd
     '';
-    hash = "sha256-h/51Wuo8Fn+O4EpXqdYOLkMBQJPjE37Lzz4LJ71mfNw=";
+    hash = "sha256-QCmAIOgyZDS/ABg6A/hqoLiOYPZ88XGSUFD/MGkfr54=";
   };
 
-  vendorHash = "sha256-KhnPbaCGdCV8OmhEZBTiaAPp8DTJyPcuDfAuKzYpa/0=";
+  vendorHash = "sha256-CvNs2nekggw840M3/D6nQhNkpPjnOKZ21GK0HsAequI=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -75,7 +76,13 @@ buildGoModule (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "version";
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = writeShellScript "update-seaweedfs" ''
+    set -euo pipefail
+    ${lib.getExe nix-update} "$@" seaweedfs
+    ${lib.getExe nix-update} --version=skip --no-src seaweedfs-volume
+    ${lib.getExe nix-update} --version=skip --no-src seaweedfs-worker
+    ${lib.getExe nix-update} --version=skip --no-src seaweedfs-vector
+  '';
 
   meta = {
     description = "Simple and highly scalable distributed file system";

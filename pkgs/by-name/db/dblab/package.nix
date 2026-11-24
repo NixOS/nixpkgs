@@ -6,6 +6,8 @@
 }:
 
 buildGoModule (finalAttrs: {
+  __structuredAttrs = true;
+
   pname = "dblab";
   version = "0.55.2";
 

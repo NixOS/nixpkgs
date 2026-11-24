@@ -16,19 +16,28 @@
   weasyprint,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "md2pdf";
-  version = "3.1.1";
+  version = "5.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jmaupetit";
     repo = "md2pdf";
-    tag = "v${version}";
-    hash = "sha256-EZIiuyy2FhHgpCh95/KbYfQpxyPQfDHnB/Q5yo2xVac=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Q6RZ1eKKhraDJnOqRuK9fCSIIRxeFYZKecGx+ehbziU=";
   };
 
+  postPatch = ''
+    substituteInPlace tests/test_cli.py \
+      --replace-fail "': path '" "': Path '"
+  '';
+
   build-system = [ hatchling ];
+
+  pythonRelaxDeps = [
+    "weasyprint"
+  ];
 
   dependencies = [
     jinja2
@@ -56,7 +65,7 @@ buildPythonPackage rec {
     pytest-cov-stub
     pytestCheckHook
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   preCheck = ''
     export PATH="$out/bin:$PATH"
@@ -71,11 +80,11 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/jmaupetit/md2pdf/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/jmaupetit/md2pdf/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Markdown to PDF conversion tool";
     homepage = "https://github.com/jmaupetit/md2pdf";
     license = lib.licenses.mit;
     mainProgram = "md2pdf";
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

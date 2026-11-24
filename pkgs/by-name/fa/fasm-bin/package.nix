@@ -8,6 +8,9 @@
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
+  __structuredAttrs = true;
+  strictDeps = true;
+
   pname = "fasm-bin";
   version = "1.73.35";
 
