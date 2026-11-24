@@ -27,6 +27,9 @@ stdenv.mkDerivation (finalAttrs: {
     # This fixes the darwin bundle generation, sets min. deployment version
     # and patches SDL2_mixer include
     ./darwin-fixes.patch
+    # CMake 4.5 rejects the extra arguments to install(CODE)
+    # https://github.com/bvschaik/julius/pull/806
+    ./fix-macos-install-cmake-4.5.patch
   ];
 
   nativeBuildInputs = [
