@@ -15032,6 +15032,12 @@
     githubId = 6544084;
     name = "Kai Harries";
   };
+  kaikundrat = {
+    name = "kaikundrat";
+    github = "kaikundrat";
+    githubId = 340632580;
+  };
+
   kaistarkk = {
     github = "KaiStarkk";
     githubId = 1722064;
