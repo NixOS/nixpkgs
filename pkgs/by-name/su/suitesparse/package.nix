@@ -72,20 +72,32 @@ effectiveStdenv.mkDerivation (finalAttrs: {
       cudaPackages.cuda_nvrtc
     ];
 
-  preConfigure = ''
-    export GRAPHBLAS_CACHE_PATH="$(mktemp -d)"
-  '';
-
   cmakeFlags = [
+    # GraphBLAS, LAGraph and Mongoose are packaged separately as
+    # suitesparse-graphblas, suitesparse-lagraph and mongoose.
+    (lib.cmakeFeature "SUITESPARSE_ENABLE_PROJECTS" (
+      lib.concatStringsSep ";" [
+        "suitesparse_config"
+        "amd"
+        "btf"
+        "camd"
+        "ccolamd"
+        "colamd"
+        "cholmod"
+        "cxsparse"
+        "ldl"
+        "klu"
+        "umfpack"
+        "paru"
+        "rbio"
+        "spqr"
+        "spex"
+      ]
+    ))
     (lib.cmakeBool "SUITESPARSE_USE_PYTHON" false)
     (lib.cmakeFeature "BLAS_LIBRARIES" "${lib.getLib blas}/lib/libblas${effectiveStdenv.hostPlatform.extensions.sharedLibrary}")
     (lib.cmakeFeature "LAPACK_LIBRARIES" "${lib.getLib lapack}/lib/liblapack${effectiveStdenv.hostPlatform.extensions.sharedLibrary}")
     (lib.cmakeBool "SUITESPARSE_USE_64BIT_BLAS" blas.isILP64)
-  ]
-  ++ lib.optionals (effectiveStdenv.hostPlatform != effectiveStdenv.buildPlatform) [
-    # GraphBLAS JIT builds a native helper binary (grb_jitpackage) but uses
-    # the cross compiler, so it can't execute on the build host.
-    (lib.cmakeBool "GRAPHBLAS_USE_JIT" false)
   ]
   ++ lib.optionals enableCuda [
     (lib.cmakeFeature "SUITESPARSE_CUDA_ARCHITECTURES" cudaPackages.flags.cmakeCudaArchitecturesString)
@@ -115,6 +127,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     for f in $src/*/README.txt $src/*/README.md $src/*/LICENSE $src/*/LICENSE.txt $src/*/ChangeLog; do
       [ -f "$f" ] || continue
       component=$(basename $(dirname "$f"))
+      case "$component" in GraphBLAS|LAGraph|Mongoose) continue ;; esac
       cp "$f" "$docdir/''${component}_$(basename "$f")"
     done
 
@@ -122,6 +135,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     for dir in $src/*/Doc; do
       [ -d "$dir" ] || continue
       component=$(basename $(dirname "$dir"))
+      case "$component" in GraphBLAS|LAGraph|Mongoose) continue ;; esac
       find "$dir" -name '*.pdf' -exec cp {} "$docdir/" \;
     done
   '';
