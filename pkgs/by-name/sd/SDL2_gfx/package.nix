@@ -1,25 +1,35 @@
 {
   lib,
   SDL2,
-  fetchurl,
+  fetchFromGitHub,
   pkg-config,
   stdenv,
   testers,
-  # Boolean flags
-  enableMmx ? stdenv.hostPlatform.isx86,
-  enableSdltest ? (!stdenv.hostPlatform.isDarwin),
+  cmake,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "SDL2_gfx";
-  version = "1.0.4";
+  version = "1.1.0";
 
-  src = fetchurl {
-    url = "http://www.ferzkopp.net/Software/SDL2_gfx/SDL2_gfx-${finalAttrs.version}.tar.gz";
-    hash = "sha256-Y+DgGt3tyd8vhbk6JI8G6KBK/6AUqDXC6jS/405XYmI=";
+  src = fetchFromGitHub {
+    tag = "v${finalAttrs.version}";
+    repo = "SDL2_gfx";
+    owner = "ferzkopp";
+    hash = "sha256-17HgBM58y4nah310uXcMLn9df2YUqjAdKWNc2m34gjA=";
   };
 
+  # upstream is silly
+  postPatch = ''
+    substituteInPlace cmake/SDL2_gfx.pc.in \
+      --replace-fail '=''${prefix}/@CMAKE_INSTALL_LIBDIR@' '=@CMAKE_INSTALL_FULL_LIBDIR@' \
+      --replace-fail '=''${prefix}/@CMAKE_INSTALL_INCLUDEDIR@' '=@CMAKE_INSTALL_FULL_INCLUDEDIR@'
+  '';
+
+  __structuredAttrs = true;
+
   nativeBuildInputs = [
+    cmake
     SDL2
     pkg-config
   ];
@@ -33,13 +43,14 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
-  # Missing 'sincos()' implementation fails linking projects
-  # like 'freeciv_sdl2'.
-  env.NIX_LDFLAGS = "-lm";
-
-  configureFlags = [
-    (lib.enableFeature enableMmx "mmx")
-    (lib.enableFeature enableSdltest "sdltest")
+  cmakeFlags = [
+    (lib.cmakeBool "SDL2GFX_SHARED" (!stdenv.hostPlatform.isStatic))
+    (lib.cmakeBool "SDL2GFX_STATIC" stdenv.hostPlatform.isStatic)
+    (lib.cmakeBool "SDL2GFX_DEMOS" false)
+    (lib.cmakeBool "SDL2GFX_BENCH" false)
+    (lib.cmakeBool "SDL2GFX_DOCS" false) # somewhat broken
+    (lib.cmakeBool "SDL2GFX_TESTS" false) # needs SDL2::SDL2test
+    (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
   ];
 
   strictDeps = true;
