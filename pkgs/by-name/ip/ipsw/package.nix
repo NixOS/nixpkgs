@@ -6,21 +6,21 @@
 }:
 
 buildGoModule (finalAttrs: {
-  version = "3.1.745";
+  version = "3.1.750";
   pname = "ipsw";
 
   src = fetchFromGitHub {
     owner = "blacktop";
     repo = "ipsw";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YnljQqH2qhHCT4ucVkBK/JhnAhu9jK177AC+1vlCggg=";
+    hash = "sha256-vvq4miTpY0EajPm/bGCx86fvQPtXqZmQRsghhP2WuA8=";
   };
 
   # Files behind the `sandbox` build tag import the closed-source pkg/sandbox,
   # which is not in the repository. `go mod vendor` resolves the imports of
   # every build tag and fails; `go mod download` does not.
   proxyVendor = true;
-  vendorHash = "sha256-iCf0QFon23Hb7aB6flOj/XQ0u/a0sWXZvzRFArf1wi8=";
+  vendorHash = "sha256-vN+MhVKYCfXf5FG+MALd5EQ9prVgMzSEEzcnw1UeZsM=";
 
   ldflags = [
     "-s"
