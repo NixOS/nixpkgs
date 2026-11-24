@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2026.11.2";
+  version = "2026.11.3";
   components = {
     "3_day_blinds" =
       ps: with ps; [
@@ -9974,6 +9974,7 @@
     "tuya"
     "twentemilieu"
     "twilio"
+    "twilio_call"
     "twinkly"
     "twitch"
     "ubus"
