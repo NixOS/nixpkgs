@@ -7,6 +7,7 @@ args@{
   ninja,
   pkg-config,
   ctestCheckHook,
+  testers,
 }:
 let
   # The behavior of OneTBB does not change if it is built with hwloc with support for CUDA.
@@ -104,6 +105,8 @@ stdenv.mkDerivation (finalAttrs: {
     HWLOC_SYNTHETIC = "node:1 core:1 pu:1";
   };
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   __structuredAttrs = true;
 
   meta = {
@@ -126,5 +129,6 @@ stdenv.mkDerivation (finalAttrs: {
       thoughtpolice
       AAAAAASomeThingsFailToEvaluate
     ];
+    pkgConfigModules = [ "tbb" ];
   };
 })
