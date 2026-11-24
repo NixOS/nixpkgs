@@ -37,9 +37,6 @@ stdenv.mkDerivation (finalAttrs: {
   # depend_files, so keep the build directory outside the source tree.
   mesonBuildDir = "../build";
 
-  # build/build.py is executed directly by meson custom commands and starts
-  # with #!/usr/bin/env python3; the Linux sandbox has no /usr/bin/env, so
-  # rewrite the shebang to the build-time python3.
   postPatch = ''
     patchShebangs --build build/build.py
   '';
@@ -65,8 +62,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ systemdLibs ];
 
-  # libsystemd (sd_notify) is only available on Linux; the nixpkgs meson hook
-  # enables auto features by default, so disable the lookup elsewhere.
   mesonFlags = lib.optionals (!stdenv.hostPlatform.isLinux) [ "-Dlibsystemd=disabled" ];
 
   passthru.tests = nixosTests.pgbackrest;
