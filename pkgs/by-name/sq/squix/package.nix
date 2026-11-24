@@ -1,6 +1,7 @@
 {
   lib,
   buildGoModule,
+  duckdb,
   fetchFromGitHub,
   writableTmpDirAsHomeHook,
   versionCheckHook,
@@ -20,6 +21,8 @@ buildGoModule (finalAttrs: {
   };
 
   vendorHash = "sha256-kSv3VAQi+qdT29gZAjLmHauItaMFd9NG7bdRtQE1MZo=";
+
+  buildInputs = [ duckdb ];
 
   ldflags = [
     "-s"
