@@ -11,6 +11,7 @@
   x11Support ? false,
   libx11,
   cairo,
+  bashNonInteractive,
   config,
   enableCuda ? config.cudaSupport,
   cudaPackages,
@@ -47,11 +48,16 @@ stdenv.mkDerivation (finalAttrs: {
     cairo
     libx11
   ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform bashNonInteractive) [
+    bashNonInteractive
+  ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ numactl ]
   ++ lib.optionals enableCuda [ cudaPackages.cuda_cudart ];
 
   # Since `libpci' appears in `hwloc.pc', it must be propagated.
   propagatedBuildInputs = lib.optional stdenv.hostPlatform.isLinux pciutils;
+
+  strictDeps = true;
 
   enableParallelBuilding = true;
 
