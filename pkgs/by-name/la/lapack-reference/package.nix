@@ -26,6 +26,8 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
   ];
 
+  strictDeps = true;
+
   # Configure stage fails on aarch64-darwin otherwise, due to either clang 11 or gfortran 10.
   hardeningDisable = lib.optionals stdenv.hostPlatform.isDarwin [
     "stackprotector"
