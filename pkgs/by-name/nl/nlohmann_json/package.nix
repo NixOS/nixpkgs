@@ -43,6 +43,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
+  strictDeps = true;
+
   cmakeFlags = [
     # .pc file uses INCLUDEDIR as a relative path
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
