@@ -1,7 +1,5 @@
 {
   qtModule,
-  lib,
-  stdenv,
   qtbase,
   qtquick3d,
 }:
