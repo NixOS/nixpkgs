@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "valijson";
-  version = "1.1.4";
+  version = "1.1.5";
 
   src = fetchFromGitHub {
     owner = "tristanpenman";
     repo = "valijson";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-LTOz7GWICeWKfQ05tUpqZoXL9IZPc7V4t9hgtSsrHAQ=";
+    hash = "sha256-xcmusREbcOc2O4WVsQtXD2sRFlbeJLjtnnZbHf7TCxg=";
   };
 
   nativeBuildInputs = [
