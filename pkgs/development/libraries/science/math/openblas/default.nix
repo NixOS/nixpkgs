@@ -340,6 +340,8 @@ stdenv.mkDerivation (finalAttrs: {
     aarch64-multiplatform = pkgsCross.aarch64-multiplatform.openblas;
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Basic Linear Algebra Subprograms";
     license = lib.licenses.bsd3;
