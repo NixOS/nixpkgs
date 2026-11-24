@@ -5,6 +5,7 @@
   writeText,
 
   unprefixed ? false,
+  static ? false,
 }:
 
 let
@@ -16,18 +17,29 @@ let
     && !stdenv.hostPlatform.isDarwin
     && !stdenv.hostPlatform.isAndroid;
 
-in
-jemalloc.overrideAttrs (oldAttrs: {
-  configureFlags =
-    oldAttrs.configureFlags
-    ++ [
-      "--with-private-namespace=_rjem_"
-    ]
-    ++ lib.optionals (!unprefixed') [
-      "--with-jemalloc-prefix=_rjem_"
-    ];
+  mkJemallocHook =
+    library:
+    writeText "setup-hook.sh" ''
+      export JEMALLOC_OVERRIDE="@out@/lib/${library}"
+    '';
 
-  setupHook = writeText "setup-hook.sh" ''
-    export JEMALLOC_OVERRIDE="@out@/lib/libjemalloc${stdenv.hostPlatform.extensions.library}"
-  '';
-})
+in
+jemalloc.overrideAttrs (
+  oldAttrs:
+  {
+    configureFlags =
+      oldAttrs.configureFlags
+      ++ [
+        "--with-private-namespace=_rjem_"
+      ]
+      ++ lib.optionals (!unprefixed') [
+        "--with-jemalloc-prefix=_rjem_"
+      ];
+
+    setupHook = mkJemallocHook "libjemalloc${stdenv.hostPlatform.extensions.library}";
+  }
+  // lib.optionalAttrs static {
+    dontDisableStatic = true;
+    setupHook = mkJemallocHook "libjemalloc_pic.a";
+  }
+)

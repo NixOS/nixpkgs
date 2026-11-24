@@ -14,13 +14,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "dotagents";
-  version = "3.4.0";
+  version = "3.5.0";
 
   src = fetchFromGitHub {
     owner = "getsentry";
     repo = "dotagents";
     tag = finalAttrs.version;
-    hash = "sha256-WJI6DMJarhlg1SdEGrxnuqV5YXUUvGtOnqRT6j9hSwE=";
+    hash = "sha256-VMminahBR40kLu4LQf0poBg+y5IUotsTe8t/DnyNWtg=";
   };
 
   strictDeps = true;

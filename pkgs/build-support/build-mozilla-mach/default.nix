@@ -141,6 +141,7 @@ in
   enableAddonSideload ? false,
 
   ## Optimizations
+  enableRustSimd ? true,
   enableElfhack ?
     isElfhackPlatform stdenv && !(stdenv.hostPlatform.isMusl && stdenv.hostPlatform.isAarch64),
   enableLTO ? (
@@ -515,6 +516,7 @@ buildStdenv.mkDerivation {
     (enableFeature enableCrashReporter "crashreporter")
     (enableFeature enableNeckoWiFi "necko-wifi")
     (enableFeature enableWebRTC "webrtc")
+    (enableFeature enableRustSimd "rust-simd")
 
     (enableFeature enableDebug "debug")
     (if enableDebug then "--enable-profiling" else "--enable-optimize")
@@ -581,7 +583,7 @@ buildStdenv.mkDerivation {
       pixman
       xorgproto
       zlib
-      (if (lib.versionAtLeast version "144") then nss_latest else nss_esr)
+      (if (lib.versionAtLeast version "154") then nss_latest else nss_esr)
     ]
     ++ lib.optional withALSA alsa-lib
     ++ lib.optional withJACK libjack2

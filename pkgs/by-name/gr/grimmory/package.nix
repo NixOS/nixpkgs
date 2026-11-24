@@ -17,12 +17,12 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "grimmory";
-  version = "3.5.0";
+  version = "3.5.1";
   src = fetchFromGitHub {
     owner = "grimmory-tools";
     repo = "grimmory";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-j9VXtqWLc13qVn89T1OmLQcAlhTP4w8AmOZINqhtNa4=";
+    hash = "sha256-vyANDumLIeEPPwlj7gE9qnFvTc0snBUElZ7N8eyQBE4=";
   };
 
   patches = [
@@ -85,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
       --set APP_REVISION ${finalAttrs.env.APP_REVISION} \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath finalAttrs.buildInputs}" \
       --add-flags "-Djava.library.path=${lib.makeLibraryPath finalAttrs.buildInputs}" \
-      --add-flags "--enable-native-access=ALL-UNNAMED --enable-preview -jar $out/share/grimmory/grimmory.jar"
+      --add-flags "--enable-native-access=ALL-UNNAMED --enable-preview -XX:-UseBASE64Intrinsics -jar $out/share/grimmory/grimmory.jar"
   '';
 
   passthru.updateScript = writeShellScript "update-grimmory" ''
@@ -100,6 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Grimmory is a self-hosted library for your ebooks, comics and audiobooks.";
     homepage = "https://grimmory.org";
+    changelog = "https://github.com/grimmory-tools/grimmory/releases/tag/v${finalAttrs.version}";
     mainProgram = "grimmory";
     maintainers = [ lib.maintainers.kraftnix ];
     license = lib.licenses.agpl3Only;

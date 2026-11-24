@@ -46,7 +46,6 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libidn2
     libunistring
-    libxslt
   ];
 
   strictDeps = true;

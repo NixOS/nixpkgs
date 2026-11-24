@@ -6,11 +6,12 @@
   lib,
   libdisplay-info,
   libusb1,
+  libva-utils,
   lm_sensors,
   mesa-demos,
   mkKdeDerivation,
-  pkg-config,
   pciutils,
+  pkg-config,
   pulseaudio,
   qtgraphs,
   qttools,
@@ -31,11 +32,12 @@ let
     glxinfo = lib.getExe' mesa-demos "glxinfo";
     ip = lib.getExe' iproute2 "ip";
     lsblk = lib.getExe' util-linux "lsblk";
-    lspci = lib.getExe' pciutils "lspci";
     lscpu = lib.getExe' util-linux "lscpu";
+    lspci = lib.getExe' pciutils "lspci";
     pactl = lib.getExe' pulseaudio "pactl";
     qdbus = lib.getExe' qttools "qdbus";
     sensors = lib.getExe' lm_sensors "sensors";
+    vainfo = lib.getExe' libva-utils "vainfo";
     vulkaninfo = lib.getExe' vulkan-tools "vulkaninfo";
     waylandinfo = lib.getExe wayland-utils;
     xdpyinfo = lib.getExe xdpyinfo;
@@ -57,13 +59,15 @@ mkKdeDerivation {
 
   postPatch = ''
     substituteInPlace kcms/{firmware_security/fwupdmgr.sh,network/ip.sh} \
-      --replace-fail " aha " " ${lib.getExe aha} "
+      --replace-fail " aha " " ${tools.aha} "
   '';
 
-  extraNativeBuildInputs = [ pkg-config ];
+  extraNativeBuildInputs = [
+    pkg-config
+  ];
+
   extraBuildInputs = [
     qtgraphs
-
     libusb1
   ];
 
@@ -73,7 +77,7 @@ mkKdeDerivation {
   # the same directory, while it is actually located in a completely different
   # store path
   preFixup = ''
-    ln -sf ${systemsettings}/bin/systemsettings $out/bin/kinfocenter
+    ln -sf ${lib.getExe systemsettings} $out/bin/kinfocenter
   '';
 
   # Hardcoded as a QString, which is UTF-16 so Nix can't pick it up automatically

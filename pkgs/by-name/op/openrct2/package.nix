@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   fetchFromGitHub,
+  fetchpatch,
   SDL2,
   cmake,
   curl,
@@ -48,6 +49,15 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-pGBxQh4T0+zAj7ju8cP55HxW7wGpl5wyalf66VcIDxA=";
   };
+
+  patches = [
+    # CMake 4.5 rejects the extra arguments to install(CODE)
+    (fetchpatch {
+      name = "remove-unused-bundle-install-parameters.patch";
+      url = "https://github.com/OpenRCT2/OpenRCT2/commit/8b5cd8b35c26231afb86b59821381ac87acb12c8.patch";
+      hash = "sha256-xrH3sSXxWt3HSSRQHxeljUOONrxqvHvPyaJHi5ITDzg=";
+    })
+  ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # MACOS_BUNDLE (to build a .APP) is tied to MACOS_USE_DEPENDENCIES by default.

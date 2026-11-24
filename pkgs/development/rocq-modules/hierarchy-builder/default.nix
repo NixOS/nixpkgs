@@ -17,6 +17,7 @@ let
       in
       with lib.versions;
       lib.switch rocq-core.rocq-version [
+        (case (range "9.0" "9.3") "1.10.4")
         (case (range "9.0" "9.3") "1.10.3")
         (case (range "9.0" "9.1") "1.10.2")
         (case (range "9.0" "9.1") "1.10.0")
@@ -30,6 +31,7 @@ let
         (case (range "8.12" "8.13") "1.1.0")
         (case (isEq "8.11") "0.10.0")
       ] null;
+    release."1.10.4".hash = "sha256-tShc5OvsJZudjtm6nzPVVvO3lYxIJszeRzWEUk0WnmE=";
     release."1.10.3".hash = "sha256-y13KxzLulIu39Ci3aMc1cZG4tw3LL2ab7U9snI6jrXc=";
     release."1.10.2".sha256 = "sha256-Uzni9qrYQP45Tr+JkHs0BuRARwmWSMwA/iHhIzkolxc=";
     release."1.10.0".sha256 = "sha256-c52nS8I0tia7Q8lZTFJyHVPVabW9xv55m7w6B7y3+e8=";

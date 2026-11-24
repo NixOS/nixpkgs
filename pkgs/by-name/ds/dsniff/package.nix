@@ -140,5 +140,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ lib.maintainers.symphorien ];
     # bsd and solaris should work as well
     platforms = lib.platforms.linux;
+
+    knownVulnerabilities = [ "CVE-2026-134753: Out of bound write" ];
   };
 })

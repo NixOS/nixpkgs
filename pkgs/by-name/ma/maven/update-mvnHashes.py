@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#! nix-shell -i python3 -p python3
+#! nix-shell -i python3 -p python3 nix-update
 """Update the mvnHash of every package built with maven.buildMavenPackage.
 
 When the maven package is updated, its default plugin versions change. A
@@ -8,33 +8,44 @@ then resolves different plugin versions, its dependency set changes, and
 its mvnHash no longer matches. This script re-derives the hash for each
 affected package.
 
-How it works, per package (see update_package):
+How it works, per package (see resolve_attributes and update_package):
 
 1. Find all .nix files under pkgs/ that call <builder>.buildMavenPackage
    and set a mvnHash, where <builder> defaults to "maven" and can be
    changed with --builder. This script itself contains no such call with
    an mvnHash line, so it is filtered out along with other non-package
    files.
-2. Determine the attribute to build: an entry from ATTRIBUTE_OVERRIDES if
-   present, otherwise the pname, otherwise the directory name under
-   pkgs/by-name/xx/name/.
-3. Replace the mvnHash line with a fake hash, so the dependency
-   derivation actually builds and fails.
-4. Run nix-build -A attribute and parse the "specified:" / "got:" lines
-   from the hash mismatch error to learn the new hash.
-5. Write the new hash into the file.
+2. Determine the attribute candidates: an entry from ATTRIBUTE_OVERRIDES
+   if present, otherwise the pname, otherwise the directory name under
+   pkgs/by-name/xx/name/. A single nix evaluation then resolves each
+   package to the first candidate whose derivation exists and exposes
+   the fetchedMavenDeps fixed-output derivation, which is what nix-update
+   needs access to.
+3. Run nix-update --version=skip --no-src for the attribute, pinned to
+   the discovered file with --override-filename. nix-update re-derives
+   the mvnHash by building fetchedMavenDeps with an empty outputHash and
+   writes the resulting hash into the file; version and src hash stay
+   untouched.
 
 The whole cycle runs per package. An interrupted run leaves the packages
 it finished updated and the rest untouched. For a package whose mvnHash
-is already correct, the "got" hash equals the "specified" hash and the
-file is left alone, so re-running is safe.
+is already correct, nix-update leaves the file alone, so re-running is
+safe.
 
-Packages whose hash could not be determined are listed at the end with
-their file path, so they can be handled manually.
+Packages whose attribute could not be resolved or whose hash could not
+be determined are listed at the end with their file path, so they can be
+handled manually.
+
+Pass one or more PACKAGE selectors to restrict the run to those packages.
+A selector matches a package's pname, one of its nixpkgs attributes, its
+directory name, or its file path (absolute, relative to the nixpkgs root,
+or as a trailing fragment like `pdfsam-basic/package.nix`). A selector
+that matches no package is an error, so typos do not silently skip
+packages. Without selectors, every found package is processed.
 
 Usage:
   ./update-mvnHashes.py [-j N] [--nixpkgs PATH] [--builder NAME]
-                        [--commit [--assisted-by TEXT]]
+                        [--commit [--assisted-by TEXT]] [PACKAGE ...]
 
 With --commit, each updated package is committed on its own as
 "<pname>: update mvnHash after maven package update". If the contribution
@@ -43,22 +54,19 @@ name to add the trailer the nixpkgs automation/AI policy requires (see
 CONTRIBUTING.md).
 
 Needs network access for the maven downloads. Unfree packages are
-allowed, since only the hash mismatch from their dependency derivation
-is needed.
+handled by disabling nixpkgs' meta checks during evaluation, since only
+the hash of their dependency derivation is needed.
 """
 
 import argparse
 import concurrent.futures
+import json
 import os
 import re
 import subprocess
 import sys
 import threading
 from pathlib import Path
-
-# must match the length of a real sha256 base64 hash, otherwise the fixed-output
-# derivation would be rejected before even building
-FAKE_HASH = "sha256-" + "A" * 43 + "="
 
 # manually curated overrides for packages whose pname is not a nixpkgs
 # attribute: pname -> attribute path to build
@@ -84,12 +92,6 @@ HASH_RE = re.compile(r'sha256-[A-Za-z0-9+/]+={0,2}')
 MVNHASH_LINE_RE = re.compile(r'^(\s*mvnHash\s*=\s*")(' + HASH_RE.pattern + r')(".*$)', re.MULTILINE)
 PNAME_RE = re.compile(r'pname\s*=\s*"([^"$\n{}]+)"')
 
-# matches lines from nix output like:
-#   specified: sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
-#   got:       sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
-SPECIFIED_RE = re.compile(r'(?i)specified\s*:\s*(' + HASH_RE.pattern + r')')
-GOT_RE = re.compile(r'(?i)\bgot\s*:\s*(' + HASH_RE.pattern + r')')
-
 # git operations from worker threads need to be serialized, git's index
 # locking does not tolerate concurrent index.lock access
 git_lock = threading.Lock()
@@ -112,7 +114,7 @@ def main() -> None:
         "-j",
         type=int,
         default=1,
-        help="number of nix-build evaluations to run in parallel",
+        help="number of nix-update runs to execute in parallel",
     )
     parser.add_argument(
         "--builder",
@@ -133,6 +135,15 @@ def main() -> None:
         "'OpenCode (GLM-5.3-Flash)'; required by the nixpkgs automation/AI policy "
         "when the commits were produced with LLM assistance (see CONTRIBUTING.md)",
     )
+    parser.add_argument(
+        "packages",
+        nargs="*",
+        metavar="PACKAGE",
+        help="only update these packages; a selector matches a package's pname, "
+        "one of its nixpkgs attributes, its directory name, or its file path "
+        "(absolute, relative to --nixpkgs, or as a trailing fragment like "
+        "'pdfsam-basic/package.nix')",
+    )
     args = parser.parse_args()
 
     nixpkgs_root = args.nixpkgs.resolve()
@@ -147,7 +158,7 @@ def main() -> None:
     maven_files = find_maven_files(nixpkgs_root, args.builder)
     print(f"found {len(maven_files)} files")
 
-    # step 2: determine the attribute to build for each file
+    # step 2: determine the attribute candidates for each file
     packages: dict[tuple[str, ...], tuple[str, Path]] = {}
     for path in maven_files:
         pname = extract_pname(path.read_text(), path, nixpkgs_root, args.builder)
@@ -161,28 +172,37 @@ def main() -> None:
             )
         packages[attributes] = (pname, path)
 
-    print(f"updating {len(packages)} packages, {args.jobs} at a time...")
-    failures: dict[tuple[str, ...], str] = {}
+    if args.packages:
+        packages = select_packages(nixpkgs_root, packages, args.packages)
+
+    # step 2b: resolve each package to an attribute nix-update can work with
+    print("resolving attributes (checking that each exposes fetchedMavenDeps)...")
+    resolved, unresolved = resolve_attributes(nixpkgs_root, packages)
+    for attributes in unresolved:
+        print(f"WARNING: {attributes[0]}: {unresolved[attributes]}", file=sys.stderr)
+
+    print(f"updating {len(resolved)} of {len(packages)} packages, {args.jobs} at a time...")
+    failures: dict[tuple[str, ...], str] = dict(unresolved)
     with concurrent.futures.ThreadPoolExecutor(max_workers=args.jobs) as executor:
         futures = {
             executor.submit(
                 update_package,
                 nixpkgs_root,
-                pname,
-                list(attributes),
-                path,
+                packages[attributes][0],
+                resolved[attributes],
+                packages[attributes][1],
                 args.commit,
                 args.assisted_by,
             ): attributes
-            for attributes, (pname, path) in packages.items()
+            for attributes in resolved
         }
         for future in concurrent.futures.as_completed(futures):
             attributes = futures[future]
             success, result = future.result()
             if success:
-                print(f"{attributes[0]}: new hash {result}")
+                print(f"{attributes[0]}: {result}")
             else:
-                failures[attributes] = result
+                failures[attributes] = "nix-update failed (see its output above)"
                 print(f"ERROR: could not determine new hash for {attributes[0]}:", file=sys.stderr)
                 print(result, file=sys.stderr)
 
@@ -190,7 +210,7 @@ def main() -> None:
         print("\nfailed to update:", file=sys.stderr)
         for attributes in sorted(failures, key=lambda attributes: attributes[0]):
             print(
-                f"  {attributes[0]} ({packages[attributes][1]}): tried attributes: {' '.join(attributes)}",
+                f"  {attributes[0]} ({packages[attributes][1]}): {failures[attributes]}",
                 file=sys.stderr,
             )
         sys.exit(1)
@@ -273,97 +293,193 @@ def attribute_candidates(nixpkgs_root: Path, path: Path, pname: str) -> list[str
     return candidates
 
 
+def resolve_attributes(
+    nixpkgs_root: Path,
+    packages: dict[tuple[str, ...], tuple[str, Path]],
+) -> tuple[dict[tuple[str, ...], str], dict[tuple[str, ...], str]]:
+    """Step 2: resolve each package to a single attribute for nix-update.
+
+    Runs one nix evaluation that, for every package, picks the first
+    attribute candidate whose derivation exists and exposes the
+    fetchedMavenDeps fixed-output derivation - only those let nix-update
+    reach the mvnHash. Returns (resolved, unresolved) maps keyed by the
+    attribute candidates, to the resolved attribute / an explanation.
+    """
+    # also try each candidate's `.src` attribute: packages like
+    # certificate-ripper build their maven jar as the src of a wrapper
+    # (buildGraalvmNativeImage &c), so the top attribute itself does not
+    # expose fetchedMavenDeps
+    candidates = [
+        {
+            "key": index,
+            "candidates": list(attributes) + [f"{attr}.src" for attr in attributes],
+        }
+        for index, attributes in enumerate(packages)
+    ]
+    proc = subprocess.run(
+        [
+            "nix-instantiate",
+            "--eval",
+            "--json",
+            "--strict",
+            "--expr",
+            f'''
+            {{ candidatesJson }}:
+            let
+              pkgs = import {nixpkgs_root} {{ config.checkMeta = false; overlays = []; }};
+              lib = pkgs.lib;
+              usable = cand:
+                let
+                  r = builtins.tryEval (
+                    let v = lib.attrByPath (lib.splitString "." cand) null pkgs;
+                    in v != null && v ? fetchedMavenDeps
+                  );
+                in
+                if r.success && r.value then cand else null;
+            in
+            map (pkg: map usable pkg.candidates) (builtins.fromJSON candidatesJson)
+            ''',
+            "--argstr",
+            "candidatesJson",
+            json.dumps(candidates),
+        ],
+        capture_output=True,
+        text=True,
+    )
+    if proc.returncode != 0:
+        print("ERROR: nix evaluation for attribute resolution failed:", file=sys.stderr)
+        print(proc.stdout + proc.stderr, file=sys.stderr)
+        sys.exit(1)
+
+    resolved: dict[tuple[str, ...], str] = {}
+    unresolved: dict[tuple[str, ...], str] = {}
+    for attributes, candidates_result in zip(packages, json.loads(proc.stdout)):
+        attribute = next((c for c in candidates_result if c is not None), None)
+        if attribute is not None:
+            resolved[attributes] = attribute
+        else:
+            unresolved[attributes] = (
+                f"none of the candidates {' '.join(attributes)} exists in nixpkgs "
+                "or exposes fetchedMavenDeps (is the mvnHash on a helper derivation "
+                "that the attribute does not expose via passthru?)"
+            )
+    return resolved, unresolved
+
+
+def select_packages(
+    nixpkgs_root: Path,
+    packages: dict[tuple[str, ...], tuple[str, Path]],
+    selectors: list[str],
+) -> dict[tuple[str, ...], tuple[str, Path]]:
+    """Restrict the discovered packages to those matching any selector.
+
+    A selector matches a package's pname, one of its attribute candidates,
+    its directory name, or its file path (absolute, relative to the nixpkgs
+    root, or as a trailing fragment like 'pdfsam-basic/package.nix').
+    Selectors that match nothing are an error, so a typo does not silently
+    skip a package.
+    """
+
+    def matches(selector: str, pname: str, attributes: tuple[str, ...], path: Path) -> bool:
+        path = path.resolve()
+        if selector in (pname, *attributes, path.parent.name):
+            return True
+        selector_path = Path(selector)
+        if selector_path.is_absolute():
+            return path == selector_path.resolve()
+        if not path.is_relative_to(nixpkgs_root):
+            return False
+        parts = selector_path.parts
+        relative_parts = path.relative_to(nixpkgs_root).parts
+        return parts == relative_parts[-len(parts):]
+
+    filtered = {
+        attributes: entry
+        for attributes, entry in packages.items()
+        if any(matches(selector, entry[0], attributes, entry[1]) for selector in selectors)
+    }
+    unmatched = [
+        selector
+        for selector in selectors
+        if not any(
+            matches(selector, entry[0], attributes, entry[1])
+            for attributes, entry in packages.items()
+        )
+    ]
+    if unmatched:
+        print(f"error: no package matches: {', '.join(unmatched)}", file=sys.stderr)
+        sys.exit(1)
+    return filtered
+
+
 def update_package(
     nixpkgs_root: Path,
     pname: str,
-    attributes: list[str],
+    attribute: str,
     path: Path,
     commit: bool,
     assisted_by: str | None,
 ) -> tuple[bool, str]:
-    """Run the full update cycle (steps 3 to 5) for a single package.
+    """Run the full update cycle (step 3) for a single package.
 
-    Doing the whole pass per package (instead of faking everything up front)
+    Doing the whole pass per package (instead of running everything up front)
     means an interrupted run leaves finished packages updated and the rest
     untouched.
     """
-    fake_hash(path)
-    success, result, not_found = build_package(nixpkgs_root, attributes)
+    before = path.read_bytes()
+    success, output = nix_update(nixpkgs_root, attribute, path.relative_to(nixpkgs_root))
     if not success:
-        return False, result
-    changed = replace_hashes(path, result)
-    if changed and commit:
-        commit_package(nixpkgs_root, pname, path, result, assisted_by)
-    return True, result
+        return False, output
+    if path.read_bytes() != before:
+        if commit:
+            commit_package(nixpkgs_root, pname, path, assisted_by)
+        return True, f"new hash {read_mvn_hashes(path)}"
+    return True, "mvnHash already up to date"
 
 
-def fake_hash(path: Path) -> None:
-    """Step 3: replace the mvnHash in the file with a fake hash."""
-    lines = path.read_text().splitlines(keepends=True)
-    new_lines = []
-    for line in lines:
-        m = MVNHASH_LINE_RE.match(line)
-        if m:
-            line = m.group(1) + FAKE_HASH + m.group(3) + ("\n" if line.endswith("\n") else "")
-        new_lines.append(line)
-    path.write_text("".join(new_lines))
+def nix_update(nixpkgs_root: Path, attribute: str, rel_path: Path) -> tuple[bool, str]:
+    """Step 3: run nix-update to re-derive and write the mvnHash.
 
-
-def build_package(nixpkgs_root: Path, attributes: list[str]) -> tuple[bool, str, list[str]]:
-    """Step 4: run nix-build and capture the log output.
-
-    Tries each attribute candidate in order; returns (success, result,
-    attributes that could not be found).
+    --version=skip leaves the version alone, --no-src skips the (unchanged)
+    src hash, and --override-filename pins the edit to the discovered file.
     """
-    not_found = []
-    for attribute in attributes:
-        print(f"building {attribute}...")
-        result = subprocess.run(
-            ["nix-build", str(nixpkgs_root), "-A", attribute, "--no-out-link"],
-            capture_output=True,
-            text=True,
-            # some maven packages like tinyMediaManager are unfree; since we
-            # only need the hash mismatch from the deps FOD, allow them
-            env={**os.environ, "NIXPKGS_ALLOW_UNFREE": "1"},
-        )
-        # nix-build fails on a hash mismatch, which is exactly what we expect here
-        output = result.stdout + result.stderr
-        specified = SPECIFIED_RE.search(output)
-        got = GOT_RE.search(output)
-        if got:
-            # if the specified hash equals the got hash, the package did not change
-            if specified and specified.group(1) == got.group(1):
-                return False, output, not_found
-            return True, got.group(1), not_found
-        if "not found" in output:
-            not_found.append(attribute)
-            continue
-        return False, output, not_found
-    return False, f"none of the attributes {' '.join(attributes)} exist in nixpkgs", not_found
+    result = subprocess.run(
+        [
+            "nix-update",
+            "--version=skip",
+            "--no-src",
+            "--override-filename",
+            str(rel_path),
+            attribute,
+        ],
+        cwd=nixpkgs_root,
+        capture_output=True,
+        text=True,
+        # some maven packages like tinyMediaManager are unfree; since we
+        # only need the hash mismatch from their dependency derivation,
+        # allow them
+        env={**os.environ, "NIXPKGS_ALLOW_UNFREE": "1"},
+    )
+    return result.returncode == 0, result.stdout + result.stderr
 
 
-def replace_hashes(path: Path, new_hash: str) -> bool:
-    """Step 5: replace the (fake) mvnHash in the file with the new hash."""
-    lines = path.read_text().splitlines(keepends=True)
-    changed = False
-    for i, line in enumerate(lines):
-        m = MVNHASH_LINE_RE.match(line)
-        if m and m.group(2) != new_hash:
-            lines[i] = m.group(1) + new_hash + m.group(3) + ("\n" if line.endswith("\n") else "")
-            changed = True
-    if changed:
-        path.write_text("".join(lines))
-    return changed
+def read_mvn_hashes(path: Path) -> str:
+    """All mvnHash values currently set in the file, for reporting."""
+    hashes = [
+        m.group(2)
+        for line in path.read_text().splitlines()
+        if (m := MVNHASH_LINE_RE.match(line))
+    ]
+    return ", ".join(hashes)
 
 
 def commit_package(
     nixpkgs_root: Path,
     pname: str,
     path: Path,
-    new_hash: str,
     assisted_by: str | None,
 ) -> None:
-    """After step 5: commit the updated mvnHash with a message matching nixpkgs conventions."""
+    """After step 3: commit the updated mvnHash with a message matching nixpkgs conventions."""
     with git_lock:
         rel_path = path.relative_to(nixpkgs_root)
         subprocess.run(["git", "-C", str(nixpkgs_root), "add", str(rel_path)], check=True)

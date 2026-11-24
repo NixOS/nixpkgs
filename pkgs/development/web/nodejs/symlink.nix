@@ -36,6 +36,9 @@ in
     nodejs-slim.npm
   ]
   ++ lib.optional (builtins.hasAttr "corepack" nodejs-slim) nodejs-slim.corepack;
+
+  strictDeps = true;
+  __structuredAttrs = true;
 }).overrideAttrs
   (nodejs: {
     passthru =

@@ -41,7 +41,7 @@ buildDunePackage {
     fpath
   ];
 
-  doCheck = true;
+  doCheck = lib.versionOlder alcotest.version "1.10";
 
   meta = irmin.meta // {
     description = "Irmin implementation of the Tezos context hash specification";

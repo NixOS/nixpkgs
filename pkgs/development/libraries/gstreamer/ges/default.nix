@@ -25,7 +25,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gst-editing-services";
-  version = "1.28.8";
+  version = "1.28.9";
 
   outputs = [
     "out"
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/gst-editing-services/gst-editing-services-${finalAttrs.version}.tar.xz";
-    hash = "sha256-TZPSMJt9AVKc1eM3X5m/fmnC4yz1nORTOzGlxxGbm1g=";
+    hash = "sha256-I8r4Q5ugYwkdoibnoXdJFYSBBf9H69vndz//ohoJRpI=";
   };
 
   separateDebugInfo = true;

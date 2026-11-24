@@ -53,6 +53,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ libpng ];
 
+  strictDeps = true;
+
   # Default "enabled" value attempts to enable CPU features on all
   # architectures and requires used to disable them:
   #   https://gitlab.freedesktop.org/pixman/pixman/-/issues/88
@@ -86,6 +88,8 @@ stdenv.mkDerivation (finalAttrs: {
       rev-prefix = "pixman-";
     };
   };
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://pixman.org";

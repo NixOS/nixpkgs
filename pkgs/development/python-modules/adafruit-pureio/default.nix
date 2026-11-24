@@ -8,14 +8,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "adafruit-pureio";
-  version = "1.1.12";
+  version = "1.1.13";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "adafruit";
     repo = "Adafruit_Python_PureIO";
     tag = finalAttrs.version;
-    hash = "sha256-yuDPQ30W8tU6kdruE3I0estRIoMU0RyXlowXsgP2r1I=";
+    hash = "sha256-eXms4hL7tVu8d/6/Gocx3zuwZIgcBhwgOebE/Kku+iM=";
   };
 
   build-system = [ setuptools-scm ];

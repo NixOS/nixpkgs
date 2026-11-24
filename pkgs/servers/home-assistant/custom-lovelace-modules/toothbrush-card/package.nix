@@ -6,16 +6,16 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "toothbrush-card";
-  version = "0.38.0";
+  version = "0.39.0";
 
   src = fetchFromGitHub {
     owner = "mtheli";
     repo = "toothbrush-card";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7ypkuluP8YqnPQXQPf0COoMGLFaEz2/YfWVnldJPTVI=";
+    hash = "sha256-w2+s41KRQQtHYmoePyX1sILlLYioPv5AT+ivVWg7hl0=";
   };
 
-  npmDepsHash = "sha256-kZRFsH2Lu16T5zsRYe51nt3Exq3zPHfTtan4IfoNBy4=";
+  npmDepsHash = "sha256-png+Asj6YEXeES400j+LMhfwP0s2FK3AmaOL95czXew=";
 
   postPatch = ''
     # do not embed build time

@@ -19,13 +19,13 @@ let
 in
 buildNpmPackage (finalAttrs: {
   pname = "super-productivity";
-  version = "20.0.0";
+  version = "20.1.0";
 
   src = fetchFromGitHub {
     owner = "super-productivity";
     repo = "super-productivity";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EWABP8wTr/dJbQhugyEa8a3KE+qbxbbi9CBLm2o8ERE=";
+    hash = "sha256-w6vPWekIHow9if1pULoqEezTK7tvp5xGQ3XGLzBVCmU=";
   };
 
   # Use custom fetcher for deps because super-productivity uses multiple
@@ -57,10 +57,11 @@ buildNpmPackage (finalAttrs: {
       buildPhase = ''
         mkdir -p $out
         find -name package-lock.json | sort | while read -r lockfile; do
-          prefetch-npm-deps $lockfile /tmp/cache
+          cacheDir=$(mktemp -d)
+          prefetch-npm-deps "$lockfile" "$cacheDir"
           # Merge output
-          rsync -a /tmp/cache/ $out
-          rm -rf /tmp/cache
+          rsync -a "$cacheDir/" "$out"
+          rm -rf "$cacheDir"
         done
         # Ensure that the root package-lock.json is placed in the output.
         # This means only the root lockfile is checked for consistancy,
@@ -71,7 +72,7 @@ buildNpmPackage (finalAttrs: {
       dontInstall = true;
 
       outputHashMode = "recursive";
-      hash = "sha256-4QvCAjQ6B2J5Ln5JVS7olS4HdLs1mFoM3EQzIh/5Fio=";
+      hash = "sha256-0W7LWxsyQQ/qtmD6pPgL7K27ayTR2xFWltqG0mN3bDQ=";
     }
   );
 
@@ -211,6 +212,7 @@ buildNpmPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       pineapplehunter
       tebriel
+      yzx9
     ];
     mainProgram = "superproductivity";
   };

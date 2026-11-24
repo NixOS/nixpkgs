@@ -48,6 +48,9 @@ stdenv.mkDerivation (finalAttrs: {
     doctest
     nlohmann_json
   ];
+  strictDeps = true;
+  __structuredAttrs = true;
+
   doCheck = true;
 
   meta = {

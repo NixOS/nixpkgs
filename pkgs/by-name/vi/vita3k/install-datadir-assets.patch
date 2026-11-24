@@ -1,0 +1,40 @@
+From 4319a8bcd05364ce389fe55c04c7581b66b729c4 Mon Sep 17 00:00:00 2001
+From: Rafael Ieda <git@ieda.me>
+Date: Mon, 23 Nov 2026 17:37:56 -0300
+Subject: [PATCH 3/5] app: Look for static assets in the install data directory
+
+---
+ vita3k/app/CMakeLists.txt   | 4 ++++
+ vita3k/app/src/app_init.cpp | 3 +++
+ 2 files changed, 7 insertions(+)
+
+diff --git a/vita3k/app/CMakeLists.txt b/vita3k/app/CMakeLists.txt
+index 3d9cca4e..ced7c9ca 100644
+--- a/vita3k/app/CMakeLists.txt
++++ b/vita3k/app/CMakeLists.txt
+@@ -27,4 +27,8 @@ endif()
+ if (LINUX)
+     find_package(X11 REQUIRED)
+     target_link_libraries(app PRIVATE ${X11_LIBRARIES})
++
++    # Where the static assets are installed, for prefixes other than /usr and /usr/local
++    include(GNUInstallDirs)
++    target_compile_definitions(app PRIVATE "VITA3K_INSTALL_DATADIR=\"${CMAKE_INSTALL_FULL_DATADIR}/Vita3K\"")
+ endif()
+diff --git a/vita3k/app/src/app_init.cpp b/vita3k/app/src/app_init.cpp
+index ad44ecdf..81e930c2 100644
+--- a/vita3k/app/src/app_init.cpp
++++ b/vita3k/app/src/app_init.cpp
+@@ -366,6 +366,9 @@ bool init_paths(Root &root_paths) {
+         }
+ 
+         const constexpr char *static_asset_paths[] = {
++#ifdef VITA3K_INSTALL_DATADIR
++            VITA3K_INSTALL_DATADIR,
++#endif
+             "/usr/local/share/Vita3K",
+             "/usr/share/Vita3K",
+             "/app/share/Vita3K",
+-- 
+2.56.0
+

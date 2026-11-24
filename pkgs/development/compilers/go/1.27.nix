@@ -8,10 +8,10 @@ let
   mkGoDerivation = callPackage ./generic.nix { };
 in
 mkGoDerivation (finalAttrs: {
-  version = "1.27.3";
+  version = "1.27.4";
   src = fetchurl {
     url = "https://go.dev/dl/go${finalAttrs.version}.src.tar.gz";
-    hash = "sha256-bndJA1zzYPBrJXXRYup535/ajvZxiJ5cN1+OUHd/Jrs=";
+    hash = "sha256-c8+4VxrsDAEXdofbhxY9Rqog6XeWcncokaoXZU2aYJk=";
   };
   patches = [
     # This patch is never used in tree, and very rarely out-of-tree. The one exception is in
@@ -19,4 +19,24 @@ mkGoDerivation (finalAttrs: {
     ./go_no_vendor_checks-1.27.patch
   ];
   buildGoModule = buildGo127Module;
+  internalPIESupport = {
+    android = [ "arm64" ];
+    darwin = [
+      "amd64"
+      "arm64"
+    ];
+    linux = [
+      "amd64"
+      "arm64"
+      "loong64"
+      "ppc64"
+      "ppc64le"
+      "s390x"
+    ];
+    windows = [
+      "386"
+      "amd64"
+      "arm64"
+    ];
+  };
 })

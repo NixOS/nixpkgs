@@ -45,23 +45,10 @@
 
 ## configurability of the wrapper itself
 
-browser_:
+browser:
 
 let
   isDarwin = stdenv.hostPlatform.isDarwin;
-  browser =
-    # Wrapper breaks codesigning on macOS; though plugins that may require
-    # original mozilla signature (like 1Password) won't work with signatures
-    # stripped, at least the wrapped browser will launch.
-    if isDarwin then
-      browser_.overrideAttrs (
-        oldAttrs:
-        lib.optionalAttrs (oldAttrs.dontFixup or false) {
-          dontFixup = false;
-        }
-      )
-    else
-      browser_;
   wrapper =
     {
       applicationName ? browser.binaryName or (lib.getName browser), # Note: this is actually *binary* name and is different from browser.applicationName, which is *app* name!
@@ -508,6 +495,14 @@ let
             # Suffix the executable with -old, because -wrapped might already be used by the old wrapper.
             oldExe="$executablePrefix/.${applicationName}"-old
             mv "$executablePath" "$oldExe"
+        ''
+        # llvm-strip fails on Mozilla Mach-O binary:
+        # https://github.com/NixOS/nixpkgs/issues/583738
+        + lib.optionalString (isDarwin && browser.dontFixup or false) ''
+          source ${buildPackages.darwin.signingUtils}
+          signIfRequired "$oldExe"
+        ''
+        + ''
           fi
         ''
         + lib.optionalString (!isDarwin) ''

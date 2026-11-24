@@ -13,16 +13,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zizmor";
-  version = "1.32.0";
+  version = "1.33.1";
 
   src = fetchFromGitHub {
     owner = "zizmorcore";
     repo = "zizmor";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wBBMF6FNwzlJiVag5tE64YnDf5Se+J5kJ/beVfg9H/Q=";
+    hash = "sha256-3XRSwP+uuRTlJWmpf+LzpmtgxG9LlL20Q38k/uoYuv4=";
   };
 
-  cargoHash = "sha256-b7tcTvECEFb1fBVSo6y+NL4YognKuOBjAVMIyrCXZGQ=";
+  cargoHash = "sha256-/vECumn81Dw0R6Q7hpB44HLUHH70+MPaxb06wzMhThQ=";
 
   buildInputs = [
     aws-lc

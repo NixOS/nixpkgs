@@ -320,7 +320,7 @@ in
         version = config.image.repart.version;
         versionInfix = if version != null then "_${version}" else "";
       in
-      lib.mkDefault (cfg.name + versionInfix);
+      cfg.name + versionInfix;
     image.extension =
       let
         compressionSuffix =
@@ -333,7 +333,7 @@ in
             ."${cfg.compression.algorithm}";
 
       in
-      lib.mkDefault ("raw" + compressionSuffix);
+      "raw" + compressionSuffix;
 
     image.repart =
       let
@@ -375,7 +375,17 @@ in
             format = pkgs.formats.ini { listsAsDuplicateKeys = true; };
 
             definitionsDirectory = utils.systemdUtils.lib.definitions "repart.d" format (
-              lib.mapAttrs (_n: v: { Partition = v.repartConfig; }) cfg.finalPartitions
+              lib.mapAttrs (_n: v: {
+                Partition =
+                  # systemd-repart formats erofs with the image's sector size as its
+                  # block size, and libblkid can't identify erofs with 512-byte blocks.
+                  # Drop once util-linux has
+                  # https://github.com/util-linux/util-linux/commit/4f4105ea201eb069a96a3c983ae1e83afb0d8558
+                  lib.optionalAttrs ((v.repartConfig.Format or null) == "erofs") {
+                    FileSystemSectorSize = 4096;
+                  }
+                  // v.repartConfig;
+              }) cfg.finalPartitions
             );
 
             mkfsEnv = mkfsOptionsToEnv cfg.mkfsOptions;
@@ -442,7 +452,7 @@ in
         );
       };
 
-    system.build.image = lib.mkDefault cfg.image;
+    system.build.image = cfg.image;
   };
 
   meta.maintainers = with lib.maintainers; [

@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "reactivex";
-  version = "6.1.0";
+  version = "6.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ReactiveX";
     repo = "RxPY";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xTbWLbhcLuK0trqKHWcdev5SEvFrW/yMSiPAKRtkCLI=";
+    hash = "sha256-BFQJvLShPfZBXqnNOY0drB6bq5f+BXVZ34zwGBJRr3g=";
   };
 
   build-system = [ hatchling ];
