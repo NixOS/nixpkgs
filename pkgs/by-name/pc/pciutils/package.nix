@@ -8,7 +8,9 @@
   which,
   hwdata,
   static ? stdenv.hostPlatform.isStatic,
+  versionCheckHook,
   gitUpdater,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -18,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "pciutils";
     repo = "pciutils";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-fPtOhUz8Hlo0ajCZbNOwT4fiuL8HlFQ7NGk+nQpmKZM=";
   };
 
@@ -29,8 +31,10 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ kmod ];
 
+  strictDeps = true;
+
   preConfigure = lib.optionalString (!stdenv.cc.isGNU) ''
-    substituteInPlace Makefile --replace 'CC=$(CROSS_COMPILE)gcc' ""
+    substituteInPlace Makefile --replace-fail 'CC=$(CROSS_COMPILE)gcc' ""
   '';
 
   enableParallelBuilding = true;
@@ -68,11 +72,19 @@ stdenv.mkDerivation (finalAttrs: {
     cp --reflink=auto ${hwdata}/share/hwdata/pci.ids $out/share/pci.ids
   '';
 
-  passthru.updateScript = gitUpdater {
-    # No nicer place to find latest release.
-    url = "https://github.com/pciutils/pciutils.git";
-    rev-prefix = "v";
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru = {
+    updateScript = gitUpdater {
+      # No nicer place to find latest release.
+      url = "https://github.com/pciutils/pciutils.git";
+      rev-prefix = "v";
+    };
+    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://mj.ucw.cz/sw/pciutils/";
@@ -81,5 +93,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.vcunat ]; # not really, but someone should watch it
     mainProgram = "lspci";
+    pkgConfigModules = [ "libpci" ];
   };
 })
