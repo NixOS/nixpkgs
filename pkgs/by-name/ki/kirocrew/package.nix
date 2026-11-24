@@ -103,7 +103,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     export HOME=$(mktemp -d)
   '';
   versionCheckKeepEnvironment = [ "HOME" ];
-  __structuredAttrs = true;
 
   passthru = {
     frontend = callPackage ./frontend.nix { kirocrew = finalAttrs.finalPackage; };
