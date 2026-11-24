@@ -14,14 +14,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aiohue";
-  version = "4.9.0";
+  version = "4.9.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "aiohue";
     tag = finalAttrs.version;
-    hash = "sha256-AZQzt/JoCvGtz4AR7afI4k1BFrYjmq5Vp+NFbxzED9c=";
+    hash = "sha256-uSLjwwG9t8Hep3Zr6MXsKLCkB1eWxE9MrnmJm9CL/dg=";
   };
 
   postPatch = ''
