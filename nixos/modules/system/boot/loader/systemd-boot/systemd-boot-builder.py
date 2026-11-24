@@ -13,7 +13,8 @@ import sys
 import tempfile
 import warnings
 import json
-from typing import NamedTuple, Any, Protocol, Sequence
+from abc import ABC, abstractmethod
+from typing import Any, Protocol, Sequence
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -39,6 +40,7 @@ CHECK_MOUNTPOINTS = "@checkMountpoints@"
 STORE_DIR = "@storeDir@"
 BOOT_COUNTING_TRIES = "@bootCountingTries@"
 BOOT_COUNTING = "@bootCounting@" == "True"
+KEEP_BOOTED_SYSTEM = "@keepBootedSystemEntry@" == "1"
 
 
 @dataclass(frozen=True)
@@ -87,7 +89,7 @@ class CopyWriter:
 class InitrdWithSecretsWriter:
     source: Path
     initrd_secrets: Path
-    generation: int
+    system_name: str
 
     def write_boot_file(self, path: Path, *, critical: bool) -> None:
         # Secrets can change between rebuilds, so always rebuild from the
@@ -115,8 +117,8 @@ class InitrdWithSecretsWriter:
                 # exists.
                 CopyWriter(source=self.source).write_boot_file(path, critical=False)
                 print(
-                    "warning: failed to update initrd secrets for an older "
-                    f"generation ({self.generation}). The previous secrets "
+                    "warning: failed to update initrd secrets for "
+                    f"{self.system_name}. The previous secrets "
                     "in this initrd will continue to be used. To silence "
                     "this warning, restore the secret files to their "
                     "original locations or delete this generation.",
@@ -150,10 +152,82 @@ class ContentsWriter:
             os.rename(tmp.name, path)
 
 
-class SystemIdentifier(NamedTuple):
+@dataclass(frozen=True)
+class SystemIdentifier(ABC):
+    @property
+    @abstractmethod
+    def system_directory(self) -> Path: ...
+
+    def system_dir(self, specialisation: str | None) -> Path:
+        d = self.system_directory
+        if specialisation:
+            return d / "specialisation" / specialisation
+        else:
+            return d
+
+    @abstractmethod
+    def title(self, specialisation: str | None) -> str: ...
+
+    @abstractmethod
+    def description(self, label: str, build_date: str) -> str: ...
+
+    @property
+    @abstractmethod
+    def display_name(self) -> str: ...
+
+    @property
+    def emit_specialisations(self) -> bool:
+        return True
+
+
+@dataclass(frozen=True)
+class GenerationIdentifier(SystemIdentifier):
     profile: str | None
     generation: int
-    specialisation: str | None
+
+    @property
+    def system_directory(self) -> Path:
+        return generation_dir(self.profile, self.generation)
+
+    def title(self, specialisation: str | None) -> str:
+        return "{name}{profile}{specialisation}".format(
+            name=DISTRO_NAME,
+            profile=" [" + self.profile + "]" if self.profile else "",
+            specialisation=" (%s)" % specialisation if specialisation else "",
+        )
+
+    def description(self, label: str, build_date: str) -> str:
+        return f"Generation {self.generation} {label}, built on {build_date}"
+
+    @property
+    def display_name(self) -> str:
+        name = f"generation {self.generation}"
+        if self.profile:
+            name += f" of profile {self.profile}"
+        return name
+
+
+@dataclass(frozen=True)
+class BootedSystemIdentifier(SystemIdentifier):
+    @property
+    def system_directory(self) -> Path:
+        return Path("/run/booted-system")
+
+    def title(self, specialisation: str | None) -> str:
+        return f"{DISTRO_NAME} (last booted)"
+
+    # Must be lexicographically later than GenerationIdentifier.description
+    # so that it shows in boot menu later
+    def description(self, label: str, build_date: str) -> str:
+        return f"Last booted system {label}, built on {build_date}"
+
+    @property
+    def display_name(self) -> str:
+        return "last booted system"
+
+    @property
+    def emit_specialisations(self) -> bool:
+        return False
 
 
 @dataclass
@@ -170,7 +244,7 @@ class BootFile:
 
     @staticmethod
     def from_initrd(
-        generation: int,
+        system_name: str,
         source: Path,
         initrd_secrets: Path | None,
     ) -> "BootFile":
@@ -195,7 +269,7 @@ class BootFile:
                 writer=InitrdWithSecretsWriter(
                     source=source,
                     initrd_secrets=initrd_secrets,
-                    generation=generation,
+                    system_name=system_name,
                 ),
             )
 
@@ -284,16 +358,6 @@ def generation_dir(profile: str | None, generation: int) -> Path:
         return Path(f"/nix/var/nix/profiles/system-{generation}-link")
 
 
-def system_dir(
-    profile: str | None, generation: int, specialisation: str | None
-) -> Path:
-    d = generation_dir(profile, generation)
-    if specialisation:
-        return d / "specialisation" / specialisation
-    else:
-        return d
-
-
 def write_loader_conf(default_entry_id: str | None) -> None:
     tmp = LOADER_CONF.with_suffix(".tmp")
     with tmp.open("x") as f:
@@ -323,13 +387,12 @@ def write_loader_conf(default_entry_id: str | None) -> None:
     os.rename(tmp, LOADER_CONF)
 
 
-def get_bootspec(profile: str | None, generation: int) -> BootSpec | None:
-    system_directory = system_dir(profile, generation, None)
+def get_bootspec(identifier: SystemIdentifier) -> BootSpec | None:
+    system_directory = identifier.system_dir(None)
     boot_json_path = (system_directory / "boot.json").resolve()
     if not boot_json_path.is_file():
         print(
-            f"warning: skipping generation {generation}"
-            + (f" of profile {profile}" if profile else "")
+            f"warning: skipping {identifier.display_name}"
             + f": {boot_json_path} does not exist",
             file=sys.stderr,
         )
@@ -383,8 +446,7 @@ def boot_path(file: Path) -> Path:
 
 
 def boot_file(
-    profile: str | None,
-    generation: int,
+    identifier: SystemIdentifier,
     specialisation: str | None,
     machine_id: str | None,
     bootspec: BootSpec,
@@ -393,7 +455,7 @@ def boot_file(
         bootspec = bootspec.specialisations[specialisation]
     kernel = BootFile.from_source(bootspec.kernel)
     initrd = BootFile.from_initrd(
-        generation,
+        identifier.display_name,
         bootspec.initrd,
         Path(bootspec.initrdSecrets) if bootspec.initrdSecrets is not None else None,
     )
@@ -402,15 +464,11 @@ def boot_file(
         devicetree = BootFile.from_source(bootspec.devicetree)
 
     kernel_params = " ".join([f"init={bootspec.init}"] + bootspec.kernelParams)
-    build_time = int(system_dir(profile, generation, specialisation).stat().st_ctime)
+    build_time = int(identifier.system_dir(specialisation).stat().st_ctime)
     build_date = datetime.datetime.fromtimestamp(build_time).strftime("%F")
 
-    title = "{name}{profile}{specialisation}".format(
-        name=DISTRO_NAME,
-        profile=" [" + profile + "]" if profile else "",
-        specialisation=" (%s)" % specialisation if specialisation else "",
-    )
-    description = f"Generation {generation} {bootspec.label}, built on {build_date}"
+    title = identifier.title(specialisation)
+    description = identifier.description(bootspec.label, build_date)
     boot_entry = (
         [
             f"title {title}",
@@ -446,9 +504,9 @@ def get_generations(profile: str | None = None) -> list[SystemIdentifier]:
     gen_lines.pop()
 
     configurationLimit = CONFIGURATION_LIMIT
-    configurations = [
-        SystemIdentifier(
-            profile=profile, generation=int(line.split()[0]), specialisation=None
+    configurations: list[SystemIdentifier] = [
+        GenerationIdentifier(
+            profile=profile, generation=int(line.split()[0])
         )
         for line in gen_lines
     ]
@@ -553,6 +611,9 @@ def install_bootloader(args: argparse.Namespace) -> None:
         )
         sys.exit(1)
 
+    if KEEP_BOOTED_SYSTEM:
+        gens.append(BootedSystemIdentifier())
+
     boot_files: BootFileList = []
     critical_paths: set[Path] = set()
 
@@ -560,20 +621,21 @@ def install_bootloader(args: argparse.Namespace) -> None:
     default_entry_id: str | None = None
 
     for gen in gens:
-        bootspec = get_bootspec(gen.profile, gen.generation)
+        bootspec = get_bootspec(gen)
         if bootspec is None:
             continue
         is_default = Path(bootspec.init).parent == default_config
-        new_boot_files, new_bootctl_id = boot_file(*gen, machine_id, bootspec)
+        new_boot_files, new_bootctl_id = boot_file(gen, None, machine_id, bootspec)
         boot_files.extend(new_boot_files)
         if is_default:
             default_entry_id = new_bootctl_id
             critical_paths.update(bf.path for bf in new_boot_files)
+        if not gen.emit_specialisations:
+            continue
         for specialisation_name, specialisation in bootspec.specialisations.items():
             is_default = Path(specialisation.init).parent == default_config
             new_boot_files, new_bootctl_id = boot_file(
-                gen.profile,
-                gen.generation,
+                gen,
                 specialisation_name,
                 machine_id,
                 bootspec,
