@@ -16,11 +16,16 @@
   writableTmpDirAsHomeHook,
 }:
 let
-  node_modules =
-    finalAttrs:
+  fetchBunDeps =
+    {
+      pname,
+      src,
+      version,
+      hash ? lib.fakeHash,
+    }:
     stdenv.mkDerivation {
-      pname = "${finalAttrs.pname}-node_modules";
-      inherit (finalAttrs) version src;
+      pname = "${pname}-bun-deps";
+      inherit version src;
 
       __structuredAttrs = true;
       strictDeps = true;
@@ -40,50 +45,18 @@ let
       buildPhase = ''
         runHook preBuild
 
-        export BUN_INSTALL_CACHE_DIR=$(mktemp -d)
-        bun install \
-          --cpu="*" \
-          --filter './' \
-          --filter './packages/cli' \
-          --filter './packages/desktop' \
-          --filter './packages/app' \
-          --frozen-lockfile \
-          --ignore-scripts \
-          --no-progress \
-          --os="*"
+        export BUN_INSTALL_CACHE_DIR=$(mktemp -d)/bun-cache
+        bun pm fetch
+        find "$BUN_INSTALL_CACHE_DIR" -mindepth 2 -maxdepth 3 -type l -delete
+        find "$BUN_INSTALL_CACHE_DIR" -mindepth 1 -maxdepth 2 -type d -empty -delete
 
-        bun --bun ./nix/scripts/canonicalize-node-modules.ts
-        bun --bun ./nix/scripts/normalize-bun-binaries.ts
+        mkdir -p $out
+        LC_ALL=C tar --sort=name --mtime='@0' --owner=0 --group=0 --numeric-owner --pax-option=exthdr.name=%d/PaxHeaders/%f,delete=atime,delete=ctime -cf $out/bun-cache.tar -C "$BUN_INSTALL_CACHE_DIR" .
 
         runHook postBuild
       '';
 
-      installPhase = ''
-        runHook preInstall
-
-        mkdir -p $out
-        find . -type d -name node_modules -exec cp -R --parents {} $out \;
-
-        # opencode targets only Linux and Darwin (see meta.platforms), so the
-        # Windows executables that "bun install --os=*" fetches are never
-        # executed. Dropping them keeps the output reproducible on hosts whose
-        # security endpoint agents scan the store, and removes the vulnerable
-        # bundled 7za.exe that will be quarantined.
-        find $out -type f -name '*.exe' -delete
-
-        runHook postInstall
-      '';
-
-      # NOTE: Required else we get errors that our fixed-output derivation references store paths
-      dontFixup = true;
-
-      outputHash =
-        if stdenv.hostPlatform.isLinux then
-          "sha256-zaRjXditlZ8C741SeBv8n0ChlfYFrD/l0fKcuo2dxrI="
-        else if stdenv.hostPlatform.isDarwin then
-          "sha256-LVqM4EJpSYmAFOJpyXwj0YySJx/ip2aXR8SrufVOHtE="
-        else
-          throw "Unsupported platform";
+      outputHash = hash;
       outputHashMode = "recursive";
     };
 in
@@ -115,7 +88,10 @@ stdenv.mkDerivation (finalAttrs: {
         --replace-fail 'import { format } from "prettier"' 'const format = (s: string) => JSON.stringify(JSON.parse(s), null, 2)'
     '';
 
-  node_modules = node_modules finalAttrs;
+  bunDeps = fetchBunDeps {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-lVfGK2NLX4uma001VWScbWgKxI504pdgKh/EmNqouxE=";
+  };
 
   nativeBuildInputs = [
     bun
@@ -139,7 +115,17 @@ stdenv.mkDerivation (finalAttrs: {
   configurePhase = ''
     runHook preConfigure
 
-    cp -R "$node_modules"/. .
+    export BUN_INSTALL_CACHE_DIR="$(mktemp --directory)"
+    tar --no-same-owner -xf "$bunDeps/bun-cache.tar" -C "$BUN_INSTALL_CACHE_DIR"
+
+    bun install \
+      --filter './' \
+      --filter './packages/app' \
+      --filter './packages/cli' \
+      --filter './packages/desktop' \
+      --offline \
+      --frozen-lockfile \
+      --ignore-scripts
     patchShebangs node_modules
     patchShebangs packages/*/node_modules
 

@@ -26,8 +26,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   inherit (opencode)
     version
     src
-    node_modules
-    patches
+    bunDeps
     ;
 
   __structuredAttrs = true;
@@ -87,7 +86,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   configurePhase = ''
     runHook preConfigure
 
-    cp -R "$node_modules"/. .
+    export BUN_INSTALL_CACHE_DIR="$(mktemp --directory)"
+    tar --no-same-owner -xf "$bunDeps/bun-cache.tar" -C "$BUN_INSTALL_CACHE_DIR"
+    bun install \
+      --filter './' \
+      --filter './packages/app' \
+      --filter './packages/cli' \
+      --filter './packages/desktop' \
+      --offline \
+      --frozen-lockfile \
+      --ignore-scripts
     patchShebangs node_modules
     patchShebangs packages/*/node_modules
 
