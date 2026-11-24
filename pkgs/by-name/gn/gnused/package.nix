@@ -27,6 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
   __structuredAttrs = true;
+  enableParallelBuilding = true;
 
   preConfigure = "patchShebangs ./build-aux/help2man";
 
