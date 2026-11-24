@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   kernel,
+  kernelModuleMakeFlags,
   nix-update-script,
   hailo8-firmware,
 }:
@@ -21,24 +22,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  buildPhase = ''
-    runHook preBuild
+  makeFlags = kernelModuleMakeFlags ++ [
+    "-C"
+    "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+    "M=$(PWD)/linux/pcie"
+    "INSTALL_MOD_PATH=${placeholder "out"}"
+    "INSTALL_MOD_DIR=extra"
+  ];
 
-    make -C linux/pcie all \
-      KERNEL_DIR="${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
-
-    runHook postBuild
-  '';
-
-  installPhase = ''
-    runHook preInstall
-
-    install -D \
-      $(find linux/pcie/build -name hailo_pci.ko -print -quit) \
-      $out/lib/modules/${kernel.modDirVersion}/extra/hailo_pci.ko
-
-    runHook postInstall
-  '';
+  installTargets = [ "modules_install" ];
 
   passthru = {
     updateScript = nix-update-script {
