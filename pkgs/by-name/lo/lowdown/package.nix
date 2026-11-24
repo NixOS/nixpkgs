@@ -43,6 +43,8 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ fixDarwinDylibNames ];
 
+  strictDeps = true;
+
   # The Darwin sandbox calls fail inside Nix builds, presumably due to
   # being nested inside another sandbox.
   preConfigure = lib.optionalString (stdenv.hostPlatform.isDarwin && !enableDarwinSandbox) ''
