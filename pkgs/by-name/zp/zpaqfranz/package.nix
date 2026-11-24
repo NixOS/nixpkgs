@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Advanced multiversioned deduplicating archiver, with HW acceleration, encryption and paranoid-level tests";
     mainProgram = "zpaqfranz";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ kamadorueda ];
     platforms = lib.platforms.unix;
   };
 })
