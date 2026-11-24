@@ -3,34 +3,36 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  uc-micro-py,
+  pytest-timeout,
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "linkify-it-py";
-  version = "2.0.3";
+  version = "2.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tsutsu3";
     repo = "linkify-it-py";
-    tag = "v${version}";
-    hash = "sha256-BLwIityUZDVdSbvTpLf6QUlZUavWzG/45Nfffn18/vU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-uFZBEBlM5IDN64ZydeNsUAZ2ssO4XRFPqPv5RoKEWwY=";
   };
 
-  nativeBuildInputs = [ setuptools ];
-
-  propagatedBuildInputs = [ uc-micro-py ];
+  build-system = [ setuptools ];
 
   pythonImportsCheck = [ "linkify_it" ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-timeout
+  ];
 
   meta = {
+    changelog = "https://github.com/tsutsu3/linkify-it-py/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Links recognition library with full unicode support";
     homepage = "https://github.com/tsutsu3/linkify-it-py";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ colinxu2020 ];
   };
-}
+})
