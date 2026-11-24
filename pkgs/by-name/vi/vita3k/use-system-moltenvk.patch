@@ -1,0 +1,75 @@
+From acf51c32164704dbb72f79eed513adf76066408a Mon Sep 17 00:00:00 2001
+From: Rafael Ieda <git@ieda.me>
+Date: Mon, 23 Nov 2026 17:38:12 -0300
+Subject: [PATCH 4/5] cmake: Allow using the system MoltenVK
+
+---
+ CMakeLists.txt          |  8 ++++++++
+ external/CMakeLists.txt | 31 +++++++++++++++++++------------
+ 2 files changed, 27 insertions(+), 12 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 65abe4a4..6a82629c 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -147,6 +147,14 @@ endif()
+ 
+ option(VITA3K_USE_SYSTEM_FFMPEG "Use the FFmpeg version in the system instead of downloading the prebuilt one" OFF)
+ 
++############################
++######### MoltenVK #########
++############################
++
++if(APPLE)
++	option(VITA3K_USE_SYSTEM_MOLTENVK "Use the MoltenVK version in the system instead of downloading the prebuilt one" OFF)
++endif()
++
+ if(WIN32)
+ 	add_compile_definitions("_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS" "_CRT_SECURE_NO_WARNINGS" "NOMINMAX")
+ endif()
+diff --git a/external/CMakeLists.txt b/external/CMakeLists.txt
+index e0ab3289..3ac592cb 100644
+--- a/external/CMakeLists.txt
++++ b/external/CMakeLists.txt
+@@ -228,19 +228,26 @@ target_include_directories(CLI11 INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}/cli11")
+ add_library(vulkan INTERFACE)
+ target_include_directories(vulkan INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}/VulkanMemoryAllocator-Hpp/Vulkan-Headers/include")
+ if(APPLE)
+-	if(NOT EXISTS "${CMAKE_BINARY_DIR}/external/MoltenVK-macos.tar")
+-		message(STATUS "Downloading MoltenVK...")
+-		file(DOWNLOAD https://github.com/KhronosGroup/MoltenVK/releases/download/v1.4.1/MoltenVK-macos.tar
+-			"${CMAKE_BINARY_DIR}/external/MoltenVK-macos.tar"
+-			SHOW_PROGRESS
+-			EXPECTED_HASH SHA256=5ea0c259df7ded9a275444820f09cced54d6e5a7c7a31d262de62a5cdb7e15cf)
+-	endif()
+-	if(NOT EXISTS "${CMAKE_BINARY_DIR}/external/MoltenVK")
+-		execute_process(COMMAND tar xf "${CMAKE_BINARY_DIR}/external/MoltenVK-macos.tar" --strip-components=1 MoltenVK/MoltenVK 
+-			WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/external")
++	if(VITA3K_USE_SYSTEM_MOLTENVK)
++		find_path(MOLTENVK_INCLUDE_DIR MoltenVK/mvk_vulkan.h REQUIRED)
++		find_library(MOLTENVK_LIBRARY MoltenVK REQUIRED)
++		target_include_directories(vulkan INTERFACE "${MOLTENVK_INCLUDE_DIR}")
++		set(MOLTENVK_DYLIB "${MOLTENVK_LIBRARY}" PARENT_SCOPE)
++	else()
++		if(NOT EXISTS "${CMAKE_BINARY_DIR}/external/MoltenVK-macos.tar")
++			message(STATUS "Downloading MoltenVK...")
++			file(DOWNLOAD https://github.com/KhronosGroup/MoltenVK/releases/download/v1.4.1/MoltenVK-macos.tar
++				"${CMAKE_BINARY_DIR}/external/MoltenVK-macos.tar"
++				SHOW_PROGRESS
++				EXPECTED_HASH SHA256=5ea0c259df7ded9a275444820f09cced54d6e5a7c7a31d262de62a5cdb7e15cf)
++		endif()
++		if(NOT EXISTS "${CMAKE_BINARY_DIR}/external/MoltenVK")
++			execute_process(COMMAND tar xf "${CMAKE_BINARY_DIR}/external/MoltenVK-macos.tar" --strip-components=1 MoltenVK/MoltenVK 
++				WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/external")
++		endif()
++		target_include_directories(vulkan INTERFACE "${CMAKE_BINARY_DIR}/external/MoltenVK/include")
++		set(MOLTENVK_DYLIB "${CMAKE_BINARY_DIR}/external/MoltenVK/dylib/macOS/libMoltenVK.dylib" PARENT_SCOPE)
+ 	endif()
+-	target_include_directories(vulkan INTERFACE "${CMAKE_BINARY_DIR}/external/MoltenVK/include")
+-	set(MOLTENVK_DYLIB "${CMAKE_BINARY_DIR}/external/MoltenVK/dylib/macOS/libMoltenVK.dylib" PARENT_SCOPE)
+ elseif(ANDROID AND NOT (CMAKE_BUILD_TYPE STREQUAL "Release"))
+ 	# add validation layer
+ 	if (NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/../android/prebuilt/${ANDROID_ABI}/libVkLayer_khronos_validation.so")
+-- 
+2.56.0
+
