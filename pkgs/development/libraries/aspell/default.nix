@@ -4,6 +4,7 @@
   fetchurl,
   fetchzip,
   perl,
+  bashNonInteractive,
   ncurses,
 
   # for tests
@@ -26,12 +27,12 @@ let
 
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "aspell";
   version = "0.60.8.3";
 
   src = fetchurl {
-    url = "mirror://gnu/aspell/aspell-${version}.tar.gz";
+    url = "mirror://gnu/aspell/aspell-${finalAttrs.version}.tar.gz";
     hash = "sha256-BTTq4REyQFEg0R5Gv1lb1d0Ym8Ekunel3WquhhtIoWI=";
   };
 
@@ -45,16 +46,19 @@ stdenv.mkDerivation rec {
   buildInputs = [
     ncurses
     perl
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform bashNonInteractive) [
+    bashNonInteractive
   ];
+
+  strictDeps = true;
 
   doCheck = true;
 
-  preConfigure = ''
-    configureFlagsArray=(
-      --enable-pkglibdir=$out/lib/aspell
-      --enable-pkgdatadir=$out/lib/aspell
-    );
-  '';
+  configureFlags = [
+    "--enable-pkglibdir=$(out)/lib/aspell"
+    "--enable-pkgdatadir=$(out)/lib/aspell"
+  ];
 
   # Include u-deva.cmap and u-deva.cset in the aspell package
   # to avoid conflict between 'mr' and 'hi' dictionaries as they
@@ -79,6 +83,8 @@ stdenv.mkDerivation rec {
         '';
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Spell checker for many languages";
     homepage = "http://aspell.net/";
@@ -86,4 +92,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = with lib.platforms; all;
   };
-}
+})
