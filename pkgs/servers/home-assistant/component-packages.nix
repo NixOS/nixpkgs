@@ -6584,7 +6584,8 @@
       ];
     "saj" =
       ps: with ps; [
-      ]; # missing inputs: aiosaj
+        aiosaj
+      ];
     "samsam" =
       ps: with ps; [
       ];
@@ -9764,6 +9765,7 @@
     "ruuvitag_ble"
     "rympro"
     "sabnzbd"
+    "saj"
     "samsung_exlink"
     "samsung_infrared"
     "samsungtv"
