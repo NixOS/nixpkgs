@@ -18,13 +18,30 @@
   or dot-files.
 */
 
+let
+  # This file has pure behavior, unlike pkgs/top-level/impure.nix or default.nix,
+  # so we can't infer everything from the expression language environment.
+  noArgumentError = abort ''
+    You must specify the hostPlatform argument to nixpkgs, to specify the platform on which the packages will run.
+    Example:
+      nixpkgs { hostPlatform = "x86_64-linux"; }
+  '';
+in
 {
-  # The system packages will be built on. See the manual for the
+  # Where the packages will run
+  # See doc/using/as-a-function.chapter.md
+  hostPlatform ? noArgumentError,
+
+  # Where the derivations are built. Default: hostPlatform.
+  # See doc/using/as-a-function.chapter.md
+  buildPlatform ? hostPlatform,
+
+  # (legacy) The system packages will be built on. See the manual for the
   # subtle division of labor between these two `*System`s and the three
   # `*Platform`s.
-  localSystem,
+  localSystem ? noArgumentError,
 
-  # The system packages will ultimately be run on.
+  # (legacy) The system packages will ultimately be run on.
   crossSystem ? null,
 
   # Allow a configuration attribute set to be passed in as an argument.
@@ -76,7 +93,7 @@ let
         }
       );
 
-  inherit (lib) throwIfNot throwIf;
+  inherit (lib) intersectAttrs throwIfNot throwIf;
 
   x86_64DarwinDeprecationMessage = ''
     Nixpkgs 26.11 has dropped support for x86_64-darwin.
@@ -104,11 +121,43 @@ let
       https://nixos.org/manual/nixpkgs/unstable/release-notes#x86_64-darwin-26.11
   '';
 
+  legacySystemArgsUsed = intersectAttrs {
+    system = null;
+    localSystem = null;
+    crossSystem = null;
+  } args;
+
+  intentToCrossCompile =
+    # is it legacy cross?
+    (args ? localSystem && !lib.systems.equals crossSystem localSystem)
+    # is it new cross?
+    || (args ? buildPlatform && args ? hostPlatform && !lib.systems.equals crossSystem localSystem);
+
   checked =
     (throwIfNot (lib.isList overlays) "The overlays argument to nixpkgs must be a list.")
       (throwIfNot (lib.all lib.isFunction overlays) "All overlays passed to nixpkgs must be functions.")
       (throwIfNot (lib.isList crossOverlays) "The crossOverlays argument to nixpkgs must be a list.")
       (throwIfNot (lib.all lib.isFunction crossOverlays) "All crossOverlays passed to nixpkgs must be functions.")
+      (throwIf (args ? buildPlatform && !args ? hostPlatform) ''
+        nixpkgs: You have only specified buildPlatform, but not hostPlatform.
+          - For cross compilation: specify both
+          - For native compilation: just specify hostPlatform; buildPlatform defaults to it
+      '')
+      (throwIf (args ? hostPlatform && (legacySystemArgsUsed != { })) ''
+        nixpkgs: You have specified hostPlatform, but also one of the system, localSystem, or crossSystem.
+        Mixing legacy system arguments and hostPlatform is not supported.
+        ${
+          if intentToCrossCompile then
+            ''
+              For cross compilation, please specify the nixpkgs arguments
+                - hostPlatform: the platform on which the packages will run
+                - buildPlatform: the platform on which the derivations are built
+            ''
+          else
+            ""
+        }
+        If you are not cross-compiling, please specify only hostPlatform.
+      '')
       (
         throwIf (
           ((localSystem.isDarwin && localSystem.isx86) || (crossSystem.isDarwin && crossSystem.isx86))
@@ -116,7 +165,11 @@ let
         ) x86_64DarwinDeprecationMessage
       );
 
-  localSystem = lib.systems.elaborate args.localSystem;
+  localSystem =
+    if args ? hostPlatform then
+      lib.systems.elaborate buildPlatform
+    else
+      lib.systems.elaborate args.localSystem;
 
   # Condition preserves sharing which in turn affects equality.
   #
@@ -131,10 +184,19 @@ let
   # Both systems are semantically equivalent as the same vendor and ABI are
   # inferred from the system double in `localSystem`.
   crossSystem =
-    let
-      system = lib.systems.elaborate crossSystem0;
-    in
-    if crossSystem0 == null || lib.systems.equals system localSystem then localSystem else system;
+    if args ? hostPlatform then
+      if
+        lib.systems.equals (lib.systems.elaborate buildPlatform) (lib.systems.elaborate hostPlatform)
+      then
+        # If equal, make them identical, so `==` works on this pair of platforms.
+        localSystem
+      else
+        (lib.systems.elaborate hostPlatform)
+    else
+      let
+        system = lib.systems.elaborate crossSystem0;
+      in
+      if crossSystem0 == null || lib.systems.equals system localSystem then localSystem else system;
 
   # Allow both:
   # { /* the config */ } and
