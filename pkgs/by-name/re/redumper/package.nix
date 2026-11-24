@@ -25,6 +25,9 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
+    # Don't bundle Homebrew's libc++ on darwin, nixpkgs links its own
+    # https://github.com/superg/redumper/pull/485
+    ./bundle-libcxx-only-with-llvm-lib-path.patch
   ];
 
   nativeBuildInputs = [

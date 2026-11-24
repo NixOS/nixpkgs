@@ -1,0 +1,26 @@
+From 3ea78e3460ea38cc1686644417a7467d3ee26555 Mon Sep 17 00:00:00 2001
+From: Rafael Ieda <git@ieda.me>
+Date: Tue, 24 Nov 2026 03:34:36 -0300
+Subject: [PATCH] Only bundle libc++ on macOS when LLVM_LIB_PATH is set
+
+---
+ CMakeLists.txt | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 046b7c2..428332d 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -255,7 +255,8 @@ endif()
+ install(TARGETS redumper DESTINATION "bin")
+ 
+ # bundle LLVM libc++ for C++20 support (system libc++ is too old, static linking not allowed on macOS)
+-if(REDUMPER_TARGET_MACOS)
++# LLVM_LIB_PATH is set by the macOS toolchain files, builds without them use the libc++ they link to
++if(REDUMPER_TARGET_MACOS AND LLVM_LIB_PATH)
+     set_target_properties(redumper PROPERTIES INSTALL_RPATH "@executable_path/../lib")
+     
+     install(FILES
+-- 
+2.56.0
+
