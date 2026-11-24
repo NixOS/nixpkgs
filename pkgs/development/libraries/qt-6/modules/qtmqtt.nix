@@ -2,6 +2,8 @@
   qtModule,
   fetchFromGitHub,
   qtbase,
+  qtdeclarative,
+  qtwebsockets,
 }:
 
 qtModule rec {
@@ -15,5 +17,9 @@ qtModule rec {
     hash = "sha256-e0gQYuo+MmQnp1TWVZkBozMB0du592owM76OoG9QjZo=";
   };
 
-  propagatedBuildInputs = [ qtbase ];
+  propagatedBuildInputs = [
+    qtbase
+    qtdeclarative
+    qtwebsockets
+  ];
 }
