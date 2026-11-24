@@ -23,7 +23,7 @@ let
       packageOverrides =
         self: super:
         {
-          nixops = self.callPackage ./unwrapped.nix { };
+          nixops = self.toPythonModule (self.callPackage ./unwrapped.nix { });
         }
         // (this.plugins self super);
     };
