@@ -57,11 +57,13 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   # skip tests that require git or modify “installed files”
-  preCheck = ''
-    checkFlagsArray+=("ARGS=-LE 'not_reproducible|git_required'")
-  '';
+  checkFlags = [
+    "ARGS=-LE 'not_reproducible|git_required'"
+  ];
 
   postInstall = "rm -rf $out/lib64";
+
+  __structuredAttrs = true;
 
   meta = {
     description = "JSON for Modern C++";
