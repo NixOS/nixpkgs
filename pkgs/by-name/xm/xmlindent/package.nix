@@ -26,6 +26,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://xmlindent.sourceforge.net/";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ kamadorueda ];
   };
 })
