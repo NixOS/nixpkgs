@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2026.11.2";
+  version = "2026.11.3";
   components = {
     "3_day_blinds" =
       ps: with ps; [
@@ -6453,7 +6453,8 @@
       ];
     "rituals_perfume_genie" =
       ps: with ps; [
-      ]; # missing inputs: ritualsgenie
+        ritualsgenie
+      ];
     "rmvtransport" =
       ps: with ps; [
         pyrmvtransport
@@ -6583,7 +6584,8 @@
       ];
     "saj" =
       ps: with ps; [
-      ]; # missing inputs: aiosaj
+        aiosaj
+      ];
     "samsam" =
       ps: with ps; [
       ];
@@ -6686,7 +6688,8 @@
     "sensecap_lorawan" =
       ps: with ps; [
         lorawan-connection
-      ]; # missing inputs: sensecap-lorawan
+        sensecap-lorawan
+      ];
     "sensibo" =
       ps: with ps; [
         pysensibo
@@ -6929,7 +6932,8 @@
       ];
     "skoda" =
       ps: with ps; [
-      ]; # missing inputs: skoda-public-api
+        skoda-public-api
+      ];
     "sky_hub" =
       ps: with ps; [
         pyskyqhub
@@ -7016,7 +7020,8 @@
       ];
     "smartyplants" =
       ps: with ps; [
-      ]; # missing inputs: pysmartyplants
+        pysmartyplants
+      ];
     "smhi" =
       ps: with ps; [
         pysmhi
@@ -7136,7 +7141,8 @@
       ];
     "solyx_energy_cloud" =
       ps: with ps; [
-      ]; # missing inputs: solyx-energy-api-client
+        solyx-energy-api-client
+      ];
     "soma" =
       ps: with ps; [
         pysoma
@@ -7313,13 +7319,14 @@
         hassil
         home-assistant-intents
         ifaddr
+        lighthouse-ble
         mutagen
         pymicro-vad
         pysmlight
         pyspeex-noise
         serialx
         zeroconf
-      ]; # missing inputs: lighthouse-ble
+      ];
     "steinway_lyngdorf" =
       ps: with ps; [
       ];
@@ -8637,7 +8644,8 @@
       ];
     "xiaomi_weather" =
       ps: with ps; [
-      ]; # missing inputs: xiaomi-weather
+        xiaomi-weather
+      ];
     "xmpp" =
       ps: with ps; [
         emoji
@@ -9746,6 +9754,7 @@
     "ridwell"
     "ring"
     "risco"
+    "rituals_perfume_genie"
     "rmvtransport"
     "roborock"
     "roku"
@@ -9762,6 +9771,7 @@
     "ruuvitag_ble"
     "rympro"
     "sabnzbd"
+    "saj"
     "samsung_exlink"
     "samsung_infrared"
     "samsungtv"
@@ -9779,6 +9789,7 @@
     "season"
     "select"
     "sense"
+    "sensecap_lorawan"
     "sensibo"
     "sensirion_ble"
     "sensor"
@@ -9804,6 +9815,7 @@
     "simplepush"
     "simplisafe"
     "siren"
+    "skoda"
     "sky_hub"
     "sky_remote"
     "skybell"
@@ -9819,6 +9831,7 @@
     "smartthings"
     "smarttub"
     "smarty"
+    "smartyplants"
     "smhi"
     "smlight"
     "smtp"
@@ -9832,6 +9845,7 @@
     "solarlog"
     "solarman"
     "solax"
+    "solyx_energy_cloud"
     "soma"
     "somfy_mylink"
     "sonarr"
@@ -9856,6 +9870,7 @@
     "statsd"
     "steam_online"
     "steamist"
+    "steamvr_base_station"
     "stiebel_eltron"
     "stookwijzer"
     "stream"
@@ -9959,6 +9974,7 @@
     "tuya"
     "twentemilieu"
     "twilio"
+    "twilio_call"
     "twinkly"
     "twitch"
     "ubus"
@@ -10059,6 +10075,7 @@
     "xiaomi_aqara"
     "xiaomi_ble"
     "xiaomi_miio"
+    "xiaomi_weather"
     "xthings_cloud"
     "yale"
     "yale_smart_alarm"

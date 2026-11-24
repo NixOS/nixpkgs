@@ -148,6 +148,8 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i "/install_emptydir(dir_etc \/ 'libinput')/d" meson.build
   '';
 
+  __structuredAttrs = true;
+
   passthru = {
     tests = {
       libinput-module = nixosTests.libinput;
