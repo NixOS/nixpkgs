@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   autoreconfHook,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -12,16 +13,22 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "anrieff";
     repo = "libcpuid";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-+/TTlGk1ePPTHrSTSZmPHT2h3gKs9ouCF4ElvLWHF/g=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
 
+  strictDeps = true;
+
   outputs = [
     "out"
     "dev"
   ];
+
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://libcpuid.sourceforge.net/";
@@ -32,5 +39,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [
     ];
     platforms = lib.platforms.x86 ++ lib.platforms.arm ++ lib.platforms.aarch64;
+    pkgConfigModules = [ "libcpuid" ];
   };
 })

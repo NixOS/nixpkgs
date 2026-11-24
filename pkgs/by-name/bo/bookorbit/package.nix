@@ -16,7 +16,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "bookorbit";
-  version = "3.8.0";
+  version = "3.9.0";
   __structuredAttrs = true;
   strictDeps = true;
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "bookorbit";
     repo = "bookorbit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dz/ctTLvI99mi9O9ABKFjDU4xF/Q0CiUAPecw+oz6zc=";
+    hash = "sha256-/2jJhPyLU/d6bROqk0jkXge7zkP1Yi4xATcWzASYqx4=";
   };
 
   pnpmWorkspaces = [
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     inherit pnpm;
     fetcherVersion = 4;
-    hash = "sha256-N9c6l+ub+1NobtsCK3WSOlKyw7ol5e9RC4DWY9lubR0=";
+    hash = "sha256-RTiVPjE4AazlVnKV3UCnUy6oER8QQTZqaL+0hcsTkyU=";
   };
 
   nativeBuildInputs = [

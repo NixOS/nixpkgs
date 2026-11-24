@@ -10,6 +10,8 @@
 }:
 
 buildGoModule (finalAttrs: {
+  __structuredAttrs = true;
+
   pname = "mongodb-atlas-cli";
   version = "1.59.1";
 

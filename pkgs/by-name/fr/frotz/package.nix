@@ -73,13 +73,13 @@ stdenv.mkDerivation (finalAttrs: {
   makeFlags = [
     "PREFIX=${placeholder "out"}"
     "HOMEBREW_PREFIX=/var/empty"
+    "CURSES_CONFIG=$(PKG_CONFIG) ncurses"
   ];
-  preConfigure = ''
-    makeFlagsArray+=(CURSES_CONFIG="$PKG_CONFIG ncurses")
-  '';
 
   buildFlags = [ frontend ];
   installTargets = if frontend == "ncurses" then "install-frotz" else "install-${frontend}";
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://davidgriffith.gitlab.io/frotz/";

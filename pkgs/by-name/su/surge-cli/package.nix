@@ -6,16 +6,16 @@
 
 buildNpmPackage rec {
   pname = "surge-cli";
-  version = "0.23.1";
+  version = "0.58.0";
 
   src = fetchFromGitHub {
     owner = "sintaxi";
     repo = "surge";
     rev = "v${version}";
-    hash = "sha256-EpYww/YCQhPFmnOJ1zbigI2qyUrKN2TxKHEju/0Si3M=";
+    hash = "sha256-6R4W+8qqelGrGp/wJp+KkSo2HYQXu0OBQjpgjOXPLe4=";
   };
 
-  npmDepsHash = "sha256-F1C/sfOT/Tf+h28g1umP6czLFIsxDkbvT14ZfWLTiCE=";
+  npmDepsHash = "sha256-m2+Ny6qBVoyMs7ys+MD9vs7VHpL/B+j+5gDM8hixsbg=";
 
   dontNpmBuild = true;
 

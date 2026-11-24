@@ -5,21 +5,22 @@
   pkg-config,
   openssl,
   zstd,
+  sqlite,
   protobuf,
   nixosTests,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tranquil-pds";
-  version = "0.8.0";
+  version = "0.9.1";
 
   src = fetchFromTangled {
     did = "did:plc:jj6ajj6duxnlthwtnob4qyuv";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0/eBbeO31lCI99TNSSQlk9QaWzegpAuYyGCQMupPb9s=";
+    hash = "sha256-G+8jFPbBzXLE40sC8oxfSUVU1T8aFlb6GJJ+nGvs1iY=";
   };
 
-  cargoHash = "sha256-r6j925a6PfVKNLg60vxKRVw4rddLsGtQ0G2/KvyGw3Q=";
+  cargoHash = "sha256-MHnKgrT30Wi4B+nlm8i0EVm++zK3Q1lZtExYNP2vsFU=";
 
   __structuredAttrs = true;
 
@@ -31,6 +32,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     openssl
     zstd
+    sqlite
   ];
 
   # the tranquil test suite has shown itself virtually impossible to complete on most hardware thus stopping reviews.

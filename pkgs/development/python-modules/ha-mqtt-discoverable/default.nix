@@ -11,14 +11,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "ha-mqtt-discoverable";
-  version = "0.26.3";
+  version = "0.27.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Home-Assistant-Tooling";
     repo = "ha-mqtt-discoverable";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bpSLo4gANie1Dn+GSI20Ddx/zrQ1nFQsVkRwRFESCAs=";
+    hash = "sha256-Wbc0o7FjJEO3dseBZrOAWq28a10+YtZG39VL50hNNbY=";
   };
 
   pythonRelaxDeps = [

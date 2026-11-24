@@ -8,7 +8,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kubectl-view-allocations";
-  version = "3.0.2";
+  version = "3.2.0";
 
   __structuredAttrs = true;
 
@@ -16,10 +16,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "davidB";
     repo = "kubectl-view-allocations";
     tag = finalAttrs.version;
-    hash = "sha256-/rtHY5vgurdl9BviyLdZ/8Rii4OCRTZYRl8OXriD8NM=";
+    hash = "sha256-D1fLIFHXljGt1q8Q9Drfh+XhTfoWevG0v+RXBS4spP4=";
   };
 
-  cargoHash = "sha256-iK6oCAvFuZV7KAHHpFfxCIC5Gv7VpDIcPbBgaNLLfgM=";
+  cargoHash = "sha256-hPZhXWLK5R/EE6yzGR7MVmxDhG0yW2t7DHnGkKOxwjY=";
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];

@@ -122,55 +122,57 @@ let
 
   genTests =
     attr: package:
-    lib.mapAttrs
-      (
-        name:
-        {
-          path,
-          flavor ? "nodes",
-        }:
-        runTest (
-          import path {
-            inherit
-              package
-              runTest
-              flavor
-              ;
-            name = "${attr}-${name}";
-            testBase = mkTestBase flavor;
-          }
+    lib.recurseIntoAttrs (
+      lib.mapAttrs
+        (
+          name:
+          {
+            path,
+            flavor ? "nodes",
+          }:
+          runTest (
+            import path {
+              inherit
+                package
+                runTest
+                flavor
+                ;
+              name = "${attr}-${name}";
+              testBase = mkTestBase flavor;
+            }
+          )
         )
-      )
-      {
-        basic = {
-          path = ./basic.nix;
-        };
-        home-bindmout = {
-          path = ./home-bindmount.nix;
-        };
-        home-mount = {
-          path = ./home-mount.nix;
-        };
-        with-declarative-redis-and-secrets = {
-          path = ./with-declarative-redis-and-secrets.nix;
-          flavor = "containers";
-        };
-        with-mysql-and-memcached = {
-          path = ./with-mysql-and-memcached.nix;
-          flavor = "containers";
-        };
-        with-postgresql-and-redis = {
-          path = ./with-postgresql-and-redis.nix;
-          flavor = "containers";
-        };
-        with-objectstore = {
-          path = ./with-objectstore.nix;
-          flavor = "containers";
-        };
-        with-mail = {
-          path = ./with-mail.nix;
-          flavor = "containers";
-        };
-      };
+        {
+          basic = {
+            path = ./basic.nix;
+          };
+          home-bindmout = {
+            path = ./home-bindmount.nix;
+          };
+          home-mount = {
+            path = ./home-mount.nix;
+          };
+          with-declarative-redis-and-secrets = {
+            path = ./with-declarative-redis-and-secrets.nix;
+            flavor = "containers";
+          };
+          with-mysql-and-memcached = {
+            path = ./with-mysql-and-memcached.nix;
+            flavor = "containers";
+          };
+          with-postgresql-and-redis = {
+            path = ./with-postgresql-and-redis.nix;
+            flavor = "containers";
+          };
+          with-objectstore = {
+            path = ./with-objectstore.nix;
+            flavor = "containers";
+          };
+          with-mail = {
+            path = ./with-mail.nix;
+            flavor = "containers";
+          };
+        }
+    );
 in
-lib.mapAttrs genTests packages
+lib.recurseIntoAttrs (lib.mapAttrs genTests packages)

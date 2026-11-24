@@ -8,20 +8,26 @@
   go,
   perl,
   rust-bindgen,
+  versionCheckHook,
   testers,
   nix-update-script,
   aws-lc,
   writableTmpDirAsHomeHook,
   runCommand,
+  enableTests ? true,
   useSharedLibraries ? !stdenv.hostPlatform.isStatic,
   withRustBindings ? true,
   symbolPrefix ? "AWS_LC",
   # This option might lead to OpenSSL being silently swapped to AWS-LC. Only use it if you know what you are doing.
   withOpenSSLShim ? false,
+  # Testing
+  pkgsStatic,
+  pkgsCross,
 }:
 
 let
   aws-lc' = aws-lc.override {
+    enableTests = false;
     useSharedLibraries = false;
     symbolPrefix = null;
   };
@@ -29,10 +35,9 @@ let
     runCommand "aws-lc-symbols"
       {
         inherit (aws-lc) src;
-        nativeBuildInputs = [
-          writableTmpDirAsHomeHook
-          go
-        ];
+        nativeBuildInputs = [ writableTmpDirAsHomeHook ];
+        # read_symbols.go runs on the build platform
+        depsBuildBuild = [ go ];
       }
       ''
         cd "$src"
@@ -44,7 +49,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "aws-lc";
-  version = "5.12.0";
+  version = "5.14.0";
 
   patches = [
     ./fix-dynamic-loading-test.patch
@@ -58,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "aws";
     repo = "aws-lc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-O+0UG6Zk6U9b73B9qDSZ9aC32WL1anJIgH0TRgVpONI=";
+    hash = "sha256-MJuQJv9iRuktxUQaIB6GfFeKbV6tWx0DhbmjR47TnK0=";
   };
 
   outputs = [
@@ -67,11 +72,13 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
+  env.GOFLAGS = lib.optionalString stdenv.hostPlatform.isStatic "-ldflags=-linkmode=external";
+
+  depsBuildBuild = [ go ];
   nativeBuildInputs = [
     writableTmpDirAsHomeHook
     cmake
     ninja
-    go
     perl
   ]
   ++ lib.optionals withRustBindings [
@@ -111,8 +118,9 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "BORINGSSL_PREFIX_SYMBOLS" (toString symbols))
   ];
 
-  doCheck = true;
+  doCheck = enableTests;
   checkTarget = "run_tests";
+  preCheck = "export AWS_LC_NUM_TEST_WORKERS=$NIX_BUILD_CORES";
 
   postInstall = ''
     moveToOutput lib/crypto/cmake "$dev"
@@ -122,29 +130,19 @@ stdenv.mkDerivation (finalAttrs: {
     moveToOutput share/rust "$dev"
   '';
 
-  # AWS-LC's generated *-targets.cmake files hardcode _IMPORT_PREFIX to $out
-  # and set INTERFACE_INCLUDE_DIRECTORIES to "$out/include", but headers live
-  # in $dev/include under multi-output splitting. Clear the broken claim so
-  # consumers fall back to stdenv's normal include-path propagation via
-  # buildInputs (which correctly resolves to $dev/include).
-  postFixup = ''
-    for f in $out/lib/{crypto,ssl}/cmake/*/*-targets.cmake; do
-      substituteInPlace "$f" \
-        --replace-fail \
-          'INTERFACE_INCLUDE_DIRECTORIES "\$<\$<BOOL:1>:>;''${_IMPORT_PREFIX}/include"' \
-          'INTERFACE_INCLUDE_DIRECTORIES ""'
-    done
-  '';
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "version";
 
   __darwinAllowLocalNetworking = true;
 
   passthru = {
     tests = {
-      version = testers.testVersion {
-        package = finalAttrs.finalPackage;
-        command = "aws-lc-bssl version";
-      };
       pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+      # Test packages
+      firecracker-static = pkgsStatic.firecracker;
+      static = pkgsStatic.aws-lc;
+      cross = pkgsCross.aarch64-multiplatform.aws-lc;
     };
     updateScript = nix-update-script { };
   };

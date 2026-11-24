@@ -1,7 +1,7 @@
 {
   mkDerivation,
   lib,
-  fetchFromGitHub,
+  fetchFromCodeberg,
   aeson,
   base,
   bytestring,
@@ -26,7 +26,7 @@
 mkDerivation rec {
   pname = "mkjson";
   version = "0.4.0";
-  src = fetchFromGitHub {
+  src = fetchFromCodeberg {
     owner = "mfussenegger";
     repo = "mkjson";
     rev = "${version}";

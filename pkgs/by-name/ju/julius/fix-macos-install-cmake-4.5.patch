@@ -1,0 +1,26 @@
+From 9867661f37dda264b24abcc6309e3cab736c63de Mon Sep 17 00:00:00 2001
+From: Rafael Ieda <git@ieda.me>
+Date: Mon, 23 Nov 2026 21:48:51 -0300
+Subject: [PATCH] Fix macOS install with CMake 4.5
+
+CMake 4.5 rejects the BUNDLE and DESTINATION arguments to install(CODE), which earlier versions ignored.
+---
+ CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index dd35061..ca85793 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -777,7 +777,7 @@ if(APPLE AND NOT ${TARGET_PLATFORM} STREQUAL "ios")
+     install(CODE "
+         include(BundleUtilities)
+         fixup_bundle(${CMAKE_BINARY_DIR}/${PROJECT_NAME}.app \"${LIBS}\" \"${DIRS}\")
+-    " BUNDLE DESTINATION ${CMAKE_BINARY_DIR})
++    ")
+ 
+     # perform ad-hoc codesigning
+ 	set(codesignCommand "codesign --verbose=4 --force --deep --options=runtime --timestamp=none --sign -")
+-- 
+2.56.0
+

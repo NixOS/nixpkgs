@@ -14,12 +14,12 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "electrum";
-  version = "4.8.3";
+  version = "4.8.4";
   pyproject = true;
 
   src = fetchurl {
     url = "https://download.electrum.org/${finalAttrs.version}/Electrum-${finalAttrs.version}.tar.gz";
-    hash = "sha256-30H6guV59yCjhZv/neCd2Yu5MHmwH6KXO3P9vb/ecog=";
+    hash = "sha256-s8vu/jfoT2L2zsCW7sKAhdepkJeEHrlsnuPpvsILA2c=";
   };
 
   build-system = [ python3.pkgs.setuptools ];

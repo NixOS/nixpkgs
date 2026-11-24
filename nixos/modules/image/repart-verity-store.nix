@@ -17,6 +17,7 @@ let
       {
         "x86_64" = "usr-x86-64";
         "arm64" = "usr-arm64";
+        "riscv" = if pkgs.stdenv.hostPlatform.is64bit then "usr-riscv64" else "usr-riscv32";
       }
       ."${pkgs.stdenv.hostPlatform.linuxArch}";
 
@@ -24,6 +25,7 @@ let
       {
         "x86_64" = "usr-x86-64-verity";
         "arm64" = "usr-arm64-verity";
+        "riscv" = if pkgs.stdenv.hostPlatform.is64bit then "usr-riscv64-verity" else "usr-riscv32-verity";
       }
       ."${pkgs.stdenv.hostPlatform.linuxArch}";
   };

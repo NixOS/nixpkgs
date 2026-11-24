@@ -401,6 +401,7 @@ mapAliases {
   ayu-theme-gtk = throw "'ayu-theme-gtk' has been removed because it depended on 'gtk-engine-murrine', which was removed because it was unmaintained upstream and depended on GTK 2."; # Added 2026-07-22
   b43FirmwareCutter = warnAlias "'b43FirmwareCutter' has been renamed to 'b43-fwcutter'" b43-fwcutter; # Added 2026-02-08
   backlight-auto = throw "'backlight-auto' has been removed as it relies on Zig 0.12 which has been dropped."; # Added 2025-08-22
+  badlion-client = throw "'badlion-client' has been discontinued; use 'lunar-client' instead."; # Added 2026-11-22
   badtouch = throw "'badtouch' has been renamed to/replaced by 'authoscope'"; # Converted to throw 2025-10-27
   balatro-mod-manager = throw "'balatro-mod-manager' has been removed as it was discontinued"; # Added 2026-11-02
   banana-vera = throw "'banana-vera' has been removed as it relies on python3.10"; # Added 2026-02-09
@@ -803,6 +804,7 @@ mapAliases {
   EBTKS = throw "'EBTKS' has been renamed to/replaced by 'ebtks'"; # Converted to throw 2025-10-27
   ec2-utils = throw "'ec2-utils' has been renamed to/replaced by 'amazon-ec2-utils'"; # Converted to throw 2025-10-27
   ecryptfs = throw "'ecryptfs' has been removed due to lack of maintenance. Consider using 'fscrypt' or 'gocryptfs' instead."; # Added 2026-01-14
+  ed-odyssey-materials-helper = throw "'ed-odyssey-materials-helper' has been removed due to upstream license violation, as it can no longer be built from source."; # Added 2026-11-22
   edid-decode = v4l-utils; # Added 2025-06-20
   eidolon = throw "eidolon was removed as it is unmaintained upstream."; # Added 2025-05-28
   eintopf = throw "'eintopf' has been renamed to/replaced by 'lauti'"; # Converted to throw 2025-10-27
@@ -1533,6 +1535,7 @@ mapAliases {
   libreoffice-qt-still-unwrapped = libreoffice-qt-stable-unwrapped; # Added 2026-08-11
   libreoffice-still = warnAlias "LibreOffice upstream has changed the versioning, please use `libreoffice-stable` or just `libreoffice`" libreoffice-stable; # Added 2026-08-11
   ###
+  libressl_4_2 = throw "LibreSSL 4.2 is end of life as of 2026-10-22, update to a newer version.";
   librest_1_0 = warnAlias "'librest_1_0' has been renamed to/replaced by 'librest'" librest; # Added 2026-05-30
   librewolf-wayland = throw "'librewolf-wayland' has been renamed to/replaced by 'librewolf'"; # Converted to throw 2025-10-27
   librtlsdr = throw "'librtlsdr' has been renamed to/replaced by 'rtl-sdr'"; # Converted to throw 2025-10-27
@@ -1571,7 +1574,8 @@ mapAliases {
   libXext = libxext; # Added 2026-02-06
   libXfixes = libxfixes; # Added 2026-02-06
   libXfont2 = libxfont_2; # Added 2026-02-06
-  libXfont = libxfont_1; # Added 2026-01-19
+  libXfont = throw "'libXfont' has been removed as it was unmaintained upstream and had many likely security issues. Consider upgrading to 'libxfont_2' instead."; # Added 2026-11-23
+  libxfont_1 = throw "'libxfont_1' has been removed as it was unmaintained upstream and had many likely security issues. Consider upgrading to 'libxfont_2' instead."; # Added 2026-11-23
   libXft = libxft; # Added 2026-02-06
   libXi = libxi; # Added 2026-02-06
   libXinerama = libxinerama; # Added 2026-02-06
@@ -1856,6 +1860,7 @@ mapAliases {
   minio_legacy_fs = throw "'minio_legacy_fs' has been removed. Users should migrate to alternatives such as Garage, SeaweedFS, or Ceph. S3-compatible clients such as rclone can be used to move data."; # Added 2026-02-02
   minizincide = warnAlias "'minizincide' has been renamed to 'minizinc-ide'" minizinc-ide; # Added 2026-01-03
   minizip2 = throw "'minizip2' has been renamed to/replaced by 'minizip-ng'"; # Converted to throw 2025-10-27
+  mkSaneConfig = throw "'mkSaneConfig' has been removed"; # Added 2026-11-03
   mkTerraform = throw "'mkTerraform' has been removed"; # Added 2026-08-29
   mkYarnModules = throw "'yarn2nix' and its tooling has been removed as it was unusable within nodePackages. Use the standard yarn v1 hooks available in nixpkgs instead."; # Added 2026-04-25
   mkYarnPackage = throw "'yarn2nix' and its tooling has been removed as it was unusable within nodePackages. Use the standard yarn v1 hooks available in nixpkgs instead."; # Added 2026-04-25
@@ -2396,6 +2401,7 @@ mapAliases {
   rar2fs = throw "'rar2fs' has been removed as it is unmaintained, and depends on the unmaintained fuse2 library"; # Added 2026-05-19
   rates = throw "'rates' has been removed as it was broken and unmaintained upstream"; # Added 2026-08-24
   raycast-beta = throw "'raycast-beta' has been removed because Raycast 2.0 is out of beta. Use 'raycast' instead."; # Added 2026-08-24
+  rdesktop = throw "'rdesktop' has been removed due to a lack of maintenance upstream"; # Added 2026-11-22
   react-native-debugger = throw "'react-native-debugger' has been removed as it was unmaintained upstream and vendoring an EOL version of Electron"; # Added 2026-09-02
   react-static = throw "'react-static' has been removed due to lack of maintenance upstream"; # Added 2025-11-04
   recapp = throw "'recapp' is unmaintained and has been removed"; # Added 2026-05-25

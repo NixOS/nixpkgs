@@ -652,6 +652,11 @@ lib.mapAttrs mkLicense (
       spdxId = "FDK-AAC";
     };
 
+    fraunhofer-fdk-mpeg-h = {
+      fullName = "Fraunhofer FDK MPEG-H Software";
+      spdxId = "FDK-MPEG-H";
+    };
+
     free = {
       fullName = "Unspecified free software license";
     };

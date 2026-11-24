@@ -10,14 +10,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "benchexec";
-  version = "3.35";
+  version = "3.36";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sosy-lab";
     repo = "benchexec";
     tag = finalAttrs.version;
-    hash = "sha256-qYBSpDZqKBPiGkftjTVxVah+eS8NaAt9q0UEaara+iE=";
+    hash = "sha256-kERXR33GZbPBVQONAy6800mrddtsl3epq7/Enay1RAE=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];

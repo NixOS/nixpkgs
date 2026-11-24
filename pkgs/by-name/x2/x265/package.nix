@@ -2,11 +2,10 @@
   lib,
   gccStdenv,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
+  fetchpatch2,
   cmake,
   nasm,
-  fetchpatch,
-  fetchpatch2,
 
   # NUMA support enabled by default on NUMA platforms:
   numaSupport ? (
@@ -36,18 +35,18 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "x265";
-  version = "4.2";
+  version = "4.3";
 
   outputs = [
     "out"
     "dev"
   ];
 
-  # Check that x265Version.txt contains the expected version number
-  # whether we fetch a source tarball or a tag from the git repo
-  src = fetchurl {
-    url = "https://bitbucket.org/multicoreware/x265_git/downloads/x265_${finalAttrs.version}.tar.gz";
-    hash = "sha256-QLHqBFPgMJ8OupNODd9TP49ilZZmeeiJTo8cHI1eEhA=";
+  src = fetchFromGitHub {
+    owner = "Multicorewareinc";
+    repo = "x265";
+    tag = finalAttrs.version;
+    hash = "sha256-3bBggPwHwMNx3Dkfq6QcgITrYir5+rKiKduXoZUVi18=";
   };
 
   patches = [
@@ -55,17 +54,29 @@ stdenv.mkDerivation (finalAttrs: {
     # fix compilation with gcc15
     # https://bitbucket.org/multicoreware/x265_git/pull-requests/36
     ./gcc15-fixes.patch
-    # fix i686-linux build
-    # https://bitbucket.org/multicoreware/x265_git/issues/1030
-    ./fix-plt-rel.patch
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLoongArch64 [
+    # fix build on loongarch64-linux
+    # https://github.com/Multicorewareinc/x265/pull/941
+    (fetchpatch2 {
+      url = "https://github.com/Multicorewareinc/x265/commit/af35fda1b45bd575b713aef979eed9352e7be1ec.patch?full_index=1";
+      stripLen = 2;
+      extraPrefix = "";
+      hash = "sha256-9S/AXFCXx24GK3vK6prKfuSSqAS0DWDN+rCydU8ES2M=";
+    })
   ];
 
-  sourceRoot = "x265_${finalAttrs.version}/source";
+  sourceRoot = "${finalAttrs.src.name}/source";
 
   postPatch = ''
-    substituteInPlace cmake/Version.cmake \
-      --replace-fail "unknown" "${finalAttrs.version}" \
-      --replace-fail "0.0" "${finalAttrs.version}"
+    # x265Version.txt at the Git tag lags behind the release; regenerate it
+    # so cmake reports the correct version (fetchFromGitHub uses the tag
+    # archive, not the release tarball)
+    chmod +w ../x265Version.txt
+    cat > ../x265Version.txt <<EOF
+    releasetag: ${finalAttrs.version}
+    releasetagdistance: 0
+    EOF
   ''
   # There is broken and complicated logic when setting X265_LATEST_TAG for
   # mingw-msvcrt-x86_64 builds. This bypasses the logic by setting it at the end of the

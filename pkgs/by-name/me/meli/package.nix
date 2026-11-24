@@ -10,7 +10,7 @@
   installShellFiles,
   makeWrapper,
   mandoc,
-  rustfmt,
+  buildPackages,
   file,
   writableTmpDirAsHomeHook,
 
@@ -52,7 +52,7 @@ rustPlatform.buildRustPackage rec {
     makeWrapper
     mandoc
     rustPlatform.bindgenHook
-    (rustfmt.override { asNightly = true; })
+    (buildPackages.rustfmt.override { asNightly = true; })
   ];
 
   buildInputs = [

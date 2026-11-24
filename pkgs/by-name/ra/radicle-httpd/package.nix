@@ -14,6 +14,7 @@
   xdg-utils,
   versionCheckHook,
   nixosTests,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -25,8 +26,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   env.RADICLE_HTTPD_VERSION = finalAttrs.version;
 
   src = fetchFromRadicle {
-    # seed.radicle.dev currently doesn't update its canonical release tags correctly
-    seed = "oak.radicle.garden";
+    seed = "seed.radicle.dev";
     repo = "z4V1sjrXqjvFdnCUbxPFqd5p4DtH5";
     tag = "releases/httpd/${finalAttrs.version}";
     nonConeMode = true;
@@ -84,7 +84,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru = {
     tests = { inherit (nixosTests) radicle; };
-    updateScript = ./update.sh;
+    updateScript = nix-update-script { };
   };
 
   meta = {

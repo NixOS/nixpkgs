@@ -490,6 +490,7 @@ in
 
         services.nginx = lib.mkIf cfg.configureNginx {
           enable = true;
+          recommendedProxySettings = true;
           upstreams.paperless.servers."${cfg.address}:${toString cfg.port}" = { };
           virtualHosts.${cfg.domain} = {
             forceSSL = lib.mkDefault true;

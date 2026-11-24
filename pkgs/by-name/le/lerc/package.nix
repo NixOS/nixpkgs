@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lerc";
-  version = "4.2.0";
+  version = "4.3.0";
 
   outputs = [
     "out"
@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "esri";
     repo = "lerc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ysD+0B5yMOdNOKe9MS2T8o0KgqygdxLYiLMr8XeG4JE=";
+    hash = "sha256-ClrsgFGJCYDQD3Aorjqa+THiN+UPzrR+SomOqButX8Q=";
   };
 
   # Required to get the freebsd-ports patch to apply.
@@ -42,9 +42,13 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
   ];
 
+  strictDeps = true;
+
   passthru.tests.pkg-config = testers.hasPkgConfigModules {
     package = finalAttrs.finalPackage;
   };
+
+  __structuredAttrs = true;
 
   meta = {
     changelog = "https://github.com/Esri/lerc/blob/${finalAttrs.src.tag}/CHANGELOG.md";

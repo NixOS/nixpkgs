@@ -8,6 +8,7 @@
   prisma_7,
   prisma-engines_7,
   runtimeShell,
+  nixosTests,
 }:
 
 buildNpmPackage (finalAttrs: {
@@ -118,6 +119,10 @@ buildNpmPackage (finalAttrs: {
       "$apiModules"/typescript \
       "$apiModules"/.{bin,cache} \
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) ghostfolio;
+  };
 
   meta = {
     description = "Open Source Wealth Management Software";

@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromCodeberg,
   makeBinaryWrapper,
@@ -43,20 +44,22 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    libopus
+    zstd
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     fontconfig
     dbus
     glib
     libglvnd
-    libopus
     libxkbcommon
     wayland
-    zstd
   ];
 
   # Force linking to libEGL, which is always dlopen()ed, to
   # libwayland-client & libxkbcommon, which is dlopen()ed based on the
   # winit backend, and to libdbus-1, which is dlopen()ed by rfd to open file dialogs.
-  env.NIX_LDFLAGS = toString [
+  env.NIX_LDFLAGS = lib.optionalString (!stdenv.hostPlatform.isDarwin) (toString [
     "--push-state"
     "--no-as-needed"
     "-lEGL"
@@ -64,7 +67,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "-lwayland-client"
     "-lxkbcommon"
     "--pop-state"
-  ];
+  ]);
 
   postInstall = ''
     for program in "$out/bin/faircamp" "$out/bin/faircamp-cli"; do
@@ -95,7 +98,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
     homepage = "https://faircamp.org/";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ fgaz ];
+    maintainers = with lib.maintainers; [
+      fgaz
+      niklaskorz
+    ];
     platforms = lib.platforms.all;
   };
 })

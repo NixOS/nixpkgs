@@ -7,12 +7,15 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   name = "pak0.pak";
+  pname = "quake-shareware";
   version = "1.06";
 
   src = fetchurl {
     url = "https://github.com/Jason2Brownlee/QuakeOfficialArchive/raw/main/bin/quake106.zip";
     hash = "sha256-7GydNLGuAlKsAGYEW2YRp5GcKg14o6Ztk4eo9ZdVMjk=";
-    meta.license = {
+    meta.license = lib.licenses.mkLicense {
+      shortName = "IDSLicense";
+      fullName = "ID SOFTWARE LICENSE";
       url = "https://github.com/id-Software/Quake/raw/master/WinQuake/data/SLICNSE.TXT";
       free = false;
       redistributable = true;

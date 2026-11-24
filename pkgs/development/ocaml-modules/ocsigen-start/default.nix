@@ -1,9 +1,7 @@
 {
-  stdenv,
+  buildDunePackage,
   lib,
   fetchFromGitHub,
-  ocaml,
-  findlib,
   ocsigen-toolkit,
   pgocaml_ppx,
   safepass,
@@ -12,17 +10,19 @@
   eliom,
   resource-pooling,
   ocsigen-ppx-rpc,
+  ocsigen-dune-rules,
   js_of_ocaml-ppx_deriving_json,
 }:
 
-stdenv.mkDerivation {
-  pname = "ocaml${ocaml.version}-ocsigen-start";
-  version = "8.0.0";
+buildDunePackage {
+  pname = "ocsigen-start";
+  version = "8.0.0+git-2026-11-01";
+
+  minimalOCamlVersion = "5.3";
 
   nativeBuildInputs = [
-    ocaml
-    findlib
     eliom
+    ocsigen-dune-rules
   ];
   buildInputs = [
     ocsigen-ppx-rpc
@@ -37,21 +37,15 @@ stdenv.mkDerivation {
     cohttp-lwt-unix
   ];
 
-  strictDeps = true;
-
-  patches = [
-    ./templates-dir.patch
-  ];
-
   src = fetchFromGitHub {
     owner = "ocsigen";
     repo = "ocsigen-start";
-    rev = "b64139e365ab1d244033133629431f7a73e3e054";
-    hash = "sha256-N6bPEibcN7WM23hSK4260+hZWo9PSRoSLjemF7m/9Ic=";
+    rev = "6a01579e13a2fb0dc0f8feb063b8aaeff4009450";
+    hash = "sha256-g1ruN8eNx1+PX0oA0uTB1wm5RMLsO8p4owJ2b9BJlDc=";
   };
 
-  preInstall = ''
-    mkdir -p $OCAMLFIND_DESTDIR
+  postInstall = ''
+    ln -s $OCAMLFIND_DESTDIR/eliom/templates $dev/eliom-distillery-templates
   '';
 
   meta = {
@@ -61,7 +55,6 @@ stdenv.mkDerivation {
       An Eliom application skeleton, ready to use to build your own application with users, (pre)registration, notifications, etc.
     '';
     license = lib.licenses.lgpl21Only;
-    inherit (ocaml.meta) platforms;
     maintainers = [ lib.maintainers.gal_bolle ];
   };
 

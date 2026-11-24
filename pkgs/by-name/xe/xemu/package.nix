@@ -106,10 +106,12 @@ stdenv.mkDerivation (finalAttrs: {
     "--disable-strip"
     "--target-list=i386-softmmu"
     "--disable-werror"
+    "--extra-cflags=-DXBOX=1 -Wno-error=redundant-decls"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # As seen in the official build script ($src/build.sh)
     "--disable-cocoa"
+    "-Wno-implicit-function-declaration"
   ];
 
   buildFlags = [ "qemu-system-i386" ];
@@ -134,12 +136,6 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   preConfigure = ''
-    configureFlagsArray+=("--extra-cflags=-DXBOX=1 -Wno-error=redundant-decls")
-  ''
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    configureFlagsArray+=("-Wno-implicit-function-declaration")
-  ''
-  + ''
     # When the data below can't be obtained through git, the build process tries
     # to run `XEMU_COMMIT=$(cat XEMU_COMMIT)` (and similar)
     echo '${finalAttrs.version}' > XEMU_VERSION
@@ -147,7 +143,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   preBuild = ''
     cd build
-    substituteInPlace ./build.ninja --replace /usr/bin/env $(which env)
   '';
 
   postBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
