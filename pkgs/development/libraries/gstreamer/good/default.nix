@@ -78,7 +78,7 @@ assert raspiCameraSupport -> hostSupportsRaspiCamera;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gst-plugins-good";
-  version = "1.26.11";
+  version = "1.28.9";
 
   outputs = [
     "out"
@@ -87,33 +87,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/gst-plugins-good/gst-plugins-good-${finalAttrs.version}.tar.xz";
-    hash = "sha256-AB3rCHbV10PNNEir90onrew/2FABL8sbAJlIYb1sEUU=";
+    hash = "sha256-5RjNl0g3BqJS6V5gMSoi0j3sb152c69vW95xnDqcp/Q=";
   };
 
   patches = [
     # dlopen libsoup_3 with an absolute path
     (replaceVars ./souploader.diff {
       nixLibSoup3Path = "${lib.getLib libsoup_3}/lib";
-    })
-    # https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/11262
-    (fetchpatch {
-      name = "GStreamer-SA-2026-0021-1.patch";
-      url = "https://gitlab.freedesktop.org/gstreamer/gstreamer/-/commit/35a905a92f4cfc85941c6c820009ac9219f755b2.patch";
-      sha256 = "sha256-1SgQo+wb2Adcgrz3zn6/qn248vnBdPuk2oJ1v9+Dbzo=";
-      stripLen = 2;
-    })
-    (fetchpatch {
-      name = "GStreamer-SA-2026-0021-2.patch";
-      url = "https://gitlab.freedesktop.org/gstreamer/gstreamer/-/commit/0d819ceb654b06bbdd54381da5363c16751758a2.patch";
-      sha256 = "sha256-a8P1YxLNMkYka01+8MhBO+uSzGbR186sumlQk5LuGfY=";
-      stripLen = 2;
-    })
-    # https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/11263
-    (fetchpatch {
-      name = "GStreamer-SA-2026-0022.patch";
-      url = "https://gitlab.freedesktop.org/gstreamer/gstreamer/-/commit/6db6dd058ebc3607452311b7dc47b0359b40b293.patch";
-      sha256 = "sha256-gaBUpEdZB0PrnI1IR53jtM0kecHpUIzavUdADN1NNlQ=";
-      stripLen = 2;
     })
   ];
 
