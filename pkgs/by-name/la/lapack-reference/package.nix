@@ -94,7 +94,12 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://www.netlib.org/lapack/";
     maintainers = with lib.maintainers; [ markuskowa ];
     license = lib.licenses.bsd3;
-    pkgConfigModules = [ "lapack" ];
+    pkgConfigModules = [
+      "blas"
+      "cblas"
+      "lapack"
+      "lapacke"
+    ];
     platforms = lib.platforms.all;
   };
 })
