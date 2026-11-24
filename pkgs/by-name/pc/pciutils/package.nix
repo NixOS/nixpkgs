@@ -76,6 +76,8 @@ stdenv.mkDerivation (finalAttrs: {
     rev-prefix = "v";
   };
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://mj.ucw.cz/sw/pciutils/";
     description = "Collection of programs for inspecting and manipulating configuration of PCI devices";
