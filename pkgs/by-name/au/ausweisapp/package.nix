@@ -12,13 +12,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "ausweisapp";
-  version = "2.6.2";
+  version = "2.6.3";
 
   src = fetchFromGitHub {
     owner = "Governikus";
     repo = "AusweisApp";
     rev = finalAttrs.version;
-    hash = "sha256-arJECA7SjVfXQLptpZOjLPeMR5t9/3jWByLMgAUUpu8=";
+    hash = "sha256-yNFQHI/Xua/KaJTxXQWTS4LaW4iA0LnIoCK+eyEWuuk=";
   };
 
   postPatch = ''
@@ -33,12 +33,6 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.wrapQtAppsHook
   ];
 
-  # The build scripts copy the entire translations directory from Qt
-  # which ends up being read-only because it's in the store.
-  preBuild = ''
-    chmod +w resources/translations
-  '';
-
   buildInputs = [
     llhttp
     pcsclite
@@ -50,6 +44,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   env.LANG = "C.UTF-8";
+
+  postInstall = ''
+    mv "$out/share/AusweisApp/AusweisApp/AusweisApp.rcc" "$out/share/AusweisApp/"
+    rmdir "$out/share/AusweisApp/AusweisApp"
+  '';
 
   passthru = {
     tests.version = testers.testVersion {
