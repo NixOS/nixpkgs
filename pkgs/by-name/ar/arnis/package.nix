@@ -28,8 +28,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-m8sFlnHSKCIxjriyQF97+noti/esfAU4t1xn7ukG+8g=";
 
-  env.AWS_LC_SYS_USE_SYSTEM = true;
-
   nativeBuildInputs = [
     cargo-tauri.hook
 
