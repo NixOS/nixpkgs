@@ -1,0 +1,13 @@
+diff --git a/tests/music/test_utils.py b/tests/music/test_utils.py
+index 92bce1274..da567f5df 100644
+--- a/tests/music/test_utils.py
++++ b/tests/music/test_utils.py
+@@ -31,7 +31,7 @@ def test_guess_mimetype_try_using_extension_if_fail(wrong, factories, mocker):
+         ("sample.flac", {"bitrate": 1608000, "length": 0.001}),
+         ("test.mp3", {"bitrate": 8000, "length": 267.70285714285717}),
+         ("test.ogg", {"bitrate": 112000, "length": 1}),
+-        ("test.opus", {"bitrate": 0, "length": 1}),  # This Opus file lacks a bitrate
++        ("test.opus", {"bitrate": 106472, "length": 1}),  # Mutagen >= 1.47 computes bitrate
+     ],
+ )
+ def test_get_audio_file_data(name, expected):

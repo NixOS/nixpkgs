@@ -64,6 +64,12 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     # prevent duplicate tracks when filtering by artist on M2M relations
     ./fix-artist-tracks-count-distinct.patch
 
+    # fix test failures in sandboxed build environment (pyfakefs for media root)
+    ./fix-root-filesystem-tests.patch
+
+    # fix test expectations for mutagen >= 1.47
+    ./mutagen-compat.patch
+
     # normalize audio/x-flac to audio/flac for native browser playback
     ./normalize-flac-mimetype.patch
   ];
@@ -180,11 +186,15 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   checkPhase = ''
     runHook preCheck
 
-    DATABASE_URL="postgresql:///$PGDATABASE?host=$PGHOST&user=$PGUSER" \
-    FUNKWHALE_URL="https://example.com" \
-    DJANGO_SETTINGS_MODULE="config.settings.local" \
-    CACHE_URL="redis://127.0.0.1:$redisTestPort/0" \
-    python -m django migrate --no-input
+    (
+      export DATABASE_URL="postgresql:///$PGDATABASE?host=$PGHOST&user=$PGUSER"
+      export FUNKWHALE_URL="https://example.com"
+      export DJANGO_SETTINGS_MODULE="config.settings.local"
+      export CACHE_URL="redis://127.0.0.1:$redisTestPort/0"
+
+      python -m django migrate --no-input
+      python -m pytest tests/music
+    )
 
     runHook postCheck
   '';
@@ -194,7 +204,9 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
   passthru = {
     python = python3;
-    tests = { inherit (nixosTests) funkwhale; };
+    tests = {
+      inherit (nixosTests) funkwhale;
+    };
 
     static = runCommand "funkwhale-static" { } ''
       FUNKWHALE_URL="https://example.com" \
