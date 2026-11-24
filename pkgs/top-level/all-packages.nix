@@ -4362,7 +4362,6 @@ with pkgs;
   electron-source = callPackage ../development/tools/electron { };
 
   inherit (callPackages ../development/tools/electron/binary { })
-    electron_39-bin
     electron_40-bin
     electron_41-bin
     electron_42-bin
@@ -4372,7 +4371,6 @@ with pkgs;
     ;
 
   inherit (callPackages ../development/tools/electron/chromedriver { })
-    electron-chromedriver_39
     electron-chromedriver_40
     electron-chromedriver_41
     electron-chromedriver_42
@@ -4398,7 +4396,6 @@ with pkgs;
           });
       in
       {
-        electron_39 = electron_39-bin;
         electron_40 = electron_40-bin;
         electron_41 = electron_41-bin;
         electron_42 = electron_42-bin;
@@ -4416,7 +4413,6 @@ with pkgs;
         };
       }
     )
-    electron_39
     electron_40
     electron_41
     electron_42
