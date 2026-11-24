@@ -60,6 +60,8 @@ stdenv.mkDerivation (finalAttrs: {
     hwloc
   ];
 
+  strictDeps = true;
+
   doCheck = !stdenv.hostPlatform.isStatic;
 
   dontUseNinjaCheck = true;
