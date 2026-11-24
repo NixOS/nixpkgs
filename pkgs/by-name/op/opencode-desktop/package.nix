@@ -47,6 +47,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     + lib.optionalString stdenvNoCC.hostPlatform.isDarwin ''
       substituteInPlace packages/desktop/script/utils.ts \
         --replace-fail 'await $`codesign --force --sign - ''${dest}`' 'true'
+      # postFixup signs with rcodesign; codesign is unavailable in the sandbox.
+      substituteInPlace packages/desktop/electron-builder.config.ts \
+        --replace-fail 'resetAdHocDarwinSignature: true' 'resetAdHocDarwinSignature: false'
     ''
     + lib.optionalString stdenvNoCC.hostPlatform.isLinux ''
       substituteInPlace \
