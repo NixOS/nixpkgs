@@ -20,17 +20,13 @@ in
     ./lxc-instance-common.nix
 
     ../profiles/qemu-guest.nix
+
+    (lib.mkRemovedOptionModule [ "system" "build" "qemuImage" ] ''
+      Use `system.build.repartImage` instead.
+    '') # Added 2026-11-24
   ];
 
   config = {
-    system.build.qemuImage = import ../../lib/make-disk-image.nix {
-      inherit pkgs lib config;
-
-      partitionTableType = "efi";
-      format = "qcow2-compressed";
-      copyChannel = config.system.installer.channel.enable;
-    };
-
     system.build.repartImage = config.image.repart.image.overrideAttrs (previousAttrs: {
       nativeBuildInputs = previousAttrs.nativeBuildInputs ++ [ pkgs.qemu-utils ];
 
