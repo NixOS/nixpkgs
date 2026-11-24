@@ -57,7 +57,7 @@ stdenv.mkDerivation (
               cp -r ${monorepoSrc}/cmake "$out"
               cp -r ${monorepoSrc}/lldb "$out"
             ''
-            + lib.optionalString (lib.versionAtLeast release_version "19" && enableManpages) ''
+            + lib.optionalString enableManpages ''
               mkdir -p "$out/llvm"
               cp -r ${monorepoSrc}/llvm/docs "$out/llvm/docs"
             ''
@@ -86,11 +86,6 @@ stdenv.mkDerivation (
 
     patches = [
       (getVersionFile "lldb/gnu-install-dirs.patch")
-    ]
-    ++ lib.optionals (lib.versions.major release_version == "18") [
-      # Fix build with gcc15
-      # https://github.com/llvm/llvm-project/commit/bb59f04e7e75dcbe39f1bf952304a157f0035314
-      ./lldb-add-include-cstdint.patch
     ]
     ++ lib.optionals (lib.versionOlder (lib.versions.major release_version) "23") [
       # Backports several fixes to export trie parsing. Otherwise, LLDB crashes when starting a debugging session on macOS 27.

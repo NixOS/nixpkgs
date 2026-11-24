@@ -83,19 +83,6 @@ stdenv.mkDerivation (
         libllvmLibdir = "${libllvm.lib}/lib";
       })
     ]
-    # Fixes a bunch of lambda-related crashes
-    # https://github.com/llvm/llvm-project/pull/93206
-    ++ lib.optional (lib.versions.major release_version == "18") (fetchpatch {
-      name = "tweak-tryCaptureVariable-for-unevaluated-lambdas.patch";
-      url = "https://github.com/llvm/llvm-project/commit/3d361b225fe89ce1d8c93639f27d689082bd8dad.patch";
-      # TreeTransform.h is not affected in LLVM 18.
-      excludes = [
-        "docs/ReleaseNotes.rst"
-        "lib/Sema/TreeTransform.h"
-      ];
-      stripLen = 1;
-      hash = "sha256-1NKej08R9SPlbDY/5b0OKUsHjX07i9brR84yXiPwi7E=";
-    })
     ++ extraPatches;
 
     nativeBuildInputs = [
@@ -167,12 +154,9 @@ stdenv.mkDerivation (
     postInstall = ''
       ln -sv $out/bin/clang $out/bin/cpp
     ''
-    + (lib.optionalString
-      ((lib.versionAtLeast release_version "19") && !(lib.versionAtLeast release_version "21"))
-      ''
-        mv $out/lib/clang $lib/lib/clang
-      ''
-    )
+    + lib.optionalString (!(lib.versionAtLeast release_version "21")) ''
+      mv $out/lib/clang $lib/lib/clang
+    ''
     + ''
 
       # Move libclang to 'lib' output

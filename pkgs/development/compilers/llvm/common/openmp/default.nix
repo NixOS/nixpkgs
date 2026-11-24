@@ -64,11 +64,8 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
-  patches =
-    lib.optional (lib.versionOlder release_version "19") (getVersionFile "openmp/fix-find-tool.patch")
-    ++ [
-      (getVersionFile "openmp/run-lit-directly.patch")
-    ];
+  # TODO: delete on staging. patch is empty.
+  patches = [ (getVersionFile "openmp/run-lit-directly.patch") ];
 
   nativeBuildInputs = [
     cmake
