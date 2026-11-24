@@ -12,7 +12,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bootvine";
-  version = "0.1.4";
+  version = "0.1.5";
   __structuredAttrs = true;
 
   src = fetchFromGitea {
@@ -20,10 +20,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "wvhulle";
     repo = "bootvine";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-47+MgKwFUErTiop+xab4F4AY0HqOZHCZy/OSoUo5Eqs=";
+    hash = "sha256-YZhRJqsSuwA/Xh5RSELzVh1j7q9d+gwCc4iQs6cd4J0=";
   };
 
-  cargoHash = "sha256-yUq+gUSFaDNlkEv8nEpKYFYMTSelunTEfQHnvFt1osY=";
+  cargoHash = "sha256-wa9ceOMdKXgXQMmkoQYDvpwQieE9Z3LSm9X06HlwrVo=";
 
   cargoBuildFlags = [
     "--bin"
