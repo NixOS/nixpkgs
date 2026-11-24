@@ -393,12 +393,18 @@ rec {
   */
   enableDWARFDebugging =
     drv:
-    # -g: enables debugging symbols
-    # --disable-*-stripping: tell GHC not to strip resulting binaries
-    # dontStrip: see above
-    appendConfigureFlag "--ghc-options=-g --disable-executable-stripping --disable-library-stripping" (
-      dontStrip drv
-    );
+    appendConfigureFlags
+      [
+        # -g: enables debugging symbols
+        "--ghc-options=-g"
+        # --disable-*-stripping: tell GHC not to strip resulting binaries
+        "--disable-executable-stripping"
+        "--disable-library-stripping"
+      ]
+      (
+        # see dontStrip docs above
+        dontStrip drv
+      );
 
   /*
     Create a source distribution tarball like those found on hackage,
@@ -449,7 +455,11 @@ rec {
     Use the gold linker. It is a linker for ELF that is designed
     "to run as fast as possible on modern systems"
   */
-  linkWithGold = appendConfigureFlag "--ghc-option=-optl-fuse-ld=gold --ld-option=-fuse-ld=gold --with-ld=ld.gold";
+  linkWithGold = appendConfigureFlags [
+    "--ghc-option=-optl-fuse-ld=gold"
+    "--ld-option=-fuse-ld=gold"
+    "--with-ld=ld.gold"
+  ];
 
   /*
     link executables statically against haskell libs to reduce
@@ -502,7 +512,10 @@ rec {
     Turn on most of the compiler warnings and fail the build if any
     of them occur.
   */
-  failOnAllWarnings = appendConfigureFlag "--ghc-option=-Wall --ghc-option=-Werror";
+  failOnAllWarnings = appendConfigureFlags [
+    "--ghc-option=-Wall"
+    "--ghc-option=-Werror"
+  ];
 
   /*
     Add a post-build check to verify that dependencies declared in
