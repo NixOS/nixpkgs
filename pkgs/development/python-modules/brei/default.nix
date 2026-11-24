@@ -16,7 +16,6 @@ buildPythonPackage (finalAttrs: {
   pname = "brei";
   version = "0.2.4";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "entangled";
