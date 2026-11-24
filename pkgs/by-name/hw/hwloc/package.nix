@@ -85,6 +85,8 @@ stdenv.mkDerivation (finalAttrs: {
     "man"
   ];
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Portable abstraction of hierarchical architectures for high-performance computing";
     longDescription = ''
