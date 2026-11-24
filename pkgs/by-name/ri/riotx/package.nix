@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "riotx";
-  version = "1.15.4";
+  version = "2.0.0";
 
   src = fetchzip {
     url = "https://github.com/redis/riotx-dist/releases/download/v${finalAttrs.version}/riotx-${finalAttrs.version}.zip";
-    hash = "sha256-heMA8tgW6QE2QSsT1lJkEfWTGLCj5Yr6xZg60egwxXQ=";
+    hash = "sha256-VYgfuVjGWuAC3F9U8L4YzytFoyof92gHnRrzdpq5L+0=";
   };
 
   nativeBuildInputs = [
