@@ -1,36 +1,53 @@
 {
   lib,
   appimageTools,
+  dwarfs,
+  fetchurl,
   makeWrapper,
   nix-update-script,
-  fetchurl,
+  runCommand,
 }:
 
-appimageTools.wrapType2 (finalAttrs: {
+appimageTools.wrapAppImage (finalAttrs: {
   pname = "vita3k";
-  version = "4065";
+  version = "4403";
 
   src = fetchurl {
     url = "https://github.com/Vita3K/Vita3K-builds/releases/download/${finalAttrs.version}/Vita3K-x86_64.AppImage";
-    sha256 = "sha256-jgypzFZgQeBvtuEuw51ex6r7tOqTYaIJAE3JzDRMcWI=";
+    hash = "sha256-we6p/+v9N6VeC7p538+qf//pi6+l2Pk3qL52jv0t8Jk=";
   };
+
+  contents =
+    runCommand "${finalAttrs.pname}-${finalAttrs.version}-extracted"
+      {
+        nativeBuildInputs = [ dwarfs ];
+        strictDeps = true;
+      }
+      ''
+        mkdir "$out"
+        dwarfsextract -i ${finalAttrs.src} -o "$out" --skip-devices --skip-specials
+        chmod go-w "$out"
+      '';
 
   nativeBuildInputs = [ makeWrapper ];
 
   extraPkgs = pkgs: [ pkgs.sdl3 ];
 
   extraInstallCommands = ''
-    install -Dm444 ${finalAttrs.contents}/vita3k.desktop -t $out/share/applications
-    substituteInPlace $out/share/applications/vita3k.desktop \
+    install -Dm444 ${finalAttrs.contents}/org.vita3k.vita3k.desktop -t "$out/share/applications"
+    substituteInPlace "$out/share/applications/org.vita3k.vita3k.desktop" \
       --replace-fail "Exec=Vita3K" "Exec=vita3k"
-    cp -r ${finalAttrs.contents}/usr/share/icons $out/share
-    wrapProgram $out/bin/vita3k \
+    install -Dm444 ${finalAttrs.contents}/org.vita3k.vita3k.svg -t "$out/share/icons/hicolor/scalable/apps"
+    wrapProgram "$out/bin/vita3k" \
       --set APPIMAGE 1 \
       --unset QT_PLUGIN_PATH \
       --unset QML2_IMPORT_PATH
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    inherit (finalAttrs) src;
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Experimental PlayStation Vita emulator";
