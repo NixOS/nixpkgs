@@ -6932,7 +6932,8 @@
       ];
     "skoda" =
       ps: with ps; [
-      ]; # missing inputs: skoda-public-api
+        skoda-public-api
+      ];
     "sky_hub" =
       ps: with ps; [
         pyskyqhub
@@ -9810,6 +9811,7 @@
     "simplepush"
     "simplisafe"
     "siren"
+    "skoda"
     "sky_hub"
     "sky_remote"
     "skybell"
