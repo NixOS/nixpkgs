@@ -17,6 +17,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
 
+  strictDeps = true;
+
   patches =
     lib.optionals stdenv.hostPlatform.isCygwin [
       ./1.16-cygwin.patch
