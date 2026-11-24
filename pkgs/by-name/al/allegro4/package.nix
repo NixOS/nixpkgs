@@ -25,6 +25,8 @@
 
 stdenv.mkDerivation rec {
   pname = "allegro";
+  # nixpkgs-update: no auto update
+  # 4.4.3.1 is the last 4.x release; newer releases in this repo are allegro5
   version = "4.4.3.1";
 
   src = fetchurl {
