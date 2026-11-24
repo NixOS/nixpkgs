@@ -14,7 +14,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "beaker";
   version = "1.14.1";
   pyproject = true;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bbangert";
     repo = "beaker";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-LvpsknCAXVoRFCy1jlrlqeAPpHhEbtCXuQuBf+vBJDs=";
   };
 
@@ -46,7 +46,7 @@ buildPythonPackage rec {
     webtest
     pytestCheckHook
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   # Can not run memcached tests because it immediately tries to connect.
   # Disable external tests because they need to connect to a live database.
@@ -60,9 +60,9 @@ buildPythonPackage rec {
   meta = {
     description = "Session and Caching library with WSGI Middleware";
     homepage = "https://github.com/bbangert/beaker";
-    changelog = "https://github.com/bbangert/beaker/blob/${version}/CHANGELOG";
+    changelog = "https://github.com/bbangert/beaker/blob/${finalAttrs.version}/CHANGELOG";
     license = lib.licenses.bsd3;
     maintainers = [ ];
     knownVulnerabilities = [ "CVE-2013-7489" ];
   };
-}
+})
