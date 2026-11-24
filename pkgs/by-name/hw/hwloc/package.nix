@@ -15,6 +15,7 @@
   config,
   enableCuda ? config.cudaSupport,
   cudaPackages,
+  versionCheckHook,
   testers,
 }:
 
@@ -34,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # Although we use a tagged version upstream has rc/alpha tags set.
-  # This fixes the contents of hwloc.pc
+  # This fixes the contents of hwloc.pc / the output of --version
   postPatch = ''
     sed -i -e 's/greek=.*/greek=/' -e 's/snapshot=1/snapshot=0/' VERSION
   '';
@@ -90,6 +91,10 @@ stdenv.mkDerivation (finalAttrs: {
     "doc"
     "man"
   ];
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgram = "${placeholder "out"}/bin/hwloc-info";
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
