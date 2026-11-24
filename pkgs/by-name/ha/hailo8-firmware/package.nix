@@ -24,8 +24,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/lib/firmware
-    cp -a $src $out/lib/firmware/hailo8_fw.bin
+    install -Dm644 "$src" "$out/lib/firmware/hailo/hailo8_fw.bin"
 
     runHook postInstall
   '';
