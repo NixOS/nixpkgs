@@ -4,6 +4,7 @@
   cmake,
   fetchFromGitHub,
   onetbb,
+  testers,
 
   useTBB ? lib.meta.availableOn stdenv.hostPlatform onetbb,
 }:
@@ -39,6 +40,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
   ];
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   __structuredAttrs = true;
 
   meta = {
@@ -54,5 +57,6 @@ stdenv.mkDerivation (finalAttrs: {
       silvanshade
     ];
     platforms = lib.platforms.all;
+    pkgConfigModules = [ "libblake3" ];
   };
 })
