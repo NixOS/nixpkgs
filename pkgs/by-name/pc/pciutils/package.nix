@@ -8,7 +8,9 @@
   which,
   hwdata,
   static ? stdenv.hostPlatform.isStatic,
+  versionCheckHook,
   gitUpdater,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -70,10 +72,16 @@ stdenv.mkDerivation (finalAttrs: {
     cp --reflink=auto ${hwdata}/share/hwdata/pci.ids $out/share/pci.ids
   '';
 
-  passthru.updateScript = gitUpdater {
-    # No nicer place to find latest release.
-    url = "https://github.com/pciutils/pciutils.git";
-    rev-prefix = "v";
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru = {
+    updateScript = gitUpdater {
+      # No nicer place to find latest release.
+      url = "https://github.com/pciutils/pciutils.git";
+      rev-prefix = "v";
+    };
+    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
   __structuredAttrs = true;
@@ -85,5 +93,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.vcunat ]; # not really, but someone should watch it
     mainProgram = "lspci";
+    pkgConfigModules = [ "libpci" ];
   };
 })
