@@ -7140,7 +7140,8 @@
       ];
     "solyx_energy_cloud" =
       ps: with ps; [
-      ]; # missing inputs: solyx-energy-api-client
+        solyx-energy-api-client
+      ];
     "soma" =
       ps: with ps; [
         pysoma
@@ -9840,6 +9841,7 @@
     "solarlog"
     "solarman"
     "solax"
+    "solyx_energy_cloud"
     "soma"
     "somfy_mylink"
     "sonarr"
