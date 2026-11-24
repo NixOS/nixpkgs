@@ -14,18 +14,18 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cc-switch-cli";
-  version = "5.11.3";
+  version = "5.11.4";
 
   src = fetchFromGitHub {
     owner = "SaladDay";
     repo = "cc-switch-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xws/t6NKnIwK651uC/IzhGLW90/VZBJtaDX8QzVBFEs=";
+    hash = "sha256-qrkvHhvKLQVkCfcwsHr/IPPXL9Jp7fFjR6oel65K/Do=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src-tauri";
 
-  cargoHash = "sha256-VEpDWh8fHG+889IMVFmq2d+6TGStbqdJolD2cpfkjxc=";
+  cargoHash = "sha256-2shi1FVCTmVY/9oJuXWj9QX/ATGG9Fs4T1TmNLMgb8o=";
 
   nativeBuildInputs = [
     installShellFiles
