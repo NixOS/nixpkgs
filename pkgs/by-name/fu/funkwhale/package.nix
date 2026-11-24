@@ -14,19 +14,21 @@
 }:
 let
   # Pin to 3.1.0 to match upstream poetry.lock, with >= 3.4 DB migration required
-  django-oauth-toolkit' = (python3.pkgs.django-oauth-toolkit.overridePythonAttrs (old: {
-    version = "3.1.0";
-    src = fetchFromGitHub {
-      owner = "django-oauth";
-      repo = "django-oauth-toolkit";
-      tag = "3.1.0";
-      hash = "sha256-c7LaB8426qjwDveec3BghqCEtPs572PTVodvLAO2CcQ=";
-    };
-    preCheck = ''
-      export DJANGO_SETTINGS_MODULE=tests.settings
-    '';
-    doCheck = true;
-  }));
+  django-oauth-toolkit' = (
+    python3.pkgs.django-oauth-toolkit.overridePythonAttrs (old: {
+      version = "3.1.0";
+      src = fetchFromGitHub {
+        owner = "django-oauth";
+        repo = "django-oauth-toolkit";
+        tag = "3.1.0";
+        hash = "sha256-c7LaB8426qjwDveec3BghqCEtPs572PTVodvLAO2CcQ=";
+      };
+      preCheck = ''
+        export DJANGO_SETTINGS_MODULE=tests.settings
+      '';
+      doCheck = true;
+    })
+  );
 in
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "funkwhale";
