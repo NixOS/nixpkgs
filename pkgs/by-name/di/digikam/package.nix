@@ -1,6 +1,5 @@
 {
   stdenv,
-  config,
   lib,
   fetchFromGitLab,
   fetchgit,
@@ -37,8 +36,6 @@
   libGLX,
   libGLU,
   llama-cpp,
-  cudaPackages,
-  enableCuda ? config.cudaSupport,
 
   kdePackages,
 
@@ -172,9 +169,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "ENABLE_MEDIAPLAYER" true)
     (lib.cmakeBool "ENABLE_APPSTYLES" true)
     (lib.cmakeBool "ENABLE_NLSEARCH_LLAMACPP" true)
-  ]
-  ++ lib.optionals enableCuda [
-    (lib.cmakeFeature "CUDA_TOOLKIT_ROOT_DIR" cudaPackages.cuda_nvcc.outPath)
   ];
 
   # Tests segfault for some reason…
