@@ -7,27 +7,23 @@
 
 let
   cfg = config.services.ds4;
-  staticUser = cfg.user != null && cfg.group != null;
 
-  # Build the ds4-server command line from options.
   serverArgs =
     with cfg;
     lib.concatStringsSep " " (
-      lib.filter (x: x != "") [
+      [
         "-m ${lib.escapeShellArg model}"
-
         "--host ${host}"
         "--port ${toString port}"
-
-        (lib.optionalString (ctx != null) "--ctx ${toString ctx}")
-        (lib.optionalString (threads != null) "--threads ${toString threads}")
-        (lib.optionalString (batchSize != null) "--batch-size ${toString batchSize}")
-        (lib.optionalString (kvDiskDir != null) "--kv-disk-dir ${lib.escapeShellArg kvDiskDir}")
-        (lib.optionalString (kvDiskSpaceMb != null) "--kv-disk-space-mb ${toString kvDiskSpaceMb}")
-        (lib.optionalString noKvOffload "--no-kv-offload")
-        (lib.optionalString cors "--cors")
-        (lib.optionalString (gpuDeviceIds != null) "--gpu ${lib.escapeShellArg gpuDeviceIds}")
       ]
+      ++ lib.optional (ctx != null) "--ctx ${toString ctx}"
+      ++ lib.optional (threads != null) "--threads ${toString threads}"
+      ++ lib.optional (batchSize != null) "--batch-size ${toString batchSize}"
+      ++ lib.optional (kvDiskDir != null) "--kv-disk-dir ${lib.escapeShellArg kvDiskDir}"
+      ++ lib.optional (kvDiskSpaceMb != null) "--kv-disk-space-mb ${toString kvDiskSpaceMb}"
+      ++ lib.optional noKvOffload "--no-kv-offload"
+      ++ lib.optional cors "--cors"
+      ++ lib.optional (gpuDeviceIds != null) "--gpu ${lib.escapeShellArg gpuDeviceIds}"
     );
 in
 {
@@ -43,36 +39,25 @@ in
         - `ds4-rocm`: ROCm build (AMD GPUs, e.g. Strix Halo)
         - `ds4-cuda`: CUDA build (NVIDIA GPUs)
 
-        The GPU variants are compiled for a specific GPU arch (see the package
-        `cudaArch`/`rocmArch` options) and must be built on a machine carrying
-        the matching toolchain.
+        Each GPU variant targets a single architecture. `ds4-rocm` defaults to
+        `gfx1151` (Strix Halo), and `ds4-cuda` uses the first architecture in
+        `cudaPackages.flags.realArches`. To build for another GPU, use an override
+        such as `pkgs.ds4-rocm.override { rocmArch = "gfx1100"; }` or
+        `pkgs.ds4-cuda.override { cudaArch = "sm_120"; }`. Builds can run on a
+        machine without a GPU.
       '';
     };
 
     user = lib.mkOption {
-      type = lib.types.nullOr lib.types.str;
-      default = null;
-      example = "ds4";
-      description = ''
-        User account under which to run ds4-server. Defaults to
-        [DynamicUser](https://www.freedesktop.org/software/systemd/man/latest/systemd.exec.html#DynamicUser=)
-        when set to `null`.
-
-        The user will automatically be created when set to a non-null value.
-      '';
+      type = lib.types.str;
+      default = "ds4";
+      description = "User account under which ds4-server runs. The default account is created automatically.";
     };
 
     group = lib.mkOption {
-      type = lib.types.nullOr lib.types.str;
-      default = cfg.user;
-      defaultText = lib.literalExpression "config.services.ds4.user";
-      example = "ds4";
-      description = ''
-        Group under which to run ds4-server. Only used when `services.ds4.user`
-        is set.
-
-        The group will automatically be created when set to a non-null value.
-      '';
+      type = lib.types.str;
+      default = "ds4";
+      description = "Group under which ds4-server runs. The default group is created automatically.";
     };
 
     model = lib.mkOption {
@@ -98,31 +83,25 @@ in
       description = "Maximum context length (number of tokens).";
       default = 100000;
       example = 100000;
-      type = lib.types.nullOr lib.types.int;
+      type = lib.types.nullOr lib.types.ints.positive;
     };
 
     threads = lib.mkOption {
       description = "Number of inference threads (default: CPU core count).";
       default = null;
       example = 16;
-      type = lib.types.nullOr lib.types.int;
+      type = lib.types.nullOr lib.types.ints.positive;
     };
 
     batchSize = lib.mkOption {
       description = "Token batch size for prompt processing.";
       default = null;
       example = 512;
-      type = lib.types.nullOr lib.types.int;
+      type = lib.types.nullOr lib.types.ints.positive;
     };
 
     kvDiskDir = lib.mkOption {
-      description = ''
-        Directory for KV cache disk offloading (persists across restarts).
-
-        With the default dynamic user, this must be a subdirectory of
-        `/var/lib/ds4` (created automatically); a `user`/`group` must be set to
-        use an arbitrary path.
-      '';
+      description = "Directory for KV cache disk offloading (persists across restarts).";
       default = null;
       example = "/var/lib/ds4/kv";
       type = lib.types.nullOr lib.types.str;
@@ -132,7 +111,7 @@ in
       description = "Maximum disk space for KV cache offloading in MB.";
       default = null;
       example = 8192;
-      type = lib.types.nullOr lib.types.int;
+      type = lib.types.nullOr lib.types.ints.positive;
     };
 
     noKvOffload = lib.mkOption {
@@ -148,7 +127,7 @@ in
     };
 
     gpuDeviceIds = lib.mkOption {
-      description = "GPU device IDs for multi-GPU inference (e.g. '0,1').";
+      description = "Comma-separated list of GPU device IDs to use for multi-GPU inference.";
       default = null;
       example = "0,1";
       type = lib.types.nullOr lib.types.str;
@@ -175,15 +154,6 @@ in
       type = lib.types.bool;
     };
 
-    autoStart = lib.mkOption {
-      description = ''
-        Whether to start ds4-server automatically at boot.
-        Set to false to only start it on demand via `systemctl start ds4-server`.
-      '';
-      default = true;
-      type = lib.types.bool;
-    };
-
     extraArgs = lib.mkOption {
       description = "Additional arguments to append to the ds4-server command line.";
       default = [ ];
@@ -194,19 +164,6 @@ in
       ];
       type = lib.types.listOf lib.types.str;
     };
-
-    extraServiceConfig = lib.mkOption {
-      description = "Extra systemd service unit config (e.g. SupplementaryGroups, TimeoutStopSec).";
-      default = { };
-      example = {
-        SupplementaryGroups = [
-          "render"
-          "video"
-        ];
-        TimeoutStopSec = 120;
-      };
-      type = lib.types.attrsOf lib.types.anything;
-    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -215,105 +172,98 @@ in
         assertion = cfg.model != "";
         message = "services.ds4: `model` must be set to a GGUF file path.";
       }
-      {
-        assertion = cfg.kvDiskDir == null || staticUser || lib.hasPrefix "/var/lib/ds4" cfg.kvDiskDir;
-        message = ''
-          services.ds4: with the default dynamic user, `kvDiskDir` must be inside
-          `/var/lib/ds4` (e.g. `/var/lib/ds4/kv`); set `services.ds4.user`/`group`
-          to use an arbitrary path.
-        '';
-      }
     ];
 
-    # Ensure the ds4 package is available in the system closure (for manual use).
+    users.users.ds4 = lib.mkIf (cfg.user == "ds4") {
+      isSystemUser = true;
+      group = cfg.group;
+      extraGroups = [ "render" ];
+      home = "/var/lib/ds4";
+    };
+    users.groups.ds4 = lib.mkIf (cfg.group == "ds4") { };
+
     environment.systemPackages = [ cfg.package ];
 
     systemd.services.ds4-server = {
       description = "ds4-server — DwarfStar local inference HTTP API";
-      documentation = [
-        "https://github.com/antirez/ds4"
-        "https://github.com/antirez/ds4#readme"
-      ];
+      documentation = [ "https://github.com/antirez/ds4" ];
 
       after = [ "network-online.target" ];
       wants = [ "network-online.target" ];
-      wantedBy = lib.optionals cfg.autoStart [ "multi-user.target" ];
+      wantedBy = [ "multi-user.target" ];
 
       environment = cfg.environment;
 
-      serviceConfig =
-        lib.optionalAttrs staticUser {
-          User = cfg.user;
-          Group = cfg.group;
-        }
-        // {
-          Type = "exec";
-          DynamicUser = true;
-          ExecStart = "${cfg.package}/bin/ds4-server ${serverArgs} ${lib.escapeShellArgs cfg.extraArgs}";
-          WorkingDirectory = "/var/lib/ds4";
-          StateDirectory = [ "ds4" ];
-          ReadWritePaths = [ "/var/lib/ds4" ] ++ lib.optionals (cfg.kvDiskDir != null) [ cfg.kvDiskDir ];
+      serviceConfig = {
+        User = cfg.user;
+        Group = cfg.group;
+        Type = "exec";
+        ExecStart = "${cfg.package}/bin/ds4-server ${serverArgs} ${lib.escapeShellArgs cfg.extraArgs}";
+        WorkingDirectory = "/var/lib/ds4";
+        StateDirectory = [ "ds4" ];
+        ReadWritePaths = lib.optional (cfg.kvDiskDir != null) cfg.kvDiskDir;
 
-          Restart = "on-failure";
-          RestartSec = 10;
-          StartLimitBurst = 3;
+        Restart = "on-failure";
+        RestartSec = 10;
+        StartLimitBurst = 3;
 
-          CapabilityBoundingSet = [ "" ];
-          DeviceAllow = [
-            # CUDA
-            # https://docs.nvidia.com/dgx/pdf/dgx-os-5-user-guide.pdf
-            "char-nvidiactl"
-            "char-nvidia-caps"
-            "char-nvidia-frontend"
-            "char-nvidia-uvm"
-            # ROCm
-            "char-drm"
-            "char-fb"
-            "char-kfd"
-            # WSL (Windows Subsystem for Linux)
-            "/dev/dxg"
-          ];
-          DevicePolicy = "closed";
-          LockPersonality = true;
-          MemoryDenyWriteExecute = true;
-          NoNewPrivileges = true;
-          PrivateDevices = false; # hides acceleration devices
-          PrivateTmp = true;
-          PrivateUsers = true;
-          ProcSubset = "all"; # /proc/meminfo
-          ProtectClock = true;
-          ProtectControlGroups = true;
-          ProtectHome = true;
-          ProtectHostname = true;
-          ProtectKernelLogs = true;
-          ProtectKernelModules = true;
-          ProtectKernelTunables = true;
-          ProtectProc = "invisible";
-          ProtectSystem = "strict";
-          RemoveIPC = true;
-          RestrictNamespaces = true;
-          RestrictRealtime = true;
-          RestrictSUIDSGID = true;
-          RestrictAddressFamilies = [
-            "AF_INET"
-            "AF_INET6"
-            "AF_UNIX"
-          ];
-          SupplementaryGroups = [ "render" ]; # for rocm to access /dev/dri/renderD* devices
-          SystemCallArchitectures = "native";
-          SystemCallFilter = [
-            "@system-service @resources"
-            "~@privileged"
-          ];
-          UMask = "0077";
-        }
-        // cfg.extraServiceConfig;
+        CapabilityBoundingSet = [ "" ];
+        DeviceAllow = [
+          # CUDA
+          # https://docs.nvidia.com/dgx/pdf/dgx-os-5-user-guide.pdf
+          "char-nvidiactl"
+          "char-nvidia-caps"
+          "char-nvidia-frontend"
+          "char-nvidia-uvm"
+          # ROCm
+          "char-drm"
+          "char-fb"
+          "char-kfd"
+          # WSL (Windows Subsystem for Linux)
+          "/dev/dxg"
+        ];
+        DevicePolicy = "closed";
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        NoNewPrivileges = true;
+        PrivateDevices = false; # hides acceleration devices
+        PrivateTmp = true;
+        PrivateUsers = true;
+        ProcSubset = "all"; # /proc/meminfo
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectProc = "invisible";
+        ProtectSystem = "strict";
+        RemoveIPC = true;
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+          "AF_UNIX"
+        ];
+        SupplementaryGroups = lib.optional (cfg.user != "ds4") "render";
+        SystemCallArchitectures = "native";
+        SystemCallFilter = [
+          "@system-service @resources"
+          "~@privileged"
+        ];
+        UMask = "0077";
+      };
     };
 
-    systemd.tmpfiles.rules = lib.mkIf staticUser (
-      (lib.optional (cfg.kvDiskDir != null) "d ${cfg.kvDiskDir} 0700 ${cfg.user} ${cfg.group} - -")
-      ++ (lib.optional (lib.hasPrefix "/var/lib/ds4" cfg.model) "d /var/lib/ds4 0700 ${cfg.user} ${cfg.group} - -")
-    );
+    systemd.tmpfiles.settings."10-ds4" = lib.optionalAttrs (cfg.kvDiskDir != null) {
+      ${cfg.kvDiskDir}.d = {
+        inherit (cfg) user group;
+        mode = "0700";
+      };
+    };
 
     networking.firewall = lib.mkIf cfg.openFirewall { allowedTCPPorts = [ cfg.port ]; };
   };

@@ -4,7 +4,6 @@
   fetchFromGitHub,
   makeWrapper,
   curl,
-  cacert,
   python3,
   rocmPackages,
   cudaPackages,
@@ -18,7 +17,7 @@
   # CUDA GPU arch, e.g. "sm_89". Defaults to the host platform's cudaPackages support
   cudaArch ? null,
 
-  # ROCm GPU target, e.g. "gfx1151". Defaults to the build host's detected GPU target
+  # ROCm GPU target, e.g. "gfx1151". Defaults to gfx1151 (Strix Halo).
   rocmArch ? null,
 }:
 
@@ -52,15 +51,6 @@ let
 
   rocmLibDirs = map (p: "${lib.getLib p}/lib") rocmInputs;
   rocmLinkFlags = lib.concatStringsSep " " (map (d: "-L${d} -Wl,-rpath,${d}") rocmLibDirs);
-  rocmIncludeFlags = lib.concatStringsSep " " (map (p: "-I${lib.getDev p}/include") rocmInputs);
-
-  cudaLibDirs = [
-    "${lib.getLib cudaPackages.cuda_cudart}/lib"
-    "${lib.getLib cudaPackages.libcublas}/lib"
-  ];
-  cudaLinkFlags = lib.concatStringsSep " " (
-    map (d: "-L${d} -Xlinker -rpath -Xlinker ${d}") cudaLibDirs
-  );
 
   resolvedCudaArch =
     if cudaArch != null then cudaArch else builtins.head (cudaPackages.flags.realArches or [ "sm_89" ]);
@@ -88,7 +78,15 @@ let
   backendMakeFlags =
     {
       cpu = [ ];
-      rocm = [ "ROCM_ARCH=${resolvedRocmArch}" ];
+      rocm = [
+        "ROCM_ARCH=${resolvedRocmArch}"
+        # Keep the upstream Makefile flags and add the ROCm store paths. hipcc
+        # drives an unwrapped clang, so it needs explicit include paths and rpaths.
+        "ROCM_CFLAGS=-O3 -ffast-math -g -fno-finite-math-only -pthread -D__HIP_PLATFORM_AMD__ -Wno-unused-command-line-argument --offload-arch=$(ROCM_ARCH) ${
+          lib.concatMapStringsSep " " (p: "-I${lib.getDev p}/include") rocmInputs
+        }"
+        "ROCM_LDLIBS=-lm -pthread ${rocmLinkFlags} -lhipblas -lhipblaslt -lrocblas"
+      ];
       cuda = [
         "NVCC=${lib.getExe' cudaPackages.cuda_nvcc "nvcc"}"
         "CUDA_HOME=${cudaPackages.cuda_nvcc}"
@@ -96,33 +94,16 @@ let
       ];
     }
     .${backend};
-
-  backendMakeFlagsArray =
-    {
-      cpu = [ ];
-      rocm = [
-        "ROCM_CFLAGS=-O3 -ffast-math -g -fno-finite-math-only -pthread -D__HIP_PLATFORM_AMD__ -Wno-unused-command-line-argument --offload-arch=${resolvedRocmArch} ${rocmIncludeFlags}"
-        "ROCM_LDLIBS=-lm -pthread ${rocmLinkFlags} -lhipblas -lhipblaslt -lrocblas"
-      ];
-      cuda = [
-        # Replace upstream's hardcoded paths with the nixpkgs cudart/cublas store paths.
-        "NVCCFLAGS=-O3 -g -lineinfo --use_fast_math $(NVCC_ARCH_FLAGS)${
-          lib.optionalString (marchFlag != "") " -Xcompiler ${marchFlag}"
-        } -Xcompiler -pthread"
-        "CUDA_LDLIBS=-lm -Xcompiler -pthread ${cudaLinkFlags} -lcudart -lcublas"
-      ];
-    }
-    .${backend};
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ds4" + lib.optionalString (backend != "cpu") "-${backend}";
-  version = "0-unstable-2026-09-16";
+  version = "0-unstable-2026-11-03";
 
   src = fetchFromGitHub {
     owner = "antirez";
     repo = "ds4";
-    rev = "8db1d1d155cb0400a86a86b9c62d0defb3a6148b";
-    hash = "sha256-d0TRJH5/cNlDrgJy2i9eEUuSAlnka0BvxDXlXIwMwrE=";
+    rev = "b3f50180ec2c7324892be1f50bc83555ccb8d5e7";
+    hash = "sha256-XccxnYqo33w1mNZNAMFx/rdPhO57lxQ/oKPGSyxzh0E=";
   };
 
   __structuredAttrs = true;
@@ -143,39 +124,41 @@ stdenv.mkDerivation (finalAttrs: {
       cudaPackages.libcublas
     ];
 
-  makeFlags = [ "NATIVE_CPU_FLAG=${marchFlag}" ] ++ backendMakeFlags ++ backendMakeFlagsArray;
+  postPatch = lib.optionalString (backend == "cuda") ''
+    # The linker wrapper finds cudart and cublas through buildInputs.
+    # nvcc needs -Xcompiler for NATIVE_CPU_FLAG only when a CPU target is set.
+    substituteInPlace Makefile \
+      --replace-fail ' -L$(CUDA_HOME)/targets/sbsa-linux/lib -L$(CUDA_HOME)/lib64' "" \
+      --replace-fail '-Xcompiler $(NATIVE_CPU_FLAG) ' '$(if $(strip $(NATIVE_CPU_FLAG)),-Xcompiler $(NATIVE_CPU_FLAG) )'
+  '';
+
+  makeFlags = [ "NATIVE_CPU_FLAG=${marchFlag}" ] ++ backendMakeFlags;
   buildFlags = [ buildTarget ];
 
-  # CPU-runnable tests only; the GPU variants are validated on real hardware.
   doCheck = backend == "cpu";
-  checkPhase = ''
-    runHook preCheck
-    local flagsArray=()
-    concatTo flagsArray makeFlags
-    make "''${flagsArray[@]}" tests/test_layer_pack tests/test_gpu_args q4k-dot-test mxfp4-dot-test
+  # Upstream's full test target links GPU tests with nvcc on Linux.
+  checkTarget = "tests/test_layer_pack tests/test_gpu_args q4k-dot-test mxfp4-dot-test";
+  postCheck = ''
     ./tests/test_layer_pack
     ./tests/test_gpu_args
     ./ds4-eval --self-test-extractors
-    runHook postCheck
   '';
 
   installPhase = ''
     runHook preInstall
     install -Dm755 -t "$out/bin" ds4 ds4-server ds4-bench ds4-eval ds4-agent
+    install -Dm644 -t "$out/libexec/ds4" gguf-tools/merge_deepseek41_shards.py
 
-    # Wrap upstream's GGUF downloader as `ds4-download-model`, patching its
-    # project-root detection to use $DS4_HOME (default: cwd) instead of the
-    # read-only store path that `dirname $0` resolves to.
+    # Upstream downloads beside the installed script in the read-only store.
+    # Use $DS4_HOME, falling back to the working directory.
     install -Dm755 download_model.sh "$out/bin/ds4-download-model"
     substituteInPlace "$out/bin/ds4-download-model" \
       --replace-fail 'ROOT=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)' 'ROOT=''${DS4_HOME:-$PWD}' \
+      --replace-fail '$ROOT/gguf-tools/merge_deepseek41_shards.py' "$out/libexec/ds4/merge_deepseek41_shards.py" \
       --replace-warn './download_model.sh' 'ds4-download-model'
     runHook postInstall
   '';
 
-  # `ds4-download-model` shells out to curl (and optionally the `hf` CLI for the
-  # huge PRO files); make curl available and point it at a CA bundle if the
-  # environment doesn't already set one.
   postFixup = ''
     wrapProgram "$out/bin/ds4-download-model" \
       --prefix PATH : ${
@@ -183,12 +166,10 @@ stdenv.mkDerivation (finalAttrs: {
           curl
           pythonEnv
         ]
-      } \
-      --set-default SSL_CERT_FILE ${cacert}/etc/ssl/certs/ca-bundle.crt
+      }
   '';
 
-  # Only the CPU variant is guaranteed to run without a GPU/device present, so
-  # restrict the smoke check to it. GPU variants are validated on real hardware.
+  # Only the CPU variant can run without a GPU
   doInstallCheck = backend == "cpu";
   installCheckPhase = ''
     runHook preInstallCheck
@@ -196,8 +177,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstallCheck
   '';
 
-  # Keep the package current automatically: upstream has no releases, so the
-  # r-ryantm update bot bumps the pin to the latest `main` commit on every run.
+  # Upstream does not make releases.
   passthru.updateScript = unstableGitUpdater {
     branch = "main";
     hardcodeZeroVersion = true;
