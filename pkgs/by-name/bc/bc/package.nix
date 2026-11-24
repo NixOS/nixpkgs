@@ -47,6 +47,8 @@ stdenv.mkDerivation (finalAttrs: {
   # masss-rebuild.
   strictDeps = true;
 
+  __structuredAttrs = true;
+
   meta = {
     description = "GNU software calculator";
     homepage = "https://www.gnu.org/software/bc/";
