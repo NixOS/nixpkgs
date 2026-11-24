@@ -33,13 +33,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zstd";
-  version = "1.5.7";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "meta";
     repo = "zstd";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tNFWIT9ydfozB8dWcmTMuZLCQmQudTFJIkSr0aG7S44=";
+    hash = "sha256-bzIcrgp7uYeJ+LEv6Nb9Nd41jGfJvUvDZ0nxQBu5Tvo=";
   };
 
   nativeBuildInputs = [
@@ -54,18 +54,13 @@ stdenv.mkDerivation (finalAttrs: {
     # This patches makes sure we do not attempt to use the MD5 implementation
     # of the host platform when running the tests
     ./playtests-darwin.patch
-
-    # Pull missing manpages update:
-    #   https://github.com/meta/zstd/pull/4302
-    # TODO: remove with 1.5.8 release
-    ./man-fix.patch
   ];
 
   postPatch = lib.optionalString (!static) ''
-    substituteInPlace build/cmake/CMakeLists.txt \
-      --replace 'message(SEND_ERROR "You need to build static library to build tests")' ""
+    substituteInPlace build/cmake/CMakeModules/ZstdBuild.cmake \
+      --replace-fail 'message(SEND_ERROR "Static library required to build test suite")' ""
     substituteInPlace build/cmake/tests/CMakeLists.txt \
-      --replace 'libzstd_static' 'libzstd_shared'
+      --replace-fail 'libzstd_static' 'libzstd_shared'
     sed -i \
       "1aexport ${lib.optionalString stdenv.hostPlatform.isDarwin "DY"}LD_LIBRARY_PATH=$PWD/build_/lib" \
       tests/playTests.sh
