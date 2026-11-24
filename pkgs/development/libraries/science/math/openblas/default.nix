@@ -242,6 +242,8 @@ stdenv.mkDerivation (finalAttrs: {
     buildPackages.stdenv.cc
   ];
 
+  strictDeps = true;
+
   cmakeFlags = [
     (lib.cmakeFeature "TARGET" config.TARGET)
     (lib.cmakeBool "DYNAMIC_ARCH" config.DYNAMIC_ARCH)
