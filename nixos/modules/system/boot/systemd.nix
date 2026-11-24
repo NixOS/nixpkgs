@@ -606,8 +606,8 @@ in
 
     system.build.units = cfg.units;
 
-    system.nssModules = [ cfg.package.out ];
-    system.nssDatabases = {
+    system.nssModules = lib.optional (cfg.package.withNss or true) cfg.package.out;
+    system.nssDatabases = lib.mkIf (cfg.package.withNss or true) {
       hosts = (
         mkMerge [
           (mkOrder 400 [ "mymachines" ]) # 400 to ensure it comes before resolve (which is 501)
@@ -840,7 +840,9 @@ in
     };
     systemd.services.systemd-random-seed.restartIfChanged = false;
     systemd.services.systemd-remount-fs.restartIfChanged = false;
-    systemd.services.systemd-update-utmp.restartIfChanged = false;
+    systemd.services.systemd-update-utmp = lib.mkIf cfg.package.withUtmp {
+      restartIfChanged = false;
+    };
     # `systemd-bless-boot good` fails once the current boot has been blessed.
     systemd.services.systemd-bless-boot = lib.mkIf cfg.package.withBootloader {
       restartIfChanged = false;

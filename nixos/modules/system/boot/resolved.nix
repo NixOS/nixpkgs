@@ -183,7 +183,9 @@ in
       # add resolve to nss hosts database if enabled and nscd enabled
       # system.nssModules is configured in nixos/modules/system/boot/systemd.nix
       # added with order 501 to allow modules to go before with mkBefore
-      system.nssDatabases.hosts = (mkOrder 501 [ "resolve [!UNAVAIL=return]" ]);
+      system.nssDatabases.hosts = mkIf (config.systemd.package.withNss or true) (
+        mkOrder 501 [ "resolve [!UNAVAIL=return]" ]
+      );
 
       systemd.additionalUpstreamSystemUnits = [
         "systemd-resolved.service"
