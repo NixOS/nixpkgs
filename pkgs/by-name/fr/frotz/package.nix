@@ -73,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
   makeFlags = [
     "PREFIX=${placeholder "out"}"
     "HOMEBREW_PREFIX=/var/empty"
-    "CURSES_CONFIG=$PKG_CONFIG ncurses"
+    "CURSES_CONFIG=$(PKG_CONFIG) ncurses"
   ];
 
   buildFlags = [ frontend ];
