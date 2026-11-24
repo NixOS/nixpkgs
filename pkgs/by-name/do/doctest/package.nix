@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -30,6 +31,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   __structuredAttrs = true;
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   meta = {
     changelog = "https://github.com/doctest/doctest/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://github.com/doctest/doctest";
@@ -37,5 +40,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.all;
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.nim65s ];
+    pkgConfigModules = [ "doctest" ];
   };
 })
