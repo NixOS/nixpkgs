@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pgsrip";
-  version = "0.2.1";
+  version = "0.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ratoaq2";
     repo = "pgsrip";
     tag = finalAttrs.version;
-    hash = "sha256-jFFPrjWacUSCgjheLblvwKhbTFOB4sHvN5tyAhSJxhY=";
+    hash = "sha256-tv5Fd6B9Fni7LEXmnZ0D14pfbOOlkO286N9848Xq80I=";
   };
 
   # Before click 8.5.0 [1^], `ParamType` didn't have a `__class_getitem__` [2^],
