@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-c-http";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-P2/YahGYuX8TiY4sJYU+QSlDroAUyFTFLGeZIqEYGi4=";
   };
 
@@ -35,6 +35,8 @@ stdenv.mkDerivation (finalAttrs: {
     s2n-tls
   ];
 
+  strictDeps = true;
+
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
   ];
@@ -42,6 +44,8 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests = {
     inherit nix;
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "C99 implementation of the HTTP/1.1 and HTTP/2 specifications";
