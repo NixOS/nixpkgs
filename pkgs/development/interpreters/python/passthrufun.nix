@@ -14,7 +14,6 @@ let
     composeExtensions
     composeManyExtensions
     elem
-    extendDerivation
     extends
     hasInfix
     isDerivation
@@ -47,22 +46,24 @@ in
 let
   pythonPackages =
     let
+      # TODO: only run these checks in CI, since they now pass for every package
       ensurePythonModules =
         items:
         let
+          inherit (pythonPackages) hasPythonModule;
+          providesSetupHook = attrByPath [ "provides" "setupHook" ] false;
           exceptions = [
             stdenv
           ];
-          providesSetupHook = attrByPath [ "provides" "setupHook" ] false;
-          valid =
-            value: pythonPackages.hasPythonModule value || providesSetupHook value || elem value exceptions;
           func =
             name: value:
             if isDerivation value then
-              extendDerivation (
-                valid value
-                || throw "${name} should use `buildPythonPackage` or `toPythonModule` if it is to be part of the Python packages set."
-              ) { } value
+              assert
+                hasPythonModule value
+                || providesSetupHook value
+                || elem value exceptions
+                || throw "${name} should use `buildPythonPackage` or `toPythonModule` if it is to be part of the Python packages set.";
+              value
             else
               value;
         in

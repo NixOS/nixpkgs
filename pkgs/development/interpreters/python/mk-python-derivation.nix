@@ -35,9 +35,9 @@
 let
   inherit (builtins) unsafeGetAttrPos;
   inherit (lib)
+    all
     concatMapStrings
     elem
-    extendDerivation
     fixedWidthString
     flip
     getName
@@ -45,13 +45,11 @@ let
     isBool
     max
     optional
-    optionalAttrs
-    optionals
     optionalString
+    optionals
     removePrefix
-    stringLength
-    all
     seq
+    stringLength
     ;
 
   leftPadName =
@@ -66,7 +64,7 @@ let
   isPythonModule =
     drv:
     # all pythonModules have the pythonModule attribute
-    (drv ? "pythonModule")
+    drv ? "pythonModule"
     # Some pythonModules are turned in to a pythonApplication by setting the field to false
     && (!isBool drv.pythonModule);
 
