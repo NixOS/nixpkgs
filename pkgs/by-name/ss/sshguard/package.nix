@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://sshguard.net";
     license = lib.licenses.bsd3;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ kamadorueda ];
     platforms = with lib.platforms; linux ++ darwin ++ freebsd ++ netbsd ++ openbsd;
   };
 })
