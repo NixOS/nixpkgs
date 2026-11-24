@@ -9,6 +9,7 @@
 </p>
 
 <p align="center">
+  <a href="CONTRIBUTING.md"><img src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FNixOS%2Fnixpkgs%2F_sidebar&query=%24.contributors.contributorCount&label=contributors&color=brightgreen" alt="Contributors badge" /></a>
   <a href="https://opencollective.com/nixos"><img src="https://opencollective.com/nixos/tiers/supporter/badge.svg?label=supporters&color=brightgreen" alt="Open Collective supporters" /></a>
 </p>
 
