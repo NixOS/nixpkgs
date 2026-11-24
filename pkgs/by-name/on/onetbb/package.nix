@@ -104,6 +104,8 @@ stdenv.mkDerivation (finalAttrs: {
     HWLOC_SYNTHETIC = "node:1 core:1 pu:1";
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "oneAPI Threading Building Blocks";
     homepage = "https://uxlfoundation.github.io/oneTBB/";
