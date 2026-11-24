@@ -10,14 +10,14 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "whatcable";
-  version = "1.5.0";
+  version = "1.5.1";
 
   strictDeps = true;
   __structuredAttrs = true;
 
   src = fetchzip {
     url = "https://github.com/darrylmorley/whatcable/releases/download/v${finalAttrs.version}/WhatCable.zip";
-    hash = "sha256-iiUeQSYFOwJYv3LtVygBTkA/00r4r72XlpypScMCpLM=";
+    hash = "sha256-Him5IvK0tPwcUeEOrNwXgK4scGHmU8ViSYm2vnCZSUk=";
   };
 
   dontPatch = true;
