@@ -85,7 +85,7 @@ buildBazelPackage {
   '';
 
   preBuild = ''
-    patchShebangs $bazelOut/external/rules_cc*/cc/private/toolchain/generate_system_module_map.sh
+    patchShebangs $bazelUserRoot/vendor_dir/rules_cc*/cc/private/toolchain/generate_system_module_map.sh
   '';
 
   bazelTargets = [ ":install-binaries" ];
