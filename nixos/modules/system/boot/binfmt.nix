@@ -15,6 +15,12 @@ let
 
   cfg = config.boot.binfmt;
 
+  # Registrations backed by a bpf handler have no interpreter of their own.
+  staticRegistrations = lib.filterAttrs (_: reg: reg.recognitionType != "bpf") cfg.registrations;
+
+  # Where the struct_ops links of bpf handlers are pinned.
+  bpfHandlerPinDir = "/sys/fs/bpf/binfmt_misc";
+
   makeBinfmtLine =
     name:
     {
@@ -26,23 +32,29 @@ let
       openBinary,
       matchCredentials,
       fixBinary,
+      bpfHandler,
       ...
     }:
-    let
-      type = if recognitionType == "magic" then "M" else "E";
-      offset' = toString offset;
-      mask' = toString mask;
-      interpreter = "/run/binfmt/${name}";
-      flags =
-        if !(matchCredentials -> openBinary) then
-          throw "boot.binfmt.registrations.${name}: you can't specify openBinary = false when matchCredentials = true."
-        else
-          optionalString preserveArgvZero "P"
-          + optionalString (openBinary && !matchCredentials) "O"
-          + optionalString matchCredentials "C"
-          + optionalString fixBinary "F";
-    in
-    ":${name}:${type}:${offset'}:${magicOrExtension}:${mask'}:${interpreter}:${flags}";
+    # A bpf entry carries neither offset, magic nor mask, and its handler
+    # picks the invocation flags per exec.
+    if recognitionType == "bpf" then
+      ":${name}:B::::${bpfHandler}:"
+    else
+      let
+        type = if recognitionType == "magic" then "M" else "E";
+        offset' = toString offset;
+        mask' = toString mask;
+        interpreter = "/run/binfmt/${name}";
+        flags =
+          if !(matchCredentials -> openBinary) then
+            throw "boot.binfmt.registrations.${name}: you can't specify openBinary = false when matchCredentials = true."
+          else
+            optionalString preserveArgvZero "P"
+            + optionalString (openBinary && !matchCredentials) "O"
+            + optionalString matchCredentials "C"
+            + optionalString fixBinary "F";
+      in
+      ":${name}:${type}:${offset'}:${magicOrExtension}:${mask'}:${interpreter}:${flags}";
 
   mkInterpreter =
     name:
@@ -79,11 +91,31 @@ in
               options = {
                 recognitionType = mkOption {
                   default = "magic";
-                  description = "Whether to recognize executables by magic number or extension.";
+                  description = ''
+                    Whether to recognize executables by magic number, by
+                    extension, or by a bpf handler (see {option}`bpfHandler`).
+                  '';
                   type = types.enum [
                     "magic"
                     "extension"
+                    "bpf"
                   ];
+                };
+
+                bpfHandler = mkOption {
+                  default = null;
+                  example = "elf_origin";
+                  description = ''
+                    Name of the `binfmt_misc_ops` struct_ops handler that
+                    matches executables and selects their interpreter, when
+                    {option}`recognitionType` is `"bpf"`. The handler has to
+                    be loaded through {option}`boot.binfmt.bpfHandlers`.
+                    Requires Linux 7.3 or newer.
+
+                    See the "bpf-backed handlers" section of the kernel docs
+                    for more details.
+                  '';
+                  type = types.nullOr types.str;
                 };
 
                 offset = mkOption {
@@ -93,8 +125,12 @@ in
                 };
 
                 magicOrExtension = mkOption {
-                  description = "The magic number or extension to match on.";
-                  type = types.str;
+                  default = null;
+                  description = ''
+                    The magic number or extension to match on. Required
+                    unless {option}`recognitionType` is `"bpf"`.
+                  '';
+                  type = types.nullOr types.str;
                 };
 
                 mask = mkOption {
@@ -104,14 +140,17 @@ in
                 };
 
                 interpreter = mkOption {
+                  default = null;
                   description = ''
-                    The interpreter to invoke to run the program.
+                    The interpreter to invoke to run the program. Required
+                    unless {option}`recognitionType` is `"bpf"`, where the
+                    handler selects the interpreter.
 
                     Note that the actual registration will point to
                     /run/binfmt/''${name}, so the kernel interpreter length
                     limit doesn't apply.
                   '';
-                  type = types.path;
+                  type = types.nullOr types.path;
                 };
 
                 preserveArgvZero = mkOption {
@@ -186,6 +225,34 @@ in
         );
       };
 
+      bpfHandlers = mkOption {
+        default = { };
+        example = lib.literalExpression ''
+          {
+            elf_origin.object = "''${config.boot.kernelPackages.binfmt-origin}/lib/bpf/elf_origin.bpf.o";
+          }
+        '';
+        description = ''
+          BPF objects holding `binfmt_misc_ops` struct_ops handlers, which
+          registrations with {option}`recognitionType` `"bpf"` refer to by
+          name. Each object is registered with `bpftool struct_ops register`
+          before {command}`systemd-binfmt` writes the registrations.
+          Requires Linux 7.3 or newer with `CONFIG_BINFMT_MISC_BPF`.
+        '';
+        type = types.attrsOf (
+          types.submodule {
+            options.object = mkOption {
+              description = ''
+                Compiled BPF object with one or more `binfmt_misc_ops`
+                struct_ops maps. It has to carry BTF compatible with the
+                running kernel.
+              '';
+              type = types.path;
+            };
+          }
+        );
+      };
+
       emulatedSystems = mkOption {
         default = [ ];
         example = [
@@ -227,10 +294,34 @@ in
   };
 
   config = {
-    assertions = lib.mapAttrsToList (name: reg: {
-      assertion = reg.fixBinary -> !reg.wrapInterpreterInShell;
-      message = "boot.binfmt.registrations.\"${name}\" cannot have fixBinary when the interpreter is invoked through a shell.";
-    }) cfg.registrations;
+    assertions = lib.concatLists (
+      lib.mapAttrsToList (
+        name: reg:
+        let
+          isBpf = reg.recognitionType == "bpf";
+        in
+        [
+          {
+            assertion = reg.fixBinary -> !reg.wrapInterpreterInShell;
+            message = "boot.binfmt.registrations.\"${name}\" cannot have fixBinary when the interpreter is invoked through a shell.";
+          }
+          {
+            assertion = !isBpf -> (reg.magicOrExtension != null && reg.interpreter != null);
+            message = "boot.binfmt.registrations.\"${name}\" needs magicOrExtension and interpreter unless recognitionType is \"bpf\".";
+          }
+          {
+            assertion = isBpf -> reg.bpfHandler != null;
+            message = "boot.binfmt.registrations.\"${name}\" needs bpfHandler when recognitionType is \"bpf\".";
+          }
+          {
+            # The handler decides these per exec with bpf_binprm_set_flags().
+            assertion =
+              isBpf -> !(reg.preserveArgvZero || reg.openBinary || reg.matchCredentials || reg.fixBinary);
+            message = "boot.binfmt.registrations.\"${name}\": preserveArgvZero, openBinary, matchCredentials and fixBinary are chosen by the bpf handler and cannot be set.";
+          }
+        ]
+      ) cfg.registrations
+    );
 
     boot.binfmt.registrations = builtins.listToAttrs (
       map (
@@ -297,7 +388,7 @@ in
           "d /run/binfmt 0755 -"
         ]
         ++ lib.mapAttrsToList (name: interpreter: "L+ /run/binfmt/${name} - - - - ${interpreter}") (
-          lib.mapAttrs mkInterpreter config.boot.binfmt.registrations
+          lib.mapAttrs mkInterpreter staticRegistrations
         );
       }
 
@@ -309,6 +400,47 @@ in
         ];
         services.systemd-binfmt.after = [ "systemd-tmpfiles-setup.service" ];
         services.systemd-binfmt.restartTriggers = [ (builtins.toJSON config.boot.binfmt.registrations) ];
+      })
+
+      (lib.mkIf (cfg.bpfHandlers != { }) {
+        # Register the struct_ops handlers before systemd-binfmt writes the
+        # 'B' entries naming them. requiredBy makes systemd-binfmt Require
+        # this unit, so restarting it for a new object also restarts
+        # systemd-binfmt, which re-creates the entries against the new
+        # handlers.
+        services.binfmt-bpf-handlers = {
+          description = "Register BPF binfmt_misc handlers";
+          documentation = [
+            "https://docs.kernel.org/admin-guide/binfmt-misc.html#bpf-backed-handlers"
+          ];
+          before = [
+            "systemd-binfmt.service"
+            "shutdown.target"
+          ];
+          requiredBy = [ "systemd-binfmt.service" ];
+          conflicts = [ "shutdown.target" ];
+          unitConfig.DefaultDependencies = false;
+
+          serviceConfig = {
+            Type = "oneshot";
+            RemainAfterExit = true;
+            # Unpinning a handler's link unregisters its name; entries that
+            # already use it keep it alive until they are removed.
+            ExecStop = "${pkgs.coreutils}/bin/rm -rf ${bpfHandlerPinDir}";
+          };
+
+          script = ''
+            # Drop links pinned by an earlier run so the names are free.
+            rm -rf ${bpfHandlerPinDir}
+            mkdir -p ${bpfHandlerPinDir}
+          ''
+          + lib.concatStrings (
+            lib.mapAttrsToList (name: handler: ''
+              mkdir -p ${bpfHandlerPinDir}/${name}
+              ${lib.getExe' pkgs.bpftools "bpftool"} struct_ops register ${handler.object} ${bpfHandlerPinDir}/${name}
+            '') cfg.bpfHandlers
+          );
+        };
       })
     ];
   };
