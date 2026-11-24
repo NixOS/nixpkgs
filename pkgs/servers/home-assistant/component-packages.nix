@@ -6688,7 +6688,8 @@
     "sensecap_lorawan" =
       ps: with ps; [
         lorawan-connection
-      ]; # missing inputs: sensecap-lorawan
+        sensecap-lorawan
+      ];
     "sensibo" =
       ps: with ps; [
         pysensibo
@@ -9783,6 +9784,7 @@
     "season"
     "select"
     "sense"
+    "sensecap_lorawan"
     "sensibo"
     "sensirion_ble"
     "sensor"
