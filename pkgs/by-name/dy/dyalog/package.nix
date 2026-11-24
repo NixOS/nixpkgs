@@ -2,12 +2,16 @@
   lib,
   stdenv,
   fetchurl,
+  runCommand,
+  xvfb-run,
 
   config,
   acceptLicense ? config.dyalog.acceptLicense or false,
 
   autoPatchelfHook,
+  coreutils,
   dpkg,
+  gnused,
   makeWrapper,
   ncurses5,
 
@@ -15,6 +19,8 @@
   dotnetSupport ? false,
 
   alsa-lib,
+  glib,
+  gsettings-desktop-schemas,
   gtk3,
   libdrm,
   libGL,
@@ -33,7 +39,24 @@
 let
   dyalogHome = "$out/lib/dyalog";
 
-  makeWrapperArgs = lib.optional dotnetSupport "--set DOTNET_ROOT ${dotnetCorePackages.sdk_8_0-source}/share/dotnet";
+  makeWrapperArgs =
+    lib.optional dotnetSupport "--set DOTNET_ROOT ${dotnetCorePackages.runtime_10_0}/share/dotnet"
+    ++ lib.optionals htmlRendererSupport [
+      # libcef.so needs 1504 bytes of initial-exec TLS. With the default static TLS surplus
+      # (1520 bytes) dlopen() fails once our other libraries have taken their share, and
+      # ⎕WC'HTMLRenderer' signals a LIMIT ERROR. Measured: 1536 is too small, 2048 works.
+      "--prefix GLIBC_TUNABLES : glibc.rtld.optional_static_tls=4096"
+      "--prefix XDG_DATA_DIRS : ${glib.getSchemaDataDirPath gtk3}:${glib.getSchemaDataDirPath gsettings-desktop-schemas}"
+    ];
+
+  maplWrapperArgs = makeWrapperArgs ++ [
+    "--suffix PATH : ${
+      lib.makeBinPath [
+        coreutils
+        gnused
+      ]
+    }"
+  ];
 
   licenseUrl = "https://www.dyalog.com/uploads/documents/Developer_Software_Licence.pdf";
 
@@ -59,7 +82,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "dyalog";
-  version = "20.0.53963";
+  version = "21.0.55109";
   shortVersion = lib.versions.majorMinor finalAttrs.version;
 
   passthru.sources =
@@ -79,14 +102,39 @@ stdenv.mkDerivation (finalAttrs: {
       "x86_64-linux" = fetchArtifact {
         prefix = "linux_64";
         suffix = "unicode.x86_64.deb";
-        hash = "sha256-4LjB/aHK40HecgZA7YUIoY/CaCnSoMOs9OoIhong8j4=";
+        hash = "sha256-A9ncL6IvpDTqkaYKbTr0dnS5B7ui24wPMLknbIr+UJo=";
       };
       "aarch64-linux" = fetchArtifact {
         prefix = "linux_64";
         suffix = "unicode.aarch64.deb";
-        hash = "sha256-5uVxMK0yowLOARW+PjFDpFiUNc/0cU/5lzY8t5Z6DxY=";
+        hash = "sha256-esJSpOfnLUi/wobVhTk0KaMRD03UiWpGVMzL5VqKdRM=";
       };
     };
+
+  passthru.updateScript = ./update.sh;
+
+  passthru.tests = lib.optionalAttrs htmlRendererSupport {
+    htmlRenderer =
+      runCommand "dyalog-htmlrenderer-test"
+        {
+          nativeBuildInputs = [
+            finalAttrs.finalPackage
+            xvfb-run
+          ];
+        }
+        ''
+          export HOME=$(mktemp -d)
+          cat > test.apls <<'EOF'
+          'h'⎕WC'HTMLRenderer'('HTML' '<h1>test</h1>')
+          ⎕←h.Type
+          ⎕EX'h'
+          EOF
+          # Exit status ignored: dyalog sometimes segfaults while tearing down CEF (1 of 20 runs), also on stock Ubuntu
+          timeout -k 5 120 xvfb-run -a dyalog -script test.apls > output 2>&1 || true
+          tr '\r' '\n' < output | grep -qx HTMLRenderer || { cat output; exit 1; }
+          touch $out
+        '';
+  };
 
   src =
     assert !acceptLicense -> throw licenseDisclaimer;
@@ -98,8 +146,6 @@ stdenv.mkDerivation (finalAttrs: {
   postUnpack = ''
     sourceRoot=$sourceRoot/opt/mdyalog/${finalAttrs.shortVersion}/64/unicode
   '';
-
-  patches = [ ./dyalogscript.patch ];
 
   nativeBuildInputs = [
     autoPatchelfHook
@@ -130,11 +176,15 @@ stdenv.mkDerivation (finalAttrs: {
     cp aplkeys.sh default.dse dyalog dyalogc dyalog.rt dyalog.dcfg.template dyalog.ver.dcfg.template languagebar.json mapl StartupSession.aplf ${dyalogHome}
 
     mkdir ${dyalogHome}/lib
-    cp lib/{conga36_64.so,dyalog64.so,libconga36ssl64.so} ${dyalogHome}/lib
+    cp lib/{conga37_64.so,dyalog64.so,libconga37ssl64.so} ${dyalogHome}/lib
 
     # Only keep the most useful workspaces
     mkdir ${dyalogHome}/ws
     cp ws/{conga,dfns,isolate,loaddata,salt,sharpplot,util}.dws ${dyalogHome}/ws
+  ''
+  # Not shipped on aarch64; dyalog loads it at startup even without the HTMLRenderer
+  + lib.optionalString (!isAarch) ''
+    cp unix_gui.so ${dyalogHome}
   ''
   + lib.optionalString dotnetSupport ''
     cp libnethost.so Dyalog.Net.Bridge.* Lokad.ILPack.dll ${dyalogHome}
@@ -143,10 +193,11 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r locales ${dyalogHome}
     cp libcef.so libEGL.so libGLESv2.so libvk_swiftshader.so libvulkan.so.1 ${dyalogHome}
     cp chrome-sandbox icudtl.dat v8_context_snapshot.bin vk_swiftshader_icd.json *.pak ${dyalogHome}
+    cp HtmlRendererPlugin.plugin ${dyalogHome}
     cp lib/htmlrenderer.so ${dyalogHome}/lib
   ''
   + lib.optionalString sqaplSupport ''
-    cp lib/cxdya66u64u.so ${dyalogHome}/lib
+    cp lib/cxdya67u64u.so ${dyalogHome}/lib
     cp ws/sqapl.dws ${dyalogHome}/ws
     cp odbc.ini.sample sqapl.err sqapl.ini ${dyalogHome}
   ''
@@ -161,15 +212,19 @@ stdenv.mkDerivation (finalAttrs: {
   + ''
     install -Dm644 dyalog.svg -t $out/share/icons/hicolor/scalable/apps
     install -Dm644 dyalog.desktop -t $out/share/applications
+    install -Dm644 fonts/*.ttf -t $out/share/fonts/truetype
 
+    # Like upstream's /usr/bin/dyalog: mapl reads ~/.dyalog and the serial, and handles -rt/-bg/-kbd
     for exec in "dyalog" "mapl"; do
-        makeWrapper ${dyalogHome}/$exec $out/bin/$exec ${toString makeWrapperArgs}
+        makeWrapper ${dyalogHome}/mapl $out/bin/$exec ${toString maplWrapperArgs}
     done
 
+    # Upstream's dyalogscript starts the interpreter directly, not through mapl
+    makeWrapper ${dyalogHome}/dyalog $out/libexec/dyalog/dyalog ${toString makeWrapperArgs}
     install -Dm755 scriptbin/dyalogscript $out/bin/dyalogscript
     substituteInPlace $out/bin/dyalogscript \
-        --subst-var-by installdir ${dyalogHome} \
-        --subst-var-by scriptdir $out/bin
+        --replace-fail 'INSTALLDIR="/opt/mdyalog/${finalAttrs.shortVersion}/64/unicode"' "INSTALLDIR=\"${dyalogHome}\"" \
+        --replace-fail ': ''${SCRIPTDIR:=$INSTALLDIR}' "SCRIPTDIR=\"$out/libexec/dyalog\""
 
     runHook postInstall
   '';
@@ -183,6 +238,46 @@ stdenv.mkDerivation (finalAttrs: {
   ''
   + lib.optionalString htmlRendererSupport ''
     patchelf ${dyalogHome}/libcef.so --add-needed libudev.so --add-needed libGL.so
+  '';
+
+  # Conga, SQAPL and .NET are loaded at runtime, so autoPatchelfHook cannot notice when they break
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    export HOME=$(mktemp -d)
+
+    # usage: check EXPECTED APL-LINE...
+    check() {
+      local expected=$1
+      shift
+      printf '%s\n' "$@" > check.apls
+      # dyalog -script terminates output lines with \r
+      local output=$($out/bin/dyalogscript check.apls | tr '\r' '\n')
+      if [[ "$output" != "$expected" ]]; then
+        echo "dyalogscript check failed for: $*"
+        echo "expected '$expected', got '$output'"
+        exit 1
+      fi
+    }
+
+    check 55 '⎕←+/⍳10'
+    check 0 "'DRC'⎕CY'conga'" "⎕←⊃DRC.Init'''"
+
+    echo '⎕←+/⍳10' > mapl.apls
+    if [[ "$($out/bin/dyalog -script mapl.apls | tr '\r' '\n')" != 55 || ! -s $HOME/.dyalog/dyalog.dcfg ]]; then
+      echo "bin/dyalog did not run through mapl"
+      exit 1
+    fi
+  ''
+  + lib.optionalString dotnetSupport ''
+    check 1 "⎕USING←'System'" '⎕←2000<DateTime.Now.Year'
+  ''
+  + lib.optionalString sqaplSupport ''
+    check 0 "'SQA'⎕CY'sqapl'" "⎕←⊃SQA.Init'''"
+  ''
+  + ''
+    runHook postInstallCheck
   '';
 
   meta = {
