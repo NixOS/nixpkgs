@@ -13,19 +13,19 @@
 buildHomeAssistantComponent (finalAttrs: {
   owner = "Lint-Free-Technology";
   domain = "uix";
-  version = "9.0.0";
+  version = "9.1.0";
 
   src = fetchFromGitHub {
     inherit (finalAttrs) owner;
     repo = "uix";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Zhve7CSVqTUyOPk8dJCqN9DuZJHdwurLrAfhdx6YDjI=";
+    hash = "sha256-wnCXc3GhbVuUijvvDhCvs6tU0usXv4k7qTBY1uIkArA=";
   };
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
     name = "uix-${finalAttrs.version}-npm-deps";
-    hash = "sha256-9pQIECBd2fMa1qJLGmGsrKoonzHxqAxpRVogwgaLJBQ=";
+    hash = "sha256-qRPQg61FIUhuxGDgk8NnqKAiRQ9m4FANzXyS+O+qskQ=";
   };
 
   nativeBuildInputs = [

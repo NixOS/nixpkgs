@@ -10,16 +10,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "neonmodem";
-  version = "1.1.0";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "mrusme";
     repo = "neonmodem";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-O12zkygenzSMNwV5gqJuW5/vCblU/ebbT/0JotrfNiQ=";
+    hash = "sha256-ylCymQ4rOQH1ztzckuAQAhCufkr20pRVbzlZyZMAt9U=";
   };
 
-  vendorHash = "sha256-PAtt72mGPDyS1wZMHOwrO8crC0mJ1GPAIm3i5T16xQY=";
+  vendorHash = "sha256-xpe2MZzv4u6rTMQ+8h4dU7eiGz0sYhEjdjCprjLc9yU=";
 
   passthru.updateScript = nix-update-script { };
 

@@ -1,10 +1,10 @@
 {
   "chromium": {
-    "version": "158.0.8127.36",
+    "version": "158.0.8127.88",
     "chromedriver": {
-      "version": "158.0.8127.37",
-      "hash_darwin": "sha256-LjPhWtPiTpgC0IuPmSN1a5/WHK3uq6LYEWbGPMwd7o8=",
-      "hash_darwin_aarch64": "sha256-14640NEdB2Sngs5e9/fyap8WH+z+O2EFfMeuFpU9bhs="
+      "version": "158.0.8127.89",
+      "hash_darwin": "sha256-4PrhSAVialrFd8+hPlipATxqoi9oMYKLrnP0MFfK5S8=",
+      "hash_darwin_aarch64": "sha256-ijZFvat94HuHiMydacBtB6kXPBbFusV3oAgRs+dF6s4="
     },
     "deps": {
       "depot_tools": {
@@ -21,8 +21,8 @@
     "DEPS": {
       "src": {
         "url": "https://chromium.googlesource.com/chromium/src.git",
-        "rev": "14d6f648e8cd7ad750a4044200ce94d3321be260",
-        "hash": "sha256-b9NAaYO2KCx0OLOYsDEW2v83+axrq+mco5Bg/k5/ROg=",
+        "rev": "0cefb18236a23db1ebb6b2bc040fbbaf8cbe759e",
+        "hash": "sha256-5dnehm5RhW5A8GNDdK6cuLmdsKnyNHHOjtfOhh+3QPU=",
         "postFetch": "find $out/third_party/blink/{manual_tests,perf_tests,tools,web_tests} $out/{chrome,chrome/updater,media,components,content}/test/data $out/third_party/sqlite/fuzz $out/tools/perf/testdata -type f ! -regex '.*\\.\\(gn\\|gni\\|grd\\|grdp\\|pydeps\\)$' -delete"
       },
       "src/third_party/clang-format/script": {
@@ -868,7 +868,7 @@
     }
   },
   "ungoogled-chromium": {
-    "version": "158.0.8127.36",
+    "version": "158.0.8127.88",
     "deps": {
       "depot_tools": {
         "rev": "b86fc981b72ab966f8260f73b4eca600b3b12677",
@@ -880,16 +880,16 @@
         "hash": "sha256-KF8o+xqqQOeATs30Ln6+FXS800IQcGawP3XCXy7xfw8="
       },
       "ungoogled-patches": {
-        "rev": "158.0.8127.36-1",
-        "hash": "sha256-SZs07QfTiv0JLmK3jle0ORetQat7pAYXIinDu/oZBFE="
+        "rev": "158.0.8127.88-1",
+        "hash": "sha256-79yT+CWumuIOybnCLxV33Tuin5oyweNAH026W/ZP6v8="
       },
       "npmHash": "sha256-P7EOD/Tsur9/R6/lYSMxPjzwWaje10VepIZUUQo3dU0="
     },
     "DEPS": {
       "src": {
         "url": "https://chromium.googlesource.com/chromium/src.git",
-        "rev": "14d6f648e8cd7ad750a4044200ce94d3321be260",
-        "hash": "sha256-b9NAaYO2KCx0OLOYsDEW2v83+axrq+mco5Bg/k5/ROg=",
+        "rev": "0cefb18236a23db1ebb6b2bc040fbbaf8cbe759e",
+        "hash": "sha256-5dnehm5RhW5A8GNDdK6cuLmdsKnyNHHOjtfOhh+3QPU=",
         "postFetch": "find $out/third_party/blink/{manual_tests,perf_tests,tools,web_tests} $out/{chrome,chrome/updater,media,components,content}/test/data $out/third_party/sqlite/fuzz $out/tools/perf/testdata -type f ! -regex '.*\\.\\(gn\\|gni\\|grd\\|grdp\\|pydeps\\)$' -delete"
       },
       "src/third_party/clang-format/script": {

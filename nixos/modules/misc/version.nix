@@ -51,6 +51,7 @@ let
       ${optionalAttr isNixos "VENDOR_URL"} = "https://nixos.org/";
       ${optionalAttr isNixos "DOCUMENTATION_URL"} = "https://nixos.org/learn.html";
       ${optionalAttr isNixos "SUPPORT_URL"} = "https://nixos.org/community.html";
+      ${optionalAttr isNixos "SUPPORT_END"} = "2027-06-31";
       ${optionalAttr isNixos "BUG_REPORT_URL"} = "https://github.com/NixOS/nixpkgs/issues";
       ${optionalAttr isNixos "ANSI_COLOR"} = "0;38;2;126;186;228";
       ${optionalAttr (config.system.image.id != null) "IMAGE_ID"} = config.system.image.id;

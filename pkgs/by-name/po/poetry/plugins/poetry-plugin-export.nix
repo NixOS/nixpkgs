@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "poetry-plugin-export";
-  version = "1.10.1";
+  version = "1.10.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-poetry";
     repo = "poetry-plugin-export";
     tag = version;
-    hash = "sha256-/6N/30SK8qdztm7/FrwVqkolVIDxVTt9xxJdC9RcnOg=";
+    hash = "sha256-RDFx3D7N68E6PnNuJEvqihg7zPeWF6a32x+KyhNUWds=";
   };
 
   build-system = [

@@ -23,6 +23,16 @@ buildPythonPackage rec {
     hash = "sha256-QDqmcZY/UANVKRjk1ZFEFHgrjtD+hXE4qd3tX64sE7c=";
   };
 
+  postPatch = ''
+    # icalendar 7.3 stores unrecognized X- properties as vUnknown, which no
+    # longer subclasses vText. The property value is unchanged.
+    # https://github.com/collective/icalendar/blob/v7.3.0/src/icalendar/prop/unknown.py
+    substituteInPlace test/test_icalevents.py \
+      --replace-fail "from icalendar.prop import vText" "from icalendar.prop import vUnknown" \
+      --replace-fail 'assertIsInstance(event.component["X-MICROSOFT-CDO-BUSYSTATUS"], vText)' \
+      'assertIsInstance(event.component["X-MICROSOFT-CDO-BUSYSTATUS"], vUnknown)'
+  '';
+
   build-system = [
     poetry-core
   ];

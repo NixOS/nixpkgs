@@ -30,7 +30,8 @@ let
 
   version = fileContents ../.version;
   versionSuffix =
-    (if stableBranch then "." else "pre") + "${toString nixpkgs.revCount}.${nixpkgs.shortRev}";
+    (if stableBranch then "." else "beta")
+    + "${toString (nixpkgs.revCount - 1129538)}.${nixpkgs.shortRev}";
 
   # Run the tests for each platform.  You can run a test by doing
   # e.g. ‘nix-build release.nix -A tests.login.x86_64-linux’,
@@ -352,6 +353,24 @@ rec {
     )
 
   );
+  amazonImageZfs = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (
+    system:
+
+    with import ./.. { inherit system; };
+
+    hydraJob (
+      (import ./lib/eval-config.nix {
+        inherit system;
+        modules = [
+          configuration
+          versionModule
+          ./maintainers/scripts/ec2/amazon-image-zfs.nix
+        ];
+      }).config.system.build.amazonImage
+    )
+
+  );
+
   # An image that can be imported into incus and used for container creation
   incusContainerImage =
     forMatchingSystems
