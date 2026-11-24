@@ -34,8 +34,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     updateScript = nix-update-script {
-      # 4.x versions track hailo8, later versions track newer hardware
-      extraArgs = [ "--version-regex '^4\\..*$'" ];
+      extraArgs = [
+        # 4.x versions track hailo8, later versions track newer hardware.
+        "--version-regex"
+        "v(4\\.[0-9]+\\.[0-9]+)$"
+        "--subpackage"
+        "tests.hailo8-firmware"
+      ];
     };
     tests = {
       inherit hailo8-firmware;
