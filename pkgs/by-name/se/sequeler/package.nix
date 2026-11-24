@@ -30,13 +30,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "sequeler";
-  version = "0.9.0";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "ellie-commons";
     repo = "sequeler";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dFmR5SfzT/1UVwcnB3Y3kB1h0DapwN/2/KQAHiMpk/8=";
+    hash = "sha256-woZkQP28+SloWSkLhtlvkR3RpJE0iGT64cXAfM3JsEI=";
   };
 
   nativeBuildInputs = [
@@ -53,6 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtk3
     glib
     pantheon.granite
+    pantheon.elementary-icon-theme
     libgee
     sqlGda
     gtksourceview4
@@ -60,6 +61,24 @@ stdenv.mkDerivation (finalAttrs: {
     libsecret
     libssh2
   ];
+
+  postPatch = ''
+    # Avoid flatpak-specific theme setting.
+    # https://github.com/ellie-commons/sequeler/pull/436#discussion_r2649202543
+    # https://github.com/elementary/flatpak-platform/blob/9.1.0/io.elementary.Sdk.json.in#L229
+    substituteInPlace src/Application.vala --replace-fail \
+      'gtk_settings.gtk_theme_name = "elementary"' \
+      'gtk_settings.gtk_theme_name = "io.elementary.stylesheet.blueberry"'
+  '';
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      # The GTK theme is hardcoded.
+      --prefix XDG_DATA_DIRS : "${pantheon.elementary-gtk-theme}/share"
+      # The icon theme is hardcoded.
+      --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS"
+    )
+  '';
 
   passthru = {
     updateScript = gitUpdater {
