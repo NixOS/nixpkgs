@@ -14,13 +14,13 @@ haskell.lib.compose.justStaticExecutables (
     { mkDerivation }:
     mkDerivation {
       pname = "hooky";
-      version = "1.0.8";
+      version = "1.0.9";
 
       src = fetchFromGitHub {
         owner = "brandonchinn178";
         repo = "hooky";
-        rev = "31a81c6a699912c5181ce3d38e7981d3e4f279ff";
-        hash = "sha256-je5yL8D6JXO7JvxnwyoWkSRqpcx3RynbT9BMx8sfYT8=";
+        rev = "5f44d5ed4ce4c7a7d58b28e3ca94c1d23a52a028";
+        hash = "sha256-DTTuYqrsp4M2Nut4zYhq9EMhgG7QG0WeO7wUAgpxTf4=";
       };
 
       isLibrary = true;
