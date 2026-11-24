@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "spec-cleaner";
-  version = "1.3.1";
+  version = "1.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rpm-software-management";
     repo = "spec-cleaner";
     tag = "spec-cleaner-${finalAttrs.version}";
-    hash = "sha256-sCFyK6dyOXs3eZshUglSnjyqiH78Ed3ijAFzthSFZ3E=";
+    hash = "sha256-ex+ltPp4bQ101nYETT+vajxUgV5BjnP3vwNkb9pUN54=";
   };
 
   build-system = [ python3Packages.setuptools ];

@@ -19,4 +19,24 @@ mkGoDerivation (finalAttrs: {
     ./go_no_vendor_checks-1.27.patch
   ];
   buildGoModule = buildGo127Module;
+  internalPIESupport = {
+    android = [ "arm64" ];
+    darwin = [
+      "amd64"
+      "arm64"
+    ];
+    linux = [
+      "amd64"
+      "arm64"
+      "loong64"
+      "ppc64"
+      "ppc64le"
+      "s390x"
+    ];
+    windows = [
+      "386"
+      "amd64"
+      "arm64"
+    ];
+  };
 })

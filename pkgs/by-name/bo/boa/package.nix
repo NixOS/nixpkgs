@@ -12,6 +12,8 @@
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
+  __structuredAttrs = true;
+
   pname = "boa";
   version = "0.22";
 

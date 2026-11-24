@@ -28,13 +28,12 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "radicle-desktop";
-  version = "0.18.0";
+  version = "0.19.0";
 
   __structuredAttrs = true;
 
   src = fetchFromRadicle {
-    # seed.radicle.dev currently doesn't update its canonical release tags correctly
-    seed = "oak.radicle.garden";
+    seed = "seed.radicle.dev";
     repo = "z4V1sjrXqjvFdnCUbxPFqd5p4DtH5";
     tag = "releases/desktop/${finalAttrs.version}";
     nonConeMode = true;
@@ -50,7 +49,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       git -C $out rev-parse --short HEAD > $out/.git_head
       rm -rf $out/.git
     '';
-    hash = "sha256-quxuiqp1PC4Dq0m91kqHvNclIhMau8hWtA599OmbZyo=";
+    hash = "sha256-baGrmj9XpqINTTxp0SxQGmucIEdM3dpC5X0pP82jFqI=";
   };
 
   postPatch = ''
@@ -66,10 +65,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
-    hash = "sha256-Cz6HoYGzMhVRwPUbw6S7Dh7FwNEO3r2xj7L8k332ZnE=";
+    hash = "sha256-snCaZtx4PVot+zo7iH8mLBLEzoGEb+wCfpKzoygXzlU=";
   };
 
-  cargoHash = "sha256-Yt5MyWdVr5Ye0Pdh996pIyHFo/F68fEbQ7Suh634umw=";
+  cargoHash = "sha256-FhbXqjG5J3wfsN/XTyrhXa2ToYO3QcpWia5WvACikw4=";
 
   cargoRoot = "desktop";
   buildAndTestSubdir = "desktop";

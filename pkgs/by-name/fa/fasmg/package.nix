@@ -13,6 +13,9 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
+  __structuredAttrs = true;
+  strictDeps = true;
+
   pname = "fasmg";
   version = "l8vn";
 

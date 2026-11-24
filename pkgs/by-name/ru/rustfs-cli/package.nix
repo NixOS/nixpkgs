@@ -9,17 +9,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rustfs-cli";
-  version = "0.1.37";
+  version = "0.1.39";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "rustfs";
     repo = "cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5qBjTNnfVv4fsFXFkvkJyuZ0lmE9ZE7bEmuAmcg1388=";
+    hash = "sha256-mCuhQcoRxEbIWXM3oXBwtuFF+ZTFGX1yULbVgHMXu/A=";
   };
 
-  cargoHash = "sha256-+iaR7BwlWeyiz9L2b2vsQelMTPaux4LDbXDuLGAR4Ng=";
+  cargoHash = "sha256-EAu73ThGyW/nh7WHPvNtS/b72OYFRmwfiU0DMRp3Wcg=";
 
   nativeBuildInputs = [ pkg-config ];
 
