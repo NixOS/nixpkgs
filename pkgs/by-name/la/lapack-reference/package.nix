@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   gfortran,
   cmake,
   shared ? true,
@@ -20,6 +21,17 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-SfKsvZ07v87tFFd9bnkIEdervyX/ucLfs/TOsl08aKQ=";
   };
+
+  patches = [
+    # Version was not updated in time for 3.12.1 release
+    # https://github.com/Reference-LAPACK/lapack/issues/1103
+    # https://github.com/Reference-LAPACK/lapack/pull/1095
+    (fetchpatch2 {
+      name = "fix-liblapack-version.patch";
+      url = "https://github.com/Reference-LAPACK/lapack/commit/3e242fc8d5d38f0425c6018fe88abf31e1a9e80f.patch?full_index=1";
+      hash = "sha256-U0jI8oMV7ua17XcmiSxchKN0kwKH04VkoS3kYc55Vno=";
+    })
+  ];
 
   nativeBuildInputs = [
     gfortran
