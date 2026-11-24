@@ -103,6 +103,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ marie ];
     mainProgram = "peacock";
-    platforms = lib.platforms.linux;
+    inherit (nodejs.meta) platforms;
   };
 })
