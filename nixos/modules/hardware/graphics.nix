@@ -16,6 +16,8 @@ let
     name = "graphics-drivers-32bit";
     paths = [ cfg.package32 ] ++ cfg.extraPackages32;
   };
+
+  driverClosure = drivers: "${pkgs.closureInfo { rootPaths = [ drivers ]; }}/store-paths";
 in
 {
   imports = [
@@ -132,11 +134,20 @@ in
 
     systemd.tmpfiles.settings.graphics-driver = {
       "/run/opengl-driver"."L+".argument = toString driversEnv;
+      # Let sandboxed clients find the dependencies of the installed graphics drivers.
+      "/run/opengl-driver-closure"."L+".argument = driverClosure driversEnv;
       "/run/opengl-driver-32" =
         if pkgs.stdenv.hostPlatform.isi686 then
           { "L+".argument = "opengl-driver"; }
         else if cfg.enable32Bit then
           { "L+".argument = toString driversEnv32; }
+        else
+          { "r" = { }; };
+      "/run/opengl-driver-32-closure" =
+        if pkgs.stdenv.hostPlatform.isi686 then
+          { "L+".argument = "opengl-driver-closure"; }
+        else if cfg.enable32Bit then
+          { "L+".argument = driverClosure driversEnv32; }
         else
           { "r" = { }; };
     };
