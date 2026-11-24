@@ -40,7 +40,10 @@ in
       }
     ];
 
-    boot.growPartition = true;
+    # systemd-repart grows root when it runs in the initrd with a root definition.
+    boot.growPartition = mkDefault (
+      !(config.boot.initrd.systemd.repart.enable && config.systemd.repart.partitions ? root)
+    );
 
     fileSystems."/" = lib.mkDefault {
       device = "/dev/disk/by-label/nixos";

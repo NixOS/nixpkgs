@@ -9,6 +9,8 @@ with lib;
 
 let
   cfg = config.virtualisation.amazon-init;
+  # Nix user data ends in `nixos-rebuild switch`.
+  canRebuild = config.nix.enable && config.system.switch.enable;
 
   script = ''
     #!${pkgs.runtimeShell} -eu
@@ -17,17 +19,21 @@ let
 
     export HOME=/root
     export PATH=${
-      pkgs.lib.makeBinPath [
-        config.nix.package
-        config.systemd.package
-        pkgs.gnugrep
-        pkgs.git
-        pkgs.gnutar
-        pkgs.gzip
-        pkgs.gnused
-        pkgs.xz
-        config.system.build.nixos-rebuild
-      ]
+      pkgs.lib.makeBinPath (
+        [
+          config.systemd.package
+          pkgs.gnugrep
+          pkgs.gnutar
+          pkgs.gzip
+          pkgs.gnused
+          pkgs.xz
+        ]
+        ++ optionals canRebuild [
+          config.nix.package
+          pkgs.git
+          config.system.build.nixos-rebuild
+        ]
+      )
     }:$PATH
     export NIX_PATH=nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos:nixos-config=/etc/nixos/configuration.nix:/nix/var/nix/profiles/per-user/root/channels
 
@@ -48,6 +54,10 @@ let
       # copy it over. Also, look for a magic three-hash comment and set
       # that as the channel.
       if sed '/^\(#\|SSH_HOST_.*\)/d' < "$userData" | grep -q '\S'; then
+        ${optionalString (!canRebuild) ''
+          echo "user data looks like a Nix expression, but this system can't rebuild itself; ignoring"
+          exit
+        ''}
         channels="$(grep '^###' "$userData" | sed 's|###\s*||')"
         while IFS= read -r channel; do
           echo "writing channel: $channel"
