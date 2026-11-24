@@ -19,7 +19,7 @@ index 861430f..aefaf2d 100644
  {
 +        if (getenv("NIXOS_USERS_PURE")) {
 +                throw_error (context, ERROR_NOT_SUPPORTED, "Modifying users not supported without users.mutableUsers");
-+                return;
++                return TRUE;
 +        }
 +
          Daemon *daemon = (Daemon *) accounts;
@@ -31,7 +31,7 @@ index 861430f..aefaf2d 100644
  {
 +        if (getenv("NIXOS_USERS_PURE")) {
 +                throw_error (context, ERROR_NOT_SUPPORTED, "Modifying users not supported without users.mutableUsers");
-+                return;
++                return TRUE;
 +        }
 +
          Daemon *daemon = (Daemon *) accounts;
@@ -47,7 +47,7 @@ index 28170db..df947a1 100644
  {
 +        if (getenv("NIXOS_USERS_PURE")) {
 +                throw_error (context, ERROR_NOT_SUPPORTED, "Modifying users not supported without users.mutableUsers");
-+                return;
++                return TRUE;
 +        }
 +
          User *user = (User *) auser;
@@ -59,7 +59,7 @@ index 28170db..df947a1 100644
  {
 +        if (getenv("NIXOS_USERS_PURE")) {
 +                throw_error (context, ERROR_NOT_SUPPORTED, "Modifying users not supported without users.mutableUsers");
-+                return;
++                return TRUE;
 +        }
 +
          User *user = (User *) auser;
@@ -71,7 +71,7 @@ index 28170db..df947a1 100644
  {
 +        if (getenv("NIXOS_USERS_PURE")) {
 +                throw_error (context, ERROR_NOT_SUPPORTED, "Modifying users not supported without users.mutableUsers");
-+                return;
++                return TRUE;
 +        }
 +
          User *user = (User *) auser;
@@ -83,7 +83,7 @@ index 28170db..df947a1 100644
  {
 +        if (getenv("NIXOS_USERS_PURE")) {
 +                throw_error (context, ERROR_NOT_SUPPORTED, "Modifying users not supported without users.mutableUsers");
-+                return;
++                return TRUE;
 +        }
 +
          User *user = (User *) auser;
@@ -95,7 +95,7 @@ index 28170db..df947a1 100644
  {
 +        if (getenv("NIXOS_USERS_PURE")) {
 +                throw_error (context, ERROR_NOT_SUPPORTED, "Modifying users not supported without users.mutableUsers");
-+                return;
++                return TRUE;
 +        }
 +
          User *user = (User *) auser;
@@ -107,7 +107,7 @@ index 28170db..df947a1 100644
  {
 +        if (getenv("NIXOS_USERS_PURE")) {
 +                throw_error (context, ERROR_NOT_SUPPORTED, "Modifying users not supported without users.mutableUsers");
-+                return;
++                return TRUE;
 +        }
 +
          User *user = (User *) auser;
@@ -119,7 +119,7 @@ index 28170db..df947a1 100644
  {
 +        if (getenv("NIXOS_USERS_PURE")) {
 +                throw_error (context, ERROR_NOT_SUPPORTED, "Modifying users not supported without users.mutableUsers");
-+                return;
++                return TRUE;
 +        }
 +
          User *user = (User *) auser;
