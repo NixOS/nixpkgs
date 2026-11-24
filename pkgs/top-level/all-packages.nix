@@ -1011,8 +1011,6 @@ with pkgs;
 
   inherit (callPackages ../development/libraries/sdbus-cpp { }) sdbus-cpp sdbus-cpp_2;
 
-  shaperglot = with python3Packages; toPythonApplication shaperglot;
-
   ufolint = with python3Packages; toPythonApplication ufolint;
 
   ventoy-full = ventoy.override {
