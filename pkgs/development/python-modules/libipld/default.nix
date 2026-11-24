@@ -17,18 +17,18 @@
 
 buildPythonPackage rec {
   pname = "libipld";
-  version = "3.4.1";
+  version = "3.5.0";
   pyproject = true;
 
   # use pypi, GitHub does not include Cargo.lock
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-XTT8j5DJVDIPyn/vEg5f6a9Y+2dP9yNfJ4cDZN5sEG8=";
+    hash = "sha256-R+Q+c4/PPMmy5X7aIK9S+P2wRCWx+mmrvXY4ZuzkFds=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
-    hash = "sha256-8DYIiX/lFGYz/4+vWgoYTsV5L3O7rulof6UomrulbeM=";
+    hash = "sha256-phMm+booPgTNoE3kBl3WYCnVbUUo009pEE3REEXY+Zw=";
   };
 
   build-system = [

@@ -1244,6 +1244,8 @@ with pkgs;
 
   arpack-mpi = arpack.override { useMpi = true; };
 
+  aurralPlugins = recurseIntoAttrs (callPackage ../by-name/au/aurral/plugins.nix { });
+
   authentik-outposts = recurseIntoAttrs (callPackages ../by-name/au/authentik/outposts.nix { });
 
   autoflake = with python3.pkgs; toPythonApplication autoflake;
@@ -2717,7 +2719,7 @@ with pkgs;
   ### SHELLS
 
   runtimeShell = "${runtimeShellPackage}${runtimeShellPackage.shellPath}";
-  runtimeShellPackage = bashNonInteractive;
+  runtimeShellPackage = if stdenv.hostPlatform.isWindows then pkgs.rubash else bashNonInteractive;
 
   bash = callPackage ../shells/bash/5.nix { };
   bashNonInteractive = lowPrio (
@@ -8974,32 +8976,6 @@ with pkgs;
     d1x-rebirth-full
     d2x-rebirth-full
     ;
-
-  factorio-experimental = factorio.override {
-    releaseType = "alpha";
-    experimental = true;
-  };
-
-  factorio-headless = factorio.override { releaseType = "headless"; };
-
-  factorio-headless-experimental = factorio.override {
-    releaseType = "headless";
-    experimental = true;
-  };
-
-  factorio-demo = factorio.override { releaseType = "demo"; };
-
-  factorio-demo-experimental = factorio.override {
-    releaseType = "demo";
-    experimental = true;
-  };
-
-  factorio-space-age = factorio.override { releaseType = "expansion"; };
-
-  factorio-space-age-experimental = factorio.override {
-    releaseType = "expansion";
-    experimental = true;
-  };
 
   factorio-utils = callPackage ../by-name/fa/factorio/utils.nix { };
 

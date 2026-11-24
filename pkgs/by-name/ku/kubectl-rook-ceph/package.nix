@@ -7,16 +7,19 @@
 
 buildGoModule (finalAttrs: {
   pname = "kubectl-rook-ceph";
-  version = "0.9.6";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "rook";
     repo = "kubectl-rook-ceph";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9keMfpYRtJ49fg8rVtwImPlkVHYKwjKWMtLHxhzUE18=";
+    hash = "sha256-1UgcFRp9XCuteBVrrD0vy4iG44/LU/PFeXPv49ZQtkQ=";
   };
 
-  vendorHash = "sha256-rXSXxSUR/F1eSsGUe1penn9eM2qTcPgE5pZmafQSISU=";
+  vendorHash = "sha256-rWWZRXMrEhMaxorogQqcz2g7KcULMlgQbs+lXDSGY10=";
+
+  # The log completion test starts a local HTTP server.
+  __darwinAllowLocalNetworking = true;
 
   postInstall = ''
     mv $out/bin/cmd $out/bin/kubectl-rook-ceph
