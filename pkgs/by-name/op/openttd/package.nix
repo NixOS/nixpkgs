@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   SDL2,
   _experimental-update-script-combinators,
   buildPackages,
@@ -80,6 +81,15 @@ stdenv.mkDerivation (finalAttrs: {
       rm -rf .git
     '';
   };
+
+  patches = [
+    # CMake 4.5 rejects the extra arguments to install(CODE)
+    (fetchpatch {
+      name = "install-code-doesnt-know-destination.patch";
+      url = "https://github.com/OpenTTD/OpenTTD/commit/db494a6dcff8f1778af3ab10be5a47f67f8f864c.patch";
+      hash = "sha256-JH1jY3dwtpAod7bPZObG+CzKibWkDm8f1QC2TX/NzrQ=";
+    })
+  ];
 
   postPatch =
     lib.optionalString withFluidSynth ''
