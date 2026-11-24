@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   replaceVars,
-  unstableGitUpdater,
+  nix-update-script,
   cmake,
   pkg-config,
   alsa-lib,
@@ -26,14 +26,17 @@
   libxft,
   lilv,
   lv2,
-  perl5,
-  perl5Packages,
+  perl,
   portaudio,
   qt5,
   sndio,
   SDL2,
+  serd,
+  sord,
+  sratom,
   suil,
   wineWow64Packages,
+  zix,
   withALSA ? true,
   withPulseAudio ? true,
   withSoundio ? false,
@@ -60,13 +63,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "lmms";
-  version = "1.2.2-unstable-2026-04-21";
+  version = "1.3.0-alpha.2";
 
   src = fetchFromGitHub {
     owner = "LMMS";
     repo = "lmms";
-    rev = "fc3dfda961a7923326d2b0d5747e5d8fd941af98";
-    hash = "sha256-q8w1CgM2QnkCIOUJlv8r+2zMKl+brbNKoAkhDJEhaN0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-oCZGvyXtW4gA9MZ10eDeATri8rDP98ZFOBVIVj4kD/Y=";
     fetchSubmodules = true;
   };
 
@@ -81,6 +84,12 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals withZyn [
     fltk
+  ]
+  ++ lib.optionals (withSWH || withSID) [
+    (perl.withPackages (ps: [
+      ps.ListMoreUtils
+      ps.XMLParser
+    ]))
   ];
 
   buildInputs = [
@@ -123,18 +132,18 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals withSoundFont [
     fluidsynth
   ]
-  ++ lib.optionals (withSWH || withSID) [
-    perl5
-    perl5Packages.ListMoreUtils
-    perl5Packages.XMLParser
-  ]
   ++ lib.optionals withGIG [
     libgig
   ]
   ++ lib.optionals withLV2 [
     lilv
     lv2
+    # LMMS's FindLilv.cmake discovers these libraries individually.
+    serd
+    sord
+    sratom
     suil
+    zix
   ]
   ++ lib.optionals withCarla [
     carla
@@ -182,12 +191,15 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "WANT_CARLA" withCarla)
   ];
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=unstable" ];
+  };
 
   meta = {
     description = "DAW similar to FL Studio (music production software)";
     mainProgram = "lmms";
     homepage = "https://lmms.io";
+    changelog = "https://github.com/LMMS/lmms/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
