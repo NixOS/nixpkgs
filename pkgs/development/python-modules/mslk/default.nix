@@ -56,6 +56,11 @@ buildPythonPackage (finalAttrs: {
     torch
   ];
 
+  # setup.py makes flydsl a hard requirement whenever torch is a ROCm build,
+  # but mslk only imports it lazily behind is_flydsl_available(). flydsl is
+  # not packaged, so drop it to keep mslk (and xformers) building with ROCm.
+  pythonRemoveDeps = [ "flydsl" ];
+
   pythonImportsCheck = [
     "mslk"
     "mslk.attention.fmha"
