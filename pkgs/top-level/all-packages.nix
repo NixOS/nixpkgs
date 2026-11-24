@@ -1015,8 +1015,6 @@ with pkgs;
 
   shaperglot = with python3Packages; toPythonApplication shaperglot;
 
-  ufolint = with python3Packages; toPythonApplication ufolint;
-
   ventoy-full = ventoy.override {
     withCryptsetup = true;
     withXfs = true;
