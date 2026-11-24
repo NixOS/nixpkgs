@@ -1,5 +1,3 @@
-{ version, hash }:
-
 {
   lib,
   stdenv,
@@ -19,7 +17,10 @@
   onlyLib ? stdenv.hostPlatform.isStatic,
   # Otherwise we have an infinite recursion during static compilation
   enableUtilLinux ? !stdenv.hostPlatform.isStatic,
-  util-linux,
+  # break the cyclic dependency:
+  # util-linux (non-minimal) depends (optionally, but on by default) on systemd,
+  # systemd (optionally, but on by default) on cryptsetup and cryptsetup depends on lvm2
+  util-linuxMinimal,
   enableVDO ? false,
   vdo,
   enableMdadm ? false,
@@ -33,21 +34,21 @@
 # configure: error: --enable-dmeventd requires --enable-cmdlib to be used as well
 assert enableDmeventd -> enableCmdlib;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname =
     "lvm2"
     + lib.optionalString enableDmeventd "-with-dmeventd"
     + lib.optionalString enableVDO "-with-vdo";
-  inherit version;
+  version = "2.03.41";
 
   __structuredAttrs = true;
 
   src = fetchurl {
     urls = [
-      "https://mirrors.kernel.org/sourceware/lvm2/LVM2.${version}.tgz"
-      "ftp://sourceware.org/pub/lvm2/LVM2.${version}.tgz"
+      "https://mirrors.kernel.org/sourceware/lvm2/LVM2.${finalAttrs.version}.tgz"
+      "ftp://sourceware.org/pub/lvm2/LVM2.${finalAttrs.version}.tgz"
     ];
-    inherit hash;
+    hash = "sha256-1YARuEXfjsE4FsoT6mw51Ms9A4zS19OHrN9Wga19Zjc=";
   };
 
   strictDeps = true;
@@ -135,7 +136,7 @@ stdenv.mkDerivation rec {
       in
       {
         inherit coreutils;
-        util_linux = optionalTool enableUtilLinux util-linux;
+        util_linux = optionalTool enableUtilLinux util-linuxMinimal;
         mdadm = optionalTool enableMdadm mdadm;
         multipath_tools = optionalTool enableMultipath multipath-tools;
         vdo = optionalTool enableVDO vdo;
@@ -232,7 +233,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     changelog = "https://gitlab.com/lvmteam/lvm2/-/blob/v${
-      lib.replaceString "." "_" version
+      lib.replaceString "." "_" finalAttrs.version
     }/WHATS_NEW";
     homepage = "http://sourceware.org/lvm2/";
     description = "Tools to support Logical Volume Management (LVM) on Linux";
@@ -247,4 +248,4 @@ stdenv.mkDerivation rec {
       ajs124
     ];
   };
-}
+})
