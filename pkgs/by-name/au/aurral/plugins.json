@@ -1,0 +1,26 @@
+{
+  "tag": "2026-11-20",
+  "hash": "sha256-lWLLecrk9nvtW3yTEPeFULn2DGUnHFJDsFin3RXDR4s=",
+  "plugins": {
+    "lidarr": {
+      "name": "Lidarr",
+      "version": "0.3.0",
+      "description": "Downloads albums through Lidarr. Lidarr grabs and files each album in its own folder, and Aurral plays it from there."
+    },
+    "metadata": {
+      "name": "Metadata",
+      "version": "0.2.0",
+      "description": "Finishes the tags on new downloads and on albums you choose: embeds the cover, saves lyrics, adds release details from MusicBrainz, cleans out junk tags, and adds ReplayGain."
+    },
+    "road-trip": {
+      "name": "Road Trip",
+      "version": "0.2.1",
+      "description": "Turns Google Maps directions into a playlist as long as the drive, with songs named after the towns you pass and artists from those towns, in the order you reach them."
+    },
+    "setlists": {
+      "name": "Setlists",
+      "version": "0.1.0",
+      "description": "Imports setlist.fm links as playlists: one show in order, or an artist's current tour with every song played on it so far."
+    }
+  }
+}
