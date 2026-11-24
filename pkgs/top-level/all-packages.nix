@@ -2717,7 +2717,7 @@ with pkgs;
   ### SHELLS
 
   runtimeShell = "${runtimeShellPackage}${runtimeShellPackage.shellPath}";
-  runtimeShellPackage = bashNonInteractive;
+  runtimeShellPackage = if stdenv.hostPlatform.isWindows then pkgs.rubash else bashNonInteractive;
 
   bash = callPackage ../shells/bash/5.nix { };
   bashNonInteractive = lowPrio (
