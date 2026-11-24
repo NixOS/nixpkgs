@@ -7,16 +7,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "restic-rest-server";
-  version = "0.14.0";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "restic";
     repo = "rest-server";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-cWnZ91mrllhTlCLb+BoJMXqUON2wOWCqVShg+NKU7gs=";
+    hash = "sha256-J76xWPRpozNQl4JH5JowzSnEb040BnjJ6VuIUfUwdnw=";
   };
 
-  vendorHash = "sha256-Fg8dDqehART535LYEOLazQntUAKxv9nmBN1RByW4OYE=";
+  vendorHash = "sha256-nUVpHvnc6pIYkTBt1AOcssHPz9m8UoofxIiLC4m2k/0=";
 
   passthru.tests.restic = nixosTests.restic-rest-server;
 
