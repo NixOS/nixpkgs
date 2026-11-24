@@ -65,7 +65,7 @@ buildGoModule (finalAttrs: {
     description = "Flexible, reusable and concise configuration for Kubernetes";
     homepage = "https://tanka.dev";
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ kamadorueda ];
     mainProgram = "tk";
   };
 })
