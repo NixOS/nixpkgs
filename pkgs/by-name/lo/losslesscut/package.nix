@@ -19,13 +19,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "losslesscut";
-  version = "3.70.2-unstable-2026-10-24";
+  version = "3.70.2";
 
   src = fetchFromGitHub {
     owner = "mifi";
     repo = "lossless-cut";
-    rev = "14b89b425213b447396e3c3cddc2ef2a7d45d61f";
-    hash = "sha256-9iYZT3/cQyU7uVHvXdHoM/jNzubZMX4XYkKhAePl6uo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-dG1jLOsAcRZHNcpWyrdYQEvK9fNEUG+YNZVwUKL0UUQ=";
   };
 
   patches = [
@@ -177,7 +177,7 @@ stdenv.mkDerivation (finalAttrs: {
   missingHashes = ./missing-hashes.json;
   offlineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
-    hash = "sha256-xsw9AqsOTCGHDNPqt+dspXw7dvBhaKcQY35XZQ0Cmag=";
+    hash = "sha256-RPdiO/q99BN+gCPttBKb5/KBfGP1kRz/egMisR6WcEU=";
   };
 
   postConfigure = ''
