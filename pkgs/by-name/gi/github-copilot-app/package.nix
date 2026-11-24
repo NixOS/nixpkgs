@@ -19,6 +19,7 @@
   libsoup_3,
   openssl_3_5,
   libayatana-appindicator,
+  libpulseaudio,
 }:
 
 let
@@ -71,6 +72,7 @@ stdenv.mkDerivation {
     libsoup_3
     openssl_3_5
     libayatana-appindicator
+    libpulseaudio
     stdenv.cc.cc.lib
   ];
 
@@ -104,6 +106,11 @@ stdenv.mkDerivation {
 
         cp -r usr/share/* $out/share/
         cp -r usr/lib/* $out/lib/
+
+        # The bundled libonnxruntime.so has the SONAME libonnxruntime.so.1, but upstream
+        # only ships the unversioned file name, so add the missing symlink that
+        # libfoundry_local.so and the dynamic linker look up.
+        ln -sf libonnxruntime.so "$out/lib/GitHub Copilot/libonnxruntime.so.1"
 
         # Rename the main executable from github to github-copilot-app to avoid conflicts
         mv usr/bin/github $out/bin/github-copilot-app
