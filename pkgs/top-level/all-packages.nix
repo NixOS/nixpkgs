@@ -2115,8 +2115,6 @@ with pkgs;
   };
   logstash = logstash7;
 
-  lagrange-tui = lagrange.override { enableTUI = true; };
-
   matrix-synapse-plugins = recurseIntoAttrs matrix-synapse-unwrapped.plugins;
 
   md2gemini = with python3.pkgs; toPythonApplication md2gemini;
@@ -7163,21 +7161,6 @@ with pkgs;
   };
 
   kmod = callPackage ../os-specific/linux/kmod { };
-
-  lvm2 = callPackage ../os-specific/linux/lvm2/2_03.nix {
-    # break the cyclic dependency:
-    # util-linux (non-minimal) depends (optionally, but on by default) on systemd,
-    # systemd (optionally, but on by default) on cryptsetup and cryptsetup depends on lvm2
-    util-linux = util-linuxMinimal;
-  };
-
-  lvm2_dmeventd = lvm2.override {
-    enableDmeventd = true;
-    enableCmdlib = true;
-  };
-  lvm2_vdo = lvm2_dmeventd.override {
-    enableVDO = true;
-  };
 
   mdadm = mdadm4;
 
