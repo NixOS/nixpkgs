@@ -4,7 +4,10 @@
   stdenv,
   jdk,
   makeWrapper,
+  coreutils,
+  gnused,
   gitUpdater,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -36,9 +39,22 @@ stdenv.mkDerivation (finalAttrs: {
     # upstream dist/bin/ant honours JAVA_HOME, then falls back to `java`
     # on PATH — so add our JDK as a *fallback*, user's JDK still wins
     makeWrapper $out/share/ant/bin/ant $out/bin/ant \
-      --suffix PATH : ${lib.makeBinPath [ jdk ]}
+      --set-default JAVA_HOME ${jdk.home} \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          jdk
+          coreutils
+          gnused
+        ]
+      }
     runHook postInstall
   '';
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+  versionCheckProgramArg = "-version";
 
   passthru = {
     home = "${finalAttrs.finalPackage}/share/ant";
