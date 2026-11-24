@@ -15,6 +15,7 @@
   config,
   enableCuda ? config.cudaSupport,
   cudaPackages,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -85,6 +86,8 @@ stdenv.mkDerivation (finalAttrs: {
     "man"
   ];
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   __structuredAttrs = true;
 
   meta = {
@@ -113,5 +116,6 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isCygwin;
+    pkgConfigModules = [ "hwloc" ];
   };
 })
