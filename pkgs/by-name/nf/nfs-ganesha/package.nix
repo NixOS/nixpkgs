@@ -27,7 +27,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nfs-ganesha";
-  version = "15.10"; # nixpkgs-update: no auto update
+  version = "15.13"; # nixpkgs-update: no auto update
 
   outputs = [
     "out"
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "nfs-ganesha";
     repo = "nfs-ganesha";
     tag = "V${finalAttrs.version}";
-    hash = "sha256-tJ0wbLdDQrTd07StcPiTPOhwPCLWOSZdouF4MhOQqsw=";
+    hash = "sha256-aQHOfbvCEycHBoPh7gcJ4pTX70DRhRR1PiG/RB97+7s=";
     fetchSubmodules = true;
   };
 
