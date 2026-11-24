@@ -9,14 +9,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "esptool";
-  version = "5.6.0";
+  version = "5.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "espressif";
     repo = "esptool";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zVK9JoeObfl+Nii4mRC1mZbqDhEvufCFe0mqj24oRd0=";
+    hash = "sha256-SE4BPR2iNk/KwbRcdtdmNZKbmk9RUw5MVvPpRVNSU0A=";
   };
 
   postPatch = ''
@@ -86,6 +86,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     [
       addBinToPathHook
       pyelftools
+      pytest-rerunfailures
       pytestCheckHook
       requests
       softhsm
