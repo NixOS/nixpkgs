@@ -17,7 +17,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
 
   src = fetchurl {
-    url = "https://github.com/abue-ammar/tinycast/releases/download/${sources.tag}/Tinycast-${sources.version}.dmg";
+    url = "https://github.com/abue-ammar/tinycast/releases/download/${sources.tag}/Tinycast-Universal-${sources.version}.dmg";
     inherit (sources) hash;
   };
 
@@ -29,13 +29,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   # Tinycast.dmg is APFS formatted, which is unsupported by undmg.
   nativeBuildInputs = [ _7zz ];
 
-  sourceRoot = "Tinycast Beta.app";
+  sourceRoot = "Tinycast.app";
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p "$out/Applications/Tinycast Beta.app"
-    cp -R . "$out/Applications/Tinycast Beta.app"
+    mkdir -p "$out/Applications/Tinycast.app"
+    cp -R . "$out/Applications/Tinycast.app"
 
     runHook postInstall
   '';
@@ -43,10 +43,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   passthru.updateScript = ./update.sh;
 
   meta = {
-    description = "Beta release of Tinycast, a native macOS launcher, hotkeys, and clipboard history";
+    description = "Native macOS launcher with hotkeys and clipboard history";
     homepage = "https://github.com/abue-ammar/tinycast";
     changelog = "https://github.com/abue-ammar/tinycast/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.agpl3Only;
+    license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ pwnwriter ];
     platforms = [
       "aarch64-darwin"

@@ -8,25 +8,15 @@ cd "$(dirname "$0")"
 repo="abue-ammar/tinycast"
 old_version=$(jq -r ".version" sources.json)
 
-release=$(curl -s ${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} \
-  "https://api.github.com/repos/${repo}/releases?per_page=100" \
-  | jq '
-    [
-      .[]
-      | select(.prerelease == true)
-      | select(.tag_name | test("^v[0-9]+\\.[0-9]+\\.[0-9]+-beta\\.[0-9]+$"))
-    ]
-    | sort_by(.published_at)
-    | last
-  ')
+release=$(curl -fsSL ${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} \
+  "https://api.github.com/repos/${repo}/releases/latest")
 
-tag=$(jq -r ".tag_name" <<< "$release")
-version="${tag#v}"
-
-if [[ -z "$tag" || "$tag" == "null" ]]; then
-  echo "No Tinycast beta release found"
+tag=$(jq -r '.tag_name // empty' <<< "$release")
+if [[ ! "$tag" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+  echo "No Tinycast stable release found"
   exit 1
 fi
+version="${tag#v}"
 
 if [[ "$old_version" == "$version" ]]; then
   echo "tinycast is already up to date at $version"
@@ -35,10 +25,10 @@ fi
 
 echo "Updating tinycast from $old_version to $version"
 
-asset_url=$(jq -r --arg name "Tinycast-${version}.dmg" '.assets[] | select(.name == $name) | .browser_download_url' <<< "$release")
+asset_url=$(jq -r --arg name "Tinycast-Universal-${version}.dmg" '.assets[] | select(.name == $name) | .browser_download_url' <<< "$release")
 
 if [[ -z "$asset_url" || "$asset_url" == "null" ]]; then
-  echo "No Tinycast Beta DMG asset found for $tag"
+  echo "No Tinycast Universal DMG asset found for $tag"
   exit 1
 fi
 
