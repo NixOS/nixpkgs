@@ -6,14 +6,14 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "zodbpickle";
-  version = "4.5";
+  version = "4.6";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-Z9QpXdtoskEP5BcJT/4aiw7UGDTuMIAg9Y7htjPh91E=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-9mt+3Ck8P3He3Z+RgclszstYNWD1Ey3g+/0HJ7n26qE=";
   };
 
   build-system = [ setuptools ];
@@ -38,11 +38,11 @@ buildPythonPackage rec {
   meta = {
     description = "Fork of Python's pickle module to work with ZODB";
     homepage = "https://github.com/zopefoundation/zodbpickle";
-    changelog = "https://github.com/zopefoundation/zodbpickle/blob/${version}/CHANGES.rst";
+    changelog = "https://github.com/zopefoundation/zodbpickle/blob/${finalAttrs.version}/CHANGES.rst";
     license = with lib.licenses; [
       psfl
       zpl21
     ];
     maintainers = [ ];
   };
-}
+})

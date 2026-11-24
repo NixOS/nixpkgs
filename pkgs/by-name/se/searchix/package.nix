@@ -18,16 +18,16 @@ in
 
 buildGoModule (finalAttrs: {
   pname = "searchix";
-  version = "0.4.10";
+  version = "0.4.11";
 
   src = fetchFromCodeberg {
     owner = "alinnow";
     repo = "searchix";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TO+PaNovMJ6WzZoc6iYJ9jfLzZXZ3y4GwqcMm+afD/o=";
+    hash = "sha256-XnkUgUxy9Fkrg8F3jxM2KbaR1wKUWFJD3bDY/okDfMA=";
   };
 
-  vendorHash = "sha256-TveAe1aUYLUQuZQXCBYYFx0d0+Ql+IxFn9C9cFNsRAw=";
+  vendorHash = "sha256-jPXG3Fn6FtAPVhJKaBIg27/SeHotOguqmQ87ulFtyg4=";
 
   overrideModAttrs = old: {
     # netdb.go allows /etc/protocols and /etc/services to not exist and happily proceeds, but it panic()s if they exist but return permission denied.

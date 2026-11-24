@@ -32,10 +32,6 @@ stdenv.mkDerivation {
     substituteInPlace CMakeLists.txt \
       --replace-fail 'cmake_minimum_required(VERSION 2.6)' \
                      'cmake_minimum_required(VERSION 3.10)'
-
-    # std::allocator<void>::const_pointer was removed in C++20
-    substituteInPlace MyGUIEngine/include/MyGUI_Allocator.h \
-      --replace-fail "typename std::allocator<void>::const_pointer = 0" "const void* = 0"
   '';
 
   nativeBuildInputs = [
@@ -58,6 +54,8 @@ stdenv.mkDerivation {
     (lib.cmakeBool "MYGUI_BUILD_TOOLS" false)
     (lib.cmakeBool "MYGUI_DONT_USE_OBSOLETE" true)
     (lib.cmakeFeature "MYGUI_RENDERSYSTEM" "8")
+    (lib.cmakeFeature "CMAKE_CXX_STANDARD" "17")
+    (lib.cmakeBool "CMAKE_CXX_STANDARD_REQUIRED" true)
   ];
 
   meta = {

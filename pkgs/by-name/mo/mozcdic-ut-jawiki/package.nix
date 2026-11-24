@@ -7,13 +7,13 @@
 
 stdenvNoCC.mkDerivation {
   pname = "mozcdic-ut-jawiki";
-  version = "0-unstable-2026-10-02";
+  version = "0-unstable-2026-11-03";
 
   src = fetchFromGitHub {
     owner = "utuhiro78";
     repo = "mozcdic-ut-jawiki";
-    rev = "57af6adefedab262c295c4bfff71a89902cbe05c";
-    hash = "sha256-UFyk0rjp+G4zGIdQy+qemg8K86XJH7WU0LcPBZbk/5I=";
+    rev = "cd3c637e2e41042da3d66e6268891d619eb8951f";
+    hash = "sha256-q9S7K1rcy1qvJ3VRLt7To79eb/xzbUjNrbpbnBmTMmc=";
   };
 
   installPhase = ''
