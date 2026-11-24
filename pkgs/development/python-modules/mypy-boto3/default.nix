@@ -227,8 +227,8 @@ in
       "sha256-KpBjrOrZ9N7hcQfE3OGQP/Ru08hiSHNDSMRv1kolMm4=";
 
   mypy-boto3-cloudfront =
-    buildMypyBoto3Package "cloudfront" "1.44.8"
-      "sha256-MrIf62HUXoyEK7jiOuoxEU9FeA3C7cPPOGaeC7ceiMg=";
+    buildMypyBoto3Package "cloudfront" "1.44.10"
+      "sha256-CXXY1ODkme49CVheAus99BA0aiEfzaUxPg98mRqR19k=";
 
   mypy-boto3-cloudhsm =
     buildMypyBoto3Package "cloudhsm" "1.44.0"
@@ -555,8 +555,8 @@ in
       "sha256-V70JqgPlOtU+lsR89qwV9RIeUXDFTz+mGaF0ojGCrHQ=";
 
   mypy-boto3-fsx =
-    buildMypyBoto3Package "fsx" "1.44.8"
-      "sha256-JChNTst6ZhnoglJRJSMhR1/H02wh566RPPob3MWE/D0=";
+    buildMypyBoto3Package "fsx" "1.44.10"
+      "sha256-rYb9zHFExmkHJdjvltHqItz4EUw1buAQ5tiZ35vdYHU=";
 
   mypy-boto3-gamelift =
     buildMypyBoto3Package "gamelift" "1.44.0"

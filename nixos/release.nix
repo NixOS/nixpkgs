@@ -352,6 +352,24 @@ rec {
     )
 
   );
+  amazonImageZfs = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (
+    system:
+
+    with import ./.. { inherit system; };
+
+    hydraJob (
+      (import ./lib/eval-config.nix {
+        inherit system;
+        modules = [
+          configuration
+          versionModule
+          ./maintainers/scripts/ec2/amazon-image-zfs.nix
+        ];
+      }).config.system.build.amazonImage
+    )
+
+  );
+
   # An image that can be imported into incus and used for container creation
   incusContainerImage =
     forMatchingSystems

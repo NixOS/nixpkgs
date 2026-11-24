@@ -3,7 +3,7 @@
   fetchurl,
   lib,
   cmake,
-  fetchpatch,
+  fetchpatch2,
   buildShared ? !stdenv.hostPlatform.isStatic,
 }:
 
@@ -165,7 +165,28 @@ in
   libressl_4_3 = generic {
     version = "4.3.5";
     hash = "sha256-YtNJePX3jbxjnjqOvZycqsRfCWXgPG+zKJaEXF5n37c=";
-    patches = [ ];
+    patches = [
+      # Back-apply a security patch from v4.4.1.
+      #
+      # https://tracker.security.nixos.org/suggestions/by-id/62597
+      # https://www.vulncheck.com/advisories/libressl-ocspcheck-through-4.4.0-cleartext-transmission-of-ocsp-requests-via-url2host
+      # https://github.com/NixOS/nixpkgs/issues/580855
+      #
+      # This is a slightly awkward patch because of the way libressl is built:
+      # we're taking a patch from the upstream repository and adapting it to
+      # fix the layout of the OpenBSD distribution tarball.
+      (fetchpatch2 {
+        url = "https://github.com/openbsd/src/commit/0f7039667044d1cd252cc72134e499186da4da25.patch";
+        hash = "sha256-nWYL3eCxeriljchfeCjky0fjNu5tx8rHbx2qrbPqiWU=";
+
+        # Rearrange the patch to match the source layout.
+        stripLen = 2;
+        extraPrefix = "apps/";
+
+        # Strip the CVS metadata changes, as these don't cleanly back-apply.
+        hunks = [ "x1" ];
+      })
+    ];
   };
 
   # 4.4 was released October 2026 and will become unsupported on October 20,

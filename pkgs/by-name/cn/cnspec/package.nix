@@ -9,18 +9,18 @@
 
 buildGo127Module (finalAttrs: {
   pname = "cnspec";
-  version = "14.12.1";
+  version = "14.14.0";
 
   src = fetchFromGitHub {
     owner = "mondoohq";
     repo = "cnspec";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Ckw0lXE4ou5y8HIXlFg6b981cIzcuAz6CQcBhZ27V+A=";
+    hash = "sha256-p3EwDqJm58DP31AuR8PSHn2uKJzlcLuh1MMzUi8maas=";
   };
 
   proxyVendor = true;
 
-  vendorHash = "sha256-lk9Fc9m5VvVPM69iDaiTvUl50Z6HkkMoGsL3lWE/iuc=";
+  vendorHash = "sha256-wI0C1a0vaNRnaur/Kze7jtOWqRN4/ELsSovaDysDXqQ=";
 
   subPackages = [ "apps/cnspec" ];
 
