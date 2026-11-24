@@ -42,6 +42,8 @@ stdenv.mkDerivation (finalAttrs: {
     aws-c-sdkutils
   ];
 
+  strictDeps = true;
+
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
   ];
@@ -49,6 +51,8 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests = {
     inherit nix;
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "C99 library implementation of AWS client-side authentication";
