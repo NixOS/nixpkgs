@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "pciutils";
     repo = "pciutils";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-fPtOhUz8Hlo0ajCZbNOwT4fiuL8HlFQ7NGk+nQpmKZM=";
   };
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   preConfigure = lib.optionalString (!stdenv.cc.isGNU) ''
-    substituteInPlace Makefile --replace 'CC=$(CROSS_COMPILE)gcc' ""
+    substituteInPlace Makefile --replace-fail 'CC=$(CROSS_COMPILE)gcc' ""
   '';
 
   enableParallelBuilding = true;
