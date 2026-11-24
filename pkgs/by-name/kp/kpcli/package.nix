@@ -53,6 +53,12 @@ stdenv.mkDerivation (finalAttrs: {
             XMLParser
             boolean
             namespaceclean
+            CryptArgon2
+            IteratorSimple
+            ScopeGuard
+            XMLLibXML
+            XMLParser
+            XMLSAXBase
           ]
           ++ lib.optional stdenv.hostPlatform.isDarwin MacPasteboard
         )
