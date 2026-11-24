@@ -44,7 +44,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "tomb";
-  version = "2.13";
+  version = "2.13.0";
 
   src = fetchFromGitHub {
     owner = "dyne";

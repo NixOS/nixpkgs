@@ -125,16 +125,6 @@ self: super:
     hidapi = super.hidapi.override { systemd = null; };
 
     # Ensure the necessary frameworks are propagatedBuildInputs on darwin
-    OpenGLRaw = overrideCabal (drv: {
-      librarySystemDepends = [ ];
-      libraryHaskellDepends = drv.libraryHaskellDepends;
-      preConfigure = ''
-        frameworkPaths=($(for i in $nativeBuildInputs; do if [ -d "$i"/Library/Frameworks ]; then echo "-F$i/Library/Frameworks"; fi done))
-        frameworkPaths=$(IFS=, ; echo "''${frameworkPaths[@]}")
-        configureFlags+=$(if [ -n "$frameworkPaths" ]; then echo -n "--ghc-options=-optl=$frameworkPaths"; fi)
-      ''
-      + (drv.preConfigure or "");
-    }) super.OpenGLRaw;
     bindings-GLFW = overrideCabal (drv: {
       librarySystemDepends = [ ];
     }) super.bindings-GLFW;

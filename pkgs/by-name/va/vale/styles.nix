@@ -110,12 +110,12 @@ in
 
   proselint = buildStyle rec {
     name = "proselint";
-    version = "0.3.4";
+    version = "0.4.0";
     src = fetchFromGitHub {
       owner = "errata-ai";
       repo = "proselint";
       rev = "v${version}";
-      hash = "sha256-ryKJDX1JrvDWVKLC5qQGctweDf74yuwEXxl/IqumM4s=";
+      hash = "sha256-3wndoHh7FqOjbLpji80lf91y8Na6ZKNf1JidxFMrJ+I=";
     };
     meta = {
       description = "Vale-compatible implementation of Python's proselint linter";
