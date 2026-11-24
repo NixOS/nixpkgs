@@ -39,6 +39,6 @@ buildGoModule (finalAttrs: {
     homepage = "https://kool.dev";
     changelog = "https://github.com/kool-dev/kool/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ kamadorueda ];
   };
 })
