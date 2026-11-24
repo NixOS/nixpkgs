@@ -10,7 +10,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "nexblue-api";
-  version = "0.1.3";
+  version = "0.1.4";
   pyproject = true;
 
   disabled = pythonOlder "3.13";
@@ -19,7 +19,7 @@ buildPythonPackage (finalAttrs: {
     owner = "NexBlue-AB";
     repo = "nexblue-api";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-y9GDSI98n79Kob/Wpxihdi6EK9/bd1wqbpHPYV0vVzA=";
+    hash = "sha256-H3XQhxkK4hu2qmIGgvRSWMMqrHO9YskvkBaZoDWpG9U=";
   };
 
   build-system = [ hatchling ];

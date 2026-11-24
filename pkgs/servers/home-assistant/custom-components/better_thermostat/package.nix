@@ -9,13 +9,13 @@
 buildHomeAssistantComponent rec {
   owner = "KartoffelToby";
   domain = "better_thermostat";
-  version = "1.9.4";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "KartoffelToby";
     repo = "better_thermostat";
     tag = version;
-    hash = "sha256-tyJVWz38Oov9+c6DA1rOgfzk9P8ds828UNNNKAzKVPA=";
+    hash = "sha256-RxrtQidQJ2MeiQSExM+AN9xzITvzpm6lRSrqwfcc5RA=";
   };
 
   dependencies = [
