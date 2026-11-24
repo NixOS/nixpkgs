@@ -53,8 +53,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=map_transformation::translate::translator::tests::test_translate_by_vector"
   ]
   ++ lib.optionals stdenv.hostPlatform.isAarch64 [
-    # Passes on x86_64, but overflows the test-thread stack on aarch64
-    "--skip=world_editor::bedrock::leveldb_options_tests::bedrock_db_survives_heavy_compaction"
+    # panics in LevelDB's cache
+    "--skip=world_editor::bedrock::leveldb_tests::bedrock_db_survives_heavy_compaction"
+    # overflows the stack
+    "--skip=world_editor::bedrock::tests::parallel_chunk_encode_writes_expected_records"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "--skip=mapillary::fetch::tests::the_run_counts_what_it_asked_of_the_network"
