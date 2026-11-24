@@ -793,6 +793,12 @@ in
               ''
             );
 
+          environment.etc."systemd/system-sleep/nvidia" =
+            lib.mkIf (cfg.powerManagement.enable && !cfg.powerManagement.kernelSuspendNotifier)
+              {
+                source = "${nvidia_x11.out}/lib/systemd/system-sleep/nvidia";
+              };
+
           systemd.packages = lib.optional (
             cfg.powerManagement.enable && !cfg.powerManagement.kernelSuspendNotifier
           ) nvidia_x11.out;
@@ -801,7 +807,10 @@ in
             let
               nvidiaService = state: {
                 description = "NVIDIA system ${state} actions";
-                path = [ pkgs.kbd ];
+                path = [
+                  pkgs.coreutils
+                  pkgs.kbd
+                ];
                 serviceConfig = {
                   Type = "oneshot";
                   ExecStart = "${nvidia_x11.out}/bin/nvidia-sleep.sh '${state}'";
@@ -809,21 +818,26 @@ in
                 before = [ "systemd-${state}.service" ];
                 requiredBy = [ "systemd-${state}.service" ];
               };
+              suspendUnits = [
+                "systemd-suspend.service"
+                "systemd-suspend-then-hibernate.service"
+                "systemd-hybrid-sleep.service"
+              ];
+              resumeUnits = suspendUnits ++ [
+                "systemd-hibernate.service"
+              ];
             in
             lib.mkMerge [
               (lib.mkIf (cfg.powerManagement.enable && !cfg.powerManagement.kernelSuspendNotifier) {
-                nvidia-suspend = nvidiaService "suspend";
                 nvidia-hibernate = nvidiaService "hibernate";
+                nvidia-suspend = (nvidiaService "suspend") // {
+                  before = suspendUnits;
+                  requiredBy = suspendUnits;
+                };
                 nvidia-resume = (nvidiaService "resume") // {
                   before = [ ];
-                  after = [
-                    "systemd-suspend.service"
-                    "systemd-hibernate.service"
-                  ];
-                  requiredBy = [
-                    "systemd-suspend.service"
-                    "systemd-hibernate.service"
-                  ];
+                  after = resumeUnits;
+                  requiredBy = resumeUnits;
                 };
               })
               (lib.mkIf cfg.nvidiaPersistenced {

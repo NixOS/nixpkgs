@@ -35,7 +35,7 @@ installPhase() {
         mv systemd/nvidia-sleep.sh ./
     fi
     if [ -e nvidia-sleep.sh ]; then
-        sed -E 's#(PATH=).*#\1"$PATH"#' nvidia-sleep.sh > nvidia-sleep.sh.fixed
+        sed -E 's#(PATH=).*#\1"$PATH":'"$out"'/bin:'"$coreutils"'/bin:'"$kbd"'/bin#' nvidia-sleep.sh > nvidia-sleep.sh.fixed
         install -Dm755 nvidia-sleep.sh.fixed $out/bin/nvidia-sleep.sh
     fi
 
