@@ -1,0 +1,39 @@
+From 333492e46e16603a04bf6045beb82c6703a78972 Mon Sep 17 00:00:00 2001
+From: Rafael Ieda <git@ieda.me>
+Date: Tue, 24 Nov 2026 04:28:01 -0300
+Subject: [PATCH] Fix source_group() calls for CMake 4.5
+
+source_group() has no positional directory argument when FILES is used.
+Older CMake versions ignored it, CMake 4.5 rejects it.
+---
+ NeuralAudio/CMakeLists.txt     | 6 +++---
+ NeuralAudioCAPI/CMakeLists.txt | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/deps/NeuralAudio/NeuralAudio/CMakeLists.txt b/deps/NeuralAudio/NeuralAudio/CMakeLists.txt
+index 4626e7a..8487797 100644
+--- a/deps/NeuralAudio/NeuralAudio/CMakeLists.txt
++++ b/deps/NeuralAudio/NeuralAudio/CMakeLists.txt
+@@ -187,6 +187,6 @@ add_subdirectory(../deps/RTNeural RTNeural)
+ add_subdirectory(../deps/math_approx math_approx)
+ target_link_libraries(NeuralAudio LINK_PUBLIC RTNeural math_approx)
+ 
+-source_group(NeuralAudio ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SOURCES})
+-source_group(NAM ${CMAKE_CURRENT_SOURCE_DIR} FILES ${NAM_SOURCES})
+-source_group(RTNeural-NAM ${CMAKE_CURRENT_SOURCE_DIR} FILES ${RTNEURAL_WN_SOURCES})
++source_group(NeuralAudio FILES ${SOURCES})
++source_group(NAM FILES ${NAM_SOURCES})
++source_group(RTNeural-NAM FILES ${RTNEURAL_WN_SOURCES})
+diff --git a/deps/NeuralAudio/NeuralAudioCAPI/CMakeLists.txt b/deps/NeuralAudio/NeuralAudioCAPI/CMakeLists.txt
+index c21731d..2152b1f 100644
+--- a/deps/NeuralAudio/NeuralAudioCAPI/CMakeLists.txt
++++ b/deps/NeuralAudio/NeuralAudioCAPI/CMakeLists.txt
+@@ -8,4 +8,4 @@ include_directories(NeuralAudioCAPI ../NeuralAudio)
+ 
+ target_link_libraries(NeuralAudioCAPI PRIVATE NeuralAudio)
+ 
+-source_group(NeuralAudioCAPI ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SOURCES})
++source_group(NeuralAudioCAPI FILES ${SOURCES})
+-- 
+2.56.0
+
