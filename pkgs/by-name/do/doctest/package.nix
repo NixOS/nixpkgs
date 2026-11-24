@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -18,6 +19,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
+  strictDeps = true;
+
   cmakeFlags = lib.optionals stdenv.hostPlatform.isStatic [
     # One of the examples tests shared library support
     # and fails linking.
@@ -26,6 +29,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
+  __structuredAttrs = true;
+
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   meta = {
     changelog = "https://github.com/doctest/doctest/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://github.com/doctest/doctest";
@@ -33,5 +40,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.all;
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.nim65s ];
+    pkgConfigModules = [ "doctest" ];
   };
 })
