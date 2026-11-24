@@ -5,20 +5,23 @@
   setuptools,
   bleak,
   bleak-retry-connector,
+  construct,
+  dbus-fast,
   pytest-asyncio,
   pytestCheckHook,
+  stdenv,
 }:
 
 buildPythonPackage rec {
   pname = "hueble";
-  version = "2.3.0";
+  version = "2.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "flip-dots";
     repo = "HueBLE";
     tag = "v${version}";
-    hash = "sha256-a6lWgcRI+0PvTZ7D2g/c6lbDi+VDUSysjox0032J9qE=";
+    hash = "sha256-+d81XiZ5Ue8XO/SuztD6GMx3WHsCbOfr2XPfDsdY5Ss=";
   };
 
   build-system = [ setuptools ];
@@ -26,6 +29,10 @@ buildPythonPackage rec {
   dependencies = [
     bleak
     bleak-retry-connector
+    construct
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    dbus-fast
   ];
 
   pythonImportsCheck = [ "HueBLE" ];
