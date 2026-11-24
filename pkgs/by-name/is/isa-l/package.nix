@@ -5,6 +5,7 @@
 
   # nativeBuildInputs
   cmake,
+  lld,
   nasm,
 
   # buildInputs
@@ -37,7 +38,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     nasm
-  ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ lld ];
 
   buildInputs = [
     zlib
@@ -54,6 +56,9 @@ stdenv.mkDerivation (finalAttrs: {
     # https://github.com/NixOS/nixpkgs/issues/144170
     (lib.cmakeFeature "CMAKE_INSTALL_INCLUDEDIR" "include")
     (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Silence `ld: warning: arm64 function not 4-byte aligned` warnings on Darwin.
+    (lib.cmakeFeature "CMAKE_LINKER_TYPE" "LLD")
   ];
 
   nativeInstallCheckInputs = [
