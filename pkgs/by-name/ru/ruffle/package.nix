@@ -30,13 +30,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ruffle";
-  version = "0.7.1";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "ruffle-rs";
     repo = "ruffle";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GCpsJKpiJg+kR4y6eCkW5RaHSc1b6pf8w/S08zt//Do=";
+    hash = "sha256-O4wOQB+kxYQ4YhYILspP3EKn9ONyT/BmSgmK4+w7el4=";
   };
 
   postPatch =
@@ -48,16 +48,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
     in
     ''
       substituteInPlace video/external/src/decoder/openh264.rs \
-        --replace-fail "OpenH264Version(2, 4, 1)" \
+        --replace-fail "OpenH264Version(2, 7, 0)" \
                        "OpenH264Version(${major}, ${minor}, ${patch})"
     '';
 
-  cargoHash = "sha256-fTfd7z98eaZabXUyi1FUWBW9HdF2geZNxfANJrkzuPE=";
+  cargoHash = "sha256-+rqEhYd0Jiue+8BAw7aLfu5kVxtr2u16MDoiLcfoxsk=";
   cargoBuildFlags = lib.optional withRuffleTools "--workspace";
 
   env =
     let
-      commitDate = "2026-09-06";
+      commitDate = "2026-11-19";
     in
     {
       VERGEN_IDEMPOTENT = "1";
