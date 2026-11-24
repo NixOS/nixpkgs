@@ -32,6 +32,8 @@ stdenv.mkDerivation (finalAttrs: {
     onetbb
   ];
 
+  strictDeps = true;
+
   cmakeFlags = [
     (lib.cmakeBool "BLAKE3_USE_TBB" useTBB)
     (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
