@@ -30,8 +30,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-crt-cpp";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-nzhGELzTjQxdxg2jX6hCRs1nRUdhKitk14zUrouJnhE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-nzhGELzTjQxdxg2jX6hCRs1nRUdhKitk14zUrouJnhE=";
   };
 
   postPatch = ''
@@ -58,6 +58,8 @@ stdenv.mkDerivation (finalAttrs: {
     s2n-tls
   ];
 
+  strictDeps = true;
+
   cmakeFlags = [
     "-DBUILD_DEPS=OFF"
     "-DBUILD_SHARED_LIBS=ON"
@@ -71,6 +73,8 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests = {
     inherit nix;
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "C++ wrapper around the aws-c-* libraries";
