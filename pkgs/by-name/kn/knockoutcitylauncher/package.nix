@@ -14,13 +14,13 @@ let
 in
 buildNpmPackage (finalAttrs: {
   pname = "knockoutcitylauncher";
-  version = "2.4.6";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "kocxyz";
     repo = "Launcher";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-INwJ6j1KNm9ABETN0bwUijFS4stM2LQdjDMSMprwQTQ=";
+    hash = "sha256-2lOsdKh4e+7usTQkokzaqRZHiJZrYmLn1YTwl7Pl8tE=";
   };
 
   nativeBuildInputs = [
@@ -28,7 +28,7 @@ buildNpmPackage (finalAttrs: {
     copyDesktopItems
   ];
 
-  npmDepsHash = "sha256-nM0Oyifz+JKjnyd2Vpq2q7yF7OrTpBSi4alMlLWTrcI=";
+  npmDepsHash = "sha256-P3UY44n6OStphY6S2KSoXQ+6awEEvYW5TFq8+F7P71A=";
   forceGitDeps = true;
   makeCacheWritable = true;
   __structuredAttrs = true;
@@ -36,7 +36,7 @@ buildNpmPackage (finalAttrs: {
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
   patches = [
-    ./updatecheck-and-devconsole.patch
+    ./disable-devtools.patch
   ];
 
   buildPhase = ''
