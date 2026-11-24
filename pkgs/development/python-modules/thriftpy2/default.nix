@@ -11,14 +11,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "thriftpy2";
-  version = "0.7.1";
+  version = "0.8.0b1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Thriftpy";
     repo = "thriftpy2";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mpCPE1bDE4bpJMwC71QW/4aJs/82/Oj+jYloXOmZyGA=";
+    hash = "sha256-tOW6YXNuwBom7Xn5aP3F1o3aWV1vLJBI6llJlAhRQEs=";
   };
 
   build-system = [ setuptools ];
