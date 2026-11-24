@@ -31,6 +31,22 @@
   mvnDeps,
   repositories,
   kotlin-jps-plugin,
+  # Source releases up to 2025.3 use JBR 21 and Kotlin 2.2.20. Newer releases need
+  # JBR 25 and the Kotlin compiler version they are developed against.
+  jbr ? jetbrains.jdk-no-jcef-21,
+  kotlinHome ? null,
+  # Optional store paths substituted into the sources. When null, the upstream
+  # download code is left untouched (used by the older pycharm-oss release).
+  composeCompilerPlugin ? null,
+  jcefArchive ? null,
+  noDownloadPatch ? ../patches/no-download.patch,
+  sbomPatch ? ../patches/disable-sbom-generation.patch,
+  jacksonPatch ? ../patches/bump-jackson-core-in-source.patch,
+  extraPatches ? [ ],
+  extraPostPatch ? "",
+  jpsBootstrapPatches ? [ ],
+  jpsBootstrapJavaFlags ? [ ],
+  copyM2Repo ? false,
 }:
 let
   kotlin' = kotlin.overrideAttrs (oldAttrs: {
@@ -41,7 +57,7 @@ let
     };
   });
 
-  jbr = jetbrains.jdk-no-jcef-21;
+  kotlinc = if kotlinHome == null then kotlin' else kotlinHome;
 
   ideaSrc = fetchFromGitHub {
     owner = "jetbrains";
@@ -99,8 +115,10 @@ let
       makeWrapper
       # keep-sorted end
     ];
-    patches = [ ../patches/kotlinc-path.patch ];
-    postPatch = "sed -i 's|KOTLIN_PATH_HERE|${kotlin'}|' src/main/java/org/jetbrains/jpsBootstrap/KotlinCompiler.kt";
+    patches = [ ../patches/kotlinc-path.patch ] ++ jpsBootstrapPatches;
+    postPatch = ''
+      sed -i 's|KOTLIN_PATH_HERE|${kotlinc}|' src/main/java/org/jetbrains/jpsBootstrap/KotlinCompiler.kt
+    '';
     buildPhase = ''
       runHook preBuild
 
@@ -116,6 +134,7 @@ let
       cp "$BUILD_HOME/jps-bootstrap.classes.jar" $out/share/java/jps-bootstrap.jar
       cp -r "$BUILD_HOME/jps-bootstrap.out.lib" $out/share/java/jps-bootstrap-classpath
       makeWrapper ${jbr}/bin/java $out/bin/jps-bootstrap \
+        ${lib.concatMapStringsSep " " (flag: "--add-flags ${lib.escapeShellArg flag}") jpsBootstrapJavaFlags} \
         --add-flags "-cp $out/share/java/jps-bootstrap-classpath/'*' org.jetbrains.jpsBootstrap.JpsBootstrapMain"
 
       runHook postInstall
@@ -197,11 +216,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   ];
   repo = mvnRepo;
 
-  patches = [
-    ../patches/no-download.patch
-    ../patches/disable-sbom-generation.patch
-    ../patches/bump-jackson-core-in-source.patch
-  ];
+  patches =
+    [
+      noDownloadPatch
+      sbomPatch
+      jacksonPatch
+    ]
+    ++ extraPatches;
 
   # Regarding brokenPlugins.json:
   #  We provide an empty brokenPlugins.json because the original file is 2.8 MB in size and can't be reliably
@@ -214,7 +235,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     substituteInPlace \
       platform/build-scripts/src/org/jetbrains/intellij/build/kotlin/KotlinCompilerDependencyDownloader.kt \
       --replace-fail 'JPS_PLUGIN_CLASSPATH_HERE' '${kotlin-jps-plugin-classpath}' \
-      --replace-fail 'KOTLIN_PATH_HERE' '${kotlin'}'
+      --replace-fail 'KOTLIN_PATH_HERE' '${kotlinc}'
     substituteInPlace \
       platform/build-scripts/downloader/src/org/jetbrains/intellij/build/dependencies/JdkDownloader.kt \
       --replace-fail 'JDK_PATH_HERE' '${jbr}/lib/openjdk'
@@ -228,18 +249,38 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       build/deps/src/org/jetbrains/intellij/build/impl/BundledMavenDownloader.kt \
       --replace-fail 'MAVEN_REPO_HERE' '${mvnRepo}/.m2/repository/' \
       --replace-fail 'MAVEN_PATH_HERE' '${maven}/maven'
+    ${lib.optionalString (jcefArchive != null) ''
+      substituteInPlace \
+        platform/build-scripts/src/org/jetbrains/intellij/build/CommunityRepositoryModules.kt \
+        --replace-fail 'JCEF_ARCHIVE_HERE' '${jcefArchive}'
+    ''}
+    ${lib.optionalString (composeCompilerPlugin != null) ''
+      find . -type f -name '*.iml' -exec sed -i \
+        's|$KOTLIN_COMPOSE_COMPILER_PLUGIN$|${composeCompilerPlugin}|g' {} +
+    ''}
 
     echo '${buildNumber}.SNAPSHOT' > build.txt
+    ${extraPostPatch}
   '';
 
   configurePhase = ''
     runHook preConfigure
 
-    ln -s "$repo"/.m2 ../.m2
+    ${
+      if copyM2Repo then
+        ''
+          cp -r "$repo"/.m2 ../.m2
+          chmod -R +w ../.m2
+        ''
+      else
+        ''
+          ln -s "$repo"/.m2 ../.m2
+        ''
+    }
     export JPS_BOOTSTRAP_COMMUNITY_HOME="$PWD"
     jps-bootstrap \
       -Dbuild.number=${buildNumber} \
-      -Djps.kotlin.home=${kotlin'} \
+      -Djps.kotlin.home=${kotlinc} \
       -Dintellij.build.target.os=linux \
       -Dintellij.build.target.arch=x64 \
       -Dintellij.build.skip.build.steps=mac_artifacts,mac_dmg,mac_sit,windows_exe_installer,windows_sign,repair_utility_bundle_step,sources_archive \
@@ -255,7 +296,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook preBuild
 
     java \
-      -Djps.kotlin.home=${kotlin'} \
+      -Djps.kotlin.home=${kotlinc} \
       "@java_argfile"
 
     runHook postBuild

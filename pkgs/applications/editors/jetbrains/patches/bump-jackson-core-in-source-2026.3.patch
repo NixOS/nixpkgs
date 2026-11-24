@@ -1,0 +1,10 @@
+--- a/build/dependencies/dependencies.properties
++++ b/build/dependencies/dependencies.properties
+@@ -1,6 +1,6 @@
+ # The file is automatically updated. Comments and empty lines will be removed. Entries are sorted by key.
+ bundledMaven3Libraries=org.apache.maven.archetype:archetype-common:2.2,org.apache.maven.archetype:archetype-catalog:2.2,org.apache.maven.archetype:archetype-descriptor:2.2,org.apache.maven.shared:maven-dependency-tree:1.2,org.sonatype.nexus:nexus-indexer:3.0.4,org.sonatype.nexus:nexus-indexer-artifact:1.0.1,org.apache.lucene:lucene-core:2.4.1
+-bundledMavenTelemetryLibraries=com.fasterxml.jackson.core:jackson-core:2.16.0
++bundledMavenTelemetryLibraries=com.fasterxml.jackson.core:jackson-core:2.22.2
+ bundledMavenVersion=3.9.16
+ debuggerAgent=1.2
+ gradleApiVersion=9.8.0
