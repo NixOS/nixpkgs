@@ -22,7 +22,12 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-UWJmxirRJJqvL4ZSjBvFepeKVvL77+WMp4YdZuFNEkg=";
   };
 
-  patches = [ ./darwin-fixes.patch ];
+  patches = [
+    ./darwin-fixes.patch
+    # CMake 4.5 rejects the extra arguments to install(CODE)
+    # https://github.com/Keriew/augustus/pull/1989
+    ./fix-macos-install-cmake-4.5.patch
+  ];
 
   nativeBuildInputs = [
     cmake
