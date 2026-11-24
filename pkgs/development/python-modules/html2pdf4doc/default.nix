@@ -12,14 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "html2pdf4doc";
-  version = "0.0.35";
+  version = "0.0.36";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "strictdoc-project";
     repo = "html2pdf4doc_python";
     tag = finalAttrs.version;
-    hash = "sha256-xq2j39OyBoQPQGpMn7xQiRGq8sBkrqqL8mCjEzSdLAA=";
+    hash = "sha256-gIF9Dt1Wcl+Sp3+v2jMP+zCHiRehxfXR1d+4Egj0fhA=";
   };
 
   build-system = [
