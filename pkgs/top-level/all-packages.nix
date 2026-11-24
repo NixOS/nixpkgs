@@ -2113,8 +2113,6 @@ with pkgs;
   };
   logstash = logstash7;
 
-  lagrange-tui = lagrange.override { enableTUI = true; };
-
   matrix-synapse-plugins = recurseIntoAttrs matrix-synapse-unwrapped.plugins;
 
   md2gemini = with python3.pkgs; toPythonApplication md2gemini;
