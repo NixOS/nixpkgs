@@ -70,6 +70,15 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dfile.encoding=utf-8"
   ];
 
+  gradleUpdateScript = ''
+    runHook preBuild
+    runHook preGradleUpdate
+
+    TARGETARCH=amd64 gradle nixDownloadDeps
+    TARGETARCH=arm64 gradle nixDownloadDeps
+    runHook postGradleUpdate
+  '';
+
   preConfigure = ''
     cp -r ${finalAttrs.frontend} frontend-dist
     chmod -R u+w frontend-dist
