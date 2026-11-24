@@ -59,6 +59,8 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "High level library for the Linux Kernel seccomp filter";
     mainProgram = "scmp_sys_resolver";
