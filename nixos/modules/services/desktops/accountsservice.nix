@@ -54,6 +54,30 @@
         (
           lib.optionalAttrs (!config.users.mutableUsers) {
             environment.NIXOS_USERS_PURE = "true";
+
+            # The upstream unit grants write access to /etc and /home for the
+            # shadow tools, and every method that runs them is disabled here.
+            serviceConfig = {
+              ReadWritePaths = [ "" ];
+              ProtectHome = "read-only";
+              # SetIconFile reads the icon as the calling user.
+              CapabilityBoundingSet = [
+                "CAP_SETUID"
+                "CAP_SETGID"
+              ];
+              NoNewPrivileges = true;
+              RestrictSUIDSGID = true;
+              ProtectClock = true;
+              ProtectHostname = true;
+              ProtectKernelLogs = true;
+              SystemCallFilter = [
+                ""
+                "@system-service"
+                "~@privileged @resources"
+                "@setuid"
+              ];
+              SystemCallErrorNumber = "EPERM";
+            };
           }
         );
   };
