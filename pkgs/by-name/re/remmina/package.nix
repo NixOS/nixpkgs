@@ -58,6 +58,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-3YSgr2yXKK2USsMXFshKmeVPdJLW9xXlaXPajZltM8Q=";
   };
 
+  patches = [
+    ./darwin-no-gdk-wayland-display.patch
+  ];
+
   nativeBuildInputs = [
     cmake
     ninja
