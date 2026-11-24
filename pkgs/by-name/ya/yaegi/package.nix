@@ -43,7 +43,7 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/traefik/yaegi";
     changelog = "https://github.com/traefik/yaegi/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ kamadorueda ];
     # The last successful Darwin Hydra build was in 2023
     broken = stdenv.hostPlatform.isDarwin;
   };
