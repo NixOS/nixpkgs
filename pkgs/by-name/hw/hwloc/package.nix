@@ -33,6 +33,12 @@ stdenv.mkDerivation (finalAttrs: {
     "--localstatedir=/var"
   ];
 
+  # Although we use a tagged version upstream has rc/alpha tags set.
+  # This fixes the contents of hwloc.pc
+  postPatch = ''
+    sed -i -e 's/greek=.*/greek=/' -e 's/snapshot=1/snapshot=0/' VERSION
+  '';
+
   # XXX: libx11 is not directly needed, but needed as a propagated dep of Cairo.
   nativeBuildInputs = [
     autoreconfHook
