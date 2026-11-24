@@ -1,7 +1,7 @@
 {
   lib,
   fetchFromGitea,
-  buildGo127Module,
+  buildGoModule,
   testers,
   gitea-actions-runner,
   nixosTests,
