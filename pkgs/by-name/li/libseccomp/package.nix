@@ -8,6 +8,7 @@
   gperf,
   nix-update-script,
   python3Packages,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -29,6 +30,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ gperf ];
   buildInputs = [ getopt ];
+
+  strictDeps = true;
 
   postPatch = ''
     patchShebangs .
@@ -54,8 +57,11 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
     tests = {
       inherit (python3Packages) seccomp;
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     };
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "High level library for the Linux Kernel seccomp filter";
@@ -74,5 +80,6 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     maintainers = with lib.maintainers; [ thoughtpolice ];
     identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "libseccomp_project" finalAttrs.version;
+    pkgConfigModules = [ "libseccomp" ];
   };
 })
