@@ -64,6 +64,9 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     # prevent duplicate tracks when filtering by artist on M2M relations
     ./fix-artist-tracks-count-distinct.patch
 
+    # avoid duplicate albums and tracks in Subsonic getAlbumList2 and getSongsByGenre
+    ./fix-subsonic-duplicates.patch
+
     # fix test failures in sandboxed build environment (pyfakefs for media root)
     ./fix-root-filesystem-tests.patch
 
@@ -193,7 +196,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
       export CACHE_URL="redis://127.0.0.1:$redisTestPort/0"
 
       python -m django migrate --no-input
-      python -m pytest tests/music
+      python -m pytest tests/music tests/subsonic
     )
 
     runHook postCheck

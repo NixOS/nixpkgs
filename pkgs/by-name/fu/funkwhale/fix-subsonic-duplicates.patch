@@ -1,0 +1,181 @@
+diff --git a/funkwhale_api/subsonic/views.py b/funkwhale_api/subsonic/views.py
+index ad182e738..412c77683 100644
+--- a/funkwhale_api/subsonic/views.py
++++ b/funkwhale_api/subsonic/views.py
+@@ -8,7 +8,7 @@ import functools
+ from django.conf import settings
+ from django.contrib.contenttypes.models import ContentType
+ from django.db import transaction
+-from django.db.models import Count, Prefetch, Q
++from django.db.models import Count, Exists, OuterRef, Prefetch, Q, Subquery
+ from django.utils import timezone
+ from rest_framework import exceptions
+ from rest_framework import permissions as rest_permissions
+@@ -494,18 +494,29 @@ class SubsonicViewSet(viewsets.GenericViewSet):
+             size = 50
+ 
+         genre = data.get("genre")
++        track_ct = ContentType.objects.get_for_model(music_models.Track)
++        album_ct = ContentType.objects.get_for_model(music_models.Album)
++        track_tags = tags_models.TaggedItem.objects.filter(
++            content_type=track_ct, object_id=OuterRef("pk"), tag__name__iexact=genre
++        )
++        track_artist_tags = music_models.ArtistCredit.objects.filter(
++            tracks=OuterRef("pk"), artist__tagged_items__tag__name__iexact=genre
++        )
++        album_tags = tags_models.TaggedItem.objects.filter(
++            content_type=album_ct, object_id=OuterRef("album_id"), tag__name__iexact=genre
++        )
++        album_artist_tags = music_models.ArtistCredit.objects.filter(
++            albums=OuterRef("album_id"), artist__tagged_items__tag__name__iexact=genre
++        )
+         queryset = (
+             queryset.playable_by(actor)
+             .filter(
+-                Q(tagged_items__tag__name__iexact=genre)
+-                | Q(artist_credit__artist__tagged_items__tag__name__iexact=genre)
+-                | Q(
+-                    artist_credit__albums__artist_credit__artist__tagged_items__tag__name__iexact=genre
+-                )
+-                | Q(artist_credit__albums__tagged_items__tag__name__iexact=genre)
++                Exists(track_tags)
++                | Exists(track_artist_tags)
++                | Exists(album_tags)
++                | Exists(album_artist_tags)
+             )
+             .prefetch_related("uploads")
+-            .distinct()
+             .order_by("-creation_date")[offset : offset + size]
+         )
+         data = {
+@@ -541,33 +552,41 @@ class SubsonicViewSet(viewsets.GenericViewSet):
+             )
+             .with_tracks_count()
+             .with_duration()
+-            .order_by("artist_credit__artist__name")
+         )
+         data = request.GET or request.POST
+-        filterset = filters.AlbumList2FilterSet(data, queryset=queryset)
+-        queryset = filterset.qs
+         actor = utils.get_actor_from_request(request)
+         queryset = queryset.playable_by(actor)
+         type = data.get("type", "alphabeticalByArtist")
+ 
+         if type == "alphabeticalByArtist":
+-            queryset = queryset.order_by("artist_credit__artist__name")
++            first_artist = (
++                music_models.Artist.objects.filter(artist_credit__albums=OuterRef("pk"))
++                .order_by("artist_credit__index", "name")
++                .values("name")[:1]
++            )
++            queryset = queryset.annotate(
++                _first_artist_name=Subquery(first_artist)
++            ).order_by("_first_artist_name", "title")
+         elif type == "starred":
+-            queryset = queryset.filter(tracks__track_favorites__isnull=False)
++            queryset = queryset.filter(tracks__track_favorites__isnull=False).distinct()
+         elif type == "random":
+             queryset = queryset.order_by("?")
+         elif type == "alphabeticalByName" or not type:
+-            queryset = queryset.order_by("artist_credit__artist__name")
++            queryset = queryset.order_by("title")
+         elif type == "recent" or not type:
+             queryset = queryset.exclude(release_date=None).order_by("-release_date")
+         elif type == "newest" or not type:
+             queryset = queryset.order_by("-creation_date")
+         elif type == "byGenre" and data.get("genre"):
+             genre = data.get("genre")
+-            queryset = queryset.filter(
+-                Q(tagged_items__tag__name__iexact=genre)
+-                | Q(artist_credit__artist__tagged_items__tag__name__iexact=genre)
++            album_ct = ContentType.objects.get_for_model(music_models.Album)
++            album_tags = tags_models.TaggedItem.objects.filter(
++                content_type=album_ct, object_id=OuterRef("pk"), tag__name__iexact=genre
++            )
++            artist_tags = music_models.ArtistCredit.objects.filter(
++                albums=OuterRef("pk"), artist__tagged_items__tag__name__iexact=genre
+             )
++            queryset = queryset.filter(Exists(album_tags) | Exists(artist_tags))
+         elif type == "byYear":
+             try:
+                 boundaries = [
+diff --git a/tests/subsonic/test_views.py b/tests/subsonic/test_views.py
+index 7e560b821..1f15ab987 100644
+--- a/tests/subsonic/test_views.py
++++ b/tests/subsonic/test_views.py
+@@ -651,6 +651,48 @@ def test_get_album_list2_by_year(params, expected, db, logged_in_api_client, fac
+     }
+ 
+ 
++def test_get_album_list2_alphabetical_by_artist_no_duplicates(
++    db, logged_in_api_client, factories
++):
++    url = reverse("api:subsonic:subsonic-get_album_list2")
++    artist1 = factories["music.Artist"](name="Avicii")
++    artist2 = factories["music.Artist"](name="Rita Ora")
++    credit1 = factories["music.ArtistCredit"](artist=artist1)
++    credit2 = factories["music.ArtistCredit"](artist=artist2)
++    album = factories["music.Album"](title="AVICI (01)", playable=True)
++    album.artist_credit.set([credit1, credit2])
++
++    response = logged_in_api_client.get(
++        url, {"f": "json", "type": "alphabeticalByArtist"}
++    )
++
++    assert response.status_code == 200
++    albums = response.data["albumList2"]["album"]
++    assert len(albums) == 1
++    assert albums[0]["id"] == album.id
++
++
++def test_get_album_list2_alphabetical_by_name(db, logged_in_api_client, factories):
++    url = reverse("api:subsonic:subsonic-get_album_list2")
++    artist1 = factories["music.Artist"](name="Avicii")
++    artist2 = factories["music.Artist"](name="Rita Ora")
++    credit1 = factories["music.ArtistCredit"](artist=artist1)
++    credit2 = factories["music.ArtistCredit"](artist=artist2)
++    album_b = factories["music.Album"](title="B Album", playable=True)
++    album_b.artist_credit.set([credit1, credit2])
++    album_a = factories["music.Album"](title="A Album", playable=True)
++    album_a.artist_credit.set([credit1])
++
++    response = logged_in_api_client.get(
++        url, {"f": "json", "type": "alphabeticalByName"}
++    )
++
++    assert response.status_code == 200
++    albums = response.data["albumList2"]["album"]
++    assert len(albums) == 2
++    assert [a["id"] for a in albums] == [album_a.id, album_b.id]
++
++
+ @pytest.mark.parametrize("f", ["json"])
+ @pytest.mark.parametrize(
+     "tags_field",
+@@ -695,6 +737,26 @@ def test_get_songs_by_genre_offset(logged_in_api_client, factories):
+     assert response.data == expected
+ 
+ 
++def test_get_songs_by_genre_no_duplicates(db, logged_in_api_client, factories):
++    url = reverse("api:subsonic:subsonic-get_songs_by_genre")
++    artist1 = factories["music.Artist"](set_tags=["Rock"])
++    artist2 = factories["music.Artist"](set_tags=["Rock"])
++    credit1 = factories["music.ArtistCredit"](artist=artist1)
++    credit2 = factories["music.ArtistCredit"](artist=artist2)
++    album = factories["music.Album"](set_tags=["Rock"])
++    album.artist_credit.set([credit1, credit2])
++
++    track = factories["music.Track"](album=album, playable=True, set_tags=["Rock"])
++    track.artist_credit.set([credit1, credit2])
++
++    response = logged_in_api_client.get(url, {"f": "json", "genre": "rock"})
++
++    assert response.status_code == 200
++    songs = response.data["songsByGenre"]["song"]
++    assert len(songs) == 1
++    assert songs[0]["id"] == track.id
++
++
+ @pytest.mark.parametrize("f", ["json"])
+ def test_search3(f, db, logged_in_api_client, factories):
+     url = reverse("api:subsonic:subsonic-search3")
