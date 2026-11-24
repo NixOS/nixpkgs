@@ -10,7 +10,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "lektricowifi";
   version = "0.2";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Lektrico";
     repo = "lektricowifi";
-    tag = "v.${version}";
+    tag = "v.${finalAttrs.version}";
     hash = "sha256-lAncBgk0/j35NthaOc9ZMrmRkBtiqELYyPA5Tvju8c8=";
   };
 
@@ -47,4 +47,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})
