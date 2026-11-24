@@ -87,6 +87,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Linear Algebra PACKage";
     homepage = "http://www.netlib.org/lapack/";
