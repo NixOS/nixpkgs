@@ -10,7 +10,7 @@ let
   testData = fetchFromGitHub {
     owner = "nlohmann";
     repo = "json_test_data";
-    rev = "v3.1.0";
+    tag = "v3.1.0";
     hash = "sha256-bG34W63ew7haLnC82A3lS7bviPDnApLipaBjJAjLcVk=";
   };
 in
@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "nlohmann";
     repo = "json";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-cECvDOLxgX7Q9R3IE86Hj9JJUxraDQvhoyPDF03B2CY=";
   };
 
