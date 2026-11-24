@@ -17,13 +17,13 @@ stdenv.mkDerivation rec {
 
   # NOTE: Don't update manually. Use passthru.updateScript on a Mac with XCode
   # installed.
-  version = "1.1.1.1";
+  version = "1.3.1.1";
 
   src = fetchFromGitHub {
     owner = "GPGTools";
     repo = "pinentry";
     rev = "v${version}";
-    sha256 = "sha256-QnDuqFrI/U7aZ5WcOCp5vLE+w59LVvDGOFNQy9fSy70=";
+    sha256 = "sha256-iVd8Gy8XhQOHCSY7caP2QCgs/MufA+p9RN2pNilrJ9E=";
   };
 
   patches = [
@@ -35,8 +35,6 @@ stdenv.mkDerivation rec {
     cp -r ${./mac/Main.nib} macosx/Main.nib
     cp -r ${./mac/Pinentry.nib} macosx/Pinentry.nib
     chmod -R u+w macosx/*.nib
-    # pinentry_mac requires updated macros to correctly detect v2 API support in libassuan 3.x.
-    cp '${lib.getDev libassuan}/share/aclocal/libassuan.m4' m4/libassuan.m4
     substituteInPlace macosx/copyInfoPlist.sh \
       --replace-fail "/usr/libexec/PlistBuddy" "PlistBuddy"
   '';
