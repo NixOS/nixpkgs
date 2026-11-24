@@ -31,7 +31,6 @@
   flask-login,
   flask-principal,
   flask-wtf,
-  libpass,
   markupsafe,
   passlib,
   importlib-resources,
@@ -63,6 +62,10 @@ buildPythonPackage rec {
 
   build-system = [ flit-core ];
 
+  pythonRemoveDeps = [
+    "libpass" # replaced with passlib
+  ];
+
   dependencies = [
     email-validator
     flask
@@ -70,7 +73,7 @@ buildPythonPackage rec {
     flask-principal
     flask-wtf
     markupsafe
-    libpass
+    passlib
     wtforms
   ];
 

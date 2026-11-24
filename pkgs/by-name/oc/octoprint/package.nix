@@ -103,7 +103,7 @@ let
               flask-login
               flask-limiter
               frozendict
-              libpass
+              passlib
               limits
               markdown
               markupsafe
