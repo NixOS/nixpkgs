@@ -7,12 +7,13 @@
   installShellFiles,
   pkg-config,
   openssl,
+  perl,
   libgit2,
   zstd,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "geode-cli";
-  version = "3.9.0";
+  version = "4.0.2";
 
   geode = "${stdenv.hostPlatform.emulator buildPackages} $out/bin/geode${stdenv.hostPlatform.extensions.executable}";
 
@@ -20,14 +21,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "geode-sdk";
     repo = "cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mRvN5kp2AtOSQDPWjk3DBhWgMPXzuATjdu+CPGDHY3E=";
+    hash = "sha256-ygfBAIioXoA5IH4vQb5wFNSBA7ODnJiI9/reIQ5tR3M=";
   };
 
-  cargoHash = "sha256-gfJXXRv0jofwjf/pmrIOD7CWQk1b/xecAW8ptTC9K6k=";
+  cargoHash = "sha256-pCyChlSfmI7rXrgVTQ4t0hdmTuxgY4LAQTAv7/56Qlk=";
 
   nativeBuildInputs = [
     pkg-config
     installShellFiles
+    perl
   ];
 
   buildInputs = [
