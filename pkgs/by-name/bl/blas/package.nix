@@ -191,6 +191,9 @@ stdenv.mkDerivation {
     checkPhaseThreadLimitHook
   ];
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   meta = (blasProvider'.meta or { }) // {
     description = "${lib.getName blasProvider} with just the BLAS C and FORTRAN ABI";
   };
