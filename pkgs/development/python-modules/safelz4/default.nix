@@ -15,7 +15,6 @@ buildPythonPackage (finalAttrs: {
   pname = "safelz4";
   version = "0.2.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "LVivona";
