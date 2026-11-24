@@ -2,6 +2,9 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  pkg-config,
+  sqlite,
+  zstd,
   nix-update-script,
 }:
 
@@ -19,6 +22,13 @@ buildGoModule (finalAttrs: {
   };
 
   vendorHash = "sha256-fjOIp2LUBaAPAPMxU2T+qbIQZgmVa0vNPYzW2hOsBr8=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [
+    sqlite
+    zstd
+  ];
 
   passthru.updateScript = nix-update-script {
     extraArgs = [ "--version=branch" ];
