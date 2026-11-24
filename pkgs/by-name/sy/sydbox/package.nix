@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitLab,
+  getconf,
   libseccomp,
   mandoc,
   nix-update-script,
@@ -30,6 +31,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-hrNhWlBDUPV52ge4sRKSsqS06CpVL36mMkvYS7iOTpM=";
 
   nativeBuildInputs = [
+    getconf
     mandoc
     pkg-config
     scdoc
@@ -43,6 +45,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--package=syd"
     "--package=pandora_box"
   ];
+
+  buildFeatures = [ "syd/oci" ];
 
   # pandora's integration tests expect test binaries directly in target/
   postPatch = ''
