@@ -8,7 +8,7 @@
   nix-update-script,
 }:
 
-buildGo127Module (finalAttrs: {
+buildGoModule (finalAttrs: {
   pname = "gitea-actions-runner";
   version = "5.4.0";
 
