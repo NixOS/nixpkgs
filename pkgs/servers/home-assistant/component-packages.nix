@@ -7319,13 +7319,14 @@
         hassil
         home-assistant-intents
         ifaddr
+        lighthouse-ble
         mutagen
         pymicro-vad
         pysmlight
         pyspeex-noise
         serialx
         zeroconf
-      ]; # missing inputs: lighthouse-ble
+      ];
     "steinway_lyngdorf" =
       ps: with ps; [
       ];
@@ -9868,6 +9869,7 @@
     "statsd"
     "steam_online"
     "steamist"
+    "steamvr_base_station"
     "stiebel_eltron"
     "stookwijzer"
     "stream"

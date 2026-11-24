@@ -10066,6 +10066,8 @@ self: super: with self; {
 
   lightgbm = callPackage ../development/python-modules/lightgbm { };
 
+  lighthouse-ble = callPackage ../development/python-modules/lighthouse-ble { };
+
   lightify = callPackage ../development/python-modules/lightify { };
 
   lightning = callPackage ../development/python-modules/lightning { };
