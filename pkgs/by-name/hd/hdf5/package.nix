@@ -2,24 +2,22 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
-  fixDarwinDylibNames,
-  removeReferencesTo,
+  pkg-config,
+  ninja,
+  gfortran,
+  mpi,
+  mpiCheckPhaseHook,
+  jdk,
+  libaec,
+  zlib,
+  testers,
+  ctestCheckHook,
+  szipSupport ? true,
   cppSupport ? true,
   fortranSupport ? false,
-  gfortran,
-  zlibSupport ? true,
-  zlib,
-  szipSupport ? true,
-  libaec,
   mpiSupport ? false,
-  mpi,
-  enableShared ? !stdenv.hostPlatform.isStatic,
-  enableStatic ? stdenv.hostPlatform.isStatic,
   javaSupport ? false,
-  jdk,
-  apiVersion ? null,
   threadsafe ? false,
   ros3Support ? false,
   curl,
@@ -32,15 +30,30 @@
   aws-c-compression,
   aws-checksums,
   s2n-tls,
-  python3,
+  apiVersion ? null,
 }:
 
-let
-  inherit (lib) optional optionals;
-in
+# cpp and mpi options are mutually exclusive
+# "-DALLOW_UNSUPPORTED=ON" could be used to force the build.
+assert !cppSupport || !mpiSupport;
 
+# See https://github.com/HDFGroup/hdf5/blob/develop/CMakeLists.txt
+# for valid versions
+assert lib.elem apiVersion [
+  "v16"
+  "v18"
+  "v110"
+  "v112"
+  "v114"
+  "v200"
+  null
+];
+let
+  enableShared = !stdenv.hostPlatform.isStatic;
+  enableStatic = stdenv.hostPlatform.isStatic;
+in
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.14.6";
+  version = "2.2.0-unstable-2026-11-04";
   pname =
     "hdf5"
     + lib.optionalString cppSupport "-cpp"
@@ -51,33 +64,67 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "HDFGroup";
     repo = "hdf5";
-    tag = "hdf5_${finalAttrs.version}";
-    hash = "sha256-mJTax+VWAL3Amkq3Ij8fxazY2nfpMOTxYMUQlTvY/rg=";
+    rev = "3447b0b751c346c14098a2d72d2f2aec38c8b8a0";
+    hash = "sha256-JwEfwMn4CmLPI/4T41U4h4FaFMegYOcZwb2MU4klCQ8=";
   };
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   patches = [
-    (fetchpatch {
-      name = "reproducible-build.patch";
-      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/hdf5/-/raw/721d33408db902ff738db18f1e977611d49b4ba8/hdf5-make-reproducible.patch";
-      hash = "sha256-Z31dCsLjYpqjoGXooOXI81EPjPwyTK8890xCENTh8aM=";
-    })
+    ./reproducible-build.patch
   ];
 
-  strictDeps = true;
-  __structuredAttrs = true;
+  # https://github.com/HDFGroup/hdf5/issues/6791
+  postPatch = ''
+    substituteInPlace src/CMakeLists.txt fortran/src/CMakeLists.txt c++/src/CMakeLists.txt hl/c++/src/CMakeLists.txt hl/fortran/src/CMakeLists.txt hl/src/CMakeLists.txt \
+      --replace-fail '\''${exec_prefix}/''${HDF5_INSTALL_LIB_DIR}' '"''${HDF5_INSTALL_LIB_DIR}"' \
+      --replace-fail '\''${prefix}/''${HDF5_INSTALL_INCLUDE_DIR}' '"''${HDF5_INSTALL_INCLUDE_DIR}"'
+
+    # HDF5_INSTALL_INCLUDE_DIR is absolute (CMAKE_INSTALL_INCLUDEDIR), so prefixing
+    # it with $<INSTALL_PREFIX> yields ''${_IMPORT_PREFIX}//nix/store/... in the
+    # exported targets. INSTALL_INTERFACE handles relative paths on its own.
+    # The same applies to HDF5_INSTALL_MODULE_DIR (Fortran modules), which is
+    # derived from HDF5_INSTALL_INCLUDE_DIR.
+    for dir in HDF5_INSTALL_INCLUDE_DIR HDF5_INSTALL_MODULE_DIR; do
+      for f in $(grep -rlF --include=CMakeLists.txt "\$<INSTALL_PREFIX>/\''${$dir}" .); do
+        substituteInPlace "$f" \
+          --replace-fail "\$<INSTALL_PREFIX>/\''${$dir}" "\''${$dir}"
+      done
+    done
+
+    # The hardcoded relative "include" is resolved against $out, which has no headers.
+    for f in $(grep -rlF --include=CMakeLists.txt 'INCLUDES DESTINATION include' .); do
+      substituteInPlace "$f" \
+        --replace-fail 'INCLUDES DESTINATION include' "INCLUDES DESTINATION \''${HDF5_INSTALL_INCLUDE_DIR}"
+    done
+
+    # The install prefix variables are a mess and break with abolsute paths,
+    # as well as don't seem to know what is what.
+    #
+    # I'm not confident this is comepletly correct yet, but needs something to
+    # use it.
+    substituteInPlace config/install/hdf5-config.cmake.in \
+      --replace-fail '"@PACKAGE_CURRENT_BUILD_DIR@/bin"' '"${placeholder "bin"}"' \
+      --replace-fail "@PACKAGE_SHARE_INSTALL_DIR@" "${placeholder "dev"}/lib/cmake/hdf5"
+  '';
 
   passthru = {
+    tests = {
+      cmake = testers.hasCmakeConfigModules {
+        package = finalAttrs.finalPackage.dev;
+        moduleNames = [
+          "hdf5"
+        ];
+      };
+    };
     inherit
+      szipSupport
       cppSupport
       fortranSupport
-      zlibSupport
-      zlib
-      szipSupport
-      libaec
       mpiSupport
       mpi
       ;
-    fortran = gfortran;
   };
 
   outputs = [
@@ -87,17 +134,21 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
-    removeReferencesTo
     cmake
+    pkg-config
+    ninja
+    ctestCheckHook
   ]
-  ++ optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames
-  ++ optional fortranSupport gfortran;
+  ++ lib.optional fortranSupport gfortran
+  # FindMPI locates MPI through the mpicc compiler wrapper
+  ++ lib.optionals mpiSupport [
+    mpi
+    mpiCheckPhaseHook
+  ];
 
   buildInputs =
-    optional fortranSupport gfortran
-    ++ optional szipSupport libaec
-    ++ optional javaSupport jdk
-    ++ optionals ros3Support [
+    lib.optional javaSupport jdk
+    ++ lib.optionals ros3Support [
       curl
       aws-c-s3
       aws-c-auth
@@ -110,55 +161,42 @@ stdenv.mkDerivation (finalAttrs: {
       s2n-tls
     ];
 
-  propagatedBuildInputs = optional zlibSupport zlib ++ optional mpiSupport mpi;
+  # Need to propagate cmake deps
+  propagatedBuildInputs = [
+    zlib
+  ]
+  ++ lib.optional szipSupport libaec
+  ++ lib.optional mpiSupport mpi;
 
   cmakeFlags = [
-    "-DHDF5_INSTALL_CMAKE_DIR=${placeholder "dev"}/lib/cmake"
+    # https://github.com/HDFGroup/hdf5/blob/fe7f2724301634e7d66cd2f938d4660332c4a803/config/cmake/MemcheckCacheinit.cmake#L16
+    # https://github.com/HDFGroup/hdf5/blob/fe7f2724301634e7d66cd2f938d4660332c4a803/CMakeBuildOptions.cmake#L3
+    (lib.cmakeBool "HDF5_USE_GNU_DIRS" true)
     (lib.cmakeBool "BUILD_STATIC_LIBS" enableStatic)
+    (lib.cmakeBool "BUILD_STATIC_EXECS" enableStatic)
+    (lib.cmakeBool "HDF5_ONLY_SHARED_LIBS" enableShared)
     (lib.cmakeBool "BUILD_SHARED_LIBS" enableShared)
+    (lib.cmakeBool "HDF5_ENABLE_SZIP_SUPPORT" szipSupport)
+    (lib.cmakeBool "HDF5_ENABLE_ZLIB_SUPPORT" true)
+    (lib.cmakeBool "HDF5_BUILD_WITH_INSTALL_NAME" stdenv.hostPlatform.isDarwin)
     (lib.cmakeBool "HDF5_BUILD_CPP_LIB" cppSupport)
     (lib.cmakeBool "HDF5_BUILD_FORTRAN" fortranSupport)
-    (lib.cmakeBool "HDF5_ENABLE_SZIP_SUPPORT" szipSupport)
     (lib.cmakeBool "HDF5_ENABLE_PARALLEL" mpiSupport)
     (lib.cmakeBool "HDF5_BUILD_JAVA" javaSupport)
     (lib.cmakeBool "HDF5_ENABLE_THREADSAFE" threadsafe)
-    (lib.cmakeBool "HDF5_BUILD_HL_LIB" (!threadsafe))
-    (lib.cmakeBool "HDF5_ENABLE_NONSTANDARD_FEATURE_FLOAT16" true)
+    (lib.cmakeBool "HDF5_BUILD_HL_LIB" (!threadsafe)) # high-level API and threadsafe is unsupported
     (lib.cmakeBool "HDF5_ENABLE_ROS3_VFD" ros3Support)
+
+    # broken in nixpkgs since around 1.14.3 -> 1.14.4.3
+    # https://github.com/HDFGroup/hdf5/issues/4208#issuecomment-2098698567
+    (lib.cmakeBool "HDF5_ENABLE_NONSTANDARD_FEATURE_FLOAT16" (
+      with stdenv.hostPlatform; !(isDarwin && isx86_64)
+    ))
   ]
-  ++ lib.optional (apiVersion != null) (lib.cmakeFeature "HDF5_DEFAULT_API_VERSION" apiVersion);
+  ++ lib.optional (apiVersion != null) (lib.cmakeFeature "HDF5_DEFAULT_API_VERSION" apiVersion)
+  ++ lib.optional mpiSupport (lib.cmakeFeature "MPIEXEC_MAX_NUMPROCS" "2");
 
-  postInstall = ''
-    find "$out" -type f -exec remove-references-to -t ${stdenv.cc} '{}' +
-    moveToOutput 'bin/' "''${!outputBin}"
-    moveToOutput 'bin/h5cc' "''${!outputDev}"
-    moveToOutput 'bin/h5c++' "''${!outputDev}"
-    moveToOutput 'bin/h5fc' "''${!outputDev}"
-    moveToOutput 'bin/h5pcc' "''${!outputDev}"
-    moveToOutput 'bin/h5hlcc' "''${!outputDev}"
-    moveToOutput 'bin/h5hlc++' "''${!outputDev}"
-  ''
-  # The shared build creates binaries with -shared suffixes,
-  # so we remove these suffixes.
-  + lib.optionalString enableShared ''
-    pushd ''${!outputBin}/bin
-    for file in *-shared; do
-      mv "$file" "''${file%%-shared}"
-    done
-    popd
-  ''
-  + lib.optionalString fortranSupport ''
-    mv $out/mod/shared $dev/include
-    rm -r $out/mod
-
-    find "$out" -type f -exec remove-references-to -t ${gfortran} '{}' +
-  '';
-
-  enableParallelBuilding = true;
-
-  passthru.tests = {
-    inherit (python3.pkgs) h5py;
-  };
+  doCheck = true;
 
   meta = {
     description = "Data model, library, and file format for storing and managing data";
@@ -168,8 +206,11 @@ stdenv.mkDerivation (finalAttrs: {
       applications to evolve in their use of HDF5. The HDF5 Technology suite includes tools and
       applications for managing, manipulating, viewing, and analyzing data in the HDF5 format.
     '';
-    license = lib.licenses.bsd3; # Lawrence Berkeley National Labs BSD 3-Clause variant
-    maintainers = [ lib.maintainers.markuskowa ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
+      markuskowa
+      doronbehar
+    ];
     homepage = "https://www.hdfgroup.org/HDF5/";
     platforms = lib.platforms.unix;
   };
