@@ -7,6 +7,12 @@
   lib,
   hostPkgs,
   bootMode,
+  store,
+  withNix,
+  espSize,
+  firmware,
+  perlless,
+  verity,
   ...
 }:
 
@@ -39,8 +45,12 @@ let
               }
             ];
           };
+          amazonImage.store = store;
+          nix.enable = withNix;
+          amazonImage.espSize = lib.mkIf (espSize != null) espSize;
+          amazonImage.verity = verity;
           # The default variant already covers the channel.
-          nix.channel.enable = bootMode != "uefi";
+          nix.channel.enable = lib.mkIf (bootMode == "uefi") false;
           amazonImage.format = "qcow2";
 
           # In a NixOS test the serial console is occupied by the "backdoor"
@@ -72,13 +82,49 @@ let
 
           nixpkgs.pkgs = pkgs;
         }
-      ];
+      ]
+      ++ lib.optional perlless ../modules/profiles/perlless.nix;
     }).config;
 
   image = "${imageCfg.system.build.amazonImage}/${imageCfg.image.fileName}";
 
-  # Hashing the store takes a while, so one variant covers it.
-  verifyFlags = lib.optionalString (bootMode == "uefi") " --check-contents";
+  # Hashing the store takes a while, so cover each store layout once.
+  verifyFlags = lib.optionalString (
+    espSize == null && !perlless && (bootMode == "uefi" || store != "root")
+  ) " --check-contents";
+
+  # Without OVMF, QEMU boots with SeaBIOS.
+  firmwareArgs = lib.optionalString (firmware == "uefi") (
+    " -drive if=pflash,format=raw,unit=0,readonly=on,file=${hostPkgs.OVMF.firmware}"
+    + " -drive if=pflash,format=raw,unit=1,readonly=on,file=${hostPkgs.OVMF.variables}"
+  );
+
+  # Read-only UEFI and hybrid images boot a UKI under UEFI.
+  ukiImage = store == "erofs" && imageCfg.ec2.bootMode != "legacy-bios";
+  hybrid = imageCfg.ec2.bootMode == "uefi-preferred";
+  expectedBootLoaders =
+    lib.optionalAttrs (imageCfg.ec2.bootMode != "legacy-bios") {
+      uefi =
+        if ukiImage then
+          "uki"
+        else if imageCfg.boot.loader.systemd-boot.enable then
+          "systemd-boot"
+        else
+          "limine";
+    }
+    // lib.optionalAttrs (imageCfg.ec2.bootMode != "uefi") { legacy-bios = "limine"; };
+
+  storeFsType = (imageCfg.fileSystems."/nix/store" or imageCfg.fileSystems."/").fsType;
+
+  # Built in the VM to check that Nix can add to the store.
+  gcTest = ''
+    derivation {
+      name = "gc-test";
+      system = builtins.currentSystem;
+      builder = "''${builtins.storePath "${pkgs.runtimeShellPackage}"}/bin/sh";
+      args = [ "-c" "echo hello > $out" ];
+    }
+  '';
 
   registerImage = imageCfg.amazonImage.registerImage;
   expectedRegisterImage = lib.filterAttrs (
@@ -88,8 +134,23 @@ let
 in
 {
   _module.args.bootMode = lib.mkDefault null;
+  _module.args.store = lib.mkDefault "root";
+  _module.args.withNix = lib.mkDefault true;
+  _module.args.espSize = lib.mkDefault null;
+  _module.args.firmware = lib.mkDefault "uefi";
+  _module.args.perlless = lib.mkDefault false;
+  _module.args.verity = lib.mkDefault false;
 
-  name = "ec2-image" + lib.optionalString (bootMode == "uefi") "-systemd-boot";
+  name =
+    "ec2-image"
+    + lib.optionalString imageCfg.boot.loader.systemd-boot.enable "-systemd-boot"
+    + lib.optionalString (bootMode == "uefi" && store == "erofs" && !verity) "-uki"
+    + lib.optionalString (store != "root") "-${store}"
+    + lib.optionalString (!withNix) "-nonix"
+    + lib.optionalString (espSize != null) "-esp-${lib.toLower espSize}"
+    + lib.optionalString (firmware == "bios") "-bios"
+    + lib.optionalString perlless "-perlless"
+    + lib.optionalString verity "-verity";
   meta = {
     maintainers = with lib.maintainers; [
       roberth
@@ -222,11 +283,9 @@ in
               + f" -netdev 'user,id=ec2meta,net=169.0.0.0/8,guestfwd=tcp:169.254.169.254:80-cmd:${lib.getExe imdsServer} {metadata_dir}'"
           )
 
-          # nixosTests.ec2-nixops covers the BIOS boot of the same image.
           start_command = (
               f"{QEMU}/bin/qemu-kvm -m 1024"
-              + " -drive if=pflash,format=raw,unit=0,readonly=on,file=${hostPkgs.OVMF.firmware}"
-              + " -drive if=pflash,format=raw,unit=1,readonly=on,file=${hostPkgs.OVMF.variables}"
+              + "${firmwareArgs}"
               + f" -drive file={disk_image},if=virtio,werror=report"
               + vlan_net
               + metadata_net
@@ -234,6 +293,13 @@ in
           )
 
           return create_machine(start_command), metadata_dir
+
+      store = "${store}"
+      nix_enabled = ${if imageCfg.nix.enable then "True" else "False"}
+      verity = ${if verity then "True" else "False"}
+      uki_image = ${if ukiImage then "True" else "False"}
+      hybrid = ${if hybrid then "True" else "False"}
+      firmware = "${firmware}"
 
       def test_userdata_decompression(machine, user_data_path, compressed_data, format_name):
           """Test that compressed user-data is decompressed by fetch-ec2-metadata"""
@@ -326,7 +392,7 @@ in
               assert "Hello from test-instance" in ssh_result, f"Unexpected SSH result: {ssh_result}"
 
           with subtest("Basic EC2 functionality"):
-              machine.succeed("test -d /sys/firmware/efi")
+              machine.succeed("test ${if firmware == "uefi" then "-d" else "! -e"} /sys/firmware/efi")
               machine.succeed("findmnt ${imageCfg.boot.loader.efi.efiSysMountPoint}")
               machine.succeed("test $(stat -c %a ${imageCfg.boot.loader.efi.efiSysMountPoint}) = 700")
               # The test resizes the disk to 10G, so the root file system must grow past the image.
@@ -340,6 +406,22 @@ in
               assert isinstance(image_info["logical_bytes"], str), image_info
               assert image_info["disks"]["root"]["logical_bytes"] == image_info["logical_bytes"], image_info
               assert image_info["format"] == "QCOW2", image_info
+              assert image_info["store"] == store, image_info
+              assert image_info["boot_loaders"] == json.loads('${builtins.toJSON expectedBootLoaders}'), image_info
+              disk = {p["partlabel"]: p for p in json.loads(machine.succeed("lsblk -J -b -l -o PARTLABEL,PARTN,SIZE"))["blockdevices"]}
+              labels = {"esp": "ESP", "root": "nixos"}
+              if store != "root":
+                  labels["store"] = "nix-store"
+              if verity:
+                  labels["store-verity"] = "nix-store-verity"
+              assert {key: p["label"] for key, p in image_info["partitions"].items()} == labels, image_info
+              for key, label in labels.items():
+                  partition = image_info["partitions"][key]
+                  assert partition["number"] == disk[label]["partn"], (key, partition)
+                  # Root has grown since.
+                  if key != "root":
+                      assert partition["size"] == disk[label]["size"], (key, partition)
+              assert image_info["partitions"]["esp"]["size"] == int(machine.succeed("numfmt --from=iec ${imageCfg.amazonImage.espSize}")), image_info
               with open(f"{nix_support}/register-image.json") as f:
                   args = json.load(f)
               expected = json.loads('${builtins.toJSON expectedRegisterImage}')
@@ -351,14 +433,85 @@ in
               assert size_gib * 1024**3 >= int(image_info["logical_bytes"]), args
               assert size_gib >= ${toString (lib.head registerImage.BlockDeviceMappings).Ebs.VolumeSize}, args
 
+          with subtest("Nix store file system"):
+              fstype, options = machine.succeed("findmnt -n -o FSTYPE,OPTIONS /nix/store | tail -n1").split()
+              assert fstype == "${storeFsType}", fstype
+              assert "ro" in options.split(","), options
+              if store == "erofs":
+                  machine.fail("test -e /run/current-system/bin/switch-to-configuration")
+                  if nix_enabled:
+                      machine.succeed("echo test > /tmp/store-test")
+                      error = machine.fail("nix-store --add /tmp/store-test 2>&1")
+                      assert "Read-only file system" in error, error
+              if store == "erofs-overlay":
+                  machine.succeed("findmnt -n -o FSTYPE /nix/.ro-store | grep -qx erofs")
+                  machine.succeed("test -x /run/current-system/bin/switch-to-configuration")
+
+          if verity:
+              with subtest("dm-verity"):
+                  roothash = image_info["partitions"]["store"]["roothash"]
+                  status = machine.succeed("veritysetup status nix-store")
+                  assert re.search(rf"^\s*root hash:\s+{roothash}$", status, re.M), (status, image_info)
+                  machine.succeed("findmnt -n -o SOURCE /nix/store | tail -n1 | grep -qx /dev/mapper/nix-store")
+
+          if uki_image:
+              with subtest("UKI boot"):
+                  esp = "${imageCfg.boot.loader.efi.efiSysMountPoint}"
+                  efi_binaries = machine.succeed(f"find {esp} -iname '*.efi'").split()
+                  assert efi_binaries == [f"{esp}/EFI/BOOT/BOOT${lib.toUpper pkgs.stdenv.hostPlatform.efiArch}.EFI"], efi_binaries
+                  machine.fail(f"test -e {esp}/loader/entries")
+                  # Under BIOS, Limine reads the same command line from its own config.
+                  expected = "${imageCfg.boot.uki.settings.UKI.Cmdline}"
+                  if verity:
+                      expected += f" storehash={image_info['partitions']['store']['roothash']}"
+                  cmdline = machine.succeed("cat /proc/cmdline").strip()
+                  assert cmdline == expected, cmdline
+                  if firmware == "uefi":
+                      # systemd-stub, the UKI's EFI stub, sets StubInfo. Limine and systemd-boot set LoaderInfo.
+                      machine.succeed("test -e /sys/firmware/efi/efivars/StubInfo-4a67b082-0a4c-41cf-b6c7-440b29bb8c4f")
+                      machine.fail("test -e /sys/firmware/efi/efivars/LoaderInfo-4a67b082-0a4c-41cf-b6c7-440b29bb8c4f")
+                  if hybrid:
+                      machine.succeed(f"test -f {esp}/limine/limine-bios.sys")
+
+          with subtest("Clean boot"):
+              failed = machine.succeed("systemctl list-units --failed --no-legend --plain").strip()
+              assert failed == "", failed
+              if not nix_enabled:
+                  units = machine.succeed("systemctl list-units --all --no-legend --plain --type=service,socket,timer 'nix-*'").strip()
+                  assert units == "", units
+
+          if store == "erofs-overlay":
+              with subtest("Writable store overlay"):
+                  machine.succeed("""cat > /tmp/gc-test.nix <<'EOF'
+          ${gcTest}EOF""")
+                  path = machine.succeed("NIX_REMOTE=daemon nix-build --no-out-link /tmp/gc-test.nix").strip()
+                  machine.succeed(f"grep -qx hello {path}", f"test -e /nix/.rw-store/upper/{os.path.basename(path)}")
+                  machine.succeed("NIX_REMOTE=daemon nix-store --gc")
+                  machine.fail(f"test -e {path}")
+
           with subtest("Store paths and profiles"):
-              machine.succeed("nix-store --check-validity ${imageCfg.system.build.toplevel}")
-              machine.succeed("nix-store --verify${verifyFlags}")
+              if nix_enabled:
+                  machine.succeed("nix-store --check-validity ${imageCfg.system.build.toplevel}")
+                  machine.succeed("nix-store --verify${verifyFlags}")
               machine.succeed("test $(readlink -f /nix/var/nix/profiles/system) = ${imageCfg.system.build.toplevel}")
               machine.fail("test -e /nix/var/nix/profiles/system-2-link")
-              ${lib.optionalString imageCfg.nix.channel.enable ''
+              ${lib.optionalString (imageCfg.nix.enable && imageCfg.nix.channel.enable) ''
                 machine.succeed("test -e /root/.nix-defexpr/channels/nixos/default.nix", "test $(stat -c %a /root) = 700")
               ''}
+
+          if not nix_enabled:
+              with subtest("amazon-init without Nix"):
+                  def run_amazon_init(user_data):
+                      with open(user_data_path, "w") as f:
+                          f.write(user_data)
+                      machine.succeed("systemctl reset-failed fetch-ec2-metadata; systemctl restart fetch-ec2-metadata")
+                      machine.succeed("systemctl restart amazon-init")
+                      return machine.succeed("journalctl -u amazon-init -b --no-pager")
+
+                  journal = run_amazon_init("{ ... }: { }\n")
+                  assert "can't rebuild itself; ignoring" in journal, journal
+                  run_amazon_init("#!/bin/sh\ntouch /run/user-data-ran\n")
+                  machine.succeed("test -e /run/user-data-ran")
 
           with subtest("Decompression of gzip-compressed user-data"):
               import gzip as gzip_mod
