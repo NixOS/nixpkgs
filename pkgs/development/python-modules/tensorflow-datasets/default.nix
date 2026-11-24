@@ -50,6 +50,7 @@
   opencv4,
   pandas,
   pillow,
+  pretty-midi,
   pycocotools,
   pydub,
   pytest-xdist,
@@ -140,6 +141,7 @@ buildPythonPackage (finalAttrs: {
     opencv4
     pandas
     pillow
+    pretty-midi
     pycocotools
     pydub
     pytest-xdist
@@ -171,10 +173,6 @@ buildPythonPackage (finalAttrs: {
     "tensorflow_datasets/proto/build_tf_proto_test.py"
     "tensorflow_datasets/scripts/cli/build_test.py"
     "tensorflow_datasets/datasets/imagenet2012_corrupted/imagenet2012_corrupted_dataset_builder_test.py"
-
-    # Requires `pretty_midi` which is not packaged in `nixpkgs`.
-    "tensorflow_datasets/audio/groove.py"
-    "tensorflow_datasets/datasets/groove/groove_dataset_builder_test.py"
 
     # Requires `crepe` which is not packaged in `nixpkgs`.
     "tensorflow_datasets/audio/nsynth.py"
