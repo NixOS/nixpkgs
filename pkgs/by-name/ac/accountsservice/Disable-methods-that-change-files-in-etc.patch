@@ -1,4 +1,4 @@
-From 6f172007452b39bfda5062fc29ea5382671ac16e Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Alexander Ried <ried@mytum.de>
 Date: Thu, 26 May 2016 19:54:21 +0200
 Subject: [PATCH] Disable methods that change files in /etc
@@ -6,14 +6,14 @@ Subject: [PATCH] Disable methods that change files in /etc
 Only if environment variable NIXOS_USERS_PURE is set.
 ---
  src/daemon.c | 10 ++++++++++
- src/user.c   | 35 +++++++++++++++++++++++++++++++++++
- 2 files changed, 45 insertions(+)
+ src/user.c   | 55 ++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 65 insertions(+)
 
 diff --git a/src/daemon.c b/src/daemon.c
-index 861430f..aefaf2d 100644
+index b5ee767..9c24ad3 100644
 --- a/src/daemon.c
 +++ b/src/daemon.c
-@@ -1378,6 +1378,11 @@ daemon_create_user (AccountsAccounts      *accounts,
+@@ -1917,6 +1917,11 @@ daemon_create_user (AccountsAccounts      *accounts,
                      const gchar           *real_name,
                      gint                   account_type)
  {
@@ -25,7 +25,7 @@ index 861430f..aefaf2d 100644
          Daemon *daemon = (Daemon *) accounts;
          CreateUserData *data;
  
-@@ -1581,6 +1586,11 @@ daemon_delete_user (AccountsAccounts      *accounts,
+@@ -2159,6 +2164,11 @@ daemon_delete_user (AccountsAccounts      *accounts,
                      gint64                 uid,
                      gboolean               remove_files)
  {
@@ -38,10 +38,10 @@ index 861430f..aefaf2d 100644
          DeleteUserData *data;
  
 diff --git a/src/user.c b/src/user.c
-index 28170db..df947a1 100644
+index 216c71e..4689990 100644
 --- a/src/user.c
 +++ b/src/user.c
-@@ -1216,6 +1216,11 @@ user_set_real_name (AccountsUser          *auser,
+@@ -1976,6 +1976,11 @@ user_set_real_name (AccountsUser          *auser,
                      GDBusMethodInvocation *context,
                      const gchar           *real_name)
  {
@@ -53,7 +53,7 @@ index 28170db..df947a1 100644
          User *user = (User *) auser;
          int uid;
          const gchar *action_id;
-@@ -1293,6 +1298,11 @@ user_set_user_name (AccountsUser          *auser,
+@@ -2053,6 +2058,11 @@ user_set_user_name (AccountsUser          *auser,
                      GDBusMethodInvocation *context,
                      const gchar           *user_name)
  {
@@ -64,8 +64,32 @@ index 28170db..df947a1 100644
 +
          User *user = (User *) auser;
  
-         daemon_local_check_auth (user->daemon,
-@@ -1945,6 +1955,11 @@ user_set_home_directory (AccountsUser          *auser,
+         if (user_get_uses_homed (user)) {
+@@ -2645,6 +2655,11 @@ user_set_password_expiration_policy (AccountsUser          *auser,
+                                      gint64                 days_to_warn,
+                                      gint64                 days_after_expiration_until_lock)
+ {
++        if (getenv("NIXOS_USERS_PURE")) {
++                throw_error (context, ERROR_NOT_SUPPORTED, "Modifying users not supported without users.mutableUsers");
++                return TRUE;
++        }
++
+         User *user = (User *) auser;
+         int uid;
+         const gchar *action_id;
+@@ -2762,6 +2777,11 @@ user_set_user_expiration_policy (AccountsUser          *auser,
+                                  GDBusMethodInvocation *context,
+                                  gint64                 user_expiration_time)
+ {
++        if (getenv("NIXOS_USERS_PURE")) {
++                throw_error (context, ERROR_NOT_SUPPORTED, "Modifying users not supported without users.mutableUsers");
++                return TRUE;
++        }
++
+         User *user = (User *) auser;
+         int uid;
+         const gchar *action_id;
+@@ -2892,6 +2912,11 @@ user_set_home_directory (AccountsUser          *auser,
                           GDBusMethodInvocation *context,
                           const gchar           *home_dir)
  {
@@ -76,8 +100,8 @@ index 28170db..df947a1 100644
 +
          User *user = (User *) auser;
  
-         daemon_local_check_auth (user->daemon,
-@@ -2000,6 +2015,11 @@ user_set_shell (AccountsUser          *auser,
+         if (user_get_uses_homed (user)) {
+@@ -2986,6 +3011,11 @@ user_set_shell (AccountsUser          *auser,
                  GDBusMethodInvocation *context,
                  const gchar           *shell)
  {
@@ -89,7 +113,7 @@ index 28170db..df947a1 100644
          User *user = (User *) auser;
  
          daemon_local_check_auth (user->daemon,
-@@ -2249,6 +2269,11 @@ user_set_locked (AccountsUser          *auser,
+@@ -3593,6 +3623,11 @@ user_set_locked (AccountsUser          *auser,
                   GDBusMethodInvocation *context,
                   gboolean               locked)
  {
@@ -101,7 +125,19 @@ index 28170db..df947a1 100644
          User *user = (User *) auser;
  
          daemon_local_check_auth (user->daemon,
-@@ -2457,6 +2482,11 @@ user_set_password_mode (AccountsUser          *auser,
+@@ -3789,6 +3824,11 @@ user_set_account_type (AccountsUser          *auser,
+                        GDBusMethodInvocation *context,
+                        gint                   account_type)
+ {
++        if (getenv("NIXOS_USERS_PURE")) {
++                throw_error (context, ERROR_NOT_SUPPORTED, "Modifying users not supported without users.mutableUsers");
++                return TRUE;
++        }
++
+         User *user = (User *) auser;
+ 
+         if (account_type < 0 || account_type > ACCOUNT_TYPE_LAST) {
+@@ -3929,6 +3969,11 @@ user_set_password_mode (AccountsUser          *auser,
                          GDBusMethodInvocation *context,
                          gint                   mode)
  {
@@ -113,7 +149,7 @@ index 28170db..df947a1 100644
          User *user = (User *) auser;
          const gchar *action_id;
          gint uid;
-@@ -2550,6 +2580,11 @@ user_set_password (AccountsUser          *auser,
+@@ -4027,6 +4072,11 @@ user_set_password (AccountsUser          *auser,
                     const gchar           *password,
                     const gchar           *hint)
  {
@@ -125,3 +161,15 @@ index 28170db..df947a1 100644
          User *user = (User *) auser;
          gchar **data;
          const gchar *action_id;
+@@ -4165,6 +4215,11 @@ user_set_automatic_login (AccountsUser          *auser,
+                           GDBusMethodInvocation *context,
+                           gboolean               enabled)
+ {
++        if (getenv("NIXOS_USERS_PURE")) {
++                throw_error (context, ERROR_NOT_SUPPORTED, "Modifying users not supported without users.mutableUsers");
++                return TRUE;
++        }
++
+         User *user = (User *) auser;
+ 
+         if (user_get_uses_homed (user)) {
