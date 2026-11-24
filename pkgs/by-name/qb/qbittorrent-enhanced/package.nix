@@ -16,6 +16,11 @@
     hash = "sha256-frAmiYQekEzIgWeSqHVAlTY5u6j7eH8Nx8MaqHjZU9E=";
   };
 
+  postPatch = (old.postPatch or "") + ''
+    substituteInPlace src/gui/log/loglistview.cpp src/gui/optionsdialog.cpp \
+      --replace-fail "#ifdef Q_OS_MAC" "#ifdef Q_OS_MACOS"
+  '';
+
   meta = old.meta // {
     description = "Unofficial enhanced version of qBittorrent, a BitTorrent client";
     homepage = "https://github.com/c0re100/qBittorrent-Enhanced-Edition";
