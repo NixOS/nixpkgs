@@ -54,6 +54,9 @@ stdenv.mkDerivation rec {
     "--with-libassuan-prefix=${libassuan.dev}"
   ];
 
+  # Silence incompatible pointer types errors building KeychainSupport.m.
+  env.OBJCFLAGS = "-Wno-error=incompatible-pointer-types";
+
   installPhase = ''
     mkdir -p $out/Applications $out/bin
     mv macosx/pinentry-mac.app $out/Applications
