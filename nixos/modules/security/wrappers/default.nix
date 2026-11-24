@@ -29,16 +29,19 @@ let
       # They're taken from pkgs.glibc so that we don't have to keep as close
       # an eye on glibc changes. Not every relevant variable is in this header,
       # so we maintain a slightly stricter list in wrapper.c itself as well.
-      unsecvars = lib.overrideDerivation (pkgs.srcOnly pkgs.glibc) (
-        { name, ... }:
-        {
-          name = "${name}-unsecvars";
-          installPhase = ''
-            mkdir $out
-            cp sysdeps/generic/unsecvars.h $out
-          '';
-        }
-      );
+      unsecvars = pkgs.buildPackages.stdenvNoCC.mkDerivation {
+        name = "${pkgs.glibc.pname}-${pkgs.glibc.version}-unsecvars";
+        inherit (pkgs.glibc) src patches;
+        phases = [
+          "unpackPhase"
+          "patchPhase"
+          "installPhase"
+        ];
+        installPhase = ''
+          mkdir $out
+          cp sysdeps/generic/unsecvars.h $out
+        '';
+      };
     };
 
   fileModeType =
