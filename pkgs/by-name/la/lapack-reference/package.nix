@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   gfortran,
   cmake,
   shared ? true,
@@ -17,14 +18,27 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Reference-LAPACK";
     repo = "lapack";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-SfKsvZ07v87tFFd9bnkIEdervyX/ucLfs/TOsl08aKQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-SfKsvZ07v87tFFd9bnkIEdervyX/ucLfs/TOsl08aKQ=";
   };
+
+  patches = [
+    # Version was not updated in time for 3.12.1 release
+    # https://github.com/Reference-LAPACK/lapack/issues/1103
+    # https://github.com/Reference-LAPACK/lapack/pull/1095
+    (fetchpatch2 {
+      name = "fix-liblapack-version.patch";
+      url = "https://github.com/Reference-LAPACK/lapack/commit/3e242fc8d5d38f0425c6018fe88abf31e1a9e80f.patch?full_index=1";
+      hash = "sha256-U0jI8oMV7ua17XcmiSxchKN0kwKH04VkoS3kYc55Vno=";
+    })
+  ];
 
   nativeBuildInputs = [
     gfortran
     cmake
   ];
+
+  strictDeps = true;
 
   # Configure stage fails on aarch64-darwin otherwise, due to either clang 11 or gfortran 10.
   hardeningDisable = lib.optionals stdenv.hostPlatform.isDarwin [
@@ -85,12 +99,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Linear Algebra PACKage";
     homepage = "http://www.netlib.org/lapack/";
     maintainers = with lib.maintainers; [ markuskowa ];
     license = lib.licenses.bsd3;
-    pkgConfigModules = [ "lapack" ];
+    pkgConfigModules = [
+      "blas"
+      "cblas"
+      "lapack"
+      "lapacke"
+    ];
     platforms = lib.platforms.all;
   };
 })
