@@ -13,9 +13,10 @@
   nix,
   lix,
   lowdown-unsandboxed,
+  testers,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lowdown${
     lib.optionalString (stdenv.hostPlatform.isDarwin && !enableDarwinSandbox) "-unsandboxed"
   }";
@@ -29,7 +30,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "https://kristaps.bsd.lv/lowdown/snapshots/lowdown-${version}.tar.gz";
+    url = "https://kristaps.bsd.lv/lowdown/snapshots/lowdown-${finalAttrs.version}.tar.gz";
     sha512 = "fe68e1b7ff23f3992398356d7aa9a330dfd7b72e22bea9a91eeef74182b209ecea0c9f3e2b2216e1a07b2358da2b746238ec9cbbdeebdd3551cef14dd2d79f46";
   };
 
@@ -42,6 +43,8 @@ stdenv.mkDerivation rec {
     bmake # Uses FreeBSD's dialect
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ fixDarwinDylibNames ];
+
+  strictDeps = true;
 
   # The Darwin sandbox calls fail inside Nix builds, presumably due to
   # being nested inside another sandbox.
@@ -109,7 +112,10 @@ stdenv.mkDerivation rec {
   passthru.tests = {
     # most important consumers in nixpkgs
     inherit nix lix lowdown-unsandboxed;
+    pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://kristaps.bsd.lv/lowdown/";
@@ -117,5 +123,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.isc;
     maintainers = [ lib.maintainers.sternenseemann ];
     platforms = lib.platforms.unix;
+    pkgConfigModules = [ "lowdown" ];
   };
-}
+})
