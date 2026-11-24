@@ -31,20 +31,15 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  env = lib.optionalAttrs stdenv.hostPlatform.isFreeBSD {
-    # This can be removed when we switch to libcxx from llvm 20
-    # https://github.com/llvm/llvm-project/pull/122361
-    NIX_CFLAGS_COMPILE = "-D_XOPEN_SOURCE=700";
-  };
-
-  buildInputs = [ gtest ];
-
   cmakeFlags = [
-    "-DCMAKE_INSTALL_PREFIX=/"
-    "-DBUILD_SHARED_LIBS=ON"
-    "-DINSTALL_UTILS=OFF"
-  ]
-  ++ lib.optionals withZlibCompat [ "-DZLIB_COMPAT=ON" ];
+    (lib.cmakeBool "BUILD_SHARED_LIBS" true)
+    (lib.cmakeBool "INSTALL_UTILS" false)
+    (lib.cmakeBool "ZLIB_COMPAT" withZlibCompat)
+    (lib.cmakeFeature "CMAKE_INSTALL_PREFIX" "/")
+  ];
+
+  doCheck = true;
+  checkInputs = [ gtest ];
 
   __structuredAttrs = true;
 
