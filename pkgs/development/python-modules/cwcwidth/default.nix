@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "cwcwidth";
-  version = "0.1.12";
+  version = "0.1.13";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sebastinas";
     repo = "cwcwidth";
     tag = "v${version}";
-    hash = "sha256-mkyBtqAFqu7dxpb46qMOnXmXpUV3qtpknfIgVQQt5nY=";
+    hash = "sha256-UO7jokfCzj98lDlHgJU/h52sx+f5oPb+gwS+bRUR+2I=";
   };
 
   build-system = [
