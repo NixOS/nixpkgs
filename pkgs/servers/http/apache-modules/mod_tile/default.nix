@@ -24,13 +24,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "mod_tile";
-  version = "0.8.1";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "openstreetmap";
     repo = "mod_tile";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zDe+pFzK16K+8I0v1Z7p83PIgQlVDbjcnD4vzwdB1Oo=";
+    hash = "sha256-SXYEIAUhjOUeMb2Zadx13e1AFVht7sG7RNVPIBbMfWM=";
   };
 
   strictDeps = true;

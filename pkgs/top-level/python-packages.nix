@@ -556,6 +556,8 @@ self: super: with self; {
 
   aiorwlock = callPackage ../development/python-modules/aiorwlock { };
 
+  aiosaj = callPackage ../development/python-modules/aiosaj { };
+
   aiosendspin = callPackage ../development/python-modules/aiosendspin { };
 
   aiosendspin-mpris = callPackage ../development/python-modules/aiosendspin-mpris { };
@@ -10064,6 +10066,8 @@ self: super: with self; {
 
   lightgbm = callPackage ../development/python-modules/lightgbm { };
 
+  lighthouse-ble = callPackage ../development/python-modules/lighthouse-ble { };
+
   lightify = callPackage ../development/python-modules/lightify { };
 
   lightning = callPackage ../development/python-modules/lightning { };
@@ -16580,6 +16584,8 @@ self: super: with self; {
 
   pysmarty2 = callPackage ../development/python-modules/pysmarty2 { };
 
+  pysmartyplants = callPackage ../development/python-modules/pysmartyplants { };
+
   pysmb = callPackage ../development/python-modules/pysmb { };
 
   pysmbc = callPackage ../development/python-modules/pysmbc { };
@@ -18598,6 +18604,8 @@ self: super: with self; {
 
   ritassist = callPackage ../development/python-modules/ritassist { };
 
+  ritualsgenie = callPackage ../development/python-modules/ritualsgenie { };
+
   rivet = toPythonModule (pkgs.rivet.override { python3 = python; });
 
   rjpl = callPackage ../development/python-modules/rjpl { };
@@ -19188,6 +19196,8 @@ self: super: with self; {
 
   sense-energy = callPackage ../development/python-modules/sense-energy { };
 
+  sensecap-lorawan = callPackage ../development/python-modules/sensecap-lorawan { };
+
   sensirion-ble = callPackage ../development/python-modules/sensirion-ble { };
 
   sensor-state-data = callPackage ../development/python-modules/sensor-state-data { };
@@ -19530,6 +19540,8 @@ self: super: with self; {
 
   sklearn2pmml = callPackage ../development/python-modules/sklearn2pmml { };
 
+  skoda-public-api = callPackage ../development/python-modules/skoda-public-api { };
+
   skops = callPackage ../development/python-modules/skops { };
 
   skorch = callPackage ../development/python-modules/skorch { };
@@ -19804,6 +19816,8 @@ self: super: with self; {
   solidpython2 = callPackage ../development/python-modules/solidpython2 { };
 
   solo-python = callPackage ../development/python-modules/solo-python { };
+
+  solyx-energy-api-client = callPackage ../development/python-modules/solyx-energy-api-client { };
 
   somajo = callPackage ../development/python-modules/somajo { };
 
@@ -23210,6 +23224,8 @@ self: super: with self; {
   xhtml2pdf = callPackage ../development/python-modules/xhtml2pdf { };
 
   xiaomi-ble = callPackage ../development/python-modules/xiaomi-ble { };
+
+  xiaomi-weather = callPackage ../development/python-modules/xiaomi-weather { };
 
   xkbcommon = callPackage ../development/python-modules/xkbcommon { };
 

@@ -1011,8 +1011,6 @@ with pkgs;
 
   inherit (callPackages ../development/libraries/sdbus-cpp { }) sdbus-cpp sdbus-cpp_2;
 
-  sdkmanager = with python3Packages; toPythonApplication sdkmanager;
-
   shaperglot = with python3Packages; toPythonApplication shaperglot;
 
   ufolint = with python3Packages; toPythonApplication ufolint;
@@ -1243,6 +1241,8 @@ with pkgs;
   arduino = arduino-core.override { withGui = true; };
 
   arpack-mpi = arpack.override { useMpi = true; };
+
+  aurralPlugins = recurseIntoAttrs (callPackage ../by-name/au/aurral/plugins.nix { });
 
   authentik-outposts = recurseIntoAttrs (callPackages ../by-name/au/authentik/outposts.nix { });
 
@@ -2102,6 +2102,8 @@ with pkgs;
 
   lean = lean4;
 
+  logseq = logseq-og;
+
   logstash7 = callPackage ../tools/misc/logstash/7.x.nix {
     # https://www.elastic.co/support/matrix#logstash-and-jvm
     jre = jdk11_headless;
@@ -2112,8 +2114,6 @@ with pkgs;
     jre = jdk11_headless;
   };
   logstash = logstash7;
-
-  lagrange-tui = lagrange.override { enableTUI = true; };
 
   matrix-synapse-plugins = recurseIntoAttrs matrix-synapse-unwrapped.plugins;
 
@@ -2717,7 +2717,7 @@ with pkgs;
   ### SHELLS
 
   runtimeShell = "${runtimeShellPackage}${runtimeShellPackage.shellPath}";
-  runtimeShellPackage = bashNonInteractive;
+  runtimeShellPackage = if stdenv.hostPlatform.isWindows then pkgs.rubash else bashNonInteractive;
 
   bash = callPackage ../shells/bash/5.nix { };
   bashNonInteractive = lowPrio (
@@ -7162,21 +7162,6 @@ with pkgs;
 
   kmod = callPackage ../os-specific/linux/kmod { };
 
-  lvm2 = callPackage ../os-specific/linux/lvm2/2_03.nix {
-    # break the cyclic dependency:
-    # util-linux (non-minimal) depends (optionally, but on by default) on systemd,
-    # systemd (optionally, but on by default) on cryptsetup and cryptsetup depends on lvm2
-    util-linux = util-linuxMinimal;
-  };
-
-  lvm2_dmeventd = lvm2.override {
-    enableDmeventd = true;
-    enableCmdlib = true;
-  };
-  lvm2_vdo = lvm2_dmeventd.override {
-    enableVDO = true;
-  };
-
   mdadm = mdadm4;
 
   # minimal-bootstrap packages aren't used for anything but bootstrapping our
@@ -8974,32 +8959,6 @@ with pkgs;
     d1x-rebirth-full
     d2x-rebirth-full
     ;
-
-  factorio-experimental = factorio.override {
-    releaseType = "alpha";
-    experimental = true;
-  };
-
-  factorio-headless = factorio.override { releaseType = "headless"; };
-
-  factorio-headless-experimental = factorio.override {
-    releaseType = "headless";
-    experimental = true;
-  };
-
-  factorio-demo = factorio.override { releaseType = "demo"; };
-
-  factorio-demo-experimental = factorio.override {
-    releaseType = "demo";
-    experimental = true;
-  };
-
-  factorio-space-age = factorio.override { releaseType = "expansion"; };
-
-  factorio-space-age-experimental = factorio.override {
-    releaseType = "expansion";
-    experimental = true;
-  };
 
   factorio-utils = callPackage ../by-name/fa/factorio/utils.nix { };
 

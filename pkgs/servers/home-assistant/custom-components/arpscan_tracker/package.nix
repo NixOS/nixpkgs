@@ -9,13 +9,13 @@
 buildHomeAssistantComponent rec {
   owner = "cyberjunky";
   domain = "arpscan_tracker";
-  version = "2.1.8";
+  version = "2.2.2";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = "home-assistant-arpscan_tracker";
     tag = version;
-    hash = "sha256-9WurVLLERUSo6guKJDWUQzkszvm9swmcqbYApdhgDFI=";
+    hash = "sha256-IzjqyW5hsbOwJvPykQw7lTbUucQZBY7c1LGkvpz3PQo=";
   };
 
   dependencies = [
