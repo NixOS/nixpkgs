@@ -113,6 +113,8 @@ stdenv.mkDerivation rec {
     inherit nix lix lowdown-unsandboxed;
   };
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://kristaps.bsd.lv/lowdown/";
     description = "Simple markdown translator";
