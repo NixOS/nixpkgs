@@ -14,6 +14,7 @@
   lua5_5,
   perl,
   versionCheckHook,
+  nix-update-script,
 }:
 
 let
@@ -77,7 +78,11 @@ stdenv.mkDerivation (finalAttrs: {
   versionCheckProgramArg = "-v";
   versionCheckProgram = "${placeholder "out"}/bin/mlogc";
 
+  # The upstream repository also hosts the v3 library (libmodsecurity) tags.
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version-regex=^v(2\\..*)$" ]; };
+
   meta = {
+    changelog = "https://github.com/owasp-modsecurity/ModSecurity/releases/tag/${finalAttrs.src.tag}";
     description = "Open source, cross-platform web application firewall (WAF)";
     license = lib.licenses.asl20;
     homepage = "https://github.com/owasp-modsecurity/ModSecurity";
