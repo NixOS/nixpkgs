@@ -25,6 +25,8 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://libcpuid.sourceforge.net/";
     description = "Small C library for CPU detection and feature extraction";
