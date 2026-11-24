@@ -68,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.epl10;
     platforms = jdk.meta.platforms;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ kamadorueda ];
     mainProgram = "lein";
   };
 })
