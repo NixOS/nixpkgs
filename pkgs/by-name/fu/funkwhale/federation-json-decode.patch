@@ -1,0 +1,13 @@
+diff --git a/funkwhale_api/federation/tasks.py b/funkwhale_api/federation/tasks.py
+index 22af011fe..67e28b955 100644
+--- a/funkwhale_api/federation/tasks.py
++++ b/funkwhale_api/federation/tasks.py
+@@ -515,7 +515,7 @@ def fetch(fetch_obj, alternate_depth=0):
+ 
+     try:
+         payload = response.json()
+-    except json.decoder.JSONDecodeError:
++    except (json.decoder.JSONDecodeError, requests.exceptions.JSONDecodeError):
+         # we attempt to extract a <link rel=alternate> that points
+         # to an activity pub resource, if possible, and retry with this URL.
+         # Capped to avoid recursing forever against a server whose alternate

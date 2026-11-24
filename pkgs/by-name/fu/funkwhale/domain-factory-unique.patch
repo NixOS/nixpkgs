@@ -1,0 +1,13 @@
+diff --git a/funkwhale_api/federation/factories.py b/funkwhale_api/federation/factories.py
+index 4879ab2a4..4bc2821f7 100644
+--- a/funkwhale_api/federation/factories.py
++++ b/funkwhale_api/federation/factories.py
+@@ -68,7 +68,7 @@ def create_user(actor):
+ 
+ @registry.register
+ class DomainFactory(NoUpdateOnCreate, factory.django.DjangoModelFactory):
+-    name = factory.Faker("domain_name")
++    name = factory.Sequence(lambda n: f"domain{n}.test")
+     nodeinfo_fetch_date = factory.LazyFunction(lambda: timezone.now())
+     allowed = None
+     reachable = True

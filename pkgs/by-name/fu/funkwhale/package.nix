@@ -75,6 +75,12 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
     # normalize audio/x-flac to audio/flac for native browser playback
     ./normalize-flac-mimetype.patch
+
+    # handle requests.exceptions.JSONDecodeError when parsing responses
+    ./federation-json-decode.patch
+
+    # ensure DomainFactory generates unique domain names for primary key
+    ./domain-factory-unique.patch
   ];
 
   build-system = with python3.pkgs; [
@@ -196,7 +202,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
       export CACHE_URL="redis://127.0.0.1:$redisTestPort/0"
 
       python -m django migrate --no-input
-      python -m pytest tests/music tests/subsonic
+      python -m pytest tests
     )
 
     runHook postCheck
