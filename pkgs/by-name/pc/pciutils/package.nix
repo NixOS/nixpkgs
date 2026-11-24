@@ -29,6 +29,8 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ kmod ];
 
+  strictDeps = true;
+
   preConfigure = lib.optionalString (!stdenv.cc.isGNU) ''
     substituteInPlace Makefile --replace 'CC=$(CROSS_COMPILE)gcc' ""
   '';
