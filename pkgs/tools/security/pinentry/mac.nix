@@ -71,13 +71,21 @@ stdenv.mkDerivation rec {
     updateScript = writers.writeBash "update-pinentry-mac" ''
       set -euxo pipefail
 
+      # Avoid using the SDK from Nixpkgs
+      unset DEVELOPER_DIR
+      unset SRCROOT
+
       main() {
+        macNix=$(nix-instantiate --eval --strict -A "pinentry_mac.meta.position" | sed -re 's/^"(.*):[0-9]+"$/\1/')
+        pinentry_macDir=$(dirname "$macNix")
+
         tag="$(queryLatestTag)"
         ver="$(expr "$tag" : 'v\(.*\)')"
 
         ${common-updater-scripts}/bin/update-source-version pinentry_mac "$ver"
 
-        cd ${lib.escapeShellArg ./.}
+        pushd "$pinentry_macDir"
+
         rm -rf mac
         mkdir mac
 
@@ -86,6 +94,8 @@ stdenv.mkDerivation rec {
           filename="''${path##*/}"
           /usr/bin/ibtool --compile "mac/''${filename%.*}.nib" "$path"
         done
+
+        popd
       }
 
       queryLatestTag() {
