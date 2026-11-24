@@ -8,11 +8,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "inconsolata-lgc";
-  version = "3.420";
+  version = "4.000";
 
   src = fetchzip {
     url = "https://github.com/MihailJP/Inconsolata-LGC/releases/download/v${finalAttrs.version}/InconsolataLGC-FullTTF-${finalAttrs.version}.tar.xz";
-    hash = "sha256-2Y05H+hoGAcTPFiFHTntvjAF5vVwe3QRr/3cfjjdAlc=";
+    hash = "sha256-BX7I/d4qrVtWhRQg+0d+hndXbYqoKKgrCJFNuraWVGc=";
   };
 
   nativeBuildInputs = [ installFonts ];
