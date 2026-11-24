@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
       available copies of significant or representative software.
     '';
     license = with lib.licenses; mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ kamadorueda ];
     platforms = with lib.platforms; unix;
   };
 }
