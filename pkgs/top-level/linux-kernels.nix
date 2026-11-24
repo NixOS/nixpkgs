@@ -81,6 +81,7 @@ in
           kernelPatches = [
             kernelPatches.bridge_stp_helper
             kernelPatches.request_key_helper
+            kernelPatches.af_alg_allow_gcm_aes
           ];
         };
 
@@ -93,6 +94,7 @@ in
               kernelPatches = [
                 kernelPatches.bridge_stp_helper
                 kernelPatches.request_key_helper
+                kernelPatches.af_alg_allow_gcm_aes
               ];
             };
             latest = packageAliases.linux_latest.kernel;
