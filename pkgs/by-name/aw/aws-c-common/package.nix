@@ -14,11 +14,13 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-c-common";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-m3CZwGUDnI+DIrxMPGpjVszZ0UI2aSQ18afbscafW6o=";
   };
 
   nativeBuildInputs = [ cmake ];
+
+  strictDeps = true;
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
@@ -53,6 +55,8 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests = {
     inherit nix;
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "AWS SDK for C common core";
