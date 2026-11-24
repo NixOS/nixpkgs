@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   python3,
   writableTmpDirAsHomeHook,
@@ -9,6 +10,8 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "circup";
   version = "3.2.1";
   pyproject = true;
+
+  __darwinAllowLocalNetworking = true;
 
   src = fetchFromGitHub {
     owner = "adafruit";
@@ -42,6 +45,9 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     # Test requires network access
     "test_libraries_from_imports_bad"
     "test_install_auto_file_bad"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "test_show_command"
   ];
 
   meta = {
