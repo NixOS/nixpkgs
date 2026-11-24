@@ -5499,6 +5499,11 @@
     githubId = 68112;
     name = "Simon";
   };
+  Circuit-Overtime = {
+    name = "Ayushman Bhattacharya";
+    github = "Circuit-Overtime";
+    githubId = 74301576;
+  };
   citadelcore = {
     email = "alex@arctarus.co.uk";
     github = "RealityAnomaly";
