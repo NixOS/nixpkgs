@@ -8,7 +8,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "resolvematrix";
-  version = "1.4.2";
+  version = "1.5.0";
 
   __structuredAttrs = true;
 
@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "continuwuation";
     repo = "resolvematrix";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dySZE0P0IdAvCmVzh3H/LhfhCE8kNxeSRL5G1ydERqk=";
+    hash = "sha256-k5n7OQh+lQUMap9fvscpRxHLSQFzZ/7aRhqy7JSop7U=";
   };
 
   buildAndTestSubdir = "cli";
@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
-    hash = "sha256-SewOK4bp58P4QW86ayF956nrfGVNJsz6DDQhXnoxVQw=";
+    hash = "sha256-H2IpJdYp/J/C9GmxPyPlijumjJ0qxONMwJUhKvszI6s=";
   };
 
   meta = {

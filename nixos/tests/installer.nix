@@ -1073,7 +1073,7 @@ let
           "udevadm settle")
       '';
       postBootCommands = optionalString fallback ''
-        target.wait_for_text("Please enter")
+        target.wait_for_console_text("Please enter passphrase")
         target.send_chars("password\n")
       '';
     };

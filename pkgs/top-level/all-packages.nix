@@ -1011,8 +1011,6 @@ with pkgs;
 
   inherit (callPackages ../development/libraries/sdbus-cpp { }) sdbus-cpp sdbus-cpp_2;
 
-  sdkmanager = with python3Packages; toPythonApplication sdkmanager;
-
   shaperglot = with python3Packages; toPythonApplication shaperglot;
 
   ufolint = with python3Packages; toPythonApplication ufolint;
@@ -2103,6 +2101,8 @@ with pkgs;
   keycloakPlugins = recurseIntoAttrs keycloak.plugins;
 
   lean = lean4;
+
+  logseq = logseq-og;
 
   logstash7 = callPackage ../tools/misc/logstash/7.x.nix {
     # https://www.elastic.co/support/matrix#logstash-and-jvm
