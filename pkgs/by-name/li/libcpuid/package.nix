@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   autoreconfHook,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -25,6 +26,8 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   __structuredAttrs = true;
 
   meta = {
@@ -36,5 +39,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [
     ];
     platforms = lib.platforms.x86 ++ lib.platforms.arm ++ lib.platforms.aarch64;
+    pkgConfigModules = [ "libcpuid" ];
   };
 })
