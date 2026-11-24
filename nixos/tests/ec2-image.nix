@@ -7,6 +7,17 @@
   lib,
   hostPkgs,
   bootMode,
+  store,
+  withNix,
+  espSize,
+  firmware,
+  perlless,
+  verity,
+  resize,
+  root,
+  rootFsType,
+  twoDisks,
+  nvme,
   ...
 }:
 
@@ -39,8 +50,14 @@ let
               }
             ];
           };
+          amazonImage.store = store;
+          amazonImage.root = root;
+          amazonImage.rootFsType = rootFsType;
+          nix.enable = withNix;
+          amazonImage.espSize = lib.mkIf (espSize != null) espSize;
+          amazonImage.verity = verity;
           # The default variant already covers the channel.
-          nix.channel.enable = bootMode != "uefi";
+          nix.channel.enable = lib.mkIf (bootMode == "uefi") false;
           amazonImage.format = "qcow2";
 
           # In a NixOS test the serial console is occupied by the "backdoor"
@@ -72,13 +89,49 @@ let
 
           nixpkgs.pkgs = pkgs;
         }
-      ];
+      ]
+      ++ lib.optional perlless ../modules/profiles/perlless.nix;
     }).config;
 
   image = "${imageCfg.system.build.amazonImage}/${imageCfg.image.fileName}";
 
-  # Hashing the store takes a while, so one variant covers it.
-  verifyFlags = lib.optionalString (bootMode == "uefi") " --check-contents";
+  # Hashing the store takes a while, so cover each store layout once.
+  verifyFlags = lib.optionalString (
+    espSize == null && !perlless && (bootMode == "uefi" || store != "root")
+  ) " --check-contents";
+
+  # Without OVMF, QEMU boots with SeaBIOS.
+  firmwareArgs = lib.optionalString (firmware == "uefi") (
+    " -drive if=pflash,format=raw,unit=0,readonly=on,file=${hostPkgs.OVMF.firmware}"
+    + " -drive if=pflash,format=raw,unit=1,readonly=on,file=${hostPkgs.OVMF.variables}"
+  );
+
+  # Read-only UEFI and hybrid images boot a UKI under UEFI.
+  ukiImage = store == "erofs" && imageCfg.ec2.bootMode != "legacy-bios";
+  hybrid = imageCfg.ec2.bootMode == "uefi-preferred";
+  expectedBootLoaders =
+    lib.optionalAttrs (imageCfg.ec2.bootMode != "legacy-bios") {
+      uefi =
+        if ukiImage then
+          "uki"
+        else if imageCfg.boot.loader.systemd-boot.enable then
+          "systemd-boot"
+        else
+          "limine";
+    }
+    // lib.optionalAttrs (imageCfg.ec2.bootMode != "uefi") { legacy-bios = "limine"; };
+
+  storeFsType = (imageCfg.fileSystems."/nix/store" or imageCfg.fileSystems."/").fsType;
+
+  # Built in the VM to check that Nix can add to the store.
+  gcTest = ''
+    derivation {
+      name = "gc-test";
+      system = builtins.currentSystem;
+      builder = "''${builtins.storePath "${pkgs.runtimeShellPackage}"}/bin/sh";
+      args = [ "-c" "echo hello > $out" ];
+    }
+  '';
 
   registerImage = imageCfg.amazonImage.registerImage;
   expectedRegisterImage = lib.filterAttrs (
@@ -88,8 +141,33 @@ let
 in
 {
   _module.args.bootMode = lib.mkDefault null;
+  _module.args.store = lib.mkDefault "root";
+  _module.args.withNix = lib.mkDefault true;
+  _module.args.espSize = lib.mkDefault null;
+  _module.args.firmware = lib.mkDefault "uefi";
+  _module.args.perlless = lib.mkDefault false;
+  _module.args.verity = lib.mkDefault false;
+  _module.args.resize = lib.mkDefault false;
+  _module.args.root = lib.mkDefault "image";
+  _module.args.rootFsType = lib.mkDefault "ext4";
+  _module.args.twoDisks = lib.mkDefault false;
+  _module.args.nvme = lib.mkDefault false;
 
-  name = "ec2-image" + lib.optionalString (bootMode == "uefi") "-systemd-boot";
+  name =
+    "ec2-image"
+    + lib.optionalString imageCfg.boot.loader.systemd-boot.enable "-systemd-boot"
+    + lib.optionalString (bootMode == "uefi" && store == "erofs" && !verity) "-uki"
+    + lib.optionalString (store != "root") "-${store}"
+    + lib.optionalString (!withNix) "-nonix"
+    + lib.optionalString (espSize != null) "-esp-${lib.toLower espSize}"
+    + lib.optionalString (firmware == "bios") "-bios"
+    + lib.optionalString perlless "-perlless"
+    + lib.optionalString verity "-verity"
+    + lib.optionalString resize "-resize"
+    + lib.optionalString (root == "first-boot") "-root-first-boot"
+    + lib.optionalString (rootFsType != "ext4") "-${rootFsType}"
+    + lib.optionalString twoDisks "-two-disks"
+    + lib.optionalString nvme "-nvme";
   meta = {
     maintainers = with lib.maintainers; [
       roberth
@@ -123,6 +201,32 @@ in
       import re
       import subprocess
       import tempfile
+
+      RESIZE = ${if resize then "True" else "False"}
+      ROOT_FIRST_BOOT = ${if root == "first-boot" then "True" else "False"}
+      TWO_DISKS = ${if twoDisks then "True" else "False"}
+      QEMU_IMG = "${nodes.machine.virtualisation.qemu.package}/bin/qemu-img"
+
+      def partition_number(node):
+          match = re.search(r"\d+$", node)
+          assert match, node
+          return int(match.group())
+
+      def partitions(table):
+          """sfdisk's partitions by number, without their device nodes"""
+          return {partition_number(p.pop("node")): p for p in table["partitions"]}
+
+      def image_partitions():
+          """The partition table as built, read from the image's primary GPT"""
+          with tempfile.TemporaryDirectory() as d:
+              head = os.path.join(d, "head.raw")
+              subprocess.check_call([QEMU_IMG, "dd", "-f", "qcow2", "-O", "raw", "bs=1M", "count=1", "if=${image}", f"of={head}"])
+              info = json.loads(subprocess.check_output([QEMU_IMG, "info", "--output=json", "${image}"]))
+              os.truncate(head, info["virtual-size"])
+              table = json.loads(subprocess.check_output(["${hostPkgs.util-linux}/bin/sfdisk", "-J", head]))
+          return partitions(table["partitiontable"])
+      NVME = ${if nvme then "True" else "False"}
+      EBS_MODEL = "Amazon Elastic Block Store"
 
       # Instance Metadata Service (IMDSv2 with 1.0 metadata version)
       # TODO: Use 'latest' metadata version instead of '1.0'
@@ -202,12 +306,27 @@ in
           os.makedirs(image_dir, mode=0o700, exist_ok=True)
           disk_image = os.path.join(image_dir, "machine.qcow2")
           QEMU = "${nodes.machine.virtualisation.qemu.package}"
-          QEMU_IMG = f"{QEMU}/bin/qemu-img"
           subprocess.check_call([
               QEMU_IMG, "create", "-f", "qcow2", "-F", "qcow2",
               "-o", "backing_file=${image}", disk_image
           ])
           subprocess.check_call([QEMU_IMG, "resize", disk_image, "10G"])
+          drives = f" -drive file={disk_image},if=virtio,werror=report"
+          if TWO_DISKS:
+              # An empty disk that enumerates first, as vda.
+              other_image = os.path.join(image_dir, "other.qcow2")
+              subprocess.check_call([QEMU_IMG, "create", "-f", "qcow2", other_image, "2G"])
+              drives = f" -drive file={other_image},if=virtio,werror=report" + drives
+          if NVME:
+              # Attach the disks as Nitro does, as EBS NVMe controllers.
+              data_image = os.path.join(image_dir, "data.qcow2")
+              subprocess.check_call([QEMU_IMG, "create", "-f", "qcow2", data_image, "1G"])
+              drives = (
+                  f" -drive file={disk_image},if=none,id=root,werror=report"
+                  + f" -device 'nvme,drive=root,serial=vol0123456789abcdef0,model={EBS_MODEL}'"
+                  + f" -drive file={data_image},if=none,id=data,werror=report"
+                  + f" -device 'nvme,drive=data,serial=vol0fedcba9876543210,model={EBS_MODEL}'"
+              )
 
           # Create fake EC2 metadata in temporary directory with client's public key
           metadata_dir = create_ec2_metadata_dir(temp_dir, client_pubkey)
@@ -222,18 +341,23 @@ in
               + f" -netdev 'user,id=ec2meta,net=169.0.0.0/8,guestfwd=tcp:169.254.169.254:80-cmd:${lib.getExe imdsServer} {metadata_dir}'"
           )
 
-          # nixosTests.ec2-nixops covers the BIOS boot of the same image.
           start_command = (
               f"{QEMU}/bin/qemu-kvm -m 1024"
-              + " -drive if=pflash,format=raw,unit=0,readonly=on,file=${hostPkgs.OVMF.firmware}"
-              + " -drive if=pflash,format=raw,unit=1,readonly=on,file=${hostPkgs.OVMF.variables}"
-              + f" -drive file={disk_image},if=virtio,werror=report"
+              + "${firmwareArgs}"
+              + drives
               + vlan_net
               + metadata_net
               + " $QEMU_OPTS"
           )
 
-          return create_machine(start_command), metadata_dir
+          return create_machine(start_command), metadata_dir, disk_image
+
+      store = "${store}"
+      nix_enabled = ${if imageCfg.nix.enable then "True" else "False"}
+      verity = ${if verity then "True" else "False"}
+      uki_image = ${if ukiImage then "True" else "False"}
+      hybrid = ${if hybrid then "True" else "False"}
+      firmware = "${firmware}"
 
       def test_userdata_decompression(machine, user_data_path, compressed_data, format_name):
           """Test that compressed user-data is decompressed by fetch-ec2-metadata"""
@@ -256,7 +380,7 @@ in
       client_pubkey, client_private_key = generate_client_ssh_key()
 
       # Set up machine with client's public key in metadata service
-      machine, metadata_dir = setup_machine(temp_dir, client_pubkey)
+      machine, metadata_dir, disk_image = setup_machine(temp_dir, client_pubkey)
       user_data_path = os.path.join(metadata_dir, "1.0", "user-data")
 
       try:
@@ -326,7 +450,7 @@ in
               assert "Hello from test-instance" in ssh_result, f"Unexpected SSH result: {ssh_result}"
 
           with subtest("Basic EC2 functionality"):
-              machine.succeed("test -d /sys/firmware/efi")
+              machine.succeed("test ${if firmware == "uefi" then "-d" else "! -e"} /sys/firmware/efi")
               machine.succeed("findmnt ${imageCfg.boot.loader.efi.efiSysMountPoint}")
               machine.succeed("test $(stat -c %a ${imageCfg.boot.loader.efi.efiSysMountPoint}) = 700")
               # The test resizes the disk to 10G, so the root file system must grow past the image.
@@ -340,6 +464,22 @@ in
               assert isinstance(image_info["logical_bytes"], str), image_info
               assert image_info["disks"]["root"]["logical_bytes"] == image_info["logical_bytes"], image_info
               assert image_info["format"] == "QCOW2", image_info
+              assert image_info["store"] == store, image_info
+              assert image_info["boot_loaders"] == json.loads('${builtins.toJSON expectedBootLoaders}'), image_info
+              disk = {p["partlabel"]: p for p in json.loads(machine.succeed("lsblk -J -b -l -o PARTLABEL,PARTN,SIZE"))["blockdevices"]}
+              labels = {"esp": "ESP"} | ({} if ROOT_FIRST_BOOT else {"root": "nixos"})
+              if store != "root":
+                  labels["store"] = "nix-store"
+              if verity:
+                  labels["store-verity"] = "nix-store-verity"
+              assert {key: p["label"] for key, p in image_info["partitions"].items()} == labels, image_info
+              for key, label in labels.items():
+                  partition = image_info["partitions"][key]
+                  assert partition["number"] == disk[label]["partn"], (key, partition)
+                  # Root has grown since.
+                  if key != "root":
+                      assert partition["size"] == disk[label]["size"], (key, partition)
+              assert image_info["partitions"]["esp"]["size"] == int(machine.succeed("numfmt --from=iec ${imageCfg.amazonImage.espSize}")), image_info
               with open(f"{nix_support}/register-image.json") as f:
                   args = json.load(f)
               expected = json.loads('${builtins.toJSON expectedRegisterImage}')
@@ -351,14 +491,175 @@ in
               assert size_gib * 1024**3 >= int(image_info["logical_bytes"]), args
               assert size_gib >= ${toString (lib.head registerImage.BlockDeviceMappings).Ebs.VolumeSize}, args
 
+          with subtest("Nix store file system"):
+              fstype, options = machine.succeed("findmnt -n -o FSTYPE,OPTIONS /nix/store | tail -n1").split()
+              assert fstype == "${storeFsType}", fstype
+              assert "ro" in options.split(","), options
+              if store == "erofs":
+                  machine.fail("test -e /run/current-system/bin/switch-to-configuration")
+                  if nix_enabled:
+                      machine.succeed("echo test > /tmp/store-test")
+                      error = machine.fail("nix-store --add /tmp/store-test 2>&1")
+                      assert "Read-only file system" in error, error
+              if store == "erofs-overlay":
+                  machine.succeed("findmnt -n -o FSTYPE /nix/.ro-store | grep -qx erofs")
+                  machine.succeed("test -x /run/current-system/bin/switch-to-configuration")
+
+          if verity:
+              with subtest("dm-verity"):
+                  roothash = image_info["partitions"]["store"]["roothash"]
+                  status = machine.succeed("veritysetup status nix-store")
+                  assert re.search(rf"^\s*root hash:\s+{roothash}$", status, re.M), (status, image_info)
+                  machine.succeed("findmnt -n -o SOURCE /nix/store | tail -n1 | grep -qx /dev/mapper/nix-store")
+
+          if uki_image:
+              with subtest("UKI boot"):
+                  esp = "${imageCfg.boot.loader.efi.efiSysMountPoint}"
+                  efi_binaries = machine.succeed(f"find {esp} -iname '*.efi'").split()
+                  assert efi_binaries == [f"{esp}/EFI/BOOT/BOOT${lib.toUpper pkgs.stdenv.hostPlatform.efiArch}.EFI"], efi_binaries
+                  machine.fail(f"test -e {esp}/loader/entries")
+                  # Under BIOS, Limine reads the same command line from its own config.
+                  expected = "${imageCfg.boot.uki.settings.UKI.Cmdline}"
+                  if verity:
+                      expected += f" storehash={image_info['partitions']['store']['roothash']}"
+                  cmdline = machine.succeed("cat /proc/cmdline").strip()
+                  assert cmdline == expected, cmdline
+                  if firmware == "uefi":
+                      # systemd-stub, the UKI's EFI stub, sets StubInfo. Limine and systemd-boot set LoaderInfo.
+                      machine.succeed("test -e /sys/firmware/efi/efivars/StubInfo-4a67b082-0a4c-41cf-b6c7-440b29bb8c4f")
+                      machine.fail("test -e /sys/firmware/efi/efivars/LoaderInfo-4a67b082-0a4c-41cf-b6c7-440b29bb8c4f")
+                  if hybrid:
+                      machine.succeed(f"test -f {esp}/limine/limine-bios.sys")
+
+          with subtest("Clean boot"):
+              failed = machine.succeed("systemctl list-units --failed --no-legend --plain").strip()
+              assert failed == "", failed
+              if not nix_enabled:
+                  units = machine.succeed("systemctl list-units --all --no-legend --plain --type=service,socket,timer 'nix-*'").strip()
+                  assert units == "", units
+
+          if store == "erofs-overlay":
+              with subtest("Writable store overlay"):
+                  machine.succeed("""cat > /tmp/gc-test.nix <<'EOF'
+          ${gcTest}EOF""")
+                  path = machine.succeed("NIX_REMOTE=daemon nix-build --no-out-link /tmp/gc-test.nix").strip()
+                  machine.succeed(f"grep -qx hello {path}", f"test -e /nix/.rw-store/upper/{os.path.basename(path)}")
+                  machine.succeed("NIX_REMOTE=daemon nix-store --gc")
+                  machine.fail(f"test -e {path}")
+
+          if ROOT_FIRST_BOOT:
+              with subtest("Root created on first boot"):
+                  built = image_partitions()
+                  assert all(p["name"] != "nixos" for p in built.values()), built
+                  root = machine.succeed("readlink -f /dev/disk/by-partlabel/nixos").strip()
+                  machine.succeed(f"test $(findmnt -no SOURCE /) = {root}")
+                  assert machine.succeed("findmnt -no FSTYPE,LABEL /").split() == ["${rootFsType}", "nixos"]
+                  disk = "/dev/" + machine.succeed(f"lsblk -no PKNAME {root}").strip()
+                  machine.succeed(f"test $(readlink -f /dev/disk/amazon-image-boot) = {disk}")
+                  machine.succeed("journalctl -b --identifier systemd-repart --grep 'Adding new partition'")
+                  machine.fail("journalctl -b --identifier systemd-repart --grep discarded")
+
+                  def check_root():
+                      """Root is new and fills the disk, and every other partition is as built."""
+                      table = json.loads(machine.succeed(f"sfdisk -J {disk}"))["partitiontable"]
+                      now = partitions(table)
+                      assert {n: now[n] for n in built} == built, (now, built)
+                      [new] = [now[n] for n in now if n not in built]
+                      assert new["name"] == "nixos" and partition_number(root) not in built, (new, built)
+                      # Within the 1 MiB alignment of the end of the disk.
+                      assert table["lastlba"] + 1 - (new["start"] + new["size"]) < 2048, (new, table)
+                      return new
+
+                  created = check_root()
+                  fs_uuid = machine.succeed("findmnt -no UUID /").strip()
+                  machine.shutdown()
+                  machine.start()
+                  machine.wait_for_unit("multi-user.target")
+                  assert check_root() == created
+                  assert machine.succeed("findmnt -no UUID /").strip() == fs_uuid
+                  # Later boots find root and leave it alone.
+                  machine.fail("journalctl -b --identifier systemd-repart --grep 'Adding new partition|Formatting|Growing'")
+                  if TWO_DISKS:
+                      assert disk == "/dev/vdb", disk
+                      machine.fail("blkid -p /dev/vda")
+                      machine.succeed("cmp -n 1048576 /dev/vda /dev/zero")
+          else:
+              with subtest("Root partition growth"):
+                  machine.fail("systemctl cat growpart.service")
+                  root = machine.succeed("readlink -f /dev/disk/by-label/nixos").strip()
+                  machine.succeed(f"test $(findmnt -no SOURCE /) = {root}")
+                  root_number = partition_number(root)
+                  disk = "/dev/" + machine.succeed(f"lsblk -no PKNAME {root}").strip()
+                  built = image_partitions()
+
+                  def check_growth():
+                      """systemd-repart grew root in the initrd, and every other partition is as built."""
+                      machine.succeed("journalctl -b --identifier systemd-repart --grep 'Growing existing partition'")
+                      table = json.loads(machine.succeed(f"sfdisk -J {disk}"))["partitiontable"]
+                      now = partitions(table)
+                      grown = now[root_number]
+                      assert now == built | {root_number: built[root_number] | {"size": grown["size"]}}, (now, built)
+                      assert grown["size"] > built[root_number]["size"], (grown, built)
+                      # Within the 1 MiB alignment of the end of the disk.
+                      assert table["lastlba"] + 1 - (grown["start"] + grown["size"]) < 2048, (grown, table)
+                      fs_size = int(machine.succeed("df --output=size -B1 / | tail -1"))
+                      assert fs_size > grown["size"] * 512 * 0.9, (fs_size, grown)
+                      return fs_size
+
+                  fs_size = check_growth()
+
+                  if RESIZE:
+                      # As after growing the EBS volume and rebooting.
+                      machine.shutdown()
+                      subprocess.check_call([QEMU_IMG, "resize", disk_image, "12G"])
+                      machine.start()
+                      machine.wait_for_unit("multi-user.target")
+                      grown = check_growth()
+                      assert grown > fs_size + 1024**3, (fs_size, grown)
+
+          if NVME:
+              with subtest("EBS NVMe device names"):
+                  machine.succeed("udevadm settle")
+                  # The kernel numbers NVMe controllers in probe order, so go by serial.
+                  by_id = "/dev/disk/by-id/nvme-Amazon_Elastic_Block_Store_"
+                  devs = machine.succeed(
+                      f"readlink -f {by_id}vol0123456789abcdef0 {by_id}vol0123456789abcdef0-part1 {by_id}vol0fedcba9876543210"
+                  ).split()
+                  for dev in devs:
+                      # udevd ran ebsnvme-bdev at boot, and nvme-cli read QEMU's vendor ID.
+                      machine.succeed(
+                          f"journalctl -b -t ebsnvme-bdev _SYSTEMD_UNIT=systemd-udevd.service --grep '^{dev}: vid=0x1b36 bdev=$'"
+                      )
+                      # QEMU can't set the vendor-specific device name, so nothing gets an xvd or sd name.
+                      ctrl = machine.succeed(f"${lib.getExe pkgs.nvme-cli} amzn id-ctrl {dev}")
+                      assert re.search(r"^bdev +: *$", ctrl, re.M), ctrl
+                  machine.fail("ls /dev/xvd* /dev/sd*")
+                  failed = machine.succeed("systemctl list-units --failed --plain --no-legend")
+                  assert not failed.strip(), failed
+
           with subtest("Store paths and profiles"):
-              machine.succeed("nix-store --check-validity ${imageCfg.system.build.toplevel}")
-              machine.succeed("nix-store --verify${verifyFlags}")
+              if nix_enabled:
+                  machine.succeed("nix-store --check-validity ${imageCfg.system.build.toplevel}")
+                  machine.succeed("nix-store --verify${verifyFlags}")
               machine.succeed("test $(readlink -f /nix/var/nix/profiles/system) = ${imageCfg.system.build.toplevel}")
               machine.fail("test -e /nix/var/nix/profiles/system-2-link")
-              ${lib.optionalString imageCfg.nix.channel.enable ''
+              ${lib.optionalString (imageCfg.nix.enable && imageCfg.nix.channel.enable) ''
                 machine.succeed("test -e /root/.nix-defexpr/channels/nixos/default.nix", "test $(stat -c %a /root) = 700")
               ''}
+
+          if not nix_enabled:
+              with subtest("amazon-init without Nix"):
+                  def run_amazon_init(user_data):
+                      with open(user_data_path, "w") as f:
+                          f.write(user_data)
+                      machine.succeed("systemctl reset-failed fetch-ec2-metadata; systemctl restart fetch-ec2-metadata")
+                      machine.succeed("systemctl restart amazon-init")
+                      return machine.succeed("journalctl -u amazon-init -b --no-pager")
+
+                  journal = run_amazon_init("{ ... }: { }\n")
+                  assert "can't rebuild itself; ignoring" in journal, journal
+                  run_amazon_init("#!/bin/sh\ntouch /run/user-data-ran\n")
+                  machine.succeed("test -e /run/user-data-ran")
 
           with subtest("Decompression of gzip-compressed user-data"):
               import gzip as gzip_mod
