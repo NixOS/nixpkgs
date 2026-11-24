@@ -37,6 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   propagatedBuildInputs = lib.optional enableTermcap ncurses;
 
+  strictDeps = true;
+
   makeFlags = lib.optionals stdenv.hostPlatform.isPE [
     "LDFLAGS=-no-undefined"
   ];
