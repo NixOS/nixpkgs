@@ -18,6 +18,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
+  strictDeps = true;
+
   cmakeFlags = lib.optionals stdenv.hostPlatform.isStatic [
     # One of the examples tests shared library support
     # and fails linking.
@@ -25,6 +27,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = true;
+
+  __structuredAttrs = true;
 
   meta = {
     changelog = "https://github.com/doctest/doctest/releases/tag/${finalAttrs.src.tag}";
