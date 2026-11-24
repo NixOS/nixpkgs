@@ -45,11 +45,10 @@ stdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
 
   meta = {
-    description = "Hailo 10/15 PCIe driver";
+    description = "Hailo 8 PCIe driver";
     homepage = "https://github.com/hailo-ai/hailort-drivers";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ hexa ];
-    mainProgram = "hailort-drivers";
-    platforms = lib.platforms.all;
+    platforms = lib.platforms.linux;
   };
 })
