@@ -3,7 +3,6 @@
   stdenvNoCC,
   fetchurl,
   linuxPackages,
-  ...
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
