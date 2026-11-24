@@ -79,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "http://www.deepspace6.net/projects/ipv6calc.html";
     license = lib.licenses.gpl2Only;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ kamadorueda ];
     platforms = lib.platforms.linux;
   };
 })
