@@ -19781,6 +19781,11 @@
     githubId = 54669781;
     keys = [ { fingerprint = "293B 93D8 A471 059F 85D7  16A6 5BA9 2099 D9BE 2DAA"; } ];
   };
+  MishowHD = {
+    name = "Giacomo Di Clerico";
+    github = "MishowHD";
+    githubId = 84620724;
+  };
   mishushakov = {
     email = "mish@e2b.dev";
     github = "mishushakov";
