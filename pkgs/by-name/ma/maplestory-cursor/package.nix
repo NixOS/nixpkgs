@@ -8,14 +8,14 @@
   python3Packages,
 }:
 
-stdenvNoCC.mkDerivation {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "maplestory-cursor";
-  version = "1.0.0-unstable-2026-11-25";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "Liam-Weitzel";
     repo = "maplestory-cursor";
-    rev = "86bddac3b1dcd18fd2ad67609b6c6192aab5fea8";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-NFkEwaeyD+vlp3sGz3Hq2R9adYZnv0huV4lyOOTEHuA=";
   };
 
@@ -48,4 +48,4 @@ stdenvNoCC.mkDerivation {
     maintainers = with lib.maintainers; [ liam-w ];
     platforms = lib.platforms.linux;
   };
-}
+})
