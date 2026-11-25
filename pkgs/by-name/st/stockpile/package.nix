@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "stockpile";
-  version = "0.5.1";
+  version = "0.50";
 
   src = fetchFromCodeberg {
     owner = "turtle";
     repo = "stockpile";
     tag = finalAttrs.version;
-    hash = "sha256-6RYd1vhArdH4s68QOSIDVPQqX2w+Dsa8HLVxCKPzYWo=";
+    hash = "sha256-e8mBZyZFGtiDGsAb4kyNOzLNA9GIE6X8buRJj6DCbxM=";
   };
 
   postPatch = ''
