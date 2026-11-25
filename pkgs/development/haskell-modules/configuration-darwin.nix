@@ -40,8 +40,8 @@ self: super:
 
     # gtk/gtk3 needs to be told on Darwin to use the Quartz
     # rather than X11 backend (see eg https://github.com/gtk2hs/gtk2hs/issues/249).
-    gtk3 = appendConfigureFlag "-f have-quartz-gtk" super.gtk3;
-    gtk = appendConfigureFlag "-fhave-quartz-gtk" super.gtk;
+    gtk3 = enableCabalFlag "have-quartz-gtk" super.gtk3;
+    gtk = enableCabalFlag "have-quartz-gtk" super.gtk;
 
     # issues finding libcharset.h without libiconv in buildInputs on darwin.
     with-utf8 = addExtraLibrary pkgs.libiconv super.with-utf8;
