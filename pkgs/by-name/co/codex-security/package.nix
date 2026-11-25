@@ -29,7 +29,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "codex-security";
-  version = "0.1.31";
+  version = "0.11.0";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -38,12 +38,12 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "openai";
     repo = "codex-security";
     tag = "npm-v${finalAttrs.version}";
-    hash = "sha256-TA0dxV9VYvvmPU2ZqI5i0XGHaIzNYhqlkLPztZMbtCQ=";
+    hash = "sha256-n7nMZpep7XyMw3ZycDWR2P60efJUe5Nffvl5lXR2Yxo=";
   };
 
   npmPackage = fetchurl {
     url = "https://registry.npmjs.org/@openai/codex-security/-/codex-security-${finalAttrs.version}.tgz";
-    hash = "sha512-XdxIQ+JQH3iysFPW2VdFcKAJJo+M+G4hR9x/KlVimMcbmocDVtQT+trjjfNPqZUdb2ZHrW7HHGepeRhMbMvCHQ==";
+    hash = "sha512-XxnhiX7fREcw3cbsTOoVVXnctSTeB5eF4ql6TPYVheoIxSPxjkkVO+JQNjeGS3AWWC6h+Lwq0RSRJW0tF9yCKA==";
   };
 
   sourceRoot = "${finalAttrs.src.name}/sdk/typescript";
@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     pnpm = pnpm_11;
     fetcherVersion = 4;
-    hash = "sha256-7gu3a76l+5XgIbpjr2NFt5Wcp/+LRjUNAaxZ0cW8T8c=";
+    hash = "sha256-lHsFNQjdoR7q97vXjXC02cKRdjRVspkkfSdjzrw2Yxk=";
   };
 
   nativeBuildInputs = [
@@ -76,6 +76,9 @@ stdenv.mkDerivation (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
+    # The build script generates files under plugins/, outside the source root.
+    chmod --recursive u+w ../../plugins
+
     pnpm run build
 
     runHook postBuild
@@ -89,7 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
     pnpm install --force --offline --prod --ignore-scripts --frozen-lockfile
 
     mkdir -p "$out/lib/codex-security"
-    cp -r bin dist node_modules package.json LICENSE README.md \
+    cp -r bin dist schemas node_modules package.json LICENSE README.md \
       "$out/lib/codex-security/"
 
     # The plugin bundle is generated during npm prepack and is not in the source tag.
