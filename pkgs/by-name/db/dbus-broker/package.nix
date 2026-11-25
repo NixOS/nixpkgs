@@ -137,6 +137,11 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/bus1/dbus-broker/commit/aaa9fd6bbc2d5d7bfeca039f9c457b7f88a50dde.patch";
       hash = "sha256-f0p5oDw/6Wxe26fcqfKua766ylMg5NydywFM3MZYV8I=";
     })
+    (fetchpatch {
+      name = "musl-sockaddr-cast.patch";
+      url = "https://github.com/bus1/dbus-broker/commit/bde3440958114694a20dae6a2e95f1f99e917c2e.patch";
+      hash = "sha256-ajubfQXxaVUwiZsT+F6qKs43oDlGgbF4Ajp74BW1m00=";
+    })
   ];
 
   nativeBuildInputs = [
