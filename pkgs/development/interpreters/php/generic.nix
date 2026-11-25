@@ -16,6 +16,7 @@ let
       acl,
       autoconf,
       automake,
+      bashNonInteractive,
       bison,
       flex,
       libtool,
@@ -232,6 +233,9 @@ let
 
           inherit version;
 
+          strictDeps = true;
+          __structuredAttrs = true;
+
           enableParallelBuilding = true;
 
           nativeBuildInputs = [
@@ -245,8 +249,11 @@ let
           ];
 
           buildInputs =
+            # Used to patch shebangs
+            [ bashNonInteractive ]
+
             # PCRE extension
-            [ pcre2 ]
+            ++ [ pcre2 ]
 
             # Enable sapis
             ++ lib.optionals pearSupport [ libxml2.dev ]
