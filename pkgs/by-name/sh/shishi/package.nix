@@ -15,6 +15,7 @@
   useGnutls ? lib.meta.availableOn stdenv.hostPlatform gnutls,
   gnutls,
   pkgsStatic,
+  testers,
 }:
 
 let
@@ -93,6 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     tests = {
       static = pkgsStatic.shishi;
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     };
   };
 
@@ -104,5 +106,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
     platforms = lib.platforms.linux;
+    pkgConfigModules = [ "shishi" ];
   };
 })
