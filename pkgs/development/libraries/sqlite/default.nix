@@ -110,7 +110,19 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail \
         'if {[clang_sanitize_address]==0} {' \
         'if {0 && [clang_sanitize_address]==0} {'
-  '';
+  ''
+  +
+    lib.optionalString
+      (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform && !stdenv.hostPlatform.isStatic)
+      ''
+        substituteInPlace test/testrunner_data.tcl \
+          --replace-fail \
+            'set tcldir [::tcl::pkgconfig get libdir,install]' \
+            'set tcldir "${lib.getLib tcl}/lib"' \
+          --replace-fail \
+            '\$SRCDIR/configure --with-tcl=\$TCLDIR $configOpts' \
+            '\$SRCDIR/configure --host=${stdenv.hostPlatform.config} --with-tcl=\$TCLDIR --with-tclsh=${lib.getExe' buildPackages.tcl "tclsh"} $configOpts'
+      '';
 
   buildInputs = [
     zlib
@@ -183,6 +195,10 @@ stdenv.mkDerivation (finalAttrs: {
     echo ""
     echo "NIX_CFLAGS_COMPILE = $NIX_CFLAGS_COMPILE"
     echo ""
+  ''
+  + lib.optionalString stdenv.hostPlatform.isMusl ''
+    # musl's default 128 KiB thread stack overflows in multi-threaded debug tests (e.g. notify2.test)
+    export NIX_LDFLAGS="$NIX_LDFLAGS -z stack-size=2097152"
   '';
 
   postInstall = ''
@@ -198,7 +214,9 @@ stdenv.mkDerivation (finalAttrs: {
   checkTarget = lib.optionalString stdenv.hostPlatform.isStatic "fuzztest sourcetest";
   # Neither GCC's libsanitizer nor compiler-rt's sanitizers are built for
   # musl, so the fuzzcheck-asan and fuzzcheck-ubsan programs cannot be linked.
-  checkFlags = lib.optionals stdenv.hostPlatform.isMusl [ "TSTRNNR_OPTS=~fuzzcheck-%san" ];
+  checkFlags = lib.optionals stdenv.hostPlatform.isMusl [
+    "TSTRNNR_OPTS=~fuzzcheck-%san"
+  ];
 
   passthru = {
     tests = {
