@@ -34,7 +34,7 @@ buildGoModule rec {
   subPackages = [ "cmd/ipfs" ];
 
   passthru.tests = {
-    inherit (nixosTests) kubo ipget;
+    inherit (nixosTests) kubo;
     repoVersion = callPackage ./test-repoVersion.nix { };
   };
 

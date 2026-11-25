@@ -922,7 +922,6 @@ in
   iocaine = runTest ./iocaine.nix;
   iodine = runTest ./iodine.nix;
   iosched = runTest ./iosched.nix;
-  ipget = runTest ./ipget.nix;
   ipv6 = runTest ./ipv6.nix;
   irqbalance = runTest ./irqbalance.nix;
   isolate = runTest ./isolate.nix;

@@ -1308,6 +1308,7 @@ mapAliases {
   ipfs-migrator = throw "'ipfs-migrator' has been renamed to/replaced by 'kubo-migrator'"; # Converted to throw 2025-10-27
   ipfs-migrator-all-fs-repo-migrations = throw "'ipfs-migrator-all-fs-repo-migrations' has been renamed to/replaced by 'kubo-fs-repo-migrations'"; # Converted to throw 2025-10-27
   ipfs-migrator-unwrapped = throw "'ipfs-migrator-unwrapped' has been renamed to/replaced by 'kubo-migrator-unwrapped'"; # Converted to throw 2025-10-27
+  ipget = throw "'ipget' has been removed as it is archived upstream; use 'ipfs get' from 'kubo' instead"; # Added 2026-11-25
   iqueue = throw "'iqueue' has been removed, as it was broken and unmaintained upstream"; # Added 2026-04-10
   ir.lv2 = ir-lv2; # Added 2025-09-37
   ircdHybrid = warnAlias "'ircdHybrid' has been renamed to 'ircd-hybrid'" ircd-hybrid; # Added 2026-02-08
