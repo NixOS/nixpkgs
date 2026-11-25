@@ -23109,6 +23109,8 @@ self: super: with self; {
 
   wordninja = callPackage ../development/python-modules/wordninja { };
 
+  workos = callPackage ../development/python-modules/workos { };
+
   world-bank-data = callPackage ../development/python-modules/world-bank-data { };
 
   wrapcco = callPackage ../development/python-modules/wrapcco { };
