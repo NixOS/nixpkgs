@@ -10,17 +10,17 @@
 
 buildGoModule (finalAttrs: {
   pname = "gitea-actions-runner";
-  version = "6.0.0";
+  version = "6.0.1";
 
   src = fetchFromGitea {
     domain = "gitea.com";
     owner = "gitea";
     repo = "runner";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-UOOvw1R9CtHlDlo8n8Racw4qEAv/KU8tToW4Cc1M0zg=";
+    hash = "sha256-V84K5zC+i9I64fwUXG05oL7oyH1+C56ZFfFMPY1yf20=";
   };
 
-  vendorHash = "sha256-v8ihlWuqI4A/FoexyZkzElgLJS8OEHwtWz2vytf3nqk=";
+  vendorHash = "sha256-HSjcmksxTmRaEHB1rRTCJHZ2VhS/+e2d7/fIXDkd9J8=";
 
   # Tests require network access (artifactcache tests try to determine outbound IP)
   doCheck = false;
