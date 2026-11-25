@@ -34,6 +34,10 @@
   libgbm,
   xz,
   libxkbcommon,
+  wayland,
+  libpsl,
+  gdk-pixbuf,
+  brotli,
 }:
 
 let
@@ -80,6 +84,10 @@ let
     libxcb-render-util # libxcb-render-util.so.0
     xz
     libxkbcommon
+    wayland
+    libpsl
+    gdk-pixbuf
+    brotli
   ];
   package = stdenv.mkDerivation {
 
