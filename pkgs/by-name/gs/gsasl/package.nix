@@ -16,10 +16,16 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-/uNsZqwS0y078pp7Na2PREt5lv42m52l02/WrmScaOs=";
   };
 
+  nativeBuildInputs = [
+    libkrb5 # for krb5-config
+  ];
+
   buildInputs = [
     libidn
     libkrb5
   ];
+
+  strictDeps = true;
 
   configureFlags = [ "--with-gssapi-impl=mit" ];
 
