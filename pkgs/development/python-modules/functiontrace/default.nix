@@ -1,26 +1,46 @@
 {
   lib,
+  aws-lc,
   buildPythonPackage,
+  cargo,
   fetchPypi,
-  setuptools,
-  toml,
   functiontrace-server,
+  nix-update-script,
+  pkg-config,
+  rustPlatform,
+  rustc,
+  setuptools,
+  setuptools-rust,
 }:
 
 buildPythonPackage rec {
   pname = "functiontrace";
-  version = "0.5.2";
+  version = "0.6.3";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-dVJQ28Z+fohSQOk0rXCCKrhYmBL7QB/CGO/9pBhabFE=";
+    hash = "sha256-eXttNuy0z+q1K9Pt7nkkJyEcnOC5y2UgYau/KE+uxpU=";
   };
 
-  nativeBuildInputs = [
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-MpsQkMNY9VllBeA/FVPYJAqizmY6GWFtnb6O5tTO3/g=";
+  };
+
+  build-system = [
     setuptools
-    toml
+    setuptools-rust
   ];
+
+  nativeBuildInputs = [
+    cargo
+    pkg-config
+    rustPlatform.cargoSetupHook
+    rustc
+  ];
+
+  buildInputs = [ aws-lc ];
 
   pythonImportsCheck = [ "functiontrace" ];
 
@@ -31,6 +51,8 @@ buildPythonPackage rec {
     wrapProgram $out/bin/functiontrace \
       --prefix PATH : ${lib.makeBinPath [ functiontrace-server ]}
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://functiontrace.com";
