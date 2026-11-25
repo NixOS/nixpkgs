@@ -7,6 +7,15 @@
 let
   # Remove when haskellPackages is on GHC 9.12
   haskellPackages = haskell.packages.ghc912;
+
+  concurrent-output-fork = haskellPackages.concurrent-output.overrideAttrs (_: {
+    src = fetchFromGitHub {
+      owner = "brandonchinn178";
+      repo = "concurrent-output";
+      rev = "a40a4d16e7836b56a682779c1ac6882739ba6a9b";
+      hash = "sha256-tom9+n6VYTzhf4XlIsUlgZz4yfa8Pe45oSiiwEevrsI=";
+    };
+  });
 in
 
 haskell.lib.compose.justStaticExecutables (
@@ -29,7 +38,7 @@ haskell.lib.compose.justStaticExecutables (
         base
         ansi-terminal
         bytestring
-        concurrent-output
+        concurrent-output-fork
         containers
         deepseq
         directory
