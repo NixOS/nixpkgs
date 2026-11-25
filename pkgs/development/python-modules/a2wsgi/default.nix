@@ -10,13 +10,14 @@
   starlette,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "a2wsgi";
   version = "1.10.10";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "a2wsgi";
+    version = finalAttrs.version;
     hash = "sha256-pbz/tSCBujnfDV6aiE/G+BnZLjpCOJNDunfL+An+H0U=";
   };
 
@@ -41,4 +42,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
-}
+})
