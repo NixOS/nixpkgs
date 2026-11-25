@@ -76,7 +76,7 @@
   # sqlite
   regex,
   # - trino
-  trino-python-client,
+  trino,
   # - visualization
   graphviz,
   # examples
@@ -441,7 +441,7 @@ buildPythonPackage (finalAttrs: {
       rich
     ];
     trino = [
-      trino-python-client
+      trino
       pyarrow
       pyarrow-hotfix
       numpy
