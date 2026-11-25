@@ -9,6 +9,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "remotecrab";
   version = "1.4.5";
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   src = fetchurl {
     name = "RemoteCrab.dmg";
     url = "https://vgoapp.com/downloads/RemoteCrab-${finalAttrs.version}.dmg";
