@@ -32,7 +32,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     python3Packages.reedsolo
     which
     zbar
-    imagemagickBig
+    graphicsmagick-imagemagick-compat
     gnupg
   ];
 
