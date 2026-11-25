@@ -8381,6 +8381,11 @@
     githubId = 54799;
     name = "Edward Tjörnhammar";
   };
+  ee5cd7d5d = {
+    github = "ee5cd7d5d";
+    githubId = 49471546;
+    name = "Pedro Rodriguez Perez";
+  };
   eeedean = {
     github = "eeedean";
     githubId = 8173116;
