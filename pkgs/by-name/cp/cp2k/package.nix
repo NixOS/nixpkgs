@@ -188,6 +188,9 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals (gpuBackend == "cuda") [
     cudaPackages.cuda_nvcc
     addDriverRunpath
+  ]
+  ++ lib.optionals (gpuBackend == "rocm") [
+    rocmPackages.clr
   ];
 
   buildInputs = [
