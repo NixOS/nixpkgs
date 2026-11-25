@@ -127,6 +127,8 @@ let
     version = "0.1.1";
     inherit src;
 
+    __structuredAttrs = true;
+
     sourceRoot = "${src.name}/parquet-rust-wrapper";
 
     cargoHash = "sha256-F68Rvfc04eI/y0Z5tGtQn4zEmqLuMZGZiKEh2HMFi/g=";
