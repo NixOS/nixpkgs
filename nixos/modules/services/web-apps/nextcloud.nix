@@ -1557,6 +1557,14 @@ in
             #        user by copying them somewhere else and overriding CREDENTIALS_DIRECTORY
             #        for php. This is currently necessary as the unit runs as root.
             serviceConfig.RuntimeDirectory = lib.mkForce "phpfpm phpfpm-nextcloud";
+
+            # Needed for the preStart script below.
+            # It's being run as root and phpfpm doesn't have capabilities on its own to override
+            # these checks.
+            # Running this as nextcloud isn't an option either since we need root permissions to
+            # create & chown the 'credentials' dir inside $RUNTIME_DIRECTORY.
+            # Proper fix would be to actually run rootless phpfpm.
+            serviceConfig.CapabilityBoundingSet = [ "CAP_DAC_OVERRIDE" ];
             preStart = ''
               umask 0077
 

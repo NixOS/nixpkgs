@@ -37,10 +37,12 @@ jobs:
             into: staging-26.05
           - from: release-26.05
             into: staging-nixos-26.05
-          - from: master
+          - from: release-26.11
             into: staging-next-26.11
           - from: staging-next-26.11
             into: staging-26.11
+          - from: release-26.11
+            into: staging-nixos-26.11
           - name: merge-base(master,staging) → haskell-updates
             from: master staging
             into: haskell-updates

@@ -12,8 +12,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.1.6";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     pname = "alibabacloud_gateway_pop";
     inherit (finalAttrs) version;

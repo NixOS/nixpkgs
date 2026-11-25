@@ -28,6 +28,7 @@
   enableOpencode ? false,
   opencode,
   enableResourceMonitor ? true,
+  enableTelemetry ? false,
   t3code-unwrapped ? callPackage ./unwrapped.nix { },
   t3code-resource-monitor ? callPackage ./resource-monitor.nix { inherit t3code-unwrapped; },
 }:
@@ -64,6 +65,13 @@ let
       "--set-default"
       "T3CODE_CLOUDFLARED_PATH"
       (lib.getExe cloudflared)
+    ]
+    # Upstream has no setting to turn telemetry off, so opt out by default.
+    # https://github.com/pingdotgg/t3code/issues/1397
+    ++ [
+      "--set-default"
+      "T3CODE_TELEMETRY_ENABLED"
+      (lib.boolToString enableTelemetry)
     ]
     ++ lib.optionals enableResourceMonitor [
       "--set-default"

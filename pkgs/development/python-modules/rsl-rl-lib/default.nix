@@ -25,14 +25,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "rsl-rl-lib";
-  version = "5.5.2";
+  version = "6.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "leggedrobotics";
     repo = "rsl_rl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vSKy5Yg4Wk3kildaBoNnin9aVAZnp72U/jWoWd5QIYU=";
+    hash = "sha256-XTrRus4D6BxQU1KriKQscvRu//JepBH0Q8WqslGYzT8=";
   };
 
   build-system = [

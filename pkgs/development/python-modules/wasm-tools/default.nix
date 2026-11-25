@@ -15,14 +15,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "wasm-tools";
-  version = "2.1.0";
+  version = "2.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "appthreat";
     repo = "wasm-tools";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AwpQ5jCg6C7opBLaL6GU3Ve2iiwxkNl6CpL6oS3osfU=";
+    hash = "sha256-IBnVNiRmAJlDzcbIyGl+QL6qEvzlXLelJH+zlw9lD+Y=";
   };
 
   postPatch = ''

@@ -9,7 +9,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pname = "entangled";
   version = "2.4.3";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "entangled";
