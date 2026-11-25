@@ -18,7 +18,7 @@ buildPythonPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "AzureAD";
     repo = "azure-activedirectory-library-for-python";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-HE8/P0aohoZNeMdcQVKdz6M31FMrjsd7oVytiaD0idI=";
   };
 
