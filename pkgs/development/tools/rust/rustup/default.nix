@@ -2,6 +2,7 @@
   stdenv,
   lib,
   runCommand,
+  symlinkJoin,
   patchelf,
   fetchFromGitHub,
   rustPlatform,
@@ -19,9 +20,15 @@
 }:
 
 let
-  libPath = lib.makeLibraryPath [
-    zlib # libz.so.1
-  ];
+  # Joined into a single directory, as each toolchain gets a symlink to it
+  # (see 0001-dynamically-patchelf-binaries.patch).
+  libs = symlinkJoin {
+    name = "rustup-toolchain-libs";
+    paths = [
+      (lib.getLib zlib) # libz.so.1
+    ];
+  };
+  libPath = "${libs}/lib";
 in
 
 rustPlatform.buildRustPackage (finalAttrs: {
