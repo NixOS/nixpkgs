@@ -74,6 +74,8 @@ in
     knownVulnerabilities = [
       # Fixed in 2026.3.0.1
       "CVE-2026-111497; see https://github.com/NixOS/nixpkgs/issues/590447"
+      # Fixed in 2026.3.0.2
+      "CVE-2026-114938; see https://github.com/NixOS/nixpkgs/issues/590447"
     ];
   };
 }).overrideAttrs
