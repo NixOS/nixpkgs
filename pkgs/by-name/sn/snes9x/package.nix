@@ -50,6 +50,9 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/snes9xgit/snes9x/commit/96b366100172723f6314c40e237b370f4f7b59f4.patch";
       hash = "sha256-oYj0vqAeChlXNnuQOAmrg7x9SU0qH18r7+1wLe981oc=";
     })
+    # Bound the screenshot read when loading a save state
+    # https://github.com/snes9xgit/snes9x/pull/1112
+    ./CVE-2026-134856.patch
   ];
 
   nativeBuildInputs = [

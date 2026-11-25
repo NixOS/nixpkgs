@@ -14,6 +14,12 @@ mkLibretroCore {
     hash = "sha256-9YK7SMHOU/v2eyzXMYb8iXhfdcQ4bDyLYE0E3j11OBI=";
   };
 
+  patches = [
+    # Bound the screenshot read when loading a save state
+    # https://github.com/snes9xgit/snes9x/pull/1112
+    ./snes9x-CVE-2026-134856.patch
+  ];
+
   makefile = "Makefile";
   preBuild = "cd libretro";
 
