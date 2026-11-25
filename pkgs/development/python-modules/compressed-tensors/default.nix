@@ -30,7 +30,7 @@ buildPythonPackage (finalAttrs: {
 
   # Release on PyPI is missing the `utils` directory, which `setup.py` wants to import
   src = fetchFromGitHub {
-    owner = "neuralmagic";
+    owner = "vllm-project";
     repo = "compressed-tensors";
     tag = finalAttrs.version;
     hash = "sha256-cbHP2YZgG0UY+rrcOKKwtgwga2pEZaEEMoJqq57pFb0=";
@@ -171,8 +171,8 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Safetensors extension to efficiently store sparse quantized tensors on disk";
-    homepage = "https://github.com/neuralmagic/compressed-tensors";
-    changelog = "https://github.com/neuralmagic/compressed-tensors/releases/tag/${finalAttrs.src.tag}";
+    homepage = "https://github.com/vllm-project/compressed-tensors";
+    changelog = "https://github.com/vllm-project/compressed-tensors/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ sarahec ];
   };
