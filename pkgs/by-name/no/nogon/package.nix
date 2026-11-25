@@ -99,5 +99,6 @@ buildGoModule (finalAttrs: {
     mainProgram = "nogon";
     maintainers = with lib.maintainers; [ _4evy ];
     platforms = lib.platforms.unix;
+    teams = with lib.teams; [ ngi ];
   };
 })
