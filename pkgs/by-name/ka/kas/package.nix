@@ -8,14 +8,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "kas";
-  version = "5.4";
+  version = "5.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "siemens";
     repo = "kas";
     tag = finalAttrs.version;
-    hash = "sha256-wETe3VgG5ZEQjWXgcC/u42ZzzPIMqrBEcZmaDcK5yRY=";
+    hash = "sha256-4yaOCu42pDoqAnx1TSAMPf5c/zaHTHuul2GMcC+WvVY=";
   };
 
   patches = [ ./pass-terminfo-env.patch ];
@@ -27,6 +27,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   dependencies = with python3.pkgs; [
     setuptools # pkg_resources is imported during runtime
     kconfiglib
+    colorlog
     jsonschema
     distro
     pyyaml
