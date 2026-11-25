@@ -1,8 +1,10 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   fetchNpmDeps,
+  installShellFiles,
   nodejs,
   npmHooks,
 
@@ -117,7 +119,10 @@ buildPythonPackage (finalAttrs: {
   };
 
   # Web UI bundle, served when DOCLING_SERVE_ENABLE_UI is set
-  nativeBuildInputs = lib.optionals withUI [
+  nativeBuildInputs = [
+    installShellFiles
+  ]
+  ++ lib.optionals withUI [
     nodejs
     npmHooks.npmConfigHook
   ];
@@ -133,6 +138,15 @@ buildPythonPackage (finalAttrs: {
       null;
   preBuild = lib.optionalString withUI ''
     npm --prefix ui run build
+  '';
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    # typer otherwise tries to detect the shell from the process tree
+    export _TYPER_COMPLETE_TEST_DISABLE_SHELL_DETECTION=1
+    installShellCompletion --cmd docling-serve \
+      --bash <($out/bin/docling-serve --show-completion bash) \
+      --fish <($out/bin/docling-serve --show-completion fish) \
+      --zsh <($out/bin/docling-serve --show-completion zsh)
   '';
 
   pythonImportsCheck = [
