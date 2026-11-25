@@ -15,7 +15,11 @@ buildPythonPackage rec {
     owner = "aboutcode-org";
     repo = "pygmars";
     tag = "v${version}";
-    hash = "sha256-AbBhWR9ycOFrxS7Vz0bSsSyS3FEEm2bXJAvMhIba6XQ=";
+    # export-subst prevents reproducibility
+    postFetch = ''
+      sed -i /fallback_version/d "$out/pyproject.toml"
+    '';
+    hash = "sha256-0Qy5epvkw+2z3y67HbR8TfVpgb9qxdglHTvmtSJDkCs=";
   };
 
   dontConfigure = true;
