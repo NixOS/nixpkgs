@@ -102,7 +102,7 @@ let
     ++ lib.optionals mediaSupport [ ffmpeg_8 ]
   );
 
-  version = "16.0.1";
+  version = "16.0.3";
 
   sources = {
     x86_64-linux = fetchurl {
@@ -115,7 +115,7 @@ let
         "mirror://sourceforge/project/tor-browser.mirror/16.0/tor-browser-linux-x86_64-${version}.tar.xz"
         "https://cdimage.debian.org/mirror/torproject.org/dist/torbrowser/${version}/tor-browser-linux-x86_64-${version}.tar.xz"
       ];
-      hash = "sha256-WzatYQwgyB+qcsryfRzToR8UoyfDILTOxYFAABa6eLA=";
+      hash = "sha256-sDnWmVTJQcPjb7gTlBisrZvBnBEBip62z8q7WmL92r4=";
     };
 
     aarch64-linux = fetchurl {
@@ -128,7 +128,7 @@ let
         "mirror://sourceforge/project/tor-browser.mirror/16.0/tor-browser-linux-aarch64-${version}.tar.xz"
         "https://cdimage.debian.org/mirror/torproject.org/dist/torbrowser/${version}/tor-browser-linux-aarch64-${version}.tar.xz"
       ];
-      hash = "sha256-Tup5yHpnQaR3e+9zduN0VlqUGrP3WLwyvyJCW1QXADE=";
+      hash = "sha256-yycnMDqUzvuDHYv0RS7vmltx4+wOTUnYskPICfspsHA=";
     };
   };
 
