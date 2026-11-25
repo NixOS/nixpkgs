@@ -14,7 +14,6 @@
   fftw,
   hdf5-mpi,
   swig,
-  gsl,
   harminv,
   libctl,
   libgdsii,
@@ -58,7 +57,6 @@ buildPythonPackage rec {
   ];
 
   buildInputs = [
-    gsl
     blas
     lapack
     fftw
@@ -67,7 +65,6 @@ buildPythonPackage rec {
     libctl
     libgdsii
     guile
-    gsl
     mpb
   ];
 
