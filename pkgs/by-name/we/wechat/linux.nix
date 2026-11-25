@@ -189,23 +189,29 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         if [ -z "''${QT_QPA_PLATFORM:-}" ]; then
           if [ -n "''${WAYLAND_DISPLAY:-}" ] || [ "''${XDG_SESSION_TYPE:-}" = wayland ]; then
             export QT_QPA_PLATFORM=wayland
-            export QT_IM_MODULE=text-input-unstable-v3
           else
             export QT_QPA_PLATFORM=xcb
-
-            case "''${XMODIFIERS:-}" in
-              *@im=fcitx*)
-                export QT_IM_MODULE=fcitx
-                export GTK_IM_MODULE=fcitx
-                ;;
-              *@im=ibus*)
-                export QT_IM_MODULE=ibus
-                export GTK_IM_MODULE=ibus
-                export IBUS_USE_PORTAL=1
-                ;;
-            esac
           fi
         fi
+
+        case "''${QT_QPA_PLATFORM}" in
+          wayland*)
+            export QT_IM_MODULE="''${QT_IM_MODULE:-text-input-unstable-v3}"
+            ;;
+          xcb*)
+            case "''${XMODIFIERS:-}" in
+              *@im=fcitx*)
+                export QT_IM_MODULE="''${QT_IM_MODULE:-fcitx}"
+                export GTK_IM_MODULE="''${GTK_IM_MODULE:-fcitx}"
+                ;;
+              *@im=ibus*)
+                export QT_IM_MODULE="''${QT_IM_MODULE:-ibus}"
+                export GTK_IM_MODULE="''${GTK_IM_MODULE:-ibus}"
+                export IBUS_USE_PORTAL="''${IBUS_USE_PORTAL:-1}"
+                ;;
+            esac
+            ;;
+        esac
       '
   '';
 
