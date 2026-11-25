@@ -21573,7 +21573,7 @@ self: super: with self; {
 
   trimesh = callPackage ../development/python-modules/trimesh { };
 
-  trino-python-client = callPackage ../development/python-modules/trino-python-client { };
+  trino = callPackage ../development/python-modules/trino { };
 
   trio = callPackage ../development/python-modules/trio { };
 

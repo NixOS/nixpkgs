@@ -841,6 +841,7 @@ mapAliases {
   treeo = throw "treeo has been removed because it has been marked as broken since 2023."; # Added 2025-10-11
   treex = throw "treex has been removed because it has transitively been marked as broken since 2023."; # Added 2025-10-11
   trezor_agent = throw "'trezor_agent' has been renamed to/replaced by 'trezor-agent'"; # Converted to throw 2025-10-29
+  trino-python-client = trino; # added 2026-11-25
   ts1-signatures = warnAlias "'ts1-signatures' has been renamed to 'th1'" th1; # Added 2026-11-07
   tunigo = throw "'tunigo' has been removed because the Tunigo service is no longer operational. For similar functionality, consider the Spotify Web API."; # Added 2026-11-20
   tuyaha = throw "'tuyaha' has been removed because it is unmaintained upstream. Use 'tuya-iot-py-sdk' instead."; # Added 2026-11-22
