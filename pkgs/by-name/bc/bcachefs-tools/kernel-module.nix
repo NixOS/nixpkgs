@@ -16,6 +16,14 @@ stdenv.mkDerivation {
 
   src = bcachefs-tools.dkms;
 
+  patches = [
+    ./compat-6.18.64.patch
+  ]
+  ++ lib.optionals (lib.versionAtLeast kernel.version "7.3.6") [
+    # needs a version gate because the new API doesn't exist in older versions
+    ./compat-7.3.6.patch
+  ];
+
   postPatch = ''
     substituteInPlace src/fs/bcachefs/Makefile \
       --replace-fail '$(objtree)/vmlinux' '${kernel.dev}/vmlinux'

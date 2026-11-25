@@ -6712,6 +6712,7 @@ with pkgs;
 
   nss_latest = callPackage ../development/libraries/nss/latest.nix { };
   nss_esr = callPackage ../development/libraries/nss/esr.nix { };
+  nss_esr_3_125 = callPackage ../development/libraries/nss/esr_3_125.nix { };
   nss = nss_esr;
   nssTools = nss.tools;
 
