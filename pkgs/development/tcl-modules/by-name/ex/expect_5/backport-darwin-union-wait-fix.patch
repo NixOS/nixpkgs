@@ -1,0 +1,22 @@
+diff --git a/configure.in b/configure.in
+index ac003f2abd..6b4b077106 100644
+--- a/configure.in
++++ b/configure.in
+@@ -432,6 +432,17 @@
+ 	])
+ fi
+ 
++AC_MSG_CHECKING([if on Darwin])
++if test "x`(uname -s) 2>/dev/null`" = xDarwin; then
++  AC_MSG_RESULT(yes)
++  AC_DEFINE(HAVE_DARWIN, 1, [Operating system])
++  AC_DEFINE(NO_UNION_WAIT)
++  darwin=1
++else
++  AC_MSG_RESULT(no)
++  darwin=0
++fi
++
+ ######################################################################
+ #
+ # Look for various header files

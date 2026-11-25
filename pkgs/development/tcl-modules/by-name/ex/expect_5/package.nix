@@ -39,6 +39,10 @@ tcl.mkTclDerivation (finalAttrs: {
     ./fix-darwin-bsd-clang16.patch
     # Remove some code which causes it to link against a file that does not exist at build time on native FreeBSD
     ./freebsd-unversioned.patch
+    # Backport of Darwin fixes from https://github.com/tcltk-depot/expect/pull/2.
+    ./backport-darwin-union-wait-fix.patch
+    # Fixes an incompatible pointer type error with Clang 22. The Tcl_ChannelType change was backported from Expect 6.
+    ./backport-tcl-channel-type-fix.patch
   ];
 
   postPatch = ''
