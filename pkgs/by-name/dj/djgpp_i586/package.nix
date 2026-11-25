@@ -10,7 +10,7 @@
   lib,
   makeWrapper,
   perl,
-  stdenv,
+  gcc14Stdenv,
   texinfo,
   unzip,
   which,
@@ -23,7 +23,7 @@ assert lib.elem targetArchitecture [
   "i586"
   "i686"
 ];
-stdenv.mkDerivation rec {
+gcc14Stdenv.mkDerivation rec {
   pname = "djgpp";
   version = s.gccVersion;
   src = s.src;
