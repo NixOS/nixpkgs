@@ -12,9 +12,6 @@ buildDartApplication (finalAttrs: {
   pname = "jaspr_cli";
   version = "0.23.0";
 
-  __structuredAttrs = true;
-  strictDeps = true;
-
   # Fetch the whole monorepo
   src = fetchFromGitHub {
     owner = "schultek";
