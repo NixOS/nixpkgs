@@ -10,20 +10,20 @@ buildNpmPackage (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "opencommit";
-  version = "3.3.11";
+  version = "3.3.12";
 
   src = fetchFromGitHub {
     owner = "di-sukharev";
     repo = "opencommit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wYwZlqItbjNjdScvPIx8/8ND3FTRsXwwu6e2WI19HcU=";
+    hash = "sha256-5mI7D+KUXkLLuRi18IqI+xOiW49YKNbvG6MkAzbfl6I=";
     postFetch = ''
       # Fix lockfile issues with bundled dependencies
       ${lib.getExe npm-lockfile-fix} $out/package-lock.json
     '';
   };
 
-  npmDepsHash = "sha256-ID7xdL6loDYsCYzQgLp5daTYsIEyJQGK1VoKIZjlxgU=";
+  npmDepsHash = "sha256-m4TtvXOffgJV6ZlhGLslnllOdRTl4Q5EriE6r24QYVI=";
 
   doCheck = true;
 
