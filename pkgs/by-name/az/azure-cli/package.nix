@@ -26,14 +26,14 @@
 }:
 
 let
-  version = "2.91.0";
+  version = "2.93.0";
 
   src = fetchFromGitHub {
     name = "azure-cli-${version}-src";
     owner = "Azure";
     repo = "azure-cli";
     tag = "azure-cli-${version}";
-    hash = "sha256-wZG9yWDgAk+7wNBUU5bmmkna2f8TmH+Fo7NX0UbPcCQ=";
+    hash = "sha256-5pPhppFk3SCGOxcAATH5p23rLuH5j83x/nbHh/Gbr8g=";
   };
 
   # put packages that needs to be overridden in the py package scope
@@ -144,13 +144,16 @@ py.pkgs.toPythonApplication (
   py.pkgs.buildAzureCliPackage rec {
     pname = "azure-cli";
     inherit version src;
-    format = "setuptools";
+    pyproject = true;
 
     sourceRoot = "${src.name}/src/azure-cli";
+
+    pythonRelaxDeps = true;
 
     nativeBuildInputs = [
       installShellFiles
       py.pkgs.argcomplete
+      py.pkgs.setuptools
     ];
 
     # Dependencies from:

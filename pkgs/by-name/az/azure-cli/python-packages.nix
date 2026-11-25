@@ -29,7 +29,7 @@ let
       # core and the actual application are highly coupled
       azure-cli-core = buildAzureCliPackage {
         pname = "azure-cli-core";
-        format = "setuptools";
+        pyproject = true;
         inherit version src;
 
         sourceRoot = "${src.name}/src/azure-cli-core";
@@ -44,7 +44,11 @@ let
           ./0001-optional-immutable-configuration-dir.patch
         ];
 
-        propagatedBuildInputs =
+        build-system = with self; [ setuptools ];
+
+        pythonRelaxDeps = true;
+
+        dependencies =
           with self;
           [
             argcomplete
@@ -105,12 +109,14 @@ let
       azure-cli-telemetry = buildAzureCliPackage {
         pname = "azure-cli-telemetry";
         version = "1.1.0";
-        format = "setuptools";
+        pyproject = true;
         inherit src;
 
         sourceRoot = "${src.name}/src/azure-cli-telemetry";
 
-        propagatedBuildInputs = with self; [
+        build-system = with self; [ setuptools ];
+
+        dependencies = with self; [
           applicationinsights
           portalocker
         ];
@@ -124,6 +130,16 @@ let
 
         meta.downloadPage = "https://github.com/Azure/azure-cli/blob/azure-cli-${version}/src/azure-cli-telemetry/";
       };
+
+      # ImportError: cannot import name 'FeatureFlagClient' from 'azure.appconfiguration' (was dropped with 1.10.0)
+      azure-appconfiguration = super.azure-appconfiguration.overridePythonAttrs (attrs: rec {
+        version = "1.10.0b1";
+        src = fetchPypi {
+          pname = "azure_appconfiguration";
+          inherit version;
+          hash = "sha256-0JTwA4ahPFCYbWI8/0PNHOHxeCyUKdJ7wFkfrOaenGo=";
+        };
+      });
 
       # Error loading command module 'batch': No module named 'azure.batch._model_base'
       azure-batch = super.azure-batch.overridePythonAttrs (attrs: rec {
@@ -173,9 +189,14 @@ let
           "sha256-QcHY1wCwQyVOEdUi06/wEa4dqJH5Ccd33gJ1Sju0qZA=";
 
       # ValueError: The operation 'azure.mgmt.hdinsight.operations#ExtensionsOperations.get_azure_monitor_agent_status' is invalid.
-      azure-mgmt-hdinsight =
-        overrideAzureMgmtPackage super.azure-mgmt-hdinsight "9.0.0b3" "tar.gz"
-          "sha256-clSeCP8+7T1uI4Nec+zhzDK980C9+JGeeJFsNSwgD2Q=";
+      azure-mgmt-hdinsight = super.azure-mgmt-hdinsight.overridePythonAttrs (attrs: rec {
+        version = "9.1.0b2";
+        src = fetchPypi {
+          pname = "azure_mgmt_hdinsight";
+          inherit version;
+          hash = "sha256-Ww0TNeLBpzvAiRq7sXjcAGMJdW0eC8V2bBgyuftEJxc=";
+        };
+      });
 
       # ValueError: The operation 'azure.mgmt.media.operations#MediaservicesOperations.create_or_update' is invalid.
       azure-mgmt-media =
@@ -247,15 +268,136 @@ let
 
       # ImportError: cannot import name 'AdvancedThreatProtectionName' from 'azure.mgmt.sql.models'
       azure-mgmt-sql = super.azure-mgmt-sql.overridePythonAttrs (attrs: rec {
-        version = "4.0.0b22";
+        version = "5.0.0b2";
         src = fetchPypi {
           pname = "azure_mgmt_sql"; # Different from src.pname in the original package.
           inherit version;
-          hash = "sha256-ku3YN9W9Cyx4zsKxAs4k9/oeDXApzi2uqAURqa72H0k=";
+          hash = "sha256-ifPodQ89xxSMUUqwPxmNn74qIxukxLjZ/seFUZi6AO8=";
         };
       });
 
-      # Attribute virtual_machines does not exist - nixpkgs has 37.x but azure-cli 2.82.0 requires ~=34.1.0
+      # azure-cli requires 6.0.0b2; nixpkgs has an older beta
+      azure-mgmt-appconfiguration = super.azure-mgmt-appconfiguration.overridePythonAttrs (attrs: rec {
+        version = "6.0.0b2";
+        src = fetchPypi {
+          pname = "azure_mgmt_appconfiguration";
+          inherit version;
+          hash = "sha256-Lt4HWb+rwaYsv7rx6asaBWbQoo004OX5aEsmUkeIhTQ=";
+        };
+      });
+
+      # ManagedClusterAgentHostingConfiguration was removed in stable 15.0.0
+      azure-mgmt-cognitiveservices = super.azure-mgmt-cognitiveservices.overridePythonAttrs (attrs: rec {
+        version = "15.0.0b6";
+        src = fetchPypi {
+          pname = "azure_mgmt_cognitiveservices";
+          inherit version;
+          hash = "sha256-8bOQXoTTpMV9ZnyCa4S/vPkPOGr7IR3rlF3U5qhmzd0=";
+        };
+      });
+
+      # azure-cli requires ~=41.8.0; nixpkgs has 41.5.0
+      azure-mgmt-containerservice = super.azure-mgmt-containerservice.overridePythonAttrs (attrs: rec {
+        version = "41.8.0";
+        src = fetchPypi {
+          pname = "azure_mgmt_containerservice";
+          inherit version;
+          hash = "sha256-h/3A/MUXhTs4ISfKi7HHRvah06xb9t5Y5gyGdU6BDVg=";
+        };
+      });
+
+      # azure-cli requires 5.0.0b1; nixpkgs has 4.0.0
+      azure-mgmt-iothub = super.azure-mgmt-iothub.overridePythonAttrs (attrs: rec {
+        version = "5.0.0b1";
+        src = fetchPypi {
+          pname = "azure_mgmt_iothub";
+          inherit version;
+          hash = "sha256-CR8ZopF7W0hth8iOBGYqkFIGZiM9hwdGrucChNZVYgQ=";
+        };
+      });
+
+      # azure-cli requires 1.1.0b4; nixpkgs has 1.0.1
+      azure-mgmt-policyinsights =
+        (overrideAzureMgmtPackage super.azure-mgmt-policyinsights "1.1.0b4" "zip"
+          "sha256-aB16xyrhNYHJeitvdCeV+kik21B2LC+5/OSDQIGwTpI="
+        ).overridePythonAttrs
+          (attrs: {
+            propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [ self.msrest ];
+          });
+
+      # azure-cli requires 3.0.0b3; nixpkgs has stable 3.0.0
+      azure-mgmt-postgresqlflexibleservers =
+        super.azure-mgmt-postgresqlflexibleservers.overridePythonAttrs
+          (attrs: rec {
+            version = "3.0.0b3";
+            src = fetchPypi {
+              pname = "azure_mgmt_postgresqlflexibleservers";
+              inherit version;
+              hash = "sha256-obejWJMY21uN4Yg5v8hUpgOLXUYa0p3qmfMFU5u+q0o=";
+            };
+          });
+
+      # nixpkgs has 4.0.0 (major bump); azure-cli requires ~=3.0.0
+      azure-mgmt-redhatopenshift = super.azure-mgmt-redhatopenshift.overridePythonAttrs (attrs: rec {
+        version = "3.0.0";
+        src = fetchPypi {
+          pname = "azure_mgmt_redhatopenshift";
+          inherit version;
+          hash = "sha256-R3XJvfNjI4g02hReX1n5doOrBPjdvSUN5F1F4zeYMn8=";
+        };
+      });
+
+      # nixpkgs has 7.0.0 (major bump); azure-cli requires 6.0.0
+      azure-mgmt-security =
+        overrideAzureMgmtPackage super.azure-mgmt-security "6.0.0" "tar.gz"
+          "sha256-zq/BhpiZBnEQvYMMXMmLybjzLY6oQMofaTsaX1Kl+LA=";
+
+      # nixpkgs has 8.2.0; azure-cli requires ~=10.0.0b1
+      azure-mgmt-servicebus = super.azure-mgmt-servicebus.overridePythonAttrs (attrs: rec {
+        version = "10.0.0b1";
+        src = fetchPypi {
+          pname = "azure_mgmt_servicebus";
+          inherit version;
+          hash = "sha256-u7xtucS8Bn+wgnH47aNWEp1gUcRTiXeo83USD05j95w=";
+        };
+      });
+
+      # azure-cli requires 1.2.0b3; nixpkgs has 1.1.0
+      azure-mgmt-servicelinker = super.azure-mgmt-servicelinker.overridePythonAttrs (attrs: rec {
+        version = "1.2.0b3";
+        src = fetchPypi {
+          pname = "azure_mgmt_servicelinker";
+          inherit version;
+          hash = "sha256-xRwRH7dsWeWPzsz+z9EZ+Mg+TWT9yneka2LYHsaj6ik=";
+        };
+      });
+
+      # azure-cli requires 25.3.0; nixpkgs has 24.0.1
+      azure-mgmt-storage = super.azure-mgmt-storage.overridePythonAttrs (attrs: rec {
+        version = "25.3.0";
+        src = fetchPypi {
+          pname = "azure_mgmt_storage";
+          inherit version;
+          hash = "sha256-vE/h6ib4xYv5yms2UJXP0ybWXO+hNd1fKeCTU8tjE+w=";
+        };
+      });
+
+      # nixpkgs has 2.0.0 (major bump); azure-cli requires 1.2.0
+      azure-monitor-query =
+        overrideAzureMgmtPackage super.azure-monitor-query "1.2.0" "zip"
+          "sha256-LFdDJEPyAwaeZOUAx+lYyjFlD2QZUFFf/mVVW6E0w3E=";
+
+      # nixpkgs has 26.0.0 which dropped ResourceManagementClient from the top-level namespace
+      azure-mgmt-resource = super.azure-mgmt-resource.overridePythonAttrs (attrs: rec {
+        version = "24.0.0";
+        src = fetchPypi {
+          pname = "azure_mgmt_resource";
+          inherit version;
+          hash = "sha256-z2uJlfzdQHrJ/x3UdAhxKUKaHZDbsax3+XwZuWI3smU=";
+        };
+      });
+
+      # Attribute virtual_machines does not exist, requires ~=34.1.0
       azure-mgmt-compute = super.azure-mgmt-compute.overridePythonAttrs (attrs: rec {
         version = "34.1.0";
         src = fetchPypi {
