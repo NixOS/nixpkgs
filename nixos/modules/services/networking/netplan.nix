@@ -39,6 +39,8 @@ in
     warnings = lib.optionals (!(networkdEnabled || networkmanagerEnabled)) [
       "You enabled the netplan-configure service, but you haven't enabled a backend for it. It's likely you want to enable either networkd or NetworkManager."
     ];
+    services.dbus.packages = [ cfg.package ];
+
     environment = {
       systemPackages = [ cfg.package ];
       etc = builtins.listToAttrs (
