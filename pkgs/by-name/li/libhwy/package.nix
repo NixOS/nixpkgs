@@ -53,6 +53,8 @@ stdenv.mkDerivation (finalAttrs: {
     gtest
   ];
 
+  strictDeps = true;
+
   # Required for case-insensitive filesystems ("BUILD" exists)
   dontUseCmakeBuildDir = true;
 
