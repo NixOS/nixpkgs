@@ -86,6 +86,10 @@
     url = "https://arcplatformcliextprod.z13.web.core.windows.net/arcappliance-1.6.0-py2.py3-none-any.whl";
     hash = "sha256-1VTKp4R6ohI4C9QsZgAabJJMnkTycEQF7DDshw/7Qkw=";
     description = "Microsoft Azure Command-Line Tools Arcappliance Extension";
+    pythonRelaxDeps = [
+      "jsonschema"
+      "kubernetes"
+    ];
     propagatedBuildInputs = with python3Packages; [
       jsonschema
       kubernetes
