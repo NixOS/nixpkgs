@@ -234,6 +234,7 @@ buildNpmPackage (finalAttrs: {
     homepage = "https://github.com/Mastermindzh/tidal-hifi";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+      alexandru0-dev
       gerg-l
       spikespaz
     ];
