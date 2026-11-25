@@ -3,6 +3,7 @@
   buildGoModule,
   fetchFromGitHub,
   nixosTests,
+  sqlite,
 }:
 
 buildGoModule (finalAttrs: {
@@ -28,6 +29,8 @@ buildGoModule (finalAttrs: {
   ];
 
   vendorHash = null;
+
+  buildInputs = [ sqlite ];
 
   doCheck = false;
 
