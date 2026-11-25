@@ -1457,6 +1457,8 @@ self: super: with self; {
 
   asserts = callPackage ../development/python-modules/asserts { };
 
+  ast-comments = callPackage ../development/python-modules/ast-comments { };
+
   ast-grep-cli = callPackage ../development/python-modules/ast-grep-cli { };
 
   ast-grep-py = callPackage ../development/python-modules/ast-grep-py { };
