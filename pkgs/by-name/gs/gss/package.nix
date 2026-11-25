@@ -76,6 +76,8 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i 's,\(-lshishi\),-L${shishi}/lib \1,' $out/lib/libgss.la
   '';
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://www.gnu.org/software/gss/";
     description = "Generic Security Service";
