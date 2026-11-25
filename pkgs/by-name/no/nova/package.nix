@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "nova";
-  version = "3.12.3";
+  version = "3.12.4";
 
   src = fetchFromGitHub {
     owner = "FairwindsOps";
     repo = "nova";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-O6gubKO6wVh7t9NYpJgX7oB2QTfZDGoUs9OOi8/G0vc=";
+    hash = "sha256-3sUvuAWeDPFVNLudpTs3bLlUEXf6fqr39ipE2qLWAFY=";
   };
 
-  vendorHash = "sha256-cTs8PLIYGJLiV5uSqZRLfYXX0o85CSzVAGqqxn5e7Vc=";
+  vendorHash = "sha256-lt1G1I4YnuwneealSKkGRPnme41HsYHg7YaW1/AmGUw=";
 
   ldflags = [
     "-X main.version=${finalAttrs.version}"
