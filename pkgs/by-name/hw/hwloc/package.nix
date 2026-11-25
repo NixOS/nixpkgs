@@ -11,9 +11,12 @@
   x11Support ? false,
   libx11,
   cairo,
+  bashNonInteractive,
   config,
   enableCuda ? config.cudaSupport,
   cudaPackages,
+  versionCheckHook,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -29,8 +32,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags = [
     "--localstatedir=/var"
-    "--enable-netloc"
   ];
+
+  # Although we use a tagged version upstream has rc/alpha tags set.
+  # This fixes the contents of hwloc.pc / the output of --version
+  postPatch = ''
+    sed -i -e 's/greek=.*/greek=/' -e 's/snapshot=1/snapshot=0/' VERSION
+  '';
 
   # XXX: libx11 is not directly needed, but needed as a propagated dep of Cairo.
   nativeBuildInputs = [
@@ -47,11 +55,16 @@ stdenv.mkDerivation (finalAttrs: {
     cairo
     libx11
   ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform bashNonInteractive) [
+    bashNonInteractive
+  ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ numactl ]
   ++ lib.optionals enableCuda [ cudaPackages.cuda_cudart ];
 
   # Since `libpci' appears in `hwloc.pc', it must be propagated.
   propagatedBuildInputs = lib.optional stdenv.hostPlatform.isLinux pciutils;
+
+  strictDeps = true;
 
   enableParallelBuilding = true;
 
@@ -79,6 +92,14 @@ stdenv.mkDerivation (finalAttrs: {
     "man"
   ];
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgram = "${placeholder "out"}/bin/hwloc-info";
+
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
+  __structuredAttrs = true;
+
   meta = {
     description = "Portable abstraction of hierarchical architectures for high-performance computing";
     longDescription = ''
@@ -105,5 +126,6 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isCygwin;
+    pkgConfigModules = [ "hwloc" ];
   };
 })
