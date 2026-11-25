@@ -29,6 +29,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-fni6crPs58e8MUr2SfVHVD5nPFIEQcOfuAMLXJlWg88=";
   };
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'find_package(SWIG 4.2.1...4.4.1 REQUIRED)' 'find_package(SWIG 4.2.1...4.5.1 REQUIRED)'
+  '';
+
   nativeBuildInputs = [
     cmake
     swig
