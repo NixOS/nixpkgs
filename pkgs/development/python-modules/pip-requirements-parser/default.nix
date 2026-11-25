@@ -18,7 +18,11 @@ buildPythonPackage (finalAttrs: {
     owner = "aboutcode-org";
     repo = "pip-requirements-parser";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-UMrwDXxk+sD3P2jk7s95y4OX6DRBjWWZZ8IhkR6tnZ4=";
+    # export-subst prevents reproducibility
+    postFetch = ''
+      sed -i /fallback_version/d "$out/pyproject.toml"
+    '';
+    hash = "sha256-0W2w3X+P1cuM7iEIkp97ctywtJDWPX9DjB7Jq5MsZdY=";
   };
 
   patches = [
