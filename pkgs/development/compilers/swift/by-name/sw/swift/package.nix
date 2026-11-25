@@ -27,6 +27,7 @@
   swift_release,
   enableRepl ? true, # Whether to build and include LLDB for the Swift REPL.
   # Toolchain options.
+  toolchain-name ? "swift" + lib.removePrefix "swiftc" (lib.getName swiftc),
   enableClangTools ? false,
   enableDocC ? false,
   enableLlvmTools ? false,
@@ -117,7 +118,7 @@ let
 in
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "swift" + lib.removePrefix "swiftc" (lib.getName swiftc);
+  pname = toolchain-name;
   version = swift_release;
 
   outputs = [
