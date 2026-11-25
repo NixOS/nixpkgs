@@ -1,0 +1,27 @@
+--- a/lean/models/__init__.py
++++ b/lean/models/__init__.py
+@@ -19,7 +19,11 @@
+ json_modules = {}
+ file_name = "modules-1.15.json"
+ directory = Path(__file__).parent
+-file_path = directory.parent / file_name
++# The Nix store is read-only, so the refreshable copy lives in the user's
++# ~/.lean directory alongside the CLI's other caches, and the copy shipped with
++# the package is the fallback when there is no cache and no network.
++bundled_file_path = directory.parent / file_name
++file_path = Path("~/.lean").expanduser() / file_name
+ 
+ # check if new file is available online
+ url = f"https://cdn.quantconnect.com/cli/{file_name}"
+@@ -54,7 +58,10 @@
+     error = str(e)
+     pass
+ 
+-# check if file exists
++# check if file exists, falling back to the copy bundled with the package
++if not Path(file_path).is_file():
++    file_path = bundled_file_path
++
+ if not Path(file_path).is_file() or path.getsize(file_path) == 0:
+     error_message = f": {error}" if error is not None else ""
+     raise FileNotFoundError(
