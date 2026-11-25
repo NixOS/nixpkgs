@@ -1,15 +1,15 @@
 {
   "stable": {
     "linux": {
-      "version": "8.12.46",
+      "version": "8.12.48",
       "sources": {
         "x86_64": {
-          "url": "https://downloads.1password.com/linux/tar/stable/x86_64/1password-8.12.46.x64.tar.gz",
-          "hash": "sha256-lKNlo5JUJGMFbBWgcx+oVIxBDlFrvgLlmbeb03+bG8k="
+          "url": "https://downloads.1password.com/linux/tar/stable/x86_64/1password-8.12.48.x64.tar.gz",
+          "hash": "sha256-1KEy6qGqHd5tgTfMvlTzp3m/U8qnNQiCfjS4idA2yOI="
         },
         "aarch64": {
-          "url": "https://downloads.1password.com/linux/tar/stable/aarch64/1password-8.12.46.arm64.tar.gz",
-          "hash": "sha256-/7vk9XsIdc5HPIXFdqHs8PVm6dZAVATJhj4+r7WvXkw="
+          "url": "https://downloads.1password.com/linux/tar/stable/aarch64/1password-8.12.48.arm64.tar.gz",
+          "hash": "sha256-5fY30TmQotXyq7dV2HLUJRJPJhmIQB/dUpm+OthxbZ4="
         }
       }
     },
