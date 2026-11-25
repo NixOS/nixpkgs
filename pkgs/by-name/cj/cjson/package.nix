@@ -43,6 +43,8 @@ stdenv.mkDerivation (finalAttrs: {
           'cmake_minimum_required(VERSION 3.10)'
     '';
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://github.com/DaveGamble/cJSON";
     description = "Ultralightweight JSON parser in ANSI C";
