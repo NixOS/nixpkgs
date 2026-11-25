@@ -4,7 +4,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   pkg-config,
-  cython,
+  cython_3_2,
   docutils,
   setuptools,
   kivy-garden,
@@ -26,22 +26,22 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "kivy";
-  version = "2.3.1-unstable-2026-07-11";
+  version = "2.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kivy";
     repo = "kivy";
-    rev = "d8e642fec15894ce338b0c9773c3f58b41b75f09";
-    hash = "sha256-i+4qsCIWOddfkw4fseHyTZRj29cdPX84uaPMORE6Gp4=";
+    tag = finalAttrs.version;
+    hash = "sha256-NUgKBUABQg1UUZgdRnaLwkVVVuPkIcuVzYsAORLID0M=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools~=82.0.0" "setuptools" \
-      --replace-fail "wheel~=0.47.0" "wheel" \
-      --replace-fail "cython>=0.29.1,<=3.2.0" "cython" \
-      --replace-fail "packaging~=26.0" packaging
+      --replace-fail "setuptools~=69.2.0" "setuptools" \
+      --replace-fail "wheel~=0.44.0" "wheel" \
+      --replace-fail "cython>=0.29.1,<=3.0.11" "cython" \
+      --replace-fail "packaging>=24.0,<26" packaging
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace kivy/lib/mtdev.py \
@@ -50,7 +50,7 @@ buildPythonPackage (finalAttrs: {
 
   build-system = [
     setuptools
-    cython
+    cython_3_2
   ];
 
   nativeBuildInputs = [
@@ -126,6 +126,6 @@ buildPythonPackage (finalAttrs: {
     description = "Library for rapid development of hardware-accelerated multitouch applications";
     homepage = "https://github.com/kivy/kivy";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ risson ];
+    maintainers = with lib.maintainers; [ iofq ];
   };
 })
