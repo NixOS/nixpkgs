@@ -8,23 +8,23 @@
 }:
 
 let
-  version = "3.0.0-beta.33";
+  version = "4.0.0-beta.10";
   srcs = {
     x86_64-linux = {
       url = "https://github.com/microsoft/mcp/releases/download/Azure.Mcp.Server-${version}/Azure.Mcp.Server-linux-x64-native.zip";
-      hash = "sha256-Zm55CQkPGvdHJDOqeh9A5wBX4HNXg/h2rhkfGRqy0Zk=";
+      hash = "sha256-ZzGLJ7EN/j7edXvy2mD5UKbDdBW1WAiaPkmthpE9SQU=";
     };
     aarch64-linux = {
       url = "https://github.com/microsoft/mcp/releases/download/Azure.Mcp.Server-${version}/Azure.Mcp.Server-linux-arm64.zip";
-      hash = "sha256-UY4cYtJE74+dWpOjq9ddhhjCPRavCwvA+VqFLabIV1o=";
+      hash = "sha256-jhkMR7SfplBVU9iUETNzf4qLivwH8IkpYkvYaI+wpIc=";
     };
     x86_64-darwin = {
       url = "https://github.com/microsoft/mcp/releases/download/Azure.Mcp.Server-${version}/Azure.Mcp.Server-osx-x64.zip";
-      hash = "sha256-aLGpa+DZBKzPlAqMDv3vg7ioN8+DL7AsyhsQvVRywnw=";
+      hash = "sha256-2HN/6RXoaPw6+jvQvRYLQhKkKLekchaKKzWateZnQVs=";
     };
     aarch64-darwin = {
       url = "https://github.com/microsoft/mcp/releases/download/Azure.Mcp.Server-${version}/Azure.Mcp.Server-osx-arm64.zip";
-      hash = "sha256-HYvRa3/G+ZJ70w8RKKIoYX9UlOorKwjMheAvHYC8uss=";
+      hash = "sha256-DOtxfadYZt9bjayi6nBiXyoHsj30wEeNsnXNG+KcejQ=";
     };
   };
   unavailable = throw "azure-mcp package is not available for this platform.";
