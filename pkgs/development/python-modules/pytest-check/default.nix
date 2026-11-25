@@ -31,6 +31,9 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/okken/pytest-check";
     changelog = "https://github.com/okken/pytest-check/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ flokli ];
+    maintainers = with lib.maintainers; [
+      flokli
+      sarahec
+    ];
   };
 })
