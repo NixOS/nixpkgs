@@ -4212,6 +4212,8 @@ self: super: with self; {
 
   datashader = callPackage ../development/python-modules/datashader { };
 
+  datasieve = callPackage ../development/python-modules/datasieve { };
+
   datasketch = callPackage ../development/python-modules/datasketch { };
 
   datastar-py = callPackage ../development/python-modules/datastar-py { };
