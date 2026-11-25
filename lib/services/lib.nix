@@ -6,8 +6,7 @@ let
     showOption
     types
     ;
-in
-rec {
+
   flattenMapServicesConfigToList =
     f: loc: config:
     f loc config
@@ -127,4 +126,7 @@ rec {
     {
       inherit serviceSubmodule;
     };
+in
+{
+  inherit getWarnings getAssertions configure;
 }
