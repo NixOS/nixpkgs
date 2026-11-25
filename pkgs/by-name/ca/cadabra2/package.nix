@@ -2,18 +2,17 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch2,
 
   cmake,
   pkg-config,
   makeBinaryWrapper,
-  wrapGAppsHook3,
+  wrapGAppsHook4,
   nix-update-script,
 
   boost,
-  glibmm_2_4,
+  glibmm_2_68,
   gmpxx,
-  gtkmm3,
+  gtkmm4,
   jsoncpp,
   onetbb,
   openssl,
@@ -42,27 +41,15 @@ assert lib.assertMsg (
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cadabra2";
-  version = "2.5.14-p1";
+  version = "2.6.1";
 
   src = fetchFromGitHub {
     owner = "kpeeters";
     repo = "cadabra2";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-Pbk9SmJ64CZ+yxMj53JpxULBQye2ETDi8xNKw38cC9k=";
+    hash = "sha256-TzvZDBoqmgT6HyQSsECrviKTfF8/bHgf1PlmYBSdYIg=";
   };
-
-  patches = [
-    # Backport a MicroTeX fix for fontconfig >= 2.18.
-    # Remove once cadabra2 updates its MicroTeX submodule to 7944eb4 or later.
-    (fetchpatch2 {
-      name = "microtex-fix-recent-fontconfig-build.patch";
-      url = "https://github.com/kpeeters/MicroTeX/commit/7944eb496dec1b7ff8af4c13e0cfee279eea30b8.patch?full_index=1";
-      extraPrefix = "submodules/microtex/";
-      stripLen = 1;
-      hash = "sha256-mobQF8uZGF1bdddYoyAxrZ4XhbMwUuK8kLwjmVrZZh0=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
@@ -90,11 +77,11 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     python3
   ]
-  ++ lib.optional enableFrontend wrapGAppsHook3;
+  ++ lib.optional enableFrontend wrapGAppsHook4;
 
   buildInputs = [
     boost
-    glibmm_2_4
+    glibmm_2_68
     gmpxx
     jsoncpp
     onetbb
@@ -102,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3.pkgs.pybind11
     sqlite
   ]
-  ++ lib.optional enableFrontend gtkmm3;
+  ++ lib.optional enableFrontend gtkmm4;
 
   propagatedBuildInputs = with python3.pkgs; [
     matplotlib
@@ -131,8 +118,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
-  #doInstallCheck = !enableBuildAsCppLibrary;
-  doInstallCheck = false; # FIXME: remove this line and uncomment the above after next release
+  doInstallCheck = !enableBuildAsCppLibrary;
 
   passthru.updateScript = nix-update-script { };
 
