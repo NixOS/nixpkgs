@@ -1,0 +1,8 @@
+{
+  "package_sets": [
+    {
+      "by_name_subpath": "pkgs/by-name",
+      "attr_path": []
+    }
+  ]
+}
