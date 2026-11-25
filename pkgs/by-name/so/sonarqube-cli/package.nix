@@ -100,8 +100,16 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.unfree;
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     maintainers = with lib.maintainers; [
-      kmjayadeep
-      jayadeep-km-sonarsource
+      charafsalmi
+      damien-urruty-sonarsource
+      georgii-borovinskikh-sonarsource
+      kirill-knize-sonarsource
+      Krosovok
+      nquinquenel
+      sophio-japharidze-sonarsource
+      tomshafir-sonarsource
+      tsiaraskon-sonar
+      vnaskos-sonar
     ];
     mainProgram = "sonar";
     platforms = [
