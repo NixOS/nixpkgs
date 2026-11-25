@@ -2,8 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchurl,
-  fetchpatch2,
   autoreconfHook,
   pkg-config,
   SDL2,
@@ -11,6 +9,8 @@
   ffmpeg,
   lua5_4,
   qt5,
+  libxcb,
+  libcap,
   libxi,
   file,
   binutils,
@@ -22,26 +22,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libtas";
-  version = "1.4.6";
+  version = "1.4.8";
 
   src = fetchFromGitHub {
     owner = "clementgallet";
     repo = "libTAS";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-/hyKJ8HGLN7hT+9If/lcp0C7GnhJMRpc7EKDgA1kQcI=";
+    hash = "sha256-2b+Cqzk3VDhBV+Wke37z6VrVymavZq3xGiJDY9uQ5G4=";
   };
-  patches = [
-    # Fixes `undefined symbol: SDL_Log` errors
-    (fetchurl {
-      url = "https://github.com/clementgallet/libTAS/commit/779ff0fb0f3accfc62949680d85ecf96b28d18ef.patch";
-      hash = "sha256-xAaTWIXt8FkMu6GE5mBWtLypROFZ1aEqmBTtG+6rTWk=";
-    })
-    # Fix build with gcc15
-    (fetchpatch2 {
-      url = "https://github.com/clementgallet/libTAS/commit/9699b158c522cf778bcdf626d0520fdd0a8b83aa.patch?full_index=1";
-      hash = "sha256-vM1f6rvKIFyzEGJ7k+b/Zp4gAv8u6mdDUD5evV+hCJU=";
-    })
-  ];
+
+  # The install hook would setcap the binary, which the build sandbox forbids
+  postPatch = ''
+    substituteInPlace src/program/Makefile.am \
+      --replace-fail "command -v setcap" "false"
+  '';
 
   nativeBuildInputs = [
     autoreconfHook
@@ -54,6 +48,8 @@ stdenv.mkDerivation (finalAttrs: {
     ffmpeg
     lua5_4
     qt5.qtbase
+    libxcb
+    libcap
   ];
 
   configureFlags = [
