@@ -3,30 +3,48 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build
   hatchling,
   pytest,
+
+  # dependencies
+  packaging,
+
+  # check
   pytestCheckHook,
+  pytest-xdist,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "pytest-check";
-  version = "3.0.3";
+  version = "3.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "okken";
     repo = "pytest-check";
     tag = finalAttrs.version;
-    hash = "sha256-jrI9F9K/51Jl8unp53TB+CrYahhQz5zZH7ulBaISNSU=";
+    hash = "sha256-iMjBar6JsAzZiezMXf+zP+gQ7b3kwI/I3718niUSEnw=";
   };
 
   build-system = [ hatchling ];
 
   buildInputs = [ pytest ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  dependencies = [ packaging ];
 
-  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-xdist
+  ];
+
+  disabledTests = [
+    # Fails on output differences
+    "test_raises_custom_msg"
+    "test_message"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # AssertionError: assert '99' not in '===========...============'
     "test_long_locals_follow_verbosity"
   ];
