@@ -3,8 +3,6 @@
   buildPythonPackage,
   fetchPypi,
 
-  unittestCheckHook,
-
   setuptools,
 
   unicodecsv,
@@ -41,11 +39,8 @@ buildPythonPackage (finalAttrs: {
     levenshtein # need for align_wordlists.py script
   ];
 
-  nativeCheckInputs = [ unittestCheckHook ];
-
-  unittestFlags = [
-    "--start-directory=test"
-  ];
+  # Tests are not included in the PyPI distribution and the git repo does not have tagged releases
+  doCheck = false;
 
   pythonImportsCheck = [
     "panphon"
