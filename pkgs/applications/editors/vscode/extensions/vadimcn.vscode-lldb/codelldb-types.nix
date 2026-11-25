@@ -11,6 +11,8 @@ rustPlatform.buildRustPackage {
   pname = "${pname}-codelldb-types";
   inherit version src cargoHash;
 
+  __structuredAttrs = true;
+
   nativeBuildInputs = [ makeWrapper ];
 
   cargoBuildFlags = [
