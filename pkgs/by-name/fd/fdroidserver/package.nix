@@ -70,8 +70,8 @@ pythonPackages.buildPythonApplication (finalAttrs: {
       androguard
       asn1crypto
       defusedxml
+      file-magic
       gitpython
-      magic
       oscrypto
       paramiko
       pillow

@@ -6185,6 +6185,8 @@ self: super: with self; {
 
   fields = callPackage ../development/python-modules/fields { };
 
+  file-magic = callPackage ../development/python-modules/file-magic { };
+
   file-read-backwards = callPackage ../development/python-modules/file-read-backwards { };
 
   filebrowser-safe = callPackage ../development/python-modules/filebrowser-safe { };
@@ -10595,8 +10597,6 @@ self: super: with self; {
   maec = callPackage ../development/python-modules/maec { };
 
   maestral = callPackage ../development/python-modules/maestral { };
-
-  magic = callPackage ../development/python-modules/magic { };
 
   magic-filter = callPackage ../development/python-modules/magic-filter { };
 
