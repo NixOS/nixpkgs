@@ -14,13 +14,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "sql-formatter";
-  version = "15.9.0";
+  version = "15.10.0";
 
   src = fetchFromGitHub {
     owner = "sql-formatter-org";
     repo = "sql-formatter";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-nVzmQ9rg+1FYKJXc0K05aEgkdJZIIdyyH/U6eE7AW2Y=";
+    hash = "sha256-QNTA0UfbE7aVoDXuFj5RheaLkbjjWc923OXjO/JR4vU=";
   };
 
   pnpmDeps = fetchPnpmDeps {
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     inherit pnpm;
     fetcherVersion = 4;
-    hash = "sha256-EH8Jj7tbIKFc0lcLK5WyWZzMPC53qKWCNyGYtQHTh8o=";
+    hash = "sha256-XVgAOdV3F3j6V1f2gxGFxMUALdEvClmFDbN6FYP0kiw=";
   };
 
   nativeBuildInputs = [
