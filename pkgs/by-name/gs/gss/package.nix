@@ -60,6 +60,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = lib.optional withShishi shishi;
 
+  strictDeps = true;
+
   preConfigure = ''
     patchShebangs doc/gdoc
     ./autogen.sh
