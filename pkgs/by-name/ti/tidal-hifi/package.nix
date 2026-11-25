@@ -151,17 +151,21 @@ buildNpmPackage (finalAttrs: {
 
   dontWrapGApps = true;
 
-  installPhase = ''
-    runHook preInstall
+  installPhase =
+    let
+      appDir = if stdenv.hostPlatform.isAarch64 then "linux-arm64-unpacked" else "linux-unpacked";
+    in
+    ''
+      runHook preInstall
 
-    for i in 16 22 24 32 48 64 128 256 384; do
-      install -Dm644 "assets/icons/$i"x"$i.png" "$out/share/icons/hicolor/$i"x"$i/apps/tidal-hifi.png"
-    done
+      for i in 16 22 24 32 48 64 128 256 384; do
+        install -Dm644 "assets/icons/$i"x"$i.png" "$out/share/icons/hicolor/$i"x"$i/apps/tidal-hifi.png"
+      done
 
-    mv dist/linux-unpacked "$out/share/tidal-hifi"
+      mv dist/${appDir} "$out/share/tidal-hifi"
 
-    runHook postInstall
-  '';
+      runHook postInstall
+    '';
 
   # see: pkgs/development/tools/electron/binary/generic.nix
   postFixup = ''
@@ -171,16 +175,19 @@ buildNpmPackage (finalAttrs: {
       $out/share/tidal-hifi/tidal-hifi \
       $out/share/tidal-hifi/chrome_crashpad_handler
 
-    # patch libANGLE
-    patchelf \
-      --set-rpath "${
-        lib.makeLibraryPath [
-          libGL
-          pciutils
-          vulkan-loader
-        ]
-      }" \
-      $out/share/tidal-hifi/lib*GL*
+    # patch libANGLE, if present (arm64 doesn't have it)
+    for lib in "$out"/share/tidal-hifi/lib*GL*; do
+      [ -e "$lib" ] || continue
+      patchelf \
+        --set-rpath "${
+          lib.makeLibraryPath [
+            libGL
+            pciutils
+            vulkan-loader
+          ]
+        }" \
+        "$lib"
+    done
 
     # replace bundled vulkan-loader
     ln -sf -t "$out/share/tidal-hifi" "${lib.getLib vulkan-loader}/lib/libvulkan.so.1"
@@ -221,9 +228,10 @@ buildNpmPackage (finalAttrs: {
       gerg-l
       spikespaz
     ];
-    # `castlabs-electron` doesn't have a distribution for `aarch64-linux`.
-    # See: <https://github.com/castlabs/electron-releases/issues/198>
-    platforms = [ "x86_64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
     mainProgram = "tidal-hifi";
   };
 })
