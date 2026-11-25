@@ -13369,6 +13369,8 @@ self: super: with self; {
 
   pagelabels = callPackage ../development/python-modules/pagelabels { };
 
+  pagerduty = callPackage ../development/python-modules/pagerduty { };
+
   paginate = callPackage ../development/python-modules/paginate { };
 
   paho-mqtt = callPackage ../development/python-modules/paho-mqtt/default.nix { };
