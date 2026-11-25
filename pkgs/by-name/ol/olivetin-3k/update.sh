@@ -3,7 +3,7 @@
 
 set -euo pipefail
 
-nix-update olivetin-3k --src-only --override-filename
+nix-update olivetin-3k --src-only
 update-source-version olivetin-3k --source-key=gen --ignore-same-version
 update-source-version olivetin-3k --source-key=webui.npmDeps --ignore-same-version
 update-source-version olivetin-3k --source-key=goModules --ignore-same-version
