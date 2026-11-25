@@ -23,14 +23,14 @@ assert lib.elem targetArchitecture [
   "i586"
   "i686"
 ];
-gcc14Stdenv.mkDerivation rec {
+gcc14Stdenv.mkDerivation (finalAttrs: {
   pname = "djgpp";
   version = s.gccVersion;
   src = s.src;
 
   patchPhase = ''
     runHook prePatch
-    for f in "build-djgpp.sh" "script/${version}" "setenv/copyfile.sh"; do
+    for f in "build-djgpp.sh" "script/${finalAttrs.version}" "setenv/copyfile.sh"; do
       substituteInPlace "$f" --replace '/usr/bin/env' '${buildPackages.coreutils}/bin/env'
     done
   ''
@@ -39,8 +39,8 @@ gcc14Stdenv.mkDerivation rec {
   # to patch after it extracts
 
   + lib.optionalString (targetArchitecture == "i686") ''
-    sed -i 's/i586/i686/g' setenv/setenv script/${version}
-    sed -i '/Building DXE tools./a sed -i "s/i586/i686/g" src/makefile.def src/dxe/makefile.dxe' script/${version}
+    sed -i 's/i586/i686/g' setenv/setenv script/${finalAttrs.version}
+    sed -i '/Building DXE tools./a sed -i "s/i586/i686/g" src/makefile.def src/dxe/makefile.dxe' script/${finalAttrs.version}
   ''
   + ''
     runHook postPatch
@@ -84,7 +84,7 @@ gcc14Stdenv.mkDerivation rec {
     ln -s "${s.mpc}"        "${s.mpc.name}"
     ln -s "${s.mpfr}"       "${s.mpfr.name}"
     popd
-    DJGPP_PREFIX=$out ./build-djgpp.sh ${version}
+    DJGPP_PREFIX=$out ./build-djgpp.sh ${finalAttrs.version}
     runHook postBuild
   '';
 
@@ -105,4 +105,4 @@ gcc14Stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ hughobrien ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})
