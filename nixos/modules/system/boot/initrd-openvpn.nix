@@ -58,10 +58,12 @@ in
     ];
 
     # Add openvpn and ip binaries to the initrd
-    # The shared libraries are required for DNS resolution
+    # On glibc, the shared libraries are required for DNS resolution
     boot.initrd.systemd.storePaths = [
       "${pkgs.openvpn}/bin/openvpn"
       "${pkgs.iproute2}/bin/ip"
+    ]
+    ++ optionals (pkgs.stdenv.hostPlatform.libc == "glibc") [
       "${pkgs.glibc}/lib/libresolv.so.2"
       "${pkgs.glibc}/lib/libnss_dns.so.2"
     ];
