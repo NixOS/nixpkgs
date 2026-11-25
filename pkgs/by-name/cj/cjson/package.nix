@@ -3,6 +3,7 @@
   lib,
   fetchFromGitHub,
   cmake,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -43,6 +44,12 @@ stdenv.mkDerivation (finalAttrs: {
           'cmake_minimum_required(VERSION 3.10)'
     '';
 
+  passthru.tests = {
+    pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+    };
+  };
+
   __structuredAttrs = true;
 
   meta = {
@@ -51,5 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.matthiasbeyer ];
     platforms = lib.platforms.windows ++ lib.platforms.unix;
+    pkgConfigModules = [ "libcjson" ];
   };
 })
