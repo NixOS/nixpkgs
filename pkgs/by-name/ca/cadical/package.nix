@@ -22,7 +22,6 @@ stdenv.mkDerivation (finalAttrs: {
         "3.0.0" = "sha256-pymbSC6bwQQ0YCtJd3xWZiC22UEkFiKSLObSOnoQj9I=";
         "2.2.1" = "sha256-dYRaw9DI63Nqz0IJkfQYU4y00KSfq1Xv0xZuL1G15CY=";
         "2.1.3" = "sha256-W3kO+6nVzkmJXyHJU+NZWP0oatK3gon4EWF1/03rgL4=";
-        "2.0.0" = "sha256-qoeEM9SdpuFuBPeQlCzuhPLcJ+bMQkTUTGiT8QdU8rc=";
       }
       .${finalAttrs.version};
   };
@@ -119,7 +118,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     platforms = lib.platforms.unix;
     license = lib.licenses.mit;
-    homepage = "https://fmv.jku.at/cadical/";
+    homepage = "https://github.com/arminbiere/cadical";
     mainProgram = "cadical";
   };
 })
