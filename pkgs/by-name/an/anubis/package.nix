@@ -111,7 +111,6 @@ buildGo127Module (finalAttrs: {
       knightpp
       soopyc
       ryand56
-      defelo
     ];
     mainProgram = "anubis";
   };
