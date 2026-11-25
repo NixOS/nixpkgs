@@ -1,0 +1,15 @@
+diff --git a/crates/macos/src/system/launch_bridge.m b/crates/macos/src/system/launch_bridge.m
+index 90595b4..8526149 100644
+--- a/crates/macos/src/system/launch_bridge.m
++++ b/crates/macos/src/system/launch_bridge.m
+@@ -142,7 +142,10 @@ bool agent_desktop_open_application(
+         if ([request[@"bundle_id"] boolValue]) {
+             url = [workspace URLForApplicationWithBundleIdentifier:identifier];
+         } else {
++#pragma clang diagnostic push
++#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+             NSString *path = [workspace fullPathForApplication:identifier];
++#pragma clang diagnostic pop
+             if (path != nil) {
+                 url = [NSURL fileURLWithPath:path];
+             }
