@@ -3,7 +3,7 @@
   buildPythonPackage,
   einops,
   fetchFromGitHub,
-  flit-core,
+  flit-core_3,
   numba,
   numpy,
   pytestCheckHook,
@@ -23,7 +23,7 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-mGRalZ9OSh3CtfhLy2E6LOQVBDoq8c777Q9WnyMtjpU=";
   };
 
-  build-system = [ flit-core ];
+  build-system = [ flit-core_3 ];
 
   dependencies = [
     numpy
