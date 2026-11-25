@@ -119,7 +119,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://github.com/toto04/webeep-sync";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.lnk3 ];
+    maintainers = with lib.maintainers; [
+      alexandru0-dev
+      lnk3
+    ];
     mainProgram = "webeep-sync";
   };
 })
