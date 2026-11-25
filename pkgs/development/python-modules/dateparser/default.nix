@@ -73,6 +73,11 @@ buildPythonPackage (finalAttrs: {
     # access network
     "test_custom_language_detect_fast_text_0"
     "test_custom_language_detect_fast_text_1"
+    # timing sensitive
+    "test_align_words_added_by_breaking_marks"
+    "test_parse_run_of_separators_then_skip_words_is_linear"
+    "test_search_dates_words_added_by_normalization"
+    "test_translate_run_of_separators_then_skip_words_is_linear"
   ];
 
   pythonImportsCheck = [ "dateparser" ];
