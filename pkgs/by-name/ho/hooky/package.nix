@@ -16,10 +16,8 @@ let
       hash = "sha256-tom9+n6VYTzhf4XlIsUlgZz4yfa8Pe45oSiiwEevrsI=";
     };
   });
-in
 
-haskell.lib.compose.justStaticExecutables (
-  haskellPackages.callPackage (
+  hooky =
     { mkDerivation }:
     mkDerivation {
       pname = "hooky";
@@ -81,6 +79,7 @@ haskell.lib.compose.justStaticExecutables (
       maintainers = with lib.maintainers; [ brandonchinn178 ];
       license = lib.licenses.bsd3;
       mainProgram = "hooky";
-    }
-  ) { }
-)
+    };
+in
+
+haskell.lib.compose.justStaticExecutables (haskellPackages.callPackage hooky { })
