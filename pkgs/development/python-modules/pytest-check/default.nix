@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchPypi,
   hatchling,
@@ -23,6 +24,11 @@ buildPythonPackage (finalAttrs: {
   buildInputs = [ pytest ];
 
   nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # AssertionError: assert '99' not in '===========...============'
+    "test_long_locals_follow_verbosity"
+  ];
 
   pythonImportsCheck = [ "pytest_check" ];
 
