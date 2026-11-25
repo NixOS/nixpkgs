@@ -10,6 +10,8 @@ buildGoModule (finalAttrs: {
   pname = "dnscrypt-proxy";
   version = "2.1.21";
 
+  __darwinAllowLocalNetworking = true;
+
   vendorHash = null;
 
   src = fetchFromGitHub {
