@@ -1,18 +1,18 @@
 {
-  "version": "2026.3",
-  "buildNumber": "263.7307.200",
+  "version": "2026.3.0.1",
+  "buildNumber": "263.7307.353",
   "urls": {
     "x86_64-linux": {
-      "url": "https://download.jetbrains.com/idea/ideaIU-2026.3.tar.gz",
-      "hash": "sha256-alP/cfSgat1Ml+3E7+hsgxGf+C5bXp8dti/JWZW9ayU="
+      "url": "https://download.jetbrains.com/idea/ideaIU-2026.3.0.1.tar.gz",
+      "hash": "sha256-3vhpzAEJJz9aFErGacc5Ap6b1ReNE3ITuNFSmMAFWFg="
     },
     "aarch64-linux": {
-      "url": "https://download.jetbrains.com/idea/ideaIU-2026.3-aarch64.tar.gz",
-      "hash": "sha256-Gcj/bhRBha5JYQgJhKZbEcSS8oIOl1AHtCdv4N7v/lI="
+      "url": "https://download.jetbrains.com/idea/ideaIU-2026.3.0.1-aarch64.tar.gz",
+      "hash": "sha256-cs1WGM7OLQbkz6b7S2kvzcfm1ZqvgR5n6bpIceAklbY="
     },
     "aarch64-darwin": {
-      "url": "https://download.jetbrains.com/idea/ideaIU-2026.3-aarch64.dmg",
-      "hash": "sha256-beZRI3VzaRX67GFmAmp1ct0DoD+n6Mh7tR+P7z1cxao="
+      "url": "https://download.jetbrains.com/idea/ideaIU-2026.3.0.1-aarch64.dmg",
+      "hash": "sha256-uFU0UJnuhALi5sUp1pRn0Vgd2QplR356drCxGfIf2k4="
     }
   }
 }
