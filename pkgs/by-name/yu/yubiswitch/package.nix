@@ -7,16 +7,19 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "yubiswitch";
-  version = "0.18";
+  version = "0.19";
 
   src = fetchurl {
     url = "https://github.com/pallotron/yubiswitch/releases/download/v${finalAttrs.version}/yubiswitch_${finalAttrs.version}.dmg";
-    hash = "sha256-ee7l8jj1pJdj+SjMNWcLfHV//G0FG9bdBkNcxUh8Zuk=";
+    hash = "sha256-l010gbOI/nmwPx7qLDn0Wi90BRt3SkiaAOL+AMnfGzE=";
   };
 
   sourceRoot = ".";
 
   nativeBuildInputs = [ _7zz ];
+
+  # Fixup phases modify the binary and invalidate the code signature.
+  dontFixup = true;
 
   installPhase = ''
     runHook preInstall
