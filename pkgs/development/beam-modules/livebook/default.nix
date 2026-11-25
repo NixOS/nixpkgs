@@ -15,7 +15,7 @@
 
 beamPackages.mixRelease (finalAttrs: {
   pname = "livebook";
-  version = "0.19.10";
+  version = "0.19.11";
 
   buildInputs = [ beamPackages.erlang ];
 
@@ -29,7 +29,7 @@ beamPackages.mixRelease (finalAttrs: {
     owner = "livebook-dev";
     repo = "livebook";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-05h6LgVDXdWlxuJdLiKSYiY345qWyj4cLN0apU7Vbh0=";
+    hash = "sha256-oaaOQ5IWakcgEMPP2VxoO2Ni5XAWvix5aatAiOKnmcM=";
   };
 
   mixFodDeps = beamPackages.fetchMixDeps {
@@ -69,7 +69,7 @@ beamPackages.mixRelease (finalAttrs: {
     '';
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = "sha256-EQ4Yzs82wJEaDHoC/LExqTe36VQ4OjtdleKe6WM1aFw=";
+    outputHash = "sha256-GZHyd33GDaWSLLlNSf0zyOyrP4HNyWn5oYiOz0jdqCY=";
   };
 
   postPatch = ''
