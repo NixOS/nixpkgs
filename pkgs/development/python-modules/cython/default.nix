@@ -15,14 +15,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "cython";
-  version = "3.3.1";
+  version = "3.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cython";
     repo = "cython";
-    tag = finalAttrs.version;
-    hash = "sha256-NuSEJSGfa287DLJZs5wxfe7oh/Pii5rMF1F1wWle0Ck=";
+    tag = "${finalAttrs.version}-1";
+    hash = "sha256-+27CYKdXCg8Jr3isyOV3AQxuiOu1L1/Su1Za5q6TcQw=";
   };
 
   build-system = [
