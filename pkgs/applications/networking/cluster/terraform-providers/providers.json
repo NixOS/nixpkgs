@@ -354,13 +354,13 @@
     "vendorHash": "sha256-q6fNyM3U9nCWrtzTlVocO0haqGT5MOrPGdXodpJNDxc="
   },
   "drfaust92_bitbucket": {
-    "hash": "sha256-wtBEaJNccS9TvX97BskH4/2VF3tLFRXP8Q9r5r2L4HM=",
+    "hash": "sha256-OBXiqfX3kEhIethHgtDqmWg9GGqjwNzO7bd4sWioxKY=",
     "homepage": "https://registry.terraform.io/providers/DrFaust92/bitbucket",
     "owner": "DrFaust92",
     "repo": "terraform-provider-bitbucket",
-    "rev": "v2.55.0",
+    "rev": "v2.55.2",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-gUKREx3NORuYAFqR/hUCuU1OXQw5NYn2LzcpeunEagE="
+    "vendorHash": "sha256-LyjAhKTRwco+19/kVKF7byOu0TzBZzldrUpNQ1XZn6o="
   },
   "e-breuninger_netbox": {
     "hash": "sha256-s8I12Yn9kic7/GtKGaqNGzxCG4nandOCsfxcHDSbZQM=",
