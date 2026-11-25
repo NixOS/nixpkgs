@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  fetchpatch,
   fetchFromGitHub,
   cmake,
   obs-studio,
@@ -19,6 +20,11 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
   nativeBuildInputs = [ cmake ];
   buildInputs = [ obs-studio ];
+
+  patches = [
+    # With fix from user: https://github.com/wimpysworld/obs-dvd-screensaver/pull/6
+    ./obs-dvd-screensaver-fix-obs_properties_add_button.patch
+  ];
 
   meta = {
     description = "DVD screen saver for OBS Studio";

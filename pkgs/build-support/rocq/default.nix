@@ -67,6 +67,7 @@ in
   useDuneifVersion ? (x: false),
   useDune ? false,
   opam-name ? null,
+  opam-nameVersion ? (x: null),
   useCoq ? false,
   useCoqifVersion ? (x: false),
   ...
@@ -95,6 +96,7 @@ let
       "useDuneifVersion"
       "useDune"
       "opam-name"
+      "opam-nameVersion"
       "extraInstallFlags"
       "setROCQBIN"
       "mlPlugin"
@@ -170,7 +172,11 @@ let
     in
     p + display-pkg n "" version + "-";
   prefix-name = foldl append-version "" namePrefix;
-  opam-name = args.opam-name or (concatStringsSep "-" (namePrefix ++ [ pname ]));
+  opam-name =
+    let
+      v = args.opam-name or (opam-nameVersion fetched.version);
+    in
+    if v != null then v else concatStringsSep "-" (namePrefix ++ [ pname ]);
   rocq-core = if useCoq then coq // { rocq-version = coq.coq-version; } else args0.rocq-core;
   rocqlib-flags = [
     "COQLIBINSTALL=$(out)/lib/coq/${rocq-core.rocq-version}/user-contrib"
