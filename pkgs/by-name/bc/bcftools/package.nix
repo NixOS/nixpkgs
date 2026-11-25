@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bcftools";
-  version = "1.24";
+  version = "1.25";
 
   src = fetchFromGitHub {
     owner = "samtools";
     repo = "bcftools";
     tag = finalAttrs.version;
-    hash = "sha256-ZwlrnfCUwrBpS1CfwPtw1To94ygbK4qoGeiuhkDPm2Q=";
+    hash = "sha256-ZBYolu3EQww9+LyY/5GxdscMlHroCgQM9jVHJCyyU5o=";
   };
 
   nativeBuildInputs = [
