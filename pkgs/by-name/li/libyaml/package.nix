@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libyaml";
-  version = "0.2.5";
+  version = "0.2.6";
 
   src = fetchFromGitHub {
     owner = "yaml";
     repo = "libyaml";
     rev = finalAttrs.version;
-    sha256 = "18zsnsxc53pans4a01cs4401a2cjk3qi098hi440pj4zijifgcsb";
+    sha256 = "sha256-XhjyTxPoGiPcUdE1xATaLExSGx0/hzqhA7XxPqEIBi4=";
   };
 
   outputs = [
