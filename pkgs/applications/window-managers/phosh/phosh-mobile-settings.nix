@@ -1,36 +1,36 @@
 {
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  nixosTests,
-  nix-update-script,
-  meson,
-  ninja,
-  pkg-config,
-  wayland-scanner,
-  wrapGAppsHook4,
+  appstream,
   desktop-file-utils,
   feedbackd,
-  gtk4,
-  libadwaita,
-  lm_sensors,
-  phoc,
-  phosh,
-  wayland-protocols,
-  json-glib,
-  gsound,
+  fetchFromGitLab,
+  glib,
   gmobile,
   gnome-desktop,
-  libpulseaudio,
+  gobject-introspection,
+  gsound,
+  gst_all_1,
+  gtk4,
+  json-glib,
+  lib,
+  libadwaita,
   libportal,
   libportal-gtk4,
-  glib,
+  libpulseaudio,
   libyaml,
+  lm_sensors,
+  meson,
   mobile-broadband-provider-info,
   modemmanager,
-  gobject-introspection,
-  appstream,
-  gst_all_1,
+  ninja,
+  nix-update-script,
+  nixosTests,
+  phoc,
+  phosh,
+  pkg-config,
+  stdenv,
+  wayland-protocols,
+  wayland-scanner,
+  wrapGAppsHook4,
 }:
 
 let
@@ -65,7 +65,7 @@ let
     forceFetchGit = true;
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "phosh-mobile-settings";
   version = "0.54.0";
 
@@ -74,43 +74,43 @@ stdenv.mkDerivation rec {
     group = "World";
     owner = "Phosh";
     repo = "phosh-mobile-settings";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-TuwxzzalNhNJwPmmPJmxsHebzksPYv8jV6K0vYntQIw=";
     # Workaround for https://github.com/NixOS/nixpkgs/issues/485701
     forceFetchGit = true;
   };
 
   nativeBuildInputs = [
+    appstream
+    glib.dev
+    gobject-introspection
     meson
     ninja
     phosh
     pkg-config
     wayland-scanner
     wrapGAppsHook4
-    glib.dev
-    gobject-introspection
-    appstream
   ];
 
   buildInputs = [
     desktop-file-utils
     feedbackd
-    gtk4
-    libadwaita
-    lm_sensors
-    phoc
-    wayland-protocols
-    json-glib
-    gsound
     gmobile
     gnome-desktop
-    libpulseaudio
+    gsound
+    gst_all_1.gst-plugins-base
+    gtk4
+    json-glib
+    libadwaita
     libportal
     libportal-gtk4
+    libpulseaudio
     libyaml
+    lm_sensors
     mobile-broadband-provider-info
     modemmanager
-    gst_all_1.gst-plugins-base
+    phoc
+    wayland-protocols
   ];
 
   postPatch = ''
@@ -134,7 +134,7 @@ stdenv.mkDerivation rec {
     description = "Settings app for mobile specific things";
     mainProgram = "phosh-mobile-settings";
     homepage = "https://gitlab.gnome.org/World/Phosh/phosh-mobile-settings";
-    changelog = "https://gitlab.gnome.org/World/Phosh/phosh-mobile-settings/-/blob/v${version}/debian/changelog";
+    changelog = "https://gitlab.gnome.org/World/Phosh/phosh-mobile-settings/-/blob/v${finalAttrs.version}/debian/changelog";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       rvl
@@ -142,4 +142,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

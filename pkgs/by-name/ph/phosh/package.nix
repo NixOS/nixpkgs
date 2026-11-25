@@ -1,49 +1,49 @@
 {
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  nix-update-script,
-  meson,
-  ninja,
-  pkg-config,
-  python3,
-  wayland-scanner,
-  wrapGAppsHook4,
-  libadwaita,
-  libhandy,
-  libxkbcommon,
-  libgudev,
+  appstream,
   callaudiod,
-  pulseaudio,
+  dbus,
+  docutils,
   evince,
+  evolution-data-server,
+  feedbackd,
+  fetchFromGitLab,
+  gcr_3,
+  gi-docgen,
   glib,
-  modemmanager,
-  gtk4,
+  gmobile,
   gnome-bluetooth,
   gnome-control-center,
   gnome-desktop,
   gnome-session,
   gnome-shell,
-  gcr_3,
+  gobject-introspection,
+  gtk4,
+  lib,
+  libadwaita,
+  libgudev,
+  libhandy,
+  libsecret,
+  libxkbcommon,
+  meson,
+  modemmanager,
+  networkmanager,
+  ninja,
+  nix-update-script,
+  nixosTests,
   pam,
+  phoc,
+  pkg-config,
+  polkit,
+  pulseaudio,
+  python3,
+  qrcodegen,
+  stdenv,
   systemdLibs,
   upower,
   wayland,
-  dbus,
+  wayland-scanner,
+  wrapGAppsHook4,
   xvfb-run,
-  phoc,
-  feedbackd,
-  networkmanager,
-  polkit,
-  libsecret,
-  evolution-data-server,
-  nixosTests,
-  gmobile,
-  appstream,
-  qrcodegen,
-  gobject-introspection,
-  docutils,
-  gi-docgen,
 }:
 
 let
@@ -86,6 +86,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
+    docutils
+    gi-docgen
     libadwaita
     meson
     ninja
@@ -93,38 +95,36 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     wayland-scanner
     wrapGAppsHook4
-    docutils
-    gi-docgen
   ];
 
   buildInputs = [
-    evince
-    phoc
-    libhandy
-    libsecret
-    libxkbcommon
-    libgudev
+    appstream
     callaudiod
+    evince
     evolution-data-server
-    pulseaudio
-    modemmanager
+    feedbackd
     gcr_3
-    networkmanager
-    polkit
     gmobile
     gnome-bluetooth
     gnome-control-center
     gnome-desktop
     gnome-session
+    gobject-introspection
     gtk4
+    libgudev
+    libhandy
+    libsecret
+    libxkbcommon
+    modemmanager
+    networkmanager
     pam
+    phoc
+    polkit
+    pulseaudio
+    qrcodegen
     systemdLibs
     upower
     wayland
-    feedbackd
-    appstream
-    qrcodegen
-    gobject-introspection
   ];
 
   nativeCheckInputs = [
