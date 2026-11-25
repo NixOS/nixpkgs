@@ -1,0 +1,44 @@
+From 4932e9c06d788cf15fad0fd078cf7efaad64401f Mon Sep 17 00:00:00 2001
+From: harshitgavita-07 <232842803+harshitgavita-07@users.noreply.github.com>
+Date: Mon, 16 Nov 2026 10:24:02 +0530
+Subject: [PATCH] fix: call wrap-serializer handlers without the
+ SerializationInfo arg
+
+Both WrapSerializer callbacks passed the SerializationInfo as the
+handler's second positional argument, where pydantic expects an
+index_key. With pydantic 2.14 this raises PydanticSerializationError
+("'index_key' is expected to be an integer or a string"), breaking
+SimpleChatStore persistence and chat memory save/load on a fresh
+install. Six existing tests fail at main with pydantic 2.14.3 and pass
+with this change; the full llama-index-core suite passes (1482).
+---
+ .../llama_index/core/extractors/metadata_extractors.py          | 2 +-
+ .../llama_index/core/storage/chat_store/simple_chat_store.py    | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/llama-index-core/llama_index/core/extractors/metadata_extractors.py b/llama-index-core/llama_index/core/extractors/metadata_extractors.py
+index f6be2313771..c8aff587e29 100644
+--- a/llama_index/core/extractors/metadata_extractors.py
++++ b/llama_index/core/extractors/metadata_extractors.py
+@@ -46,7 +46,7 @@
+ 
+ 
+ def add_class_name(value: Any, handler: Callable, info: Any) -> Dict[str, Any]:
+-    partial_result = handler(value, info)
++    partial_result = handler(value)
+     if hasattr(value, "class_name"):
+         partial_result.update({"class_name": value.class_name()})
+     return partial_result
+diff --git a/llama-index-core/llama_index/core/storage/chat_store/simple_chat_store.py b/llama-index-core/llama_index/core/storage/chat_store/simple_chat_store.py
+index 78509a7bfaa..79f0482cd3b 100644
+--- a/llama_index/core/storage/chat_store/simple_chat_store.py
++++ b/llama_index/core/storage/chat_store/simple_chat_store.py
+@@ -12,7 +12,7 @@
+ def chat_message_serialization(
+     chat_message: Any, handler: Any, info: Any
+ ) -> Dict[str, Any]:
+-    partial_result = handler(chat_message, info)
++    partial_result = handler(chat_message)
+ 
+     for key, value in partial_result.get("additional_kwargs", {}).items():
+         value = chat_message._recursive_serialization(value)
