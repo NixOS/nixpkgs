@@ -7,7 +7,7 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "exa-agent-skills";
-  version = "2026.11.06-a0c2df8";
+  version = "2026.11.23-53c2b03";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -16,7 +16,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     owner = "exa-labs";
     repo = "agent-skills";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jmRo5dcAbWushV7b23AScnYU3Kca53HXAHi0iIC9jIQ=";
+    hash = "sha256-OokwB0L4BoCo3tGX/7KBU7fSgVIsk61+JSSE8JSk7Xc=";
   };
 
   nativeBuildInputs = [ installAgentSkills ];

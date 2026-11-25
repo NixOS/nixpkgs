@@ -10,13 +10,13 @@
 
 buildPecl (finalAttrs: {
   pname = "openswoole";
-  version = "26.11.0";
+  version = "26.11.1";
 
   src = fetchFromGitHub {
     owner = "openswoole";
     repo = "swoole-src";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EGCAqlgFRVGBYNXxwK9qPFC4OcgUX/9hYSNyAX2CjLM=";
+    hash = "sha256-yRJ4izIVz/pgtWUsINb1tpzhMth4B+fNVnLfwb1dkiQ=";
   };
 
   buildInputs = [ pcre2 ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ valgrind ];
