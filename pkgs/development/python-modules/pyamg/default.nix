@@ -5,6 +5,7 @@
   fetchPypi,
   numpy,
   scipy,
+  pymetis,
   pytest,
   python,
   pybind11,
@@ -32,6 +33,7 @@ buildPythonPackage (finalAttrs: {
   dependencies = [
     numpy
     scipy
+    pymetis
   ];
 
   nativeCheckInputs = [
