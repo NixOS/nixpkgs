@@ -92,13 +92,13 @@ let
 in
 buildNpmPackage (finalAttrs: {
   pname = "tidal-hifi";
-  version = "8.1.3";
+  version = "9.0.1";
 
   src = fetchFromGitHub {
     owner = "Mastermindzh";
     repo = "tidal-hifi";
     tag = finalAttrs.version;
-    hash = "sha256-R30UR5Ikcp50ASOay7418Tdz1mHWv7HSiwdETcZzrPE=";
+    hash = "sha256-kJ6AHR/c8LQssydOQdQGA6dPrWVJenLldK8niJPwz4k=";
   };
 
   nativeBuildInputs = [
@@ -107,7 +107,7 @@ buildNpmPackage (finalAttrs: {
     copyDesktopItems
   ];
 
-  npmDepsHash = "sha256-6qOeWKLBlGy32zY4p0Ar0scToQthbtrpCSi7MyS8igA=";
+  npmDepsHash = "sha256-/8e7ZjQYZQ3uoBTxiPUGSakXIl0bjziTUTLUUQJKLm0=";
   forceGitDeps = true;
   makeCacheWritable = true;
 
