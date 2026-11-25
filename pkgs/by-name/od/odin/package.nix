@@ -24,17 +24,16 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "odin";
-  version = "dev-2026-11a";
+  version = "dev-2026-11";
 
   src = fetchFromGitHub {
     owner = "odin-lang";
     repo = "Odin";
     tag = finalAttrs.version;
-    hash = "sha256-LzvPcA6CA0p9DZi1cuFUizDPkVODMZ0OC9/y+NAO0Kc=";
+    hash = "sha256-626+yeBVtfY3Q7AzOY5vtSHSe8mvVDruC2RawzUu+eg=";
   };
 
   patches = [
-    ./darwin-remove-impure-links.patch
     # The default behavior is to use the statically linked Raylib libraries,
     # but GLFW still attempts to load Xlib at runtime, which won't normally be
     # available on Nix based systems. Instead, use the "system" Raylib version,
