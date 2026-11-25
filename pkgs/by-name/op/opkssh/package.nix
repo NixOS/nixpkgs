@@ -8,18 +8,18 @@
 
 buildGoModule (finalAttrs: {
   pname = "opkssh";
-  version = "0.17.0";
+  version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "openpubkey";
     repo = "opkssh";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7j0CDyEIStLge84PisnAZFG0C44fcU+6ebjF03GzazM=";
+    hash = "sha256-omwwWKLu3HwOAvdTmzfQyuHgDiatR9Bvh6u6dP8MmKA=";
   };
 
   ldflags = [ "-X main.Version=${finalAttrs.version}" ];
 
-  vendorHash = "sha256-0UwEQBplwnH33h7vgW8gUZoK+Ruuwnru9/PmVEJqoes=";
+  vendorHash = "sha256-EHT04zE9+z2I7CQ3bqIjNfnHOGW9kNJgKT1FkElUxtE=";
 
   nativeInstallCheckInputs = [
     versionCheckHook
