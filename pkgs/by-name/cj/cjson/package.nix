@@ -12,8 +12,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "DaveGamble";
     repo = "cJSON";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-WjgzokT9aHJ7dB40BtmhS7ur1slTuXmemgDimZHLVQM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-WjgzokT9aHJ7dB40BtmhS7ur1slTuXmemgDimZHLVQM=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     # cJSON actually uses C99 standard, not C89
     # https://github.com/DaveGamble/cJSON/issues/275
     ''
-      substituteInPlace CMakeLists.txt --replace -std=c89 -std=c99
+      substituteInPlace CMakeLists.txt --replace-fail -std=c89 -std=c99
     ''
     # Fix the build with CMake 4.
     #
