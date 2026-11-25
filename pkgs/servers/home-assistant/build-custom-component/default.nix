@@ -60,6 +60,9 @@ lib.extendMkDerivation {
         ]
         ++ (args.nativeBuildInputs or [ ]);
 
+      # Home Assistant components don't ship .dist-info/METADATA
+      dontCheckPythonMetadata = true;
+
       passthru = {
         isHomeAssistantComponent = true;
       }
