@@ -2,7 +2,7 @@
   lib,
   stdenv,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   hatchling,
   pytest,
   pytestCheckHook,
@@ -13,10 +13,11 @@ buildPythonPackage (finalAttrs: {
   version = "3.0.3";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "pytest_check";
-    inherit (finalAttrs) version;
-    hash = "sha256-4qqQtni2ouD0K1/gNAUcmGdFDJmz5hOTBwpOSAwyulc=";
+  src = fetchFromGitHub {
+    owner = "okken";
+    repo = "pytest-check";
+    tag = finalAttrs.version;
+    hash = "sha256-jrI9F9K/51Jl8unp53TB+CrYahhQz5zZH7ulBaISNSU=";
   };
 
   build-system = [ hatchling ];
@@ -35,7 +36,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Pytest plugin allowing multiple failures per test";
     homepage = "https://github.com/okken/pytest-check";
-    changelog = "https://github.com/okken/pytest-check/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/okken/pytest-check/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       flokli
