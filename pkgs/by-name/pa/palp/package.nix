@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  singular,
   dimensions ? 6, # works for <= dimensions dimensions, but is only optimized for that exact value
   allDimensions ? false,
   doSymlink ? true, # symlink the executables to the default location (without dimension postfix)
@@ -41,19 +42,10 @@ stdenv.mkDerivation (finalAttrs: {
     "all-dims"
   ];
 
-  # palp has no tests of its own. This test is an adapted sage test that failed
-  # when #28029 was merged.
   doCheck = true;
-  checkPhase = ''
-    runHook preCheck
-    ./nef.x -f -N << EOF | grep -q 'np='
-      3 6
-      1  0  0 -1  0  0
-      0  1  0  0 -1  0
-      0  0  1  0  0 -1
-    EOF
-    runHook postCheck
-  '';
+  nativeCheckInputs = [
+    singular
+  ];
 
   preInstall = lib.optionalString (!allDimensions) ''
     for file in poly class cws nef mori; do
