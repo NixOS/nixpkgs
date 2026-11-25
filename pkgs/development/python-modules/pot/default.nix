@@ -10,6 +10,7 @@
 
   # dependencies
   scipy,
+  eigen,
 
   # optional-dependencies
   # backend-jax
@@ -35,14 +36,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pot";
-  version = "0.9.6.post1";
+  version = "0.9.7.post1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PythonOT";
     repo = "POT";
     tag = finalAttrs.version;
-    hash = "sha256-db4fKXqvg9DEmbI/RTQWcOdw+3ccPk74ME0VDsXZlsQ=";
+    hash = "sha256-D1jFTYGQU4lW3aJ2KxJOPUu5KH2sVIoU7+PTWHXfmt0=";
   };
 
   postPatch = ''
@@ -52,6 +53,10 @@ buildPythonPackage (finalAttrs: {
 
     # we don't need setup.py to find the macos sdk for us
     sed -i '/sdk_path/d' setup.py
+
+    # replace vendored eigen
+    mkdir -p deps/eigen
+    cp -r "${lib.getDev eigen}/include/eigen3" -T deps/eigen
   '';
 
   build-system = [
@@ -63,6 +68,7 @@ buildPythonPackage (finalAttrs: {
   dependencies = [
     numpy
     scipy
+    eigen
   ];
 
   optional-dependencies = {
@@ -103,47 +109,11 @@ buildPythonPackage (finalAttrs: {
     rm -rf ot
   '';
 
-  disabledTests = [
-    # GPU tests are always skipped because of sandboxing
-    "warnings"
-    # Fixture is not available
-    "test_conditional_gradient"
-    "test_convert_between_backends"
-    "test_emd_backends"
-    "test_emd_emd2_types_devices"
-    "test_emd1d_type_devices"
-    "test_emd2_backends"
-    "test_factored_ot_backends"
-    "test_free_support_barycenter_backends"
-    "test_func_backends"
-    "test_generalized_conditional_gradient"
-    "test_line_search_armijo"
-    "test_loss_dual"
-    "test_max_sliced_backend"
-    "test_plan_dual"
-    "test_random_backends"
-    "test_sliced_backend"
-    "test_to_numpy"
-    "test_wasserstein_1d_type_devices"
-    "test_wasserstein"
-    "test_weak_ot_bakends"
-
-    # TypeError: Only integers, slices...
-    "test_emd1d_device_tf"
-
-    # ValueError: setting an array element with a sequence
-    "test_fully_relaxed_path"
-    "test_pointwise_gromov"
-    "test_semi_relaxed_path"
-
-    # ValueError: Unknown Distance Metric: sokalmichener
-    "test_dist"
-    "test_dist_vs_cdist"
-  ];
-
   pythonImportsCheck = [
     "ot"
+    "ot.bsp"
     "ot.lp"
+    "ot.partial"
   ];
 
   meta = {
