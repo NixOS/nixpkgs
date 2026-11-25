@@ -1,6 +1,4 @@
 {
-  comet-gog_kind ? "latest",
-
   lib,
   stdenv,
   rustPlatform,
@@ -9,38 +7,22 @@
   pkg-config,
   sqlite,
   aws-lc,
+  versionCheckHook,
 
   meson,
   ninja,
   pkgsCross,
 }:
 
-let
-  versionInfoTable = {
-    "latest" = {
-      version = "0.4.1";
-      srcHash = "sha256-NK3td9huujLM2sSU/gMPV0Bak+i+6BDwre/z/JNlR1M=";
-      cargoHash = "sha256-iOG52ZT1oRjqUVd81UhRdXUgDkIky0qrboZfVJjuoSk=";
-    };
-    # version pin that is compatible with heroic
-    "heroic" = {
-      version = "0.2.0";
-      srcHash = "sha256-LAEt2i/SRABrz+y2CTMudrugifLgHNxkMSdC8PXYF0E=";
-      cargoHash = "sha256-SvDE+QqaSK0+4XgB3bdmqOtwxBDTlf7yckTR8XjmMXc=";
-    };
-  };
-
-  versionInfo = versionInfoTable.${comet-gog_kind};
-in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "comet-gog";
-  inherit (versionInfo) version cargoHash;
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "imLinguin";
     repo = "comet";
     tag = "v${finalAttrs.version}";
-    hash = versionInfo.srcHash;
+    hash = "sha256-NK3td9huujLM2sSU/gMPV0Bak+i+6BDwre/z/JNlR1M=";
     fetchSubmodules = true;
   };
 
@@ -62,6 +44,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     aws-lc
     sqlite
   ];
+
+  cargoHash = "sha256-iOG52ZT1oRjqUVd81UhRdXUgDkIky0qrboZfVJjuoSk=";
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   passthru.dummy-service = stdenv.mkDerivation {
     pname = "galaxy-dummy-service";
