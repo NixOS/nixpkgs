@@ -5,7 +5,6 @@
   fetchzip,
   autoconf,
   automake,
-  libtool,
   makeWrapper,
   pkg-config,
   cmake,
@@ -390,7 +389,6 @@ stdenv.mkDerivation (
       pkg-config
       autoconf
       automake
-      # <<< libtool # still needed for some components. Check if that is the case with 19.0 <<<
       jre_headless
       yasm
       gettext
