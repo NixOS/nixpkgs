@@ -98,6 +98,7 @@ buildPythonPackage (finalAttrs: {
       extraArgs = [
         "--version-regex"
         "google-cloud-firestore-v(.*)"
+        "--use-github-releases"
       ];
     };
   };
