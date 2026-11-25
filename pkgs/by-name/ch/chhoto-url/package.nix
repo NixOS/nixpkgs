@@ -11,26 +11,25 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "chhoto-url";
-  version = "7.5.5";
+  version = "7.11.7";
 
   src = fetchFromGitHub {
     owner = "SinTan1729";
     repo = "chhoto-url";
     tag = finalAttrs.version;
-    hash = "sha256-u0S5HHTyuCYKnNDVs8mSjMyOPdhfKwNSIVh4pPXnpPM=";
+    hash = "sha256-ZJLPZvelQZ47PuWF5a6AjmhTgwl9Z/xINJKSQBXi0Fs=";
     fetchLFS = true;
   };
 
   sourceRoot = "${finalAttrs.src.name}/backend";
 
   postPatch = ''
-    substituteInPlace src/{main.rs,services/get.rs,services/utils.rs} \
-      --replace-fail "./frontend/" "${placeholder "out"}/share/chhoto-url/frontend/"
-    substituteInPlace Cargo.toml \
-      --replace-fail 'rust-version = "1.96"' 'rust-version = "1.95"'
+    substituteInPlace src/utils.rs \
+      --replace-fail '("./frontend", "./frontend-final")' \
+        '("${placeholder "out"}/share/chhoto-url/frontend", "./frontend-final")'
   '';
 
-  cargoHash = "sha256-23nDGYjGW4gL7sKh2YPPxkTUaxIQFRbPtVUVFDUlbHo=";
+  cargoHash = "sha256-AllA3dXFEDPlvVoGyGfKh5SdRQ/3lCOTNt9XpSnvFTI=";
 
   nativeBuildInputs = [ pkg-config ];
 

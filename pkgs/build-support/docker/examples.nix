@@ -9,16 +9,19 @@
 
 {
   pkgs,
-  buildImage,
-  buildLayeredImage,
-  pullImage,
-  shadowSetup,
-  buildImageWithNixDb,
+  dockerTools,
   pkgsCross,
-  streamNixShellImage,
 }:
 
 let
+  inherit (dockerTools)
+    buildImage
+    buildLayeredImage
+    pullImage
+    buildImageWithNixDb
+    streamNixShellImage
+    ;
+
   nixosLib = import ../../../nixos/lib {
     # Experimental features need testing too, but there's no point in warning
     # about it, so we enable the feature flag.
@@ -178,7 +181,7 @@ rec {
   nginx = buildLayeredImage nginxArguments;
 
   # Used to demonstrate how virtualisation.oci-containers.imageStream works
-  nginxStream = pkgs.dockerTools.streamLayeredImage nginxArguments;
+  nginxStream = dockerTools.streamLayeredImage nginxArguments;
 
   # 4. example of pulling an image. could be used as a base for other images
   nixFromDockerHub = pullImage {
@@ -257,7 +260,7 @@ rec {
 
   # 8. regression test for erroneous use of eval and string expansion.
   # See issue #34779 and PR #40947 for details.
-  runAsRootExtraCommands = pkgs.dockerTools.buildImage {
+  runAsRootExtraCommands = dockerTools.buildImage {
     name = "runAsRootExtraCommands";
     tag = "latest";
     copyToRoot = pkgs.buildEnv {
@@ -274,7 +277,7 @@ rec {
 
   # 9. Ensure that setting created to now results in a date which
   # isn't the epoch + 1
-  unstableDate = pkgs.dockerTools.buildImage {
+  unstableDate = dockerTools.buildImage {
     name = "unstable-date";
     tag = "latest";
     copyToRoot = pkgs.buildEnv {
@@ -286,7 +289,7 @@ rec {
   };
 
   # 10. Create a layered image
-  layered-image = pkgs.dockerTools.buildLayeredImage {
+  layered-image = dockerTools.buildLayeredImage {
     name = "layered-image";
     tag = "latest";
     extraCommands = ''echo "(extraCommand)" > extraCommands'';
@@ -299,7 +302,7 @@ rec {
   };
 
   # 11. Create an image on top of a layered image
-  layered-on-top = pkgs.dockerTools.buildImage {
+  layered-on-top = dockerTools.buildImage {
     name = "layered-on-top";
     tag = "latest";
     fromImage = layered-image;
@@ -319,7 +322,7 @@ rec {
   };
 
   # 12 Create a layered image on top of a layered image
-  layered-on-top-layered = pkgs.dockerTools.buildLayeredImage {
+  layered-on-top-layered = dockerTools.buildLayeredImage {
     name = "layered-on-top-layered";
     tag = "latest";
     fromImage = layered-image;
@@ -355,7 +358,7 @@ rec {
   #   (this is why there are 3 images)
   layersOrder =
     let
-      l1 = pkgs.dockerTools.buildImage {
+      l1 = dockerTools.buildImage {
         name = "l1";
         tag = "latest";
         extraCommands = ''
@@ -365,7 +368,7 @@ rec {
           echo layer1 > tmp/layer3
         '';
       };
-      l2 = pkgs.dockerTools.buildImage {
+      l2 = dockerTools.buildImage {
         name = "l2";
         fromImage = l1;
         tag = "latest";
@@ -376,7 +379,7 @@ rec {
         '';
       };
     in
-    pkgs.dockerTools.buildImage {
+    dockerTools.buildImage {
       name = "l3";
       fromImage = l2;
       tag = "latest";
@@ -394,7 +397,7 @@ rec {
   # 15. Environment variable inheritance.
   # Child image should inherit parents environment variables,
   # optionally overriding them.
-  environmentVariablesParent = pkgs.dockerTools.buildImage {
+  environmentVariablesParent = dockerTools.buildImage {
     name = "parent";
     tag = "latest";
     config = {
@@ -405,7 +408,7 @@ rec {
     };
   };
 
-  environmentVariables = pkgs.dockerTools.buildImage {
+  environmentVariables = dockerTools.buildImage {
     name = "child";
     fromImage = environmentVariablesParent;
     tag = "latest";
@@ -422,7 +425,7 @@ rec {
     };
   };
 
-  environmentVariablesLayered = pkgs.dockerTools.buildLayeredImage {
+  environmentVariablesLayered = dockerTools.buildLayeredImage {
     name = "child";
     fromImage = environmentVariablesParent;
     tag = "latest";
@@ -436,14 +439,14 @@ rec {
   };
 
   # 16. Create another layered image, for comparing layers with image 10.
-  another-layered-image = pkgs.dockerTools.buildLayeredImage {
+  another-layered-image = dockerTools.buildLayeredImage {
     name = "another-layered-image";
     tag = "latest";
     config.Cmd = [ "${pkgs.hello}/bin/hello" ];
   };
 
   # 17. Create a layered image with only 2 layers
-  two-layered-image = pkgs.dockerTools.buildLayeredImage {
+  two-layered-image = dockerTools.buildLayeredImage {
     name = "two-layered-image";
     tag = "latest";
     config.Cmd = [ "${pkgs.hello}/bin/hello" ];
@@ -456,7 +459,7 @@ rec {
 
   # 18. Create a layered image with more packages than max layers.
   # coreutils and hello are part of the same layer
-  bulk-layer = pkgs.dockerTools.buildLayeredImage {
+  bulk-layer = dockerTools.buildLayeredImage {
     name = "bulk-layer";
     tag = "latest";
     contents = with pkgs; [
@@ -468,7 +471,7 @@ rec {
 
   # 19. Create a layered image with a base image and more packages than max
   # layers. coreutils and hello are part of the same layer
-  layered-bulk-layer = pkgs.dockerTools.buildLayeredImage {
+  layered-bulk-layer = dockerTools.buildLayeredImage {
     name = "layered-bulk-layer";
     tag = "latest";
     fromImage = two-layered-image;
@@ -481,7 +484,7 @@ rec {
 
   # 20. Create a "layered" image without nix store layers. This is not
   # recommended, but can be useful for base images in rare cases.
-  no-store-paths = pkgs.dockerTools.buildLayeredImage {
+  no-store-paths = dockerTools.buildLayeredImage {
     name = "no-store-paths";
     tag = "latest";
     extraCommands = ''
@@ -494,7 +497,7 @@ rec {
     '';
   };
 
-  nixLayered = pkgs.dockerTools.buildLayeredImageWithNixDb {
+  nixLayered = dockerTools.buildLayeredImageWithNixDb {
     name = "nix-layered";
     tag = "latest";
     contents = [
@@ -516,7 +519,7 @@ rec {
 
   # 21. Support files in the store on buildLayeredImage
   # See: https://github.com/NixOS/nixpkgs/pull/91084#issuecomment-653496223
-  filesInStore = pkgs.dockerTools.buildLayeredImageWithNixDb {
+  filesInStore = dockerTools.buildLayeredImageWithNixDb {
     name = "file-in-store";
     tag = "latest";
     contents = [
@@ -536,7 +539,7 @@ rec {
 
   # 22. Ensure that setting created to now results in a date which
   # isn't the epoch + 1 for layered images.
-  unstableDateLayered = pkgs.dockerTools.buildLayeredImage {
+  unstableDateLayered = dockerTools.buildLayeredImage {
     name = "unstable-date-layered";
     tag = "latest";
     contents = [ pkgs.coreutils ];
@@ -549,7 +552,7 @@ rec {
     let
       layerOnTopOf =
         parent: layerName:
-        pkgs.dockerTools.buildImage {
+        dockerTools.buildImage {
           name = "layers-unpack-order-${layerName}";
           tag = "latest";
           fromImage = parent;
@@ -572,7 +575,7 @@ rec {
     in
     layerC;
 
-  bashUncompressed = pkgs.dockerTools.buildImage {
+  bashUncompressed = dockerTools.buildImage {
     name = "bash-uncompressed";
     tag = "latest";
     compressor = "none";
@@ -580,7 +583,7 @@ rec {
     copyToRoot = pkgs.bash;
   };
 
-  bashZstdCompressed = pkgs.dockerTools.buildImage {
+  bashZstdCompressed = dockerTools.buildImage {
     name = "bash-zstd";
     tag = "latest";
     compressor = "zstd";
@@ -589,20 +592,20 @@ rec {
   };
 
   # buildImage without explicit tag
-  bashNoTag = pkgs.dockerTools.buildImage {
+  bashNoTag = dockerTools.buildImage {
     name = "bash-no-tag";
     # Not recommended. Use `buildEnv` between copy and packages to avoid file duplication.
     copyToRoot = pkgs.bash;
   };
 
   # buildLayeredImage without explicit tag
-  bashNoTagLayered = pkgs.dockerTools.buildLayeredImage {
+  bashNoTagLayered = dockerTools.buildLayeredImage {
     name = "bash-no-tag-layered";
     contents = pkgs.bash;
   };
 
   # buildLayeredImage without compression
-  bashLayeredUncompressed = pkgs.dockerTools.buildLayeredImage {
+  bashLayeredUncompressed = dockerTools.buildLayeredImage {
     name = "bash-layered-uncompressed";
     tag = "latest";
     compressor = "none";
@@ -610,7 +613,7 @@ rec {
   };
 
   # buildLayeredImage with zstd compression
-  bashLayeredZstdCompressed = pkgs.dockerTools.buildLayeredImage {
+  bashLayeredZstdCompressed = dockerTools.buildLayeredImage {
     name = "bash-layered-zstd";
     tag = "latest";
     compressor = "zstd";
@@ -618,13 +621,13 @@ rec {
   };
 
   # streamLayeredImage without explicit tag
-  bashNoTagStreamLayered = pkgs.dockerTools.streamLayeredImage {
+  bashNoTagStreamLayered = dockerTools.streamLayeredImage {
     name = "bash-no-tag-stream-layered";
     contents = pkgs.bash;
   };
 
   # buildLayeredImage with non-root user
-  bashLayeredWithUser = pkgs.dockerTools.buildLayeredImage {
+  bashLayeredWithUser = dockerTools.buildLayeredImage {
     name = "bash-layered-with-user";
     tag = "latest";
     contents = [
@@ -663,7 +666,7 @@ rec {
       target = pkgs.writeTextDir "dir/target" "Content doesn't matter.";
       symlink = pkgs.runCommand "symlink" { } "ln -s ${target} $out";
     in
-    pkgs.dockerTools.buildLayeredImage {
+    dockerTools.buildLayeredImage {
       name = "layeredstoresymlink";
       tag = "latest";
       contents = [
@@ -676,21 +679,21 @@ rec {
     };
 
   # image with registry/ prefix
-  prefixedImage = pkgs.dockerTools.buildImage {
+  prefixedImage = dockerTools.buildImage {
     name = "registry-1.docker.io/image";
     tag = "latest";
     config.Cmd = [ "${pkgs.hello}/bin/hello" ];
   };
 
   # layered image with registry/ prefix
-  prefixedLayeredImage = pkgs.dockerTools.buildLayeredImage {
+  prefixedLayeredImage = dockerTools.buildLayeredImage {
     name = "registry-1.docker.io/layered-image";
     tag = "latest";
     config.Cmd = [ "${pkgs.hello}/bin/hello" ];
   };
 
   # layered image with files owned by a user other than root
-  layeredImageWithFakeRootCommands = pkgs.dockerTools.buildLayeredImage {
+  layeredImageWithFakeRootCommands = dockerTools.buildLayeredImage {
     name = "layered-image-with-fake-root-commands";
     tag = "latest";
     contents = [
@@ -718,31 +721,31 @@ rec {
   };
 
   # tarball consisting of both bash and redis images
-  mergedBashAndRedis = pkgs.dockerTools.mergeImages [
+  mergedBashAndRedis = dockerTools.mergeImages [
     bash
     redis
   ];
 
   # tarball consisting of bash (without tag) and redis images
-  mergedBashNoTagAndRedis = pkgs.dockerTools.mergeImages [
+  mergedBashNoTagAndRedis = dockerTools.mergeImages [
     bashNoTag
     redis
   ];
 
   # tarball consisting of bash and layered image with different owner of the
   # /home/alice directory
-  mergedBashFakeRoot = pkgs.dockerTools.mergeImages [
+  mergedBashFakeRoot = dockerTools.mergeImages [
     bash
     layeredImageWithFakeRootCommands
   ];
 
-  mergeVaryingCompressor = pkgs.dockerTools.mergeImages [
+  mergeVaryingCompressor = dockerTools.mergeImages [
     redis
     bashUncompressed
     bashZstdCompressed
   ];
 
-  helloOnRoot = pkgs.dockerTools.streamLayeredImage {
+  helloOnRoot = dockerTools.streamLayeredImage {
     name = "hello";
     tag = "latest";
     contents = [
@@ -754,7 +757,7 @@ rec {
     config.Cmd = [ "hello" ];
   };
 
-  helloOnRootNoStore = pkgs.dockerTools.streamLayeredImage {
+  helloOnRootNoStore = dockerTools.streamLayeredImage {
     name = "hello";
     tag = "latest";
     contents = [
@@ -767,7 +770,7 @@ rec {
     includeStorePaths = false;
   };
 
-  helloOnRootNoStoreFakechroot = pkgs.dockerTools.streamLayeredImage {
+  helloOnRootNoStoreFakechroot = dockerTools.streamLayeredImage {
     name = "hello";
     tag = "latest";
     contents = [
@@ -808,7 +811,7 @@ rec {
         ${pkgs.busybox}/bin/cat /etc/some-config-file
       '';
     in
-    pkgs.dockerTools.streamLayeredImage {
+    dockerTools.streamLayeredImage {
       name = "etc";
       tag = "latest";
       enableFakechroot = true;
@@ -820,9 +823,9 @@ rec {
     };
 
   # Example export of the bash image
-  exportBash = pkgs.dockerTools.exportImage { fromImage = bash; };
+  exportBash = dockerTools.exportImage { fromImage = bash; };
 
-  imageViaFakeChroot = pkgs.dockerTools.streamLayeredImage {
+  imageViaFakeChroot = dockerTools.streamLayeredImage {
     name = "image-via-fake-chroot";
     tag = "latest";
     config.Cmd = [ "hello" ];
@@ -846,7 +849,7 @@ rec {
     ];
   };
 
-  layered-image-with-path = pkgs.dockerTools.streamLayeredImage {
+  layered-image-with-path = dockerTools.streamLayeredImage {
     name = "layered-image-with-path";
     tag = "latest";
     contents = [
@@ -866,7 +869,7 @@ rec {
     ];
   };
 
-  layered-image-with-architecture = pkgs.dockerTools.streamLayeredImage {
+  layered-image-with-architecture = dockerTools.streamLayeredImage {
     name = "layered-image-with-architecture";
     tag = "latest";
     architecture = "arm64";
@@ -885,7 +888,7 @@ rec {
       name = "image-with-certs-root";
       paths = [
         pkgs.coreutils
-        pkgs.dockerTools.caCertificates
+        dockerTools.caCertificates
       ];
     };
 
@@ -1006,7 +1009,7 @@ rec {
     '';
   };
 
-  nix-layered = pkgs.dockerTools.streamLayeredImage {
+  nix-layered = dockerTools.streamLayeredImage {
     name = "nix-layered";
     tag = "latest";
     contents = [

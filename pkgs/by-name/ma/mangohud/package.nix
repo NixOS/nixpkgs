@@ -226,21 +226,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postFixup =
-    let
-      archMap = {
-        "x86_64-linux" = "x86_64";
-        "i686-linux" = "x86";
-      };
-      layerPlatform = archMap."${stdenv.hostPlatform.system}" or null;
-    in
-    # We need to give the different layers separate names or else the loader
-    # might try the 32-bit one first, fail and not attempt to load the 64-bit
-    # layer under the same name.
-    lib.optionalString (layerPlatform != null) ''
-      substituteInPlace $out/share/vulkan/implicit_layer.d/MangoHud.${layerPlatform}.json \
-        --replace-fail "VK_LAYER_MANGOHUD_overlay" "VK_LAYER_MANGOHUD_overlay_${toString stdenv.hostPlatform.parsed.cpu.bits}"
-    ''
-    + lib.optionalString nvidiaSupport ''
+    lib.optionalString nvidiaSupport ''
       # Add OpenGL driver and libXNVCtrl paths to RUNPATH to support NVIDIA cards
       addDriverRunpath "$out/lib/mangohud/libMangoHud.so"
       patchelf --add-rpath ${libXNVCtrl}/lib "$out/lib/mangohud/libMangoHud.so"

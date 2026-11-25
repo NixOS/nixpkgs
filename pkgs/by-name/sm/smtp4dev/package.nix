@@ -67,7 +67,6 @@ buildDotnetModule (finalAttrs: {
     maintainers = with lib.maintainers; [
       rucadi
       jchw
-      defelo
     ];
     platforms = lib.platforms.unix;
   };

@@ -16,7 +16,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rattler-build";
-  version = "0.77.0";
+  version = "0.81.0";
 
   __structuredAttrs = true;
 
@@ -24,10 +24,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "prefix-dev";
     repo = "rattler-build";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hMK5WO1wuwGdTVPxl/XuX+xTI/hHC82oK54dFhGZP4I=";
+    hash = "sha256-6qWzXccWUikPsCDXgpjcVwSnmXS8a1dpql0QQQmM13s=";
   };
 
-  cargoHash = "sha256-AXwEo27kpKrr/baFjH7dczRngTL9EBWMh2SBnqLQBGk=";
+  cargoHash = "sha256-+fWH6WokG654Moq5mt+XLaSaALCrafjiOyoVBDCCSVA=";
 
   doCheck = false; # test requires network access
 
