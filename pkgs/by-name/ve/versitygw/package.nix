@@ -2,7 +2,10 @@
   lib,
   fetchFromGitHub,
   buildGoModule,
+  callPackage,
   nix-update-script,
+  nixosTests,
+  stdenv,
   versionCheckHook,
 }:
 
@@ -80,6 +83,12 @@ buildGoModule (finalAttrs: {
   versionCheckProgramArg = "--version";
 
   passthru = {
+    tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
+      nixos = nixosTests.versitygw.extendNixOS {
+        module.services.versitygw.package = finalAttrs.finalPackage;
+      };
+      overrides = callPackage ./test-overrides.nix { versitygw = finalAttrs.finalPackage; };
+    };
     updateScript = nix-update-script { };
   };
 
@@ -91,6 +100,7 @@ buildGoModule (finalAttrs: {
     maintainers = with lib.maintainers; [
       adamcstephens
       genga898
+      rrittste
     ];
     mainProgram = "versitygw";
   };

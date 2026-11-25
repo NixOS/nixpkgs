@@ -1951,6 +1951,7 @@
   ./services/web-servers/ttyd.nix
   ./services/web-servers/tusd.nix
   ./services/web-servers/uwsgi.nix
+  ./services/web-servers/versitygw.nix
   ./services/web-servers/vinyl-cache/default.nix
   ./services/x11/clight.nix
   ./services/x11/colord.nix
