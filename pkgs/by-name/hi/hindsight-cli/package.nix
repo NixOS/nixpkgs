@@ -21,13 +21,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-fykytEgE0dapJhDtky4zyWwXgBgiuvufPkfdbnssi8g=";
   };
 
-  sourceRoot = "${finalAttrs.src.name}/hindsight-cli";
+  cargoRoot = "hindsight-cli";
+  buildAndTestSubdir = finalAttrs.cargoRoot;
 
   # Upstream does not commit a Cargo.lock for the CLI.
   cargoLock.lockFile = ./Cargo.lock;
 
   postPatch = ''
-    ln -s ${./Cargo.lock} Cargo.lock
+    ln -s ${./Cargo.lock} hindsight-cli/Cargo.lock
   '';
 
   nativeBuildInputs = [ pkg-config ];
