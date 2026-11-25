@@ -1,4 +1,3 @@
-# package.nix
 {
   lib,
   stdenv,
