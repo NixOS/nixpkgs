@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "curio";
-  version = "1.6-unstable-2024-04-11";
+  version = "1.6-unstable-2025-12-21";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dabeaz";
     repo = "curio";
-    rev = "148454621f9bd8dd843f591e87715415431f6979";
-    hash = "sha256-WLu7XF5wiVzBRQH1KRdAbhluTvGE7VvnRQUS0c3SUDk=";
+    rev = "c29701fbb8d0a7b8f28ea60639b36b75f5550366";
+    hash = "sha256-jnVyVPIczQs0Ec29HaB8cqL3EILfN5NF5+IkVMspFyo=";
   };
 
   build-system = [ setuptools ];
