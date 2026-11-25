@@ -21,7 +21,7 @@ let
 
   # Hard-code to avoid creating another instance of nixpkgs. Also avoids eval errors in some cases.
   libDir32 = "lib"; # pkgs.pkgsi686Linux.stdenv.hostPlatform.libDir
-  ldsoBasename32 = "ld-linux.so.2"; # last (splitString "/" pkgs.pkgsi686Linux.stdenv.cc.bintools.dynamicLinker)
+  ldsoBasename32 = if pkgs.stdenv.hostPlatform.isMusl then "ld-musl-i386.so.1" else "ld-linux.so.2"; # last (splitString "/" pkgs.pkgsi686Linux.stdenv.cc.bintools.dynamicLinker)
 in
 {
   options = {
