@@ -6,10 +6,8 @@
   config,
   fetchurl,
   jdk,
-  jq,
   lib,
   llvmPackages,
-  moreutils,
   protobuf,
   python3Packages,
   stdenv,
@@ -2821,20 +2819,12 @@ let
             hash = "sha256-wxjqyGIDnYML3jYugRTO+mf4tEC5aFj0SX5cB7GSnlQ=";
           };
 
-          nativeBuildInputs = [
-            jq
-            moreutils
-          ];
-
           buildInputs = [
             cfn-lint
             pydot
           ];
 
-          postInstall = ''
-            cd "$out/$installPrefix"
-            jq '.contributes.configuration.properties."cfnLint.path".default = "${cfn-lint}/bin/cfn-lint"' package.json | sponge package.json
-          '';
+          defaultConfig."cfnLint.path" = cfn-lint;
 
           meta = {
             description = "CloudFormation Linter IDE integration, autocompletion, and documentation";
@@ -5664,14 +5654,10 @@ let
           version = "0.5.5";
           sha256 = "sha256-Em+w3FyJLXrpVAe9N7zsHRoMcpvl+psmG1new7nA8iE=";
         };
-        nativeBuildInputs = [
-          jq
-          moreutils
-        ];
-        postInstall = ''
-          cd "$out/$installPrefix"
-          jq '.contributes.configuration.properties.protoc.properties.path.default = "${protobuf}/bin/protoc"' package.json | sponge package.json
-        '';
+        defaultConfig.protoc = {
+          extraJqExpr = ".properties.path";
+          value = protobuf;
+        };
         meta = {
           license = lib.licenses.mit;
         };
