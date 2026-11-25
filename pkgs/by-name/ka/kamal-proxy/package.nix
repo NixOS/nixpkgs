@@ -7,16 +7,16 @@
 
 buildGo127Module (finalAttrs: {
   pname = "kamal-proxy";
-  version = "0.10.2";
+  version = "0.10.3";
 
   src = fetchFromGitHub {
     owner = "basecamp";
     repo = "kamal-proxy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2hVmQnFZ5HftoPU8ELoi76QqnZwP+deIWWImcmcOGh8=";
+    hash = "sha256-cx4ruglwWWhzbb+rdEz3iUXK1F3mhregz/QY/4YjjT0=";
   };
 
-  vendorHash = "sha256-82a2r5zKZu3Yh+9Vl9NroVxIP2T0KR7Vdn2GjuS3Uy0=";
+  vendorHash = "sha256-LQjpn5fKADbYPIsRshzdMNViw4j43hOdWeerB3GRRkY=";
 
   subPackages = [ "cmd/kamal-proxy" ];
 
