@@ -1,109 +1,90 @@
 {
   lib,
-  stdenv,
-  buildGoModule,
-  fetchFromGitHub,
-  fetchYarnDeps,
   symlinkJoin,
-
-  yarnConfigHook,
-  yarnBuildHook,
-  nodejs,
-
   makeWrapper,
-  v2ray,
+  stdenvNoCC,
+  fetchurl,
+  fetchFromGitHub,
   v2ray-geoip,
   v2ray-domain-list-community,
-  nix-update-script,
 }:
 let
   pname = "v2raya";
-  version = "2.2.7.5";
+  version = "2.5.16";
 
-  src = fetchFromGitHub {
-    owner = "v2rayA";
-    repo = "v2rayA";
-    tag = "v${version}";
-    hash = "sha256-aa/Eb+fZQ1hwm6H7wb7mr0b4tCu12Mhy14OXNjZUJ0Y=";
-    postFetch = "sed -i -e 's/npmmirror/yarnpkg/g' $out/gui/yarn.lock";
+  src = fetchurl {
+    url = "https://github.com/v2rayA/v2rayA/releases/download/v2.5.16/v2raya_linux_x64_2.5.16";
+    hash = "sha256-YmqHuj+8yyaIUp3758h4FnHiZD5N7S0H4uDIAN+GPCw=";
   };
 
-  web = stdenv.mkDerivation {
-    inherit pname version src;
-
-    sourceRoot = "${src.name}/gui";
-
-    offlineCache = fetchYarnDeps {
-      yarnLock = "${src}/gui/yarn.lock";
-      hash = "sha256-g+hI9n+nfXAcuEpjvDDaHg/DfjtNusOaw3S6kC1QDn4=";
-    };
-
-    env.OUTPUT_DIR = placeholder "out";
-
-    nativeBuildInputs = [
-      yarnConfigHook
-      yarnBuildHook
-      nodejs
-    ];
+  coreSrc = fetchurl {
+    url = "https://github.com/v2rayA/v2rayA/releases/download/v2.5.16/v2raya_core_linux_x64_2.5.16";
+    hash = "sha256-ae3yEAXCmCVKInaSN+g0OLIrHvAB5VMuSnQ5bQ5LnZ0=";
   };
 
   assetsDir = symlinkJoin {
-    name = "assets";
+    name = "${pname}-assets";
     paths = [
       v2ray-geoip
       v2ray-domain-list-community
     ];
   };
 
+  desktopSrc = fetchFromGitHub {
+    owner = "v2rayA";
+    repo = "v2rayA";
+    rev = "v${version}";
+    hash = "sha256-XCFsmie9K1l6BsFehjA9+Dbsdb5mfaPWVu5cceRHysw=";
+  };
 in
-buildGoModule {
-  inherit pname version src;
+stdenvNoCC.mkDerivation {
+  inherit
+    pname
+    version
+    src
+    coreSrc
+    ;
 
-  sourceRoot = "${src.name}/service";
+  strictDeps = true;
 
-  vendorHash = "sha256-uiURsB1V4IB77YKLu5gdaqw9Fuja6fC5adWYDE3OE+Q=";
-
-  ldflags = [
-    "-s"
-    "-w"
-    "-X github.com/v2rayA/v2rayA/conf.Version=${version}"
-  ];
-
-  subPackages = [ "." ];
+  dontUnpack = true;
+  dontBuild = true;
 
   nativeBuildInputs = [ makeWrapper ];
 
-  preBuild = ''
-    cp -a ${web} server/router/web
-  '';
+  installPhase = ''
+    runHook preInstall
 
-  postInstall = ''
-    install -Dm 444 ../install/universal/v2raya.desktop -t $out/share/applications
-    install -Dm 444 ../install/universal/v2raya.png -t $out/share/icons/hicolor/512x512/apps
+    install -Dm755 "$src" "$out/bin/v2raya"
+    install -Dm755 "$coreSrc" "$out/bin/v2raya_core"
+
+    install -Dm644 ${desktopSrc}/install/universal/v2raya.desktop \
+      $out/share/applications/v2raya.desktop
+
+    install -Dm644 ${desktopSrc}/install/universal/v2raya.png \
+      $out/share/icons/hicolor/512x512/apps/v2raya.png
+
     substituteInPlace $out/share/applications/v2raya.desktop \
-      --replace-fail 'Icon=/usr/share/icons/hicolor/512x512/apps/v2raya.png' 'Icon=v2raya'
+      --replace-fail \
+        'Icon=/usr/share/icons/hicolor/512x512/apps/v2raya.png' \
+        'Icon=v2raya'
 
-    wrapProgram $out/bin/v2rayA \
-      --prefix PATH ":" "${lib.makeBinPath [ v2ray ]}" \
-      --prefix XDG_DATA_DIRS ":" ${assetsDir}/share
+    runHook postInstall
   '';
 
-  passthru = {
-    inherit web;
-    updateScript = nix-update-script {
-      extraArgs = [
-        "--subpackage"
-        "web"
-      ];
-    };
-  };
+  postFixup = ''
+    wrapProgram $out/bin/v2raya \
+      --set V2RAYA_V2RAY_ASSETSDIR "${assetsDir}/share/v2ray"
+  '';
+
+  passthru.assetsDir = assetsDir;
 
   meta = {
     description = "Linux web GUI client of Project V which supports V2Ray, Xray, SS, SSR, Trojan and Pingtunnel";
-    homepage = "https://github.com/v2rayA/v2rayA";
-    mainProgram = "v2rayA";
+    homepage = "https://github.com/v2rayA/v2raya";
+    mainProgram = "v2raya";
     license = lib.licenses.agpl3Only;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ ChaosAttractor ];
+    platforms = [ "x86_64-linux" ];
+    maintainers = with lib.maintainers; [ pouya ];
   };
 }
