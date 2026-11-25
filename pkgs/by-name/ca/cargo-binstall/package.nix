@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  rustPlatform,
+  rustPackages_1_100,
   fetchFromGitHub,
   pkg-config,
   aws-lc,
@@ -12,18 +12,18 @@
   versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage (finalAttrs: {
+rustPackages_1_100.rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-binstall";
-  version = "1.27.0";
+  version = "1.28.0";
 
   src = fetchFromGitHub {
     owner = "cargo-bins";
     repo = "cargo-binstall";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-UeYTqLo5v/qAsPRVkRo3Ty662fFwZt2/0zuoOGEpfCY=";
+    hash = "sha256-zbWrRPtdPB2NUo5XQV2+9TFXTqZWwvJPRmHUmltUy3Y=";
   };
 
-  cargoHash = "sha256-FRkwWKhb+S8wngBz6YjbdoxYOqU+WlKPQBXplkurkB0=";
+  cargoHash = "sha256-QRckKN7k31rF7apr9fCuhwWLhDSjcAj7Xx+qWJEU5v8=";
 
   nativeBuildInputs = [
     installShellFiles
