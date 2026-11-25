@@ -3239,9 +3239,9 @@
   };
 
   tql = {
-    version = "1.2.1";
+    version = "1.5.1";
     url = "github:tenzir/tree-sitter-tql";
-    hash = "sha256-88P6PVKh011Nf1ht9L29cSPRCanlXwHP9r4JE+///Ck=";
+    hash = "sha256-h+OBBWEQvM6uL4Kwdnqx3FvoJ+Cj6rCE8G7Cc7zgFWs=";
     meta.license = lib.licenses.mit;
   };
 
