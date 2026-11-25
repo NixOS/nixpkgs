@@ -8,6 +8,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "resvg";
   version = "0.50.0";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "linebender";
     repo = "resvg";
