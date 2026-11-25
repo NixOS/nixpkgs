@@ -10,16 +10,16 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "lektricowifi";
-  version = "0.1";
+  version = "0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Lektrico";
     repo = "lektricowifi";
-    tag = "v.${version}";
-    hash = "sha256-GkRZ+fBjLtiZ3dPsn/xeJ7c0cVMY6SHIs+wqhmXXOTk=";
+    tag = "v.${finalAttrs.version}";
+    hash = "sha256-lAncBgk0/j35NthaOc9ZMrmRkBtiqELYyPA5Tvju8c8=";
   };
 
   build-system = [ setuptools ];
@@ -41,13 +41,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  # AttributeError: type object 'InfoForCharger' has no attribute 'from_dict'
-  doCheck = false;
-
   meta = {
     description = "Communication with Lektrico's chargers";
     homepage = "https://github.com/Lektrico/lektricowifi";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})
