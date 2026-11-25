@@ -188,5 +188,8 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ Zirconium419122 ];
     platforms = lib.platforms.all;
+    # On darwin the case-insensitive /nix store lets lnInclude/string.H
+    # shadow <string.h>, which libc++ rejects
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })
