@@ -18,7 +18,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ripgrep";
-  version = "15.2.0";
+  version = "16.0.0";
 
   __structuredAttrs = true;
 
@@ -26,10 +26,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "BurntSushi";
     repo = "ripgrep";
     tag = finalAttrs.version;
-    hash = "sha256-BsSIbZwB6s8i3dDTRYJ1EdVbJmiO0oxcLu6qiYlPkOI=";
+    hash = "sha256-EW+k5vMcWYUdaTKpcyZcXj9DgIfsiesuJPrOD+5O/O8=";
   };
 
-  cargoHash = "sha256-AqizStE9ICd6mNDZWdeXg6dHuTiY+B0TNauQQYWUa84=";
+  cargoHash = "sha256-jq74hAlDGhkKHKkiLezAwnR0UDKc7Ydt3KYdMajagz4=";
 
   nativeBuildInputs = [
     installShellFiles

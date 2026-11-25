@@ -12,6 +12,7 @@
   mupdf,
   openjpeg,
   qt6,
+  wrapGAppsHook3,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "sioyek";
@@ -42,7 +43,8 @@ stdenv.mkDerivation (finalAttrs: {
     installShellFiles
     qt6.qmake
     qt6.wrapQtAppsHook
-  ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ wrapGAppsHook3 ];
 
   qmakeFlags = lib.optionals stdenv.hostPlatform.isDarwin [ "CONFIG+=non_portable" ];
 

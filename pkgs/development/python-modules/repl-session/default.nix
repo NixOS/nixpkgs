@@ -12,7 +12,6 @@ buildPythonPackage (finalAttrs: {
   pname = "repl-session";
   version = "0.2.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "entangled";

@@ -517,6 +517,14 @@ stdenv.mkDerivation (
           hash = "sha256-peIXXU5+5DRQc3Xdpz5V+xIN7Vohs0Dlal6mHiMryXc=";
         })
       ]
+      ++ optionals (lib.versionOlder version "8.1.3") [
+        # Fix CVE-2026-125209
+        (fetchpatch2 {
+          name = "dvdsubenc-byte-alignment.patch";
+          url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/8702f12c9daa199cc4d7c17164b13c3cdcdc2436";
+          hash = "sha256-TxBJ8tZUILIbfcpt8PnRYj5uVFO3ZYafOx7PiV3fiuU=";
+        })
+      ]
       ++ optionals (lib.versionAtLeast version "8") [
         # compatibility with openapv 1.1. remove when >8.1.3 and >9.0.2
         # https://code.ffmpeg.org/FFmpeg/FFmpeg/pulls/24663

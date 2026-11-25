@@ -8,14 +8,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "getmail6";
-  version = "6.21.02";
+  version = "6.21.03";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "getmail6";
     repo = "getmail6";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0e2HE1E6k70zEkYhG6s+jkP6mznPXp8SuRrrT/ZhuIc=";
+    hash = "sha256-EmHNJ0dVL11AurXhAAChNqiOvcz4qxG779so4ijuQmk=";
   };
 
   build-system = with python3.pkgs; [

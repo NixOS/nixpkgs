@@ -13,7 +13,6 @@ buildPythonPackage (finalAttrs: {
   pname = "pytest-mysql";
   version = "5.0.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "dbfixtures";

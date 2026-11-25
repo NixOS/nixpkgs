@@ -13,20 +13,16 @@
   libGL,
   glew,
   tinyxml-2,
-  copyDesktopItems,
-  makeDesktopItem,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "trigger-rally";
-  version = "0.6.6.1";
+  version = "0.6.7";
 
   src = fetchurl {
     url = "mirror://sourceforge/trigger-rally/trigger-rally-${finalAttrs.version}.tar.gz";
-    sha256 = "016bc2hczqscfmngacim870hjcsmwl8r3aq8x03vpf22s49nw23z";
+    hash = "sha256-ZAaR+jzhKX8oyYP4dRTcbzAsKJZqxgo72l+CWVxr3+c=";
   };
-
-  nativeBuildInputs = [ copyDesktopItems ];
 
   buildInputs = [
     SDL2
@@ -52,6 +48,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [
     "prefix=${placeholder "out"}"
+    # Hardcoded to /usr/share/… upstream
+    "LOC_DESKTOPFILE=${placeholder "out"}/share/applications"
+    "LOC_APPDATAFILE=${placeholder "out"}/share/metainfo"
   ];
 
   enableParallelBuilding = true;
@@ -64,22 +63,8 @@ stdenv.mkDerivation (finalAttrs: {
     EOF
     chmod +x $out/bin/trigger-rally
 
-    install -Dm644 $out/share/games/trigger-rally/icon/trigger-rally-icons.svg $out/share/icons/hicolor/scalable/trigger.svg
+    install -Dm644 $out/share/games/trigger-rally/icon/trigger-rally-icons.svg $out/share/icons/hicolor/scalable/apps/trigger-rally.svg
   '';
-
-  desktopItems = [
-    (makeDesktopItem {
-      name = "Trigger";
-      exec = "trigger-rally";
-      icon = "trigger";
-      desktopName = "Trigger";
-      comment = "Fast-paced 3D single-player rally racing game";
-      categories = [
-        "Game"
-        "ActionGame"
-      ];
-    })
-  ];
 
   meta = {
     description = "Fast-paced single-player racing game";

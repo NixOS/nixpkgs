@@ -331,6 +331,14 @@ in
         environment.DBENGINE = "${cfg.database.dbEngine}";
         environment.LIMESURVEY_CONFIG = limesurveyConfig;
         script = ''
+          install -o ${user} -g ${group} -m 0600 \
+            "$CREDENTIALS_DIRECTORY/encryption_key" \
+            "${stateDir}/credentials/encryption_key"
+
+          install -o ${user} -g ${group} -m 0600 \
+            "$CREDENTIALS_DIRECTORY/encryption_nonce" \
+            "${stateDir}/credentials/encryption_nonce"
+
           # update or install the database as required
           ${lib.getExe php} ${cfg.package}/share/limesurvey/application/commands/console.php updatedb || \
           ${lib.getExe php} ${cfg.package}/share/limesurvey/application/commands/console.php install admin password admin admin@example.com verbose
@@ -388,29 +396,6 @@ in
           ) "on";
           config.defaultlang = "en";
         };
-      };
-
-      systemd.services.phpfpm-limesurvey.serviceConfig = {
-        ExecStartPre = pkgs.writeShellScript "limesurvey-phpfpm-exec-pre" ''
-          cp -f "''${CREDENTIALS_DIRECTORY}"/encryption_key "${stateDir}/credentials/encryption_key"
-          chown ${user}:${group} "${stateDir}/credentials/encryption_key"
-          cp -f "''${CREDENTIALS_DIRECTORY}"/encryption_nonce "${stateDir}/credentials/encryption_nonce"
-          chown ${user}:${group} "${stateDir}/credentials/encryption_nonce"
-        '';
-        LoadCredential = [
-          "encryption_key:${
-            if cfg.encryptionKeyFile != null then
-              cfg.encryptionKeyFile
-            else
-              pkgs.writeText "key" cfg.encryptionKey
-          }"
-          "encryption_nonce:${
-            if cfg.encryptionNonceFile != null then
-              cfg.encryptionNonceFile
-            else
-              pkgs.writeText "nonce" cfg.encryptionKey
-          }"
-        ];
       };
 
       services.phpfpm.pools.limesurvey = {

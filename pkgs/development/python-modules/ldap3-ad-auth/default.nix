@@ -14,8 +14,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.1.1";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     pname = "ldap3_ad_auth";
     inherit (finalAttrs) version;
