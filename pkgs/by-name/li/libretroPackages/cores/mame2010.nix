@@ -6,14 +6,21 @@
 }:
 mkLibretroCore {
   core = "mame2010";
-  version = "0-unstable-2026-09-02";
+  version = "0-unstable-2026-11-22";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "mame2010-libretro";
-    rev = "dff8aadd1c3f38215af3955746d6e19abe0ddcea";
-    hash = "sha256-UfppTEDAnUkV8RzAlbsZIRjYy6Jj2GMWOp3T3lsix68=";
+    rev = "16a9093cf0fded4895c035e7fb01e88f38eaf08d";
+    hash = "sha256-HDTTdvKx1nYDQ93UUcnebTfX8VB1xWDKBpcQ4KTt4fA=";
   };
+
+  patches = [
+    # Fix the build: the libretro-common update renamed path_default_slash()
+    # to PATH_DEFAULT_SLASH(), but retromain.c still used the old name
+    # https://github.com/libretro/mame2010-libretro/pull/176
+    ./mame2010-path-default-slash.patch
+  ];
 
   makefile = "Makefile";
   makeFlags = lib.optionals stdenv.hostPlatform.isAarch64 [
