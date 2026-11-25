@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  flit-core,
+  flit-core_3,
   sphinx,
 }:
 
@@ -18,9 +18,9 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-aHsTdCVu/e9uaM4ayOfY3IBjjivZwDiHoWA0W2vyvNA=";
   };
 
-  nativeBuildInputs = [ flit-core ];
+  build-system = [ flit-core_3 ];
 
-  propagatedBuildInputs = [ sphinx ];
+  dependencies = [ sphinx ];
 
   # no tests, see https://github.com/pradyunsg/sphinx-inline-tabs/issues/6
   doCheck = false;
