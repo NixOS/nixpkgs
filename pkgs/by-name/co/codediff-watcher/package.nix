@@ -8,7 +8,7 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "codediff-watcher";
-  version = "0.28.1";
+  version = "0.37.0";
 
   __structuredAttrs = true;
 
@@ -16,10 +16,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "esmuellert";
     repo = "codediff";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-kI/dGVlKc0XcAViCP8kzuqE90YEaKZ1eJsncV0esEtw=";
+    hash = "sha256-DDHcy9Qe6cl0sFNpvincrecWE/l7gsyHzkIDzizNWxA=";
   };
 
-  cargoHash = "sha256-gQKJPoZdV9XtFHbove8NXZEGdwaJQDVeZfrgtYd2iIA=";
+  cargoHash = "sha256-DTm0O28+qxQvEIa3MMyo+ieFwotV/A2GoJGemFlXYuw=";
 
   buildAndTestSubdir = "crates/watcher";
 
