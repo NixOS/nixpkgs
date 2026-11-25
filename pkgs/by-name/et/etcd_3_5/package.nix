@@ -8,11 +8,11 @@
 }:
 
 let
-  version = "3.5.35";
-  etcdSrcHash = "sha256-WdRm0djQFxrv83BwtoT53PSniLUqT58HzqJLoPEy5ko=";
-  etcdServerVendorHash = "sha256-+yQ9ylwh15mGHnPomMOUwFAfPO9EKrFBrCp6f95d3u0=";
-  etcdUtlVendorHash = "sha256-6PN9PrmMEN1xltZEVJcajkRCweKPoxMRUodCgwiN5hU=";
-  etcdCtlVendorHash = "sha256-DNvFzc0YRQyu4yZVEQRQq6rINGWlRwhp880K289+0bY=";
+  version = "3.5.36";
+  etcdSrcHash = "sha256-N23S8s5q01UqbljYHotooEUyh/U15coB6cdl7fX+PHA=";
+  etcdServerVendorHash = "sha256-2ldY7t0mtaabGBThJTpm7kaOlLKyZEhpqgEMEbOm2jA=";
+  etcdUtlVendorHash = "sha256-UHTzwQfql9AEj24X1EuwFN6srH8wZxF5sXrFev6Y1VE=";
+  etcdCtlVendorHash = "sha256-eGvoL124b8827S8lSfwWBqDoHp7FdI8zNoGDaWOK2Es=";
 
   src = fetchFromGitHub {
     owner = "etcd-io";
