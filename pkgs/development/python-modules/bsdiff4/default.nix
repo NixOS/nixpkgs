@@ -7,12 +7,12 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "bsdiff4";
-  version = "1.4.2";
+  version = "1.4.4";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-P/1Niy1bnw8cQn5PtYUS3IikzIB2I7crwOleC6ohxws=";
+    hash = "sha256-j8zIO0IjhcwCJ6ywrSw9hvjTJmjHx1dSv/W1ZwCq8o8=";
   };
 
   build-system = [ setuptools ];
