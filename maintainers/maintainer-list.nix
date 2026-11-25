@@ -33074,6 +33074,12 @@
     githubId = 85800291;
     email = "yes@ysnt.live";
   };
+  yswtrue = {
+    email = "a365039311@gmail.com";
+    github = "yswtrue";
+    githubId = 1270490;
+    name = "roy";
+  };
   ytausch = {
     name = "Yannik Tausch";
     email = "dev@ytausch.de";
