@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   cmake,
   pkg-config,
   wrapGAppsHook3,
@@ -31,6 +32,14 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}-main";
     hash = "sha256-lAP8rI1YnBMmwWBDxfQOV5W8NYscQbb7lh/ZhG893p0=";
   };
+
+  patches = [
+    # Fix -Wdiscarded-qualifiers errors with glibc 2.44's const-preserving strchr
+    (fetchpatch2 {
+      url = "https://github.com/analogdevicesinc/iio-oscilloscope/commit/1e2b49ac934c352d3698d874e00c1d35cf36a2a8.patch?full_index=1";
+      hash = "sha256-KzIPYNJXBIssdBQ4obD4QwfBSfgiQ2AcBc6GWhAOwIM=";
+    })
+  ];
 
   postPatch = ''
     # error: 'idx' may be used uninitialized
