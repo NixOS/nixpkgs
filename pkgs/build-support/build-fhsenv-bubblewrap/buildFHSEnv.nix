@@ -214,6 +214,7 @@ let
     src = ./rootfs-builder;
     cargoLock.lockFile = ./rootfs-builder/Cargo.lock;
     doCheck = false;
+    __structuredAttrs = true;
   };
 
   rootfs =
