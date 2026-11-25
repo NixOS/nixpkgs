@@ -14,8 +14,18 @@
   setuptools,
   setuptools-scm,
 }:
-
-buildPythonPackage rec {
+let
+  fullDeps = [
+    dissect-target
+    minio
+    pycryptodome
+    requests
+    requests-toolbelt
+    rich
+  ]
+  ++ dissect-target.optional-dependencies.full;
+in
+buildPythonPackage (finalAttrs: {
   pname = "acquire";
   version = "3.22";
   pyproject = true;
@@ -23,7 +33,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "acquire";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-CtzVHnQALqA5D0wJQ74lAw9HunVFZEkKvij6RQaQrBE=";
   };
 
@@ -39,18 +49,10 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
-    full = [
-      dissect-target
-      minio
-      pycryptodome
-      requests
-      requests-toolbelt
-      rich
-    ]
-    ++ dissect-target.optional-dependencies.full;
+    full = fullDeps;
   };
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.full;
+  nativeCheckInputs = [ pytestCheckHook ] ++ fullDeps;
 
   disabledTests = [
     "output_encrypt"
@@ -65,8 +67,8 @@ buildPythonPackage rec {
   meta = {
     description = "Tool to quickly gather forensic artifacts from disk images or a live system";
     homepage = "https://github.com/fox-it/acquire";
-    changelog = "https://github.com/fox-it/acquire/releases/tag/${src.tag}";
+    changelog = "https://github.com/fox-it/acquire/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
