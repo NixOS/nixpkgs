@@ -1354,6 +1354,7 @@ builtins.intersectAttrs super {
           dbus = if pkgs.stdenv.hostPlatform.isLinux then self.dbus else null;
           fdo-notify = if pkgs.stdenv.hostPlatform.isLinux then self.fdo-notify else null;
           hinotify = if pkgs.stdenv.hostPlatform.isLinux then self.hinotify else self.fsnotify;
+          blake3 = if pkgs.stdenv.hostPlatform.isx86 then self.blake3 else null;
         }
       );
 
