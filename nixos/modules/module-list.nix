@@ -1770,7 +1770,6 @@
   ./services/web-apps/haven.nix
   ./services/web-apps/healthchecks.nix
   ./services/web-apps/hedgedoc.nix
-  ./services/web-apps/hister.nix
   ./services/web-apps/hledger-web.nix
   ./services/web-apps/homebox.nix
   ./services/web-apps/homer.nix
@@ -1832,6 +1831,7 @@
   ./services/web-apps/nifi.nix
   ./services/web-apps/nipap.nix
   ./services/web-apps/node-red.nix
+  ./services/web-apps/nogon.nix
   ./services/web-apps/nostr-rs-relay.nix
   ./services/web-apps/ocis.nix
   ./services/web-apps/olivetin.nix
