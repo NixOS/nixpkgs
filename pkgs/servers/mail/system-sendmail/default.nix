@@ -36,6 +36,9 @@ stdenv.mkDerivation {
     chmod +x $out/bin/sendmail
   '';
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   meta = {
     description = ''
       A sendmail wrapper that calls the system sendmail. Do not install as system-wide sendmail!
