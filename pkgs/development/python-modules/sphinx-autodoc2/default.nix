@@ -4,7 +4,7 @@
   fetchFromGitHub,
   fetchDebianPatch,
 
-  flit-core,
+  flit-core_3,
 
   astroid,
   typing-extensions,
@@ -39,7 +39,7 @@ buildPythonPackage (finalAttrs: {
     })
   ];
 
-  build-system = [ flit-core ];
+  build-system = [ flit-core_3 ];
 
   dependencies = [
     astroid
