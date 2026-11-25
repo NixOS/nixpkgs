@@ -9,12 +9,12 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "acme";
   inherit (certbot) version src;
   pyproject = true;
 
-  sourceRoot = "${src.name}/acme";
+  sourceRoot = "${finalAttrs.src.name}/acme";
 
   build-system = [
     setuptools
@@ -36,4 +36,4 @@ buildPythonPackage rec {
   meta = certbot.meta // {
     description = "ACME protocol implementation in Python";
   };
-}
+})
