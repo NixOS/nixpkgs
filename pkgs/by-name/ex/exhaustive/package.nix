@@ -7,21 +7,23 @@
 
 buildGoModule (finalAttrs: {
   pname = "exhaustive";
-  version = "0.12.0";
+  version = "0.17.1";
 
   src = fetchFromGitHub {
     owner = "nishanths";
     repo = "exhaustive";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-OLIdtKzCqnBkzdUSIl+UlENeMl3zrBE47pLWPg+6qXw=";
+    hash = "sha256-fjvr4eCXnDrePqSZ30FzkR8fOatev2J54t6b936+O54=";
   };
 
-  vendorHash = "sha256-jTKzfQnqCN15EOzAWGTHtolWFNj/0g4ay0ckgoa2E34=";
+  vendorHash = "sha256-RSM6tV5mMwL69bsC/vlP8iq2AR71pkY6MjBcUnAYW8I=";
 
-  patches = [
-    # https://github.com/nishanths/exhaustive/pull/85
-    ./fix-go125.patch
-  ];
+  # Script tests expect the binary next to them, and -mod=vendor from GOFLAGS
+  # breaks the testdata modules, which have no vendor directories.
+  preCheck = ''
+    ln -s $GOPATH/bin/exhaustive cmd/exhaustive/exhaustive-scripttest
+    export GOFLAGS="''${GOFLAGS//-mod=vendor/}"
+  '';
 
   ldflags = [
     "-s"
