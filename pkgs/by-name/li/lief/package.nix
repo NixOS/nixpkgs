@@ -16,8 +16,7 @@ let
   pyEnv = python3.withPackages (ps: [
     ps.setuptools
     ps.tomli
-    ps.pip
-    ps.setuptools
+    ps.installer
   ]);
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -53,7 +52,6 @@ stdenv.mkDerivation (finalAttrs: {
       python
       build
       pathspec
-      pip
       pydantic
       scikit-build-core
     ];
@@ -74,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = lib.optionalString withPython ''
     pushd ../api/python
-    ${pyEnv.interpreter} -m pip install --prefix $py dist/*.whl
+    ${pyEnv.interpreter} -m installer --prefix $py dist/*.whl
     popd
   '';
 
