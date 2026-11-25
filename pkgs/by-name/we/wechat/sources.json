@@ -1,9 +1,9 @@
 {
   "aarch64-darwin": {
-    "version": "4.2.1.5-270597",
+    "version": "4.2.1.9-270601",
     "src": {
-      "url": "https://dldir1v6.qq.com/weixin/Universal/Mac/xWeChatMac_universal_4.2.1.5_270597.dmg",
-      "hash": "sha256-phf3VF4YrUKa925GV8+O04Ak50Q5nwsVWtDdGMFFNOM="
+      "url": "https://dldir1v6.qq.com/weixin/Universal/Mac/xWeChatMac_universal_4.2.1.9_270601.dmg",
+      "hash": "sha256-0c5rjuF4KmZS4IuDgts3z1u2YcOiiWXgGQiV4ABpHhM="
     }
   },
   "x86_64-linux": {
