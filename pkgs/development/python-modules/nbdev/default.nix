@@ -16,12 +16,12 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "nbdev";
-  version = "3.3.28";
+  version = "3.3.31";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-IH/PHOQxymnSiphHOt9ZPuAyotqiH40HULmvU/Gk7AQ=";
+    hash = "sha256-4VJoP9RJHZ5IFmbxUEACJba4Gv8suNybRnNLOXvqFwU=";
   };
 
   pythonRelaxDeps = [
