@@ -11,6 +11,7 @@
   python-dateutil,
   pyyaml,
   rebulk,
+  six,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -30,6 +31,7 @@ buildPythonPackage (finalAttrs: {
     rebulk
     babelfish
     python-dateutil
+    six
   ];
 
   nativeCheckInputs = [
