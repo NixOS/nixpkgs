@@ -15804,6 +15804,8 @@ self: super: with self; {
 
   pymeteoclimatic = callPackage ../development/python-modules/pymeteoclimatic { };
 
+  pymetis = callPackage ../development/python-modules/pymetis { };
+
   pymetno = callPackage ../development/python-modules/pymetno { };
 
   pymfy = callPackage ../development/python-modules/pymfy { };
