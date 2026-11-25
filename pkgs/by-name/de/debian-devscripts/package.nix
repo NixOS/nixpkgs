@@ -104,8 +104,8 @@ stdenv.mkDerivation (finalAttrs: {
   ]);
 
   pythonPath = with python3Packages; [
+    file-magic
     junit-xml
-    magic
     python-apt
     python-debian
     requests

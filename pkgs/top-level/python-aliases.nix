@@ -433,6 +433,7 @@ mapAliases {
   m2r = throw "'m2r' has been removed because it was marked broken for a long time."; # Added 2026-05-27
   mac_alias = throw "'mac_alias' has been renamed to/replaced by 'mac-alias'"; # Converted to throw 2025-10-29
   macropy = throw "macropy has been removed as it was broken since 2020"; # added 2025-10-04
+  magic = file-magic; # added 2026-11-25
   Mako = throw "'Mako' has been renamed to/replaced by 'mako'"; # Converted to throw 2025-10-29
   mallard-ducktype = throw "mallard-ducktype has been removed, as it has been unmaintained upstream since 2019 and is broken"; # added 2026-11-07
   Markups = throw "'Markups' has been renamed to/replaced by 'markups'"; # Converted to throw 2025-10-29
