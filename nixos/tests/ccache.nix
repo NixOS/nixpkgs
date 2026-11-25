@@ -1,6 +1,7 @@
 { lib, ... }:
 {
   name = "ccache";
+  meta.maintainers = with lib.maintainers; [ rhendric ];
   node.pkgsReadOnly = false;
 
   nodes.machine =
