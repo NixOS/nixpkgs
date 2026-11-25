@@ -9,9 +9,14 @@
   rustPlatform,
   scdoc,
   versionCheckHook,
+  pkgsStatic,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
+  __structuredAttrs = true;
+  enableParallelBuilding = true;
+  strictDeps = true;
+
   pname = "sydbox";
   version = "3.60.0";
 
@@ -111,6 +116,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
+  passthru.tests.static = pkgsStatic.sydbox;
 
   meta = {
     description = "Seccomp-based application sandbox";
