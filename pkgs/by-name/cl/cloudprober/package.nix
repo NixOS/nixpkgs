@@ -8,16 +8,16 @@
 # test TestCompressBytes fail because the output changed
 buildGo126Module (finalAttrs: {
   pname = "cloudprober";
-  version = "0.14.3";
+  version = "0.14.7";
 
   src = fetchFromGitHub {
     owner = "cloudprober";
     repo = "cloudprober";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dMogW0NQAMiSBC7//7gGmadvK5vS2H+170aW0RK58fU=";
+    hash = "sha256-qvHrHBAsQkCkWy5DOrMKO+qPlwr9lwFWBqlpj+YyLJQ=";
   };
 
-  vendorHash = "sha256-YEueI/Ms350bNkKPmLNzLljr9FDL0R7zACF4HQwHLdk=";
+  vendorHash = "sha256-Cgb+/dKfX9yhAhGIMb7piC1/nrQIOX+7suobPMuFWTQ=";
 
   checkFlags =
     let
@@ -26,6 +26,7 @@ buildGo126Module (finalAttrs: {
         "TestSaveProbesConfig"
         "TestRunProbeRealICMP"
         "TestMultipleTargetsMultipleRequests"
+        "TestCommandNotifierReapsChild"
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];

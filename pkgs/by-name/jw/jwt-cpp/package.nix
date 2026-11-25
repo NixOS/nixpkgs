@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jwt-cpp";
-  version = "0.7.2";
+  version = "0.7.3";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Thalhammer";
     repo = "jwt-cpp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jzxK21mc7M6+ozxLo5KCqb7A/6gLWNaim5/UC7kZqHE=";
+    hash = "sha256-mRvtyw32Rv0xrrmX4VaAmyyZ1BDI9aV4O8PefCrbxJk=";
   };
 
   nativeBuildInputs = [ cmake ];

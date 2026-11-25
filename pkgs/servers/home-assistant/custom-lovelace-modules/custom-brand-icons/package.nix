@@ -6,13 +6,13 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "custom-brand-icons";
-  version = "2026.11.1";
+  version = "2026.11.3";
 
   src = fetchFromGitHub {
     owner = "elax46";
     repo = "custom-brand-icons";
     tag = finalAttrs.version;
-    hash = "sha256-XO3MACiJHuMv1nTJxJAR6K5QyKbTi97qVCgYqSELerc=";
+    hash = "sha256-C08mB1EPHBsyNXm046MWdzksULDRUGSgAXGe3SCXxw4=";
   };
 
   npmDepsHash = "sha256-RIEX7kEpoMEEuESXJASHlKMVY+L+2n/JRWvoRbSEPjM=";

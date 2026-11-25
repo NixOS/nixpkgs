@@ -27,7 +27,9 @@ backendStdenv.mkDerivation (finalAttrs: {
       --replace-fail "_chdir (buf)" "0/* _chdir (buf) */"
 
     substituteInPlace Makefile \
-      --replace-fail "/usr/local/cuda" "${cudaPackages.cuda_nvcc}"
+      --replace-fail "/usr/local/cuda" "${cudaPackages.cuda_nvcc}" \
+      --replace-fail "/bin/nvcc" "/bin/nvcc ${cudaPackages.flags.gencodeString}" \
+      --replace-fail "-arch sm_61" ""
   '';
 
   nativeBuildInputs = [

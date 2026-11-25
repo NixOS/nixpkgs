@@ -1,10 +1,5 @@
 [
   {
-    "pname": "BouncyCastle.Cryptography",
-    "version": "2.7.0",
-    "hash": "sha256-8JH/zKtNA5k+Zgus4ndlmnne4JcvVNfx9L1G1oCWYkE="
-  },
-  {
     "pname": "CsvHelper",
     "version": "33.1.0",
     "hash": "sha256-pEfX4o63xupI7uuwe6qa05One0pJ7UbzzJqLh4Shju8="
@@ -16,8 +11,8 @@
   },
   {
     "pname": "MailKit",
-    "version": "4.18.1",
-    "hash": "sha256-w3ncBmlPkTTfKH87ZPhKg4ZaLseFmwfcttqsO6NuBjo="
+    "version": "5.0.0",
+    "hash": "sha256-GAfjWvOj6+JeKKJsZzA/uNOB2PyeLF6cPu9n20Xxz5k="
   },
   {
     "pname": "Microsoft.Bcl.Cryptography",
@@ -45,18 +40,13 @@
     "hash": "sha256-Tkkc4HFS/Fw6Z6jqUKuI8TSLGYutTs+r1mAvXuJQ6fc="
   },
   {
-    "pname": "MimeKit",
-    "version": "4.18.1",
-    "hash": "sha256-W15tP12RW7aPyzlHD0eJ+5TDwggQkjZ3Hih+qDyyQYs="
+    "pname": "MimeKit.Core",
+    "version": "5.0.0",
+    "hash": "sha256-zbbLjQez8I/CKRM+/zFZ1ISJqTIPryjQGrBcdSlM/Cg="
   },
   {
     "pname": "Npgsql",
     "version": "9.0.5",
     "hash": "sha256-5AF0qiVQwfKUqCXSFb+oJhe3Q1wwK9F9+Q9/A4RTIdo="
-  },
-  {
-    "pname": "System.Security.Cryptography.Pkcs",
-    "version": "10.0.0",
-    "hash": "sha256-d3sLG+LZ3+N/h/6gdJcVKOgbBO6wYb66NfXalAEDqnE="
   }
 ]

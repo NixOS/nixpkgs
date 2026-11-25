@@ -9,8 +9,6 @@ python3.pkgs.buildPythonApplication {
   pname = "cecdaemon";
   version = "1.0.0-unstable-2025-11-12";
   pyproject = true;
-  __structuredAttrs = true;
-  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "simons-public";

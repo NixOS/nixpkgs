@@ -16,7 +16,6 @@ buildPythonPackage (finalAttrs: {
   pname = "flask-wtforms-htmx";
   version = "0.1.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "yaal-coop";

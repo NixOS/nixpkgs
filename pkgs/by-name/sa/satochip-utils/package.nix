@@ -12,8 +12,6 @@ python3Packages.buildPythonApplication rec {
   version = "0.4.2";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "Toporin";
     repo = "Satochip-Utils";

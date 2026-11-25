@@ -15,7 +15,7 @@
         services.mealie = {
           enable = true;
           port = 9001;
-          settings.ALLOW_SIGNUP = "true";
+          settings.ALLOW_SIGNUP = true;
         };
       };
       postgres = {

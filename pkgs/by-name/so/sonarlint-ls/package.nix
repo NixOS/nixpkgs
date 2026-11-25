@@ -25,7 +25,7 @@ maven.buildMavenPackage rec {
   };
 
   mvnJdk = jdk17;
-  mvnHash = "sha256-nL6hIrEsmIXzJxjbBHQdZTgaNFCnG98wbLS6I1DZXU4=";
+  mvnHash = "sha256-PUCdkIfnRPD4xF9bZ4irP3o5UHxSB7bDupuvf+bIciE=";
 
   # Disables failing tests which either need network access or are flaky.
   mvnParameters = lib.escapeShellArgs [

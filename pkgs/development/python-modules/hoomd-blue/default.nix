@@ -26,7 +26,7 @@
   withMpi ? false,
 }:
 buildPythonPackage (finalAttrs: {
-  version = "7.2.1";
+  version = "7.2.2";
   pname = "hoomd-blue";
   pyproject = false; # build with cmake
 
@@ -34,7 +34,7 @@ buildPythonPackage (finalAttrs: {
     owner = "glotzerlab";
     repo = "hoomd-blue";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-nRANjVcKyttXzofEJWpriCaI1MN2XIns5bVcrQ2jOC0=";
+    hash = "sha256-t4/tcTtBq8rxF2/QkAtrKEJ9fW/exKnEtQ7Oddx+IqY=";
     fetchSubmodules = true;
   };
 

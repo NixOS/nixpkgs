@@ -17,7 +17,6 @@ buildPythonPackage (finalAttrs: {
   pname = "wtforms-htmx-components";
   version = "0.3.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "yaal-coop";

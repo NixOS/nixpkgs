@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "letos";
-  version = "4.0.3";
+  version = "4.0.4";
 
   src = fetchFromGitHub {
     owner = "pawelsalawa";
     repo = "letos";
     tag = finalAttrs.version;
-    hash = "sha256-//04MG1uLxNzbU3MEccVLp7L1pfZGC0pj3/Dw3+/SSE=";
+    hash = "sha256-xcPnUE1T6SVogrRJ75/j+LkTrcM8Vy9rurw6q6jtyU0=";
   };
 
   nativeBuildInputs = [
@@ -39,30 +39,16 @@ stdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
   strictDeps = true;
 
-  postPatch = ''
-    substituteInPlace Letos/letos/main.cpp \
-      --replace-fail \
-        'qunsetenv("QT_PLUGIN_PATH");' \
-        'qputenv("QT_PLUGIN_PATH", qgetenv("NIXPKGS_LETOS_QT_PLUGIN_PATH"));'
-  '';
-
   cmakeDir = "../Letos";
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_TESTING" false)
+    # Enable Unix favored layout (i.e. FHS) and install it system-wide. Select
+    # this only if you are a system administrator or distro packager.
+    (lib.cmakeBool "WITH_UNIX_FAV" true)
   ]
   ++ lib.optionals includeOfficialPlugins [
     (lib.cmakeFeature "SYS_PLUGINS_DIR" "${letos-plugins}/lib/letos")
-  ];
-
-  qtWrapperArgs = [
-    "--set"
-    "NIXPKGS_LETOS_QT_PLUGIN_PATH"
-    (lib.makeSearchPath "lib/qt-6/plugins" [
-      qt6.qtbase
-      qt6.qtsvg
-      qt6.qtwayland
-    ])
   ];
 
   postInstall = ''

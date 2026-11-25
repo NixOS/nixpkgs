@@ -54,6 +54,8 @@ stdenv.mkDerivation {
     (lib.cmakeBool "MYGUI_BUILD_TOOLS" false)
     (lib.cmakeBool "MYGUI_DONT_USE_OBSOLETE" true)
     (lib.cmakeFeature "MYGUI_RENDERSYSTEM" "8")
+    (lib.cmakeFeature "CMAKE_CXX_STANDARD" "17")
+    (lib.cmakeBool "CMAKE_CXX_STANDARD_REQUIRED" true)
   ];
 
   meta = {

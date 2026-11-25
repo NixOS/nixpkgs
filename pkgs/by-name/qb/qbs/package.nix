@@ -9,12 +9,12 @@
 stdenv.mkDerivation rec {
   pname = "qbs";
 
-  version = "3.3.1";
+  version = "3.4.0";
 
   src = fetchgit {
     url = "https://code.qt.io/qbs/qbs.git";
     tag = "v${version}";
-    sha256 = "sha256-1W7+CZt1mtx8RdcZxhEhgi6+4/SPQAjic8yYXckBuJg=";
+    sha256 = "sha256-UNwKu1Z9Z6JsV0l/zayzHSyY1A/oBOJ18i2rxPlsUf0=";
   };
 
   dontWrapQtApps = true;

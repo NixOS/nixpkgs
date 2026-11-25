@@ -32,14 +32,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "docling-parse";
-  version = "7.25.0";
+  version = "7.28.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "docling-project";
     repo = "docling-parse";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JQxvDfXMifxiO2tlKtp38ymv+5UdSz07IeQnP71C6KY=";
+    hash = "sha256-BE02nBBai7xfqcrfQ9/VDK8apn7pHevs7fHmdJKIHvA=";
   };
 
   postPatch =
