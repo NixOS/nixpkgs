@@ -24,6 +24,11 @@ stdenv.mkDerivation {
     hash = "sha256-wAOTUUpMAnnvFOQKgs7BCAg+CurrpY1bQL8hW3DMPps=";
   };
 
+  postPatch = ''
+    substituteInPlace src/parser.c \
+      --replace-fail '"/usr/local/share/sxbarc"' "\"$out/share/sxbarc\""
+  '';
+
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
@@ -39,7 +44,7 @@ stdenv.mkDerivation {
   meta = {
     description = "The simple, yet powerful, status bar for Xorg";
     homepage = "https://github.com/uint23/sxbar";
-    license = lib.licenses.gpl3;
+    license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ r1w1s1 ];
     mainProgram = "sxbar";
     platforms = lib.platforms.linux;
