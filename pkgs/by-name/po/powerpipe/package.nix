@@ -1,11 +1,13 @@
 {
   buildGoModule,
+  duckdb,
   fetchFromGitHub,
   installShellFiles,
   lib,
   makeWrapper,
   nix-update-script,
   powerpipe,
+  sqlite,
   testers,
 }:
 
@@ -26,6 +28,11 @@ buildGoModule (finalAttrs: {
   nativeBuildInputs = [
     installShellFiles
     makeWrapper
+  ];
+
+  buildInputs = [
+    duckdb
+    sqlite
   ];
 
   ldflags = [
