@@ -10,6 +10,7 @@
   wrapGAppsHook4,
   writableTmpDirAsHomeHook,
   nix-update-script,
+  nixosTests,
   withIndicator ? true,
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -90,6 +91,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   passthru.updateScript = nix-update-script { };
+  passthru.tests.proton-vpn = nixosTests.proton-vpn;
 
   meta = meta // {
     platforms = lib.platforms.linux;
