@@ -96,6 +96,8 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://www.gnu.org/software/shishi/";
     description = "Implementation of the Kerberos 5 network security system";
