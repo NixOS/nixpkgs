@@ -49,14 +49,14 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "shiny";
-  version = "1.7.0";
+  version = "1.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "posit-dev";
     repo = "py-shiny";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4DnWfJS3vb2AASXyhLBcYhBh4LjLihTEIylm2ChWNtk=";
+    hash = "sha256-KhjMAfpvkEmgOEiW8fL+zPLKC5LXYtZ0bA7eK89dFlc=";
   };
 
   build-system = [
