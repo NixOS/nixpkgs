@@ -141,6 +141,17 @@ in
             description = "The path of a directory which contains a custom landing page.";
             default = null;
           };
+
+          CHHOTO_HEALTH_PORT = lib.mkOption {
+            type = lib.types.port;
+            description = ''
+              The port of the health check endpoint (`/healthz`), which always listens on 127.0.0.1.
+              The endpoint is mainly intended for container health checks.
+              Set to `0` to disable it.
+            '';
+            default = 0;
+            example = 1729;
+          };
         };
       };
     };
@@ -197,7 +208,12 @@ in
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
-        SocketBindAllow = "tcp:${toString cfg.settings.port}";
+        SocketBindAllow = [
+          "tcp:${toString cfg.settings.port}"
+        ]
+        ++ lib.optionals (cfg.settings.CHHOTO_HEALTH_PORT != 0) [
+          "tcp:${toString cfg.settings.CHHOTO_HEALTH_PORT}"
+        ];
         SocketBindDeny = "any";
         SystemCallArchitectures = "native";
         SystemCallFilter = [

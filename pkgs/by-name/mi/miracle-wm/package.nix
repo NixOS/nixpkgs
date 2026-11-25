@@ -104,7 +104,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "END_TO_END_TESTS" finalAttrs.finalPackage.doCheck)
   ];
 
-  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+  # 0.11.2 tests fail to compile against Mir 2.31.0
+  doCheck = false;
 
   checkPhase = ''
     runHook preCheck

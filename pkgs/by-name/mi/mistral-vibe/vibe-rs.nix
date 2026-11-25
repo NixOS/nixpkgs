@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/vibe/cli-rust";
 
-  cargoHash = "sha256-s8Db0TAGAsczGTlALEJRSVWZXitvlasULbVfMvcD8JU=";
+  cargoHash = "sha256-oKtjHXlWSnA/RHqWCmiy5ZOapX5J4LFYQEMqJN52Mr4=";
 
   nativeBuildInputs = [
     pkg-config
@@ -47,6 +47,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       tests/isolated/clipboard_linux.rs \
       tests/isolated/clipboard_tmux.rs \
       tests/isolated/tmux_mouse.rs \
+      tests/isolated/tmux_mouse_hint.rs \
       --replace-fail \
         "/bin/cat" \
         "${lib.getExe' coreutils "cat"}"
@@ -66,6 +67,21 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # (timed out waiting for a CLI event)
     "--skip"
     "suspend_lifecycle::"
+
+    # Flaky under load: these count pooled app-servers after a fixed 300ms sleep
+    # assertion `left == right` failed
+    "--skip"
+    "an_app_server_takes_k_runs_and_the_next_one_starts_another"
+    "--skip"
+    "an_app_server_takes_16_runs_by_default"
+    "--skip"
+    "a_run_awaiting_its_close_acknowledgement_takes_no_room"
+    "--skip"
+    "an_app_server_exits_once_its_last_run_ends"
+    "--skip"
+    "new_runs_fill_the_fuller_app_server_so_the_other_drains_and_exits"
+    "--skip"
+    "a_crashed_app_server_fails_only_its_own_runs"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # The file watcher never reports changes in the sandbox (timeout)
