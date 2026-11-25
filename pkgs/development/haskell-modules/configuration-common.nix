@@ -1248,6 +1248,9 @@ with haskellLib;
         ./patches/idris-Setup-symbolic-paths.patch
       ]
     ))
+    (lib.warnIf (pkgs.config.allowAliases or false)
+      "'idris' is unmaintained upstream and will be removed in NixOS 27.05. Consider using 'idris2' instead."
+    )
   ];
 
   # https://hydra.nixos.org/build/42769611/nixlog/1/raw

@@ -2235,10 +2235,6 @@ with pkgs;
 
   maple-mono = recurseIntoAttrs (callPackage ../data/fonts/maple-font { });
 
-  netcdf-mpi = netcdf.override {
-    hdf5 = hdf5-mpi.override { apiVersion = "v110"; };
-  };
-
   ioskeley-mono = recurseIntoAttrs (callPackage ../data/fonts/ioskeley-mono { });
 
   netbox_4_7 = netbox;
@@ -2379,6 +2375,7 @@ with pkgs;
     percona-server
     ;
   inherit (import ../tools/backup/percona-xtrabackup pkgs)
+    percona-xtrabackup_9_7
     percona-xtrabackup_8_4
     percona-xtrabackup
     ;

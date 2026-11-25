@@ -14,16 +14,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rustic";
-  version = "0.11.4";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "rustic-rs";
     repo = "rustic";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-d7ZAmIou8NFnx1T7CxnSqIRg8VuVeS0BXij023PElVE=";
+    hash = "sha256-EAY6w4XzUPEEn1kutgk962WeNI1LIT3dkRp+GD+wyuo=";
   };
 
-  cargoHash = "sha256-o6tQdAuwawmhhi93dPeg9l5WGekqDKkJS7HCToyniJ0=";
+  cargoHash = "sha256-UBOQfkQDjdunTJKu4ORXA979FvfKb3Raz6UQK9WMQ58=";
 
   buildFeatures = lib.optionals stdenv.hostPlatform.isLinux [ "mount" ];
   checkFeatures = lib.subtractLists [ "mount" ] finalAttrs.buildFeatures; # we do not want `mount` during unit tests because it breaks rustic's test snapshots

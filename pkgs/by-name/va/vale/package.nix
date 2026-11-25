@@ -10,7 +10,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "vale";
-  version = "3.27.0";
+  version = "3.28.1";
 
   subPackages = [ "cmd/vale" ];
 
@@ -18,13 +18,13 @@ buildGoModule (finalAttrs: {
     owner = "vale-cli";
     repo = "vale";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jV8Oe8DCWijjhHMBhnTn0NehG5EjEPdjC/JDTSkZSNc=";
+    hash = "sha256-CpnGwDR60YQTwzRicQl9ZYwjR6vfbpShkPYr5bFbgSU=";
   };
 
   # go mod vendor prunes go-tree-sitter/php/tree_sitter/ because it is
   # headers-only. see https://github.com/golang/go/issues/26366
   proxyVendor = true;
-  vendorHash = "sha256-XDvUiBTTpO4K3bHdXNBoLOCxwx37wQJVY8VAEwzWglw=";
+  vendorHash = "sha256-0saUjaPuUzMBBLbo4p4McH5YFYq5vvjuuCZRT0lvvMU=";
 
   ldflags = [
     "-s"

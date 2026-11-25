@@ -18,7 +18,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "swh-mosaic";
-  version = "0.7.0";
+  version = "0.8.2";
   pyproject = true;
 
   src = fetchFromGitLab {
@@ -27,12 +27,12 @@ buildPythonPackage (finalAttrs: {
     owner = "devel";
     repo = "swh-mosaic";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1zHImrEnSIChC0eL+e89xbAnOTbaKLf18aTaXWfu9BI=";
+    hash = "sha256-t4awnyUSwsmPR7o22oaFmV1RF8AaxqiZWc1p1PEqmdM=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-7klHrx6N2h9egiLdSVki6i5GBPn7wMXrw3YbndreHbQ=";
+    hash = "sha256-ZdTSPOsq2V7B2jMVjqaSKxWt98HhCuVgKakjdImdtn4=";
   };
 
   build-system = [
