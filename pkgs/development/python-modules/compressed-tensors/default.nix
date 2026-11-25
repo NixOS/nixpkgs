@@ -17,6 +17,7 @@
 
   # tests
   accelerate,
+  datasets,
   nbconvert,
   nbformat,
   pytestCheckHook,
@@ -25,7 +26,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "compressed-tensors";
-  version = "0.18.0";
+  version = "0.20.1";
   pyproject = true;
 
   # Release on PyPI is missing the `utils` directory, which `setup.py` wants to import
@@ -33,7 +34,7 @@ buildPythonPackage (finalAttrs: {
     owner = "vllm-project";
     repo = "compressed-tensors";
     tag = finalAttrs.version;
-    hash = "sha256-cbHP2YZgG0UY+rrcOKKwtgwga2pEZaEEMoJqq57pFb0=";
+    hash = "sha256-4ZpqAqXk6nn4IkGeXnzWheP2MBJxVqRBtjVbRSqpl9g=";
   };
 
   postPatch = ''
@@ -58,6 +59,7 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     accelerate
+    datasets
     nbconvert
     nbformat
     pytestCheckHook
