@@ -3,23 +3,23 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  SDL2,
+  SDL3,
   perl,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dethrace";
-  version = "0.9.0";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "dethrace-labs";
     repo = "dethrace";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+C3NyRLmvXrkZuhLGwIIHFWjXLMpt3srLZCVrxRUlkA=";
+    hash = "sha256-yo5AXLMSEFlWe/BV/At7XL2yJQ9hgcMZfC3hu5KEF8Y=";
     fetchSubmodules = true;
   };
 
-  buildInputs = [ SDL2 ];
+  buildInputs = [ SDL3 ];
   nativeBuildInputs = [
     cmake
     perl
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Reverse engineering the 1997 game Carmageddon";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ astro ];
+    maintainers = with lib.maintainers; [ astro, fluddsskark ];
     mainProgram = "dethrace";
   };
 })
