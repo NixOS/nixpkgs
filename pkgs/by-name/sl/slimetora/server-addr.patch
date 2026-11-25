@@ -1,0 +1,13 @@
+diff --git a/src/main.ts b/src/main.ts
+index 67644b0..c0c74fb 100644
+--- a/src/main.ts
++++ b/src/main.ts
+@@ -48,7 +48,7 @@ let firstLaunch = false;
+ let isClosing = false;
+ let hasInitializedLogDir = false;
+ let foundSlimeVR = false;
+-let serverAddress = "255.255.255.255";
++let serverAddress = "127.0.0.1";
+ let serverPort = 6969;
+ 
+ let canLogToFile = true;
