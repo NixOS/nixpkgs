@@ -15,11 +15,11 @@
   # optional-dependencies
   # backend-jax
   jax,
-  jaxlib,
   # backend-tf
   tensorflow,
   # backend-torch
   torch,
+  torch-geometric,
   # cvxopt
   cvxopt,
   # dr
@@ -32,6 +32,8 @@
   # tests
   pytestCheckHook,
   pytest-cov-stub,
+  python,
+  cvxpy,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -73,10 +75,7 @@ buildPythonPackage (finalAttrs: {
 
   optional-dependencies = {
     backend-numpy = [ ];
-    backend-jax = [
-      jax
-      jaxlib
-    ];
+    backend-jax = [ jax ];
     backend-cupy = [ ];
     backend-tf = [ tensorflow ];
     backend-torch = [ torch ];
@@ -88,14 +87,40 @@ buildPythonPackage (finalAttrs: {
     ];
     gnn = [
       torch
-      # torch-geometric
+      torch-geometric
     ];
     plot = [ matplotlib ];
+    # geomloss = [ geomloss ];
+    all = [
+      jax
+      tensorflow
+      torch
+      cvxopt
+      scikit-learn
+      pymanopt
+      autograd
+      torch-geometric
+      matplotlib
+      # geomloss
+    ];
   };
 
   nativeCheckInputs = [
     pytestCheckHook
     pytest-cov-stub
+    jax
+    torch
+    cvxopt
+    scikit-learn
+    autograd
+    torch-geometric
+    matplotlib
+    cvxpy
+  ]
+  # tensorflow is broken on Python 3.14
+  ++ lib.optionals (lib.versionOlder python.version "3.14") [
+    tensorflow
+    pymanopt
   ];
 
   # need to run the tests with the built package next to the test directory
