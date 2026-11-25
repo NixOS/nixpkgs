@@ -54,6 +54,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
     changelog = "https://github.com/modelcontextprotocol/servers/releases/tag/${finalAttrs.version}";
     description = "Model Context Protocol server providing tools to read, search, and manipulate Git repositories programmatically via LLMs";
     homepage = "https://github.com/modelcontextprotocol/servers";
+    knownVulnerabilities = [
+      "CVE-2026-134465"
+    ];
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ drupol ];
     mainProgram = "mcp-server-git";
