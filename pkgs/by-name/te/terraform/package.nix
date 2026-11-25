@@ -139,12 +139,25 @@ let
 
   evalTests =
     ok:
+    let
+      changed = ((pluggable package).overrideAttrs { changed = "foo"; });
+    in
     # overrideAttrs works on withPlugins and modifies the unwrapped derivation inside
     # See https://github.com/NixOS/nixpkgs/issues/158620
     assert
       (((pluggable package).withPlugins (p: [ p.hashicorp_random ])).overrideAttrs { name = "squee"; })
       .unwrapped.name == "squee";
-
+    assert package.drvPath == (pluggable package).unwrapped.drvPath;
+    assert
+      package.drvPath == ((pluggable package).withPlugins (p: [
+        (abort "no need")
+      ])).unwrapped.drvPath;
+    assert changed.drvPath != package.drvPath;
+    assert changed.drvPath == changed.unwrapped.drvPath;
+    assert
+      changed.drvPath == (changed.withPlugins (p: [
+        (abort "no need")
+      ])).unwrapped.drvPath;
     ok;
 
   pluggable =
