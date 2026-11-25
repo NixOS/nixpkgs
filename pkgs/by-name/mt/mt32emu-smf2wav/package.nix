@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mt32emu-smf2wav";
-  version = "1.9.4";
+  version = "1.9.5";
 
   src = fetchFromGitHub {
     owner = "munt";
     repo = "munt";
     rev = "mt32emu_smf2wav_${lib.replaceString "." "_" finalAttrs.version}";
-    sha256 = "sha256-BlRPKVDKo+fYjDiCVw2L1UDBAXs31tg4Tqf02MBbsW4=";
+    sha256 = "sha256-krPcYq0wKLz1IF++1yLCAS3mPjJ51tAEMmSvNmqfjik=";
   };
 
   postPatch =
