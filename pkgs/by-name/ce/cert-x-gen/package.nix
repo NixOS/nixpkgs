@@ -19,13 +19,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cert-x-gen";
-  version = "1.8.0";
+  version = "1.9.2";
 
   src = fetchFromGitHub {
     owner = "Bugb-Technologies";
     repo = "cert-x-gen";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fMHxpZWH4ZL1RKAuMtjm3IIN1HV2GkMJYKiR20M5feA=";
+    hash = "sha256-a08Im1jCtFExi0MsiwKmQhi4LolWFMx5hAqpG3kMaHI=";
   };
 
   __structuredAttrs = true;
@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     patchShebangs tests/fixtures
   '';
 
-  cargoHash = "sha256-nagrum6fJCJTqTJnb9vhxV1dtGGHglE6gcCJf7SUBI4=";
+  cargoHash = "sha256-TEDyiRwkoIt3reMfN6ZZE8/+KT0/Z4aRtGPjdPisDos=";
 
   nativeBuildInputs = [ pkg-config ];
 
