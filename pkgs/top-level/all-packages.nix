@@ -2725,8 +2725,6 @@ with pkgs;
 
   wrapFish = callPackage ../shells/fish/wrapper.nix { };
 
-  fishPlugins = recurseIntoAttrs (callPackage ../shells/fish/plugins { });
-
   powerline = with python3Packages; toPythonApplication powerline;
 
   ### DEVELOPMENT / COMPILERS
