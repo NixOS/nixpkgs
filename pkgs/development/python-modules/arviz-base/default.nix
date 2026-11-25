@@ -5,7 +5,7 @@
   fetchFromGitHub,
 
   # build-system
-  flit-core,
+  flit-core_3,
 
   # dependencies
   lazy-loader,
@@ -36,7 +36,7 @@ buildPythonPackage (finalAttrs: {
   };
 
   build-system = [
-    flit-core
+    flit-core_3
   ];
 
   dependencies = [
