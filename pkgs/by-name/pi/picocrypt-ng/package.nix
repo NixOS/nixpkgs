@@ -51,12 +51,15 @@ buildGoModule (finalAttrs: {
     writableTmpDirAsHomeHook
   ];
 
-  # git ls-files doesn't work as source is not a git repo
   checkFlags =
     let
       skippedTests = [
+        # git ls-files doesn't work as source is not a git repo
         "TestOldVersionLiteralsAreAllowlisted"
         "TestLinuxAppIdentityContract"
+        # Go 1.27 changed DEFLATE output, so the generated ZIP no longer exceeds 1000:1.
+        # https://go.dev/doc/go1.27#compressflatepkgcompressflate
+        "TestUnpackRejectsHighlyCompressedFileAboveFloor"
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
