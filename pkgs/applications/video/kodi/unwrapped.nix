@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  fetchpatch,
   fetchzip,
   autoconf,
   automake,
@@ -15,6 +14,7 @@
   libxcrypt,
   libgcrypt,
   libgpg-error,
+  libsysprof-capture,
   libunistring,
   boost,
   avahi,
@@ -39,7 +39,7 @@
   alsa-lib,
   libGLU,
   libGL,
-  ffmpeg_8,
+  ffmpeg_9,
   fontconfig,
   freetype,
   ftgl,
@@ -61,6 +61,8 @@
   libudfread,
   sqlite,
   libmysqlclient,
+  meson,
+  ninja,
   nasm,
   gnutls,
   libva,
@@ -145,25 +147,19 @@ let
 
   # We can build these externally but FindLibDvd.cmake forces us to build it
   # them, so we currently just use them for the src.
-  libdvdcss = fetchFromGitHub {
-    owner = "xbmc";
-    repo = "libdvdcss";
-    rev = "1.4.3-Next-Nexus-Alpha2-2";
-    hash = "sha256-CJMGH50mNAkovccNcol5ArF3zUnZKfbVB9EXyQgu5k4=";
+  libdvdcss = fetchzip {
+    url = "https://mirrors.kodi.tv/build-deps/sources/libdvdcss-1.5.0.tar.bz2";
+    hash = "sha256-xQWfAfxqsaLZN0HMozsqY5mSIO9KvZ5RAb4bj/f6WWo=";
   };
 
-  libdvdnav = fetchFromGitHub {
-    owner = "xbmc";
-    repo = "libdvdnav";
-    rev = "6.1.1-Next-Nexus-Alpha2-2";
-    hash = "sha256-m8SCjOokVbwJ7eVfYKHap1pQjVbI+BXaoxhGZQIg0+k=";
+  libdvdnav = fetchzip {
+    url = "https://mirrors.kodi.tv/build-deps/sources/libdvdnav-7.0.0.tar.bz2";
+    hash = "sha256-WuHgMsCEdIRJxvueixFQLMV4Q0gwh7p/KNKzHZZpLDM=";
   };
 
-  libdvdread = fetchFromGitHub {
-    owner = "xbmc";
-    repo = "libdvdread";
-    rev = "6.1.3-Next-Nexus-Alpha2-2";
-    hash = "sha256-AphBQhXud+a6wm52zjzC5biz53NnqWdgpL2QDt2ZuXc=";
+  libdvdread = fetchzip {
+    url = "https://mirrors.kodi.tv/build-deps/sources/libdvdread-7.0.1.tar.bz2";
+    hash = "sha256-U+jJpBRzuura11126Xxtkxo5JLYoieZGr90AmkiVQ2w=";
   };
 
   groovy = fetchzip {
@@ -245,38 +241,17 @@ stdenv.mkDerivation (
   in
   {
     pname = "kodi";
-    version = "22.0a3";
+    version = "22.0rc2";
     kodiReleaseName = "Piers";
 
     src = fetchFromGitHub {
       owner = "xbmc";
       repo = "xbmc";
       rev = "${finalAttrs.version}-${finalAttrs.kodiReleaseName}";
-      hash = "sha256-z9MnqMvo2jChmogYOmVz4D42NLgGbmjL19/sRs1AZSI=";
+      hash = "sha256-Y5oJ7QMp6n2y4IxtTxgWO1Zgmcd+1B+4mNtRPODPwkk=";
     };
 
-    patches = [
-      # TexturePacker has some conditionals on GIFLIB 5, which break with
-      # GIFLIB 6. This has been extended to support all versions >= 5 upstream,
-      # but has not yet made it into a release.
-      # https://github.com/xbmc/xbmc/pull/28016
-      (fetchpatch {
-        name = "texturepacker-giflib-6.patch";
-        url = "https://github.com/xbmc/xbmc/commit/29492cbd20d4c90a9c00a30ab525d4d0e81a968b.patch";
-        hash = "sha256-WNaODPCtRfn30jVU5HbBnAO2Vl/MQp2CYmKOTTyDGZI=";
-      })
-
-      # Upstream only support pcre-cpp which is deprecated and to be removed
-      # from nixpkgs. This patch moves all usages to pcre2
-      # See https://github.com/xbmc/xbmc/issues/23184
-      (fetchpatch {
-        name = "kodi-21.3-pcre2.patch";
-        url = "https://gitlab.archlinux.org/archlinux/packaging/packages/kodi/-/raw/9fdc116256e7c610e2045d5bc6fb3c234234a88d/kodi-21.3-pcre2.patch";
-        hash = "sha256-PJXfuZl8f4WfTjtL5CFMDEQuB40tlTWu7LvkBUeX5DE=";
-      })
-    ];
-
-    # make  derivations declared in the let binding available here, so
+    # make derivations declared in the let binding available here, so
     # they can be overridden
     inherit
       libdvdcss
@@ -350,6 +325,7 @@ stdenv.mkDerivation (
       libxcrypt
       libgcrypt
       libgpg-error
+      libsysprof-capture
       libunistring
       crossguid
       libplist
@@ -358,7 +334,7 @@ stdenv.mkDerivation (
       harfbuzz
       lcms2
       libpthread-stubs
-      ffmpeg_8.dev
+      ffmpeg_9.dev
       flatbuffers
       fstrcmp
       nlohmann_json
@@ -414,17 +390,29 @@ stdenv.mkDerivation (
       pkg-config
       autoconf
       automake
-      libtool # still needed for some components. Check if that is the case with 19.0
+      # <<< libtool # still needed for some components. Check if that is the case with 19.0 <<<
       jre_headless
       yasm
       gettext
       python3Packages.python
       flatbuffers
+
+      # meson and ninja are used by some components, but not by kodi itself
+      # (note the various dontUseNinja* and dontUseMeson* flags below).
+      meson
+      ninja
     ]
     ++ lib.optionals waylandSupport [
       wayland-protocols
       waylandpp.bin
     ];
+
+    # We need meson and ninja for some components, but not kodi itself.
+    dontUseNinjaBuild = true;
+    dontUseNinjaInstall = true;
+    dontUseNinjaCheck = true;
+    dontUseMesonCheck = true;
+    dontUseMesonInstall = true;
 
     nativeCheckInputs = [
       gtest
@@ -436,18 +424,15 @@ stdenv.mkDerivation (
 
     cmakeFlags = [
       "-DAPP_RENDER_SYSTEM=${if gbmSupport then "gles" else "gl"}"
-      "-Dlibdvdcss_URL=${finalAttrs.libdvdcss}"
-      "-Dlibdvdnav_URL=${finalAttrs.libdvdnav}"
-      "-Dlibdvdread_URL=${finalAttrs.libdvdread}"
-      "-Dgroovy_SOURCE_DIR=${finalAttrs.groovy}"
-      "-Dapache-commons-lang_SOURCE_DIR=${finalAttrs.apache_commons_lang}"
-      "-Dapache-commons-text_SOURCE_DIR=${finalAttrs.apache_commons_text}"
+      "-DLIBDVDCSS_URL=${finalAttrs.libdvdcss}"
+      "-DLIBDVDNAV_URL=${finalAttrs.libdvdnav}"
+      "-DLIBDVDREAD_URL=${finalAttrs.libdvdread}"
       # Upstream derives this from the git HEADs hash and date.
       # LibreElec (minimal distro for kodi) uses the equivalent to this.
       "-DGIT_VERSION=${finalAttrs.version}-${finalAttrs.kodiReleaseName}"
       "-DENABLE_EVENTCLIENTS=ON"
       "-DENABLE_INTERNAL_CROSSGUID=OFF"
-      "-DENABLE_INTERNAL_NLOHMANNJ=OFF"
+      "-DENABLE_INTERNAL_NLOHMANNJSON=OFF"
       "-DENABLE_OPTICAL=${if opticalSupport then "ON" else "OFF"}"
       "-DENABLE_VDPAU=${if vdpauSupport then "ON" else "OFF"}"
       "-DSWIG_EXECUTABLE=${buildPackages.swig}/bin/swig"
@@ -537,7 +522,7 @@ stdenv.mkDerivation (
 
     passthru = {
       pythonPackages = python3Packages;
-      ffmpeg = ffmpeg_8;
+      ffmpeg = ffmpeg_9;
       kodi = finalAttrs.finalPackage;
     };
 
