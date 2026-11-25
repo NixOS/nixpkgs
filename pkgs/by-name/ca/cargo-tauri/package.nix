@@ -16,6 +16,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tauri";
   version = "2.12.6";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "tauri-apps";
     repo = "tauri";
