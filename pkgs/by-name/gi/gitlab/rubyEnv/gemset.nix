@@ -2858,10 +2858,10 @@ src: {
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "0rdgh1q747kfhn9l4frdwhpjaaz99zqkfgjd40fjb1az0rwq2l51";
+      sha256 = "1amfc5zgl3jqdf8ci7amsrw4lhx89hw7i0h75nmsrah5ri635cd3";
       type = "gem";
     };
-    version = "19.4.0";
+    version = "19.4.2";
   };
   gitlab = {
     dependencies = [
@@ -4096,10 +4096,10 @@ src: {
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "1amb4f0hgwdlz9dzblfpsidays3mb4cg65plwr0m6x1vp0pgvsqs";
+      sha256 = "07xh10d3bzp2k555z5mslkfivappvg5qmq20ldbra75swhfj612g";
       type = "gem";
     };
-    version = "2.0.26";
+    version = "2.0.27";
   };
   grape = {
     dependencies = [

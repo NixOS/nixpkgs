@@ -10,7 +10,7 @@ in
 buildGoModule (finalAttrs: {
   pname = "gitlab-workhorse";
 
-  version = "19.5.8";
+  version = "19.5.9";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitLab {
