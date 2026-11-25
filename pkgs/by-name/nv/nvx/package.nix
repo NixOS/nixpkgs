@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nvx";
-  version = "0-unstable-2026-10-04";
+  version = "0.1.0-dev.3881452d3866-unstable-2026-11-25";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "nvx";
-    tag = "v0.1.0-dev.9653b1e1419b";
-    hash = "sha256-qctSGiirhXW50BwaMlzBlSgY3RC4BUhXPTW1tDgOLrM=";
+    tag = "v0.1.0-dev.3881452d3866";
+    hash = "sha256-0nHyaodot+3N4U5ewRYkaeW6z+JBs6CHtEq0nA/U5jE=";
   };
 
   nativeBuildInputs = [
