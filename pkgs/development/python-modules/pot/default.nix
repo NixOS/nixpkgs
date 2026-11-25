@@ -147,6 +147,9 @@ buildPythonPackage (finalAttrs: {
     downloadPage = "https://github.com/PythonOT/POT";
     changelog = "https://github.com/PythonOT/POT/blob/${finalAttrs.src.tag}/RELEASES.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ yl3dy ];
+    maintainers = with lib.maintainers; [
+      yl3dy
+      stephen-huan
+    ];
   };
 })
