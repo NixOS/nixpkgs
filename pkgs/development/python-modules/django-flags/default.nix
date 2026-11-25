@@ -11,14 +11,14 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "django-flags";
-  version = "5.2.0";
+  version = "5.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cfpb";
     repo = "django-flags";
     tag = finalAttrs.version;
-    hash = "sha256-4UOueNXfDouTqpLpG391zcGHTTJ8GfznYmEl33YKdv8=";
+    hash = "sha256-vhzjP0HN/ifDHo6S1eLcZdgxDHsWDX1qyzFKTQi1MTk=";
   };
 
   build-system = [
