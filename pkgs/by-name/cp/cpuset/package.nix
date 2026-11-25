@@ -16,6 +16,11 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     hash = "sha256-fW0SXNI10pb6FTn/2TOqxP9qlys0KL/H9m//NjslUaY=";
   };
 
+  postPatch = ''
+    substituteInPlace cpuset/version.py \
+      --replace-fail "version = '1.6'" "version = '${finalAttrs.version}'"
+  '';
+
   build-system = with python3.pkgs; [
     setuptools
   ];
