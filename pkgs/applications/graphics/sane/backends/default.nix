@@ -93,13 +93,6 @@ stdenv.mkDerivation (finalAttrs: {
     printf "%s\n" "$version" > .version
 
     autoreconf -fiv
-
-    # Fixes for cross compilation
-    # https://github.com/NixOS/nixpkgs/issues/308283
-
-    # sane-desc will be used in postInstall so compile it for build
-    # https://github.com/void-linux/void-packages/blob/master/srcpkgs/sane/patches/sane-desc-cross.patch
-    patch -p1 -i ${./sane-desc-cross.patch}
   '';
 
   outputs = [
