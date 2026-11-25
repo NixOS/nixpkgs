@@ -4029,7 +4029,7 @@ self: super: with self; {
 
   cycler = callPackage ../development/python-modules/cycler { };
 
-  cyclonedds-python = callPackage ../development/python-modules/cyclonedds-python { };
+  cyclonedds = callPackage ../development/python-modules/cyclonedds { inherit (pkgs) cyclonedds; };
 
   cyclonedx-python-lib = callPackage ../development/python-modules/cyclonedx-python-lib { };
 
