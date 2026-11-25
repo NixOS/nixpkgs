@@ -8,7 +8,7 @@
 }:
 
 let
-  version = "1.5.3";
+  version = "1.6.0";
 in
 
 rustPlatform.buildRustPackage {
@@ -19,10 +19,10 @@ rustPlatform.buildRustPackage {
     owner = "twosigma";
     repo = "nsncd";
     tag = "v${version}";
-    hash = "sha256-CyZlvyD8PDPxnIGoQrOvx++GLNBatqfM9c+Ekt0PXHs=";
+    hash = "sha256-elgxyR+/5CGoDusOqU73FCn++h7/HzMKE9luLBkdsv4=";
   };
 
-  cargoHash = "sha256-MC/WMnBrUr16tOhtP9ueHNLb2cLT8o3A6kwWOWLvFPk=";
+  cargoHash = "sha256-5LKWWrYelUInod6zeGcI0oE1an6lhMmTjaVHQHWBqi8=";
 
   checkFlags = [
     # Relies on the test environment to be able to resolve "localhost"
