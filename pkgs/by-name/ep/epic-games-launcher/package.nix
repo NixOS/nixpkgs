@@ -27,13 +27,13 @@
 
 let
   pname = "epic-games-launcher";
-  version = "0.121.0";
+  version = "0.122.0";
   # Build identifier that upstream appends to the version in the download path
-  build = "g81137b1";
+  build = "g2109121";
 
   src = fetchurl {
     url = "https://content-download-egs.distro.on.epicgames.com/Builds/EGLv2/${version}%2B${build}/Linux/EpicGamesLauncher-x86_64.deb";
-    hash = "sha256-3qWM3eoBiEL47qbJVJ/qnJt3i89Fh13gBfaN7Bdekok=";
+    hash = "sha256-EVmUJ1njL9zMUloqTJmPjMTnzXYgrM5QGt4kLVCO+RU=";
   };
 
   # The EOS SDK can't be packaged separately, as it's only downloadable behind a login.
