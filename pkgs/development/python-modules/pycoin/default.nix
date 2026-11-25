@@ -31,6 +31,7 @@ buildPythonPackage rec {
     "ServicesTest"
     "test_tx_pay_to_opcode_list_txt"
     "test_tx_fetch_unspent"
+    "test_tx_ignored_locktime_txt"
     "test_tx_with_gpg"
   ];
 
