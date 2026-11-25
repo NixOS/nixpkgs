@@ -2375,6 +2375,7 @@ with pkgs;
     percona-server
     ;
   inherit (import ../tools/backup/percona-xtrabackup pkgs)
+    percona-xtrabackup_9_7
     percona-xtrabackup_8_4
     percona-xtrabackup
     ;
