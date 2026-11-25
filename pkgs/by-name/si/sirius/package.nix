@@ -100,6 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ]
   ++ lib.optionals (gpuBackend == "cuda") [ cudaPackages.cuda_nvcc ]
+  ++ lib.optionals (gpuBackend == "rocm") [ rocmPackages.clr ]
   ++ lib.optionals enablePython [ pythonPackages.python ];
 
   buildInputs = [
@@ -185,7 +186,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (gpuBackend == "rocm") [
     "-DSIRIUS_USE_ROCM=ON"
-    "-DHIP_ROOT_DIR=${rocmPackages.clr}"
   ]
   ++ lib.optionals enablePython [
     "-DSIRIUS_CREATE_PYTHON_MODULE=ON"

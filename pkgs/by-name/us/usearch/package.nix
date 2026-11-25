@@ -13,8 +13,6 @@ let
     url = "https://sqlite.org/2024/sqlite-amalgamation-3450200.zip";
     hash = "sha256-nkDMIiTHjeiopPbGcviQekgSOYifuNM/kr07IHgQvoI=";
   };
-
-  inherit (stdenv.hostPlatform.extensions) sharedLibrary;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "usearch";
@@ -42,6 +40,17 @@ stdenv.mkDerivation (finalAttrs: {
     rm -r numkong
     # TODO: change numkong to provide a CMakeLists.txt file or pc config file, so that headers can be auto discovered
     ln -s ${numkong.src} numkong
+
+    # Allow us to change those variables
+    substituteInPlace CMakeLists.txt \
+      --replace-fail '    CACHE INTERNAL ""' '    CACHE PATH ""' \
+      --replace-fail 'set(USEARCH_PKGCONFIG_INSTALL_DIR "''${CMAKE_INSTALL_DATADIR}/pkgconfig")' \
+                     'set(USEARCH_PKGCONFIG_INSTALL_DIR "''${CMAKE_INSTALL_DATADIR}/pkgconfig" CACHE PATH "")'
+
+    # Install sqlite shared objects used by the python package
+    substituteInPlace sqlite/CMakeLists.txt \
+      --replace-fail '    setup_target(usearch_sqlite)' '    setup_target(usearch_sqlite)
+    install(TARGETS usearch_sqlite sqlite3_shared LIBRARY DESTINATION "''${CMAKE_INSTALL_LIBDIR}")'
   '';
 
   nativeBuildInputs = [
@@ -53,26 +62,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin llvmPackages.openmp;
 
-  postInstall = ''
-    install {libusearch*,sqlite/libsqlite3}${sharedLibrary} -t $lib/lib/
-  '';
-
-  preFixup =
-    lib.optionalString stdenv.hostPlatform.isLinux ''
-      patchelf \
-        --replace-needed libnumkong${sharedLibrary} $lib/lib/libnumkong${sharedLibrary} \
-        --replace-needed libsqlite3${sharedLibrary} $lib/lib/libsqlite3${sharedLibrary} \
-        --shrink-rpath $lib/lib/libusearch*
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      install_name_tool -id $lib/lib/libnumkong${sharedLibrary} $lib/lib/libnumkong${sharedLibrary}
-      for f in $lib/lib/libusearch*${sharedLibrary}; do
-        install_name_tool \
-          -change @rpath/libnumkong${sharedLibrary} $lib/lib/libnumkong${sharedLibrary} \
-          "$f"
-      done
-    '';
-
   cmakeFlags = [
     # dependencies
     (lib.cmakeBool "USEARCH_USE_JEMALLOC" true)
@@ -82,7 +71,10 @@ stdenv.mkDerivation (finalAttrs: {
     # libraries
     (lib.cmakeBool "USEARCH_BUILD_LIB_C" true)
     (lib.cmakeBool "USEARCH_BUILD_SQLITE" true)
+    (lib.cmakeBool "USEARCH_INSTALL" true)
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_SQLITE3" sqliteSrc.outPath)
+    (lib.cmakeFeature "USEARCH_CONFIG_INSTALL_DIR" "${placeholder "dev"}/lib/cmake/usearch")
+    (lib.cmakeFeature "USEARCH_PKGCONFIG_INSTALL_DIR" "${placeholder "dev"}/lib/pkgconfig")
 
     # checks
     (lib.cmakeBool "USEARCH_BUILD_TEST_C" true)

@@ -14,7 +14,6 @@
   fftw,
   hdf5-mpi,
   swig,
-  gsl,
   harminv,
   libctl,
   libgdsii,
@@ -34,15 +33,15 @@
 assert !blas.isILP64;
 assert !lapack.isILP64;
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "meep";
-  version = "1.35.1";
+  version = "1.36.0";
 
   src = fetchFromGitHub {
     owner = "NanoComp";
     repo = "meep";
-    tag = "v${version}";
-    hash = "sha256-Eq3yCn778ab3ymgkrbZfgixKUsXYla/CQWFrIiBTGzc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Xkfq6We8WlNEEctLqOxPJGv5hvMvshkLFy6Q5CzS7Jg=";
   };
 
   pyproject = false;
@@ -58,7 +57,6 @@ buildPythonPackage rec {
   ];
 
   buildInputs = [
-    gsl
     blas
     lapack
     fftw
@@ -67,7 +65,6 @@ buildPythonPackage rec {
     libctl
     libgdsii
     guile
-    gsl
     mpb
   ];
 
@@ -164,4 +161,4 @@ buildPythonPackage rec {
       markuskowa
     ];
   };
-}
+})
