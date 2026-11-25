@@ -8075,10 +8075,6 @@ with pkgs;
     ;
   k3s = k3s_1_36;
 
-  kotatogram-desktop =
-    callPackage ../applications/networking/instant-messengers/telegram/kotatogram-desktop
-      { };
-
   kubectl-convert = kubectl.convert;
 
   linkerd = callPackage ../applications/networking/cluster/linkerd { };
