@@ -22,20 +22,24 @@ let
       "/Applications/Xcode.app/Contents/SharedFrameworks/LLDB.framework/Versions/A/Resources/debugserver"
     else
       "${lib.getBin lldb}/bin/lldb-server";
-  LLVM_TRIPLE = stdenv.buildPlatform.rust.rustcTarget;
+  LLVM_TRIPLE = lib.replaceString "-" "_" stdenv.buildPlatform.rust.rustcTarget;
 in
 rustPlatform.buildRustPackage {
   pname = "${pname}-adapter";
   inherit version src;
 
+  __structuredAttrs = true;
+
   inherit cargoHash;
 
   # Environment variables, based on <https://github.com/vadimcn/codelldb/blob/master/cargo_config.unix.toml>
   # The LLDB_* variables are used in adapter/lldb/build.rs.
-  "CC_${LLVM_TRIPLE}" = "${stdenv.cc}/bin/cc";
-  "CXX_${LLVM_TRIPLE}" = "${stdenv.cc}/bin/c++";
-  LLDB_DYLIB = "${lib.getLib lldb}/lib/liblldb${stdenv.hostPlatform.extensions.sharedLibrary}";
-  LLDB_INCLUDE = "${lib.getDev lldb}/include";
+  env = {
+    "CC_${LLVM_TRIPLE}" = "${stdenv.cc}/bin/cc";
+    "CXX_${LLVM_TRIPLE}" = "${stdenv.cc}/bin/c++";
+    LLDB_DYLIB = "${lib.getLib lldb}/lib/liblldb${stdenv.hostPlatform.extensions.sharedLibrary}";
+    LLDB_INCLUDE = "${lib.getDev lldb}/include";
+  };
 
   nativeBuildInputs = [
     makeWrapper
