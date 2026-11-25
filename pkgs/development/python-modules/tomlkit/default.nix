@@ -12,7 +12,6 @@
 
   # passthru.tests
   remarshal,
-  tomlkit,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -39,7 +38,7 @@ buildPythonPackage (finalAttrs: {
 
   passthru.tests = {
     inherit remarshal;
-    pytest = tomlkit.overrideAttrs { doCheck = true; };
+    pytest = finalAttrs.finalPackage.overrideAttrs { doInstallCheck = true; };
   };
 
   meta = {
