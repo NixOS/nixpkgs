@@ -237,6 +237,10 @@
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/k8s_extension-${version}-py3-none-any.whl";
     hash = "sha256-gyQxHfsXd+V6w2jMBNiYpE1MrqFeHei9RlsVhXgOjW8=";
     description = "Microsoft Azure Command-Line Tools K8s-extension Extension";
+    pythonRelaxDeps = [
+      "kubernetes"
+      "oras"
+    ];
     propagatedBuildInputs = with python3Packages; [
       kubernetes
       oras
