@@ -473,6 +473,7 @@ mapAliases {
   mypermobil = throw "'mypermobil' was removed because Home Assistant dropped the integration"; # added 2026-08-05
   mysql-connector = mysql-connector-python; # added 2026-06-21
   myst-docutils = warnAlias "'myst-docutils' has been removed as it was identical to 'myst-parser'" myst-parser;
+  nanomsg-python = warnAlias "'nanomsg-python' has been renamed to 'nanomsg'" nanomsg; # added 2026-11-25
   napari-npe2 = warnAlias "napari-npe2 has been renamed to 'npe2'" npe2; # added 2026-07-28
   net2grid = throw "'net2grid' has been renamed to/replaced by 'gridnet'"; # Converted to throw 2025-10-29
   netbox-attachments = throw "'netbox-attachments' has been moved to the 'netboxPlugins' package set"; # Added 2026-06-13
