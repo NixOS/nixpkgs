@@ -2039,7 +2039,7 @@ with pkgs;
 
   iperf = iperf3;
 
-  i-pi = with python3Packages; toPythonApplication i-pi;
+  i-pi = with python3Packages; toPythonApplication ipi;
 
   # ipscan is commonly known under the name angryipscanner
   angryipscanner = ipscan;

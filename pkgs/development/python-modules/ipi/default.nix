@@ -16,7 +16,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "i-pi";
+  pname = "ipi";
   version = "3.2.0";
   pyproject = true;
 
