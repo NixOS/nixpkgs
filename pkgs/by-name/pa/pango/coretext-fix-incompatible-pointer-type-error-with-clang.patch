@@ -1,0 +1,27 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Wed, 25 Nov 2026 08:57:18 -0500
+Subject: [PATCH] coretext: fix incompatible pointer type error with clang
+
+Clang 22 makes `-Wincompatible-pointer-types` an error by default. Add
+an explicit cast to silence the error.
+---
+ pango/pangocoretext.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/pango/pangocoretext.c b/pango/pangocoretext.c
+index d42790c8..1957f448 100644
+--- a/pango/pangocoretext.c
++++ b/pango/pangocoretext.c
+@@ -283,7 +283,7 @@ _pango_core_text_font_set_font_map (PangoCoreTextFont    *font,
+ 
+   g_return_if_fail (priv->fontmap == NULL);
+ 
+-  priv->fontmap = fontmap;
++  priv->fontmap = PANGO_FONT_MAP (fontmap);
+   if (fontmap)
+     g_object_add_weak_pointer (G_OBJECT (fontmap), (gpointer *) &priv->fontmap);
+ }
+-- 
+2.56.0
+

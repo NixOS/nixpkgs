@@ -43,6 +43,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-NCOFtso7fHNFXXyAoTt9vkSJ4AvDvUxb1u1NzkIeN0o=";
   };
 
+  patches = [
+    # Fix incompatible pointer type error with Clang 22 when building CoreText support.
+    # Upstream MR: https://gitlab.gnome.org/GNOME/pango/-/merge_requests/947
+    ./coretext-fix-incompatible-pointer-type-error-with-clang.patch
+  ];
   depsBuildBuild = [
     pkg-config
   ];
