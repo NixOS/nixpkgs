@@ -23,14 +23,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aioautomower";
-  version = "3.1.0";
+  version = "3.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Thomas55555";
     repo = "aioautomower";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/uYQaNWSUmZGyW7sccUNfSPHw3aFBlEeT0gUiZ27UA8=";
+    hash = "sha256-2M0PhPI8Jor5YOGgqBi9pZzQfyH10H2RGu61QDDE04Q=";
   };
 
   build-system = [ hatchling ];
