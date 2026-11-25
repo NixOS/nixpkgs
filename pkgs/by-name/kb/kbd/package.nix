@@ -102,6 +102,18 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals withVlock [ pam ];
 
+  # musl's dlopen() does not search the calling shared library's (libkbdfile.so)
+  # DT_RUNPATH; executables like loadkeys/setfont must carry the compression
+  # library paths in their own RUNPATH so libkbdfile can dlopen them.
+  runtimeDependencies = lib.optionals stdenv.hostPlatform.isMusl (
+    map lib.getLib [
+      zlib
+      bzip2
+      xz
+      zstd
+    ]
+  );
+
   postInstall = ''
     substituteInPlace $out/bin/unicode_{start,stop} \
       --replace-fail /usr/bin/tty ${coreutils}/bin/tty
