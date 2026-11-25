@@ -12,19 +12,19 @@
 
 buildPythonPackage rec {
   pname = "tree-sitter-c-sharp";
-  version = "0.23.5";
+  version = "0.24.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tree-sitter";
     repo = "tree-sitter-c-sharp";
     tag = "v${version}";
-    hash = "sha256-N5AAlwQFGGi47cj0m7Te08bA486gwY6NBOx4Qcy4lpo=";
+    hash = "sha256-O1gIlpFNJOao/JsKgYkXxwkxLro0y5pPFIlEZhxfQyg=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
-    hash = "sha256-fPjCguwWE+beoOiLR2EyMtogiv1JRXI8NP4vCuvGHss=";
+    hash = "sha256-lV5uG7l+VFDtOL+xLpKaNuIXhB/H72d7gmZ+AuclWLU=";
   };
 
   build-system = [
