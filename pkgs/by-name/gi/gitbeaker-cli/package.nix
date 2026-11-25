@@ -13,20 +13,20 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "gitbeaker-cli";
-  version = "44.0.5";
+  version = "44.1.10";
 
   src = fetchFromGitHub {
     owner = "jdalrymple";
     repo = "gitbeaker";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FR2i5aIlJXjOzqKoH3Mb5AcTlLvEeL7h8kakQA5hmbw=";
+    hash = "sha256-V4jXhJlkyAHNqWWZHU/SuTRTuQyil52u/QTF7Pz9CGQ=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
     fetcherVersion = 5;
-    hash = "sha256-O39LqxfqP4gMFyJMSrTlGwT8PW/ES+4vrVtGhs/gkxY=";
+    hash = "sha256-UuZ38Bw7wjbEwDrPCnoVBvI6sidJePJmKG80PVMmBCo=";
   };
 
   nativeBuildInputs = [
