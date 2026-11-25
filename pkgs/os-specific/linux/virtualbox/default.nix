@@ -1,10 +1,13 @@
 {
   stdenv,
-  virtualbox,
+  virtualboxHardened,
   kernel,
   kernelModuleMakeFlags,
 }:
 
+let
+  virtualbox = virtualboxHardened;
+in
 stdenv.mkDerivation {
   pname = "virtualbox-modules";
   version = "${virtualbox.version}-${kernel.version}";
