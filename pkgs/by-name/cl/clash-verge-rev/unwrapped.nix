@@ -22,7 +22,6 @@
   glib,
   kdePackages,
   libayatana-appindicator,
-  libsForQt5,
   libsoup_3,
   openssl,
   webkitgtk_4_1,
@@ -52,6 +51,8 @@ rustPlatform.buildRustPackage {
   env = {
     OPENSSL_NO_VENDOR = 1;
   };
+
+  patches = [ ./prevent-writing-mimeapps.patch ];
 
   postPatch = ''
     # We disable the option to try to use the bleeding-edge version of mihomo
