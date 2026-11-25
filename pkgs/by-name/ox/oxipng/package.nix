@@ -8,6 +8,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "10.2.1";
   pname = "oxipng";
 
+  __structuredAttrs = true;
+
   # do not use fetchCrate (only repository includes tests)
   src = fetchFromGitHub {
     owner = "oxipng";
