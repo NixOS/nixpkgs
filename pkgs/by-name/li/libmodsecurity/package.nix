@@ -16,6 +16,7 @@
   ssdeep,
   yajl,
   nixosTests,
+  nix-update-script,
 }:
 let
   lua = lua5_5;
@@ -28,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "owasp-modsecurity";
     repo = "ModSecurity";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-OebDDhaOQfOf22MoQ1htHwB25O52OnJBSzZlxhnJ0Zo=";
     fetchSubmodules = true;
   };
@@ -91,20 +92,22 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = ''
     mkdir -p $out/share/modsecurity
-    cp ${finalAttrs.src}/{AUTHORS,CHANGES,LICENSE,README.md,modsecurity.conf-recommended,unicode.mapping} $out/share/modsecurity
+    cp {AUTHORS,CHANGES,LICENSE,README.md,modsecurity.conf-recommended,unicode.mapping} $out/share/modsecurity
   '';
 
   enableParallelBuilding = true;
 
-  passthru.tests = {
-    nginx-modsecurity = nixosTests.nginx.mainline.modsecurity;
+  passthru = {
+    tests = {
+      nginx-modsecurity = nixosTests.nginx.mainline.modsecurity;
+    };
+    updateScript = nix-update-script { };
   };
 
   meta = {
     homepage = "https://github.com/owasp-modsecurity/ModSecurity";
-    description = ''
-      ModSecurity v3 library component.
-    '';
+    changelog = "https://github.com/owasp-modsecurity/ModSecurity/releases/tag/${finalAttrs.src.tag}";
+    description = "ModSecurity v3 library component";
     longDescription = ''
       Libmodsecurity is one component of the ModSecurity v3 project. The
       library codebase serves as an interface to ModSecurity Connectors taking

@@ -1,41 +1,54 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
-  version = "3.3.4";
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "modsecurity-crs";
+  version = "4.31.0";
 
   src = fetchFromGitHub {
     owner = "coreruleset";
     repo = "coreruleset";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-WDJW4K85YdHrw9cys3LrnZUoTxc0WhiuCW6CiC1cAbk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-jyhPin4jM3uLQ/JUPPsUL0I4Mn+NvmLhOuVLRAZVAo0=";
   };
 
+  dontConfigure = true;
+  dontBuild = true;
+
   installPhase = ''
-    install -D -m444 -t $out/rules ${finalAttrs.src}/rules/*.conf
-    install -D -m444 -t $out/rules ${finalAttrs.src}/rules/*.data
-    install -D -m444 -t $out/share/doc/modsecurity-crs ${finalAttrs.src}/*.md
-    install -D -m444 -t $out/share/doc/modsecurity-crs ${finalAttrs.src}/{CHANGES,INSTALL,LICENSE}
-    install -D -m444 -t $out/share/modsecurity-crs ${finalAttrs.src}/rules/*.example
-    install -D -m444 -t $out/share/modsecurity-crs ${finalAttrs.src}/crs-setup.conf.example
+    runHook preInstall
+
+    install -D -m444 -t $out/rules rules/*.conf rules/*.data
+    install -D -m444 -t $out/share/doc/modsecurity-crs \
+      {CHANGES,INSTALL,KNOWN_BUGS,PLUGIN-CONTRACT,README}.md LICENSE
+    install -D -m444 -t $out/share/modsecurity-crs rules/*.example crs-setup.conf.example
     cat > $out/share/modsecurity-crs/modsecurity-crs.load.example <<EOF
     ##
     ## This is a sample file for loading OWASP CRS's rules.
     ##
     Include /etc/modsecurity/crs/crs-setup.conf
+    IncludeOptional /etc/modsecurity/crs/plugins/*-config.conf
+    IncludeOptional /etc/modsecurity/crs/plugins/*-before.conf
     IncludeOptional /etc/modsecurity/crs/REQUEST-900-EXCLUSION-RULES-BEFORE-CRS.conf
     Include $out/rules/*.conf
     IncludeOptional /etc/modsecurity/crs/RESPONSE-999-EXCLUSION-RULES-AFTER-CRS.conf
+    IncludeOptional /etc/modsecurity/crs/plugins/*-after.conf
     EOF
+
+    runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://coreruleset.org";
-    description = ''
+    changelog = "https://github.com/coreruleset/coreruleset/releases/tag/${finalAttrs.src.tag}";
+    description = "OWASP CRS, generic attack detection rules for ModSecurity and compatible WAFs";
+    longDescription = ''
       The OWASP ModSecurity Core Rule Set is a set of generic attack detection
       rules for use with ModSecurity or compatible web application firewalls.
     '';
