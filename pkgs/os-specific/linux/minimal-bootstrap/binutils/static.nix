@@ -42,6 +42,7 @@ let
 
   configureFlags = [
     # otherwise the binary links dynamically and pulls gcc into the closure
+    "CFLAGS=-Wno-discarded-qualifiers"
     "LDFLAGS=--static"
     "--prefix=${placeholder "out"}"
     "--build=${buildPlatform.config}"
