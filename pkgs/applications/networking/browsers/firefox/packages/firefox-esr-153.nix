@@ -8,11 +8,11 @@
 
 buildMozillaMach rec {
   pname = "firefox";
-  version = "153.7.0esr";
+  version = "153.8.0esr";
   applicationName = "Firefox ESR";
   src = fetchurl {
     url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-    sha512 = "40eaa7892b910d1b50f6eb534a58e2c191067af160b33691c7c6925b81217f376d39da8ef5137720cf16a6d88b8de951ac986cfb71cfaddc9dd067ee72dca0d3";
+    sha512 = "b6991b55e4a0bff7320ac5f3db1330ce63e274a9f77c6e7e623713ec05aca8d7433a9acdf3f6e12aa1b2878cd2d2b81e6fe78100a68a5384a2f327e8de5a02ce";
   };
 
   meta = {
