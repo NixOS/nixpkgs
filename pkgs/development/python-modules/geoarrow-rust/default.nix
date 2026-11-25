@@ -48,6 +48,7 @@ let
       mit
     ];
     maintainers = with lib.maintainers; [ daspk04 ];
+    teams = [ lib.teams.geospatial ];
   };
 
   buildGeoArrowPackage =
