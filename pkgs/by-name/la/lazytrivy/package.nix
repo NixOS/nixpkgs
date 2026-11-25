@@ -1,13 +1,14 @@
 {
   lib,
-  buildGoModule,
+  buildGo126Module,
   fetchFromGitHub,
   makeWrapper,
   trivy,
   nix-update-script,
 }:
 
-buildGoModule (finalAttrs: {
+# trivy < 0.75 does not build with Go 1.27: https://github.com/aquasecurity/trivy/pull/11127
+buildGo126Module (finalAttrs: {
   pname = "lazytrivy";
   version = "1.4.2";
 
