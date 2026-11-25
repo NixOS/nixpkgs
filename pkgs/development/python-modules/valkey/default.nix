@@ -86,6 +86,10 @@ buildPythonPackage rec {
     # valkey 9.2 reports the stream length as lag for a group positioned
     # before the first entry (valkey-io/valkey#4983), the test expects -6
     "test_xgroup_create_entries_read"
+    # valkey 9.2 has new module load error messages
+    # https://github.com/valkey-io/valkey-py/commit/e11d1aa6902a21ec2b06d1a562d607c92c8ba41f
+    "test_module"
+    "test_module_loadex"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     #  OSError: AF_UNIX path too long
