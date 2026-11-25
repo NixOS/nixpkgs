@@ -209,13 +209,22 @@ buildNpmPackage (finalAttrs: {
           common-updater-scripts
         ]
       }:$PATH"
+      export NIXPKGS_ALLOW_UNFREE=1
 
       nix-update 'tidal-hifi'
 
       TIDAL_VERSION="$(nix-instantiate --eval --raw -A 'tidal-hifi.version')"
-      NEW_VERSION="$(curl --silent "https://raw.githubusercontent.com/Mastermindzh/tidal-hifi/refs/tags/$TIDAL_VERSION/build/electron-builder.base.yml" | yq -r '.electronVersion')"
+      OLD_ELECTRON_VERSION="$(nix-instantiate --eval --raw -A 'tidal-hifi.castlabs-electron.version')"
+      NEW_ELECTRON_VERSION="$(curl --silent --fail "https://raw.githubusercontent.com/Mastermindzh/tidal-hifi/refs/tags/$TIDAL_VERSION/build/electron-builder.base.yml" | yq -r '.electronVersion')"
 
-      NIXPKGS_ALLOW_UNFREE=1 update-source-version tidal-hifi.castlabs-electron "$NEW_VERSION"
+      if [[ "$NEW_ELECTRON_VERSION" != "$OLD_ELECTRON_VERSION" ]]; then
+        for system in ${lib.concatStringsSep " " (builtins.attrNames castlabs-electron.sources)}; do
+          update-source-version \
+            tidal-hifi.castlabs-electron "$NEW_ELECTRON_VERSION" \
+            --source-key="sources.$system" \
+            --ignore-same-version
+        done
+      fi
     '';
   };
 
