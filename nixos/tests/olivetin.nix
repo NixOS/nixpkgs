@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ lib, ... }:
 
 {
   name = "olivetin";
@@ -47,11 +47,8 @@
     machine.wait_for_open_port(8000)
 
     def start_action(action):
-      if "${config.nodes.machine.services.olivetin.package.releaseSeries}" == "2k":
-        cmd = f"curl http://localhost:8000/api/StartActionByGetAndWait/{action}"
-      else:
-        req = {"actionId": action}
-        cmd = f"curl -H 'Content-Type: application/json' http://localhost:8000/api/olivetin.api.v1.OliveTinApiService/StartActionAndWait -d {shlex.quote(json.dumps(req))}"
+      req = {"actionId": action}
+      cmd = f"curl -H 'Content-Type: application/json' http://localhost:8000/api/olivetin.api.v1.OliveTinApiService/StartActionAndWait -d {shlex.quote(json.dumps(req))}"
 
       return json.loads(machine.succeed(cmd))
 
