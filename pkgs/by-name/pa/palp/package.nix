@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   dimensions ? 6, # works for <= dimensions dimensions, but is only optimized for that exact value
+  allDimensions ? false,
   doSymlink ? true, # symlink the executables to the default location (without dimension postfix)
 }:
 
@@ -31,10 +32,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  preBuild = ''
+  preBuild = lib.optionalString (!allDimensions) ''
     echo Building PALP optimized for ${dim} dimensions
     sed -i "s/^#define[^a-zA-Z]*POLY_Dmax.*/#define POLY_Dmax ${dim}/" Global.h
   '';
+
+  buildFlags = lib.optionals allDimensions [
+    "all-dims"
+  ];
 
   # palp has no tests of its own. This test is an adapted sage test that failed
   # when #28029 was merged.
@@ -50,11 +55,17 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postCheck
   '';
 
+  preInstall = lib.optionalString (!allDimensions) ''
+    for file in poly class cws nef mori; do
+      mv $file.x $file-${dim}d.x
+    done
+  '';
+
   installPhase = ''
     runHook preInstall
     mkdir -p $out/bin
     for file in poly class cws nef mori; do
-      cp -p $file.x "$out/bin/$file-${dim}d.x"
+      cp -p $file-*.x $out/bin
     done
     runHook postInstall
   '';
