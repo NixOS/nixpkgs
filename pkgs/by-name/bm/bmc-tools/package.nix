@@ -24,6 +24,9 @@ python3.pkgs.buildPythonApplication {
     runHook postInstall
   '';
 
+  # custom installPhase doesn't install .dist-info/METADATA
+  dontCheckPythonMetadata = true;
+
   meta = {
     description = "RDP Bitmap Cache parser";
     homepage = "https://github.com/ANSSI-FR/bmc-tools";
