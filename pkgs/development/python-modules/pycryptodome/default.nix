@@ -4,6 +4,7 @@
   callPackage,
   fetchFromGitHub,
   pytestCheckHook,
+  python,
   setuptools,
 }:
 
@@ -21,6 +22,11 @@ buildPythonPackage (finalAttrs: {
 
   build-system = [ setuptools ];
 
+  postInstall = ''
+    # also provide the namespace distributed by pycryptodomex
+    ln -s Crypto "$out/${python.sitePackages}/Cryptodome"
+  '';
+
   nativeCheckInputs = [
     pytestCheckHook
   ];
@@ -29,7 +35,10 @@ buildPythonPackage (finalAttrs: {
     export PYTHONPATH="test_vectors:$PYTHONPATH"
   '';
 
-  pythonImportsCheck = [ "Crypto" ];
+  pythonImportsCheck = [
+    "Crypto"
+    "Cryptodome"
+  ];
 
   meta = {
     description = "Self-contained cryptographic library";
