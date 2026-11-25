@@ -1,15 +1,15 @@
 {
-  "version": "0.3.2",
+  "version": "1.0.4",
   "aarch64-darwin": {
-    "url": "https://github.com/getgauge/gauge_screenshot/releases/download/v0.3.2/screenshot-0.3.2-darwin.arm64.zip",
-    "hash": "sha256-hsFevOBgKbUIMpNcEyv/2A/agIuInIjLTdhmg0C54pQ="
+    "url": "https://github.com/getgauge/gauge_screenshot/releases/download/v1.0.4/screenshot-1.0.4-darwin.arm64.zip",
+    "hash": "sha256-eMax0WJe7SNV706/uVo3hbuZJEdco8mxHGyVM9MSBHI="
   },
   "aarch64-linux": {
-    "url": "https://github.com/getgauge/gauge_screenshot/releases/download/v0.3.2/screenshot-0.3.2-linux.arm64.zip",
-    "hash": "sha256-anGbQ3lMDxnPJIuyMjhHUBlcSvI8Cyi867262618AgA="
+    "url": "https://github.com/getgauge/gauge_screenshot/releases/download/v1.0.4/screenshot-1.0.4-linux.arm64.zip",
+    "hash": "sha256-P1q2005G1Tuzrj5jjqab4Mlmripoadji38ziVBP9UUY="
   },
   "x86_64-linux": {
-    "url": "https://github.com/getgauge/gauge_screenshot/releases/download/v0.3.2/screenshot-0.3.2-linux.x86_64.zip",
-    "hash": "sha256-pWNUhCtp4QUQkWYzL+osOdwjN2gfwwXyk6qpec6GA/o="
+    "url": "https://github.com/getgauge/gauge_screenshot/releases/download/v1.0.4/screenshot-1.0.4-linux.x86_64.zip",
+    "hash": "sha256-bLfZw+r7g5L5moKJ8CJCBTnkKFgVhornRT+wU7QcKRs="
   }
 }
