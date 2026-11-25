@@ -5,7 +5,7 @@
   fetchFromGitHub,
 
   # build-system
-  flit-core_3,
+  flit-core,
 
   # tests
   pytestCheckHook,
@@ -14,17 +14,17 @@
 
 buildPythonPackage rec {
   pname = "marshmallow";
-  version = "4.3.1";
+  version = "4.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "marshmallow-code";
     repo = "marshmallow";
     tag = version;
-    hash = "sha256-P3MaS0wXyRCYyHW07ifPoglP95SUakhH5rdkAsktXag=";
+    hash = "sha256-kIAvpc0ZI4BDNmaBuSLWqzdCC/oYj39pMB4iAxlI3do=";
   };
 
-  build-system = [ flit-core_3 ];
+  build-system = [ flit-core ];
 
   nativeCheckInputs = [
     pytestCheckHook
