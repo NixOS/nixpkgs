@@ -26950,6 +26950,12 @@
     github = "sebastianblunt";
     githubId = 47431204;
   };
+  sebastienrousseau = {
+    name = "Sebastien Rousseau";
+    email = "sebastian.rousseau@gmail.com";
+    github = "sebastienrousseau";
+    githubId = 1394998;
+  };
   sebbadk = {
     email = "sebastian@sebba.dk";
     github = "SEbbaDK";
