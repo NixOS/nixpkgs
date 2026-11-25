@@ -1036,8 +1036,6 @@ with pkgs;
 
   winbox = winbox4;
 
-  bump2version = with python3Packages; toPythonApplication bump2version;
-
   datalad = with python3Packages; toPythonApplication datalad;
 
   datalad-gooey = with python3Packages; toPythonApplication datalad-gooey;
