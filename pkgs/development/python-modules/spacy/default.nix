@@ -49,14 +49,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "spacy";
-  version = "3.8.19";
+  version = "3.8.20";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "explosion";
     repo = "spaCy";
     tag = "release-v${finalAttrs.version}";
-    hash = "sha256-NpW6QrtmG/2X6AVWBw0W+P38ZcXOfESYAdy8N6VMirc=";
+    hash = "sha256-Yrtu0pA/SuWcZ4t95InnzlRWRZpQ6pP2f/hpfd0c+QI=";
   };
 
   build-system = [

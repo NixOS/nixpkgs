@@ -10,7 +10,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pname = "metaphlan";
   version = "4.2.4";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "biobakery";

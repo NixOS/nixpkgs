@@ -9,7 +9,7 @@
   libxext,
   libxfixes,
   libxcomposite,
-  libxinerama,
+  libxrandr,
   pkg-config,
   libbsd,
   versionCheckHook,
@@ -17,7 +17,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "scrot";
-  version = "1.12.1";
+  version = "2.0.0";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "resurrecting-open-source-projects";
     repo = "scrot";
     tag = finalAttrs.version;
-    hash = "sha256-ExZH+bjpEvdbSYM8OhV+cyn4j+0YrHp5/b+HsHKAHCA=";
+    hash = "sha256-sxvopl04sMHyI3v2SH5O+QnlMneWThJKgFzYIe7t/58=";
   };
 
   nativeBuildInputs = [
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxext
     libxfixes
     libxcomposite
-    libxinerama
+    libxrandr
     libbsd
   ];
 

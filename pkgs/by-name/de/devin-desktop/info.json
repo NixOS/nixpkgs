@@ -1,14 +1,14 @@
 {
   "aarch64-darwin": {
-    "version": "3.14.30819",
+    "version": "3.14.30833",
     "vscodeVersion": "1.141.2",
-    "url": "https://windsurf-stable.codeiumdata.com/darwin-arm64/stable/c3f852dad740063cc1773032aefce24eb5acf833/Devin-darwin-arm64-3.14.30819.zip",
-    "sha256": "1742560e7e958e2efe2b150ae423a66be5a588d08618f32850d06ca28dbe38bc"
+    "url": "https://windsurf-stable.codeiumdata.com/darwin-arm64/stable/a165b2eb0a68542b92a3c89cc68b4700e819a409/Devin-darwin-arm64-3.14.30833.zip",
+    "sha256": "d34cdfbda119aff9a81cc1be36344385a3f836f4c370b121ae554ec11dac9fe1"
   },
   "x86_64-linux": {
-    "version": "3.14.30819",
+    "version": "3.14.30833",
     "vscodeVersion": "1.141.2",
-    "url": "https://windsurf-stable.codeiumdata.com/linux-x64/stable/c3f852dad740063cc1773032aefce24eb5acf833/Devin-linux-x64-3.14.30819.tar.gz",
-    "sha256": "5be44ff7fb296ff400703da8c923d97973ab072f72a756d57af3c2922199b764"
+    "url": "https://windsurf-stable.codeiumdata.com/linux-x64/stable/a165b2eb0a68542b92a3c89cc68b4700e819a409/Devin-linux-x64-3.14.30833.tar.gz",
+    "sha256": "735f80f9a7851c043b7a19595a396a3f9352629aae388b1af5aa868064a93c6a"
   }
 }

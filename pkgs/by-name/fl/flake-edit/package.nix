@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "a-kenji";
     repo = "flake-edit";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-YQw44sh//aOufTNyFRit8PxcpR++/98LhxBgQadqJzY=";
   };
 
@@ -43,7 +43,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Edit your flake inputs with ease";
     homepage = "https://github.com/a-kenji/flake-edit";
-    changelog = "https://github.com/a-kenji/flake-edit/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/a-kenji/flake-edit/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ a-kenji ];
     mainProgram = "flake-edit";

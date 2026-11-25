@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libhx";
-  version = "5.5";
+  version = "5.6";
 
   src = fetchFromCodeberg {
     tag = "v${finalAttrs.version}";
     owner = "jengelh";
     repo = "libhx";
-    hash = "sha256-P/npMEjQi81AVAIMjnPgGrm8bwJEWdCbWDuL3uPnRQs=";
+    hash = "sha256-vFT19+gXf8lQVR7sqtwz/OKWCCWy9ab0aLn5ylKvwdI=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

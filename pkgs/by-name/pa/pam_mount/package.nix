@@ -17,18 +17,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pam_mount";
-  version = "2.22";
+  version = "2.23";
 
   src = fetchFromCodeberg {
     tag = "v${finalAttrs.version}";
     owner = "jengelh";
     repo = "pam_mount";
-    hash = "sha256-13vAYIulkOdq0u6xyYgVFmFo31yLmL5Ip79ZTo3Zhn0=";
+    hash = "sha256-Ds7eiQXLqCMYewk+MkZTBZ8dWlJo5avp0nKPj3nuRHw=";
   };
 
   patches = [
     ./insert_utillinux_path_hooks.patch
-    ./resolve_build_failure_with_gcc-13.patch
   ];
 
   postPatch = ''

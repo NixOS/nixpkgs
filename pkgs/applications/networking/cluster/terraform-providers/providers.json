@@ -182,13 +182,13 @@
     "vendorHash": "sha256-ZY8eGdyHnyOgG6LNOlPbD+4KH5sC0tnmMLri0zPUwi0="
   },
   "checkly_checkly": {
-    "hash": "sha256-uQebdZqWA8FawwoN01hcUXcg+US2EIDoA5b7A2GJLOQ=",
+    "hash": "sha256-ZmNCRBByuhi+A7uNuM4ZRAU9t26SeSthKEA6h1GtEZ4=",
     "homepage": "https://registry.terraform.io/providers/checkly/checkly",
     "owner": "checkly",
     "repo": "terraform-provider-checkly",
-    "rev": "v1.32.0",
+    "rev": "v2.0.1",
     "spdx": null,
-    "vendorHash": "sha256-k9nLmq4h0xHTomHJJmSfKkfTQFLjHU+YU0B+m4WmKzw="
+    "vendorHash": "sha256-Nv9GGLIffNSVyMwCaFqsBo38gKFKFkuwU0qKyclaDRg="
   },
   "ciscodevnet_aci": {
     "hash": "sha256-OuoW4Ta05quBtFszluclX348nHPUF+RUta9pMB+Xar8=",
@@ -363,13 +363,13 @@
     "vendorHash": "sha256-gUKREx3NORuYAFqR/hUCuU1OXQw5NYn2LzcpeunEagE="
   },
   "e-breuninger_netbox": {
-    "hash": "sha256-tbBCGOcbDhiOjdgyS9lSw6IbMgzZwnbM40/InvhUKCA=",
+    "hash": "sha256-s8I12Yn9kic7/GtKGaqNGzxCG4nandOCsfxcHDSbZQM=",
     "homepage": "https://registry.terraform.io/providers/e-breuninger/netbox",
     "owner": "e-breuninger",
     "repo": "terraform-provider-netbox",
-    "rev": "v5.8.0",
+    "rev": "v6.0.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-NbFksqqwwelhSig6+5kqoTuUsUab8we+sSp1izfpF10="
+    "vendorHash": "sha256-CQW+TE8/wmqbaMhMWRsRbuqdjdfj48+rDPXD3DJDO94="
   },
   "equinix_equinix": {
     "hash": "sha256-aA3LfI95cA2d3zvfeKfSg+7ks/sw7+RXd5vZ1KGlojc=",

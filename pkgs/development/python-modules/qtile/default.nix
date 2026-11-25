@@ -53,6 +53,7 @@
   pytest-asyncio,
   pytest-httpbin,
   pytest-rerunfailures,
+  pytest-timeout,
   writableTmpDirAsHomeHook,
   anyio,
   fontconfig,
@@ -156,6 +157,7 @@ buildPythonPackage (finalAttrs: {
     pytest-asyncio
     pytest-httpbin
     pytest-rerunfailures
+    pytest-timeout
     writableTmpDirAsHomeHook
     anyio
     gdk-pixbuf
