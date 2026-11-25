@@ -7,7 +7,7 @@
   fetchFromGitHub,
   poetry-core,
   pytest-asyncio,
-  pytestCheckHook,
+  pytest9_1CheckHook,
   pythonOlder,
 }:
 
@@ -41,7 +41,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     aresponses
     pytest-asyncio
-    pytestCheckHook
+    pytest9_1CheckHook
   ];
 
   pythonImportsCheck = [ "pyhaversion" ];
