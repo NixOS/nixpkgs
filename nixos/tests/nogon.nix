@@ -19,11 +19,19 @@ in
   nodes.machine = {
     environment.systemPackages = [ pkgs.jq ];
 
-    systemd.tmpfiles.settings."10-nogon-env"."/run/nogon.env"."f" = {
-      mode = "0600";
-      user = "root";
-      group = "root";
-      argument = "NOGON__APP__ACCESS_TOKEN=test-token";
+    systemd.tmpfiles.settings = {
+      "10-nogon-env"."/run/nogon.env"."f" = {
+        mode = "0600";
+        user = "root";
+        group = "root";
+        argument = "NOGON__APP__ACCESS_TOKEN=test-token";
+      };
+      "10-hister-env"."/run/hister.env"."f" = {
+        mode = "0600";
+        user = "root";
+        group = "root";
+        argument = "HISTER__APP__ACCESS_TOKEN=legacy-token";
+      };
     };
 
     specialisation = {
@@ -54,6 +62,26 @@ in
         dataDir = "/srv/nogon-data";
         settings.app.title = "NixOS Nogon Custom Data";
       };
+
+      legacy_hister.configuration = {
+        system.stateVersion = "26.11";
+        services.hister = {
+          enable = true;
+          port = 4436;
+          environmentFile = "/run/hister.env";
+          settings.app.title = "NixOS Legacy Hister";
+        };
+      };
+
+      legacy_nogon.configuration = {
+        system.stateVersion = "26.11";
+        services.nogon = {
+          enable = true;
+          port = 4436;
+          environmentFile = "/run/hister.env";
+          settings.app.title = "NixOS Legacy Nogon";
+        };
+      };
     };
   };
 
@@ -74,6 +102,7 @@ in
         machine.wait_for_open_port(4433)
         machine.succeed("curl -fsS http://localhost:4433/ | grep -F '<title>Nogon</title>'")
         machine.succeed("test $(stat -c %a /var/lib/nogon) = 750")
+        machine.succeed("test $(stat -c %U:%G /var/lib/nogon) = nogon:nogon")
         machine.succeed("test $(stat -c %a /run/nogon) = 750")
         machine.succeed("test -s /run/nogon/tui.yaml")
         machine.succeed("test -s /var/lib/nogon/db.sqlite3")
@@ -142,5 +171,58 @@ in
             + "'"
         )
         machine.fail("journalctl -u nogon.service | grep -F 'Failed to create tui.yaml'")
+
+      with subtest("legacy services.hister and stateVersion compatibility"):
+        machine.succeed("${switchTo "legacy_hister"}")
+        machine.wait_for_unit("nogon.service")
+        machine.wait_for_open_port(4436)
+        machine.succeed("nogon --version | grep -F 'nogon version'")
+        machine.succeed("hister --version | grep -F 'nogon version'")
+        machine.succeed("systemctl is-active nogon.service")
+        machine.succeed("systemctl is-active hister.service")
+        machine.succeed("test $(stat -c %U:%G:%a /var/lib/hister) = hister:hister:750")
+        machine.succeed("test -s /var/lib/hister/db.sqlite3")
+        machine.succeed("test ! -e /var/lib/nogon")
+        machine.succeed(
+            "curl -fsS http://localhost:4436/api/config"
+            + " | jq -e "
+            + "'"
+            + '.title == "NixOS Legacy Hister"'
+            + ' and .authMode == "token"'
+            + "'"
+        )
+        secret_before = machine.succeed("cat /var/lib/hister/.secret_key")
+        machine.succeed(
+            "curl -fsS -X POST http://127.0.0.1:4436/api/add"
+            + " -H 'Origin: hister://'"
+            + " -H 'Content-Type: application/json'"
+            + " -H 'X-Access-Token: legacy-token'"
+            + " -d '{\"url\":\"https://example.org/legacy\",\"title\":\"LegacyEntry\",\"text\":\"legacy_persistence_token\"}'"
+        )
+        machine.succeed(
+            "hister -u http://127.0.0.1:4436 -t legacy-token search legacy_persistence_token"
+            + " | grep -F 'LegacyEntry'"
+        )
+
+      with subtest("switching from services.hister to services.nogon preserves hister state"):
+        machine.succeed("${switchTo "legacy_nogon"}")
+        machine.wait_for_unit("nogon.service")
+        machine.wait_for_open_port(4436)
+        machine.succeed("systemctl is-active hister.service")
+        machine.succeed("test $(stat -c %U:%G:%a /var/lib/hister) = hister:hister:750")
+        machine.succeed("test ! -e /var/lib/nogon")
+        assert machine.succeed("cat /var/lib/hister/.secret_key") == secret_before
+        machine.succeed(
+            "curl -fsS http://localhost:4436/api/config"
+            + " | jq -e "
+            + "'"
+            + '.title == "NixOS Legacy Nogon"'
+            + ' and .authMode == "token"'
+            + "'"
+        )
+        machine.succeed(
+            "nogon -u http://127.0.0.1:4436 -t legacy-token search legacy_persistence_token"
+            + " | grep -F 'LegacyEntry'"
+        )
     '';
 }
