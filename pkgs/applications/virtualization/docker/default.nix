@@ -355,8 +355,10 @@ let
         + ''
 
           makeWrapper $out/libexec/docker/docker $out/bin/docker \
-            --prefix PATH : "$out/libexec/docker" \
-            --prefix DOCKER_CLI_PLUGIN_DIRS : "${dockerCliPluginsDirs}"
+            ${lib.optionalString (
+              dockerCliPluginsDirs != ""
+            ) ''--prefix DOCKER_CLI_PLUGIN_DIRS : ${dockerCliPluginsDirs} \''}
+            --prefix PATH : "$out/libexec/docker"
         ''
         + lib.optionalString (!clientOnly) ''
           # symlink docker daemon to docker cli derivation
