@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "django-mptt";
-  version = "0.21.1";
+  version = "0.22";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "django-mptt";
     repo = "django-mptt";
     rev = version;
-    hash = "sha256-E5iItZ4LZA44Rft9TBNWuOCAUb2YHRyIb7D8FgoiMKQ=";
+    hash = "sha256-FxrZQaQRkq3GIDCDiNEHoi8DJW7iDAQLIHdvEvmpKSw=";
   };
 
   build-system = [ hatchling ];
