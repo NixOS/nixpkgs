@@ -7,7 +7,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mycli";
-  version = "2.20.0";
+  version = "2.32.0";
   pyproject = true;
 
   # test_ssh_tunnel.py binds to localhost to find a free port; the darwin
@@ -18,7 +18,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "dbcli";
     repo = "mycli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jbEbyY5N6IY344sLiY9cjhPbwzHtNUJK4+SXkXU2lqM=";
+    hash = "sha256-3Di1YoLR2x87Fjswi2h4trewYgi2gCsSx5fdu1eThYc=";
   };
 
   pythonRelaxDeps = [
@@ -42,6 +42,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   dependencies =
     with python3Packages;
     [
+      altair
       cli-helpers
       click
       clickdc
@@ -50,6 +51,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       jinja2
       keyring
       llm
+      polars
       prompt-toolkit
       pycryptodomex
       pygments
@@ -72,20 +74,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
     pytest-random-order
   ]);
 
-  disabledTestPaths = [
-    # require optional polars dependency (not packaged)
-    "test/pytests/test_polars_transform.py"
-    "test/pytests/test_polars_completion.py"
-  ];
-
   pytestFlags = [
-    # environment-specific completion keyword differences
-    "--deselect=test/pytests/test_smart_completion_public_schema_only.py::test_backticked_column_completion_three_character"
-    "--deselect=test/pytests/test_smart_completion_public_schema_only.py::test_backticked_column_completion_two_character"
-    "--deselect=test/pytests/test_naive_completion.py::test_function_name_completion"
     # bash completion harness is sensitive to the system bash version and
     # exercises only the static completion script, not the packaged code
-    "--deselect=test/pytests/test_bash_completion.py::test_bash_completion_matches_mycli_completion_behavior"
+    "--deselect=mycli_test/pytests/test_bash_completion.py::test_bash_completion_matches_mycli_completion_behavior"
   ];
 
   meta = {
