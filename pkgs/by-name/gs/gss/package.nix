@@ -14,6 +14,7 @@
   texinfo,
   withShishi ? !stdenv.hostPlatform.isDarwin,
   shishi,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -44,6 +45,8 @@ stdenv.mkDerivation (finalAttrs: {
   # Reported to bug-gss@gnu.org with Message-ID: <87cyngavtt.fsf@alyssa.is>.
   postPatch = ''
     rm tests/krb5context.c
+    # We don't use the dist tarball (see above), so we need to set the version ourselves
+    echo ${finalAttrs.version} > .tarball-version
   '';
 
   nativeBuildInputs = [
@@ -76,6 +79,8 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i 's,\(-lshishi\),-L${shishi}/lib \1,' $out/lib/libgss.la
   '';
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   __structuredAttrs = true;
 
   meta = {
@@ -85,5 +90,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
     platforms = lib.platforms.all;
+    pkgConfigModules = [ "gss" ];
   };
 })
