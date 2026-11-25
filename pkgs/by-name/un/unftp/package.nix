@@ -10,16 +10,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "unftp";
-  version = "0.16.0";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "Cloudinvoke";
     repo = "unftp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Z9Cse4/QO7uH46foL7lagtffZGhfZ24rS/yP3A9s9zU=";
+    hash = "sha256-rlgpHPhBrHQW4fo+QLxG/0Z50KSHQmYAEGpCcqJ1mGk=";
   };
 
-  cargoHash = "sha256-fR03iwfd5QZ3iU4jxYcQbVcgR+s+dUIRIIgHDt+n8EA=";
+  cargoHash = "sha256-54vz348nuyufocDIh+HlkYTub1Wq0ICF+iE1+YnULCI=";
 
   nativeBuildInputs = [ pkg-config ];
 
