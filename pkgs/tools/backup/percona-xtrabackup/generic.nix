@@ -46,6 +46,9 @@ stdenv.mkDerivation (finalAttrs: {
     inherit hash fetchSubmodules;
   };
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   nativeBuildInputs = [
     bison
     boost
