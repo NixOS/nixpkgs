@@ -3,36 +3,36 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
+  setuptools-scm,
   ds-store,
-  importlib-resources,
   mac-alias,
 }:
 
 buildPythonPackage rec {
   pname = "dmgbuild";
-  version = "1.6.7";
+  version = "2.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dmgbuild";
     repo = "dmgbuild";
     tag = "v${version}";
-    hash = "sha256-dJHUpMPsYTgJdR3FoIzrH6C/VLWXlktW3o8VXeHxey8=";
+    hash = "sha256-m73IUB9d5HWtj/EnzKrX15tnjFqgeO4cFmvaBvCuR5w=";
   };
 
   postPatch = ''
-    # relax all deps
     substituteInPlace pyproject.toml \
-      --replace-fail "==" ">="
+      --replace-fail "setuptools==84.0.0" "setuptools" \
+      --replace-fail "setuptools_scm==10.3.4" "setuptools_scm"
   '';
 
   build-system = [
     setuptools
+    setuptools-scm
   ];
 
   dependencies = [
     ds-store
-    importlib-resources
     mac-alias
   ];
 
@@ -40,8 +40,7 @@ buildPythonPackage rec {
     "dmgbuild"
   ];
 
-  # require permissions to access TextEditor.app
-  # https://github.com/dmgbuild/dmgbuild/blob/refs/tags/v1.6.2/tests/examples/settings.py#L17
+  # tests invoke /usr/sbin/diskutil which requires macOS system services unavailable in the sandbox
   doCheck = false;
 
   meta = {
