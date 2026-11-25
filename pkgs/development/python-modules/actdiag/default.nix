@@ -7,7 +7,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "actdiag";
   version = "3.0.0";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "blockdiag";
     repo = "actdiag";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-WmprkHOgvlsOIg8H77P7fzEqxGnj6xaL7Df7urRkg3o=";
   };
 
@@ -40,10 +40,10 @@ buildPythonPackage rec {
   meta = {
     description = "Generate activity-diagram image from spec-text file (similar to Graphviz)";
     homepage = "http://blockdiag.com/";
-    changelog = "https://github.com/blockdiag/actdiag/blob/${version}/CHANGES.rst";
+    changelog = "https://github.com/blockdiag/actdiag/blob/${finalAttrs.version}/CHANGES.rst";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ bjornfor ];
     mainProgram = "actdiag";
     platforms = lib.platforms.unix;
   };
-}
+})
