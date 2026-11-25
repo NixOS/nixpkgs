@@ -263,6 +263,16 @@ makeScopeWithSplicing' {
   f = lib.extends autoCalledPackages (
     self:
     let
+      swift-toolchain = self.swift.override {
+        toolchain-name = "swift-toolchain";
+        enableClangTools = true;
+        enableLlvmTools = true;
+        enableDocC = true;
+        enableSourceKitLSP = true;
+        enableSwiftFormat = true;
+        enableSwiftPM = true;
+      };
+
       # Can’t be defined in `by-name` because it’s a function.
       swiftpmDepsUpdater =
         let
@@ -331,6 +341,11 @@ makeScopeWithSplicing' {
       inherit swiftpmDepsUpdater swift_release;
     }
     // lib.optionalAttrs config.allowAliases {
+      # swift-toolchain is deliberately omitted from the Swift package set to prevent its use inside Nixpkgs.
+      # It is intended for end users to have a complete toolchain similar to what they could download from swift.org.
+      # Packages in Nixpkgs should use the `swift` compiler and `swiftpm` or other build system packages as needed.
+      inherit swift-toolchain;
+
       # Compatibility aliases for the old Swift packaging.
       swift-unwrapped = lib.warnOnInstantiate "Swift is no longer wrapped. Use `swift` directly." self.swift;
       swiftNoSwiftDriver =
