@@ -112,6 +112,7 @@
     hash = "sha256-/ejgjd/O37GtS6/+gzsscImoLllaDYCl2LS8m+pulTw=";
     description = "Tools for managing ArcData";
     propagatedBuildInputs = with python3Packages; [
+      colorama
       jinja2
       jsonpatch
       jsonpath-ng
@@ -122,6 +123,9 @@
       pydash
       regex
     ];
+    # The wheel pins every dependency exactly and lists msrestazure, which it never imports.
+    pythonRelaxDeps = true;
+    pythonRemoveDeps = [ "msrestazure" ];
     meta.maintainers = with lib.maintainers; [ techknowlogick ];
   };
 
