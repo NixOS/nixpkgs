@@ -814,6 +814,9 @@ let
       # This does not have any effect if a program does not support it
       SECURITY_LANDLOCK = yes;
 
+      # XFRM (IPsec) security hooks for SELinux labeled IPsec
+      SECURITY_NETWORK_XFRM = yes;
+
       # IPE (Integrity Policy Enforcement) - LSM that can enforce file integrity based on
       # fs-verity measurements or dm-verity. Useful for verified boot and immutable /nix/store.
       SECURITY_IPE = whenAtLeast "6.12" yes;
