@@ -12,7 +12,7 @@
 
 llvmPackages.stdenv.mkDerivation (finalAttrs: {
   pname = "redumper";
-  version = "773";
+  version = "775";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -21,14 +21,8 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     owner = "superg";
     repo = "redumper";
     tag = "b${finalAttrs.version}";
-    hash = "sha256-fYw2ShXyhQ1Urdj69pxRvfXLGS9Vwe3f7yWjqQwN5uE=";
+    hash = "sha256-0fX1Eph5EYAzQJJVQR2B+C1aUnFB3AUtqwZ/BVxwrG4=";
   };
-
-  patches = [
-    # Don't bundle Homebrew's libc++ on darwin, nixpkgs links its own
-    # https://github.com/superg/redumper/pull/485
-    ./bundle-libcxx-only-with-llvm-lib-path.patch
-  ];
 
   nativeBuildInputs = [
     cmake

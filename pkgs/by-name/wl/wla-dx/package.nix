@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wla-dx";
-  version = "10.7";
+  version = "10.8";
 
   src = fetchFromGitHub {
     owner = "vhelin";
     repo = "wla-dx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HLoPWEVjyFLrYGjeKAqyhvF1OS09Ao2UJBL5fj3L5QA=";
+    hash = "sha256-xdb6zXJvgdd+mjmO6J19dvf7VDd0W4y0ifGcSGPNT6A=";
   };
 
   installPhase = ''
