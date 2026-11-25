@@ -16,30 +16,29 @@
   hatchling,
   jinja2,
   markdown-it-py,
+  msgspec,
   nodejs,
   npmHooks,
-  ply,
   pytestCheckHook,
-  simplejson,
   watchfiles,
   werkzeug,
 }:
 buildPythonPackage (finalAttrs: {
   pname = "fava";
-  version = "1.30.16";
+  version = "1.31";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "beancount";
     repo = "fava";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TXsDfNZrqTfHZ1rH3JHPSS103ab6nxP3BOFrUQ8CQH4=";
+    hash = "sha256-3nBBDR34HlMdaPLagl90bwdPYlbHiF/hFtaQuwiuH3k=";
   };
 
   npmDeps = fetchNpmDeps {
     name = "${finalAttrs.pname}-npm-deps-${finalAttrs.version}";
     src = "${finalAttrs.src}/${finalAttrs.npmRoot}";
-    hash = "sha256-WjdFEZqfD2rJpKs5ad7/YUlgBBrO92DGkiTp9v5PJhE=";
+    hash = "sha256-DbnwXA5v2JrE6IEaqn03rhFbzhJ5yGVaITem2nYynyY=";
   };
 
   npmRoot = "frontend";
@@ -65,13 +64,10 @@ buildPythonPackage (finalAttrs: {
     flask-babel
     jinja2
     markdown-it-py
-    ply
-    simplejson
+    msgspec
     werkzeug
     watchfiles
   ];
-
-  pythonRelaxDeps = [ "simplejson" ];
 
   nativeBuildInputs = [
     nodejs
