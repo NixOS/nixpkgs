@@ -448,7 +448,6 @@ stdenv.mkDerivation (
       "-DENABLE_INTERNAL_RapidJSON=OFF"
       "-DENABLE_OPTICAL=${if opticalSupport then "ON" else "OFF"}"
       "-DENABLE_VDPAU=${if vdpauSupport then "ON" else "OFF"}"
-      "-DLIRC_DEVICE=/run/lirc/lircd"
       "-DSWIG_EXECUTABLE=${buildPackages.swig}/bin/swig"
       "-DFLATBUFFERS_FLATC_EXECUTABLE=${buildPackages.flatbuffers}/bin/flatc"
       "-DPYTHON_EXECUTABLE=${buildPackages.python3Packages.python}/bin/python"
