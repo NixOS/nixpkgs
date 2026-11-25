@@ -29,7 +29,7 @@ buildDotnetModule (finalAttrs: {
     owner = "ppy";
     repo = "osu";
     tag = "${finalAttrs.version}-lazer";
-    hash = "sha256-1sjKtCkcXc1LOT/E1/cCbTiyl3hn+tO4U0sNHawVAuo=";
+    hash = "sha256-x8u0y/iGhEDbAv0Ay8UcN4rZxLSeb4JeUvEXUr/DdnE=";
   };
 
   projectFile = "osu.Desktop/osu.Desktop.csproj";
