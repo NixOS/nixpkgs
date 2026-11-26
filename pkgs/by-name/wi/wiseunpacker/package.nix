@@ -1,18 +1,22 @@
 {
+  lib,
   fetchFromGitHub,
   buildDotnetModule,
   dotnetCorePackages,
-  lib,
+  nix-update-script,
 }:
 
 buildDotnetModule (finalAttrs: {
-  pname = "WiseUnpacker";
+  pname = "wiseunpacker";
   version = "3.1.0";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "mnadareski";
     repo = "WiseUnpacker";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-7TKXGI3XO4oLIZCD21xOpxD5bZKiI6Qk+pyLdzo+kQ8=";
   };
 
@@ -27,10 +31,20 @@ buildDotnetModule (finalAttrs: {
 
   executables = [ "WiseUnpacker" ];
 
+  doCheck = false;
+
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     homepage = "https://github.com/mnadareski/WiseUnpacker/";
-    description = "C# Wise installer unpacker based on HWUN and E_WISE ";
+    changelog = "https://github.com/mnadareski/WiseUnpacker/releases/tag/${finalAttrs.src.tag}";
+    description = "Wise installer unpacker based on REWise";
     maintainers = [ lib.maintainers.gigahawk ];
+    mainProgram = "WiseUnpacker";
     license = lib.licenses.mit;
+    sourceProvenance = with lib.sourceTypes; [
+      fromSource
+      binaryNativeCode # libGrindCore from NuGet
+    ];
   };
 })
