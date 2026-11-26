@@ -34,6 +34,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ libogg ];
 
+  strictDeps = true;
+
   cmakeFlags = lib.optionals (!stdenv.hostPlatform.isStatic) [
     "-DBUILD_SHARED_LIBS=ON"
   ];
