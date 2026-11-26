@@ -4,6 +4,7 @@
   fetchurl,
   pkg-config,
   libsndfile,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -18,12 +19,18 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libsndfile ];
 
+  strictDeps = true;
+
   configureFlags = [ "--disable-fftw" ];
 
   outputs = [
     "dev"
     "out"
   ];
+
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Sample Rate Converter for audio";
@@ -33,5 +40,8 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.all;
     # Linker is unhappy with the `.def` file.
     broken = stdenv.hostPlatform.isMinGW;
+    pkgConfigModules = [
+      "samplerate"
+    ];
   };
 })
