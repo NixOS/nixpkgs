@@ -169,6 +169,12 @@ stdenv.mkDerivation (finalAttrs: {
       -B $out/lib \
       -Wl,-dynamic-linker=$(ls $out/lib/ld-*)
   ''
+  + lib.optionalString (stdenv.hostPlatform.muslArch != null) ''
+    if [[ ! -e $out/lib/ld-musl-${stdenv.hostPlatform.muslArch}.so.1 ]]; then
+      echo "hostPlatform.muslArch is ${stdenv.hostPlatform.muslArch}, but musl installed:" $out/lib/ld-musl-* >&2
+      exit 1
+    fi
+  ''
   + lib.optionalString (arch != null) ''
     # Create 'libc.musl-$arch' symlink
     ln -rs $out/lib/libc.so $out/lib/libc.musl-${arch}.so.1
