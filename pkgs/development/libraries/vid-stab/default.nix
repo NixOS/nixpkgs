@@ -21,6 +21,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   propagatedBuildInputs = lib.optionals stdenv.cc.isClang [ openmp ];
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   meta = {
     description = "Video stabilization library";
     homepage = "http://public.hronopik.de/vid.stab/";
