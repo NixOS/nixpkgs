@@ -1,13 +1,13 @@
 [
   {
     "pname": "Acornima",
-    "version": "1.7.0",
-    "hash": "sha256-RMdNhr9GinGYY4C3h78y/Go47NwpM5b9EFawu5Tb9AQ="
+    "version": "1.9.1",
+    "hash": "sha256-FzDP2A8s8ICuCOZgz0FsNEI3AxpA0QhPiuz1yJo4lVs="
   },
   {
     "pname": "Avalonia",
-    "version": "11.3.22",
-    "hash": "sha256-bV80CsjuLWwWygp1wzNgvtA8K4GQQgNEXtoMSpbsjSc="
+    "version": "11.3.23",
+    "hash": "sha256-fkZRH6aH6m54029ZXThk07SQj8cdsKxGodqYtJTjvHQ="
   },
   {
     "pname": "Avalonia.Angle.Windows.Natives",
@@ -26,8 +26,8 @@
   },
   {
     "pname": "Avalonia.Controls.ColorPicker",
-    "version": "11.3.22",
-    "hash": "sha256-YNd6nxOCo+DkKXiZ179lyj3+UaxegsGljEOqmTjImHw="
+    "version": "11.3.23",
+    "hash": "sha256-0JGqo7h0jpvFxTrQBrFt4r16faZx0lwKcr8cfW+EEHg="
   },
   {
     "pname": "Avalonia.Controls.DataGrid",
@@ -36,33 +36,33 @@
   },
   {
     "pname": "Avalonia.Desktop",
-    "version": "11.3.22",
-    "hash": "sha256-exGUplIWkvYlQHInN1H+zbA0iqDL5klSJ2+2AtsOXV4="
+    "version": "11.3.23",
+    "hash": "sha256-hIciFHBNNiuIZefsNt3pKF1fW7zGnXCKvG4rhhrc/fs="
   },
   {
     "pname": "Avalonia.Diagnostics",
-    "version": "11.3.22",
-    "hash": "sha256-ItdTNiAbNHihGwbs3Njba3U9dcqoXrxMiZjyvURLMWI="
+    "version": "11.3.23",
+    "hash": "sha256-aV4Mgg3cOUhROCqHoWnTQdCCNuGR5IAa0TrHKYqWyt0="
   },
   {
     "pname": "Avalonia.Fonts.Inter",
-    "version": "11.3.22",
-    "hash": "sha256-vF8ooh0KJDUH/u9Ap2kxGoy0byiNvS2FOxsz37O1Sf0="
+    "version": "11.3.23",
+    "hash": "sha256-ooFFu74arejRjhTVfeI4F4KPjnQ1ST6vBxHX70eMNrA="
   },
   {
     "pname": "Avalonia.FreeDesktop",
-    "version": "11.3.22",
-    "hash": "sha256-GVTGsjJxJZysevISUqey0L4mA6junygbYf0ikPWDoSU="
+    "version": "11.3.23",
+    "hash": "sha256-l+zttzZ1fCdrprN9MSbAMW8TN/BWlytAO/lMRaTQ2Zk="
   },
   {
     "pname": "Avalonia.Native",
-    "version": "11.3.22",
-    "hash": "sha256-srhFjYlg7inKXfLjOsFzpbO3pJyesou7eFaJn0uZxYQ="
+    "version": "11.3.23",
+    "hash": "sha256-POVfLJSTpNeyrtG6qPonY4M2QH4yu/aS8N38mzRoe/A="
   },
   {
     "pname": "Avalonia.Remote.Protocol",
-    "version": "11.3.22",
-    "hash": "sha256-UZHrMfKqWvisq3TzmoiC6Ly80m/uBSwFqZrpJzjULzw="
+    "version": "11.3.23",
+    "hash": "sha256-JgV0Zg8f+Hj9bZTmV/zb203/q7fCd4UIPN7fCAZK3Pw="
   },
   {
     "pname": "Avalonia.Skia",
@@ -71,28 +71,28 @@
   },
   {
     "pname": "Avalonia.Skia",
-    "version": "11.3.22",
-    "hash": "sha256-xQcmzS7XSQiSvIwwyg8Q9gLTLyduO2kwZYs89Mrq9t4="
+    "version": "11.3.23",
+    "hash": "sha256-rPOQPdZjHkvwE77xIRpVHzkrVybxWJlx9H+7rMfcjJ8="
   },
   {
     "pname": "Avalonia.Themes.Fluent",
-    "version": "11.3.22",
-    "hash": "sha256-bOYYnO8sFSoyqKFIrX8kAXUoyPHCvcK7CekM5wXFHWQ="
+    "version": "11.3.23",
+    "hash": "sha256-HsmD02OLzoi9ubJlRuhmRqZIoqsT1l73DUQb1cTxAAo="
   },
   {
     "pname": "Avalonia.Themes.Simple",
-    "version": "11.3.22",
-    "hash": "sha256-zlNolCy8YBIQSiJD1DWX39aSwHutqa7taDUURC/UDG0="
+    "version": "11.3.23",
+    "hash": "sha256-F1C4CAjXpnvBtl9Sj4uD5b9yQ1Zldad8UbHf0GddBqU="
   },
   {
     "pname": "Avalonia.Win32",
-    "version": "11.3.22",
-    "hash": "sha256-y29Pb/nAlh+IW+4AI1xnMrlJrj2Qe57cNZQYoaCLLT0="
+    "version": "11.3.23",
+    "hash": "sha256-LRA0QVCIlK1zl1O6F0TCg2ktcg7KW5z4uIhW1qW3rhg="
   },
   {
     "pname": "Avalonia.X11",
-    "version": "11.3.22",
-    "hash": "sha256-OURvkW5iYuTJpaQPGzJX+Mkj7e+s6fq5MEcJZTJGrjc="
+    "version": "11.3.23",
+    "hash": "sha256-kSGeiWlNrvb7OsmnJ4WrvJnb/1fV0N/QLsjkoejXDr0="
   },
   {
     "pname": "CommunityToolkit.Mvvm",
@@ -136,8 +136,8 @@
   },
   {
     "pname": "Jint",
-    "version": "4.17.0",
-    "hash": "sha256-MzDTp8f5ZAYB4NuJ9+CebzXYN7HInAbEz2/R3FYsvlk="
+    "version": "4.18.0",
+    "hash": "sha256-lzxukodT/wGlW0K950epNGErDALwn6P4uc9jkLS1luI="
   },
   {
     "pname": "MicroCom.Runtime",
@@ -146,8 +146,8 @@
   },
   {
     "pname": "Microsoft.AspNetCore",
-    "version": "2.3.13",
-    "hash": "sha256-Kk0IAmFGl28ic4l8U1F9STq0bmJhqy20mfbwEg496WY="
+    "version": "2.3.14",
+    "hash": "sha256-qZYcDz1O5LtFjUer90eSAY9NaS6zt1NZjfS2FMTOBsI="
   },
   {
     "pname": "Microsoft.AspNetCore.Authentication.Abstractions",
@@ -161,33 +161,33 @@
   },
   {
     "pname": "Microsoft.AspNetCore.Connections.Abstractions",
-    "version": "2.3.11",
-    "hash": "sha256-/SngFtZyleh7KGeRLy+6/LOfamDEb0mn8PcEA4/Efzs="
+    "version": "2.3.12",
+    "hash": "sha256-893Us5ydyoAAcbbZhEFL0EihEwukAWNdijU7aWLRNuo="
   },
   {
     "pname": "Microsoft.AspNetCore.Diagnostics",
-    "version": "2.3.12",
-    "hash": "sha256-YnBeZsxE4mriXSho/SwnKAmEnRNRg3Q3ddRTtlLdOSE="
+    "version": "2.3.13",
+    "hash": "sha256-+KAHEL5fO4+2ym2gu51x4t/nPAGUjbEvxBgFVlGpP6M="
   },
   {
     "pname": "Microsoft.AspNetCore.Diagnostics.Abstractions",
-    "version": "2.3.11",
-    "hash": "sha256-NBHiII21mULWLKTc5qzpv1gp0PAJPtiAPDxZohcPG6I="
+    "version": "2.3.12",
+    "hash": "sha256-zgA8Z8BOV1zunAoVvAZq4mpUEM6YeG1j01mflUQEW3g="
   },
   {
     "pname": "Microsoft.AspNetCore.HostFiltering",
-    "version": "2.3.12",
-    "hash": "sha256-TI+fnPivVaO25y8+ZyskSEWpZT6O2FEnji784H8/SJ4="
-  },
-  {
-    "pname": "Microsoft.AspNetCore.Hosting",
-    "version": "2.3.11",
-    "hash": "sha256-e01X9EeGP7RpR7H9v9IromUFUz3Eoirux68GnYKVoIk="
+    "version": "2.3.13",
+    "hash": "sha256-PgG67wdYg9ZlfE8JWvGf3M16xfIqhexPgkGWzL2NrEY="
   },
   {
     "pname": "Microsoft.AspNetCore.Hosting",
     "version": "2.3.12",
     "hash": "sha256-UCE5gJTa/InQnm6fBB/wEHG/REGcEWPJnDS8IseYNA8="
+  },
+  {
+    "pname": "Microsoft.AspNetCore.Hosting",
+    "version": "2.3.13",
+    "hash": "sha256-i3Fk/t3CWOmMNT6Z/eOszVQ3rFTAUcj9D/eyYWhQHM4="
   },
   {
     "pname": "Microsoft.AspNetCore.Hosting.Abstractions",
@@ -196,18 +196,18 @@
   },
   {
     "pname": "Microsoft.AspNetCore.Hosting.Abstractions",
-    "version": "2.3.11",
-    "hash": "sha256-AP3zqzVH1rQde5Q+jkFf621d9MT/t0znsp+dw1as9Z8="
-  },
-  {
-    "pname": "Microsoft.AspNetCore.Hosting.Abstractions",
     "version": "2.3.12",
     "hash": "sha256-oEDI47fRY2rodZUaapPMNg1c+vksVbhzM82N06B/SD0="
   },
   {
+    "pname": "Microsoft.AspNetCore.Hosting.Abstractions",
+    "version": "2.3.13",
+    "hash": "sha256-tpfJKRLjfIZ14xAPjjQZ21WBLPJoq+ygg2MKWr7yKEE="
+  },
+  {
     "pname": "Microsoft.AspNetCore.Hosting.Server.Abstractions",
-    "version": "2.3.11",
-    "hash": "sha256-SQv8/BLFmrq04LSnSZNmLkW7c1mXEEnq7qsISk/d1CA="
+    "version": "2.3.12",
+    "hash": "sha256-ecOny7hwh3lsvyxEiJVe5Ih7RW/ffesd/Y9XsbrccHA="
   },
   {
     "pname": "Microsoft.AspNetCore.Http",
@@ -216,8 +216,8 @@
   },
   {
     "pname": "Microsoft.AspNetCore.Http",
-    "version": "2.3.11",
-    "hash": "sha256-Wy+HphsrkH6r9ljPfQ+k1bgL/nsUKR5A9iCJ7DP33d4="
+    "version": "2.3.12",
+    "hash": "sha256-aXJG/CHxIdPr2Lhcr9iVrQLQLFGL74pQSoIpIdxSDsQ="
   },
   {
     "pname": "Microsoft.AspNetCore.Http.Abstractions",
@@ -226,13 +226,13 @@
   },
   {
     "pname": "Microsoft.AspNetCore.Http.Abstractions",
-    "version": "2.3.10",
-    "hash": "sha256-TlgQug0JPR5vsFsxU0btpa4SbLSLLKZ2T8izyZpkZtM="
+    "version": "2.3.11",
+    "hash": "sha256-TZ29MQF9aJ+Iy3NSszVVDypEv7wXhWfLf5dp1uxxuCA="
   },
   {
     "pname": "Microsoft.AspNetCore.Http.Abstractions",
-    "version": "2.3.11",
-    "hash": "sha256-TZ29MQF9aJ+Iy3NSszVVDypEv7wXhWfLf5dp1uxxuCA="
+    "version": "2.3.12",
+    "hash": "sha256-sUVALuHYiUaafAar4rTpzoy8qupNEHUOb2yMyWQQbfM="
   },
   {
     "pname": "Microsoft.AspNetCore.Http.Extensions",
@@ -241,13 +241,13 @@
   },
   {
     "pname": "Microsoft.AspNetCore.Http.Extensions",
-    "version": "2.3.11",
-    "hash": "sha256-MIlX/WRqRdpJky0ya8lSxp2qR3Bp8152BroMCI8qMTg="
+    "version": "2.3.12",
+    "hash": "sha256-PGiTx6fcklzi6YBGAt0QQknctyxGVjoHCASBKJ+U6XI="
   },
   {
     "pname": "Microsoft.AspNetCore.Http.Features",
-    "version": "2.3.10",
-    "hash": "sha256-XD/AU/0g+jriODowOVSPKGrjyQV1OlDrICmAq6xGJ9g="
+    "version": "2.3.11",
+    "hash": "sha256-cBy44q+ZSkY4DHpPamOAyVmPPiK+s2K8oOShk53VEMs="
   },
   {
     "pname": "Microsoft.AspNetCore.HttpOverrides",
@@ -256,13 +256,13 @@
   },
   {
     "pname": "Microsoft.AspNetCore.Routing",
-    "version": "2.3.12",
-    "hash": "sha256-OSKpGvToBQnbd9BqW5hc1EwYfZkxzmXIgZJKeU4dv4Q="
+    "version": "2.3.13",
+    "hash": "sha256-jLsANQFYajPv1ke/Ic1N/qHqebOqdYcv10XponWt2gg="
   },
   {
     "pname": "Microsoft.AspNetCore.Routing.Abstractions",
-    "version": "2.3.11",
-    "hash": "sha256-UrcAkWHhQf0V1doefknB8XS1kyefRzh/7Hf5VAw+Q4s="
+    "version": "2.3.12",
+    "hash": "sha256-Xaiq0XJ4Ml/YH0OzMJ4l3Y9gc114fBqAvg4SDT/3RnQ="
   },
   {
     "pname": "Microsoft.AspNetCore.Server.IISIntegration",
@@ -271,18 +271,13 @@
   },
   {
     "pname": "Microsoft.AspNetCore.Server.Kestrel",
-    "version": "2.3.12",
-    "hash": "sha256-J8sPXv+R9SP6hxSdeoL4MHo/5oREOEAhZ/55cbTUrIo="
+    "version": "2.3.13",
+    "hash": "sha256-nclQOSQqDGE50GfIruZBhT8sbgNEBrlbcdj/Rxbi8Lk="
   },
   {
     "pname": "Microsoft.AspNetCore.Server.Kestrel.Core",
-    "version": "2.3.13",
-    "hash": "sha256-5P3eNqdOmQqTKVBhcFi3ZNBZuED3yAo59aTRBXmUbqw="
-  },
-  {
-    "pname": "Microsoft.AspNetCore.Server.Kestrel.Https",
-    "version": "2.3.11",
-    "hash": "sha256-kL/d6YETdqRQynnAH3G/ZDQM5iUtgXnEKGMQ5Lsatq4="
+    "version": "2.3.14",
+    "hash": "sha256-y1FAmkzrmj/yPGgy9krQ1wbRDSfwETtS7P1mp3vNYZY="
   },
   {
     "pname": "Microsoft.AspNetCore.Server.Kestrel.Https",
@@ -290,9 +285,9 @@
     "hash": "sha256-gJfOPurMAYWvs9wRnsqpWyqlnQF2gqaPcQNg1nZCEVA="
   },
   {
-    "pname": "Microsoft.AspNetCore.Server.Kestrel.Transport.Abstractions",
-    "version": "2.3.11",
-    "hash": "sha256-y18Ed6C2zrVWmKUTOHOBGEFcGB2YX7ciVHnavzlDzog="
+    "pname": "Microsoft.AspNetCore.Server.Kestrel.Https",
+    "version": "2.3.13",
+    "hash": "sha256-ujlWeYRQypo4fnJcUFYIrif87DP5WOAzLeW+3uotVRo="
   },
   {
     "pname": "Microsoft.AspNetCore.Server.Kestrel.Transport.Abstractions",
@@ -300,14 +295,14 @@
     "hash": "sha256-BhUuWcX0X0pkmoIOZI/51A4FfjVXDidQBxl4OJvq1Uk="
   },
   {
-    "pname": "Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets",
-    "version": "2.3.12",
-    "hash": "sha256-YDcaUfyxh9gLLoULOUnuAme3Sl56sUmyy9GvMfOl1qI="
+    "pname": "Microsoft.AspNetCore.Server.Kestrel.Transport.Abstractions",
+    "version": "2.3.13",
+    "hash": "sha256-mfVuA7YDt1oDUOkgqcHMFdYfgUNKHCQ0OMAJZgmc8fc="
   },
   {
-    "pname": "Microsoft.AspNetCore.WebUtilities",
-    "version": "2.3.10",
-    "hash": "sha256-XuHgYt83oinCBcCfY1FJa1PWj/t5kvg/YPse0DlYiUA="
+    "pname": "Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets",
+    "version": "2.3.13",
+    "hash": "sha256-1rZ0IBoKkC0RdVA4tEyKBWdASQHZCdGjjK8PAoVOQhg="
   },
   {
     "pname": "Microsoft.AspNetCore.WebUtilities",
@@ -318,6 +313,11 @@
     "pname": "Microsoft.AspNetCore.WebUtilities",
     "version": "2.3.12",
     "hash": "sha256-js0KyvQlV2ZeQxuLHU8dNj6N1szO3xP3RPo0tpGjPFo="
+  },
+  {
+    "pname": "Microsoft.AspNetCore.WebUtilities",
+    "version": "2.3.13",
+    "hash": "sha256-pATeIF5YFKEJt8VFQ42U2NHPnFi8MVpQoAxGqfnvHtk="
   },
   {
     "pname": "Microsoft.Extensions.Configuration",
@@ -466,11 +466,6 @@
   },
   {
     "pname": "Microsoft.Net.Http.Headers",
-    "version": "2.3.10",
-    "hash": "sha256-4LG06n+vo2bFpg9dQ9NSLvVf7rQfiD+k0FEq5S6tDsE="
-  },
-  {
-    "pname": "Microsoft.Net.Http.Headers",
     "version": "2.3.11",
     "hash": "sha256-/6ttqU89/nmwSk6KmlbpoKsWqRyS9f0NhvxpnLF0s7E="
   },
@@ -478,6 +473,11 @@
     "pname": "Microsoft.Net.Http.Headers",
     "version": "2.3.12",
     "hash": "sha256-oXMVH/BY9JjpZ7Rr5wPc1911mJI3vqxe+W9ZYnuyffE="
+  },
+  {
+    "pname": "Microsoft.Net.Http.Headers",
+    "version": "2.3.13",
+    "hash": "sha256-0mq/K+DvkYZUrtDzgZ/vCyCXWkjFu+SxjPUk9aVAGAw="
   },
   {
     "pname": "Newtonsoft.Json",
