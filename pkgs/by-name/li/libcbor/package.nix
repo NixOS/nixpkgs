@@ -60,6 +60,8 @@ stdenv.mkDerivation (finalAttrs: {
     );
   };
 
+  __structuredAttrs = true;
+
   meta = {
     changelog = "https://github.com/PJK/libcbor/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "CBOR protocol implementation for C and others";
