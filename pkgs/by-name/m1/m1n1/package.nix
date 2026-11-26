@@ -150,7 +150,10 @@ stdenv.mkDerivation (finalAttrs: {
       bsd3
       asl20
     ];
-    maintainers = with lib.maintainers; [ sempiternal-aurora ];
+    maintainers = with lib.maintainers; [
+      flokli
+      sempiternal-aurora
+    ];
     platforms = [ "aarch64-linux" ];
   };
 })
