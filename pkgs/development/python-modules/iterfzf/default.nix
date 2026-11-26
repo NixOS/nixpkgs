@@ -23,6 +23,7 @@ buildPythonPackage (finalAttrs: {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
+      --replace-fail 'flit_core >= 3.2, < 4' flit_core \
       --replace-fail 'dynamic = ["version"]' 'version = "${finalAttrs.version}"' \
       --replace-fail 'backend-path = ["."]' '# backend-path = ["."]' \
       --replace-fail 'build-backend = "build_dist"' '# build-backend = "build_dist"'
