@@ -54,9 +54,22 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         }
     }
     EOF
+  ''
+  + lib.optionalString stdenvNoCC.hostPlatform.isDarwin ''
+    # Some pixels of the scaled stdlib sprites are off by one on darwin, failing the
+    # byte-exact SVG comparison. The test runs every .puml file in src/test/resources/vega
+    # https://github.com/plantuml/plantuml/issues/3045
+    rm src/test/resources/vega/{stdlib,stdlib2}/azure/{azure_iot,azure_simple}.puml \
+      src/test/resources/vega/{stdlib,stdlib2}/osa2/example.puml
   '';
 
   __darwinAllowLocalNetworking = true;
+
+  # Java's dual-stack sockets prevent Gradle from connecting to its daemon
+  # inside the Darwin sandbox.
+  env = lib.optionalAttrs stdenvNoCC.hostPlatform.isDarwin {
+    JAVA_TOOL_OPTIONS = "-Djava.net.preferIPv4Stack=true";
+  };
 
   mitmCache = gradle.fetchDeps {
     inherit (finalAttrs) pname;
@@ -97,6 +110,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
+  # Java segfaults inside the build without HOME on darwin
+  versionCheckKeepEnvironment = lib.optionals stdenvNoCC.hostPlatform.isDarwin [ "HOME" ];
 
   installCheckPhase = ''
     runHook preInstallCheck

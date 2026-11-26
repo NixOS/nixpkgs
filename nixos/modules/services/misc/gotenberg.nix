@@ -16,11 +16,6 @@ let
     "--chromium-max-queue-size=${toString cfg.chromium.maxQueueSize}"
     "--libreoffice-restart-after=${toString cfg.libreoffice.restartAfter}"
     "--libreoffice-max-queue-size=${toString cfg.libreoffice.maxQueueSize}"
-    "--pdfengines-merge-engines=${lib.concatStringsSep "," cfg.pdfEngines.merge}"
-    "--pdfengines-convert-engines=${lib.concatStringsSep "," cfg.pdfEngines.convert}"
-    "--pdfengines-read-metadata-engines=${lib.concatStringsSep "," cfg.pdfEngines.readMetadata}"
-    "--pdfengines-write-metadata-engines=${lib.concatStringsSep "," cfg.pdfEngines.writeMetadata}"
-    "--api-download-from-allow-list=${cfg.downloadFrom.allowList}"
     "--api-download-from-max-retry=${toString cfg.downloadFrom.maxRetries}"
   ]
   ++ optional cfg.enableBasicAuth "--api-enable-basic-auth"
@@ -29,13 +24,18 @@ let
   ++ optional cfg.chromium.disableRoutes "--chromium-disable-routes"
   ++ optional cfg.libreoffice.autoStart "--libreoffice-auto-start"
   ++ optional cfg.libreoffice.disableRoutes "--libreoffice-disable-routes"
-  ++ optional cfg.pdfEngines.disableRoutes "--pdfengines-disable-routes"
+  ++ optional cfg.pdf.disableRoutes "--pdf-disable-routes"
+  ++ optional (
+    cfg.downloadFrom.allowList != null
+  ) "--api-download-from-allow-list=${cfg.downloadFrom.allowList}"
   ++ optional (
     cfg.downloadFrom.denyList != null
   ) "--api-download-from-deny-list=${cfg.downloadFrom.denyList}"
+  ++ optional cfg.downloadFrom.denyPrivateIPs "--api-download-from-deny-private-ips"
+  ++ optional cfg.downloadFrom.denyPublicIPs "--api-download-from-deny-public-ips"
   ++ optional cfg.downloadFrom.disable "--api-disable-download-from"
   ++ optional (cfg.bodyLimit != null) "--api-body-limit=${cfg.bodyLimit}"
-  ++ lib.optionals (cfg.extraArgs != [ ]) cfg.extraArgs;
+  ++ cfg.extraArgs;
 
   inherit (lib)
     mkEnableOption
@@ -48,13 +48,42 @@ let
     ;
 in
 {
+  imports = [
+    (lib.mkRemovedOptionModule [
+      "services"
+      "gotenberg"
+      "pdfEngines"
+      "merge"
+    ] "In Gotenberg 9 PDF engine selection was removed and the new litho PDF engine is always used.")
+    (lib.mkRemovedOptionModule [
+      "services"
+      "gotenberg"
+      "pdfEngines"
+      "convert"
+    ] "In Gotenberg 9 PDF engine selection was removed and the new litho PDF engine is always used.")
+    (lib.mkRemovedOptionModule [
+      "services"
+      "gotenberg"
+      "pdfEngines"
+      "readMetadata"
+    ] "In Gotenberg 9 PDF engine selection was removed and the new litho PDF engine is always used.")
+    (lib.mkRemovedOptionModule [
+      "services"
+      "gotenberg"
+      "pdfEngines"
+      "writeMetadata"
+    ] "In Gotenberg 9 PDF engine selection was removed and the new litho PDF engine is always used.")
+    (lib.mkRenamedOptionModule
+      [ "services" "gotenberg" "pdfEngines" "disableRoutes" ]
+      [ "services" "gotenberg" "pdf" "disableRoutes" ]
+    )
+  ];
+
   options = {
     services.gotenberg = {
       enable = mkEnableOption "Gotenberg, a stateless API for PDF files";
 
-      # Users can override only gotenberg, libreoffice and chromium if they want to (eg. ungoogled-chromium, different LO version, etc)
-      # Don't allow setting the qpdf, pdftk, or unoconv paths, as those are very stable
-      # and there's only one version of each.
+      # Users can override gotenberg, libreoffice and chromium.
       package = mkPackageOption pkgs "gotenberg" { };
 
       port = mkOption {
@@ -135,8 +164,11 @@ in
       downloadFrom = {
         allowList = mkOption {
           type = types.nullOr types.str;
-          default = ".*";
-          description = "Allow these URLs to be used in the `downloadFrom` API field. Accepts a regular expression.";
+          default = null;
+          description = ''
+            Restrict URLs accepted in the `downloadFrom` API field. Accepts a regular expression.
+            Matching URLs bypass the private and public IP checks.
+          '';
         };
         denyList = mkOption {
           type = types.nullOr types.str;
@@ -148,6 +180,16 @@ in
           default = 4;
           description = "The maximum amount of times to retry downloading a file specified with `downloadFrom`.";
         };
+        denyPrivateIPs = mkOption {
+          type = types.bool;
+          default = false;
+          description = "Reject `downloadFrom` URLs resolving to private or otherwise non-public IP addresses.";
+        };
+        denyPublicIPs = mkOption {
+          type = types.bool;
+          default = false;
+          description = "Reject `downloadFrom` URLs resolving to public IP addresses.";
+        };
         disable = mkOption {
           type = types.bool;
           default = false;
@@ -156,7 +198,7 @@ in
       };
 
       libreoffice = {
-        package = mkPackageOption pkgs "libreoffice" { };
+        package = mkPackageOption pkgs "libreoffice-unwrapped" { };
 
         restartAfter = mkOption {
           type = types.ints.unsigned;
@@ -183,60 +225,11 @@ in
         };
       };
 
-      pdfEngines = {
-        merge = mkOption {
-          type = types.listOf (
-            types.enum [
-              "qpdf"
-              "pdfcpu"
-              "pdftk"
-            ]
-          );
-          default = [
-            "qpdf"
-            "pdfcpu"
-            "pdftk"
-          ];
-          description = "PDF Engines to use for merging files.";
-        };
-        convert = mkOption {
-          type = types.listOf (
-            types.enum [
-              "libreoffice-pdfengine"
-            ]
-          );
-          default = [
-            "libreoffice-pdfengine"
-          ];
-          description = "PDF Engines to use for converting files.";
-        };
-        readMetadata = mkOption {
-          type = types.listOf (
-            types.enum [
-              "exiftool"
-            ]
-          );
-          default = [
-            "exiftool"
-          ];
-          description = "PDF Engines to use for reading metadata from files.";
-        };
-        writeMetadata = mkOption {
-          type = types.listOf (
-            types.enum [
-              "exiftool"
-            ]
-          );
-          default = [
-            "exiftool"
-          ];
-          description = "PDF Engines to use for writing metadata to files.";
-        };
-
+      pdf = {
         disableRoutes = mkOption {
           type = types.bool;
           default = false;
-          description = "Disable routes related to PDF engines.";
+          description = "Disable PDF processing routes.";
         };
       };
 
@@ -274,15 +267,6 @@ in
           you must provide an environment file via `services.gotenberg.environmentFile` with the appropriate environment variables set in it.
 
           See `services.gotenberg.enableBasicAuth` for the names of those variables.
-        '';
-      }
-      {
-        assertion = !(lib.isList cfg.pdfEngines);
-        message = ''
-          Setting `services.gotenberg.pdfEngines` to a list is now deprecated.
-          Use the new `pdfEngines.mergeEngines`, `pdfEngines.convertEngines`, `pdfEngines.readMetadataEngines`, and `pdfEngines.writeMetadataEngines` settings instead.
-
-          The previous option was using a method that is now deprecated by upstream.
         '';
       }
     ];

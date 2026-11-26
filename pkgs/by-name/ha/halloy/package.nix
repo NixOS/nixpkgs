@@ -18,6 +18,11 @@
   libx11,
   libxcb,
   alsa-lib,
+  zstd,
+
+  # Halloy comes with native support for a Tor proxy using Arti
+  # https://halloy.chat/configuration/proxy#tor
+  withTor ? true,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -32,6 +37,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-S/6JHaAbT6aylj9qx40YEiMpN7Am8RFy2EpoYkbaWl4=";
+
+  buildFeatures = lib.optional withTor "tor";
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -52,6 +59,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libxcursor
     libxi
     libxcb
+  ]
+  ++ lib.optionals withTor [
+    zstd
   ];
 
   desktopItems = [
