@@ -159,6 +159,14 @@ let
       ;
   };
 
+  coreutilsSeed = stage0.linuxBootstrapCoreutils or null;
+  isBootstrapCoreutils =
+    package:
+    if coreutilsSeed == null then
+      isBuiltByNixpkgsCompiler package
+    else
+      package.outPath == coreutilsSeed.outPath;
+
   # This function builds the various standard environments used during
   # the bootstrap.  In all stages, we build an stdenv and the package
   # set that can be built with that stdenv.
@@ -620,6 +628,7 @@ in
       name = "bootstrap-stage4";
 
       overrides = self: super: {
+        ${if coreutilsSeed != null then "coreutils" else null} = prevStage.coreutils;
         # Zlib has to be inherited and not rebuilt in this stage,
         # because gcc (since JAR support) already depends on zlib, and
         # then if we already have a zlib we want to use that for the
@@ -684,7 +693,7 @@ in
     assert isBuiltByNixpkgsCompiler prevStage.${localSystem.libc};
     assert isBuiltByNixpkgsCompiler prevStage.libc;
     assert isBuiltByNixpkgsCompiler prevStage.gcc-unwrapped;
-    assert isBuiltByNixpkgsCompiler prevStage.coreutils;
+    assert isBootstrapCoreutils prevStage.coreutils;
     assert isBuiltByNixpkgsCompiler prevStage.gnugrep;
     assert isBuiltByNixpkgsCompiler prevStage.patchelf;
     {
@@ -874,7 +883,7 @@ in
     assert isBuiltByNixpkgsCompiler prevStage.${localSystem.libc};
     assert isBuiltByNixpkgsCompiler prevStage.libc;
     assert isBuiltByNixpkgsCompiler prevStage.gcc-unwrapped;
-    assert isBuiltByNixpkgsCompiler prevStage.coreutils;
+    assert isBootstrapCoreutils prevStage.coreutils;
     assert isBuiltByNixpkgsCompiler prevStage.gnugrep;
     assert isBuiltByNixpkgsCompiler prevStage.patchelf;
     assert stage0.checkBootstrapPackages prevStage;

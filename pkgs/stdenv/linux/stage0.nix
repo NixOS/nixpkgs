@@ -10,6 +10,7 @@ let
     "x86_64-linux"
   ];
   minbootSupported = builtins.elem localSystem.system minbootSupportedSystems;
+  seed = config.linuxBootstrapCoreutils.${localSystem.system} or null;
   checkVersion =
     topPackage: bootPackage:
     let
@@ -19,6 +20,9 @@ let
       "stdenv stage0: minimal-bootstrap.${bootPackage.pname} ${bootPackage.version} is newer than pkgs.${topPackage.pname} ${topPackage.version}"
       versionOk;
 in
+assert lib.assertMsg (
+  seed == null || minbootSupported
+) "linuxBootstrapCoreutils is supported only for x86_64-linux and i686-linux";
 if minbootSupported then
   let
     callPackage = lib.callPackageWith { inherit lib config; };
@@ -52,6 +56,7 @@ if minbootSupported then
   assert minimal-bootstrap.bash-static.passthru.isFromMinBootstrap or false; # sanity check
   {
     inherit minimal-bootstrap;
+    linuxBootstrapCoreutils = seed;
     isMinimalBootstrap = true;
 
     dummyStdenv = {
@@ -142,7 +147,9 @@ if minbootSupported then
       xz-static
     ];
     disallowedInFinalStdenv = lib.attrsets.catAttrs "out" (
-      builtins.filter (drv: lib.attrsets.isDerivation drv) (builtins.attrValues minimal-bootstrap)
+      builtins.filter (
+        drv: lib.attrsets.isDerivation drv && (seed == null || drv.outPath != seed.outPath)
+      ) (builtins.attrValues minimal-bootstrap)
     );
   }
 else

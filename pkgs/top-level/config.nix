@@ -359,6 +359,20 @@ let
       '';
     };
 
+    linuxBootstrapCoreutils = mkMassRebuild {
+      type = types.attrsOf (types.addCheck types.package lib.isDerivation);
+      default = { };
+      description = ''
+        Map Linux bootstrap systems (x86_64-linux or i686-linux) to
+        independently built static uutils Coreutils packages. Each bin
+        directory must provide the utilities under their ordinary unprefixed
+        names. A seed must not depend on the package set using it.
+
+        This adds the supplied binary to the bootstrap trust base and retains
+        it as the Coreutils provider in the resulting package set.
+      '';
+    };
+
     replaceBootstrapFiles = mkMassRebuild {
       type = types.functionTo (types.attrsOf types.package);
       default = lib.id;

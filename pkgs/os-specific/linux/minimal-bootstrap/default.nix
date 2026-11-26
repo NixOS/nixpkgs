@@ -7,6 +7,20 @@
   checkMeta,
 }:
 
+let
+  seed = config.linuxBootstrapCoreutils.${buildPlatform.system} or null;
+  coreutilsProvider =
+    native:
+    if seed == null then
+      native
+    else
+      seed
+      // {
+        passthru = (seed.passthru or { }) // {
+          isFromMinBootstrap = true;
+        };
+      };
+in
 lib.makeScope
   # Prevent using top-level attrs to protect against introducing dependency on
   # non-bootstrap packages by mistake. Any top-level inputs must be explicitly
@@ -85,19 +99,23 @@ lib.makeScope
           gnutar = gnutar-latest;
         };
 
-        coreutils = callPackage ./coreutils { tinycc = tinycc-mes; };
+        coreutils = coreutilsProvider (callPackage ./coreutils { tinycc = tinycc-mes; });
 
-        coreutils-musl = callPackage ./coreutils/musl.nix {
-          bash = bash_2_05;
-          tinycc = tinycc-musl;
-          gnumake = gnumake-musl;
-          gnutar = gnutar-musl;
-        };
-        coreutils-static = callPackage ./coreutils/static.nix {
-          gcc = gcc-latest;
-          gnumake = gnumake-musl;
-          gnutar = gnutar-latest;
-        };
+        coreutils-musl = coreutilsProvider (
+          callPackage ./coreutils/musl.nix {
+            bash = bash_2_05;
+            tinycc = tinycc-musl;
+            gnumake = gnumake-musl;
+            gnutar = gnutar-musl;
+          }
+        );
+        coreutils-static = coreutilsProvider (
+          callPackage ./coreutils/static.nix {
+            gcc = gcc-latest;
+            gnumake = gnumake-musl;
+            gnutar = gnutar-latest;
+          }
+        );
 
         diffutils = callPackage ./diffutils {
           bash = bash_2_05;
@@ -462,7 +480,12 @@ lib.makeScope
             echo ${binutils.tests.get-version}
             echo ${bison.tests.get-version}
             echo ${bzip2.tests.get-version}
-            echo ${coreutils-musl.tests.get-version}
+            ${
+              if seed == null then
+                "echo ${coreutils-musl.tests.get-version}"
+              else
+                "${seed}/bin/coreutils --version"
+            }
             echo ${diffutils.tests.get-version}
             echo ${findutils.tests.get-version}
             echo ${gawk.tests.get-version}
@@ -491,7 +514,12 @@ lib.makeScope
             echo ${binutils-static.tests.get-version}
             echo ${bzip2-static.tests.get-version}
             echo ${bzip2-static.tests.compress}
-            echo ${coreutils-static.tests.get-version}
+            ${
+              if seed == null then
+                "echo ${coreutils-static.tests.get-version}"
+              else
+                "${seed}/bin/coreutils --version"
+            }
             echo ${diffutils-static.tests.get-version}
             echo ${findutils-static.tests.get-version}
             echo ${gawk-static.tests.get-version}
