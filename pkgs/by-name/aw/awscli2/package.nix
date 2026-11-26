@@ -216,6 +216,9 @@ python.pkgs.buildPythonApplication (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
 
+  # the Python project is called awscli, not awscli2
+  dontCheckPythonMetadata = true;
+
   meta = {
     description = "Unified tool to manage your AWS services";
     homepage = "https://aws.amazon.com/cli/";
