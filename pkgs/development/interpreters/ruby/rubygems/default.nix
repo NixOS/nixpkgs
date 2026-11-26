@@ -5,14 +5,16 @@
   stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rubygems";
   version = "3.7.2";
 
   src = fetchurl {
-    url = "https://rubygems.org/rubygems/rubygems-${version}.tgz";
+    url = "https://rubygems.org/rubygems/rubygems-${finalAttrs.version}.tgz";
     hash = "sha256-7+zgEiWlMvS1LPh2TSCgDg0p7W+Fsz2TAt9IlqkPpas=";
   };
+
+  strictDeps = true;
 
   patches = [
     ./0001-add-post-extract-hook.patch
@@ -32,9 +34,11 @@ stdenv.mkDerivation rec {
     ignoredVersions = "(pre|alpha|beta|rc|bundler).*";
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Package management framework for Ruby";
-    changelog = "https://github.com/rubygems/rubygems/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/rubygems/rubygems/blob/v${finalAttrs.version}/CHANGELOG.md";
     homepage = "https://rubygems.org/";
     license =
       with lib.licenses;
@@ -45,4 +49,4 @@ stdenv.mkDerivation rec {
     mainProgram = "gem";
     maintainers = with lib.maintainers; [ zimbatm ];
   };
-}
+})
