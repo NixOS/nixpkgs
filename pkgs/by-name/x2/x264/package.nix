@@ -3,10 +3,11 @@
   lib,
   fetchFromGitLab,
   nasm,
+  testers,
   enableShared ? !stdenv.hostPlatform.isStatic,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "x264";
   version = "0-unstable-2025-09-10";
 
@@ -60,6 +61,8 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = lib.optional stdenv.hostPlatform.isx86 nasm;
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   strictDeps = true;
   __structuredAttrs = true;
 
@@ -70,5 +73,6 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix ++ lib.platforms.windows;
     maintainers = [ ];
+    pkgConfigModules = [ "x264" ];
   };
-}
+})
