@@ -5,6 +5,7 @@
   autoreconfHook,
   bison,
   flex,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -25,6 +26,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   configureFlags = [ "--sysconfdir=/etc" ];
+
+  passthru.tests.nixos = nixosTests.sshguard;
 
   meta = {
     description = "Protects hosts from brute-force attacks";
