@@ -91,8 +91,25 @@ in
     ];
   };
 
+  nodes.unseeded = {
+    virtualisation.memorySize = 1024;
+    services.versitygw = {
+      enable = true;
+      rootDirectory = "/srv/versitygw";
+      environmentFile = "/run/versitygw-test/root.env";
+      settings.VGW_PORT = "127.0.0.1:7070";
+    };
+    systemd.tmpfiles.rules = [
+      "d /run/versitygw-test 0700 root root -"
+      "C /run/versitygw-test/root.env 0600 root root - ${rootEnvironment}"
+    ];
+  };
+
   testScript = ''
     start_all()
+    unseeded.wait_for_unit("versitygw.service")
+    unseeded.wait_for_open_port(7070)
+    unseeded.succeed("test -d /var/lib/versitygw/iam")
     machine.wait_for_unit("versitygw.service")
     machine.wait_for_open_port(7070)
 
@@ -109,6 +126,17 @@ in
         machine.wait_for_open_port(7070)
         machine.succeed("${checkS3} verify")
 
+    with subtest("IAM symlink cannot modify a root-owned directory"):
+        machine.succeed("systemctl stop versitygw.service")
+        machine.succeed("mkdir -m 0755 /root/iam-target; echo sentinel > /root/iam-target/users.json")
+        machine.succeed("mv /var/lib/versitygw/iam /var/lib/versitygw/iam-backup")
+        machine.succeed("runuser -u versitygw -- ln -s /root/iam-target /var/lib/versitygw/iam")
+        status, _ = machine.execute("systemctl start versitygw.service")
+        assert status != 0
+        assert machine.succeed("stat -c '%U:%G:%a' /root/iam-target").strip() == "root:root:755"
+        assert machine.succeed("cat /root/iam-target/users.json").strip() == "sentinel"
+
     machine.shutdown()
+    unseeded.shutdown()
   '';
 }

@@ -12,13 +12,10 @@ let
   iamDirectory = "${stateDirectory}/iam";
   seedUsers = pkgs.writeShellScript "versitygw-seed-users" ''
     set -eu
-    ${pkgs.coreutils}/bin/install -d -m 0700 \
-      -o ${lib.escapeShellArg cfg.user} -g ${lib.escapeShellArg cfg.group} \
-      ${lib.escapeShellArg iamDirectory}
+    ${pkgs.coreutils}/bin/install -d -m 0700 ${lib.escapeShellArg iamDirectory}
     ${lib.optionalString (cfg.usersFile != null) ''
       ${pkgs.coreutils}/bin/install -m 0600 \
-        -o ${lib.escapeShellArg cfg.user} -g ${lib.escapeShellArg cfg.group} \
-        ${lib.escapeShellArg cfg.usersFile} ${lib.escapeShellArg "${iamDirectory}/users.json"}
+        "$CREDENTIALS_DIRECTORY/users.json" ${lib.escapeShellArg "${iamDirectory}/users.json"}
     ''}
   '';
 in
@@ -78,6 +75,8 @@ in
       description = ''
         Runtime JSON IAM account store, copied to /var/lib/versitygw/iam/users.json
         with mode 0600 before every start. The source may be owned by root.
+        It is loaded as a systemd credential, subject to systemd's total
+        credential size limit (currently 1 MB per service).
         Use an absolute path as a string to keep account secrets out of the
         Nix store. When set, accounts created through the admin API are
         discarded on restart; otherwise the gateway manages its own IAM store.
@@ -155,8 +154,8 @@ in
         StateDirectory = "versitygw";
         StateDirectoryMode = "0700";
         EnvironmentFile = cfg.environmentFile;
-        # Read root-owned account secrets without granting the gateway root privileges.
-        ExecStartPre = "+${seedUsers}";
+        LoadCredential = lib.optional (cfg.usersFile != null) "users.json:${toString cfg.usersFile}";
+        ExecStartPre = seedUsers;
         ExecStart = utils.escapeSystemdExecArgs [
           (lib.getExe cfg.package)
           "--iam-dir"
