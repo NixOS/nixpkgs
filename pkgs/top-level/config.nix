@@ -288,6 +288,17 @@ let
       '';
     };
 
+    allowPatentEncumbered = mkOption {
+      type = types.bool;
+      default = true;
+      defaultText = literalExpression ''builtins.getEnv "NIXPKGS_ALLOW_PATENT_ENCUMBERED" != "0"'';
+      description = ''
+        Whether to allow patent-encumbered packages.
+
+        See [installing patent-encumbered packages](https://nixos.org/manual/nixpkgs/stable/#sec-allow-patent-encumbered) in the NixOS manual.
+      '';
+    };
+
     allowUnsupportedSystem = mkOption {
       type = types.bool;
       default = false;

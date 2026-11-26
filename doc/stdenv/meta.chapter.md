@@ -99,6 +99,14 @@ A list containing the type or types of source inputs from which the package is b
 
 For details, see [Source provenance](#sec-meta-sourceProvenance).
 
+### `needsPatentGrant` {#var-meta-needsPatentGrant}
+
+Set to `true` if the package has software you can only use with a patent license, for example an implementation of a patented codec.
+A package is also considered patent-encumbered if its `meta.license` has `needsPatentGrant = true`, like `lib.licenses.fraunhofer-fdk`.
+
+Patent-encumbered packages are allowed by default;
+also see [installing patent-encumbered packages](#sec-allow-patent-encumbered).
+
 ### `maintainers` {#var-meta-maintainers}
 
 A list of the maintainers of this Nix expression. Maintainers are defined in [`nixpkgs/maintainers/maintainer-list.nix`](https://github.com/NixOS/nixpkgs/blob/master/maintainers/maintainer-list.nix). There is no restriction to becoming a maintainer, just add yourself to that list in a separate commit titled “maintainers: add alice” in the same pull request, and reference maintainers with `maintainers = with lib.maintainers; [ alice bob ]`.

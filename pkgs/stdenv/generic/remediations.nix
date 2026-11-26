@@ -20,6 +20,7 @@ let
       Unfree = "NIXPKGS_ALLOW_UNFREE";
       UnsupportedSystem = "NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM";
       NonSource = "NIXPKGS_ALLOW_NONSOURCE";
+      PatentEncumbered = "NIXPKGS_ALLOW_PATENT_ENCUMBERED";
     }
     .${allow_attr};
   remediation_phrase =
@@ -28,6 +29,7 @@ let
       Unfree = "unfree packages";
       UnsupportedSystem = "packages that are unsupported for this system";
       NonSource = "packages not built from source";
+      PatentEncumbered = "patent-encumbered packages";
     }
     .${allow_attr};
   # flakeNote will be printed in the remediation messages below.
