@@ -59,6 +59,8 @@ stdenv.mkDerivation (finalAttrs: {
     boost
   ];
 
+  strictDeps = true;
+
   mesonFlags = [
     (lib.mesonEnable "jni" enableJri)
     (lib.mesonEnable "ladspa" true)
