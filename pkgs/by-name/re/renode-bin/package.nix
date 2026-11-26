@@ -30,6 +30,7 @@ let
     with python3Packages;
     makePythonPath [
       construct
+      docutils
       psutil
       pyyaml
       requests
@@ -66,11 +67,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "renode";
-  version = "1.17.0";
+  version = "1.17.1";
 
   src = fetchurl {
     url = "https://github.com/renode/renode/releases/download/v${finalAttrs.version}/renode-${finalAttrs.version}.linux.tar.gz";
-    hash = "sha256-1kz/3kjnIGS6nof/NOGGy3qo2PKW3sm7vNaot2rn/XY=";
+    hash = "sha256-1H2y296o8cR81qK2z+CMGZOdVCn62aeTnocoA4eGe74=";
   };
 
   nativeBuildInputs = [
@@ -118,13 +119,13 @@ stdenv.mkDerivation (finalAttrs: {
     mv .renode-root $out/libexec/renode
 
     makeWrapper "$out/libexec/renode/renode" "$out/bin/renode" \
-      --prefix PATH : "$out/libexec/renode:${lib.makeBinPath [ dotnetCorePackages.runtime_8_0 ]}" \
+      --prefix PATH : "$out/libexec/renode:${lib.makeBinPath [ dotnetCorePackages.runtime_10_0 ]}" \
       --prefix GIO_EXTRA_MODULES : "${lib.getLib dconf}/lib/gio/modules" \
       --suffix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ gtk3-x11 ]}" \
       --prefix PYTHONPATH : "${pythonLibs}" \
       --set LOCALE_ARCHIVE "${glibcLocales}/lib/locale/locale-archive"
     makeWrapper "$out/libexec/renode/renode-test" "$out/bin/renode-test" \
-      --prefix PATH : "$out/libexec/renode:${lib.makeBinPath [ dotnetCorePackages.runtime_8_0 ]}" \
+      --prefix PATH : "$out/libexec/renode:${lib.makeBinPath [ dotnetCorePackages.runtime_10_0 ]}" \
       --prefix GIO_EXTRA_MODULES : "${lib.getLib dconf}/lib/gio/modules" \
       --suffix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ gtk3-x11 ]}" \
       --prefix PYTHONPATH : "${pythonLibs}" \
