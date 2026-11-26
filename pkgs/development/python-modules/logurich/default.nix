@@ -21,10 +21,7 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-WkbE1bUWQWd/Zb9Nkv0HMNp9FK6QRceWmdm0zplD9HU=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "uv_build>=0.12.1,<0.13.0" "uv_build"
-  '';
+  pythonRelaxBuildSystem = [ "uv_build" ];
 
   pythonRelaxDeps = [ "rich" ];
 

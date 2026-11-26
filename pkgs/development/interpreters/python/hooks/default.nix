@@ -414,6 +414,21 @@ in
     } ./python-recompile-bytecode-hook.sh
   ) { };
 
+  pythonRelaxBuildSystemHook = callPackage (
+    { makePythonHook }:
+    makePythonHook {
+      name = "python-relax-build-system-hook";
+      substitutions = {
+        pythonInterpreter =
+          (pythonOnBuildForHost.withPackages (ps: [
+            ps.packaging
+            ps.tomlkit
+          ])).interpreter;
+        script = ./python-relax-build-system-hook.py;
+      };
+    } ./python-relax-build-system-hook.sh
+  ) { };
+
   pythonRelaxDepsHook = callPackage (
     { makePythonHook, wheel }:
     makePythonHook {
