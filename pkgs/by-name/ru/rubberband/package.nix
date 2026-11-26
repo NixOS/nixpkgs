@@ -13,6 +13,7 @@
   meson,
   ninja,
   boost,
+  testers,
   enableJri ? lib.meta.availableOn stdenv.buildPlatform jdk_headless,
 }:
 
@@ -59,6 +60,8 @@ stdenv.mkDerivation (finalAttrs: {
     boost
   ];
 
+  strictDeps = true;
+
   mesonFlags = [
     (lib.mesonEnable "jni" enableJri)
     (lib.mesonEnable "ladspa" true)
@@ -72,6 +75,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
+  __structuredAttrs = true;
+
   meta = {
     description = "High quality software library for audio time-stretching and pitch-shifting";
     homepage = "https://breakfastquay.com/rubberband/";
@@ -79,5 +86,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.jopejoe1 ];
     platforms = lib.platforms.all;
+    pkgConfigModules = [ "rubberband" ];
   };
 })
