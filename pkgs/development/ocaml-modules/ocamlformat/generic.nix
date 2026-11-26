@@ -2,7 +2,7 @@
   lib,
   ocaml,
   fetchurl,
-  version ? if lib.versionAtLeast ocaml.version "4.14" then "0.29.0" else "0.28.1",
+  version ? if lib.versionAtLeast ocaml.version "4.14" then "0.30.0" else "0.28.1",
   astring,
   base,
   camlp-streams,
@@ -52,6 +52,7 @@ rec {
         "0.27.0" = "sha256-3b9ITAdtCPmUAO6Et5DsIx9cj8vV0zJKZADVOI6EbRU=";
         "0.28.1" = "sha256-cL2gN9C+2WHtkb21GYsu7vVCREdQqLAV2AzLlLP/Qfs=";
         "0.29.0" = "sha256-2sd/CpV654K7S4abB7mAOocqNPjB6uiQG0LSG2I8nbU=";
+        "0.30.0" = "sha256-WGpcwvSqWUnSBZGJ6y3SXTUF/JIk9LB7mUyoGexkDeQ=";
       }
       ."${version}";
   };
