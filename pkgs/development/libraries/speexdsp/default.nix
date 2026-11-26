@@ -32,6 +32,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   buildInputs = lib.optionals withFftw3 [ fftw ];
 
+  strictDeps = true;
+
   configureFlags =
     lib.optionals withFftw3 [ "--with-fft=gpl-fftw3" ]
     ++ lib.optional stdenv.hostPlatform.isAarch64 "--disable-neon";
