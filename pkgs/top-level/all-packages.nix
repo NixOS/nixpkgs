@@ -5849,7 +5849,7 @@ with pkgs;
   magnumclient = with python3Packages; toPythonApplication python-magnumclient;
   manilaclient = with python3Packages; toPythonApplication python-manilaclient;
   mistralclient = with python3Packages; toPythonApplication python-mistralclient;
-  neutronclient = with python313Packages; toPythonApplication python-neutronclient;
+  neutronclient = with python3Packages; toPythonApplication python-neutronclient;
   swiftclient = with python313Packages; toPythonApplication python-swiftclient;
   troveclient = with python313Packages; toPythonApplication python-troveclient;
   watcherclient = with python313Packages; toPythonApplication python-watcherclient;
