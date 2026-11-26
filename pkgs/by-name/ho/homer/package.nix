@@ -13,13 +13,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "homer";
-  version = "26.11.2";
+  version = "26.11.4";
 
   src = fetchFromGitHub {
     owner = "bastienwirtz";
     repo = "homer";
     rev = "v${version}";
-    hash = "sha256-JLroN80y+V48V7BaXSOH3tgMRDuBfU/alw/yBG7K5rs=";
+    hash = "sha256-1Gxu+ZyLwS4dhoZ5AiBDP5HT0HOOp4ZjD+mjwwsz3XQ=";
   };
 
   pnpmDeps = fetchPnpmDeps {
