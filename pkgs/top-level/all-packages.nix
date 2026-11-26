@@ -1011,8 +1011,6 @@ with pkgs;
 
   inherit (callPackages ../development/libraries/sdbus-cpp { }) sdbus-cpp sdbus-cpp_2;
 
-  shaperglot = with python3Packages; toPythonApplication shaperglot;
-
   ufolint = with python3Packages; toPythonApplication ufolint;
 
   ventoy-full = ventoy.override {
@@ -1030,13 +1028,9 @@ with pkgs;
     defaultGuiType = "qt5";
   };
 
-  vprof = with python3Packages; toPythonApplication vprof;
-
   waydroid-nftables = waydroid.override { withNftables = true; };
 
   winbox = winbox4;
-
-  bump2version = with python3Packages; toPythonApplication bump2version;
 
   datalad = with python3Packages; toPythonApplication datalad;
 
@@ -2241,10 +2235,6 @@ with pkgs;
 
   maple-mono = recurseIntoAttrs (callPackage ../data/fonts/maple-font { });
 
-  netcdf-mpi = netcdf.override {
-    hdf5 = hdf5-mpi.override { apiVersion = "v110"; };
-  };
-
   ioskeley-mono = recurseIntoAttrs (callPackage ../data/fonts/ioskeley-mono { });
 
   netbox_4_7 = netbox;
@@ -2385,6 +2375,7 @@ with pkgs;
     percona-server
     ;
   inherit (import ../tools/backup/percona-xtrabackup pkgs)
+    percona-xtrabackup_9_7
     percona-xtrabackup_8_4
     percona-xtrabackup
     ;
@@ -3728,6 +3719,7 @@ with pkgs;
     cargo-pgrx_0_18_0
     cargo-pgrx_0_19_0
     cargo-pgrx_0_19_1
+    cargo-pgrx_0_19_4
     cargo-pgrx
     ;
 
@@ -8623,18 +8615,6 @@ with pkgs;
     lua = lua5_1;
   };
   neovim = wrapNeovim neovim-unwrapped { };
-
-  virtualbox = callPackage ../applications/virtualization/virtualbox {
-    stdenv = stdenv_32bit;
-
-    # VirtualBox uses wsimport, which was removed after JDK 8.
-    jdk = jdk8;
-
-    # Opt out of building the guest BIOS sources with the problematic Open Watcom
-    # toolchain. People who need to build the BIOS from sources (for example to
-    # apply patches) can override this.
-    open-watcom-bin = null;
-  };
 
   virtualboxKvm = lowPrio (
     virtualbox.override {

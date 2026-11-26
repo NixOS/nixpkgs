@@ -33,5 +33,12 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ambroisie ];
     mainProgram = "nginx-sso";
+
+    problems = {
+      deprecated = {
+        message = "Upstream has archived this repository and no longer provides updates.";
+        urls = [ "https://github.com/Luzifer/nginx-sso/blob/master/README.md" ];
+      };
+    };
   };
 })

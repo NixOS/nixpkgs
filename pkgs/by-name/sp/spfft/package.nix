@@ -61,7 +61,8 @@ stdenv.mkDerivation (finalAttrs: {
     gfortran
     mpi
   ]
-  ++ lib.optionals (gpuBackend == "cuda") [ cudaPackages.cuda_nvcc ];
+  ++ lib.optionals (gpuBackend == "cuda") [ cudaPackages.cuda_nvcc ]
+  ++ lib.optionals (gpuBackend == "rocm") [ rocmPackages.clr ];
 
   buildInputs = [
     fftw
@@ -91,7 +92,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (gpuBackend == "rocm") [
     (lib.cmakeFeature "SPFFT_GPU_BACKEND" "ROCM")
-    (lib.cmakeFeature "HIP_ROOT_DIR" rocmPackages.clr.outPath)
   ];
 
   passthru.tests = {

@@ -450,15 +450,10 @@ builtins.intersectAttrs super {
     addPkgconfigDepend pkgs.glib (addBuildTool self.buildHaskellPackages.gtk2hs-buildtools super.glib)
   );
   gtk3 = disableHardening [ "fortify" ] (super.gtk3.override { inherit (pkgs) gtk3; });
-  gtk = lib.pipe super.gtk (
-    [
-      (disableHardening [ "fortify" ])
-      (addBuildTool self.buildHaskellPackages.gtk2hs-buildtools)
-    ]
-    ++ (
-      if pkgs.stdenv.hostPlatform.isDarwin then [ (appendConfigureFlag "-fhave-quartz-gtk") ] else [ ]
-    )
-  );
+  gtk = lib.pipe super.gtk [
+    (disableHardening [ "fortify" ])
+    (addBuildTool self.buildHaskellPackages.gtk2hs-buildtools)
+  ];
   gtksourceview2 = addPkgconfigDepend pkgs.gtk2 super.gtksourceview2;
   gtk-traymanager = addPkgconfigDepend pkgs.gtk3 super.gtk-traymanager;
 
@@ -1357,6 +1352,7 @@ builtins.intersectAttrs super {
           dbus = if pkgs.stdenv.hostPlatform.isLinux then self.dbus else null;
           fdo-notify = if pkgs.stdenv.hostPlatform.isLinux then self.fdo-notify else null;
           hinotify = if pkgs.stdenv.hostPlatform.isLinux then self.hinotify else self.fsnotify;
+          blake3 = if pkgs.stdenv.hostPlatform.isx86 then self.blake3 else null;
         }
       );
 

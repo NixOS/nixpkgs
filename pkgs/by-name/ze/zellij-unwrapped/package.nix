@@ -19,6 +19,7 @@
   writableTmpDirAsHomeHook,
   versionCheckHook,
   nix-update-script,
+  withTerminal ? !stdenv.hostPlatform.isStatic,
   withWebServer ? true,
 }:
 
@@ -34,18 +35,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-JpSNWC6jHahirUmnWRZKiVRonFjjIZx9j0V//6t1+iM=";
   };
 
-  # Remove the `vendored_curl` feature in order to link against the libcurl from nixpkgs instead of
-  # the vendored one
-  postPatch = ''
-    substituteInPlace Cargo.toml \
-      --replace-fail ', "vendored_curl"' ""
-  ''
-  + lib.optionalString (!withWebServer) ''
-    substituteInPlace Cargo.toml \
-      --replace-fail ', "web_server_capability"' ""
-  '';
-
   cargoHash = "sha256-i3Vh7w9YeGUkGIsbqA2UIiLtMqsSC+/ehdSDIfTckM8=";
+
+  # Omit vendored_curl to link against libcurl from nixpkgs.
+  buildNoDefaultFeatures = true;
+  buildFeatures = [
+    "plugins_from_target"
+  ]
+  ++ lib.optional withTerminal "terminal"
+  ++ lib.optional withWebServer "web_server_capability";
 
   env.LIBSSH2_SYS_USE_PKG_CONFIG = 1;
   env.OPENSSL_NO_VENDOR = 1;
@@ -82,7 +80,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   postInstall =
-    lib.optionalString stdenv.hostPlatform.isLinux ''
+    lib.optionalString (withTerminal && stdenv.hostPlatform.isLinux) ''
       install -Dm644 assets/dev.zellij.Zellij.desktop -t $out/share/applications
       install -Dm644 assets/dev.zellij.Zellij.metainfo.xml -t $out/share/metainfo
 
@@ -98,7 +96,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
         --zsh <($out/bin/zellij setup --generate-completion zsh)
     '';
 
-  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
+  postFixup = lib.optionalString (withTerminal && stdenv.hostPlatform.isLinux) ''
     # winit/glutin and system font discovery load these libraries with dlopen.
     patchelf --add-rpath ${
       lib.makeLibraryPath [

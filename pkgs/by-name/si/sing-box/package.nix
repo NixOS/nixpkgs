@@ -75,6 +75,7 @@ buildGoModule (finalAttrs: {
   // lib.optionalAttrs (withNaiveOutbound && withStaticCronet) {
     CGO_ENABLED = 1;
     CGO_LDFLAGS = "-fuse-ld=lld";
+    CGO_LDFLAGS_ALLOW = "-l:libcronet\\.a";
   };
 
   nativeBuildInputs = [

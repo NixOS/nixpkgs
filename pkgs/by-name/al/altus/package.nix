@@ -7,11 +7,11 @@
 
 appimageTools.wrapType2 (finalAttrs: {
   pname = "altus";
-  version = "5.8.3";
+  version = "5.8.4";
   src = fetchurl {
     name = "altus-${finalAttrs.version}.AppImage";
     url = "https://github.com/amanharwara/altus/releases/download/${finalAttrs.version}/Altus-${finalAttrs.version}.AppImage";
-    hash = "sha256-z0uyQ4N5Kx1iW/lyAOmC0flFWaRPPsseKoURs2sp8yg=";
+    hash = "sha256-ZaAM4yXBYZMt0amz9TC4sFOfkZwXLIbRtxgk0SgdhVw=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

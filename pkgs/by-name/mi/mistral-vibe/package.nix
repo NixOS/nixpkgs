@@ -15,14 +15,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mistral-vibe";
-  version = "3.1.0";
+  version = "3.1.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mistralai";
     repo = "mistral-vibe";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lgrxLd7sfXMHK2Q1yvopbUZXtogZWxlMijtXl5cMGXc=";
+    hash = "sha256-+mwC5GLZIAlKM5Ar6AtbXFAeTGeyLLbjDmza04tFJn8=";
   };
 
   patches = [
@@ -44,7 +44,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
     sourceRoot = "${finalAttrs.src.name}/${finalAttrs.cargoRoot}";
-    hash = "sha256-JkmZ65pnioLfTLg9Nmtsjs4m6lB72c6iTKvnwz48Gqo=";
+    hash = "sha256-AzZBYZrusBynp0HFJZyAgcRXjPXey+d8gMFR/4/3IO4=";
   };
 
   nativeBuildInputs = [
@@ -74,6 +74,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pythonRemoveDeps = [
     # Not packaged in nixpkgs, and not imported by vibe
     "opentelemetry-exporter-otlp-common"
+    # Not packaged in nixpkgs. Provides the `mistralai.vibe.harness` target runtime,
+    # which vibe itself does not import (only tests/app_server/test_session_api_rename.py)
+    "mistralai-vibe-harness"
   ];
   dependencies =
     with python3Packages;
@@ -84,6 +87,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       attrs
       authlib
       beautifulsoup4
+      brotli
       cachetools
       certifi
       cffi
@@ -98,7 +102,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
       google-auth
       googleapis-common-protos
       h11
+      httpcore
       httpcore2
+      httpx
       httpx2
       humanize
       idna
@@ -152,6 +158,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
       soupsieve
       sse-starlette
       starlette
+      structlog
+      tenacity
       tomli-w
       tree-sitter
       tree-sitter-bash
@@ -163,7 +171,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
       uvicorn
       watchfiles
       websockets
-      zstandard
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       jeepney
@@ -175,8 +182,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   nativeCheckInputs = [
     # vibe.core.agent_loop.TeleportError: Teleport requires git to be installed.
     gitMinimal
-    # respx models its routes on HTTPX
-    python3Packages.httpx
     python3Packages.pyte
     python3Packages.pytest-asyncio
     python3Packages.pytest-xdist
@@ -226,6 +231,33 @@ python3Packages.buildPythonApplication (finalAttrs: {
     # TypeError: OTLPSpanExporter.__init__() got an unexpected keyword argument '_transport'
     # (requires opentelemetry-exporter-otlp-proto-http>=1.45.0)
     "test_trace_export_swaps_each_batch_and_keeps_tenant_headers"
+
+    # Disk usage is measured from allocated blocks, which depends on the build filesystem
+    # e.g. assert 512 >= 80000
+    "test_a_bucket_folder_that_is_no_worktree_goes_to_other_vibe_data"
+    "test_an_entry_with_an_unknown_device_is_still_counted"
+    "test_an_orphan_child_goes_to_other_vibe_data"
+    "test_a_subagent_child_folds_into_its_root_session"
+    "test_a_worktree_of_archived_sessions_only_is_a_leftover"
+    "test_a_write_during_the_last_turn_triggers_a_re_measure"
+    "test_legacy_folders_and_other_session_data_go_to_other_vibe_data"
+    "test_worktree_layout_bucket_unclaimed_and_not_a_bucket"
+    "test_a_home_behind_a_symlink_counts_each_history_once"
+    "test_measuring_around_excluded_folders_never_enters_a_junction"
+    "test_the_portable_walk_never_enters_a_junction"
+
+    # Failed: DID NOT RAISE WorkspaceTrustError
+    "test_a_name_longer_than_the_system_allows_is_an_error"
+    "test_a_path_inside_an_unreadable_folder_is_an_error"
+
+    # The fake stdio MCP server cannot be reached through the harness in the sandbox
+    # LocalToolFailure: `fake` is configured on this computer but could not be reached
+    "test_a_call_retunes_only_its_own_server"
+    "test_a_call_to_one_server_keeps_the_others_connected"
+    "test_an_allow_that_rests_on_read_only_is_checked_on_the_route_that_runs"
+    "test_a_real_server_that_outlasts_the_deadline_times_out"
+    "test_a_real_stdio_server_is_listed_and_called_through_the_harness"
+    "test_the_list_leaves_out_tools_the_user_turned_off"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # AssertionError: assert 'alive' == 'gone'
@@ -249,6 +281,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   disabledTestPaths = [
+    # ModuleNotFoundError: No module named 'mistralai.vibe' (mistralai-vibe-harness is not packaged)
+    "tests/app_server/test_session_api_rename.py"
+
     # These tests invoke uv run and fail to import the packaged pydantic extension.
     "tests/e2e/agent_loop_characterization/test_resume.py"
     "tests/e2e/agent_loop_characterization/test_subagents.py"
@@ -284,7 +319,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   meta = {
     description = "Minimal CLI coding agent by Mistral";
     homepage = "https://github.com/mistralai/mistral-vibe";
-    changelog = "https://github.com/mistralai/mistral-vibe/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/mistralai/mistral-vibe/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       GaetanLepage

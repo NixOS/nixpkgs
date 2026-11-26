@@ -1,25 +1,12 @@
 {
   lib,
-  build,
   buildPythonPackage,
+  distutils,
   fetchPypi,
-  filelock,
-  ini2toml,
-  jaraco-envs,
   jaraco-path,
-  jaraco-test,
-  nix-update-script,
-  packaging,
-  pip,
-  pyproject-hooks,
-  pytest-subprocess,
-  pytest-timeout,
-  pytest-xdist,
   pytestCheckHook,
   setuptools,
-  tomli-w,
-  virtualenv,
-  wheel,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -38,33 +25,18 @@ buildPythonPackage (finalAttrs: {
   dependencies = [ setuptools ];
 
   nativeCheckInputs = [
-    build
-    filelock
-    ini2toml
-    jaraco-envs
+    distutils
     jaraco-path
-    jaraco-test
-    packaging
-    pip
-    pyproject-hooks
     pytestCheckHook
-    pytest-subprocess
-    pytest-timeout
-    pytest-xdist
-    tomli-w
-    virtualenv
-    wheel
+    writableTmpDirAsHomeHook
   ];
 
   pythonImportsCheck = [ "pkg_resources" ];
 
   disabledTests = [
     "test_get_cache_path"
-    "test_resource_filename_rewrites_on_change"
     "test_interop_pkg_resources_iter_entry_points"
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Snapshot of last pkg_resources module from setuptools";
