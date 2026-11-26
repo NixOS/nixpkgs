@@ -7,6 +7,7 @@
 
   pipewire,
   gitUpdater,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -51,6 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     tests = {
       inherit pipewire;
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     };
     updateScript = gitUpdater {
       # No nicer place to find latest release.
@@ -59,6 +61,8 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://lv2plug.in";
     description = "Plugin standard for audio systems";
@@ -66,5 +70,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+    pkgConfigModules = [ "lv2" ];
   };
 })
