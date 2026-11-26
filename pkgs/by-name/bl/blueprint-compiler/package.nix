@@ -75,6 +75,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
+  # doesn't ship .dist-info/METADATA
+  dontCheckPythonMetadata = true;
+
   passthru = {
     tests = {
       version = testers.testVersion {
