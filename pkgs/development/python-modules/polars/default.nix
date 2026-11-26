@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  aws-lc,
   build,
   buildPythonPackage,
   cargo,
@@ -47,19 +48,19 @@ in
 
 buildPythonPackage (finalAttrs: {
   pname = "polars";
-  version = "1.42.1";
+  version = "1.44.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pola-rs";
     repo = "polars";
     tag = "py-${finalAttrs.version}";
-    hash = "sha256-xHO+3mgwKvRRQZiAnThwkKFDvfe3ehkifBPINi101Ws=";
+    hash = "sha256-MBHY4eeF/IdnJL6ydX0uyjDBqjuJH95WuD7fZKV1WJA=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-EHtQ5BzG6EFJD7e8NMajqNEXlAU/QyyIFLil1irfaqo=";
+    hash = "sha256-RkoqR68xfBSWrhgLHAW+XI91AQ1EN066k0v/MehL9oY=";
   };
 
   requiredSystemFeatures = [ "big-parallel" ];
@@ -81,6 +82,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
     # The mimalloc work-around doesn't seem to work.
     # runtime paths do not list mimalloc, and jemalloc is
     # compiled & used regardless.
