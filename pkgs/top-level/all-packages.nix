@@ -5838,7 +5838,7 @@ with pkgs;
 
   opencv = opencv4;
 
-  openstackclient = with python313Packages; toPythonApplication python-openstackclient;
+  openstackclient = with python3Packages; toPythonApplication python-openstackclient;
   openstackclient-full = openstackclient.overridePythonAttrs (oldAttrs: {
     dependencies = oldAttrs.dependencies ++ oldAttrs.optional-dependencies.cli-plugins;
   });
