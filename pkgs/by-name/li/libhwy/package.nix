@@ -53,6 +53,8 @@ stdenv.mkDerivation (finalAttrs: {
     gtest
   ];
 
+  strictDeps = true;
+
   # Required for case-insensitive filesystems ("BUILD" exists)
   dontUseCmakeBuildDir = true;
 
@@ -102,6 +104,9 @@ stdenv.mkDerivation (finalAttrs: {
     tests.pkg-config = testers.hasPkgConfigModules {
       package = finalAttrs.finalPackage;
     };
+    tests.cmake-config = testers.hasCmakeConfigModules {
+      package = finalAttrs.finalPackage;
+    };
   };
 
   meta = {
@@ -116,6 +121,9 @@ stdenv.mkDerivation (finalAttrs: {
     pkgConfigModules = [
       "libhwy"
       "libhwy-contrib"
+    ];
+    cmakeConfigModules = [
+      "hwy"
     ];
   };
 })
