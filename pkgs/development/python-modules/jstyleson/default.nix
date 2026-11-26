@@ -3,12 +3,13 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage {
   pname = "jstyleson";
-  version = "0.0.2";
-  format = "setuptools";
+  version = "0.2.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "linjackson78";
@@ -17,6 +18,8 @@ buildPythonPackage {
     rev = "544b9fdb43339cdd15dd03dc69a6d0f36dd73241";
     hash = "sha256-s/0DDfy+07TuUNjHPqKRT3xMMQl6spZCacB7Dweof7A=";
   };
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
