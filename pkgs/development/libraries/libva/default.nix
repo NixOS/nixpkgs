@@ -63,6 +63,8 @@ stdenv.mkDerivation (finalAttrs: {
     libGL
   ];
 
+  strictDeps = true;
+
   mesonFlags = lib.optionals stdenv.hostPlatform.isLinux [
     # Add FHS and Debian paths for non-NixOS applications
     "-Ddriverdir=${mesa.driverLink}/lib/dri:/usr/lib/dri:/usr/lib32/dri:/usr/lib/x86_64-linux-gnu/dri:/usr/lib/i386-linux-gnu/dri"
@@ -89,6 +91,8 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Implementation for VA-API (Video Acceleration API)";
