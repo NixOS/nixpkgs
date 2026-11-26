@@ -70,6 +70,7 @@ jetbrains.mkJetBrainsProduct {
     description = "C/C++ IDE from JetBrains";
     longDescription = "Enhancing productivity for every C and C++ developer on Linux, macOS and Windows.";
     maintainers = with lib.maintainers; [
+      flaviut
       mic92
       tymscar
     ];
