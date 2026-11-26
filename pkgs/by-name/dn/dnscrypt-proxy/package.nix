@@ -36,8 +36,8 @@ buildGoModule (finalAttrs: {
   passthru.tests = { inherit (nixosTests) dnscrypt-proxy; };
 
   meta = {
+    changelog = "https://github.com/DNSCrypt/dnscrypt-proxy/blob/${finalAttrs.version}/ChangeLog";
     description = "Tool that provides secure DNS resolution";
-
     license = lib.licenses.isc;
     homepage = "https://dnscrypt.info/";
     maintainers = with lib.maintainers; [
