@@ -59,6 +59,7 @@ jetbrains.mkJetBrainsProduct {
     maintainers = with lib.maintainers; [
       gytis-ivaskevicius
       tymscar
+      jadewilk
     ];
     teams = [ lib.teams.jetbrains ];
     license = lib.licenses.unfree;

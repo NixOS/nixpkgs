@@ -46,6 +46,7 @@ in
   meta.maintainers = with maintainers; [
     oddlama
     AAAAAASomeThingsFailToEvaluate
+    karlbeecken
   ];
 
   options.services.esphome = {

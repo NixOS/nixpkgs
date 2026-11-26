@@ -1,30 +1,30 @@
 {
   "aarch64-darwin": {
-    "version": "26.1117.41037",
+    "version": "26.1120.50957",
     "src": {
-      "url": "https://persistent.oaistatic.com/codex-app-prod/ChatGPT-darwin-arm64-26.1117.41037.zip",
-      "hash": "sha256-vApC0Bqb3t4cHCuHYVGoGFYNax6vH0WuQC09IinDQiA="
+      "url": "https://persistent.oaistatic.com/codex-app-prod/ChatGPT-darwin-arm64-26.1120.50957.zip",
+      "hash": "sha256-LBZnH8qtUpGi9r4TXhKClh1TQmOcPbVVFKGvGogd3m8="
     }
   },
   "aarch64-linux": {
-    "version": "26.1117.41037",
+    "version": "26.1120.50957",
     "src": {
-      "url": "https://persistent.oaistatic.com/codex-app-prod/linux/deb/pool/main/c/chatgpt/chatgpt_26.1117.41037_arm64.deb",
-      "hash": "sha256-cUFG6cZnsmob1OV2M8VEM0qe1Hw5mYm/2Yz3ZBQL3FM="
+      "url": "https://persistent.oaistatic.com/codex-app-prod/linux/deb/pool/main/c/chatgpt/chatgpt_26.1120.50957_arm64.deb",
+      "hash": "sha256-0RrbmhPSG8X1FIhZJCB68OhompeDKFUOOkOJWmlgPYk="
     },
     "primaryRuntime": null
   },
   "x86_64-linux": {
-    "version": "26.1117.41037",
+    "version": "26.1120.50957",
     "src": {
-      "url": "https://persistent.oaistatic.com/codex-app-prod/linux/deb/pool/main/c/chatgpt/chatgpt_26.1117.41037_amd64.deb",
-      "hash": "sha256-gw4lG2ykrUX+aQQSenkOjwD3wm7UyAOUc/cyPHxOJpI="
+      "url": "https://persistent.oaistatic.com/codex-app-prod/linux/deb/pool/main/c/chatgpt/chatgpt_26.1120.50957_amd64.deb",
+      "hash": "sha256-6Ks435bWBw/V1FgqYGSQY3coJDu1Kentrhmz8KbmZNI="
     },
     "primaryRuntime": {
-      "version": "26.1119.11507",
+      "version": "26.1123.11515",
       "src": {
-        "url": "https://persistent.oaistatic.com/codex-primary-runtime/26.1119.11507/codex-primary-runtime-linux-x64-26.1119.11507.tar.xz",
-        "hash": "sha256-0vxX4MO9Fm++ofbjzFZf0UQygLDRplX3V8ldwg74lBQ="
+        "url": "https://persistent.oaistatic.com/codex-primary-runtime/26.1123.11515/codex-primary-runtime-linux-x64-26.1123.11515.tar.xz",
+        "hash": "sha256-IOJD95HPCqhzgLp8eseXcQDRE63Bl+32XilEp2XQC4k="
       }
     }
   }
