@@ -29,6 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace GNUmakefile --replace gcc cc
+    patchShebangs --build tests
   '';
 
   enableParallelBuilding = true;
