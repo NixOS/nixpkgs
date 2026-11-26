@@ -38,7 +38,7 @@ let
         mkdir -p "$out/bin"
 
         # take every binary from perl packages and put them into the env
-        for path in ${lib.concatStringsSep " " paths}; do
+        for path in "''${paths[@]}"; do
           if [ -d "$path/bin" ]; then
             cd "$path/bin"
             for prg in *; do
