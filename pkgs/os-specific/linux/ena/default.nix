@@ -32,7 +32,8 @@ stdenv.mkDerivation (finalAttrs: {
   env.KERNEL_BUILD_DIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
 
   postPatch = ''
-    substituteInPlace kernel/linux/ena/configure.sh --replace-fail '^HOSTCC' '^CC'
+    # Detect the target CC instead of HOSTCC (for cross), but not the CC_FLAGS_* variables
+    substituteInPlace kernel/linux/ena/configure.sh --replace-fail '^HOSTCC' '^CC ='
   '';
 
   configurePhase = ''

@@ -13,7 +13,7 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "apify-cli";
-  version = "1.12.0";
+  version = "1.14.0";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -22,7 +22,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     owner = "apify";
     repo = "apify-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-T58AfsEd+YnWUpTeKMaFTRgGmQ72uI/hyyfjDZadgZM=";
+    hash = "sha256-XnOIcfN/vytf8i2m+OkbrIbqauC7gGpsRxEZk6F5Bn0=";
   };
 
   # The workspace also has the docs website, which the CLI does not need.
@@ -36,7 +36,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       ;
     pnpm = pnpm_12;
     fetcherVersion = 5;
-    hash = "sha256-VhmLbNrtkdiCZev/TWFTG21s0jxIMkW12YGmgVrPE2k=";
+    hash = "sha256-w/yRCeRdqkNkmGAEe8O8naNCq95oSgJWtkceKZ8bHzU=";
   };
 
   nativeBuildInputs = [

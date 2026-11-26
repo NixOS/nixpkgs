@@ -37,6 +37,8 @@ buildPythonPackage (finalAttrs: {
   };
 
   postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "hatchling==1.32.0" hatchling
     substituteInPlace src/pyannote/metrics/cli.py \
       --replace-fail 'version="Evaluation"' 'version="${finalAttrs.version}"'
   '';

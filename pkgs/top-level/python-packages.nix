@@ -3875,6 +3875,8 @@ self: super: with self; {
 
   crossplane = callPackage ../development/python-modules/crossplane { };
 
+  crowdstrike-falconpy = callPackage ../development/python-modules/crowdstrike-falconpy { };
+
   crownstone-cloud = callPackage ../development/python-modules/crownstone-cloud { };
 
   crownstone-core = callPackage ../development/python-modules/crownstone-core { };
@@ -6005,8 +6007,6 @@ self: super: with self; {
   falcon = callPackage ../development/python-modules/falcon { };
 
   falcon-cors = callPackage ../development/python-modules/falcon-cors { };
-
-  falconpy = callPackage ../development/python-modules/falconpy { };
 
   faraday-agent-parameters-types =
     callPackage ../development/python-modules/faraday-agent-parameters-types
@@ -12075,7 +12075,7 @@ self: super: with self; {
 
   nanoleaf = callPackage ../development/python-modules/nanoleaf { };
 
-  nanomsg-python = callPackage ../development/python-modules/nanomsg-python {
+  nanomsg = callPackage ../development/python-modules/nanomsg {
     inherit (pkgs) nanomsg;
   };
 
@@ -21571,7 +21571,7 @@ self: super: with self; {
 
   trimesh = callPackage ../development/python-modules/trimesh { };
 
-  trino-python-client = callPackage ../development/python-modules/trino-python-client { };
+  trino = callPackage ../development/python-modules/trino { };
 
   trio = callPackage ../development/python-modules/trio { };
 
@@ -22140,8 +22140,6 @@ self: super: with self; {
   types-colorama = callPackage ../development/python-modules/types-colorama { };
 
   types-dataclasses = callPackage ../development/python-modules/types-dataclasses { };
-
-  types-dateutil = callPackage ../development/python-modules/types-dateutil { };
 
   types-decorator = callPackage ../development/python-modules/types-decorator { };
 
