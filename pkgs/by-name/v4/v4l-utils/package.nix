@@ -25,6 +25,7 @@
   qt6Packages,
   linuxHeaders,
   buildPackages,
+  testers,
 }:
 
 # See libv4l in all-packages.nix for the libs only (overrides alsa, QT)
@@ -124,6 +125,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   doInstallCheck = true;
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   __structuredAttrs = true;
 
   meta = {
@@ -138,5 +141,12 @@ stdenv.mkDerivation (finalAttrs: {
       yarny
     ];
     platforms = lib.platforms.linux;
+    pkgConfigModules = [
+      "libv4l2"
+      "libdvbv5"
+      "libv4l1"
+      "libv4lconvert"
+      "libv4l2rds"
+    ];
   };
 })
