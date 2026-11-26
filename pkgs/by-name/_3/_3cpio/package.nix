@@ -1,8 +1,6 @@
 {
   fetchFromGitHub,
   lib,
-  lz4,
-  lzop,
   nix-update-script,
   rustPlatform,
   stdenv,
