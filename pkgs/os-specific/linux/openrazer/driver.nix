@@ -10,7 +10,7 @@
 }:
 
 let
-  common = import ../../../development/python-modules/openrazer/common.nix {
+  common = import ../../../sets/python3Packages/non-by-name/openrazer/common.nix {
     inherit lib fetchFromGitHub;
   };
 in

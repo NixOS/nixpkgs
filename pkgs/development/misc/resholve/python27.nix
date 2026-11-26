@@ -1,6 +1,7 @@
 {
   lib,
   pkgsBuildHost,
+  python3PackagesFor,
 }:
 
 let
@@ -14,6 +15,7 @@ let
 
   passthruFun = import ../../interpreters/python/passthrufun.nix {
     inherit lib;
+    inherit python3PackagesFor;
     inherit (pkgsBuildHost)
       stdenv
       callPackage

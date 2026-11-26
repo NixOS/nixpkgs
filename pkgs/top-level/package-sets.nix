@@ -84,5 +84,17 @@ lib.pipe ../sets [
 
 # manually called sets
 // {
-
+  # python
+  # we only recurse into the newest 2 python versions
+  python3PackagesFor = self.callPackage ../sets/python3Packages/packageset.nix { };
+  python311Packages = self.python311.pkgs;
+  python312Packages = self.python312.pkgs;
+  python313Packages = lib.recurseIntoAttrs (self.python313.pkgs);
+  python314Packages = lib.recurseIntoAttrs (self.python314.pkgs);
+  python315Packages = self.python315.pkgs;
+  python316Packages = self.python316.pkgs;
+  python3Packages = self.python314Packages;
+  pypy310Packages = self.pypy310.pkgs;
+  pypy311Packages = self.pypy311.pkgs;
+  pypy3Packages = self.pypy3.pkgs;
 }

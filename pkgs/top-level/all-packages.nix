@@ -348,7 +348,7 @@ with pkgs;
 
   dnf-plugins-core = with python3Packages; toPythonApplication dnf-plugins-core;
 
-  dnf4 = python3Packages.callPackage ../development/python-modules/dnf4/wrapper.nix { };
+  dnf4 = python3Packages.callPackage ../sets/python3Packages/non-by-name/dnf4/wrapper.nix { };
 
   inherit (gridlock) nyarr;
 
@@ -1859,7 +1859,7 @@ with pkgs;
     callPackage ../servers/search/elasticsearch/plugins.nix { }
   );
 
-  emborg = python3Packages.callPackage ../development/python-modules/emborg { };
+  emborg = python3Packages.callPackage ../sets/python3Packages/non-by-name/emborg { };
 
   executor = with python3Packages; toPythonApplication executor;
 
@@ -4112,9 +4112,6 @@ with pkgs;
   # When switching these sets, please update docs at ../../doc/languages-frameworks/python.md
   python3 = python314;
 
-  # pythonPackages further below, but assigned here because they need to be in sync
-  python3Packages = dontRecurseIntoAttrs python314Packages;
-
   pypy = pypy2;
   pypy2 = pypy27;
   pypy3 = pypy311;
@@ -4162,18 +4159,9 @@ with pkgs;
   pythonPackagesExtensions = [ ];
 
   # Python package sets.
-  python311Packages = python311.pkgs;
-  python312Packages = python312.pkgs;
-  python313Packages = recurseIntoAttrs python313.pkgs;
-  python314Packages = recurseIntoAttrs python314.pkgs;
-  python315Packages = python315.pkgs;
-  python316Packages = python316.pkgs;
   pypyPackages = pypy.pkgs;
   pypy2Packages = pypy2.pkgs;
   pypy27Packages = pypy27.pkgs;
-  pypy3Packages = pypy3.pkgs;
-  pypy310Packages = pypy310.pkgs;
-  pypy311Packages = pypy311.pkgs;
 
   pythonManylinuxPackages = callPackage ./../development/interpreters/python/manylinux { };
 

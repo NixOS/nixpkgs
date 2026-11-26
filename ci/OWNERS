@@ -251,7 +251,7 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @Artturin @Ericson2314 @lo
 # Certificate Authorities
 pkgs/by-name/ca/cacert @ajs124 @lukegb @mweinelt
 pkgs/development/libraries/nss/ @ajs124 @lukegb @mweinelt
-pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
+pkgs/sets/python3Packages/non-by-name/buildcatrust/ @ajs124 @lukegb @mweinelt
 
 # Java
 /doc/languages-frameworks/java.section.md @NixOS/java @NixOS/documentation-team

@@ -36,16 +36,13 @@ Python libraries and applications that use tools to follow PEP 517 (e.g. `setupt
 previous tools such as `distutils` are typically built with respectively the [`buildPythonPackage`](#buildpythonpackage-function) and
 [`buildPythonApplication`](#buildpythonapplication-function) functions. These two functions also support installing a `wheel`.
 
-All Python packages reside in `pkgs/top-level/python-packages.nix` and all
+All Python packages reside in `pkgs/sets/python3Packages/` and all
 applications elsewhere. In case a package is used as both a library and an
-application, then the package should be in `pkgs/top-level/python-packages.nix`
+application, then the package should be in `pkgs/sets/python3Packages/`
 since only those packages are made available for all interpreter versions. The
-preferred location for library expressions is in
-`pkgs/development/python-modules`. It is important that these packages are
-called from `pkgs/top-level/python-packages.nix` and not elsewhere, to guarantee
-the right version of the package is built.
+preferred location for library expressions is in `pkgs/sets/python3Packages/by-name/`.
 
-Based on the packages defined in `pkgs/top-level/python-packages.nix` an
+Based on the packages defined in `pkgs/sets/python3Packages/` an
 attribute set is created for each available Python interpreter. The available
 sets are
 
@@ -70,8 +67,8 @@ and the aliases
 #### `buildPythonPackage` function {#buildpythonpackage-function}
 
 The `buildPythonPackage` function has its name binding in
-`pkgs/development/interpreters/python/python-packages-base.nix` and is
-implemented in `pkgs/development/interpreters/python/mk-python-derivation.nix`
+`pkgs/sets/python3Packages/python-packages-base.nix` and is
+implemented in `pkgs/sets/python3Packages/mk-python-derivation.nix`
 using setup hooks.
 
 The following is an example:
@@ -2236,7 +2233,7 @@ The following rules are desired to be respected:
 
 * Python libraries are called from `python-packages.nix` and packaged with
   [`buildPythonPackage`](#buildpythonpackage-function). The expression of a library should be in
-  `pkgs/development/python-modules/<name>/default.nix`.
+  `pkgs/sets/python3Packages/non-by-name/<name>/default.nix`.
 * Python applications live outside of `python-packages.nix` and are packaged
   with [`buildPythonApplication`](#buildpythonapplication-function).
 * Make sure libraries build for all Python interpreters.
@@ -2307,7 +2304,7 @@ An exemplary call to update all python libraries between minor versions
 would be:
 
 ```ShellSession
-$ maintainers/scripts/update-python-libraries --target minor --commit --use-pkgs-prefix pkgs/development/python-modules/**/default.nix
+$ maintainers/scripts/update-python-libraries --target minor --commit --use-pkgs-prefix pkgs/sets/python3Packages/non-by-name/**/default.nix
 ```
 
 ## CPython Update Schedule {#python-cpython-update-schedule}

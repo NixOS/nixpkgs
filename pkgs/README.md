@@ -9,7 +9,7 @@ See the [CONTRIBUTING.md](../CONTRIBUTING.md) document for more general informat
   - [`impure.nix`](./top-level/impure.nix), [`default.nix`](./top-level/default.nix), [`config.nix`](./top-level/config.nix): Definitions for the evaluation entry point of `import <nixpkgs>`
   - [`stage.nix`](./top-level/stage.nix), [`all-packages.nix`](./top-level/all-packages.nix), [`by-name-overlay.nix`](./top-level/by-name-overlay.nix), [`splice.nix`](./top-level/splice.nix): Definitions for the top-level attribute set made available through `import <nixpkgs> {…}`
   - `*-packages.nix`, [`linux-kernels.nix`](./top-level/linux-kernels.nix), [`unixtools.nix`](./top-level/unixtools.nix): Aggregations of nested package sets defined in `development`
-  - [`aliases.nix`](./top-level/aliases.nix), [`python-aliases.nix`](./top-level/python-aliases.nix): Aliases for package definitions that have been renamed or removed
+  - [`aliases.nix`](./top-level/aliases.nix): Aliases for package definitions that have been renamed or removed
   - `release*.nix`, [`make-tarball.nix`](./top-level/make-tarball.nix), [`packages-config.nix`](./top-level/packages-config.nix), [`metrics.nix`](./top-level/metrics.nix), [`nixpkgs-basic-release-checks.nix`](./top-level/nixpkgs-basic-release-checks.nix): Entry-points and utilities used by Hydra for continuous integration
 - [`development`](./development)
   - `*-modules`, `*-packages`, `*-pkgs`: Package definitions for nested package sets
@@ -891,7 +891,7 @@ Here are examples of package tests:
 
 - [Jasmin compile test](by-name/ja/jasmin/test-assemble-hello-world/default.nix)
 - [Lobster compile test](by-name/lo/lobster/test-can-run-hello-world.nix)
-- [Spacy annotation test](development/python-modules/spacy/annotation-test/default.nix)
+- [Spacy annotation test](sets/python3Packages/non-by-name/spacy/annotation-test/default.nix)
 - [Libtorch test](development/libraries/science/math/libtorch/test/default.nix)
 - [Multiple tests for nanopb](./by-name/na/nanopb/package.nix)
 

@@ -7,6 +7,7 @@
   makeScopeWithSplicing',
   pythonPackagesExtensions,
   stdenv,
+  python3PackagesFor,
 }@args:
 
 (
