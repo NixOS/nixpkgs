@@ -24,6 +24,9 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://www.alsa-project.org/";
     description = "ALSA topology configuration files";
