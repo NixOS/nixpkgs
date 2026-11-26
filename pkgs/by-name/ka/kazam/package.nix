@@ -47,7 +47,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   build-system = with python3Packages; [
     setuptools
-    distutils-extra
+    python-distutils-extra
   ];
 
   dependencies = with python3Packages; [

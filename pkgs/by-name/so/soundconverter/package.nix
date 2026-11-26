@@ -45,7 +45,7 @@ python3Packages.buildPythonApplication rec {
 
   dependencies = with python3Packages; [
     gst-python
-    distutils-extra
+    python-distutils-extra
     setuptools
     pygobject3
   ];

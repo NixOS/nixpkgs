@@ -29,7 +29,7 @@ python3.pkgs.buildPythonApplication rec {
 
   build-system = with python3.pkgs; [
     setuptools
-    distutils-extra
+    python-distutils-extra
   ];
 
   dependencies = with python3.pkgs; [
