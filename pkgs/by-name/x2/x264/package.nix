@@ -60,6 +60,9 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = lib.optional stdenv.hostPlatform.isx86 nasm;
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   meta = {
     description = "Library for encoding H264/AVC video streams";
     mainProgram = "x264";
