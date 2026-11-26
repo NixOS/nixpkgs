@@ -3,9 +3,8 @@
   lib,
   stdenv,
   jdk,
-  makeWrapper,
+  jdk8,
   coreutils,
-  gnused,
   gitUpdater,
   versionCheckHook,
 }:
@@ -21,8 +20,6 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-nItxykMLxRNcSRTTfJR+prjwRMgarjrf/76Pusew4YU=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-
   env.JAVA_HOME = jdk.home;
 
   buildPhase = ''
@@ -36,17 +33,60 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/bin $out/share/ant
     cp -r dist/* $out/share/ant/
 
-    # upstream dist/bin/ant honours JAVA_HOME, then falls back to `java`
-    # on PATH — so add our JDK as a *fallback*, user's JDK still wins
-    makeWrapper $out/share/ant/bin/ant $out/bin/ant \
-      --set-default JAVA_HOME ${jdk.home} \
-      --prefix PATH : ${
-        lib.makeBinPath [
-          jdk
-          coreutils
-          gnused
-        ]
-      }
+    # Do not use upstream's bin/ant launcher: it prefers
+    # $JAVA_HOME/jre/bin/java when it exists, which is the case for
+    # openjdk < 11 in nixpkgs (the jre output is linked into the JDK).
+    # Running that JVM makes java.home resolve to the JRE, where the
+    # launcher cannot find tools.jar, so every <javac> task fails with
+    # "Unable to find a javac compiler".  The launcher below always
+    # uses the JVM from $JAVA_HOME/bin instead.
+    cat > $out/bin/ant <<EOF
+    #! ${stdenv.shell} -e
+
+    ANT_HOME=$out/share/ant
+
+    # Find the JDK by looking for javac.  As a fall-back, find the
+    # JRE by looking for java.  The latter allows just the JRE to be
+    # used with (say) ECJ as the compiler.  Finally, allow the GNU
+    # JVM.
+    if [ -z "\''${JAVA_HOME-}" ]; then
+        for i in javac java gij; do
+            if p="\$(type -p \$i)"; then
+                export JAVA_HOME="\$(${coreutils}/bin/dirname \$(${coreutils}/bin/dirname \$(${coreutils}/bin/readlink -f \$p)))"
+                break
+            fi
+        done
+        if [ -z "\''${JAVA_HOME-}" ]; then
+            # No JDK or JRE on PATH: fall back to the JDK that ant
+            # itself was built with, so ant still runs for tasks that
+            # do not need a compiler.
+            export JAVA_HOME=${jdk.home}
+        fi
+    fi
+
+    if [ -z \$NIX_JVM ]; then
+        if [ -e \$JAVA_HOME/bin/java ]; then
+            NIX_JVM=\$JAVA_HOME/bin/java
+        elif [ -e \$JAVA_HOME/bin/gij ]; then
+            NIX_JVM=\$JAVA_HOME/bin/gij
+        else
+            NIX_JVM=java
+        fi
+    fi
+
+    LOCALCLASSPATH="\$ANT_HOME/lib/ant-launcher.jar\''${LOCALCLASSPATH:+:}\$LOCALCLASSPATH"
+
+    if [ -n "\$ANT_LIB" ]; then
+        ANT_LIB_ARG="-Dant.library.dir=\$ANT_LIB"
+    fi
+
+    exec \$NIX_JVM \$NIX_ANT_OPTS \$ANT_OPTS -classpath "\$LOCALCLASSPATH" \\
+        -Dant.home=\$ANT_HOME \''${ANT_LIB_ARG:+"\$ANT_LIB_ARG"} \\
+        org.apache.tools.ant.launch.Launcher \$NIX_ANT_ARGS \$ANT_ARGS \\
+        -cp "\$CLASSPATH" "\$@"
+    EOF
+
+    chmod +x $out/bin/ant
     runHook postInstall
   '';
 
