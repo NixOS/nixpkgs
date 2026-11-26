@@ -18,14 +18,19 @@ buildPythonPackage rec {
     hash = "sha256-S1ng2eTR+dNg7TkkpLTtJvX105FOqCi2eiMdRaqQrVg=";
   };
 
-  nativeBuildInputs = [ flit-core ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'flit_core >=2,<4' flit_core
+  '';
 
-  propagatedBuildInputs = [ setuptools ];
+  build-system = [ flit-core ];
+
+  dependencies = [ setuptools ];
 
   # this has a circular dependency on quantiphy
-  preBuild = ''
-    sed -i '/quantiphy/d' pyproject.toml
-  '';
+  pythonRemoveDeps = [
+    "quantiphy"
+  ];
 
   # this import check will fail as quantiphy is imported by this package
   # pythonImportsCheck = [ "rkm_codes" ];
