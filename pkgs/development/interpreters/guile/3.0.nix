@@ -174,6 +174,8 @@ stdenv.mkDerivation (finalAttrs: {
     '';
   };
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://www.gnu.org/software/guile/";
     description = "Embeddable Scheme implementation";
