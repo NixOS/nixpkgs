@@ -317,6 +317,8 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     runHook postCheck
   '';
 
+  dontCheckPythonMetadata = finalAttrs.pname != "asciidoc";
+
   meta = {
     description = "Text-based document generation system";
     longDescription = ''
