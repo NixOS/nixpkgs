@@ -10,6 +10,7 @@
   perl,
   guile,
   libxml2,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -152,6 +153,8 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   __structuredAttrs = true;
 
   meta = {
@@ -163,5 +166,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.gnu.org/software/autogen/";
     platforms = lib.platforms.all;
     maintainers = [ ];
+    pkgConfigModules = [ "autoopts" ];
   };
 })
