@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   autoreconfHook,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -12,8 +13,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "sekrit-twc";
     repo = "zimg";
-    rev = "release-${finalAttrs.version}";
-    sha256 = "sha256-T+/wuTxPK+PLofqJm3dujGqGGXhpdGQLjAttTQPsgOI=";
+    tag = "release-${finalAttrs.version}";
+    hash = "sha256-T+/wuTxPK+PLofqJm3dujGqGGXhpdGQLjAttTQPsgOI=";
   };
 
   outputs = [
@@ -26,11 +27,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   meta = {
     description = "Scaling, colorspace conversion and dithering library";
     homepage = "https://github.com/sekrit-twc/zimg";
     license = lib.licenses.wtfpl;
     platforms = with lib.platforms; unix ++ windows;
     maintainers = with lib.maintainers; [ rnhmjoj ];
+    pkgConfigModules = [ "zimg" ];
   };
 })
