@@ -42,6 +42,8 @@ stdenv.mkDerivation (finalAttrs: {
         'cmake_minimum_required (VERSION 3.10 FATAL_ERROR)'
   '';
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Audio resampling library";
     homepage = "https://soxr.sourceforge.net";
