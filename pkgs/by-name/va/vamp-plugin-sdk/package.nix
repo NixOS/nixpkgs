@@ -7,6 +7,7 @@
   fetchFromGitHub,
   pkg-config,
   libsndfile,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -16,12 +17,14 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "vamp-plugins";
     repo = "vamp-plugin-sdk";
-    rev = "vamp-plugin-sdk-v${finalAttrs.version}";
+    tag = "vamp-plugin-sdk-v${finalAttrs.version}";
     hash = "sha256-5jNA6WmeIOVjkEMZXB5ijxyfJT88alVndBif6dnUFdI=";
   };
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libsndfile ];
+
+  strictDeps = true;
 
   # build is susceptible to race conditions: https://github.com/vamp-plugins/vamp-plugin-sdk/issues/12
   enableParallelBuilding = false;
@@ -29,7 +32,11 @@ stdenv.mkDerivation (finalAttrs: {
     "AR:=$(AR)"
     "RANLIB:=$(RANLIB)"
   ]
-  ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "-o test";
+  ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "--old-file=test";
+
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Audio processing plugin system for plugins that extract descriptive information from audio data";
@@ -37,5 +44,10 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd3;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+    pkgConfigModules = [
+      "vamp"
+      "vamp-sdk"
+      "vamp-hostsdk"
+    ];
   };
 })
