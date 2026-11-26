@@ -11,6 +11,7 @@
   perl,
   argp-standalone,
   libjpeg,
+  gettext,
   json_c,
   libbpf,
   libelf,
@@ -77,6 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     doxygen
+    gettext
     meson
     ninja
     pkg-config
@@ -105,6 +107,8 @@ stdenv.mkDerivation (finalAttrs: {
   hardeningDisable = [ "zerocallusedregs" ];
 
   propagatedBuildInputs = [ libjpeg ];
+
+  strictDeps = true;
 
   postPatch = ''
     patchShebangs utils/
