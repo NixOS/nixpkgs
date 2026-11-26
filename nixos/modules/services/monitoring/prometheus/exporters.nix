@@ -102,6 +102,7 @@ let
         "nut"
         "nvidia-gpu"
         "opnsense"
+        "oxidized"
         "pgbouncer"
         "php-fpm"
         "pihole"
