@@ -97,6 +97,8 @@ buildPythonPackage (finalAttrs: {
     "test_join_duplicate_column_names"
     # PySpark does not yet fully support pandas >= 3.0.0
     "test_backend_version[pyspark[connect]]"
+    # ducksb interprets inf as column name
+    "test_contains_inner_dtypes_expr"
   ];
 
   pytestFlags = [
