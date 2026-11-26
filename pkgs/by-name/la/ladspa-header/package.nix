@@ -15,6 +15,9 @@ stdenv.mkDerivation (finalAttrs: {
     cp src/ladspa.h $out/include/ladspa.h
   '';
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   meta = {
     inherit (ladspa-sdk.meta) homepage license maintainers;
     description = "LADSPA format audio plugins header file";
