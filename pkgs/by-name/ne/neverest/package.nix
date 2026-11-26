@@ -1,75 +1,112 @@
 {
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  stdenv,
-  pkg-config,
-  installShellFiles,
-  installShellCompletions ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
-  installManPages ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
-  notmuch,
-  buildNoDefaultFeatures ? false,
+  aws-lc,
   buildFeatures ? [ ],
+  buildNoDefaultFeatures ? false,
+  buildPackages,
+  fetchFromGitHub,
+  installManPages ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
+  installShellCompletions ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
+  installShellFiles,
+  lib,
+  openssl,
+  pkg-config,
+  rustPlatform,
+  sqlite,
+  stdenv,
+  windows,
 }:
 
+let
+  nativeTls = builtins.elem "native-tls" buildFeatures;
+  rustlsAws = builtins.elem "rustls-aws" buildFeatures;
+
+  # nixpkgs' mingw sqlite fails its pthread probe and compiles
+  # single-threaded, defining no sqlite3_mutex_* rusqlite links against
+  sqlite' =
+    if stdenv.hostPlatform.isWindows then
+      sqlite.overrideAttrs (old: {
+        buildInputs = (old.buildInputs or [ ]) ++ [ windows.pthreads ];
+      })
+    else
+      sqlite;
+
+in
 rustPlatform.buildRustPackage (finalAttrs: {
-  # Learn more about available cargo features at:
-  #  - <https://pimalaya.org/neverest/cli/latest/installation.html#cargo>
-  #  - <https://git.sr.ht/~soywod/neverest-cli/tree/master/item/Cargo.toml#L18>
+  __structuredAttrs = true;
+
   inherit buildNoDefaultFeatures buildFeatures;
 
   pname = "neverest";
-  version = "1.0.0-beta";
+  version = "1.0.0";
+  cargoHash = "sha256-cXSC+Av4YjyFGztUsbDzpMLxB1j/7iIud2+tc2Boduo=";
 
   src = fetchFromGitHub {
     owner = "pimalaya";
     repo = "neverest";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-3PSJyhxrOCiuHUeVHO77+NecnI5fN5EZfPhYizuYvtE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-h5cISmgzlFOE7YfxVCMBpCZEdPbMZmkQlWCa0q2qHfA=";
   };
 
-  cargoHash = "sha256-K+LKRokfE8i4Huti0aQm4UrpConTcxVwJ2DyeOLjNKA=";
+  # openssl should not be provided by vendors, not even on windows
+  env.OPENSSL_NO_VENDOR = 1;
 
-  # TODO: Remove this once email-lib is moved to 0.27.
-  # Rust 1.89 added inherent
-  #  `File::try_lock and File::unlock`, which take
-  # precedence over the `advisory_lock` trait methods # that email-lib calls.
-  postPatch = ''
-    patch -p1 -d "$cargoDepsCopy"/source-registry-0/email-lib-0.24.0 < ${./email-lib-file-lock.patch}
-  '';
+  # pkg-config hands the linker libsqlite3 but no rpath, leaving a binary that
+  # cannot find it: not in postInstall, which runs it, nor once installed.
+  env.NIX_LDFLAGS = "-rpath " + lib.getLib sqlite' + "/lib";
 
   nativeBuildInputs = [
     pkg-config
+    installShellFiles
+  ];
+
+  buildInputs = [
+    sqlite'
   ]
-  ++ lib.optional (installManPages || installShellCompletions) installShellFiles;
-
-  buildInputs = lib.optional (builtins.elem "notmuch" buildFeatures) notmuch;
-
-  # TODO: unit tests temporarily broken, remove this line for the next
-  # beta.2 release
-  doCheck = false;
+  ++ lib.optional nativeTls openssl
+  ++ lib.optional rustlsAws aws-lc;
 
   postInstall =
-    lib.optionalString installManPages ''
-      mkdir -p $out/man
-      $out/bin/neverest man $out/man
-      installManPage $out/man/*
+    let
+      exe =
+        if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
+          "$out/bin/neverest"
+        else
+          lib.getExe buildPackages.neverest;
+    in
+    ''
+      mkdir -p $out/share/{completions,man,schemas}
+      install -Dm644 config.sample.toml "$out"/share/doc/neverest/config.sample.toml
+      ${exe} manual -d "$out"/share/man
+      ${exe} completion -d "$out"/share/completions bash elvish fish powershell zsh
+      ${exe} json-schema -d "$out"/share/schemas
+    ''
+    + lib.optionalString installManPages ''
+      installManPage "$out"/share/man/*
     ''
     + lib.optionalString installShellCompletions ''
       installShellCompletion --cmd neverest \
-        --bash <($out/bin/neverest completion bash) \
-        --fish <($out/bin/neverest completion fish) \
-        --zsh <($out/bin/neverest completion zsh)
+        --bash "$out"/share/completions/neverest.bash \
+        --fish "$out"/share/completions/neverest.fish \
+        --zsh "$out"/share/completions/_neverest
     '';
 
+  # disable impure integration tests: they open sockets against live servers
+  cargoTestFlags = [ "--bins" ];
+
+  # some unit tests require network, should be fixed for next release
+  __darwinAllowLocalNetworking = true;
+
   meta = {
-    description = "CLI to synchronize, backup and restore emails";
+    description = "CLI to synchronize mails, contacts and calendars";
     mainProgram = "neverest";
-    homepage = "https://pimalaya.org/neverest/cli/v${finalAttrs.version}/";
-    changelog = "https://git.sr.ht/~soywod/neverest-cli/tree/v${finalAttrs.version}/item/CHANGELOG.md";
-    license = lib.licenses.mit;
+    homepage = "https://github.com/pimalaya/neverest";
+    changelog = "https://github.com/pimalaya/neverest/releases/tag/${finalAttrs.src.tag}";
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
     maintainers = with lib.maintainers; [ soywod ];
-    # last successful hydra build on darwin was in 2025
-    broken = stdenv.hostPlatform.isDarwin;
   };
 })
