@@ -104,7 +104,7 @@ with haskellLib;
   # Cabal 3.18 excludes process 1.6.26.1, which ships with GHC 9.14.1.
   # Use a newer process for Cabal 3.18 and for everything in the
   # cabal-install closure that depends on process directly.
-  Cabal_3_18_1_0 = super.Cabal_3_18_1_0.override {
+  Cabal_3_18_2_0 = super.Cabal_3_18_2_0.override {
     process = self.process_1_6_30_0;
   };
   inherit
