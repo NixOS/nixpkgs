@@ -237,6 +237,7 @@ in
         CapabilityBoundingSet = [ "" ];
         DeviceAllow = [ "" ];
         LockPersonality = true;
+        NoNewPrivileges = true;
         PrivateDevices = true;
         PrivateTmp = true;
         PrivateUsers = true;
@@ -248,6 +249,8 @@ in
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
         ProtectProc = "invisible";
+        ProtectSystem = "full";
+        RemoveIPC = true;
         RestrictAddressFamilies = [
           "AF_INET"
           "AF_INET6"
@@ -256,6 +259,14 @@ in
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
         SystemCallArchitectures = "native";
+        SystemCallFilter = [
+          "@system-service"
+          "~@chown"
+          "~@keyring"
+          "~@resources"
+          "~@setuid"
+          "~@privileged"
+        ];
         UMask = "0077";
       };
 

@@ -136,8 +136,8 @@
   },
   {
     "pname": "Seq.Api",
-    "version": "2026.1.0",
-    "hash": "sha256-jOxgOAGeJgh686/krCSeq8/oYLv58nn5FfxOIWbn6Sc="
+    "version": "2026.2.0",
+    "hash": "sha256-G5cT7mPCKulFcOB4iKC/jyCK+ZpLvR6FWe8YZMkL9K4="
   },
   {
     "pname": "Seq.Apps",

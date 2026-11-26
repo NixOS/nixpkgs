@@ -53,7 +53,6 @@ perlPackages.buildPerlModule {
     IPCRun3
     LWPProtocolHttps
     LWP # LWPUserAgent
-    libwwwperl
     LinguaTranslit
     ListAllUtils
     ListMoreUtils

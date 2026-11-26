@@ -28,16 +28,34 @@ symlinkJoin {
       wrapCommandLine = [
         "wrapProgram"
         "$out/bin/obs"
-        ''--set OBS_PLUGINS_PATH "${pluginsJoined}/lib/obs-plugins"''
-        ''--set OBS_PLUGINS_DATA_PATH "${pluginsJoined}/share/obs/obs-plugins"''
+        # Plugins in the new layout, see below
+        ''--set OBS_PLUGINS_PATH "$out/lib/obs-studio-plugins"''
+        # Plugins in the legacy layout (lib/obs-plugins/<plugin>.so)
+        ''--set OBS_LEGACY_PLUGINS_PATH "${pluginsJoined}/lib/obs-plugins"''
+        ''--set OBS_LEGACY_PLUGINS_DATA_PATH "${pluginsJoined}/share/obs/obs-plugins"''
       ]
       ++ lib.lists.unique pluginArguments;
     in
+    # Plugins in the new layout install lib/obs-modules/plugins/<plugin>.so
+    # and share/obs/obs-modules/plugins/<plugin>, but OBS_PLUGINS_PATH
+    # expects <plugin>/<plugin>.so and <plugin>/data
     ''
+      mkdir -p $out/lib/obs-studio-plugins
+      for module in ${pluginsJoined}/lib/obs-modules/plugins/*.so; do
+        [ -e "$module" ] || continue
+        name=$(basename "$module" .so)
+        mkdir "$out/lib/obs-studio-plugins/$name"
+        ln -s "$module" "$out/lib/obs-studio-plugins/$name/$name.so"
+        data="${pluginsJoined}/share/obs/obs-modules/plugins/$name"
+        if [ -d "$data" ]; then
+          ln -s "$data" "$out/lib/obs-studio-plugins/$name/data"
+        fi
+      done
+
       ${lib.concatStringsSep " " wrapCommandLine}
 
       # Remove unused obs-plugins dir to not cause confusion
-      rm -r $out/share/obs/obs-plugins
+      rm -rf $out/share/obs/obs-plugins
       # Leave some breadcrumbs
       echo 'Plugins are at ${pluginsJoined}/share/obs/obs-plugins' > $out/share/obs/obs-plugins-README
     '';

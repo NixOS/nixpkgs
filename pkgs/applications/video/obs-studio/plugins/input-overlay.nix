@@ -5,6 +5,7 @@
   cmake,
   pkg-config,
   ninja,
+  kdePackages,
   obs-studio,
   qt6,
   libxt,
@@ -18,17 +19,23 @@
   libxkbcommon,
   libxkbfile,
   sdl3,
+  libinput,
+  libxrandr,
+  udev,
+  wayland,
+  wayland-protocols,
+  wayland-scanner,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "obs-input-overlay";
-  version = "5.1.0-unstable-2025-09-23";
+  version = "5.1.3";
 
   src = fetchFromGitHub {
     owner = "univrsal";
     repo = "input-overlay";
-    rev = "4d62e7d0c55f8ff62c3a0e7b1a8f3092086b23b7";
-    hash = "sha256-cUULaOoV4fffEvsHkcG3lnFCIHSvnv3LHg+SDuuVLao=";
+    tag = finalAttrs.version;
+    hash = "sha256-ilhb2bLC7844FDhOoTXJ4JF4RoAjrs2Cb8QPnwVUPV8=";
     fetchSubmodules = true;
   };
 
@@ -36,6 +43,8 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     pkg-config
     ninja
+    kdePackages.extra-cmake-modules
+    wayland-scanner
   ];
 
   buildInputs = [
@@ -52,6 +61,11 @@ stdenv.mkDerivation (finalAttrs: {
     libxinerama
     libxkbcommon
     libxkbfile
+    libinput
+    libxrandr
+    udev
+    wayland
+    wayland-protocols
   ];
 
   cmakeFlags = lib.optionals stdenv.hostPlatform.isx86 [
@@ -60,11 +74,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   postUnpack = ''
     sed -i '/set(CMAKE_CXX_FLAGS "-march=native")/d' 'source/CMakeLists.txt'
-  '';
-
-  preFixup = ''
-    # Remove broken uiohook development files
-    rm -r $out/lib/cmake $out/lib/pkgconfig
   '';
 
   dontWrapQtApps = true;

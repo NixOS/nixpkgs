@@ -14,16 +14,16 @@ let
 in
 buildNpmPackage (finalAttrs: {
   pname = "ytDownloader";
-  version = "4.1.0";
+  version = "4.2.0";
 
   src = fetchFromGitHub {
     owner = "aandrew-me";
     repo = "ytDownloader";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XuJki4PyBIwOhIjIiiebHNry/OFGkyfG7wnVay4dToM=";
+    hash = "sha256-u5uDb7xmzQ2LsSJ/P4yJx0BghfbPnOyLbFUP01hHch4=";
   };
 
-  npmDepsHash = "sha256-Pd52ytVwvrx+LmY67weqTWVWiIAdxkpTDnFVfN6VPc0=";
+  npmDepsHash = "sha256-edddVHofcHktEBwr9SURGTsfEOR0Gh9OG/ojHcijXK8=";
   makeCacheWritable = true;
 
   nativeBuildInputs = [
