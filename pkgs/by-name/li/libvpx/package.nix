@@ -47,6 +47,7 @@
   # for passthru.tests
   ffmpeg,
   gst_all_1,
+  testers,
 }:
 
 let
@@ -261,6 +262,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests = {
     inherit (gst_all_1) gst-plugins-good;
     ffmpeg = ffmpeg.override { withVpx = true; };
+    pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
   __structuredAttrs = true;
@@ -272,5 +274,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd3;
     maintainers = [ ];
     platforms = lib.platforms.all;
+    pkgConfigModules = [ "vpx" ];
   };
 })
