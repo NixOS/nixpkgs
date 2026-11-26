@@ -4,6 +4,7 @@
   fetchurl,
   libogg,
   pkg-config,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -34,6 +35,8 @@ stdenv.mkDerivation (finalAttrs: {
     sed s/\-mno\-ieee\-fp// -i {configure,configure.ac}
   '';
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   __structuredAttrs = true;
 
   meta = {
@@ -41,5 +44,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://xiph.org/vorbis/";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
+    pkgConfigModules = [
+      "vorbis"
+      "vorbisfile"
+      "vorbisenc"
+    ];
   };
 })
