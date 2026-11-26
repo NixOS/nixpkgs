@@ -27,6 +27,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
+  strictDeps = true;
+
   cmakeFlags = [
     # Workaround for upstream not using GNUInstallDirs.
     "-DINCLUDE_INSTALL_DIR=${placeholder "dev"}/include"
