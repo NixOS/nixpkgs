@@ -7,6 +7,7 @@
   fetchFromGitHub,
   pkg-config,
   libsndfile,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -33,6 +34,8 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "--old-file=test";
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   __structuredAttrs = true;
 
   meta = {
@@ -41,5 +44,10 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd3;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+    pkgConfigModules = [
+      "vamp"
+      "vamp-sdk"
+      "vamp-hostsdk"
+    ];
   };
 })
