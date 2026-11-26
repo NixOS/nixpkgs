@@ -5,7 +5,6 @@
   pkg-config,
   protobuf,
   bzip2,
-  stdenv,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
