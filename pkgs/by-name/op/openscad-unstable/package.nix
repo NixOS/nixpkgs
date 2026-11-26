@@ -196,8 +196,8 @@ clangStdenv.mkDerivation rec {
       interested in creating computer-animated movies.
     '';
     homepage = "https://openscad.org/";
-    # note that the *binary license* is gpl3 due to CGAL
-    license = lib.licenses.gpl3;
+    # note that the *binary license* is gpl3Plus due to CGAL
+    license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
       eclairevoyant
@@ -206,5 +206,6 @@ clangStdenv.mkDerivation rec {
       raskin
     ];
     mainProgram = "openscad";
+    mainDarwinApp = "OpenSCAD.app";
   };
 }
