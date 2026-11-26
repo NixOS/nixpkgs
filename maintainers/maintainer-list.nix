@@ -30921,6 +30921,11 @@
     githubId = 1057789;
     matrix = "@typedrat:thisratis.gay";
   };
+  typeparameter = {
+    name = "Drew Davis";
+    github = "typeparameter";
+    githubId = 9686215;
+  };
   typetetris = {
     email = "ericwolf42@mail.com";
     github = "typetetris";
