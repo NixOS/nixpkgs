@@ -17,6 +17,11 @@ buildPythonPackage rec {
     hash = "sha256-+5sZUzWrFLQ/gnMofQx+62N7psVsZlgcEbRyAvZxiyk=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'flit_core >=3.2,<4' flit_core
+  '';
+
   build-system = [
     flit-core
   ];
