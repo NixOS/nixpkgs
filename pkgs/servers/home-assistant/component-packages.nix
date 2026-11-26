@@ -3776,8 +3776,9 @@
         aiohasupervisor
         aiousbwatcher
         ifaddr
+        kaco-serial
         serialx
-      ]; # missing inputs: kaco-serial
+      ];
     "kaiser_nienhaus" =
       ps: with ps; [
       ];
@@ -9395,6 +9396,7 @@
     "justnimbus"
     "jvc_projector"
     "kaco_modbus"
+    "kaco_rs485"
     "kaleidescape"
     "karakeep"
     "keenetic_ndms2"
