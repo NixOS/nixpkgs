@@ -6,15 +6,7 @@
   dotnetCorePackages,
   makeDesktopItem,
   copyDesktopItems,
-  libx11,
-  glew,
   libGL,
-  libice,
-  libsm,
-  libxcursor,
-  libxext,
-  libxi,
-  libxrandr,
   nix-update-script,
   versionCheckHook,
   writableTmpDirAsHomeHook,
@@ -52,18 +44,7 @@ buildDotnetModule (finalAttrs: {
 
   nativeBuildInputs = [ copyDesktopItems ];
 
-  runtimeDeps = [
-    # Avalonia UI
-    libx11
-    libGL
-    glew
-    libice
-    libsm
-    libxcursor
-    libxext
-    libxi
-    libxrandr
-  ];
+  runtimeDeps = [ libGL ];
 
   enableParallelBuilding = false;
   dotnetFlags = [
