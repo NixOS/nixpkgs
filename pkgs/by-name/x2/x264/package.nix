@@ -3,10 +3,11 @@
   lib,
   fetchFromGitLab,
   nasm,
+  testers,
   enableShared ? !stdenv.hostPlatform.isStatic,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "x264";
   version = "0-unstable-2025-09-10";
 
@@ -25,7 +26,7 @@ stdenv.mkDerivation {
   ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    substituteInPlace Makefile --replace '$(if $(STRIP), $(STRIP) -x $@)' '$(if $(STRIP), $(STRIP) -S $@)'
+    substituteInPlace Makefile --replace-fail '$(if $(STRIP), $(STRIP) -x $@)' '$(if $(STRIP), $(STRIP) -S $@)'
   '';
 
   enableParallelBuilding = true;
@@ -60,6 +61,11 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = lib.optional stdenv.hostPlatform.isx86 nasm;
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
+  strictDeps = true;
+  __structuredAttrs = true;
+
   meta = {
     description = "Library for encoding H264/AVC video streams";
     mainProgram = "x264";
@@ -67,5 +73,6 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix ++ lib.platforms.windows;
     maintainers = [ ];
+    pkgConfigModules = [ "x264" ];
   };
-}
+})
