@@ -7,16 +7,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "mkbrr";
-  version = "1.27.0";
+  version = "1.28.0";
 
   src = fetchFromGitHub {
     owner = "autobrr";
     repo = "mkbrr";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dK33AjsurzL80sqpvcZQd0cWZXRn2A3UjESp2DeI0lI=";
+    hash = "sha256-6T7/HrCXMVun1Q+ZlBSGbV/ct88BVuf/I4KzdER5XGg=";
   };
 
-  vendorHash = "sha256-dkj9Gpg8TDVNXRTHhvXSCkTJf6NkfHeKkqEQmyzcMLk=";
+  vendorHash = "sha256-xvDgEN3FeSDmKtO66+8MLVW0cL9zHijk6XugeWGJxCA=";
 
   # From v1.23.0, a separate Go module (GUI) was introduced into the repo. Build only the cli tool.
   subPackages = [ "." ];

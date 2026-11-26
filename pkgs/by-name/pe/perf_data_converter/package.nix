@@ -36,7 +36,7 @@ buildBazelPackage {
   ];
 
   fetchAttrs = {
-    hash = "sha256-aiKFVuOWi9/Ex+7+2L0Sb8ac9tqqVc4zRW+fLjOHtWI=";
+    hash = "sha256-W9UGjB2EDCQYrx/sUfNTQ+G4xjU/ejekgQ25g2sWK5Y=";
   };
 
   nativeBuildInputs = [ jdk ];

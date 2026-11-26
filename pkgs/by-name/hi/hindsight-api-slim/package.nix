@@ -15,14 +15,14 @@ let
 in
 pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "hindsight-api-slim";
-  version = "1.2.1";
+  version = "1.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "vectorize-io";
     repo = "hindsight";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fykytEgE0dapJhDtky4zyWwXgBgiuvufPkfdbnssi8g=";
+    hash = "sha256-a02cE7GOXHuu57XBRFl9Oq5KIW0+/9dm8wo9EmY3pVw=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/hindsight-api-slim";

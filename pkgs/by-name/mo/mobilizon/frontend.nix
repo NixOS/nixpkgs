@@ -13,10 +13,9 @@ buildNpmPackage {
     pname
     version
     src
-    patches
     ;
 
-  npmDepsHash = "sha256-gvAHUgfS21UrZYUL/QUsAMymqh4g/Moo/+vTl6RH/7I=";
+  npmDepsHash = "sha256-2cMsZPSDCBXx/U+ymOImHpoBBQ4rs69dbL3bZBA0dY0=";
 
   nativeBuildInputs = [ imagemagick ];
 

@@ -5,9 +5,9 @@ mkTdarr {
   component = "node";
 
   hashes = {
-    linux_x64 = "sha256-sUZgyPraowXzPawQcSKAFPDYijdxWr4hAn8I8YGk6X0=";
-    linux_arm64 = "sha256-QBMYIBK3x9Getjg+vt8ZH9vLdZaFVSqVrat3RxOGJCw=";
-    darwin_arm64 = "sha256-+HM6Hxy97zn5Id20cz13fLlATQLUoUxO/sWVBjV9tq4=";
+    linux_x64 = "sha256-pT0zHp5KGDQp+c0vXsw0lhghrBCH/IAqc0t1tM5zWBM=";
+    linux_arm64 = "sha256-k3doWqSm18KYvksvcCw/fxF3AGfz2KYPzCas1ffLd70=";
+    darwin_arm64 = "sha256-bfwKlZsiQB60BSgKx1AbcE8XJ7lsO+AyQe/a109VU1c=";
   };
 
   includeInPath = [ ccextractor ];

@@ -13,6 +13,7 @@
   libusb1,
   libnfc,
   libpulseaudio,
+  sqlite,
 }:
 
 buildGoModule (finalAttrs: {
@@ -45,6 +46,7 @@ buildGoModule (finalAttrs: {
   subPackages = [ (if stdenv.hostPlatform.isDarwin then "cmd/mac" else "cmd/linux") ];
 
   tags = [
+    "libsqlite3"
     "netgo"
     "osusergo"
     "sqlite_omit_load_extension"
@@ -64,7 +66,10 @@ buildGoModule (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+  buildInputs = [
+    sqlite
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     libusb1
     libnfc
   ];
