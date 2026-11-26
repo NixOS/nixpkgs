@@ -34,6 +34,8 @@ stdenv.mkDerivation (finalAttrs: {
     sed s/\-mno\-ieee\-fp// -i {configure,configure.ac}
   '';
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Vorbis audio compression reference implementation";
     homepage = "https://xiph.org/vorbis/";
