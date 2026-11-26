@@ -10,6 +10,7 @@
   mysql84,
   openssh,
   systemd,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -58,6 +59,12 @@ stdenv.mkDerivation (finalAttrs: {
         withCryptsetup = true;
       }
     );
+    pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+    };
+    cmake-config = testers.hasCmakeConfigModules {
+      package = finalAttrs.finalPackage;
+    };
   };
 
   __structuredAttrs = true;
@@ -68,5 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/PJK/libcbor";
     license = lib.licenses.mit;
     maintainers = [ ];
+    pkgConfigModules = [ "libcbor" ];
+    cmakeConfigModules = [ "libcbor" ];
   };
 })
