@@ -31,9 +31,9 @@ with lib;
           The absolute path to the configuration file.
 
           xray selects the parser from the file extension, so files ending in
-          `.yaml`, `.yml` or `.toml` are read as YAML or TOML, and anything
-          else is read as JSON. When the file comes from a secret manager, make
-          sure the secret's path keeps the extension.
+          `.json`, `.yaml`, `.yml` or `.toml` are read as JSON, YAML or TOML
+          respectively. The fallback is JSON. When the file comes from a
+          secret manager, make sure the secret's path keeps the extension.
 
           Either `settingsFile` or `settings` must be specified.
 
@@ -89,11 +89,14 @@ with lib;
         if cfg.settingsFile == null then
           "json"
         else
-          findFirst (ext: hasSuffix ".${ext}" (toString cfg.settingsFile)) "json" [
-            "yaml"
-            "yml"
-            "toml"
-          ];
+          findFirst (ext: hasSuffix ".${ext}" (toString cfg.settingsFile))
+            (warn "Invalid file extension for Xray config file" "json")
+            [
+              "json"
+              "yaml"
+              "yml"
+              "toml"
+            ];
 
     in
     mkIf cfg.enable {
