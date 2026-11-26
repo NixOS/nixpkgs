@@ -146,11 +146,12 @@ in
         PrivateTmp = true;
         ExecStartPre = [
           "${lib.getExe' pkgs.coreutils "ln"} -sf ${configFile} /var/lib/${cfg.stateDirectoryName}/config.yml"
-          "${lib.getExe' pkgs.coreutils "ln"} -sf ${pkgs.wiki-js}/server /var/lib/${cfg.stateDirectoryName}"
+          "${lib.getExe' pkgs.coreutils "ln"} -sf ${pkgs.wiki-js}/backend /var/lib/${cfg.stateDirectoryName}"
+          "${lib.getExe' pkgs.coreutils "ln"} -sf ${pkgs.wiki-js}/blocks /var/lib/${cfg.stateDirectoryName}"
           "${lib.getExe' pkgs.coreutils "ln"} -sf ${pkgs.wiki-js}/assets /var/lib/${cfg.stateDirectoryName}"
           "${lib.getExe' pkgs.coreutils "ln"} -sf ${pkgs.wiki-js}/package.json /var/lib/${cfg.stateDirectoryName}/package.json"
         ];
-        ExecStart = "${pkgs.lib.getExe pkgs.nodejs-slim} ${pkgs.wiki-js}/server";
+        ExecStart = "${pkgs.lib.getExe pkgs.nodejs-slim_26} ${pkgs.wiki-js}/backend";
       };
     };
   };

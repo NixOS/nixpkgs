@@ -1,43 +1,83 @@
 {
   stdenv,
-  fetchurl,
+  nix-update-script,
   lib,
   nixosTests,
+  fetchFromGitHub,
+  npm-lockfile-fix,
+  buildNpmPackage,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "wiki-js";
-  version = "2.5.317";
+  version = "3.6.1";
+  src = fetchFromGitHub {
+    owner = "requarks";
+    repo = "wiki";
+    rev = finalAttrs.version;
+    hash = "sha256-6FUOG53t1Q18fCNCLg7vBrhBop44ypC5sOzPAcIQ+Cs=";
 
-  src = fetchurl {
-    url = "https://github.com/Requarks/wiki-v2/releases/download/v${finalAttrs.version}/wiki-js.tar.gz";
-    hash = "sha256-z2Gfr4GBu/7RVbcbr3RGkIEeIcXlOuHOyphQnnW23Zs=";
+    postFetch = ''
+      ${lib.getExe npm-lockfile-fix} -r $out/frontend/package-lock.json
+    '';
   };
 
-  # Unpack the tarball into a subdir. All the contents are copied into `$out`.
-  # Unpacking into the parent directory would also copy `env-vars` into `$out`
-  # in the `installPhase` which ultimately means that the package retains
-  # references to build tools and the tarball.
-  preUnpack = ''
-    mkdir source
-    cd source
-  '';
+  frontend = buildNpmPackage {
+    inherit (finalAttrs) version src;
+    pname = "${finalAttrs.pname}-frontend";
+    sourceRoot = "${finalAttrs.src.name}/frontend";
+    npmDepsHash = "sha256-+l8UgBaRgs4p26HXDNClX4t5P1jEBZWLR+ofXVF3LYA=";
 
-  sourceRoot = ".";
+    dontNpmInstall = true;
 
-  dontBuild = true;
+    preBuild = ''
+      npm pkg set version="$version"
+      substituteInPlace vite.config.js \
+        --replace-fail "../assets" "${placeholder "out"}/assets"
+    '';
+  };
+
+  blocks = buildNpmPackage {
+    inherit (finalAttrs) version src;
+    pname = "${finalAttrs.pname}-blocks";
+    sourceRoot = "${finalAttrs.src.name}/blocks";
+    npmDepsHash = "sha256-0aBGfzuWBuLcVC5bvx7pJzPMpxH5DvS3Gdm69JHZBoo=";
+
+    dontNpmInstall = true;
+    npmBuildFlags = [
+      "--"
+      "-d"
+      "${placeholder "out"}/blocks/compiled"
+    ];
+  };
+
+  backend = buildNpmPackage {
+    inherit (finalAttrs) version src;
+    pname = "${finalAttrs.pname}-backend";
+    sourceRoot = "${finalAttrs.src.name}/backend";
+    npmDepsHash = "sha256-lvHbAMLWuGQSEAw0pxP1Xs7niFkeq0iEbGQxEAbXkMA=";
+
+    dontNpmBuild = true;
+
+    preBuild = ''
+      npm pkg set version="$version"
+    '';
+  };
+
   installPhase = ''
     runHook preInstall
 
-    mkdir $out
-    cp -r . $out
+    mkdir -p $out/blocks
+    cp -r ${finalAttrs.frontend}/assets $out/assets
+    cp -r ${finalAttrs.blocks}/blocks/compiled $out/blocks/compiled
+    cp -r ${finalAttrs.backend}/lib/node_modules/wiki-backend/ $out/backend/
+    cp config.sample.yml $out/config.sample.yml
 
     runHook postInstall
   '';
 
   passthru = {
     tests = { inherit (nixosTests) wiki-js; };
-    updateScript = ./update.sh;
+    updateScript = nix-update-script { };
   };
 
   meta = {
