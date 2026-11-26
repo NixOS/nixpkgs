@@ -36,6 +36,9 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   enableParallelBuilding = true;
 
   postInstall = ''
