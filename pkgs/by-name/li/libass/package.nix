@@ -11,6 +11,7 @@
   fontconfig ? null, # fontconfig support
   largeTilesSupport ? false, # Use larger tiles in the rasterizer
   libiconv,
+  testers,
 }:
 
 assert fontconfigSupport -> fontconfig != null;
@@ -46,11 +47,17 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optional fontconfigSupport fontconfig;
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   meta = {
     description = "Portable ASS/SSA subtitle renderer";
     homepage = "https://github.com/libass/libass";
     license = lib.licenses.isc;
     platforms = lib.platforms.unix;
     maintainers = [ ];
+    pkgConfigModules = [ "libass" ];
   };
 })
