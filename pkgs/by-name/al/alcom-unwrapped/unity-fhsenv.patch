@@ -1,0 +1,37 @@
+diff --git a/vrc-get-gui/src/commands/project.rs b/vrc-get-gui/src/commands/project.rs
+index 960ef980..761dbb3f 100644
+--- a/vrc-get-gui/src/commands/project.rs
++++ b/vrc-get-gui/src/commands/project.rs
+@@ -505,7 +505,22 @@ pub async fn project_open_unity(
+ 
+     let unity_args = custom_args.or_else(|| config.get().default_unity_arguments.clone());
+     tokio::spawn(async move {
+-        let mut args = vec!["-projectPath".as_ref(), OsStr::new(project_path.as_str())];
++        let (executable, mut args) =
++            if let Ok(fhsenv_path) = std::env::var("NIXPKGS_UNITYHUB_FHSENV") {
++                (
++                    fhsenv_path,
++                    vec![
++                        unity_path.as_ref(),
++                        "-projectPath".as_ref(),
++                        OsStr::new(project_path.as_str()),
++                    ],
++                )
++            } else {
++                (
++                    unity_path,
++                    vec!["-projectPath".as_ref(), OsStr::new(project_path.as_str())],
++                )
++            };
+ 
+         if let Some(unity_args) = &unity_args {
+             args.extend(unity_args.iter().map(OsStr::new));
+@@ -513,7 +528,7 @@ pub async fn project_open_unity(
+             args.extend(DEFAULT_UNITY_ARGUMENTS.iter().map(OsStr::new));
+         }
+ 
+-        if let Err(e) = crate::os::start_command("Unity".as_ref(), unity_path.as_ref(), &args).await
++        if let Err(e) = crate::os::start_command("Unity".as_ref(), executable.as_ref(), &args).await
+         {
+             log::error!("Launching Unity: {e}");
+         }
