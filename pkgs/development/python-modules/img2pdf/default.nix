@@ -47,6 +47,11 @@ buildPythonPackage rec {
     })
   ];
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'flit_core >=3.2,<4' flit_core
+  '';
+
   build-system = [ flit-core ];
 
   dependencies = [
