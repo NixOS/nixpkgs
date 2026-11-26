@@ -8,7 +8,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "steampipe-plugin-aws";
-  version = "1.35.0";
+  version = "1.37.0";
 
   __structuredAttrs = true;
 
@@ -16,10 +16,10 @@ buildGoModule (finalAttrs: {
     owner = "turbot";
     repo = "steampipe-plugin-aws";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-L0VzkFSCj4zpMRxII6v8sQWFPT8PjTPMLtlI5mBL16M=";
+    hash = "sha256-eAqaBCQszj85c5rSQr/WxQ8uH5y9fGDjMlyhDGHD7mM=";
   };
 
-  vendorHash = "sha256-UcaGfgrEl6TQph5VEK1dq4vl/jftgPK4KpDXP83b0ck=";
+  vendorHash = "sha256-pao/OCYu0+1HOurH6nNiNRIbTE2XWEAWKKtAdS6WMfQ=";
 
   ldflags = [
     "-s"
