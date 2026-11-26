@@ -51,6 +51,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/googlefonts/glyphsLib";
     changelog = "https://github.com/googlefonts/glyphsLib/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.jopejoe1 ];
   };
 })
