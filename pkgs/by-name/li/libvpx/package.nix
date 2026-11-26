@@ -264,6 +264,8 @@ stdenv.mkDerivation (finalAttrs: {
     ffmpeg = ffmpeg.override { withVpx = true; };
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "WebM VP8/VP9 codec SDK";
     homepage = "https://www.webmproject.org/";
