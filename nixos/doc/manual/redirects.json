@@ -1,4 +1,22 @@
 {
+  "module-services-cleanuparr": [
+    "index.html#module-services-cleanuparr"
+  ],
+  "module-services-cleanuparr-basic-usage": [
+    "index.html#module-services-cleanuparr-basic-usage"
+  ],
+  "module-services-cleanuparr-environment": [
+    "index.html#module-services-cleanuparr-environment"
+  ],
+  "module-services-cleanuparr-network": [
+    "index.html#module-services-cleanuparr-network"
+  ],
+  "module-services-cleanuparr-postgresql": [
+    "index.html#module-services-cleanuparr-postgresql"
+  ],
+  "module-services-cleanuparr-storage": [
+    "index.html#module-services-cleanuparr-storage"
+  ],
   "module-services-jellystat": [
     "index.html#module-services-jellystat"
   ],
