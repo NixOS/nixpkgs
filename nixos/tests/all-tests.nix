@@ -433,6 +433,7 @@ in
   cjdns = runTest ./cjdns.nix;
   clamav = runTest ./clamav.nix;
   clatd = runTest ./clatd.nix;
+  cleanuparr = runTest ./cleanuparr.nix;
   clickhouse = import ./clickhouse {
     inherit runTest;
     package = pkgs.clickhouse;

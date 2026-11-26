@@ -10,6 +10,7 @@
   dart-sass,
   makeWrapper,
   gcc,
+  nixosTests,
 }:
 buildDotnetModule (finalAttrs: {
   pname = "cleanuparr";
@@ -78,6 +79,7 @@ buildDotnetModule (finalAttrs: {
     transmission-api-rpc = callPackage ./transmission-api-rpc.nix { };
     qbittorrent-net-client = callPackage ./qbittorrent-net-client.nix { };
     updateScript = ./update-script.sh;
+    tests = { inherit (nixosTests) cleanuparr; };
   };
 
   meta = {

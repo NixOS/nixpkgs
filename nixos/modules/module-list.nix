@@ -889,6 +889,7 @@
   ./services/misc/castsponsorskip.nix
   ./services/misc/cfdyndns.nix
   ./services/misc/cgminer.nix
+  ./services/misc/cleanuparr.nix
   ./services/misc/clipcat.nix
   ./services/misc/clipmenu.nix
   ./services/misc/cliproxyapi.nix
