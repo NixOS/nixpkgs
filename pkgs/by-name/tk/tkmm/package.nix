@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildDotnetModule,
   fetchFromGitHub,
   dotnetCorePackages,
@@ -14,6 +15,9 @@
   libxext,
   libxi,
   libxrandr,
+  nix-update-script,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 buildDotnetModule (finalAttrs: {
   pname = "Tkmm";
@@ -83,6 +87,30 @@ buildDotnetModule (finalAttrs: {
       comment = "Tears of the Kingdom Mod Manager";
     })
   ];
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
+  versionCheckProgram = "${placeholder "out"}/bin/Tkmm.CLI";
+  versionCheckKeepEnvironment = [
+    "HOME"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ "CFFIXED_USER_HOME" ];
+
+  preVersionCheck =
+    if stdenv.hostPlatform.isDarwin then
+      ''
+        export CFFIXED_USER_HOME="$HOME"
+        mkdir -p "$HOME/Library/Application Support"
+      ''
+    else
+      ''
+        mkdir -p "$HOME/.config"
+      '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Tears of the Kingdom Mod Manager, a mod merger and manager for TotK";
