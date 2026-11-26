@@ -1,6 +1,7 @@
 {
   stdenv,
   lib,
+  testers,
   fetchFromGitLab,
   meson,
   ninja,
@@ -8,24 +9,32 @@
   cjson,
   cmocka,
   mbedtls,
+  lz4,
+
+  # for passthru.tests
+  ffmpeg-headless,
+  obs-studio,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "librist";
-  version = "0.2.11";
+  version = "0.2.20";
+
+  __structuredAttrs = true;
+  strictDeps = true;
+  separateDebugInfo = true;
 
   src = fetchFromGitLab {
     domain = "code.videolan.org";
     owner = "rist";
     repo = "librist";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-xWqyQl3peB/ENReMcDHzIdKXXCYOJYbhhG8tcSh36dY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-TaO1vQsJ/sJ/YFW7Ykv9HywsrtEy/3R4+BfxS1v/ZBY=";
   };
 
-  # avoid rebuild on Linux for now
-  patches = lib.optionals stdenv.hostPlatform.isDarwin [
-    # https://code.videolan.org/rist/librist/-/issues/192
-    ./no-brew-darwin.diff
+  outputs = [
+    "out"
+    "dev"
   ];
 
   nativeBuildInputs = [
@@ -39,11 +48,25 @@ stdenv.mkDerivation (finalAttrs: {
     NIX_CFLAGS_COMPILE = "-Wno-error=discarded-qualifiers";
   };
 
+  mesonFlags = lib.mapAttrsToList lib.mesonBool {
+    test = finalAttrs.finalPackage.doCheck;
+    fallback_builtin = false;
+  };
+
   buildInputs = [
     cjson
-    cmocka
     mbedtls
+    lz4
   ];
+
+  checkInputs = [ cmocka ];
+  # needs disabledTest support
+  doCheck = false;
+
+  passthru.tests = {
+    pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    inherit ffmpeg-headless obs-studio;
+  };
 
   meta = {
     description = "Library that can be used to easily add the RIST protocol to your application";
@@ -55,5 +78,6 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     maintainers = with lib.maintainers; [ raphaelr ];
     platforms = lib.platforms.all;
+    pkgConfigModules = [ "librist" ];
   };
 })
