@@ -6,6 +6,7 @@
   libjack2,
   pkg-config,
   which,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -66,9 +67,16 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+    pkgConfigModules = [
+      "portaudio-2.0"
+      "portaudiocpp"
+    ];
   };
+
+  __structuredAttrs = true;
 
   passthru = {
     api_version = 19;
+    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 })
