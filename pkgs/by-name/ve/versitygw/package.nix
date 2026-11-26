@@ -84,6 +84,7 @@ buildGoModule (finalAttrs: {
 
   passthru = {
     tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
+      module = callPackage ./test-module.nix { };
       nixos = nixosTests.versitygw.extendNixOS {
         module.services.versitygw.package = finalAttrs.finalPackage;
       };
