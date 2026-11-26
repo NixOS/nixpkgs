@@ -2700,13 +2700,13 @@ with self;
       # Fix out of memory error on Perl 5.19.4 and later.
       ../development/perl-modules/boost-geometry-utils-fix-oom.patch
     ];
-    postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # Clang on Darwin defaults to a newer C++ mode where the old bundled Boost
-      # headers no longer compile.
+    postPatch = ''
+      # The old bundled Boost headers do not compile in newer default C++ modes.
       substituteInPlace Build.PL \
         --replace-fail "extra_compiler_flags => [qw(-DHAS_BOOL)]" \
           "extra_compiler_flags => [qw(-DHAS_BOOL -std=c++14)]"
-
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
       # Avoid Boost.MPL enum wrappers that modern Clang rejects as out-of-range
       # enum constant expressions.
       substituteInPlace src/boost/numeric/conversion/detail/int_float_mixture.hpp \
