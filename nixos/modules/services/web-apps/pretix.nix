@@ -446,6 +446,7 @@ in
                 proxy_set_header X-Forwarded-For $remote_addr;
                 proxy_set_header X-Forwarded-Proto $scheme;
               '';
+              recommendedProxySettings = false;
             };
             "/media/" = {
               alias = "${cfg.settings.pretix.datadir}/media/";

@@ -28,7 +28,7 @@ buildPythonPackage (finalAttrs: {
   # `__version__` of polygraphy, which is versioned independently of TensorRT. A cudaPackages.tensorrt update that changes
   # `__version__` breaks this package (pythonMetadataCheckHook) until passthru.updateScript is run, so run it in the same
   # change. It also fails where cudaPackages uses an older TensorRT, such as with Jetson capabilities.
-  version = "0.53.6";
+  version = "0.53.9";
   pyproject = true;
 
   # cudaPackages.tensorrt-samples's source, the TensorRT OSS release of cudaPackages.tensorrt, so that Nixpkgs has one

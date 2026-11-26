@@ -18,13 +18,13 @@ let
 in
 maven.buildMavenPackage rec {
   pname = "cryptomator";
-  version = "1.19.6";
+  version = "1.19.7";
 
   src = fetchFromGitHub {
     owner = "cryptomator";
     repo = "cryptomator";
     tag = version;
-    hash = "sha256-g9DWxQYyfZ9Tk44jIrbFh0ee4/CXUEFVC+1AZr66QSo=";
+    hash = "sha256-l2A/C1FuxOs6SvW7j7uHM89cZb9ljNpcEO9DvBKr21s=";
   };
 
   mvnJdk = jdk;
@@ -68,6 +68,7 @@ maven.buildMavenPackage rec {
       --add-flags "-Dcryptomator.appVersion='${version}'" \
       --add-flags "-Djava.net.useSystemProxies=true" \
       --add-flags "-Xss20m" \
+      --add-flags "-XX:-UseBASE64Intrinsics" \
       --add-flags "-Xmx512m" \
       --add-flags "-Dcryptomator.disableUpdateCheck=true" \
       --add-flags "-Dcryptomator.integrationsLinux.trayIconsDir='$out/share/icons/hicolor/symbolic/apps'" \

@@ -227,13 +227,13 @@
     "vendorHash": "sha256-SoJxFqkj+Uf/XXXOVul7yi9/BEaUqppHU9+yt123RxU="
   },
   "cloudamqp_cloudamqp": {
-    "hash": "sha256-Ih26RaGdJKt9jeeCegcMZWnoxUv4vrzr1Pdx84BEcFA=",
+    "hash": "sha256-OpOaF1pKzEgHdPrVBeTBpPB93rdJBChwNMi94BckZ+A=",
     "homepage": "https://registry.terraform.io/providers/cloudamqp/cloudamqp",
     "owner": "cloudamqp",
     "repo": "terraform-provider-cloudamqp",
-    "rev": "v1.52.0",
+    "rev": "v1.53.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-oXzgbhm+343BuItU9J/QvsMegncG3sjNXPZbdkt9SxQ="
+    "vendorHash": "sha256-ddi9a4cI3FL53o39MAEJqcKD5nUTKsoarUdhjpmG3U4="
   },
   "cloudflare_cloudflare": {
     "hash": "sha256-9uq4ebmGmwxOj5tTLgxapEbTvWjjByUNAIHLfcZfREA=",
@@ -1066,11 +1066,11 @@
     "vendorHash": null
   },
   "ovh_ovh": {
-    "hash": "sha256-Qr7IQANWhoAe7InE5bRpVAsS4IaMDYLqRKV1v6VsESU=",
+    "hash": "sha256-H6PPvn5qvdM1qLEU/OwT91wOvGr4EukWUXw6sZqHLsg=",
     "homepage": "https://registry.terraform.io/providers/ovh/ovh",
     "owner": "ovh",
     "repo": "terraform-provider-ovh",
-    "rev": "v2.25.0",
+    "rev": "v2.26.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -1327,11 +1327,11 @@
     "vendorHash": "sha256-vAq4WDTP4JKjz/5PO0CBeWrkEUaYPGcUuPpE4ZUI+0c="
   },
   "tencentcloudstack_tencentcloud": {
-    "hash": "sha256-pqysSGWUdVoDyp5+14lnTFRFQcBRILJNf6M/h8Bo/kc=",
+    "hash": "sha256-z2p8s5l04xJ/J9NOTw3pn5FtEkSUNWSVmBrRSFffB1c=",
     "homepage": "https://registry.terraform.io/providers/tencentcloudstack/tencentcloud",
     "owner": "tencentcloudstack",
     "repo": "terraform-provider-tencentcloud",
-    "rev": "v1.83.41",
+    "rev": "v1.83.45",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
