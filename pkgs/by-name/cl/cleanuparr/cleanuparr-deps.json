@@ -20,6 +20,11 @@
     "hash": "sha256-EXvojddPu+9JKgOG9NSQgUTfWq1RpOYw7adxDPKDJ6o="
   },
   {
+    "pname": "JetBrains.Annotations",
+    "version": "2026.2.0",
+    "hash": "sha256-409CskrdaICXUplGs9sNplfTJfYElllVwIQwoDWfdmk="
+  },
+  {
     "pname": "Microsoft.AspNetCore.Authentication.JwtBearer",
     "version": "10.0.1",
     "hash": "sha256-x30FL5t31tGtbgTTHZlIEIky+J2Slba5YuLqytt56l4="
@@ -525,9 +530,19 @@
     "hash": "sha256-kWRapMTVEfcc0DxnI9Ai1+RwAAcR2+HUu+WF+OeLJCs="
   },
   {
+    "pname": "SQLitePCLRaw.bundle_e_sqlite3",
+    "version": "2.1.14",
+    "hash": "sha256-aLLoBio4O9zooLzKyH0ZST0nl/1fjSdFtGRkS7wHajs="
+  },
+  {
     "pname": "SQLitePCLRaw.core",
     "version": "2.1.11",
     "hash": "sha256-s/fxEoYlNf9c2C4HZueMzPCBvpiViDVlSpg7epB0GXY="
+  },
+  {
+    "pname": "SQLitePCLRaw.core",
+    "version": "2.1.14",
+    "hash": "sha256-aZ2JmhKVH4p5DP+M/QO8S7TKW4sGn4+jyh6NalwZNgs="
   },
   {
     "pname": "SQLitePCLRaw.lib.e_sqlite3",
@@ -535,9 +550,19 @@
     "hash": "sha256-ZmffbHNgnLUdsPbikilEAihxXl1MedIBQ1Xzt9226Bw="
   },
   {
+    "pname": "SQLitePCLRaw.lib.e_sqlite3",
+    "version": "2.1.14",
+    "hash": "sha256-t+nhjfcsgS3yxHabaraF3gRH+AgPOcWiirERRdeaNvA="
+  },
+  {
     "pname": "SQLitePCLRaw.provider.e_sqlite3",
     "version": "2.1.11",
     "hash": "sha256-LdfV325AmYgBOwmwP7MNZxMJZkNO6bwrHvB6C5SyItA="
+  },
+  {
+    "pname": "SQLitePCLRaw.provider.e_sqlite3",
+    "version": "2.1.14",
+    "hash": "sha256-2HDfVGaWo3IzDVkuRi+kjYHczSG6OCd0lREpBfIUeGk="
   },
   {
     "pname": "System.CodeDom",
@@ -621,13 +646,8 @@
   },
   {
     "pname": "System.Security.Cryptography.Pkcs",
-    "version": "7.0.2",
-    "hash": "sha256-qS5Z/Yo8J+f3ExVX5Qkcpj1Z57oUZqz5rWa1h5bVpl8="
-  },
-  {
-    "pname": "System.Security.Cryptography.Pkcs",
-    "version": "9.0.0",
-    "hash": "sha256-AjG14mGeSc2Ka4QSelGBM1LrGBW3VJX60lnihKyJjGY="
+    "version": "10.0.15",
+    "hash": "sha256-ctNJYS2jnSHuLuRd+89Fx9gJCMz6vVtk2lumHHG0amA="
   },
   {
     "pname": "System.Security.Cryptography.ProtectedData",
