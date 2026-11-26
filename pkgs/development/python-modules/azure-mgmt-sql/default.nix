@@ -2,35 +2,32 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  msrest,
-  msrestazure,
+  typing-extensions,
+  isodate,
   azure-common,
   azure-mgmt-core,
-  azure-mgmt-nspkg,
-  isPy3k,
   setuptools,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "azure-mgmt-sql";
-  version = "3.0.1";
+  version = "4.0.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit (finalAttrs) pname version;
-    extension = "zip";
-    hash = "sha256-EpBCzAESJeJ67m7yaX1YX6VyLl0a6wA4r2rSRRooVFc=";
+    pname = "azure_mgmt_sql";
+    inherit (finalAttrs) version;
+    hash = "sha256-s5dW+c+KzucnZPHHRSEcbGNfpfa/wnF03ipYaQkXJis=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
-    msrest
-    msrestazure
     azure-common
     azure-mgmt-core
-  ]
-  ++ lib.optionals (!isPy3k) [ azure-mgmt-nspkg ];
+    isodate
+    typing-extensions
+  ];
 
   # has no tests
   doCheck = false;
