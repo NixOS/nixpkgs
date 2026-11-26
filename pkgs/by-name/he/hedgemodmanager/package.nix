@@ -24,12 +24,16 @@ buildDotnetModule (finalAttrs: {
   postPatch = ''
     substituteInPlace flatpak/hedgemodmanager.desktop --replace-fail "/app/bin/HedgeModManager.UI" "HedgeModManager.UI"
     substituteInPlace Source/HedgeModManager.UI/Program.cs --replace-fail "ThisAssembly.GitCommitId[..7]" '""'
+    substituteInPlace Source/HedgeModManager{,.UI}/*.csproj Source/Libraries/HedgeModManager.{Epic,Foundation,Steam}/*.csproj \
+      --replace-fail '<TargetFramework>net8.0</' '<TargetFramework>net10.0</'
+    substituteInPlace Source/Libraries/HedgeModManager.Text/HedgeModManager.Text.csproj \
+      --replace-fail '<TargetFramework>net6.0</' '<TargetFramework>net10.0</'
   '';
 
   projectFile = "Source/HedgeModManager.UI/HedgeModManager.UI.csproj";
   nugetDeps = ./deps.json;
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
-  dotnet-runtime = dotnetCorePackages.runtime_8_0;
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
+  dotnet-runtime = dotnetCorePackages.runtime_10_0;
   executables = [ "HedgeModManager.UI" ];
 
   postInstall = ''
