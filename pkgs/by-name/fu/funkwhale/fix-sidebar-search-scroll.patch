@@ -1,5 +1,26 @@
---- a/src/shell/Search.vue	2026-11-26 18:38:05.235415998 +0530
-+++ b/src/shell/Search.vue	2026-11-26 18:39:19.050089290 +0530
+diff -u -r a/src/App.vue b/src/App.vue
+--- a/src/App.vue	2026-11-26 19:29:22.912193949 +0530
++++ b/src/App.vue	2026-11-26 19:29:22.912681146 +0530
+@@ -147,7 +147,7 @@
+ .responsive {
+   display: grid !important;
+   grid-template-columns: 300px minmax(0, 1fr);
+-  grid-template-rows: min-content auto 4rem;
++  grid-template-rows: min-content auto min-content;
+ 
+   min-height: 100vh;
+ 
+@@ -161,6 +161,7 @@
+       "sidebar main"
+       "sidebar main"
+       "player player";
++    grid-template-rows: 1fr 1fr min-content;
+   }
+ }
+ </style>
+diff -u -r a/src/shell/Search.vue b/src/shell/Search.vue
+--- a/src/shell/Search.vue	2026-11-26 19:29:22.912374415 +0530
++++ b/src/shell/Search.vue	2026-11-26 19:29:22.942469883 +0530
 @@ -1,8 +1,8 @@
  <script setup lang="ts">
 -import { refDebounced, watchDebounced, useElementBounding } from '@vueuse/core'
@@ -211,3 +232,31 @@
 +    height: 48px;
 +  }
  </style>
+diff -u -r a/src/shell/Sidebar.vue b/src/shell/Sidebar.vue
+--- a/src/shell/Sidebar.vue	2026-11-26 19:29:22.912502249 +0530
++++ b/src/shell/Sidebar.vue	2026-11-26 19:29:22.944634631 +0530
+@@ -402,7 +402,6 @@
+ 
+ .sidebar {
+   &.sticky-content {
+-    overflow: auto;
+     top: 0;
+ 
+     .upload-progress {
+@@ -473,6 +472,8 @@
+     .menu-links {
+       padding: 0 16px 72px;
+       flex-grow: 1;
++      overflow-y: auto;
++      overscroll-behavior: contain;
+     }
+   }
+ 
+@@ -484,7 +485,6 @@
+   }
+ 
+   @media screen and (min-width: 1024px) {
+-    height: 100%;
+ 
+     :global(.hide-on-desktop) {
+       display: none !important;
