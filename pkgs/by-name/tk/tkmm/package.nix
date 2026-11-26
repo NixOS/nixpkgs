@@ -17,22 +17,27 @@
 }:
 buildDotnetModule (finalAttrs: {
   pname = "Tkmm";
-  version = "2.0.0-beta3";
+  version = "2.2.2";
 
   src = fetchFromGitHub {
     owner = "TKMM-Team";
     repo = "Tkmm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XdnNKnusvWhNy/0rQCULft6ztsB/nhTeQiN4F9LmxJE=";
+    hash = "sha256-Z9BfqSEa3smB70EKWw4Wsv8VlxFfr5BXd1UIHes4Uzk=";
     fetchSubmodules = true;
   };
 
   patches = [ ./patchTk.diff ];
 
+  postPatch = ''
+    substituteInPlace src/Tkmm.Core/Helpers/DesktopEntryHelper.cs \
+      --replace-fail 'return Environment.ProcessPath;' "return \"$out/bin/Tkmm\";"
+  '';
+
   selfContainedBuild = true;
 
-  dotnet-sdk = dotnetCorePackages.sdk_9_0;
-  dotnet-runtime = dotnetCorePackages.runtime_9_0;
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
+  dotnet-runtime = dotnetCorePackages.runtime_10_0;
   projectFile = [
     "src/Tkmm/Tkmm.csproj"
     "src/Tkmm.CLI/Tkmm.CLI.csproj"
@@ -60,7 +65,8 @@ buildDotnetModule (finalAttrs: {
 
   enableParallelBuilding = false;
   dotnetFlags = [
-    ''-p:DefineConstants="READONLY_FS"''
+    "-p:NoUpdate=true"
+    "-p:UseApplicationDataFolder=true"
   ];
 
   postInstall = ''
