@@ -49,6 +49,12 @@ stdenv.mkDerivation (finalAttrs: {
     xz
   ];
 
+  # appid_log is defined inline in one file but called from others; GCC 16 no longer emits it
+  postPatch = ''
+    substituteInPlace src/network_inspectors/appid/appid_debug.cc \
+      --replace-fail "inline void appid_log(" "void appid_log("
+  '';
+
   enableParallelBuilding = true;
 
   passthru.updateScript = nix-update-script { };
