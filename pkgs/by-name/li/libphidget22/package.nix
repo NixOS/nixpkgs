@@ -7,7 +7,7 @@
 }:
 let
   # This package should be updated together with libphidget22extra
-  version = "1.25.20260512";
+  version = "1.27.20261112";
 in
 stdenv.mkDerivation {
   pname = "libphidget22";
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.phidgets.com/downloads/phidget22/libraries/linux/libphidget22/libphidget22-${version}.tar.gz";
-    hash = "sha256-wrLPP32gOjXsewdLUCe7lUUqfib3egrOONey9mcUfV8=";
+    hash = "sha256-ccqk/s7kR/pqVjgaQZTZCY6dKgFwsPUb8i6t0Ass0PA=";
   };
 
   nativeBuildInputs = [ automake ];
