@@ -43,6 +43,8 @@ stdenv.mkDerivation rec {
     "--with-fft=gpl-fftw3"
   ];
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://www.speex.org/";
     description = "Open Source/Free Software patent-free audio compression format designed for speech";
