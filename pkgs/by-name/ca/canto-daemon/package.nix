@@ -24,6 +24,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   pythonImportsCheck = [ "canto_next" ];
 
+  # Python project is called canto
+  dontCheckPythonMetadata = true;
+
   meta = {
     description = "Daemon for the canto Atom/RSS feed reader";
     longDescription = ''
