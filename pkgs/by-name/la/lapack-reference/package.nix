@@ -97,7 +97,14 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postCheck
   '';
 
-  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+  passthru.tests = {
+    pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+    };
+    cmake-config = testers.hasCmakeConfigModules {
+      package = finalAttrs.finalPackage;
+    };
+  };
 
   __structuredAttrs = true;
 
@@ -110,6 +117,11 @@ stdenv.mkDerivation (finalAttrs: {
       "blas"
       "cblas"
       "lapack"
+      "lapacke"
+    ];
+    cmakeConfigModules = [
+      "lapack"
+      "cblas"
       "lapacke"
     ];
     platforms = lib.platforms.all;
