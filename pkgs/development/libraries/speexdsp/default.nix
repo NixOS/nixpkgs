@@ -5,6 +5,7 @@
   autoreconfHook,
   pkg-config,
   fftw,
+  testers,
   withFftw3 ? (!stdenv.hostPlatform.isMinGW),
 }:
 
@@ -38,6 +39,8 @@ stdenv.mkDerivation (finalAttrs: {
     lib.optionals withFftw3 [ "--with-fft=gpl-fftw3" ]
     ++ lib.optional stdenv.hostPlatform.isAarch64 "--disable-neon";
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   __structuredAttrs = true;
 
   meta = {
@@ -45,5 +48,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Open Source/Free Software patent-free audio compression format designed for speech";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix ++ lib.platforms.windows;
+    pkgConfigModules = [ "speexdsp" ];
   };
 })
