@@ -105,7 +105,14 @@ stdenv.mkDerivation (finalAttrs: {
     HWLOC_SYNTHETIC = "node:1 core:1 pu:1";
   };
 
-  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+  passthru.tests = {
+    pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+    };
+    cmake-config = testers.hasCmakeConfigModules {
+      package = finalAttrs.finalPackage;
+    };
+  };
 
   __structuredAttrs = true;
 
@@ -130,5 +137,6 @@ stdenv.mkDerivation (finalAttrs: {
       AAAAAASomeThingsFailToEvaluate
     ];
     pkgConfigModules = [ "tbb" ];
+    cmakeConfigModules = [ "TBB" ];
   };
 })
