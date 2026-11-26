@@ -21,9 +21,14 @@ buildPythonPackage rec {
     hash = "sha256-+BgzhlAG9rSpslUKJHSm49fn8ssjuiMwkmBXfqZVUvY=";
   };
 
-  nativeBuildInputs = [ flit-core ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'flit_core >=3.4,<4' flit_core
+  '';
 
-  propagatedBuildInputs = [
+  build-system = [ flit-core ];
+
+  dependencies = [
     click
     pyyaml
     sphinx
