@@ -1,79 +1,41 @@
 {
   lib,
   stdenv,
-  buildNpmPackage,
   buildDotnetModule,
   fetchFromGitHub,
+  fetchurl,
   autoPatchelfHook,
   dotnetCorePackages,
-  npm-lockfile-fix,
-  dart-sass,
   icu,
   openssl,
   krb5,
 }:
 
 let
-  version = "2.4.1.0";
+  version = "2.4.1.1";
   channel = "stable";
-  buildDate = "2026-10-29";
-  ngclientVersion = "0.0.244";
-  ngclientRev = "4c2cb9a067d41e86359e7dcbcb10d8768342dbb5";
-  ngclientHash = "sha256-aeQ6P/SLsQPu2VnIEyouzZa0DHBH91X6kftZ1J0/cDE=";
+  buildDate = "2026-11-25";
+  ngclientVersion = "0.0.251";
+  ngclientHash = "sha512-xfyI0mGJOp2sPqsACky8XVoEMGn1QCYyyLm9ueJXYkyUVVd4GqkR4oCp5qd7NuAKw19FO1YzIyIl27vXP5ImDQ==";
 
-  # from Duplicati/Server/webroot/ngclient/package.json
-  ngclient = buildNpmPackage {
+  ngclient = stdenv.mkDerivation {
     pname = "ngclient";
     version = ngclientVersion;
-    __structuredAttrs = true;
-    strictDeps = true;
-
-    src = fetchFromGitHub {
-      owner = "duplicati";
-      repo = "ngclient";
-      rev = ngclientRev;
+    src = fetchurl {
+      url = "https://registry.npmjs.org/@duplicati/ngclient/-/ngclient-${ngclientVersion}.tgz";
       hash = ngclientHash;
-
-      postFetch = ''
-        ${lib.getExe npm-lockfile-fix} -r $out/package-lock.json
-      '';
     };
 
-    postPatch = ''
-      substituteInPlace package.json \
-        --replace-fail '"build:prod": "bun run gen:font & ng build' \
-                       '"build:prod": "npm run gen:font && ng build' \
-        --replace-fail '"gen:font": "ship-fg' \
-                       '"gen:font": "node node_modules/.bin/ship-fg'
-    '';
+    strictDeps = true;
+    __structuredAttrs = true;
 
-    npmDepsHash = "sha256-1Np60bym1z4yTRq/kBgVosqw74b9UFL3ikFqgvGyCWs=";
-
-    npmBuildScript = "build:prod";
-
-    env = {
-      NG_CLI_ANALYTICS = "false";
-      CI = "true";
-    };
-
-    nativeBuildInputs = [ dart-sass ];
-
-    preBuild = ''
-      # force our dart-sass executable
-      echo "export const compilerCommand = ['dart-sass'];" \
-        > node_modules/sass-embedded/dist/lib/src/compiler-path.js
-    '';
+    dontUnpack = true;
+    dontBuild = true;
+    dontFixup = true;
 
     installPhase = ''
-      runHook preInstall
-
-      mkdir -p $out
-      cp -r dist/ngclient/* $out/
-
-      runHook postInstall
-    '';
-
-    postInstall = ''
+      mkdir -p $out/browser
+      tar --strip-components=1 -xzf "$src" -C "$out/browser"
       substituteInPlace $out/browser/index.html \
           --replace-fail '<base href="/">' '<base href="/ngclient/">'
     '';
@@ -82,13 +44,14 @@ in
 buildDotnetModule {
   pname = "duplicati";
   inherit version channel buildDate;
+  strictDeps = true;
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "duplicati";
     repo = "duplicati";
     tag = "v${version}_${channel}_${buildDate}";
-    hash = "sha256-Hl1NkYona6M3b24PA2C1W1fRgL6+ir5B1P09kgo0Qow=";
+    hash = "sha256-zKaUcfxBzDu8LSpNoyfz0b6I6K5QiAFHFtpjB6yvoXo=";
     stripRoot = true;
   };
 
