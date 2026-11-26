@@ -5846,7 +5846,7 @@ with pkgs;
   glanceclient = with python3Packages; toPythonApplication python-glanceclient;
   heatclient = with python3Packages; toPythonApplication python-heatclient;
   ironicclient = with python3Packages; toPythonApplication python-ironicclient;
-  magnumclient = with python313Packages; toPythonApplication python-magnumclient;
+  magnumclient = with python3Packages; toPythonApplication python-magnumclient;
   manilaclient = with python313Packages; toPythonApplication python-manilaclient;
   mistralclient = with python313Packages; toPythonApplication python-mistralclient;
   neutronclient = with python313Packages; toPythonApplication python-neutronclient;
