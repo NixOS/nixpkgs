@@ -63,6 +63,8 @@ stdenv.mkDerivation (finalAttrs: {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "X Athena Widget Set, based on the X Toolkit Intrinsics (Xt) Library";
     homepage = "https://gitlab.freedesktop.org/xorg/lib/libxaw";
