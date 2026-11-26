@@ -209,6 +209,7 @@ mapAliases {
   digital-ocean = throw "'digital-ocean' has been renamed to/replaced by 'python-digitalocean'"; # Converted to throw 2025-10-29
   discogs_client = throw "'discogs_client' has been renamed to/replaced by 'discogs-client'"; # Converted to throw 2025-10-29
   distutils_extra = throw "'distutils_extra' has been renamed to/replaced by 'distutils-extra'"; # Converted to throw 2025-10-29
+  distutils-extra = python-distutils-extra; # added 2026-11-25
   dj-stripe = throw "dj-stripe has been removed because it is unused and broken"; # added 2025-07-21
   django-admin-datta = throw "django-admin-datta has been removed because it is unmaintained"; # added 2026-09-19
   django-crispy-bootstrap3 = crispy-bootstrap3; # added 2025-06-11

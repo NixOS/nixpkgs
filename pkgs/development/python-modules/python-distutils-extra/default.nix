@@ -5,12 +5,12 @@
 }:
 
 buildPythonPackage rec {
-  pname = "distutils-extra";
+  pname = "python-distutils-extra";
   version = "2.50";
   format = "setuptools";
 
   src = fetchurl {
-    url = "https://salsa.debian.org/python-team/modules/python-distutils-extra/-/archive/${version}/python-${pname}-${version}.tar.bz2";
+    url = "https://salsa.debian.org/python-team/modules/python-distutils-extra/-/archive/${version}/python-distutils-extra-${version}.tar.bz2";
     hash = "sha256-aq5+JjlzD3fS4+CPxZNjyz2QNfqsChC0w6KRVgbTGwI=";
   };
 

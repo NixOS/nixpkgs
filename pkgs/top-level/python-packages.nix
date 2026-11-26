@@ -4619,8 +4619,6 @@ self: super: with self; {
   distutils =
     if pythonOlder "3.12" then null else callPackage ../development/python-modules/distutils { };
 
-  distutils-extra = callPackage ../development/python-modules/distutils-extra { };
-
   distutils_80 =
     if pythonOlder "3.12" then null else callPackage ../development/python-modules/distutils/80.nix { };
 
@@ -17196,6 +17194,8 @@ self: super: with self; {
   python-digitalocean = callPackage ../development/python-modules/python-digitalocean { };
 
   python-discovery = callPackage ../development/python-modules/python-discovery { };
+
+  python-distutils-extra = callPackage ../development/python-modules/python-distutils-extra { };
 
   python-docs-theme = callPackage ../development/python-modules/python-docs-theme { };
 
