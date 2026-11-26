@@ -12,14 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "faraday-agent-parameters-types";
-  version = "1.9.1";
+  version = "1.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "infobyte";
     repo = "faraday_agent_parameters_types";
     tag = finalAttrs.version;
-    hash = "sha256-Oe/9/zKOoCLK3JHMacOhk2+d91MrhzkBTW3POoFm71M=";
+    hash = "sha256-jYIGIA/IMTZlYNjmcP1nYQJ3g3RRj7n6EMYceHJAH7o=";
   };
 
   pythonRelaxDeps = [
