@@ -44,6 +44,8 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Media container library to manipulate Ogg files";
     longDescription = ''
