@@ -4,6 +4,7 @@
   fetchFromGitHub,
   cmake,
   fetchpatch,
+  testers,
   static ? stdenv.hostPlatform.isStatic,
 }:
 
@@ -72,6 +73,15 @@ stdenv.mkDerivation (finalAttrs: {
   # requires gbenchmark and gtest but it also installs them out $dev
   doCheck = false;
 
+  passthru = {
+    tests.pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+    };
+    tests.cmake-config = testers.hasCmakeConfigModules {
+      package = finalAttrs.finalPackage;
+    };
+  };
+
   __structuredAttrs = true;
 
   meta = {
@@ -79,5 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd3;
     description = "Compression/decompression library for very high speeds";
     platforms = lib.platforms.all;
+    pkgConfigModules = [ "snappy" ];
+    cmakeConfigModules = [ "Snappy" ];
   };
 })
