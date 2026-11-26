@@ -14,22 +14,23 @@
   python3,
   rustPlatform,
   stdenv,
+  tzdata,
   writableTmpDirAsHomeHook,
   writeShellScriptBin,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "atuin";
-  version = "18.24.8";
+  version = "18.25.1";
 
   src = fetchFromGitHub {
     owner = "atuinsh";
     repo = "atuin";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JOJ/My4/IaAzSX6NJpFfcf9bAEutuRpbjWx7zS/uzRw=";
+    hash = "sha256-fZpe677ju8n3X4Csj7HJDPqcWEFyPE7FL0zVNpiI72g=";
   };
 
-  cargoHash = "sha256-+ov43XTWhHJj+/c2XTu3GCXExdg3q+PC4AEqOf2Nun4=";
+  cargoHash = "sha256-SZKFzRmrz+p2b74SoZgovBoAxPAtL4MjERcv8PTNh5s=";
 
   # crates/atuin-common/src/secrets.rs sets a `REDACT_BUDGET` of 250ms for release builds
   # and 5s (which we increase to 30s here) for debug builds.
@@ -38,6 +39,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   postPatch = ''
     substituteInPlace crates/atuin-common/src/secrets.rs \
       --replace-fail 'Duration::from_secs(5)' 'Duration::from_secs(30)'
+    # the sandbox has /bin/sh but no /bin/bash
+    substituteInPlace crates/atuin/tests/e2e_pty_proxy_stdin.rs \
+      --replace-fail '"/bin/bash"' '"${lib.getExe bashInteractive}"'
   '';
 
   # atuin's default features include 'check-updates', which do not make sense
@@ -103,6 +107,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=operator_creates_resets_and_deletes_a_user"
     # timing-dependent: fails when the index reload is too fast to measure
     "--skip=end_history_is_not_starved_by_an_index_reload"
+    # the shim runs with PATH=/usr/bin:/bin, where the sandbox has no sleep
+    "--skip=a_shim_that_hangs_is_killed_with_its_children"
   ];
 
   # The e2e tests start an interactive bash, which sources the host's
@@ -118,6 +124,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
       NOSYSBASHRC=1 exec ${lib.getExe bashInteractive} "$@"
     ''
   );
+
+  # the stats tests look up America/Santiago in the time zone database
+  env.TZDIR = "${tzdata}/share/zoneinfo";
 
   __darwinAllowLocalNetworking = true;
 
