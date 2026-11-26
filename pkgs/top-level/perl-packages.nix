@@ -14655,7 +14655,7 @@ with self;
       TryTiny
       WebScraper
       XMLLibXML
-      libwwwperl
+      LWP
     ];
     meta = {
       homepage = "https://finance-quote.sourceforge.net/";
@@ -19055,44 +19055,6 @@ with self;
       description = "Add paths relative to the current file to @INC";
       homepage = "https://github.com/Grinnz/lib-relative";
       license = lib.licenses.artistic2;
-    };
-  };
-
-  libwwwperl = buildPerlPackage {
-    pname = "libwww-perl";
-    version = "6.83";
-    src = fetchurl {
-      url = "mirror://cpan/authors/id/O/OA/OALDERS/libwww-perl-6.83.tar.gz";
-      hash = "sha256-518PqdPG8Nr1pacvqfixycDSPjqEqFIsy0+DUjK5VQU=";
-    };
-    buildInputs = [
-      HTTPDaemon
-      TestFatal
-      TestNeeds
-      TestRequiresInternet
-    ];
-    propagatedBuildInputs = [
-      EncodeLocale
-      FileListing
-      HTMLParser
-      HTTPCookieJar
-      HTTPCookies
-      HTTPDate
-      HTTPMessage
-      HTTPNegotiate
-      LWPMediaTypes
-      NetHTTP
-      TryTiny
-      URI
-      WWWRobotRules
-    ];
-    meta = {
-      homepage = "https://github.com/libwww-perl/libwww-perl";
-      description = "World-Wide Web library for Perl";
-      license = with lib.licenses; [
-        artistic1
-        gpl1Plus
-      ];
     };
   };
 
@@ -39835,7 +39797,7 @@ with self;
       URI
       XMLXPathEngine
       YAML
-      libwwwperl
+      LWP
     ];
     meta = {
       homepage = "https://github.com/miyagawa/web-scraper";
@@ -40091,6 +40053,7 @@ with self;
   IOstringy = self.IOStringy;
   libintl_perl = self.libintl-perl;
   libintlperl = self.libintl-perl;
+  libwwwperl = self.LWP; # Accidental duplicate of the identical package was introduced under a different name
   LWPProtocolconnect = self.LWPProtocolConnect;
   LWPProtocolhttps = self.LWPProtocolHttps;
   LWPUserAgent = self.LWP;
