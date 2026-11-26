@@ -41,6 +41,7 @@
   wrapGAppsHook3,
   fetchpatch2,
   nixosTests,
+  testers,
 
   x11Support ? false,
 
@@ -285,6 +286,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests = {
     inherit (nixosTests) pulseaudio pulseaudio-tcp;
+    pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+    };
+    cmake-config = testers.hasCmakeConfigModules {
+      package = finalAttrs.finalPackage;
+    };
   };
 
   __structuredAttrs = true;
@@ -298,6 +305,14 @@ stdenv.mkDerivation (finalAttrs: {
 
     # https://gitlab.freedesktop.org/pulseaudio/pulseaudio/-/issues/1089
     badPlatforms = [ lib.systems.inspect.platformPatterns.isStatic ];
+    pkgConfigModules = [
+      "libpulse"
+      "libpulse-simple"
+      "libpulse-mainloop-glib"
+    ];
+    cmakeConfigModules = [
+      "PulseAudio"
+    ];
 
     longDescription = ''
       PulseAudio is a sound server for POSIX and Win32 systems.  A
