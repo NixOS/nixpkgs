@@ -1,5 +1,16 @@
 diff --git a/src/main/java/com/google/devtools/build/lib/bazel/rules/BazelRuleClassProvider.java b/src/main/java/com/google/devtools/build/lib/bazel/rules/BazelRuleClassProvider.java
 index 8ac0c2bb97..4233eccf19 100644
+--- a/src/main/java/com/google/devtools/build/lib/analysis/BashCommandConstructor.java
++++ b/src/main/java/com/google/devtools/build/lib/analysis/BashCommandConstructor.java
+@@ -43,7 +43,7 @@
+   @Override
+   public Artifact commandAsScript(RuleContext ruleContext, String command) {
+     String scriptFileName = ruleContext.getTarget().getName() + scriptNameSuffix;
+-    String scriptFileContents = "#!/bin/bash\n" + command;
++    String scriptFileContents = "#!@defaultBash@\n" + command;
+     return FileWriteAction.createFile(
+         ruleContext, scriptFileName, scriptFileContents, /*executable=*/ true);
+   }
 --- a/src/main/java/com/google/devtools/build/lib/bazel/rules/BazelRuleClassProvider.java
 +++ b/src/main/java/com/google/devtools/build/lib/bazel/rules/BazelRuleClassProvider.java
 @@ -87,16 +87,16 @@ public class BazelRuleClassProvider {

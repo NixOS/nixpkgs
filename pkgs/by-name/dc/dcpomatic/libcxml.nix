@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchgit,
+  gitUpdater,
 
   wafHook,
   python3,
@@ -13,12 +14,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libcxml";
-  version = "0.17.17";
+  version = "0.17.18";
 
   src = fetchgit {
     url = "https://git.carlh.net/git/libcxml.git";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fd6KYSQnFw3aHCQOT6TTcGUvTxIWrJeRT5rmk2CgbrQ=";
+    hash = "sha256-x3DJYs5/MJM7N22e5jSNR/OujyjVdOpQbXAnQlVIb9w=";
   };
 
   # for some reason the version is not set properly upstream
@@ -40,6 +41,15 @@ stdenv.mkDerivation (finalAttrs: {
     libxmlxx
     boost
   ];
+
+  passthru.updateScript =
+    gitUpdater {
+      rev-prefix = "v";
+      attrPath = "dcpomatic.libcxml";
+    }
+    // {
+      supportedFeatures = [ ];
+    };
 
   __structuredAttrs = true;
   strictDeps = true;

@@ -25,6 +25,12 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
+    # Remove when updating past 3.7.1.
+    (fetchpatch {
+      name = "CVE-2026-133167.patch";
+      url = "https://github.com/DCMTK/dcmtk/commit/f9fbc4f3687a43e8342d85ef5584edf6f15f9fc9.patch";
+      hash = "sha256-8ZbcmUYjzbnFxlzKhhE11LeUmr46Mr/gkZdD9V4ocKg=";
+    })
     # Remove when updating past 3.7.0.
     (fetchpatch {
       name = "CVE-2026-5663.patch";

@@ -13,14 +13,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "infisicalsdk";
-  version = "1.3.0";
+  version = "1.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Infisical";
     repo = "python-sdk-official";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Qj1Dpuqmv9utv9Ht6m1Pk0E0hYw1DPMW8/rk8VTnGR4=";
+    hash = "sha256-k2vBzF6bEZDcPlhY1jsYrK7NEAgsIlhLZX1BJIHNn3s=";
   };
 
   # fix version in setup.py AND pyproject.toml

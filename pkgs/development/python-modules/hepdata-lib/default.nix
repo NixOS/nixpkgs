@@ -17,14 +17,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "hepdata_lib";
-  version = "0.21.0";
+  version = "0.21.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "HEPData";
     repo = "hepdata_lib";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+RoiH0yFfR2dJxstk4JWUHWNk5TQH6fgEl7f78Ej2KI=";
+    hash = "sha256-mGBvcNHeTJ68CH9xqI8x+3gquzJmkDQK2z2vrqgltTY=";
   };
 
   build-system = [ setuptools ];
