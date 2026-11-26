@@ -19,6 +19,7 @@
   writeScript,
   pkgsStatic,
   guileImportsCheckHook,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -155,7 +156,10 @@ stdenv.mkDerivation (finalAttrs: {
   setupHook = ./setup-hook-3.0.sh;
 
   passthru = {
-    tests.static = pkgsStatic.guile;
+    tests = {
+      static = pkgsStatic.guile;
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    };
 
     effectiveVersion = lib.versions.majorMinor finalAttrs.version;
     siteCcacheDir = "lib/guile/${finalAttrs.passthru.effectiveVersion}/site-ccache";
@@ -192,5 +196,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     platforms = lib.platforms.all;
     mainProgram = "guile";
+    pkgConfigModules = [ "guile-3.0" ];
   };
 })
