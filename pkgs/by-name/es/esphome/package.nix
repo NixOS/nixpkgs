@@ -4,6 +4,7 @@
   python3Packages,
   fetchFromGitHub,
   installShellFiles,
+  bashNonInteractive,
   platformio,
   platformio-core,
   esptool,
@@ -101,6 +102,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     # platformio is used in esphome/platformio_api.py
     # esptool is used in esphome/__main__.py
     # git is used in esphome/git.py
+    # sh is used by ninja, which nixpkgs patches to look up in PATH (see https://github.com/NixOS/nixpkgs/pull/432064)
     "--prefix"
     "PATH"
     ":"
@@ -108,6 +110,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       platformio
       esptool
       git
+      bashNonInteractive
     ])
 
     # The dashboard requires esphome to be importable
