@@ -2,10 +2,12 @@
   buildFHSEnv,
   callPackage,
   lib,
+
+  withSecretStore ? false,
 }:
 let
 
-  shticker-book-unwritten-unwrapped = callPackage ./unwrapped.nix { };
+  shticker-book-unwritten-unwrapped = callPackage ./unwrapped.nix { inherit withSecretStore; };
 
 in
 buildFHSEnv {
