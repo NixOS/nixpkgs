@@ -7,6 +7,9 @@
   coreutils,
   gitUpdater,
   versionCheckHook,
+  runCommand,
+  testers,
+  writeText,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -102,6 +105,29 @@ stdenv.mkDerivation (finalAttrs: {
       rev-prefix = "rel/";
       url = "https://gitbox.apache.org/repos/asf/ant";
     };
+    tests.javac-jdk8 =
+      # Regression test for the ant launcher: it must run the JVM from
+      # $JAVA_HOME/bin.  Upstream's bin/ant prefers $JAVA_HOME/jre/bin/java
+      # when it exists, which is the case for all openjdk < 11 in nixpkgs
+      # (their jre output is linked into the JDK).  Running that JVM makes
+      # java.home resolve into the JRE, where the launcher cannot find
+      # tools.jar, so <javac> fails with "Unable to find a javac compiler".
+      testers.testEqualContents {
+        assertion = "can compile and run a Java file with the JDK given via JAVA_HOME";
+        expected = writeText "expected" "Hello from ant!\n";
+        actual =
+          runCommand "actual"
+            {
+              nativeBuildInputs = [ finalAttrs.finalPackage ];
+              src = ./tests/javac-jdk8;
+              env.JAVA_HOME = jdk8.home;
+            }
+            ''
+              cp -a $src/* .
+              ant
+              ${jdk8.jre}/bin/java -cp build Hello > $out
+            '';
+      };
   };
 
   meta = {
