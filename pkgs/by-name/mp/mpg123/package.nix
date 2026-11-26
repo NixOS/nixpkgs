@@ -48,6 +48,8 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals withJack [ libjack2 ]
   );
 
+  strictDeps = true;
+
   configureFlags =
     lib.optionals (!libOnly) [
       "--with-audio=${
