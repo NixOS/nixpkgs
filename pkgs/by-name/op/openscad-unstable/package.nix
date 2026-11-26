@@ -28,7 +28,7 @@
   libGLU,
   libice,
   libsm,
-  libsForQt5,
+  qt6Packages,
   libspnav,
   libzip,
   manifold,
@@ -76,12 +76,13 @@ clangStdenv.mkDerivation rec {
     bison
     cmake
     flex
-    libsForQt5.wrapQtAppsHook
+    qt6Packages.wrapQtAppsHook
     llvmPackages.bintools
     wrapGAppsHook3
     ninja
     pkg-config
   ];
+
   buildInputs = [
     catch2_3
     clipper2
@@ -105,9 +106,10 @@ clangStdenv.mkDerivation rec {
     libzip
     manifold
     mpfr
-    libsForQt5.qscintilla
-    libsForQt5.qtbase
-    libsForQt5.qtmultimedia
+    qt6Packages.qt5compat
+    qt6Packages.qtbase
+    qt6Packages.qscintilla
+    qt6Packages.qtmultimedia
   ]
   ++ lib.optionals clangStdenv.hostPlatform.isLinux [
     libxdmcp
@@ -115,10 +117,9 @@ clangStdenv.mkDerivation rec {
     libsm
     wayland
     wayland-protocols
-    libsForQt5.qtwayland
+    qt6Packages.qtwayland
     libGLU
-  ]
-  ++ lib.optional clangStdenv.hostPlatform.isDarwin libsForQt5.qtmacextras;
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "EXPERIMENTAL" true) # enable experimental options
@@ -126,6 +127,7 @@ clangStdenv.mkDerivation rec {
     (lib.cmakeBool "USE_BUILTIN_OPENCSG" false)
     (lib.cmakeBool "USE_BUILTIN_MANIFOLD" false)
     (lib.cmakeBool "USE_BUILTIN_CLIPPER2" false)
+    (lib.cmakeBool "USE_QT6" true)
     # Derive version from our unstable date
     (lib.cmakeFeature "OPENSCAD_VERSION" "${
       builtins.replaceStrings [ "-" ] [ "." ] unstable_date
@@ -133,10 +135,6 @@ clangStdenv.mkDerivation rec {
     (lib.cmakeBool "CMAKE_UNITY_BUILD" false) # broken compile with unity
     # IPO
     (lib.cmakeBool "CMAKE_INTERPROCEDURAL_OPTIMIZATION" true)
-
-    # The sources enable this for only apple. We turn it off globally anyway to stay
-    # consistent.
-    (lib.cmakeBool "USE_QT6" false)
 
     # For tests
     (lib.cmakeFeature "VENV_DIR" "${python3withPackages}")
