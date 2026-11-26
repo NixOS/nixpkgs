@@ -31,7 +31,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   __structuredAttrs = true;
 
-  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+  passthru.tests = {
+    pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+    };
+    cmake-config = testers.hasCmakeConfigModules {
+      package = finalAttrs.finalPackage;
+    };
+  };
 
   meta = {
     changelog = "https://github.com/doctest/doctest/releases/tag/${finalAttrs.src.tag}";
@@ -41,5 +48,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.nim65s ];
     pkgConfigModules = [ "doctest" ];
+    cmakeConfigModules = [ "doctest" ];
   };
 })
