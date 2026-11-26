@@ -5842,7 +5842,7 @@ with pkgs;
   openstackclient-full = openstackclient.overridePythonAttrs (oldAttrs: {
     dependencies = oldAttrs.dependencies ++ oldAttrs.optional-dependencies.cli-plugins;
   });
-  barbicanclient = with python313Packages; toPythonApplication python-barbicanclient;
+  barbicanclient = with python3Packages; toPythonApplication python-barbicanclient;
   glanceclient = with python313Packages; toPythonApplication python-glanceclient;
   heatclient = with python313Packages; toPythonApplication python-heatclient;
   ironicclient = with python313Packages; toPythonApplication python-ironicclient;
