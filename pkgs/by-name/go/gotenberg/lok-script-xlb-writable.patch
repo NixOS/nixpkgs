@@ -1,0 +1,13 @@
+diff --git a/pkg/lok/internal/profile/profile.go b/pkg/lok/internal/profile/profile.go
+--- a/pkg/lok/internal/profile/profile.go
++++ b/pkg/lok/internal/profile/profile.go
+@@ -83,4 +83,9 @@ func registerModule(scriptXLB string) error {
+ 	merged := content[:idx] + ` <library:element library:name="LokGeometry"/>` + "\n" + content[idx:]
+ 
+-	return os.WriteFile(scriptXLB, []byte(merged), 0o600) //nolint:gosec // scriptXLB is inside the private profile directory Init creates, not a caller-controlled path
++	// LibreOffice preserves the preset's file permissions from the nix store when copying it into the private profile.
++ // Make it writable before writing to it.
++	if err := os.Chmod(scriptXLB, 0o600); err != nil {
++		return fmt.Errorf("making library index writable: %w", err)
++	}
++	return os.WriteFile(scriptXLB, []byte(merged), 0o600)

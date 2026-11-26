@@ -395,6 +395,37 @@ in
             RuntimeDirectoryPreserve = true; # Relevant when multiple processes are running
             Restart = "always";
             WatchdogSec = 15;
+            NoNewPrivileges = true;
+            ProcSubset = "pid";
+            ProtectProc = "invisible";
+            PrivateBPF = true;
+            ProtectHostname = true;
+            ProtectClock = true;
+            ProtectKernelTunables = true;
+            ProtectKernelModules = true;
+            ProtectKernelLogs = true;
+            ProtectControlGroups = true;
+            RestrictNamespaces = true;
+            LockPersonality = true;
+            RestrictRealtime = true;
+            RestrictSUIDSGID = true;
+            PrivateMounts = true;
+            RemoveIPC = true;
+            SystemCallFilter = [ "@system-service" ];
+            SystemCallArchitectures = "native";
+            SystemCallErrorNumber = "EPERM";
+            UMask = "0007";
+            MemoryDenyWriteExecute = false; # for pcre2 jit
+            CapabilityBoundingSet = [
+              "CAP_CHOWN"
+              "CAP_KILL"
+              "CAP_SETUID"
+              "CAP_SETGID"
+              "CAP_SETPCAP"
+            ]
+            ++ lib.optionals (poolOpts.settings ? chroot) [
+              "CAP_SYS_CHROOT"
+            ];
           };
       }
     ) cfg.pools;

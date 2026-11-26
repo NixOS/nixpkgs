@@ -21,7 +21,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "trino-python-client";
+  pname = "trino";
   version = "0.338.0";
   pyproject = true;
 

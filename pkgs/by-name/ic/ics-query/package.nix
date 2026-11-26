@@ -42,6 +42,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   pythonRelaxDeps = [
+    "icalendar"
+    "click"
     "recurring-ical-events"
     "tzdata"
     "tzlocal"

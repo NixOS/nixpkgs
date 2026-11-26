@@ -5,25 +5,27 @@
   fetchFromGitHub,
   fmt,
   lib,
+  re,
 }:
 
 buildDunePackage (finalAttrs: {
   pname = "tw";
-  version = "0-unstable-2026-06-23";
+  version = "1.2.0";
   minimalOCamlVersion = "5.2";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "samoht";
     repo = "tw";
-    rev = "594d35df46ec2afcfe97632923331badf2940b93";
-    hash = "sha256-vCRq0FCBIxc/AQg+R2Hig7nqwJGxgy2jedLbAsKaIoA=";
+    tag = finalAttrs.version;
+    hash = "sha256-lmEAl9XDKSAcT4qHpTTGienKcMUjqvYgrdPmXteHKAo=";
   };
 
   propagatedBuildInputs = [ cascade ];
   buildInputs = [
     cmdliner
     fmt
+    re
   ];
 
   # Disabling tests because they check for byte-for-byte identical
