@@ -34,8 +34,6 @@ buildPythonPackage (finalAttrs: {
     description = "Library for fetching fuel prices from Fuelprices.dk API";
     homepage = "https://github.com/MTrab/pybraendstofpriser";
     changelog = "https://github.com/MTrab/pybraendstofpriser/releases/tag/${finalAttrs.src.tag}";
-    # Awaiting license clarification from upstream.
-    # https://github.com/MTrab/pybraendstofpriser/issues/44
     license = lib.licenses.gpl3Only;
     maintainers = [ lib.maintainers.jamiemagee ];
   };
