@@ -618,6 +618,8 @@ self: super: with self; {
 
   aiotractive = callPackage ../development/python-modules/aiotractive { };
 
+  aiotrimlight = callPackage ../development/python-modules/aiotrimlight { };
+
   aiounifi = callPackage ../development/python-modules/aiounifi { };
 
   aiounittest = callPackage ../development/python-modules/aiounittest { };
