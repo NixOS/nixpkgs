@@ -24,8 +24,8 @@ buildDotnetModule (finalAttrs: {
   };
 
   postPatch = ''
-    substituteInPlace src/Tkmm.Core/Helpers/DesktopEntryHelper.cs \
-      --replace-fail 'return Environment.ProcessPath;' "return \"$out/bin/Tkmm\";"
+    substituteInPlace src/Tkmm/Program.cs \
+      --replace-fail 'DesktopEntryHelper.TryRegisterUriSchemeHandler();' ""
   '';
 
   selfContainedBuild = true;
@@ -54,16 +54,22 @@ buildDotnetModule (finalAttrs: {
 
   postInstall = ''
     install -D distribution/appimage/tkmm.svg $out/share/icons/hicolor/scalable/apps/tkmm.svg
+    install -D distribution/appimage/tkmm.svg $out/share/icons/hicolor/scalable/mimetypes/application-x-tkcl.svg
+    install -Dm644 ${./tkmm-tkcl.xml} $out/share/mime/packages/tkmm-tkcl.xml
   '';
 
   desktopItems = [
     (makeDesktopItem {
       name = "Tears of the Kingdom Mod Manager";
-      exec = "Tkmm";
+      exec = "Tkmm %u";
       icon = "tkmm";
       desktopName = "TKMM";
       categories = [
         "Game"
+      ];
+      mimeTypes = [
+        "application/x-tkcl"
+        "x-scheme-handler/tkmm"
       ];
       comment = "Tears of the Kingdom Mod Manager";
     })
