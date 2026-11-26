@@ -8,13 +8,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "kor";
-  version = "0.7.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "yonahd";
     repo = "kor";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mIzNkH1JpnLMrjl+dxYJ8MpSzuX/11Zfv7Hn6SoyThg=";
+    hash = "sha256-qP6uFuykDZoYhDjVrB1KYDA878AfHPNWOazdo77CQUs=";
   };
 
   vendorHash = "sha256-3xcIrSm4BQ2AgwEr8X9q0W9RHscbgegzunUQV/Pb6Wo=";
