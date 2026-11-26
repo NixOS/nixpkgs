@@ -9,15 +9,15 @@
   pcre2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "simh";
-  version = "3.11-1";
+  version = "3.12-2";
 
   src = fetchFromGitHub {
     owner = "simh";
     repo = "simh";
-    rev = "v${version}";
-    sha256 = "sha256-65+YfOWpVXPeT64TZcSaWJY+ODQ0q/pwF9jb8xGdpIs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-s8Hx8DKu/wDS9efL/722LQHIJrKSqNs+G4EYegLDp+s=";
   };
 
   buildInputs = [
@@ -35,10 +35,14 @@ stdenv.mkDerivation rec {
   #    https://github.com/simh/simh/issues/794
   env.NIX_CFLAGS_COMPILE = toString [ "-fcommon" ];
 
+  env.NIX_LDFLAGS = toString [
+    "-lm"
+    "-lpcap"
+  ];
+
   makeFlags = [
     "GCC=${stdenv.cc.targetPrefix}cc"
     "CC_STD=-std=c99"
-    "LDFLAGS=-lm"
   ];
 
   preInstall = ''
@@ -49,7 +53,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
     for i in BIN/*; do
-      install -D $i ${placeholder "out"}/bin
+      [ -f "$i" ] && install -D $i ${placeholder "out"}/bin
     done
     for i in VAX/*bin; do
       install -D $i ${placeholder "out"}/share/simh
@@ -71,9 +75,9 @@ stdenv.mkDerivation rec {
       simulators and to publish them as freeware on the Internet, with freely
       available copies of significant or representative software.
     '';
-    license = with lib.licenses; mit;
-    maintainers = [ ];
-    platforms = with lib.platforms; unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kamadorueda ];
+    platforms = lib.platforms.unix;
   };
-}
+})
 # TODO: install documentation
