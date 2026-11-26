@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "schemesh";
-  version = "1.0.2";
+  version = "1.0.3";
 
   src = fetchFromGitHub {
     owner = "cosmos72";
     repo = "schemesh";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EeFj2//vqYFwiFxK1NSoK1t49i0i7W3MMWLr2Dk5oSk=";
+    hash = "sha256-n8XH/OPJciKb+hAj5MI60sZCy4mfZThK8ZnSJtH3xzk=";
   };
 
   preBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -32,6 +32,8 @@ stdenv.mkDerivation (finalAttrs: {
     ncurses
     zlib
   ];
+
+  passthru.shellPath = "/bin/schemesh";
 
   makeFlags = [ "prefix=$(out)" ];
 

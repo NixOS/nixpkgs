@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libfolia";
-  version = "2.22";
+  version = "2.23";
 
   src = fetchFromGitHub {
     owner = "LanguageMachines";
     repo = "libfolia";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-D7iA40E0dkkLCqjLUcUd5UvoQJnIzdXAPdXPyeozrow=";
+    hash = "sha256-6GkySWGw5bJQkIRaYnrCch7ave3A8j2aY4GG79PwyrU=";
   };
 
   nativeBuildInputs = [

@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   kernel,
+  kernelModuleMakeFlags,
   nix-update-script,
   hailo8-firmware,
 }:
@@ -21,29 +22,25 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  buildPhase = ''
-    runHook preBuild
+  makeFlags = kernelModuleMakeFlags ++ [
+    "-C"
+    "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+    "M=$(PWD)/linux/pcie"
+    "INSTALL_MOD_PATH=${placeholder "out"}"
+    "INSTALL_MOD_DIR=extra"
+  ];
 
-    make -C linux/pcie all \
-      KERNEL_DIR="${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
-
-    runHook postBuild
-  '';
-
-  installPhase = ''
-    runHook preInstall
-
-    install -D \
-      $(find linux/pcie/build -name hailo_pci.ko -print -quit) \
-      $out/lib/modules/${kernel.modDirVersion}/extra/hailo_pci.ko
-
-    runHook postInstall
-  '';
+  installTargets = [ "modules_install" ];
 
   passthru = {
     updateScript = nix-update-script {
-      # 4.x versions track hailo8, later versions track newer hardware
-      extraArgs = [ "--version-regex '^4\\..*$'" ];
+      extraArgs = [
+        # 4.x versions track hailo8, later versions track newer hardware.
+        "--version-regex"
+        "v(4\\.[0-9]+\\.[0-9]+)$"
+        "--subpackage"
+        "tests.hailo8-firmware"
+      ];
     };
     tests = {
       inherit hailo8-firmware;
@@ -53,11 +50,13 @@ stdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
 
   meta = {
-    description = "Hailo 10/15 PCIe driver";
+    description = "Hailo 8 PCIe driver";
     homepage = "https://github.com/hailo-ai/hailort-drivers";
     license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ hexa ];
-    mainProgram = "hailort-drivers";
-    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
+      hexa
+      aaravrav
+    ];
+    platforms = lib.platforms.linux;
   };
 })
