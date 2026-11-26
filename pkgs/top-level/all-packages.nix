@@ -8454,10 +8454,6 @@ with pkgs;
     inherit (haskellPackages) ghcWithPackages taffybar;
   };
 
-  telegram-desktop =
-    kdePackages.callPackage ../applications/networking/instant-messengers/telegram/telegram-desktop
-      { };
-
   terminaltexteffects = with python3Packages; toPythonApplication terminaltexteffects;
 
   inherit
