@@ -7,14 +7,14 @@
   versionCheckHook,
   protobuf,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "chirpstack-udp-forwarder";
   version = "4.3.1";
 
   src = fetchFromGitHub {
     owner = "chirpstack";
     repo = "chirpstack-udp-forwarder";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-XPSAn+w4G8YErjKIG0a+F+ep+QBIwzL2BEffyccLLXw=";
   };
 
@@ -35,4 +35,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ lib.maintainers.stv0g ];
     mainProgram = "chirpstack-udp-forwarder";
   };
-}
+})
