@@ -4,6 +4,7 @@
   fetchFromGitLab,
   meson,
   ninja,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -23,6 +24,8 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
   ];
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   strictDeps = true;
   __structuredAttrs = true;
 
@@ -32,5 +35,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Library for decrypting DVDs";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.unix;
+    pkgConfigModules = [ "libdvdcss" ];
   };
 })
