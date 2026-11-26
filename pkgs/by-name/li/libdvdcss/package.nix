@@ -4,6 +4,7 @@
   fetchFromGitLab,
   meson,
   ninja,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -23,11 +24,17 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
   ];
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
+  strictDeps = true;
+  __structuredAttrs = true;
+
   meta = {
     homepage = "http://www.videolan.org/developers/libdvdcss.html";
     changelog = "https://code.videolan.org/videolan/libdvdcss/blob/${finalAttrs.src.tag}/NEWS";
     description = "Library for decrypting DVDs";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.unix;
+    pkgConfigModules = [ "libdvdcss" ];
   };
 })
