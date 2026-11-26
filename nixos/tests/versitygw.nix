@@ -118,7 +118,7 @@ in
     virtualisation.memorySize = 1024;
     services.versitygw = {
       enable = true;
-      rootDirectory = "/srv/versitygw";
+      rootDirectory = "/srv/s3-%m's data";
       environmentFile = "/run/versitygw-test/root.env";
       settings = {
         VGW_PORT = "127.0.0.1:7070";

@@ -26,6 +26,11 @@ let
       };
     };
   };
+  unusualPath = evaluate {
+    services.versitygw = service // {
+      rootDirectory = "/srv/s3-%m's data";
+    };
+  };
   failures =
     settings:
     lib.filter (assertion: !assertion.assertion && lib.hasPrefix "services.versitygw" assertion.message)
@@ -41,6 +46,9 @@ assert valid.systemd.services.versitygw.environment.VGW_QUIET == "true";
 assert valid.systemd.services.versitygw.environment.VGW_MAX_CONNECTIONS == "100";
 assert !(valid.systemd.services.versitygw.environment ? VGW_UNUSED);
 assert valid.networking.firewall.allowedTCPPorts == [ ];
+assert lib.any (
+  rule: rule == ''d "/srv/s3-%%m's data" 0750 versitygw versitygw - -''
+) unusualPath.systemd.tmpfiles.rules;
 assert failures { } == [ ];
 assert lib.all
   (

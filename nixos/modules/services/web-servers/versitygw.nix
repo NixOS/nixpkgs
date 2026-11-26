@@ -134,10 +134,11 @@ in
     };
     users.groups = lib.mkIf (cfg.group == "versitygw") { versitygw = { }; };
 
-    systemd.tmpfiles.settings."10-versitygw".${cfg.rootDirectory}.d = {
-      inherit (cfg) user group;
-      mode = "0750";
-    };
+    systemd.tmpfiles.rules = [
+      "d ${
+        builtins.toJSON (lib.replaceStrings [ "%" ] [ "%%" ] cfg.rootDirectory)
+      } 0750 ${cfg.user} ${cfg.group} - -"
+    ];
 
     systemd.services.versitygw = {
       description = "Versity S3 Gateway";
