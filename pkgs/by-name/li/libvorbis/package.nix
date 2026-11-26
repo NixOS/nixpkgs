@@ -4,6 +4,7 @@
   fetchurl,
   libogg,
   pkg-config,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -24,6 +25,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ pkg-config ];
   propagatedBuildInputs = [ libogg ];
 
+  strictDeps = true;
+
   doCheck = true;
 
   # strip -mno-ieee-fp flag from configure and configure.ac when using
@@ -32,10 +35,19 @@ stdenv.mkDerivation (finalAttrs: {
     sed s/\-mno\-ieee\-fp// -i {configure,configure.ac}
   '';
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
+  __structuredAttrs = true;
+
   meta = {
     description = "Vorbis audio compression reference implementation";
     homepage = "https://xiph.org/vorbis/";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
+    pkgConfigModules = [
+      "vorbis"
+      "vorbisfile"
+      "vorbisenc"
+    ];
   };
 })
