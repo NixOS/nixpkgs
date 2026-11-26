@@ -43,6 +43,8 @@ buildPythonPackage (finalAttrs: {
     # Fails on output differences
     "test_raises_custom_msg"
     "test_message"
+    # assert {} == {3: 3, 5: 5} (a/k/a racy)
+    "test_concurrent_check_failures_are_tracked_per_thread"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # AssertionError: assert '99' not in '===========...============'
