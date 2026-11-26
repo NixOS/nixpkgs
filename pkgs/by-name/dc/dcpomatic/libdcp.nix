@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchgit,
+  gitUpdater,
 
   wafHook,
   python3,
@@ -26,12 +27,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libdcp";
-  version = "1.10.64";
+  version = "1.11.2";
 
   src = fetchgit {
     url = "https://git.carlh.net/git/libdcp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-aqTdMp6mUZF0uGb86WprVlHm7G8QovdH6VIet0YYYH0=";
+    hash = "sha256-dBDefd4P4/j18TlOYCwGiy6ccOe89KYs2gxW/+IYeOQ=";
   };
 
   # for some reason the version is not set properly upstream
@@ -70,6 +71,15 @@ stdenv.mkDerivation (finalAttrs: {
   propagatedBuildInputs = [
     asdcplib
   ];
+
+  passthru.updateScript =
+    gitUpdater {
+      rev-prefix = "v";
+      attrPath = "dcpomatic.libdcp";
+    }
+    // {
+      supportedFeatures = [ ];
+    };
 
   __structuredAttrs = true;
 
