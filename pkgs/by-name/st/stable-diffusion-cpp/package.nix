@@ -28,6 +28,8 @@
   metalSupport ? stdenv.hostPlatform.isDarwin,
   darwin,
   apple-sdk,
+
+  gitUpdater,
 }:
 
 let
@@ -41,7 +43,7 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "stable-diffusion-cpp";
-  version = "master-1104-5dcfa79";
+  version = "1141-e637c7b";
 
   outputs = [
     "out"
@@ -51,8 +53,8 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "leejet";
     repo = "stable-diffusion.cpp";
-    tag = finalAttrs.version;
-    hash = "sha256-8kHsl8tL+2VVApOC2Gs/zMVpInYUbAnnXhq/C+jSAWo=";
+    tag = "master-${finalAttrs.version}";
+    hash = "sha256-sOX5MOl7XvVL+PYuSM97azKtfZkthPJNuYQdt5nm72o=";
     fetchSubmodules = true;
   };
 
@@ -113,6 +115,11 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   ++ optionals rocmSupport [
     (cmakeFeature "CMAKE_HIP_ARCHITECTURES" (builtins.concatStringsSep ";" rocmGpuTargets))
   ];
+
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "master-";
+    ignoredVersions = "^[0-9a-f]+$";
+  };
 
   meta = {
     description = "Stable Diffusion inference in pure C/C++";
