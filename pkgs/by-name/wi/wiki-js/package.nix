@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    tests = { inherit (nixosTests) wiki-js; };
+    tests = { inherit (nixosTests.wiki-js) v2; };
     updateScript = ./update.sh;
   };
 

@@ -80,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    tests = { inherit (nixosTests) wiki-js_3; };
+    tests = { inherit (nixosTests.wiki-js) v3; };
     updateScript = nix-update-script { };
   };
 
@@ -88,6 +88,9 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://js.wiki/";
     description = "Modern and powerful wiki app built on Node.js";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ minosimo Merded ];
+    maintainers = with lib.maintainers; [
+      minosimo
+      Merded
+    ];
   };
 })
