@@ -36,7 +36,7 @@ index dbed0e7576..421c432d3e 100755
 --- a/src/main/cpp/generate_jvm_module_options.sh
 +++ b/src/main/cpp/generate_jvm_module_options.sh
 @@ -1,4 +1,4 @@
--#!/bin/bash
+-#!/usr/bin/env bash
 +#!@usrBinEnv@ bash
  #
  # Copyright 2025 The Bazel Authors. All rights reserved.
