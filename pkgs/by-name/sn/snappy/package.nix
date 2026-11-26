@@ -72,6 +72,8 @@ stdenv.mkDerivation (finalAttrs: {
   # requires gbenchmark and gtest but it also installs them out $dev
   doCheck = false;
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://google.github.io/snappy/";
     license = lib.licenses.bsd3;
