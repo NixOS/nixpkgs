@@ -287,6 +287,8 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (nixosTests) pulseaudio pulseaudio-tcp;
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Sound server for POSIX and Win32 systems";
     homepage = "http://www.pulseaudio.org/";
