@@ -10,6 +10,7 @@
   perl,
   guile,
   libxml2,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -105,6 +106,8 @@ stdenv.mkDerivation (finalAttrs: {
     libxml2
   ];
 
+  strictDeps = true;
+
   preConfigure = ''
     export MAN_PAGE_DATE=$(date '+%Y-%m-%d' -d "@$SOURCE_DATE_EPOCH")
   '';
@@ -150,6 +153,10 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
+  __structuredAttrs = true;
+
   meta = {
     description = "Automated text and program generation tool";
     license = with lib.licenses; [
@@ -159,5 +166,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.gnu.org/software/autogen/";
     platforms = lib.platforms.all;
     maintainers = [ ];
+    pkgConfigModules = [ "autoopts" ];
   };
 })
