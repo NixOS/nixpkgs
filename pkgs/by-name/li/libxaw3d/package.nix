@@ -54,6 +54,8 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { extraArgs = [ "--version-regex=libXaw3d-(.*)" ]; };
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "3D appearance variant of the X Athena Widget Set";
     homepage = "https://gitlab.freedesktop.org/xorg/lib/libxaw3d";
