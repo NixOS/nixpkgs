@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "chirpstack";
     repo = "chirpstack-mqtt-forwarder";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-xt94DxiDkyS0o9sSV6ye1vRi08ey4rmh1acpNI38fUE=";
   };
 
