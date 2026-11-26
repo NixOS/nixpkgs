@@ -38,11 +38,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "prosody";
-  version = "13.0.7"; # also update communityModules
+  version = "13.0.8"; # also update communityModules
 
   src = fetchurl {
     url = "https://prosody.im/downloads/source/prosody-${finalAttrs.version}.tar.gz";
-    hash = "sha256-9nHfPHU1xyaa/IlXnqJvwT0QBrQO9d9My3GlYBl/FRs=";
+    hash = "sha256-FNjac2njjQ7vNJFf9ECZu4QuukzFuTHK54LgL+ucYiY=";
   };
 
   # A note to all those merging automated updates: Please also update this
@@ -50,8 +50,8 @@ stdenv.mkDerivation (finalAttrs: {
   # version.
   communityModules = fetchhg {
     url = "https://hg.prosody.im/prosody-modules";
-    rev = "e80e68d68faa";
-    hash = "sha256-WYMWIlWsOywQ02gg5ywrz7G1DqnLLWLQynXHcfl2us0=";
+    rev = "e9ec93949fe0";
+    hash = "sha256-r3q8c4D8WFyor/nml+apk1pWxJuxQX9XJZ3CqLHSReE=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
