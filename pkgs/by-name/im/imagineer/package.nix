@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "imagineer";
-  version = "0.24.0";
+  version = "0.25.1";
 
   src = fetchFromGitHub {
     owner = "foresterre";
     repo = "imagineer";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-pnnMRRccxSA5F6oIbe9wvdMmuSUMI7Da+NtwyH2psjo=";
+    hash = "sha256-Joqw/PECC5h1WoAEce8R6DlgLAhh2suqphDxJfwVz0o=";
   };
 
-  cargoHash = "sha256-6QMMP6Uss9r6zNd/S6w7yo19IBOQyLmFvcn2o0MkOq4=";
+  cargoHash = "sha256-S5T+V9d9TVuOK2K/4DSUK2/ufenko+8Gw37wG4HeYS4=";
 
   nativeBuildInputs = [
     installShellFiles
