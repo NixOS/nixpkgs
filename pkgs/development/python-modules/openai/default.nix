@@ -27,10 +27,12 @@
   websockets,
 
   # check deps
-  pytestCheckHook,
+  griffe,
   inline-snapshot,
   pytest-asyncio,
   pytest-xdist,
+  pytestCheckHook,
+  trio,
 
   # optional-dependencies toggle
   withAiohttp ? false,
@@ -41,14 +43,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "openai";
-  version = "3.14.1";
+  version = "3.60.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openai";
     repo = "openai-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7oFIiENP5d/TAVbkjtsjcsuin+qJ/tmjSdzXgu/qsCE=";
+    hash = "sha256-yWVar2yWg9av3q3Zqgny69DouOIUQ9EeoftmmISimQk=";
   };
 
   postPatch = ''
@@ -101,17 +103,34 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [ "openai" ];
 
   nativeCheckInputs = [
-    pytestCheckHook
+    griffe
     inline-snapshot
     pytest-asyncio
     pytest-xdist
+    pytestCheckHook
+    trio
   ]
   # including pandas-stubs would cause infinite recursion
   ++ lib.concatAttrValues (lib.removeAttrs finalAttrs.passthru.optional-dependencies [ "datalib" ]);
 
+  pytestFlags = [
+    # https://github.com/openai/openai-python/issues/4337
+    "-Wignore::DeprecationWarning"
+  ];
+
   disabledTests = [
     # websockets.exceptions.SecurityError: more than 10 redirects
     "test_sync_azure_websocket_does_not_follow_redirects"
+
+    # No such file or directory 'ps'
+    "test_interrupted_example_stops_descendants"
+
+    # FileNotFoundError: [Errno 2] No such file or directory: 'git'
+    # adding `gitMinimal` doesn't help, results in additional FileNotFound errors
+    "test_compatibility_gate_selects_callers"
+
+    # TimeoutError
+    "test_interactive_realtime_example_remains_responsive_at_input"
   ];
 
   disabledTestPaths = [
@@ -124,7 +143,12 @@ buildPythonPackage (finalAttrs: {
     "tests/test_uv_workflows.py"
 
     # flaky
-    "tests/lib/test_azure_redirects.py::test_sync_redirect_origin"
+    "tests/lib/test_azure_redirects.py"
+    "tests/lib/test_realtime_translation.py"
+    "tests/lib/test_websocket_redirects.py"
+
+    # ModuleNotFoundError: No module named 'typing_extensions'
+    "tests/test_lazy_imports.py"
   ];
 
   meta = {
