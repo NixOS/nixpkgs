@@ -20,13 +20,13 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "ga4gh.vrs";
-  version = "2.3.3";
+  version = "2.4.0-a6";
 
   src = fetchFromGitHub {
     owner = "ga4gh";
     repo = "vrs-python";
     tag = finalAttrs.version;
-    hash = "sha256-6ULUSnrJmIo6ne4cCNAgZDKcGSsffUhKXZ0/5RjbSAA=";
+    hash = "sha256-SIbbPWEgQGHMydoTAi04wsrBe59SjG/3kF75KE04nsw=";
   };
 
   pyproject = true;
