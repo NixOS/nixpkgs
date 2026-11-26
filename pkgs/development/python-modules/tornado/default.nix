@@ -43,6 +43,11 @@ buildPythonPackage (finalAttrs: {
     "maint/test"
   ];
 
+  disabledTests = [
+    # Timing sensitive
+    "test_disposition_param_linear_performance"
+  ];
+
   pythonImportsCheck = [ "tornado" ];
 
   __darwinAllowLocalNetworking = true;
