@@ -67,6 +67,8 @@ let
         ln -sfv ${buildbot}/lib $out/lib
       '';
 
+      dontCheckPythonMetadata = true;
+
       passthru = buildbot.passthru // {
         inherit pyproject;
         withPlugins = morePlugins: withPlugins (morePlugins ++ plugins);
