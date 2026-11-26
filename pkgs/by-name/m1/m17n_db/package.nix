@@ -5,6 +5,7 @@
   gettext,
   gawk,
   bash,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -27,6 +28,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags = [ "--with-charmaps=${stdenv.cc.libc}/share/i18n/charmaps" ];
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   __structuredAttrs = true;
 
   meta = {
@@ -38,5 +41,6 @@ stdenv.mkDerivation (finalAttrs: {
     }";
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.linux;
+    pkgConfigModules = [ "m17n-db" ];
   };
 })
