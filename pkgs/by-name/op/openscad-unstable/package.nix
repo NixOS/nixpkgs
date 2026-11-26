@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   clangStdenv,
   llvmPackages,
   fetchFromGitHub,
@@ -142,7 +141,7 @@ clangStdenv.mkDerivation rec {
   ];
 
   # tests rely on sysprof which is not available on darwin
-  doCheck = !stdenv.hostPlatform.isDarwin;
+  doCheck = !clangStdenv.hostPlatform.isDarwin;
 
   # remove unused submodules, to ensure correct dependency usage
   postUnpack = ''
@@ -160,7 +159,7 @@ clangStdenv.mkDerivation rec {
     sed -e '/find_path(VENV_BIN_PATH /d' -i tests/cmake/ImageCompare.cmake
   '';
 
-  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+  postInstall = lib.optionalString clangStdenv.hostPlatform.isDarwin ''
     mkdir $out/Applications
     mv $out/bin/*.app $out/Applications
     rm $out/bin/* || true
