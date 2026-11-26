@@ -23,6 +23,11 @@ buildPythonPackage rec {
     ./python314-compat.patch
   ];
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'flit_core >=2,<4' flit_core
+  '';
+
   build-system = [ flit-core ];
 
   nativeCheckInputs = [ pytestCheckHook ];
