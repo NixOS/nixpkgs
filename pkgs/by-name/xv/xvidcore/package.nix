@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Undocumented darwin hack
-    substituteInPlace configure --replace "-no-cpp-precomp" ""
+    substituteInPlace configure --replace-fail "-no-cpp-precomp" ""
   '';
 
   configureFlags =
@@ -57,6 +57,8 @@ stdenv.mkDerivation (finalAttrs: {
       libtool
     ];
 
+  strictDeps = true;
+
   # Don't remove static libraries (e.g. 'libs/*.a') on darwin.  They're needed to
   # compile ffmpeg (and perhaps other things).
   postInstall = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
@@ -68,6 +70,8 @@ stdenv.mkDerivation (finalAttrs: {
   postFixup = lib.optionalString stdenv.hostPlatform.isMinGW ''
     ln -s $out/bin/*.dll $out/lib
   '';
+
+  __structuredAttrs = true;
 
   meta = {
     description = "MPEG-4 video codec for PC";
