@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   cmake,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -27,6 +28,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
+  strictDeps = true;
+
   cmakeFlags = [
     # Workaround for upstream not using GNUInstallDirs.
     "-DINCLUDE_INSTALL_DIR=${placeholder "dev"}/include"
@@ -40,11 +43,19 @@ stdenv.mkDerivation (finalAttrs: {
         'cmake_minimum_required (VERSION 3.10 FATAL_ERROR)'
   '';
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
+  __structuredAttrs = true;
+
   meta = {
     description = "Audio resampling library";
     homepage = "https://soxr.sourceforge.net";
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.unix ++ lib.platforms.windows;
     maintainers = [ ];
+    pkgConfigModules = [
+      "soxr"
+      "soxr-lsr"
+    ];
   };
 })
