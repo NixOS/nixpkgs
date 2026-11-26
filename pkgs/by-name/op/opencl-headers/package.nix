@@ -17,11 +17,13 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "OpenCL-Headers";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-qL8lFtjj+rYTsNz9RALx3pIlugAkcwclbGW7VIiijXk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-qL8lFtjj+rYTsNz9RALx3pIlugAkcwclbGW7VIiijXk=";
   };
 
   nativeBuildInputs = [ cmake ];
+
+  strictDeps = true;
 
   passthru.tests = {
     inherit
@@ -35,6 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
       moduleNames = [ "OpenCL-Headers" ];
     };
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Khronos OpenCL headers version ${finalAttrs.version}";
