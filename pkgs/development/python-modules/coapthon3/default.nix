@@ -17,6 +17,12 @@ buildPythonPackage rec {
     hash = "sha256-9QApoPUu3XFZY/lgjAsf5r2StFiRtUd1UXWDrzYUh6w=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail "version='1.0.1+fb.' + datetime.datetime.now().strftime(\"%Y%m%d%H%M\")" \
+                     "version='${version}'"
+  '';
+
   propagatedBuildInputs = [ cachetools ];
 
   # tests take in the order of 10 minutes to execute and sometimes hang forever on tear-down
