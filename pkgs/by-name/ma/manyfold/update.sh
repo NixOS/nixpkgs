@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p nix-update bundix bundler pkgs.nixfmt yarn-berry_3.yarn-berry-fetcher nix-prefetch-git ruby_3_4
+#!nix-shell -i bash -p nix-update bundix bundler pkgs.nixfmt yarn-berry_4.yarn-berry-fetcher nix-prefetch-git ruby_3_4
 
 set -eux
 

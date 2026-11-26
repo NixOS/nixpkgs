@@ -12,11 +12,11 @@
   runCommand,
   stdenvNoCC,
   writeTextDir,
-  yarn-berry_3,
+  yarn-berry_4,
   nixosTests,
 }:
 let
-  yarn-berry = yarn-berry_3;
+  yarn-berry = yarn-berry_4;
   ruby = ruby_3_4;
   lockfile = runCommand "Gemfile.lock" { } ''
     sed -E 's/ruby [0-9]+\.[0-9]+\.[0-9]+/ruby ${ruby.version}/' ${./Gemfile.lock} > $out
@@ -45,7 +45,7 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "manyfold";
-  version = "0.154.1";
+  version = "0.154.4";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -54,7 +54,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     owner = "manyfold3d";
     repo = "manyfold";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-IXa8GZ72VoZjgPPbr2IBG/M90kaGSO1VxwltWJ+AjbM=";
+    hash = "sha256-ib8hDDrGoE/+8BtOK0IlBA5TaT2LbtlIw7MKsGLw6OQ=";
   };
 
   prePatch = ''
@@ -84,7 +84,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   missingHashes = ./missing-hashes.json;
   offlineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
-    hash = "sha256-je/ZAdkrWmAONl4Jp/R5Xx6ecMRS2ITX1cXY3YoS7rE=";
+    hash = "sha256-17qjVhgZnJCugtXOC26XuR1NGdRdAZKMMbdoVo32XCE=";
   };
 
   # dynamically loaded by ruby gems
