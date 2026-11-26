@@ -115,6 +115,8 @@ python3Packages.buildPythonApplication rec {
     (lib.makeBinPath runtimeDeps)
   ];
 
+  dontCheckPythonMetadata = nameSuffix != "";
+
   meta = {
     description = "turn almost any device into a file server over http(s), webdav, ftp(s), and tftp";
     inherit longDescription;
