@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "git-aggregator";
-  version = "4.1";
+  version = "4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "acsone";
     repo = "git-aggregator";
     tag = finalAttrs.version;
-    hash = "sha256-sZYh3CN15WTCQ59W24ERJdP48EJt571cbkswLQ3JL2g=";
+    hash = "sha256-7JPf0y5g2ChqyAwy7UtJk3HKjk4x+uc6iIquYxGbQkQ=";
   };
 
   build-system = with python3Packages; [
