@@ -52,7 +52,7 @@ lib.extendMkDerivation {
     let
       nameVersionAssertion =
         pred: lib.assertMsg pred "either name or both pname and version must be given";
-      pname =
+      eggName =
         if args ? pname then
           assert nameVersionAssertion (!args ? name && args ? version);
           args.pname
@@ -63,7 +63,7 @@ lib.extendMkDerivation {
       allChickenInstallFlags = chickenInstallFlags ++ lib.optional isCross "-target";
     in
     {
-      pname = "chicken-${pname}";
+      pname = "chicken-${lib.versions.major chicken.version}-${eggName}";
       inherit version;
       # Eggs are found in dev, which propagates out and the eggs they depend on.
       outputs =
@@ -79,7 +79,10 @@ lib.extendMkDerivation {
       # The runtime the egg is compiled against and links to, which, with
       # strictDeps, the chicken in nativeBuildInputs does not provide when
       # cross-compiling.
-      buildInputs = [ hostChicken ] ++ args.buildInputs or [ ];
+      buildInputs = [
+        hostChicken
+      ]
+      ++ args.buildInputs or [ ];
 
       strictDeps = args.strictDeps or true;
 
@@ -101,7 +104,6 @@ lib.extendMkDerivation {
             # inherits this.
             export CHICKEN_EGG_CACHE="$NIX_BUILD_TOP/chicken-egg-cache"
             mkdir -p "$CHICKEN_EGG_CACHE"
-
           ''
           + lib.optionalString (buildPlatformEgg != null) ''
             # Eggs whose modules are needed while compiling others, such as for
@@ -119,6 +121,9 @@ lib.extendMkDerivation {
             runHook postBuild
           ''
         );
+
+      doInstallCheck =
+        args.doInstallCheck or (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64);
 
       installPhase =
         args.installPhase or ''
@@ -143,8 +148,8 @@ lib.extendMkDerivation {
 
           # Patching the generated .egg-info instead of the original .egg; see the
           # script for why.
-          csi -s ${./patch-egg-info.scm} ${lib.escapeShellArg version} "$devRepository" < "$devRepository/${pname}.egg-info" > "${pname}.egg-info.new"
-          mv "${pname}.egg-info.new" "$devRepository/${pname}.egg-info"
+          csi -s ${./patch-egg-info.scm} ${lib.escapeShellArg version} "$devRepository" < "$devRepository/${eggName}.egg-info" > "${eggName}.egg-info.new"
+          mv "${eggName}.egg-info.new" "$devRepository/${eggName}.egg-info"
 
           # Programs run with the repositories of the eggs they use, which are the
           # ones holding extensions and import libraries, in the out outputs, and
@@ -170,6 +175,23 @@ lib.extendMkDerivation {
           done
 
           runHook postInstall
+        '';
+
+      # Not using checkPhase because some egg test suites require the egg to be already installed
+      # and loadable.
+      installCheckPhase =
+        args.installCheckPhase or ''
+          runHook preInstallCheck
+
+          if [ -e tests/run.scm ]; then
+            # Make the freshly installed egg visible, the way the setup hook does for dependencies
+            addChickenRepositoryPath "$out"
+            addChickenRepositoryPath "$dev"
+            export PATH="$out/bin:$PATH"
+            (cd tests && csi -s run.scm ${eggName} ${lib.escapeShellArg version})
+          fi
+
+          runHook postInstallCheck
         '';
 
       dontConfigure = args.dontConfigure or true;
@@ -209,7 +231,7 @@ lib.extendMkDerivation {
           '';
 
       passthru = {
-        eggName = pname;
+        inherit eggName;
       }
       // args.passthru or { };
 
