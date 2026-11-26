@@ -68,6 +68,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.optionalString debugSupport "--enable-debug=alot")
   ];
 
+  __structuredAttrs = true;
+
   meta = {
     description = "High quality MPEG Audio Layer III (MP3) encoder";
     homepage = "https://lame.sourceforge.io";
