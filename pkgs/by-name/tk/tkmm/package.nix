@@ -12,7 +12,7 @@
   writableTmpDirAsHomeHook,
 }:
 buildDotnetModule (finalAttrs: {
-  pname = "Tkmm";
+  pname = "tkmm";
   version = "2.2.2";
 
   src = fetchFromGitHub {
@@ -94,7 +94,7 @@ buildDotnetModule (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "Tears of the Kingdom Mod Manager, a mod merger and manager for TotK";
+    description = "Mod merger and manager for Tears of the Kingdom";
     homepage = "https://tkmm.org/";
     license = lib.licenses.mit;
     mainProgram = "Tkmm";
