@@ -19,14 +19,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pcompress";
-  version = "4.4.0";
+  version = "4.5.0";
 
   # The release tarball bundles the pinned lz4, zstd, libbsc and libarchive
   # sources (git submodules); pcompress patches libarchive and builds them
   # in-tree. GitHub's auto-generated archives omit the submodules.
   src = fetchurl {
     url = "https://github.com/gburd/pcompress/releases/download/v${finalAttrs.version}/pcompress-${finalAttrs.version}.tar.gz";
-    hash = "sha256-NtJ+Yhqivl3XyxOxLN9sS4QMCfD4Qcpa/B1cANqQhT0=";
+    hash = "sha256-8AjamocmgY02C0WGU5/+xo4kfCiXkIaAswOchW1m6FE=";
   };
 
   nativeBuildInputs = [
