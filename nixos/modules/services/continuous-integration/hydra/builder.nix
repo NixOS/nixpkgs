@@ -207,6 +207,8 @@ in
 
   config = lib.mkIf cfg.enable {
     systemd.services.hydra-builder = {
+      # Hydra names every program it runs by its own variable, never by `PATH`.
+      enableDefaultPath = false;
       description = "Hydra build agent";
       requires = [ "nix-daemon.socket" ];
       after = [ "network.target" ];
@@ -218,10 +220,10 @@ in
         RUST_BACKTRACE = "1";
         # nix-store wants $HOME for its cache dir.
         HOME = "/run/hydra-builder";
+        # Hydra finds the programs it runs through these variables, not `PATH`.
+        HYDRA_PROGRAM_NIX = lib.getExe' config.nix.package "nix";
       }
       // otel.otelEnv cfg.otel;
-
-      path = [ config.nix.package ];
 
       serviceConfig = {
         Type = "notify";
