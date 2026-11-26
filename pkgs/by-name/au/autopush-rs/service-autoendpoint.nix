@@ -56,7 +56,7 @@ in
           #hardening
           MemoryDenyWriteExecute = true;
           StateDirectoryMode = 0700;
-          UMask = 077;
+          UMask = "0077";
           DynamicUser = true;
           PrivateUsers = true;
           PrivateTmp = true;

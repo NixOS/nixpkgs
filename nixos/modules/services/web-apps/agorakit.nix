@@ -392,7 +392,7 @@ in
         Type = "oneshot";
         RemainAfterExit = true;
         User = user;
-        UMask = 77;
+        UMask = "0077";
         WorkingDirectory = "${agorakit}";
         RuntimeDirectory = "agorakit/cache";
         RuntimeDirectoryMode = 700;

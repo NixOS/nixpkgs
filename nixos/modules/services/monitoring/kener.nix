@@ -147,7 +147,7 @@ in
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
         SystemCallArchitectures = "native";
-        UMask = 27;
+        UMask = "0027";
         SupplementaryGroups = lib.mkIf (cfg.redis.createLocally && isRedisUnixSocket) [
           config.services.redis.servers.kener.group
         ];

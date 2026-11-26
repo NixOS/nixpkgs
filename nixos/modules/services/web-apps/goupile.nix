@@ -99,7 +99,7 @@ in
             RuntimeDirectory = "goupile";
             RuntimeDirectoryPreserve = "yes";
             StateDirectory = "goupile";
-            UMask = 0077;
+            UMask = "0077";
             WorkingDirectory = "%S/goupile";
 
             SystemCallArchitectures = "native";

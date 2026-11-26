@@ -261,7 +261,7 @@ in
         SystemCallErrorNumber = "EPERM";
         SystemCallFilter = [ "@system-service" ];
         Type = "simple";
-        UMask = 27;
+        UMask = "0027";
       };
       restartTriggers = [ settingsFileUnsubstituted ];
     };

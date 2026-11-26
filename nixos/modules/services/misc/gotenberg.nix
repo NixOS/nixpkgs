@@ -331,7 +331,7 @@ in
         ];
         SystemCallArchitectures = "native";
 
-        UMask = 77;
+        UMask = "0077";
       }
       // optionalAttrs (cfg.environmentFile != null) { EnvironmentFile = cfg.environmentFile; };
     };

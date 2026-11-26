@@ -80,7 +80,7 @@ in
         MemoryMax = "100M";
         MemorySwapMax = "100M";
 
-        UMask = 27;
+        UMask = "0027";
         ProtectSystem = "strict";
         ReadWritePaths = "/var/log";
         InaccessiblePaths = "/home /root";

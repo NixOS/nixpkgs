@@ -269,7 +269,7 @@ in
       defaultServiceConfig = {
         ReadWritePaths = "${cfg.dataDir}";
         User = user;
-        UMask = 77;
+        UMask = "0077";
         DeviceAllow = "";
         LockPersonality = true;
         NoNewPrivileges = true;
