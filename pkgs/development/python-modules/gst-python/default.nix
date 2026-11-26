@@ -94,6 +94,9 @@ buildPythonPackage rec {
     export DYLD_LIBRARY_PATH="${gst_all_1.gst-plugins-base}/lib"
   '';
 
+  # doesn't produce .dist-info/METADATA
+  dontCheckPythonMetadata = true;
+
   passthru = {
     updateScript = directoryListingUpdater { odd-unstable = true; };
   };
