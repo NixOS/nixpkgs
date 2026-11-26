@@ -186,13 +186,13 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "koboldcpp";
-  version = "1.124";
+  version = "1.125.1";
 
   src = fetchFromGitHub {
     owner = "LostRuins";
     repo = "koboldcpp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fkr+932D9nehpikiFi04lgiAqbyllnx0qKmieazzJHw=";
+    hash = "sha256-NG39WXu7KwXamM4BzQ+Jx1oYbNt8P9kbVZMwXpIK4Pg=";
   };
 
   __structuredAttrs = true;
