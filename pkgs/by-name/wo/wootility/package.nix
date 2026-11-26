@@ -33,12 +33,14 @@ let
   meta = {
     homepage = "https://wooting.io/wootility";
     description = "Customization and management software for Wooting keyboards";
+    changelog = "https://wooting.io/wootility/changelogs/${version}";
     platforms = lib.platforms.unix;
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [
       sodiboo
       returntoreality
       FlorianFranzen
+      debtquity
     ];
     mainProgram = "wootility";
   };
