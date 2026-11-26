@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nemo-fileroller";
-  version = "6.6.0";
+  version = "6.8.1";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "nemo-extensions";
     rev = finalAttrs.version;
-    hash = "sha256-tXeMkaCYnWzg+6ng8Tyg4Ms1aUeE3xiEkQ3tKEX6Vv8=";
+    hash = "sha256-IDhgOwO4gCC/Wfi++qac7XDFW1qFdHvhOIWXraGojWg=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/nemo-fileroller";
