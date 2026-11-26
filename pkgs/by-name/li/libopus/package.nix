@@ -59,6 +59,8 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
   ];
 
+  strictDeps = true;
+
   mesonFlags = [
     (lib.mesonBool "fixed-point" fixedPoint)
     (lib.mesonBool "custom-modes" withCustomModes)
