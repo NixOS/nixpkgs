@@ -152,6 +152,8 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Automated text and program generation tool";
     license = with lib.licenses; [
