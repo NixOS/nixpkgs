@@ -21,6 +21,9 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ obs-studio ];
 
+  # obs_source_set_monitoring_type is deprecated since OBS 33
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
+
   postInstall = ''
     rm -rf $out/obs-plugins $out/data
   '';

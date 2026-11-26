@@ -4,33 +4,41 @@
   fetchFromGitHub,
   obs-studio,
   cmake,
+  curl,
+  nlohmann_json,
+  qt6,
 }:
 
 stdenv.mkDerivation rec {
   pname = "obs-advanced-masks";
-  version = "1.1.0";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "FiniteSingularity";
     repo = "obs-advanced-masks";
     tag = "v${version}";
-    hash = "sha256-NtmOWKk3eZeRa3TvclZpg4sj8lbOoY8hUhxs1z6kEW4=";
+    hash = "sha256-WlFLlVXrxCYVE4SxvwemjgMZXI8NGshl/sX7034qYK8=";
   };
 
   buildInputs = [
+    curl
     obs-studio
+    qt6.qtbase
+    qt6.qtsvg
   ];
 
   nativeBuildInputs = [
     cmake
   ];
 
-  postInstall = ''
-    rm -rf "$out/share"
-    mkdir -p "$out/share/obs"
-    mv "$out/data/obs-plugins" "$out/share/obs"
-    rm -rf "$out/obs-plugins" "$out/data"
-  '';
+  cmakeFlags = [
+    (lib.cmakeBool "ENABLE_FRONTEND_API" true)
+    (lib.cmakeBool "ENABLE_QT" true)
+    # Use our nlohmann_json instead of downloading it at configure time
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_JSON" "${nlohmann_json.src}")
+  ];
+
+  dontWrapQtApps = true;
 
   meta = {
     description = "Advanced Masking Plugin for OBS";

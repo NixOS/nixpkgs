@@ -8,22 +8,17 @@
 
 stdenv.mkDerivation rec {
   pname = "obs-stroke-glow-shadow";
-  version = "v1.5.2";
+  version = "v1.6.1";
 
   src = fetchFromGitHub {
     owner = "FiniteSingularity";
     repo = "obs-stroke-glow-shadow";
     rev = version;
-    hash = "sha256-+2hb4u+6UG7IV9pAvPjp4wvDYhYnxe98U5QQjUcdD/k=";
+    hash = "sha256-h0AYCN0BhOi2jtmFXAMdarl/D55I4sR/mlVip9NgeJ4=";
   };
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ obs-studio ];
-
-  postFixup = ''
-    rm -rf $out/obs-plugins
-    rm -rf $out/data
-  '';
 
   meta = {
     description = "OBS plugin to provide efficient Stroke, Glow, and Shadow effects on masked sources";
