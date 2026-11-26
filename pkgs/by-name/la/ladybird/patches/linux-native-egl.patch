@@ -1,0 +1,263 @@
+Load nixpkgs' native EGL before the compositor restricts filesystem access.
+ANGLE looks up libEGL.so.1 by SONAME, and the helper does not inherit
+LD_LIBRARY_PATH from the browser.
+
+Use the ELF dependency metadata of system graphics drivers to grant read
+access to their library directories. Follow dependencies recursively and
+include Mesa DRI modules loaded dynamically by EGL.
+
+--- a/Services/Compositor/main.cpp
++++ b/Services/Compositor/main.cpp
+@@ -23,6 +23,10 @@
+ #include <LibIPC/SingleServer.h>
+ #include <LibMain/Main.h>
+ #include <LibPlatformFeatures/ProcessFeatures.h>
++
++#if defined(AK_OS_LINUX)
++#    include <dlfcn.h>
++#endif
+
+ ErrorOr<int> ladybird_main(Main::Arguments arguments)
+ {
+@@ -103,6 +107,10 @@
+         Compositor::set_font_rasterizer(Compositor::FontRasterizer::FreeType);
+
+ #if defined(AK_OS_LINUX)
++    // ANGLE opens native EGL by SONAME. Keep libglvnd loaded locally so it does not replace ANGLE's symbols.
++    if (!dlopen("@NIX_NATIVE_EGL@", RTLD_NOW | RTLD_LOCAL))
++        warnln("Could not load native EGL: {}", dlerror());
++
+     // NB: The GPU driver starts threads, and Landlock does not confine a thread that already runs. Seccomp covers every
+     //     thread, so the rest of the sandbox can wait until the driver is done with the syscalls that only its setup uses.
+     if (!disable_sandbox)
+--- a/Libraries/LibSandbox/GpuDriverPaths.cpp
++++ b/Libraries/LibSandbox/GpuDriverPaths.cpp
+@@ -4,10 +4,13 @@
+  * SPDX-License-Identifier: BSD-2-Clause
+  */
+
++#include <AK/HashTable.h>
+ #include <AK/JsonArray.h>
+ #include <AK/JsonObject.h>
+ #include <AK/JsonValue.h>
+ #include <AK/LexicalPath.h>
++#include <AK/NumericLimits.h>
++#include <AK/ScopeGuard.h>
+ #include <AK/String.h>
+ #include <LibCore/Directory.h>
+ #include <LibCore/Environment.h>
+@@ -15,12 +18,141 @@
+ #include <LibCore/StandardPaths.h>
+ #include <LibCore/System.h>
+ #include <LibSandbox/Sandbox.h>
++#include <gelf.h>
++#include <limits.h>
++#include <stdlib.h>
+
+ namespace Sandbox {
++
++// Only use the system driver manifests to discover Nix store directories.
++static Optional<ByteString> resolve_nix_store_library(ByteString const& path)
++{
++    char resolved[PATH_MAX];
++    if (!realpath(path.characters(), resolved))
++        return {};
++    StringView canonical_path { resolved, strlen(resolved) };
++    if (!canonical_path.starts_with("@NIX_STORE_DIR@/"sv))
++        return {};
++    auto metadata = Core::System::stat(canonical_path);
++    if (metadata.is_error() || !S_ISREG(metadata.value().st_mode))
++        return {};
++    return canonical_path.to_byte_string();
++}
++
++struct NixDriverLibraries {
++    HashTable<ByteString> libraries;
++    HashTable<ByteString> driver_directories;
++};
++
++static void append_elf_dependencies(ByteString const& library, Vector<ByteString>& pending)
++{
++    static bool const elf_initialized = elf_version(EV_CURRENT) != EV_NONE;
++    if (!elf_initialized)
++        return;
++
++    auto file = Core::File::open(library, Core::File::OpenMode::Read);
++    if (file.is_error())
++        return;
++    auto* elf = elf_begin(file.value()->fd(), ELF_C_READ_MMAP_PRIVATE, nullptr);
++    if (!elf)
++        return;
++    ScopeGuard end_elf([&] { elf_end(elf); });
++
++    for (Elf_Scn* section = nullptr; (section = elf_nextscn(elf, section));) {
++        GElf_Shdr header;
++        if (!gelf_getshdr(section, &header) || header.sh_type != SHT_DYNAMIC || header.sh_entsize == 0)
++            continue;
++        auto* data = elf_getdata(section, nullptr);
++        if (!data)
++            return;
++
++        Optional<StringView> runpath;
++        Optional<StringView> rpath;
++        Vector<StringView> needed;
++        for (size_t index = 0; index < data->d_size / header.sh_entsize && index <= NumericLimits<int>::max(); ++index) {
++            GElf_Dyn entry;
++            if (!gelf_getdyn(data, static_cast<int>(index), &entry) || entry.d_tag == DT_NULL)
++                break;
++            if (entry.d_tag != DT_NEEDED && entry.d_tag != DT_RUNPATH && entry.d_tag != DT_RPATH)
++                continue;
++            auto const* value = elf_strptr(elf, header.sh_link, entry.d_un.d_val);
++            if (!value)
++                continue;
++            StringView string { value, strlen(value) };
++            if (entry.d_tag == DT_NEEDED)
++                needed.append(string);
++            else if (entry.d_tag == DT_RUNPATH)
++                runpath = string;
++            else
++                rpath = string;
++        }
++
++        auto origin = LexicalPath::dirname(library);
++        Vector<ByteString> search_directories;
++        for (auto entry : runpath.value_or(rpath.value_or(""sv)).split_view(':')) {
++            auto directory = entry.to_byte_string().replace("${ORIGIN}"sv, origin).replace("$ORIGIN"sv, origin);
++            if (directory.starts_with('/'))
++                search_directories.append(move(directory));
++        }
++
++        for (auto name : needed) {
++            if (name.starts_with('/')) {
++                pending.append(name.to_byte_string());
++                continue;
++            }
++            if (name.contains('/'))
++                continue;
++            for (auto const& directory : search_directories) {
++                if (auto dependency = resolve_nix_store_library(LexicalPath::join(directory, name).string()); dependency.has_value()) {
++                    pending.append(dependency.release_value());
++                    break;
++                }
++            }
++        }
++        return;
++    }
++}
++
++static ErrorOr<void> add_nix_driver_library_paths(Vector<PathRule>& paths, ByteString const& manifest_library, NixDriverLibraries& visited)
++{
++    auto driver = resolve_nix_store_library(manifest_library);
++    if (!driver.has_value())
++        return {};
++
++    Vector<ByteString> pending;
++    auto driver_directory = LexicalPath::dirname(*driver);
++    pending.append(driver.release_value());
++
++    // Mesa can dlopen DRI modules which do not appear in the EGL driver's DT_NEEDED entries.
++    if (visited.driver_directories.set(driver_directory) == HashSetResult::InsertedNewEntry) {
++        auto dri_directory = LexicalPath::join(driver_directory, "dri"sv).string();
++        auto metadata = Core::System::stat(dri_directory);
++        if (!metadata.is_error() && S_ISDIR(metadata.value().st_mode)) {
++            auto flags = static_cast<Core::DirIterator::Flags>(Core::DirIterator::SkipDots | Core::DirIterator::NoStat);
++            TRY(Core::Directory::for_each_entry(dri_directory, flags, [&](Core::DirectoryEntry const& entry, Core::Directory const&) -> ErrorOr<IterationDecision> {
++                if (entry.name.ends_with("_dri.so"sv))
++                    pending.append(LexicalPath::join(dri_directory, entry.name).string());
++                return IterationDecision::Continue;
++            }));
++        }
++    }
++
++    while (!pending.is_empty()) {
++        auto library = resolve_nix_store_library(pending.take_last());
++        if (!library.has_value() || visited.libraries.set(*library) != HashSetResult::InsertedNewEntry)
++            continue;
++
++        auto directory = LexicalPath::dirname(*library);
++        if (directory != "@NIX_STORE_DIR@"sv)
++            TRY(add_path_if_exists(paths, directory, PathRule::Access::ReadOnly));
++        append_elf_dependencies(*library, pending);
++    }
++    return {};
++}
+
+ // A driver or layer manifest names the library that the loader opens. A bare name is found by the dynamic loader in
+ // the library directories, which are already allowed. A path, which may be relative to the manifest, can be anywhere.
+-static ErrorOr<void> add_manifest_library_paths(Vector<PathRule>& paths, StringView manifest_path)
++static ErrorOr<void> add_manifest_library_paths(Vector<PathRule>& paths, StringView manifest_path, NixDriverLibraries* nix_drivers)
+ {
+     auto file = Core::File::open(manifest_path, Core::File::OpenMode::Read);
+     if (file.is_error())
+@@ -35,6 +167,8 @@
+         if (!library_path.has_value() || !library_path->contains('/'))
+             return {};
+         auto path = LexicalPath::absolute_path(LexicalPath::dirname(manifest_path), *library_path);
++        if (nix_drivers)
++            return add_nix_driver_library_paths(paths, path, *nix_drivers);
+         return add_path_if_exists(paths, path, PathRule::Access::ReadOnly);
+     };
+
+@@ -53,19 +187,24 @@
+ }
+
+ // Allows a manifest, or every manifest in a directory, along with the libraries that they point to.
+-static ErrorOr<void> add_manifest_paths(Vector<PathRule>& paths, StringView manifest_file_or_directory)
++static ErrorOr<void> add_manifest_paths(Vector<PathRule>& paths, StringView manifest_file_or_directory, NixDriverLibraries* nix_drivers = nullptr)
+ {
+     auto metadata = Core::System::stat(manifest_file_or_directory);
+     if (metadata.is_error())
+         return {};
+     TRY(add_path_if_exists(paths, manifest_file_or_directory, PathRule::Access::ReadOnly));
+     if (!S_ISDIR(metadata.value().st_mode))
+-        return add_manifest_library_paths(paths, manifest_file_or_directory);
++        return add_manifest_library_paths(paths, manifest_file_or_directory, nix_drivers);
+
+     auto flags = static_cast<Core::DirIterator::Flags>(Core::DirIterator::SkipDots | Core::DirIterator::NoStat);
+     return Core::Directory::for_each_entry(manifest_file_or_directory, flags, [&](Core::DirectoryEntry const& entry, Core::Directory const&) -> ErrorOr<IterationDecision> {
+-        if (entry.name.ends_with(".json"sv))
+-            TRY(add_manifest_library_paths(paths, LexicalPath::join(manifest_file_or_directory, entry.name).string()));
++        if (!entry.name.ends_with(".json"sv))
++            return IterationDecision::Continue;
++        auto manifest_path = LexicalPath::join(manifest_file_or_directory, entry.name).string();
++        // The NixOS driver directory links to manifests in separate store paths.
++        if (nix_drivers)
++            TRY(add_path_if_exists(paths, manifest_path, PathRule::Access::ReadOnly));
++        TRY(add_manifest_library_paths(paths, manifest_path, nix_drivers));
+         return IterationDecision::Continue;
+     });
+ }
+@@ -102,6 +241,13 @@
+     }
+     for (auto directory : { "/etc/glvnd/egl_vendor.d"sv, "/usr/share/glvnd/egl_vendor.d"sv })
+         TRY(add_manifest_paths(paths, directory));
++
++    NixDriverLibraries nix_drivers;
++    for (auto directory : { "@NIX_DRIVER_LINK@/share/glvnd/egl_vendor.d"sv,
++             "@NIX_DRIVER_LINK@/share/vulkan/icd.d"sv,
++             "@NIX_DRIVER_LINK@/share/vulkan/implicit_layer.d"sv,
++             "@NIX_DRIVER_LINK@/share/vulkan/explicit_layer.d"sv })
++        TRY(add_manifest_paths(paths, directory, &nix_drivers));
+
+     static constexpr Array manifest_variables {
+         "VK_DRIVER_FILES"sv,
+@@ -155,6 +301,7 @@
+     TRY(add_path_if_exists(paths, "/etc/glvnd"sv, PathRule::Access::ReadOnly));
+     TRY(add_path_if_exists(paths, "/usr/share/glvnd"sv, PathRule::Access::ReadOnly));
+     TRY(add_path_if_exists(paths, "/usr/share/drirc.d"sv, PathRule::Access::ReadOnly));
++    TRY(add_path_if_exists(paths, "@NIX_DRIVER_LINK@/share/drirc.d"sv, PathRule::Access::ReadOnly));
+     TRY(add_path_if_exists(paths, "/usr/share/libdrm"sv, PathRule::Access::ReadOnly));
+     TRY(add_path_if_exists(paths, "/usr/share/vulkan"sv, PathRule::Access::ReadOnly));
+     TRY(add_path_if_exists(paths, "/dev/dri"sv, PathRule::Access::ReadWrite));
+--- a/Libraries/LibSandbox/CMakeLists.txt
++++ b/Libraries/LibSandbox/CMakeLists.txt
+@@ -16,3 +16,9 @@
+ if (LINUX OR APPLE)
+     target_link_libraries(LibSandbox PRIVATE LibCore)
+ endif()
++
++if (LINUX)
++    find_package(PkgConfig REQUIRED)
++    pkg_check_modules(LibElf REQUIRED IMPORTED_TARGET libelf)
++    target_link_libraries(LibSandbox PRIVATE PkgConfig::LibElf)
++endif()
