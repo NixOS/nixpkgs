@@ -13,6 +13,7 @@
 rustPackages_1_100.rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dimcode";
   version = "0.1.0-alpha.29";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "arcships";
