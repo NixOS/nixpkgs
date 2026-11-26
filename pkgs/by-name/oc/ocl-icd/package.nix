@@ -15,8 +15,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "OCL-dev";
     repo = "ocl-icd";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-J7j68KlcwdlwtBo171xZd5iLWeo1suYm43G1JiFs2AE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-J7j68KlcwdlwtBo171xZd5iLWeo1suYm43G1JiFs2AE=";
   };
 
   nativeBuildInputs = [
@@ -38,6 +38,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   # fixes: can't build x86_64-w64-mingw32 shared library unless -no-undefined is specified
   makeFlags = lib.optionals stdenv.hostPlatform.isWindows [ "LDFLAGS=-no-undefined" ];
+
+  __structuredAttrs = true;
 
   meta = {
     description = "OpenCL ICD Loader for ${opencl-headers.name}";
