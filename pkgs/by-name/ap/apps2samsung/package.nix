@@ -24,13 +24,13 @@
 
 buildDotnetModule (finalAttrs: {
   pname = "apps2samsung";
-  version = "2.8.3";
+  version = "3.2.1";
 
   src = fetchFromGitHub {
     owner = "Apps2Samsung";
     repo = "Apps2Samsung";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fkYlCQDbLGyAqk3w9d/qey0kvKAlLhx7gba1h5wihgw=";
+    hash = "sha256-my9e5sTvlVy9IhJsTw2E1m1O6MHv5IRCpHYOLjJUsRs=";
   };
 
   postPatch = ''
@@ -40,7 +40,7 @@ buildDotnetModule (finalAttrs: {
       --replace-fail 'PlatformService.GetEsbuildPath(Path.Combine(baseDir, "Assets", "esbuild"))' \
                      '"${lib.getExe esbuild}"' \
       --replace-fail 'EnsureExecutable(esbuildPath);' ""
-    rm -r Jellyfin2Samsung-CrossOS/Assets/esbuild
+    rm -r Apps2Samsung.Desktop/Assets/esbuild
   '';
 
   strictDeps = true;
@@ -49,7 +49,7 @@ buildDotnetModule (finalAttrs: {
   dotnet-sdk = dotnetCorePackages.sdk_10_0;
   dotnet-runtime = dotnetCorePackages.runtime_10_0;
 
-  projectFile = "Jellyfin2Samsung-CrossOS/Apps2Samsung.csproj";
+  projectFile = "Apps2Samsung.Desktop/Apps2Samsung.csproj";
   nugetDeps = ./deps.json;
 
   dotnetFlags = [
@@ -93,7 +93,7 @@ buildDotnetModule (finalAttrs: {
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ copyDesktopItems ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
-    install -Dm444 Jellyfin2Samsung-CrossOS/Assets/jelly2sams.png \
+    install -Dm444 Apps2Samsung.Desktop/Assets/jelly2sams.png \
       $out/share/icons/hicolor/256x256/apps/apps2samsung.png
   '';
 
@@ -106,10 +106,10 @@ buildDotnetModule (finalAttrs: {
       appDir="$out/Applications/Apps2Samsung.app/Contents"
       mkdir -p "$appDir/MacOS" "$appDir/Resources"
       ln -s "$out/bin/Apps2Samsung" "$appDir/MacOS/Apps2Samsung"
-      install -m444 Jellyfin2Samsung-CrossOS/Assets/jelly2sams.icns "$appDir/Resources/"
+      install -m444 Apps2Samsung.Desktop/Assets/jelly2sams.icns "$appDir/Resources/"
 
       # Match the minimum OS version and network permission in upstream's release workflow.
-      substitute Jellyfin2Samsung-CrossOS/Info.plist "$appDir/Info.plist" \
+      substitute Apps2Samsung.Desktop/Info.plist "$appDir/Info.plist" \
         --replace-fail '<string>10.15</string>' '<string>11.0</string>' \
         --replace-fail '</dict>' '<key>CFBundleShortVersionString</key>
         <string>${finalAttrs.version}</string>

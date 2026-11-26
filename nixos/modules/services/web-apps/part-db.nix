@@ -157,8 +157,7 @@ in
         };
         settings = {
           "listen.mode" = lib.mkDefault "0660";
-          "listen.owner" = lib.mkDefault "part-db";
-          "listen.group" = lib.mkDefault "part-db";
+          "listen.owner" = lib.mkDefault config.services.nginx.user;
           "pm" = lib.mkDefault "dynamic";
           "pm.max_children" = lib.mkDefault 32;
           "pm.start_servers" = lib.mkDefault 2;
@@ -273,10 +272,6 @@ in
             "part-db-migrate.service"
             "postgresql.target"
           ];
-          # ensure nginx can access the php-fpm socket
-          postStart = ''
-            ${lib.getExe' pkgs.acl "setfacl"} -m 'u:${config.services.nginx.user}:rw' ${config.services.phpfpm.pools.part-db.socket}
-          '';
         };
       };
 

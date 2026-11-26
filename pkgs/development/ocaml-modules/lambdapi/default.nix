@@ -4,15 +4,14 @@
   fetchpatch,
   buildDunePackage,
   alcotest,
-  dedukti,
   camlp-streams,
-  cmdliner,
   dream,
+  dune-site,
   lwt_ppx,
   menhir,
+  ppx_inline_test,
   pratter,
   sedlex,
-  stdlib-shims,
   timed,
   why3,
   yojson,
@@ -20,22 +19,14 @@
 
 buildDunePackage (finalAttrs: {
   pname = "lambdapi";
-  version = "3.0.0";
+  version = "4.0.0";
 
   minimalOCamlVersion = "4.14";
 
   src = fetchurl {
     url = "https://github.com/Deducteam/lambdapi/releases/download/${finalAttrs.version}/lambdapi-${finalAttrs.version}.tbz";
-    hash = "sha256-EGau0mGP2OakAMUUfb9V6pd86NP+LlGKxnhcZ3WhuL4=";
+    hash = "sha256-Di5z4OoMZ08SY7+F7TRT7T1ghNOO6imXSgO6njgtKdc=";
   };
-
-  patches = [
-    # Compatibility with cmdliner ≥ 2
-    (fetchpatch {
-      url = "https://github.com/Deducteam/lambdapi/commit/8e27c0f668915fbd49e32bdac246d6d515a64dd0.patch";
-      hash = "sha256-9CkvH1o81T9LP+IPogKGhoiIDP76/nRfq59ttU7r0fI=";
-    })
-  ];
 
   nativeBuildInputs = [
     dream
@@ -44,11 +35,11 @@ buildDunePackage (finalAttrs: {
   buildInputs = [ lwt_ppx ];
   propagatedBuildInputs = [
     camlp-streams
-    cmdliner
     dream
+    dune-site
+    ppx_inline_test
     pratter
     sedlex
-    stdlib-shims
     timed
     why3
     yojson
@@ -56,9 +47,8 @@ buildDunePackage (finalAttrs: {
 
   checkInputs = [
     alcotest
-    dedukti
   ];
-  doCheck = false; # anomaly: Sys_error("/homeless-shelter/.why3.conf: No such file or directory")
+  doCheck = true;
 
   meta = {
     homepage = "https://github.com/Deducteam/lambdapi";
