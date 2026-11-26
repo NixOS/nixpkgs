@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "dwdwfsapi";
-  version = "1.1.0";
+  version = "1.2.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-7dIVD+4MiYtsjAM5j67MlbiUN2Q5DpK6bUU0ZuHN2rk=";
+    hash = "sha256-Xj1SUPmtZ773+trXkdvZK+uUF1+wmUnMlRltsCmhtCM=";
   };
 
   build-system = [ hatchling ];
