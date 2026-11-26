@@ -52,6 +52,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = lib.optional decoderSupport libmpg123 ++ lib.optional sndfileFileIOSupport libsndfile;
 
+  strictDeps = true;
+
   configureFlags = [
     (lib.enableFeature nasmSupport "nasm")
     (lib.enableFeature cpmlSupport "cpml")
