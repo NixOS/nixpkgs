@@ -58,6 +58,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
     install -D -t $out/bin ${lib.concatStringsSep " " scripts}
   '';
 
+  # doesn't ship .dist-info/METADATA
+  dontCheckPythonMetadata = true;
+
   meta = {
     inherit description license;
     homepage = "https://github.com/AdityaGarg8/git-credential-email";
