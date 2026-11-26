@@ -6,6 +6,7 @@
   nix-update-script,
   libGL,
   libx11,
+  makeWrapper,
   versionCheckHook,
 }:
 
@@ -29,6 +30,8 @@ buildGoModule (finalAttrs: {
     "-w"
     "-X github.com/richardwilkes/toolbox/v2/xos.AppVersion=${finalAttrs.version}"
   ];
+
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ makeWrapper ];
 
   __darwinAllowLocalNetworking = true;
 
@@ -57,6 +60,15 @@ buildGoModule (finalAttrs: {
     runHook preInstall
     install -Dm755 $GOPATH/bin/gcs -t $out/bin
     runHook postInstall
+  '';
+
+  # upstream's packager (cmd/pack) builds GCS.app from ./gcs and packaging.yml
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mv $out/bin/gcs gcs
+    $GOPATH/bin/pack --release ${finalAttrs.version}
+    mkdir -p $out/Applications
+    mv GCS.app $out/Applications/
+    makeWrapper $out/Applications/GCS.app/Contents/MacOS/gcs $out/bin/gcs
   '';
 
   # Loaded at runtime
