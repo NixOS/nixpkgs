@@ -239,6 +239,10 @@ if [[ -n "$newUrl" ]]; then
     fi
 fi
 
+if test "$oldHash" = "$tempHash"; then
+    die "Unexpected: source hash of '$attr' is already a temporary hash."
+fi
+
 sed -i.cmp "$nixFile" -re "s|\"$oldHashEscaped\"|\"$tempHash\"|"
 if cmp -s "$nixFile" "$nixFile.cmp"; then
     die "Failed to replace source hash of '$attr' to a temporary hash!"
