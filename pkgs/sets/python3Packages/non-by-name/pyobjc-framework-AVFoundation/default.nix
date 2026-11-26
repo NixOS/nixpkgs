@@ -26,7 +26,7 @@ buildPythonPackage rec {
     darwin.DarwinTools # sw_vers
   ];
 
-  patches = [ ../pyobjc-core/use-PATH-for-macOS-tools.patch ];
+  patches = [ ../../by-name/py/pyobjc-core/use-PATH-for-macOS-tools.patch ];
 
   dependencies = [
     pyobjc-core

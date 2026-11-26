@@ -13,7 +13,7 @@ result-*
 result
 repl-result-*
 tags
-!pkgs/sets/python3Packages/non-by-name/result
+!pkgs/sets/python3Packages/by-name/re/result
 /doc/NEWS.html
 /doc/NEWS.txt
 /doc/manual.html

@@ -348,7 +348,7 @@ with pkgs;
 
   dnf-plugins-core = with python3Packages; toPythonApplication dnf-plugins-core;
 
-  dnf4 = python3Packages.callPackage ../sets/python3Packages/non-by-name/dnf4/wrapper.nix { };
+  dnf4 = python3Packages.callPackage ../sets/python3Packages/by-name/dn/dnf4/wrapper.nix { };
 
   inherit (gridlock) nyarr;
 
@@ -1859,7 +1859,7 @@ with pkgs;
     callPackage ../servers/search/elasticsearch/plugins.nix { }
   );
 
-  emborg = python3Packages.callPackage ../sets/python3Packages/non-by-name/emborg { };
+  emborg = python3Packages.callPackage ../sets/python3Packages/by-name/em/emborg/package.nix { };
 
   executor = with python3Packages; toPythonApplication executor;
 
