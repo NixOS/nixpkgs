@@ -18,6 +18,7 @@ let
       };
     }
   );
+  admin = "${pkgs.versitygw}/bin/versitygw admin --access fixture-root --secret fixture-root-secret";
   checkS3 =
     pkgs.writers.writePython3 "versitygw-check-s3"
       {
@@ -100,6 +101,7 @@ in
       usersFile = "/run/versitygw-test/users.json";
       settings = {
         VGW_PORT = "127.0.0.1:7070";
+        VGW_ADMIN_PORT = "127.0.0.1:7080";
         VGW_QUIET = true;
         VGW_MAX_REQUESTS = 100;
         VGW_UNUSED = null;
@@ -143,6 +145,13 @@ in
     unseeded.succeed("test -d /var/lib/versitygw/iam")
     machine.wait_for_unit("versitygw.service")
     machine.wait_for_open_port(7070)
+
+    with subtest("admin API is confined to its separate loopback listener"):
+        machine.fail("${admin} --endpoint-url http://127.0.0.1:7070 list-users")
+        machine.wait_for_open_port(7080, timeout=60)
+        assert "fixture-reader" in machine.succeed("${admin} --endpoint-url http://127.0.0.1:7080 list-users")
+        listeners = machine.succeed("ss -ltnH 'sport = :7080'").splitlines()
+        assert [line.split()[3] for line in listeners] == ["127.0.0.1:7080"]
 
     with subtest("external sidecar metadata and version storage"):
         unseeded.succeed("${checkS3} external-storage")

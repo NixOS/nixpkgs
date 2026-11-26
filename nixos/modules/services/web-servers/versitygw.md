@@ -9,7 +9,10 @@ through an S3-compatible API. It requires a filesystem with extended attributes.
     enable = true;
     rootDirectory = "/srv/versitygw";
     environmentFile = "/run/secrets/versitygw.env";
-    settings.VGW_PORT = "127.0.0.1:7070";
+    settings = {
+      VGW_PORT = "127.0.0.1:7070";
+      VGW_ADMIN_PORT = "127.0.0.1:7080";
+    };
   };
 }
 ```
@@ -47,6 +50,18 @@ the rendered file: the service receives these credentials at runtime.
 The service does not open firewall ports. Without an explicit `VGW_PORT`,
 VersityGW listens on all interfaces on port 7070. Set an appropriate bind
 address and configure TLS or a reverse proxy before exposing the gateway.
+Without `VGW_ADMIN_PORT`, the admin API shares the S3 listener. The example
+separates it onto loopback port 7080; forward only the S3 listener through a
+public reverse proxy and keep the admin endpoint restricted. Configure the
+administration CLI to use `http://127.0.0.1:7080` on the gateway host.
+
+A separate admin listener does not inherit the S3 TLS certificate and key.
+Unless both `VGW_ADMIN_CERT` and `VGW_ADMIN_CERT_KEY` are set, it serves plaintext
+HTTP, even when S3 uses TLS. If exposing it beyond loopback, configure its own
+TLS certificate pair or a restricted TLS-terminating proxy. The certificate and
+key files must be readable by the service user; keep private keys out of the
+Nix store.
+
 Additional upstream flags can be configured through their environment variables
 in [](#opt-services.versitygw.settings).
 
