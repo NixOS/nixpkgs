@@ -1922,7 +1922,8 @@
       ];
     "engie_be" =
       ps: with ps; [
-      ]; # missing inputs: aioengiebelgium
+        aioengiebelgium
+      ];
     "enigma2" =
       ps: with ps; [
         openwebifpy
@@ -9124,6 +9125,7 @@
     "energy"
     "energyid"
     "energyzero"
+    "engie_be"
     "enigma2"
     "enocean"
     "enphase_envoy"
