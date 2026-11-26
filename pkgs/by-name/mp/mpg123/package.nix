@@ -94,6 +94,8 @@ stdenv.mkDerivation (finalAttrs: {
     '';
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Fast console MPEG Audio Player and decoder library";
     homepage = "https://mpg123.org";
