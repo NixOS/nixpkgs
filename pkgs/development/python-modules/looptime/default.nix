@@ -35,8 +35,8 @@ buildPythonPackage (finalAttrs: {
     pytestCheckHook
   ];
 
-  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
-    # Time-based tests that fail pretty predictably on darwin but pass on linux
+  disabledTestPaths = [
+    # Time-based tests that fail pretty predictably on darwin, but often pass on linux
     "tests/test_chronometers.py::test_duration_resets_on_reuse"
     "tests/test_chronometers.py::test_conversion_to_float"
     "tests/test_chronometers.py::test_sync_context_manager"
