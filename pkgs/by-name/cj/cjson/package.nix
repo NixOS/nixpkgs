@@ -3,6 +3,7 @@
   lib,
   fetchFromGitHub,
   cmake,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -12,11 +13,13 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "DaveGamble";
     repo = "cJSON";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-WjgzokT9aHJ7dB40BtmhS7ur1slTuXmemgDimZHLVQM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-WjgzokT9aHJ7dB40BtmhS7ur1slTuXmemgDimZHLVQM=";
   };
 
   nativeBuildInputs = [ cmake ];
+
+  strictDeps = true;
 
   cmakeFlags = lib.optional (stdenv.cc.isClang && !stdenv.hostPlatform.isDarwin) (
     lib.cmakeBool "ENABLE_CUSTOM_COMPILER_FLAGS" false
@@ -26,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     # cJSON actually uses C99 standard, not C89
     # https://github.com/DaveGamble/cJSON/issues/275
     ''
-      substituteInPlace CMakeLists.txt --replace -std=c89 -std=c99
+      substituteInPlace CMakeLists.txt --replace-fail -std=c89 -std=c99
     ''
     # Fix the build with CMake 4.
     #
@@ -41,11 +44,24 @@ stdenv.mkDerivation (finalAttrs: {
           'cmake_minimum_required(VERSION 3.10)'
     '';
 
+  passthru.tests = {
+    pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+    };
+    cmake-config = testers.hasCmakeConfigModules {
+      package = finalAttrs.finalPackage;
+    };
+  };
+
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://github.com/DaveGamble/cJSON";
     description = "Ultralightweight JSON parser in ANSI C";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.matthiasbeyer ];
     platforms = lib.platforms.windows ++ lib.platforms.unix;
+    pkgConfigModules = [ "libcjson" ];
+    cmakeConfigModules = [ "cJSON" ];
   };
 })
