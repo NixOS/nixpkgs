@@ -15,17 +15,17 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "garage";
-  version = "2.5.0";
+  version = "2.6.0";
 
   src = fetchFromGitea {
     domain = "git.deuxfleurs.fr";
     owner = "Deuxfleurs";
     repo = "garage";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5jWgH+hi0Ouqszapw00KOBHFjxlV/y4T7IB22IRaEHE=";
+    hash = "sha256-Tabc1LHCY5vAmRba5YsOPh+bKhU+Xn8Fc3LUdVgIuFE=";
   };
 
-  cargoHash = "sha256-xk1lMNnGp4qWK7BvgdUKIvc+cR5HDw0GFfV6q64yMso=";
+  cargoHash = "sha256-CHOpkA4JZX9ZxLScKW3XsGVp4zFBXHFXmUFcY07tRJg=";
 
   nativeBuildInputs = [
     installShellFiles
