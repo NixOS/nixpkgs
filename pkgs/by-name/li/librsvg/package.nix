@@ -46,6 +46,7 @@
   imlib2,
   vips,
   xfwm4,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -222,6 +223,7 @@ stdenv.mkDerivation (finalAttrs: {
       inherit (enlightenment) efl;
       inherit xfwm4;
       ffmpeg = ffmpeg.override { withSvg = true; };
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     };
   };
 
@@ -235,5 +237,6 @@ stdenv.mkDerivation (finalAttrs: {
     teams = [ lib.teams.gnome ];
     mainProgram = "rsvg-convert";
     platforms = lib.platforms.unix;
+    pkgConfigModules = [ "librsvg-2.0" ];
   };
 })
