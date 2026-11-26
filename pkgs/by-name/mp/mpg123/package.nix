@@ -15,6 +15,7 @@
   withConplay ? !stdenv.hostPlatform.isWindows,
   perl,
   writeScript,
+  testers,
 }:
 
 assert withConplay -> !libOnly;
@@ -47,6 +48,8 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals withJack [ libjack2 ]
   );
+
+  strictDeps = true;
 
   configureFlags =
     lib.optionals (!libOnly) [
@@ -90,7 +93,10 @@ stdenv.mkDerivation (finalAttrs: {
           pcre2grep -o1 '<a href="download/mpg123-([0-9.]+).tar.bz2">')"
       update-source-version ${finalAttrs.pname} "$new_version"
     '';
+    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Fast console MPEG Audio Player and decoder library";
@@ -98,5 +104,10 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl21Only;
     maintainers = [ ];
     platforms = lib.platforms.all;
+    pkgConfigModules = [
+      "libmpg123"
+      "libout123"
+      "libsyn123"
+    ];
   };
 })
