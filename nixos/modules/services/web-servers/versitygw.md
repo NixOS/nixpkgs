@@ -14,9 +14,35 @@ through an S3-compatible API. It requires a filesystem with extended attributes.
 }
 ```
 
-Provision `environmentFile` at runtime with `ROOT_ACCESS_KEY` and
-`ROOT_SECRET_KEY`. Do not use `pkgs.writeText` or a Nix path literal for real
-credentials: those put secrets in the world-readable Nix store.
+Provision [](#opt-services.versitygw.environmentFile) at runtime with
+`ROOT_ACCESS_KEY` and `ROOT_SECRET_KEY`. Do not put credentials in
+[](#opt-services.versitygw.settings): its values become part of the
+world-readable Nix store, and the module rejects root credential keys there.
+Likewise, do not use `pkgs.writeText` or a Nix path literal for real credentials.
+
+For example, with [sops-nix](https://github.com/Mic92/sops-nix) already
+configured and secrets `versitygw_access_key` and `versitygw_secret_key`
+declared, a template can produce the environment file at activation:
+
+```nix
+{ config, ... }:
+{
+  sops.templates."versitygw.env" = {
+    restartUnits = [ "versitygw.service" ];
+    content = ''
+      ROOT_ACCESS_KEY=${config.sops.placeholder.versitygw_access_key}
+      ROOT_SECRET_KEY=${config.sops.placeholder.versitygw_secret_key}
+    '';
+  };
+  services.versitygw.environmentFile = config.sops.templates."versitygw.env".path;
+}
+```
+
+The template placeholders are replaced in the rendered file, not in arbitrary
+NixOS options such as `settings`. The example assumes secret values are valid
+unquoted systemd environment-file values; values containing special characters
+must be encoded according to the `EnvironmentFile=` syntax. Restrict access to
+the rendered file: the service receives these credentials at runtime.
 
 The service does not open firewall ports. Without an explicit `VGW_PORT`,
 VersityGW listens on all interfaces on port 7070. Set an appropriate bind
