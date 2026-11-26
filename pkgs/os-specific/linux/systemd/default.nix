@@ -211,6 +211,7 @@ let
   #  $ curl -s https://api.github.com/repos/systemd/systemd/releases/latest | \
   #     jq '.created_at|strptime("%Y-%m-%dT%H:%M:%SZ")|mktime'
   releaseTimestamp = "1793885120";
+  bpfClang = buildPackages.llvmPackages.clang-unwrapped;
 in
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;
@@ -257,7 +258,9 @@ stdenv.mkDerivation (finalAttrs: {
   ''
   + lib.optionalString withLibBPF ''
     substituteInPlace src/bpf/meson.build \
-      --replace-fail "find_program('clang'" "find_program('${stdenv.cc.targetPrefix}clang'"
+      --replace-fail "find_program('clang'," "find_program('${bpfClang}/bin/clang'," \
+      --replace-fail "clang = cc.cmd_array()" "clang = '${bpfClang}/bin/clang'" \
+      --replace-fail "bpf_clang_flags = [" "bpf_clang_flags = ['-isystem', '${lib.getDev stdenv.cc.libc}/include',"
   ''
   + lib.optionalString withUkify ''
     substituteInPlace src/ukify/ukify.py \
@@ -325,7 +328,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals withLibBPF [
     bpftools
-    buildPackages.llvmPackages.clang
     buildPackages.llvmPackages.libllvm
   ];
 
