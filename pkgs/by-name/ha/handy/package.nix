@@ -62,7 +62,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "handy";
-  version = "0.10.0";
+  version = "0.10.2";
 
   __structuredAttrs = true;
 
@@ -70,11 +70,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "cjpais";
     repo = "Handy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PnL2le8URBs4I3pv9DKh+JLDII20xtDkJEUJghLToXQ=";
+    hash = "sha256-yvbCDA6pjN8y+Ft8HpZxR180aigTHVuZfUbIEWGMsLo=";
   };
 
   cargoRoot = "src-tauri";
-  cargoHash = "sha256-1ae7U/uEa11R0RC6nZthqBVsxojQsGduiiFQlIrHUZA=";
+  cargoHash = "sha256-5m9KEYBRbZlpt/d+/WXHSnygnnEtpiymEjdLAjc33RQ=";
 
   nativeInstallInputs = [ jq ];
 
