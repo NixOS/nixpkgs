@@ -706,7 +706,7 @@ We use jbidwatcher as an example for a discontinued project here.
 
     ```nix
     {
-      jbidwatcher = throw "jbidwatcher was discontinued in march 2021"; # added 2021-03-15
+      jbidwatcher = throw "'jbidwatcher' was discontinued in march 2021"; # added 2021-03-15
     }
     ```
 
