@@ -20313,6 +20313,8 @@ self: super: with self; {
 
   stable-baselines3 = callPackage ../development/python-modules/stable-baselines3 { };
 
+  stable-baselines3-contrib = callPackage ../development/python-modules/stable-baselines3-contrib { };
+
   stac-valid = callPackage ../development/python-modules/stac-valid { };
 
   stack-data = callPackage ../development/python-modules/stack-data { };
