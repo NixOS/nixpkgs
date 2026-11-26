@@ -10972,6 +10972,8 @@ self: super: with self; {
 
   meteo-lt-pkg = callPackage ../development/python-modules/meteo-lt-pkg { };
 
+  meteoalarmapi = callPackage ../development/python-modules/meteoalarmapi { };
+
   meteoalertapi = callPackage ../development/python-modules/meteoalertapi { };
 
   meteocalc = callPackage ../development/python-modules/meteocalc { };
