@@ -65,6 +65,8 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+  __structuredAttrs = true;
+
   meta = {
     changelog = "https://gitlab.xiph.org/xiph/theora/-/releases/v${finalAttrs.version}";
     description = "Library for Theora, a free and open video compression format";
