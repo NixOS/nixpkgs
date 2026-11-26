@@ -47,6 +47,7 @@
   # for passthru.tests
   ffmpeg,
   gst_all_1,
+  testers,
 }:
 
 let
@@ -141,7 +142,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "webmproject";
     repo = "libvpx";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-1PBeHQSgBf5nT/IDL36VWBqiWLSHz/1XGM41gy49DsY=";
   };
 
@@ -156,9 +157,8 @@ stdenv.mkDerivation (finalAttrs: {
     # When cross-compiling (for aarch64-multiplatform), the compiler errors out on these flags.
     # Since they're 'just' warnings, it's fine to just remove them.
     substituteInPlace configure \
-      --replace "check_add_cflags -Wparentheses-equality" "" \
-      --replace "check_add_cflags -Wunreachable-code-loop-increment" "" \
-      --replace "check_cflags -Wshorten-64-to-32 && add_cflags_only -Wshorten-64-to-32" ""
+      --replace-fail "check_add_cflags -Wparentheses-equality" "" \
+      --replace-fail "check_cflags -Wshorten-64-to-32 && add_cflags_only -Wshorten-64-to-32" ""
   '';
 
   outputs = [
@@ -249,6 +249,8 @@ stdenv.mkDerivation (finalAttrs: {
       curl
     ];
 
+  strictDeps = true;
+
   env.NIX_LDFLAGS = toString [
     "-lpthread" # fixes linker errors
   ];
@@ -260,7 +262,10 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests = {
     inherit (gst_all_1) gst-plugins-good;
     ffmpeg = ffmpeg.override { withVpx = true; };
+    pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "WebM VP8/VP9 codec SDK";
@@ -269,5 +274,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd3;
     maintainers = [ ];
     platforms = lib.platforms.all;
+    pkgConfigModules = [ "vpx" ];
   };
 })
