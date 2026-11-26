@@ -37,8 +37,47 @@ steam.buildRuntimeEnv {
     ]
     ++ extraPkgs pkgs;
 
+  extraLibraries =
+    pkgs:
+    with pkgs;
+    [
+      alsa-lib
+      cups
+      dbus
+      fontconfig
+      freetype
+      gnutls
+      gst_all_1.gst-libav
+      gst_all_1.gst-plugins-bad
+      gst_all_1.gst-plugins-base
+      gst_all_1.gst-plugins-good
+      gst_all_1.gst-plugins-ugly
+      gst_all_1.gstreamer
+      libgphoto2
+      libkrb5
+      libpcap
+      libpulseaudio
+      libusb1
+      libv4l
+      libxkbcommon
+      libx11
+      libxcomposite
+      libxcursor
+      libxext
+      libxfixes
+      libxi
+      libxinerama
+      libxrandr
+      libxrender
+      ocl-icd
+      SDL2
+      sane-backends
+      unixodbc
+      wayland
+    ]
+    ++ extraLibraries pkgs;
+
   inherit
-    extraLibraries
     extraEnv
     extraProfile
     extraPreBwrapCmds
