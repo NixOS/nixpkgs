@@ -8516,11 +8516,9 @@ with pkgs;
     ({
       timeshift-unwrapped = callPackage ../applications/backup/timeshift/unwrapped.nix { };
       timeshift = callPackage ../applications/backup/timeshift { grubPackage = grub2; };
-      timeshift-minimal = callPackage ../applications/backup/timeshift/minimal.nix { };
     })
     timeshift-unwrapped
     timeshift
-    timeshift-minimal
     ;
 
   tlp = callPackage ../tools/misc/tlp {
