@@ -9,6 +9,28 @@ with lib;
 
 let
   cfg = config.services.wiki-js;
+  serviceExecV2 = {
+    ExecStartPre = [
+      "${lib.getExe' pkgs.coreutils "ln"} -sf ${configFile} /var/lib/${cfg.stateDirectoryName}/config.yml"
+      "${lib.getExe' pkgs.coreutils "ln"} -sf ${cfg.package}/server /var/lib/${cfg.stateDirectoryName}"
+      "${lib.getExe' pkgs.coreutils "ln"} -sf ${cfg.package}/assets /var/lib/${cfg.stateDirectoryName}"
+      "${lib.getExe' pkgs.coreutils "ln"} -sf ${cfg.package}/package.json /var/lib/${cfg.stateDirectoryName}/package.json"
+    ];
+    ExecStart = "${pkgs.lib.getExe pkgs.nodejs-slim} ${cfg.package}/server";
+  };
+
+  serviceExecV3 = {
+    ExecStartPre = [
+      "${lib.getExe' pkgs.coreutils "ln"} -sf ${configFile} /var/lib/${cfg.stateDirectoryName}/config.yml"
+      "${lib.getExe' pkgs.coreutils "ln"} -sf ${cfg.package}/backend /var/lib/${cfg.stateDirectoryName}"
+      "${lib.getExe' pkgs.coreutils "ln"} -sf ${cfg.package}/blocks /var/lib/${cfg.stateDirectoryName}"
+      "${lib.getExe' pkgs.coreutils "ln"} -sf ${cfg.package}/assets /var/lib/${cfg.stateDirectoryName}"
+      "${lib.getExe' pkgs.coreutils "ln"} -sf ${cfg.package}/package.json /var/lib/${cfg.stateDirectoryName}/package.json"
+    ];
+    ExecStart = "${pkgs.lib.getExe pkgs.nodejs-slim_26} ${cfg.package}/backend";
+  };
+
+  serviceExec = if lib.versionAtLeast cfg.package.version "3" then serviceExecV3 else serviceExecV2;
 
   format = pkgs.formats.json { };
 
@@ -17,6 +39,10 @@ in
 {
   options.services.wiki-js = {
     enable = mkEnableOption "wiki-js";
+
+    package = mkPackageOption pkgs "wiki-js" {
+      default = "wiki-js_3";
+    };
 
     environmentFile = mkOption {
       type = types.nullOr types.path;
@@ -144,13 +170,7 @@ in
         WorkingDirectory = "/var/lib/${cfg.stateDirectoryName}";
         DynamicUser = true;
         PrivateTmp = true;
-        ExecStartPre = [
-          "${lib.getExe' pkgs.coreutils "ln"} -sf ${configFile} /var/lib/${cfg.stateDirectoryName}/config.yml"
-          "${lib.getExe' pkgs.coreutils "ln"} -sf ${pkgs.wiki-js}/server /var/lib/${cfg.stateDirectoryName}"
-          "${lib.getExe' pkgs.coreutils "ln"} -sf ${pkgs.wiki-js}/assets /var/lib/${cfg.stateDirectoryName}"
-          "${lib.getExe' pkgs.coreutils "ln"} -sf ${pkgs.wiki-js}/package.json /var/lib/${cfg.stateDirectoryName}/package.json"
-        ];
-        ExecStart = "${pkgs.lib.getExe pkgs.nodejs-slim} ${pkgs.wiki-js}/server";
+        inherit (serviceExec) ExecStartPre ExecStart;
       };
     };
   };
