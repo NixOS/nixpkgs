@@ -6656,7 +6656,7 @@ self: super: with self; {
 
   frictionless = callPackage ../development/python-modules/frictionless { };
 
-  frida-python = callPackage ../development/python-modules/frida-python { };
+  frida = callPackage ../development/python-modules/frida { };
 
   friendly-traceback = callPackage ../development/python-modules/friendly-traceback { };
 

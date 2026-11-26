@@ -27,7 +27,7 @@ let
     distro
     pdfkit
     google-play-scraper
-    frida-python
+    frida
     tldextract
     openstep-parser
     svgutils
@@ -100,7 +100,7 @@ buildPythonApplication (finalAttrs: {
     distro
     pdfkit
     google-play-scraper
-    frida-python
+    frida
     tldextract
     openstep-parser
     svgutils

@@ -109,7 +109,7 @@ python3Packages.buildPythonApplication {
   ];
 
   dependencies = with python3Packages; [
-    frida-python
+    frida
     frida-tools
     prompt-toolkit
     click

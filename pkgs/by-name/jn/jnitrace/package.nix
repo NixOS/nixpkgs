@@ -19,7 +19,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   dependencies = with python3Packages; [
-    frida-python
+    frida
     colorama
     hexdump
     setuptools # pkg_resources is imported during runtime

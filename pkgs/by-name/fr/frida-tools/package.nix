@@ -28,7 +28,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     pygments
     prompt-toolkit
     colorama
-    frida-python
+    frida
     websockets
   ];
 

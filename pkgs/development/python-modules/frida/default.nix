@@ -28,7 +28,7 @@ let
     .${system} or (throw "Unsupported system: ${system}");
 in
 buildPythonPackage {
-  pname = "frida-python";
+  pname = "frida";
   inherit version format;
 
   src = fetchPypi {
