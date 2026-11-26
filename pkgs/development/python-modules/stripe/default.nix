@@ -19,6 +19,11 @@ buildPythonPackage rec {
     hash = "sha256-7oe2lkGfTWWgY3wxWDk96KIgHegbWJYyQYUXcT5OyO0=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'flit_core >=3.11, <4' flit_core
+  '';
+
   build-system = [ flit-core ];
 
   dependencies = [
