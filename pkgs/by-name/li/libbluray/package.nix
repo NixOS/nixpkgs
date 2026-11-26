@@ -70,6 +70,8 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = lib.optional withAACS libaacs;
 
+  strictDeps = true;
+
   env.NIX_LDFLAGS =
     lib.optionalString withAACS "-L${libaacs}/lib -laacs"
     + lib.optionalString withBDplus " -L${libbdplus}/lib -lbdplus";
