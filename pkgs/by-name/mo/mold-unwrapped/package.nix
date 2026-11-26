@@ -48,7 +48,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   postInstall = ''
     ln -s $out/bin/{,ld.}mold
 
-    ${lib.optionalString stdenv.targetPlatform.isLinux ''
+    ${lib.optionalString stdenv.hostPlatform.isLinux ''
       mkdir -p $out/lib/mold
       mv $out/lib/mold-wrapper.so $out/lib/mold
     ''}
