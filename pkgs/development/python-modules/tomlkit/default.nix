@@ -11,8 +11,8 @@
   pyyaml,
 
   # passthru.tests
+  cattrs,
   remarshal,
-  tomlkit,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -38,8 +38,8 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [ "tomlkit" ];
 
   passthru.tests = {
-    inherit remarshal;
-    pytest = tomlkit.overrideAttrs { doCheck = true; };
+    inherit cattrs remarshal;
+    pytest = finalAttrs.finalPackage.overrideAttrs { doInstallCheck = true; };
   };
 
   meta = {

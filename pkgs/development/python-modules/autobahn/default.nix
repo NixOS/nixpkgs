@@ -31,7 +31,6 @@
   msgpack,
   ujson,
   py-ubjson,
-  # twisted
   attrs,
   twisted,
   zope-interface,
@@ -41,19 +40,19 @@
   # tests
   mock,
   pytest-asyncio_0,
-  pytestCheckHook,
+  pytest9_1CheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "autobahn";
-  version = "26.7.1";
+  version = "26.11.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "crossbario";
     repo = "autobahn-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OepX1Hf2McNQhXPWfshU2SgLMzqz8AEbRm8ha1s//K8=";
+    hash = "sha256-dstOHiYgaOUjPF3NZ/9ZgenJg94p00quDVSxz5aWT9s=";
   };
 
   build-system = [
@@ -117,11 +116,12 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [
     mock
     pytest-asyncio_0
-    pytestCheckHook
+    pytest9_1CheckHook
   ]
   ++ finalAttrs.passthru.optional-dependencies.encryption
   ++ finalAttrs.passthru.optional-dependencies.scram
-  ++ finalAttrs.passthru.optional-dependencies.serialization;
+  ++ finalAttrs.passthru.optional-dependencies.serialization
+  ++ finalAttrs.passthru.optional-dependencies.twisted;
 
   preCheck = ''
     # Run asyncio tests (requires twisted)
@@ -137,6 +137,7 @@ buildPythonPackage (finalAttrs: {
     "src/autobahn/twisted"
 
     # Requires insecure ecdsa library
+    "src/autobahn/asyncio/test/test_aio_tls.py"
     "src/autobahn/wamp/test/test_wamp_cryptosign.py"
   ];
 
@@ -144,6 +145,7 @@ buildPythonPackage (finalAttrs: {
     # Tests require insecure ecdsa library
     "test_crypto_extras_present"
     "test_import[autobahn.wamp.cryptosign]"
+    "test_import_framework[autobahn.twisted.cryptosign-twisted]"
   ];
 
   meta = {

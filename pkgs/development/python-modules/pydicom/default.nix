@@ -3,7 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  flit-core,
+  flit-core_3,
   numpy,
   pytestCheckHook,
 
@@ -39,7 +39,7 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-d7fFsNKzUoGUDg9E6KVHq64g7p8QzIAAEIk3vLQ+rQ0=";
   };
 
-  build-system = [ flit-core ];
+  build-system = [ flit-core_3 ];
 
   dependencies = [
     numpy

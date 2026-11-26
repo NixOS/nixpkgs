@@ -4,16 +4,12 @@
   fetchFromGitHub,
 
   # build time
+  hatch-fancy-pypi-readme,
   hatchling,
   hatch-vcs,
 
   # runtime
   packaging,
-
-  # docs
-  sphinxHook,
-  furo,
-  sphinx-autodoc-typehints,
 
   # tests
   pytest-mock,
@@ -22,31 +18,20 @@
 
 buildPythonPackage rec {
   pname = "pyproject-api";
-  version = "1.10.0";
+  version = "1.12.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tox-dev";
     repo = "pyproject-api";
     tag = version;
-    hash = "sha256-fWlGGVjB43NPfBRFfOWqZUDQuqOdrFP7jsqq9xOfvaw=";
+    hash = "sha256-flW5/zWRBsoLyzJKzKlpsnnthZDENyExbhdLyyo9erw=";
   };
 
-  outputs = [
-    "out"
-    "doc"
-  ];
-
   build-system = [
+    hatch-fancy-pypi-readme
     hatchling
     hatch-vcs
-  ];
-
-  nativeBuildInputs = [
-    # docs
-    sphinxHook
-    furo
-    sphinx-autodoc-typehints
   ];
 
   dependencies = [ packaging ];

@@ -10,7 +10,7 @@
   # tests
   pytest-instafail,
   pytest-xdist,
-  pytestCheckHook,
+  pytest9_1CheckHook,
 
   # passthru
   gitUpdater,
@@ -42,7 +42,10 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [
     pytest-instafail
     pytest-xdist
-    pytestCheckHook
+    # Internal Error with pytest 9.2
+    # AssertionError: ('tests/test_system.py::TestCpuAPIs::test_getloadavg', <WorkerController gw21>)
+    # assert not 'tests/test_system.py::TestCpuAPIs::test_getloadavg'
+    pytest9_1CheckHook
   ];
 
   # Segfaults on darwin:

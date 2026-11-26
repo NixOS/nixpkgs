@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
+  flit-core_3,
   flit-scm,
   pytestCheckHook,
   pythonAtLeast,
@@ -36,7 +37,10 @@ buildPythonPackage rec {
     })
   ];
 
-  build-system = [ flit-scm ];
+  build-system = [
+    flit-scm
+    flit-core_3
+  ];
 
   dependencies = lib.optionals (pythonOlder "3.13") [ typing-extensions ];
 
@@ -44,11 +48,16 @@ buildPythonPackage rec {
 
   doCheck = pythonAtLeast "3.11"; # infinite recursion with pytest
 
-  disabledTests = lib.optionals (pythonAtLeast "3.14") [
-    # RecursionError not raised
-    "test_deep_split"
-    "test_deep_subgroup"
-  ];
+  disabledTests =
+    lib.optionals (pythonAtLeast "3.14") [
+      # RecursionError not raised
+      "test_deep_split"
+      "test_deep_subgroup"
+    ]
+    ++ lib.optionals (pythonAtLeast "3.15") [
+      # Smarter AttributeError message that is not matched
+      "test_nameerror_suggestions_in_group"
+    ];
 
   pythonImportsCheck = [ "exceptiongroup" ];
 

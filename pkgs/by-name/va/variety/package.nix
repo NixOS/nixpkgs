@@ -58,7 +58,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       beautifulsoup4
       configobj
       dbus-python
-      distutils-extra
+      python-distutils-extra
       httplib2
       lxml
       pillow

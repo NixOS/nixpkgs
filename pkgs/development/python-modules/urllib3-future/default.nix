@@ -12,7 +12,7 @@
   pytest-asyncio,
   pytest-rerunfailures,
   pytest-timeout,
-  pytestCheckHook,
+  pytest9_1CheckHook,
   python-socks,
   pythonOlder,
   qh3,
@@ -81,7 +81,7 @@ buildPythonPackage (finalAttrs: {
     pytest-asyncio
     pytest-rerunfailures
     pytest-timeout
-    pytestCheckHook
+    pytest9_1CheckHook
     tornado
     trustme
   ]

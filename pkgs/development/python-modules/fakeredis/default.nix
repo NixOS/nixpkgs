@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pytestCheckHook,
+  pytest9_1CheckHook,
   redisTestHook,
 
   hatchling,
@@ -20,14 +20,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "fakeredis";
-  version = "2.37.0";
+  version = "2.41.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cunla";
     repo = "fakeredis-py";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5J7MJGKaiN/360xH89W58rOVVlhWxY9+P7X54wBGaKA=";
+    hash = "sha256-oY5DhpA7Umlp0MSjbxV530mY4wmIlgkOyBpqOm+SX3M=";
   };
 
   build-system = [ hatchling ];
@@ -54,7 +54,7 @@ buildPythonPackage (finalAttrs: {
     hypothesis
     pytest-asyncio
     pytest-mock
-    pytestCheckHook
+    pytest9_1CheckHook
     redisTestHook
     valkey
   ];
@@ -64,15 +64,8 @@ buildPythonPackage (finalAttrs: {
   disabledTestMarks = [ "slow" ];
 
   disabledTests = [
-    # redis.exceptions.ResponseError: unknown command 'evalsha'
-    "test_async_lock"
-    # behavior change in latest valkey
-    "test_zinterstore_nan_to_zero"
-    # valkey 9.2 adds a pathhash ACL category that fakeredis does not know
-    "test_acl_cat[Strict"
-    # valkey 9.2 lets EXEC take arguments, so a bad argument outside MULTI
-    # yields "EXEC without MULTI" instead of EXECABORT
-    "test_exec_bad_arguments[Strict"
+    # redis.exceptions.ResponseError: unknown command 'eval'
+    "test_nested_replies_reach_the_client_intact"
   ];
 
   preCheck = ''

@@ -9,15 +9,17 @@
 
 buildPythonPackage rec {
   pname = "atpublic";
-  version = "5.0";
+  version = "9.0.0";
   pyproject = true;
 
   src = fetchFromGitLab {
-    owner = "warsaw";
+    owner = "flufl";
     repo = "public";
     tag = version;
-    hash = "sha256-cqum+4hREu0jO9iFoUUzfzn597BoMAhG+aanwnh8hb8=";
+    hash = "sha256-jYRm+5aN2wFrd6MeIeWoREpnbZt2n58vn9A2buzVuFM=";
   };
+
+  sourceRoot = "${src.name}/packages/atpublic";
 
   build-system = [ hatchling ];
 

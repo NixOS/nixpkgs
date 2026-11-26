@@ -89,6 +89,8 @@ buildPythonPackage (finalAttrs: {
     "test_no_candidates"
     "test_no_candidates_pre"
     "test_failure_of_legacy_resolver_prompts_for_backtracking"
+    # Fails due to dprecation warnings that are different when pip modules are devendored
+    "test_no_warnings"
   ];
 
   pythonImportsCheck = [ "piptools" ];

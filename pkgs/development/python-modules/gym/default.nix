@@ -14,7 +14,7 @@
 
   # tests
   moviepy,
-  pybox2d,
+  box2d,
   pygame,
   pytestCheckHook,
   opencv-python,
@@ -67,7 +67,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     moviepy
     opencv-python
-    pybox2d
+    box2d
     pygame
     pytestCheckHook
   ];

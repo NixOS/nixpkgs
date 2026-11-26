@@ -15,12 +15,12 @@
 
 buildPythonPackage rec {
   pname = "watchdog";
-  version = "6.0.0";
+  version = "7.1.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-nd98gv2jro4k3s2hM47eZuHJmIPbk3Edj7lB6qLYwoI=";
+    hash = "sha256-04YeJVQW9JoThEdMsu+gl94WX7Mw1MVDLOZwi1Ce2SI=";
   };
 
   build-system = [ setuptools ];
@@ -39,8 +39,6 @@ buildPythonPackage rec {
   disabledTestPaths = [
     "tests/test_emitter.py::test_create_wrong_encoding"
     "tests/test_emitter.py::test_close"
-    # tests timeout easily
-    "tests/test_inotify_buffer.py"
     # assert cap.out.splitlines(keepends=False).count('+++++ 0') == 2 != 3
     "tests/test_0_watchmedo.py::test_auto_restart_on_file_change_debounce"
   ]

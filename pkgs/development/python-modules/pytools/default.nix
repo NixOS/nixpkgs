@@ -8,6 +8,7 @@
   pytestCheckHook,
   typing-extensions,
   siphash24,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -34,6 +35,12 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    writableTmpDirAsHomeHook
+  ];
+
+  disabledTests = [
+    # FileNotFoundError: [Errno 2] No such file or directory: 'tmpdir_pytools_xdg_test'
+    "test_xdg_cache_home"
   ];
 
   pythonImportsCheck = [

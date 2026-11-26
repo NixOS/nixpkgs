@@ -40,7 +40,7 @@
   pytest-asyncio,
   pytest-examples,
   pytest-xdist,
-  pytestCheckHook,
+  pytest9_1CheckHook,
   pyyaml,
   trio,
   zensical,
@@ -101,9 +101,9 @@ buildPythonPackage (finalAttrs: {
     logfire
     opentelemetry-sdk
     pytest-asyncio
-    pytest-examples
     pytest-xdist
-    pytestCheckHook
+    pytest9_1CheckHook
+    pytest-examples
     pyyaml
     trio
     zensical

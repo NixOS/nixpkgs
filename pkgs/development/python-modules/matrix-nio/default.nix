@@ -31,7 +31,7 @@
   pytest-aiohttp,
   pytest-asyncio_0,
   pytest-benchmark,
-  pytestCheckHook,
+  pytest9_1CheckHook,
 
   # passthru tests
   nixosTests,
@@ -94,9 +94,12 @@ buildPythonPackage rec {
     hpack
     hyperframe
     hypothesis
-    (pytest-aiohttp.override { pytest-asyncio = pytest-asyncio_0; })
+    (pytest-aiohttp.override {
+      pytest-asyncio = pytest-asyncio_0;
+      pytestCheckHook = pytest9_1CheckHook;
+    })
     pytest-benchmark
-    pytestCheckHook
+    pytest9_1CheckHook
   ];
 
   pytestFlags = [ "--benchmark-disable" ];

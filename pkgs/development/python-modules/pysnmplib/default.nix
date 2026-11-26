@@ -22,7 +22,11 @@ buildPythonPackage rec {
 
   build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [
+    "pycryptodomex"
+  ];
+
+  dependencies = [
     pysnmp-pysmi
     pysnmp-pyasn1
     pycryptodomex

@@ -31,14 +31,14 @@
 let
   contourpy = buildPythonPackage rec {
     pname = "contourpy";
-    version = "1.3.3";
+    version = "1.4.0";
     pyproject = true;
 
     src = fetchFromGitHub {
       owner = "contourpy";
       repo = "contourpy";
       tag = "v${version}";
-      hash = "sha256-/tE+F1wH7YkqfgenXwtcfkjxUR5FwfgoS4NYC6n+/2M=";
+      hash = "sha256-VoSKbXjoC+DMAwQugrFXBITN+2dsXj5NdUKvAVtcemg=";
     };
 
     # prevent unnecessary references to the build python when cross compiling

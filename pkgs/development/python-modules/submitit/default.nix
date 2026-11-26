@@ -28,6 +28,11 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-Q/2mC7viLYl8fx7dtQueZqT191EbERZPfN0WkTS/U1w=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'flit_core >=3.2,<4' flit_core
+  '';
+
   build-system = [ flit-core ];
 
   dependencies = [

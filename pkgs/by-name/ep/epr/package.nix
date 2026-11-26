@@ -20,6 +20,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
     setuptools
   ];
 
+  # Python project is called epr_reader
+  dontCheckPythonMetadata = true;
+
   meta = {
     description = "CLI Epub Reader";
     mainProgram = "epr";

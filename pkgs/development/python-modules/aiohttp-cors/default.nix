@@ -4,7 +4,7 @@
   fetchFromGitHub,
   fetchpatch,
   aiohttp,
-  pytestCheckHook,
+  pytest9_1CheckHook,
   pytest-aiohttp,
   setuptools,
 }:
@@ -37,7 +37,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "aiohttp_cors" ];
 
   nativeCheckInputs = [
-    pytestCheckHook
+    pytest9_1CheckHook
     pytest-aiohttp
   ];
 

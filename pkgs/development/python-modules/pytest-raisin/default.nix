@@ -2,7 +2,8 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  flit,
+  fetchurl,
+  flit-core_3,
   pytest,
 }:
 
@@ -18,9 +19,17 @@ buildPythonPackage rec {
     hash = "sha256-BI0SWy671DYDTPH4iO811ku6SzpH4ho7eQFUA8PmxW8=";
   };
 
-  nativeBuildInputs = [ flit ];
+  patches = [
+    (fetchurl {
+      name = "flit-migration.patch";
+      url = "https://github.com/wimglenn/pytest-raisin/commit/3a4e4285e2c9b6610e3f9120c9eb2a52f83b0b86.patch";
+      hash = "sha256-H7LK2wybUZSeQd3W0pXehTctE7q7s7uioaSUxVwWVTI=";
+    })
+  ];
 
-  propagatedBuildInputs = [ pytest ];
+  nativeBuildInputs = [ flit-core_3 ];
+
+  buildInputs = [ pytest ];
 
   # tests cause circular pytest-raisin already registered with pytest error
   doCheck = false;

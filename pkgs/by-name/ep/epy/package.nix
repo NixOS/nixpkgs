@@ -24,6 +24,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "epy_reader.reader"
   ];
 
+  # Python project is called epy_reader
+  dontCheckPythonMetadata = true;
+
   meta = {
     description = "CLI Ebook Reader";
     homepage = "https://github.com/wustho/epy";

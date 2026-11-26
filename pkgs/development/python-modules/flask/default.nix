@@ -4,7 +4,7 @@
   fetchPypi,
 
   # build-system
-  flit-core,
+  flit-core_3,
 
   # dependencies
   blinker,
@@ -42,7 +42,7 @@ buildPythonPackage rec {
     ./pytest-9.1-compat.patch
   ];
 
-  build-system = [ flit-core ];
+  build-system = [ flit-core_3 ];
 
   dependencies = [
     click

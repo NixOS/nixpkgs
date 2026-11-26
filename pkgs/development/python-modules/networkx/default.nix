@@ -28,12 +28,12 @@
 buildPythonPackage rec {
   pname = "networkx";
   # upgrade may break sage, please test the sage build or ping the sage team on upgrade
-  version = "3.6.1";
+  version = "3.7";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-JrfDV6zMDIzeVYrUhig3KLZbapXYXuHNZrr6tMgWhQk=";
+    hash = "sha256-/XelEb2Q8589AWNRNFtSz1MZuBO9ygHeP3VdPMpi6Wo=";
   };
 
   nativeBuildInputs = [ setuptools ];

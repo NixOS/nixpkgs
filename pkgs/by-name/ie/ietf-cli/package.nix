@@ -26,6 +26,9 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     runHook postInstall
   '';
 
+  # custom installPhase doesn't install .dist-info/METADATA
+  dontCheckPythonMetadata = true;
+
   passthru.updateScript = nix-update-script { };
 
   meta = {

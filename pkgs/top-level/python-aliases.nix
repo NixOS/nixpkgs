@@ -208,6 +208,7 @@ mapAliases {
   diff_cover = throw "'diff_cover' has been renamed to/replaced by 'diff-cover'"; # Converted to throw 2025-10-29
   digital-ocean = throw "'digital-ocean' has been renamed to/replaced by 'python-digitalocean'"; # Converted to throw 2025-10-29
   discogs_client = throw "'discogs_client' has been renamed to/replaced by 'discogs-client'"; # Converted to throw 2025-10-29
+  distutils-extra = python-distutils-extra; # added 2026-11-25
   distutils_extra = throw "'distutils_extra' has been renamed to/replaced by 'distutils-extra'"; # Converted to throw 2025-10-29
   dj-stripe = throw "dj-stripe has been removed because it is unused and broken"; # added 2025-07-21
   django-admin-datta = throw "django-admin-datta has been removed because it is unmaintained"; # added 2026-09-19
@@ -434,6 +435,7 @@ mapAliases {
   m2r = throw "'m2r' has been removed because it was marked broken for a long time."; # Added 2026-05-27
   mac_alias = throw "'mac_alias' has been renamed to/replaced by 'mac-alias'"; # Converted to throw 2025-10-29
   macropy = throw "macropy has been removed as it was broken since 2020"; # added 2025-10-04
+  magic = file-magic; # added 2026-11-25
   Mako = throw "'Mako' has been renamed to/replaced by 'mako'"; # Converted to throw 2025-10-29
   mallard-ducktype = throw "mallard-ducktype has been removed, as it has been unmaintained upstream since 2019 and is broken"; # added 2026-11-07
   Markups = throw "'Markups' has been renamed to/replaced by 'markups'"; # Converted to throw 2025-10-29
@@ -537,6 +539,7 @@ mapAliases {
   pdfminer = throw "'pdfminer' has been renamed to/replaced by 'pdfminer-six'"; # Converted to throw 2025-10-29
   peakrdl = throw "'peakrdl' has been renamed to/replaced by 'peakrdl-cli'"; # added 2026-07-14
   pep257 = throw "'pep257' has been renamed to/replaced by 'pydocstyle'"; # Converted to throw 2025-10-29
+  pep517 = throw "'pep517' has been renamed to pyproject-hooks (low-level) and build (high-level)"; # Added 2026-11-02
   percol = throw "percol has been removed because it hasn't been updated since 2019"; # added 2025-05-25
   piano-transcription-inference = throw "'piano-transcription-inference' has been removed, because its upstream repo was archived in 2025."; # added 2026-08-13
   pilight = throw "'pilight' has been removed, because it is unmaintained since 2019 and the integration was removed from Home Assistant."; # added 2026-05-06
@@ -576,6 +579,7 @@ mapAliases {
   py_stringmatching = throw "'py_stringmatching' has been renamed to/replaced by 'py-stringmatching'"; # Converted to throw 2025-10-29
   pyacaia-async = throw "'pyacaia-async' has been renamed to/replaced by 'aioacaia'"; # added 2026-08-26
   pybind11-protobuf = throw "'pybind11-protobuf' was only used by or-tools, and with some overrides, so vendored in there until it's used in other places."; # Converted to throw 2025-11-06
+  pybox2d = box2d; # added 2026-11-25
   pycategories = throw "'pycategories' has been removed as it was broken and unmaintained"; # added 2025-11-08
   PyChromecast = throw "'PyChromecast' has been renamed to/replaced by 'pychromecast'"; # Converted to throw 2025-10-29
   pycrc = throw "'pycrc' has been removed because its source is unavailable"; # Added 2025-12-22
@@ -852,6 +856,7 @@ mapAliases {
   typed-ast = throw "typed-ast was removed because it went end of life in July 2023"; # added 2025-05-24
   typedmonarchmoney = throw "'typedmonarchmoney' was removed because Home Assistant switched to 'monarchmoneycommunity'"; # added 2026-08-05
   typer-slim = warnAlias "typer-slim was an alias package of typer that only depended on it and has been removed." typer; # added 2026-02-16
+  types-dateutil = types-python-dateutil; # added 2026-11-25
   types-typed-ast = throw "types-typed-ast was removed because so was typed-ast"; # added 2025-05-24
   typesentry = throw "typesentry was removed because it was broken and unmaintained"; # added 2026-02-02
   typesystem = throw "'typesystem' has been removed as it was broken, unmaintained, and archived upstream"; # Added 2025-11-27

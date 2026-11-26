@@ -6,6 +6,7 @@
   django,
   elastic-transport,
   setuptools,
+  six,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -26,6 +27,7 @@ buildPythonPackage (finalAttrs: {
     django
     elasticsearch-dsl
     elastic-transport
+    six
   ];
 
   # Tests require running Elasticsearch daemon

@@ -3,7 +3,7 @@
   aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
-  flit-core,
+  flit-core_3,
   httpx,
   pyopenssl,
   requests,
@@ -12,17 +12,17 @@
 
 buildPythonPackage rec {
   pname = "truststore";
-  version = "0.10.4";
+  version = "0.10.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sethmlarson";
     repo = "truststore";
     tag = "v${version}";
-    hash = "sha256-EbwD2YyVA9W9cWEjYvypBJxs6Hbkb/tF2qU/sUNCt5g=";
+    hash = "sha256-Pnz8Go1v5RXFmMkWYrmA7WzSsn+eQHIg4Yb+wlur5m4=";
   };
 
-  build-system = [ flit-core ];
+  build-system = [ flit-core_3 ];
 
   dependencies = [
     aiohttp

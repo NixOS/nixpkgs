@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  flit-core,
+  flit-core_3,
 }:
 
 buildPythonPackage rec {
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     hash = "sha256-YI3s+KkDPd6PVQlwpau+kgEccquo7FtfNSK278Z8B9M=";
   };
 
-  nativeBuildInputs = [ flit-core ];
+  nativeBuildInputs = [ flit-core_3 ];
 
   # Circular dependency elastic-apm
   doCheck = false;

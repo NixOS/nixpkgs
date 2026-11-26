@@ -4,7 +4,7 @@
   fetchFromGitHub,
   flask,
   flask-sqlalchemy,
-  flit-core,
+  flit-core_3,
   marshmallow,
   marshmallow-sqlalchemy,
   pytestCheckHook,
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     hash = "sha256-IzeVVkyf4BRxtUVQIfzAvyjaKG+BLwhruXZHFJ6iGmw=";
   };
 
-  build-system = [ flit-core ];
+  build-system = [ flit-core_3 ];
 
   dependencies = [
     flask

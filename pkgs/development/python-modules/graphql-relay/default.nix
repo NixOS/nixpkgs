@@ -36,14 +36,21 @@ buildPythonPackage rec {
       --replace ', "setuptools>=59,<70"' ""
   '';
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [ graphql-core ];
+  dependencies = [ graphql-core ];
+
+  pythonRelaxDeps = [ "graphql-core" ];
 
   nativeCheckInputs = [
     pytest-asyncio
     pytest-describe
     pytestCheckHook
+  ];
+
+  disabledTests = [
+    # broke with graphql-core 3.3
+    "requires_an_argument"
   ];
 
   pythonImportsCheck = [ "graphql_relay" ];

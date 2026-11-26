@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   # build-system
-  flit-core,
+  flit-core_3,
 
   # dependencies
   numpy,
@@ -35,7 +35,7 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-tFv/hb+xgur/ntrJxDY2cZy8mwy9p9vhAwTlkUAQFu4=";
   };
 
-  build-system = [ flit-core ];
+  build-system = [ flit-core_3 ];
 
   dependencies = [ numpy ];
 

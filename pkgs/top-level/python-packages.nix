@@ -2700,6 +2700,8 @@ self: super: with self; {
 
   bottombar = callPackage ../development/python-modules/bottombar { };
 
+  box2d = callPackage ../development/python-modules/box2d { };
+
   bpemb = callPackage ../development/python-modules/bpemb { };
 
   bpylist2 = callPackage ../development/python-modules/bpylist2 { };
@@ -4619,8 +4621,6 @@ self: super: with self; {
   distutils =
     if pythonOlder "3.12" then null else callPackage ../development/python-modules/distutils { };
 
-  distutils-extra = callPackage ../development/python-modules/distutils-extra { };
-
   distutils_80 =
     if pythonOlder "3.12" then null else callPackage ../development/python-modules/distutils/80.nix { };
 
@@ -6185,6 +6185,8 @@ self: super: with self; {
 
   fields = callPackage ../development/python-modules/fields { };
 
+  file-magic = callPackage ../development/python-modules/file-magic { };
+
   file-read-backwards = callPackage ../development/python-modules/file-read-backwards { };
 
   filebrowser-safe = callPackage ../development/python-modules/filebrowser-safe { };
@@ -6500,6 +6502,8 @@ self: super: with self; {
   flit = callPackage ../development/python-modules/flit { };
 
   flit-core = callPackage ../development/python-modules/flit-core { };
+
+  flit-core_3 = callPackage ../development/python-modules/flit-core/3.nix { };
 
   flit-gettext = callPackage ../development/python-modules/flit-gettext { };
 
@@ -8940,6 +8944,8 @@ self: super: with self; {
 
   jinja2-time = callPackage ../development/python-modules/jinja2-time { };
 
+  jinxed = callPackage ../development/python-modules/jinxed { };
+
   jira = callPackage ../development/python-modules/jira { };
 
   jishaku = callPackage ../development/python-modules/jishaku { };
@@ -10591,8 +10597,6 @@ self: super: with self; {
   maec = callPackage ../development/python-modules/maec { };
 
   maestral = callPackage ../development/python-modules/maestral { };
-
-  magic = callPackage ../development/python-modules/magic { };
 
   magic-filter = callPackage ../development/python-modules/magic-filter { };
 
@@ -13673,8 +13677,6 @@ self: super: with self; {
 
   pep440 = callPackage ../development/python-modules/pep440 { };
 
-  pep517 = callPackage ../development/python-modules/pep517 { };
-
   pep8 = callPackage ../development/python-modules/pep8 { };
 
   pep8-naming = callPackage ../development/python-modules/pep8-naming { };
@@ -14845,8 +14847,6 @@ self: super: with self; {
   pybluez = callPackage ../development/python-modules/pybluez { inherit (pkgs) bluez; };
 
   pybotvac = callPackage ../development/python-modules/pybotvac { };
-
-  pybox2d = callPackage ../development/python-modules/pybox2d { };
 
   pybraendstofpriser = callPackage ../development/python-modules/pybraendstofpriser { };
 
@@ -17091,11 +17091,15 @@ self: super: with self; {
 
   pytest9_0CheckHook = pytestCheckHook.override { pytest = pytest_9_0; };
 
+  pytest9_1CheckHook = pytestCheckHook.override { pytest = pytest_9_1; };
+
   pytest_7 = callPackage ../development/python-modules/pytest/7.nix { };
 
   pytest_8_3 = callPackage ../development/python-modules/pytest/8_3.nix { };
 
   pytest_9_0 = callPackage ../development/python-modules/pytest/9_0.nix { };
+
+  pytest_9_1 = callPackage ../development/python-modules/pytest/9_1.nix { };
 
   pytestcache = callPackage ../development/python-modules/pytestcache { };
 
@@ -17190,6 +17194,8 @@ self: super: with self; {
   python-digitalocean = callPackage ../development/python-modules/python-digitalocean { };
 
   python-discovery = callPackage ../development/python-modules/python-discovery { };
+
+  python-distutils-extra = callPackage ../development/python-modules/python-distutils-extra { };
 
   python-docs-theme = callPackage ../development/python-modules/python-docs-theme { };
 
@@ -22140,8 +22146,6 @@ self: super: with self; {
   types-colorama = callPackage ../development/python-modules/types-colorama { };
 
   types-dataclasses = callPackage ../development/python-modules/types-dataclasses { };
-
-  types-dateutil = callPackage ../development/python-modules/types-dateutil { };
 
   types-decorator = callPackage ../development/python-modules/types-decorator { };
 

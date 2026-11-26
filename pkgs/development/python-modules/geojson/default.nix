@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
   setuptools,
   unittestCheckHook,
 }:
@@ -10,6 +11,8 @@ buildPythonPackage (finalAttrs: {
   pname = "geojson";
   version = "3.3.0";
   pyproject = true;
+
+  disabled = pythonAtLeast "3.15";
 
   src = fetchFromGitHub {
     owner = "jazzband";

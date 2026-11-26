@@ -13,14 +13,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pydantic-xml";
-  version = "2.21.1";
+  version = "2.22.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dapper91";
     repo = "pydantic-xml";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yH42bXLw1CLgIrBnSkd8JQoafev71TnQlLf8Woa2cUY=";
+    hash = "sha256-IrsuVeCOpuOTPonxgjdsclYDXpOOUhNHNSXQsjrIOKM=";
   };
 
   build-system = [ poetry-core ];

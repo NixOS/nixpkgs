@@ -37,6 +37,8 @@ buildPythonPackage rec {
     pyaes
   ];
 
+  pythonRelaxDeps = [ "python-dateutil" ];
+
   doCheck = false; # tests require internet access
 
   pythonImportsCheck = [

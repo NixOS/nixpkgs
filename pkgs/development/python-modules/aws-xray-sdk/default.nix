@@ -11,7 +11,7 @@
   pymysql,
   pytest-asyncio_0,
   pynamodb,
-  pytestCheckHook,
+  pytest9_1CheckHook,
   requests,
   setuptools,
   sqlalchemy,
@@ -48,7 +48,7 @@ buildPythonPackage rec {
     pymysql
     pynamodb
     pytest-asyncio_0
-    pytestCheckHook
+    pytest9_1CheckHook
     sqlalchemy
     webtest
   ];

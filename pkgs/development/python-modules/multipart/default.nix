@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  flit-core,
+  flit-core_3,
   pytestCheckHook,
 }:
 
@@ -18,7 +18,7 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-Klo2HaIBo3xrCzQT2BxVpRCdaaKqCT1vtITMPABE6s0=";
   };
 
-  build-system = [ flit-core ];
+  build-system = [ flit-core_3 ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

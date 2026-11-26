@@ -23,9 +23,9 @@
   pydantic,
   pygments,
   pyinstrument,
-  pyprojectVersionPatchHook,
   pytest-aiohttp,
   pytest-asyncio,
+  pytest-codspeed,
   pytest-django,
   pytest-emoji,
   pytest-flask,
@@ -46,14 +46,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "strawberry-graphql";
-  version = "0.319.0";
+  version = "0.341.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "strawberry-graphql";
     repo = "strawberry";
     tag = finalAttrs.version;
-    hash = "sha256-7mbinSIb0AhqMggaziiLCZQBJ0i2G6Dq0ZjGVnFLDiY=";
+    hash = "sha256-t6c9/dGCX2K7uybrHsIaRVP06KXeKHeMtrGNO+9uovA=";
   };
 
   postPatch = ''
@@ -62,8 +62,6 @@ buildPythonPackage (finalAttrs: {
     substituteInPlace pyproject.toml \
       --replace-fail "--emoji" ""
   '';
-
-  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   build-system = [ uv-build ];
 
@@ -139,6 +137,7 @@ buildPythonPackage (finalAttrs: {
     freezegun
     inline-snapshot
     pytest-asyncio
+    pytest-codspeed
     pytest-emoji
     pytest-mock
     pytest-snapshot

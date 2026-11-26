@@ -9,18 +9,18 @@
   flit-core,
   pytest-asyncio,
   pytest-xprocess,
-  pytestCheckHook,
+  pytest9_1CheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "flask-caching";
-  version = "2.5.0";
+  version = "2.5.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "flask_caching";
     inherit version;
-    hash = "sha256-Wod5tUaV+W4bSnoUndjG2GNDPqZjJ83kMRzn/XtXOR8=";
+    hash = "sha256-91tFH94/qsDieNpyJjgYE03sqMS6a7B7mzsjiZE2ja4=";
   };
 
   build-system = [ flit-core ];
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     asgiref
     pytest-asyncio
     pytest-xprocess
-    pytestCheckHook
+    pytest9_1CheckHook
   ];
 
   disabledTests = [

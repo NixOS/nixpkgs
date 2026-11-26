@@ -2,7 +2,8 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  flit,
+  fetchpatch,
+  flit-core_3,
 }:
 
 buildPythonPackage rec {
@@ -15,7 +16,14 @@ buildPythonPackage rec {
     hash = "sha256-BkcviJSigvlE5qECxfbFpYu2gVidWLvheVw5BWOVgb4=";
   };
 
-  nativeBuildInputs = [ flit ];
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/kalekundert/tidyexc/commit/73d0130cf4886b63a2b43aa4046e3fc95428ae48.patch";
+      hash = "sha256-Lz/yYfipGQswwhXS+XNFzPKjyddn2vJ6bUZRQIxHhUM=";
+    })
+  ];
+
+  nativeBuildInputs = [ flit-core_3 ];
 
   pythonImportsCheck = [ "tidyexc" ];
 

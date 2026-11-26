@@ -12,7 +12,6 @@
   more-itertools,
   pydantic,
   pytestCheckHook,
-  pythonAtLeast,
   pyyaml,
   typing-extensions,
 }:
@@ -33,6 +32,7 @@ buildPythonPackage (finalAttrs: {
     "click"
     "importlib-metadata"
     "more-itertools"
+    "python-dateutil"
   ];
 
   build-system = [

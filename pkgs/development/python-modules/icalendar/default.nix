@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch2,
   pyprojectVersionPatchHook,
   pythonOlder,
   hatch-vcs,
@@ -16,24 +15,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "icalendar";
-  version = "7.3.0";
+  version = "7.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "collective";
     repo = "icalendar";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SrQ5Bfb3ZyUyYYvT9FkUs6pAwx9WGL+DdWTAn1N0RrA=";
+    hash = "sha256-6fvSrE1P4wMT8eJH5I7rcE3P7tGlBVNHaYwfvCPEJ6c=";
   };
-
-  patches = [
-    # https://github.com/collective/icalendar/pull/1661
-    (fetchpatch2 {
-      name = "warn-on-cached-tzid-guess.patch";
-      url = "https://github.com/collective/icalendar/commit/0213619845d5ff2525de409d70dd40c0fe1d5f1f.patch?full_index=1";
-      hash = "sha256-dkzQp3nsKqdDR2sACe8imYvJyNVJzBfFXpE4gXv5oiY=";
-    })
-  ];
 
   build-system = [
     hatch-vcs

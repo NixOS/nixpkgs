@@ -2,32 +2,41 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  black,
   colorama,
   hatchling,
+  hatch-mypyc,
   hatch-vcs,
   hypothesis,
+  mypy-extensions,
   pylama,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "isort";
-  version = "8.0.1";
+  version = "9.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PyCQA";
     repo = "isort";
     tag = version;
-    hash = "sha256-adEAWbRY+bCji4TfnS8W5p5KvuSjmLQrqhi+n8mSQPA=";
+    hash = "sha256-y0Uh2OU3aVrHwyXsdAWpZBYW1qhItzTMTVA46wvNawU=";
   };
 
   build-system = [
     hatchling
+    hatch-mypyc
     hatch-vcs
   ];
 
+  dependencies = [
+    mypy-extensions
+  ];
+
   nativeCheckInputs = [
+    black
     colorama
     hypothesis
     pylama
@@ -73,8 +82,6 @@ buildPythonPackage rec {
     "test_value_assignment_list"
     # profiles not available
     "test_isort_supports_shared_profiles_issue_970"
-    # https://github.com/PyCQA/isort/issues/2234
-    "test_isort_should_warn_on_empty_custom_config_issue_1433"
   ];
 
   meta = {

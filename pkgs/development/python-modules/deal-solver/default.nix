@@ -3,7 +3,7 @@
   astroid,
   buildPythonPackage,
   fetchFromGitHub,
-  flit-core,
+  flit-core_3,
   hypothesis,
   pytest-cov-stub,
   pytest-xdist,
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     hash = "sha256-DAOeQLFR/JED32uJSW7W9+Xx5f1Et05W8Fp+Vm7sfZo=";
   };
 
-  build-system = [ flit-core ];
+  build-system = [ flit-core_3 ];
 
   dependencies = [
     z3-solver

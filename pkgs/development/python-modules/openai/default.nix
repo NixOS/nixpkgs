@@ -28,9 +28,11 @@
 
   # check deps
   pytestCheckHook,
+  griffe,
   inline-snapshot,
   pytest-asyncio,
   pytest-xdist,
+  trio,
 
   # optional-dependencies toggle
   withAiohttp ? false,
@@ -41,18 +43,18 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "openai";
-  version = "3.14.1";
+  version = "3.51.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openai";
     repo = "openai-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7oFIiENP5d/TAVbkjtsjcsuin+qJ/tmjSdzXgu/qsCE=";
+    hash = "sha256-Er1kq3JcjHBNHtaOcSbDfOT5Eb6eqRxL5l68pgQCq4k=";
   };
 
   postPatch = ''
-    substituteInPlace pyproject.toml --replace-fail "hatchling==1.27.0" "hatchling"
+    sed -i -E 's/hatchling[><=!~]+[0-9a-zA-Z.*,-]+/hatchling/g' pyproject.toml
     substituteInPlace tests/test_uv_workflows.py --replace-fail "/bin/bash" "${lib.getExe bash}"
   '';
 
@@ -102,12 +104,19 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     pytestCheckHook
+    griffe
     inline-snapshot
     pytest-asyncio
     pytest-xdist
+    trio
   ]
   # including pandas-stubs would cause infinite recursion
   ++ lib.concatAttrValues (lib.removeAttrs finalAttrs.passthru.optional-dependencies [ "datalib" ]);
+
+  disabledTests = [
+    # websockets.exceptions.SecurityError: more than 10 redirects
+    "test_sync_azure_websocket_does_not_follow_redirects"
+  ];
 
   disabledTestPaths = [
     # tests makes network requests
@@ -120,6 +129,21 @@ buildPythonPackage (finalAttrs: {
 
     # flaky
     "tests/lib/test_azure_redirects.py::test_sync_redirect_origin"
+
+    # FileNotFoundError: [Errno 2] No such file or directory: 'git'
+    "tests/test_consumer_compatibility.py::test_compatibility_gate_selects_callers"
+
+    # FileNotFoundError: [Errno 2] No such file or directory: 'ps'
+    "tests/test_example_security.py"
+
+    # TimeoutError
+    "tests/lib/test_realtime_example_keepalive.py"
+
+    # Unhandled thread exception
+    "tests/lib/test_beta_realtime_auth_policy.py"
+
+    # Fails to load typing_extensions even when it's in nativeCheckInputs
+    "tests/test_lazy_imports.py"
   ];
 
   meta = {

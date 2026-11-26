@@ -5,7 +5,7 @@
   mock,
   pytest-asyncio_0,
   pytest-trio,
-  pytestCheckHook,
+  pytest9_1CheckHook,
   setuptools,
   setuptools-scm,
   twisted,
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     mock
     pytest-asyncio_0
     pytest-trio
-    pytestCheckHook
+    pytest9_1CheckHook
     twisted
   ];
 

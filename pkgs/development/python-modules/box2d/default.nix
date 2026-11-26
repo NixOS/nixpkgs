@@ -6,7 +6,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "pybox2d";
+  pname = "box2d";
   version = "2.3.10";
   format = "setuptools";
 

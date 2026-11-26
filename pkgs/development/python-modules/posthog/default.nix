@@ -32,7 +32,7 @@
   parameterized,
   pytest-asyncio,
   pytest-bdd,
-  pytestCheckHook,
+  pytest9_1CheckHook,
   zstandard,
 }:
 
@@ -77,7 +77,7 @@ buildPythonPackage (finalAttrs: {
     parameterized
     pytest-asyncio
     pytest-bdd
-    pytestCheckHook
+    pytest9_1CheckHook
     zstandard
   ];
 

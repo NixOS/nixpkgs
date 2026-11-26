@@ -8,6 +8,7 @@
   python-dateutil,
   requests,
   setuptools,
+  six,
 }:
 
 buildPythonPackage rec {
@@ -22,10 +23,6 @@ buildPythonPackage rec {
     hash = "sha256-HE8/P0aohoZNeMdcQVKdz6M31FMrjsd7oVytiaD0idI=";
   };
 
-  postPatch = ''
-    sed -i '/cryptography/d' setup.py
-  '';
-
   build-system = [ setuptools ];
 
   dependencies = [
@@ -34,9 +31,18 @@ buildPythonPackage rec {
     requests
   ];
 
+  pythonRelaxDeps = [
+    "python-dateutil"
+  ];
+
+  pythonRemoveDeps = [
+    "cryptography"
+  ];
+
   nativeCheckInputs = [
     httpretty
     pytestCheckHook
+    six
   ];
 
   disabledTests = [

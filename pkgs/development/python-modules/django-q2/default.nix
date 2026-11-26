@@ -2,6 +2,7 @@
   lib,
   arrow,
   blessed,
+  boto3,
   bson,
   buildPythonPackage,
   croniter,
@@ -10,7 +11,7 @@
   django-redis,
   fetchFromGitHub,
   hiredis,
-  poetry-core,
+  uv-build,
   pytest-django,
   pytestCheckHook,
   redisTestHook,
@@ -19,18 +20,22 @@
 
 buildPythonPackage rec {
   pname = "django-q2";
-  version = "1.10.0";
+  version = "1.11.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "django-q2";
     repo = "django-q2";
     tag = "v${version}";
-    hash = "sha256-VwB3pvDAGsMvcKblRnmCYHzvEBCz8E13Qov4LjWEqxc=";
+    hash = "sha256-GiheD09kKNhD2bhf/DTf7xTTQ9CSs1DbCiQ1bySpl+c=";
   };
 
+  postPatch = ''
+    sed -i 's/uv_build[<>=0-9.,]*[0-9]/uv_build/g' pyproject.toml
+  '';
+
   build-system = [
-    poetry-core
+    uv-build
   ];
 
   dependencies = [
@@ -42,6 +47,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     blessed
+    boto3
     croniter
     django-redis
     hiredis
@@ -60,6 +66,8 @@ buildPythonPackage rec {
   disabledTests = [
     # requires a running mongodb
     "test_mongo"
+    # botocore.exceptions.NoRegionError: You must specify a region.
+    "test_sqs"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # fails with an assertion

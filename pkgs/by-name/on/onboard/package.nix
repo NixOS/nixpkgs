@@ -100,7 +100,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
   pythonPath = with python3.pkgs; [
     dbus-python
-    distutils-extra
+    python-distutils-extra
     pyatspi
     pycairo
     pygobject3

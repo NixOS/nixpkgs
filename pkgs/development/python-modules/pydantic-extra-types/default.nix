@@ -7,6 +7,7 @@
   pydantic,
   typing-extensions,
   cron-converter,
+  jsonschema,
   semver,
   pendulum,
   phonenumbers,
@@ -15,19 +16,21 @@
   python-ulid,
   pytz,
   tzdata,
+  uuid-utils,
+  pythonOlder,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pydantic-extra-types";
-  version = "2.11.0";
+  version = "2.11.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pydantic";
     repo = "pydantic-extra-types";
     tag = "v${version}";
-    hash = "sha256-aXhlfDBCpk8h3F4gXAQ40fVKxsoFvkmfO/roaqrGxho=";
+    hash = "sha256-O8pw9oX+7hthg4/WtPAQXFwXT6qqan0xRGlE2Er7gtk=";
   };
 
   build-system = [ hatchling ];
@@ -40,6 +43,7 @@ buildPythonPackage rec {
   optional-dependencies = {
     all = [
       cron-converter
+      jsonschema
       pendulum
       phonenumbers
       pycountry
@@ -48,13 +52,15 @@ buildPythonPackage rec {
       pytz
       semver
       tzdata
-    ];
+    ]
+    ++ lib.optionals (pythonOlder "3.14") [ uuid-utils ];
     cron = [ cron-converter ];
     phonenumbers = [ phonenumbers ];
     pycountry = [ pycountry ];
     semver = [ semver ];
     python_ulid = [ python-ulid ];
     pendulum = [ pendulum ];
+    uuid_utils = lib.optionals (pythonOlder "3.14") [ uuid-utils ];
   };
 
   pytestFlags = [

@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "executing";
-  version = "2.2.1";
+  version = "2.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "alexmojaki";
     repo = "executing";
     rev = "v${version}";
-    hash = "sha256-UlXuXBW9TmJ0xG/0yMdx8EDQDSzVgtsgFJIj/O7pmio=";
+    hash = "sha256-77Fn5A0yYmSAAV24ehvU1aHFlw1WqnsVUaob00TuQC0=";
   };
 
   build-system = [

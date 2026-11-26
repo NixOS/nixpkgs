@@ -29,7 +29,7 @@
   ale-py,
   opencv,
   shimmy,
-  pybox2d,
+  box2d,
   pygame,
   swig,
   mujoco,
@@ -105,7 +105,7 @@ buildPythonPackage rec {
 
     box2d = [
       # instead of box2d-py
-      pybox2d
+      box2d
       pygame
       swig
     ];

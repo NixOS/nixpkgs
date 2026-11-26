@@ -2,7 +2,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   lib,
-  flit-core,
+  flit-core_3,
   jinja2,
   pytestCheckHook,
   railroad-diagrams,
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     hash = "sha256-TlYl57JdMJzpCUkHMLiQuCb24UXoNFFTShfqcgrmZm8=";
   };
 
-  nativeBuildInputs = [ flit-core ];
+  nativeBuildInputs = [ flit-core_3 ];
 
   # circular dependencies with pytest if enabled by default
   doCheck = false;

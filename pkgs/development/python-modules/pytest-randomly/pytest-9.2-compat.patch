@@ -1,0 +1,104 @@
+diff --git a/tests/test_pytest_randomly.py b/tests/test_pytest_randomly.py
+index b9b142e..73684d8 100644
+--- a/tests/test_pytest_randomly.py
++++ b/tests/test_pytest_randomly.py
+@@ -247,7 +247,8 @@ def test_files_reordered(ourtester):
+     out = ourtester.runpytest(*args)
+ 
+     out.assert_outcomes(passed=4, failed=0)
+-    assert out.outlines[9:13] == [
++    outlines = [line for line in out.outlines if line.strip()]
++    assert outlines[9:13] == [
+         "test_c.py::test_it PASSED",
+         "test_b.py::test_it PASSED",
+         "test_d.py::test_it PASSED",
+@@ -267,7 +268,8 @@ def test_files_reordered_when_seed_not_reset(ourtester):
+     out = ourtester.runpytest(*args)
+ 
+     out.assert_outcomes(passed=4, failed=0)
+-    assert out.outlines[9:13] == [
++    outlines = [line for line in out.outlines if line.strip()]
++    assert outlines[9:13] == [
+         "test_c.py::test_it PASSED",
+         "test_b.py::test_it PASSED",
+         "test_d.py::test_it PASSED",
+@@ -306,7 +308,8 @@ def test_classes_reordered(ourtester):
+     out = ourtester.runpytest(*args)
+ 
+     out.assert_outcomes(passed=4, failed=0)
+-    assert out.outlines[9:13] == [
++    outlines = [line for line in out.outlines if line.strip()]
++    assert outlines[9:13] == [
+         "test_one.py::D::test_d PASSED",
+         "test_one.py::A::test_a PASSED",
+         "test_one.py::C::test_c PASSED",
+@@ -338,7 +341,8 @@ def test_class_test_methods_reordered(ourtester):
+     out = ourtester.runpytest(*args)
+ 
+     out.assert_outcomes(passed=4, failed=0)
+-    assert out.outlines[9:13] == [
++    outlines = [line for line in out.outlines if line.strip()]
++    assert outlines[9:13] == [
+         "test_one.py::T::test_c PASSED",
+         "test_one.py::T::test_b PASSED",
+         "test_one.py::T::test_d PASSED",
+@@ -367,7 +371,8 @@ def test_test_functions_reordered(ourtester):
+     out = ourtester.runpytest(*args)
+ 
+     out.assert_outcomes(passed=4, failed=0)
+-    assert out.outlines[9:13] == [
++    outlines = [line for line in out.outlines if line.strip()]
++    assert outlines[9:13] == [
+         "test_one.py::test_d PASSED",
+         "test_one.py::test_a PASSED",
+         "test_one.py::test_c PASSED",
+@@ -401,7 +406,8 @@ def test_test_functions_reordered_when_randomness_in_module(ourtester):
+     out = ourtester.runpytest(*args)
+ 
+     out.assert_outcomes(passed=4, failed=0)
+-    assert out.outlines[9:13] == [
++    outlines = [line for line in out.outlines if line.strip()]
++    assert outlines[9:13] == [
+         "test_one.py::test_d PASSED",
+         "test_one.py::test_a PASSED",
+         "test_one.py::test_c PASSED",
+@@ -445,7 +451,8 @@ def test_reordered_before_other_tryfirst_hook(ourtester):
+     out = ourtester.runpytest(*args)
+ 
+     out.assert_outcomes(passed=4, failed=0)
+-    assert out.outlines[9:13] == [
++    outlines = [line for line in out.outlines if line.strip()]
++    assert outlines[9:13] == [
+         "test_one.py::test_db_a PASSED",
+         "test_one.py::test_db_b PASSED",
+         "test_one.py::test_plain_d PASSED",
+@@ -475,7 +482,8 @@ def test_doctests_reordered(ourtester):
+ 
+     out = ourtester.runpytest(*args)
+     out.assert_outcomes(passed=2)
+-    assert out.outlines[9:11] == [
++    outlines = [line for line in out.outlines if line.strip()]
++    assert outlines[9:11] == [
+         "test_one.py::test_one.bar PASSED",
+         "test_one.py::test_one.foo PASSED",
+     ]
+@@ -555,7 +563,8 @@ def test_doctests_in_txt_files_reordered(ourtester):
+ 
+     out = ourtester.runpytest(*args)
+     out.assert_outcomes(passed=2)
+-    assert out.outlines[9:11] == [
++    outlines = [line for line in out.outlines if line.strip()]
++    assert outlines[9:11] == [
+         "test2.txt::test2.txt PASSED",
+         "test.txt::test.txt PASSED",
+     ]
+@@ -575,7 +584,8 @@ def test_it_runs_before_stepwise(ourtester):
+     out = ourtester.runpytest("-v", "--randomly-seed=8")
+     out.assert_outcomes(failed=2)
+     # Ensure test_b runs first
+-    assert out.outlines[9:11] == [
++    outlines = [line for line in out.outlines if line.strip()]
++    assert outlines[9:11] == [
+         "test_one.py::test_b FAILED",
+         "test_one.py::test_a FAILED",
+     ]

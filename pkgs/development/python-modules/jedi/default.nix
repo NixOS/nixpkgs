@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
 
   # build-system
   setuptools,
@@ -17,14 +18,16 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "jedi";
-  version = "0.20.0";
+  version = "0.20.1";
   pyproject = true;
+
+  disabled = pythonAtLeast "3.15"; # not yet supported by parso and jedi
 
   src = fetchFromGitHub {
     owner = "davidhalter";
     repo = "jedi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-D0Zy8HJYq5l8Wp1M+J7p8Z+EBY/R5tYFa2uMYiqLIT8=";
+    hash = "sha256-s8ITHaV3cSpo0oMW7RmZ3PejmMoERC7RbNPcbIfWqA0=";
     fetchSubmodules = true;
   };
 

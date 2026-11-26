@@ -6,18 +6,18 @@
   mock,
   pyfakefs,
   pytest-forked,
-  pytestCheckHook,
+  pytest9_1CheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pyu2f";
-  version = "0.1.5a";
+  version = "0.1.5";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "pyu2f";
-    tag = version;
+    tag = "${version}a";
     hash = "sha256-G2TrvngU7n8cdKfsPvE+fsEUDhuPC6S67w7YcYNdp1c=";
   };
 
@@ -45,7 +45,7 @@ buildPythonPackage rec {
     mock
     pyfakefs
     pytest-forked
-    pytestCheckHook
+    pytest9_1CheckHook
   ];
 
   disabledTestPaths = [

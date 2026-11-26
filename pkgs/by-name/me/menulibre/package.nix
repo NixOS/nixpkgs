@@ -31,7 +31,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     pygobject3
     gnome-menus
     psutil
-    distutils-extra
+    python-distutils-extra
   ];
 
   nativeBuildInputs = [

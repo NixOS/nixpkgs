@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  flit-core,
+  flit-core_3,
   pygments,
   python,
 }:
@@ -19,7 +19,7 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-7vX/xm1lb89YLuDJmgdDCg+/UHinQAchi8OaF9TXRJA=";
   };
 
-  build-system = [ flit-core ];
+  build-system = [ flit-core_3 ];
 
   dependencies = [ pygments ];
 

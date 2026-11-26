@@ -42,14 +42,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "redis";
-  version = "8.1.0";
+  version = "8.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "redis";
     repo = "redis-py";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qKrJaI4IaqTzdeaxx7Q7vEvE6qmmtkrRKefkrhCy4Q4=";
+    hash = "sha256-ewB5lI8Db6voz4AQmatsYRtUcdba4q27MBNU9uEFeXg=";
   };
 
   build-system = [ hatchling ];
@@ -111,6 +111,10 @@ buildPythonPackage (finalAttrs: {
     # FIXME package redis-entraid
     "tests/test_asyncio/test_credentials.py"
     "tests/test_credentials.py"
+    # connect to the internet
+    "tests/test_asyncio/test_scenario/test_maint_notifications.py"
+    "tests/test_scenario/test_maint_notifications.py"
+    "tests/test_scenario/test_pubsub.py"
   ];
 
   disabledTests = [

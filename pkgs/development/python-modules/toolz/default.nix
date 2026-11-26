@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "toolz";
-  version = "1.1.0";
+  version = "1.2.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-J6XHcNBowRDZ7ZMj8k8VQ+g7LzAKaHt4kcGm1Wtpe1s=";
+    hash = "sha256-lmegOOnW7Lo3mV4myy9Z7GQgtq2N2Wd95Z25uVawhJA=";
   };
 
   postPatch = ''

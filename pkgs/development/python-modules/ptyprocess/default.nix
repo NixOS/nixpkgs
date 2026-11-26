@@ -1,33 +1,22 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  fetchpatch,
+  fetchFromGitHub,
   flit-core,
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ptyprocess";
-  version = "0.7.0";
+  version = "0.7.0-unstable-2026-08-26"; # last release in 2020, various unreleased fixes merged since
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-XF0KO0jO7gtISF4MJgN8Cs19KXZco/u1yzgx00dCMiA=";
+  src = fetchFromGitHub {
+    owner = "pexpect";
+    repo = "ptyprocess";
+    rev = "12d3221806c0a7cf114b894101814b1f9e338ed4";
+    hash = "sha256-WGxHmh60pHi6tjmAA6c2MzRLfy18JRTK5S8UmSsAbWs=";
   };
-
-  patches = [
-    # Remove after https://github.com/pexpect/ptyprocess/pull/64 is merged.
-    (fetchpatch {
-      url = "https://github.com/pexpect/ptyprocess/commit/40c1ccf3432a6787be1801ced721540e34c6cd87.patch";
-      hash = "sha256-IemngBqBq3QRCmVscWtsuXHiFgvTOJIIB9SyAvsqHd0=";
-    })
-    (fetchpatch {
-      url = "https://github.com/pexpect/ptyprocess/commit/a44312974bd9084aa568d2e18ce5b2a7e0e45983.patch";
-      hash = "sha256-DEO4FbzKNAXADYocSQhhwjQTGGu9V5pqd38u1sWhpOI=";
-    })
-  ];
 
   build-system = [ flit-core ];
 
@@ -38,8 +27,7 @@ buildPythonPackage rec {
   meta = {
     description = "Run a subprocess in a pseudo terminal";
     homepage = "https://github.com/pexpect/ptyprocess";
-    changelog = "https://github.com/pexpect/ptyprocess/releases/tag/${version}";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ getchoo ];
   };
-}
+})

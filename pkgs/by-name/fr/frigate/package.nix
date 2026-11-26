@@ -110,6 +110,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
     # - Pydantic TypeAdapter
     # https://github.com/blakeblackshear/frigate/pull/23641
     ./pr23641.patch
+
+    # API compat with FastAPI
+    ./fastapi-compat.patch
   ];
 
   postPatch = ''

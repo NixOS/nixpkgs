@@ -2,7 +2,7 @@
   lib,
   fetchurl,
   buildPythonPackage,
-  flit-core,
+  flit-core_3,
   pillow,
   python,
 }:
@@ -21,7 +21,7 @@ let
       hash = "sha256-dG9QYDIlESgKHlDrdoRu1r8jQphLKsBNxCyqGo14eZ4=";
     };
 
-    build-system = [ flit-core ];
+    build-system = [ flit-core_3 ];
 
     # infinite recursion via sphinx and pillow
     doCheck = false;

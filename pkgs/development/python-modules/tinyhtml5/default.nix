@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  flit-core,
+  flit-core_3,
   webencodings,
   pytestCheckHook,
 }:
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   };
 
   build-system = [
-    flit-core
+    flit-core_3
   ];
 
   dependencies = [

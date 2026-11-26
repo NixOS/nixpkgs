@@ -105,7 +105,7 @@ python3Packages.buildPythonApplication rec {
     ++ lib.optional withBasicAudioMetadata mutagen
     ++ lib.optional withHashedPasswords argon2-cffi
     ++ lib.optional withZeroMQ pyzmq
-    ++ lib.optional withMagic magic
+    ++ lib.optional withMagic file-magic
     ++ (extraPythonPackages python3Packages);
 
   makeWrapperArgs = [
@@ -114,6 +114,8 @@ python3Packages.buildPythonApplication rec {
     ":"
     (lib.makeBinPath runtimeDeps)
   ];
+
+  dontCheckPythonMetadata = nameSuffix != "";
 
   meta = {
     description = "turn almost any device into a file server over http(s), webdav, ftp(s), and tftp";

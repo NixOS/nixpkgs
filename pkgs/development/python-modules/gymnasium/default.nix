@@ -25,7 +25,7 @@
   mujoco,
   opencv4,
   packaging,
-  pybox2d,
+  box2d,
   pygame-ce,
   seaborn,
   torch,
@@ -60,7 +60,7 @@ buildPythonPackage (finalAttrs: {
   optional-dependencies = {
     atari = [ ale-py ];
     box2d = [
-      pybox2d
+      box2d
       pygame-ce
     ];
     classic-control = [ pygame-ce ];

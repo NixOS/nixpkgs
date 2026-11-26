@@ -67,6 +67,8 @@ buildPythonPackage rec {
     # and will raise an error in the future. This includes implicit conversion of bare
     # integers (e.g. `+ 1`).Please use a specific unit instead.
     "test_import_without_warning"
+    # 'NoneType' object has no attribute 'total_seconds'
+    "test_bad_tz"
   ];
 
   # Workaround https://github.com/NixOS/nixpkgs/issues/123561

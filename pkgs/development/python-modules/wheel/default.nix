@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "wheel";
-  version = "0.47.0";
+  version = "0.48.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pypa";
     repo = "wheel";
     tag = version;
-    hash = "sha256-/5OxFySesdsFsuUbhdhcgFPsry8RSy5ZshG0TWGncVY=";
+    hash = "sha256-sgOInnmKOh2KmUHvzdkSc8iiwONIA+6Ahm7Iebt4eRg=";
   };
 
   nativeBuildInputs = [ flit-core ];
@@ -42,5 +42,6 @@ buildPythonPackage rec {
     '';
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ siriobalmelli ];
+    teams = [ lib.teams.python ];
   };
 }
