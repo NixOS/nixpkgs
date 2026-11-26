@@ -64,6 +64,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--url=https://github.com/xiph/flac" ]; };
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://xiph.org/flac/";
     description = "Library and tools for encoding and decoding the FLAC lossless audio file format";
