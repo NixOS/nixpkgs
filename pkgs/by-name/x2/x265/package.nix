@@ -88,8 +88,11 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     nasm
-  ]
-  ++ lib.optionals numaSupport [ numactl ];
+  ];
+
+  buildInputs = lib.optionals numaSupport [ numactl ];
+
+  strictDeps = true;
 
   cmakeFlags = [
     (lib.cmakeBool "ENABLE_ALPHA" true)
