@@ -11,6 +11,7 @@
   perl,
   argp-standalone,
   libjpeg,
+  gettext,
   json_c,
   libbpf,
   libelf,
@@ -24,6 +25,7 @@
   qt6Packages,
   linuxHeaders,
   buildPackages,
+  testers,
 }:
 
 # See libv4l in all-packages.nix for the libs only (overrides alsa, QT)
@@ -77,6 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     doxygen
+    gettext
     meson
     ninja
     pkg-config
@@ -106,6 +109,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   propagatedBuildInputs = [ libjpeg ];
 
+  strictDeps = true;
+
   postPatch = ''
     patchShebangs utils/
   '';
@@ -120,6 +125,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   doInstallCheck = true;
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
+  __structuredAttrs = true;
+
   meta = {
     description = "V4L utils and libv4l, provide common image formats regardless of the v4l device";
     homepage = "https://linuxtv.org/projects.php";
@@ -132,5 +141,12 @@ stdenv.mkDerivation (finalAttrs: {
       yarny
     ];
     platforms = lib.platforms.linux;
+    pkgConfigModules = [
+      "libv4l2"
+      "libdvbv5"
+      "libv4l1"
+      "libv4lconvert"
+      "libv4l2rds"
+    ];
   };
 })
