@@ -105,6 +105,8 @@ stdenv.mkDerivation (finalAttrs: {
     libxml2
   ];
 
+  strictDeps = true;
+
   preConfigure = ''
     export MAN_PAGE_DATE=$(date '+%Y-%m-%d' -d "@$SOURCE_DATE_EPOCH")
   '';
