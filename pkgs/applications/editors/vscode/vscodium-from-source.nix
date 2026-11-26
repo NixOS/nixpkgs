@@ -41,6 +41,9 @@ stdenv.mkDerivation (
   finalAttrs:
   let
 
+    stableJson = lib.importJSON ./vscodium-from-source-stable.json;
+    productMeta = lib.importJSON ./vscodium-from-source-meta.json;
+
     builtInExtensionVsix = lib.listToAttrs (
       map (ext: {
         name = ext.name;
@@ -53,7 +56,7 @@ stdenv.mkDerivation (
             toHashFormat = "sri";
           };
         };
-      }) (lib.importJSON "${finalAttrs.vscodeSrc}/product.json").builtInExtensions
+      }) productMeta.builtInExtensions
     );
 
     # The `vscode-*-packing` gulp task assembles the desktop app by merging the
@@ -62,11 +65,7 @@ stdenv.mkDerivation (
     # gulp-vinyl-zip), so repackage the nixpkgs-provided Electron, instead of
     # downloading the upstream prebuilt. ELECTRON_SKIP_BINARY_DOWNLOAD only
     # covers the npm `electron` package and does not stop this path
-    electronVersion = builtins.head (
-      builtins.match ".*target=\"([0-9.]+)\".*" (
-        builtins.replaceStrings [ "\n" ] [ " " ] (builtins.readFile "${finalAttrs.vscodeSrc}/.npmrc")
-      )
-    );
+    electronVersion = productMeta.electronVersion;
     electronPlatform = if stdenv.hostPlatform.isDarwin then "darwin" else "linux";
     electronArch =
       {
@@ -95,19 +94,19 @@ stdenv.mkDerivation (
   in
   {
     pname = "vscodium";
-    version = "1.143.17183";
+    version = "1.143.17232";
 
     src = fetchFromGitHub {
       owner = "VSCodium";
       repo = "vscodium";
       rev = finalAttrs.version;
-      hash = "sha256-wzOie7h/jwJL/dnM1z7k0cz7rSATVCQ6nsuPjcx1NWs=";
+      hash = "sha256-4zKukdMZewlsQqEGXhI5goAv9vo5WMwEsVm18hFzzUs=";
     };
 
     vscodeSrc = fetchFromGitHub {
       owner = "Microsoft";
       repo = "vscode";
-      rev = (lib.importJSON "${finalAttrs.src}/upstream/stable.json").commit;
+      rev = stableJson.commit;
       hash = "sha256-GuR+613RHZ876yC1e1glj0TC+4syMDG0SV7IVKY7S+4=";
     };
 
@@ -524,6 +523,8 @@ stdenv.mkDerivation (
 
     passthru = {
       inherit electron;
+      inherit (finalAttrs) vscodeSrc npmCache;
+      updateScript = ./update-vscodium-from-source.sh;
     };
 
     meta = {
