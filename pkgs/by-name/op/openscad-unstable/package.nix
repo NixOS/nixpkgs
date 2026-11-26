@@ -119,25 +119,28 @@ clangStdenv.mkDerivation rec {
     libGLU
   ]
   ++ lib.optional clangStdenv.hostPlatform.isDarwin libsForQt5.qtmacextras;
+
   cmakeFlags = [
-    "-DEXPERIMENTAL=ON" # enable experimental options
-    "-DSNAPSHOT=ON" # nightly icons
-    "-DUSE_BUILTIN_OPENCSG=OFF"
-    "-DUSE_BUILTIN_MANIFOLD=OFF"
-    "-DUSE_BUILTIN_CLIPPER2=OFF"
+    (lib.cmakeBool "EXPERIMENTAL" true) # enable experimental options
+    (lib.cmakeBool "SNAPSHOT" true) # nightly icons
+    (lib.cmakeBool "USE_BUILTIN_OPENCSG" false)
+    (lib.cmakeBool "USE_BUILTIN_MANIFOLD" false)
+    (lib.cmakeBool "USE_BUILTIN_CLIPPER2" false)
     # Derive version from our unstable date
-    "-DOPENSCAD_VERSION='${builtins.replaceStrings [ "-" ] [ "." ] unstable_date}-unstable'"
-    "-DCMAKE_UNITY_BUILD=OFF" # broken compile with unity
+    (lib.cmakeFeature "OPENSCAD_VERSION" "${
+      builtins.replaceStrings [ "-" ] [ "." ] unstable_date
+    }-unstable")
+    (lib.cmakeBool "CMAKE_UNITY_BUILD" false) # broken compile with unity
     # IPO
-    "-DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON"
+    (lib.cmakeBool "CMAKE_INTERPROCEDURAL_OPTIMIZATION" true)
 
     # The sources enable this for only apple. We turn it off globally anyway to stay
     # consistent.
-    "-DUSE_QT6=OFF"
+    (lib.cmakeBool "USE_QT6" false)
 
     # For tests
-    "-DVENV_DIR=${python3withPackages}"
-    "-DVENV_BIN_PATH=${python3withPackages}/bin"
+    (lib.cmakeFeature "VENV_DIR" "${python3withPackages}")
+    (lib.cmakeFeature "VENV_BIN_PATH" "${python3withPackages}/bin")
   ];
 
   # tests rely on sysprof which is not available on darwin
