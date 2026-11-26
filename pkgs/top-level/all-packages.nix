@@ -5852,7 +5852,7 @@ with pkgs;
   neutronclient = with python3Packages; toPythonApplication python-neutronclient;
   swiftclient = with python3Packages; toPythonApplication python-swiftclient;
   troveclient = with python3Packages; toPythonApplication python-troveclient;
-  watcherclient = with python313Packages; toPythonApplication python-watcherclient;
+  watcherclient = with python3Packages; toPythonApplication python-watcherclient;
   zunclient = with python313Packages; toPythonApplication python-zunclient;
 
   inherit (callPackages ../by-name/li/libressl { })
