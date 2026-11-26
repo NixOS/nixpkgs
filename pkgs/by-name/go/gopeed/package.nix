@@ -1,21 +1,24 @@
 {
   lib,
   fetchFromGitHub,
-  flutter338,
+  flutter341,
   autoPatchelfHook,
   buildGoModule,
   keybinder3,
   libayatana-appindicator,
+  pkg-config,
+  gtk3,
+  webkitgtk_4_1,
 }:
 
 let
-  version = "1.9.3";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "GopeedLab";
     repo = "gopeed";
     tag = "v${version}";
-    hash = "sha256-a/q02UKNa2324XK5f0gF6Wh4qmBmPDcYA35VWup54/4=";
+    hash = "sha256-/FuE6mMoORG1Jf4pTcqbwlPXkEJ+TswloRz3B+bJM6A=";
   };
 
   metaCommon = {
@@ -30,7 +33,14 @@ let
     inherit version src;
     pname = "libgopeed";
 
-    vendorHash = "sha256-Vk6/ns7Jk6STBGMKov+iOX4n1GscXDScXB0khfN0Cq0=";
+    vendorHash = "sha256-PLWxyacuJgKmY+0M5p474F9RHw45FXgVVAwhkb8LhgM=";
+
+    nativeBuildInputs = [ pkg-config ];
+
+    buildInputs = [
+      gtk3
+      webkitgtk_4_1
+    ];
 
     buildPhase = ''
       runHook preBuild
@@ -45,7 +55,7 @@ let
     meta = metaCommon;
   };
 in
-flutter338.buildFlutterApplication {
+flutter341.buildFlutterApplication {
   inherit version src;
   pname = "gopeed";
 

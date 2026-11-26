@@ -1,5 +1,13 @@
 {
+  "flutter_inappwebview": "sha256-3IKMMcjm6sCBhIh0Xi9IcILLcnyrazIoPqqFHLwVeQY=",
+  "flutter_inappwebview_android": "sha256-3IKMMcjm6sCBhIh0Xi9IcILLcnyrazIoPqqFHLwVeQY=",
+  "flutter_inappwebview_ios": "sha256-3IKMMcjm6sCBhIh0Xi9IcILLcnyrazIoPqqFHLwVeQY=",
+  "flutter_inappwebview_macos": "sha256-3IKMMcjm6sCBhIh0Xi9IcILLcnyrazIoPqqFHLwVeQY=",
+  "flutter_inappwebview_platform_interface": "sha256-3IKMMcjm6sCBhIh0Xi9IcILLcnyrazIoPqqFHLwVeQY=",
+  "flutter_local_notifications": "sha256-VxEM6DEeYc42GVxD9GgkxzUrU/XXCWeFTNZOFLc2DSo=",
+  "flutter_local_notifications_windows": "sha256-VxEM6DEeYc42GVxD9GgkxzUrU/XXCWeFTNZOFLc2DSo=",
   "install_plugin": "sha256-3FM08D2pbtWmitf8R4pAylVqum7IfbWh6pOIEhJdySk=",
-  "permission_handler_windows": "sha256-MRTmuH0MfhGaMEb9bRotimAPRlFyl3ovtJUJ2WK7+DA=",
-  "tray_manager": "sha256-rsvykRadbCRNwJUEAcoFTywwqvx4qvzdUmz7TQFDYP4="
+  "launch_at_startup": "sha256-EYqGYxwRNNORa5vzrHQN4smjX4/mFaToTuAcGl4AcZs=",
+  "open_dir_windows": "sha256-h5MecdbIaaezdKWuNQH128oQ4cJD10dj8aREZ+nbNmk=",
+  "permission_handler_windows": "sha256-MRTmuH0MfhGaMEb9bRotimAPRlFyl3ovtJUJ2WK7+DA="
 }
