@@ -158,7 +158,6 @@ stdenv.mkDerivation {
     git
     makeWrapper
     libtool # used e.g. for `qatlib_ext`
-    nasm
     pkg-config
     ceph-python-env
     ceph-python-env.pkgs.python # for the toPythonPath function
@@ -168,6 +167,9 @@ stdenv.mkDerivation {
     # for building docs/man-pages presumably
     doxygen
     graphviz
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isx86 [
+    nasm
   ];
 
   buildInputs =
