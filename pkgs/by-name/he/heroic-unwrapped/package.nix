@@ -79,6 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Make Heroic create Steam shortcuts (to non-steam games) with the correct path to heroic.
     ./fix-non-steam-shortcuts.patch
     ./fix-notification-name.patch
+    ./disable-update-check.patch
   ];
 
   nativeBuildInputs = [
@@ -149,6 +150,8 @@ stdenv.mkDerivation (finalAttrs: {
     cp -t ${helpersDir}/x64/win32 \
       ${comet-gog.dummy-service}/GalaxyCommunication.exe \
       ${epic-integration}/EpicGamesLauncher.exe
+
+    makeWrapper ${lib.getExe electron} $out/bin/heroic "''${makeWrapperArgs[@]}"
   '';
 
   makeWrapperArgs = [
@@ -168,10 +171,6 @@ stdenv.mkDerivation (finalAttrs: {
     ":"
     (lib.makeBinPath [ umu-launcher ])
   ];
-
-  postFixup = ''
-    makeWrapper ${lib.getExe electron} $out/bin/heroic "''${makeWrapperArgs[@]}"
-  '';
 
   passthru = {
     inherit epic-integration;
