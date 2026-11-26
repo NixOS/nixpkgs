@@ -59,6 +59,8 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
   ];
 
+  strictDeps = true;
+
   mesonFlags = [
     (lib.mesonBool "fixed-point" fixedPoint)
     (lib.mesonBool "custom-modes" withCustomModes)
@@ -67,6 +69,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "asm" withAsm)
     (lib.mesonEnable "docs" false)
   ];
+
+  __structuredAttrs = true;
 
   doCheck = !stdenv.hostPlatform.isi686 && !stdenv.hostPlatform.isAarch32; # test_unit_LPC_inv_pred_gain fails
 
