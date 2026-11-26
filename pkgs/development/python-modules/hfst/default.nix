@@ -16,6 +16,9 @@ buildPythonPackage rec {
   sourceRoot = "${src.name}/python";
 
   postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail "version = '3.17.0_beta'" "version = '${version}'"
+
     # omorfi-python looks for 'hfst' Python package
     sed -i 's/libhfst_swig/hfst/' setup.py;
   '';
