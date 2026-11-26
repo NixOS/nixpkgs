@@ -78,6 +78,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
   # doesn't ship .dist-info/METADATA
   dontCheckPythonMetadata = true;
 
+  pythonImportsCheck = [ "blueprintcompiler" ];
+
   passthru = {
     tests = {
       version = testers.testVersion {
