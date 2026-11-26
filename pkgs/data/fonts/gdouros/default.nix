@@ -1,64 +1,46 @@
 {
   lib,
   stdenvNoCC,
-  fetchzip,
+  fetchurl,
   installFonts,
 }:
 
 let
   fonts = {
     aegan = {
-      version = "13.00";
-      file = "Aegean.zip";
-      hash = "sha256-3HmCqCMZLN6zF1N/EirQOPnHKTGHoc4aHKoZxFYTB34=";
+      pattern = "Aegean*";
       description = "Aegean";
     };
     aegyptus = {
-      version = "13.00";
-      file = "Aegyptus.zip";
-      hash = "sha256-SSAK707xhpsUTq8tSBcrzNGunCYad58amtCqAWuevnY=";
+      pattern = "Aegyptus*";
       description = "Egyptian Hieroglyphs, Coptic, Meroitic";
     };
     akkadian = {
-      version = "13.00";
-      file = "Akkadian.zip";
-      hash = "sha256-wXiDYyfujAs6fklOCqXq7Ms7wP5RbPlpNVwkUy7CV4k=";
+      pattern = "Akkadian*";
       description = "Sumero-Akkadian Cuneiform";
     };
     assyrian = {
-      version = "13.00";
-      file = "Assyrian.zip";
-      hash = "sha256-CZj1sc89OexQ0INb7pbEu5GfE/w2E5JmhjT8cosoLSg=";
-      description = "Neo-Assyrian in Unicode with OpenType";
+      pattern = "Assyrian*";
+      description = "Neo-Assyrian in Unicode";
     };
     eemusic = {
-      version = "13.00";
-      file = "EEMusic.zip";
-      hash = "sha256-LxOcQOPEImw0wosxJotbOJRbe0qlK5dR+kazuhm99Kg=";
+      pattern = "Musica*";
       description = "Byzantine Musical Notation in Unicode with OpenType";
     };
     maya = {
-      version = "13.00";
-      file = "Maya%20Hieroglyphs.zip";
-      hash = "sha256-PAwF1lGqm6XVf4NQCA8AFLGU40N0Xsn5Q8x9ikHJDhY=";
+      pattern = "Maya*";
       description = "Maya Hieroglyphs";
     };
     symbola = {
-      version = "13.00";
-      file = "Symbola.zip";
-      hash = "sha256-TsHWmzkEyMa8JOZDyjvk7PDhm239oH/FNllizNFf398=";
+      pattern = "Symbola*";
       description = "Basic Latin, Greek, Cyrillic and many Symbol blocks of Unicode";
     };
     textfonts = {
-      version = "13.00";
-      file = "Textfonts.zip";
-      hash = "sha256-7S3NiiyDvyYoDrLPt2z3P9bEEFOEZACv2sIHG1Tn6yI=";
+      pattern = "Aroania* Anaktoria* Alexander* Avdira* Asea*";
       description = "Aroania, Anaktoria, Alexander, Avdira and Asea";
     };
     unidings = {
-      version = "13.00";
-      file = "Unidings.zip";
-      hash = "sha256-WUY+Ylphep6WuzqLQ3Owv+vK5Yuu/aAkn4GOFXL0uQY=";
+      pattern = "Unidings*";
       description = "Glyphs and Icons for blocks of The Unicode Standard";
     };
   };
@@ -66,35 +48,34 @@ let
   mkpkg =
     pname:
     {
-      version,
-      file,
-      hash,
+      pattern,
       description,
     }:
-    stdenvNoCC.mkDerivation {
-      inherit pname version;
-
-      src = fetchzip {
-        url = "https://web.archive.org/web/20221006174450/https://dn-works.com/wp-content/uploads/2020/UFAS-Fonts/${file}";
-        stripRoot = false;
-        inherit hash;
+    stdenvNoCC.mkDerivation (finalAttrs: {
+      inherit pname;
+      version = "2.60";
+      src = fetchurl {
+        # Launchpad is used to provide a more reliable download than internet archive.
+        url = "https://launchpad.net/ubuntu/+archive/primary/+files/ttf-ancient-fonts_${finalAttrs.version}.orig.tar.xz";
+        hash = "sha256-B3z/EUPwd/A4ZMC/aBz6+alKmR3bLVINqs/x+Sz2pUs=";
       };
+
+      # Remove all files except selected
+      patchPhase = ''
+        mkdir keep
+        cp ${pattern} keep
+        find . -type f -delete -maxdepth 1
+        ls keep
+      '';
 
       nativeBuildInputs = [ installFonts ];
 
-      postInstall = ''
-        install -Dm644 *.{odt,ods,pdf,xlsx} -t "$out/share/doc/${pname}" || true  # install docs if any
-      '';
-
       meta = {
         inherit description;
-        # see https://web.archive.org/web/20221006174450/https://dn-works.com/wp-content/uploads/2020/UFAS-Docs/License.pdf
-        # quite draconian: non-commercial, no modifications,
-        # no redistribution, "a single instantiation and no
-        # network installation"
-        license = lib.licenses.unfree;
+        # see https://metadata.ftp-master.debian.org/changelogs//main/t/ttf-ancient-fonts/ttf-ancient-fonts_2.60-5_copyright
+        license = lib.licenses.free;
         homepage = "https://web.archive.org/web/20221006174450/https://dn-works.com/ufas/";
       };
-    };
+    });
 in
 lib.mapAttrs mkpkg fonts
