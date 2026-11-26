@@ -13,18 +13,23 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "palp";
   version = "2.21";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchurl {
     url = "https://hep.itp.tuwien.ac.at/~kreuzer/CY/palp/palp-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-fkp78hmZioRMC8zgoXbknQdDy0tQWg4ZUym/LsGW3dc=";
+    hash = "sha256-fkp78hmZioRMC8zgoXbknQdDy0tQWg4ZUym/LsGW3dc=";
   };
 
   hardeningDisable = [
     "format"
   ];
 
-  patchPhase = lib.optionalString stdenv.hostPlatform.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace GNUmakefile --replace gcc cc
   '';
+
+  enableParallelBuilding = true;
 
   preBuild = ''
     echo Building PALP optimized for ${dim} dimensions
@@ -35,24 +40,29 @@ stdenv.mkDerivation (finalAttrs: {
   # when #28029 was merged.
   doCheck = true;
   checkPhase = ''
+    runHook preCheck
     ./nef.x -f -N << EOF | grep -q 'np='
       3 6
       1  0  0 -1  0  0
       0  1  0  0 -1  0
       0  0  1  0  0 -1
     EOF
+    runHook postCheck
   '';
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin
     for file in poly class cws nef mori; do
       cp -p $file.x "$out/bin/$file-${dim}d.x"
     done
-  ''
-  + lib.optionalString doSymlink ''
+    runHook postInstall
+  '';
+
+  postInstall = lib.optionalString doSymlink ''
     cd $out/bin
     for file in poly class cws nef mori; do
-      ln -sf $file-6d.x $file.x
+      ln -sf $file-${dim}d.x $file.x
     done
   '';
 
