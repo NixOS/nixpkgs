@@ -29,9 +29,11 @@ stdenv.mkDerivation (finalAttrs: {
     help2man
   ];
 
+  strictDeps = true;
+
   #Fix, see #28255
   postPatch = ''
-    substituteInPlace configure --replace \
+    substituteInPlace configure --replace-fail \
       'set -o posix' \
       'set +o posix'
   '';
@@ -39,6 +41,8 @@ stdenv.mkDerivation (finalAttrs: {
   env = lib.optionalAttrs stdenv.cc.isClang {
     CXXFLAGS = "-std=c++14";
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Command-line option parser generator";
