@@ -26,6 +26,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ opencl-headers ] ++ lib.optionals stdenv.hostPlatform.isWindows [ windows.dlfcn ];
 
+  strictDeps = true;
+
   configureFlags = [
     "--enable-custom-vendordir=/run/opengl-driver/etc/OpenCL/vendors"
   ]
