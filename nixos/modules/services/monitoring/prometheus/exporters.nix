@@ -193,6 +193,10 @@ let
           name = "exportarr";
           type = "sonarr";
         };
+        exportarr-sabnzbd = {
+          name = "exportarr";
+          type = "sabnzbd";
+        };
       }
     );
 
