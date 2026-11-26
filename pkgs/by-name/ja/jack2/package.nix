@@ -45,8 +45,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "jackaudio";
     repo = "jack2";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-Cslfys5fcZDy0oee9/nM5Bd1+Cg4s/ayXjJJOSQCL4E=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Cslfys5fcZDy0oee9/nM5Bd1+Cg4s/ayXjJJOSQCL4E=";
   };
 
   outputs = [
@@ -74,6 +74,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
     freebsd.libsysinfo
   ];
+
+  strictDeps = true;
 
   patches = [
     (fetchpatch2 {
@@ -117,6 +119,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
+  __structuredAttrs = true;
 
   meta = {
     description = "JACK audio connection kit, version 2 with jackdbus";
