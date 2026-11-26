@@ -77,14 +77,14 @@
  // RSS and Federation (remote object) search
  
  type Category = 'rss' | 'federation'
-@@ -286,9 +266,26 @@
+@@ -286,9 +266,28 @@
  
  <template>
    <div
 -    ref="outer"
 -    class="secondary raised interactive solid" :class="[$style.placeholder]"
 -  />
-+    class="shape-field-full"
++    :class="$style.sidebarSearch"
 +    @click="openSearch"
 +  >
 +    <Input
@@ -107,7 +107,7 @@
    <Modal
      v-model="isOpen"
      autofocus="off"
-@@ -297,12 +294,21 @@
+@@ -297,12 +296,23 @@
      :priority="12"
    >
      <template #topleft>
@@ -117,25 +117,27 @@
 -        ui-raised
 -        class="color-default-solid" :class="[$style.placeholder]"
 -      />
-+      <Input
-+        ref="modalSearchInput"
-+        v-model="query"
-+        class="shape-field-full"
-+        ui-sunken
-+        autocomplete="search"
-+        type="search"
-+        icon="bi:search"
-+        :placeholder="t('components.audio.SearchBar.placeholder.search')"
-+        autofocus
-+      >
-+        <template #start>
-+          <Icon icon="bi:search" />
-+        </template>
-+      </Input>
++      <div :class="$style.modalSearch">
++        <Input
++          ref="modalSearchInput"
++          v-model="query"
++          class="shape-field-full"
++          ui-sunken
++          autocomplete="search"
++          type="search"
++          icon="bi:search"
++          :placeholder="t('components.audio.SearchBar.placeholder.search')"
++          autofocus
++        >
++          <template #start>
++            <Icon icon="bi:search" />
++          </template>
++        </Input>
++      </div>
      </template>
  
      <!-- Federation (Fetch) -->
-@@ -856,54 +862,10 @@
+@@ -856,54 +866,34 @@
        />
      </template>
    </Modal>
@@ -189,4 +191,28 @@
 -    }
 -    transition: width .2s, top .3s, left .4s;
 -}
++
++  .sidebarSearch {
++    width: 100%;
++    height: 48px;
++    flex-shrink: 0;
++    cursor: pointer;
++  }
++
++  .modalSearch {
++    flex-grow: 1;
++    height: 48px;
++    display: flex;
++  }
++
++  .sidebarSearch :global([ui-inline-size]),
++  .modalSearch :global([ui-inline-size]),
++  .sidebarSearch :global(.shape-field-full),
++  .modalSearch :global(.shape-field-full) {
++    inline-size: 100%;
++    max-inline-size: 100%;
++    width: 100%;
++    flex-grow: 1;
++    height: 48px;
++  }
  </style>
