@@ -16,6 +16,21 @@ let
   # this value gets reused even if this file is imported multiple times,
   # thanks to Nix's import-value cache.
   autoCalledPackages = import ./by-name-overlay.nix ../by-name;
+
+  # An overlay to call package sets in ../sets.
+  packageSets =
+    self: super:
+    let
+      res = import ./package-sets.nix self super;
+      conflictingAttrs = builtins.intersectAttrs res super;
+    in
+    assert
+      (conflictingAttrs == { })
+      ||
+        throw "The following attributes were defined both in `pkgs/top-level/package-sets.nix` and elsewhere, "
+        + "most likely in `pkgs/by-name/` or `pkgs/top-level/all-packages.nix`: "
+        + "${builtins.concatStringsSep ", " (builtins.attrNames conflictingAttrs)}";
+    res;
 in
 
 {
@@ -363,6 +378,7 @@ let
       trivialBuilders
       splice
       autoCalledPackages
+      packageSets
       allPackages
       otherPackageSets
       aliases
