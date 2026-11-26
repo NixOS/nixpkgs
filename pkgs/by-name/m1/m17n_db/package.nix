@@ -27,6 +27,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags = [ "--with-charmaps=${stdenv.cc.libc}/share/i18n/charmaps" ];
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://www.nongnu.org/m17n/";
     description = "Multilingual text processing library (database)";
