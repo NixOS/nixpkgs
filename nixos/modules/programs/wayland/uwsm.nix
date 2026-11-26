@@ -41,6 +41,7 @@ let
   sessionServices = [
     "wayland-wm@"
     "wayland-session-bindpid@"
+    "wayland-wm-env@"
   ];
 in
 {
