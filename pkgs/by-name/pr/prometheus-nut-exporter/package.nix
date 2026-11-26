@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nixosTests,
 }:
 
 buildGoModule rec {
@@ -16,6 +17,8 @@ buildGoModule rec {
   };
 
   vendorHash = "sha256-cMZ4GSal03LIZi7ESr/sQx8zLHNepOTZGEEsdvsNhec=";
+
+  passthru.tests = { inherit (nixosTests.prometheus-exporters) nut; };
 
   meta = {
     description = "Prometheus exporter for Network UPS Tools";
