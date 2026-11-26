@@ -57,7 +57,7 @@ backendStdenv.mkDerivation (finalAttrs: {
   #   newer versions of NCCL than what we provide here.
   version =
     if cudaAtLeast "12.0" then
-      "2.32.6-1"
+      "2.32.7-1"
     else if cudaAtLeast "11.7" then
       "2.28.7-1"
     else if cudaAtLeast "11.6" then
@@ -70,7 +70,7 @@ backendStdenv.mkDerivation (finalAttrs: {
     repo = "nccl";
     tag = "v${finalAttrs.version}";
     hash = getAttr finalAttrs.version {
-      "2.32.6-1" = "sha256-GgYG84IUJwIPCJGsg2xEGB6kbYakvutI5mH4GGytbNA=";
+      "2.32.7-1" = "sha256-MlUF8m2yBTGcfq0t6Fd5W3rpsmQNC38EXctdfY/eVYs=";
       "2.28.7-1" = "sha256-NM19OiBBGmv3cGoVoRLKSh9Y59hiDoei9NIrRnTqWeA=";
       "2.26.6-1" = "sha256-vkWMGXCy+dIpYCecdafmOAGlnfRxIQ5Y2ZQuMjinraI=";
       "2.25.1-1" = "sha256-3snh0xdL9I5BYqdbqdl+noizJoI38mZRVOJChgEE1I8=";
