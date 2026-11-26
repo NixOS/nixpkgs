@@ -1,6 +1,7 @@
 {
   lib,
   rustPlatform,
+  fetchCrate,
   fetchFromGitHub,
   aws-lc,
   pkg-config,
@@ -16,7 +17,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "greptimedb";
-  version = "1.2.1";
+  version = "1.3.1";
 
   __structuredAttrs = true;
 
@@ -24,25 +25,42 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "GreptimeTeam";
     repo = "greptimedb";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hE4hQ3NR0UPVghQv84jdpV+xeWpapxWfBR3PSTFHhww=";
+    hash = "sha256-cMQOqtNiCxbr44lf4zELR6qEBOPm1mCrgaQqarSCCP8=";
   };
 
-  cargoHash = "sha256-xkirWIE+RoZVDzkpGk4gf1DHybqCmGO6EzlVnbz+0A8=";
+  cargoHash = "sha256-qtvPTEWWdCn2WnDZZQQv2FMmySH0pPXWpTBjak1JPQI=";
 
-  # otel-arrow-rust regenerates its protos from a directory that sits outside the
-  # crate, which cargo vendoring drops. Its generated sources are committed, so
-  # the codegen is redundant.
+  # packed with the gen/ files that vendoring drops; see postPatch
+  substraitVersion = "0.63.0";
+  substraitCrate = fetchCrate {
+    pname = "substrait";
+    version = finalAttrs.substraitVersion;
+    hash = "sha256-PhaF+ume7uiTKxG4MOC42FUdlEgadRjByYQeq06p5VU=";
+  };
+
   postPatch = ''
+    # otel-arrow-rust regenerates its protos from a directory that sits outside the
+    # crate, which cargo vendoring drops. Its generated sources are committed, so
+    # the codegen is redundant.
     for f in "$cargoDepsCopy"/source-git-*/otel-arrow-rust-*/build.rs; do
       echo 'fn main() {}' > "$f"
     done
 
-    # std::sync::Exclusive was renamed after the nightly upstream pins
-    substituteInPlace src/servers/src/postgres/auth_handler.rs \
-      --replace-fail 'use std::sync::Exclusive;' 'use std::sync::SyncView as Exclusive;'
+    # Vendoring also drops substrait's spec submodule metadata and the version
+    # files build.rs generates from it. Copy them from the published crate, which
+    # is packed after generation; bump substraitVersion when Cargo.lock moves.
+    substraitDir=$(printf '%s\n' "$cargoDepsCopy"/source-git-*/substrait-${finalAttrs.substraitVersion}/)
+    if [ ! -d "$substraitDir" ]; then
+      echo "substrait-rs ${finalAttrs.substraitVersion} not found in $cargoDepsCopy" >&2
+      exit 1
+    fi
+    mkdir -p "$substraitDir/gen"
+    cp ${finalAttrs.substraitCrate}/gen/version ${finalAttrs.substraitCrate}/gen/version.in \
+      "$substraitDir/gen/"
 
     # gRPC service futures nest deeper than the default query depth allows
-    sed -i '1i #![recursion_limit = "512"]' src/frontend/src/lib.rs
+    substituteInPlace src/frontend/src/lib.rs \
+      --replace-fail '#![recursion_limit = "256"]' '#![recursion_limit = "512"]'
   '';
 
   nativeBuildInputs = [
