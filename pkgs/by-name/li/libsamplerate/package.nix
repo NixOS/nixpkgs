@@ -18,6 +18,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libsndfile ];
 
+  strictDeps = true;
+
   configureFlags = [ "--disable-fftw" ];
 
   outputs = [
