@@ -45,6 +45,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
+  strictDeps = true;
+
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=${if static then "OFF" else "ON"}"
     "-DSNAPPY_BUILD_TESTS=OFF"
