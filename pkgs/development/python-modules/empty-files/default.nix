@@ -17,6 +17,10 @@ buildPythonPackage rec {
     hash = "sha256-P/woyAN9cYdxryX1iM36C53c9dL6lo4eoTzBWT2cd3A=";
   };
 
+  postPatch = ''
+    echo 'version_number = "v0.0.9"' > empty_files/version.py
+  '';
+
   propagatedBuildInputs = [ requests ];
 
   # cyclic dependency with approvaltests
