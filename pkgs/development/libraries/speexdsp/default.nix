@@ -38,6 +38,8 @@ stdenv.mkDerivation (finalAttrs: {
     lib.optionals withFftw3 [ "--with-fft=gpl-fftw3" ]
     ++ lib.optional stdenv.hostPlatform.isAarch64 "--disable-neon";
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://www.speex.org/";
     description = "Open Source/Free Software patent-free audio compression format designed for speech";
