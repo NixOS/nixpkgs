@@ -49,7 +49,12 @@ buildPythonPackage (finalAttrs: {
     owner = "magic-wormhole";
     repo = "magic-wormhole";
     tag = finalAttrs.version;
-    hash = "sha256-/0zszNZpWBcpjO/8Fi+vvTLAKf9+c0jAsIuhQFRJ4Mw=";
+    # Work around irreproducible usage of export-subst by manually fixing $Format:%d$.
+    postFetch = ''
+      sed -Ei 's/^(\s+git_refnames = ").*"$/\1 (tag: ${finalAttrs.src.tag})"/' $out/src/wormhole/_version.py
+      grep -Exq '\s+git_refnames = " \(tag: ${finalAttrs.src.tag}\)"' $out/src/wormhole/_version.py
+    '';
+    hash = "sha256-KOKxgruxHqIyyvfO3lkVrkBt7wVCTnxO4L/hSYCMuGY=";
   };
 
   postPatch =
