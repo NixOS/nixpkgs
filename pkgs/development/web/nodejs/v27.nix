@@ -19,8 +19,8 @@ let
       [ ];
 in
 buildNodejs {
-  version = "27.0.0-alpha.0.1.1";
-  sha256 = "39c4a870ab63d403ee86af9847f40c192b845d2cc960234b3583c3d58bbf192e";
+  version = "27.0.0-alpha.0.2.0";
+  sha256 = "48b176e46d47bad76774a17bf5b5cb74651fe9dc80adbf60ecca8b4b7933592c";
   patches =
     (lib.optional (!(stdenv.hostPlatform.emulatorAvailable buildPackages)) (fetchpatch2 {
       url = "https://raw.githubusercontent.com/buildroot/buildroot/2f0c31bffdb59fb224387e35134a6d5e09a81d57/package/nodejs/nodejs-src/0003-include-obj-name-in-shared-intermediate.patch";
