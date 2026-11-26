@@ -6,6 +6,7 @@
   gettext,
   freebsd,
   netbsd,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -68,6 +69,10 @@ stdenv.mkDerivation (finalAttrs: {
     # the test and allows `configure` to detect clang properly.
     ++ [ autoreconfHook ];
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
+  __structuredAttrs = true;
+
   meta = {
     description = "ELF object file access library";
 
@@ -77,5 +82,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     platforms = lib.platforms.all;
     maintainers = [ ];
+    pkgConfigModules = [ "libelf" ];
   };
 })
