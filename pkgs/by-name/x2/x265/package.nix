@@ -139,9 +139,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   preConfigure =
     lib.optionalString multibitdepthSupport ''
-      cmake -B build-10bits "''${cmakeFlags[@]}" "''${cmakeFlagsArray[@]}" "''${cmakeStaticLibFlags[@]}"
-      cmake -B build-12bits "''${cmakeFlags[@]}" "''${cmakeFlagsArray[@]}" "''${cmakeStaticLibFlags[@]}" ${lib.cmakeBool "MAIN12" true}
-      cmakeFlagsArray+=(
+      cmake -B build-10bits "''${cmakeFlags[@]}" "''${cmakeStaticLibFlags[@]}"
+      cmake -B build-12bits "''${cmakeFlags[@]}" "''${cmakeStaticLibFlags[@]}" ${lib.cmakeBool "MAIN12" true}
+      cmakeFlags+=(
         ${lib.cmakeFeature "EXTRA_LIB" "\"x265-10.a;x265-12.a\""}
         ${lib.cmakeFeature "EXTRA_LINK_FLAGS" "-L."}
         ${lib.cmakeBool "LINKED_10BIT" true}
@@ -149,7 +149,7 @@ stdenv.mkDerivation (finalAttrs: {
       )
     ''
     + ''
-      cmakeFlagsArray+=(
+      cmakeFlags+=(
         ${lib.cmakeBool "GIT_ARCHETYPE" true} # https://bugs.gentoo.org/814116
         ${lib.cmakeBool "ENABLE_SHARED" (!stdenv.hostPlatform.isStatic)}
         ${lib.cmakeBool "HIGH_BIT_DEPTH" false}
