@@ -4,6 +4,7 @@
   fetchPypi,
   grpcio,
   protobuf,
+  setuptools_80,
 }:
 
 # This package should be updated together with the main grpc package and other
@@ -12,7 +13,7 @@
 buildPythonPackage rec {
   pname = "grpcio-health-checking";
   version = "1.85.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "grpcio_health_checking";
@@ -20,7 +21,11 @@ buildPythonPackage rec {
     hash = "sha256-k6XuspJiFllJsy/aqGUF8RAY0bgWE4LuNzqFUwsR0oE=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools_80
+  ];
+
+  dependencies = [
     grpcio
     protobuf
   ];
