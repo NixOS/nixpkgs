@@ -60,11 +60,6 @@
     "hash": "sha256-FeM40ktcObQJk4nMYShB61H/E8B7tIKfl9ObJ0IOcCM="
   },
   {
-    "pname": "Microsoft.NETCore.Platforms",
-    "version": "5.0.0",
-    "hash": "sha256-LIcg1StDcQLPOABp4JRXIs837d7z0ia6+++3SF3jl1c="
-  },
-  {
     "pname": "Microsoft.Win32.Registry",
     "version": "5.0.0",
     "hash": "sha256-9kylPGfKZc58yFqNKa77stomcoNnMeERXozWJzDcUIA="
@@ -83,11 +78,6 @@
     "pname": "PangoSharp",
     "version": "3.24.24.95",
     "hash": "sha256-YhltIz1jisJqR2ZxvbYy0ybi4oGw6qR2SkjF/2aWiBQ="
-  },
-  {
-    "pname": "System.Buffers",
-    "version": "4.4.0",
-    "hash": "sha256-KTxAhYawFG2V5VX1jw3pzx3IrQXRgn1TsvgjPgxAbqA="
   },
   {
     "pname": "System.Buffers",
@@ -131,11 +121,6 @@
   },
   {
     "pname": "System.Runtime.CompilerServices.Unsafe",
-    "version": "4.5.0",
-    "hash": "sha256-g9jIdQtXSAhY+ezQtYNgHEUoQR3HzznHs3JMzD9bip4="
-  },
-  {
-    "pname": "System.Runtime.CompilerServices.Unsafe",
     "version": "4.5.3",
     "hash": "sha256-lnZMUqRO4RYRUeSO8HSJ9yBHqFHLVbmenwHWkIU20ak="
   },
@@ -173,11 +158,6 @@
     "pname": "System.Security.Permissions",
     "version": "6.0.0",
     "hash": "sha256-/MMvtFWGN/vOQfjXdOhet1gsnMgh6lh5DCHimVsnVEs="
-  },
-  {
-    "pname": "System.Security.Principal.Windows",
-    "version": "4.5.0",
-    "hash": "sha256-BkUYNguz0e4NJp1kkW7aJBn3dyH9STwB5N8XqnlCsmY="
   },
   {
     "pname": "System.Security.Principal.Windows",

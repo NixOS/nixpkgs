@@ -57,7 +57,7 @@ buildDotnetModule {
     hash = "sha256-bXUBw8XN3iR3UL1vvTsBqnnnJGxMIxFCg1tVVyAxRPw=";
   };
 
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
   projectFile = "AM2RLauncher/AM2RLauncher.Gtk/AM2RLauncher.Gtk.csproj";
 
   nugetDeps = ./deps.json;
@@ -85,6 +85,11 @@ buildDotnetModule {
   patches = [
     ./am2r-run-binary.patch
   ];
+
+  postPatch = ''
+    substituteInPlace AM2RLauncher/AM2RLauncher.Gtk/AM2RLauncher.Gtk.csproj \
+      --replace-fail '<TargetFramework>net8.0</' '<TargetFramework>net10.0</'
+  '';
 
   dotnetFlags = [
     ''-p:DefineConstants="NOAPPIMAGE;NOAUTOUPDATE;PATCHOPENSSL"''
