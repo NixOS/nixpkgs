@@ -14186,6 +14186,8 @@ self: super: with self; {
 
   powerline-mem-segment = callPackage ../development/python-modules/powerline-mem-segment { };
 
+  powersensor-local = callPackage ../development/python-modules/powersensor-local { };
+
   pox = callPackage ../development/python-modules/pox { };
 
   poyo = callPackage ../development/python-modules/poyo { };
