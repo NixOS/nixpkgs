@@ -29,14 +29,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "shopify-spy";
-  version = "0.4.1";
+  version = "0.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ndgigliotti";
     repo = "shopify-spy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-oPcL7zni9vi9cPJgBvlT6I9Ve0KmlUJdCuHsdskmR5c=";
+    hash = "sha256-SKdaibFihgTkUmdO7p3i+m3eqZpBbPwcL3yvnljdhJQ=";
   };
 
   build-system = [ hatchling ];
@@ -50,7 +50,8 @@ buildPythonPackage (finalAttrs: {
     pyyaml
     rich
     typer
-  ];
+  ]
+  ++ httpx.optional-dependencies.socks;
 
   optional-dependencies = {
     excel = [ xlsxwriter ];

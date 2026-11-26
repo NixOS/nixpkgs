@@ -8307,8 +8307,6 @@ self: super: with self; {
 
   hyrule = callPackage ../development/python-modules/hyrule { };
 
-  i-pi = callPackage ../development/python-modules/i-pi { };
-
   i2c-tools = callPackage ../development/python-modules/i2c-tools { inherit (pkgs) i2c-tools; };
 
   i2csense = callPackage ../development/python-modules/i2csense { };
@@ -8657,6 +8655,8 @@ self: super: with self; {
   iperf3 = callPackage ../development/python-modules/iperf3 { };
 
   ipfshttpclient = callPackage ../development/python-modules/ipfshttpclient { };
+
+  ipi = callPackage ../development/python-modules/ipi { };
 
   iplotx = callPackage ../development/python-modules/iplotx { };
 
@@ -20293,7 +20293,7 @@ self: super: with self; {
 
   stable-baselines3 = callPackage ../development/python-modules/stable-baselines3 { };
 
-  stac-validator = callPackage ../development/python-modules/stac-validator { };
+  stac-valid = callPackage ../development/python-modules/stac-valid { };
 
   stack-data = callPackage ../development/python-modules/stack-data { };
 
@@ -21233,7 +21233,7 @@ self: super: with self; {
 
   todoist-api-python = callPackage ../development/python-modules/todoist-api-python { };
 
-  toggl-cli = callPackage ../development/python-modules/toggl-cli { };
+  togglcli = callPackage ../development/python-modules/togglcli { };
 
   togrill-bluetooth = callPackage ../development/python-modules/togrill-bluetooth { };
 

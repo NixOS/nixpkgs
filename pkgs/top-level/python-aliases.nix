@@ -353,6 +353,7 @@ mapAliases {
   howdoi = throw "'howdoi' has been removed as it was unmaintained upstream"; # Added 2026-04-19
   HTSeq = throw "'HTSeq' has been renamed to/replaced by 'htseq'"; # Converted to throw 2025-10-29
   hypothesis_6_136 = throw "'hypothesis_6_136' has been removed as it's not needed anymore"; # Added 2026-08-26
+  i-pi = ipi; # added 2026-11-25
   ibmiotf = throw "'ibmiotf' has been removed as it was unmaintained upstream and the corresponding home-assistant integration was removed"; # Added 2026-05-04
   idna-ssl = throw "'idna-ssl' has been removed as it was archived upstream"; # Added 2026-04-23
   ignite = pytorch-ignite; # added 2026-11-17
@@ -798,6 +799,7 @@ mapAliases {
   sqlalchemy-views = throw "'sqlalchemy-views' has been removed as it was broken and unmaintained upstream"; # Added 2025-11-09
   sqlalchemy_1_3 = throw "'sqlalchemy_1_3' has been removed because it was actually version 1.4.54"; # added 2026-07-20
   sqlalchemy_migrate = throw "'sqlalchemy_migrate' has been renamed to/replaced by 'sqlalchemy-migrate'"; # Converted to throw 2025-10-29
+  stac-validator = warnAlias "'stac-validator' has been renamed to 'stac-valid', following upstream's rename" stac-valid; # Added 2026-11-21
   statistics = throw "'statistics' has been removed because it is unmaintained upstream"; # Added 2026-09-05
   steamship = throw "'steamship' has been removed because it is broken and unmaintained upstream"; # Added 2026-05-06
   steamworkspy = warnAlias "'steamworkspy' has been renamed to 'steamworks' to match the upstream distribution name" steamworks; # Added 2026-09-19
@@ -836,6 +838,7 @@ mapAliases {
   threadpool = throw "'threadpool' has been removed, since it is obsolete"; # Added 2026-01-09
   tikteck = throw "'tikteck' has been removed because Home Assistant dropped its integration"; # Added 2026-06-04
   tikzplotlib = throw "tikzplotlib was removed because it is incompatible with recent versions of matplotlib and webcolors"; # added 2025-11-11
+  toggl-cli = togglcli; # added 2026-11-25
   torchtnt-nightly = throw "'torchtnt-nightly' was only needed as a test dependency for 'torcheval', but these tests are no longer run"; # added 2025-11-12
   torchtune = throw "'torchtune' was removed because it is unmaintained upstream."; # added 2026-07-02
   torrent_parser = throw "'torrent_parser' has been renamed to/replaced by 'torrent-parser'"; # Converted to throw 2025-10-29
