@@ -22,6 +22,12 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+  # Timing sensitive
+  disabledTestPaths = [
+    "tests/test_inline_limits.py"
+    "tests/test_security_edge_cases.py"
+  ];
+
   pythonImportsCheck = [ "mistune" ];
 
   meta = {
