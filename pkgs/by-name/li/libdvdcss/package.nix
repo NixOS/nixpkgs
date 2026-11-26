@@ -23,6 +23,9 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
   ];
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   meta = {
     homepage = "http://www.videolan.org/developers/libdvdcss.html";
     changelog = "https://code.videolan.org/videolan/libdvdcss/blob/${finalAttrs.src.tag}/NEWS";
