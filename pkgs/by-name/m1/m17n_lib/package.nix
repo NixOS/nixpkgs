@@ -5,6 +5,7 @@
   m17n_db,
   autoreconfHook,
   pkg-config,
+  testers,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "m17n-lib";
@@ -27,6 +28,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   __structuredAttrs = true;
 
   meta = {
@@ -34,5 +37,11 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Multilingual text processing library (runtime)";
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.linux;
+    pkgConfigModules = [
+      "m17n-core"
+      "m17n-flt"
+      "m17n-gui"
+      "m17n-shell"
+    ];
   };
 })
