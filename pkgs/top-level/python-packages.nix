@@ -2700,6 +2700,8 @@ self: super: with self; {
 
   bottombar = callPackage ../development/python-modules/bottombar { };
 
+  box2d = callPackage ../development/python-modules/box2d { };
+
   bpemb = callPackage ../development/python-modules/bpemb { };
 
   bpylist2 = callPackage ../development/python-modules/bpylist2 { };
@@ -14845,8 +14847,6 @@ self: super: with self; {
   pybluez = callPackage ../development/python-modules/pybluez { inherit (pkgs) bluez; };
 
   pybotvac = callPackage ../development/python-modules/pybotvac { };
-
-  pybox2d = callPackage ../development/python-modules/pybox2d { };
 
   pybraendstofpriser = callPackage ../development/python-modules/pybraendstofpriser { };
 

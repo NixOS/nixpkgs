@@ -27,7 +27,7 @@
   pillow,
   # sisl
   scipy,
-  pybox2d,
+  box2d,
   swig,
 
   # tests
@@ -83,7 +83,7 @@ buildPythonPackage (finalAttrs: {
       pygame-ce
       pymunk
       scipy
-      pybox2d
+      box2d
     ]
     ++ lib.optionals (pythonAtLeast "3.14") [
       swig
@@ -95,7 +95,7 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [
     chess
     moviepy
-    pybox2d
+    box2d
     pygame-ce
     pymunk
     pytest-markdown-docs
