@@ -131,7 +131,7 @@ symlinkJoin {
   inherit (mpv-unwrapped) version;
 
   # TODO: don't link all mpv outputs
-  paths = [ mpv-unwrapped.all ];
+  paths = mpv-unwrapped.all;
 
   nativeBuildInputs = [ makeBinaryWrapper ];
 
