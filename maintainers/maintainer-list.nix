@@ -29468,6 +29468,12 @@
     github = "temidaradev";
     githubId = 118509044;
   };
+  ten-garcia = {
+    name = "Tenebris Garcia";
+    email = "nomadapiercing@gmail.com";
+    github = "ten-garcia";
+    githubId = 311242560;
+  };
   tengkuizdihar = {
     name = "Tengku Izdihar";
     email = "tengkuizdihar@gmail.com";
