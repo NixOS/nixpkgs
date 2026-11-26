@@ -6,6 +6,7 @@
   fetchpatch2,
   cmake,
   nasm,
+  testers,
 
   # NUMA support enabled by default on NUMA platforms:
   numaSupport ? (
@@ -186,6 +187,8 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s $out/bin/*.dll $out/lib
   '';
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   __structuredAttrs = true;
 
   meta = {
@@ -198,5 +201,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];
     platforms = lib.platforms.all;
+    pkgConfigModules = [ "x265" ];
   };
 })
