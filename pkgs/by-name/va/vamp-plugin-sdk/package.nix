@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "vamp-plugins";
     repo = "vamp-plugin-sdk";
-    rev = "vamp-plugin-sdk-v${finalAttrs.version}";
+    tag = "vamp-plugin-sdk-v${finalAttrs.version}";
     hash = "sha256-5jNA6WmeIOVjkEMZXB5ijxyfJT88alVndBif6dnUFdI=";
   };
 
