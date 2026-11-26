@@ -7,13 +7,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "types-retry";
-  version = "0.9.9.20260408";
+  version = "0.9.9.20261122";
   pyproject = true;
 
   src = fetchPypi {
     pname = "types_retry";
     inherit (finalAttrs) version;
-    hash = "sha256-P5j6YuwCdEk4P1wBnM6sx4TB26tHYJid2rQh97hAfZI=";
+    hash = "sha256-+0bOq4Zpkd6ONjVuCkA/43rdymu1ev0OdmyKkRflTmM=";
   };
 
   build-system = [ setuptools ];
