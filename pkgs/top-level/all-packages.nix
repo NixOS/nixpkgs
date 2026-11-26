@@ -1400,7 +1400,7 @@ with pkgs;
     haskellPackages.generateOptparseApplicativeCompletions [ "cabal2nix" ] haskellPackages.cabal2nix
   );
 
-  stac-validator = with python3Packages; toPythonApplication stac-validator;
+  stac-valid = with python3Packages; toPythonApplication stac-valid;
 
   stack2nix =
     with haskell.lib;
