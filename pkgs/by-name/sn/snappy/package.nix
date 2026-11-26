@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "google";
     repo = "snappy";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-bMZD8EI9dvDGupfos4hi/0ShBkrJlI5Np9FxE6FfrNE=";
   };
 
@@ -48,14 +48,14 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   cmakeFlags = [
-    "-DBUILD_SHARED_LIBS=${if static then "OFF" else "ON"}"
-    "-DSNAPPY_BUILD_TESTS=OFF"
-    "-DSNAPPY_BUILD_BENCHMARKS=OFF"
+    (lib.cmakeBool "BUILD_SHARED_LIBS" (!static))
+    (lib.cmakeBool "SNAPPY_BUILD_TESTS" false)
+    (lib.cmakeBool "SNAPPY_BUILD_BENCHMARKS" false)
   ];
 
   postInstall = ''
     substituteInPlace "$out"/lib/cmake/Snappy/SnappyTargets.cmake \
-      --replace 'INTERFACE_INCLUDE_DIRECTORIES "''${_IMPORT_PREFIX}/include"' 'INTERFACE_INCLUDE_DIRECTORIES "'$dev'"'
+      --replace-fail 'INTERFACE_INCLUDE_DIRECTORIES "''${_IMPORT_PREFIX}/include"' 'INTERFACE_INCLUDE_DIRECTORIES "'$dev'"'
 
     mkdir -p $dev/lib/pkgconfig
     cat <<EOF > $dev/lib/pkgconfig/snappy.pc
