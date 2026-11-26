@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   cmake,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -28,9 +29,22 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
   ];
 
+  strictDeps = true;
+
   cmakeFlags = [
     (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
   ];
+
+  passthru.tests = {
+    pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+    };
+    cmake-config = testers.hasCmakeConfigModules {
+      package = finalAttrs.finalPackage;
+    };
+  };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Media container library to manipulate Ogg files";
@@ -42,5 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://xiph.org/ogg/";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
+    pkgConfigModules = [ "ogg" ];
+    cmakeConfigModules = [ "Ogg" ];
   };
 })
