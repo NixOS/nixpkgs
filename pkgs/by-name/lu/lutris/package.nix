@@ -96,24 +96,6 @@ buildFHSEnv {
 
       # DGen // TODO: libarchive is broken
 
-      # Dolphin
-      bluez
-      ffmpeg_6
-      gettext
-      portaudio
-      miniupnpc
-      mbedtls
-      lzo
-      sfml
-      gsm
-      wavpack
-      orc
-      nettle
-      gmp
-      pcre2 # TODO: pcre2 is incorrect. This is supposed to be pcre1, but it has been dropped
-      vulkan-loader
-      zstd
-
       # DOSBox
       SDL_net
       SDL_sound
@@ -160,6 +142,7 @@ buildFHSEnv {
       llvm
       e2fsprogs
       libgpg-error
+      gmp # PCSX2 needs it too
 
       # ScummVM
       nasm
