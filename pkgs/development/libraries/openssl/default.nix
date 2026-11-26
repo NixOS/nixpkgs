@@ -66,7 +66,7 @@ let
       + ''
         substituteInPlace config --replace '/usr/bin/env' '${buildPackages.coreutils}/bin/env'
       ''
-      + lib.optionalString stdenv.hostPlatform.isMusl ''
+      + lib.optionalString (stdenv.hostPlatform.isMusl && lib.versionOlder version "4.0") ''
         substituteInPlace crypto/async/arch/async_posix.h \
           --replace '!defined(__ANDROID__) && !defined(__OpenBSD__)' \
                     '!defined(__ANDROID__) && !defined(__OpenBSD__) && 0'
