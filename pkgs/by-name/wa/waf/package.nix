@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitLab {
     owner = "ita1024";
     repo = "waf";
-    rev = "waf-${finalAttrs.version}";
+    tag = "waf-${finalAttrs.version}";
     hash = "sha256-myPGbJW/RkOtEas+qZ/vTL66bekwDBPhC6AmfXECkcw=";
   };
 
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
       python waf-light build ${extraToolsList}
 
       substituteInPlace waf \
-        --replace "w = test(i + '/lib/' + dirname)" \
+        --replace-fail "w = test(i + '/lib/' + dirname)" \
                   "w = test('$out/${python3.sitePackages}')"
 
       runHook postBuild
@@ -76,6 +76,8 @@ stdenv.mkDerivation (finalAttrs: {
       waf = finalAttrs.finalPackage;
     };
   };
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://waf.io";
