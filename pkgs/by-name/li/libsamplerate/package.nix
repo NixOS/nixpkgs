@@ -27,6 +27,8 @@ stdenv.mkDerivation (finalAttrs: {
     "out"
   ];
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Sample Rate Converter for audio";
     homepage = "https://libsndfile.github.io/libsamplerate/";
