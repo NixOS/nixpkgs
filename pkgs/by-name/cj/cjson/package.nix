@@ -48,6 +48,9 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config = testers.hasPkgConfigModules {
       package = finalAttrs.finalPackage;
     };
+    cmake-config = testers.hasCmakeConfigModules {
+      package = finalAttrs.finalPackage;
+    };
   };
 
   __structuredAttrs = true;
@@ -59,5 +62,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ lib.maintainers.matthiasbeyer ];
     platforms = lib.platforms.windows ++ lib.platforms.unix;
     pkgConfigModules = [ "libcjson" ];
+    cmakeConfigModules = [ "cJSON" ];
   };
 })
