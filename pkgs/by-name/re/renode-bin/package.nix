@@ -59,6 +59,7 @@ let
           })
           # typing.Union is types.UnionType since Python 3.14
           ./robotframework-python3.14-type-name.patch
+          ./robotframework-isatty-detached-buffer.patch
         ];
       }))
     ];
