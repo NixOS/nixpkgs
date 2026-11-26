@@ -32,6 +32,11 @@ buildPythonPackage rec {
     hash = "sha256-KkdbK8diuQtZQk6FC9xDK/U7mfRBwwUmXp4YYuKueLQ=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'flit_core >=3.2,<4' flit_core
+  '';
+
   nativeBuildInputs = [
     flit-core
     sphinxHook
