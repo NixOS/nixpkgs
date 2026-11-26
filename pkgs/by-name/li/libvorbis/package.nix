@@ -24,6 +24,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ pkg-config ];
   propagatedBuildInputs = [ libogg ];
 
+  strictDeps = true;
+
   doCheck = true;
 
   # strip -mno-ieee-fp flag from configure and configure.ac when using
