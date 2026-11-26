@@ -386,6 +386,9 @@ let
       INET_ESPINTCP = yes;
       INET6_ESPINTCP = yes;
 
+      # IPsec error counters in /proc/net/xfrm_stat
+      XFRM_STATISTICS = yes;
+
       # enable multipath-tcp
       MPTCP = yes;
       MPTCP_IPV6 = yes;
