@@ -101,6 +101,11 @@ stdenv.mkDerivation (
     __structuredAttrs = true;
     doCheck = true;
 
+    # These tests fail in darwin sandbox.
+    checkFlags = optionals (stdenv.hostPlatform.isDarwin && enableQt) [
+      "ARGS=-E '^QT[.](add-data|main-window|dbus-interop)$$'"
+    ];
+
     patches = [
       ./0001-Skip-bundle-fixup.patch
     ];
