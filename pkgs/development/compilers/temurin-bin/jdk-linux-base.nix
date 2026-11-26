@@ -97,6 +97,8 @@ let
         makeWrapper
       ];
 
+      strictDeps = true;
+
       # See: https://github.com/NixOS/patchelf/issues/10
       dontStrip = 1;
 
