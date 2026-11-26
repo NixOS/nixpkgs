@@ -104,6 +104,9 @@ stdenv.mkDerivation (finalAttrs: {
     tests.pkg-config = testers.hasPkgConfigModules {
       package = finalAttrs.finalPackage;
     };
+    tests.cmake-config = testers.hasCmakeConfigModules {
+      package = finalAttrs.finalPackage;
+    };
   };
 
   meta = {
@@ -118,6 +121,9 @@ stdenv.mkDerivation (finalAttrs: {
     pkgConfigModules = [
       "libhwy"
       "libhwy-contrib"
+    ];
+    cmakeConfigModules = [
+      "hwy"
     ];
   };
 })
