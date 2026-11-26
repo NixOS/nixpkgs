@@ -19,6 +19,9 @@ python3Packages.buildPythonApplication {
 
   dependencies = with python3Packages; [ requests ];
 
+  # Python project is called file_info
+  dontCheckPythonMetadata = true;
+
   meta = {
     homepage = "https://github.com/sdushantha/fileinfo";
     description = "File extension metadata lookup tool";
