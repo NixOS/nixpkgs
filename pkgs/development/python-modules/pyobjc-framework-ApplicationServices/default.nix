@@ -9,13 +9,13 @@
   lib,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyobjc-framework-ApplicationServices";
   pyproject = true;
 
   inherit (pyobjc-core) version src;
 
-  sourceRoot = "${src.name}/pyobjc-framework-ApplicationServices";
+  sourceRoot = "${finalAttrs.src.name}/pyobjc-framework-ApplicationServices";
 
   build-system = [ setuptools ];
 
@@ -25,15 +25,7 @@ buildPythonPackage rec {
     darwin.DarwinTools # sw_vers
   ];
 
-  # Same workaround as pyobjc-framework-Quartz; see
-  # https://github.com/ronaldoussoren/pyobjc/pull/641.
-  postPatch = ''
-    substituteInPlace pyobjc_setup.py \
-      --replace-fail "-buildversion" "-buildVersion" \
-      --replace-fail "-productversion" "-productVersion" \
-      --replace-fail "/usr/bin/sw_vers" "sw_vers" \
-      --replace-fail "/usr/bin/xcrun" "xcrun"
-  '';
+  patches = [ ../pyobjc-core/use-PATH-for-macOS-tools.patch ];
 
   dependencies = [
     pyobjc-core
@@ -59,4 +51,4 @@ buildPythonPackage rec {
     platforms = lib.platforms.darwin;
     maintainers = with lib.maintainers; [ l1n ];
   };
-}
+})
