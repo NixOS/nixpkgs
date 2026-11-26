@@ -27,8 +27,6 @@ buildDotnetModule (finalAttrs: {
     fetchSubmodules = true;
   };
 
-  patches = [ ./patchTk.diff ];
-
   postPatch = ''
     substituteInPlace src/Tkmm.Core/Helpers/DesktopEntryHelper.cs \
       --replace-fail 'return Environment.ProcessPath;' "return \"$out/bin/Tkmm\";"
