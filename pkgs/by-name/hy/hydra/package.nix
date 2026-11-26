@@ -17,42 +17,46 @@
   nukeReferences,
   unzip,
 
-  bzip2,
   perl,
-  pixz,
 
-  coreutils,
-  findutils,
-  gnused,
-  gnutar,
-  gzip,
-  openssh,
-  xz,
-
-  breezy,
-  darcs,
   gitMinimal,
-  mercurial,
-  subversion,
-  top-git,
-
-  cdrkit,
-  dpkg,
-  rpm,
 }:
 
 let
   # Keep in sync with the nix input of https://github.com/NixOS/hydra/blob/master/flake.nix
   nixComponents = nixVersions.nixComponents_2_35;
 
-  version = "0-unstable-2026-11-17";
+  version = "0-unstable-2026-11-24";
 
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "hydra";
-    rev = "c7eee7d7635df188c4e6640b38036ce127457109";
-    hash = "sha256-8UBNpDE2Y1//nePVSESxKIX52wsiWKyAsGJxPAcTtxg=";
+    rev = "e181b587af32365897c215c443b0389657bfdc23";
+    hash = "sha256-KlxcjZs0EKhvAggPeTtr2vMj4hQUaTzdJCbL1HR+f6c=";
   };
+
+  # Which programs each of Hydra's programs runs, as `HYDRA_PROGRAM_<NAME>` variables.
+  hydraPrograms = callPackage ./programs.nix {
+    nix = nixComponents.nix-cli;
+    git = gitMinimal;
+  };
+
+  # Every script meson installs, except `hydra-dev-server`.
+  scripts = [
+    "hydra-backfill-ids"
+    "hydra-create-user"
+    "hydra-fetch-input"
+    "hydra-init"
+    "hydra-notify"
+    "hydra-prepare-declarative-jobset"
+    "hydra-s3-backup-collect-garbage"
+    "hydra-send-stats"
+    "hydra-server"
+    "hydra-update-gc-roots"
+    "nix-prefetch-bzr"
+    "nix-prefetch-git"
+    "nix-prefetch-hg"
+  ];
 
   nix-perl = callPackage ./nix-perl.nix {
     inherit src;
@@ -173,34 +177,6 @@ stdenv.mkDerivation (finalAttrs: {
     perlDeps
   ];
 
-  hydraPath = lib.makeBinPath (
-    [
-      breezy
-      bzip2
-      coreutils
-      darcs
-      findutils
-      gitMinimal
-      gnused
-      gnutar
-      gzip
-      mercurial
-      nix-eval-jobs
-      nixComponents.nix-cli
-      openssh
-      pixz
-      subversion
-      top-git
-      unzip
-      xz
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      cdrkit
-      dpkg
-      rpm
-    ]
-  );
-
   mesonBuildType = "release";
 
   postPatch = ''
@@ -220,22 +196,62 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $doc/share/doc/hydra $out/nix-support
     cp -r $NIX_BUILD_TOP/manual/. $doc/share/doc/hydra
     echo "doc manual $doc/share/doc/hydra" >> $out/nix-support/hydra-build-products
-
-    for i in $out/bin/*; do
-        read -n 4 chars < $i
-        if [[ $chars =~ ELF ]]; then continue; fi
-        wrapProgram $i \
-            --prefix PERL5LIB ':' "$out/libexec/hydra/lib:${perlPackages.makePerlPath [ perlDeps ]}" \
-            --prefix PATH ':' "$out/bin:$hydraPath" \
-            --set-default HYDRA_RELEASE ${finalAttrs.version} \
-            --set HYDRA_HOME $out/libexec/hydra \
-            --set NIX_RELEASE ${nixComponents.nix-cli.name or "unknown"} \
-            --set NIX_EVAL_JOBS_RELEASE ${nix-eval-jobs.name or "unknown"}
+  ''
+  # Upstream installs the scripts unwrapped in libexec, and finds every program
+  # they run through its own `HYDRA_PROGRAM_<NAME>` variable rather than `PATH`.
+  + ''
+    for script in $out/libexec/hydra/script/*; do
+      if [[ " ${toString scripts} " != *" $(basename "$script") "* ]]; then
+        echo "$script is not wrapped, add it to \`scripts'"
+        exit 1
+      fi
     done
-  '';
+
+    mkdir -p $out/bin
+  ''
+  + lib.concatMapStrings (
+    script:
+    lib.escapeShellArgs (
+      [
+        "makeWrapper"
+        "${placeholder "out"}/libexec/hydra/script/${script}"
+        "${placeholder "out"}/bin/${script}"
+        "--prefix"
+        "PERL5LIB"
+        ":"
+        "${placeholder "out"}/libexec/hydra/lib:${perlPackages.makePerlPath [ perlDeps ]}"
+        "--set-default"
+        "HYDRA_RELEASE"
+        finalAttrs.version
+        "--set"
+        "HYDRA_HOME"
+        "${placeholder "out"}/libexec/hydra"
+        "--set"
+        "NIX_RELEASE"
+        (nixComponents.nix-cli.name or "unknown")
+        "--set"
+        "NIX_EVAL_JOBS_RELEASE"
+        (nix-eval-jobs.name or "unknown")
+      ]
+      ++ lib.concatLists (
+        lib.mapAttrsToList
+          (name: value: [
+            "--set"
+            name
+            value
+          ])
+          (
+            hydraPrograms.envFor {
+              localPath = name: "${placeholder "out"}/bin/${name}";
+            } hydraPrograms.programs.${script}
+          )
+      )
+    )
+    + "\n"
+  ) scripts;
 
   passthru = {
-    inherit nix-perl perlDeps;
+    inherit hydraPrograms nix-perl perlDeps;
     nix = nixComponents.nix-cli;
     tests = { inherit (nixosTests) hydra; };
     updateScript = unstableGitUpdater { };

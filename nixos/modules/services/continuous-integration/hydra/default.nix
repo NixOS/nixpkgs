@@ -36,6 +36,8 @@ let
   env = {
     NIX_REMOTE = "daemon";
     PGPASSFILE = "${baseDir}/pgpass";
+    # Only run when no transport is configured, e.g. through `smtpHost`.
+    HYDRA_PROGRAM_SENDMAIL = cfg.sendmail;
   }
   // lib.optionalAttrs (cfg.smtpHost != null) {
     EMAIL_SENDER_TRANSPORT = "SMTP";
@@ -56,6 +58,13 @@ let
   localDbUrl = "postgres://hydra@%2Frun%2Fpostgresql:5432/hydra";
 
   haveLocalDB = cfg.dbUrl == localDbUrl;
+
+  # Which programs each of Hydra's programs runs, with the Nix this machine uses.
+  hydraPrograms = cfg.package.hydraPrograms.override { nix = config.nix.package; };
+  evaluatorPrograms = hydraPrograms.programs.hydra-evaluator;
+
+  # What plugins from outside Hydra, and the commands `RunCommand` runs, find on `PATH`.
+  pluginPath = lib.makeBinPath cfg.pluginPath;
 
   hydra-package =
     let
@@ -145,6 +154,16 @@ in
               type = lib.types.ints.positive;
               default = 4;
               description = "How many jobsets to evaluate at once.";
+            };
+
+            roots_dir = lib.mkOption {
+              type = lib.types.path;
+              default = cfg.gcRootsDir;
+              defaultText = lib.literalExpression "config.services.hydra.gcRootsDir";
+              description = ''
+                Where to root the evaluated derivations.
+                It must be the directory `hydra-update-gc-roots` tidies.
+              '';
             };
           };
         };
@@ -364,6 +383,28 @@ in
         example = "localhost";
         description = ''
           Hostname of the SMTP server to use to send email.
+        '';
+      };
+
+      sendmail = lib.mkOption {
+        type = lib.types.str;
+        default = "${config.security.wrapperDir}/sendmail";
+        defaultText = lib.literalExpression ''"''${config.security.wrapperDir}/sendmail"'';
+        description = ''
+          The `sendmail` program to send email with, when no
+          {option}`services.hydra.smtpHost` is set. The default is the
+          setuid wrapper that mail servers such as Postfix install.
+        '';
+      };
+
+      pluginPath = lib.mkOption {
+        type = lib.types.listOf lib.types.package;
+        default = [ ];
+        example = lib.literalExpression "[ pkgs.curl ]";
+        description = ''
+          Packages whose programs are on the `PATH` of the plugins from outside
+          Hydra and of the commands run by the `RunCommand` plugin, in the
+          evaluator and `hydra-notify`.
         '';
       };
 
@@ -601,6 +642,16 @@ in
                 type = lib.types.nullOr (lib.types.listOf lib.types.path);
                 default = null;
                 description = "Paths of the accepted authentication tokens.";
+              };
+
+              uploadLocalOutputs = lib.mkOption {
+                type = lib.types.bool;
+                default = true;
+                description = ''
+                  Whether an output that the remote store lacks but the queue runner's local store holds
+                  is uploaded from the local store instead of built. If disabled, it will force a rebuild
+                  on the remote store instead of uploading from the local store.
+                '';
               };
 
               enableFodChecker = lib.mkOption {
@@ -956,14 +1007,11 @@ in
     };
 
     systemd.services.hydra-server = {
+      # Hydra names every program it runs by its own variable, never by `PATH`.
+      enableDefaultPath = false;
       wantedBy = [ "multi-user.target" ];
       requires = [ "hydra-init.service" ];
       after = [ "hydra-init.service" ];
-      path = [
-        # these are used to serve logs if they are compressed with zstd or bzip2
-        pkgs.zstd
-        pkgs.bzip2
-      ];
       environment = serverEnv // {
         HYDRA_DATABASE_URL = dbUrlWithAppName "hydra-server";
       };
@@ -981,6 +1029,8 @@ in
     };
 
     systemd.services.hydra-queue-runner = {
+      # Hydra names every program it runs by its own variable, never by `PATH`.
+      enableDefaultPath = false;
       description = "Hydra queue runner";
       wantedBy = [ "multi-user.target" ];
       requires = [
@@ -1000,6 +1050,8 @@ in
         RUST_BACKTRACE = "1";
         # nix-store wants $HOME for its cache dir.
         HOME = "/run/hydra-queue-runner";
+        # Hydra finds the programs it runs through these variables, not `PATH`.
+        HYDRA_PROGRAM_NIX = lib.getExe' config.nix.package "nix";
       }
       // lib.optionalAttrs (queueRunnerCfg.awsCredentialsFile != null) {
         AWS_SHARED_CREDENTIALS_FILE = queueRunnerCfg.awsCredentialsFile;
@@ -1110,6 +1162,8 @@ in
     );
 
     systemd.services.hydra-ws = lib.mkIf cfg.ws.enable {
+      # Hydra names every program it runs by its own variable, never by `PATH`.
+      enableDefaultPath = false;
       description = "Hydra WebSocket server";
       wantedBy = [ "multi-user.target" ];
       requires = [ "hydra-ws.socket" ];
@@ -1188,6 +1242,8 @@ in
     };
 
     systemd.services.hydra-ad-hoc = lib.mkIf cfg.adHoc.enable {
+      # Hydra names every program it runs by its own variable, never by `PATH`.
+      enableDefaultPath = false;
       description = "Hydra ad hoc build daemon";
       wantedBy = [ "multi-user.target" ];
       requires = [
@@ -1286,6 +1342,8 @@ in
     };
 
     systemd.services.hydra-evaluator = {
+      # Hydra names every program it runs by its own variable, never by `PATH`.
+      enableDefaultPath = false;
       wantedBy = [ "multi-user.target" ];
       requires = [ "hydra-init.service" ];
       wants = [ "network-online.target" ];
@@ -1294,17 +1352,20 @@ in
         "network.target"
         "network-online.target"
       ];
-      path = [
-        pkgs.hostname-debian
-        pkgs.jq
-        hydra-package # hydra-eval-jobset
-      ];
+      # `git` and `ssh` for Nix's git fetcher, `hostname` for `Sys::Hostname::Long`.
+      path = evaluatorPrograms.path ++ [ pkgs.hostname-debian ];
       # Not `hydra.conf`: only the Perl the evaluator runs reads it, and that
       # starts afresh for each evaluation.
       restartTriggers = [ config.environment.etc."hydra/evaluator.toml".source ];
-      environment = env // {
-        HYDRA_DATABASE_URL = dbUrlWithAppName "hydra-evaluator";
-      };
+      environment =
+        env
+        // hydraPrograms.envFor {
+          localPath = name: "${hydra-package}/bin/${name}";
+        } evaluatorPrograms
+        // {
+          HYDRA_DATABASE_URL = dbUrlWithAppName "hydra-evaluator";
+          HYDRA_PLUGIN_PATH = pluginPath;
+        };
       serviceConfig = {
         ExecStart = lib.escapeShellArgs [
           "@${lib.getExe cfg.evaluatorPackage}"
@@ -1329,6 +1390,8 @@ in
       toml.generate "evaluator.toml" cfg.evaluatorSettings;
 
     systemd.services.hydra-update-gc-roots = {
+      # Hydra names every program it runs by its own variable, never by `PATH`.
+      enableDefaultPath = false;
       requires = [ "hydra-init.service" ];
       after = [ "hydra-init.service" ];
       environment = env // {
@@ -1343,6 +1406,8 @@ in
     };
 
     systemd.services.hydra-send-stats = {
+      # Hydra names every program it runs by its own variable, never by `PATH`.
+      enableDefaultPath = false;
       wantedBy = [ "multi-user.target" ];
       after = [ "hydra-init.service" ];
       environment = env // {
@@ -1356,14 +1421,16 @@ in
     };
 
     systemd.services.hydra-notify = {
+      # Hydra names every program it runs by its own variable, never by `PATH`.
+      enableDefaultPath = false;
       wantedBy = [ "multi-user.target" ];
       requires = [ "hydra-init.service" ];
       after = [ "hydra-init.service" ];
       restartTriggers = [ hydraConf ];
-      path = [ pkgs.zstd ];
       environment = env // {
         PGPASSFILE = "${baseDir}/pgpass-queue-runner";
         HYDRA_DATABASE_URL = dbUrlWithAppName "hydra-notify";
+        HYDRA_PLUGIN_PATH = pluginPath;
       };
       serviceConfig = {
         ExecStart = "@${hydra-package}/bin/hydra-notify hydra-notify";
