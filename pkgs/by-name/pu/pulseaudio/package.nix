@@ -4,6 +4,7 @@
   fetchurl,
   pkg-config,
   libsndfile,
+  bashNonInteractive,
   libtool,
   makeWrapper,
   perlPackages,
@@ -40,6 +41,7 @@
   wrapGAppsHook3,
   fetchpatch2,
   nixosTests,
+  testers,
 
   x11Support ? false,
 
@@ -68,12 +70,12 @@
 
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "${lib.optionalString libOnly "lib"}pulseaudio";
   version = "17.0";
 
   src = fetchurl {
-    url = "https://freedesktop.org/software/pulseaudio/releases/pulseaudio-${version}.tar.xz";
+    url = "https://freedesktop.org/software/pulseaudio/releases/pulseaudio-${finalAttrs.version}.tar.xz";
     hash = "sha256-BTeU1mcaPjl9hJ5HioC4KmPLnYyilr01tzMXu1zrh7U=";
   };
 
@@ -123,6 +125,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ libcap ];
 
   buildInputs = [
+    bashNonInteractive
     libtool
     libsndfile
     soxr
@@ -174,6 +177,8 @@ stdenv.mkDerivation rec {
     ++ lib.optional remoteControlSupport lirc
     ++ lib.optional zeroconfSupport avahi
   );
+
+  strictDeps = true;
 
   env =
     lib.optionalAttrs (stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17")
@@ -254,7 +259,7 @@ stdenv.mkDerivation rec {
   preFixup =
     lib.optionalString (stdenv.hostPlatform.isLinux && (stdenv.hostPlatform == stdenv.buildPlatform)) ''
       wrapProgram $out/libexec/pulse/gsettings-helper \
-       --prefix XDG_DATA_DIRS : "$out/share/gsettings-schemas/${pname}-${version}" \
+       --prefix XDG_DATA_DIRS : "$out/share/gsettings-schemas/pulseaudio-${finalAttrs.version}" \
        --prefix GIO_EXTRA_MODULES : "${lib.getLib dconf}/lib/gio/modules"
     ''
     # add .so symlinks for modules to be found under macOS
@@ -281,7 +286,15 @@ stdenv.mkDerivation rec {
 
   passthru.tests = {
     inherit (nixosTests) pulseaudio pulseaudio-tcp;
+    pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+    };
+    cmake-config = testers.hasCmakeConfigModules {
+      package = finalAttrs.finalPackage;
+    };
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Sound server for POSIX and Win32 systems";
@@ -292,6 +305,14 @@ stdenv.mkDerivation rec {
 
     # https://gitlab.freedesktop.org/pulseaudio/pulseaudio/-/issues/1089
     badPlatforms = [ lib.systems.inspect.platformPatterns.isStatic ];
+    pkgConfigModules = [
+      "libpulse"
+      "libpulse-simple"
+      "libpulse-mainloop-glib"
+    ];
+    cmakeConfigModules = [
+      "PulseAudio"
+    ];
 
     longDescription = ''
       PulseAudio is a sound server for POSIX and Win32 systems.  A
@@ -303,4 +324,4 @@ stdenv.mkDerivation rec {
       one are easily achieved using a sound server.
     '';
   };
-}
+})
