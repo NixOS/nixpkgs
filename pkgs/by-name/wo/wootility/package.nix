@@ -8,22 +8,20 @@
 }:
 let
   pname = "wootility";
-  version = "5.4.2";
+  version = "5.4.3";
+
+  x86_64-linux = fetchurl {
+    url = "https://wooting.io/_backend/public/wootility/download?os=linux&version=${version}";
+    hash = "sha256-eh2Ay4gvcxiDJCJ4nLXf4baZg5iyM+H+D7MJ+iDTWaQ=";
+  };
 
   srcs = {
-    x86_64-linux = fetchurl {
-      url = "https://wooting.io/_backend/public/wootility/download?os=linux&version=${version}";
-      hash = "sha512-3n73cnXW81w+7ta6+nnPymEriU9CpfKwX8DFNuxuNMMEBCyL6YgpQmxa0qKY6hr9WiiHQyuqvrSe+bXURwv31w==";
-    };
-
-    aarch64-linux = fetchurl {
-      url = "https://wooting.io/_backend/public/wootility/download?os=linux&version=${version}";
-      hash = "sha512-3n73cnXW81w+7ta6+nnPymEriU9CpfKwX8DFNuxuNMMEBCyL6YgpQmxa0qKY6hr9WiiHQyuqvrSe+bXURwv31w==";
-    };
+    inherit x86_64-linux;
+    aarch64-linux = x86_64-linux;
 
     aarch64-darwin = fetchurl {
       url = "https://wooting.io/_backend/public/wootility/download?os=mac&platform=arm64&version=${version}";
-      hash = "sha256-TU6QtBaZkJAPf7nWrtFurRB6rrpyvtFqaKN9PB94kS4=";
+      hash = "sha256-4zHxV8BH3soUU/d2YV69ZO1i8CCHeNQPFiFqrEi5Ki8=";
     };
   };
 
