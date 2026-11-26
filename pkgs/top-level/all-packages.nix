@@ -8512,13 +8512,6 @@ with pkgs;
     versionSuffix = "esr";
   };
 
-  inherit
-    ({
-      timeshift = callPackage ../applications/backup/timeshift { grubPackage = grub2; };
-    })
-    timeshift
-    ;
-
   tlp = callPackage ../tools/misc/tlp {
     inherit (linuxPackages) x86_energy_perf_policy;
   };
