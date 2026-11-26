@@ -59,6 +59,10 @@ clangStdenv.mkDerivation rec {
   pname = "openscad-unstable";
   unstable_date = "2026-11-25";
   version = "2026.11-RC1-unstable-${unstable_date}";
+
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "openscad";
     repo = "openscad";
