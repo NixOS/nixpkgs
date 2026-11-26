@@ -6,14 +6,14 @@
   nodejs_26,
   npmHooks,
   fetchNpmDeps,
-  callPackage,
+  nix-update-script,
   dart-sass,
   makeWrapper,
   gcc,
 }:
 buildDotnetModule (finalAttrs: {
   pname = "cleanuparr";
-  version = "2.11.1";
+  version = "2.11.2";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -22,7 +22,7 @@ buildDotnetModule (finalAttrs: {
     owner = "Cleanuparr";
     repo = "Cleanuparr";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-n0QuwQBPtuDbp+SCfpgv5p38FXDTi2gMCdzjyA0V/Ao=";
+    hash = "sha256-KMa8ePF682GnXRLuTL9SXYjLJDz14v5Geglk1vFL6vw=";
   };
 
   dotnet-sdk = dotnetCorePackages.sdk_10_0;
@@ -33,11 +33,6 @@ buildDotnetModule (finalAttrs: {
   executables = [ "Cleanuparr" ];
 
   nugetDeps = ./cleanuparr-deps.json;
-
-  projectReferences = [
-    finalAttrs.passthru.transmission-api-rpc
-    finalAttrs.passthru.qbittorrent-net-client
-  ];
 
   nativeBuildInputs = [
     nodejs_26
@@ -75,9 +70,7 @@ buildDotnetModule (finalAttrs: {
   '';
 
   passthru = {
-    transmission-api-rpc = callPackage ./transmission-api-rpc.nix { };
-    qbittorrent-net-client = callPackage ./qbittorrent-net-client.nix { };
-    updateScript = ./update-script.sh;
+    updateScript = nix-update-script { };
   };
 
   meta = {

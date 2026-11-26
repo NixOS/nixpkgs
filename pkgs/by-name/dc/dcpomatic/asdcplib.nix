@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchgit,
+  gitUpdater,
 
   wafHook,
   python3,
@@ -40,6 +41,15 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
     boost
   ];
+
+  passthru.updateScript =
+    gitUpdater {
+      rev-prefix = "v";
+      attrPath = "dcpomatic.asdcplib";
+    }
+    // {
+      supportedFeatures = [ ];
+    };
 
   __structuredAttrs = true;
   strictDeps = true;

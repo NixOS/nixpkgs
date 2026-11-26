@@ -1266,6 +1266,7 @@ mapAliases {
   httpfs2 = throw "'httpfs2' has been removed as it was unmaintained upstream"; # Added 2026-05-31
   httplz = throw "'httplz' has been removed as it was unmaintained upstream"; # Added 2026-04-25
   hubicfuse = throw "'hubicfuse' has been removed as the hubic service was discontinued and the project is unmaintained upstream"; # Added 2026-05-08
+  humility = throw "'humility' has been removed as it was broken and its package installed no binary"; # Added 2026-11-25
   hydra_unstable = throw "'hydra_unstable' has been renamed to/replaced by 'hydra'"; # Converted to throw 2025-10-27
   hydraAntLogger = warnAlias "'hydraAntLogger' has been renamed to 'hydra-ant-logger'" hydra-ant-logger; # Added 2026-02-08
   hyena = throw "'hyena' has been removed, as it is archived upstream and relies on gtk2"; # Added 2026-07-28
@@ -2056,6 +2057,7 @@ mapAliases {
   oil = throw "'oil' has been renamed to/replaced by 'oils-for-unix'"; # Converted to throw 2025-10-27
   olaris-server = throw "'olaris-server' has been removed as it failed to build since 2024"; # Added 2026-01-15
   olive-editor = throw "'olive-editor' has been removed as it is unmaintained upstream and broken"; # Added 2026-05-22
+  olivetin = throw "'olivetin' has been removed because it has reached its end of life. Please upgrade to `olivetin-3k` (the 3000.x release series of olivetin)."; # Added 2026-11-26
   omni-gtk-theme = throw "'omni-gtk-theme' has been removed because it depended on 'gtk-engine-murrine', which was removed because it was unmaintained upstream and depended on GTK 2."; # Added 2026-07-22
   omxplayer = throw "'omxplayer' has been removed because it depends on a severely outdated upstream, a severely outdated FFmpeg, and the new upstream was deprecated since 2020. Please use 'vlc' instead."; # Added 2026-07-24
   oneDNN = onednn; # Added 2026-02-08

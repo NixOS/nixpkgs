@@ -59,7 +59,9 @@ jetbrains.mkJetBrainsProduct {
     homepage = "https://www.jetbrains.com/rust/";
     description = "Rust IDE from JetBrains";
     longDescription = "Rust IDE from JetBrains";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      charlieprm88
+    ];
     teams = [ lib.teams.jetbrains ];
     license = lib.licenses.unfree;
     sourceProvenance =

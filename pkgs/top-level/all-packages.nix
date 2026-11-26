@@ -9900,8 +9900,6 @@ with pkgs;
 
   openbsd = recurseIntoAttrs (callPackage ../os-specific/bsd/openbsd { });
 
-  olivetin-3k = callPackage ../by-name/ol/olivetin/3k.nix { };
-
   newlib-nano = newlib.override {
     nanoizeNewlib = true;
   };

@@ -8,7 +8,7 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "paseo-hub";
-  version = "0.11.0";
+  version = "0.12.0";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -17,16 +17,11 @@ buildNpmPackage (finalAttrs: {
     owner = "getpaseo";
     repo = "hub";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tsNlfJ62YktCzkzAcQMhEOozrNQlpEiZe7iwwqAooGo=";
+    hash = "sha256-5KzNym+kvRwwgsZryDTrhmarOAt8YQS1eTfCzPa4l1s=";
   };
 
-  # upstream has an invalid dep https://github.com/getpaseo/hub/pull/149
-  postPatch = ''
-    substituteInPlace package-lock.json --replace-fail hubflare cloudflare
-  '';
-
   nodejs = nodejs_26;
-  npmDepsHash = "sha256-PwY5yyviELORn6N3Benr5vi7F7UtfocFnrMGZBd9/Vw=";
+  npmDepsHash = "sha256-yEkTWWmtfO+G4vqBuL8wcGP3jwLqZ7KqGHmFEqv7gLM=";
 
   passthru.updateScript = nix-update-script { };
 

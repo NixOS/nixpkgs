@@ -3,27 +3,29 @@
   buildGoModule,
   fetchFromGitHub,
   nixosTests,
+  nix-update-script,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "cadvisor";
-  version = "0.56.2";
+  version = "0.61.1";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "cadvisor";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-UBQvFlO0pb5mDUrrUTaEsuQcKX7qKQrAMub2knUZWGA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-4pl6sN/BepCEo59VQ8x0ODBm1oRoWZ4Q1ayORXsFHZ4=";
   };
 
   modRoot = "./cmd";
 
-  vendorHash = "sha256-JJulf+Wj/bf3l8l0rufcyLlfqefriOzhxCfGUru6+lA=";
+  vendorHash = "sha256-ECLpq1vk2EqJo0DcKvCqLI7Bq3k8L8ji+wuC9It6jGw=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/google/cadvisor/version.Version=${finalAttrs.version}"
+    "-X github.com/google/cadvisor/lib/version.Version=${finalAttrs.version}"
   ];
 
   postInstall = ''
@@ -31,14 +33,26 @@ buildGoModule (finalAttrs: {
     rm $out/bin/example
   '';
 
-  passthru.tests = { inherit (nixosTests) cadvisor; };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  passthru = {
+    tests = { inherit (nixosTests) cadvisor; };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "v(\\d+\\.\\d+\\.\\d+)"
+      ];
+    };
+  };
 
   meta = {
     description = "Analyzes resource usage and performance characteristics of running docker containers";
+    changelog = "https://github.com/google/cadvisor/releases/tag/v${finalAttrs.version}";
     mainProgram = "cadvisor";
     homepage = "https://github.com/google/cadvisor";
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ kamadorueda ];
     platforms = lib.platforms.linux;
   };
 })

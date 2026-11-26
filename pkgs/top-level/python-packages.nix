@@ -14649,6 +14649,8 @@ self: super: with self; {
 
   py-sucks = callPackage ../development/python-modules/py-sucks { };
 
+  py-svg-hush = callPackage ../development/python-modules/py-svg-hush { };
+
   py-synologydsm-api = callPackage ../development/python-modules/py-synologydsm-api { };
 
   py-tes = callPackage ../development/python-modules/py-tes { };
