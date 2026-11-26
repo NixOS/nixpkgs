@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   postPatch = ''
-    substituteInPlace unix/Makefile --replace 'CC = cc' ""
+    substituteInPlace unix/Makefile --replace-fail 'CC = cc' ""
     substituteInPlace unix/configure --replace-fail "O3" "O2"
   '';
 
@@ -101,6 +101,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs =
     lib.optional enableNLS libnatspec ++ lib.optional stdenv.hostPlatform.isCygwin libiconv;
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   meta = {
     description = "Compressor/archiver for creating and modifying zipfiles";
