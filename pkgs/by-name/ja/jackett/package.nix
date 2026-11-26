@@ -12,29 +12,29 @@
 
 buildDotnetModule (finalAttrs: {
   pname = "jackett";
-  version = "0.24.3036";
+  version = "0.25.39";
 
   src = fetchFromGitHub {
     owner = "jackett";
     repo = "jackett";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-D7OAVLifzDDZxdU+CnHAvAAW+esPw8zOJpJZmSl3cYg=";
+    hash = "sha256-PGUyxMjCsNqUWFd4ME/aUpLHWO9f8gd9QZhHSQDRFXk=";
   };
 
   projectFile = "src/Jackett.Server/Jackett.Server.csproj";
   nugetDeps = ./deps.json;
 
-  dotnet-runtime = dotnetCorePackages.aspnetcore_9_0;
-  dotnet-sdk = dotnetCorePackages.sdk_9_0;
+  dotnet-runtime = dotnetCorePackages.aspnetcore_10_0;
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
 
   dotnetInstallFlags = [
     "--framework"
-    "net9.0"
+    "net10.0"
   ];
 
   postPatch = ''
     substituteInPlace ${finalAttrs.projectFile} ${finalAttrs.testProjectFile} \
-      --replace-fail '<TargetFrameworks>net9.0;net471</' '<TargetFrameworks>net9.0</'
+      --replace-fail '<TargetFrameworks>net10.0;net471</' '<TargetFrameworks>net10.0</'
   '';
 
   runtimeDeps = [ openssl ];
