@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dcmtk";
-  version = "3.7.0";
+  version = "3.7.1";
 
   src = fetchFromGitHub {
     owner = "DCMTK";
     repo = "dcmtk";
     tag = "DCMTK-${finalAttrs.version}";
-    hash = "sha256-JUF3IX0LOtpeAJPuTbAJo79sCuPuhh7KNIuQJfcFN/A=";
+    hash = "sha256-FBsaD4tjJ2p8LTlvlc522Nsmb4eFJugLiCuHv+UpgwY=";
   };
 
   patches = [
@@ -31,11 +31,11 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/DCMTK/dcmtk/commit/f9fbc4f3687a43e8342d85ef5584edf6f15f9fc9.patch";
       hash = "sha256-8ZbcmUYjzbnFxlzKhhE11LeUmr46Mr/gkZdD9V4ocKg=";
     })
-    # Remove when updating past 3.7.0.
+    # Remove when updating past 3.7.1.
     (fetchpatch {
-      name = "CVE-2026-5663.patch";
-      url = "https://github.com/DCMTK/dcmtk/commit/edbb085e45788dccaf0e64d71534cfca925784b8.patch";
-      hash = "sha256-aSK/G5zI1Zyz0aonxnbWP/W5Ra6xCBYGxgPhM+05LXs=";
+      name = "CVE-2026-133168.patch";
+      url = "https://github.com/DCMTK/dcmtk/commit/c22836c449bb81834fee5d883e9ebd9d7dab90b9.patch";
+      hash = "sha256-PZ7ZmZql1svCY9yyrapLkHPN1hHW9oMymatxt4Y0m6M=";
     })
     # The following patches are taken from the Debian package
     # See https://salsa.debian.org/med-team/dcmtk
