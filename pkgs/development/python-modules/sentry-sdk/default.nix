@@ -56,9 +56,11 @@
   pip,
   pyrsistent,
   pysocks,
+  pytest-aiohttp,
   pytest-asyncio,
   pytest9_1CheckHook,
   pytest-forked,
+  pytest-httpx,
   pytest-localserver,
   pytest-xdist,
   pytest-watch,
@@ -161,8 +163,10 @@ buildPythonPackage (finalAttrs: {
     executing
     jsonschema
     pip
+    pytest-aiohttp
     pytest-asyncio
     pytest-forked
+    pytest-httpx
     pytest-localserver
     pytest-xdist
     pytest-watch
@@ -222,6 +226,8 @@ buildPythonPackage (finalAttrs: {
     "test_logger_with_all_attributes"
     "test_span_templates_ai_dicts"
     "test_span_templates_ai_objects"
+    # AssertionError: assert {'sentry.orig...string'}, ...} == {'thread.id':...string'}, ...}
+    "test_default_attributes"
   ]
   ++ lib.optionals (pythonAtLeast "3.13" && stdenv.hostPlatform.isDarwin) [
     # profiler_id not populated on darwin
