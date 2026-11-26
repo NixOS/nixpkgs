@@ -43,6 +43,6 @@ rustPlatform.buildRustPackage rec {
       mit
     ];
     maintainers = [ lib.maintainers.Bauke ];
-    inherit (obs-studio.meta) platforms;
+    platforms = lib.platforms.linux;
   };
 }

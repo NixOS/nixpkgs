@@ -25,6 +25,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/FiniteSingularity/obs-retro-effects";
     maintainers = with lib.maintainers; [ flexiondotorg ];
     license = lib.licenses.gpl2Plus;
-    inherit (obs-studio.meta) platforms;
+    platforms = lib.platforms.linux;
   };
 }

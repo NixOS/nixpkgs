@@ -25,6 +25,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/dspstanky/pixel-art";
     maintainers = with lib.maintainers; [ flexiondotorg ];
     license = lib.licenses.gpl2Only;
-    inherit (obs-studio.meta) platforms;
+    platforms = lib.platforms.linux;
   };
 }

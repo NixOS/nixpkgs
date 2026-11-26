@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/Zarosmm/obs-bilibili-stream";
     changelog = "https://github.com/Zarosmm/obs-bilibili-stream/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl2Only;
-    inherit (obs-studio.meta) platforms;
+    platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ kitsunori ];
   };
 })

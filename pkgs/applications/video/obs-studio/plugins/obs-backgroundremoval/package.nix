@@ -54,6 +54,6 @@ stdenv.mkDerivation rec {
       zahrun
     ];
     license = lib.licenses.gpl3Plus;
-    inherit (obs-studio.meta) platforms;
+    platforms = lib.platforms.linux;
   };
 }

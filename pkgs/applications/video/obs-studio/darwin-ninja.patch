@@ -1,0 +1,206 @@
+Build OBS on macOS with Ninja, which nixpkgs builds with, instead of the Xcode
+generator its CMake requires, and with the SDK nixpkgs provides instead of
+xcodebuild's and the prebuilt dependencies':
+
+- cmake/macos: no Xcode generator, SDK or buildspec checks, and the Xcode
+  attributes that change how sources compile (CLANG_ENABLE_OBJC_ARC,
+  CLANG_ENABLE_MODULES) given as compiler options to other generators.
+- CMakeLists.txt, libobs-metal: Swift as a language of the project, and the
+  bridging header and module options Xcode would give swiftc.
+- osconfig.cmake: GNU C and C++ extensions, as in strict C17 and C++17 the
+  macOS 27 SDK's modules (simd, which AVFoundation imports, and libc++'s std)
+  miss INFINITY.
+- frontend: the graphics modules loaded from the bundle's Frameworks, where
+  Xcode would embed them.
+- libobs, frontend, ffmpeg-mux: room in the headers to relink install names
+  into the bundle after the install.
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 7ae561131..46e01413a 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.28...3.30)
+ 
+ include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/common/bootstrap.cmake" NO_POLICY_SCOPE)
+ 
+-project(obs-studio VERSION ${OBS_VERSION_CANONICAL})
++project(obs-studio VERSION ${OBS_VERSION_CANONICAL} LANGUAGES C CXX OBJC OBJCXX Swift)
+ 
+ if(CMAKE_HOST_SYSTEM_NAME MATCHES "Windows")
+   include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/windows/architecture.cmake")
+diff --git a/cmake/common/osconfig.cmake b/cmake/common/osconfig.cmake
+index 2dc6dedb8..8342cc4fb 100644
+--- a/cmake/common/osconfig.cmake
++++ b/cmake/common/osconfig.cmake
+@@ -8,8 +8,8 @@ if(CMAKE_HOST_SYSTEM_NAME STREQUAL "Windows")
+   list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/windows")
+   set(OS_WINDOWS TRUE)
+ elseif(CMAKE_HOST_SYSTEM_NAME STREQUAL "Darwin")
+-  set(CMAKE_C_EXTENSIONS FALSE)
+-  set(CMAKE_CXX_EXTENSIONS FALSE)
++  # With GNU extensions: in strict C17 and C++17, the macOS 27 SDK's modules
++  # (simd, which AVFoundation imports, and libc++'s std) miss INFINITY.
+   list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/macos")
+   set(OS_MACOS TRUE)
+ elseif(CMAKE_HOST_SYSTEM_NAME MATCHES "Linux|FreeBSD|OpenBSD")
+diff --git a/cmake/macos/compilerconfig.cmake b/cmake/macos/compilerconfig.cmake
+index 7478e3d43..49048522d 100644
+--- a/cmake/macos/compilerconfig.cmake
++++ b/cmake/macos/compilerconfig.cmake
+@@ -5,9 +5,7 @@ include_guard(GLOBAL)
+ option(ENABLE_COMPILER_TRACE "Enable clang time-trace" OFF)
+ mark_as_advanced(ENABLE_COMPILER_TRACE)
+ 
+-if(NOT XCODE)
+-  message(FATAL_ERROR "Building OBS Studio on macOS requires Xcode generator.")
+-endif()
++# Nixpkgs builds with Ninja, and the SDK it provides, without xcodebuild.
+ 
+ enable_language(Swift)
+ 
+@@ -61,7 +59,6 @@ function(check_sdk_requirements)
+   endif()
+ endfunction()
+ 
+-check_sdk_requirements()
+ 
+ # Enable dSYM generator for release builds
+ string(APPEND CMAKE_C_FLAGS_RELEASE " -g")
+diff --git a/cmake/macos/defaults.cmake b/cmake/macos/defaults.cmake
+index 7c6daf437..0cd9e5ca0 100644
+--- a/cmake/macos/defaults.cmake
++++ b/cmake/macos/defaults.cmake
+@@ -14,7 +14,6 @@ endif()
+ 
+ include(xcode)
+ 
+-include(buildspec)
+ 
+ # SWIG hard codes the directory to its library directory at compile time. As obs-deps need to be relocatable, we need to
+ # force SWIG to look for its files in a directory relative to the PREFIX_PATH. The best way to ensure this is to set the
+diff --git a/cmake/macos/helpers.cmake b/cmake/macos/helpers.cmake
+index 8913b2b24..5bc4a5e57 100644
+--- a/cmake/macos/helpers.cmake
++++ b/cmake/macos/helpers.cmake
+@@ -4,6 +4,18 @@ include_guard(GLOBAL)
+ 
+ include(helpers_common)
+ 
++# _xcode_attribute_compile_options: Gives other generators the compiler options of an Xcode attribute
++function(_xcode_attribute_compile_options target key value)
++  if(XCODE OR NOT value STREQUAL YES)
++    return()
++  endif()
++  if(key STREQUAL CLANG_ENABLE_OBJC_ARC)
++    target_compile_options(${target} PRIVATE $<$<COMPILE_LANGUAGE:OBJC,OBJCXX>:-fobjc-arc>)
++  elseif(key STREQUAL CLANG_ENABLE_MODULES)
++    target_compile_options(${target} PRIVATE $<$<COMPILE_LANGUAGE:OBJC,OBJCXX>:-fmodules>)
++  endif()
++endfunction()
++
+ # set_target_xcode_properties: Sets Xcode-specific target attributes
+ function(set_target_xcode_properties target)
+   set(options "")
+@@ -16,6 +28,7 @@ function(set_target_xcode_properties target)
+   while(_STXP_PROPERTIES)
+     list(POP_FRONT _STXP_PROPERTIES key value)
+     set_property(TARGET ${target} PROPERTY XCODE_ATTRIBUTE_${key} "${value}")
++    _xcode_attribute_compile_options(${target} ${key} "${value}")
+   endwhile()
+ endfunction()
+ 
+@@ -31,6 +44,9 @@ function(set_target_properties_obs target)
+   while(_STPO_PROPERTIES)
+     list(POP_FRONT _STPO_PROPERTIES key value)
+     set_property(TARGET ${target} PROPERTY ${key} "${value}")
++    if(key MATCHES "^XCODE_ATTRIBUTE_(.+)$")
++      _xcode_attribute_compile_options(${target} ${CMAKE_MATCH_1} "${value}")
++    endif()
+   endwhile()
+ 
+   get_target_property(target_type ${target} TYPE)
+@@ -134,14 +150,6 @@ function(set_target_properties_obs target)
+ 
+       set_target_properties(${target} PROPERTIES XCODE_ATTRIBUTE_CODE_SIGN_ENTITLEMENTS "${entitlements_file}")
+ 
+-      add_custom_command(
+-        TARGET ${target}
+-        POST_BUILD
+-        COMMAND /bin/ln -fs obs-frontend-api.dylib libobs-frontend-api.1.dylib
+-        WORKING_DIRECTORY "$<TARGET_BUNDLE_CONTENT_DIR:${target}>/Frameworks"
+-        COMMENT "Create symlink for legacy obs-frontend-api"
+-      )
+-
+       if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/cmake/macos/qt.conf")
+         target_add_resource(${target} "${CMAKE_CURRENT_SOURCE_DIR}/cmake/macos/qt.conf")
+       endif()
+diff --git a/frontend/CMakeLists.txt b/frontend/CMakeLists.txt
+index f0cde6b47..7d90fb3e1 100644
+--- a/frontend/CMakeLists.txt
++++ b/frontend/CMakeLists.txt
+@@ -26,6 +26,9 @@ endif()
+ 
+ add_executable(obs-studio)
+ add_executable(OBS::studio ALIAS obs-studio)
++if(OS_MACOS)
++  target_link_options(obs-studio PRIVATE LINKER:-headerpad_max_install_names)
++endif()
+ 
+ target_link_libraries(
+   obs-studio
+@@ -87,7 +90,7 @@ foreach(graphics_library IN ITEMS opengl metal d3d11)
+     target_compile_definitions(
+       obs-studio
+       PRIVATE
+-        DL_${graphics_library_U}="$<$<IF:$<PLATFORM_ID:Windows>,TARGET_FILE_NAME,TARGET_SONAME_FILE_NAME>:OBS::libobs-${graphics_library}>"
++        DL_${graphics_library_U}="$<$<PLATFORM_ID:Darwin>:@executable_path/../Frameworks/>$<$<IF:$<PLATFORM_ID:Windows>,TARGET_FILE_NAME,TARGET_SONAME_FILE_NAME>:OBS::libobs-${graphics_library}>"
+     )
+   else()
+     target_compile_definitions(obs-studio PRIVATE DL_${graphics_library_U}="")
+diff --git a/libobs-metal/CMakeLists.txt b/libobs-metal/CMakeLists.txt
+index e9afd5f10..1231e8648 100644
+--- a/libobs-metal/CMakeLists.txt
++++ b/libobs-metal/CMakeLists.txt
+@@ -45,6 +45,14 @@ target_sources(
+ 
+ target_link_libraries(libobs-metal PRIVATE OBS::libobs)
+ 
++target_compile_options(
++  libobs-metal
++  PRIVATE
++    "$<$<COMPILE_LANGUAGE:Swift>:SHELL:-import-objc-header ${CMAKE_CURRENT_SOURCE_DIR}/libobs-metal-Bridging-Header.h>"
++    "$<$<COMPILE_LANGUAGE:Swift>:SHELL:-Xcc -fmodules>"
++)
++set_target_properties(libobs-metal PROPERTIES Swift_LANGUAGE_VERSION 6 Swift_MODULE_NAME libobs_metal)
++
+ target_enable_feature(libobs "Metal renderer")
+ 
+ set_property(SOURCE OBSMetalRenderer.swift APPEND PROPERTY COMPILE_FLAGS -emit-objc-header)
+diff --git a/libobs/CMakeLists.txt b/libobs/CMakeLists.txt
+index b20c2fa47..8b3478ab4 100644
+--- a/libobs/CMakeLists.txt
++++ b/libobs/CMakeLists.txt
+@@ -22,6 +22,9 @@ endif()
+ 
+ add_library(libobs SHARED)
+ add_library(OBS::libobs ALIAS libobs)
++if(OS_MACOS)
++  target_link_options(libobs PRIVATE LINKER:-headerpad_max_install_names)
++endif()
+ 
+ target_sources(
+   libobs
+diff --git a/plugins/obs-ffmpeg/ffmpeg-mux/CMakeLists.txt b/plugins/obs-ffmpeg/ffmpeg-mux/CMakeLists.txt
+index c1f95297f..92355e391 100644
+--- a/plugins/obs-ffmpeg/ffmpeg-mux/CMakeLists.txt
++++ b/plugins/obs-ffmpeg/ffmpeg-mux/CMakeLists.txt
+@@ -6,6 +6,9 @@ find_package(FFmpeg REQUIRED COMPONENTS avcodec avutil avformat)
+ 
+ add_executable(obs-ffmpeg-mux)
+ add_executable(OBS::ffmpeg-mux ALIAS obs-ffmpeg-mux)
++if(OS_MACOS)
++  target_link_options(obs-ffmpeg-mux PRIVATE LINKER:-headerpad_max_install_names)
++endif()
+ 
+ target_sources(obs-ffmpeg-mux PRIVATE ffmpeg-mux.c ffmpeg-mux.h)
+ 
