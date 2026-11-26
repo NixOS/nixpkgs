@@ -37,6 +37,8 @@ stdenv.mkDerivation rec {
   # TODO: Remove this will help with immediate backward compatibility
   propagatedBuildInputs = [ speexdsp ];
 
+  strictDeps = true;
+
   configureFlags = lib.optionals withFft [
     "--with-fft=gpl-fftw3"
   ];
