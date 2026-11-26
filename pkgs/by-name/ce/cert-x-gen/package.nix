@@ -21,6 +21,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cert-x-gen";
   version = "1.9.2";
 
+  __darwinAllowLocalNetworking = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "Bugb-Technologies";
     repo = "cert-x-gen";
@@ -28,10 +31,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-a08Im1jCtFExi0MsiwKmQhi4LolWFMx5hAqpG3kMaHI=";
   };
 
-  __structuredAttrs = true;
-
   postPatch = ''
-    substituteInPlace src/engine/shell/mod.rs --replace-fail /bin/bash ${lib.getExe bash}
+    substituteInPlace src/engine/shell/mod.rs \
+      --replace-fail /bin/bash ${lib.getExe bash}
     patchShebangs tests/fixtures
   '';
 
