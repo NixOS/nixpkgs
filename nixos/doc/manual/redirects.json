@@ -1539,6 +1539,9 @@
   "module-services-versitygw": [
     "index.html#module-services-versitygw"
   ],
+  "module-services-versitygw-external-storage": [
+    "index.html#module-services-versitygw-external-storage"
+  ],
   "module-services-wanderer": [
     "index.html#module-services-wanderer"
   ],

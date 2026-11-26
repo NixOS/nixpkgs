@@ -44,6 +44,27 @@ let
         root = client("fixture-root", "fixture-root-secret")
         reader = client("fixture-reader", "fixture-reader-secret")
         bucket = "test-bucket"
+        if sys.argv[1] == "external-storage":
+            root.create_bucket(Bucket=bucket)
+            root.put_bucket_versioning(
+                Bucket=bucket, VersioningConfiguration={"Status": "Enabled"},
+            )
+            first = root.put_object(
+                Bucket=bucket, Key="versioned", Body=b"first",
+                Metadata={"revision": "first"},
+            )["VersionId"]
+            second = root.put_object(
+                Bucket=bucket, Key="versioned", Body=b"second",
+                Metadata={"revision": "second"},
+            )["VersionId"]
+            assert first != second
+            for version, body in [(first, b"first"), (second, b"second")]:
+                response = root.get_object(
+                    Bucket=bucket, Key="versioned", VersionId=version,
+                )
+                assert response["Body"].read() == body
+                assert response["Metadata"] == {"revision": body.decode()}
+            sys.exit(0)
         if sys.argv[1] == "create":
             root.create_bucket(Bucket=bucket)
             root.put_object(Bucket=bucket, Key="hello", Body=b"hello, S3")
@@ -97,21 +118,36 @@ in
       enable = true;
       rootDirectory = "/srv/versitygw";
       environmentFile = "/run/versitygw-test/root.env";
-      settings.VGW_PORT = "127.0.0.1:7070";
+      settings = {
+        VGW_PORT = "127.0.0.1:7070";
+        VGW_META_SIDECAR = "/srv/s3-metadata";
+        VGW_VERSIONING_DIR = "/srv/s3-versions";
+      };
     };
     systemd.tmpfiles.rules = [
       "d /run/versitygw-test 0700 root root -"
       "C /run/versitygw-test/root.env 0600 root root - ${rootEnvironment}"
+      "d /srv/s3-metadata 0750 versitygw versitygw -"
+      "d /srv/s3-versions 0750 versitygw versitygw -"
+    ];
+    systemd.services.versitygw.serviceConfig.ReadWritePaths = [
+      "/srv/s3-metadata"
+      "/srv/s3-versions"
     ];
   };
 
   testScript = ''
     start_all()
     unseeded.wait_for_unit("versitygw.service")
-    unseeded.wait_for_open_port(7070)
+    unseeded.wait_for_open_port(7070, timeout=60)
     unseeded.succeed("test -d /var/lib/versitygw/iam")
     machine.wait_for_unit("versitygw.service")
     machine.wait_for_open_port(7070)
+
+    with subtest("external sidecar metadata and version storage"):
+        unseeded.succeed("${checkS3} external-storage")
+        unseeded.succeed("test -n \"$(find /srv/s3-metadata -type f -print -quit)\"")
+        unseeded.succeed("test -n \"$(find /srv/s3-versions -type f -print -quit)\"")
 
     with subtest("runtime credentials, IAM seeding and S3 access"):
         machine.fail("runuser -u versitygw -- test -r /run/versitygw-test/users.json")

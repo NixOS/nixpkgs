@@ -60,4 +60,36 @@ When this option is set, runtime account changes are replaced on restart.
 Manage buckets and policies through the upstream administration CLI or an S3
 client. This module does not reconcile or delete buckets, objects or policies.
 Objects remain ordinary files below [](#opt-services.versitygw.rootDirectory),
-so backup both that directory and the IAM state directory.
+so back up both that directory and the IAM state directory.
+
+## External metadata and version storage {#module-services-versitygw-external-storage}
+
+The POSIX backend can use `VGW_META_SIDECAR` for sidecar metadata and
+`VGW_VERSIONING_DIR` for non-current object versions. Both directories must
+already exist outside the object root and be writable by the service user.
+The service uses `ProtectSystem=strict`, so filesystem ownership alone is not
+enough: also add these paths to `ReadWritePaths`. For the default service user:
+
+```nix
+{
+  services.versitygw.settings = {
+    VGW_META_SIDECAR = "/srv/s3-metadata";
+    VGW_VERSIONING_DIR = "/srv/s3-versions";
+  };
+  systemd.tmpfiles.rules = [
+    "d /srv/s3-metadata 0750 versitygw versitygw -"
+    "d /srv/s3-versions 0750 versitygw versitygw -"
+  ];
+  systemd.services.versitygw.serviceConfig.ReadWritePaths = [
+    "/srv/s3-metadata"
+    "/srv/s3-versions"
+  ];
+}
+```
+
+This extends the module's writable paths without disabling its filesystem
+sandbox. Adapt the directory ownership when using a custom service user or
+group. Use absolute paths; avoid sidecar paths sharing the object root's string
+prefix, which upstream also rejects. Back up these directories together with
+the object and IAM stores. Setting `VGW_VERSIONING_DIR` enables versioning
+support, but each bucket still needs versioning enabled through the S3 API.
