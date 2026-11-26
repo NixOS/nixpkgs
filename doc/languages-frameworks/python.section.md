@@ -2245,6 +2245,8 @@ The following rules are desired to be respected:
 * Only unversioned attributes (e.g. `pydantic`, but not `pydantic_1`) can be included in `dependencies`,
   since due to `PYTHONPATH` limitations we can only ever support a single version for libraries
   without running into duplicate module name conflicts.
+  Python applications may instead use `python3Packages.overrideScope`
+  to [override Python packages](#overriding-python-packages) and their versions for the whole Python package set.
 * The version restrictions of `dependencies` can be relaxed by [`pythonRelaxDepsHook`](#using-pythonrelaxdepshook).
 * Make sure the tests are enabled using for example [`pytestCheckHook`](#using-pytestcheckhook) and, in the case of
   libraries, are passing for all interpreters. If certain tests fail they can be
