@@ -14609,6 +14609,8 @@ self: super: with self; {
 
   py-multihash = callPackage ../development/python-modules/py-multihash { };
 
+  py-nanotts = callPackage ../development/python-modules/py-nanotts { };
+
   py-netgear-plus = callPackage ../development/python-modules/py-netgear-plus { };
 
   py-nextbusnext = callPackage ../development/python-modules/py-nextbusnext { };
