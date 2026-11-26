@@ -7,14 +7,14 @@
   versionCheckHook,
   protobuf,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "chirpstack-mqtt-forwarder";
   version = "4.6.1";
 
   src = fetchFromGitHub {
     owner = "chirpstack";
     repo = "chirpstack-mqtt-forwarder";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-xt94DxiDkyS0o9sSV6ye1vRi08ey4rmh1acpNI38fUE=";
   };
 
@@ -38,4 +38,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ lib.maintainers.stv0g ];
     mainProgram = "chirpstack-mqtt-forwarder";
   };
-}
+})
