@@ -13,6 +13,9 @@ buildPythonPackage {
 
   preConfigure = "cd py-smbus";
 
+  # Python package version doesn't correspond to i2c-tools' version
+  dontCheckPythonMetadata = true;
+
   meta = {
     inherit (i2c-tools.meta) homepage platforms;
 
