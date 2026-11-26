@@ -3,6 +3,7 @@
   buildGoModule,
   fetchFromGitHub,
   nix-update-script,
+  nixosTests,
 }:
 
 buildGoModule (finalAttrs: {
@@ -22,7 +23,12 @@ buildGoModule (finalAttrs: {
 
   ldflags = [ "-s" ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = {
+      inherit (nixosTests) oxidized;
+    };
+  };
 
   __structuredAttrs = true;
 
