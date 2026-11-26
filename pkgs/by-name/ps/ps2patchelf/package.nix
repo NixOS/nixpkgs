@@ -17,14 +17,16 @@ buildDotnetModule rec {
   };
 
   patches = [
-    ./patches/target_net8.0.patch
     ./patches/fix_arg_check.patch
   ];
 
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
-  dotnet-runtime = dotnetCorePackages.runtime_8_0;
+  postPatch = ''
+    substituteInPlace PS2PatchElf/PS2PatchElf.csproj PS2PatchLib/PS2PatchLib.csproj \
+      --replace-fail '<TargetFramework>net6.0</' '<TargetFramework>net10.0</'
+  '';
 
-  dotnetFlags = [ "-p:TargetFramework=net8.0" ];
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
+  dotnet-runtime = dotnetCorePackages.runtime_10_0;
 
   nugetDeps = ./deps.json;
 
