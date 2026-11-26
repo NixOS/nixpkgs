@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   pkg-config,
+  testers,
   nasmSupport ? true,
   nasm, # Assembly optimizations
   cpmlSupport ? true, # Compaq's fast math library
@@ -68,6 +69,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.optionalString debugSupport "--enable-debug=alot")
   ];
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   __structuredAttrs = true;
 
   meta = {
@@ -77,5 +80,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     platforms = lib.platforms.all;
     mainProgram = "lame";
+    pkgConfigModules = [ "lame" ];
   };
 })
