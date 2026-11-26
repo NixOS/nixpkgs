@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   src = fetchFromBitbucket {
     owner = "delan";
     repo = "nonymous";
-    rev = "bore-${finalAttrs.version}";
+    tag = "bore-${finalAttrs.version}";
     hash = "sha256-qYFRUWSMy6xkBjHp+Y2hS+GWzsCGtbBnJvKh0E63trk=";
   };
 
