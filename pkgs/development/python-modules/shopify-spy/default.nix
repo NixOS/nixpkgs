@@ -29,14 +29,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "shopify-spy";
-  version = "0.5.0";
+  version = "0.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ndgigliotti";
     repo = "shopify-spy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SKdaibFihgTkUmdO7p3i+m3eqZpBbPwcL3yvnljdhJQ=";
+    hash = "sha256-P7ktj/I9C4OjnIzeHfK/z+/jkbgz88AG9G03qzobk2w=";
   };
 
   build-system = [ hatchling ];
