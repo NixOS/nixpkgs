@@ -92,6 +92,8 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Implementation for VA-API (Video Acceleration API)";
     longDescription = ''
