@@ -100,7 +100,7 @@ in
       serviceConfig = {
         Type = "simple";
         ExecStart = lib.getExe cfg.package;
-        Restart = "on-failure";
+        Restart = "always";
         User = cfg.user;
         Group = cfg.group;
         EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
