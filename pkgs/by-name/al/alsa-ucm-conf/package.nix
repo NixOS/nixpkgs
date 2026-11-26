@@ -45,6 +45,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     url = "https://www.alsa-project.org/files/pub/lib/";
   };
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://www.alsa-project.org/";
     changelog = "https://github.com/alsa-project/alsa-ucm-conf/releases/tag/v${finalAttrs.version}";
