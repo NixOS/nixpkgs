@@ -7,13 +7,13 @@
 
 buildDotnetModule (finalAttrs: {
   pname = "WiseUnpacker";
-  version = "1.3.3";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "mnadareski";
     repo = "WiseUnpacker";
     rev = finalAttrs.version;
-    hash = "sha256-APbfo2D/p733AwNNByu5MvC9LA8WW4mAzq6t2w/YNrs=";
+    hash = "sha256-7TKXGI3XO4oLIZCD21xOpxD5bZKiI6Qk+pyLdzo+kQ8=";
   };
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
@@ -21,14 +21,11 @@ buildDotnetModule (finalAttrs: {
 
   dotnetFlags = [ "-p:TargetFramework=net8.0" ];
 
-  # Rename to something sensible
-  postFixup = ''
-    mv "$out/bin/Test" "$out/bin/WiseUnpacker"
-  '';
-
   nugetDeps = ./deps.json;
 
-  projectFile = "Test/Test.csproj";
+  projectFile = "WiseUnpacker/WiseUnpacker.csproj";
+
+  executables = [ "WiseUnpacker" ];
 
   meta = {
     homepage = "https://github.com/mnadareski/WiseUnpacker/";
