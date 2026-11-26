@@ -5466,6 +5466,8 @@ self: super: with self; {
 
   e3-core = callPackage ../development/python-modules/e3-core { };
 
+  e3dc-ess-modbus = callPackage ../development/python-modules/e3dc-ess-modbus { };
+
   e3nn = callPackage ../development/python-modules/e3nn { };
 
   eagle100 = callPackage ../development/python-modules/eagle100 { };
