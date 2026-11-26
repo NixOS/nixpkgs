@@ -98,6 +98,8 @@ let
     version = "0.8.0";
     inherit src;
 
+    __structuredAttrs = true;
+
     sourceRoot = "${src.name}/symon";
 
     cargoHash = "sha256-ZMa3aGbp4AtFBmATEua+woRlI9l7nTxfrevPcoZ3s1Y=";
@@ -124,6 +126,8 @@ let
     pname = "arrow-rs-wrapper";
     version = "0.1.1";
     inherit src;
+
+    __structuredAttrs = true;
 
     sourceRoot = "${src.name}/parquet-rust-wrapper";
 
