@@ -10,6 +10,7 @@
   pkg-config,
   stdenv,
   versionCheckHook,
+  testers,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "flac";
@@ -32,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = [ libogg ];
+  propagatedBuildInputs = [ libogg ];
 
   strictDeps = true;
 
@@ -62,7 +63,15 @@ stdenv.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
 
-  passthru.updateScript = nix-update-script { extraArgs = [ "--url=https://github.com/xiph/flac" ]; };
+  passthru = {
+    updateScript = nix-update-script { extraArgs = [ "--url=https://github.com/xiph/flac" ]; };
+    tests.pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+    };
+    tests.cmake-config = testers.hasCmakeConfigModules {
+      package = finalAttrs.finalPackage;
+    };
+  };
 
   __structuredAttrs = true;
 
@@ -79,5 +88,12 @@ stdenv.mkDerivation (finalAttrs: {
       lgpl21Plus
     ];
     maintainers = with lib.maintainers; [ ruuda ];
+    pkgConfigModules = [
+      "flac"
+      "flac++"
+    ];
+    cmakeConfigModules = [
+      "flac"
+    ];
   };
 })
