@@ -23,11 +23,15 @@ stdenv.mkDerivation (finalAttrs: {
 
     # when signing up the ui errors with a length not found in the console
     ./signup-bug.patch
+
+    # Prevent sidebar search input from scrolling independently from sidebar
+    ./fix-sidebar-search-scroll.patch
   ];
 
   missingHashes = ./missing-hashes.json;
   offlineCache = yarn-berry_4.fetchYarnBerryDeps {
-    inherit (finalAttrs) src patches sourceRoot;
+    inherit (finalAttrs) src sourceRoot;
+    patches = [ ./yarn-4.14-support.patch ];
     missingHashes = ./missing-hashes.json;
     hash = "sha256-N6hgAw1mi+vazXJGO+t5kqoGrmz8AmosLObcZMVhQBg=";
   };
