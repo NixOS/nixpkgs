@@ -45,18 +45,8 @@
     "hash": "sha256-Y0kVti0n9xzdekSMGAwATkgSIN4dYX2ZiJMXl6gXdqA="
   },
   {
-    "pname": "System.Buffers",
-    "version": "4.6.1",
-    "hash": "sha256-sARR6R0Bb77Aka0eNh86cBXh2R1AR/fkinRFWypnPXk="
-  },
-  {
     "pname": "System.IO.Hashing",
     "version": "11.0.0",
     "hash": "sha256-Af3vFimAmfT/MwFhFW616SRvjUdq/ZuwOUv8NKk3+qg="
-  },
-  {
-    "pname": "System.Memory",
-    "version": "4.6.3",
-    "hash": "sha256-JgeK63WMmumF6L+FH5cwJgYdpqXrSDcgTQwtIgTHKVU="
   }
 ]

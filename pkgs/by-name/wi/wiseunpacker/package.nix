@@ -16,10 +16,10 @@ buildDotnetModule (finalAttrs: {
     hash = "sha256-7TKXGI3XO4oLIZCD21xOpxD5bZKiI6Qk+pyLdzo+kQ8=";
   };
 
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
-  dotnet-runtime = dotnetCorePackages.runtime_8_0;
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
+  dotnet-runtime = dotnetCorePackages.runtime_10_0;
 
-  dotnetFlags = [ "-p:TargetFramework=net8.0" ];
+  dotnetFlags = [ "-p:TargetFramework=net10.0" ];
 
   nugetDeps = ./deps.json;
 
