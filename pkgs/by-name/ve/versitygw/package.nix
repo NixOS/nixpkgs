@@ -101,7 +101,6 @@ buildGoModule (finalAttrs: {
     maintainers = with lib.maintainers; [
       adamcstephens
       genga898
-      rrittste
     ];
     mainProgram = "versitygw";
   };
