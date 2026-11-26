@@ -154,6 +154,8 @@ let
         home = result;
       };
 
+      __structuredAttrs = true;
+
       meta = {
         license = with lib.licenses; [
           gpl2
