@@ -19,7 +19,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "swift-certificates";
-  version = "1.21.1";
+  version = "1.21.2";
 
   outputs = [
     "out"
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "apple";
     repo = "swift-certificates";
     tag = finalAttrs.version;
-    hash = "sha256-kDZ0YWvQHT0WaEvcGhPj7dXUgxgWHGu5d5vOGZ89Psg=";
+    hash = "sha256-hMJhooe5sEd6i3Uw3DsM9c5oDTkj+JitzKdOYjR590Y=";
   };
 
   postPatch = ''
