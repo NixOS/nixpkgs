@@ -2,33 +2,42 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nix-update-script,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "brev-cli";
-  version = "0.6.316";
+  version = "0.6.337";
 
   src = fetchFromGitHub {
     owner = "brevdev";
     repo = "brev-cli";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-L1NpFbZXHxQQJzcLHkOIcCnHu9HRybM0R+Iz1qOheGs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-P6LBVQEP/HuKufYrPnn86ZI4a9x+UoZJHalaA0c4heQ=";
   };
 
-  vendorHash = "sha256-CzGuEbq4I1ygYQsoyyXC6gDBMLg21dKQTKkrbwpAR2U=";
+  vendorHash = "sha256-hDWqhwdaMkeXSMRJmv+ElL9EvpWTPXgvAxx0Mo/WHNU=";
 
-  env.CGO_ENABLED = 0;
   subPackages = [ "." ];
+
+  # go-nvml needs lazy binding of libnvidia-ml symbols
+  hardeningDisable = [ "bindnow" ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/brevdev/brev-cli/pkg/cmd/version.Version=${finalAttrs.src.rev}"
+    "-X github.com/brevdev/brev-cli/pkg/cmd/version.Version=${finalAttrs.src.tag}"
   ];
 
   postInstall = ''
     mv $out/bin/brev-cli $out/bin/brev
   '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Connect your laptop to cloud computers";
@@ -36,6 +45,6 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/brevdev/brev-cli";
     changelog = "https://github.com/brevdev/brev-cli/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ kamadorueda ];
   };
 })
