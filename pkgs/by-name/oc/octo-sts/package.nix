@@ -6,7 +6,7 @@
 
 buildGo127Module (finalAttrs: {
   pname = "octo-sts";
-  version = "0.12.0";
+  version = "0.14.4";
 
   __structuredAttrs = true;
 
@@ -14,10 +14,10 @@ buildGo127Module (finalAttrs: {
     owner = "octo-sts";
     repo = "app";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qYLOxZ6hwsI59Brhfajhb2UOpzv4AG9v+gDxLRDrxNA=";
+    hash = "sha256-B3hd/mP8fxOSyltrh4ySn16rEkiUjJ2ZpTDxETMjrjY=";
   };
 
-  vendorHash = "sha256-RQe4gC77C3pZvV9/YeiXIVYAq9SFbLay6mwqK6BudzM=";
+  vendorHash = "sha256-eHGQwnshnC8YGcGtpLMwyTBlM/t/YD82mE/Bmp2oB/g=";
 
   # Upstream publishes container images for these two components.
   subPackages = [
