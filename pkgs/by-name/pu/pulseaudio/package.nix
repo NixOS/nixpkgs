@@ -4,6 +4,7 @@
   fetchurl,
   pkg-config,
   libsndfile,
+  bashNonInteractive,
   libtool,
   makeWrapper,
   perlPackages,
@@ -123,6 +124,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ libcap ];
 
   buildInputs = [
+    bashNonInteractive
     libtool
     libsndfile
     soxr
@@ -174,6 +176,8 @@ stdenv.mkDerivation rec {
     ++ lib.optional remoteControlSupport lirc
     ++ lib.optional zeroconfSupport avahi
   );
+
+  strictDeps = true;
 
   env =
     lib.optionalAttrs (stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17")
