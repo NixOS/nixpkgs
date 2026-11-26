@@ -23,7 +23,7 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ds4u";
-  version = "0.1.3";
+  version = "0.1.4";
   __structuredAttrs = true;
 
   src = fetchFromGitea {
@@ -31,10 +31,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "deadYokai";
     repo = "ds4u";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rft8aajPprTgktACKzIDrl4AIn7i010ymNuleDfhX7Y=";
+    hash = "sha256-UzRhZarFNLQpRZOHpoqqwaoLCcCC25jYtCi0A+47Hec=";
   };
 
-  cargoHash = "sha256-rECEkUGpH3eK/P5oWwb7O1EfI5aZvmxgaZkQ86ut0Nc=";
+  cargoHash = "sha256-ebkf1LLI/3Dzq1hV6CQ/VFbdkX1zJt4KyKDS2oOYUmk=";
 
   nativeBuildInputs = [
     pkg-config
