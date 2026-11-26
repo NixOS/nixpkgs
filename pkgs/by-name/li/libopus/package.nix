@@ -70,6 +70,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "docs" false)
   ];
 
+  __structuredAttrs = true;
+
   doCheck = !stdenv.hostPlatform.isi686 && !stdenv.hostPlatform.isAarch32; # test_unit_LPC_inv_pred_gain fails
 
   passthru = {
