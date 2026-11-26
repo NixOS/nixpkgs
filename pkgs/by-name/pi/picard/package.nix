@@ -3,6 +3,7 @@
   stdenv,
   python3Packages,
   fetchFromGitHub,
+  fetchpatch,
 
   gettext,
   qt6,
@@ -26,6 +27,18 @@ python3Packages.buildPythonApplication (finalAttrs: {
     tag = "release-${finalAttrs.version}";
     hash = "sha256-xkDQU788dcTkN6/54AI8UXNDnN+RkX4F8PlbDTlck6k=";
   };
+  patches = [
+    # pyobjc version constraint bump:
+    # https://github.com/metabrainz/picard/pull/3634
+    (fetchpatch {
+      url = "https://github.com/metabrainz/picard/commit/956515bf9ecaee22ed0316a33080d580371d894a.patch";
+      includes = [
+        # The only file really needed - the rest are lockfiles
+        "pyproject.toml"
+      ];
+      hash = "sha256-+ZJ3m590kR5OjHBQPUYUIltGz54a9wJtWVHRq0uq6AQ=";
+    })
+  ];
 
   nativeBuildInputs = [
     gettext
