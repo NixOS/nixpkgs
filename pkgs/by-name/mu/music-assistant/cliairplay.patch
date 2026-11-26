@@ -2,14 +2,10 @@ diff --git a/music_assistant/providers/airplay/helpers.py b/music_assistant/prov
 index 044fa52db..f08eaacde 100644
 --- a/music_assistant/providers/airplay/helpers.py
 +++ b/music_assistant/providers/airplay/helpers.py
-@@ -9,6 +9,7 @@
- import re
- import time
+@@ -15,2 +15,3 @@
  from fnmatch import fnmatchcase
 +from shutil import which
- from typing import TYPE_CHECKING, Any, Final
- 
- from aiohttp import ClientError, ClientTimeout
+ from typing import TYPE_CHECKING, Any
 @@ -315,14 +316,11 @@
  
      :raises RuntimeError: If the binary cannot be found.

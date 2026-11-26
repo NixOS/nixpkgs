@@ -13,14 +13,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "music-assistant-frontend";
-  version = "2.17.377";
+  version = "2.17.381";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "music-assistant";
     repo = "frontend";
     tag = finalAttrs.version;
-    hash = "sha256-zdFTWlvTeq5buZ574gkg8Fc9Cj/3ziaHa4TD0LpwLhg=";
+    hash = "sha256-KCONItsUp9DdqbB/MB3bT6u9kvkJ5eegiwuWrSJKq3I=";
   };
 
   nativeBuildInputs = [
@@ -34,7 +34,7 @@ buildPythonPackage (finalAttrs: {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_11;
     fetcherVersion = 5;
-    hash = "sha256-Q2LikQ/HP2Jw2ieIMsHrz2yJsRx1FcTM7iQlbefRM/s=";
+    hash = "sha256-0n2dI91jP0Eq+ewWEVukSeNRNzsAU/Nao2OwV35KuSc=";
   };
 
   build-system = [ setuptools ];

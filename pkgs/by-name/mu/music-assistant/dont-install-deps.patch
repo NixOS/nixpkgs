@@ -39,16 +39,34 @@ diff --git a/music_assistant/providers/ytmusic/__init__.py b/music_assistant/pro
 index 6d6758b58..1b3710434 100644
 --- a/music_assistant/providers/ytmusic/__init__.py
 +++ b/music_assistant/providers/ytmusic/__init__.py
-@@ -72,9 +72,7 @@
+@@ -7,7 +7,6 @@
+ import importlib
+ import logging
+ import secrets
+-import sys
+ import time
+ from collections import Counter
+ from collections.abc import AsyncGenerator, Iterable, Sequence
+@@ -77,11 +76,8 @@
  from music_assistant.controllers.music.constants import CACHE_CATEGORY_SEARCH_RESULTS
- from music_assistant.helpers.aiohttp_client import create_clientsession
+ from music_assistant.helpers.playlists import validate_playlist_block_move
  from music_assistant.helpers.util import (
+-    get_package_version,
 -    import_module_in_thread,
      infer_album_type,
 -    install_package,
      parse_title_and_version,
  )
  from music_assistant.models.music_provider import MusicProvider
+ from music_assistant.models.recommendation_payload import RecommendationPayloadMixin
+@@ -170,7 +166,6 @@
+ )
+ DYNAMIC_PLAYLIST_TRACK_LIMIT = 300
+ YTM_PREMIUM_CHECK_TRACK_ID = "dQw4w9WgXcQ"
+-PACKAGES_TO_INSTALL = ("yt-dlp[default]", "bgutil-ytdlp-pot-provider")
+ DEFAULT_STREAM_URL_EXPIRATION = 3600  # 1 hour
+ 
+ SUPPORTED_FEATURES = {
 @@ -228,7 +226,6 @@ async def get_config_entries(self) -> tuple[ConfigEntry, ...]:
      async def handle_async_init(self) -> None:
          """Set up the YTMusic provider."""
@@ -57,20 +75,13 @@ index 6d6758b58..1b3710434 100644
          self._cookie = str(self.get_setup_value(CONF_COOKIE))
          self._po_token_server_url = (
              self.get_setup_value(CONF_PO_TOKEN_SERVER_URL) or DEFAULT_PO_TOKEN_SERVER_URL
-@@ -1697,13 +1697,0 @@ async def _install_packages(self) -> None:
--    async def _install_packages(self) -> None:
--        """Install frequently changing packages dynamically."""
--        # NOTE: Google breaks things quite often which requires us to update
--        # some packages very frequently. Installing them dynamically prevents
--        # us from having to update MA to ensure this provider works.
--        for package_name in PACKAGES_TO_INSTALL:
--            await install_package(package_name)
--        # verify if the yt_dlp package is usable
--        try:
--            await import_module_in_thread("yt_dlp")
--        except ImportError:
--            raise SetupFailedError("Package yt_dlp failed to install")
--
+@@ -1909,6 +1868,3 @@
+     return []
+ 
+ 
+-def _version_parts(version: str) -> list[int]:
+-    """Return the numeric parts of a yt-dlp version."""
+-    return [int(part) for part in version.split(".")]
 diff --git a/tests/providers/ytmusic/test_ytmusic.py b/tests/providers/ytmusic/test_ytmusic.py
 index 08dc7697e..078fcb445 100644
 --- a/tests/providers/ytmusic/test_ytmusic.py

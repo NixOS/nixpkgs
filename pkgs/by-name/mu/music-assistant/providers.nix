@@ -1,7 +1,7 @@
 # Do not edit manually, run ./update-providers.py
 
 {
-  version = "2.11.0b10";
+  version = "2.11.0b11";
   builtinProviders = [
     "builtin"
     "coverartarchive"
@@ -22,6 +22,7 @@
   providerDependencies = {
     hass_players = [ "hass" ];
     hue_entertainment = [ "sendspin" ];
+    lifx_entertainment = [ "sendspin" ];
     neteasecloudmusic_scrobble = [ "neteasecloudmusic" ];
     plex_connect = [ "plex" ];
     sonic_similarity = [ "sonic_analysis" ];
@@ -182,6 +183,8 @@
       ps: with ps; [
         pylast
       ];
+    lifx_entertainment = _: [
+    ]; # missing lifx-entertainment
     listenbrainz_scrobble =
       ps: with ps; [
         liblistenbrainz
@@ -446,6 +449,7 @@
     "hue_entertainment"
     "ibroadcast"
     "kion_music"
+    "lifx_entertainment"
     "nicovideo"
     "qqmusic"
     "samsung_wam"

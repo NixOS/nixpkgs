@@ -26,10 +26,10 @@ let
       music-assistant-frontend = final.callPackage ./frontend.nix { };
 
       music-assistant-models = prev.music-assistant-models.overridePythonAttrs (oldAttrs: {
-        version = "1.1.248";
+        version = "1.1.251";
 
         src = oldAttrs.src.override {
-          hash = "sha256-TNUdvOUsuUtbec7NusHsANwvgz4aH6dB/210wiGW9sM=";
+          hash = "sha256-XD8/RADymU4x9dZaEy6AQNCHZcTTE6QS5bPDZ2WrhD8=";
         };
       });
 
@@ -53,14 +53,14 @@ let
 in
 pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "music-assistant";
-  version = "2.11.0b10";
+  version = "2.11.0b11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "music-assistant";
     repo = "server";
     tag = finalAttrs.version;
-    hash = "sha256-JSyN0DbxXEU2QthdiEteBl3XPySL5bTFkV4xlKwJYSo=";
+    hash = "sha256-a6pnUKd1sKGtqxf3PQShy22bqatO/QuIypQwgWpJly0=";
   };
 
   patches = [
@@ -71,9 +71,6 @@ pythonPackages.buildPythonApplication (finalAttrs: {
 
     # Look up librespot from PATH at runtime
     ./librespot.patch
-
-    # Look up shairport-sync from PATH at runtime
-    ./shairport-sync.patch
 
     # Look up cliairplay from PATH at runtime
     ./cliairplay.patch
@@ -121,7 +118,6 @@ pythonPackages.buildPythonApplication (finalAttrs: {
       }")'
 
     rm -rv \
-      music_assistant/providers/airplay_receiver/bin/{build_binaries.sh,shairport-sync-*} \
       music_assistant/providers/spotify/bin/librespot-*
 
     found_bins=$(find music_assistant/ -wholename '*/bin/*' -type f -executable -print0 | tr '\0' ' ')
@@ -148,6 +144,8 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     "aiosqlite"
     "certifi"
     "cryptography"
+    "gql"
+    "numpy"
     "pillow"
   ];
 
@@ -287,6 +285,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     "tests/providers/hue_entertainment"
     "tests/providers/ibroadcast"
     "tests/providers/kion_music"
+    "tests/providers/lifx_entertainment"
     "tests/providers/nicovideo"
     "tests/providers/qqmusic"
     "tests/providers/samsung_wam"
@@ -311,11 +310,10 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     # Our patches break those tests
     "tests/helpers/test_util.py::TestLoadProviderModule"
     "tests/providers/airplay/test_helpers.py::test_get_cli_binary_uses_release_asset_name"
+    "tests/providers/ytmusic/test_ytmusic.py::test_install_packages"
     # We do not have a full git repo to work with
     "tests/scripts/test_dev_image.py::test_dev_app_bump"
     "tests/scripts/test_release_workflow.py"
-    # save compute
-    "tests/benchmarks/test_bench_helpers.py"
     # timing sensitive and racy tests
     "tests/controllers/music/test_music_migrations.py::test_migrate_database_backfills_external_id_lookup"
     "tests/controllers/players/test_player_controller.py::TestReleaseWaitForPlayMedia::test_plays_as_soon_as_the_player_reports_its_leave"
