@@ -32970,6 +32970,11 @@
     github = "ymstnt";
     githubId = 21342713;
   };
+  yoav-yosifor = {
+    name = "Yoav Yosif-Or";
+    github = "yoav-yosifor";
+    githubId = 352421336;
+  };
   yoavlavi = {
     email = "yoav@yoavlavi.com";
     github = "yoav-lavi";
