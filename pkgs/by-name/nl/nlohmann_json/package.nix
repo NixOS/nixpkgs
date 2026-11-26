@@ -64,7 +64,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = "rm -rf $out/lib64";
 
-  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+  passthru.tests = {
+    pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+    };
+    cmake-config = testers.hasCmakeConfigModules {
+      package = finalAttrs.finalPackage;
+    };
+  };
 
   __structuredAttrs = true;
 
@@ -76,5 +83,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ miniharinn ];
     pkgConfigModules = [ "nlohmann_json" ];
+    cmakeConfigModules = [ "nlohmann_json" ];
   };
 })
