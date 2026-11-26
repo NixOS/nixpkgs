@@ -504,6 +504,8 @@ self: super: with self; {
 
   aioprometheus = callPackage ../development/python-modules/aioprometheus { };
 
+  aioproxmox = callPackage ../development/python-modules/aioproxmox { };
+
   aioptdevices = callPackage ../development/python-modules/aioptdevices { };
 
   aiopulse = callPackage ../development/python-modules/aiopulse { };
