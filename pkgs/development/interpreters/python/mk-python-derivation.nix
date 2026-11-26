@@ -349,9 +349,12 @@ lib.extendMkDerivation {
         # This is a test, however, it should be ran independent of the checkPhase and checkInputs
         pythonImportsCheckHook
       ]
-      ++ optionals (finalAttrs ? "pname" && finalAttrs ? "version" && !isBootstrapPackage) [
-        pythonMetadataCheckHook
-      ]
+      ++
+        optionals
+          (finalAttrs ? "pname" && finalAttrs ? "version" && !isBootstrapPackage && pyproject != false)
+          [
+            pythonMetadataCheckHook
+          ]
       ++ optionals (python.pythonAtLeast "3.3") [
         # Optionally enforce PEP420 for python3
         pythonNamespacesHook
