@@ -72,11 +72,14 @@ stdenv.mkDerivation (finalAttrs: {
   # new native dependencies could bloat up binary size.
   + ''
     pnpm rebuild
-    rm -rf node_modules/.pnpm/re2*/node_modules/re2/build/Release/{obj.target,.deps} \
-      node_modules/.pnpm/re2*/node_modules/re2/vendor
-
     pnpm build
     pnpm prune --prod --ignore-scripts
+
+    # re2 only needs its compiled addon at runtime, the rest of its build output
+    # and node-gyp reference python3, pnpm and nodejs-slim
+    re2=$(echo node_modules/.pnpm/re2@*/node_modules/re2)
+    find $re2/build -mindepth 1 ! -path $re2/build/Release ! -path $re2/build/Release/re2.node -delete
+    rm -r $re2/vendor $re2/../node-gyp node_modules/.pnpm/{node-gyp@*,node_modules/node-gyp}
 
     runHook postBuild
   '';
@@ -110,6 +113,12 @@ stdenv.mkDerivation (finalAttrs: {
       ];
     };
   };
+
+  disallowedRequisites = [
+    python3
+    pnpm
+    pnpm.nodejs-slim
+  ];
 
   meta = {
     description = "Cross-platform Dependency Automation by Mend.io";
