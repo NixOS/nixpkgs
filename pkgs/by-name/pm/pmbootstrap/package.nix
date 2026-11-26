@@ -46,6 +46,13 @@ python3Packages.buildPythonApplication rec {
     versionCheckHook
   ];
 
+  # envkernel.sh can be used to locally compile a kernel for Nura, which is
+  # helpful for quick iteration and testing during kernel development.
+  # Docs: https://wiki.nura.eco/wiki/Compiling_kernels_with_envkernel.sh
+  postInstall = ''
+    install -Dm755 helpers/envkernel.sh "$out/bin/pmb-envkernel.sh"
+  '';
+
   # Add test dependency in PATH
   preCheck = ''
     export PYTHONPATH=$PYTHONPATH:${pmb_test}
