@@ -7,14 +7,14 @@
 
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bandwhich";
   version = "0.23.1";
 
   src = fetchFromGitHub {
     owner = "imsnif";
     repo = "bandwhich";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-gXPX5drVXsfkssPMdhqIpFsYNSbelE9mKwO+nGEy4Qs=";
   };
 
@@ -46,11 +46,11 @@ rustPlatform.buildRustPackage rec {
       the background using reverse DNS on a best effort basis.
     '';
     homepage = "https://github.com/imsnif/bandwhich";
-    changelog = "https://github.com/imsnif/bandwhich/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/imsnif/bandwhich/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [
     ];
     platforms = lib.platforms.unix;
     mainProgram = "bandwhich";
   };
-}
+})
