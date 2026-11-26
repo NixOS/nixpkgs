@@ -70,6 +70,11 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/fontforge/fontforge/commit/6aea6db5da332d8ac94e3501bb83c1b21f52074d.patch";
       hash = "sha256-3KsWSXVRpPJbytVmzjExCGw6IaCgcrKwqQGRKpQAOiY=";
     })
+    (fetchpatch {
+      name = "CVE-2026-135295.patch";
+      url = "https://github.com/fontforge/fontforge/commit/65e80b5dfb6691a1c8a532cfbb8ec905949e0c9a.patch";
+      hash = "sha256-1jR3pqUu0xMZyBfUdDZ6W/f2A82Eyn7ftHfKprhXPHY=";
+    })
   ];
 
   # use $SOURCE_DATE_EPOCH instead of non-deterministic timestamps
