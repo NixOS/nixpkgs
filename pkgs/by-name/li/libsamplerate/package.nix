@@ -4,6 +4,7 @@
   fetchurl,
   pkg-config,
   libsndfile,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -27,6 +28,8 @@ stdenv.mkDerivation (finalAttrs: {
     "out"
   ];
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   __structuredAttrs = true;
 
   meta = {
@@ -37,5 +40,8 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.all;
     # Linker is unhappy with the `.def` file.
     broken = stdenv.hostPlatform.isMinGW;
+    pkgConfigModules = [
+      "samplerate"
+    ];
   };
 })
