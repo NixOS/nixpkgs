@@ -867,7 +867,7 @@ GEM
     git (1.19.1)
       addressable (~> 2.8)
       rchardet (~> 1.8)
-    gitaly (19.4.0)
+    gitaly (19.4.2)
       grpc (~> 1.0)
     gitlab (6.1.0)
       base64
@@ -1134,7 +1134,7 @@ GEM
       multi_json (~> 1.11)
       os (>= 0.9, < 2.0)
       signet (>= 0.16, < 2.a)
-    gpgme (2.0.26)
+    gpgme (2.0.27)
       mini_portile2 (~> 2.7)
     grape (3.2.1)
       activesupport (>= 7.2)
@@ -2631,7 +2631,7 @@ DEPENDENCIES
   google-cloud-storage (~> 1.62.0)
   google-protobuf (>= 3.25, < 5.0)
   googleauth (~> 1.14)
-  gpgme (~> 2.0.24)
+  gpgme (~> 2.0.27)
   grape (~> 3.2)
   grape-entity (~> 1.1.0)
   grape-path-helpers (~> 2.1)
@@ -3078,7 +3078,7 @@ CHECKSUMS
   gettext (3.5.2) sha256=ada02c59aa7e9f56bd2522faedaed16421dd2f3ddb5fe28628c0be5abcbf3c74
   gettext_i18n_rails (1.13.0) sha256=d4a4739d928b6ce52a2d694d33a831dcb06c7c8e197b3172fc73dfaa20ac8ee6
   git (1.19.1) sha256=b0a422d9f6517353c48a330d6114de4db9e0c82dbe7202964a1d9f1fbc827d70
-  gitaly (19.4.0) sha256=a1508179065f85251d204d3e37f14fe92b252fe42d3b4293856e1e727080af65
+  gitaly (19.4.2) sha256=a3b1324ccc05aaacab2d078278384ca8434a78d6559dc8906b580efa7e61aeaa
   gitlab (6.1.0) sha256=4ae1f866a1f5ae07aa1125e86c0a656b2ad0fe1d78d5ad91b8bc3b67d66063a5
   gitlab-active-context (0.0.1)
   gitlab-backup-cli (0.0.1)
@@ -3180,7 +3180,7 @@ CHECKSUMS
   googleapis-common-protos (1.7.0) sha256=b684c0b9e1800c6bb89ad64e0dcabb377a01a31ff7aec1bfebd26c183b2c9241
   googleapis-common-protos-types (1.23.0) sha256=992e740a523794d9fc5f29a504465d8fc737aaa16c930fe7228e3346860faf0a
   googleauth (1.14.0) sha256=62e7de11791890c3d3dc70582dfd9ab5516530e4e4f56d96451fd62c76475149
-  gpgme (2.0.26) sha256=1aebfd2eb83b745341e6f416f318597568af5ad4d7d1f55bfab4f1078123abaa
+  gpgme (2.0.27) sha256=4f04231de4ba1c9557a340e08acbdbf7aa1ddda4ba965f4a99e2fe351a08b01f
   grape (3.2.1) sha256=448072f55904e5a4dca2e3781f0a373942514be65402cafb6177f5bc73db1b94
   grape-entity (1.1.0) sha256=ab6a1004e57791834e8497d5e85a3c101b72144d8ca31462a26e6d0a380c3d89
   grape-path-helpers (2.1.0) sha256=908155cdc6e33fbca28bd44b4e1467d904fe36b45ef61bee62b7bfa28f5c7726

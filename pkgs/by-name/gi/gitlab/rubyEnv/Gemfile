@@ -151,7 +151,7 @@ gem 'browser', '~> 5.3.1', feature_category: :shared # rubocop:todo Gemfile/Miss
 gem 'ohai', '~> 19.1.16', feature_category: :product_analytics
 
 # GPG
-gem 'gpgme', '~> 2.0.24', feature_category: :source_code_management
+gem 'gpgme', '~> 2.0.27', feature_category: :source_code_management
 
 # LDAP Auth
 # GitLab fork with several improvements to original library. For full list of changes

@@ -72,8 +72,8 @@ let
   cef = cef-binary.overrideAttrs (
     oldAttrs:
     let
-      version = "6533";
-      revision = "6";
+      version = "7871";
+      revision = "2";
     in
     {
       inherit version;
@@ -86,8 +86,8 @@ let
           }
         }_v${revision}.tar.xz";
         hash = selectSystem {
-          aarch64-linux = "sha256-ZCUURp6qKaXIh4kQhNLnP33C10Bfffp3JrLbwkswmZk=";
-          x86_64-linux = "sha256-eWMzVRmhnM3FIz9zNMWrAjAm4vPpoMxBcAfAnYZggUY=";
+          aarch64-linux = "sha256-pvBOpaGgVV1oPy2vpmPgcEoOqVTXA97kyrX/Z7oHStA=";
+          x86_64-linux = "sha256-P1x0+MTEsk276f9M/3unZKpNCnISe5aXY0LkNg5DXbM=";
         };
       };
     }
@@ -95,21 +95,17 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "obs-studio";
-  version = "32.2.2";
+  version = "33.0.3";
 
   src = fetchFromGitHub {
     owner = "obsproject";
     repo = "obs-studio";
     tag = finalAttrs.version;
-    hash = "sha256-JAV3UvM89asUj6P5pD9a+6/Qfa2kFIVQqVfMOZn5MJE=";
+    hash = "sha256-171bpL3Mn/3RFqu1ATE+3u8xoVHqhCPQYM9HdqWv5OY=";
     fetchSubmodules = true;
   };
 
   separateDebugInfo = true;
-
-  patches = [
-    ./fix-nix-plugin-path.patch
-  ];
 
   nativeBuildInputs = [
     addDriverRunpath
@@ -169,11 +165,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   propagatedBuildInputs = [ simde ];
 
-  # Copied from the obs-linuxbrowser
-  postUnpack = lib.optionalString browserSupport ''
-    ln -s ${cef} cef
-  '';
-
   postPatch = ''
     cp ${./CMakeUserPresets.json} ./CMakeUserPresets.json
   '';
@@ -181,10 +172,12 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     "--preset"
     "nixpkgs-${if stdenv.hostPlatform.isDarwin then "darwin" else "linux"}"
-    "-DOBS_VERSION_OVERRIDE=${finalAttrs.version}"
+    (lib.cmakeFeature "OBS_VERSION_OVERRIDE" finalAttrs.version)
+    # Module search paths are built from it relative to the executable
+    (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
     "-Wno-dev" # kill dev warnings that are useless for packaging
-    "-DENABLE_JACK=ON"
-    "-DENABLE_WEBRTC=ON"
+    (lib.cmakeBool "ENABLE_JACK" true)
+    (lib.cmakeBool "ENABLE_WEBRTC" true)
     (lib.cmakeBool "ENABLE_QSV11" stdenv.hostPlatform.isx86_64)
     (lib.cmakeBool "ENABLE_LIBFDK" withFdk)
     (lib.cmakeBool "ENABLE_SCRIPTING" scriptingSupport)
@@ -194,7 +187,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "ENABLE_AJA" false) # TODO: fix linking against libajantv2
     (lib.cmakeBool "ENABLE_BROWSER" browserSupport)
   ]
-  ++ lib.optional browserSupport "-DCEF_ROOT_DIR=../../cef";
+  ++ lib.optional browserSupport (lib.cmakeFeature "CEF_ROOT_DIR" "${cef}");
 
   env.NIX_CFLAGS_COMPILE = toString [
     "-Wno-error=deprecated-declarations"
@@ -220,23 +213,23 @@ stdenv.mkDerivation (finalAttrs: {
     ''
     + lib.optionalString browserSupport ''
       # Remove cef components before patchelf, otherwise it will fail
-      rm $out/lib/obs-plugins/libcef.so
-      rm $out/lib/obs-plugins/libEGL.so
-      rm $out/lib/obs-plugins/libGLESv2.so
-      rm $out/lib/obs-plugins/libvk_swiftshader.so
-      rm $out/lib/obs-plugins/libvulkan.so.1
-      rm $out/lib/obs-plugins/chrome-sandbox
+      rm $out/lib/obs-modules/core/libcef.so
+      rm $out/lib/obs-modules/core/libEGL.so
+      rm $out/lib/obs-modules/core/libGLESv2.so
+      rm $out/lib/obs-modules/core/libvk_swiftshader.so
+      rm $out/lib/obs-modules/core/libvulkan.so.1
+      rm $out/lib/obs-modules/core/chrome-sandbox
     '';
 
   postFixup = lib.concatStrings [
     (lib.optionalString stdenv.hostPlatform.isLinux ''
       addDriverRunpath $out/lib/lib*.so
-      addDriverRunpath $out/lib/obs-plugins/*.so
+      addDriverRunpath $out/lib/obs-modules/core/*.so
     '')
 
     (lib.optionalString browserSupport ''
       # Link cef components again after patchelfing other libs
-      ln -sf ${cef}/${cef.buildType}/* $out/lib/obs-plugins/
+      ln -sf ${cef}/${cef.buildType}/* $out/lib/obs-modules/core/
     '')
   ];
 

@@ -9,13 +9,13 @@
 
 buildDotnetModule (finalAttrs: {
   pname = "seq-cli";
-  version = "2026.1.02662";
+  version = "2026.2.02674";
 
   src = fetchFromGitHub {
     owner = "datalust";
     repo = "seqcli";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-vvcYT1u3+puJVZ/LoxiOpLIsk17bnRB8/ivzCPfPj5U=";
+    hash = "sha256-WTXC4+Fuv8gxgkq1zHWPwSeEzr762IeVbg0HgmsZqrA=";
   };
 
   projectFile = "src/SeqCli/SeqCli.csproj";

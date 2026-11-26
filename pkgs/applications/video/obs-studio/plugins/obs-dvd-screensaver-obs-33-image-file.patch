@@ -1,0 +1,94 @@
+From d830ac567be68623c5363be5da8a7ac570ac6c64 Mon Sep 17 00:00:00 2001
+From: Rafael Ieda <git@ieda.me>
+Date: Sun, 22 Nov 2026 09:57:26 -0300
+Subject: [PATCH] fix: support the OBS 33 image file API
+
+Assisted-by: Claude Code (claude-opus-5-5)
+---
+ src/plugin-main.c | 43 ++++++++++++++++++++++++++-----------------
+ 1 file changed, 26 insertions(+), 17 deletions(-)
+
+diff --git a/src/plugin-main.c b/src/plugin-main.c
+index 233a98b..bb9c057 100644
+--- a/src/plugin-main.c
++++ b/src/plugin-main.c
+@@ -22,6 +22,14 @@ with this program. If not, see <https://www.gnu.org/licenses/>
+ #include <graphics/image-file.h>
+ #include "plugin-support.h"
+ 
++/* OBS 33 replaced gs_image_file with gs_image_file_ex */
++#if LIBOBS_API_MAJOR_VER < 33
++#define gs_image_file_ex_t gs_image_file_t
++#define gs_image_file_ex_init(image, file, alpha_mode) gs_image_file_init(image, file)
++#define gs_image_file_ex_init_texture gs_image_file_init_texture
++#define gs_image_file_ex_free gs_image_file_free
++#endif
++
+ #define FILTER_NAME "dvd-filter"
+ #define SOURCE_NAME "dvd-image"
+ #define DVD_SOURCE_ID "obs_dvd_screensaver"
+@@ -129,6 +137,19 @@ static bool add_source(struct dvd_source *context, const char *id)
+ 	return result;
+ }
+ 
++static void get_image_size(const char *file, uint32_t *cx, uint32_t *cy)
++{
++	gs_image_file_ex_t temp;
++	gs_image_file_ex_init(&temp, file, GS_IMAGE_ALPHA_STRAIGHT);
++
++	obs_enter_graphics();
++	gs_image_file_ex_init_texture(&temp);
++	*cx = temp.cx;
++	*cy = temp.cy;
++	gs_image_file_ex_free(&temp);
++	obs_leave_graphics();
++}
++
+ static void dvd_source_update(void *data, obs_data_t *settings)
+ {
+ 	struct dvd_source *context = data;
+@@ -147,19 +168,15 @@ static void dvd_source_update(void *data, obs_data_t *settings)
+ 	/* Since obs_source_getwidth reports old values, we
+ 	 * get the image size here every time a new file is loaded
+ 	 */
+-	gs_image_file_t temp;
+ 	const char *file = obs_data_get_string(settings, "file");
+ 	const char *id = obs_data_get_string(settings, S_SOURCE_ID);
+ 	context->use_image = strcmp(id, S_SOURCE_IMAGE) == 0;
+ 
+ 	if (file && strlen(file) > 0) {
+-		gs_image_file_init(&temp, file);
+-		obs_enter_graphics();
+-		gs_image_file_init_texture(&temp);
+-		context->img_cx = (uint32_t)(temp.cx * context->scale);
+-		context->img_cy = (uint32_t)(temp.cy * context->scale);
+-		gs_image_file_free(&temp);
+-		obs_leave_graphics();
++		uint32_t cx, cy;
++		get_image_size(file, &cx, &cy);
++		context->img_cx = (uint32_t)(cx * context->scale);
++		context->img_cy = (uint32_t)(cy * context->scale);
+ 	} else {
+ 		context->img_cx =
+ 			(uint32_t)(obs_source_get_width(context->logo_source) *
+@@ -313,16 +330,8 @@ bool image_path_changed(obs_properties_t *props, obs_property_t *p,
+ 	/* Since obs_source_getwidth reports old values, we
+ 	 * get the image size here every time a new file is loaded
+ 	 */
+-	gs_image_file_t temp;
+ 	const char *file = obs_data_get_string(data, "file");
+-	gs_image_file_init(&temp, file);
+-
+-	obs_enter_graphics();
+-	gs_image_file_init_texture(&temp);
+-	cx = temp.cx;
+-	cy = temp.cy;
+-	gs_image_file_free(&temp);
+-	obs_leave_graphics();
++	get_image_size(file, &cx, &cy);
+ 
+ 	obs_property_int_set_limits(obs_properties_get(props, S_SOURCE_CX),
+ 				    cx + 4, 0xffff, 1);
+-- 
+2.56.0
+
