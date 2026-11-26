@@ -12,14 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "psptool";
-  version = "3.7";
+  version = "3.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PSPReverse";
     repo = "PSPTool";
     tag = finalAttrs.version;
-    hash = "sha256-S5pBgaHlepyq0xqwO+LSBqbihN9DSnyxEhrkPaL4BDE=";
+    hash = "sha256-Lw1YZ6gjq9fPRo4btjcJaa3yC8/LSmjvmpXiw29m1as=";
   };
 
   build-system = [
