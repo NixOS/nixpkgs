@@ -140,7 +140,7 @@ stdenv.mkDerivation (finalAttrs: {
     (fetchpatch {
       name = "musl-sockaddr-cast.patch";
       url = "https://github.com/bus1/dbus-broker/commit/bde3440958114694a20dae6a2e95f1f99e917c2e.patch";
-      hash = "sha256-ajubfQXxaVUwiZsT+F6qKs43oDlGgbF4Ajp74BW1m00=";
+      hash = "sha256-H2DQ7tqQFkEOnSxAtAD0mAOK/6mlIIhabVRUM5voaiw=";
     })
   ];
 
