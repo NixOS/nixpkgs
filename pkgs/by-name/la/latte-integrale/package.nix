@@ -28,6 +28,9 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+  # fails with configure: error: C compiler cannot create executables
+  makeFlags = lib.optionals stdenv.hostPlatform.isLinux [ "CXXFLAGS=-std=gnu++17" ];
+
   buildInputs = [
     gmp
     ntl
