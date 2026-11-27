@@ -13,7 +13,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "proc-cli";
-  version = "2.4.0";
+  version = "2.5.0";
 
   __structuredAttrs = true;
 
@@ -21,10 +21,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "yazeed";
     repo = "proc-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pG3kioWjEI9AQ1D+lHW2xtwQCUqerpdMCizx3gG2SPs=";
+    hash = "sha256-msIAhJOSD2tEXkqQD4+Bj11yiR4q6ShHkbsbtC0S23Q=";
   };
 
-  cargoHash = "sha256-Eg+86S2XuitFh5UA3wh7p3kTEnqwWuiR2UnsR+TAzXs=";
+  cargoHash = "sha256-WbluSwCzU+gQnQ3rAR2LGG4/DyeTnb6UEfzOLNsX0Rk=";
 
   nativeBuildInputs = [ installShellFiles ];
 

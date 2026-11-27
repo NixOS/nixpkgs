@@ -23,6 +23,7 @@
   e2fsprogs,
   enableBloat ? true,
   enjarify,
+  fetchpatch,
   fetchurl,
   ffmpeg,
   file,
@@ -127,6 +128,11 @@ python.pkgs.buildPythonApplication rec {
 
   patches = [
     ./ignore_links.patch
+    (fetchpatch {
+      name = "Handle-GHC-snapshot-versions-correctly.patch";
+      url = "https://salsa.debian.org/reproducible-builds/diffoscope/-/commit/33826eb6d0cbc4bec0b6aa53b1d2f041fb54a51f.patch";
+      hash = "sha256-lqZLUq/U6/5qaRT1tkHS21qZ5m2Zv7waDZY9fwsMV1A=";
+    })
   ];
 
   postPatch = ''

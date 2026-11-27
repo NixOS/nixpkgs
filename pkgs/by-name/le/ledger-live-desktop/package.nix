@@ -8,11 +8,11 @@
 
 appimageTools.wrapType2 (finalAttrs: {
   pname = "ledger-live-desktop";
-  version = "4.28.0";
+  version = "4.30.0";
 
   src = fetchurl {
     url = "https://download.live.ledger.com/ledger-live-desktop-${finalAttrs.version}-linux-x86_64.AppImage";
-    hash = "sha256-kaRhYhfcI5aOXaAPt3QtFm4X+a2DTHRANbn+lmY4jZo=";
+    hash = "sha256-ca8hz4LmMzxbwtE7cD2M8gUMad0E21J2r6ElyEb8yyk=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
