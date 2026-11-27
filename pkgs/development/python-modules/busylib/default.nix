@@ -11,7 +11,6 @@
   pydantic-settings,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   typing-extensions,
@@ -23,8 +22,6 @@ buildPythonPackage (finalAttrs: {
   pname = "busylib";
   version = "2.6.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "busy-app";
