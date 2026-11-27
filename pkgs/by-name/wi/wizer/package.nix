@@ -4,8 +4,6 @@
   fetchFromGitHub,
   pkg-config,
   zstd,
-  testers,
-  wizer,
   writableTmpDirAsHomeHook,
 }:
 
