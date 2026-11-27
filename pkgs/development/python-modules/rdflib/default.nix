@@ -61,6 +61,9 @@ buildPythonPackage rec {
     # requires network access
     "rdflib/__init__.py::rdflib"
     "test/jsonld/test_onedotone.py::test_suite"
+    # requires Docker
+    "test/test_graphdb/test_e2e"
+    "test/test_rdf4j/test_e2e"
   ];
 
   disabledTests = [
