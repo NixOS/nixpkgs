@@ -3,7 +3,6 @@
   stdenv,
   darwin,
   fetchFromGitHub,
-  fetchpatch,
   autoreconfHook,
   kyua,
   gitUpdater,
@@ -15,13 +14,13 @@ let
 in
 stdenv'.mkDerivation (finalAttrs: {
   pname = "atf";
-  version = "0.23";
+  version = "0.26.1";
 
   src = fetchFromGitHub {
     owner = "freebsd";
     repo = "atf";
     tag = "atf-${finalAttrs.version}";
-    hash = "sha256-g9cXeiCaiyGQXtg6eyrbRQpqk4VLGSFuhfPB+ynbDIo=";
+    hash = "sha256-YdxmkrJIQpOd48RSgQwPgLD76KzKFONc5vlqOaNKIcU=";
   };
 
   postPatch =
@@ -59,27 +58,19 @@ stdenv'.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  makeFlags = [
-    # ATF isn’t compatible with C++17, which is the default on current clang and GCC.
-    "CXXFLAGS=-std=c++14"
-  ];
-
   doInstallCheck = true;
 
   nativeInstallCheckInputs = [
     kyua
   ];
 
-  # Don’t install the test programs for ATF itself; they’re useless
-  # other than as part of the `installCheckPhase`, and they contain
-  # non‐reproducible references to the build directory.
-  postInstall = ''
-    rm -r $out/tests
-  '';
-
+  # ATF expects to run the installed tests. Run them as part of check phase then delete them to avoid creating
+  # references to the ATF build products.
   installCheckPhase = ''
     runHook preInstallCheck
+    cd $out/tests/atf
     HOME=$TMPDIR PATH=$out/bin:$PATH kyua test
+    rm -rf $out/tests
     runHook postInstallCheck
   '';
 
