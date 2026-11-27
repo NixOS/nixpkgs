@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "tparse";
-  version = "0.18.0";
+  version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "mfridman";
     repo = "tparse";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-oJApKmdo8uvnm6npXpzcKBRRkZ901AH1kZqGuoLdB3U=";
+    hash = "sha256-ecq5OHNXQOkTyNZ2bvP4hBuIdWT/TkUQoXxHGqf69+A=";
   };
 
-  vendorHash = "sha256-4W6RryyQByUcwM2P2jmG2wXjNMrnpcCTSOJiw1M/Kd0=";
+  vendorHash = "sha256-dV6roD9wTEiRmKAnAgbgGYrf7emwOI3AAFoEDiNnVZE=";
 
   ldflags = [
     "-s"
