@@ -2,7 +2,6 @@
   lib,
   stdenv,
   buildPackages,
-  replaceVars,
   fetchFromGitHub,
   meson,
   mesonEmulatorHook,
@@ -12,12 +11,12 @@
   cmake,
   gettext,
   xmlto,
-  docbook-xsl-nons,
+  docbook-xsl-ns,
   docbook_xml_dtd_45,
+  libblake3,
   libxslt,
   libstemmer,
   glib,
-  xapian,
   libxml2,
   libxmlb,
   libfyaml,
@@ -27,10 +26,10 @@
   vala,
   curl,
   cairo,
-  gdk-pixbuf,
   pango,
-  librsvg,
   bash-completion,
+  vips,
+  wayland,
   systemd,
   nixosTests,
   testers,
@@ -42,7 +41,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "appstream";
-  version = "1.1.2";
+  version = "1.2.3";
 
   outputs = [
     "out"
@@ -53,16 +52,11 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ximion";
     repo = "appstream";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-tvdWWdL6PthffAZZnNZ3+17/eJdZFx8xFkqm7IvyPWE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-SNVM2luS/bgxg0JfxuSQNel3SaKTu9ZTbJ14vV8V1jo=";
   };
 
   patches = [
-    # Fix hardcoded paths
-    (replaceVars ./fix-paths.patch {
-      libstemmer_includedir = "${lib.getDev libstemmer}/include";
-    })
-
     # Allow installing installed tests to a separate output.
     ./installed-tests-path.patch
   ];
@@ -81,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     gettext
     libxslt
     xmlto
-    docbook-xsl-nons
+    docbook-xsl-ns
     docbook_xml_dtd_45
     glib
     itstool
@@ -99,34 +93,36 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    libblake3
     libstemmer
     glib
-    xapian
     libxml2
     libxmlb
     libfyaml
     curl
-    cairo
-    gdk-pixbuf
-    pango
-    librsvg
     bash-completion
+  ]
+  # only used by appstream-compose
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    cairo
+    pango
+    vips
+    wayland
   ]
   ++ lib.optionals withSystemd [
     systemd
   ];
 
   mesonFlags = [
-    "-Dapidocs=false"
-    "-Dc_args=-Wno-error=missing-include-dirs"
-    "-Ddocs=false"
-    "-Dvapi=true"
-    "-Dinstalled_test_prefix=${placeholder "installedTests"}"
-    "-Dcompose=true"
+    (lib.mesonBool "apidocs" false)
+    # uses Linux-specific APIs
+    (lib.mesonBool "compose" stdenv.hostPlatform.isLinux)
+    (lib.mesonBool "docs" false)
     (lib.mesonBool "gir" withIntrospection)
-  ]
-  ++ lib.optionals (!withSystemd) [
-    "-Dsystemd=false"
+    (lib.mesonBool "systemd" withSystemd)
+    (lib.mesonBool "vapi" true)
+    (lib.mesonOption "c_args" "-Wno-error=missing-include-dirs")
+    (lib.mesonOption "installed_test_prefix" "${placeholder "installedTests"}")
   ];
 
   passthru.tests = {
@@ -149,5 +145,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "appstreamcli";
     platforms = lib.platforms.unix;
     pkgConfigModules = [ "appstream" ];
+    maintainers = with lib.maintainers; [ eclairevoyant ];
   };
 })
