@@ -22,7 +22,7 @@
 
 buildGo127Module (finalAttrs: {
   pname = "gitea";
-  version = "28.4.0";
+  version = "29.0.0-dev";
 
   outputs = [
     "out"
@@ -33,12 +33,12 @@ buildGo127Module (finalAttrs: {
     owner = "go-gitea";
     repo = "gitea";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YR9IrLGPRuxiuoIoBwd9MsX+S3r/pqw/D4H5qtRsrmg=";
+    hash = "sha256-2lRSAEv/lUYNrZn6su1UU0PVpZrYwnWV9JoHQmPVxLg=";
   };
 
   proxyVendor = true;
 
-  vendorHash = "sha256-DHRcBNzoR3w9T0e20qiX6VD7STH30ql0pRBUbyNeKTU=";
+  vendorHash = "sha256-m2lkBKsJeJ+SRP7mKDu+uVfaM3yEOpJIyW6xqfaII7A=";
 
   postPatch = ''
     substituteInPlace modules/setting/server.go \
@@ -70,7 +70,7 @@ buildGo127Module (finalAttrs: {
       inherit (finalFrontendAttrs) pname version src;
       pnpm = pnpm_11;
       fetcherVersion = 4;
-      hash = "sha256-ali72RBRH2tGUY7n2vQIxnIenxZZ7GdVtVcMAZZwa1w=";
+      hash = "sha256-Q8PJfQ5RPKM1upeujKLd5msANQRj+Fjwz/Q+lqov0yI=";
     };
 
     nativeBuildInputs = [
