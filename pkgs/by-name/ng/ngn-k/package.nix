@@ -28,6 +28,8 @@ stdenv.mkDerivation {
     done
   '';
 
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=discarded-qualifiers";
+
   makeFlags = [ "-e" ];
   buildFlags = [
     "k"
