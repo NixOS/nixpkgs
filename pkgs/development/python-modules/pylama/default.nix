@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   replaceVars,
-  git,
+  gitMinimal,
   eradicate,
   mccabe,
   mypy,
@@ -30,7 +30,7 @@ buildPythonPackage (finalAttrs: {
 
   patches = [
     (replaceVars ./paths.patch {
-      git = "${lib.getBin git}/bin/git";
+      git = lib.getExe gitMinimal;
     })
     ./pytest-9.1-compat.patch
     ./setuptools-82-compat.patch
