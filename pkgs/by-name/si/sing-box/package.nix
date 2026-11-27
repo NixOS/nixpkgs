@@ -19,7 +19,7 @@ assert lib.assertMsg (
 buildGoModule (finalAttrs: {
   pname = "sing-box";
   # NOTE: also update cronet-go
-  version = "1.14.4";
+  version = "1.14.5";
 
   __structuredAttrs = true;
 
@@ -28,7 +28,7 @@ buildGoModule (finalAttrs: {
     owner = "SagerNet";
     repo = "sing-box";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1tP0gXUTLGVR32c11nypsZSx2FtBOmKMTJkt+7j/fJU=";
+    hash = "sha256-BID9YMyyqkx4itqzzBU48DFp3ndXU/J5x5kEss3GK4k=";
   };
 
   # Remove distrusted CA certificates from the embedded root stores.
@@ -42,7 +42,7 @@ buildGoModule (finalAttrs: {
       common/certificate/{mozilla,chrome}.go
   '';
 
-  vendorHash = "sha256-xZWWzvyTrbaxqHG1UdKOVLOd5dPf9z6JfPJf3WeTm5Y=";
+  vendorHash = "sha256-oq5JCK4Y6p1YeRDAtPrSC/KcsaN6ioKoYk9k2W5ehNQ=";
 
   tags = [
     "with_gvisor"
