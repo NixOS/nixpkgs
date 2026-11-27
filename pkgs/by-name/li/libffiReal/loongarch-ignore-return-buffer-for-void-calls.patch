@@ -1,0 +1,26 @@
+From f9652a3535d0c83159175b472405c5c9ea6fb969 Mon Sep 17 00:00:00 2001
+From: Pluto Yang <yangyj.ee@gmail.com>
+Date: Thu, 19 Nov 2026 21:32:42 +0800
+Subject: [PATCH] loongarch: ignore return buffer for void calls
+
+ffi_type_void has size 1, so a non-NULL rvalue made ffi_call() copy one
+byte of the return register into the caller's buffer.  Skip unmarshalling
+for VOID, as the RISC-V port already does; without this,
+testsuite/libffi.call/return_void.c fails on loongarch64.
+---
+ src/loongarch/ffi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/loongarch/ffi.c b/src/loongarch/ffi.c
+index ab0d929f8..d0072765e 100644
+--- a/src/loongarch/ffi.c
++++ b/src/loongarch/ffi.c
+@@ -507,7 +507,7 @@ ffi_call_int (ffi_cif *cif, void (*fn) (void), void *rvalue, void **avalue,
+   ffi_call_asm ((void *) alloc_base, cb.aregs, fn, closure);
+ 
+   cb.used_float = cb.used_integer = 0;
+-  if (!return_by_ref && rvalue)
++  if (!return_by_ref && rvalue && cif->rtype->type != FFI_TYPE_VOID)
+     unmarshal (&cb, cif->rtype, 0, rvalue);
+ }
+ 
