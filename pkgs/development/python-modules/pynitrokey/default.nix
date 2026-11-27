@@ -25,7 +25,7 @@
 
 let
   pname = "pynitrokey";
-  version = "0.14.1";
+  version = "0.15.0";
   mainProgram = "nitropy";
 in
 
@@ -35,7 +35,7 @@ buildPythonPackage {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ZUleWvx+zRInAHf5j1gn1lLF37G/80122sG+vz6yc74=";
+    hash = "sha256-mjglOjjCLPZGBkBqpfcbSsxbrniwf81OEKFYWed5EWI=";
   };
 
   nativeBuildInputs = [ installShellFiles ];

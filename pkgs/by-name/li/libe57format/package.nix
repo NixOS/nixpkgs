@@ -10,19 +10,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libe57format";
-  version = "3.3.0";
+  version = "3.4.1";
 
   src = fetchFromGitHub {
     owner = "asmaloney";
     repo = "libE57Format";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rEX251cgb6GMToGzcZcwDzjLZBGcwN8+ij1nCIpK2ZE=";
+    hash = "sha256-HzlQ9Jy/Nx9X7OMx7Hcu4rgxBRCDtDcnySK9aHWSv7Y=";
   };
-
-  postPatch = lib.optionalString finalAttrs.finalPackage.doCheck ''
-    rmdir test/extern/googletest
-    ln -s ${gtest.src} test/extern/googletest
-  '';
 
   # Repository of E57 files used for testing.
   libE57Format-test-data_src = fetchFromGitHub {
@@ -40,19 +35,28 @@ stdenv.mkDerivation (finalAttrs: {
     xercesc
   ];
 
+  checkInputs = [
+    gtest
+  ];
+
   cmakeFlags = [
     # Without this, LTO will be enabled, which seems to cause
     # errors when consumers try to link the `.a` file, see:
     #     https://github.com/asmaloney/libE57Format/pull/313#issuecomment-2907797367
     "-DE57_RELEASE_LTO=OFF"
     # See https://github.com/asmaloney/libE57Format/blob/9372bdea8db2cc0c032a08f6d655a53833d484b8/test/README.md
-    (
-      if finalAttrs.finalPackage.doCheck then
+  ]
+  ++ (
+    if finalAttrs.finalPackage.doCheck then
+      [
         "-DE57_TEST_DATA_PATH=${finalAttrs.libE57Format-test-data_src}"
-      else
-        "-DE57_BUILD_TEST=OFF"
-    )
-  ];
+        # Use nixpkgs' gtest instead of the (empty)
+        # `test/extern/googletest` submodule.
+        "-DE57_USE_EXTERNAL_GTEST=ON"
+      ]
+    else
+      [ "-DE57_BUILD_TEST=OFF" ]
+  );
 
   doCheck = true;
 

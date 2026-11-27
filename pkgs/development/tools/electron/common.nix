@@ -12,7 +12,6 @@
   yarn-berry_4,
   unzip,
   writers,
-  substitute,
 
   libnotify,
   libpulseaudio,
