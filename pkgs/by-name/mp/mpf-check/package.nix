@@ -10,7 +10,7 @@
 
 buildDotnetModule (finalAttrs: {
   pname = "mpf-check";
-  version = "3.11.1";
+  version = "3.12.0";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -19,7 +19,7 @@ buildDotnetModule (finalAttrs: {
     owner = "SabreTools";
     repo = "MPF";
     tag = finalAttrs.version;
-    hash = "sha256-i+Kq72skWBqCQwtibaBhztuRsJSU1bIwSaTmM8u4ARU=";
+    hash = "sha256-/CJxW1c/avoYXy9ICljjiz2LQyyo4rgDrNoqDupbrXQ=";
   };
 
   postPatch = ''
