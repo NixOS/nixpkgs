@@ -2103,8 +2103,8 @@ let
         mktplcRef = {
           name = "gc-excelviewer";
           publisher = "grapecity";
-          version = "4.2.66";
-          hash = "sha256-EFy5GjkgV5puELTzNat+30WC224PLDQJmJeBILc1Fvo=";
+          version = "4.2.67";
+          hash = "sha256-M26Wt796r0ndCEKI8HcrAQi8ZLaCxWg3vDKOHuS62lk=";
         };
         meta = {
           description = "Edit Excel spreadsheets and CSV files in Visual Studio Code and VS Code for the Web";
