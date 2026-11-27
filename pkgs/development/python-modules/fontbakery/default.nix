@@ -171,6 +171,8 @@ buildPythonPackage (finalAttrs: {
     # These require network access
     "test_check_axes_match"
     "test_check_vertical_metrics_regressions"
+    # Fails with news version of axisregistry
+    "test_check_gfaxisregistry_bounds[googlefonts/metadata/axisregistry_bounds]"
   ];
 
   postInstall = ''
