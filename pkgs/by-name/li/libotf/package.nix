@@ -7,14 +7,15 @@
   autoreconfHook,
   libxaw,
   freetype,
+  testers,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libotf";
   version = "0.9.16";
 
   src = fetchurl {
-    url = "mirror://savannah/m17n/${pname}-${version}.tar.gz";
+    url = "mirror://savannah/m17n/libotf-${finalAttrs.version}.tar.gz";
     sha256 = "0sq6g3xaxw388akws6qrllp3kp2sxgk2dv4j79k6mm52rnihrnv8";
   };
 
@@ -57,8 +58,12 @@ stdenv.mkDerivation rec {
     mkdir -p $dev/bin
     mv $out/bin/libotf-config $dev/bin/
     substituteInPlace $dev/bin/libotf-config \
-      --replace "pkg-config" "${pkg-config}/bin/pkg-config"
+      --replace-fail "pkg-config" "${pkg-config}/bin/pkg-config"
   '';
+
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://www.nongnu.org/m17n/";
@@ -66,5 +71,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ bendlas ];
+    pkgConfigModules = [ "libotf" ];
   };
-}
+})

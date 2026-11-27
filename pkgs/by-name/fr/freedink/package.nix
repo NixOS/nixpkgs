@@ -2,6 +2,7 @@
   autoreconfHook,
   cxxtest,
   desktopToDarwinBundle,
+  directoryListingUpdater,
   fetchurl,
   fontconfig,
   gettext,
@@ -9,7 +10,6 @@
   help2man,
   intltool,
   lib,
-  nix-update-script,
   pkg-config,
   SDL2,
   SDL2_gfx,
@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     # Data rarely changes, so not covered by update-script
-    updateScript = nix-update-script { };
+    updateScript = directoryListingUpdater { url = "https://ftp.gnu.org/gnu/freedink/"; };
     inherit data;
   };
 
