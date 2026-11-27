@@ -1,0 +1,14 @@
+--- a/desktopApp/build.gradle.kts
++++ b/desktopApp/build.gradle.kts
+@@ -257,11 +257,6 @@
+                 // Archive the classes loaded at startup, so the app starts
+                 // faster. On Windows the JetBrains Runtime 21 loses most of
+                 // the gain when the app is installed elsewhere, see JBR-9098.
+-                if (!hostPlatform.isWindows) {
+-                    aot {
+-                        mode = AotMode.AppCdsPrebuild
+-                    }
+-                }
+             }
+         }
+     }

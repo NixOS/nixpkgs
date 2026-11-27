@@ -1,0 +1,17 @@
+--- a/settings.gradle
++++ b/settings.gradle
+@@ -27,7 +27,13 @@
+                 includeGroup 'com.github.open-keychain.open-keychain'
+             }
+         }
+-        maven { url = "https://maven.pkg.jetbrains.space/public/p/compose/dev" }
++        maven {
++            url = "https://maven.pkg.jetbrains.space/public/p/compose/dev"
++            content {
++                includeGroupByRegex "org[.]jetbrains[.]compose([.].*)?"
++                includeGroupByRegex "org[.]jetbrains[.]androidx([.].*)?"
++            }
++        }
+     }
+ }
+ rootProject.name = "keyguard"
