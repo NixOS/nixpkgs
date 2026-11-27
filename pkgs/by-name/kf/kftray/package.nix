@@ -36,7 +36,7 @@ stdenv.mkDerivation (
       substituteInPlace crates/kftray-helper/src/network.rs \
         --replace-fail '"/sbin/ip"' '"${lib.getExe' iproute2 "ip"}"'
     '';
-    cargoHash = finalAttrs.cargoDeps.hash or "sha256-5XLxYcdInGOMWzx0x8NM6wZdliv64xsuLI9qdxLjhpk=";
+    cargoHash = finalAttrs.cargoDeps.hash or "sha256-81jl8EZpTwA9GkwO2UEfKGMWQakv5LPj86qAdkBE110=";
     kftrayBinaries = rustPlatform.buildRustPackage {
       pname = "kftray-binaries";
       cargoBuildFlags = [
@@ -69,13 +69,13 @@ stdenv.mkDerivation (
   in
   {
     pname = "kftray";
-    version = "0.35.2";
+    version = "0.36.0";
 
     src = fetchFromGitHub {
       owner = "hcavarsan";
       repo = "kftray";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-COOxLWgJE2qSdxdVW9oQsbjpEsK05dumgosvXBchTtU=";
+      hash = "sha256-fsUCurLuTr+D5zN3U1A+VWjdWKPL4tVzFhrHhAsK4dk=";
     };
 
     cargoRoot = "./";
@@ -93,7 +93,7 @@ stdenv.mkDerivation (
       inherit (finalAttrs) pname version src;
       inherit pnpm;
       fetcherVersion = 4;
-      hash = "sha256-AVzeVI4KLarlVuYvF6WbW3gDUrv3wHw2JrJDoByASLA=";
+      hash = "sha256-E8WOJEDNY7a2jb1OAWUTzc7OvRNelCVAti9MXxZlcb0=";
     };
 
     buildInputs = [
