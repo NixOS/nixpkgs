@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "autozimu";
     repo = "unison-fsmonitor";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-hMrfEKW4klzHF89UGI4NUwXE6/Yk/wsUXUxe7ZPy/b8=";
   };
 
