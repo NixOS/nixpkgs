@@ -17,7 +17,6 @@
   SDL2_ttf,
   libx11,
   xorgproto,
-  nix-update-script,
 }:
 
 let
@@ -128,13 +127,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
-
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "tome-(.*)"
-    ];
-  };
 
   meta = {
     description = "Tales of Maj'eyal (rogue-like game)";
