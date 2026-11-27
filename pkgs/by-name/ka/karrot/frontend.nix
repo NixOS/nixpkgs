@@ -26,6 +26,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-aQAeHK8vw2wJr1+qUzv1cWdm0ghzf0hHURVYepF2kpo=";
   };
 
+  patches = [
+    # TODO: upstream this fix and fetchpatch
+    ./fix-empty-groups-create-link.patch
+  ];
+
   nativeBuildInputs = [
     yarnConfigHook
     yarnBuildHook
