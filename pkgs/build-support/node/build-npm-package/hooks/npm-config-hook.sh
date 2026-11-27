@@ -5,6 +5,11 @@ npmConfigHook() {
 
     # Use npm patches in the nodejs package
     export NIX_NODEJS_BUILDNPMPACKAGE=1
+
+    # Read by node-npm-build-npm-package-logic.patch to prepare Git
+    # dependencies. `__structuredAttrs = true` doesn't export attributes.
+    export stdenv
+    export forceGitDeps
     export prefetchNpmDeps="@prefetchNpmDeps@"
 
     if [ -n "${npmRoot-}" ]; then
