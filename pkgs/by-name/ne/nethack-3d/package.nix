@@ -59,7 +59,12 @@ buildNpmPackage (finalAttrs: {
   '';
 
   passthru.updateScript = nix-update-script {
-    extraArgs = [ "--generate-lockfile" ];
+    extraArgs = [
+      "--generate-lockfile"
+      # Only match tags formatted as x.y.z (e.g., 1.2.3)
+      "--version-regex"
+      "^([0-9]+\\.[0-9]+\\.[0-9]+)$"
+    ];
   };
 
   meta = {
