@@ -13,6 +13,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "netavark";
   version = "2.1.0";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "containers";
     repo = "netavark";
