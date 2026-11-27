@@ -23792,6 +23792,11 @@
     github = "plamper";
     githubId = 59016721;
   };
+  Plarpoon = {
+    name = "Alessandro Suha";
+    github = "Plarpoon";
+    githubId = 40299833;
+  };
   PlasmaPower = {
     name = "Lee Bousfield";
     github = "PlasmaPower";
