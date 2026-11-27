@@ -16,13 +16,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "yaru";
-  version = "26.10.3";
+  version = "27.04.0";
 
   src = fetchFromGitHub {
     owner = "ubuntu";
     repo = "yaru";
     tag = finalAttrs.version;
-    hash = "sha256-E8CYl0i9/UzlwhnmBl8IDDeAoB9AxOWAbOnPm2HOcz0=";
+    hash = "sha256-BmTMdI+ejLbHM600ydnOzsty7dINs0Qhpsr+VgqG0No=";
   };
 
   __structuredAttrs = true;
