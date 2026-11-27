@@ -25,14 +25,14 @@
           pkgs.callPackage (
             {
               runCommand,
-              libxml2Python,
+              libxml2,
               python3Packages,
             }:
             runCommand name
               {
                 nativeBuildInputs = [
                   python3Packages.xmltodict
-                  libxml2Python
+                  libxml2
                 ];
                 inherit value;
                 pythonGen = pkgs.writeText "pythonGen" ''

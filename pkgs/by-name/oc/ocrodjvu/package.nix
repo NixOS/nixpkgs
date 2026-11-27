@@ -7,7 +7,6 @@
   docbook-xsl-ns,
   glibcLocales,
   libxml2,
-  libxml2Python,
   libxslt,
   pkg-config,
   tesseract5,
@@ -61,7 +60,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     djvulibre
     glibcLocales
     libxml2
-    libxml2Python
     tesseract5
   ];
 
