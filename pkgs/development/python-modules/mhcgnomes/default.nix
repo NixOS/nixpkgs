@@ -7,9 +7,9 @@
   setuptools,
 
   # dependencies
+  argcomplete,
   pandas,
   pyyaml,
-  numpy,
 
   # tests
   pytestCheckHook,
@@ -17,14 +17,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "mhcgnomes";
-  version = "3.70.3";
+  version = "3.96.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pirl-unc";
     repo = "mhcgnomes";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fVa5U8qf0SprLhS8YacYZ05kkOk1KCaVRY0dlB3h9S0=";
+    hash = "sha256-j3+Zh0NM6OWCfT6TFcCqIXBKzvWk0DFiddTJpcGRNrw=";
   };
 
   build-system = [
@@ -32,9 +32,9 @@ buildPythonPackage (finalAttrs: {
   ];
 
   dependencies = [
+    argcomplete
     pandas
     pyyaml
-    numpy
   ];
 
   pythonImportsCheck = [ "mhcgnomes" ];
@@ -48,5 +48,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/pirl-unc/mhcgnomes";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ samuela ];
+    mainProgram = "mhcgnomes";
   };
 })
