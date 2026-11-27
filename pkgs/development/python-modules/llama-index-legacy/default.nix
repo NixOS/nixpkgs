@@ -4,6 +4,8 @@
   fetchPypi,
   llama-index-core,
   poetry-core,
+  openai,
+  pandas,
 }:
 
 buildPythonPackage rec {
@@ -21,7 +23,11 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-  dependencies = [ llama-index-core ];
+  dependencies = [
+    llama-index-core
+    openai
+    pandas
+  ];
 
   # Tests are only available in the mono repo
   doCheck = false;
