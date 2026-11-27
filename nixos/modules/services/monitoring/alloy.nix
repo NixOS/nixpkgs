@@ -43,7 +43,7 @@ let
         nativeBuildInputs = [ cfg.package ];
       }
       ''
-        alloy validate ${checkSource}
+        alloy validate ${lib.escapeShellArgs cfg.checkConfigFlags} ${checkSource}
         touch $out
       '';
 in
@@ -107,6 +107,21 @@ in
         for the build platform. This does not work for a package changed
         with `override` or `overrideAttrs`, so disable the check in that
         case.
+      '';
+    };
+
+    checkConfigFlags = lib.mkOption {
+      type = with lib.types; listOf str;
+      default = [ ];
+      example = [
+        "--stability.level=experimental"
+        "--config.format=promtail"
+      ];
+      description = ''
+        Extra command-line flags passed to {command}`alloy validate` when
+        {option}`services.alloy.checkConfig` is enabled.
+
+        See <https://grafana.com/docs/alloy/latest/reference/cli/validate/>
       '';
     };
 
