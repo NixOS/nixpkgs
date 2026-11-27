@@ -155,6 +155,8 @@ goBuild (finalAttrs: {
   pname = "ollama";
   version = "0.40.18";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "ollama";
     repo = "ollama";
