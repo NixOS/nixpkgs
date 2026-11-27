@@ -40,6 +40,7 @@
   libgit2,
   manix,
   llvmPackages,
+  mcp-hub,
   neovim-unwrapped,
   nix,
   nodejs,
@@ -2583,9 +2584,14 @@ assertNoAdditions {
 
   mcphub-nvim = super.mcphub-nvim.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
+
     checkInputs = [
       # Required by mcphub.extensions.luali
       self.lualine-nvim
+    ];
+
+    runtimeDeps = [
+      mcp-hub
     ];
 
     nvimSkipModules = [
