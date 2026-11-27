@@ -5,7 +5,6 @@
   groff,
   mandoc,
   ncurses,
-  nix-update-script,
   util-linux,
   versionCheckHook,
 }:
@@ -45,8 +44,6 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Text-mode videogame inspired by Namco's Pac-Man";
