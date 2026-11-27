@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/cli";
 
-  cargoHash = "sha256-idzEyxElozYDcAqrvY/AqCBMMTz/a1DN21SyTyHDqTc=";
+  cargoHash = "sha256-yJ2zGFdMpHagvzQh/79znTCGebP26d5v+NTXoejH2zY=";
 
   buildFeatures = [ "nix" ] ++ lib.optional withEval "eval";
 
