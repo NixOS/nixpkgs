@@ -1510,6 +1510,7 @@ mapAliases {
   libmp3splt = throw "'libmp3splt' has been removed due to lack of maintenance upstream."; # Added 2025-05-17
   libmusicbrainz3 = throw "libmusicbrainz3 has been removed as it was obsolete and unused"; # Added 2025-09-16
   libmusicbrainz5 = libmusicbrainz; # Added 2025-09-16
+  libnids = throw "'libnids' has been removed as it is unmaintained and it only user in nixpkgs was removed"; # Added 2026-11-27
   libomxil-bellagio = throw "'libomxil-bellagio' has been removed, as it has been unmaintained upstream for over 15 years"; # Added 2026-11-07
   libosmo-sccp = throw "'libosmo-sccp' has been renamed to/replaced by 'libosmo-sigtran'"; # Converted to throw 2025-10-27
   libpng12 = "'libpng12' has been removed as it was suceptible to various security issues and long superseded by the libpng 1.6 ABI."; # Added 2026-10-23
