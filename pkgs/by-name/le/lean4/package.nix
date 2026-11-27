@@ -8,6 +8,10 @@
   gmp,
   cadical,
   leangz,
+  lean4lean,
+  nanoda-lib,
+  con-leche,
+  con-ron,
   makeWrapper,
   openssl,
   pkg-config,
@@ -44,6 +48,9 @@ stdenv.mkDerivation (finalAttrs: {
         stage0/src/CMakeLists.txt \
         stage0/src/runtime/CMakeLists.txt \
         --replace-fail '${pattern}' '${finalAttrs.mimalloc-src}'
+
+      substituteInPlace src/stdlib.make.in \
+        --replace-fail '/usr/bin/env bash' "$(command -v bash)"
     ''
     # Remove tests that fails in sandbox.
     # It expects `sourceRoot` to be a git repository.
@@ -73,7 +80,16 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
   ];
 
+  postBuild = ''
+    make -C stage1 leanchecker-paranoid -j$NIX_BUILD_CORES
+  '';
+
   postInstall = ''
+    install -m755 "${lib.getExe lean4lean}" -t "$out/bin/"
+    install -m755 "${lib.getExe nanoda-lib}" -t "$out/bin/"
+    install -m755 "${lib.getExe con-leche}" -t "$out/bin/"
+    install -m755 "${lib.getExe con-ron}" -t "$out/bin/"
+
     wrapProgram $out/bin/lean \
       --prefix PATH : ${cadical'}/bin
   '';

@@ -12,6 +12,11 @@
   cadical,
   cadical' ? cadical.override { version = "2.1.3"; },
   leangz,
+  leanPackages,
+  lean4lean,
+  nanoda-lib,
+  con-leche,
+  con-ron,
   openssl,
   pkg-config,
   libuv,
@@ -59,6 +64,9 @@ let
           --replace-fail \
             'let upToDate := (← olean.pathExists) ∧' \
             'let upToDate := cfg.pkgDir.toString.startsWith "/nix/store/" ∨ (← olean.pathExists) ∧'
+
+        substituteInPlace src/stdlib.make.in \
+          --replace-fail '/usr/bin/env bash' "$(command -v bash)"
       '';
 
     preConfigure = ''
@@ -93,6 +101,10 @@ let
       "-DUSE_MIMALLOC=ON"
       "-DFETCHCONTENT_SOURCE_DIR_MIMALLOC=${finalAttrs.mimalloc-src}"
     ];
+
+    postBuild = ''
+      make -C stage1 leanchecker-paranoid -j$NIX_BUILD_CORES
+    '';
 
     passthru.tests = {
       version = testers.testVersion {
@@ -156,5 +168,25 @@ let
         };
     };
   };
+
+  buildLakePackage = leanPackages.buildLakePackage.override { lean4 = wrapped; };
+  leanPackages' = leanPackages // {
+    inherit buildLakePackage;
+  };
+  batteries = leanPackages.batteries.override { inherit buildLakePackage; };
+  lean4export = leanPackages.lean4export.override { inherit buildLakePackage; };
+  lean4lean' = lean4lean.override {
+    leanPackages = leanPackages' // {
+      inherit batteries lean4export;
+    };
+  };
+  con-leche' = con-leche.override { leanPackages = leanPackages'; };
 in
-wrapped
+wrapped.overrideAttrs (previousAttrs: {
+  buildCommand = previousAttrs.buildCommand + ''
+    install -m755 "${lib.getExe lean4lean'}" -t "$out/bin/"
+    install -m755 "${lib.getExe nanoda-lib}" -t "$out/bin/"
+    install -m755 "${lib.getExe con-leche'}" -t "$out/bin/"
+    install -m755 "${lib.getExe con-ron}" -t "$out/bin/"
+  '';
+})
