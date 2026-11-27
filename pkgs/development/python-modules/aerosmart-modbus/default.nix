@@ -11,14 +11,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aerosmart-modbus";
-  version = "0.3.5";
+  version = "0.3.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kayloehmann";
     repo = "aerosmart-modbus";
     tag = finalAttrs.version;
-    hash = "sha256-LSBkEnH22llPmUO7UNrAFdoLDNmivneRd1SpvfQAFzU=";
+    hash = "sha256-r6GDzCuxA8DXIXcoUvg1qKIKcdJ7nCbTpLwZgbr2mx8=";
   };
 
   nativeBuildInputs = [
