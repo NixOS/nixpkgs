@@ -7,7 +7,7 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tmaze";
   version = "1.18.0";
 
@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "ur-fault";
     repo = "TMaze";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-JB3ZFoC659TNaxoMWmzFFyvzdQZwmBDdsJHz79nRyn8=";
   };
 
@@ -43,4 +43,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "tmaze";
   };
-}
+})
