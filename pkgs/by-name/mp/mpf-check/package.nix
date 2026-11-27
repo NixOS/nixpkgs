@@ -40,6 +40,8 @@ buildDotnetModule (finalAttrs: {
   dotnetFlags = [
     "-p:TargetFramework=net10.0"
     "-p:TreatWarningsAsErrors=false"
+    "-p:PublishSingleFile=false"
+    "-p:PublishSelfContained=false"
   ];
 
   # vstest can't bind IPv6 loopback in the darwin sandbox
