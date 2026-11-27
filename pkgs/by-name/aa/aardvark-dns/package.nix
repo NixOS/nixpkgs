@@ -9,6 +9,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "aardvark-dns";
   version = "2.1.0";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "containers";
     repo = "aardvark-dns";
