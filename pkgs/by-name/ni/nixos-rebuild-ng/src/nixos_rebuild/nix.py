@@ -71,6 +71,7 @@ def build(
         build_attr.to_attr(attr),
         *dict_to_flags(build_flags),
     ]
+
     r = run_wrapper(run_args, stdout=PIPE)
     return Path(r.stdout.strip())
 
@@ -405,9 +406,7 @@ def get_build_image_attr(specialisation: str | None) -> str:
 
 
 def get_nixpkgs_rev(nixpkgs_path: Path | None) -> str | None:
-    """Get Nixpkgs path as a Git revision.
-
-    Can be used to generate `.version-suffix` file."""
+    """Get Nixpkgs path as a Git revision."""
     if not nixpkgs_path:
         return None
 
@@ -436,7 +435,7 @@ def get_nixpkgs_rev(nixpkgs_path: Path | None) -> str | None:
             rev += "M"
         return f".git.{rev}"
     else:
-        return None
+        return "unknown"
 
 
 def get_generations(profile: Profile) -> list[Generation]:

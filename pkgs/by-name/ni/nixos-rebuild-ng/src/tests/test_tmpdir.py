@@ -32,7 +32,7 @@ def test_make_tmpdir() -> None:
     assert_tmpdir(tmp)
 
     # Test with a short system temp dir. We should use it unmodified.
-    short_tempdir = "/tmp/not-too-long"
+    short_tempdir = f"/tmp/t-{os.getpid()}"
     with tempfile_tempdir(short_tempdir):
         tmpdir = make_tmpdir()
         tmp = Path(tmpdir.name)
@@ -43,7 +43,7 @@ def test_make_tmpdir() -> None:
     # Test with a long system temp dir. We should ignore
     # it and fall back to something short enough for OpenSSH to
     # create sockets in.
-    with tempfile_tempdir("/tmp/long" + ("g" * MAX_TMPDIR_LENGTH)):
+    with tempfile_tempdir(f"/tmp/long-{os.getpid()}" + ("g" * MAX_TMPDIR_LENGTH)):
         tmpdir = make_tmpdir()
         tmp = Path(tmpdir.name)
 
