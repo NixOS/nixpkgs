@@ -14,7 +14,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aioabrp";
-  version = "0.9.0";
+  version = "0.10.0";
   pyproject = true;
 
   disabled = pythonOlder "3.14";
@@ -23,7 +23,7 @@ buildPythonPackage (finalAttrs: {
     owner = "mtandersson";
     repo = "aioabrp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VeuatqfbYHX6TPdYNI5mA7Mi/2kyUyE8+jPXsaFbRQQ=";
+    hash = "sha256-AzXVEd8LPoP46WLPmvCHB8k4pMry5I0QMI1XmVNJLO8=";
   };
 
   build-system = [
