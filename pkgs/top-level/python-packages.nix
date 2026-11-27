@@ -8624,6 +8624,8 @@ self: super: with self; {
 
   intervaltree = callPackage ../development/python-modules/intervaltree { };
 
+  intesis-gw-modbus = callPackage ../development/python-modules/intesis-gw-modbus { };
+
   into-dbus-python = callPackage ../development/python-modules/into-dbus-python { };
 
   inventree = callPackage ../development/python-modules/inventree { };
