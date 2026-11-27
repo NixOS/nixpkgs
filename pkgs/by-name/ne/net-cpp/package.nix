@@ -30,13 +30,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "net-cpp";
-  version = "3.2.2";
+  version = "3.2.3";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lib-cpp/net-cpp";
     tag = finalAttrs.version;
-    hash = "sha256-6isbPSzoPcnqbv6+ju/Arbcy+PgFxFF376d4CGmQ6wM=";
+    hash = "sha256-etlyfM7gGNL3mG7kn5xpd821M6QKoCiqJtTMcXRGtjs=";
   };
 
   outputs = [
@@ -74,8 +74,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    # https://gitlab.com/ubports/development/core/lib-cpp/net-cpp/-/work_items/7
-    (lib.cmakeBool "ENABLE_WERROR" false)
+    # For catching upcoming issues & reporting them to upstream
+    (lib.cmakeBool "ENABLE_WERROR" true)
   ];
 
   env.FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ ]; };

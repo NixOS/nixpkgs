@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation {
   pname = "cdvd";
-  version = "0-unstable-2026-09-19";
+  version = "0-unstable-2026-11-17";
 
   src = fetchFromGitHub {
     owner = "Szmelc-INC";
     repo = "cdvd";
-    rev = "5a6ff849a58e0923a86045bfd90067f8cb7f8d67";
-    hash = "sha256-X3dRhW3/rvHOPD6SYT+7S3zLPC0GjYiru53gJUSq1BY=";
+    rev = "5e4d9e1267cfb63c90d803b09eeaf4483a9eb1a5";
+    hash = "sha256-p0K1sUtS31kohW5v1uRwQkr5ZPFp66U6SaN+erybBFU=";
   };
 
   strictDeps = true;

@@ -19736,7 +19736,7 @@
   };
   mio = {
     name = "Mio";
-    email = "mio@mio19.uk";
+    email = "mio-aotearoa@mio19.uk";
     github = "mio-aotearoa";
     githubId = 57285379;
   };
