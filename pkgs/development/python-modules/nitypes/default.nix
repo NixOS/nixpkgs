@@ -17,14 +17,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "nitypes";
-  version = "1.1.0";
+  version = "1.2.0.dev0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ni";
     repo = "nitypes-python";
     tag = finalAttrs.version;
-    hash = "sha256-gUHu5Bp9qJGX3gTRVmE5J/86zpcSrlypKBkan9LZY2s=";
+    hash = "sha256-+do+RhBaFnMfVh30VbGyvWej6h8ogxMsK5HgRdxbdnc=";
   };
 
   build-system = [
