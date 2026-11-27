@@ -72,9 +72,10 @@ bash.runCommand "${pname}-${version}"
     mkdir build
     cd build
     # libstdc++.so is built against musl and fails to link
+    LIBGCC_PATH="${libgcc}/lib/gcc/${hostPlatform.config}/${libgcc.version}"
     export CXX=false
-    export CFLAGS="-B${libgcc}/lib -L${libgcc}/lib -Wl,-rpath,${gcc}/lib,-rpath,${libgcc} -O1 -Wno-error=attribute-alias -Wno-error=maybe-uninitialized -fexceptions"
-    export LDFLAGS="-L${libgcc}/lib -L${libgcc}/lib/gcc/${hostPlatform.config}/${libgcc.version} -B${libgcc}/lib -B${libgcc}/lib/gcc/${hostPlatform.config}/${libgcc.version}"
+    export CFLAGS="-B$LIBGCC_PATH -Wl,-rpath,$LIBGCC_PATH -O1 -Wno-error=attribute-alias -Wno-error=maybe-uninitialized -fexceptions"
+    export LDFLAGS="-B$LIBGCC_PATH"
     bash ../configure \
       --prefix=$out \
       --build=${buildPlatform.config} \
