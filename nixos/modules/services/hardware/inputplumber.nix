@@ -17,7 +17,6 @@ in
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
     environment.pathsToLink = [ "/share/inputplumber" ];
-    services.dbus.packages = [ cfg.package ];
 
     systemd.services.inputplumber = {
       description = "InputPlumber Service";
