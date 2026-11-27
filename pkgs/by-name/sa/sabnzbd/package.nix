@@ -17,7 +17,7 @@ let
   sabctoolsVersion = "9.6.3";
   sabctoolsHash = "sha256-+qzSDV7JER45yBMmyh5Jor4rJLlcE8KPguPnrBmMkSk=";
 
-  path = lib.makeBinPath [
+  runtimeTools = [
     coreutils
     par2cmdline-turbo
     unrar
@@ -25,6 +25,7 @@ let
     p7zip
     util-linux
   ];
+  path = lib.makeBinPath runtimeTools;
 in
 python3Packages.buildPythonApplication rec {
   version = "5.1.3";
@@ -88,7 +89,36 @@ python3Packages.buildPythonApplication rec {
     zc-lockfile
   ];
 
-  doCheck = false;
+  nativeCheckInputs =
+    runtimeTools
+    ++ (with python3Packages; [
+      flaky
+      lxml
+      pyfakefs
+      pytestCheckHook
+      pytest-asyncio
+      pytest-httpbin
+      pytest-httpserver
+      pytest-mock
+      selenium
+      xmltodict
+    ]);
+
+  disabledTestPaths = [
+    # Functional integration tests use Selenium or Tavern.
+    "tests/test_functional_*.py"
+    # Require internet access.
+    "tests/test_get_addrinfo.py"
+    "tests/test_getipaddress.py"
+    "tests/test_internetspeed.py"
+  ];
+
+  disabledTests = [
+    # Require internet access.
+    "test_added_wiki_entries"
+    "test_http_basic"
+    "test_https_basic"
+  ];
 
   installPhase = ''
     runHook preInstall
