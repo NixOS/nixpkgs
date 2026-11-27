@@ -16,14 +16,14 @@ let
   builder = "${opentelemetry-collector-builder}/bin/ocb";
 
   # Keep the version in sync with the builder.
-  version = "0.164.0";
+  version = "0.166.0";
 
   # This is a weird meta-repo where all the open-telemetry collectors are.
   releasesSrc = fetchFromGitHub {
     owner = "open-telemetry";
     repo = "opentelemetry-collector-releases";
     rev = "v${version}";
-    hash = "sha256-bkWU3J8P56Q9WHEVXOO24mpkVXIP6LrTtj/Isgi5g38=";
+    hash = "sha256-A7RvwIWdwtCKiC4ZsDSd2eRj6JIHYmYaquGBe6fA10U=";
   };
 
   # Then from this src, we use the tool to generate some go code, including
@@ -170,26 +170,26 @@ in
 lib.recurseIntoAttrs {
   otelcol = mkDistribution {
     name = "otelcol";
-    sourceHash = "sha256-QL5omiqdiYi7BTim0T7cTWk1hGuvH+99QrSYKnhrMnM=";
-    vendorHash = "sha256-q9bOIrX5jld79WrHCWcyHpwN4wukPest+tjpydkOr5E=";
+    sourceHash = "sha256-R7vDNi3nZc8WJmZecZio0Qq32SX5WdLHmPGKBe/20Do=";
+    vendorHash = "sha256-fH1cJ0gmtW+WUSlsvHF2MibnTjATyrb1tzcUumi5fmc=";
   };
 
   otelcol-contrib = mkDistribution {
     name = "otelcol-contrib";
-    sourceHash = "sha256-pN4pIx8oE7ZDLm/Zx9kWJv7Alcvj3fUTt4gaiw6B1To=";
-    vendorHash = "sha256-sbVebT6TODLIEm/SiCIFgfjZNtFKqunPSH3ByPW9/zY=";
+    sourceHash = "sha256-iEWDpo892vt7YJUBeCgUlUtcC1Y20LyHaeZSo+3v56Q=";
+    vendorHash = "sha256-4i6U2McP9rd2y377TQ1XFu7wQ7lRJT2hspL7PFTv5xQ=";
     proxyVendor = true; # hash mismatch between linux and darwin
   };
 
   otelcol-k8s = mkDistribution {
     name = "otelcol-k8s";
-    sourceHash = "sha256-vvJLMSb8Jf+wMZ5hTRgSqxfapM2zs1UN68QNHnr5zaM=";
-    vendorHash = "sha256-tBV8hRbBJVVfzH9kujr+xUV/bSdog9ix4+MOOYKEBvA=";
+    sourceHash = "sha256-SvOxRld7rET1IDs8gogu/psYZ0mPeJfcD7J/OTHxWdw=";
+    vendorHash = "sha256-oj52E2qAqK2A2rQzNEZLAPUlpwhaMcKnvSdOP76QQnc=";
   };
 
   otelcol-otlp = mkDistribution {
     name = "otelcol-otlp";
-    sourceHash = "sha256-pgJaFQ23G0WVm9KbZ6qC/2VBz699cy6TACIq7UYw3b4=";
-    vendorHash = "sha256-jxCLq3aXxIcUJ8tywl7V1ocHeNyhLLTqfOGaz6JEfh8=";
+    sourceHash = "sha256-aoewNJdcYWfOaeS2us7xUnHM4kQw2w7nbnRYbBWHCQ0=";
+    vendorHash = "sha256-+XvVXgnCyX1Kj6kVaIZboEQibU5195li3hlHjR9EK8o=";
   };
 }
