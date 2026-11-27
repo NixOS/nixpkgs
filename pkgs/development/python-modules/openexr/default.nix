@@ -18,8 +18,7 @@ buildPythonPackage {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "==" ">=" \
-      --replace-fail "cmake.targets" "build.targets"
+      --replace-fail "==" ">="
   '';
 
   cmakeFlags = [
