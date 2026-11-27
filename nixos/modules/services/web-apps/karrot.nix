@@ -23,6 +23,10 @@ let
     else
       null;
 
+  allowedHosts =
+    cfg.settings.allowedHosts
+    ++ lib.optional (cfg.nginx.enable && !lib.elem cfg.nginx.hostName cfg.settings.allowedHosts) cfg.nginx.hostName;
+
   envVars = {
     HOME = cfg.dataDir;
     MODE = cfg.settings.mode;
@@ -62,8 +66,8 @@ let
   // lib.optionalAttrs (cfg.settings.listen.socket != null) {
     LISTEN_SOCKET = cfg.settings.listen.socket;
   }
-  // lib.optionalAttrs (cfg.settings.allowedHosts != [ ]) {
-    ALLOWED_HOSTS = lib.concatStringsSep "," cfg.settings.allowedHosts;
+  // lib.optionalAttrs (allowedHosts != [ ]) {
+    ALLOWED_HOSTS = lib.concatStringsSep "," allowedHosts;
   }
   // lib.optionalAttrs (cfg.settings.csrfTrustedOrigins != [ ]) {
     CSRF_TRUSTED_ORIGINS = lib.concatStringsSep "," cfg.settings.csrfTrustedOrigins;
@@ -151,8 +155,25 @@ in
 
       baseUrl = lib.mkOption {
         type = lib.types.str;
-        default = "http://localhost:${toString cfg.settings.listen.port}";
-        defaultText = lib.literalExpression ''"http://localhost:''${toString config.services.karrot.settings.listen.port}"'';
+        default =
+          if cfg.nginx.enable then
+            let
+              vhost = config.services.nginx.virtualHosts.${cfg.nginx.hostName};
+              ssl = vhost.forceSSL || vhost.onlySSL || vhost.enableACME || vhost.addSSL;
+            in
+            "http${lib.optionalString ssl "s"}://${cfg.nginx.hostName}"
+          else
+            "http://${cfg.settings.listen.host}:${toString cfg.settings.listen.port}";
+        defaultText = lib.literalExpression ''
+          if config.services.karrot.nginx.enable then
+            let
+              vhost = config.services.nginx.virtualHosts.''${config.services.karrot.nginx.hostName};
+              ssl = vhost.forceSSL || vhost.onlySSL || vhost.enableACME || vhost.addSSL;
+            in
+            "http''${lib.optionalString ssl "s"}://''${config.services.karrot.nginx.hostName}"
+          else
+            "http://''${config.services.karrot.settings.listen.host}:''${toString config.services.karrot.settings.listen.port}"
+        '';
         example = "https://karrot.example.org";
         description = "Public base URL where Karrot is reachable.";
       };
@@ -380,7 +401,9 @@ in
       cfg.group
     ];
 
-    networking.firewall.allowedTCPPorts = lib.mkIf cfg.openFirewall [ cfg.settings.listen.port ];
+    networking.firewall.allowedTCPPorts = lib.mkIf cfg.openFirewall (
+      if cfg.nginx.enable then [ 80 443 ] else [ cfg.settings.listen.port ]
+    );
 
     services.postgresql = lib.mkIf cfg.database.createLocally {
       enable = true;
@@ -407,6 +430,7 @@ in
           client_max_body_size ${cfg.settings.uploads.maxSize};
         '';
         locations."/assets".extraConfig = "expires max;";
+        locations."/statics".extraConfig = "expires max;";
         locations."/css".extraConfig = "expires max;";
         locations."/js".extraConfig = "expires max;";
         locations."/img".extraConfig = "expires max;";
