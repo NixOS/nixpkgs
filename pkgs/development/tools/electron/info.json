@@ -1462,8 +1462,8 @@
         "deps": {
             "src": {
                 "args": {
-                    "hash": "sha256-//r8o/F25Pea3vr8QwQBOJHmZ4/f1VeXxffMx0amy5E=",
-                    "postFetch": "rm -rf $(find $out/third_party/blink/web_tests ! -name BUILD.gn -mindepth 1 -maxdepth 1); rm -r $out/content/test/data; rm -rf $out/courgette/testdata; rm -r $out/extensions/test/data; rm -r $(find $out/media/test/data -mindepth 1 -maxdepth 1 ! -name README.md ! -name trun_overflow.mp4); ",
+                    "hash": "sha256-7xHMDW7T9U1mxXzulkreT+nnYa/S6oR0DUCWWXd0iKE=",
+                    "postFetch": "rm -rf $(find $out/third_party/blink/web_tests ! -name BUILD.gn -mindepth 1 -maxdepth 1); rm -r $out/content/test/data; rm -rf $out/courgette/testdata; rm -r $out/extensions/test/data; rm -r $out/media/test/data; ",
                     "tag": "152.0.7977.169",
                     "url": "https://chromium.googlesource.com/chromium/src.git"
                 },
@@ -1511,10 +1511,10 @@
             },
             "src/electron": {
                 "args": {
-                    "hash": "sha256-IJXQfTVX2MZKl53A+/2jUGPt6soJcXrBw2UCH0uYzCQ=",
+                    "hash": "sha256-BF+5d2rciSvU/j1XJSN6oOcxs43lW1pW3I9XGYscFpo=",
                     "owner": "electron",
                     "repo": "electron",
-                    "tag": "v44.11.5"
+                    "tag": "v44.11.6"
                 },
                 "fetcher": "fetchFromGitHub"
             },
@@ -2924,7 +2924,7 @@
         },
         "modules": "149",
         "node": "24.22.3",
-        "version": "44.11.5"
+        "version": "44.11.6"
     },
     "45": {
         "chrome": "156.0.8078.100",
