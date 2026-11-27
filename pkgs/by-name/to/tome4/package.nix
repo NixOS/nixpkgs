@@ -1,12 +1,13 @@
 {
   lib,
   stdenv,
-  fetchFromGitLab,
+  fetchurl,
   fetchpatch2,
   copyDesktopItems,
   makeDesktopItem,
   makeWrapper,
   premake4,
+  unzip,
   openal,
   libpng,
   libvorbis,
@@ -31,13 +32,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "tome4";
   version = "1.7.6";
 
-  # Official source according to https://te4.org/wiki/How_to_compile
-  src = fetchFromGitLab {
-    domain = "git.net-core.org";
-    owner = "tome";
-    repo = "t-engine4";
-    tag = "tome-${finalAttrs.version}";
-    hash = "sha256-v0YPbmaOqKYgFkOe/X0FCirucrMo2UGAyhZ7MFj+nsU=";
+  src = fetchurl {
+    url = "https://te4.org/dl/t-engine/t-engine4-src-${finalAttrs.version}.tar.bz2";
+    hash = "sha256-mJ3qAIA/jNyt4CT0ZH1IC7GsDUN8JUKSwHVJwnKkaAw=";
   };
 
   prePatch = ''
@@ -65,6 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     copyDesktopItems
     makeWrapper
     premake4
+    unzip
   ];
 
   # tome4 vendors quite a few libraries so someone might want to look
@@ -122,7 +120,9 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper $dir/t-engine $out/bin/tome4 \
       --chdir "$dir"
 
-    install -Dm644 game/engines/default/data/gfx/te4-icon.png -t $out/share/icons/hicolor/64x64
+    # the release tarball ships the engine as a zip archive
+    unzip -p game/engines/te4-${finalAttrs.version}.teae data/gfx/te4-icon.png > te4-icon.png
+    install -Dm644 te4-icon.png -t $out/share/icons/hicolor/64x64
 
     install -Dm644 -t $out/share/doc/tome4 CONTRIBUTING COPYING COPYING-MEDIA CREDITS
 
