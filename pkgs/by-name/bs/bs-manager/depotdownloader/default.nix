@@ -16,10 +16,19 @@ buildDotnetModule {
     hash = "sha256-qC9EakT1tu8NNwbmj7HmYgcIoEUlMRRHNGnKggVNDgk=";
   };
 
+  postPatch = ''
+    substituteInPlace global.json \
+      --replace-fail '"version": "9.0.100"' \
+      "\"version\": \"${dotnetCorePackages.sdk_10_0.version}\""
+    substituteInPlace DepotDownloader/DepotDownloader.csproj \
+      --replace-fail '<TargetFramework>net9.0</TargetFramework>' \
+      '<TargetFramework>net10.0</TargetFramework>'
+  '';
+
   projectFile = "DepotDownloader.sln";
   nugetDeps = ./deps.json;
-  dotnet-sdk = dotnetCorePackages.sdk_9_0;
-  dotnet-runtime = dotnetCorePackages.runtime_9_0;
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
+  dotnet-runtime = dotnetCorePackages.runtime_10_0;
 
   meta = {
     description = "Fork of DepotDownloader to be used by BSManager";
