@@ -7,15 +7,12 @@
   pyprojectVersionPatchHook,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "e3dc-ess-modbus";
   version = "0.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "AlCalzone";
