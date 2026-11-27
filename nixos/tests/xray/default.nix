@@ -101,6 +101,53 @@ let
         )
       '';
     };
+
+  makeDumpTest =
+    name: xrayConfig: expected:
+    runTest {
+      name = "xray-dump-${name}";
+      nodes.machine =
+        { pkgs, ... }:
+        {
+          environment.systemPackages = [ pkgs.xray ];
+          services.xray = {
+            enable = true;
+            package = pkgs.writeShellScriptBin "xray" ''
+              exec ${pkgs.xray}/bin/xray "$@" -dump
+            '';
+          }
+          // xrayConfig pkgs;
+
+          systemd.services.xray.serviceConfig = {
+            Type = "oneshot";
+            StandardOutput = "file:/tmp/xray-output.json";
+          };
+        };
+
+      testScript = ''
+        import json
+
+        def process_output(output, filter=False):
+          loaded = json.loads(output)
+          if filter:
+            loaded = {k: loaded[k] for k in ('inbounds', 'outbounds', 'routing') if k in loaded}
+          return json.dumps(loaded, sort_keys=True)
+
+        start_all()
+        machine.succeed("systemctl start xray.service")
+
+        dumped = machine.succeed("cat /tmp/xray-output.json")
+        expected_dumped = machine.succeed("cat ${expected} | xray run -dump")
+        expected = machine.succeed("cat ${expected}")
+
+
+        # xray adds default fields which makes comparing to the merged result problematic, comparing only inbounds, outbounds and routing
+        assert process_output(dumped, True) == process_output(expected, True), f"Output mismatch!\nGot: {dumped}\nExpected: {expected}"
+
+        # supplimentary: both files were parsed the same, xray will add identical default fields to both of them which makes it unnecessary to filter
+        assert process_output(dumped) == process_output(expected_dumped), f"Output mismatch!\nGot: {dumped}\nExpected: {expected_dumped}"
+      '';
+    };
 in
 {
   settings = makeTest "settings" (_: {
@@ -112,4 +159,14 @@ in
   toml = makeTest "toml" (pkgs: {
     settingsFile = (pkgs.formats.toml { }).generate "xray.toml" xraySettings;
   });
+
+  # Configurations copied verbatism from https://xtls.github.io/en/config/features/multiple.html#configuration-example
+  dump = makeDumpTest "multiple-configs-dump" (_: {
+    settings = { };
+    extraSettingFiles = [
+      ./files/01.json
+      ./files/02.json
+      ./files/03_tail.json
+    ];
+  }) ./files/expected.json;
 }
