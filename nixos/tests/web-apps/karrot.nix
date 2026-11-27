@@ -51,5 +51,45 @@
         machine.succeed("karrot-manage check")
   '';
 
+  # Debug interactively with:
+  # - nix run .#nixosTests.karrot.driverInteractive -L
+  # - start_all() / run_tests()
+  interactive.sshBackdoor.enable = true;
+  interactive.nodes.machine =
+    { config, ... }:
+    let
+      inherit (config.services.karrot.settings.listen) port;
+    in
+    {
+      # not needed, only for manual interactive debugging
+      virtualisation.memorySize = 4096;
+      environment.systemPackages = with pkgs; [
+        htop
+      ];
+
+      virtualisation.forwardPorts =
+        map
+          (p: {
+            from = "host";
+            host.port = p;
+            guest.port = p;
+          })
+          [
+            port
+          ]
+        ++ lib.optionals config.services.karrot.nginx.enable [
+          {
+            from = "host";
+            host.port = 8080;
+            guest.port = 80;
+          }
+        ];
+
+      # forwarded ports need to be accessible
+      networking.firewall.allowedTCPPorts = [
+        port
+      ] ++ lib.optional config.services.karrot.nginx.enable 80;
+    };
+
   meta.teams = with lib.teams; [ ngi ];
 }
