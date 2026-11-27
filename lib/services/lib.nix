@@ -6,8 +6,14 @@ let
     showOption
     types
     ;
+  inherit (types) submoduleWith;
 in
 rec {
+  /**
+    Module system types specific to services.
+  */
+  types = import ./types.nix { inherit lib; };
+
   flattenMapServicesConfigToList =
     f: loc: config:
     f loc config
@@ -61,7 +67,7 @@ rec {
     in
     {
       options.services = lib.mkOption {
-        type = lib.types.attrsOf modularServiceConfiguration.serviceSubmodule;
+        type = attrsOf modularServiceConfiguration.serviceSubmodule;
         default = { };
       };
 
@@ -118,7 +124,7 @@ rec {
       extraRootSpecialArgs ? { },
     }:
     let
-      serviceSubmodule = types.submoduleWith {
+      serviceSubmodule = submoduleWith {
         class = "service";
         modules = baseModules ++ extraRootModules;
         specialArgs = extraRootSpecialArgs;

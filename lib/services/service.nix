@@ -44,26 +44,11 @@ in
   imports = [
     ../modules/generic/meta-maintainers.nix
     ../modules/generic/assertions.nix
+    ./identity.nix
     (lib.modules.importApply ./config-data.nix { inherit pkgs; })
+    ./sub-services.nix
   ];
   options = {
-    services = mkOption {
-      type = types.attrsOf (
-        types.submoduleWith {
-          modules = [
-            (lib.modules.importApply ./service.nix { inherit pkgs; })
-          ];
-        }
-      );
-      description = ''
-        A collection of [modular services](https://nixos.org/manual/nixos/unstable/#modular-services) that are configured in one go.
-
-        You could consider the sub-service relationship to be an ownership relation.
-        It **does not** automatically create any other relationship between services (e.g. systemd slices), unless perhaps such a behavior is explicitly defined and enabled in another option.
-      '';
-      default = { };
-      visible = "shallow";
-    };
     process = {
       argv = mkOption {
         type = types.listOf pathOrStr;
@@ -200,6 +185,20 @@ in
       description = ''
         Notification protocol that this service supports with the underlying service manager.
       '';
+    };
+
+    # Declared in `./sub-services.nix`.
+    services = mkOption {
+      type = types.attrsOf (
+        types.submoduleWith {
+          modules = [
+            # Pass pkgs to the sub-services too. We don't want to expose our
+            # specific pkgs to user modules so that we don't create implicit
+            # dependencies, and users can bring their own nixpkgs.
+            (lib.modules.importApply ./service.nix { inherit pkgs; })
+          ];
+        }
+      );
     };
   };
 
