@@ -9,15 +9,15 @@
 }:
 buildNpmPackage rec {
   pname = "immich-public-proxy";
-  version = "4.1.2";
+  version = "4.2.0";
   src = fetchFromGitHub {
     owner = "alangrainger";
     repo = "immich-public-proxy";
     tag = "v${version}";
-    hash = "sha256-MJ5VoBHXM5Mxch4nVaFk0B8/SNjkXf8oXQgnRwscc4E=";
+    hash = "sha256-T146Sco4D82bWOM+xt+HRMUbjZVWpMWWupHzoj+tLiQ=";
   };
 
-  npmDepsHash = "sha256-oKS034t7X0kJhVSRSUNyJRo3NDjjqP/LUm7rHl+6oSo=";
+  npmDepsHash = "sha256-P9md3D8Lyya1U+YR8OulguzxGt5+wr9fIpNKnZTeXQA=";
 
   nativeBuildInputs = [ makeWrapper ];
 
