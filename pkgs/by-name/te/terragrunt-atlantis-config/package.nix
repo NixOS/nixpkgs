@@ -6,16 +6,16 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "terragrunt-atlantis-config";
-  version = "1.26.2";
+  version = "1.26.3";
 
   src = fetchFromGitHub {
     owner = "dbccompany";
     repo = "terragrunt-atlantis-config";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QbjofmCsKd2C1+4z5oXnK5jpD0kBafeJdPo24/HTTCs=";
+    hash = "sha256-MR+r1FEF1805SggIanM8S9N0/L8YuU8OA9vW0S0ZfVg=";
   };
 
-  vendorHash = "sha256-VbrzyUaLwj0tvCdH/DZYX+fL7epZI+rv9fOBYGVNho8=";
+  vendorHash = "sha256-K+K0PhgD+TnyNt0LkTu8DhbFlsDwb6QDzq+GU6u3bhw=";
 
   env.CGO_ENABLED = 0;
 
