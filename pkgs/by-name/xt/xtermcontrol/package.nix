@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xtermcontrol";
-  version = "3.11";
+  version = "3.12";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "JessThrysoee";
     repo = "xtermcontrol";
     tag = finalAttrs.version;
-    hash = "sha256-HS99l9APrW/1l3HwoGga81kX8CPosipISXtp+OnA1vU=";
+    hash = "sha256-+sLygwshLQKyqaZLzSPEy+VikSKFOS2E8Qah83wsTHE=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
