@@ -20,8 +20,8 @@ mkLibretroCore {
 
   extraNativeBuildInputs = [ gitMinimal ];
 
+  # The libretro Makefile writes object files outside sourceRoot.
   postPatch = ''
-    # The libretro Makefile writes object files outside sourceRoot.
     chmod -R u+w ../deps ../src
   '';
 
