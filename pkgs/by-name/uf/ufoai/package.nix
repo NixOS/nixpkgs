@@ -1,8 +1,11 @@
 {
   lib,
   stdenv,
+  copyDesktopItems,
   fetchFromGitHub,
   fetchurl,
+  installShellFiles,
+  makeDesktopItem,
   pkg-config,
   libtheora,
   xvidcore,
@@ -59,7 +62,11 @@ stdenv.mkDerivation (finalAttrs: {
     "--disable-memory"
   ];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    copyDesktopItems
+    installShellFiles
+    pkg-config
+  ];
 
   buildInputs = [
     libtheora
@@ -84,7 +91,37 @@ stdenv.mkDerivation (finalAttrs: {
   # the map editor needs GTK 2 and is not built, but its launcher is installed
   postInstall = ''
     rm $out/bin/uforadiant
+
+    install -Dm644 src/ports/linux/ufo.png $out/share/icons/hicolor/32x32/apps/ufoai.png
+    install -Dm644 src/ports/linux/ufoded.png $out/share/icons/hicolor/32x32/apps/ufoded.png
+    installManPage debian/ufo.6 debian/ufoded.6 debian/ufo2map.6
   '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "ufoai";
+      desktopName = "UFO: Alien Invasion";
+      comment = "Turn-based tactical combat against hostile alien forces";
+      exec = "ufo";
+      icon = "ufoai";
+      categories = [
+        "Game"
+        "StrategyGame"
+      ];
+    })
+    (makeDesktopItem {
+      name = "ufoded";
+      desktopName = "UFO: AI Dedicated Server";
+      comment = "Turn-based tactical combat against hostile alien forces (server)";
+      exec = "ufoded";
+      icon = "ufoded";
+      terminal = true;
+      categories = [
+        "Game"
+        "StrategyGame"
+      ];
+    })
+  ];
 
   meta = {
     homepage = "http://ufoai.org";
