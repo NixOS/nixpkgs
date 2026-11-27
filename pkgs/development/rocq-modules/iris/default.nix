@@ -3,6 +3,7 @@
   mkRocqDerivation,
   rocq-core,
   stdpp,
+  rocq-elpi,
   version ? null,
 }:
 
@@ -61,5 +62,12 @@ let
       ];
     };
   };
+  patched-derivation1 = derivation.overrideAttrs (
+    o:
+    lib.optionalAttrs (o.version != null && (o.version == "dev" || lib.versions.isGt "4.5.0" o.version))
+      {
+        propagatedBuildInputs = o.propagatedBuildInputs ++ [ rocq-elpi ];
+      }
+  );
 in
-derivation
+patched-derivation1
