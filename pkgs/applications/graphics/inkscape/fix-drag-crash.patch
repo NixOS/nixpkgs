@@ -1,0 +1,289 @@
+From b69bac78bccaa1c9199ca95fc148db42fecaa710 Mon Sep 17 00:00:00 2001
+From: Ivan Malison <IvanMalison@gmail.com>
+Date: Thu, 18 Jun 2026 01:40:28 -0700
+Subject: [PATCH 1/2] Fix Objects panel row drag crash
+
+Dragging a nested object or group row in the Objects dialog can abort inside GTK before Inkscape's own drop handler gets control. The crash comes from GTK's native TreeView row-reordering path: when the Objects panel enables native row reordering over the name column, GTK requests the built-in GTK_TREE_MODEL_ROW target and serializes the nested GtkTreeStore path through gtk_tree_set_row_drag_data(). With a deep path such as 0:0:0, that GTK 3 serialization path can trip fortified bounds checking and abort with a buffer-overflow failure.
+
+The Objects panel already implements its own drag/drop behavior in on_drag_drop(), so it does not need GTK's built-in row-reordering target. Register an Inkscape-owned same-widget DND target for both the source and destination, provide inert selection data for that target, and keep native TreeView reordering disabled even when the pointer is over the name column. This preserves the existing panel reparenting behavior while avoiding the GTK row serialization path that aborts.
+
+Add a headless regression test that models the actual crash path instead of only checking the configured target list. The test constructs a nested Gtk::TreeStore row, prepares GTK_TREE_MODEL_ROW selection data in a subprocess, and would request GTK's native row drag data if the Objects panel policy ever re-enables native tree reordering over the name column. With the fix, the subprocess exits normally without touching that GTK crash path. When forced down the old native-row path locally, the same test fails with signal 6 and "*** buffer overflow detected ***", matching the original failure mode.
+
+The helper target construction functions are kept file-local; the test only depends on the policy hook that decides whether Objects panel drags should use native TreeView row reordering.
+
+The interactive Xvfb repro was also run manually: the baseline crashed while the patched build survived the same nested-row drag and moved the object as expected. A supplemental branch with the coordinate-driven Xvfb/xdotool repro harness is available at https://gitlab.com/ivanmalison/inkscape-fork/-/tree/colonelpanic/objects-panel-dnd-crash-5256-with-repro. It is intentionally not part of this patch because it depends on local GUI geometry and tooling rather than Inkscape's normal test harness.
+
+Verified with:
+
+- test_objects-panel rebuilt and run directly
+- forced old-path test variant failed with signal 6 and "*** buffer overflow detected ***"
+- ctest --test-dir build-debug --output-on-failure -R '^test_objects-panel$'
+- ctest -R 'test_(drag-and-drop-svgz|sp-item|sp-object|object-set|sp-item-group|objects-panel)$'
+- automated Xvfb nested-row drag repro against the patched build
+
+https://gitlab.com/inkscape/inkscape/-/work_items/5256
+---
+ src/ui/dialog/objects.cpp            | 48 ++++++++++++++--
+ testfiles/CMakeLists.txt             |  1 +
+ testfiles/src/objects-panel-test.cpp | 84 ++++++++++++++++++++++++++++
+ 3 files changed, 128 insertions(+), 5 deletions(-)
+ create mode 100644 testfiles/src/objects-panel-test.cpp
+
+diff --git a/src/ui/dialog/objects.cpp b/src/ui/dialog/objects.cpp
+index ce3e5186d5..d1ec1cb7f4 100644
+--- a/src/ui/dialog/objects.cpp
++++ b/src/ui/dialog/objects.cpp
+@@ -98,6 +98,45 @@ namespace Inkscape::UI::Dialog {
+ using Inkscape::XML::Node;
+ using namespace Inkscape::UI::Widget;
+ 
++namespace {
++
++char const objects_panel_dnd_target[] = "application/x-inkscape-objects-panel-row";
++
++void objects_panel_drag_data_get(Glib::RefPtr<Gdk::DragContext> const &,
++                                 Gtk::SelectionData &selection_data,
++                                 guint,
++                                 guint)
++{
++    static guint8 const data[] = {1};
++    selection_data.set(objects_panel_dnd_target, 8, data, sizeof(data));
++}
++
++char const *objects_panel_dnd_target_name()
++{
++    return objects_panel_dnd_target;
++}
++
++std::vector<Gtk::TargetEntry> objects_panel_dnd_targets()
++{
++    return {Gtk::TargetEntry(objects_panel_dnd_target_name(), Gtk::TARGET_SAME_WIDGET, 0)};
++}
++
++void objects_panel_configure_tree_drag_and_drop(Gtk::TreeView &tree)
++{
++    auto const dnd_targets = objects_panel_dnd_targets();
++    tree.drag_source_set(dnd_targets, Gdk::BUTTON1_MASK, Gdk::ACTION_MOVE);
++    tree.drag_dest_set(dnd_targets, Gtk::DEST_DEFAULT_ALL, Gdk::ACTION_MOVE);
++    tree.set_reorderable(false);
++    tree.signal_drag_data_get().connect(sigc::ptr_fun(&objects_panel_drag_data_get), false);
++}
++
++} // namespace
++
++bool objects_panel_use_native_tree_reordering(bool /*over_name_column*/)
++{
++    return false;
++}
++
+ class ObjectWatcher : public Inkscape::XML::NodeObserver
+ {
+ public:
+@@ -692,9 +731,7 @@ ObjectsPanel::ObjectsPanel()
+     //Set up the tree
+     _tree.set_model(_store);
+     _tree.set_headers_visible(false);
+-    // Reorderable means that we allow drag-and-drop, but we only allow that
+-    // when at least one row is selected
+-    _tree.enable_model_drag_dest (Gdk::ACTION_MOVE);
++    objects_panel_configure_tree_drag_and_drop(_tree);
+     _tree.set_name("ObjectsTreeView");
+ 
+     auto& header = get_widget<Gtk::Box>(_builder, "header");
+@@ -1548,8 +1585,9 @@ void ObjectsPanel::on_motion_motion(GtkEventControllerMotion const * const contr
+             _drag_column = nullptr;
+         }
+ 
+-        // Only allow drag and drop when not filtering. Otherwise bad things happen
+-        _tree.set_reorderable(col == _name_column);
++        // The Objects panel handles row drag/drop itself; GTK's native TreeView
++        // reordering path can produce invalid row drag data for nested groups.
++        _tree.set_reorderable(objects_panel_use_native_tree_reordering(col == _name_column));
+ 
+         if (auto row = *_store->get_iter(path)) {
+             row[_model->_colHover] = true;
+diff --git a/testfiles/CMakeLists.txt b/testfiles/CMakeLists.txt
+index 7883f164fd..cc24c5702e 100644
+--- a/testfiles/CMakeLists.txt
++++ b/testfiles/CMakeLists.txt
+@@ -79,6 +79,7 @@ set(TEST_SOURCES
+     sp-object-lang-test
+     sp-object-tags-test
+     object-links-test
++    objects-panel-test
+     object-set-test
+     object-style-test
+     page-management
+diff --git a/testfiles/src/objects-panel-test.cpp b/testfiles/src/objects-panel-test.cpp
+new file mode 100644
+index 0000000000..656921a85a
+--- /dev/null
++++ b/testfiles/src/objects-panel-test.cpp
+@@ -0,0 +1,84 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ * Regression tests for the Layers and Objects panel.
++ *
++ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
++ */
++
++#include <gtest/gtest.h>
++
++#include <gtk/gtk.h>
++#include <gtkmm/treestore.h>
++
++#include <cstdlib>
++
++namespace Inkscape::UI::Dialog {
++bool objects_panel_use_native_tree_reordering(bool over_name_column);
++}
++
++namespace {
++
++class TestColumns final : public Gtk::TreeModel::ColumnRecord
++{
++public:
++    TestColumns() { add(label); }
++
++    Gtk::TreeModelColumn<Glib::ustring> label;
++};
++
++struct GtkSelectionDataFields
++{
++    // GTK 3 does not expose a constructor for selection data with a specific
++    // target; this mirrors GtkSelectionData's private layout for this child
++    // process so we can exercise GTK_TREE_MODEL_ROW serialization directly.
++    GdkAtom selection = GDK_NONE;
++    GdkAtom target = GDK_NONE;
++    GdkAtom type = GDK_NONE;
++    gint format = 0;
++    guchar *data = nullptr;
++    gint length = -1;
++    GdkDisplay *display = nullptr;
++};
++
++void request_native_tree_model_row_data_for_deep_path()
++{
++    TestColumns columns;
++    auto store = Gtk::TreeStore::create(columns);
++
++    auto root = *store->append();
++    root[columns.label] = "root";
++    auto child = *store->append(root.children());
++    child[columns.label] = "child";
++    auto grandchild = *store->append(child.children());
++    grandchild[columns.label] = "grandchild";
++
++    auto path = store->get_path(grandchild);
++    if (path.to_string() != "0:0:0") {
++        std::_Exit(2);
++    }
++
++    GtkSelectionDataFields selection_data;
++    selection_data.target = gdk_atom_intern_static_string("GTK_TREE_MODEL_ROW");
++
++    auto *gtk_selection_data = reinterpret_cast<GtkSelectionData *>(&selection_data);
++    if (!gtk_tree_drag_source_drag_data_get(GTK_TREE_DRAG_SOURCE(store->gobj()),
++                                            path.gobj(),
++                                            gtk_selection_data)) {
++        std::_Exit(3);
++    }
++
++    g_free(selection_data.data);
++}
++
++} // namespace
++
++TEST(ObjectsPanelTest, DoesNotRequestNativeTreeModelRowDataForDeepRows)
++{
++    ASSERT_EXIT({
++        if (Inkscape::UI::Dialog::objects_panel_use_native_tree_reordering(true)) {
++            request_native_tree_model_row_data_for_deep_path();
++            std::_Exit(4);
++        }
++        std::_Exit(0);
++    }, ::testing::ExitedWithCode(0), "");
++}
+-- 
+GitLab
+
+
+From d8ecdd58d59ed855b682162bdaf40f651c8db216 Mon Sep 17 00:00:00 2001
+From: Ivan Malison <IvanMalison@gmail.com>
+Date: Thu, 18 Jun 2026 22:01:15 -0700
+Subject: [PATCH 2/2] Fix CI failures for objects panel crash MR
+
+---
+ src/ui/dialog/objects.cpp            |  4 +---
+ testfiles/src/objects-panel-test.cpp | 24 +++++++++++-------------
+ 3 files changed, 14 insertions(+), 19 deletions(-)
+
+diff --git a/src/ui/dialog/objects.cpp b/src/ui/dialog/objects.cpp
+index d1ec1cb7f4..b862e86fbc 100644
+--- a/src/ui/dialog/objects.cpp
++++ b/src/ui/dialog/objects.cpp
+@@ -102,9 +102,7 @@ namespace {
+ 
+ char const objects_panel_dnd_target[] = "application/x-inkscape-objects-panel-row";
+ 
+-void objects_panel_drag_data_get(Glib::RefPtr<Gdk::DragContext> const &,
+-                                 Gtk::SelectionData &selection_data,
+-                                 guint,
++void objects_panel_drag_data_get(Glib::RefPtr<Gdk::DragContext> const &, Gtk::SelectionData &selection_data, guint,
+                                  guint)
+ {
+     static guint8 const data[] = {1};
+diff --git a/testfiles/src/objects-panel-test.cpp b/testfiles/src/objects-panel-test.cpp
+index 656921a85a..4e11ba41db 100644
+--- a/testfiles/src/objects-panel-test.cpp
++++ b/testfiles/src/objects-panel-test.cpp
+@@ -5,13 +5,11 @@
+  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
+  */
+ 
++#include <cstdlib>
+ #include <gtest/gtest.h>
+-
+ #include <gtk/gtk.h>
+ #include <gtkmm/treestore.h>
+ 
+-#include <cstdlib>
+-
+ namespace Inkscape::UI::Dialog {
+ bool objects_panel_use_native_tree_reordering(bool over_name_column);
+ }
+@@ -61,9 +59,7 @@ void request_native_tree_model_row_data_for_deep_path()
+     selection_data.target = gdk_atom_intern_static_string("GTK_TREE_MODEL_ROW");
+ 
+     auto *gtk_selection_data = reinterpret_cast<GtkSelectionData *>(&selection_data);
+-    if (!gtk_tree_drag_source_drag_data_get(GTK_TREE_DRAG_SOURCE(store->gobj()),
+-                                            path.gobj(),
+-                                            gtk_selection_data)) {
++    if (!gtk_tree_drag_source_drag_data_get(GTK_TREE_DRAG_SOURCE(store->gobj()), path.gobj(), gtk_selection_data)) {
+         std::_Exit(3);
+     }
+ 
+@@ -74,11 +70,13 @@ void request_native_tree_model_row_data_for_deep_path()
+ 
+ TEST(ObjectsPanelTest, DoesNotRequestNativeTreeModelRowDataForDeepRows)
+ {
+-    ASSERT_EXIT({
+-        if (Inkscape::UI::Dialog::objects_panel_use_native_tree_reordering(true)) {
+-            request_native_tree_model_row_data_for_deep_path();
+-            std::_Exit(4);
+-        }
+-        std::_Exit(0);
+-    }, ::testing::ExitedWithCode(0), "");
++    ASSERT_EXIT(
++        {
++            if (Inkscape::UI::Dialog::objects_panel_use_native_tree_reordering(true)) {
++                request_native_tree_model_row_data_for_deep_path();
++                std::_Exit(4);
++            }
++            std::_Exit(0);
++        },
++        ::testing::ExitedWithCode(0), "");
+ }
+-- 
+GitLab
+
