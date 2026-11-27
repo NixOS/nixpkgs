@@ -3869,8 +3869,6 @@ with pkgs;
 
   ### DEVELOPMENT / INTERPRETERS
 
-  acl2-minimal = acl2.override { certifyBooks = false; };
-
   uiua-unstable = callPackage ../by-name/ui/uiua/package.nix { uiua_versionType = "unstable"; };
 
   # BQN interpreters and compilers
