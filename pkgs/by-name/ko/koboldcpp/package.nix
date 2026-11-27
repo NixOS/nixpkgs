@@ -143,6 +143,15 @@ let
 
   builtLibraries = if metalSupport then lib.remove "koboldcpp_failsafe" libraries else libraries;
 
+  # Linux splits CPU and Vulkan backends from the shared model code
+  sharedLibraries = lib.optionals stdenv.hostPlatform.isLinux (
+    [ "koboldcpp_common" ]
+    ++ lib.optionals vulkanSupport [ "koboldcpp_vulkan_shaders" ]
+    ++ lib.optionals (vulkanSupport && stdenv.hostPlatform.isx86) [
+      "koboldcpp_vulkan_noext_shaders"
+    ]
+  );
+
   allBackendLibraries = [
     "koboldcpp_default"
     "koboldcpp_failsafe"
@@ -161,13 +170,13 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "koboldcpp";
-  version = "1.124";
+  version = "1.125.1";
 
   src = fetchFromGitHub {
     owner = "LostRuins";
     repo = "koboldcpp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fkr+932D9nehpikiFi04lgiAqbyllnx0qKmieazzJHw=";
+    hash = "sha256-NG39WXu7KwXamM4BzQ+Jx1oYbNt8P9kbVZMwXpIK4Pg=";
   };
 
   __structuredAttrs = true;
@@ -233,6 +242,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
       cudaPackages.libcublas
       cudaPackages.cuda_cudart
       cudaPackages.cccl
+      (lib.getOutput "include" cudaPackages.cuda_nvml_dev)
     ]
     ++ lib.optionals rocmSupport ([ rocmPackages.clr ] ++ rocmBlasInputs)
     ++ lib.optionals vulkanSupport [
@@ -314,7 +324,9 @@ effectiveStdenv.mkDerivation (finalAttrs: {
 
       install -Dm755 koboldcpp.py "$installDir/koboldcpp"
       install -m644 kcpp_src/json_to_gbnf.py kcpp_agent.py -t "$installDir"
-      install -Dm755 ${lib.escapeShellArgs (map (library: "${library}.so") builtLibraries)} "$installDir"
+      install -Dm755 ${
+        lib.escapeShellArgs (map (library: "${library}.so") (builtLibraries ++ sharedLibraries))
+      } "$installDir"
       cp -r --no-preserve=mode embd_res kcpp_adapters -t "$installDir"
     ''
 
