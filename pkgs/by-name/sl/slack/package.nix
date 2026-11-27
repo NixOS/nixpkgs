@@ -22,6 +22,7 @@ let
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [
+      faukah
       mmahut
       prince213
     ];
