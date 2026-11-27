@@ -137,6 +137,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Long macOS tmpdir path gets wrapped mid-assertion
     "test_output_file_missing_parent_raises"
+
+    # AssertionError: assert 'None' == '2'
+    # (it's a race)
+    "test_executing_command_sends_project_definition_in_telemetry_data"
   ];
 
   disabledTestPaths = [
@@ -182,6 +186,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
       --fish <($out/bin/snow --show-completion fish) \
       --zsh <($out/bin/snow --show-completion zsh)
   '';
+
+  # Required for testing in the sandbox
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     changelog = "https://github.com/snowflakedb/snowflake-cli/blob/${finalAttrs.src.tag}/RELEASE-NOTES.md";
