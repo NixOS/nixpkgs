@@ -108,7 +108,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "prosody";
     maintainers = with lib.maintainers; [
       toastal
-      mirror230469
       SuperSandro2000
       haansn08
     ];
