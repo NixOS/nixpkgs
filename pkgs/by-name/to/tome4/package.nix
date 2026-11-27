@@ -133,7 +133,10 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "tome4";
     homepage = "https://te4.org/";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ peterhoeg ];
+    maintainers = with lib.maintainers; [
+      iedame
+      peterhoeg
+    ];
     platforms = [
       "i686-linux"
       "x86_64-linux"
