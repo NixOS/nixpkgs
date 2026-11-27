@@ -13,6 +13,9 @@ renode.overrideAttrs (
   finalAttrs: old: {
     pname = "renode-unstable";
     version = "1.17.0-unstable-2026-10-12";
+    # Point meta.position here instead of renode/package.nix so nixpkgs-update
+    # edits the right file.
+    pos = __curPos;
 
     src = fetchFromGitHub {
       owner = "renode";
