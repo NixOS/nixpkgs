@@ -5,9 +5,6 @@
   stdenv,
   ocamlPackages,
   coqPackages,
-  rubber,
-  hevea,
-  emacs,
   version ? "1.8.2",
   ideSupport ? true,
   wrapGAppsHook3,
@@ -47,11 +44,6 @@ stdenv.mkDerivation rec {
     [
       ocamlgraph
       zarith
-      # Emacs compilation of why3.el
-      emacs
-      # Documentation
-      rubber
-      hevea
     ]
     ++
       lib.optional ideSupport
