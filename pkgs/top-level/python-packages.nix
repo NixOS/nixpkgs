@@ -5593,6 +5593,10 @@ self: super: with self; {
 
   electrickiwi-api = callPackage ../development/python-modules/electrickiwi-api { };
 
+  electrolux-group-developer-sdk =
+    callPackage ../development/python-modules/electrolux-group-developer-sdk
+      { };
+
   electrum-aionostr = callPackage ../development/python-modules/electrum-aionostr { };
 
   electrum-ecc = callPackage ../development/python-modules/electrum-ecc { };
