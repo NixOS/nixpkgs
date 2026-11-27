@@ -1,6 +1,5 @@
 {
   swig,
-  pcre2,
   fetchFromGitHub,
 }:
 
@@ -16,9 +15,9 @@ swig.overrideAttrs (old: {
     sha256 = "sha256-ell63rIfnmFsUhyQl7OzP3kiVYUfPCDhrTFaw2KIEPQ=";
   };
 
-  configureFlags = old.configureFlags ++ [ "--with-forth=yes" ];
-
-  env.PCRE_CONFIG = "${pcre2.dev}/bin/pcre-config";
-
-  meta.broken = true; # stuck on legacy pcre
+  configureFlags = old.configureFlags ++ [
+    "--with-forth=yes"
+    # SWIG 3 needs the removed pcre (not pcre2); it is only used for regex %rename, which gforth doesn't use
+    "--without-pcre"
+  ];
 })
