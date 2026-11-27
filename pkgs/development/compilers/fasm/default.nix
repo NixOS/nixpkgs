@@ -3,6 +3,7 @@
   lib,
   fasm-bin,
   isx86_64,
+  # Run the updater with native tools rather than the 32-bit bootstrap tools.
   updateScript ? fasm-bin.updateScript,
 }:
 

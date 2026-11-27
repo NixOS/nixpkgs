@@ -2837,11 +2837,7 @@ with pkgs;
 
   elmPackages = recurseIntoAttrs (callPackage ../development/compilers/elm { });
 
-  fasm = pkgsi686Linux.callPackage ../development/compilers/fasm {
-    inherit (stdenv.hostPlatform) isx86_64;
-    # Run the updater with native tools rather than the 32-bit bootstrap tools.
-    inherit (fasm-bin) updateScript;
-  };
+  fasm = pkgsi686Linux.callPackage ../development/compilers/fasm { };
 
   filecheck = with python3Packages; toPythonApplication filecheck;
 
