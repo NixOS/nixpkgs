@@ -61,6 +61,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       faukah
       max
       NotAShelf
+      qweered
     ];
   };
 })
