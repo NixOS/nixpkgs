@@ -13,13 +13,13 @@ in
 let
   finalPackage = buildDotnetModule rec {
     pname = "omnisharp-roslyn";
-    version = "1.40.0";
+    version = "2.0.0";
 
     src = fetchFromGitHub {
       owner = "OmniSharp";
       repo = "omnisharp-roslyn";
       tag = "v${version}";
-      hash = "sha256-UwG296N2yvSS+OGk5sx6KebWao9drxDf/Z80ZL6zD3s=";
+      hash = "sha256-CN4DKz6N3LcAb6MDeikQQ/xu2OLa5uppNH/9jDgIhN0=";
     };
 
     projectFile = "src/OmniSharp.Stdio.Driver/OmniSharp.Stdio.Driver.csproj";
