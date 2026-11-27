@@ -1,73 +1,90 @@
 {
   lib,
   stdenv,
+  fetchFromGitHub,
   fetchurl,
+  pkg-config,
   libtheora,
   xvidcore,
   libGLU,
   libGL,
-  SDL,
-  SDL_ttf,
-  SDL_mixer,
+  SDL2,
+  SDL2_ttf,
+  SDL2_mixer,
   curl,
   libjpeg,
+  libogg,
   libpng,
+  libvorbis,
+  minixml,
   gettext,
-  cunit,
-  enableEditor ? false,
+  zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ufoai";
-  version = "2.4";
-  src = fetchurl {
-    url = "mirror://sourceforge/ufoai/ufoai-${finalAttrs.version}-source.tar.bz2";
-    sha256 = "0kxrbcjrharcwz319s90m789i4my9285ihp5ax6kfhgif2vn2ji5";
+  version = "2.5-unstable-2020-12-24";
+
+  # unstable for fixes needed by current compilers
+  src = fetchFromGitHub {
+    owner = "ufoaiorg";
+    repo = "ufoai";
+    rev = "59e97870caaab03960e4ea7d16b2de3c18898c94";
+    hash = "sha256-G2icAJs5uldiuIOOuGtzl03bYqexTYi62XCY6D+IT8M=";
   };
 
   srcData = fetchurl {
-    url = "mirror://sourceforge/ufoai/ufoai-${finalAttrs.version}-data.tar";
-    sha256 = "1drhh08cqqkwv1yz3z4ngkplr23pqqrdx6cp8c3isy320gy25cvb";
+    urls = [
+      # Gentoo mirrors the same file, SourceForge only serves it slowly
+      "mirror://gentoo/distfiles/72/ufoai-2.5-data.tar"
+      "mirror://sourceforge/ufoai/ufoai-2.5-data.tar"
+    ];
+    hash = "sha256-XnBqQkr/ai6jCkx5gSnWME6Jc4fq34CFKBKbUSt9zbA=";
   };
 
   env = {
-    # Workaround build failure on -fno-common toolchains:
-    #   ld: r_gl.h:52: multiple definition of `qglGenBuffers';
-    #     r_gl.h:52: first defined here
-    # TODO: drop once release contains upstream fix:
-    #   https://github.com/ufoai/ufoai/commit/8a3075fffdad294e
-    NIX_CFLAGS_COMPILE = "-fcommon";
-    NIX_CFLAGS_LINK = toString [
-      # to avoid occasional runtime error in finding libgcc_s.so.1
-      "-lgcc_s"
-      # tests are underlinked against libm:
-      # ld: release-linux-x86_64/testall/client/sound/s_mix.c.o: undefined reference to symbol 'acos@@GLIBC_2.2.5'
-      "-lm"
-    ];
+    # to avoid occasional runtime error in finding libgcc_s.so.1
+    NIX_CFLAGS_LINK = "-lgcc_s";
   };
 
   preConfigure = ''tar xvf "${finalAttrs.srcData}"'';
 
   configureFlags = [
     "--enable-release"
-    "--enable-sse"
   ]
-  ++ lib.optional enableEditor "--enable-uforadiant";
+  ++ lib.optionals stdenv.hostPlatform.isx86 [ "--enable-sse" ]
+  ++ [
+    # upstream's unit tests and memory debugging tool, never run here
+    "--disable-testall"
+    "--disable-memory"
+  ];
+
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     libtheora
     xvidcore
     libGLU
     libGL
-    SDL
-    SDL_ttf
-    SDL_mixer
+    SDL2
+    SDL2_ttf
+    SDL2_mixer
     curl
     libjpeg
+    libogg
     libpng
+    libvorbis
+    minixml
     gettext
-    cunit
+    zlib
   ];
+
+  enableParallelBuilding = true;
+
+  # the map editor needs GTK 2 and is not built, but its launcher is installed
+  postInstall = ''
+    rm $out/bin/uforadiant
+  '';
 
   meta = {
     homepage = "http://ufoai.org";
