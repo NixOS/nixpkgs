@@ -290,6 +290,11 @@
     githubId = 3140815;
     name = "Christoforus Surjoputro";
   };
+  _3nd3r1 = {
+    github = "3nd3r1";
+    githubId = 28145418;
+    name = "Viljami Ranta";
+  };
   _3noch = {
     email = "eacameron@gmail.com";
     github = "3noch";
