@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromCodeberg,
-  makeWrapper,
   runtimeShell,
   runCommand,
   util-linux,
@@ -19,14 +18,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-rUMi+VetQc139PjbFJXlSkmYEuK5wtM6LpQ/f1tcB1s=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-
   postPatch = ''
     # don't use hardcoded /bin/sh
     for f in repl.k m.c;do
       substituteInPlace "$f" --replace-fail "/bin/sh" "${runtimeShell}"
     done
-    substituteInPlace repl.k --replace-fail '"LICENSE"' '"../share/ngn-k/LICENSE"'
   '';
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error=discarded-qualifiers";
@@ -49,12 +45,14 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
     install -Dm755 k "$out/bin/k"
-    install -Dm755 repl.k "$out/bin/repl.k"
+    install -Dm755 repl.k "$out/bin/k-repl"
     install -Dm755 libk.so "$lib/lib/libk.so"
     install -Dm644 k.h "$dev/include/k.h"
     install -Dm644 LICENSE -t "$out/share/ngn-k"
-    substituteInPlace "$out/bin/repl.k" --replace-fail "#!k" "#!$out/bin/k"
-    makeWrapper "$out/bin/repl.k" "$out/bin/k-repl"
+    substituteInPlace "$out/bin/k-repl" \
+      --replace-fail "#!k" "#!$out/bin/k" \
+      --replace-fail '"LICENSE"' '"../share/ngn-k/LICENSE"' \
+      --replace-fail '"repl.k"~basename' '"k-repl"~basename'
     runHook postInstall
   '';
 
