@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  cacert,
   pkg-config,
   aws-lc,
   sqlite,
@@ -13,16 +14,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "monocle";
-  version = "1.6.1";
+  version = "1.6.2";
 
   src = fetchFromGitHub {
     owner = "bgpkit";
     repo = "monocle";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HJb6Lae42XOMm6AEZrDRB7JT3Qr0128MibBfMpUEiAc=";
+    hash = "sha256-rib6T4zonSwzOaDfSP6TQaSOmkr2Tr2HzB5ystf2D8E=";
   };
 
-  cargoHash = "sha256-ph4z6XLFp8cO8FANFeDmoqaPfPQr5N4g3/Lwr3UrWL4=";
+  cargoHash = "sha256-LWVFzIx28kE805DOU8U8qrGJsqN40PUfRqm6umR9Wbs=";
 
   env = {
     AWS_LC_SYS_USE_SYSTEM = true;
@@ -40,7 +41,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     zstd
   ];
 
-  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
+  nativeCheckInputs = [
+    cacert
+    writableTmpDirAsHomeHook
+  ];
 
   # require internet access
   checkFlags = map (t: "--skip=${t}") [

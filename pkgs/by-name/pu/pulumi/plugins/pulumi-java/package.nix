@@ -5,13 +5,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "pulumi-java";
-  version = "1.39.0";
+  version = "1.40.4";
 
   src = fetchFromGitHub {
     owner = "pulumi";
     repo = "pulumi-java";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-H9fce2JIA1w2w0oFvQ4Zrl6XpS8T5AGylvhTJ7cIA2c=";
+    hash = "sha256-PJVfLBGa77xKMqGDs5ZeLQdooPbA7eFowfAW2xkfax8=";
     fetchSubmodules = true;
   };
 
@@ -37,7 +37,7 @@ buildGoModule (finalAttrs: {
   ];
 
   sourceRoot = "source";
-  vendorHash = "sha256-XIM1TU7iD1FAu2giS6W+/nH9mDy5gDdmYSZPunawyAg=";
+  vendorHash = "sha256-zkxgmxq8aStjon2DlReXt//4YdZcffj4qXRRnIbBGSY=";
 
   subPackages = [ "pkg/cmd/pulumi-language-java" ];
 

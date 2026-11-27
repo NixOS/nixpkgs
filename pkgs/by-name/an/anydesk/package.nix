@@ -4,8 +4,6 @@
   fetchurl,
   makeWrapper,
   makeDesktopItem,
-  writeShellScript,
-  jq,
   atk,
   cairo,
   gdk-pixbuf,
@@ -163,9 +161,7 @@ stdenv.mkDerivation (finalAttrs: {
       --set GTK_THEME Adwaita
   '';
 
-  passthru = {
-    updateScript = ./update.sh;
-  };
+  passthru.updateScript = ./update.sh;
 
   meta = {
     inherit description;

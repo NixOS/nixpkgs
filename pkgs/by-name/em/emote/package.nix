@@ -15,14 +15,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "emote";
-  version = "5.2.0";
+  version = "5.2.1";
   pyproject = false; # Built with meson
 
   src = fetchFromGitHub {
     owner = "tom-james-watson";
     repo = "Emote";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-C5Ycew0Y+G08ItujlqgHIEiC85me9+md9OUzFtJhS3w=";
+    hash = "sha256-1ySZEiZbT9u9YRn+rZS39dWecvbLmMZS2r8aAnIMyI8=";
   };
 
   nativeBuildInputs = [

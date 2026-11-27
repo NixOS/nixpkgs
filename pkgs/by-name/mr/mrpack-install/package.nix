@@ -10,48 +10,38 @@
 
 buildGoModule (finalAttrs: {
   pname = "mrpack-install";
-  version = "0.16.10";
+  version = "0.23.1";
 
   src = fetchFromGitHub {
     owner = "nothub";
     repo = "mrpack-install";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mTAXFK97t10imdICpg0UI4YLF744oscJqoOIBG5GEkc=";
+    hash = "sha256-vaIPs6ZF88bugFHbRLrqy0bTgRsbstvoN3njUGCo5YM=";
   };
 
-  vendorHash = "sha256-az+NpP/hCIq2IfO8Bmn/qG3JVypeDljJ0jWg6yT6hks=";
+  vendorHash = "sha256-cmVqOA1rKa7guwW0GEM4TLpreOVh8p7vI/z8SIsxtdI=";
+
+  excludedPackages = [
+    # Separate Go module
+    "e2e"
+    # Upstream's release helpers
+    "tools"
+  ];
 
   ldflags = [
     "-s"
-    "-X github.com/nothub/mrpack-install/buildinfo.Version=${finalAttrs.version}"
-    "-X github.com/nothub/mrpack-install/buildinfo.date=1970-01-01T00:00:00Z"
+    "-X github.com/nothub/mrpack-install/internal/buildinfo.version=${finalAttrs.version}"
+    "-X github.com/nothub/mrpack-install/internal/buildinfo.date=1970-01-01T00:00:00Z"
   ];
+
+  # Tests serve their fixtures from local HTTP servers
+  __darwinAllowLocalNetworking = true;
 
   checkFlags =
     let
-      skippedTests = [
-        # Skip tests that require network access
+      skippedTests = lib.optionals stdenv.hostPlatform.isDarwin [
+        # sendfile(2) does not work with __darwinAllowLocalNetworking, see NixOS/nix#16632
         "TestFetchMetadata"
-        "TestClient_VersionFromHash"
-        "TestClient_GetDependencies"
-        "TestClient_GetProjectVersions_Count"
-        "TestClient_GetVersion"
-        "TestClient_CheckProjectValidity_Slug"
-        "Test_GetProject_404"
-        "TestClient_GetProjects_Count"
-        "TestClient_GetProjectVersions_Filter_NoResults"
-        "Test_GetProject_Success"
-        "TestClient_CheckProjectValidity_Id"
-        "TestClient_GetLatestGameVersion"
-        "TestClient_GetProjectVersions_Filter_Results"
-        "TestClient_GetProjects_Slug"
-        "TestClient_GetVersions"
-        "TestGetPlayerUuid"
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        # /tmp is a symlink to /private/tmp on Darwin, breaking hardcoded path prefix checks
-        "TestPathTraversalAbsolute"
-        "TestPathTraversalRelative"
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];

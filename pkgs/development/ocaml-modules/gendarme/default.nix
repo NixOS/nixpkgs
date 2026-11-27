@@ -2,11 +2,13 @@
   lib,
   buildDunePackage,
   fetchFromGitHub,
+  nix-update-script,
+  ppxlib,
 }:
 
 buildDunePackage (finalAttrs: {
   pname = "gendarme";
-  version = "0.4";
+  version = "0.6";
 
   minimalOCamlVersion = "4.13";
 
@@ -14,8 +16,14 @@ buildDunePackage (finalAttrs: {
     owner = "bensmrs";
     repo = "gendarme";
     tag = finalAttrs.version;
-    hash = "sha256-yiHBAhnWYntv+5fKG7Sa1RqsnvWIsW0YDqp+uAzpg/s=";
+    hash = "sha256-oXJq2lG8XcF/yGtIsomqYDG5sGRPvAiG2ZtKmLaZgN0=";
   };
+
+  propagatedBuildInputs = [
+    ppxlib
+  ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Marshalling library for OCaml";

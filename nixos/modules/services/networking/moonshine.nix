@@ -150,6 +150,8 @@ in
       ];
     });
 
+    security.polkit.enable = true;
+
     services.udev.packages = [ cfg.package ];
 
     systemd.services.moonshine = {

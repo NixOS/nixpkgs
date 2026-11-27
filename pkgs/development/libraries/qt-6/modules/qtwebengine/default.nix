@@ -76,7 +76,7 @@ qtModule {
 
   version = "6.140.0";
   src = fetchzip {
-    url = "https://download.qt.io/official_releases/qtwebengine/6.140/6.140.0/src/qtwebengine-everywhere-src-6.140.0.tar.xz";
+    url = "mirror://qt/official_releases/qtwebengine/6.140/6.140.0/src/qtwebengine-everywhere-src-6.140.0.tar.xz";
     hash = "sha256-t8n34Ica4VIfe026Ubk4hvdJvIPMWrm6eKMITd6evJs=";
   };
 
