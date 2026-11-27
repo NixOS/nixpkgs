@@ -10,20 +10,20 @@
 
 buildGo127Module (finalAttrs: {
   pname = "d2";
-  version = "0.9.0";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "d2lang";
     repo = "d2";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HhCktLU43Y/uje038axwO7tNqO353mV/JID223sBtd8=";
+    hash = "sha256-tskJ48dPK2IzS1YQeaIl4hHQdcW1QKXFjDxS8trIRYY=";
   };
 
   # d2renderers/d2raster's TestRasterPackageHasNoIOCapabilities shells out to
   # `go list -mod=readonly -deps`, which bypasses the vendor directory and needs
   # a populated module cache.
   proxyVendor = true;
-  vendorHash = "sha256-6rrFjboeJ2Qln5TxbsJKmyTclIh1gz1X91g5IFjbMKo=";
+  vendorHash = "sha256-TckUA2c/1BmMvQNu+bS+MCVFQdsGsy1Cjxqwkj2dA9M=";
 
   excludedPackages = [
     "./ci"
