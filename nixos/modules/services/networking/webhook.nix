@@ -41,11 +41,32 @@ let
 
 in
 {
+  meta.maintainers = [
+    lib.maintainers.quantenzitrone
+  ];
+
+  imports = [
+    (lib.mkRemovedOptionModule [ "services" "webhook" "ip" ] ''
+      The webhook service was changed to use systemd socket activation.
+      The `ip` and `port` options were replaced by the `listenStream` option to configure the socket.
+      Additionally the default was changed to listen on localhost only.
+    '')
+    (lib.mkRemovedOptionModule [ "services" "webhook" "port" ] ''
+      The webhook service was changed to use systemd socket activation.
+      The `ip` and `port` options were replaced by the `listenStream` option to configure the socket.
+      Additionally the default was changed to listen on localhost only.
+    '')
+    (lib.mkRemovedOptionModule [ "services" "webhook" "openFirewall" ] ''
+      The `openFirewall` option was removed.
+      You should probably run this behind a reverse proxy anyway.
+    '')
+  ];
+
   options = {
     services.webhook = {
       enable = mkEnableOption ''
         [Webhook](https://github.com/adnanh/webhook), a server written in Go that allows you to create HTTP endpoints (hooks),
-        which execute configured commands for any person or service that knows the URL
+        which execute configured commands for any person or service that knows the URL (and potentially a configured secret)
       '';
 
       package = mkPackageOption pkgs "webhook" { };
@@ -67,26 +88,55 @@ in
           If set, you must create this group yourself!
         '';
       };
-      ip = mkOption {
-        type = types.str;
-        default = "0.0.0.0";
-        description = ''
-          The IP webhook should serve hooks on.
+      hardening.enable = mkEnableOption ''
+        systemd hardening for the webhook systemd unit. Enabling this will
+        probably break some workflows.
+        The author of this option, quantenzitrone, recommends to have the
+        webhook touch a file in /run/webhook and then listen for changes on
+        that file with a systemd.path(5) unit that triggers a systemd.service(5)
+        of Type=oneshot. Like this:
 
-          The default means it can be reached on any interface if `openFirewall = true`.
-        '';
-      };
-      port = mkOption {
-        type = types.port;
-        default = 9000;
-        description = "The port webhook should be reachable from.";
-      };
-      openFirewall = mkOption {
-        type = types.bool;
-        default = false;
+        ```nix
+          {
+            services.webhook = {
+              enable = true;
+              hardening.enable = true;
+
+              hooks.myhook = {
+                execute-command = pkgs.writeShellScript "trigger-myhook" "touch /run/webhook/myhook.trigger";
+                response = "successfully triggered myhook";
+              };
+            };
+
+            systemd.paths.myhook = {
+              description = "start myhook when /run/webhook/myhook.trigger changes";
+              pathConfig.PathModified = "/run/webhook/myhook.trigger";
+              wantedBy = [ "multi-user.target" ];
+            };
+
+            systemd.services.myhook = {
+              serviceConfig = {
+                Type = "oneshot";
+                # ...
+              };
+
+              script = '${""}'
+                # ...
+              '${""}';
+            };
+          }
+        ```
+
+        You can then harden each oneshot unit for each webhook separately for its specific needs.
+      '';
+      listenStream = mkOption {
+        type = types.str;
+        default = "127.0.0.1:9000";
+        example = "/run/webhook/socket";
         description = ''
-          Open the configured port in the firewall for external ingress traffic.
-          Preferably the Webhook server is instead put behind a reverse proxy.
+          Specifies an address for the socket listen on.
+          Directly used as `systemd.sockets.webhook.socketConfig.listenStream`.
+          See the systemd.socket(5) manpage for detailed information about the syntax.
         '';
       };
       enableTemplates = mkOption {
@@ -201,24 +251,30 @@ in
       ${defaultUser} = { };
     };
 
-    networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.port ];
+    systemd.sockets.webhook = {
+      description = "Webhook server socket";
+      socketConfig = {
+        ListenStream = [ cfg.listenStream ];
+        # recommended for ip specific binding (the default)
+        FreeBind = true;
+        # in case unix sockets are used
+        SocketUser = cfg.user;
+        SocketGroup = cfg.group;
+      };
+      wantedBy = [ "multi-user.target" ];
+    };
 
     systemd.services.webhook = {
-      description = "Webhook service";
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      description = "Webhook server";
       environment = config.networking.proxy.envVars // cfg.environment;
       serviceConfig = {
         Restart = "on-failure";
         User = cfg.user;
         Group = cfg.group;
+        RuntimeDirectory = "webhook";
         ExecStart =
           let
             args = [
-              "-ip"
-              cfg.ip
-              "-port"
-              (toString cfg.port)
               "-urlprefix"
               cfg.urlPrefix
             ]
@@ -233,6 +289,36 @@ in
           ''
             ${cfg.package}/bin/webhook ${escapeShellArgs args}
           '';
+      }
+      // optionalAttrs cfg.hardening.enable {
+        ProtectSystem = "strict";
+        CapabilityBoundingSet = "";
+        RestrictAddressFamilies = "none";
+        RestrictNamespaces = true;
+        SystemCallFilter = [
+          "@system-service"
+          "~@resources @privileged"
+        ];
+        ProtectHostname = true;
+        PrivateDevices = true;
+        ProtectProc = "invisible";
+        ProcSubset = "pid";
+        PrivateUsers = true;
+        PrivateNetwork = true;
+        ProtectClock = true;
+        ProtectKernelLogs = true;
+        ProtectControlGroups = true;
+        ProtectKernelModules = true;
+        MemoryDenyWriteExecute = true;
+        LockPersonality = true;
+        ProtectKernelTunables = true;
+        ProtectHome = true;
+        RemoveIPC = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        NoNewPrivileges = true;
+        PrivateTmp = true;
+        SystemCallArchitectures = "native";
       };
     };
   };
