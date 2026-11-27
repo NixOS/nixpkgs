@@ -3,6 +3,7 @@
   stdenv,
   fetchFromCodeberg,
   runtimeShell,
+  ncurses,
   runCommand,
   util-linux,
 }:
@@ -52,7 +53,8 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace "$out/bin/k-repl" \
       --replace-fail "#!k" "#!$out/bin/k" \
       --replace-fail '"LICENSE"' '"../share/ngn-k/LICENSE"' \
-      --replace-fail '"repl.k"~basename' '"k-repl"~basename'
+      --replace-fail '"repl.k"~basename' '"k-repl"~basename' \
+      --replace-fail '"/usr/bin/env";"tput"' '"${lib.getExe' ncurses "tput"}"'
     runHook postInstall
   '';
 
