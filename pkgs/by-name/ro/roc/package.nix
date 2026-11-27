@@ -10,18 +10,15 @@
   writableTmpDirAsHomeHook,
 }:
 
-let
-  nightlyTag = "nightly-2026-11-09-9e85de7";
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "roc";
-  version = "0-unstable-2026-11-08";
+  version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "roc-lang";
     repo = "roc";
-    rev = "9e85de7aba79eaeb8ca589ab6a1ea581274c8930";
-    hash = "sha256-XK2CMrOkZ/03NC1X102RttEjFrtLT/1m9fZzy2eHuw8=";
+    rev = "ee835686f9eae076bee7422c26e7cf8deb20aa0e";
+    hash = "sha256-eYy8v4RcU7+yzFRZSS17on/hErx1Czv6hIZnUdPL3ZQ=";
   };
 
   # Includes prebuilt LLVM, LLD and Binaryen from roc-lang/roc-bootstrap.
@@ -39,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   zigBuildFlags = [
     "build-release"
-    "-Dcompiler-version=${nightlyTag}"
+    "-Dcompiler-version=${finalAttrs.version}"
     "-Dcoverage=false"
     "--system"
     "${finalAttrs.deps}"
@@ -118,7 +115,6 @@ stdenv.mkDerivation (finalAttrs: {
       version = testers.testVersion {
         package = finalAttrs.finalPackage;
         command = "roc version";
-        version = nightlyTag;
       };
 
       helloTest = testScript "roc-test-hello" ''
