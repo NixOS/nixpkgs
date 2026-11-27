@@ -14,6 +14,7 @@
   libxt,
   xorgproto,
   nix-update-script,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -52,7 +53,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     updateScript = nix-update-script { extraArgs = [ "--version-regex=libXaw3d-(.*)" ]; };
+    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "3D appearance variant of the X Athena Widget Set";
@@ -60,5 +64,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+    pkgConfigModules = [ "xaw3d" ];
   };
 })

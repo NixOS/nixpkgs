@@ -27,7 +27,7 @@
 
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "vita3k";
-  version = "4403";
+  version = "4437";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -35,17 +35,20 @@ clangStdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Vita3K";
     repo = "Vita3K";
-    rev = "a631dd35d46747fdb27d7715a0524ea67b0b1a89";
+    rev = "b123d9ddc974a5e81fdfba92f0eed9c4428d11d4";
     fetchSubmodules = true;
-    hash = "sha256-QJNtfYf9Zwt6e8+v25yy9Q96nLRp4nF5lzpLq9ciA6U=";
+    hash = "sha256-PK5WP6O+NnXRjPGt5vTwhFzqI8mRyIH5mg+ojxyWolo=";
   };
 
   patches = [
+    # Not upstreamable: the AAC decoder uses libavcodec internals, which upstream only
+    # supports with its static FFmpeg. The store path pins the libavcodec it was built
+    # against, and the patch checks the libavcodec version at configure time
     # https://github.com/Vita3K/Vita3K/pull/4457
-    ./use-system-sdl3.patch
     ./use-system-ffmpeg.patch
-    ./install-datadir-assets.patch
-    ./use-system-moltenvk.patch
+    # sips, iconutil and codesign aren't in the darwin sandbox, upstream relies on them
+    # being present on macOS
+    # https://github.com/Vita3K/Vita3K/pull/4457
     ./optional-macos-tools.patch
   ];
 

@@ -8,7 +8,7 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "rea";
-  version = "6.9.0";
+  version = "6.10.1";
 
   __structuredAttrs = true;
 
@@ -16,10 +16,10 @@ buildNpmPackage (finalAttrs: {
     owner = "morluto";
     repo = "rea";
     tag = "rea-agents-${finalAttrs.version}";
-    hash = "sha256-n96fXl7OKRIlQ/nKGBDjN8kT4RIr2atgrQAU379lsoQ=";
+    hash = "sha256-2ulhZ2GXe1xOHKLNuJo9mTivy4OTiWP9VLHEXnpn5YI=";
   };
 
-  npmDepsHash = "sha256-xFNYn2vxfk8unZyJQ3YWOO3fFb3iJVU6Alav0A+TiSI=";
+  npmDepsHash = "sha256-cXQSwTmmu0sDcnFjpmdmaj01PU6gB0UZ+kp0T8EHKH4=";
 
   npmFlags = [ "--ignore-scripts" ];
 

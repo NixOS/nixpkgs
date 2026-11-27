@@ -5,7 +5,7 @@
 }:
 
 let
-  version = "3.06.00";
+  version = "3.10.00";
 
   mkTdarr = callPackage ./mktdarr.nix { inherit version; };
   server = callPackage ./server.nix { inherit mkTdarr; };

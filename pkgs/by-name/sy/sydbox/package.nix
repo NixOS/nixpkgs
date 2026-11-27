@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitLab,
+  getconf,
   libseccomp,
   mandoc,
   nix-update-script,
@@ -8,11 +9,16 @@
   rustPlatform,
   scdoc,
   versionCheckHook,
+  pkgsStatic,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
+  __structuredAttrs = true;
+  enableParallelBuilding = true;
+  strictDeps = true;
+
   pname = "sydbox";
-  version = "3.59.0";
+  version = "3.60.0";
 
   outputs = [
     "out"
@@ -24,12 +30,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "Sydbox";
     repo = "sydbox";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2hpLvclVjl42TKN3rt5w9MgoQigOpluNQaYSjbVyujY=";
+    hash = "sha256-T3DBDBNAE+4RS8YwxG7bSZXXPNu+fr2V1E9H84T0rUs=";
   };
 
-  cargoHash = "sha256-T0LiEiKIMVylTn6gDtd5zHVz9DLzqBBZ+wTo9bwLlt8=";
+  cargoHash = "sha256-hrNhWlBDUPV52ge4sRKSsqS06CpVL36mMkvYS7iOTpM=";
 
   nativeBuildInputs = [
+    getconf
     mandoc
     pkg-config
     scdoc
@@ -38,6 +45,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [ libseccomp ];
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
+
+  cargoBuildFlags = [
+    "--package=syd"
+    "--package=pandora_box"
+  ];
+
+  buildFeatures = [ "syd/oci" ];
+
+  # pandora's integration tests expect test binaries directly in target/
+  postPatch = ''
+    substituteInPlace pandora/Cargo.toml \
+      --replace-fail 'name = "tests"' $'name = "tests"\ntest = false'
+  '';
 
   checkFlags = [
     "--exact"
@@ -81,7 +101,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=dl::tests::test_has_vdso_symbol_1"
   ];
 
-  cargoTestFlags = [
+  cargoTestFlags = finalAttrs.cargoBuildFlags ++ [
     "--no-fail-fast"
   ];
 
@@ -96,13 +116,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
+  passthru.tests.static = pkgsStatic.sydbox;
 
   meta = {
     description = "Seccomp-based application sandbox";
     homepage = "https://gitlab.exherbo.org/sydbox/sydbox";
     changelog = "https://gitlab.exherbo.org/sydbox/sydbox/-/blob/${finalAttrs.src.tag}/ChangeLog.md";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ getchoo ];
+    maintainers = with lib.maintainers; [
+      getchoo
+      hmenke
+    ];
     mainProgram = "syd";
     platforms = lib.platforms.linux;
   };

@@ -99,6 +99,9 @@ lib.extendMkDerivation {
               cacert
             ];
 
+            strictDeps = true;
+            __structuredAttrs = true;
+
             inherit (finalAttrs) src modRoot goSum;
 
             # The following inheritance behavior is not trivial to expect, and some may

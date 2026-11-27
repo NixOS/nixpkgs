@@ -368,7 +368,9 @@ in
           lib.mapAttrsToList (name: value: "${name} ${value}") cfg.resolution.nsrecord
         )}
 
-        ${lib.optionalString (cfg.usersFile != null) ''users $"${cfg.usersFile}"''}
+        ${lib.optionalString (
+          cfg.usersFile != null
+        ) ''users $"/run/credentials/3proxy.service/3proxy.passwd"''}
 
         ${lib.concatMapStringsSep "\n" (service: ''
           auth ${lib.concatStringsSep " " service.auth}
@@ -410,9 +412,15 @@ in
         StateDirectory = "3proxy";
         ExecStart = "${pkg}/bin/3proxy ${cfg.confFile}";
         Restart = "on-failure";
+      }
+      // lib.optionalAttrs (cfg.usersFile != null) {
+        LoadCredential = "3proxy.passwd:${cfg.usersFile}";
       };
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ misuzu ];
+  meta.maintainers = with lib.maintainers; [
+    misuzu
+    yanganto
+  ];
 }

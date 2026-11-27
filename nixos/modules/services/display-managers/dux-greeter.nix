@@ -325,7 +325,8 @@ in
 
         if [ -f session.json ]; then
             copy_wallpaper() {
-                local path=$(${jq} -r ".$1 // empty" session.json)
+                local path
+                path=$(${jq} -r ".$1 // empty" session.json)
                 if [ -f "$path" ]; then
                     cp "$path" "$2"
                     ${jq} ".$1 = \"${cacheDir}/$2\"" session.json > session.tmp
@@ -334,8 +335,9 @@ in
             }
 
             copy_monitor_wallpapers() {
-                ${jq} -r ".$1 // {} | to_entries[] | .key + \":\" + .value" session.json 2>/dev/null | while IFS=: read monitor path; do
-                    local dest="$2-$(echo "$monitor" | tr -c '[:alnum:]' '-')"
+                ${jq} -r ".$1 // {} | to_entries[] | .key + \":\" + .value" session.json 2>/dev/null | while IFS=: read -r monitor path; do
+                    local dest
+                    dest="$2-$(echo "$monitor" | tr -c '[:alnum:]' '-')"
                     if [ -f "$path" ]; then
                         cp "$path" "$dest"
                         ${jq} --arg m "$monitor" --arg p "${cacheDir}/$dest" ".$1[\$m] = \$p" session.json > session.tmp
@@ -362,7 +364,7 @@ in
         fi
 
         mv dms-colors.json colors.json || :
-        chown dms-greeter:dms-greeter * || :
+        chown dms-greeter:dms-greeter ./* || :
       '';
 
     services.displayManager.dux-greeter.configFiles = lib.mkIf (

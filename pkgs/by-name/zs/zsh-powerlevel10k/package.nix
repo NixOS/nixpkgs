@@ -9,14 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "powerlevel10k";
-  version = "1.20.15";
+  version = "1.21.0";
 
   src = fetchFromGitHub {
     owner = "romkatv";
     repo = "powerlevel10k";
-    # upstream doesn't seem to use tags anymore
-    rev = "36f3045d69d1ba402db09d09eb12b42eebe0fa3b";
-    hash = "sha256-BRJyGn+gTGUWifpJ1ziBKVHACcWw+R5N/HdUi8HzSvY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Plv/JqwPjat0JLW4sKw6KdoB2v4Ol0zSFIldHqj5ku0=";
   };
 
   strictDeps = true;
@@ -51,6 +50,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/romkatv/powerlevel10k";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ kamadorueda ];
   };
 })

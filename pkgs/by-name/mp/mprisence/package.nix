@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  cacert,
   pkg-config,
   dbus,
   openssl,
@@ -10,16 +11,20 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mprisence";
-  version = "1.8.8";
+  version = "1.9.2";
 
   src = fetchFromGitHub {
     owner = "lazykern";
     repo = "mprisence";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+TZnhA9z6duk7d9U2OBPlXJyrTFoVyKRIS35l6E62/c=";
+    hash = "sha256-NcHUEwAPfB1olyJ0D3fjpJcmgmMyew0hKAYPJpNFV+4=";
   };
 
-  cargoHash = "sha256-B3Z/GkHOy4R9hhRZtVIItHs6J6wQSNVv0KNGF2/NSlo=";
+  cargoHash = "sha256-9lVHV2R+Di4R2FAEhZ9IG0gsgBThLf9+oJEJLUJ/9ZM=";
+
+  # Required for some of the tests
+  __darwinAllowLocalNetworking = true;
+  nativeCheckInputs = [ cacert ];
 
   nativeBuildInputs = [ pkg-config ];
 

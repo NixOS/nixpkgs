@@ -87,7 +87,12 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "python-bindings" true)
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^v(2\\.0\\.[0-9]+)$"
+    ];
+  };
 
   meta = {
     homepage = "https://libtorrent.org/";

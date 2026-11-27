@@ -18,17 +18,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "upki";
-  version = "1.0.3";
+  version = "1.0.4";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "rustls";
     repo = "upki";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-aHZY4RmvlxspaepkT2hwOmi4BGk6aVfbaDDGBE4OhxM=";
+    hash = "sha256-pFrk/TcJ6AjqZ8NbyIdF5e+wesl8TXEUPsNCigKPJ3M=";
   };
 
-  cargoHash = "sha256-ZtrJ1JdOYXKgx5gk6DtIW/L7ik+AFnL22UGaPSl/IrQ=";
+  cargoHash = "sha256-vCiZTh5Xd/0EXhOlPn+CeqxX7flt4IehPL1NqUmWCyY=";
 
   cargoBuildFlags = [
     "--package=upki-cli"
@@ -61,11 +61,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --target=${stdenv.hostPlatform.rust.rustcTarget}
   '';
 
-  preCheck = ''
-    # fetch_with_stale_local_manifest sets its local cache mtime to 1970-01-02.
-    # Make the server fixture newer than that cache.
-    touch -d @172800 upki-cli/tests/data/typical/revocation/manifest.json
-  '';
+  # These upstream packaging tests require systemd tools and we aren't
+  # using the checked systemd units at this time.
+  checkFlags = [
+    "--skip=systemd_units_verify"
+    "--skip=sysusers_configuration_verifies"
+  ];
 
   postInstall = ''
     ${buildPackages.rust.envVars.setEnv} cargo cinstall --release --frozen \

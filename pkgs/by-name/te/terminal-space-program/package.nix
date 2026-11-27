@@ -7,14 +7,14 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "terminal-space-program";
-  version = "0.69.0";
+  version = "0.70.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "jasonfen";
     repo = "terminal-space-program";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CN86DKYxzvRzSu6ehz+hYAFRzjiTQtFYaQGHM2OIOjA=";
+    hash = "sha256-j0GBzW6Yz7e2I7LPdjj5c56vlF6FCQ1sIqQ3lEZw2xg=";
   };
 
   vendorHash = "sha256-DtzGzLe5HMasMZdfO3h1VTBKGFuANyQExY/2mireTEE=";
@@ -39,7 +39,10 @@ buildGoModule (finalAttrs: {
     changelog = "https://github.com/jasonfen/terminal-space-program/blob/main/docs/version-history.md";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ tomasrivera ];
+    maintainers = with lib.maintainers; [
+      tomasrivera
+      jasonfen
+    ];
     mainProgram = "terminal-space-program";
   };
 })

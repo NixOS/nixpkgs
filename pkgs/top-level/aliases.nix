@@ -1266,6 +1266,7 @@ mapAliases {
   httpfs2 = throw "'httpfs2' has been removed as it was unmaintained upstream"; # Added 2026-05-31
   httplz = throw "'httplz' has been removed as it was unmaintained upstream"; # Added 2026-04-25
   hubicfuse = throw "'hubicfuse' has been removed as the hubic service was discontinued and the project is unmaintained upstream"; # Added 2026-05-08
+  humility = throw "'humility' has been removed as it was broken and its package installed no binary"; # Added 2026-11-25
   hydra_unstable = throw "'hydra_unstable' has been renamed to/replaced by 'hydra'"; # Converted to throw 2025-10-27
   hydraAntLogger = warnAlias "'hydraAntLogger' has been renamed to 'hydra-ant-logger'" hydra-ant-logger; # Added 2026-02-08
   hyena = throw "'hyena' has been removed, as it is archived upstream and relies on gtk2"; # Added 2026-07-28
@@ -1308,6 +1309,7 @@ mapAliases {
   ipfs-migrator = throw "'ipfs-migrator' has been renamed to/replaced by 'kubo-migrator'"; # Converted to throw 2025-10-27
   ipfs-migrator-all-fs-repo-migrations = throw "'ipfs-migrator-all-fs-repo-migrations' has been renamed to/replaced by 'kubo-fs-repo-migrations'"; # Converted to throw 2025-10-27
   ipfs-migrator-unwrapped = throw "'ipfs-migrator-unwrapped' has been renamed to/replaced by 'kubo-migrator-unwrapped'"; # Converted to throw 2025-10-27
+  ipget = throw "'ipget' has been removed as it is archived upstream; use 'ipfs get' from 'kubo' instead"; # Added 2026-11-25
   iqueue = throw "'iqueue' has been removed, as it was broken and unmaintained upstream"; # Added 2026-04-10
   ir.lv2 = ir-lv2; # Added 2025-09-37
   ircdHybrid = warnAlias "'ircdHybrid' has been renamed to 'ircd-hybrid'" ircd-hybrid; # Added 2026-02-08
@@ -2056,6 +2058,7 @@ mapAliases {
   oil = throw "'oil' has been renamed to/replaced by 'oils-for-unix'"; # Converted to throw 2025-10-27
   olaris-server = throw "'olaris-server' has been removed as it failed to build since 2024"; # Added 2026-01-15
   olive-editor = throw "'olive-editor' has been removed as it is unmaintained upstream and broken"; # Added 2026-05-22
+  olivetin = throw "'olivetin' has been removed because it has reached its end of life. Please upgrade to `olivetin-3k` (the 3000.x release series of olivetin)."; # Added 2026-11-26
   omni-gtk-theme = throw "'omni-gtk-theme' has been removed because it depended on 'gtk-engine-murrine', which was removed because it was unmaintained upstream and depended on GTK 2."; # Added 2026-07-22
   omxplayer = throw "'omxplayer' has been removed because it depends on a severely outdated upstream, a severely outdated FFmpeg, and the new upstream was deprecated since 2020. Please use 'vlc' instead."; # Added 2026-07-24
   oneDNN = onednn; # Added 2026-02-08
@@ -2622,6 +2625,7 @@ mapAliases {
   sshd-openpgpg-auth = throw "'sshd-openpgpg-auth' has been removed as it is no longer maintained and fails a few tests."; # Added 2026-10-23
   ssl-proxy = throw "'ssl-proxy' has been removed as it was unmaintained both upstream and in nixpkgs, pinned to dangerously old version of go crypto."; # Added 2026-10-17
   ssm-agent = throw "'ssm-agent' has been renamed to/replaced by 'amazon-ssm-agent'"; # Converted to throw 2025-10-27
+  stac-validator = warnAlias "'stac-validator' has been renamed to 'stac-valid', following upstream's rename" stac-valid; # Added 2026-11-21
   stacer = throw "'stacer' has been removed because it was abandoned upstream and relied upon vulnerable software"; # Added 2025-11-08
   stalwart = warnAlias "`stalwart` is currently pinned to `0.15.5`. If `0.16.x` is needed, it is available as `stalwart_0_16`. Note: `stalwart_0_16` is not compatible with `services.stalwart` at this time." stalwart_0_15;
   stalwart-mail = warnAlias "'stalwart-mail' has been renamed to/replaced by 'stalwart'" stalwart; # Added 2026-01-19

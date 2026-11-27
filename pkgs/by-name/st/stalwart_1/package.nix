@@ -9,14 +9,12 @@
 
   aws-lc,
   bzip2,
-  foundationdb,
   pkg-config,
   rocksdb_11_8,
   rust-jemalloc-sys-unprefixed,
   sqlite,
   zstd,
 
-  withFoundationdb ? false,
   stalwartEnterprise ? false,
 }:
 let
@@ -66,23 +64,23 @@ rustPlatform.buildRustPackage (finalAttrs: {
     rust-jemalloc-sys-unprefixed
     sqlite
     zstd
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isLinux && withFoundationdb) [ foundationdb ];
+  ];
 
-  # Issue: https://github.com/stalwartlabs/stalwart/issues/1104
+  # https://github.com/stalwartlabs/stalwart/blob/v1.2.0/.github/workflows/ci.yml#L360
   buildNoDefaultFeatures = true;
   buildFeatures = [
     "sqlite"
     "postgres"
     "mysql"
     "rocks"
+    "foundationdb"
     "s3"
     "redis"
+    "keep"
     "azure"
     "nats"
-    "keep"
+    "exchange"
   ]
-  ++ lib.optionals withFoundationdb [ "foundationdb" ]
   ++ lib.optionals stalwartEnterprise [ "enterprise" ];
 
   cargoBuildFlags = [

@@ -25,6 +25,7 @@
   wayland,
   libglvnd,
   perl,
+  nix-update-script,
 }:
 rustPlatform.buildRustPackage (finalAttrs: rec {
   pname = "lookout";
@@ -113,6 +114,8 @@ rustPlatform.buildRustPackage (finalAttrs: rec {
     install -Dm644 clients/native/packaging/linux/com.hackclub.lookout.desktop $out/share/applications/com.hackclub.lookout.desktop
     install -Dm644 clients/native/assets/app-icon.png $out/share/icons/hicolor/128x128/apps/com.hackclub.lookout.png
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Hack Club time-tracking desktop app that captures periodic screenshots";

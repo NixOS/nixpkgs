@@ -11,14 +11,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pylookyloo";
-  version = "1.43.1";
+  version = "1.43.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Lookyloo";
     repo = "PyLookyloo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-N9WPo/STVoxXyNwW76genzEtUN2Sn9d9k44yR7cjbo8=";
+    hash = "sha256-Nrdo9QW/ewigVtudhmud2XUgiHqsoz7VqTGU6jQ+AJQ=";
   };
 
   build-system = [ poetry-core ];

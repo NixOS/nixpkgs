@@ -11,6 +11,7 @@
   pytestCheckHook,
   pyotp,
   pytest-cov-stub,
+  stdenv,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -42,6 +43,9 @@ buildPythonPackage (finalAttrs: {
   ];
 
   pythonImportsCheck = [ "proton" ];
+
+  # The hook aborts when trying to collect tests on Darwin
+  dontUsePytestCheck = stdenv.hostPlatform.isDarwin;
 
   disabledTestPaths = [
     # Single test, requires internet connection

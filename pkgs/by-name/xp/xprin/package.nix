@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "xprin";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "crossplane-contrib";
     repo = "xprin";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3UtQuG9cCIzyrAbfji4vzmeHsW50gTDZk8bmuEDLgQM=";
+    hash = "sha256-Nh9YAtTB+SlACHR/5nHq8uQ0flmsRBScNAktglFlM4c=";
   };
 
-  vendorHash = "sha256-F16iD1+HHOyawrKLNhhIfHbwyUoXgE6wWQlcii1mcz8=";
+  vendorHash = "sha256-ert+yL6RJKFXkJH3jlIZ5B4biWHjVuBqoPK5yh34c+g=";
 
   subPackages = [
     "cmd/xprin"

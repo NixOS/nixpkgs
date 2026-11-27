@@ -4346,12 +4346,6 @@ assertNoAdditions {
     }
   );
 
-  srcery-vim = super.srcery-vim.overrideAttrs (old: {
-    meta = old.meta // {
-      license = lib.licenses.mit;
-    };
-  });
-
   starrynight = super.starrynight.overrideAttrs (old: {
     meta = old.meta // {
       license = lib.licenses.vim;

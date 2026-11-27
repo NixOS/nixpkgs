@@ -47,6 +47,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ hexa ];
     mainProgram = "hailort-drivers";
-    platforms = lib.platforms.all;
+    platforms = lib.platforms.linux;
   };
 })

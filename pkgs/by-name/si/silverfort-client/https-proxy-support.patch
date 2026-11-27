@@ -1,0 +1,28 @@
+diff --git a/main.js b/main.js
+index 0f354cf..1bfac3a 100644
+--- a/main.js
++++ b/main.js
+@@ -1,6 +1,7 @@
+ const fs = require("fs"),
+ 	fsPromises = require("fs").promises,
+ 	https = require("https"),
++	{ HttpsProxyAgent } = require("https-proxy-agent");
+ 	url = require("url"),
+ 	path = require("path"),
+ 	util = require("util"),
+@@ -486,6 +487,7 @@ const changeWorkingMode = () => {
+ 		let e = 0;
+ 		const n = connectionOptions[currentWorkingMode],
+ 			o = getPairedTokens();
++		const proxy = process.env.https_proxy;
+ 		(socket = io(n, {
+ 			rejectUnauthorized: !1,
+ 			transports: ["websocket"],
+@@ -495,6 +497,7 @@ const changeWorkingMode = () => {
+ 				accessToken: accessToken,
+ 				refreshToken: 0 === o.length && pairedTokenId ? pairedTokenId : void 0,
+ 			},
++			...(proxy) && { agent: new HttpsProxyAgent(proxy) },
+ 		})),
+ 			socket.on("connect", () => {
+ 				log.info(`Primary: socket.io connected to ${n}`),

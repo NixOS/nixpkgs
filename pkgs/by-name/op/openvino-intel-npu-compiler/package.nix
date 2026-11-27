@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openvino-intel-npu-compiler";
-  version = "2026.38-rc1";
+  version = "2026.44-rc1";
 
   src = fetchFromGitHub {
     owner = "openvinotoolkit";
@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "npu_ud_" + lib.replaceStrings [ "." "-" ] [ "_" "_" ] finalAttrs.version;
     fetchLFS = true;
     fetchSubmodules = true;
-    hash = "sha256-rXUysfCLKc3VKavc3lG8BZtWLgvQVPTI/QP11Xk8F/Y=";
+    hash = "sha256-Qfkl7q14tuuMQOABsbGXUdIuA3lG1gpqRGN2ZA29FjA=";
   };
 
   # Must be the revision from validation/openvino_config.json: building against
@@ -30,9 +30,9 @@ stdenv.mkDerivation (finalAttrs: {
   openvinoSrc = fetchFromGitHub {
     owner = "openvinotoolkit";
     repo = "openvino";
-    rev = "d8047fb380b27a9d5827cb3f22aec7781ae5ac82";
+    rev = "88f8c6bf7c46bb2e3b3fc6c6c357a030a43c780c";
     fetchSubmodules = true;
-    hash = "sha256-djEof2C5T5EyKz5hy4TQdW0Q1WHZYVHYFLujox90r/I=";
+    hash = "sha256-i5b9zG8GcirbXlcvupPdK7m3dbd55jhn9ONgus0gWmM=";
   };
 
   nativeBuildInputs = [

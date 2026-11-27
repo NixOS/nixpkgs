@@ -18,6 +18,8 @@ let
     pname = "cord";
     inherit src version;
 
+    __structuredAttrs = true;
+
     # The version in .github/server-version.txt differs from the one in Cargo.toml
     postPatch = ''
       substituteInPlace .github/server-version.txt \
@@ -27,7 +29,7 @@ let
     cargoHash = "sha256-14u3rhpDYNKZ4YLoGp6OPeeXDo3EzGYO3yhE9BkDSC0=";
 
     # cord depends on nightly features
-    RUSTC_BOOTSTRAP = 1;
+    env.RUSTC_BOOTSTRAP = 1;
 
     nativeInstallCheckInputs = [
       versionCheckHook

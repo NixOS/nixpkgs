@@ -26,19 +26,21 @@
   psutil,
   pydantic,
   pydantic-settings,
-  pyyaml,
+  slack-sdk,
   slowapi,
   torch,
+  typing-extensions,
   uvicorn,
 
   # optional-dependencies
   mcp,
+  pyjwt,
   setproctitle,
   slack-bolt,
-  slack-sdk,
 
   # tests
   addBinToPathHook,
+  hypothesis,
   pytestCheckHook,
 
   cudaSupport ? config.cudaSupport,
@@ -46,14 +48,14 @@
 
 buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } (finalAttrs: {
   pname = "nvidia-resiliency-ext";
-  version = "0.7.0";
+  version = "0.7.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "nvidia-resiliency-ext";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sQcmZP6oPVf6uty+M7FNJi8nhqY/r2HFAH787jzRwik=";
+    hash = "sha256-VUp2KWPKPAl12mF4VZUmeV/aRCy+Dypy6NqeWLLfABA=";
   };
 
   postPatch = ''
@@ -104,19 +106,21 @@ buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } (finalAttrs
     psutil
     pydantic
     pydantic-settings
-    pyyaml
+    slack-sdk
     slowapi
     torch
+    typing-extensions
     uvicorn
   ];
 
   optional-dependencies = {
     attribution = [
       mcp
+      pyjwt
       setproctitle
       slack-bolt
-      slack-sdk
-    ];
+    ]
+    ++ pyjwt.optional-dependencies.crypto;
   };
 
   pythonImportsCheck = [ "nvidia_resiliency_ext" ];
@@ -124,11 +128,13 @@ buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } (finalAttrs
   nativeCheckInputs = [
     # Tests invoke `ft_launcher`
     addBinToPathHook
+    hypothesis
     pytestCheckHook
   ];
 
   # Most of the test suite requires GPUs and/or a distributed setup
   enabledTestPaths = [
+    "tests/checkpointing/unit_cpu"
     "tests/fault_tolerance/unit"
     "tests/shared_utils"
   ];

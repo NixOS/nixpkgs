@@ -9,13 +9,13 @@
 }:
 buildNpmPackage (finalAttrs: {
   pname = "npq";
-  version = "3.19.6";
+  version = "3.27.5";
 
   src = fetchFromGitHub {
     owner = "lirantal";
     repo = "npq";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-UCxo43RAJNH/60gDX99BPSCchvTb2wAJNcMXbQkROII=";
+    hash = "sha256-BAjPRkjKYy8PIZ+wNnlbLMMNUL1hb9ucQfhgandrfro=";
   };
 
   topPackagesFile = fetchurl {
@@ -42,7 +42,7 @@ buildNpmPackage (finalAttrs: {
 
   stdenv = stdenvNoCC;
 
-  npmDepsHash = "sha256-vSj1aGxFL9l14eiJN1j8RvkMOpb+6KflhAX0BZ1znuw=";
+  npmDepsHash = "sha256-kmSfsBoULFrqiscamBk30UhNWVWtSXJM6kcGfxEVwNY=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;

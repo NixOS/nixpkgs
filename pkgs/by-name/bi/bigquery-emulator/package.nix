@@ -27,6 +27,14 @@ buildGoModule.override
       rm -r internal/cmd/generator
     '';
 
+    tags = [
+      # grpc uses http2.TrailerPrefix, which x/net only defines on Go 1.27 with http2legacy
+      # https://github.com/golang/net/commit/49810da71b9026da9e0d028a6ad8c7730c52d9c4
+      # https://github.com/grpc/grpc-go/issues/9206
+      # Drop once upstream bumps x/net: https://github.com/goccy/bigquery-emulator/pull/497
+      "http2legacy"
+    ];
+
     ldflags = [ "-s -w -X main.version=${finalAttrs.version} -X main.revision=v${finalAttrs.version}" ];
 
     doCheck = false;

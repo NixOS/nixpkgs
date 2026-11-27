@@ -5,45 +5,16 @@
   writableTmpDirAsHomeHook,
 }:
 
-let
-  py = python3.override {
-    packageOverrides = self: super: {
-
-      # Requires 'cyclonedx-python-lib = ">=6.0.0,<8.0.0"'
-      cyclonedx-python-lib = super.cyclonedx-python-lib.overridePythonAttrs (oldAttrs: rec {
-        version = "7.6.2";
-        src = fetchFromGitHub {
-          owner = "CycloneDX";
-          repo = "cyclonedx-python-lib";
-          tag = "v${version}";
-          hash = "sha256-nklizCiu7Nmynjd5WU5oX/v2TWy9xFVF4GkmCwFKZLI=";
-        };
-
-        # The `serializable` package eventually got renamed `py_serializable`, therefore we need
-        # to patch the imports;
-        # _c.f._ https://github.com/madpah/serializable/pull/155 .
-        postPatch = ''
-          find . -name '*.py' | xargs -I{} sed -i \
-            -e 's/serializable\./py_serializable\./g' \
-            -e 's/@serializable/@py_serializable/g' \
-            -e 's/from serializable/from py_serializable/g' \
-            -e 's/import serializable/import py_serializable/g' \
-            {}
-        '';
-      });
-    };
-  };
-in
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "checkov";
-  version = "3.4.5";
+  version = "3.4.11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bridgecrewio";
     repo = "checkov";
     tag = finalAttrs.version;
-    hash = "sha256-O0brspS07toTrp96k3/2KWUHAea7jdiUnvsua/OWpno=";
+    hash = "sha256-B/JSIDbHxGlYiP3u4PjAhRLW98mgxYy/h3L8AIXpVg4=";
   };
 
   pythonRelaxDeps = [
@@ -77,9 +48,9 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     "pycep-parser"
   ];
 
-  build-system = with py.pkgs; [ setuptools-scm ];
+  build-system = with python3.pkgs; [ setuptools-scm ];
 
-  dependencies = with py.pkgs; [
+  dependencies = with python3.pkgs; [
     aiodns
     aiohttp
     aiomultiprocess
@@ -125,7 +96,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     update-checker
   ];
 
-  nativeCheckInputs = with py.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     aioresponses
     distutils
     mock

@@ -158,7 +158,7 @@ buildPythonPackage (finalAttrs: {
 
   pytestFlags = [
     "-v"
-    "--hypothesis-profile ci"
+    "--hypothesis-profile=ci"
     # Follow upstream with settings
     "--durations=20"
 

@@ -45,6 +45,7 @@
   ntl,
   onetbb,
   openssl,
+  palp,
   R,
   rPackages,
   rWrapper,
@@ -56,6 +57,7 @@
   runtimeShell,
   topcom,
   which,
+  writableTmpDirAsHomeHook,
   xz,
   llvmPackages,
 
@@ -65,16 +67,20 @@
 assert disableDocs -> !downloadDocs;
 let
   generateDocs = !(disableDocs || downloadDocs);
+
+  palpCustom = palp.override {
+    allDimensions = true;
+  };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "macaulay2";
-  version = "1.26.06";
+  version = "1.26.11";
 
   src = fetchFromGitHub {
     owner = "Macaulay2";
     repo = "M2";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-kYxqbMKW+7r6nI4i3o7vvJVf0TGRVLaDviZTFx3PTBI=";
+    hash = "sha256-w8heIm/zgpXQXDqvXJM2jvusUMu+ovLwccPlnBmkDn0=";
   };
 
   buildInputs = [
@@ -140,7 +146,12 @@ stdenv.mkDerivation (finalAttrs: {
     msolve
     nauty
     normaliz
+    palpCustom
     topcom
+  ]
+  ++ lib.optionals generateDocs [
+    # some documentation generation tries to save stuff in $HOME
+    writableTmpDirAsHomeHook
   ];
 
   __structuredAttrs = true;
@@ -184,7 +195,7 @@ stdenv.mkDerivation (finalAttrs: {
     let
       docs = fetchurl {
         url = "https://macaulay2.com/Downloads/OtherSourceCode/Macaulay2-docs-${finalAttrs.version}.tar.gz";
-        hash = "sha256-0+ilvDh87Gmwzx0bLhT6nnadcPwgU3uB6pKhP9VqW0Q=";
+        hash = "sha256-lLxoNkM4DC8JuVf3EYAVcPVkA9eB7hjvqTYMDlL4104=";
       };
     in
     if downloadDocs then
@@ -225,6 +236,7 @@ stdenv.mkDerivation (finalAttrs: {
           nauty
           normaliz
           openssl
+          palpCustom
           R
           topcom
         ]

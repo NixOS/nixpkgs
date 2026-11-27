@@ -10,15 +10,15 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "proxy";
-  version = "1.0.5";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "stalwartlabs";
     repo = "proxy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BpScQFek0T+lHjjtfXyOZDOVfEWOGpLwSkPVtljzqMc=";
+    hash = "sha256-Wl1OGxy4CKfDxqJMy8uH8S85dx4etQvEnmiEK0v7RUI=";
   };
-  cargoHash = "sha256-UTTGTxzi0y1T3+SnSNrKRCus0lnoODCtN5qRknZJ1HE=";
+  cargoHash = "sha256-NETohRBZx4eTQA4oCaPmqUebHNcCCuERO2HjT+ZRirc=";
 
   __structuredAttrs = true;
   __darwinAllowLocalNetworking = true;

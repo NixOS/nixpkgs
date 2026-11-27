@@ -8,17 +8,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "uniffi-bindgen";
-  version = "0.32.2";
+  version = "0.33.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "mozilla";
     repo = "uniffi-rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zIQ2ktwOI3MYnYinGZO52aJhm1l6SELpdNPcQ84KYsc=";
+    hash = "sha256-K0JqI9VpnR9urSIMxKuAkfiKmAI9qxtNjMK5mJUzZT8=";
   };
 
-  cargoHash = "sha256-6LdW3ZVYqUilmbCLslhSrTt6eVZr1QLgecGVshONKpU=";
+  cargoHash = "sha256-etaH85c3SNtRMPxdsL93H5JMOWqV7ojDzhEWQ2Ht7PI=";
 
   cargoBuildFlags = [
     "-p"

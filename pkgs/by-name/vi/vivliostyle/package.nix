@@ -24,13 +24,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vivliostyle";
-  version = "11.5.0";
+  version = "11.6.0";
 
   src = fetchFromGitHub {
     owner = "vivliostyle";
     repo = "vivliostyle-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Mruulx2Zz98Xgqs452DeNu+OADTmyyedYt82bzilyg4=";
+    hash = "sha256-zaQmDi10E742pNwHty1jKtDMVevOr7eHY8dcgmzAS2s=";
   };
 
   patches = [
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
     fetcherVersion = 5;
-    hash = "sha256-AK1Q6Q7OyRDWO87WhIQepMAJaCVihocnAPIpF4x+waw=";
+    hash = "sha256-Um+bfz4n/ocizH2GAXtmXPcj6vNR7fUzS0cU3AgwXmA=";
   };
 
   nativeBuildInputs = [

@@ -24,14 +24,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "langchain-perplexity";
-  version = "1.4.2";
+  version = "1.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-perplexity==${finalAttrs.version}";
-    hash = "sha256-rlHBCHiVHqnoMq+oCqsVMZTZ9cP94C62ZV2/335cJXI=";
+    hash = "sha256-eGSzMMmAP9IwiaU7LttyAMgT20tzLYqsXDT3GSpnwmg=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/libs/partners/perplexity";

@@ -270,6 +270,7 @@ mapAliases {
   face_recognition = throw "'face_recognition' has been renamed to/replaced by 'face-recognition'"; # Converted to throw 2025-10-29
   face_recognition_models = throw "'face_recognition_models' has been renamed to/replaced by 'face-recognition-models'"; # Converted to throw 2025-10-29
   factory_boy = throw "'factory_boy' has been renamed to/replaced by 'factory-boy'"; # Converted to throw 2025-10-29
+  falconpy = crowdstrike-falconpy; # added 2026-11-25
   fasthtml = python-fasthtml; # Added 2026-07-11
   fastnlo_toolkit = throw "'fastnlo_toolkit' has been renamed to/replaced by 'fastnlo-toolkit'"; # Converted to throw 2025-10-29
   fasttext-predict = throw "'fasttext-predict' has been removed as the only consumer searxng removed its usage"; # Added 2026-03-11
@@ -352,6 +353,7 @@ mapAliases {
   howdoi = throw "'howdoi' has been removed as it was unmaintained upstream"; # Added 2026-04-19
   HTSeq = throw "'HTSeq' has been renamed to/replaced by 'htseq'"; # Converted to throw 2025-10-29
   hypothesis_6_136 = throw "'hypothesis_6_136' has been removed as it's not needed anymore"; # Added 2026-08-26
+  i-pi = ipi; # added 2026-11-25
   ibmiotf = throw "'ibmiotf' has been removed as it was unmaintained upstream and the corresponding home-assistant integration was removed"; # Added 2026-05-04
   idna-ssl = throw "'idna-ssl' has been removed as it was archived upstream"; # Added 2026-04-23
   ignite = pytorch-ignite; # added 2026-11-17
@@ -473,6 +475,7 @@ mapAliases {
   mypermobil = throw "'mypermobil' was removed because Home Assistant dropped the integration"; # added 2026-08-05
   mysql-connector = mysql-connector-python; # added 2026-06-21
   myst-docutils = warnAlias "'myst-docutils' has been removed as it was identical to 'myst-parser'" myst-parser;
+  nanomsg-python = warnAlias "'nanomsg-python' has been renamed to 'nanomsg'" nanomsg; # added 2026-11-25
   napari-npe2 = warnAlias "napari-npe2 has been renamed to 'npe2'" npe2; # added 2026-07-28
   net2grid = throw "'net2grid' has been renamed to/replaced by 'gridnet'"; # Converted to throw 2025-10-29
   netbox-attachments = throw "'netbox-attachments' has been moved to the 'netboxPlugins' package set"; # Added 2026-06-13
@@ -795,6 +798,7 @@ mapAliases {
   sqlalchemy-views = throw "'sqlalchemy-views' has been removed as it was broken and unmaintained upstream"; # Added 2025-11-09
   sqlalchemy_1_3 = throw "'sqlalchemy_1_3' has been removed because it was actually version 1.4.54"; # added 2026-07-20
   sqlalchemy_migrate = throw "'sqlalchemy_migrate' has been renamed to/replaced by 'sqlalchemy-migrate'"; # Converted to throw 2025-10-29
+  stac-validator = warnAlias "'stac-validator' has been renamed to 'stac-valid', following upstream's rename" stac-valid; # Added 2026-11-21
   statistics = throw "'statistics' has been removed because it is unmaintained upstream"; # Added 2026-09-05
   steamship = throw "'steamship' has been removed because it is broken and unmaintained upstream"; # Added 2026-05-06
   steamworkspy = warnAlias "'steamworkspy' has been renamed to 'steamworks' to match the upstream distribution name" steamworks; # Added 2026-09-19
@@ -833,6 +837,7 @@ mapAliases {
   threadpool = throw "'threadpool' has been removed, since it is obsolete"; # Added 2026-01-09
   tikteck = throw "'tikteck' has been removed because Home Assistant dropped its integration"; # Added 2026-06-04
   tikzplotlib = throw "tikzplotlib was removed because it is incompatible with recent versions of matplotlib and webcolors"; # added 2025-11-11
+  toggl-cli = togglcli; # added 2026-11-25
   torchtnt-nightly = throw "'torchtnt-nightly' was only needed as a test dependency for 'torcheval', but these tests are no longer run"; # added 2025-11-12
   torchtune = throw "'torchtune' was removed because it is unmaintained upstream."; # added 2026-07-02
   torrent_parser = throw "'torrent_parser' has been renamed to/replaced by 'torrent-parser'"; # Converted to throw 2025-10-29
@@ -841,6 +846,7 @@ mapAliases {
   treeo = throw "treeo has been removed because it has been marked as broken since 2023."; # Added 2025-10-11
   treex = throw "treex has been removed because it has transitively been marked as broken since 2023."; # Added 2025-10-11
   trezor_agent = throw "'trezor_agent' has been renamed to/replaced by 'trezor-agent'"; # Converted to throw 2025-10-29
+  trino-python-client = trino; # added 2026-11-25
   ts1-signatures = warnAlias "'ts1-signatures' has been renamed to 'th1'" th1; # Added 2026-11-07
   tunigo = throw "'tunigo' has been removed because the Tunigo service is no longer operational. For similar functionality, consider the Spotify Web API."; # Added 2026-11-20
   tuyaha = throw "'tuyaha' has been removed because it is unmaintained upstream. Use 'tuya-iot-py-sdk' instead."; # Added 2026-11-22
@@ -851,6 +857,7 @@ mapAliases {
   typed-ast = throw "typed-ast was removed because it went end of life in July 2023"; # added 2025-05-24
   typedmonarchmoney = throw "'typedmonarchmoney' was removed because Home Assistant switched to 'monarchmoneycommunity'"; # added 2026-08-05
   typer-slim = warnAlias "typer-slim was an alias package of typer that only depended on it and has been removed." typer; # added 2026-02-16
+  types-dateutil = types-python-dateutil; # Added 2026-11-19
   types-typed-ast = throw "types-typed-ast was removed because so was typed-ast"; # added 2025-05-24
   typesentry = throw "typesentry was removed because it was broken and unmaintained"; # added 2026-02-02
   typesystem = throw "'typesystem' has been removed as it was broken, unmaintained, and archived upstream"; # Added 2025-11-27

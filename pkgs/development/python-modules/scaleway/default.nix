@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "scaleway";
-  version = "2.12.0";
+  version = "2.13.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scaleway";
     repo = "scaleway-sdk-python";
     tag = finalAttrs.version;
-    hash = "sha256-JvlCCy0RrOUGuwWcWqQdvRfCVtooNvkjpIBxb6NPOSY=";
+    hash = "sha256-M4M+y3GTHMXzOlwFxbJgEX3CDiQ3xQ2mLXkSxQLThK8=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/${finalAttrs.pname}";

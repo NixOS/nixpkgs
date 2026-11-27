@@ -22,6 +22,13 @@ buildGoModule (finalAttrs: {
 
   vendorHash = "sha256-x7NdRBCpDQQ2vvi7sdFevmwi1BxphoqfNK5r6AZExLM=";
 
+  # pocketbase < 0.40 overflows the stack with Go 1.27's json/v2
+  # https://github.com/pocketbase/pocketbase/issues/7811
+  env.GOEXPERIMENT = "nojsonv2";
+
+  # pocketbase/routes runs close to go test's default 10m timeout.
+  checkFlags = [ "-timeout=15m" ];
+
   postInstall = ''
     mv $out/bin/pocketbase $out/bin/wanderer
 

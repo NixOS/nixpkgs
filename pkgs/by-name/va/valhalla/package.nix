@@ -10,6 +10,7 @@
   expat,
   geos,
   libgeotiff,
+  libsodium,
   libspatialite,
   libtiff,
   luajit,
@@ -67,6 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     cxxopts
     expat
     libgeotiff
+    libsodium
     libtiff
     lz4
     openssl
@@ -89,6 +91,10 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     tests = {
       pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+      version = testers.testVersion {
+        package = finalAttrs.finalPackage;
+        command = "valhalla_service --version";
+      };
     };
     updateScript = nix-update-script { };
   };

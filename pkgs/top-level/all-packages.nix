@@ -1400,7 +1400,7 @@ with pkgs;
     haskellPackages.generateOptparseApplicativeCompletions [ "cabal2nix" ] haskellPackages.cabal2nix
   );
 
-  stac-validator = with python3Packages; toPythonApplication stac-validator;
+  stac-valid = with python3Packages; toPythonApplication stac-valid;
 
   stack2nix =
     with haskell.lib;
@@ -2033,7 +2033,7 @@ with pkgs;
 
   iperf = iperf3;
 
-  i-pi = with python3Packages; toPythonApplication i-pi;
+  i-pi = with python3Packages; toPythonApplication ipi;
 
   # ipscan is commonly known under the name angryipscanner
   angryipscanner = ipscan;
@@ -3660,12 +3660,14 @@ with pkgs;
   wrapRustc = rustc-unwrapped: wrapRustcWith { inherit rustc-unwrapped; };
 
   rust_1_99 = callPackage ../development/compilers/rust/1_99.nix { };
+  rust_1_100 = callPackage ../development/compilers/rust/1_100.nix { };
   rust = rust_1_99;
 
   mrustc = callPackage ../development/compilers/mrustc { };
   mrustc-bootstrap = callPackage ../development/compilers/mrustc/bootstrap.nix { };
 
   rustPackages_1_99 = rust_1_99.packages.stable;
+  rustPackages_1_100 = rust_1_100.packages.stable;
   rustPackages = rustPackages_1_99;
 
   inherit (rustPackages)
@@ -9899,8 +9901,6 @@ with pkgs;
   netbsd = recurseIntoAttrs (callPackage ../os-specific/bsd/netbsd { });
 
   openbsd = recurseIntoAttrs (callPackage ../os-specific/bsd/openbsd { });
-
-  olivetin-3k = callPackage ../by-name/ol/olivetin/3k.nix { };
 
   newlib-nano = newlib.override {
     nanoizeNewlib = true;

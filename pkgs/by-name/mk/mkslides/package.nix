@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mkslides";
-  version = "2.0.23";
+  version = "2.0.24";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "MartenBE";
     repo = "mkslides";
     tag = finalAttrs.version;
-    hash = "sha256-pmlMZzOhTdgPf/D6NLLg3j/RZP4ldW3sOgafwZJtdtc=";
+    hash = "sha256-yw5punoEG6oSl91vDQQPDddFNyFSK8K7Jgdzs/FZtgQ=";
     fetchSubmodules = true; # reveal.js and highlight.js are submodules.
   };
 

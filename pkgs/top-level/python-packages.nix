@@ -308,6 +308,8 @@ self: super: with self; {
 
   aioemonitor = callPackage ../development/python-modules/aioemonitor { };
 
+  aioengiebelgium = callPackage ../development/python-modules/aioengiebelgium { };
+
   aioesphomeapi = callPackage ../development/python-modules/aioesphomeapi { };
 
   aioextensions = callPackage ../development/python-modules/aioextensions { };
@@ -3875,6 +3877,8 @@ self: super: with self; {
 
   crossplane = callPackage ../development/python-modules/crossplane { };
 
+  crowdstrike-falconpy = callPackage ../development/python-modules/crowdstrike-falconpy { };
+
   crownstone-cloud = callPackage ../development/python-modules/crownstone-cloud { };
 
   crownstone-core = callPackage ../development/python-modules/crownstone-core { };
@@ -6005,8 +6009,6 @@ self: super: with self; {
   falcon = callPackage ../development/python-modules/falcon { };
 
   falcon-cors = callPackage ../development/python-modules/falcon-cors { };
-
-  falconpy = callPackage ../development/python-modules/falconpy { };
 
   faraday-agent-parameters-types =
     callPackage ../development/python-modules/faraday-agent-parameters-types
@@ -8261,6 +8263,8 @@ self: super: with self; {
 
   hydrogram = callPackage ../development/python-modules/hydrogram { };
 
+  hydropeak-opendata = callPackage ../development/python-modules/hydropeak-opendata { };
+
   hydrus-api = callPackage ../development/python-modules/hydrus-api { };
 
   hypchat = callPackage ../development/python-modules/hypchat { };
@@ -8306,8 +8310,6 @@ self: super: with self; {
   hyprland-state = callPackage ../development/python-modules/hyprland-state { };
 
   hyrule = callPackage ../development/python-modules/hyrule { };
-
-  i-pi = callPackage ../development/python-modules/i-pi { };
 
   i2c-tools = callPackage ../development/python-modules/i2c-tools { inherit (pkgs) i2c-tools; };
 
@@ -8657,6 +8659,8 @@ self: super: with self; {
   iperf3 = callPackage ../development/python-modules/iperf3 { };
 
   ipfshttpclient = callPackage ../development/python-modules/ipfshttpclient { };
+
+  ipi = callPackage ../development/python-modules/ipi { };
 
   iplotx = callPackage ../development/python-modules/iplotx { };
 
@@ -9224,6 +9228,8 @@ self: super: with self; {
   kaa-metadata = callPackage ../development/python-modules/kaa-metadata { };
 
   kaco-modbus = callPackage ../development/python-modules/kaco-modbus { };
+
+  kaco-serial = callPackage ../development/python-modules/kaco-serial { };
 
   kafka-python = callPackage ../development/python-modules/kafka-python { };
 
@@ -12077,7 +12083,7 @@ self: super: with self; {
 
   nanoleaf = callPackage ../development/python-modules/nanoleaf { };
 
-  nanomsg-python = callPackage ../development/python-modules/nanomsg-python {
+  nanomsg = callPackage ../development/python-modules/nanomsg {
     inherit (pkgs) nanomsg;
   };
 
@@ -14651,6 +14657,8 @@ self: super: with self; {
 
   py-sucks = callPackage ../development/python-modules/py-sucks { };
 
+  py-svg-hush = callPackage ../development/python-modules/py-svg-hush { };
+
   py-synologydsm-api = callPackage ../development/python-modules/py-synologydsm-api { };
 
   py-tes = callPackage ../development/python-modules/py-tes { };
@@ -14777,6 +14785,8 @@ self: super: with self; {
   pyasuswrt = callPackage ../development/python-modules/pyasuswrt { };
 
   pyasynchat = callPackage ../development/python-modules/pyasynchat { };
+
+  pyasyncialarm = callPackage ../development/python-modules/pyasyncialarm { };
 
   pyasyncore = callPackage ../development/python-modules/pyasyncore { };
 
@@ -20295,7 +20305,7 @@ self: super: with self; {
 
   stable-baselines3 = callPackage ../development/python-modules/stable-baselines3 { };
 
-  stac-validator = callPackage ../development/python-modules/stac-validator { };
+  stac-valid = callPackage ../development/python-modules/stac-valid { };
 
   stack-data = callPackage ../development/python-modules/stack-data { };
 
@@ -21235,7 +21245,7 @@ self: super: with self; {
 
   todoist-api-python = callPackage ../development/python-modules/todoist-api-python { };
 
-  toggl-cli = callPackage ../development/python-modules/toggl-cli { };
+  togglcli = callPackage ../development/python-modules/togglcli { };
 
   togrill-bluetooth = callPackage ../development/python-modules/togrill-bluetooth { };
 
@@ -21573,7 +21583,7 @@ self: super: with self; {
 
   trimesh = callPackage ../development/python-modules/trimesh { };
 
-  trino-python-client = callPackage ../development/python-modules/trino-python-client { };
+  trino = callPackage ../development/python-modules/trino { };
 
   trio = callPackage ../development/python-modules/trio { };
 
@@ -22142,8 +22152,6 @@ self: super: with self; {
   types-colorama = callPackage ../development/python-modules/types-colorama { };
 
   types-dataclasses = callPackage ../development/python-modules/types-dataclasses { };
-
-  types-dateutil = callPackage ../development/python-modules/types-dateutil { };
 
   types-decorator = callPackage ../development/python-modules/types-decorator { };
 

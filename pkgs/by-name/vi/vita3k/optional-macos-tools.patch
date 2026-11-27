@@ -1,7 +1,7 @@
-From cee59f33391e20011ccfda55507f8e74d01b5363 Mon Sep 17 00:00:00 2001
+From 6ec2d518ed5ae6f3dae3872d6a118d26a9d39a68 Mon Sep 17 00:00:00 2001
 From: Rafael Ieda <git@ieda.me>
 Date: Mon, 23 Nov 2026 17:38:32 -0300
-Subject: [PATCH 5/5] cmake: Skip the macOS icon and signing when the tools are
+Subject: [PATCH 2/2] cmake: Skip the macOS icon and signing when the tools are
  missing
 
 ---

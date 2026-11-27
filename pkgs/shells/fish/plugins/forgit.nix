@@ -2,6 +2,7 @@
   lib,
   buildFishPlugin,
   fetchFromGitHub,
+  bashNonInteractive,
 }:
 buildFishPlugin (finalAttrs: {
   pname = "forgit";
@@ -13,6 +14,10 @@ buildFishPlugin (finalAttrs: {
     tag = finalAttrs.version;
     hash = "sha256-XjGNq7ezjX6xPTS0p/1b0An9fFGn3Xm+4ojuq2EZf1I=";
   };
+
+  buildInputs = [
+    bashNonInteractive
+  ];
 
   postInstall = ''
     cp -r bin $out/share/fish/vendor_conf.d/

@@ -15,7 +15,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rust-analyzer-unwrapped";
-  version = "2026-11-16";
+  version = "2026-11-23";
 
   cargoHash = "sha256-cHPXHEzpv7/2FvXBpqGeOU2KGVrDLJl/Jp1TO/dgcKw=";
 
@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "rust-lang";
     repo = "rust-analyzer";
     rev = finalAttrs.version;
-    hash = "sha256-HkesLRySfo08Om/dXxsmlfUDMmPBBhaG+C0YIMKFjag=";
+    hash = "sha256-hZfnhkmliBbx1rw19SpSMNXJ+BxdhAeYy2L3/Iz33q4=";
   };
 
   cargoBuildFlags = [

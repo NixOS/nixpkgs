@@ -5,7 +5,6 @@
   beam,
   mix2nix,
   fetchFromGitHub,
-  applyPatches,
   git,
   cmake,
   nixosTests,
@@ -14,7 +13,9 @@
 }:
 
 let
-  beamPackages = beam.packages.erlang_27.overrideScope (final: prev: { elixir = final.elixir_1_18; });
+  beamPackages = beam.packages.erlang_27.overrideScope (
+    final: _prev: { elixir = final.elixir_1_18; }
+  );
 
   common = callPackage ./common.nix { };
 in
@@ -23,7 +24,6 @@ beamPackages.mixRelease rec {
     pname
     version
     src
-    patches
     ;
 
   nativeBuildInputs = [
@@ -52,9 +52,9 @@ beamPackages.mixRelease rec {
             owner = "elixir-cldr";
             repo = "cldr";
             rev = "v${old.version}";
-            hash =
-              assert old.version == "2.47.4";
-              "sha256-LIQK6pZRAW1T3Ej2XAjnuPo82hPJ2KiMPWYmHWgx008=";
+            hash = lib.throwIfNot (
+              old.version == "2.47.5"
+            ) "ex_cldr needs hash for ${old.version}" "sha256-nGVuv8jyGCMZS63ga2iObjl+ldIZmM/xDfpQbB/ZRjE=";
           };
           postInstall = ''
             cp $src/priv/cldr/locales/* $out/lib/erlang/lib/ex_cldr-${old.version}/priv/cldr/locales/
@@ -66,10 +66,10 @@ beamPackages.mixRelease rec {
           name = "web_push_encryption";
           version = "0.3.1";
           src = fetchFromGitHub {
-            owner = "danhper";
+            owner = "mobilizon-tools";
             repo = "elixir-web-push-encryption";
-            rev = "6e143dcde0a2854c4f0d72816b7ecab696432779";
-            hash = "sha256-Da+/28SPZuUQBi8fQj31zmMvhMrYUaQIW4U4E+mRtMg=";
+            rev = "f8cb3571af1b9d4e360a5a15039dac2b42abe19d";
+            hash = "sha256-KO5zQ4d4DyC/1k8FhoLYBsnw7FUTBYQCw7r4Ge65Z0g=";
           };
           beamDeps = with final; [
             httpoison
@@ -82,8 +82,8 @@ beamPackages.mixRelease rec {
           src = fetchFromGitHub {
             owner = "mobilizon-tools";
             repo = name;
-            rev = "b8fc5360b1755f60f2768d40f6aca949ef598a00";
-            hash = "sha256-UAdlYTRt1itkR/dmC2/AM89MlJIABJw9N0XfYR6IcVI=";
+            rev = "b352e47fa28fdefcf6f184ae70f9cb447c8b5eec";
+            hash = "sha256-UWEOmig/ALHhm/rYMQomx2osdNmK+mISprc8NrJwDZk=";
           };
           beamDeps = with final; [
             mix_test_watch
@@ -93,12 +93,12 @@ beamPackages.mixRelease rec {
         };
         rajska = beamPackages.buildMix rec {
           name = "rajska";
-          version = "1.3.3";
+          version = "1.3.5";
           src = fetchFromGitHub {
-            owner = "tcitworld";
+            owner = "mobilizon-tools";
             repo = name;
-            rev = "0c036448e261e8be6a512581c592fadf48982d84";
-            hash = "sha256-4pfply1vTAIT2Xvm3kONmrCK05xKfXFvcb8EKoSCXBE=";
+            rev = "7fcbb1a2dbe682fc72649b3c31bcfbfb256e92f5";
+            hash = "sha256-Fo5fpkJvs3e0m+6TsP9ECSco82eS01Ov+o0A+xkOp8k=";
           };
           beamDeps = with final; [
             ex_doc
@@ -113,10 +113,10 @@ beamPackages.mixRelease rec {
           name = "exkismet";
           version = "0.0.3";
           src = fetchFromGitHub {
-            owner = "tcitworld";
+            owner = "mobilizon-tools";
             repo = name;
-            rev = "8b5485fde00fafbde20f315bec387a77f7358334";
-            hash = "sha256-ttgCWoBKU7VTjZJBhZNtqVF4kN7psBr/qOeR65MbTqw=";
+            rev = "b7e2ed706e834e28b9390a801a08952158e9a3d8";
+            hash = "sha256-hD7h7QYrk2JVQCJuC/ca2fvFBNV0qXhKggHTr2UuxpE=";
           };
           beamDeps = with final; [
             httpoison
@@ -124,6 +124,21 @@ beamPackages.mixRelease rec {
             credo
             doctor
             dialyxir
+          ];
+        };
+        ueberauth_twitter = beamPackages.buildMix rec {
+          name = "ueberauth_twitter";
+          version = "0.4.1";
+          src = fetchFromGitHub {
+            owner = "mobilizon-tools";
+            repo = name;
+            rev = "8217b7f0f9f602e64e908453dbfafcf3151a020c";
+            hash = "sha256-Ze1D7R5iDzZ+23xG82osOvuPEHmq+euOOkvGthzcIPM=";
+          };
+          beamDeps = with final; [
+            httpoison
+            oauther
+            ueberauth
           ];
         };
 
@@ -143,18 +158,12 @@ beamPackages.mixRelease rec {
 
   passthru = {
     tests = { inherit (nixosTests) mobilizon; };
-    updateScript =
-      let
-        patchedSource = applyPatches {
-          inherit src patches;
-        };
-      in
-      writeShellScriptBin "update-mobilizon" ''
-        set -euo pipefail
+    updateScript = writeShellScriptBin "update-mobilizon" ''
+      set -euo pipefail
 
-        ${lib.getExe mix2nix} '${patchedSource}/mix.lock' > pkgs/by-name/mo/mobilizon/mix.nix
-        ${lib.getExe nixfmt} pkgs/by-name/mo/mobilizon/mix.nix
-      '';
+      ${lib.getExe mix2nix} '${src}/mix.lock' > pkgs/by-name/mo/mobilizon/mix.nix
+      ${lib.getExe nixfmt} pkgs/by-name/mo/mobilizon/mix.nix
+    '';
     elixirPackage = beamPackages.elixir;
     inherit mixNixDeps;
   };

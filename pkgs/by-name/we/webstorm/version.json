@@ -1,18 +1,18 @@
 {
-  "version": "2026.3",
-  "buildNumber": "263.7307.202",
+  "version": "2026.3.0.1",
+  "buildNumber": "263.7307.348",
   "urls": {
     "x86_64-linux": {
-      "url": "https://download.jetbrains.com/webstorm/WebStorm-2026.3.tar.gz",
-      "hash": "sha256-YreKZC2JYrQ79CBVj6H8u+4DnQPWkNfnPwLBRQyLWYI="
+      "url": "https://download.jetbrains.com/webstorm/WebStorm-2026.3.0.1.tar.gz",
+      "hash": "sha256-7AZreOCb5lRES8FsD+poYHWSqmFszurSPvjsF6CTL10="
     },
     "aarch64-linux": {
-      "url": "https://download.jetbrains.com/webstorm/WebStorm-2026.3-aarch64.tar.gz",
-      "hash": "sha256-XiXzvuUe+fKoWPW5T7PMzsdmxVqa1boVVdqw4MxSz8E="
+      "url": "https://download.jetbrains.com/webstorm/WebStorm-2026.3.0.1-aarch64.tar.gz",
+      "hash": "sha256-Ah+setY7CUSph7rV465Ni5oII4nAdNrr5/vQ8/QEhg4="
     },
     "aarch64-darwin": {
-      "url": "https://download.jetbrains.com/webstorm/WebStorm-2026.3-aarch64.dmg",
-      "hash": "sha256-0zP69nEmscF45Y8bQokx1LQAv/b9byVCUfAOVEKglHc="
+      "url": "https://download.jetbrains.com/webstorm/WebStorm-2026.3.0.1-aarch64.dmg",
+      "hash": "sha256-6y3VcSOI2udGAtPFcltMuNfxAYfQEPw+EPS4RCVdMWw="
     }
   }
 }
