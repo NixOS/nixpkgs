@@ -126,6 +126,8 @@ Unless you understand how the fetcher you're using calculates the hash from the 
 
    The hash is printed to stdout.
 
+   For a container image, run `nix-prefetch-docker <image-name> [<tag-or-digest>]` instead of passing a source URL.
+
 3. Prefetch by package source (with `nix-prefetch-url '<nixpkgs>' -A <package>.src`, where `<package>` is package attribute name).
    The hash is printed to stdout.
 
