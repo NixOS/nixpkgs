@@ -15,8 +15,8 @@
         "deps": {
             "src": {
                 "args": {
-                    "hash": "sha256-VCmbtrMoJbbfu8/YYAgyIuxQLJBjW4aPBx34VKu+LOU=",
-                    "postFetch": "rm -rf $(find $out/third_party/blink/web_tests ! -name BUILD.gn -mindepth 1 -maxdepth 1); rm -r $out/content/test/data; rm -rf $out/courgette/testdata; rm -r $out/extensions/test/data; rm -r $(find $out/media/test/data -mindepth 1 -maxdepth 1 ! -name README.md ! -name trun_overflow.mp4); ",
+                    "hash": "sha256-S1dNeHATdNesZCAskUoDpeTByyK3ha1Bp2st0h5t95M=",
+                    "postFetch": "rm -rf $(find $out/third_party/blink/web_tests ! -name BUILD.gn -mindepth 1 -maxdepth 1); rm -r $out/content/test/data; rm -rf $out/courgette/testdata; rm -r $out/extensions/test/data; rm -r $out/media/test/data; ",
                     "tag": "150.0.7871.250",
                     "url": "https://chromium.googlesource.com/chromium/src.git"
                 },
@@ -64,10 +64,10 @@
             },
             "src/electron": {
                 "args": {
-                    "hash": "sha256-3NL8pjkPZNLHbACpeDmMd9fDcXdAlH/f1pSG32WLxqY=",
+                    "hash": "sha256-RGOnzHQJLpknqQRFNXGYh/CEH0MZdjS7u/M0Cwusnpw=",
                     "owner": "electron",
                     "repo": "electron",
-                    "tag": "v43.8.12"
+                    "tag": "v43.8.13"
                 },
                 "fetcher": "fetchFromGitHub"
             },
@@ -409,10 +409,10 @@
             },
             "src/third_party/electron_node": {
                 "args": {
-                    "hash": "sha256-I+ArwuoobibS6JxQ1tTP63B8e7yrv6xqp+R+GXs7NOE=",
+                    "hash": "sha256-+UMKDBSfUVFo1pn/Twf6Q7POeC+nEGmuTmeIS2DWj7E=",
                     "owner": "nodejs",
                     "repo": "node",
-                    "tag": "v24.22.1"
+                    "tag": "v24.22.3"
                 },
                 "fetcher": "fetchFromGitHub"
             },
@@ -1443,8 +1443,8 @@
             }
         },
         "modules": "148",
-        "node": "24.22.1",
-        "version": "43.8.12"
+        "node": "24.22.3",
+        "version": "43.8.13"
     },
     "44": {
         "chrome": "152.0.7977.169",
