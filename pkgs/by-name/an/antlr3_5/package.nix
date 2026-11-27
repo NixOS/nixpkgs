@@ -55,6 +55,6 @@ stdenv.mkDerivation rec {
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
-    maintainers = [ lib.maintainers.workflow ];
+    maintainers = [ lib.maintainers.kaayzouee ];
   };
 }
