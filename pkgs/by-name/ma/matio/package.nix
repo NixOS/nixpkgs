@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-i9O5R3BC7MAN1xwEdi+lhGjhTMzDL9jGgmwtoei8MQc=";
   };
 
-  configureFlags = [ "ac_cv_va_copy=1" ];
+  configureFlags = [ "ac_cv_va_copy=C99" ];
 
   nativeBuildInputs = [
     pkgconf
