@@ -236,12 +236,17 @@ builtins.intersectAttrs super {
   # CUDA needs help finding the SDK headers and libraries.
   cuda = overrideCabal (drv: {
     extraLibraries = (drv.extraLibraries or [ ]) ++ [ pkgs.linuxPackages.nvidia_x11 ];
-    configureFlags = (drv.configureFlags or [ ]) ++ [
-      "--extra-lib-dirs=${pkgs.cudaPackages.cuda_cudart}/lib/stubs"
-      "--extra-include-dirs=${pkgs.cudaPackages.cuda_cudart}/include"
-      "--extra-include-dirs=${pkgs.cudaPackages.cuda_nvcc}/include"
-      "--extra-include-dirs=${pkgs.cudaPackages.cuda_profiler_api.include}/include"
-    ];
+    configureFlags =
+      (drv.configureFlags or [ ])
+      ++ [
+        "--extra-lib-dirs=${pkgs.cudaPackages.cuda_cudart}/lib/stubs"
+        "--extra-include-dirs=${pkgs.cudaPackages.cuda_cudart}/include"
+        "--extra-include-dirs=${pkgs.cudaPackages.cuda_nvcc}/include"
+        "--extra-include-dirs=${pkgs.cudaPackages.cuda_profiler_api.include}/include"
+      ]
+      ++ lib.optionals (pkgs.cudaPackages.cudaAtLeast "13.0") [
+        "--extra-include-dirs=${pkgs.cudaPackages.cuda_crt}/include"
+      ];
     preConfigure = ''
       export CUDA_PATH=${pkgs.cudaPackages.cuda_cudart}
     '';
