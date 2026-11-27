@@ -10,7 +10,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   version = "13.2.0.283494";
   src = fetchzip {
     url = "https://osx.telegram.org/updates/Telegram-${finalAttrs.version}.app.zip";
-    sha256 = "fkKpEcpQkufr2k0xDm354ii21mXYf7GeXDe0vCeAIYI=";
+    hash = "sha256-fkKpEcpQkufr2k0xDm354ii21mXYf7GeXDe0vCeAIYI=";
   };
 
   dontBuild = true;
