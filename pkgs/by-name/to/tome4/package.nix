@@ -121,7 +121,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # the release tarball ships the engine as a zip archive
     unzip -p game/engines/te4-${finalAttrs.version}.teae data/gfx/te4-icon.png > te4-icon.png
-    install -Dm644 te4-icon.png -t $out/share/icons/hicolor/64x64
+    install -Dm644 te4-icon.png -t $out/share/icons/hicolor/64x64/apps
 
     install -Dm644 -t $out/share/doc/tome4 CONTRIBUTING COPYING COPYING-MEDIA CREDITS
 
