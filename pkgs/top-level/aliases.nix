@@ -784,6 +784,7 @@ mapAliases {
   drone-runner-exec = throw "'drone-runner-exec' has been removed as it was deprecated and archived upstream."; # Added 2026-07-20
   dsd = throw "dsd has been removed, as it was broken and lack of upstream maintenance"; # Added 2025-08-25
   dsearch = warnAlias "'dsearch' has been renamed to 'dux-search'" dux-search; # Added 2026-10-20
+  dsniff = throw "'dsniff' has been removed because it is unmaintained upstream and insecure C code parsing network packets as root. See CVE-2026-134753 for example. When one of the peers is on localhost, some of dsniff functionality is covered by `ss --kill` from 'iproute2' and 'mitmproxy'."; # Added 2026-11-27
   dspam = throw "'dspam' has been removed because upstream development ceased and the project has no active maintainer; consider another maintained spam filter."; # Added 2026-11-13
   dtv-scan-tables_linuxtv = throw "'dtv-scan-tables_linuxtv' has been renamed to/replaced by 'dtv-scan-tables'"; # Converted to throw 2025-10-27
   dtv-scan-tables_tvheadend = throw "'dtv-scan-tables_tvheadend' has been renamed to/replaced by 'dtv-scan-tables'"; # Converted to throw 2025-10-27
