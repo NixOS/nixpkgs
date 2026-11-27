@@ -71,11 +71,11 @@ let
   # https://github.com/haskell/cabal/issues/6466 for details.
   cc =
     if stdenv.hasCC then
-      "$CC"
+      lib.getExe stdenv.cc
     else if stdenv.hostPlatform.isGhcjs then
       "${emscripten}/bin/emcc"
     else
-      "$CC_FOR_BUILD";
+      lib.getExe buildPackages.stdenv.cc;
 
   inherit (buildPackages)
     fetchurl
@@ -102,6 +102,7 @@ in
   # Extra environment variables to set during the build.
   # See: `../../../doc/languages-frameworks/haskell.section.md`
   env ? { },
+  __structuredAttrs ? true,
   buildDepends ? [ ],
   setupHaskellDepends ? [ ],
   libraryHaskellDepends ? [ ],
@@ -295,7 +296,7 @@ let
   # the target dir for haddock documentation
   docdir = docoutput: docoutput + "/share/doc/" + pname + "-" + version;
 
-  binDir = if enableSeparateBinOutput then "$bin/bin" else "$out/bin";
+  binDir = "${placeholder (if enableSeparateBinOutput then "bin" else "out")}/bin";
 
   newCabalFileUrl = "mirror://hackage/${pname}-${version}/revision/${revision}.cabal";
   newCabalFile = fetchurl {
@@ -353,10 +354,14 @@ let
     "--with-strip=${stdenv.cc.bintools.targetPrefix}strip"
   ]
   ++ optional doHaddock "--with-haddock=${ghc.targetPrefix}haddock"
-  ++ optionals (!isHaLVM) [
-    "--hsc2hs-option=--cross-compile"
-    (optionalString enableHsc2hsViaAsm "--hsc2hs-option=--via-asm")
-  ]
+  ++ optionals (!isHaLVM) (
+    [
+      "--hsc2hs-option=--cross-compile"
+    ]
+    ++ optionals enableHsc2hsViaAsm [
+      "--hsc2hs-option=--via-asm"
+    ]
+  )
   ++ optional (allPkgconfigDepends != [ ]) "--with-pkg-config=${pkg-config.targetPrefix}pkg-config"
 
   ++ optionals enableExternalInterpreter (
@@ -373,46 +378,50 @@ let
     )
   );
 
-  makeGhcOptions = opts: lib.concatStringsSep " " (map (opt: "--ghc-option=${opt}") opts);
+  makeGhcOptions = map (opt: "--ghc-option=${opt}");
 
   defaultConfigureFlags = [
     "--verbose"
-    "--prefix=$out"
+    "--prefix=${placeholder "out"}"
     # Note: This must be kept in sync manually with mkGhcLibdir
-    ("--libdir=\\$prefix/lib/\\$compiler" + lib.optionalString (ghc ? hadrian) "/lib")
-    "--libsubdir=\\$abi/\\$libname"
-    (optionalString enableSeparateDataOutput "--datadir=$data/share/${ghcNameWithPrefix}")
-    (optionalString enableSeparateDocOutput "--docdir=${docdir "$doc"}")
+    ("--libdir=$prefix/lib/$compiler" + lib.optionalString (ghc ? hadrian) "/lib")
+    "--libsubdir=$abi/$libname"
+  ]
+  ++ optionals enableSeparateDataOutput [
+    "--datadir=${placeholder "data"}/share/${ghcNameWithPrefix}"
+  ]
+  ++ optionals enableSeparateDocOutput [
+    "--docdir=${docdir (placeholder "doc")}"
   ]
   ++ optionals stdenv.hasCC [
-    "--with-gcc=$CC" # Clang won't work without that extra information.
+    "--with-gcc=${lib.getExe stdenv.cc}" # Clang won't work without that extra information.
+  ]
+  ++ optionals (enableSharedExecutables && stdenv.hostPlatform.isLinux) [
+    "--ghc-option=-optl=-Wl,-rpath=${placeholder "out"}/${ghcLibdir}/${pname}-${version}"
+  ]
+  ++ optionals (enableSharedExecutables && stdenv.hostPlatform.isDarwin) [
+    "--ghc-option=-optl=-Wl,-headerpad_max_install_names"
+  ]
+  ++ optionals enableParallelBuilding (makeGhcOptions [
+    "+RTS"
+    "-A64M"
+    "-RTS"
+  ])
+  ++ optionals useCpphs (
+    [ "--with-cpphs=${cpphs}/bin/cpphs" ]
+    ++ (makeGhcOptions [
+      "-cpp"
+      "-pgmP${cpphs}/bin/cpphs"
+      "-optP--cpp"
+    ])
+  )
+  ++ [
+    (enableFeature enableLibraryProfiling "library-profiling")
+  ]
+  ++ optionals (enableExecutableProfiling || enableLibraryProfiling) [
+    "--profiling-detail=${profilingDetail}"
   ]
   ++ [
-    "--package-db=$packageConfDir"
-    (optionalString (
-      enableSharedExecutables && stdenv.hostPlatform.isLinux
-    ) "--ghc-option=-optl=-Wl,-rpath=$out/${ghcLibdir}/${pname}-${version}")
-    (optionalString (
-      enableSharedExecutables && stdenv.hostPlatform.isDarwin
-    ) "--ghc-option=-optl=-Wl,-headerpad_max_install_names")
-    (optionalString enableParallelBuilding (makeGhcOptions [
-      "-j$NIX_BUILD_CORES"
-      "+RTS"
-      "-A64M"
-      "-RTS"
-    ]))
-    (optionalString useCpphs (
-      "--with-cpphs=${cpphs}/bin/cpphs "
-      + (makeGhcOptions [
-        "-cpp"
-        "-pgmP${cpphs}/bin/cpphs"
-        "-optP--cpp"
-      ])
-    ))
-    (enableFeature enableLibraryProfiling "library-profiling")
-    (optionalString (
-      enableExecutableProfiling || enableLibraryProfiling
-    ) "--profiling-detail=${profilingDetail}")
     (enableFeature enableExecutableProfiling "profiling")
     (enableFeature enableSharedLibraries "shared")
     (enableFeature doCoverage "coverage")
@@ -509,7 +518,7 @@ let
   depsBuildBuild = [
     nativeGhc
   ]
-  # CC_FOR_BUILD may be necessary if we have no C preprocessor for the host
+  # buildPackages.stdenv.cc may be necessary if we have no C preprocessor for the host
   # platform. See crossCabalFlags above for more details.
   ++ lib.optionals (!stdenv.hasCC) [ buildPackages.stdenv.cc ];
   collectedToolDepends =
@@ -677,6 +686,7 @@ lib.fix (
           LOCALE_ARCHIVE = "${buildPackages.glibcLocales}/lib/locale/locale-archive";
         }
         // env';
+      inherit __structuredAttrs;
 
       prePatch =
         optionalString (editedCabalFile != null) ''
@@ -716,8 +726,14 @@ lib.fix (
         packageConfDir="$builddir/package.conf.d"
         mkdir -p $packageConfDir
 
+        # Not a derivation attribute, therefore untouched by __structuredAttrs
         setupCompileFlags="${concatStringsSep " " setupCompileFlags}"
-        configureFlags="${concatStringsSep " " defaultConfigureFlags} $configureFlags"
+
+        # Pass in configure flags that are only known at this phase
+        prependToVar configureFlags "--package-db=$packageConfDir"
+        ${optionalString enableParallelBuilding ''
+          prependToVar configureFlags "--ghc-option=-j$NIX_BUILD_CORES"
+        ''}
       ''
       # We build the Setup.hs on the *build* machine, and as such should only add
       # dependencies for the build machine.
@@ -815,7 +831,14 @@ lib.fix (
 
       # Cabal takes flags like `--configure-option=--host=...` instead
       configurePlatforms = [ ];
-      inherit configureFlags buildFlags;
+      inherit
+        # Standard flags the builder sets which are kept when the user overrides configureFlags.
+        # These are used only in the configurePhase, so no hooks can see them in configureFlags.
+        defaultConfigureFlags
+        configureFlags
+        buildFlags
+        haddockFlags
+        ;
 
       # Note: the options here must be always added, regardless of whether the
       # package specifies `hardeningDisable`.
@@ -826,8 +849,11 @@ lib.fix (
       configurePhase = ''
         runHook preConfigure
 
-        echo configureFlags: $configureFlags
-        ${setupCommand} configure $configureFlags 2>&1 | ${coreutils}/bin/tee "$NIX_BUILD_TOP/cabal-configure.log"
+        local -a haskellConfigureFlagsArray
+        concatTo haskellConfigureFlagsArray defaultConfigureFlags configureFlags
+
+        echo configureFlags: "''${haskellConfigureFlagsArray[@]}"
+        ${setupCommand} configure "''${haskellConfigureFlagsArray[@]}" 2>&1 | ${coreutils}/bin/tee "$NIX_BUILD_TOP/cabal-configure.log"
         ${lib.optionalString (!allowInconsistentDependencies) ''
           if grep -E -q -z 'Warning:.*depends on multiple versions' "$NIX_BUILD_TOP/cabal-configure.log"; then
             echo >&2 "*** abort because of serious configure-time warning from Cabal"
@@ -849,7 +875,11 @@ lib.fix (
         find dist/build -exec touch -d '1970-01-01T00:00:00Z' {} +
       ''
       + ''
-        ${setupCommand} build ${buildTarget} $buildFlags
+        local -a haskellBuildFlagsArray
+        concatTo haskellBuildFlagsArray buildFlags
+
+        echo buildFlags: "''${haskellBuildFlagsArray[@]}"
+        ${setupCommand} build ${buildTarget} "''${haskellBuildFlagsArray[@]}"
         runHook postBuild
       '';
 
@@ -873,22 +903,33 @@ lib.fix (
           "--test-wrapper=${testWrapperScript}"
           ${lib.escapeShellArgs (map (opt: "--test-option=${opt}") testFlags)}
         )
+        local -a haskellCheckFlagsArray
+        concatTo haskellCheckFlagsArray checkFlags checkFlagsArray
+
         export NIX_GHC_PACKAGE_PATH_FOR_TEST="''${NIX_GHC_PACKAGE_PATH_FOR_TEST:-$packageConfDir:}"
-        ${setupCommand} test ${testTargetsString} $checkFlags ''${checkFlagsArray:+"''${checkFlagsArray[@]}"}
+        echo checkFlags: "''${haskellCheckFlagsArray[@]}"
+        ${setupCommand} test ${testTargetsString} "''${haskellCheckFlagsArray[@]}"
+
         runHook postCheck
       '';
 
       haddockPhase = ''
         runHook preHaddock
+
         ${optionalString (doHaddock && isLibrary) ''
+          local -a haddockFlagsArray
+          concatTo haddockFlagsArray haddockFlags
+
+          echo haddockFlags: "''${haddockFlagsArray[@]}"
           ${setupCommand} haddock --html \
             ${optionalString doHoogle "--hoogle"} \
             ${optionalString doHaddockQuickjump "--quickjump"} \
             ${optionalString (isLibrary && hyperlinkSource) "--hyperlink-source"} \
             ${optionalString enableParallelBuilding "--haddock-option=-j$NIX_BUILD_CORES"} \
             --haddock-option=--no-tmp-comp-dir \
-            ${lib.concatStringsSep " " haddockFlags}
+            "''${haddockFlagsArray[@]}"
         ''}
+
         runHook postHaddock
       '';
 

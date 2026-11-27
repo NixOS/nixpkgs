@@ -1298,10 +1298,13 @@ builtins.intersectAttrs super {
 
           checkFlagsArray+=("-J$NIX_BUILD_CORES")
 
-          echo checkFlags: $checkFlags ''${checkFlagsArray:+"''${checkFlagsArray[@]}"}
+          local -a haskellCheckFlagsArray
+          concatTo haskellCheckFlagsArray checkFlags checkFlagsArray
+
+          echo checkFlags: "''${haskellCheckFlagsArray[@]}"
 
           # Doesn't use Cabal's test mechanism
-          git-annex test $checkFlags ''${checkFlagsArray:+"''${checkFlagsArray[@]}"}
+          git-annex test "''${haskellCheckFlagsArray[@]}"
 
           runHook postCheck
         '';

@@ -227,6 +227,16 @@ If `null` (which is the default value), the one included in `src` is used.
 : Extra environment variables to set during the build.
 These will also be set inside the [development environment defined by the `passthru.env` attribute in the returned derivation](#haskell-development-environments), but will not be set inside a development environment built with [`shellFor`](#haskell-shellFor) that includes this package.
 
+`__structuredAttrs`
+: Enables [structured attributes (`{ __structuredAttrs = true; }`)](https://nix.dev/manual/nix/2.18/language/advanced-attributes.html#adv-attr-structuredAttrs).
+With this setting enabled, derivation attributes such as `*Flags` are passed as JSON and reach the build as a bash array.
+When you edit them in hooks such as `preConfigure`, `preHaddock` etc.,
+use `appendToVar`/`prependToVar` instead of space separated string interpolation;
+when you read them use e.g. `"${configureFlags[@]}"` (the whole array) instead of `$configureFlags` (only the first flag).
+Also ensure that all flags are passed separately through e.g. `appendConfigureFlag` or `configureFlags`,
+not several space-separated flags in one string such as `appendConfigureFlag "--ghc-option=-Wall --ghc-option=-Werror"`.
+Defaults to `true`, to opt out use e.g. `haskell.lib.compose.overrideCabal (_: { __structuredAttrs = false; })`.
+
 `configureFlags`
 : Extra flags passed when executing the `configure` command of `Setup.hs`.
 
