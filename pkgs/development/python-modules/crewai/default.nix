@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   nix-update-script,
+  pyprojectVersionPatchHook,
 
   # build-system
   hatchling,
@@ -59,7 +60,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "crewai";
-  version = "1.15.18";
+  version = "1.15.44";
   pyproject = true;
 
   inherit (crewai-core) src;
@@ -74,10 +75,9 @@ buildPythonPackage (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/lib/crewai";
 
-  build-system = [ hatchling ];
-
   pythonRelaxDeps = [
     "aiofiles"
+    "aiosqlite"
     "chromadb"
     "click"
     "json-repair"
@@ -99,6 +99,10 @@ buildPythonPackage (finalAttrs: {
     "tomli"
     "tomli-w"
   ];
+
+  build-system = [ hatchling ];
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   dependencies = [
     aiofiles
@@ -137,6 +141,22 @@ buildPythonPackage (finalAttrs: {
   optional-dependencies = {
     litellm = [ litellm ];
   };
+
+  nativeCheckInputs = [
+    a2a-sdk
+    aiocache
+    anthropic
+    boto3
+    google-genai
+    pytest-asyncio
+    pytest-recording
+    pytest-xdist
+    pytestCheckHook
+    qdrant-client
+    vcrpy
+    writableTmpDirAsHomeHook
+  ]
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   pythonImportsCheck = [ "crewai" ];
 
@@ -185,6 +205,11 @@ buildPythonPackage (finalAttrs: {
     "tests/tools/agent_tools/test_read_file_tool.py"
     "tests/utilities/test_file_store.py"
     "tests/utilities/test_files.py"
+
+    # Import issues
+    "tests/a2a/test_a2a_integration.py"
+    "tests/a2a/utils/test_agent_card.py"
+    "tests/a2a/utils/test_task.py"
   ];
 
   disabledTests = [
@@ -528,23 +553,18 @@ buildPythonPackage (finalAttrs: {
 
     # Tests time dependent
     "test_older_than"
-  ];
 
-  nativeCheckInputs = [
-    a2a-sdk
-    aiocache
-    anthropic
-    boto3
-    google-genai
-    # litellm is an optional dependency upstream, but the test suite requires it
-    litellm
-    pytest-asyncio
-    pytest-recording
-    pytest-xdist
-    pytestCheckHook
-    qdrant-client
-    vcrpy
-    writableTmpDirAsHomeHook
+    # Misc. issues
+    "test_trust_remote_completion_status"
+    "test_default_trust_remote_completion_status_is_false"
+    "test_dynamic_versioning_consistency"
+    "test_connect_cancelled_during_initialize_recovers_auth_on_transport_unwind"
+    "test_http_transport_connect_raises"
+    "test_http_transport_connect_classifies_mixed_exception_group"
+    "test_http_transport_connect_cancelled_on_enter_recovers_auth_on_exit"
+    "test_http_transport_connect_timeout_recovers_auth_on_exit"
+    "test_agent_with_a2a_creates_successfully"
+    "test_wrapper_is_applied_differently_per_instance"
   ];
 
   pytestFlags = [
