@@ -52,7 +52,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/manic-systems/tack";
-    description = "flake-like toml nix pins, lazily fetched and transformed";
+    description = "Full-featured pinning system for nix inputs";
     mainProgram = "tack";
     license = lib.licenses.eupl12;
     maintainers = with lib.maintainers; [
