@@ -7,6 +7,7 @@
   gitpython,
   jsonfeed,
   mkdocs,
+  properdocs,
   pytest-cov-stub,
   pytestCheckHook,
   setuptools,
@@ -16,14 +17,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "mkdocs-rss-plugin";
-  version = "1.17.9";
+  version = "1.20.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Guts";
     repo = "mkdocs-rss-plugin";
     tag = finalAttrs.version;
-    hash = "sha256-rUMjS0+895SsU7qNckLL3BprUQa/3lJDjpwhMkF0jYg=";
+    hash = "sha256-UUXiMWR7lNclV0VHac27bcZwIBxr5oGLluq27TomTgA=";
   };
 
   build-system = [
@@ -34,9 +35,13 @@ buildPythonPackage (finalAttrs: {
   dependencies = [
     cachecontrol
     gitpython
-    mkdocs
   ]
   ++ cachecontrol.optional-dependencies.filecache;
+
+  optional-dependencies = {
+    mkdocs = [ mkdocs ];
+    properdocs = [ properdocs ];
+  };
 
   nativeCheckInputs = [
     feedparser
@@ -44,7 +49,8 @@ buildPythonPackage (finalAttrs: {
     pytest-cov-stub
     pytestCheckHook
     validator-collection
-  ];
+  ]
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   pythonImportsCheck = [ "mkdocs_rss_plugin" ];
 
@@ -53,9 +59,13 @@ buildPythonPackage (finalAttrs: {
     "test_plugin_config_through_mkdocs"
     "test_remote_image"
     # Configuration error
+    "test_page_processing_without_material"
     "test_plugin_config_blog_enabled"
+    "test_plugin_config_materialx_blog_enabled_but_integration_disabled"
+    "test_plugin_config_materialx_blog_enabled"
     "test_plugin_config_social_cards_enabled_but_integration_disabled"
     "test_plugin_config_theme_material"
+    "test_plugin_config_theme_not_material"
     "test_simple_build"
   ];
 

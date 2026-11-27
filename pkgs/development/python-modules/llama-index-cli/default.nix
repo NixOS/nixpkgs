@@ -19,6 +19,11 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-n80Z69VhWsaQ0cK+RzOqRhBlBGQsF7CcaSh0CDezkZk=";
   };
 
+  pythonRelaxDeps = [
+    "llama-index-embeddings-openai"
+    "llama-index-llms-openai"
+  ];
+
   build-system = [ hatchling ];
 
   dependencies = [

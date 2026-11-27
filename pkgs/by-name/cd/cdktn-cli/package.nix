@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cdktn-cli";
-  version = "0.25.0";
+  version = "0.25.1";
 
   src = fetchFromGitHub {
     owner = "open-constructs";
     repo = "cdk-terrain";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TgLhIiv6v4jH8afqX907sOtejXD0TH1InOThNPCum1o=";
+    hash = "sha256-fozb1vf7lDc4pRwbdgy3o4wBTo9CwA/mBmyG+qHy2iA=";
   };
 
   pnpmWorkspaces = [ "cdktn-cli..." ];
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
       pnpmWorkspaces
       ;
     fetcherVersion = 3;
-    hash = "sha256-zo5zwdxRXKbFSeiOBBekie/ky1qyAk9UugPWB5j5S40=";
+    hash = "sha256-DJ7AyiPPvkRM8z+BBXllon0RdunED77HElg1/bVAC9g=";
     pnpm = pnpm_10;
   };
 

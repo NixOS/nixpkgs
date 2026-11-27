@@ -79,6 +79,7 @@ let
 
   cudaBuildInputs = with cudaPackages; [
     cccl # <nv/target>
+    cuda_nvml_dev # nvml.h
 
     # A temporary hack for reducing the closure size, remove once cudaPackages
     # have stopped using lndir: https://github.com/NixOS/nixpkgs/issues/271792
@@ -102,7 +103,7 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "llama-cpp";
-  version = "1.0.0";
+  version = "1.1.0";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -116,7 +117,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     owner = "ggml-org";
     repo = "llama.cpp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-aYziwYzK9Zj7sopAEsrANhMGs4BO0F2g0cDCGmYLxDA=";
+    hash = "sha256-0O3An2dgjy3HGF6T3ZDiEPwnv26+6B8os7htE6ocG8I=";
   };
 
   nativeBuildInputs = [
@@ -160,8 +161,8 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     "fortify3"
   ];
 
-  npmRoot = "tools/ui";
-  npmDepsHash = "sha256-0OJIueUN5oD/V2NtVcXTiRW59u2tJIG3OxW8aJ8JDBY=";
+  npmRoot = "ui/lib/ui";
+  npmDepsHash = "sha256-lKvSNPTG1Mh0Z+zC4yKhS/spZH+oz4BnznwhCqhrREE=";
   npmDeps = fetchNpmDeps {
     name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
     inherit (finalAttrs) src;
@@ -174,6 +175,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
 
   preConfigure = ''
     pushd ${finalAttrs.npmRoot}
+    substituteInPlace package.json --replace-fail " && publint" ""
     LLAMA_BUILD_NUMBER=${buildNumber} npm run build
     popd
   '';
@@ -262,6 +264,8 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     # Tests convert_hf_to_gguf, which is not installed, and needs torch.
     "test-conversion-fp8"
     "test-kv-cache-scales"
+    # fails for sycl enabled builds because it needs access to compatible hardware
+    "test-mtmd-impl"
   ]
   # icpx DAZ/FTZ makes nlohmann treat 5e-324 as 0 and pass 0.0 to Python.
   ++ optionals syclSupport [

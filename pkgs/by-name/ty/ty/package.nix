@@ -106,9 +106,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   passthru = {
     updateScript = nix-update-script { };
 
-    # ensure that an update doesn't break the test-driver.
     tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
+      # ensure that an update doesn't break run-virtiofsd-qemu or the test-driver.
       nixos-test-driver-busybox = nixosTests.nixos-test-driver.busybox;
+      # ensure that an update doesn't break run-nspawn.
+      nixos-test-simple-container = nixosTests.simple-container;
     };
   };
 
