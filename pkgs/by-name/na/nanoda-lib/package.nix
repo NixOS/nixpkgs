@@ -2,41 +2,32 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nanoda-lib";
-  version = "0.3.2";
+  version = "0.4.19";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "ammkrn";
     repo = "nanoda_lib";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-YKoexQz/2Z+sxdNtJfNvkZRbLFff1SXaWRzTcrU9Oz4=";
+    # https://github.com/leanprover/lean4/blob/v{version}/src/CMakeLists.txt
+    rev = "831ba4e661ab5af55a6b1dcf69fa86c0f81f1332";
+    hash = "sha256-gp8Aul2AyRh926mdmQbNcpqJ/FNzbTmA4DJUHjrc73s=";
   };
 
-  cargoHash = "sha256-Low43L/Yd/OLjfE+9om1gztfrdFhZptjJJEZg92m3xg=";
-
-  checkFlags = [
-    # Error: "failed to open configuration file: Os { code: 2, kind: NotFound, message: \"No such file or directory\" }"
-    "--skip=tests::declar::aesop_goal_unsafe"
-    "--skip=tests::declar::mutual_def"
-    "--skip=tests::natlit::e_nat_tests"
-    "--skip=tests::pretty_printer::pp_prelude"
-    "--skip=tests::stringlit::string_lit_tests"
-    "--skip=tests::util::check_prelude"
-  ];
-
-  passthru.updateScript = nix-update-script { };
+  cargoHash = "sha256-BH7GdzOWBPB4cWOSQ1Dhr4XMKVqNeVmG9F9HH5UZuhk=";
 
   meta = {
     description = "Library implementing type inference/checking functionality based on the Lean theorem prover";
     homepage = "https://github.com/ammkrn/nanoda_lib";
-    changelog = "https://github.com/ammkrn/nanoda_lib/releases/tag/${finalAttrs.src.tag}";
+    changelog = "https://github.com/ammkrn/nanoda_lib/releases";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = with lib.maintainers; [
+      drupol
+      stephen-huan
+    ];
     mainProgram = "nanoda_bin";
   };
 })
