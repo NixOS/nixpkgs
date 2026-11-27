@@ -178,7 +178,7 @@ let
   );
   llm = buildPythonPackage (finalAttrs: {
     pname = "llm";
-    version = "0.37.1";
+    version = "0.37.3";
     pyproject = true;
 
     build-system = [ setuptools ];
@@ -187,7 +187,7 @@ let
       owner = "simonw";
       repo = "llm";
       tag = finalAttrs.version;
-      hash = "sha256-dJoECKdRbGCAT2Q7M1pBWL37w+4qRxo+ChfdMJBVIQc=";
+      hash = "sha256-UXfxE8t9Z1uklvvKjzK1EQR7RB69gEezsQbLOHVsjJA=";
     };
 
     patches = [
