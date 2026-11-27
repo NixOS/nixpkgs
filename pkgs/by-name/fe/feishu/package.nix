@@ -65,12 +65,12 @@
 let
   sources = {
     x86_64-linux = fetchurl {
-      url = "https://sf3-cn.feishucdn.com/obj/ee-appcenter/6e3610b5/Feishu-linux_x64-7.66.11.deb";
-      sha256 = "sha256-3E8NLC2zzIO7l1jPcePhMfCafgjuyWOzeNZgxTTM/TE=";
+      url = "https://sf3-cn.feishucdn.com/obj/ee-appcenter/fc38d53a/Feishu-linux_x64-7.72.23.deb";
+      sha256 = "sha256-fHRM4QHin1DY0PwJl4i2TLOJ3eMXgXin/On/zb8pbhM=";
     };
     aarch64-linux = fetchurl {
-      url = "https://sf3-cn.feishucdn.com/obj/ee-appcenter/36c6e858/Feishu-linux_arm64-7.66.11.deb";
-      sha256 = "sha256-2nMHCuJy2dYiokwR3dFAkITeBgH8K9poJ9gkJNp42aQ=";
+      url = "https://sf3-cn.feishucdn.com/obj/ee-appcenter/8d668c7a/Feishu-linux_arm64-7.72.23.deb";
+      sha256 = "sha256-gFLSIYlUZDjiSzaR1khxgFlh7Op6RYBMdaKWDtK4cQ4=";
     };
   };
 
@@ -133,7 +133,7 @@ let
   ];
 in
 stdenv.mkDerivation {
-  version = "7.66.11";
+  version = "7.72.23";
   pname = "feishu";
 
   src =
@@ -173,19 +173,15 @@ stdenv.mkDerivation {
     mv opt/ $out/
 
     substituteInPlace $out/share/applications/bytedance-feishu.desktop \
-      --replace /usr/bin/bytedance-feishu-stable $out/opt/bytedance/feishu/bytedance-feishu
+      --replace-fail /usr/bin/bytedance-feishu-stable $out/opt/bytedance/feishu/bytedance-feishu
 
-    # Wrap feishu and vulcan
-    # Feishu is the main executable, vulcan is the builtin browser
-    for executable in $out/opt/bytedance/feishu/{feishu,vulcan/vulcan}; do
-      # FIXME: Add back NIXOS_OZONE_WL support once upstream fixes the crash on native Wayland (see #318035)
-      wrapProgram $executable \
-        --prefix XDG_DATA_DIRS    :  "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH" \
-        --prefix LD_LIBRARY_PATH  :  ${rpath}:$out/opt/bytedance/feishu:${addDriverRunpath.driverLink}/share \
-        ${lib.optionalString (
-          commandLineArgs != ""
-        ) "--add-flags ${lib.escapeShellArg commandLineArgs}"}
-    done
+    # 7.72.23 no longer ships the bundled Vulcan browser, so only the main
+    # executable needs to be wrapped.
+    # FIXME: Add back NIXOS_OZONE_WL support once upstream fixes the crash on native Wayland (see #318035)
+    wrapProgram $out/opt/bytedance/feishu/feishu \
+      --prefix XDG_DATA_DIRS    :  "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH" \
+      --prefix LD_LIBRARY_PATH  :  ${rpath}:$out/opt/bytedance/feishu:${addDriverRunpath.driverLink}/share \
+      ${lib.optionalString (commandLineArgs != "") "--add-flags ${lib.escapeShellArg commandLineArgs}"}
 
     mkdir -p $out/share/icons/hicolor
     base="$out/opt/bytedance/feishu"
