@@ -11,6 +11,7 @@ import psutil
 import re
 import shutil
 import subprocess
+import sys
 import textwrap
 
 
@@ -47,7 +48,7 @@ def get_profiles() -> List[str]:
     return [path for path in dirs if not path.endswith('-link')]
 
 
-def get_gens(profile: str = 'system') -> List[Tuple[int, List[str]]]:
+def get_gens(profile: str = 'system') -> List[int]:
     nix_env = os.path.join(config('nixPath'), 'bin', 'nix-env')
     output = subprocess.check_output([
         nix_env, '--list-generations',
@@ -75,6 +76,7 @@ def is_fs_type_supported(fs_type: str) -> bool:
 
 paths = {}
 
+
 def get_copied_path_uri(path: str, target: str) -> str:
     package_id = os.path.basename(os.path.dirname(path))
     suffix = os.path.basename(path)
@@ -88,6 +90,7 @@ def get_copied_path_uri(path: str, target: str) -> str:
 
     return os.path.join('/efi/refind', target, dest_file)
 
+
 def get_path_uri(path: str) -> str:
     return get_copied_path_uri(path, "")
 
@@ -100,6 +103,20 @@ def get_file_uri(profile: str, gen: Optional[str], spec: Optional[str], name: st
 
 def get_kernel_uri(kernel_path: str) -> str:
     return get_copied_path_uri(kernel_path, "kernels")
+
+
+def get_icon_uri(icon: str) -> str:
+    """
+    Resolves an icon into an ESP-relative URI for rEFInd.
+    - If `icon` is a path in /nix/store, copies it into /efi/refind/icons/.
+    - If `icon` is a bare filename (e.g. 'os_nixos.png'), prefixes '/efi/refind/icons/'.
+    - If `icon` is already an ESP path (starts with '/'), uses it as-is.
+    """
+    if icon.startswith('/nix/store/'):
+        return get_copied_path_uri(icon, "icons")
+    if icon.startswith('/'):
+        return icon
+    return os.path.join('/efi/refind/icons', icon)
 
 
 @dataclass
@@ -124,12 +141,20 @@ def bootjson_to_bootspec(bootjson: dict) -> BootSpec:
     )
 
 
-def config_entry(is_sub: bool, bootspec: BootSpec, label: str, time: str) -> str:
+def config_entry(
+    is_sub: bool,
+    bootspec: BootSpec,
+    label: str,
+    time: str,
+    icon: Optional[str] = None,
+) -> str:
     entry = ""
     if is_sub:
         entry += 'sub'
 
     entry += f'menuentry "{label}" {{\n'
+    if icon and not is_sub:
+        entry += f'  icon {get_icon_uri(icon)}\n'
     entry += '  loader ' + get_kernel_uri(bootspec.kernel) + '\n'
 
     if bootspec.initrd:
@@ -141,23 +166,31 @@ def config_entry(is_sub: bool, bootspec: BootSpec, label: str, time: str) -> str
 
 
 def generate_config_entry(profile: str, gen: str, special: bool, group_name: str) -> str:
-    time = datetime.datetime.fromtimestamp(os.stat(get_system_path(profile,gen), follow_symlinks=False).st_mtime).strftime("%F %H:%M:%S")
+    time = datetime.datetime.fromtimestamp(
+        os.stat(get_system_path(profile, gen), follow_symlinks=False).st_mtime
+    ).strftime("%F %H:%M:%S")
     boot_json = json.load(open(os.path.join(get_system_path(profile, gen), 'boot.json'), 'r'))
     boot_spec = bootjson_to_bootspec(boot_json)
+
+    # Allow per-profile icon override, falling back to the global 'icon' setting
+    profile_icons = install_config.get('profileIcons') or {}
+    icon = profile_icons.get(profile) or install_config.get('icon')
 
     specialisation_list = boot_spec.specialisations.items()
     entry = ""
 
     if len(specialisation_list) > 0:
         entry += f'menuentry "NixOS {group_name} Generation {gen}" {{\n'
-        entry += config_entry(True, boot_spec, f'Default', str(time))
+        if icon:
+            entry += f'  icon {get_icon_uri(icon)}\n'
+        entry += config_entry(True, boot_spec, 'Default', str(time))
 
         for spec, spec_boot_spec in specialisation_list:
             entry += config_entry(True, spec_boot_spec, f'{spec}', str(time))
 
         entry += '}\n'
     else:
-        entry += config_entry(False, boot_spec, f'NixOS {group_name} Generation {gen}', str(time))
+        entry += config_entry(False, boot_spec, f'NixOS {group_name} Generation {gen}', str(time), icon=icon)
     return entry
 
 
@@ -292,7 +325,7 @@ def install_bootloader() -> None:
             if matches := re.findall(r'Boot([0-9a-fA-F]{4})\*? rEFInd', efibootmgr_output):
                 refind_boot_entry = matches[0]
 
-            # If there's already a Limine entry, replace it
+            # If there's already a rEFInd entry, replace it
             if refind_boot_entry:
                 boot_order = re.findall(r'BootOrder: ((?:[0-9a-fA-F]{4},?)*)', efibootmgr_output)[0]
 
