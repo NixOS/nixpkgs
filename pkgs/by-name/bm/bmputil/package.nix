@@ -11,14 +11,14 @@
   oniguruma,
   udev,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bmputil";
   version = "1.2.0";
 
   src = fetchFromCodeberg {
     owner = "blackmagic-debug";
     repo = "bmputil";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-WX26rDFLWtEG/BvVwPjsY3X1ebvNseEpdgJRGMynyBo=";
   };
 
@@ -57,4 +57,4 @@ rustPlatform.buildRustPackage rec {
       lib.maintainers.karstx
     ];
   };
-}
+})
