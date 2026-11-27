@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pyppmd";
-  version = "1.1.1";
+  version = "1.3.1";
   pyproject = true;
 
   src = fetchFromCodeberg {
     owner = "miurahr";
     repo = "pyppmd";
     tag = "v${version}";
-    hash = "sha256-0t1vyVMtmhb38C2teJ/Lq7dx4usm4Bzx+k7Zalf/nXE=";
+    hash = "sha256-nry9MbyzU4blv7DQn8MV6/5694d7CFAWmZc27YKUw6g=";
   };
 
   build-system = [
