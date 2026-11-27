@@ -21,6 +21,7 @@
   libx11,
   libsm,
   libice,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -176,6 +177,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     dbus-launch = "${dbus.lib}/bin/dbus-launch";
+    tests = {
+      inherit (nixosTests) dbus-config dbus-activation;
+    };
   };
 
   meta = {

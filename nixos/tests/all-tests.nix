@@ -545,6 +545,8 @@ in
   davis = runTest ./davis.nix;
   dawarich = runTest ./web-apps/dawarich.nix;
   db-rest = runTest ./db-rest.nix;
+  dbus-activation = runTest ./dbus-activation.nix;
+  dbus-config = pkgsLinux.callPackage ./dbus-config.nix { inherit evalSystem; };
   dconf = runTest ./dconf.nix;
   ddns-updater = runTest ./ddns-updater.nix;
   deconz = runTest ./deconz.nix;

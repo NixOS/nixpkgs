@@ -11,6 +11,7 @@
   linuxHeaders,
   systemdLibs,
   expat,
+  nixosTests,
 }:
 
 let
@@ -183,6 +184,10 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   doCheck = true;
+
+  passthru.tests = {
+    inherit (nixosTests) dbus-config dbus-activation;
+  };
 
   meta = meta // {
     description = "Linux D-Bus Message Broker";
