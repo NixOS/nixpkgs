@@ -9,6 +9,7 @@
   pytest-mock,
   pytestCheckHook,
   setuptools,
+  six,
   wrapt,
 }:
 
@@ -30,6 +31,7 @@ buildPythonPackage (finalAttrs: {
     attrs
     boto3
     cryptography
+    six
     wrapt
   ];
 
