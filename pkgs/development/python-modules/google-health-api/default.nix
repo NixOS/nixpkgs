@@ -17,7 +17,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "google-health-api";
-  version = "0.10.0";
+  version = "1.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.14";
@@ -26,7 +26,7 @@ buildPythonPackage (finalAttrs: {
     owner = "allenporter";
     repo = "python-google-health-api";
     tag = finalAttrs.version;
-    hash = "sha256-iuCbplWZ+OPA5YH81PTFHqIwRRs5DkeHFTgPvQZVYb0=";
+    hash = "sha256-y5pKyrenGryp1grs3PMG2wT9B418NTvV/vSPs9p/zso=";
   };
 
   build-system = [ setuptools ];
