@@ -1,0 +1,41 @@
+diff --git a/gradient-graph/src/writer.rs b/gradient-graph/src/writer.rs
+index bff553ad0..04601d06e 100644
+--- a/gradient-graph/src/writer.rs
++++ b/gradient-graph/src/writer.rs
+@@ -8,6 +8,8 @@ use std::sync::Arc;
+ use std::time::{Duration, Instant};
+ 
+ use anyhow::{Context as _, anyhow};
++use futures::FutureExt as _;
++use futures::future::BoxFuture;
+ use gradient_db::DbContext;
+ use gradient_db::connection::find_sessions_with_transaction_older_than;
+ use gradient_db::graph::consistency::BuildGraphConsistencyCheckStep;
+@@ -183,6 +185,19 @@ impl Actor for GraphWriter {
+         msg: Self::Msg,
+         st: &mut Self::State,
+     ) -> Result<(), ActorProcessingErr> {
++        handle_graph_message(myself, msg, st).await
++    }
++}
++
++// No inlining via type erasure. rustc can inline cross-crate functions. Crates that run this
++// actor compute the nested future's layout and overflow the query's depth limit.
++#[inline(never)]
++fn handle_graph_message(
++    myself: ActorRef<GraphMsg>,
++    msg: GraphMsg,
++    st: &mut GraphState,
++) -> BoxFuture<'_, Result<(), ActorProcessingErr>> {
++    async move {
+         match msg {
+             GraphMsg::Record(batch, reply) => {
+                 st.queued_rows += batch.derivations.len();
+@@ -275,6 +290,7 @@ impl Actor for GraphWriter {
+ 
+         Ok(())
+     }
++    .boxed()
+ }
+ 
+ fn graph_writer_transaction_limits_for_transition_message(
