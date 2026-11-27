@@ -8,7 +8,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pigeons";
-  version = "0.2.1";
+  version = "0.2.4";
 
   __structuredAttrs = true;
 
@@ -16,10 +16,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "n0-computer";
     repo = "pigeons";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dig5bYAxPPOM8YFR0IE9LCQqP/tF7J5FkPlWE9Zx4DA=";
+    hash = "sha256-b5K1K9+aax+pOYMBHA6R9P6wv96Ca4TKePO9cnUPBgw=";
   };
 
-  cargoHash = "sha256-0fYPpP/pFtlG3Ws+nI1PWOcv1jbVQ1bERL439dCFDgA=";
+  cargoHash = "sha256-Xrt3+JPJFoNWgAPkf8qvy0CH+3hCnWyqrwd7Pk8kNCI=";
+
+  preCheck = ''
+    export HOME="$NIX_BUILD_TOP"
+  '';
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [
