@@ -6,6 +6,7 @@
   fetchurl,
   installShellFiles,
   makeDesktopItem,
+  makeWrapper,
   pkg-config,
   libtheora,
   xvidcore,
@@ -45,9 +46,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-XnBqQkr/ai6jCkx5gSnWME6Jc4fq34CFKBKbUSt9zbA=";
   };
 
+  # switching the display mode for fullscreen breaks the mouse on macOS, so
+  # use the desktop's mode and render at its size instead
+  patches = lib.optionals stdenv.hostPlatform.isDarwin [ ./darwin-fullscreen-desktop.patch ];
+
   env = {
     # to avoid occasional runtime error in finding libgcc_s.so.1
-    NIX_CFLAGS_LINK = "-lgcc_s";
+    NIX_CFLAGS_LINK = lib.optionalString stdenv.hostPlatform.isLinux "-lgcc_s";
   };
 
   preConfigure = ''tar xvf "${finalAttrs.srcData}"'';
@@ -66,7 +71,8 @@ stdenv.mkDerivation (finalAttrs: {
     copyDesktopItems
     installShellFiles
     pkg-config
-  ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ makeWrapper ];
 
   buildInputs = [
     libtheora
@@ -95,7 +101,38 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm644 src/ports/linux/ufo.png $out/share/icons/hicolor/32x32/apps/ufoai.png
     install -Dm644 src/ports/linux/ufoded.png $out/share/icons/hicolor/32x32/apps/ufoded.png
     installManPage debian/ufo.6 debian/ufoded.6 debian/ufo2map.6
-  '';
+  ''
+  # upstream's macOS bundle layout: the game changes into the bundle at
+  # startup and expects its data in UFOAI.app/base
+  + lib.optionalString stdenv.hostPlatform.isDarwin (
+    let
+      # not included in GitHub's source archive
+      bundleFile =
+        path: hash:
+        fetchurl {
+          url = "https://raw.githubusercontent.com/ufoaiorg/ufoai/${finalAttrs.src.rev}/contrib/installer/mac/UFOAI.app/Contents/${path}";
+          inherit hash;
+        };
+    in
+    ''
+      app=$out/Applications/UFOAI.app
+      mkdir -p $app/Contents/{MacOS,Resources}
+      mv $out/games/ufo/{ufo,ufoded,ufo2map,ufomodel,ufoslicer} $app/Contents/MacOS/
+      mv $out/games/ufo/base $app/base
+      rmdir $out/games/ufo $out/games
+
+      substitute ${bundleFile "Info.plist.in" "sha256-oRjLMbXUqEXP/1w3LdogdGJT7/73LE4kpLcPZFqoglo="} \
+        $app/Contents/Info.plist \
+        --replace-fail @UFOAI_VERSION@ ${lib.versions.majorMinor finalAttrs.version}
+      install -Dm644 ${bundleFile "Resources/ufo.icns" "sha256-gnndStojWNflOyc7uDKVlY9Kb0pkBz36y+un39Yy4ac="} \
+        $app/Contents/Resources/ufo.icns
+
+      for prog in ufo ufoded; do
+        rm $out/bin/$prog
+        makeWrapper $app/Contents/MacOS/$prog $out/bin/$prog
+      done
+    ''
+  );
 
   desktopItems = [
     (makeDesktopItem {
@@ -128,7 +165,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Squad-based tactical strategy game in the tradition of X-Com";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ iedame ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     hydraPlatforms = [ ];
   };
 })

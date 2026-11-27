@@ -1,0 +1,44 @@
+diff -ru a/src/client/input/cl_input.cpp b/src/client/input/cl_input.cpp
+--- a/src/client/input/cl_input.cpp
++++ b/src/client/input/cl_input.cpp
+@@ -893,7 +893,7 @@
+ #if SDL_VERSION_ATLEAST(2,0,0)
+ 	const int mask = SDL_WINDOW_FULLSCREEN_DESKTOP;
+ 	const bool isFullScreen = SDL_GetWindowFlags(cls.window) & mask;
+-	SDL_SetWindowFullscreen(cls.window, isFullScreen ? 0 : SDL_WINDOW_FULLSCREEN);
++	SDL_SetWindowFullscreen(cls.window, isFullScreen ? 0 : SDL_WINDOW_FULLSCREEN_DESKTOP);
+ 	return SDL_GetWindowFlags(cls.window) & mask;
+ #else
+ #ifdef _WIN32
+diff -ru a/src/client/renderer/r_main.cpp b/src/client/renderer/r_main.cpp
+--- a/src/client/renderer/r_main.cpp
++++ b/src/client/renderer/r_main.cpp
+@@ -696,6 +696,16 @@
+ 	}
+ 	newCtx.width = vidmode.width;
+ 	newCtx.height = vidmode.height;
++#if SDL_VERSION_ATLEAST(2,0,0)
++	/* fullscreen uses the desktop's mode, so render at the desktop's size */
++	if (newCtx.fullscreen) {
++		SDL_DisplayMode desktopMode;
++		if (SDL_GetDesktopDisplayMode(0, &desktopMode) == 0) {
++			newCtx.width = desktopMode.w;
++			newCtx.height = desktopMode.h;
++		}
++	}
++#endif
+ 	result = R_InitGraphics(&newCtx);
+ 	if (!result) {
+ 		/* failed, revert */
+diff -ru a/src/client/renderer/r_sdl.cpp b/src/client/renderer/r_sdl.cpp
+--- a/src/client/renderer/r_sdl.cpp
++++ b/src/client/renderer/r_sdl.cpp
+@@ -215,7 +215,7 @@
+ 	flags = SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN;
+ 
+ 	if (context->fullscreen)
+-		flags |= SDL_WINDOW_FULLSCREEN | SDL_WINDOW_BORDERLESS;
++		flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
+ 
+ 	const int videoDrivers = SDL_GetNumVideoDrivers();
+ 	for (int i = 0; i < videoDrivers; ++i) {
