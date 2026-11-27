@@ -9,14 +9,14 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "ngn-k";
-  version = "0-unstable-2025-11-17";
+  pname = "growler-k";
+  version = "0-unstable-2026-11-27";
 
   src = fetchFromCodeberg {
-    owner = "ngn";
+    owner = "growler";
     repo = "k";
-    rev = "717063f24921d5aff405a39cf7643efedb5bb365";
-    hash = "sha256-rUMi+VetQc139PjbFJXlSkmYEuK5wtM6LpQ/f1tcB1s=";
+    rev = "49827de9482fdcac6f0c3c704617e5fb86d788fd";
+    hash = "sha256-y383okOfa1JykrMeLc9+8BPBdwqDJi4UGerYRt4eIb4=";
   };
 
   postPatch = ''
@@ -26,7 +26,10 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=discarded-qualifiers";
+  env.NIX_CFLAGS_COMPILE = "-include stdint.h"; # no longer provided on glibc. drop when fixed upstream
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   makeFlags = [ "-e" ];
   buildFlags = [
@@ -49,17 +52,17 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm755 repl.k "$out/bin/k-repl"
     install -Dm755 libk.so "$lib/lib/libk.so"
     install -Dm644 k.h "$dev/include/k.h"
-    install -Dm644 LICENSE -t "$out/share/ngn-k"
+    install -Dm644 LICENSE -t "$out/share/growler-k"
     substituteInPlace "$out/bin/k-repl" \
       --replace-fail "#!k" "#!$out/bin/k" \
-      --replace-fail '"LICENSE"' '"../share/ngn-k/LICENSE"' \
+      --replace-fail '"LICENSE"' '"../share/growler-k/LICENSE"' \
       --replace-fail '"repl.k"~basename' '"k-repl"~basename' \
       --replace-fail '"/usr/bin/env";"tput"' '"${lib.getExe' ncurses "tput"}"'
     runHook postInstall
   '';
 
   passthru.tests.repl =
-    runCommand "ngn-k-repl-test"
+    runCommand "growler-k-repl-test"
       {
         nativeBuildInputs = [ expect ];
         meta.timeout = 60;
@@ -84,15 +87,15 @@ stdenv.mkDerivation (finalAttrs: {
         touch "$out"
       '';
 
-  passthru.tests.eval = runCommand "ngn-k-eval-test" { } ''
+  passthru.tests.eval = runCommand "growler-k-eval-test" { } ''
     echo '2!!7!4' > prog.k
     ${lib.getExe' finalAttrs.finalPackage "k"} prog.k > "$out"
     [ "$(cat "$out")" = "0 1 0 1" ]
   '';
 
   meta = {
-    description = "Simple fast vector programming language";
-    homepage = "https://codeberg.org/ngn/k";
+    description = "Simple fast vector programming language, maintained fork of ngn/k";
+    homepage = "https://codeberg.org/growler/k";
     license = lib.licenses.agpl3Only;
     mainProgram = "k";
     maintainers = [ lib.maintainers.sternenseemann ];
