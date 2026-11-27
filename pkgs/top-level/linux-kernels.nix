@@ -365,8 +365,6 @@ in
 
         tbs = callPackage ../os-specific/linux/tbs { };
 
-        mbp2018-bridge-drv = callPackage ../os-specific/linux/mbp-modules/mbp2018-bridge-drv { };
-
         nct6687d = callPackage ../os-specific/linux/nct6687d { };
 
         hid-fanatecff = callPackage ../os-specific/linux/hid-fanatecff { };
@@ -597,6 +595,7 @@ in
         deepin-anything-module = throw "the Deepin desktop environment and associated tools have been removed from nixpkgs due to lack of maintenance";
         exfat-nofuse = throw "exfat-nofuse has been removed, all kernels > 5.8 come with built-in exfat support"; # added 2025-10-07
         hid-nintendo = throw "hid-nintendo was added in mainline kernel version 5.16"; # Added 2023-07-30
+        mbp2018-bridge-drv = throw "linuxPackages.mbp2018-bridge-drv was removed because it had been broken for years."; # Added 2026-11-26
         sch_cake = throw "sch_cake was added in mainline kernel version 4.19"; # Added 2023-06-14
         rtl8723bs = throw "rtl8723bs was added in mainline kernel version 4.12"; # Added 2023-06-14
         rtl8821ce = throw "rtl8821ce has been removed due to lack of maintenance"; # Added 2026-07-22

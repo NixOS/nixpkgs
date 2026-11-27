@@ -61,13 +61,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "easyeffects";
-  version = "8.3.2";
+  version = "8.3.3";
 
   src = fetchFromGitHub {
     owner = "wwmm";
     repo = "easyeffects";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eZAvcErsjfV6s8/R1s9q8p6318hVyCFziOxRaBBVHKM=";
+    hash = "sha256-u1esWEH9kX+zqYeSqnqdh5oxqGIa2LtRvJV7FwR89Io=";
   };
 
   nativeBuildInputs = [

@@ -446,8 +446,6 @@ in
 
       # Install CLI tools and systemd units
       environment.systemPackages = [ pkgs.bluez-alsa ];
-      services.dbus.packages = [ pkgs.bluez-alsa ];
-
       systemd.packages = [ pkgs.bluez-alsa ];
 
       # See Nixpkgs issue #81138
