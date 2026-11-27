@@ -19,6 +19,11 @@ npmConfigHook() {
     concatTo nixNpmInstallFlags npmInstallFlags npmInstallFlagsArray
     concatTo nixNpmRebuildFlags npmRebuildFlags npmRebuildFlagsArray
 
+    # For the nested npm, which `eval`s these back into arrays.
+    export NIX_NPM_FLAGS="${nixNpmFlags[*]@Q}"
+    export NIX_NPM_INSTALL_FLAGS="${nixNpmInstallFlags[*]@Q}"
+    export NIX_NPM_REBUILD_FLAGS="${nixNpmRebuildFlags[*]@Q}"
+
     if [ -n "${npmRoot-}" ]; then
       pushd "$npmRoot"
     fi
