@@ -8235,6 +8235,10 @@ self: super: with self; {
 
   human-readable = callPackage ../development/python-modules/human-readable { };
 
+  humanbound = callPackage ../development/python-modules/humanbound { };
+
+  humanbound-firewall = callPackage ../development/python-modules/humanbound-firewall { };
+
   humanfriendly = callPackage ../development/python-modules/humanfriendly { };
 
   humanize = callPackage ../development/python-modules/humanize { };
