@@ -30013,6 +30013,12 @@
     githubId = 678511;
     name = "Thomas Mader";
   };
+  ThomShark = {
+    email = "thomas@nodecode.ai";
+    github = "ThomShark";
+    githubId = 134332456;
+    name = "Thomas de Vos";
+  };
   thornoar = {
     email = "r.a.maksimovich@gmail.com";
     github = "thornoar";
