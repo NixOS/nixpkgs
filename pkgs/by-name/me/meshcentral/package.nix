@@ -7,16 +7,16 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "meshcentral";
-  version = "1.3.1";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "Ylianst";
     repo = "MeshCentral";
     tag = finalAttrs.version;
-    hash = "sha256-nDBgXSWrkMhfnGgpWJQyaUCz2RuF1P7U1I8A4qTIYh0=";
+    hash = "sha256-xS9R7fhFDQKmKtsNw8aZw8EwByx3rXYZDD93ma5DOWg=";
   };
 
-  npmDepsHash = "sha256-7AajJbMRirj1diuSIHC8MgYMChsZfvq1t+IBk0y/46Y=";
+  npmDepsHash = "sha256-CxalB/RdxXJcde/hn5dsJp8ykLrBSag+oIE4SKpCwq4=";
 
   # node-gyp needs distutils
   nativeBuildInputs = [ (nodejs.python.withPackages (ps: [ ps.setuptools ])) ];
