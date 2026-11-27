@@ -24,6 +24,8 @@ php.buildComposerProject2 (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
 
+  passthru.updateScript = ./update.sh;
+
   meta = {
     changelog = "https://github.com/phpmd/phpmd/releases/tag/${finalAttrs.version}";
     description = "PHP code quality analyzer";
