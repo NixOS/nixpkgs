@@ -90,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://ufoai.org";
     description = "Squad-based tactical strategy game in the tradition of X-Com";
     license = lib.licenses.gpl2Plus;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ iedame ];
     platforms = lib.platforms.linux;
     hydraPlatforms = [ ];
   };
