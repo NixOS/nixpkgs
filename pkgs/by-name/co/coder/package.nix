@@ -105,6 +105,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       ghuntley
       kylecarbs
     ];
+    knownVulnerabilities = lib.optionals (lib.versionOlder finalAttrs.version "2.29.27") [
+      "CVE-2026-137547: database password exposure via API errors"
+    ];
   };
 
   passthru = {
