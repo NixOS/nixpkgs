@@ -1,10 +1,13 @@
 {
   lib,
+  stdenv,
+  buildPackages,
   rustPlatform,
   fetchFromGitHub,
   nix-update-script,
   pkg-config,
   zstd,
+  installShellFiles,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tack";
@@ -20,7 +23,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-J0U1vSjiqMMFhSJTJlOmV/9BY8Bzc/ijG2HRcgSqm+w=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    installShellFiles
+  ];
   buildInputs = [ zstd ];
 
   prePatch = ''
@@ -28,6 +34,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   doInstallCheck = true;
+
+  postInstall = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
+    let
+      tack = "${stdenv.hostPlatform.emulator buildPackages} $out/bin/tack";
+    in
+    ''
+      installShellCompletion --cmd tack \
+        --bash    <(COMPLETE=bash ${tack}) \
+        --zsh     <(COMPLETE=zsh  ${tack}) \
+        --fish    <(COMPLETE=fish ${tack}) \
+        --nushell <(COMPLETE=nu   ${tack})
+    ''
+  );
 
   passthru.updateScript = nix-update-script { };
 
