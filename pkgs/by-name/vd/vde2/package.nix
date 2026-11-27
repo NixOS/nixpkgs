@@ -59,5 +59,6 @@ stdenv.mkDerivation (finalAttrs: {
       # libvdeplug and code copied from glibc.
       lib.licenses.lgpl21Plus
     ];
+    hasNoMaintainersButDependents = true;
   };
 })

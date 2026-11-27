@@ -56,5 +56,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "xcalc";
     maintainers = [ ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

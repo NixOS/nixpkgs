@@ -51,5 +51,6 @@ buildPythonPackage rec {
     homepage = "https://www.mercurial-scm.org/wiki/PythonHglibs";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

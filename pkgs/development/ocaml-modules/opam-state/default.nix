@@ -23,5 +23,6 @@ buildDunePackage {
   meta = opam.meta // {
     description = "OPAM development library handling the ~/.opam hierarchy, repository and switch states";
     maintainers = with lib.maintainers; [ sternenseemann ];
+    hasNoMaintainersButDependents = false;
   };
 }

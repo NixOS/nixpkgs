@@ -64,5 +64,6 @@ buildPythonPackage rec {
     mainProgram = "validate-docstrings";
     homepage = "https://github.com/numpy/numpydoc";
     license = lib.licenses.free;
+    hasNoMaintainersButDependents = true;
   };
 }

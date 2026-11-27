@@ -39,5 +39,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/syrusakbary/snapshottest";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

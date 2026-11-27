@@ -56,5 +56,6 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

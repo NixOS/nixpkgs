@@ -38,5 +38,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://www.leonerd.org.uk/code/libtermkey";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -55,5 +55,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/python-xlib/python-xlib";
     license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

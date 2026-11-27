@@ -36,5 +36,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.asl20;
     maintainers = [ ];
     mainProgram = "sftool";
+    hasNoMaintainersButDependents = true;
   };
 })

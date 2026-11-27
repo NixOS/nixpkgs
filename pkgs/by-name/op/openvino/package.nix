@@ -200,5 +200,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ lib.maintainers.ryan4yin ];
     platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isDarwin; # Cannot find macos sdk
+    hasNoMaintainersButDependents = true;
   };
 })

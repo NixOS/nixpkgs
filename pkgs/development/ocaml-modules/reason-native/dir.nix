@@ -26,5 +26,6 @@ buildDunePackage {
     downloadPage = "https://github.com/reasonml/reason-native/tree/master/src/dir";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

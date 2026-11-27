@@ -107,5 +107,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://tdb.samba.org/";
     license = lib.licenses.lgpl3Plus;
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })

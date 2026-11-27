@@ -41,5 +41,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/zopefoundation/zope.deferredimport";
     changelog = "https://github.com/zopefoundation/zope.deferredimport/blob/${finalAttrs.version}/CHANGES.rst";
     license = lib.licenses.zpl21;
+    hasNoMaintainersButDependents = true;
   };
 })

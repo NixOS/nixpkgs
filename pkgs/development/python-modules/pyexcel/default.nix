@@ -40,5 +40,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/pyexcel/pyexcel/releases/tag/v${version}";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

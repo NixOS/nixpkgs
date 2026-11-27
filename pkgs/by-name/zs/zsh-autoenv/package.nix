@@ -43,5 +43,6 @@ stdenv.mkDerivation {
     mainProgram = "zsh-autoenv-share";
     platforms = lib.platforms.all;
     license = lib.licenses.unfree;
+    hasNoMaintainersButDependents = true;
   };
 }

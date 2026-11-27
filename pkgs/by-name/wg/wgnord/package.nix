@@ -68,5 +68,6 @@ resholve.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     mainProgram = "wgnord";
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

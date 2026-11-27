@@ -51,5 +51,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "xwininfo";
     maintainers = [ lib.maintainers.booxter ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

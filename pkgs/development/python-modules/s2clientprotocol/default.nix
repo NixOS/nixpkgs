@@ -24,5 +24,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Blizzard/s2client-proto";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -52,5 +52,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/python-mechanize/mechanize/blob/v${version}/ChangeLog";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

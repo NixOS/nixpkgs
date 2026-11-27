@@ -25,5 +25,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ samirbgno ];
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })

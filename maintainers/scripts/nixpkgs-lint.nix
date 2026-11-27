@@ -40,5 +40,6 @@ stdenv.mkDerivation {
     mainProgram = "nixpkgs-lint";
     platforms = lib.platforms.unix;
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 }

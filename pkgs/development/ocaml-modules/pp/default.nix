@@ -30,5 +30,6 @@ buildDunePackage (finalAttrs: {
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

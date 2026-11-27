@@ -61,5 +61,6 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.linux;
     sourceProvenance = [ lib.sourceTypes.fromSource ];
+    hasNoMaintainersButDependents = true;
   };
 }

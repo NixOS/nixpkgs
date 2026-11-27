@@ -50,5 +50,6 @@ stdenv.mkDerivation {
     maintainers = [ ];
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 }

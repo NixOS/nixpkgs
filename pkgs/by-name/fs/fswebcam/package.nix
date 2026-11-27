@@ -26,5 +26,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://www.sanslogic.co.uk/fswebcam";
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Only;
+    hasNoMaintainersButDependents = true;
   };
 })

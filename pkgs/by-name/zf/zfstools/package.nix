@@ -50,5 +50,6 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.bsd2;
     platforms = lib.platforms.linux ++ lib.platforms.freebsd;
+    hasNoMaintainersButDependents = true;
   };
 })

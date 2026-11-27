@@ -61,5 +61,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/bugsnag/bugsnag-python/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

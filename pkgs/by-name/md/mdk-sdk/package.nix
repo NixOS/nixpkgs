@@ -127,5 +127,6 @@ stdenv.mkDerivation {
     license = lib.licenses.unfree;
     maintainers = [ ];
     platforms = builtins.attrNames sources;
+    hasNoMaintainersButDependents = true;
   };
 }

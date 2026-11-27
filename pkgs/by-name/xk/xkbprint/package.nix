@@ -49,5 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "xkbprint";
     maintainers = [ ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

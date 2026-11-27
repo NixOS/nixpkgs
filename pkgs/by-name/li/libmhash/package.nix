@@ -31,5 +31,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://mhash.sourceforge.net";
     license = lib.licenses.lgpl2Only;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

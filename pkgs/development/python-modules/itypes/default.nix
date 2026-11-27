@@ -28,5 +28,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/PavanTatikonda/itypes";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

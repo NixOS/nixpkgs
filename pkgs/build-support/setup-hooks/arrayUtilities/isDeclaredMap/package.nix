@@ -9,5 +9,6 @@ makeSetupHook {
   meta = {
     description = "Tests if an associative array is declared";
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 } ./isDeclaredMap.bash

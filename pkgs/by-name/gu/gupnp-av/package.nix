@@ -71,5 +71,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Collection of helpers for building AV (audio/video) applications using GUPnP";
     license = lib.licenses.lgpl2Plus;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

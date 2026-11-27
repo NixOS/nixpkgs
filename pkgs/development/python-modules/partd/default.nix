@@ -58,5 +58,6 @@ buildPythonPackage rec {
     description = "Appendable key-value storage";
     license = lib.licenses.bsd3;
     homepage = "https://github.com/dask/partd/";
+    hasNoMaintainersButDependents = true;
   };
 }

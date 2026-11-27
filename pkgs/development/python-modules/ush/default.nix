@@ -38,5 +38,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/tarruda/python-ush";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

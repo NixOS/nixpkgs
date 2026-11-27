@@ -94,5 +94,6 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     mainProgram = "nm-applet";
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 }

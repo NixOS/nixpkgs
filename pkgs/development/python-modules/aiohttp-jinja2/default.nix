@@ -51,5 +51,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/aio-libs/aiohttp_jinja2";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

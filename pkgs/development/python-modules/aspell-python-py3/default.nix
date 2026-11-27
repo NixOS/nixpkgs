@@ -47,5 +47,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/WojciechMula/aspell-python";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

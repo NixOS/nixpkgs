@@ -29,5 +29,6 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/mattn/anko";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

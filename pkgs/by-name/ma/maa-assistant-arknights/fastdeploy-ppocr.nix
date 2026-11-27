@@ -74,5 +74,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     license = lib.licenses.asl20;
     broken = cudaSupport && stdenv.hostPlatform.system != "x86_64-linux";
+    hasNoMaintainersButDependents = true;
   };
 })

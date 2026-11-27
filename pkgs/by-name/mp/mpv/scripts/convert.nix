@@ -45,5 +45,6 @@ buildLua {
     '';
     # author was asked to add a license https://gist.github.com/Zehkul/25ea7ae77b30af959be0#gistcomment-3715700
     license = lib.licenses.unfree;
+    hasNoMaintainersButDependents = true;
   };
 }

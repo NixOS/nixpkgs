@@ -45,5 +45,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/Foundry376/Mailspring-Sync";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    hasNoMaintainersButDependents = true;
   };
 }

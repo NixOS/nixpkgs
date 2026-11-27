@@ -54,5 +54,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "xpr";
     maintainers = [ ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

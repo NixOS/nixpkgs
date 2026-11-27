@@ -62,5 +62,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ lib.maintainers.smakarov ];
     pkgConfigModules = [ "xrender" ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -47,5 +47,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Typesafe callback system for standard C++";
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })

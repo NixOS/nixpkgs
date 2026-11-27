@@ -55,5 +55,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/tuxinal/venbind";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

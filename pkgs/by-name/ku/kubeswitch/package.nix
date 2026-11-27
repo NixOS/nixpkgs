@@ -48,5 +48,6 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/danielfoehrKn/kubeswitch";
     maintainers = [ ];
     mainProgram = "switcher";
+    hasNoMaintainersButDependents = true;
   };
 })

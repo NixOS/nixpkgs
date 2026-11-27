@@ -7,5 +7,6 @@ vimUtils.buildVimPlugin {
   meta = {
     inherit (mirth.meta) homepage license;
     description = "Syntax highlighting & filetype detection for the Mirth programming language";
+    hasNoMaintainersButDependents = true;
   };
 }

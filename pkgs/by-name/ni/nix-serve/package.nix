@@ -66,5 +66,6 @@ stdenv.mkDerivation {
     broken = stdenv.hostPlatform.isDarwin;
     platforms = nix.meta.platforms;
     mainProgram = "nix-serve";
+    hasNoMaintainersButDependents = true;
   };
 }

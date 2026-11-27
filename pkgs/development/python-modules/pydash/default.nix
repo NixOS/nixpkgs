@@ -48,5 +48,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/dgilland/pydash/blob/v${version}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

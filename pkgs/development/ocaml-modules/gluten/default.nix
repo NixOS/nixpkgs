@@ -29,5 +29,6 @@ buildDunePackage (finalAttrs: {
     license = lib.licenses.bsd3;
     homepage = "https://github.com/anmonteiro/gluten";
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -37,5 +37,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/python-quantities/python-quantities/blob/v${version}/CHANGES.txt";
     license = lib.licenses.bsd2;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

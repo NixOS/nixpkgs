@@ -47,5 +47,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/testing-cabal/testscenarios/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

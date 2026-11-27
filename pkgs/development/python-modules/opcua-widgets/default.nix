@@ -33,5 +33,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/FreeOpcUa/opcua-widgets";
     license = lib.licenses.gpl3Only;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

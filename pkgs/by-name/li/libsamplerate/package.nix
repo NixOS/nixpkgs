@@ -33,5 +33,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.all;
     # Linker is unhappy with the `.def` file.
     broken = stdenv.hostPlatform.isMinGW;
+    hasNoMaintainersButDependents = true;
   };
 })

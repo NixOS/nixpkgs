@@ -197,5 +197,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.all;
     pkgConfigModules = [ "freetype2" ];
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -45,5 +45,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     mainProgram = "svn2git";
+    hasNoMaintainersButDependents = true;
   };
 })

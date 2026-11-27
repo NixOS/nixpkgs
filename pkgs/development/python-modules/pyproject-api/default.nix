@@ -64,5 +64,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/tox-dev/pyproject-api";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

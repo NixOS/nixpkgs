@@ -35,5 +35,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/thombashi/tabledata/releases/tag/${src.tag}";
     maintainers = [ ];
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 }

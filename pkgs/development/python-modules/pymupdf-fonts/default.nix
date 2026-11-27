@@ -27,5 +27,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pymupdf/pymupdf-fonts";
     license = lib.licenses.ofl;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

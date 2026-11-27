@@ -41,5 +41,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/jupyter-widgets/ipywidgets/releases/tag/${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

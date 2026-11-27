@@ -63,5 +63,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.agpl3Plus;
     maintainers = [ ];
     mainProgram = "gifski";
+    hasNoMaintainersButDependents = true;
   };
 })

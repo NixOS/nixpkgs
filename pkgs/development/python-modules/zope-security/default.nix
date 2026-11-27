@@ -76,5 +76,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/zopefoundation/zope.security/blob/${finalAttrs.src.tag}/CHANGES.rst";
     license = lib.licenses.zpl21;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

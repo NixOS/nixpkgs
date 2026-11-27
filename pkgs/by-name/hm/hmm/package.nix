@@ -32,5 +32,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/samwho/hmm/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

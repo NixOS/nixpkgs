@@ -49,6 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "npush";
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
     platforms = lib.platforms.unix;
   };
 })

@@ -42,6 +42,8 @@ let
         homepage = "https://translatelocally.com/";
         # https://github.com/browsermt/students/blob/master/LICENSE.md
         license = lib.licenses.cc-by-sa-40;
+        # TODO: We should still have a maintainer for the generation code
+        requiresMaintainers = false;
       };
     };
   allModelPkgs = lib.listToAttrs (map (withCodeAsKey mkModelPackage) modelSpecs);

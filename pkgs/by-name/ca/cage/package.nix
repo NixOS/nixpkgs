@@ -69,5 +69,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ olduser101 ];
     mainProgram = "cage";
+    hasNoMaintainersButDependents = true;
   };
 })

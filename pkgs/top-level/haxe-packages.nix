@@ -79,6 +79,7 @@ in
     version = "3.5.0";
     sha256 = "sha256-5vZ7b+P74uGx0Gb7X/+jbsx5048dO/jv5nqCDtw5y/A=";
     meta.description = "Haxe library for supporting different file formats";
+    meta.hasNoMaintainersButDependents = true;
   };
 
   heaps = buildHaxeLib {
@@ -86,6 +87,7 @@ in
     version = "1.9.1";
     sha256 = "sha256-i5EIKnph80eEEHvGXDXhIL4t4+RW7OcUV5zb2f3ItlI=";
     meta.description = "GPU game framework";
+    meta.hasNoMaintainersButDependents = true;
   };
 
   hlopenal = buildHaxeLib {
@@ -114,6 +116,7 @@ in
       done
     '';
     meta.description = "Runtime support library for the Haxe C++ backend";
+    meta.hasNoMaintainersButDependents = true;
   };
 
   hxjava = buildHaxeLib {

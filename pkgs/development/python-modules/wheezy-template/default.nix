@@ -22,5 +22,6 @@ buildPythonPackage rec {
     mainProgram = "wheezy.template";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

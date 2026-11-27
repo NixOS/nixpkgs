@@ -53,5 +53,6 @@ buildDunePackage (finalAttrs: {
       helpers for unix and threads.
     '';
     license = lib.licenses.bsd2;
+    hasNoMaintainersButDependents = true;
   };
 })

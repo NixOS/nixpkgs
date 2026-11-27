@@ -51,5 +51,6 @@ buildPythonPackage (finalAttrs: {
     maintainers = [ ];
     # https://github.com/bastibe/python-soundfile/issues/157
     broken = stdenv.hostPlatform.isi686;
+    hasNoMaintainersButDependents = true;
   };
 })

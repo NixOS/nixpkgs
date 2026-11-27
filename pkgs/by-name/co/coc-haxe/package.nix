@@ -27,5 +27,6 @@ buildNpmPackage (finalAttrs: {
     homepage = "https://github.com/vantreeseba/coc-haxe";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

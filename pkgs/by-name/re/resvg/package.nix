@@ -39,5 +39,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       ];
     maintainers = [ lib.maintainers.jopejoe1 ];
     mainProgram = "resvg";
+    hasNoMaintainersButDependents = true;
   };
 })

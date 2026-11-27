@@ -49,5 +49,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = lib.licenses.lppl13c;
     maintainers = [ ];
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })

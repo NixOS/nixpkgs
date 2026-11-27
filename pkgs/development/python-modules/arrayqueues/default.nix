@@ -32,5 +32,6 @@ buildPythonPackage rec {
     description = "Multiprocessing queues for numpy arrays using shared memory";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

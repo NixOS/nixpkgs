@@ -28,5 +28,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/epsy/repeated_test";
     changelog = "https://github.com/epsy/repeated_test/releases/tag/v${version}";
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 }

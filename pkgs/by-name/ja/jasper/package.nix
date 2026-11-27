@@ -97,6 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "jasper";
     maintainers = [ ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })
 # TODO: investigate opengl support

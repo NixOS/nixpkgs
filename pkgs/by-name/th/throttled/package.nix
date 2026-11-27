@@ -57,5 +57,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "throttled.py";
     platforms = [ "x86_64-linux" ];
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

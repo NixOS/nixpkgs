@@ -35,5 +35,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/makinacorpus/django-leaflet/blob/${version}/CHANGES";
     license = lib.licenses.lgpl3Only;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

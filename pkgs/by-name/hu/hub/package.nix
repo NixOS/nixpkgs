@@ -82,5 +82,6 @@ buildGoModule (finalAttrs: {
     homepage = "https://hub.github.com/";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

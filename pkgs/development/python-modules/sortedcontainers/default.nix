@@ -35,6 +35,7 @@ let
       homepage = "https://grantjenks.com/docs/sortedcontainers/";
       license = lib.licenses.asl20;
       maintainers = [ ];
+      hasNoMaintainersButDependents = true;
     };
   };
 in

@@ -29,5 +29,6 @@ buildPythonPackage (finalAttrs: {
     description = "Python bindings for musicbrainz NGS webservice";
     license = lib.licenses.bsd2;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

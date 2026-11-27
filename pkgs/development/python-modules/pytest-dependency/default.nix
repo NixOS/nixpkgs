@@ -38,5 +38,6 @@ buildPythonPackage rec {
     description = "Manage dependencies of tests";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

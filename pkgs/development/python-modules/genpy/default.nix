@@ -26,5 +26,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/inducer/genpy";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

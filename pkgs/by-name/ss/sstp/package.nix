@@ -49,5 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ enovamaker ];
     license = lib.licenses.gpl2Plus;
     mainProgram = "sstpc";
+    hasNoMaintainersButDependents = true;
   };
 })

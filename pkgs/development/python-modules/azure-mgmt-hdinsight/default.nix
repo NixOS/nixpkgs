@@ -42,5 +42,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-hdinsight_${version}/sdk/hdinsight/azure-mgmt-hdinsight/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

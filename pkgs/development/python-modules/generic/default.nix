@@ -28,5 +28,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/gaphor/generic/releases/tag/${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

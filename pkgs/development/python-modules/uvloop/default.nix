@@ -113,5 +113,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/MagicStack/uvloop";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

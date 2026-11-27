@@ -247,6 +247,7 @@ let
           license
           maintainers
           ;
+        hasNoMaintainersButDependents = true;
         description = "Hyphen dictionary for English (United States)";
       };
       installPhase = ''

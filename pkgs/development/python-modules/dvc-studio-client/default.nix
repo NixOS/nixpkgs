@@ -40,5 +40,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/treeverse/dvc-studio-client";
     changelog = "https://github.com/treeverse/dvc-studio-client/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
+    hasNoMaintainersButDependents = true;
   };
 }

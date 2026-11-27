@@ -61,5 +61,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/tee-ar-ex/trx-python/releases/tag/${version}";
     license = lib.licenses.bsd2;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

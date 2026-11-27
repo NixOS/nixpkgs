@@ -30,5 +30,6 @@ stdenv.mkDerivation {
     platforms = lib.platforms.linux;
     hydraPlatforms = [ ];
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

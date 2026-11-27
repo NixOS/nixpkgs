@@ -20,5 +20,6 @@ buildPythonPackage {
     description = "Python port of GNU sed's parser";
     homepage = "https://github.com/aureliojargas/sedparse";
     license = lib.licenses.gpl3Plus;
+    hasNoMaintainersButDependents = true;
   };
 }

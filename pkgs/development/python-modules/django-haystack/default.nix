@@ -64,5 +64,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/django-haystack/django-haystack/releases/tag/v${version}";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

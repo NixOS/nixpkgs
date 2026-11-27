@@ -76,5 +76,6 @@ buildPythonPackage (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "pyannote-metrics";
+    hasNoMaintainersButDependents = true;
   };
 })

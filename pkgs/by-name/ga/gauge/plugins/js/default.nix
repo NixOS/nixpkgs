@@ -39,5 +39,6 @@ buildNpmPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
     inherit (gauge-unwrapped.meta) platforms;
+    hasNoMaintainersButDependents = true;
   };
 }

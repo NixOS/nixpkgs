@@ -60,5 +60,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://sinusoid.es/lager/";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  noMaintainersNorDependents,
 }:
 
 let
@@ -13,6 +14,7 @@ let
       description,
       dimensions,
       license ? lib.licenses.free,
+      meta ? { },
     }:
 
     let
@@ -85,7 +87,8 @@ let
           inherit description license;
           homepage = "https://github.com/NixOS/nixos-artwork";
           platforms = lib.platforms.all;
-        };
+        }
+        // meta;
       };
     in
     pkg;
@@ -188,6 +191,7 @@ rec {
     };
     dimensions = "3840x2160";
     license = lib.licenses.cc-by-sa-40;
+    meta.hasNoMaintainersButDependents = true;
   };
 
   dracula = mkNixBackground {
@@ -200,6 +204,7 @@ rec {
     };
     dimensions = "1920x1080";
     license = lib.licenses.cc-by-sa-40;
+    meta.hasNoMaintainersButDependents = true;
   };
 
   gear = mkNixBackground {
@@ -212,9 +217,10 @@ rec {
     };
     dimensions = "3840x2160";
     license = lib.licenses.cc-by-sa-40;
+    meta.hasNoMaintainersButDependents = true;
   };
 
-  gnome-dark = simple-dark-gray-bottom;
+  gnome-dark = noMaintainersNorDependents simple-dark-gray-bottom;
 
   gradient-grey = mkNixBackground {
     pname = "gradient-grey";
@@ -262,6 +268,7 @@ rec {
     };
     dimensions = "3840x2160";
     license = lib.licenses.cc-by-sa-40;
+    meta.hasNoMaintainersButDependents = true;
   };
 
   nineish-dark-gray = mkNixBackground {
@@ -274,6 +281,7 @@ rec {
     };
     dimensions = "3840x2160";
     license = lib.licenses.cc-by-sa-40;
+    meta.hasNoMaintainersButDependents = true;
   };
 
   nineish-solarized-dark = mkNixBackground {
@@ -406,6 +414,7 @@ rec {
     };
     dimensions = "3840x2160";
     license = lib.licenses.cc-by-sa-40;
+    meta.hasNoMaintainersButDependents = true;
   };
 
   simple-blue = mkNixBackground {
@@ -418,6 +427,7 @@ rec {
     };
     dimensions = "1920x1080";
     license = lib.licenses.cc0;
+    meta.hasNoMaintainersButDependents = true;
   };
 
   simple-dark-gray = mkNixBackground {
@@ -430,6 +440,7 @@ rec {
     };
     dimensions = "1920x1080";
     license = lib.licenses.cc0;
+    meta.hasNoMaintainersButDependents = true;
   };
 
   simple-dark-gray-bootloader = mkNixBackground {
@@ -442,6 +453,7 @@ rec {
     };
     dimensions = "628x535";
     # license not clarified
+    meta.hasNoMaintainersButDependents = true;
   };
 
   simple-dark-gray-bottom = mkNixBackground {
@@ -454,6 +466,7 @@ rec {
     };
     dimensions = "1920x1080";
     # license not clarified
+    meta.hasNoMaintainersButDependents = true;
   };
 
   simple-light-gray = mkNixBackground {
@@ -478,6 +491,7 @@ rec {
     };
     dimensions = "1920x1080";
     license = lib.licenses.cc0;
+    meta.hasNoMaintainersButDependents = true;
   };
 
   stripes-logo = mkNixBackground {
@@ -502,6 +516,7 @@ rec {
     };
     dimensions = "1920x1080";
     license = lib.licenses.cc0;
+    meta.hasNoMaintainersButDependents = true;
   };
 
   waterfall = mkNixBackground {

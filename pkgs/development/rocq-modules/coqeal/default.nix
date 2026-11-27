@@ -70,6 +70,7 @@ let
     meta = {
       description = "CoqEAL - The Coq Effective Algebra Library";
       license = lib.licenses.mit;
+      hasNoMaintainersButDependents = true;
     };
   };
   patched-derivation1 = derivation.overrideAttrs (o: {

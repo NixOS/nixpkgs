@@ -74,5 +74,6 @@ stdenv.mkDerivation (finalAttrs: {
       gpl2Plus
     ];
     mainProgram = "dash";
+    hasNoMaintainersButDependents = true;
   };
 })

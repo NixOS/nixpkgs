@@ -31,5 +31,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Vaelor/python-mattermost-driver";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

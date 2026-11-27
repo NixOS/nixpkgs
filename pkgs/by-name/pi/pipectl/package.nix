@@ -32,5 +32,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Simple named pipe management utility";
     maintainers = [ ];
     mainProgram = "pipectl";
+    hasNoMaintainersButDependents = true;
   };
 })

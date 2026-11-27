@@ -48,5 +48,6 @@ buildPythonPackage {
     homepage = "https://github.com/nicolashahn/diffimg";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

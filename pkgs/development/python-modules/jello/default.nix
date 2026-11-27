@@ -38,5 +38,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/kellyjonbrazil/jello/blob/${src.tag}/CHANGELOG";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

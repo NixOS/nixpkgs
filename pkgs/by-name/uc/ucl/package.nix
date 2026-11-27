@@ -22,5 +22,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Portable lossless data compression library";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

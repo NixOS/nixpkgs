@@ -58,5 +58,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/jdepoix/youtube-transcript-api/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

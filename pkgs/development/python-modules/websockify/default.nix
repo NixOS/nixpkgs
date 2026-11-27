@@ -63,5 +63,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/novnc/websockify/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.lgpl3Only;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

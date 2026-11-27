@@ -63,5 +63,6 @@ stdenv.mkDerivation (finalAttrs: {
     pkgConfigModules = [ "glu" ];
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isAndroid;
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -43,5 +43,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/lextudio/pysnmpcrypto/blob/v${version}/CHANGES.txt";
     license = lib.licenses.bsd2;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

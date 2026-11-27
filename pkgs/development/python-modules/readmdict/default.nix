@@ -39,5 +39,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ffreemt/readmdict";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -71,5 +71,6 @@ buildGo127Module rec {
     homepage = "https://kuma.io/";
     changelog = "https://github.com/kumahq/kuma/releases/tag/v${version}";
     license = lib.licenses.asl20;
+    hasNoMaintainersButDependents = true;
   };
 }

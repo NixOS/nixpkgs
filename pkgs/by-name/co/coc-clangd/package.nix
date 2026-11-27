@@ -25,5 +25,6 @@ buildNpmPackage {
     homepage = "https://github.com/clangd/coc-clangd";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

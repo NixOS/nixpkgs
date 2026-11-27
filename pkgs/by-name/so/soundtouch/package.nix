@@ -35,5 +35,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     mainProgram = "soundstretch";
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })

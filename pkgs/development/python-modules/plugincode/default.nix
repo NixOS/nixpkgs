@@ -57,5 +57,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/nexB/plugincode/blob/v${version}/CHANGELOG.rst";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

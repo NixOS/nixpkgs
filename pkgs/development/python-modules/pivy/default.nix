@@ -61,5 +61,6 @@ buildPythonPackage rec {
     description = "Python binding for Coin";
     license = lib.licenses.isc;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

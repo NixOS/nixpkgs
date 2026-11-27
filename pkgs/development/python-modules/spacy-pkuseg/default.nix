@@ -41,5 +41,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/explosion/spacy-pkuseg";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

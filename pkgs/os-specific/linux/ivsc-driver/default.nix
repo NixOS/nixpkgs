@@ -43,5 +43,6 @@ stdenv.mkDerivation {
     # This module is in mainline now and upstream suggests using that
     # with recent kernels rather than the out-of-tree module.
     broken = kernel.kernelOlder "5.15" || kernel.kernelAtLeast "6.9";
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -45,5 +45,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.limesurvey.org";
     maintainers = [ ];
     platforms = with lib.platforms; unix;
+    hasNoMaintainersButDependents = true;
   };
 }

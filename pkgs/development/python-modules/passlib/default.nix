@@ -10,5 +10,6 @@ mkPythonMetaPackage {
   optional-dependencies = libpass.optional-dependencies or { };
   meta = {
     inherit (libpass.meta) changelog description homepage;
+    hasNoMaintainersButDependents = true;
   };
 }

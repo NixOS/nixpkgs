@@ -100,6 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://alephone.lhowon.org/";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 
   passthru.makeWrapper =
@@ -147,6 +148,7 @@ stdenv.mkDerivation (finalAttrs: {
         meta =
           finalAttrs.finalPackage.meta
           // {
+            hasNoMaintainersButDependents = false;
             license = lib.licenses.free;
             mainProgram = "alephone";
             hydraPlatforms = [ ];

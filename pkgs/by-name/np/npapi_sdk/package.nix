@@ -21,5 +21,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://bitbucket.org/mgorny/npapi-sdk"; # see also https://github.com/mozilla/npapi-sdk
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

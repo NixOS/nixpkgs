@@ -29,5 +29,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/numerodix/ansicolor/";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

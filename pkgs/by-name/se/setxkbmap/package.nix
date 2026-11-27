@@ -56,5 +56,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "setxkbmap";
     maintainers = [ lib.maintainers.kamadorueda ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

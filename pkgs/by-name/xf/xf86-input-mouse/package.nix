@@ -60,5 +60,6 @@ stdenv.mkDerivation (finalAttrs: {
     pkgConfigModules = [ "xorg-mouse" ];
     # platforms according to the readme
     platforms = with lib.platforms; freebsd ++ netbsd ++ openbsd ++ illumos;
+    hasNoMaintainersButDependents = true;
   };
 })

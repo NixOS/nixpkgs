@@ -25,5 +25,6 @@ stdenv.mkDerivation {
         mit # For the code from Nixpkgs
         bsd3 # nim_builder.nim contains some BSD3 code from Nimble
       ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -40,5 +40,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/explosion/preshed";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

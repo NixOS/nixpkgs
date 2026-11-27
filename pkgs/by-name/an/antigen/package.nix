@@ -26,5 +26,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Plugin manager for zsh";
     homepage = "https://antigen.sharats.me/";
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 })

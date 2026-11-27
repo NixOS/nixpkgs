@@ -42,5 +42,6 @@ crystal.buildCrystalPackage rec {
     homepage = "https://github.com/cloudamqp/amqpcat";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

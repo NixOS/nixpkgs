@@ -60,5 +60,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "xload";
     maintainers = [ ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

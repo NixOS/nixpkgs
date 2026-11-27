@@ -23,5 +23,6 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/Milkshiift/patchcord";
     license = lib.licenses.osl3;
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 }

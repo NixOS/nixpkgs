@@ -1339,6 +1339,7 @@ rec {
       nuget-source = mkNugetSource {
         name = "${fname}-nuget-source";
         description = "Nuget source with the dependencies for ${fname}";
+        meta.hasNoMaintainersButDependents = true;
         deps = [ _nugetDeps ];
       };
 

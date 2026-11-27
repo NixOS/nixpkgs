@@ -32,5 +32,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://launchpad.net/wadllib";
     license = lib.licenses.lgpl3Only;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

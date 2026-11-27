@@ -38,5 +38,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Communication package providing the XMODEM, YMODEM ZMODEM file transfer protocols";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

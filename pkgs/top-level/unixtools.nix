@@ -42,6 +42,7 @@ let
           priority = 10;
           platforms = platforms.${stdenv.hostPlatform.parsed.kernel.name} or platforms.all;
           inherit (provider.meta) license;
+          requiresMaintainers = false;
         };
         inherit (provider) version pname;
         passthru = {
@@ -274,6 +275,8 @@ let
       inherit paths pname version;
       meta = {
         license = lib.licenses.AND (lib.unique (lib.map (x: x.meta.license) paths));
+        # TODO: Why?
+        requiresMaintainers = false;
       };
     };
 

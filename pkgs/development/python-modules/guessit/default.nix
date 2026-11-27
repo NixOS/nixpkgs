@@ -51,5 +51,6 @@ buildPythonPackage (finalAttrs: {
     license = lib.licenses.lgpl3Only;
     maintainers = [ ];
     mainProgram = "guessit";
+    hasNoMaintainersButDependents = true;
   };
 })

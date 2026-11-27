@@ -35,5 +35,6 @@ buildPythonPackage rec {
     description = "GMP or MPIR interface to Python 2.4+ and 3.x";
     homepage = "https://github.com/gmpy2/gmpy2/";
     license = lib.licenses.lgpl21Plus;
+    hasNoMaintainersButDependents = true;
   };
 }

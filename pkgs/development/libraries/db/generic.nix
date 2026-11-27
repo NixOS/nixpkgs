@@ -121,6 +121,7 @@ stdenv.mkDerivation (
       description = "Berkeley DB";
       license = license;
       platforms = lib.platforms.unix;
+      hasNoMaintainersButDependents = true;
     };
   }
   // drvArgs

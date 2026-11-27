@@ -37,5 +37,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://wpewebkit.org";
     maintainers = [ ];
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

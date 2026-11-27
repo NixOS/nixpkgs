@@ -54,5 +54,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pallets-eco/wtforms";
     changelog = "https://github.com/pallets-eco/wtforms/blob/${version}/CHANGES.rst";
     license = lib.licenses.bsd3;
+    hasNoMaintainersButDependents = true;
   };
 }

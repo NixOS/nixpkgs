@@ -56,5 +56,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/mongodb/mongo-python-driver";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -51,5 +51,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/altdesktop/python-dbus-next/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

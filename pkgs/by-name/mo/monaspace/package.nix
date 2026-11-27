@@ -61,7 +61,9 @@ let
 
         runHook postInstall
       '';
-      inherit meta;
+      meta = meta // {
+        hasNoMaintainersButDependents = true;
+      };
     };
 
   makePackages =

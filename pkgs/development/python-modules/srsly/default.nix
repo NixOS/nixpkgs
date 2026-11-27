@@ -54,5 +54,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/explosion/srsly";
     changelog = "https://github.com/explosion/srsly/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 })

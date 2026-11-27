@@ -131,5 +131,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     platforms = lib.platforms.all;
     changelog = "https://github.com/uclouvain/openjpeg/blob/v${finalAttrs.version}/CHANGELOG.md";
+    hasNoMaintainersButDependents = true;
   };
 })

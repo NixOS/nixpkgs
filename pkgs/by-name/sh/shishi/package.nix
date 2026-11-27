@@ -107,5 +107,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     platforms = lib.platforms.linux;
     pkgConfigModules = [ "shishi" ];
+    hasNoMaintainersButDependents = true;
   };
 })

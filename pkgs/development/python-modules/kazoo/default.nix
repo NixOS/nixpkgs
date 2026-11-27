@@ -38,5 +38,6 @@ buildPythonPackage rec {
     description = "Higher Level Zookeeper Client";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

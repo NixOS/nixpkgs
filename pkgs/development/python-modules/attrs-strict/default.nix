@@ -52,5 +52,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/bloomberg/attrs-strict/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

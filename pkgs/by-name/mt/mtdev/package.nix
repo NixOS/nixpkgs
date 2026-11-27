@@ -39,5 +39,6 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.mit;
     platforms = with lib.platforms; freebsd ++ linux;
+    hasNoMaintainersButDependents = true;
   };
 })

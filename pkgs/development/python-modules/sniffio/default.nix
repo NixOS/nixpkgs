@@ -33,5 +33,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/python-trio/sniffio/blob/${finalAttrs.src.tag}/docs/source/history.rst";
     license = lib.licenses.asl20;
     description = "Sniff out which async library your code is running under";
+    hasNoMaintainersButDependents = true;
   };
 })

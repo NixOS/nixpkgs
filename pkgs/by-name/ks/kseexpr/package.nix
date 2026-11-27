@@ -45,5 +45,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Embeddable expression evaluation engine";
     maintainers = [ ];
     license = lib.licenses.lgpl3Plus;
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -86,5 +86,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/Qiskit/rustworkx/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

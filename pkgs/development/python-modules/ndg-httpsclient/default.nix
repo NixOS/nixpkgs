@@ -32,5 +32,6 @@ buildPythonPackage rec {
     mainProgram = "ndg_httpclient";
     license = lib.licenses.bsd2;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

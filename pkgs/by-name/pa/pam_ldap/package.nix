@@ -46,5 +46,6 @@ stdenv.mkDerivation (finalAttrs: {
       passwords in the directory.'';
     license = lib.licenses.gpl2;
     inherit (pam.meta) platforms;
+    hasNoMaintainersButDependents = true;
   };
 })

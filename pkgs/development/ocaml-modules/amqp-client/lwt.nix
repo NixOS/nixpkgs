@@ -23,6 +23,7 @@ buildDunePackage {
   doCheck = true;
 
   meta = amqp-client.meta // {
+    hasNoMaintainersButDependents = false;
     description = "Amqp client library, lwt version";
   };
 }

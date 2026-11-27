@@ -5593,7 +5593,7 @@ self: super: with self; {
 
   elasticsearch9 = callPackage ../development/python-modules/elasticsearch9 { };
 
-  elasticsearchdsl = self.elasticsearch-dsl;
+  elasticsearchdsl = pkgs.noMaintainersNorDependents self.elasticsearch-dsl;
 
   electrickiwi-api = callPackage ../development/python-modules/electrickiwi-api { };
 
@@ -12526,7 +12526,7 @@ self: super: with self; {
 
   numba-scipy = callPackage ../development/python-modules/numba-scipy { };
 
-  numbaWithCuda = self.numba.override { cudaSupport = true; };
+  numbaWithCuda = pkgs.noMaintainersNorDependents (self.numba.override { cudaSupport = true; });
 
   numbagg = callPackage ../development/python-modules/numbagg { };
 
@@ -16668,7 +16668,7 @@ self: super: with self; {
 
   pysonos = callPackage ../development/python-modules/pysonos { };
 
-  pysoundfile = self.soundfile; # Alias added 23-06-2019
+  pysoundfile = pkgs.noMaintainersNorDependents self.soundfile; # Alias added 23-06-2019
 
   pyspark = callPackage ../development/python-modules/pyspark { };
 
@@ -20946,9 +20946,13 @@ self: super: with self; {
 
   tensorflow-probability = callPackage ../development/python-modules/tensorflow-probability { };
 
-  tensorflowWithCuda = self.tensorflow.override { cudaSupport = true; };
+  tensorflowWithCuda = pkgs.noMaintainersNorDependents (
+    self.tensorflow.override { cudaSupport = true; }
+  );
 
-  tensorflowWithoutCuda = self.tensorflow.override { cudaSupport = false; };
+  tensorflowWithoutCuda = pkgs.noMaintainersNorDependents (
+    self.tensorflow.override { cudaSupport = false; }
+  );
 
   tensorly = callPackage ../development/python-modules/tensorly { };
 

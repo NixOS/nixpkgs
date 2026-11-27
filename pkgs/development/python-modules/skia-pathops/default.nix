@@ -68,5 +68,6 @@ buildPythonPackage rec {
     badPlatforms = lib.platforms.bigEndian;
     # ERROR at //gn/BUILDCONFIG.gn:87:14: Script returned non-zero exit code.
     broken = isPyPy;
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -53,6 +53,8 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/django-commons/django-formtools";
     changelog = "https://github.com/django-commons/django-formtools/blob/${finalAttrs.src.tag}/docs/changelog.rst";
     license = lib.licenses.bsd3;
-    maintainers = [ ];
+    maintainers = [
+    ];
+    hasNoMaintainersButDependents = true;
   };
 })

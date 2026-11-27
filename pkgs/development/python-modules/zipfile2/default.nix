@@ -35,5 +35,6 @@ buildPythonPackage {
     homepage = "https://github.com/itziakos/zipfile2";
     license = lib.licenses.psfl;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

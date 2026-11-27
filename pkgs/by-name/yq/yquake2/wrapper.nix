@@ -64,5 +64,6 @@ stdenv.mkDerivation {
 
   meta = {
     inherit description;
+    hasNoMaintainersButDependents = true;
   };
 }

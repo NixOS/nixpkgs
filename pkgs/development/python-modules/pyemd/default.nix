@@ -40,5 +40,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/wmayner/pyemd/blob/v${finalAttrs.version}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

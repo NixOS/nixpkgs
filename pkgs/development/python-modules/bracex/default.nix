@@ -27,5 +27,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/facelessuser/bracex";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -35,5 +35,6 @@ buildPythonPackage rec {
     homepage = "https://kaptan.readthedocs.io/";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

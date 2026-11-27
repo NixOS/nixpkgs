@@ -52,5 +52,6 @@ stdenv.mkDerivation {
     license = lib.licenses.artistic1;
     maintainers = [ ];
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 }

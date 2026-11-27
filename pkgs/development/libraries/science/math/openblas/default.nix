@@ -350,5 +350,6 @@ stdenv.mkDerivation (finalAttrs: {
       "cblas"
       "lapack"
     ];
+    hasNoMaintainersButDependents = true;
   };
 })

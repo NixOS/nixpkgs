@@ -92,5 +92,6 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "jsonschema";
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -143,5 +143,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix ++ lib.platforms.windows;
     maintainers = [ ];
     license = lib.licenses.asl20;
+    hasNoMaintainersButDependents = true;
   };
 })

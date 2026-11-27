@@ -47,5 +47,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/mwilliamson/python-cobble";
     license = lib.licenses.bsd2;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

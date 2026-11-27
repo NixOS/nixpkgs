@@ -22,5 +22,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Animenosekai/safeIO";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

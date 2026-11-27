@@ -51,5 +51,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/jaraco/tempora/blob/${src.tag}/NEWS.rst";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

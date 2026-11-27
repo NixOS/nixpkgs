@@ -22,5 +22,6 @@ buildPythonPackage rec {
     description = "Thin python wrapper around Linode's API";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

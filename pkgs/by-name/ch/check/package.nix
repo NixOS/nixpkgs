@@ -51,5 +51,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "checkmk";
     platforms = lib.platforms.all;
     pkgConfigModules = [ "check" ];
+    hasNoMaintainersButDependents = true;
   };
 })

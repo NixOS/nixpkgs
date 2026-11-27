@@ -49,5 +49,6 @@ buildGoModule {
     homepage = "https://influxdata.com/";
     maintainers = with lib.maintainers; [ kamadorueda ];
     mainProgram = "influx";
+    hasNoMaintainersButDependents = true;
   };
 }

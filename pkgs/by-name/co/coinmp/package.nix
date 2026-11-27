@@ -44,5 +44,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ coolcuber ];
     platforms = lib.platforms.unix;
     license = lib.licenses.epl10;
+    hasNoMaintainersButDependents = true;
   };
 })

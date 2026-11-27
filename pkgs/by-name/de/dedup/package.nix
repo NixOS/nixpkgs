@@ -47,5 +47,6 @@ stdenv.mkDerivation (finalAttrs: {
       isc
     ];
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -49,5 +49,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/tlocke/scramp";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

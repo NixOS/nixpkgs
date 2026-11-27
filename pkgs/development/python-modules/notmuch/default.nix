@@ -32,5 +32,6 @@ buildPythonPackage {
     homepage = "https://notmuchmail.org/";
     license = lib.licenses.gpl3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

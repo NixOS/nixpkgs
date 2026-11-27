@@ -44,5 +44,6 @@ buildPythonPackage (finalAttrs: {
       zpl21
     ];
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -38,5 +38,6 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.bsd3;
     mainProgram = "extism";
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })

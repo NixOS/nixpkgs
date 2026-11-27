@@ -54,5 +54,6 @@ stdenv.mkDerivation (finalAttrs: {
       "libpcre2-32"
     ];
     identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "pcre" finalAttrs.version;
+    hasNoMaintainersButDependents = true;
   };
 })

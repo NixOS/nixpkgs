@@ -65,5 +65,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "svgo";
     maintainers = [ ];
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })

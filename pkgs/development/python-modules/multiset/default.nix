@@ -37,5 +37,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/wheerd/multiset/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

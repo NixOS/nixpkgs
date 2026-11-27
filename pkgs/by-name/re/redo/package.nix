@@ -46,5 +46,6 @@ stdenv.mkDerivation {
     maintainers = [ ];
     mainProgram = "redo";
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 }

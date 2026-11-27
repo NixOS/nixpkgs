@@ -33,5 +33,6 @@ buildPythonPackage rec {
     homepage = "https://sourceforge.net/projects/ruamel-yaml-clib/";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -70,5 +70,6 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "pyannote-pipeline";
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -36,5 +36,6 @@ stdenv.mkDerivation rec {
     homepage = "https://gtkspell.sourceforge.net/";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 }

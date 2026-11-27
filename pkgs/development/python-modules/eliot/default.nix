@@ -74,5 +74,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/itamarst/eliot/blob/${finalAttrs.version}/docs/source/news.rst";
     mainProgram = "eliot-prettyprint";
     license = lib.licenses.asl20;
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -69,5 +69,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = with lib.platforms; unix;
     maintainers = [ ];
     license = lib.licenses.abstyles;
+    hasNoMaintainersButDependents = true;
   };
 })

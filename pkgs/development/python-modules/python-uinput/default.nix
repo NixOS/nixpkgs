@@ -26,5 +26,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pyinput/python-uinput";
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

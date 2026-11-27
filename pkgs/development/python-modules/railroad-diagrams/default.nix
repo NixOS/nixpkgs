@@ -27,5 +27,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/tabatkins/railroad-diagrams";
     license = lib.licenses.cc0;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

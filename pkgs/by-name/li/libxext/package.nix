@@ -72,5 +72,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ lib.maintainers.smakarov ];
     pkgConfigModules = [ "xext" ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

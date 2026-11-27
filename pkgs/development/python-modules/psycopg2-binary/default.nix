@@ -9,5 +9,6 @@ mkPythonMetaPackage {
   optional-dependencies = psycopg2.optional-dependencies or { };
   meta = {
     inherit (psycopg2.meta) description homepage;
+    hasNoMaintainersButDependents = true;
   };
 }

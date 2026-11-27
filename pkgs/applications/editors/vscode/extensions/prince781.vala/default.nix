@@ -30,5 +30,6 @@ vscode-utils.buildVscodeMarketplaceExtension {
     downloadPage = "https://marketplace.visualstudio.com/items?itemName=prince781.vala";
     homepage = "https://github.com/vala-lang/vala-vscode#readme";
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 }

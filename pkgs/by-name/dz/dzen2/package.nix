@@ -48,5 +48,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     description = "X notification utility";
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

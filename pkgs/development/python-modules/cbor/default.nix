@@ -26,5 +26,6 @@ buildPythonPackage (finalAttrs: {
     description = "Concise Binary Object Representation (CBOR) library";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

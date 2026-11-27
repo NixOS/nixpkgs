@@ -72,5 +72,6 @@ buildPythonPackage rec {
     description = "Jupyter Packaging Utilities";
     homepage = "https://github.com/jupyter/jupyter-packaging";
     license = lib.licenses.bsd3;
+    hasNoMaintainersButDependents = true;
   };
 }

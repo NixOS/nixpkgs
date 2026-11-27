@@ -59,5 +59,6 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.mit;
     mainProgram = "plikd";
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

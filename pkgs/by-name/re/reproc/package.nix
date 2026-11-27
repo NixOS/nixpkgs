@@ -54,5 +54,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Cross-platform (C99/C++11) process library";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })

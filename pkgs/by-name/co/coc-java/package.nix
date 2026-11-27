@@ -25,5 +25,6 @@ buildNpmPackage (finalAttrs: {
     homepage = "https://github.com/neoclide/coc-java";
     license = lib.licenses.epl10;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

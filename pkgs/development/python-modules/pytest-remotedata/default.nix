@@ -40,5 +40,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/astropy/pytest-remotedata/blob/v${finalAttrs.version}/CHANGES.rst";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

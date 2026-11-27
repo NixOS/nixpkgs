@@ -60,5 +60,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "xfd";
     maintainers = [ ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

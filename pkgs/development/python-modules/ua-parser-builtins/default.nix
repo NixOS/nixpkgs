@@ -33,5 +33,6 @@ buildPythonPackage rec {
       changelog
       ;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

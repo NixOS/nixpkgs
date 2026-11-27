@@ -68,5 +68,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
     mainProgram = "rare";
+    hasNoMaintainersButDependents = true;
   };
 })

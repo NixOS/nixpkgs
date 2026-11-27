@@ -37,5 +37,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     mainProgram = "babeld";
+    hasNoMaintainersButDependents = true;
   };
 })

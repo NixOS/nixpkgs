@@ -45,5 +45,6 @@ buildNpmPackage (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kamadorueda ];
     mainProgram = "js-beautify";
+    hasNoMaintainersButDependents = true;
   };
 })

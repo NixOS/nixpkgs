@@ -10,4 +10,5 @@ quake3wrapper {
     quake3arenadata
     quake3pointrelease
   ];
+  meta.hasNoMaintainersButDependents = true;
 }

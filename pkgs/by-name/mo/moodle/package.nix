@@ -151,5 +151,6 @@ stdenv.mkDerivation rec {
     knownVulnerabilities = [
       "Moodle has no listed maintainer and updates are not applied in a reasonable timeframe."
     ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -32,5 +32,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "YAML 1.1 parser and emitter written in C";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })

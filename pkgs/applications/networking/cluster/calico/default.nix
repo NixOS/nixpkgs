@@ -38,6 +38,7 @@ builtins.mapAttrs
         description = "Cloud native networking and network security";
         license = lib.licenses.asl20;
         maintainers = [ ];
+        hasNoMaintainersButDependents = true;
         platforms = lib.platforms.linux;
         inherit mainProgram;
       };

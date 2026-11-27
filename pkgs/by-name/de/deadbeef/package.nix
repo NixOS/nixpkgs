@@ -165,5 +165,6 @@ clangStdenv.mkDerivation (finalAttrs: {
       "aarch64-linux"
     ];
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

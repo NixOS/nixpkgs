@@ -27,5 +27,6 @@ buildPythonPackage rec {
 
   meta = certbot.meta // {
     description = "Nginx plugin for Certbot";
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -56,5 +56,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.philocalyst ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

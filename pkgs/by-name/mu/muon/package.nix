@@ -212,6 +212,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     platforms = lib.platforms.unix;
     mainProgram = "muon";
+    hasNoMaintainersButDependents = true;
   };
 })
 # TODO LIST:

@@ -1,7 +1,9 @@
-{ transmission_4 }:
+{ transmission_4, noMaintainersNorDependents }:
 
-transmission_4.override {
-  installLib = true;
-  enableDaemon = false;
-  enableCli = false;
-}
+noMaintainersNorDependents (
+  transmission_4.override {
+    installLib = true;
+    enableDaemon = false;
+    enableCli = false;
+  }
+)

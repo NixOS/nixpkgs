@@ -36,5 +36,6 @@ buildPythonPackage rec {
     '';
     changelog = "https://github.com/netinvent/command_runner/releases/tag/${src.tag}";
     license = lib.licenses.bsd3;
+    hasNoMaintainersButDependents = true;
   };
 }

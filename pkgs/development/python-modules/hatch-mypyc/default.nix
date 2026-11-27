@@ -44,5 +44,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/ofek/hatch-mypyc";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

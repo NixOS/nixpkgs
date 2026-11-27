@@ -91,5 +91,6 @@ stdenv.mkDerivation (finalAttrs: {
       files.
     '';
     platforms = if withGui then lib.platforms.linux else lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

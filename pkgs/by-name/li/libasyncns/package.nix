@@ -28,5 +28,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "C library for Linux/Unix for executing name service queries asynchronously";
     license = lib.licenses.lgpl21;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

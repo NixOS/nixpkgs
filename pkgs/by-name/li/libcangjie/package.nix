@@ -41,5 +41,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     platforms = lib.platforms.all;
     mainProgram = "libcangjie-cli";
+    hasNoMaintainersButDependents = true;
   };
 })

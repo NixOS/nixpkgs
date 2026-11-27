@@ -36,5 +36,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/Airblader/xcb-util-xrm";
     license = lib.licenses.mit; # X11 variant
     platforms = with lib.platforms; unix;
+    hasNoMaintainersButDependents = true;
   };
 })

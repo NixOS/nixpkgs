@@ -76,5 +76,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix;
     pkgConfigModules = [ "iniparser" ];
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

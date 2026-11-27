@@ -87,5 +87,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "psl";
     platforms = lib.platforms.unix ++ lib.platforms.windows;
     pkgConfigModules = [ "libpsl" ];
+    hasNoMaintainersButDependents = true;
   };
 })

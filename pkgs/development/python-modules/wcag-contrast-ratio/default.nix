@@ -33,5 +33,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/gsnedders/wcag-contrast-ratio";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -30,5 +30,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/Ultimaker/CuraEngine";
     license = lib.licenses.agpl3Plus;
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

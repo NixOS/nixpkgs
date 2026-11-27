@@ -42,5 +42,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/GrahamDumpleton/wrapt/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd2;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

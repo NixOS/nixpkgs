@@ -71,5 +71,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/enthought/okonomiyaki/releases/tag/${src.tag}";
     maintainers = [ ];
     license = lib.licenses.bsd3;
+    hasNoMaintainersButDependents = true;
   };
 }

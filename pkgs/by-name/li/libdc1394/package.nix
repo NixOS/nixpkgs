@@ -29,5 +29,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     mainProgram = "dc1394_reset_bus";
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

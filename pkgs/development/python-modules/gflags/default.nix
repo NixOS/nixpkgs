@@ -30,5 +30,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/google/python-gflags";
     description = "Module for command line handling, similar to Google's gflags for C++";
     license = lib.licenses.bsd3;
+    hasNoMaintainersButDependents = true;
   };
 }

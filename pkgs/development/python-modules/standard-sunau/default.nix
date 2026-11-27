@@ -37,5 +37,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/youknowone/python-deadlib/tree/main/sunau";
     license = lib.licenses.psfl;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

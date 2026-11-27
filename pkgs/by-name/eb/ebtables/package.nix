@@ -47,5 +47,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://ebtables.sourceforge.net/";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

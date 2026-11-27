@@ -33,5 +33,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/omnilib/aiosqlite/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

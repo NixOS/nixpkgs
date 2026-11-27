@@ -61,5 +61,6 @@ buildPythonPackage rec {
       polygons.
     '';
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

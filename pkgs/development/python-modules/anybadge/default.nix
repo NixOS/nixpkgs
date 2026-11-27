@@ -55,5 +55,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/jongracecox/anybadge/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

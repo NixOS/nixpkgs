@@ -43,5 +43,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-sqlvirtualmachine_${version}/sdk/sql/azure-mgmt-sqlvirtualmachine/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

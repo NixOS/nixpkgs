@@ -94,5 +94,6 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux ++ lib.platforms.cygwin;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

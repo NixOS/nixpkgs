@@ -175,5 +175,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     maintainers = [ ];
     platforms = subtractLists systems.doubles.i686 systems.doubles.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

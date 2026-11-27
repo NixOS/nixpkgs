@@ -31,5 +31,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/stchris/untangle";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

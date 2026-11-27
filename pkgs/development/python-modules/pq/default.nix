@@ -23,5 +23,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/malthe/pq/";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

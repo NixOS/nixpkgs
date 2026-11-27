@@ -52,5 +52,6 @@ buildPythonPackage rec {
     homepage = "https://git.sr.ht/~bignose/changelog-chug";
     license = lib.licenses.agpl3Only;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

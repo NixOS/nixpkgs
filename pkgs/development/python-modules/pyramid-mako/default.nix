@@ -38,5 +38,6 @@ buildPythonPackage rec {
     description = "Mako template bindings for the Pyramid web framework";
     license = lib.licenses.bsd0;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

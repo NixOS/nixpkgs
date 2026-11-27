@@ -91,5 +91,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     maintainers = [ ];
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })

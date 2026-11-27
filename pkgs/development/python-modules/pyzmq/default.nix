@@ -93,5 +93,6 @@ buildPythonPackage (finalAttrs: {
         lgpl3Only
       ];
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -31,5 +31,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     mainProgram = "smfsh";
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

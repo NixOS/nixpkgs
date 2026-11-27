@@ -11,11 +11,16 @@
   version,
   sha256,
   vendorHash,
-}:
+  meta ? { },
+}@args:
 
+let
+  _meta = meta;
+in
 buildGoModule rec {
   pname = "linkerd-${channel}";
   inherit version vendorHash;
+  pos = builtins.unsafeGetAttrPos "channel" args;
 
   src = fetchFromGitHub {
     owner = "linkerd";
@@ -70,5 +75,6 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = [
     ];
-  };
+  }
+  // _meta;
 }

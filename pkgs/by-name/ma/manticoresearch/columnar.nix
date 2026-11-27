@@ -40,6 +40,7 @@ let
       homepage = "https://github.com/nmslib/hnswlib";
       license = lib.licenses.asl20;
       platforms = lib.platforms.all;
+      hasNoMaintainersButDependents = true;
     };
   });
   pgm-index = stdenv.mkDerivation (finalAttrs: {
@@ -64,6 +65,7 @@ let
       homepage = "https://github.com/gvinciguerra/PGM-index";
       license = lib.licenses.asl20;
       platforms = lib.platforms.all;
+      hasNoMaintainersButDependents = true;
     };
   });
   streamvbyte = stdenv.mkDerivation (finalAttrs: {
@@ -90,6 +92,7 @@ let
       homepage = "https://github.com/manticoresoftware/streamvbyte/";
       license = lib.licenses.asl20;
       platforms = lib.platforms.all;
+      hasNoMaintainersButDependents = true;
     };
   });
   fastpfor = stdenv.mkDerivation (finalAttrs: {
@@ -128,6 +131,7 @@ let
       homepage = "https://github.com/manticoresoftware/FastPFor/";
       license = lib.licenses.asl20;
       platforms = lib.platforms.all;
+      hasNoMaintainersButDependents = true;
     };
   });
 in
@@ -168,5 +172,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Manticore Columnar Library - columnar storage and secondary indexes library for Manticore Search";
     homepage = "https://github.com/manticoresoftware/columnar";
     license = lib.licenses.asl20;
+    hasNoMaintainersButDependents = true;
   };
 })

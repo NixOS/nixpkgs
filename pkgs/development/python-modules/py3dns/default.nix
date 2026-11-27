@@ -23,5 +23,6 @@ buildPythonPackage (finalAttrs: {
     description = "Python 3 DNS library";
     homepage = "https://launchpad.net/py3dns";
     license = lib.licenses.psfl;
+    hasNoMaintainersButDependents = true;
   };
 })

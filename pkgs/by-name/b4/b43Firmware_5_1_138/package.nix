@@ -25,5 +25,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://wireless.wiki.kernel.org/en/users/drivers/b43";
     license = lib.licenses.unfree;
     sourceProvenance = with lib.sourceTypes; [ binaryFirmware ];
+    hasNoMaintainersButDependents = true;
   };
 })

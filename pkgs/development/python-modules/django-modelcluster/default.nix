@@ -54,5 +54,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/torchbox/django-modelcluster/";
     changelog = "https://github.com/wagtail/django-modelcluster/blob/${src.tag}/CHANGELOG.txt";
     license = lib.licenses.bsd2;
+    hasNoMaintainersButDependents = true;
   };
 }

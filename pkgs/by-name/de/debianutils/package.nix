@@ -51,5 +51,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "ischroot";
     maintainers = [ ];
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })

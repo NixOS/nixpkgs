@@ -40,5 +40,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/ultrafunkamsterdam/undetected-chromedriver";
     mainProgram = "undetected-chromedriver";
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

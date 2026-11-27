@@ -32,5 +32,6 @@ buildPythonPackage rec {
     description = "Better living through Python with decorators";
     license = lib.licenses.bsd2;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

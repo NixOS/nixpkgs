@@ -79,5 +79,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     platforms = lib.platforms.unix ++ lib.platforms.windows;
     pkgConfigModules = [ "libnick" ];
+    hasNoMaintainersButDependents = true;
   };
 })

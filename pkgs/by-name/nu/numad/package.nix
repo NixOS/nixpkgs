@@ -37,5 +37,6 @@ stdenv.mkDerivation {
     license = lib.licenses.lgpl21;
     platforms = lib.platforms.linux;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

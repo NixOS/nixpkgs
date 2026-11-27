@@ -32,5 +32,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jketterl/pycsdr";
     description = "Bindings for the csdr library";
     license = lib.licenses.gpl3Only;
+    hasNoMaintainersButDependents = true;
   };
 }

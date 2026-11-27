@@ -80,5 +80,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     platforms = lib.platforms.unix;
     mainProgram = "pstoedit";
+    hasNoMaintainersButDependents = true;
   };
 })

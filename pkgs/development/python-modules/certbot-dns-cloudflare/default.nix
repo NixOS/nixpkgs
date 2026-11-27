@@ -33,6 +33,7 @@ buildPythonPackage rec {
   ];
 
   meta = certbot.meta // {
+    hasNoMaintainersButDependents = false;
     description = "Cloudflare DNS Authenticator plugin for Certbot";
   };
 }

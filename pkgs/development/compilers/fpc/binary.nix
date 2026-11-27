@@ -51,5 +51,6 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Free Pascal Compiler from a binary distribution";
+    hasNoMaintainersButDependents = true;
   };
 }

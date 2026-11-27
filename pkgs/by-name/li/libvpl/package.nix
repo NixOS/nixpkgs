@@ -41,5 +41,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://intel.github.io/libvpl/";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

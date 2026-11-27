@@ -41,5 +41,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/CourtBouillon/tinyhtml5";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

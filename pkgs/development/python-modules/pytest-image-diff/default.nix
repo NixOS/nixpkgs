@@ -39,5 +39,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Apkawa/pytest-image-diff";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

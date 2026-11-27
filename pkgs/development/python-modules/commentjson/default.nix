@@ -41,5 +41,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/vaidik/commentjson/";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

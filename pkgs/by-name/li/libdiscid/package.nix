@@ -50,5 +50,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl21;
     platforms = lib.platforms.all;
     pkgConfigModules = [ "libdiscid" ];
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -30,5 +30,6 @@ buildNpmPackage (finalAttrs: {
     homepage = "https://github.com/josa42/coc-sh";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -77,5 +77,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     homepage = "https://plib.sourceforge.net/";
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

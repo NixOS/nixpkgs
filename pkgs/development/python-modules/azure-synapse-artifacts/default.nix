@@ -40,5 +40,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-synapse-artifacts_${finalAttrs.version}/sdk/synapse/azure-synapse-artifacts/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

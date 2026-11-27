@@ -23,5 +23,6 @@ buildGoModule rec {
     homepage = "https://github.com/wi1dcard/v2ray-exporter";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

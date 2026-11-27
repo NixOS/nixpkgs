@@ -61,5 +61,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl21Only;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

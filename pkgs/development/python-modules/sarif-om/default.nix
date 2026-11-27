@@ -31,5 +31,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/microsoft/sarif-python-om";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

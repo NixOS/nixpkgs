@@ -42,5 +42,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/sqlobject/sqlobject/blob/${src.tag}/docs/News.rst";
     license = lib.licenses.lgpl21Only;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

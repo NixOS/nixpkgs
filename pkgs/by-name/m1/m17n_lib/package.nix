@@ -43,5 +43,6 @@ stdenv.mkDerivation (finalAttrs: {
       "m17n-gui"
       "m17n-shell"
     ];
+    hasNoMaintainersButDependents = true;
   };
 })

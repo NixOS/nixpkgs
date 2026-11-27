@@ -42,5 +42,6 @@ buildPythonPackage rec {
     mainProgram = "waitress-serve";
     license = lib.licenses.zpl21;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

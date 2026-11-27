@@ -80,5 +80,6 @@ stdenv.mkDerivation (finalAttrs: {
     # BE platforms are unsupported
     # https://gitlab.freedesktop.org/pulseaudio/webrtc-audio-processing/-/issues/31
     badPlatforms = lib.platforms.bigEndian;
+    hasNoMaintainersButDependents = true;
   };
 })

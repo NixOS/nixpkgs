@@ -62,5 +62,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.gpl3;
     maintainers = [ ];
     mainProgram = "bukubrow";
+    hasNoMaintainersButDependents = true;
   };
 })

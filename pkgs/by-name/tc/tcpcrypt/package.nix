@@ -49,5 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Fast TCP encryption";
     platforms = lib.platforms.all;
     license = lib.licenses.bsd2;
+    hasNoMaintainersButDependents = true;
   };
 })

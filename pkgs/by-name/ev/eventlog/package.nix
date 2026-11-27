@@ -31,5 +31,6 @@ stdenv.mkDerivation {
     homepage = "https://www.balabit.com/support/community/products/";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 }

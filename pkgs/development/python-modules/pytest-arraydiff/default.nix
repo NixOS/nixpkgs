@@ -35,5 +35,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/astrofrog/pytest-arraydiff";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

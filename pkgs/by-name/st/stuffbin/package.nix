@@ -27,6 +27,7 @@ buildGo126Module (finalAttrs: {
     homepage = "https://github.com/knadh/stuffbin";
     changelog = "https://github.com/knadh/stuffbin/releases/tag/v${finalAttrs.version}";
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
     license = lib.licenses.mit;
   };
 })

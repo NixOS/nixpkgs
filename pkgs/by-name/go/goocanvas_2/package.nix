@@ -76,5 +76,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl2;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

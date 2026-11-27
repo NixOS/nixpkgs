@@ -6,5 +6,8 @@ python3Packages.toPythonApplication (
       python3Packages.boto3
       python3Packages.mysqlclient
     ];
+    meta = old.meta // {
+      hasNoMaintainersButDependents = false;
+    };
   })
 )

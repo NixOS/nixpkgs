@@ -58,5 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "xhost";
     maintainers = [ ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

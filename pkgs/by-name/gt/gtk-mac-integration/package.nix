@@ -42,5 +42,6 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.gnome.org/GNOME/gtk-mac-integration";
     maintainers = [ ];
     platforms = lib.platforms.darwin;
+    hasNoMaintainersButDependents = true;
   };
 }

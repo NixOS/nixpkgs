@@ -35,5 +35,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/smira/txZMQ";
     license = lib.licenses.mpl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

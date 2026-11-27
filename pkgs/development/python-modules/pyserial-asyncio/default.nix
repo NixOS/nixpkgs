@@ -26,5 +26,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pyserial/pyserial-asyncio";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

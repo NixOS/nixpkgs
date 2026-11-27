@@ -39,5 +39,6 @@ buildGoModule (finalAttrs: {
     mainProgram = "grafana-reporter";
     homepage = "https://github.com/IzakMarais/reporter";
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 })

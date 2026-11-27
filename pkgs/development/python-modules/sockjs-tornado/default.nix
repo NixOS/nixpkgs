@@ -22,5 +22,6 @@ buildPythonPackage rec {
     description = "SockJS python server implementation on top of Tornado framework";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

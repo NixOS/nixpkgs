@@ -94,5 +94,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "xmlto";
     maintainers = [ ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

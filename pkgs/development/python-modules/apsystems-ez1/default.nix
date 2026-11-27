@@ -37,5 +37,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/SonnenladenGmbH/APsystems-EZ1-API";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

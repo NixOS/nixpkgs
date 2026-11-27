@@ -37,5 +37,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "frame-test-x11";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

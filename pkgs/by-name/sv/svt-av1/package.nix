@@ -61,5 +61,6 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     mainProgram = "SvtAv1EncApp";
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

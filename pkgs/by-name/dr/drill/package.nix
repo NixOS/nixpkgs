@@ -38,5 +38,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/fcsonline/drill";
     license = lib.licenses.gpl3Only;
     mainProgram = "drill";
+    hasNoMaintainersButDependents = true;
   };
 })

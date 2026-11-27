@@ -50,5 +50,6 @@ buildPythonPackage (finalAttrs: {
     mainProgram = "dot2tex";
     homepage = "https://github.com/kjellmf/dot2tex";
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 })

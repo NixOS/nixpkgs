@@ -45,5 +45,6 @@ stdenv.mkDerivation {
     maintainers = [ ];
     platforms = lib.platforms.linux;
     mainProgram = "cnping";
+    hasNoMaintainersButDependents = true;
   };
 }

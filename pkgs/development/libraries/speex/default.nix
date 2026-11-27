@@ -46,5 +46,6 @@ stdenv.mkDerivation rec {
     description = "Open Source/Free Software patent-free audio compression format designed for speech";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix ++ lib.platforms.windows;
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -30,5 +30,6 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl3;
     mainProgram = "todo.sh";
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -53,5 +53,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://codeberg.org/PassFF/passff-host";
     license = lib.licenses.gpl2Only;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -49,5 +49,6 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "goose";
+    hasNoMaintainersButDependents = true;
   };
 })

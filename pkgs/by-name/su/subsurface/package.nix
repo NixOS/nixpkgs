@@ -100,6 +100,7 @@ let
       inherit (src.meta) homepage;
       description = "QtLocation plugin for Google maps tile API";
       maintainers = [ ];
+      hasNoMaintainersButDependents = true;
       license = lib.licenses.mit;
       platforms = lib.platforms.all;
     };

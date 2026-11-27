@@ -44,5 +44,6 @@ stdenv.mkDerivation (finalAttrs: {
       hpnd
     ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

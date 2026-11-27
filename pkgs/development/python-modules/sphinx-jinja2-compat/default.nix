@@ -43,5 +43,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/sphinx-toolbox/sphinx-jinja2-compat";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -49,5 +49,6 @@ stdenv.mkDerivation {
       asl20
     ];
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

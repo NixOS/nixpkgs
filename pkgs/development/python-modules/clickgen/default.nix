@@ -56,5 +56,6 @@ buildPythonPackage (finalAttrs: {
     # fails with:
     # ld: unknown option: -zdefs
     broken = stdenv.hostPlatform.isDarwin;
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -60,5 +60,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Library and command line tool to personalize YubiKeys";
     license = lib.licenses.bsd2;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

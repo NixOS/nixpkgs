@@ -52,5 +52,6 @@ rustPlatform.buildRustPackage rec {
     ];
     platforms = lib.platforms.unix;
     mainProgram = "bandwhich";
+    hasNoMaintainersButDependents = true;
   };
 }

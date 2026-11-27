@@ -31,5 +31,6 @@ buildDunePackage (finalAttrs: {
       gpl3
     ];
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

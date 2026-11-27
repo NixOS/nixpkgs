@@ -55,5 +55,6 @@ stdenv.mkDerivation {
     maintainers = [ ];
     mainProgram = "irkerd";
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -29,5 +29,6 @@ buildPythonPackage rec {
     mainProgram = "pygtail";
     license = lib.licenses.gpl2Plus;
     homepage = "https://github.com/bgreenlee/pygtail";
+    hasNoMaintainersButDependents = true;
   };
 }

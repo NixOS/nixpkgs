@@ -56,5 +56,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/maximdanilchenko/aiohttp-apispec/";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

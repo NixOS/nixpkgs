@@ -46,5 +46,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ novalkun ];
     mainProgram = "microbin";
+    hasNoMaintainersButDependents = true;
   };
 })

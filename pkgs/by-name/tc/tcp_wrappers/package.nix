@@ -80,5 +80,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "ftp://ftp.porcupine.org/pub/security/index.html";
     license = lib.licenses.tcpWrappers;
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -41,5 +41,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/mariadb-corporation/mariadb-connector-python";
     license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

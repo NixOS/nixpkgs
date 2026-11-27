@@ -69,5 +69,6 @@ stdenv.mkDerivation (finalAttrs: {
         ++ lib.platforms.riscv64
         ++ lib.platforms.power
       ) lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

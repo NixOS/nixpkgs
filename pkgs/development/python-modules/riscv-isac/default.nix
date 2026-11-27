@@ -53,5 +53,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/riscvarchive/riscv-isac/blob/${version}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -35,5 +35,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/hvac/hvac/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

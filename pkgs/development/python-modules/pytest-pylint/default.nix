@@ -54,5 +54,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/carsongee/pytest-pylint";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

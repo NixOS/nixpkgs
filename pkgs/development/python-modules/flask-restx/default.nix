@@ -109,5 +109,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/python-restx/flask-restx/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

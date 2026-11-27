@@ -55,5 +55,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "xcompmgr";
     maintainers = [ ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

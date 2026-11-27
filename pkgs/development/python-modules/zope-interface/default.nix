@@ -31,5 +31,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/zopefoundation/zope.interface";
     license = lib.licenses.zpl21;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

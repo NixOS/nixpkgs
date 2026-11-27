@@ -59,5 +59,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.cecill20;
     maintainers = [ ];
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

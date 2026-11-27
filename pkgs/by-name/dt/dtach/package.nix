@@ -52,5 +52,6 @@ stdenv.mkDerivation (finalAttrs: {
       yiyu
     ];
     mainProgram = "dtach";
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -57,5 +57,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "lndir";
     maintainers = [ ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

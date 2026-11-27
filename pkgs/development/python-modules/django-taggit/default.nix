@@ -42,5 +42,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jazzband/django-taggit";
     changelog = "https://github.com/jazzband/django-taggit/blob/${version}/CHANGELOG.rst";
     license = lib.licenses.bsd3;
+    hasNoMaintainersButDependents = true;
   };
 }

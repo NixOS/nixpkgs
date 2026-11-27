@@ -42,5 +42,6 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/rancher/cli";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

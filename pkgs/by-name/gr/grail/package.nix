@@ -42,5 +42,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Gesture Recognition And Instantiation Library";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

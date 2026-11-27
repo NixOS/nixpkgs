@@ -41,5 +41,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/cjrh/aiorun/blob/v${version}/CHANGES";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

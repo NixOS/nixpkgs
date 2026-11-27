@@ -92,5 +92,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     platforms = lib.platforms.unix;
     pkgConfigModules = [ "epoxy" ];
+    hasNoMaintainersButDependents = true;
   };
 })

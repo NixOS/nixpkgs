@@ -70,5 +70,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/python-trio/trio-websocket";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

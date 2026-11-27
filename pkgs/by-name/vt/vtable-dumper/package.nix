@@ -25,5 +25,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "vtable-dumper";
     license = lib.licenses.lgpl21;
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -112,6 +112,7 @@ let
         meta = {
           description = "ValidSDP";
           license = lib.licenses.lgpl21Plus;
+          hasNoMaintainersButDependents = true;
         };
 
         passthru = lib.mapAttrs (package: deps: validsdp_ package) packages;

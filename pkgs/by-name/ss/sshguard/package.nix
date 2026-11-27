@@ -49,5 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ kamadorueda ];
     platforms = with lib.platforms; linux ++ darwin ++ freebsd ++ netbsd ++ openbsd;
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -61,5 +61,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/davidhalter/jedi";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

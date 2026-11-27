@@ -31,5 +31,6 @@ buildPythonPackage (finalAttrs: {
     description = "High-level interface to Kerberos";
     homepage = "https://github.com/02strich/pykerberos";
     license = lib.licenses.asl20;
+    hasNoMaintainersButDependents = true;
   };
 })

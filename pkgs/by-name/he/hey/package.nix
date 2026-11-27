@@ -22,5 +22,6 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/rakyll/hey";
     license = lib.licenses.asl20;
     mainProgram = "hey";
+    hasNoMaintainersButDependents = true;
   };
 })

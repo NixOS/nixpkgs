@@ -81,5 +81,6 @@
     maintainers = [ ];
     pkgConfigModules = [ "libpqxx" ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -73,5 +73,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "cron";
     maintainers = [ ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

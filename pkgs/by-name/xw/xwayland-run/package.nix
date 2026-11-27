@@ -91,5 +91,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     license = lib.licenses.gpl2Only;
     maintainers = [ ];
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

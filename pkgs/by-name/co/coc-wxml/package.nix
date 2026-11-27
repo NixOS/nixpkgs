@@ -47,5 +47,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://github.com/neoclide/coc-wxml";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

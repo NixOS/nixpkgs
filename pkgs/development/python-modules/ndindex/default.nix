@@ -79,5 +79,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/Quansight-Labs/ndindex/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

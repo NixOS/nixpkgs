@@ -66,5 +66,6 @@ stdenv.mkDerivation (finalAttrs: {
     pkgConfigModules = [ "libzip" ];
     platforms = lib.platforms.unix;
     changelog = "https://github.com/nih-at/libzip/blob/v${finalAttrs.version}/NEWS.md";
+    hasNoMaintainersButDependents = true;
   };
 })

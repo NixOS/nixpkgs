@@ -57,5 +57,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/mozilla/PyFxA";
     license = lib.licenses.mpl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

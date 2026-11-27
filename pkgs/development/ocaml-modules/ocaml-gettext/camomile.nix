@@ -19,6 +19,7 @@ buildDunePackage {
   checkInputs = [ ounit2 ];
 
   meta = (removeAttrs ocaml_gettext.meta [ "mainProgram" ]) // {
+    hasNoMaintainersButDependents = false;
     description = "Internationalization library using camomile (i18n)";
   };
 

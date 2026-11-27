@@ -44,5 +44,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.pjrc.com/teensy/";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

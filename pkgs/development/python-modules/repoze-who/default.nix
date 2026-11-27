@@ -43,5 +43,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/repoze/repoze.who/blob/${version}/CHANGES.rst";
     license = lib.licenses.bsd0;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

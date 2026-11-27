@@ -40,5 +40,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/kumar303/mohawk";
     license = lib.licenses.mpl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

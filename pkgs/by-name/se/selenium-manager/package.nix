@@ -43,5 +43,6 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ ];
     mainProgram = "selenium-manager";
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 }

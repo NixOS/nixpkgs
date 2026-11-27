@@ -39,5 +39,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
     platforms = guile.meta.platforms;
+    hasNoMaintainersButDependents = true;
   };
 })

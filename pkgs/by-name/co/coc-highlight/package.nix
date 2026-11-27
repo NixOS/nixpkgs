@@ -41,5 +41,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://github.com/neoclide/coc-highlight";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

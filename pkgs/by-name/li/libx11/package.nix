@@ -94,5 +94,6 @@ stdenv.mkDerivation (finalAttrs: {
       "x11-xcb"
     ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

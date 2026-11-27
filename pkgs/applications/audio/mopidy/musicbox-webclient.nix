@@ -33,5 +33,6 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     changelog = "https://github.com/pimusicbox/mopidy-musicbox-webclient/blob/v${finalAttrs.version}/CHANGELOG.rst";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

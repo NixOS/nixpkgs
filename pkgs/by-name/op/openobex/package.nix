@@ -50,5 +50,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
     license = lib.licenses.lgpl2Plus;
     mainProgram = "obex-check-device";
+    hasNoMaintainersButDependents = true;
   };
 })

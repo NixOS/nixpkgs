@@ -31,5 +31,6 @@ buildPythonPackage rec {
     homepage = "https://pypi.org/project/microsoft-security-utilities-secret-masker/";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

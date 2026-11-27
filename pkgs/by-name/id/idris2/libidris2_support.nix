@@ -30,4 +30,5 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta.description = "Runtime library for Idris2";
+  meta.hasNoMaintainersButDependents = true;
 })

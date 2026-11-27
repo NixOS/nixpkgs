@@ -67,6 +67,7 @@ let
       mainProgram = "jupyter-execute";
       license = lib.licenses.bsd3;
       maintainers = [ ];
+      hasNoMaintainersButDependents = true;
     };
   };
 in

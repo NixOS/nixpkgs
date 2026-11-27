@@ -32,5 +32,6 @@ buildPythonPackage (finalAttrs: {
     description = "Ordered Multivalue Dictionary";
     homepage = "https://github.com/gruns/orderedmultidict";
     license = lib.licenses.unlicense;
+    hasNoMaintainersButDependents = true;
   };
 })

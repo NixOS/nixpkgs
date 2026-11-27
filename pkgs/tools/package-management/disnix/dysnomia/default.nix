@@ -104,5 +104,6 @@ stdenv.mkDerivation rec {
     description = "Automated deployment of mutable components and services for Disnix";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 }

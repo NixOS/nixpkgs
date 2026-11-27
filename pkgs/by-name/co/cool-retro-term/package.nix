@@ -58,5 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = with lib.platforms; linux ++ darwin;
     maintainers = [ ];
     mainProgram = "cool-retro-term";
+    hasNoMaintainersButDependents = true;
   };
 })

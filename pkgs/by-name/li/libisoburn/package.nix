@@ -76,5 +76,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ ccicnce113424 ];
     mainProgram = "xorriso";
     inherit (libisofs.meta) platforms;
+    hasNoMaintainersButDependents = true;
   };
 })

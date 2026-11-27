@@ -35,5 +35,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/enthought/traitsui/releases/tag/${version}";
     license = lib.licenses.bsdOriginal;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

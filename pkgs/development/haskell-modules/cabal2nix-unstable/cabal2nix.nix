@@ -107,4 +107,5 @@ mkDerivation {
   homepage = "https://github.com/nixos/cabal2nix#readme";
   description = "Convert Cabal files into Nix build instructions";
   license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
+  hasNoMaintainersButDependents = true;
 }

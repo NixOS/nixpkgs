@@ -34,5 +34,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "stdlogctl";
     license = lib.licenses.bsd2;
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })

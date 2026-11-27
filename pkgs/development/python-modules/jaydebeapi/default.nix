@@ -22,5 +22,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/baztian/jaydebeapi";
     license = lib.licenses.lgpl2;
     description = "Use JDBC database drivers from Python 2/3 or Jython with a DB-API";
+    hasNoMaintainersButDependents = true;
   };
 }

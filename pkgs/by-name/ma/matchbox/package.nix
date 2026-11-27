@@ -41,5 +41,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.yoctoproject.org/software-item/matchbox/";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

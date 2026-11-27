@@ -45,5 +45,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/keeprocking/pygelf";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

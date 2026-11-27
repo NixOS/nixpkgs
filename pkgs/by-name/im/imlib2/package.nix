@@ -125,5 +125,6 @@ stdenv.mkDerivation (finalAttrs: {
     pkgConfigModules = [ "imlib2" ];
     platforms = lib.platforms.unix;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

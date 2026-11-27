@@ -30,5 +30,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://troydhanson.github.io/uthash";
     license = lib.licenses.bsd2; # it's one-clause, actually, as it's source-only
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })

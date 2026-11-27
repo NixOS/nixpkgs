@@ -78,5 +78,6 @@ stdenv.mkDerivation (finalAttrs: {
     pkgConfigModules = [
       "ofono"
     ];
+    hasNoMaintainersButDependents = true;
   };
 })

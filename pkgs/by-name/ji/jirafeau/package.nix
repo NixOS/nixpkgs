@@ -37,5 +37,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.com/jirafeau/Jirafeau";
     platforms = lib.platforms.all;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

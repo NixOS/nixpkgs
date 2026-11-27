@@ -40,6 +40,7 @@ runCommand "${pname}-${version}"
       homepage = "https://postgrey.schweikert.ch/";
       platforms = postfix.meta.platforms;
       license = lib.licenses.gpl2Plus;
+      hasNoMaintainersButDependents = true;
     };
   }
   ''

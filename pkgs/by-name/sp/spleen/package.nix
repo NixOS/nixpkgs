@@ -37,5 +37,6 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://www.cambus.net/spleen-monospaced-bitmap-fonts";
     license = lib.licenses.bsd2;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

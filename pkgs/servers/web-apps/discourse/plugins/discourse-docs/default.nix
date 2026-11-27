@@ -16,5 +16,6 @@ mkDiscoursePlugin {
     homepage = "https://github.com/discourse/discourse-docs";
     license = lib.licenses.mit;
     description = "Find and filter knowledge base topics";
+    hasNoMaintainersButDependents = true;
   };
 }

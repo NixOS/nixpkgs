@@ -74,5 +74,6 @@ buildPythonPackage rec {
     homepage = "https://joblib.readthedocs.io/";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

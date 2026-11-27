@@ -34,5 +34,6 @@ buildPythonPackage rec {
 
   meta = certbot.meta // {
     description = "OVH DNS Authenticator plugin for Certbot";
+    hasNoMaintainersButDependents = true;
   };
 }
