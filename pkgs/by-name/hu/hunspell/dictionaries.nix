@@ -11,10 +11,7 @@
   bash,
   which,
   zip,
-  ispell,
-  perl,
   python3,
-  hunspell,
   symlinkJoin,
 }:
 
@@ -298,54 +295,6 @@ let
       };
     };
 
-  mkDictFromJ3e =
-    {
-      shortName,
-      shortDescription,
-      dictFileName,
-    }:
-    stdenv.mkDerivation rec {
-      pname = "hunspell-dict-${shortName}-j3e";
-      version = "20161207";
-
-      src = fetchurl {
-        url = "https://j3e.de/ispell/igerman98/dict/igerman98-${version}.tar.bz2";
-        sha256 = "1a3055hp2bc4q4nlg3gmg0147p3a1zlfnc65xiv2v9pyql1nya8p";
-      };
-
-      nativeBuildInputs = [
-        ispell
-        perl
-        hunspell
-      ];
-
-      dontBuild = true;
-
-      installPhase = ''
-        patchShebangs bin
-        make hunspell/${dictFileName}.aff hunspell/${dictFileName}.dic
-        # hunspell dicts
-        install -dm755 "$out/share/hunspell"
-        install -m644 hunspell/${dictFileName}.dic "$out/share/hunspell/"
-        install -m644 hunspell/${dictFileName}.aff "$out/share/hunspell/"
-        # myspell dicts symlinks
-        install -dm755 "$out/share/myspell/dicts"
-        ln -sv "$out/share/hunspell/${dictFileName}.dic" "$out/share/myspell/dicts/"
-        ln -sv "$out/share/hunspell/${dictFileName}.aff" "$out/share/myspell/dicts/"
-      '';
-
-      meta = {
-        homepage = "https://www.j3e.de/ispell/igerman98/index_en.html";
-        description = shortDescription;
-        license = with lib.licenses; [
-          gpl2
-          gpl3
-        ];
-        maintainers = with lib.maintainers; [ timor ];
-        platforms = lib.platforms.all;
-      };
-    };
-
   mkDictFromLibreOffice =
     {
       shortName,
@@ -354,6 +303,8 @@ let
       license,
       readmeFile ? "README_${dictFileName}.txt",
       sourceRoot ? dictFileName,
+      srcFileName ? dictFileName,
+      maintainers ? [ lib.maintainers.vlaci ],
     }:
     mkDict rec {
       pname = "hunspell-dict-${shortName}-libreoffice";
@@ -368,11 +319,15 @@ let
       buildPhase = ''
         cp -a ${sourceRoot}/* .
       '';
+      preInstall = lib.optionalString (srcFileName != dictFileName) ''
+        mv ${srcFileName}.dic ${dictFileName}.dic
+        mv ${srcFileName}.aff ${dictFileName}.aff
+      '';
       meta = {
         homepage = "https://wiki.documentfoundation.org/Development/Dictionaries";
         description = "Hunspell dictionary for ${shortDescription} from LibreOffice";
         license = license;
-        maintainers = with lib.maintainers; [ vlaci ];
+        inherit maintainers;
         platforms = lib.platforms.all;
       };
     };
@@ -783,24 +738,57 @@ let
     # GERMAN
 
     de_DE = de-de;
-    de-de = mkDictFromJ3e {
+    de-de = mkDictFromLibreOffice {
       shortName = "de-de";
-      shortDescription = "German (Germany)";
       dictFileName = "de_DE";
+      srcFileName = "de_DE_frami";
+      shortDescription = "German (Germany)";
+      readmeFile = "README_de_DE_frami.txt";
+      sourceRoot = "de";
+      license = with lib.licenses; [
+        gpl2
+        gpl3
+      ];
+      maintainers = with lib.maintainers; [
+        nivalux
+        timor
+      ];
     };
 
     de_AT = de-at;
-    de-at = mkDictFromJ3e {
+    de-at = mkDictFromLibreOffice {
       shortName = "de-at";
-      shortDescription = "German (Austria)";
       dictFileName = "de_AT";
+      srcFileName = "de_AT_frami";
+      shortDescription = "German (Austria)";
+      readmeFile = "README_de_DE_frami.txt";
+      sourceRoot = "de";
+      license = with lib.licenses; [
+        gpl2
+        gpl3
+      ];
+      maintainers = with lib.maintainers; [
+        nivalux
+        timor
+      ];
     };
 
     de_CH = de-ch;
-    de-ch = mkDictFromJ3e {
+    de-ch = mkDictFromLibreOffice {
       shortName = "de-ch";
-      shortDescription = "German (Switzerland)";
       dictFileName = "de_CH";
+      srcFileName = "de_CH_frami";
+      shortDescription = "German (Switzerland)";
+      readmeFile = "README_de_DE_frami.txt";
+      sourceRoot = "de";
+      license = with lib.licenses; [
+        gpl2
+        gpl3
+      ];
+      maintainers = with lib.maintainers; [
+        nivalux
+        timor
+      ];
     };
 
     # UKRAINIAN
