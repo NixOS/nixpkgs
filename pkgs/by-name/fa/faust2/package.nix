@@ -19,6 +19,7 @@
   which,
   ncurses,
   fetchpatch,
+  nix-update-script,
 }:
 
 let
@@ -75,7 +76,16 @@ let
         libxml2
       ];
 
-      passthru = { inherit wrap wrapWithBuildEnv faust2ApplBase; };
+      passthru = {
+        inherit wrap wrapWithBuildEnv faust2ApplBase;
+        updateScript = nix-update-script {
+          # Only match tags formatted as x.y.z (e.g., 1.2.3)
+          extraArgs = [
+            "--version-regex"
+            "^([0-9]+\\.[0-9]+\\.[0-9]+)$"
+          ];
+        };
+      };
 
       preConfigure = ''
         # include llvm-config in path
