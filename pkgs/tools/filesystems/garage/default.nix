@@ -124,9 +124,9 @@ rec {
   };
 
   garage_2 = generic {
-    version = "2.5.0";
-    hash = "sha256-5jWgH+hi0Ouqszapw00KOBHFjxlV/y4T7IB22IRaEHE=";
-    cargoHash = "sha256-xk1lMNnGp4qWK7BvgdUKIvc+cR5HDw0GFfV6q64yMso=";
+    version = "2.6.0";
+    hash = "sha256-Tabc1LHCY5vAmRba5YsOPh+bKhU+Xn8Fc3LUdVgIuFE=";
+    cargoHash = "sha256-CHOpkA4JZX9ZxLScKW3XsGVp4zFBXHFXmUFcY07tRJg=";
   };
 
   garage = garage_1;

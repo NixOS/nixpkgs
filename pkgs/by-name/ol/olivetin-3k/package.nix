@@ -120,13 +120,9 @@ buildGoModule (finalAttrs: {
   doInstallCheck = true;
 
   passthru = {
-    tests.olivetin = nixosTests.olivetin.extendNixOS {
-      module = {
-        services.olivetin.package = finalAttrs.finalPackage;
-      };
-    };
+    tests = { inherit (nixosTests) olivetin; };
     releaseSeries = "3k";
-    updateScript = ./update-3k.sh;
+    updateScript = ./update.sh;
   };
 
   meta = {
