@@ -5,19 +5,12 @@
 }:
 
 let
-  # Remove when haskellPackages is on GHC 9.12
+  # TODO: Remove when `haskellPackages` is on GHC 9.12
   haskellPackages = haskell.packages.ghc912;
 
-  concurrent-output-fork = haskellPackages.concurrent-output.overrideAttrs (_: {
-    src = fetchFromGitHub {
-      owner = "brandonchinn178";
-      repo = "concurrent-output";
-      rev = "a40a4d16e7836b56a682779c1ac6882739ba6a9b";
-      hash = "sha256-tom9+n6VYTzhf4XlIsUlgZz4yfa8Pe45oSiiwEevrsI=";
-    };
-  });
-
-  hooky =
+  # TODO: Remove when hackage2nix is regenerated and `haskellPackages`
+  # contains `hooky`
+  hookyDrv =
     { mkDerivation }:
     mkDerivation {
       pname = "hooky";
@@ -36,7 +29,7 @@ let
         base
         ansi-terminal
         bytestring
-        concurrent-output-fork
+        concurrent-output
         containers
         deepseq
         directory
@@ -80,6 +73,25 @@ let
       license = lib.licenses.bsd3;
       mainProgram = "hooky";
     };
+
+  haskellPackagesForHooky = haskellPackages.extend (
+    final: prev: {
+      hooky = final.callPackage hookyDrv { };
+      concurrent-output =
+        let
+          rev = "a40a4d16e7836b56a682779c1ac6882739ba6a9b";
+        in
+        haskell.lib.compose.overrideSrc {
+          version = "${prev.concurrent-output.version}-fork-${rev}";
+          src = fetchFromGitHub {
+            owner = "brandonchinn178";
+            repo = "concurrent-output";
+            inherit rev;
+            hash = "sha256-tom9+n6VYTzhf4XlIsUlgZz4yfa8Pe45oSiiwEevrsI=";
+          };
+        } prev.concurrent-output;
+    }
+  );
 in
 
-haskell.lib.compose.justStaticExecutables (haskellPackages.callPackage hooky { })
+haskell.lib.compose.justStaticExecutables haskellPackagesForHooky.hooky
