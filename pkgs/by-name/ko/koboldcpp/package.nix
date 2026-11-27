@@ -1,6 +1,5 @@
 {
   lib,
-  buildEnv,
   buildPackages,
   cacert,
   cloudflared,
@@ -65,34 +64,11 @@ let
     # list need not be sorted, then convert it to a Makefile flag value
     toString (10 * lib.foldl' lib.max 0 cudaArchitectures);
 
-  libraryPathWrapperArgs = lib.optionals (rocmSupport && stdenv.hostPlatform.isLinux) [
-    "--prefix"
-    "LD_LIBRARY_PATH"
-    ":"
-    "${rocmPath}/lib"
-    "--set-default"
-    "HIP_PATH"
-    "${rocmPath}"
-    "--set-default"
-    "ROCM_PATH"
-    "${rocmPath}"
-  ];
-
-  # The Makefile expects a single ROCM_PATH that provides hipconfig, hipcc,
-  # amdhip64, hipblas, and rocblas. clr ships hipconfig plus the HIP/LLVM
-  # compiler, but hipconfig is wrapped with ROCM_PATH=clr so `hipconfig -C`
-  # never emits hipblas/rocblas/hipblas-common include flags
-  rocmBuildInputs = with rocmPackages; [
-    clr
+  rocmBlasInputs = with rocmPackages; [
     hipblas
     hipblas-common
     rocblas
   ];
-
-  rocmPath = buildEnv {
-    name = "rocm-path";
-    paths = rocmBuildInputs;
-  };
 
   runtimePath = [
     cloudflared
@@ -115,8 +91,7 @@ let
     "--set-default"
     "SSL_CERT_FILE"
     "${cacert}/etc/ssl/certs/ca-bundle.crt"
-  ]
-  ++ libraryPathWrapperArgs;
+  ];
 
   libraries = [
     "koboldcpp_default"
@@ -259,7 +234,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
       cudaPackages.cuda_cudart
       cudaPackages.cccl
     ]
-    ++ lib.optionals rocmSupport rocmBuildInputs
+    ++ lib.optionals rocmSupport ([ rocmPackages.clr ] ++ rocmBlasInputs)
     ++ lib.optionals vulkanSupport [
       vulkan-loader
     ];
@@ -268,9 +243,8 @@ effectiveStdenv.mkDerivation (finalAttrs: {
 
   env =
     lib.optionalAttrs rocmSupport {
-      # Keep this as an environment variable so the Makefile can append
-      # its required HIP defines and hipconfig flags
-      HIPFLAGS = "-I${rocmPath}/include";
+      # hipconfig in clr provides HIP's own includes, not the BLAS headers
+      HIPFLAGS = lib.concatMapStringsSep " " (pkg: "-I${lib.getDev pkg}/include") rocmBlasInputs;
     }
     // lib.optionalAttrs vulkanSupport {
       # The shader generator prefers bundled glslc-linux when this is set
@@ -287,9 +261,17 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals rocmSupport [
       "LLAMA_HIPBLAS=1"
-      "ROCM_PATH=${rocmPath}"
-      "HCC=${rocmPath}/bin/hipcc"
-      "HCXX=${rocmPath}/bin/hipcc"
+      "ROCM_PATH=${rocmPackages.clr}"
+      "ROCM_LIB_PATH=${
+        lib.concatMapStringsSep " " (pkg: "${lib.getLib pkg}/lib") (
+          with rocmPackages;
+          [
+            clr
+            hipblas
+            rocblas
+          ]
+        )
+      }"
       "GPU_TARGETS=${builtins.concatStringsSep " " rocmGpuTargets}"
     ]
     ++ lib.optionals vulkanSupport [
