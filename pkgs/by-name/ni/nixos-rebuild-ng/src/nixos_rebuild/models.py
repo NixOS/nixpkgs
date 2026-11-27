@@ -85,6 +85,12 @@ class BuildAttr:
             return cls(Path("/etc/nixos/system.nix"), attr)
         return cls("<nixpkgs/nixos>", attr)
 
+    def resolved_path(self) -> str:
+        if isinstance(self.path, Path):
+            return f'"{self.path.resolve()}"'
+        else:
+            return self.path
+
 
 @dataclass(frozen=True)
 class Flake:

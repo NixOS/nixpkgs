@@ -391,7 +391,7 @@ def execute(argv: list[str]) -> None:
         logger.warning("'--upgrade(-all)' flag has no effect for flake-based systems")
 
     if can_run and not flake:
-        services.write_version_suffix(grouped_nix_args)
+        services.write_version_suffix(build_attr, grouped_nix_args)
 
     match action:
         case (
