@@ -109,6 +109,7 @@ stdenv.mkDerivation (finalAttrs: {
       toastal
       mirror230469
       SuperSandro2000
+      haansn08
     ];
   };
 })
