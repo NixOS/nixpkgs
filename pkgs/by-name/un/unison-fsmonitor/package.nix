@@ -4,14 +4,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "unison-fsmonitor";
   version = "0.3.9";
 
   src = fetchFromGitHub {
     owner = "autozimu";
     repo = "unison-fsmonitor";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-hMrfEKW4klzHF89UGI4NUwXE6/Yk/wsUXUxe7ZPy/b8=";
   };
 
@@ -30,4 +30,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.darwin;
     mainProgram = "unison-fsmonitor";
   };
-}
+})
