@@ -33518,6 +33518,12 @@
     githubId = 1108325;
     name = "Théo Zimmermann";
   };
+  zimtechmeister = {
+    name = "Tim Zechmeister";
+    email = "tim.zechmeister03@gmail.com";
+    github = "zimtechmeister";
+    githubId = 125199108;
+  };
   zimward = {
     name = "zimward";
     github = "zimward";
