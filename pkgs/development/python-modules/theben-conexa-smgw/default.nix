@@ -10,7 +10,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "theben-conexa-smgw";
-  version = "0.4.3";
+  version = "0.4.4";
   pyproject = true;
 
   disabled = pythonOlder "3.14";
@@ -19,7 +19,7 @@ buildPythonPackage (finalAttrs: {
     owner = "michael.dluhosch";
     repo = "theben-conexa-smgw";
     tag = finalAttrs.version;
-    hash = "sha256-J3jM54kqXV0FywkxyjaGBVYY8duDYAVoY/MJg3C03qU=";
+    hash = "sha256-tYi5ZDSy52+0UCT49ATeTknxDDsNFf6aqwiwpMJUI7U=";
   };
 
   build-system = [
