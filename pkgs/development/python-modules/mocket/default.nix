@@ -82,16 +82,15 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
+  disabledTestPaths = [
+    # redis.exceptions.ConnectionError: Error while reading from socket: (0,)
+    "tests/test_redis.py"
+  ];
+
   disabledTests = [
     # tests that require network access (like DNS lookups)
-    "test_truesendall_with_dump_from_recording"
     "test_aiohttp"
     "test_asyncio_record_replay"
-    "test_gethostbyname"
-    # httpx read failure
-    "test_no_dangling_fds"
-    # redis-py response mismatch
-    "test_hgetall"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # fails on darwin due to upstream bug: https://github.com/mindflayer/python-mocket/issues/287
