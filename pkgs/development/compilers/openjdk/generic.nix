@@ -588,5 +588,12 @@ stdenv.mkDerivation (finalAttrs: {
     # https://github.com/NixOS/nixpkgs/issues/281618
     # error: ‘isnanf’ was not declared in this scope
     broken = !atLeast11 && stdenv.hostPlatform.isMusl;
+
+    identifiers.cpeParts = {
+      product = "openjdk";
+      vendor = "oracle";
+      inherit version;
+      update = "*";
+    };
   };
 })
