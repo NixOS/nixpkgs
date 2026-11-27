@@ -1,32 +1,39 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p bash nix-update common-updater-scripts nix jq
+#!nix-shell -i bash -p bash curl jq nix
 
 set -euo pipefail
 
-packageFile=pkgs/by-name/an/antigravity-cli/package.nix
+sourcesFile=pkgs/by-name/an/antigravity-cli/sources.json
 baseUrl=https://storage.googleapis.com/antigravity-public/antigravity-cli
 
-currentVersion=$(nix-instantiate --eval --raw -E "with import ./. {}; antigravity-cli.version or (lib.getVersion antigravity-cli)")
-latestVersion=$(curl $baseUrl/latest)
+currentVersion=$(jq -r .version "$sourcesFile")
+latestVersion=$(curl -sSfL "$baseUrl/latest")
 
 if [[ "$currentVersion" == "$latestVersion" ]]; then
     echo "package is up-to-date: $currentVersion"
     exit 0
 fi
 
-# urls unfortunately include a weird buildid that make it hard to get
-latestWholeVersion=$(curl $baseUrl/$latestVersion/manifest.json | jq -r '.platforms."linux-x64".url' | cut -d/ -f6)
-latestBuildId=${latestWholeVersion#*-}
-currentBuildId=$(sed -n 's/.*buildId = "\([^"]*\)";.*/\1/p' "$packageFile")
+manifest=$(curl -sSfL "$baseUrl/$latestVersion/manifest.json")
 
-sed -i "s/buildId = \"$currentBuildId\";/buildId = \"$latestBuildId\";/" "$packageFile"
-update-source-version --version-key=version antigravity-cli $latestVersion || true
+declare -A platforms=(
+    [x86_64-linux.glibc]=linux-x64
+    [x86_64-linux.musl]=linux-x64-musl
+    [aarch64-linux.glibc]=linux-arm
+    [aarch64-linux.musl]=linux-arm-musl
+    [aarch64-darwin.libSystem]=darwin-arm
+)
 
-for system in \
-    x86_64-linux \
-    aarch64-linux \
-    aarch64-darwin; do
-    hash=$(nix store prefetch-file --json --hash-type sha256 \
-      $(nix-instantiate --eval --raw -E "with import ./. {}; antigravity-cli.src.url" --system "$system") | jq -r '.hash')
-    update-source-version --version-key=version antigravity-cli $latestVersion $hash --system=$system --ignore-same-version
+sources=$(jq -n --arg version "$latestVersion" '{version: $version, platforms: {}}')
+
+for platform in "${!platforms[@]}"; do
+    entry=$(jq -e --arg p "${platforms[$platform]}" '.platforms[$p]' <<<"$manifest")
+    url=$(jq -r .url <<<"$entry")
+    hash=$(nix --extra-experimental-features nix-command hash convert \
+        --hash-algo sha512 --to sri "$(jq -r .sha512 <<<"$entry")")
+    sources=$(jq --arg system "${platform%.*}" --arg libc "${platform#*.}" \
+        --arg url "$url" --arg hash "$hash" \
+        '.platforms[$system][$libc] = {url: $url, hash: $hash}' <<<"$sources")
 done
+
+jq -S . <<<"$sources" >"$sourcesFile"
