@@ -7,12 +7,17 @@ npmInstallHook() {
 
     local -r packageOut="$out/lib/node_modules/$(@jq@ --raw-output '.name' package.json)"
 
+    local packFlagsArray=()
+    concatTo packFlagsArray npmPackFlags npmPackFlagsArray npmFlags npmFlagsArray
+
+    echoCmd 'npmInstallHook pack flags' "${packFlagsArray[@]}"
+
     # `npm pack` writes to cache so temporarily override it
     while IFS= read -r file; do
         local dest="$packageOut/$(dirname "$file")"
         mkdir -p "$dest"
         cp "${npmWorkspace-.}/$file" "$dest"
-    done < <(@jq@ --raw-output '.[0].files | map(.path | select(. | startswith("node_modules/") | not)) | join("\n")' <<< "$(npm_config_cache="$HOME/.npm" npm pack --json --dry-run --loglevel=warn --no-foreground-scripts ${npmWorkspace+--workspace=$npmWorkspace} $npmPackFlags "${npmPackFlagsArray[@]}" $npmFlags "${npmFlagsArray[@]}")")
+    done < <(@jq@ --raw-output '.[0].files | map(.path | select(. | startswith("node_modules/") | not)) | join("\n")' <<< "$(npm_config_cache="$HOME/.npm" npm pack --json --dry-run --loglevel=warn --no-foreground-scripts ${npmWorkspace+--workspace=$npmWorkspace} "${packFlagsArray[@]}")")
 
     nodejsInstallExecutables "${npmWorkspace-.}/package.json"
 
@@ -22,7 +27,12 @@ npmInstallHook() {
 
     if [ ! -d "$nodeModulesPath" ]; then
         if [ -z "${dontNpmPrune-}" ]; then
-            if ! npm prune --omit=dev --no-save ${npmWorkspace+--workspace=$npmWorkspace} $npmPruneFlags "${npmPruneFlagsArray[@]}" $npmFlags "${npmFlagsArray[@]}"; then
+            local pruneFlagsArray=()
+            concatTo pruneFlagsArray npmPruneFlags npmPruneFlagsArray npmFlags npmFlagsArray
+
+            echoCmd 'npmInstallHook prune flags' "${pruneFlagsArray[@]}"
+
+            if ! npm prune --omit=dev --no-save ${npmWorkspace+--workspace=$npmWorkspace} "${pruneFlagsArray[@]}"; then
               echo
               echo
               echo "ERROR: npm prune step failed"
