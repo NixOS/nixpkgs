@@ -74,6 +74,10 @@ buildFHSEnv {
     [
       lutris-unwrapped
 
+      # XKB data for Qt/Wayland
+      # PCSX2's AppImage expects /usr/share/X11/xkb
+      xkeyboard-config
+
       # Appimages
       fuse
 
@@ -95,24 +99,6 @@ buildFHSEnv {
       atk
 
       # DGen // TODO: libarchive is broken
-
-      # Dolphin
-      bluez
-      ffmpeg_6
-      gettext
-      portaudio
-      miniupnpc
-      mbedtls
-      lzo
-      sfml
-      gsm
-      wavpack
-      orc
-      nettle
-      gmp
-      pcre2 # TODO: pcre2 is incorrect. This is supposed to be pcre1, but it has been dropped
-      vulkan-loader
-      zstd
 
       # DOSBox
       SDL_net
@@ -160,6 +146,7 @@ buildFHSEnv {
       llvm
       e2fsprogs
       libgpg-error
+      gmp # PCSX2 needs it too
 
       # ScummVM
       nasm
@@ -265,8 +252,6 @@ buildFHSEnv {
       p11-kit
       libbsd
       harfbuzz
-
-      # PCSX2 // TODO: "libgobject-2.0.so.0: wrong ELF class: ELFCLASS64"
 
       # WINE
       cups

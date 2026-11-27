@@ -308,6 +308,8 @@ self: super: with self; {
 
   aioemonitor = callPackage ../development/python-modules/aioemonitor { };
 
+  aioengiebelgium = callPackage ../development/python-modules/aioengiebelgium { };
+
   aioesphomeapi = callPackage ../development/python-modules/aioesphomeapi { };
 
   aioextensions = callPackage ../development/python-modules/aioextensions { };
@@ -8261,6 +8263,8 @@ self: super: with self; {
 
   hydrogram = callPackage ../development/python-modules/hydrogram { };
 
+  hydropeak-opendata = callPackage ../development/python-modules/hydropeak-opendata { };
+
   hydrus-api = callPackage ../development/python-modules/hydrus-api { };
 
   hypchat = callPackage ../development/python-modules/hypchat { };
@@ -9224,6 +9228,8 @@ self: super: with self; {
   kaa-metadata = callPackage ../development/python-modules/kaa-metadata { };
 
   kaco-modbus = callPackage ../development/python-modules/kaco-modbus { };
+
+  kaco-serial = callPackage ../development/python-modules/kaco-serial { };
 
   kafka-python = callPackage ../development/python-modules/kafka-python { };
 
@@ -14777,6 +14783,8 @@ self: super: with self; {
   pyasuswrt = callPackage ../development/python-modules/pyasuswrt { };
 
   pyasynchat = callPackage ../development/python-modules/pyasynchat { };
+
+  pyasyncialarm = callPackage ../development/python-modules/pyasyncialarm { };
 
   pyasyncore = callPackage ../development/python-modules/pyasyncore { };
 

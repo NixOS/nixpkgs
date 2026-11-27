@@ -151,6 +151,40 @@ in
         ExecStart = utils.escapeSystemdExecArgs (
           [ "${cfg.package}/bin/calibre-server" ] ++ execFlags ++ [ "--" ] ++ cfg.libraries
         );
+
+        # Hardening
+        CapabilityBoundingSet = "";
+        NoNewPrivileges = true;
+        LockPersonality = true;
+        PrivateDevices = true;
+        ProtectClock = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        PrivateMounts = true;
+        ProtectHostname = true;
+        ProtectProc = "invisible";
+        SystemCallArchitectures = "native";
+        ProtectKernelTunables = true;
+        RestrictRealtime = true;
+        PrivateIPC = true;
+        PrivatePIDs = true;
+        PrivateTmp = true;
+        PrivateUsers = true;
+        ProtectHome = true;
+        ProtectSystem = "full";
+        RestrictNamespaces = true;
+        RestrictSUIDSGID = true;
+        RemoveIPC = true;
+        RestrictAddressFamilies = [
+          "AF_UNIX" # Unix sockets
+          "AF_INET" # ipv4
+          "AF_INET6" # ipv6
+          "AF_NETLINK"
+        ];
+        SystemCallFilter = [
+          "@system-service"
+        ];
+
       };
 
     };

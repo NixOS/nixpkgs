@@ -922,7 +922,6 @@ in
   iocaine = runTest ./iocaine.nix;
   iodine = runTest ./iodine.nix;
   iosched = runTest ./iosched.nix;
-  ipget = runTest ./ipget.nix;
   ipv6 = runTest ./ipv6.nix;
   irqbalance = runTest ./irqbalance.nix;
   isolate = runTest ./isolate.nix;
@@ -2069,6 +2068,7 @@ in
   xmonad = runTest ./xmonad.nix;
   xmonad-xdg-autostart = runTest ./xmonad-xdg-autostart.nix;
   xpadneo = runTest ./xpadneo.nix;
+  xray = import ./xray.nix { inherit runTest; };
   xrdp = runTest ./xrdp.nix;
   xrdp-with-audio-pulseaudio = runTest ./xrdp-with-audio-pulseaudio.nix;
   xscreensaver = runTest ./xscreensaver.nix;

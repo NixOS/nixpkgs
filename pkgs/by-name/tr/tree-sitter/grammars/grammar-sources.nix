@@ -594,11 +594,10 @@
     };
   };
 
-  dune = {
-    version = "0-unstable-2026-05-21";
-    url = "github:tmcgilchrist/tree-sitter-dune";
-    rev = "dd00f0d232e5f081b583966a414994338614b35b";
-    hash = "sha256-yJYuK1uPgN2DH8SIq67prQ1eEazPeBQNlPgGdkEjjHg=";
+  dune = rec {
+    version = "0.1.1";
+    url = "github:ocaml-dune/tree-sitter-dune?ref=${version}";
+    hash = "sha256-8mQLq+vu7ypfkXZ9Lx1FYlh5m/Z4f/7CyYnB4Ve/D+A=";
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
