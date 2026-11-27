@@ -5,7 +5,7 @@
   runtimeShell,
   ncurses,
   runCommand,
-  util-linux,
+  expect,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -58,13 +58,31 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.tests.repl = runCommand "ngn-k-repl-test" { nativeBuildInputs = [ util-linux ]; } ''
-    printf '\\a\n 2!!7!4\n' \
-      | script -qec ${lib.getExe' finalAttrs.finalPackage "k-repl"} /dev/null \
-        > "$out" 2>&1 || true
-    grep -q 'GNU AFFERO GENERAL PUBLIC LICENSE' "$out"
-    grep -q '0 1 0 1' "$out"
-  '';
+  passthru.tests.repl =
+    runCommand "ngn-k-repl-test"
+      {
+        nativeBuildInputs = [ expect ];
+        meta.timeout = 60;
+      }
+      ''
+        expect <<'EOF'
+        set timeout 60
+        spawn ${lib.getExe' finalAttrs.finalPackage "k-repl"}
+        expect_before timeout { exit 1 } eof { exit 1 }
+        expect "for more info"
+        send {\a}
+        send "\r"
+        expect "GNU AFFERO GENERAL PUBLIC LICENSE"
+        send "2!!7!4\r"
+        expect "0 1 0 1"
+        send {\\}
+        send "\r"
+        expect_before
+        expect eof
+        exit [lindex [wait] 3]
+        EOF
+        touch "$out"
+      '';
 
   passthru.tests.eval = runCommand "ngn-k-eval-test" { } ''
     echo '2!!7!4' > prog.k
