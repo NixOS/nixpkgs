@@ -56,6 +56,10 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://src.fedoraproject.org/rpms/mozjs140/raw/49492baa47bc1d7b7d5bc738c4c81b4661302f27/f/9aa8b4b051dd539e0fbd5e08040870b3c712a846.patch";
       hash = "sha256-SsyO5g7wlrxE7y2+VTHfmUDamofeZVqge8fv2y0ZhuU=";
     })
+
+    # fixes GCC -> rustc translation of ppc64 triplets that specify ELF ABI version
+    # https://bugzilla.mozilla.org/show_bug.cgi?id=2093443
+    ./ppc64-explicit-elf-abi-support.patch
   ]
   ++ lib.optionals (stdenv.hostPlatform.system == "i686-linux") [
     # Fixes i686 build, https://bugzilla.mozilla.org/show_bug.cgi?id=1729459
