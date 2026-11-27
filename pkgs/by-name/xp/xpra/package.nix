@@ -279,6 +279,12 @@ effectiveBuildPythonApplication (finalAttrs: {
     cat ${xorgModulePaths} >> $out/etc/xpra/xorg.conf
     cat ${xorgModulePaths} >> $out/etc/xpra/xorg-uinput.conf
 
+    # fix for writing the xvfb command while installing into the wheel's
+    # staging directory and Xorg missing on PATH at build time
+    substituteInPlace $out/etc/xpra/conf.d/55_server_x11.conf \
+      --replace-fail "/xpra-${finalAttrs.version}.data/data/etc/" "$out/etc/" \
+      --replace-fail "xvfb = Xorg " "xvfb = ${xorg-server}/bin/Xorg "
+
     # make application icon visible to desktop environemnts
     icon_dir="$out/share/icons/hicolor/64x64/apps"
     mkdir -p "$icon_dir"
