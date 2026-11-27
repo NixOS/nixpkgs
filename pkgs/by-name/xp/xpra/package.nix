@@ -2,6 +2,7 @@
   lib,
   fetchFromGitHub,
   nix-update-script,
+  nixosTests,
   pkg-config,
   runCommand,
   writeText,
@@ -300,6 +301,7 @@ effectiveBuildPythonApplication (finalAttrs: {
 
   passthru = {
     inherit xf86videodummy;
+    tests = { inherit (nixosTests) xpra; };
     updateScript = nix-update-script { };
   };
 
