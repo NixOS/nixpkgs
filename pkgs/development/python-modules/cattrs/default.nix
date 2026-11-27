@@ -27,6 +27,7 @@ buildPythonPackage (finalAttrs: {
   pname = "cattrs";
   version = "26.2.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "python-attrs";
