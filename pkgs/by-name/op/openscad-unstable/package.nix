@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   clangStdenv,
   llvmPackages,
   fetchFromGitHub,
@@ -28,7 +27,7 @@
   libGLU,
   libice,
   libsm,
-  libsForQt5,
+  qt6Packages,
   libspnav,
   libzip,
   manifold,
@@ -57,13 +56,17 @@ let
 in
 clangStdenv.mkDerivation rec {
   pname = "openscad-unstable";
-  unstable_date = "2026-07-20";
-  version = "2021.01-unstable-${unstable_date}";
+  unstable_date = "2026-11-25";
+  version = "2026.11-RC1-unstable-${unstable_date}";
+
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "openscad";
     repo = "openscad";
-    rev = "e4fdec49730103274a4e21c2390b9a12882f01aa";
-    hash = "sha256-9bPz6iVbUHeFp2uQiVVFYze24IN4skesP45TBBbr8Vk=";
+    rev = "6ea4937838eaa39e0657a72fc3324e94c1b175f4";
+    hash = "sha256-EmdvFoDPyDcbvYjo6dXb9EkEXxOxzKMYaEtgDGTR2fo=";
     fetchSubmodules = true; # Only really need sanitizers-cmake and MCAD and manifold
   };
 
@@ -72,12 +75,13 @@ clangStdenv.mkDerivation rec {
     bison
     cmake
     flex
-    libsForQt5.wrapQtAppsHook
+    qt6Packages.wrapQtAppsHook
     llvmPackages.bintools
     wrapGAppsHook3
     ninja
     pkg-config
   ];
+
   buildInputs = [
     catch2_3
     clipper2
@@ -101,9 +105,10 @@ clangStdenv.mkDerivation rec {
     libzip
     manifold
     mpfr
-    libsForQt5.qscintilla
-    libsForQt5.qtbase
-    libsForQt5.qtmultimedia
+    qt6Packages.qt5compat
+    qt6Packages.qtbase
+    qt6Packages.qscintilla
+    qt6Packages.qtmultimedia
   ]
   ++ lib.optionals clangStdenv.hostPlatform.isLinux [
     libxdmcp
@@ -111,33 +116,32 @@ clangStdenv.mkDerivation rec {
     libsm
     wayland
     wayland-protocols
-    libsForQt5.qtwayland
+    qt6Packages.qtwayland
     libGLU
-  ]
-  ++ lib.optional clangStdenv.hostPlatform.isDarwin libsForQt5.qtmacextras;
-  cmakeFlags = [
-    "-DEXPERIMENTAL=ON" # enable experimental options
-    "-DSNAPSHOT=ON" # nightly icons
-    "-DUSE_BUILTIN_OPENCSG=OFF"
-    "-DUSE_BUILTIN_MANIFOLD=OFF"
-    "-DUSE_BUILTIN_CLIPPER2=OFF"
-    # Derive version from our unstable date
-    "-DOPENSCAD_VERSION='${builtins.replaceStrings [ "-" ] [ "." ] unstable_date}-unstable'"
-    "-DCMAKE_UNITY_BUILD=OFF" # broken compile with unity
-    # IPO
-    "-DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON"
+  ];
 
-    # The sources enable this for only apple. We turn it off globally anyway to stay
-    # consistent.
-    "-DUSE_QT6=OFF"
+  cmakeFlags = [
+    (lib.cmakeBool "EXPERIMENTAL" true) # enable experimental options
+    (lib.cmakeBool "SNAPSHOT" true) # nightly icons
+    (lib.cmakeBool "USE_BUILTIN_OPENCSG" false)
+    (lib.cmakeBool "USE_BUILTIN_MANIFOLD" false)
+    (lib.cmakeBool "USE_BUILTIN_CLIPPER2" false)
+    (lib.cmakeBool "USE_QT6" true)
+    # Derive version from our unstable date
+    (lib.cmakeFeature "OPENSCAD_VERSION" "${
+      builtins.replaceStrings [ "-" ] [ "." ] unstable_date
+    }-unstable")
+    (lib.cmakeBool "CMAKE_UNITY_BUILD" false) # broken compile with unity
+    # IPO
+    (lib.cmakeBool "CMAKE_INTERPROCEDURAL_OPTIMIZATION" true)
 
     # For tests
-    "-DVENV_DIR=${python3withPackages}"
-    "-DVENV_BIN_PATH=${python3withPackages}/bin"
+    (lib.cmakeFeature "VENV_DIR" "${python3withPackages}")
+    (lib.cmakeFeature "VENV_BIN_PATH" "${python3withPackages}/bin")
   ];
 
   # tests rely on sysprof which is not available on darwin
-  doCheck = !stdenv.hostPlatform.isDarwin;
+  doCheck = !clangStdenv.hostPlatform.isDarwin;
 
   # remove unused submodules, to ensure correct dependency usage
   postUnpack = ''
@@ -155,11 +159,11 @@ clangStdenv.mkDerivation rec {
     sed -e '/find_path(VENV_BIN_PATH /d' -i tests/cmake/ImageCompare.cmake
   '';
 
-  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+  postInstall = lib.optionalString clangStdenv.hostPlatform.isDarwin ''
     mkdir $out/Applications
     mv $out/bin/*.app $out/Applications
     rm $out/bin/* || true
-    ln -s $out/Applications/OpenSCAD.app/Contents/MacOS/OpenSCAD $out/bin/openscad-unstable
+    ln -s $out/Applications/OpenSCAD.app/Contents/MacOS/OpenSCAD $out/bin/openscad
   '';
 
   nativeCheckInputs = [
@@ -191,14 +195,16 @@ clangStdenv.mkDerivation rec {
       interested in creating computer-animated movies.
     '';
     homepage = "https://openscad.org/";
-    # note that the *binary license* is gpl3 due to CGAL
-    license = lib.licenses.gpl3;
+    # note that the *binary license* is gpl3Plus due to CGAL
+    license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
+      eclairevoyant
       hzeller
       pca006132
       raskin
     ];
     mainProgram = "openscad";
+    mainDarwinApp = "OpenSCAD.app";
   };
 }

@@ -1,20 +1,19 @@
 {
   lib,
-  stdenv,
   rustPlatform,
   fetchFromGitHub,
   sqlite,
   xdg-utils,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "anup";
   version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "jonathanlmc";
     repo = "anup";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-4pXF4p4K8+YihVB9NdgT6bOidmQEgWXUbcbvgXJ0IDA=";
   };
 
@@ -32,4 +31,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ natto1784 ];
     mainProgram = "anup";
   };
-}
+})

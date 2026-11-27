@@ -121,6 +121,11 @@ stdenv.mkDerivation (finalAttrs: {
     find . -iname \*CMakeLists.txt -exec sed -i -e 's/pybind11_native_proto_caster/pybind11_protobuf::pybind11_native_proto_caster/' '{}' \;
     sed -i -e 's/TARGET pybind11_native_proto_caster/TARGET pybind11_protobuf::pybind11_native_proto_caster/' cmake/check_deps.cmake
     sed -i -e "/protobuf/ { s/.*,/'protobuf >= 5.26',/ }" ortools/python/setup.py.in
+  ''
+  # swig 4.5 dropped the Python 2 PyInt_* aliases
+  + ''
+    grep -rlE 'PyInt_(Check|AsLong|FromLong)\b' ortools \
+      | xargs sed -i -E 's/\bPyInt_(Check|AsLong|FromLong)\b/PyLong_\1/g'
   '';
 
   cmakeFlags = [

@@ -127,6 +127,8 @@ stdenv.mkDerivation (finalAttrs: {
   # On Hydra the *-linux tests are very flaky.  Maybe they're sensitive to load.
   doCheck = stdenv.hostPlatform.isDarwin;
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Rich and powerful protocol-independent mail framework";
 

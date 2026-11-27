@@ -15,29 +15,30 @@
   pytest-mock,
   pytestCheckHook,
   python-sbom,
-  rustc,
-  rustPlatform,
+  rustPackages_1_100,
   scikit-build-core,
   setuptools-scm,
-  stdenvNoCC,
   versionCheckHook,
 }:
 
+let
+  rustPackages = rustPackages_1_100;
+in
 buildPythonPackage (finalAttrs: {
   pname = "pipdeptree";
-  version = "4.2.14";
+  version = "4.2.16";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tox-dev";
     repo = "pipdeptree";
     tag = finalAttrs.version;
-    hash = "sha256-kneg+woQFZt1wqTvF/DEqd7OXLZ5vUk2QA0MXUKolEI=";
+    hash = "sha256-MrIhETMECoo1P7v/8KUwgHDq8Apcp3QMWtv6AreK2KE=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoVendor {
+  cargoDeps = rustPackages.rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-iLeSUqvGf0MsrpQOV52p3uqN9TlW0g71LIxBEqEU8zg=";
+    hash = "sha256-LrhB2L75y/Ejz3TW6++PelMrVWigvV4XAU8ItAE+xQs=";
   };
 
   postPatch = ''
@@ -49,8 +50,8 @@ buildPythonPackage (finalAttrs: {
 
   nativeBuildInputs = [
     cargo
-    rustc
-    rustPlatform.cargoSetupHook
+    rustPackages.rustc
+    rustPackages.rustPlatform.cargoSetupHook
   ];
 
   build-system = [

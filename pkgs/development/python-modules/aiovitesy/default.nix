@@ -15,14 +15,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aiovitesy";
-  version = "1.4.8";
+  version = "1.4.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "chemelli74";
     repo = "aiovitesy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hmxNjZSxBLy+qFnQenuWFb4dvygicbU1s6mybY9J6Zw=";
+    hash = "sha256-1okeOjjC2zC9AkUt4A6Stke2smqDNaPVNX241+ubBF0=";
   };
 
   postPatch = ''

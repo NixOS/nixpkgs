@@ -1,0 +1,64 @@
+diff --git a/source/creator/viewport/common/mesheditor/operations/drawable.d b/source/creator/viewport/common/mesheditor/operations/drawable.d
+index 7af0863..a0283d3 100644
+--- a/source/creator/viewport/common/mesheditor/operations/drawable.d
++++ b/source/creator/viewport/common/mesheditor/operations/drawable.d
+@@ -488,7 +488,10 @@ protected:
+             return;
+         deformation = drawable.deformation.dup;
+         auto param = incArmedParameter();
+-        auto binding = cast(DeformationParameterBinding)(param? param.getBinding(drawable, "deform"): null);
++        DeformationParameterBinding binding = null;
++        if (param) {
++            binding = cast(DeformationParameterBinding)param.getBinding(drawable, "deform");
++        }
+         if (binding is null) {
+             deformation = drawable.deformation.dup;
+             
+diff --git a/source/creator/viewport/common/mesheditor/tools/brush.d b/source/creator/viewport/common/mesheditor/tools/brush.d
+index 5e07411..0d76db9 100644
+--- a/source/creator/viewport/common/mesheditor/tools/brush.d
++++ b/source/creator/viewport/common/mesheditor/tools/brush.d
+@@ -248,7 +248,10 @@ class BrushToolInfo : ToolInfoBase!BrushTool {
+     bool displayToolOptions(bool deformOnly, VertexToolMode toolMode, IncMeshEditorOne[Node] editors) {
+         igPushStyleVar(ImGuiStyleVar.ItemSpacing, ImVec2(0, 0));
+         igPushStyleVar(ImGuiStyleVar.WindowPadding, ImVec2(4, 4));
+-        auto brushTool = cast(BrushTool)(editors.length == 0 ? null: editors.values()[0].getTool());
++        BrushTool brushTool = null;
++        if (editors.length != 0) {
++            brushTool = cast(BrushTool)editors.values()[0].getTool();
++        }
+             igBeginGroup();
+                 if (incButtonColored("", ImVec2(0, 0), (brushTool !is null && !brushTool.getFlow())? ImVec4.init : ImVec4(0.6, 0.6, 0.6, 1))) { // path definition
+                     foreach (e; editors) {
+diff --git a/source/creator/viewport/common/mesheditor/tools/pathdeform.d b/source/creator/viewport/common/mesheditor/tools/pathdeform.d
+index c7c4072..5600183 100644
+--- a/source/creator/viewport/common/mesheditor/tools/pathdeform.d
++++ b/source/creator/viewport/common/mesheditor/tools/pathdeform.d
+@@ -403,7 +403,10 @@ class PathDeformToolInfo : ToolInfoBase!PathDeformTool {
+     bool displayToolOptions(bool deformOnly, VertexToolMode toolMode, IncMeshEditorOne[Node] editors) { 
+         igPushStyleVar(ImGuiStyleVar.ItemSpacing, ImVec2(0, 0));
+         igPushStyleVar(ImGuiStyleVar.WindowPadding, ImVec2(4, 4));
+-        auto deformTool = cast(PathDeformTool)(editors.length == 0 ? null: editors.values()[0].getTool());
++        PathDeformTool deformTool = null;
++        if (editors.length != 0) {
++            deformTool = cast(PathDeformTool)editors.values()[0].getTool();
++        }
+         igBeginGroup();
+             if (incButtonColored("", ImVec2(0, 0), (deformTool !is null && deformTool.mode == PathDeformTool.Mode.Define)? ImVec4.init : ImVec4(0.6, 0.6, 0.6, 1))) { // path definition
+                 foreach (e; editors) {
+diff --git a/source/creator/viewport/common/mesheditor/tools/point.d b/source/creator/viewport/common/mesheditor/tools/point.d
+index c56543a..973b5fa 100644
+--- a/source/creator/viewport/common/mesheditor/tools/point.d
++++ b/source/creator/viewport/common/mesheditor/tools/point.d
+@@ -481,7 +481,10 @@ class PointToolInfo : ToolInfoBase!PointTool {
+         if (deformOnly) {
+ 
+         } else {
+-            auto pointTool = cast(PointTool)(editors.length == 0 ? null: editors.values()[0].getTool());
++            PointTool pointTool = null;
++            if (editors.length != 0) {
++                pointTool = cast(PointTool)editors.values()[0].getTool();
++            }
+             igBeginGroup();
+                 if (incButtonColored("", ImVec2(0, 0), (pointTool !is null && !pointTool.isAutoConnect())? ImVec4.init : ImVec4(0.6, 0.6, 0.6, 1))) {
+                 foreach (e; editors) {

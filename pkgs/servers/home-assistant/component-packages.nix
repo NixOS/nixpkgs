@@ -1922,7 +1922,8 @@
       ];
     "engie_be" =
       ps: with ps; [
-      ]; # missing inputs: aioengiebelgium
+        aioengiebelgium
+      ];
     "enigma2" =
       ps: with ps; [
         openwebifpy
@@ -3283,7 +3284,8 @@
       ];
     "hydroquebec_peak" =
       ps: with ps; [
-      ]; # missing inputs: hydropeak-opendata
+        hydropeak-opendata
+      ];
     "hyperion" =
       ps: with ps; [
         hyperion-py
@@ -3294,7 +3296,8 @@
       ];
     "ialarm" =
       ps: with ps; [
-      ]; # missing inputs: pyasyncialarm
+        pyasyncialarm
+      ];
     "iammeter" =
       ps: with ps; [
         iammeter
@@ -3773,8 +3776,9 @@
         aiohasupervisor
         aiousbwatcher
         ifaddr
+        kaco-serial
         serialx
-      ]; # missing inputs: kaco-serial
+      ];
     "kaiser_nienhaus" =
       ps: with ps; [
       ];
@@ -9124,6 +9128,7 @@
     "energy"
     "energyid"
     "energyzero"
+    "engie_be"
     "enigma2"
     "enocean"
     "enphase_envoy"
@@ -9323,8 +9328,10 @@
     "huum"
     "hvv_departures"
     "hydrawise"
+    "hydroquebec_peak"
     "hyperion"
     "hypontech"
+    "ialarm"
     "iaqualink"
     "ibeacon"
     "icloud"
@@ -9389,6 +9396,7 @@
     "justnimbus"
     "jvc_projector"
     "kaco_modbus"
+    "kaco_rs485"
     "kaleidescape"
     "karakeep"
     "keenetic_ndms2"

@@ -24,13 +24,13 @@
 
 buildDotnetModule (finalAttrs: {
   pname = "apps2samsung";
-  version = "3.2.1";
+  version = "3.3.1";
 
   src = fetchFromGitHub {
     owner = "Apps2Samsung";
     repo = "Apps2Samsung";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-my9e5sTvlVy9IhJsTw2E1m1O6MHv5IRCpHYOLjJUsRs=";
+    hash = "sha256-MnyhFc9En9ts2UJHzgqDBLhVS1MGaICWU+aauD7WBNw=";
   };
 
   postPatch = ''
