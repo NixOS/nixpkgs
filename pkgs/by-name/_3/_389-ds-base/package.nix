@@ -42,7 +42,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "389-ds-base";
-  version = "3.3.0";
+  version = "3.3.1";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "389ds";
     repo = "389-ds-base";
     rev = "389-ds-base-${finalAttrs.version}";
-    hash = "sha256-N/+fTTgkqs25ToR/OH9BaBHxheVDZWR4RANFtC71rBg=";
+    hash = "sha256-Ml2bS0RfX35Hq/PFk0esFSbM77/hdXxecu51HlnqYKM=";
   };
 
   patches = [
@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src cargoRoot;
     name = "389-ds-base-${finalAttrs.version}";
-    hash = "sha256-1qCH2Onb69Jcqqs3JfDJslavzMrHO6//OtYtDq2iCgY=";
+    hash = "sha256-qOVIJLQb4TyVLoLoXkzDfiB/zcyb4Z3m+HyvuNSZZO4=";
   };
 
   nativeBuildInputs = [
@@ -116,6 +116,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals withSystemd [
     "--with-systemd"
     "--with-systemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
+    "--with-sysctl-d=${placeholder "out"}/lib/sysctl.d"
+    "--with-sysusers-d=${placeholder "out"}/lib/sysuser.d"
   ]
   ++ lib.optionals withOpenldap [
     "--with-openldap"
