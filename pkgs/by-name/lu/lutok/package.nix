@@ -5,12 +5,13 @@
   atf,
   autoreconfHook,
   kyua,
-  lua5_2_compat,
+  lua5_5,
   pkg-config,
   gitUpdater,
 }:
+
 let
-  lua = lua5_2_compat;
+  lua = lua5_5;
 in
 
 lib.fix (
@@ -28,7 +29,7 @@ lib.fix (
     kyua' =
       (kyua.override {
         lutok = drv.overrideAttrs (_: {
-          doCheck = false;
+          doInstallCheck = false;
         });
       }).overrideAttrs
         (_: {
@@ -39,7 +40,7 @@ lib.fix (
   in
   stdenv.mkDerivation (finalAttrs: {
     pname = "lutok";
-    version = "0.4";
+    version = "0.6.3";
 
     outputs = [
       "out"
@@ -50,7 +51,7 @@ lib.fix (
       owner = "freebsd";
       repo = "lutok";
       rev = "lutok-${finalAttrs.version}";
-      hash = "sha256-awAFxx9q8dZ6JO1/mShjhJnOPTLn1wCT4VrB4rlgWyg=";
+      hash = "sha256-HpTs/BF0F3jFZrh6K5X6z6T9ySK/EsR/KZw1462RDTY=";
     };
 
     strictDeps = true;
@@ -63,17 +64,26 @@ lib.fix (
       pkg-config
     ];
 
-    enableParallelBuilding = true;
-
-    makeFlags = [
-      # Lutok isn’t compatible with C++17, which is the default on current clang and GCC.
-      "CXXFLAGS=-std=c++11"
+    configureFlags = lib.optionals finalAttrs.finalPackage.doInstallCheck [
+      (lib.enableFeature true "atf")
     ];
 
-    doCheck = true;
+    enableParallelBuilding = true;
 
-    checkInputs = [ atf' ];
-    nativeCheckInputs = [ kyua' ];
+    doInstallCheck = true;
+
+    installCheckInputs = [ atf' ];
+    nativeInstallCheckInputs = [ kyua' ];
+
+    # Lutok expects to run the installed tests. Run them as part of check phase then delete them to avoid creating
+    # references to the ATF package used to bootstrap Lutok.
+    installCheckPhase = ''
+      runHook preInstallCheck
+      cd $out/tests/lutok
+      HOME=$TMPDIR PATH+=$out/bin:$PATH PKG_CONFIG_PATH=''${!outputDev}/lib/pkgconfig:$PKG_CONFIG_PATH kyua test
+      rm -rf $out/tests/lutok
+      runHook postInstallCheck
+    '';
 
     passthru.updateScript = gitUpdater { rev-prefix = "lutok-"; };
 
