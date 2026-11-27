@@ -17,6 +17,7 @@ lib.makeScope newScope (self: {
   Qq = self.callPackage ../development/lean-modules/Qq { };
   proofwidgets = self.callPackage ../development/lean-modules/proofwidgets { };
   plausible = self.callPackage ../development/lean-modules/plausible { };
+  lean4export = self.callPackage ../development/lean-modules/lean4export { };
   LeanSearchClient = self.callPackage ../development/lean-modules/LeanSearchClient { };
   Cli = self.callPackage ../development/lean-modules/Cli { };
   importGraph = self.callPackage ../development/lean-modules/importGraph { };
