@@ -96,6 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     communityModules = withCommunityModules;
     tests = { inherit (nixosTests) prosody prosody-mysql; };
+    updateScript = ./update.sh;
   };
 
   meta = {
