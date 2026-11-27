@@ -28,7 +28,7 @@ let
 in
 stdenv'.mkDerivation (finalAttrs: {
   pname = "opensplat";
-  version = "1.1.5";
+  version = "1.2.2";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -37,7 +37,7 @@ stdenv'.mkDerivation (finalAttrs: {
     owner = "WebODM";
     repo = "OpenSplat";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-quMsTtW0NeYxxGU3DRINuzxqPo1VR4Auhq5P5+X9VTA=";
+    hash = "sha256-e+gmQtENbN5FHcr8QXNpF8A8vCUWDgEeV8ojAlaTpMk=";
   };
 
   postPatch = lib.optionalString rocmSupport (
