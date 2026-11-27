@@ -49,7 +49,11 @@ buildPythonPackage (finalAttrs: {
 
   dontUseCmakeConfigure = true;
 
-  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'scikit-build-core ~= 1.0.2' scikit-build-core
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace vex/Makefile-gcc \
       --replace-fail '/usr/bin/ar' 'ar'
   '';
