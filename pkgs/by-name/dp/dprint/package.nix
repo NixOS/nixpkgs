@@ -63,6 +63,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   checkFlags = [
     # Require cargo is running
     "--skip=utils::process::test"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+    # Fails in sandbox
+    "--skip=environment::real_environment::test::should_watch_files_that_may_not_exist"
   ];
 
   postInstall =
