@@ -7,13 +7,13 @@
 }:
 buildGoModule rec {
   pname = "torrserver";
-  version = "150";
+  version = "152";
 
   src = fetchFromGitHub {
     owner = "YouROK";
     repo = "TorrServer";
     tag = "MatriX.${version}";
-    sha256 = "sha256-d/uRWZWCz5aQpSNHDJM1vnLtNxAY0AXUCITWFHg99H8=";
+    sha256 = "sha256-nHvsUtb9jxUVineFEAhtK/NlbbChf9oC+9JhNJcqd4k=";
   };
   vendorHash = "sha256-x67fp19mWBEQUcR+QWyP4MFNVzHqeM9P20xz+H687kM=";
 
