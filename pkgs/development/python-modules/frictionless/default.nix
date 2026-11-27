@@ -207,6 +207,12 @@ buildPythonPackage (finalAttrs: {
     # The tests of other unavailable formats are auto-skipped
     "frictionless/formats/excel/__spec__/test_mapper.py"
     "frictionless/formats/excel/parsers/__spec__/test_xls.py"
+    # _duckdb.BinderException: Binder Error: Referenced table "pg_catalog.pg_collation" not found!
+    "frictionless/formats/sql/__spec__/duckdb/test_adapter.py"
+    "frictionless/formats/sql/__spec__/duckdb/test_parser.py"
+    "frictionless/indexer/__spec__/test_resource.py::test_resource_index_sqlite[duckdb_url]"
+    "frictionless/indexer/__spec__/test_resource.py::test_resource_index_sqlite_on_progress[duckdb_url]"
+    "frictionless/indexer/__spec__/test_resource.py::test_resource_index_sqlite_with_metadata[duckdb_url]"
   ];
 
   disabledTests = [
