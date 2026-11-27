@@ -131,6 +131,22 @@ effectiveBuildPythonApplication (finalAttrs: {
     NIX_CFLAGS_COMPILE = "-Wno-error=unused-function";
 
     INCLUDE_DIRS = "${pam}/include";
+
+    XPRA_EXTRA_BUILD_ARGS = lib.concatStringsSep " " (
+      [
+        "--with-Xdummy"
+        "--without-Xdummy_wrapper"
+        "--without-strict"
+        "--with-gtk3"
+        # Override these, setup.py checks for headers in /usr/* paths
+        "--with-pam"
+        "--with-vsock"
+      ]
+      ++ lib.optionals withNvenc [
+        "--with-nvenc"
+        "--with-nvjpeg_encoder"
+      ]
+    );
   };
 
   nativeBuildInputs = [
@@ -229,20 +245,6 @@ effectiveBuildPythonApplication (finalAttrs: {
         pynvml
       ]
     );
-
-  setupPyBuildFlags = [
-    "--with-Xdummy"
-    "--without-Xdummy_wrapper"
-    "--without-strict"
-    "--with-gtk3"
-    # Override these, setup.py checks for headers in /usr/* paths
-    "--with-pam"
-    "--with-vsock"
-  ]
-  ++ lib.optionals withNvenc [
-    "--with-nvenc"
-    "--with-nvjpeg_encoder"
-  ];
 
   dontWrapGApps = true;
 
