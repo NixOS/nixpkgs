@@ -37,7 +37,7 @@ buildGoModule (finalAttrs: {
     '';
     changelog = "https://github.com/x90skysn3k/brutespray/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ kamadorueda ];
     mainProgram = "brutespray";
   };
 })
