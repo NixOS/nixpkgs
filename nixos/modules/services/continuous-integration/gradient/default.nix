@@ -36,7 +36,7 @@ let
       display_name = key;
     };
 
-    integrations = key: { name = key; };
+    git_host_connections = key: { name = key; };
 
     caches = key: {
       name = key;
@@ -116,14 +116,14 @@ let
       "gradient_worker_${worker.worker_id}_token:${worker.token_file}"
     ]) state.workers
     ++ lib.mapAttrsToList (
-      _: int:
+      label: connection:
       lib.optional (
-        int.secret_file or null != null
-      ) "gradient_integration_${int.name}_secret:${int.secret_file}"
+        connection.secret_file or null != null
+      ) "gradient_git_host_connection_${label}_secret:${connection.secret_file}"
       ++ lib.optional (
-        int.access_token_file or null != null
-      ) "gradient_integration_${int.name}_token:${int.access_token_file}"
-    ) state.integrations
+        connection.access_token_file or null != null
+      ) "gradient_git_host_connection_${label}_token:${connection.access_token_file}"
+    ) state.git_host_connections
     ++ lib.mapAttrsToList (
       _: task:
       lib.concatMap (
@@ -132,7 +132,9 @@ let
           field = actionSecretFields.${action.type} or null;
           file = if field == null then null else action.config."${field}_file" or null;
         in
-        lib.optional (file != null) "gradient_action_${action.name}_${field}:${file}"
+        lib.optional (
+          file != null
+        ) "gradient_action_${task.project}_${task.name}_${action.name}_${field}:${file}"
       ) (task.actions or [ ])
     ) state.tasks
   );
