@@ -29,6 +29,7 @@ buildPythonPackage rec {
     sed -i '/coveralls/d' ./pyproject.toml
 
     substituteInPlace pyproject.toml \
+      --replace-fail 'flit_core >=3.2,<4' flit_core \
       --replace "more_itertools~=8.10" "more_itertools"
   '';
 
