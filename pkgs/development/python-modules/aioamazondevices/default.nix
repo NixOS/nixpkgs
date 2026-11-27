@@ -16,14 +16,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aioamazondevices";
-  version = "17.3.2";
+  version = "18.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "chemelli74";
     repo = "aioamazondevices";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-U1qYJL7wCVOnuFv9pGvvbT9ixD/UoZ5IioFsaPf4qZM=";
+    hash = "sha256-BNJQ5UOMZtRwWq/buiG9Dv7/WUVUNjQ4G7hFVKnJkLc=";
   };
 
   postPatch = ''
