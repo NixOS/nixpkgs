@@ -49,6 +49,9 @@ php.buildComposerProject2 (finalAttrs: {
     homepage = "https://github.com/vimeo/psalm";
     license = lib.licenses.mit;
     mainProgram = "psalm";
-    maintainers = [ lib.maintainers.patka ];
+    maintainers = with lib.maintainers; [
+      patka
+      piotrkwiecinski
+    ];
   };
 })
