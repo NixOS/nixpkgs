@@ -410,6 +410,8 @@ let
 
       # Gate for the DINGHAI_PF module
       DINGHAI = whenAtLeast "7.3" yes;
+
+      R8169_LEDS = whenAtLeast "6.8" yes;
     }
     // lib.optionalAttrs (stdenv.hostPlatform.system == "aarch64-linux") {
       # Not enabled by default, hides modules behind it
