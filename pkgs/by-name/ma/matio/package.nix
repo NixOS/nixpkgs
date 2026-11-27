@@ -32,6 +32,8 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ];
 
+  doCheck = true;
+
   passthru = {
     tests = {
       pkg-config = testers.hasPkgConfigModules {
