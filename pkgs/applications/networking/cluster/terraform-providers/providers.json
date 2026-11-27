@@ -435,13 +435,13 @@
     "vendorHash": "sha256-FcxAh8EOvnT8r1GHu0Oj2C5Jgbr2WPwD7/vY4/qIvTA="
   },
   "gitlabhq_gitlab": {
-    "hash": "sha256-gXf3lmFIn1l1LymhcQyn37Oxjywsja3z0CgfyuoJoCQ=",
+    "hash": "sha256-0eaZOeu/+b1OIVeRR0iG8oDYUxRTjGKv2faEgpoBHUQ=",
     "homepage": "https://registry.terraform.io/providers/gitlabhq/gitlab",
     "owner": "gitlabhq",
     "repo": "terraform-provider-gitlab",
-    "rev": "v19.5.0",
+    "rev": "v19.6.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-kz6uVMpwrTDHGmXGTP2DNV9l6fuXgfYOVbPGhUcC0Q4="
+    "vendorHash": "sha256-onKCR+jABw9wSZ3yKuBlAaMl7AWySQwDOxlMvWicLoI="
   },
   "go-gandi_gandi": {
     "hash": "sha256-fsCtmwyxkXfOtiZG27VEb010jglK35yr4EynnUWlFog=",
@@ -786,13 +786,13 @@
     "vendorHash": "sha256-mnKXYT0GfIS+ODzBCS9l4rLF1ugadesmpgdOgj74nLg="
   },
   "jianyuan_sentry": {
-    "hash": "sha256-FimRTFvn/u6FsJFb06iD44GGpb87B9+nVN2muVlFWGc=",
+    "hash": "sha256-aE2tw9ofIcyy/qzUesbAtyD5nPF06vDXmNfCpBDmaOg=",
     "homepage": "https://registry.terraform.io/providers/jianyuan/sentry",
     "owner": "jianyuan",
     "repo": "terraform-provider-sentry",
-    "rev": "v0.16.0",
+    "rev": "v0.17.0",
     "spdx": "MIT",
-    "vendorHash": "sha256-b+OcjtsnSvyqk4MnIp7yltKJvTYaEhY1M08AtG+Nv9A="
+    "vendorHash": "sha256-/lZ5oYHrXG438QDz/+LcdqxcIFyNYCn7TsCuEPwhI/E="
   },
   "jkossis_garage": {
     "hash": "sha256-j9rf8ynqPl0JTv/K5ouVBitH41lIRnDiMvulx7OarZE=",

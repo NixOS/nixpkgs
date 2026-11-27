@@ -12,12 +12,12 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyavm";
-  version = "0.9.9";
+  version = "0.9.10";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-vA9gXZV8H9bXdlUj/LqLmnI3esbFFGHCqDj+RGALzZo=";
+    hash = "sha256-f2B+wtDOcyBNFO7lxUX0INT1t6w/WSenrdeBcvmQbcE=";
   };
 
   build-system = [

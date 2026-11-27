@@ -5,14 +5,14 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "cgt-calc";
-  version = "4.0.0";
+  version = "4.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cgt-calc";
     repo = "capital-gains-calculator";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VqrdPvBaQb+C6FNu+RggjtrF6zieB/DL/4rm+O2UjoU=";
+    hash = "sha256-Np7MirDbrUzfgIva+IP7WMyXrqfhU6gQWTrhYhA+xvo=";
   };
 
   patches = [

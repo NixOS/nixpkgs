@@ -12,11 +12,11 @@
 assert unicodeSupport -> ncurses.unicodeSupport;
 stdenv.mkDerivation (finalAttrs: {
   pname = "dialog";
-  version = "1.3-20260107";
+  version = "1.3-20260721";
 
   src = fetchurl {
     url = "https://invisible-island.net/archives/dialog/dialog-${finalAttrs.version}.tgz";
-    hash = "sha256-eLPdGNleUPC+j5ucHnz/4oyb8c3yDVs+8XJ5xNo1xbU=";
+    hash = "sha256-Yr31kFfU92ChzCIXgn8HiHtKPuv2lMJerNSAPSFxzcY=";
   };
 
   nativeBuildInputs = lib.optionals withLibrary [

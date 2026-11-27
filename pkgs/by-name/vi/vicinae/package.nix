@@ -29,7 +29,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vicinae";
-  version = "0.30.0";
+  version = "0.30.1";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "vicinaehq";
     repo = "vicinae";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-uZYp/eYUhO9udRfE2hLf/+zl4tEY49EzqBwH5IH8BF8=";
+    hash = "sha256-6dPa7KCpssLJIDUW1Q/92g8eIIKu/tdgzn7PXDrzCzc=";
   };
 
   apiDeps = fetchNpmDeps {
