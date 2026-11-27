@@ -1,15 +1,15 @@
 --- a/naiveproxy/src/build/config/compiler/BUILD.gn
 +++ b/naiveproxy/src/build/config/compiler/BUILD.gn
-@@ -580,7 +580,7 @@
-     # Flags for diagnostics.
+@@ -593,7 +593,7 @@
      cflags += [ "-fcolor-diagnostics" ]
-     if (!is_win) {
--      cflags += [ "-fdiagnostics-show-inlining-chain" ]
-+      # cflags += [ "-fdiagnostics-show-inlining-chain" ]
-     } else {
-       # Combine after https://github.com/llvm/llvm-project/pull/192241
-       cflags += [ "/clang:-fdiagnostics-show-inlining-chain" ]
-@@ -618,9 +618,9 @@
+     if (!is_wasm) {
+       if (!is_win) {
+-        cflags += [ "-fdiagnostics-show-inlining-chain" ]
++        # cflags += [ "-fdiagnostics-show-inlining-chain" ]
+       } else {
+         # Combine after https://github.com/llvm/llvm-project/pull/192241
+         cflags += [ "/clang:-fdiagnostics-show-inlining-chain" ]
+@@ -632,9 +632,9 @@
      # The performance improvement does not seem worth the risk. See
      # https://crbug.com/484082200 for background and https://crrev.com/c/7593035
      # for discussion.
@@ -24,7 +24,7 @@
      # by default. https://crbug.com/765793
 --- a/naiveproxy/src/build/config/sanitizers/sanitizers.gni
 +++ b/naiveproxy/src/build/config/sanitizers/sanitizers.gni
-@@ -541,7 +541,7 @@
+@@ -549,7 +549,7 @@
          # be usable even in release builds, i.e. as widely as possible.
          # It's important not to have full-on UBSan workarounds activate
          # just because we built support for a specific sanitizer.
