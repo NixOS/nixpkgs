@@ -115,8 +115,6 @@ in
 
     environment.systemPackages = [ cfg.package ];
 
-    services.dbus.packages = [ cfg.package ];
-
     systemd.services.connman = {
       description = "Connection service";
       wantedBy = [ "multi-user.target" ];

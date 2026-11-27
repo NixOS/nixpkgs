@@ -15,6 +15,7 @@
           {
             replication_factor = 1;
             consistency_mode = "consistent";
+            admin.api_bind_addr = "[::1]:3903";
           }
         else
           {
@@ -36,5 +37,11 @@
         # Now Garage is operational.
         test_bucket_writes(single_node)
         test_bucket_over_http(single_node)
+
+      ${lib.optionalString (lib.versionAtLeast package.version "2.6") ''
+        with subtest("Garage serves the web admin UI"):
+          single_node.wait_for_open_port(3903, "::1")
+          assert "<title>Garage Web Admin</title>" in single_node.succeed("curl -fsSL http://[::1]:3903/")
+      ''}
     '';
 }

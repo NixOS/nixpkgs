@@ -82,6 +82,7 @@ let
     cudaPackages.cuda_cudart
     cudaPackages.libcublas
     cudaPackages.cccl
+    cudaPackages.cuda_nvml_dev # nvml.h
   ];
 
   vulkanLibs = [

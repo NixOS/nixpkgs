@@ -22,18 +22,19 @@
 
   # tests
   pytestCheckHook,
+  python-dotenv,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "crewai-core";
-  version = "1.15.18";
+  version = "1.15.45";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "crewAIInc";
     repo = "crewAI";
     tag = finalAttrs.version;
-    hash = "sha256-A1nhvn4jdfjTiLfYldXsIUV7lGGqa1FDiSh0KfB5Ssk=";
+    hash = "sha256-zrZLtQr/qV79tdx0evGUxmSaGa983xc+62zCk4XjmyI=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/lib/crewai-core";
@@ -68,10 +69,16 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     pytestCheckHook
+    python-dotenv
   ];
 
   enabledTestPaths = [
     "tests"
+  ];
+
+  disabledTests = [
+    # Requires opentelemetry>=1.45
+    "test_user_otlp_exporters_keep_their_logs"
   ];
 
   pytestFlags = [
@@ -80,6 +87,8 @@ buildPythonPackage (finalAttrs: {
     # Drop addopts from the repository-wide pyproject.toml (xdist, socket, timeout)
     "--override-ini=addopts="
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Shared utilities for CrewAI (version, paths, user-data, telemetry, printer)";

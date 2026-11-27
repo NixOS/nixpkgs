@@ -6,13 +6,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "wonderbrushed";
-  version = "0.45-beta.1";
+  version = "0.45";
 
   src = fetchFromGitHub {
     owner = "Bhavneeth-Games";
     repo = "Wonderbrushed";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-jyXeGFvNxov7NAY9jQp+gnhxBGFUI2dHX0tizlSTCAU=";
+    hash = "sha256-E5Wkm2O17PzRxt9oQcNuUpeRINpkCFowmHhT1svWNjo=";
   };
 
   strictDeps = true;
