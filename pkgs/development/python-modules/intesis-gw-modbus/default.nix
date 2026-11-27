@@ -6,7 +6,6 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   setuptools-scm,
 }:
@@ -15,8 +14,6 @@ buildPythonPackage (finalAttrs: {
   pname = "intesis-gw-modbus";
   version = "0.3.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "TimoPtr";
