@@ -6,6 +6,7 @@
   makeWrapper,
   jdk,
   maven,
+  testers,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -58,6 +59,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     dontFixup = true;
     outputHashMode = "recursive";
     outputHash = "sha256-wp2G/byiCS6/qx4gtLs62d8bHbxCvBXsMSDteqxLVH0=";
+  };
+
+
+  passthru.tests.version = testers.testVersion {
+    package = finalAttrs.finalPackage;
   };
 
   preBuild = ''
