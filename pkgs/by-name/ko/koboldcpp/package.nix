@@ -352,7 +352,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     '')
 
     (lib.optionalString (!koboldLiteSupport) ''
-      rm "$installDir/embd_res/kcpp_docs.embd"
       rm "$installDir/embd_res/klite.embd"
     '')
 
