@@ -10,7 +10,7 @@
 
 ocamlPackages.buildDunePackage (finalAttrs: {
   pname = "why3find";
-  version = "1.3.0";
+  version = "1.3.1";
 
   # why3find looks up its dune-site locations in its library directory at
   # runtime, so the library can't be split into a separate "dev" output.
@@ -21,11 +21,15 @@ ocamlPackages.buildDunePackage (finalAttrs: {
     owner = "pub";
     repo = "why3find";
     tag = finalAttrs.version;
-    hash = "sha256-G1Cmmo83Le1WRBTeit2NvyXvWpw0yJtd2kRiGMKSPrs=";
+    hash = "sha256-vDqGp8sznG+QC4T0JpvkGvBY7eIlgfwQTKq/pnGLjDA=";
   };
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.sigtool # codesign
+  ];
+
+  buildInputs = with ocamlPackages; [
+    cpu
   ];
 
   propagatedBuildInputs = with ocamlPackages; [
@@ -33,7 +37,7 @@ ocamlPackages.buildDunePackage (finalAttrs: {
     terminal_size
     why3
     yojson
-    zmq
+    xdg
   ];
 
   doCheck = true;
@@ -41,6 +45,10 @@ ocamlPackages.buildDunePackage (finalAttrs: {
   nativeCheckInputs = [
     alt-ergo.bin
     why3
+  ];
+
+  checkInputs = with ocamlPackages; [
+    zmq
   ];
 
   meta = {
