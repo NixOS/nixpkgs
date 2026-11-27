@@ -47,7 +47,7 @@ This section describes how changes can be proposed with a pull request (PR).
 
    ```bash
    # Make sure you have the latest changes from upstream Nixpkgs
-   git fetch upstream
+   git fetch upstream master --progress
 
    # Create and switch to a new branch, based on the base branch in Nixpkgs
    git switch --create update-hello upstream/master
@@ -117,8 +117,9 @@ This section describes how changes can be proposed with a pull request (PR).
    - If there are merge conflicts, you will have to [rebase the branch](https://git-scm.com/book/en/v2/Git-Branching-Rebasing) onto the current **base branch**.
      Sometimes this can be done [on GitHub directly](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/keeping-your-pull-request-in-sync-with-the-base-branch#updating-your-pull-request-branch).
      To rebase locally:
-     ```
-     git fetch upstream
+
+     ```bash
+     git fetch upstream master --progress
      git rebase upstream/master
      git push --force-with-lease
      ```
