@@ -2,7 +2,9 @@
   lib,
   stdenv,
   fetchurl,
+  singular,
   dimensions ? 6, # works for <= dimensions dimensions, but is only optimized for that exact value
+  allDimensions ? false,
   doSymlink ? true, # symlink the executables to the default location (without dimension postfix)
 }:
 
@@ -13,46 +15,58 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "palp";
   version = "2.21";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchurl {
     url = "https://hep.itp.tuwien.ac.at/~kreuzer/CY/palp/palp-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-fkp78hmZioRMC8zgoXbknQdDy0tQWg4ZUym/LsGW3dc=";
+    hash = "sha256-fkp78hmZioRMC8zgoXbknQdDy0tQWg4ZUym/LsGW3dc=";
   };
 
   hardeningDisable = [
     "format"
   ];
 
-  patchPhase = lib.optionalString stdenv.hostPlatform.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace GNUmakefile --replace gcc cc
+    patchShebangs --build tests
   '';
 
-  preBuild = ''
+  enableParallelBuilding = true;
+
+  preBuild = lib.optionalString (!allDimensions) ''
     echo Building PALP optimized for ${dim} dimensions
     sed -i "s/^#define[^a-zA-Z]*POLY_Dmax.*/#define POLY_Dmax ${dim}/" Global.h
   '';
 
-  # palp has no tests of its own. This test is an adapted sage test that failed
-  # when #28029 was merged.
+  buildFlags = lib.optionals allDimensions [
+    "all-dims"
+  ];
+
   doCheck = true;
-  checkPhase = ''
-    ./nef.x -f -N << EOF | grep -q 'np='
-      3 6
-      1  0  0 -1  0  0
-      0  1  0  0 -1  0
-      0  0  1  0  0 -1
-    EOF
+  nativeCheckInputs = [
+    singular
+  ];
+
+  preInstall = lib.optionalString (!allDimensions) ''
+    for file in poly class cws nef mori; do
+      mv $file.x $file-${dim}d.x
+    done
   '';
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin
     for file in poly class cws nef mori; do
-      cp -p $file.x "$out/bin/$file-${dim}d.x"
+      cp -p $file-*.x $out/bin
     done
-  ''
-  + lib.optionalString doSymlink ''
+    runHook postInstall
+  '';
+
+  postInstall = lib.optionalString doSymlink ''
     cd $out/bin
     for file in poly class cws nef mori; do
-      ln -sf $file-6d.x $file.x
+      ln -sf $file-${dim}d.x $file.x
     done
   '';
 

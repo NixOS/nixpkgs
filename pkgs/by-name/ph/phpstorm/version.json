@@ -1,18 +1,18 @@
 {
-  "version": "2026.3",
-  "buildNumber": "263.7307.215",
+  "version": "2026.3.0.1",
+  "buildNumber": "263.7307.352",
   "urls": {
     "x86_64-linux": {
-      "url": "https://download.jetbrains.com/webide/PhpStorm-2026.3.tar.gz",
-      "hash": "sha256-lYqIFieuxES9cq66zlLB8alP1NC93YQDjJjwR2fvDg8="
+      "url": "https://download.jetbrains.com/webide/PhpStorm-2026.3.0.1.tar.gz",
+      "hash": "sha256-BSLsZ1h8KJFCwIxRMK9AQazmUkzD7YHDEz/4QBBxBUc="
     },
     "aarch64-linux": {
-      "url": "https://download.jetbrains.com/webide/PhpStorm-2026.3-aarch64.tar.gz",
-      "hash": "sha256-lt7C16ofqf4ZtnrTZtlSyKi4ld4Qs+rfR1F49cbcsfQ="
+      "url": "https://download.jetbrains.com/webide/PhpStorm-2026.3.0.1-aarch64.tar.gz",
+      "hash": "sha256-bseP8K9e4FNQjjsq9Uc7+zl9Cf8BxKYA9hTZQiXMsU0="
     },
     "aarch64-darwin": {
-      "url": "https://download.jetbrains.com/webide/PhpStorm-2026.3-aarch64.dmg",
-      "hash": "sha256-WWgUAW2feaX+wJbc2GPWmfE0rboWU0AEBQXINfjH/tI="
+      "url": "https://download.jetbrains.com/webide/PhpStorm-2026.3.0.1-aarch64.dmg",
+      "hash": "sha256-q8jnkCgXSMCOX9iRm9zt0Mwndx2GJ0cFG4G8Ch5tsnk="
     }
   }
 }
