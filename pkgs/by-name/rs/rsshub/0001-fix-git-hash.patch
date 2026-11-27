@@ -20,16 +20,16 @@ diff --git a/lib/utils/git-hash.ts b/lib/utils/git-hash.ts
 -        .trim();
 -
 -let gitHash = process.env.HEROKU_SLUG_COMMIT?.slice(0, 8) || process.env.VERCEL_GIT_COMMIT_SHA?.slice(0, 8);
--let gitDate: Date | undefined;
+-let gitDate: Temporal.Instant | undefined;
 -if (!gitHash) {
 -    try {
 -        gitHash = git('git rev-parse HEAD').slice(0, 8);
--        gitDate = new Date(git('git log -1 --format=%cd'));
+-        gitDate = Temporal.Instant.from(git('git log -1 --format=%cI'));
 -    } catch {
 -        gitHash = 'unknown';
 -    }
 -}
 +let gitHash = '@GIT_HASH@'.slice(0, 8);
-+let gitDate = new Date('Thu Jan 1 00:00:00 1970 +0000');
++let gitDate = Temporal.Instant.fromEpochMilliseconds(0);
  
  export { gitDate, gitHash };
