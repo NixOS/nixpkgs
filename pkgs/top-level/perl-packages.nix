@@ -10613,6 +10613,26 @@ with self;
     };
   };
 
+  DBIxSafe = buildPerlPackage {
+    pname = "DBIx-Safe";
+    version = "1.2.5";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TU/TURNSTEP/DBIx-Safe-1.2.5.tar.gz";
+      hash = "sha256-cyef2YsgA003Nd7mfiuJrGPVVEnDxk3Rp7oN8Q++Cs8=";
+    };
+    buildInputs = [ ModuleSignature ];
+    propagatedBuildInputs = [
+      DBDPg
+      DBI
+    ];
+    meta = {
+      homepage = "http://bucardo.org/dbix_safe/index.html";
+      description = "Safe wrapper to DBI interface";
+      license = lib.licenses.bsd2;
+      maintainers = with lib.maintainers; [ castorNova2 ];
+    };
+  };
+
   DBIxSearchBuilder = buildPerlPackage rec {
     pname = "DBIx-SearchBuilder";
     version = "1.85";
