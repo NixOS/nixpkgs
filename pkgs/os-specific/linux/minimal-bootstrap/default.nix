@@ -65,6 +65,7 @@ lib.makeScope
           gcc = gcc-latest;
           gnumake = gnumake-musl;
           gnutar = gnutar-latest;
+          targetPlatform = hostPlatform;
         };
 
         bison = callPackage ./bison {

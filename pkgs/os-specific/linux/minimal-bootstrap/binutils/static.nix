@@ -2,6 +2,7 @@
   lib,
   buildPlatform,
   hostPlatform,
+  targetPlatform,
   fetchurl,
   bash,
   gcc-buildbuild,
@@ -45,6 +46,7 @@ let
     "--prefix=${placeholder "out"}"
     "--build=${buildPlatform.config}"
     "--host=${hostPlatform.config}"
+    "--target=${targetPlatform.config}"
 
     "--disable-dependency-tracking"
     "--disable-nls"
