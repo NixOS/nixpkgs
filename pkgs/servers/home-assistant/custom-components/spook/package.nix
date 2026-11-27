@@ -9,27 +9,25 @@
   pytest-homeassistant,
   pytestCheckHook,
 }:
-buildHomeAssistantComponent rec {
+buildHomeAssistantComponent (finalAttrs: {
   owner = "frenck";
   domain = "spook";
-  version = "5.11.1";
+  version = "5.12.0";
 
   src = fetchFromGitHub {
-    inherit owner;
-    repo = domain;
-    tag = "v${version}";
-    hash = "sha256-LO4WnmsPlvc26e4Sx/RxrZVIgEUak1oVm7Qa+SKkYUo=";
+    inherit (finalAttrs) owner;
+    repo = finalAttrs.domain;
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-hQ0yfPUNoWMYL0gGuyqesH0YP4AvMHR8jhWgBJZpt8Q=";
   };
 
   patches = [
     ./remove-sub-integration-symlink-hack.patch
-    # https://github.com/frenck/spook/pull/2070
-    ./home-assistant-2026-11.patch
   ];
 
   postPatch = ''
     substituteInPlace custom_components/spook/manifest.json \
-      --replace-fail '"version": "0.0.0"' '"version": "${version}"'
+      --replace-fail '"version": "0.0.0"' '"version": "${finalAttrs.version}"'
   '';
 
   dependencies = [
@@ -55,10 +53,10 @@ buildHomeAssistantComponent rec {
   ];
 
   meta = {
-    changelog = "https://github.com/frenck/spook/releases/tag/v${version}";
+    changelog = "https://github.com/frenck/spook/releases/tag/${finalAttrs.src.tag}";
     description = "Toolbox for Home Assistant";
     homepage = "https://spook.boo/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kkoniuszy ];
   };
-}
+})
