@@ -9,14 +9,14 @@
   git,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "swim";
   version = "0.21.0";
 
   src = fetchFromCodeberg {
     owner = "spade-lang";
     repo = "swim";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-JwD3cehXXgLMDgu0b8kiKK/Gf25bEUyP6KSLjKLzOgA=";
   };
 
@@ -56,4 +56,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ pbsds ];
     mainProgram = "swim";
   };
-}
+})
