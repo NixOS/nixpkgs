@@ -15,7 +15,7 @@
   wavpack,
   vorbisgain,
   monkeys-audio,
-  sox,
+  sox_ng,
   gtk3,
   qt6,
   ttaenc,
@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
       wavpack
       monkeys-audio
       vorbisgain
-      sox
+      sox_ng
     ]
     ++ lib.optional withFaac faac
   );

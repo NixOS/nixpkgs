@@ -11,7 +11,7 @@
   libsndfile,
   glib,
   flac,
-  sox,
+  sox_ng,
   util-linux,
   testers,
   whipper,
@@ -22,7 +22,7 @@ let
     libcdio-paranoia
     cdrdao
     flac
-    sox
+    sox_ng
     util-linux
   ];
 in

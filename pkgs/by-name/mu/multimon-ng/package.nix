@@ -6,7 +6,7 @@
   libpulseaudio,
   libx11,
   makeWrapper,
-  sox,
+  sox_ng,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postInstall = ''
-    wrapProgram $out/bin/multimon-ng --prefix PATH : "${lib.makeBinPath [ sox ]}"
+    wrapProgram $out/bin/multimon-ng --prefix PATH : "${lib.makeBinPath [ sox_ng ]}"
   '';
 
   meta = {

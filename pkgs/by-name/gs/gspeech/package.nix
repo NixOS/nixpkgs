@@ -16,7 +16,7 @@
   gst_all_1,
   makeWrapper,
   picotts,
-  sox,
+  sox_ng,
 }:
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
@@ -66,13 +66,13 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     wrapProgram $out/bin/gspeech --prefix PATH : ${
       lib.makeBinPath [
         picotts
-        sox
+        sox_ng
       ]
     }
     wrapProgram $out/bin/gspeech-cli --prefix PATH : ${
       lib.makeBinPath [
         picotts
-        sox
+        sox_ng
       ]
     }
   '';

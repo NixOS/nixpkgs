@@ -6,7 +6,7 @@
   nix-update-script,
   bashNonInteractive,
   gawk,
-  sox,
+  sox_ng,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -39,7 +39,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       --prefix PATH : ${
         lib.makeBinPath [
           gawk
-          sox
+          sox_ng
         ]
       }
 

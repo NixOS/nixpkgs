@@ -11,7 +11,7 @@
   makeWrapper,
   python3,
   pkg-config,
-  sox,
+  sox_ng,
   vorbis-tools,
   which,
 }:
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     lame
     libao
     libzakalwe
-    sox
+    sox_ng
     vorbis-tools
   ];
 
@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
         lib.makeBinPath [
           flac
           lame
-          sox
+          sox_ng
           vorbis-tools
         ]
       }

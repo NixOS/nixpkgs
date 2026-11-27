@@ -9,7 +9,7 @@
   # buildInputs
   cudaPackages,
   ffmpeg_6,
-  sox,
+  sox_ng,
 
   # nativeBuildInputs
   addDriverRunpath,
@@ -36,7 +36,7 @@ buildPythonPackage (finalAttrs: {
   buildInputs = [
     # We need to patch lib/torio/_torio_ffmpeg6
     ffmpeg_6.dev
-    sox
+    sox_ng
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux (
     with cudaPackages;

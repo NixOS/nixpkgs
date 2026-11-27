@@ -3,7 +3,7 @@
   lib,
   fetchurl,
   gnuplot,
-  sox,
+  sox_ng,
   flac,
   id3v2,
   vorbis-tools,
@@ -13,7 +13,7 @@
 let
   path = lib.makeBinPath [
     gnuplot
-    sox
+    sox_ng
     flac
     id3v2
     vorbis-tools

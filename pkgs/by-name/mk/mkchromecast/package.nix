@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   python3Packages,
-  sox,
+  sox_ng,
   flac,
   lame,
   ffmpeg,
@@ -19,7 +19,7 @@
 let
   packages = [
     vorbis-tools
-    sox
+    sox_ng
     flac
     lame
     opus-tools

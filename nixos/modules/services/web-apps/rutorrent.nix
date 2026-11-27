@@ -18,7 +18,7 @@ let
     ];
     rss = [ curl ];
     mediainfo = [ mediainfo ];
-    spectrogram = [ sox ];
+    spectrogram = [ sox_ng ];
     screenshots = [ ffmpeg ];
   };
 
