@@ -60,7 +60,11 @@ let
     # Turn on --enable-new-dtags by default to make the linker set
     # RUNPATH instead of RPATH on binaries.  This is important because
     # RUNPATH can be overridden using LD_LIBRARY_PATH at runtime.
+    # Also, set sysroot. This has the undocumented effect that a cross-
+    # linker will search the RUNPATH of dependency .so's, matching a
+    # native linker's behavior with or without a sysroot configured.
     "--enable-new-dtags"
+    "--with-sysroot=/"
 
     # By default binutils searches $libdir for libraries. This brings in
     # libbfd and libopcodes into a default visibility. Drop default lib
