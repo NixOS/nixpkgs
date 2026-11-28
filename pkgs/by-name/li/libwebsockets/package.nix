@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libwebsockets";
-  version = "4.5.8";
+  version = "5.1.0";
 
   src = fetchFromGitHub {
     owner = "warmcat";
     repo = "libwebsockets";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-0pLBxOSKaxboHd9L27RKKqSJ9lVH4wPgKSyXEoJMal4=";
+    hash = "sha256-8UY0UHdzlc4DXB5YNc5dUj2u5BfLXK5JJfCrncP4UzM=";
   };
 
   outputs = [
@@ -38,10 +38,11 @@ stdenv.mkDerivation (finalAttrs: {
     "-DLWS_WITH_PLUGINS=ON"
     "-DLWS_WITH_IPV6=ON"
     "-DLWS_WITH_SOCKS5=ON"
+    # Prevents dependency on GnuTLS
+    "-DLWS_WITH_HTTP3=OFF"
     "-DDISABLE_WERROR=ON"
     "-DLWS_BUILD_HASH=no_hash"
-    # TODO(Mindavi): figure out why linking has broken for test apps between 4.3.5 and 4.4.1.
-    "-DLWS_WITHOUT_TESTAPPS=ON"
+    "-DLWS_WITHOUT_TESTAPPS=OFF"
   ]
   ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "-DLWS_WITHOUT_TESTAPPS=ON"
   ++ lib.optional withExternalPoll "-DLWS_WITH_EXTERNAL_POLL=ON"
@@ -55,34 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
       ]
   );
 
-  postPatch = ''
-    substituteInPlace lib/CMakeLists.txt \
-      --replace-fail '=\''${exec_prefix}/''${LWS_INSTALL_LIB_DIR}' '=''${CMAKE_INSTALL_FULL_LIBDIR}' \
-      --replace-fail '=\''${prefix}/''${LWS_INSTALL_INCLUDE_DIR}' '=''${CMAKE_INSTALL_FULL_INCLUDEDIR}'
-
-    substituteInPlace cmake/lws_config.h.in \
-      --replace-fail '"''${CMAKE_INSTALL_PREFIX}/''${LWS_INSTALL_LIB_DIR}"' '"''${CMAKE_INSTALL_FULL_LIBDIR}"'
-  ''
-  # Remove after https://github.com/warmcat/libwebsockets/pull/3567 has been merged or otherwise addressed
-  + lib.optionalString stdenv.hostPlatform.isStatic ''
-    substituteInPlace "cmake/libwebsockets-config.cmake.in" --replace-fail \
-      "set(LIBWEBSOCKETS_LIBRARIES websockets websockets_shared)" \
-      "set(LIBWEBSOCKETS_LIBRARIES websockets)"
-  ''
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    # Fix doubled store path in macOS install_name
-    substituteInPlace CMakeLists.txt \
-      --replace-fail \
-        'SET(CMAKE_INSTALL_NAME_DIR "''${CMAKE_INSTALL_PREFIX}/''${LWS_INSTALL_LIB_DIR}")' \
-        'SET(CMAKE_INSTALL_NAME_DIR "''${LWS_INSTALL_LIB_DIR}")'
-  ''
-  + lib.optionalString stdenv.hostPlatform.isStatic "";
-
   postInstall = ''
-    # Fix path that will be incorrect on move to "dev" output.
-    substituteInPlace "$out/lib/cmake/libwebsockets/LibwebsocketsTargets-release.cmake" \
-      --replace "\''${_IMPORT_PREFIX}" "$out"
-
     # The package builds a few test programs that are not usually necessary.
     # Move those to the dev output.
     moveToOutput "bin/libwebsockets-test-*" "$dev"
