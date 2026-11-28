@@ -8,7 +8,7 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "budget-tracker-tui";
-  version = "1.8.1";
+  version = "1.8.2";
 
   __structuredAttrs = true;
 
@@ -16,9 +16,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "Feromond";
     repo = "budget-tracker-tui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-j8JK1zBIFJyPp+sT4lB7IX9mB4WLsRiCI2fec4ocYU4=";
+    hash = "sha256-yijS3Tqu57StLuVfdtrGl43+PbobsrZmCAoG/w1Aypg=";
   };
-  cargoHash = "sha256-IYFzqcvpDu4KrGrJl5T3Sir6MG7b1SFIgdY/8HiAPAg=";
+  cargoHash = "sha256-FDIM5myGO8Dw6ITE/A9XbIhtsI73dZRTsSQb4Y4vYJQ=";
 
   nativeBuildInputs = [
     pkg-config
