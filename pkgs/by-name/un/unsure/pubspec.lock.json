@@ -64,11 +64,11 @@
       "dependency": "transitive",
       "description": {
         "name": "cli_util",
-        "sha256": "89b8801ba49f8b593fbf2d3e59efd0f566c46cd4ba6837ae2610c72b52a0f899",
+        "sha256": "da2a2b22f919995eb427edab07725e2be0b1281ef26770f6ce3a213355565262",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "0.6.0"
+      "version": "0.6.1"
     },
     "collection": {
       "dependency": "transitive",
@@ -94,11 +94,11 @@
       "dependency": "transitive",
       "description": {
         "name": "coverage",
-        "sha256": "ff89e37c19355194e279d26dafe8e4bece46c9ea63a30be4dc68214f5bc290d3",
+        "sha256": "8877574b53777c6627f436538eaf4a0485eebb49e19a3cace38474af60584613",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "1.16.0"
+      "version": "1.16.2"
     },
     "crypto": {
       "dependency": "transitive",
@@ -184,11 +184,11 @@
       "dependency": "direct dev",
       "description": {
         "name": "lints",
-        "sha256": "a2c3d198cb5ea2e179926622d433331d8b58374ab8f29cdda6e863bd62fd369c",
+        "sha256": "12f842a479589fea194fe5c5a3095abc7be0c1f2ddfa9a0e76aed1dbd26a87df",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "1.0.1"
+      "version": "6.1.0"
     },
     "logging": {
       "dependency": "transitive",
@@ -211,7 +211,7 @@
       "version": "0.12.20"
     },
     "meta": {
-      "dependency": "transitive",
+      "dependency": "direct main",
       "description": {
         "name": "meta",
         "sha256": "307249ce4ff29d58a18e97f6345f539382eb9c9c29ecda628900f31de0443dd9",
@@ -264,11 +264,11 @@
       "dependency": "direct main",
       "description": {
         "name": "petitparser",
-        "sha256": "cb3798bef7fc021ac45b308f4b51208a152792445cce0448c9a4ba5879dd8750",
+        "sha256": "2f1564aadb14215e478563b5406cb80729d022158c01dc50c96013c2f7eb4790",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "5.4.0"
+      "version": "7.1.0"
     },
     "pool": {
       "dependency": "transitive",
@@ -289,16 +289,6 @@
       },
       "source": "hosted",
       "version": "2.2.1"
-    },
-    "quiver": {
-      "dependency": "transitive",
-      "description": {
-        "name": "quiver",
-        "sha256": "ea0b925899e64ecdfbf9c7becb60d5b50e706ade44a85b2363be2a22d88117d2",
-        "url": "https://pub.dev"
-      },
-      "source": "hosted",
-      "version": "3.2.2"
     },
     "shelf": {
       "dependency": "transitive",
@@ -404,11 +394,11 @@
       "dependency": "direct main",
       "description": {
         "name": "t_stats",
-        "sha256": "ebe4babf8fba8140d4a66465707a5f3db43cf31c9159df225fee823973d467c6",
+        "sha256": "8d0eb44f00038bc3baec64de2d22ac006747c622b238f840643920fef94a6411",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "3.0.0"
+      "version": "4.0.0"
     },
     "term_glyph": {
       "dependency": "transitive",
