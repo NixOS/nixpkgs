@@ -16,7 +16,7 @@
 }:
 let
   pname = "part-db";
-  version = "2.20.4";
+  version = "2.21.2";
 
   srcWithVendor = php.buildComposerProject2 {
     inherit pname version;
@@ -25,7 +25,7 @@ let
       owner = "Part-DB";
       repo = "Part-DB-server";
       tag = "v${version}";
-      hash = "sha256-jy78fZPXIoXHTrN3a17GOfEjGlzks0c5sSDYBK+NJ14=";
+      hash = "sha256-9kZcqsxQzLUSaCWKub0SKjUYQedLsRzL+9+vNQZ27rY=";
     };
 
     php = php.buildEnv {
@@ -38,7 +38,7 @@ let
       );
     };
 
-    vendorHash = "sha256-k6qQZ7SnqeS0LkZBLS3SllXhLGXeI9bf+hdJjr5+5y8=";
+    vendorHash = "sha256-iRDEy+509opV9UERuygnrlvotsXr5vTkZaUi+aaGbA4=";
 
     # Upstream composer.json file is missing the description field
     composerStrictValidation = false;
@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = finalAttrs.src + "/yarn.lock";
-    hash = "sha256-z0bwuL9FwqE5kDRdBh12yofhQ3eaMX0HrLxlK6xQIVc=";
+    hash = "sha256-oJwzGrT8czSVpX+8VUFUD4P9r5Udg5Fqr5QWj8AWnDQ=";
   };
 
   nativeBuildInputs = [
