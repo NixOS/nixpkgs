@@ -6,19 +6,24 @@
 }:
 buildDotnetModule (finalAttrs: {
   pname = "fracjson";
-  version = "1.0.1";
+  version = "1.1.0";
   src = fetchFromGitHub {
     owner = "j-brooke";
     repo = "FracturedJson";
     tag = "cli-v${finalAttrs.version}";
-    sha256 = "sha256-JdCDL6kTGUT2bgKLXw9aHThuSNxeSOtFm2besvFw814=";
+    sha256 = "sha256-NV2IgupvCl1Q3C9T37ZjiE5/6Y4zRHLF1367cUseI8k=";
   };
+
+  patchPhase = ''
+    substituteInPlace Cli/Cli.csproj \
+    --replace-fail '<TargetFramework>net8.0</' '<TargetFramework>net11.0</'
+  '';
 
   projectFile = "Cli/Cli.csproj";
   nugetDeps = ./deps.json;
 
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
-  dotnet-runtime = dotnetCorePackages.runtime_8_0;
+  dotnet-sdk = dotnetCorePackages.sdk_11_0;
+  dotnet-runtime = dotnetCorePackages.runtime_11_0;
 
   # Compression in single-file bundles requires self-contained builds;
   # override the .csproj setting for framework-dependent Nix packaging.
