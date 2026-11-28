@@ -29,6 +29,7 @@
   x264,
   x265,
   zlib,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -139,6 +140,8 @@ stdenv.mkDerivation (finalAttrs: {
   postInstallCheck = ''
     "$out/bin/tvhmeta" --list-grabber-capabilities | jq -e 'has("tv_meta_tmdb") and has("tv_meta_tvdb")'
   '';
+
+  passthru.tests = { inherit (nixosTests) tvheadend; };
 
   meta = {
     description = "TV streaming server and digital video recorder";
