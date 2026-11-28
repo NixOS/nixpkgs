@@ -1,0 +1,26 @@
+diff --git a/utils/partial_model.cpp b/utils/partial_model.cpp
+index 8f51e973..0801f25a 100644
+--- a/utils/partial_model.cpp
++++ b/utils/partial_model.cpp
+@@ -153,7 +153,7 @@ static inline bool is_all_zero(const std::string & s)
+   if (s == "true") return false;
+   if (s == "false") return true;
+   assert(s.length() > 2);
+-  if (s.substr(0, 2) == "#b") {
++  if (s.substr(0, 2) == "#b" || s.substr(0, 2) == "#x") {
+     for (auto pos = s.begin() + 2; pos != s.end(); ++pos)
+       if (*pos != '0') return false;
+     return true;
+@@ -172,6 +172,12 @@ static inline bool is_all_one(const std::string & s, uint64_t w)
+   if (s == "false") return false;
+ 
+   assert(s.length() > 2);
++  if (s.substr(0, 2) == "#x") {
++    if ((s.length() - 2) * 4 != w) return false;
++    for (auto pos = s.begin() + 2; pos != s.end(); ++pos)
++      if (*pos != 'f' && *pos != 'F') return false;
++    return true;
++  }
+   if (s.substr(0, 2) == "#b") {
+     assert(s.length() - 2 <= w);
+     if (s.length() - 2 < w)  // if it has fewer zeros
