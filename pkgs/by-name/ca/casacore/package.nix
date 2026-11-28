@@ -95,6 +95,12 @@ stdenv.mkDerivation (finalAttrs: {
       includes = [ "tables/Dysco/*" ];
       hash = "sha256-j/Ukc6hvfGpWTlw3YZDjgu/UihFxfOoHMatpPP9KcO8=";
     })
+
+    # Fix "no matching function call to arrayTransform" with libc++
+    (fetchpatch {
+      url = "https://github.com/casacore/casacore/commit/14b62e2e44680fb2ac9a933b3bea55cc8e0fd947.patch";
+      hash = "sha256-HsnqopIJYVGPMA7ht+WAaNGipV+6VHW5CjY9Lr8AEJk=";
+    })
   ];
 
   enableParallelBuilding = true;
