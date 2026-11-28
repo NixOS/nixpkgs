@@ -1,0 +1,31 @@
+{
+  "platforms": {
+    "aarch64-darwin": {
+      "libSystem": {
+        "hash": "sha512-oh2y5bdyT9HPMbhcB8zVwuoe+HKJgPR0BB40U7n0FcwZBH8SvTWyi3MPBeGDxNAPvEB+OVeGd9UXbkny5soSuw==",
+        "url": "https://storage.googleapis.com/antigravity-public/antigravity-cli/1.5.19-6272854199762944/darwin-arm/cli_mac_arm64.tar.gz"
+      }
+    },
+    "aarch64-linux": {
+      "glibc": {
+        "hash": "sha512-oCtrC2tj9ULBma5qklLZFrn8MT4vduCayqcv+twrnMgJfZ7adMqq6YMEqQ+ib6FjG+jYrKLWkTgnUsgzY55kNQ==",
+        "url": "https://storage.googleapis.com/antigravity-public/antigravity-cli/1.5.19-6272854199762944/linux-arm/cli_linux_arm64.tar.gz"
+      },
+      "musl": {
+        "hash": "sha512-mDsuieimHm19AW7QB80JsT5yAUeN1YLNe0Weeurw2ltaZGl8fZ3BXMygNo+ms+HWrHsBb/MOQ6OdNTdLGhQdGQ==",
+        "url": "https://storage.googleapis.com/antigravity-public/antigravity-cli/1.5.19-6272854199762944/linux-arm-musl/cli_linux_arm64_musl.tar.gz"
+      }
+    },
+    "x86_64-linux": {
+      "glibc": {
+        "hash": "sha512-oATwztf/Ej/B3+l0DpS2h/H+PWzc9oZEbSaBeRyZB8iv4uDQ3eICKdZexctba0zahHeulCBe08AhJXOECQiOCA==",
+        "url": "https://storage.googleapis.com/antigravity-public/antigravity-cli/1.5.19-6272854199762944/linux-x64/cli_linux_x64.tar.gz"
+      },
+      "musl": {
+        "hash": "sha512-G/L95zdJGl6qLc8adoWnpjRL7FICfnCVhMg8CxreIAv3QaiIVMrqWD8eA4X4a5WSPOZ2AubPuLNxykXf4DAYLA==",
+        "url": "https://storage.googleapis.com/antigravity-public/antigravity-cli/1.5.19-6272854199762944/linux-x64-musl/cli_linux_x64_musl.tar.gz"
+      }
+    }
+  },
+  "version": "1.5.19"
+}

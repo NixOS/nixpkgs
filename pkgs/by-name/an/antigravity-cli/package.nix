@@ -5,36 +5,20 @@
   autoPatchelfHook,
   versionCheckHook,
 }:
-let
-  version = "1.5.13";
-  buildId = "5999302598852608";
-  wholeVersion = "${version}-${buildId}";
 
-  throwSystem = throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}";
-
-  sourceData = {
-    x86_64-linux = fetchurl {
-      url = "https://storage.googleapis.com/antigravity-public/antigravity-cli/${wholeVersion}/linux-x64/cli_linux_x64.tar.gz";
-      hash = "sha256-f6nMbfDQlWJpPWN8QGqGwbD1KrM2RxSx/S15zGBg1LI=";
-    };
-    aarch64-linux = fetchurl {
-      url = "https://storage.googleapis.com/antigravity-public/antigravity-cli/${wholeVersion}/linux-arm/cli_linux_arm64.tar.gz";
-      hash = "sha256-Nllq2AOFMf118Ol7W6iWejDy/Wf42cYZWdLkdh17IV8=";
-    };
-    aarch64-darwin = fetchurl {
-      url = "https://storage.googleapis.com/antigravity-public/antigravity-cli/${wholeVersion}/darwin-arm/cli_mac_arm64.tar.gz";
-      hash = "sha256-HIPj6Ii1QQxEptilRn9+yg11xNVVHIAHa32o3Hc4vZw=";
-    };
-  };
-in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "antigravity-cli";
-  inherit version;
+  inherit (finalAttrs.passthru.sources) version;
 
   strictDeps = true;
   __structuredAttrs = true;
 
-  src = sourceData.${stdenvNoCC.hostPlatform.system} or throwSystem;
+  src =
+    with stdenvNoCC.hostPlatform;
+    fetchurl (
+      finalAttrs.passthru.sources.platforms.${system}.${libc}
+        or (throw "Unsupported platform: ${system} with ${libc}")
+    );
 
   sourceRoot = ".";
 
@@ -55,7 +39,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   doInstallCheck = true;
 
   passthru = {
-    inherit wholeVersion; # for the updateScript
+    sources = lib.importJSON ./sources.json;
     updateScript = ./update.sh;
   };
 
@@ -69,7 +53,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       kirillrdy
       u3kkasha
     ];
-    platforms = lib.attrNames sourceData;
+    platforms = lib.attrNames finalAttrs.passthru.sources.platforms;
     mainProgram = "agy";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
