@@ -8,7 +8,7 @@
   qtbase,
   qtsvg,
   qtx11extras ? null, # Qt 5 only
-  kwindowsystem ? null, # Qt 6 only
+  kdePackages, # Qt 6 only
   qtwayland,
   libx11,
   libxext,
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals isQt5 [ qtx11extras ]
   ++ lib.optionals (!isQt5) [
-    kwindowsystem
+    kdePackages.kwindowsystem
     qtwayland
   ];
 
