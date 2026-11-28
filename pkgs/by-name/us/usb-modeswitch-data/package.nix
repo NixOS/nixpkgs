@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "usb-modeswitch-data";
-  version = "20251207";
+  version = "20261111";
 
   src = fetchurl {
     url = "https://www.draisberghof.de/usb_modeswitch/${finalAttrs.pname}-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-C7EtZK7l5GfDGvYaU/uCj/eqWcVKgsqF7u3kxWkL+mY=";
+    hash = "sha256-IhUHV02n0R3r26lOQM8WS1n7ixm+Gj7L7HbjSLek+nM=";
   };
 
   doInstallCheck = true;
