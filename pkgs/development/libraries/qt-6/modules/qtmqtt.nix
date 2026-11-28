@@ -2,6 +2,9 @@
   qtModule,
   fetchFromGitHub,
   qtbase,
+  qtdeclarative,
+  qtwebsockets,
+  pkgsBuildBuild,
 }:
 
 qtModule rec {
@@ -15,5 +18,13 @@ qtModule rec {
     hash = "sha256-e0gQYuo+MmQnp1TWVZkBozMB0du592owM76OoG9QjZo=";
   };
 
-  propagatedBuildInputs = [ qtbase ];
+  propagatedBuildInputs = [
+    qtbase
+    qtdeclarative
+    qtwebsockets
+  ];
+
+  cmakeFlags = [
+    "-DQt6QuickTools_DIR=${pkgsBuildBuild.qt6.qtdeclarative}/lib/cmake/Qt6QuickTools"
+  ];
 }

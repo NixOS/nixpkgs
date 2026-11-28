@@ -69,6 +69,7 @@
   bootstrap_cmds,
   cctools,
   xcbuild,
+  pkgsBuildBuild,
 }:
 
 qtModule {
@@ -86,7 +87,7 @@ qtModule {
     flex
     gperf
     ninja
-    (python3.withPackages (ps: with ps; [ html5lib ]))
+    (pkgsBuildBuild.python3.withPackages (ps: with ps; [ html5lib ]))
     which
     gn
     nodejs
@@ -165,6 +166,9 @@ qtModule {
     # android only. https://bugreports.qt.io/browse/QTBUG-100293
     # "-DQT_FEATURE_webengine_native_spellchecker=ON"
     "-DQT_FEATURE_webengine_kerberos=ON"
+    # Cross build still fails: Could NOT find Gn
+    "-DQt6QmlTools_DIR=${pkgsBuildBuild.qt6.qtdeclarative}/lib/cmake/Qt6QmlTools"
+    "-DQt6QuickTools_DIR=${pkgsBuildBuild.qt6.qtdeclarative}/lib/cmake/Qt6QuickTools"
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     "-DQT_FEATURE_webengine_system_libxml=ON"

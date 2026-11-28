@@ -38,12 +38,25 @@ qtModule {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ cups ];
 
   cmakeFlags =
+    let
+      qttoolsBuildBuild = pkgsBuildBuild.qt6.qttools.override {
+        inherit withClang;
+      };
+    in
+    # Conditional is required to prevent infinite recursion during a cross build
+    # If we want to build withClang in cross, we need tools that are only built when clang is enabled for the native build
     lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      "-DQt6LinguistTools_DIR=${pkgsBuildBuild.qt6.qttools}/lib/cmake/Qt6LinguistTools"
-      "-DQt6ToolsTools_DIR=${pkgsBuildBuild.qt6.qttools}/lib/cmake/Qt6ToolsTools"
+      "-DQt6LinguistTools_DIR=${qttoolsBuildBuild}/lib/cmake/Qt6LinguistTools"
+      "-DQt6ToolsTools_DIR=${qttoolsBuildBuild}/lib/cmake/Qt6ToolsTools"
     ]
-    ++ lib.optionals withClang [
-      "-DFEATURE_clang=ON"
+    # qttranslations builds qttools with `qtdeclarative = null` (see
+    # ../../default.nix), so there are no Quick/Qml tools to point at there
+    ++ lib.optionals (qtdeclarative != null) [
+      "-DQt6QuickTools_DIR=${pkgsBuildBuild.qt6.qtdeclarative}/lib/cmake/Qt6QuickTools"
+      "-DQt6QmlTools_DIR=${pkgsBuildBuild.qt6.qtdeclarative}/lib/cmake/Qt6QmlTools"
+    ]
+    ++ [
+      (lib.cmakeBool "FEATURE_clang" withClang)
     ];
 
   postInstall = ''
