@@ -527,9 +527,13 @@ in
 
         virtio_vmmci = callPackage ../os-specific/linux/virtio_vmmci { };
 
-        virtualbox = callPackage ../os-specific/linux/virtualbox { };
+        virtualbox = callPackage ../os-specific/linux/virtualbox {
+          virtualbox = pkgs.virtualboxHardened;
+        };
 
-        virtualboxGuestAdditions = callPackage ../by-name/vi/virtualbox/guest-additions { };
+        virtualboxGuestAdditions =
+          callPackage ../applications/virtualization/virtualbox/guest-additions
+            { };
 
         mm-tools = callPackage ../os-specific/linux/mm-tools { };
 
