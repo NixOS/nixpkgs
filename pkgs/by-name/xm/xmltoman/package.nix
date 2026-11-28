@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  makeWrapper,
   perlPackages,
   perl,
   installShellFiles,
@@ -21,6 +22,7 @@ stdenvNoCC.mkDerivation rec {
   nativeBuildInputs = [
     perl
     installShellFiles
+    makeWrapper
   ];
 
   buildInputs = [
@@ -33,15 +35,29 @@ stdenvNoCC.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out
-    perl xmltoman xml/xmltoman.1.xml > xmltoman.1
-    perl xmltoman xml/xmlmantohtml.1.xml > xmlmantohtml.1
-    install -d $out/bin $out/share/xmltoman
-    install -m 0755 xmltoman xmlmantohtml $out/bin
+    mkdir -p $out/bin $out/share/xmltoman
+    install -m 0755 xmltoman xmlmantohtml "$out/bin"
+    patchShebangs "$out/bin/xmltoman" "$out/bin/xmlmantohtml"
+    wrapProgram "$out/bin/xmltoman" --set PERL5LIB $PERL5LIB
+    wrapProgram "$out/bin/xmlmantohtml" --set PERL5LIB $PERL5LIB
+
+    "$out/bin/xmltoman" xml/xmltoman.1.xml > xmltoman.1
+    "$out/bin/xmltoman" xml/xmlmantohtml.1.xml > xmlmantohtml.1
     install -m 0644 xmltoman.dtd xmltoman.css xmltoman.xsl $out/share/xmltoman
     installManPage *.1
 
     runHook postInstall
+  '';
+
+  doInstallCheck = true;
+
+  installCheckPhase = ''
+    runHook preInstallCheckPhase
+
+    "$out/bin/xmltoman" <(echo '<xml/>')
+    "$out/bin/xmlmantohtml" <(echo '<xml/>')
+
+    runHook postInstallCheckPhase
   '';
 
   meta = {
