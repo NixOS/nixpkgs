@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "desktop-file-utils";
-  version = "0.28";
+  version = "0.29";
 
   src = fetchurl {
     url = "https://www.freedesktop.org/software/desktop-file-utils/releases/desktop-file-utils-${finalAttrs.version}.tar.xz";
-    hash = "sha256-RAHU4jHYQsLegkI5WnSjlcpGjNlvX2ENgi3zNZSJinA=";
+    hash = "sha256-Zh8iW+TGZ6vEli8HVxfbQlK2PIRID203smBQ0Cnaj6A=";
   };
 
   nativeBuildInputs = [
