@@ -7140,6 +7140,8 @@ self: super: with self; {
     callPackage ../development/python-modules/google-cloud-access-context-manager
       { };
 
+  google-cloud-aiplatform = callPackage ../development/python-modules/google-cloud-aiplatform { };
+
   google-cloud-appengine-logging =
     callPackage ../development/python-modules/google-cloud-appengine-logging
       { };
