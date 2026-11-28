@@ -96,7 +96,10 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     homepage = "https://github.com/Pennyw0rth/NetExec";
     changelog = "https://github.com/Pennyw0rth/NetExec/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ vncsb ];
+    maintainers = with lib.maintainers; [
+      vncsb
+      letgamer
+    ];
     mainProgram = "nxc";
     # FIXME: failing fixupPhase:
     # $ Rewriting #!/nix/store/<hash>-python3-3.11.7/bin/python3.11 to #!/nix/store/<hash>-python3-3.11.7
