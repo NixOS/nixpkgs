@@ -17,12 +17,18 @@ buildDotnetModule (finalAttrs: {
   patches = [
     # error: PublishTrimmed is implied by native compilation and cannot be disabled
     ./publish-fix.patch
+    # logs directory is read-only, fallback to xdg state dir for logging
+    ./fix-log-dir.patch
+    # resolve shaka-packager executable path properly
+    ./fix-shaka-packager.patch
   ];
 
   # from openutau/default.nix
   # [...]/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(248,5): error MSB4018: The "GenerateDepsFile" task failed unexpectedly. [[...]/N_m3u8DL-RE.Common.csproj]
   # [...]/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(248,5): error MSB4018: System.IO.IOException: The process cannot access the file '[...]/N_m3u8DL-RE.Common.deps.json' because it is being used by another process. [[...]/N_m3u8DL-RE.Common.csproj]
   enableParallelBuilding = false;
+
+  doCheck = true;
 
   projectFile = "src/N_m3u8DL-RE.sln";
   nugetDeps = ./deps.json;
