@@ -3,6 +3,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch2,
   cmake,
   gtest,
   doCheck ? true,
@@ -46,7 +47,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   #   in \
   #   rWrapper.override{ packages = [ xgb ]; }"
   pname = lib.optionalString rLibrary "r-" + "xgboost";
-  version = "3.0.5";
+  version = "3.4.2";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -57,8 +58,22 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     repo = "xgboost";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-khaD9gvKfUyWhkrIZXzGzKw/nfgeTcp9akCi5X3IORo=";
+    hash = "sha256-xdukBs4Y+JgQIKxXuY1Gh7gjYH+RbVpGrfjyljdytRk=";
   };
+
+  # Fix the build with CCCL 3.5 (CUDA 13.5). Both are on upstream's release_3.4.0 branch, after v3.4.2.
+  patches = [
+    (fetchpatch2 {
+      name = "device-lambda-return-type.patch";
+      url = "https://github.com/dmlc/xgboost/commit/8419866a248a3d2c18d794844dbdf4b9a62b13f9.patch";
+      hash = "sha256-BK4o//or5F75lhEXquWI2/F6yUiUXzLZSwdmLPDM+G4=";
+    })
+    (fetchpatch2 {
+      name = "scan-input-reverse-iterator.patch";
+      url = "https://github.com/dmlc/xgboost/commit/6abe39953954f23fd8b9408283294bf630f1ec7b.patch";
+      hash = "sha256-aov7Xb6sLpTJi4fHl3DRR+/SAuWACae0C+kDa3ZpE1M=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -126,17 +141,26 @@ effectiveStdenv.mkDerivation (finalAttrs: {
           "ThreadGroup.TimerThread"
           "ThreadGroup.TimerThreadSimple"
         ];
+        # The sandbox has no /sys/devices/system/node
+        numaTests = [
+          "Numa.GetHasCpuNodes"
+          "Numa.GetHasNormalMemoryNodes"
+          "Numa.GetNumNodes"
+        ];
         networkingTest = [
+          "AUC.MultiLabelEmptyWorker"
           "AllgatherTest.Basic"
           "AllgatherTest.VAlgo"
           "AllgatherTest.VBasic"
           "AllgatherTest.VRing"
           "AllreduceGlobal.Basic"
           "AllreduceGlobal.Small"
+          "AllreduceTest.AllreduceV"
           "AllreduceTest.Basic"
           "AllreduceTest.BitOr"
           "AllreduceTest.Restricted"
           "AllreduceTest.Sum"
+          "Anchors/QuantileDistributedContainerTest.*"
           "Approx.PartitionerColumnSplit"
           "BroadcastTest.Basic"
           "CPUHistogram.BuildHistColSplit"
@@ -169,7 +193,9 @@ effectiveStdenv.mkDerivation (finalAttrs: {
           "QuantileHist.MultiPartitionerColumnSplit"
           "QuantileHist.PartitionerColumnSplit"
           "Stats.SampleMean"
+          "Stats.SampleMeanDist"
           "Stats.WeightedSampleMean"
+          "Stats.WeightedSampleMeanDist"
           "SimpleDMatrix.ColumnSplit"
           "TrackerAPITest.CAPI"
           "TrackerTest.AfterShutdown"
@@ -178,7 +204,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
           "TrackerTest.Print"
           "VectorAllgatherV.Basic"
         ];
-        excludedTests = xsimdTests ++ networkingTest;
+        excludedTests = xsimdTests ++ numaTests ++ networkingTest;
       in
       "-${builtins.concatStringsSep ":" excludedTests}";
   };
@@ -220,6 +246,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     pkgConfigModules = [ "xgboost" ];
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
+      _81reap
       nviets
     ];
   };
