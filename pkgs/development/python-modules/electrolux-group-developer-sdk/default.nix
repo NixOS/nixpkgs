@@ -15,14 +15,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "electrolux-group-developer-sdk";
-  version = "0.7.0";
+  version = "0.7.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "electrolux-oss";
     repo = "electrolux-group-developer-sdk";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fUZFHV5PKyTehHq6PMtXOgvFm2m1OoY3Bw7XBf6Xxio=";
+    hash = "sha256-qZ/qdyKmsu3P5KOnB3dpzYhjux1DjUk/NyCVbP7Et/g=";
   };
 
   build-system = [ poetry-core ];
