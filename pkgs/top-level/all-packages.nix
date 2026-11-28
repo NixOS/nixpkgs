@@ -4740,6 +4740,10 @@ with pkgs;
     _7zz = _7zz-rar;
   };
 
+  ninjaMinimal = ninja.override {
+    minimal = true;
+  };
+
   nwjs-sdk = nwjs.override {
     sdk = true;
   };

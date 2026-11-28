@@ -6,7 +6,7 @@
   coreutils,
   libblocksruntime,
   llvmPackages,
-  ninja,
+  ninjaMinimal,
   pkg-config,
   python3,
   replaceVars,
@@ -97,7 +97,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   };
 
   nativeCheckInputs = [
-    ninja
+    ninjaMinimal
     pkg-config
     writableTmpDirAsHomeHook
   ]
