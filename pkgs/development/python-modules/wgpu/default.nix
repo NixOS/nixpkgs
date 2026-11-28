@@ -39,14 +39,14 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "wgpu";
-  version = "0.32.0";
+  version = "0.33.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pygfx";
     repo = "wgpu-py";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YkzZ0ZTq+zJfCctRn9WtoBI6l36uPnMlc/wc+OSJ8jQ=";
+    hash = "sha256-IP4PBv1r+oIydZUuW+Nkhka8eq+NVhk7xyECZM5FpZE=";
   };
 
   postPatch =
