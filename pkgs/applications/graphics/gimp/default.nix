@@ -241,6 +241,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "-Dalsa=disabled"
     "-Djavascript=disabled"
+    # XCursor is only used by the X11 input backend.
+    "-Dxcursor=disabled"
   ];
 
   doCheck = true;
@@ -315,6 +317,12 @@ stdenv.mkDerivation (finalAttrs: {
       ]
     }"
     --suffix XDG_DATA_DIRS : "${adwaita-icon-theme}/share")
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # GIMP's macOS relocation support overwrites the wrapper's GDK pixbuf
+    # loader cache with a path that does not exist in the split Nix output.
+    # Without SVG icon support this aborts while initializing the status bar.
+    gappsWrapperArgs+=(--set GIMP_NO_WRAPPER 1)
   '';
 
   postFixup = ''
@@ -351,7 +359,7 @@ stdenv.mkDerivation (finalAttrs: {
       bddvlpr
     ];
     license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     # Build invokes built binary to convert assets, binary hangs during plugin loading on big-endian platforms (s390x, ppc64)
     # https://gitlab.gnome.org/GNOME/gimp/-/issues/12522
     broken = stdenv.hostPlatform.isBigEndian;
