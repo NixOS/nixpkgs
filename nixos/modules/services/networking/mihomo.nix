@@ -16,7 +16,8 @@ let
     ++ lib.optionals cfg.processesInfo [
       "CAP_DAC_READ_SEARCH"
       "CAP_SYS_PTRACE"
-    ];
+    ]
+    ++ lib.optional cfg.bindPrivilegedPorts "CAP_NET_BIND_SERVICE";
   CapabilityBoundingSet = AmbientCapabilities;
 in
 {
@@ -63,6 +64,10 @@ in
 
     processesInfo = lib.mkEnableOption ''
       necessary capabilities for rules about process information such as `process-name`
+    '';
+
+    bindPrivilegedPorts = lib.mkEnableOption ''
+      capability (`CAP_NET_BIND_SERVICE`) for Mihomo to bind to privileged ports (such as port 53)
     '';
   };
 
@@ -134,9 +139,11 @@ in
         SystemCallFilter = "@system-service bpf";
         UMask = "0077";
       }
+      // lib.optionalAttrs (cfg.tunMode || cfg.bindPrivilegedPorts) {
+        PrivateUsers = false;
+      }
       // lib.optionalAttrs cfg.tunMode {
         PrivateDevices = false;
-        PrivateUsers = false;
         RestrictAddressFamilies = "AF_UNIX AF_INET AF_INET6 AF_NETLINK";
       };
     };
