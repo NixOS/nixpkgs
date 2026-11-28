@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "pyhanko-certvalidator";
-  version = "0.31.4";
+  version = "0.33.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "MatthiasValvekens";
     repo = "pyhanko";
     tag = "pyhanko-certvalidator/v${version}";
-    hash = "sha256-PyCVebWLtDeYFDxAE2mZ8tGaVQF60czU8ZyVbSyVONo=";
+    hash = "sha256-od9t6OmCYQ+j5HGTPa44VxNqTgT1S53VTBhjqD5/Ynw=";
   };
 
   sourceRoot = "${src.name}/pkgs/pyhanko-certvalidator";
