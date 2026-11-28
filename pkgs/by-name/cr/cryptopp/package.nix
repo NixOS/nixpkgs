@@ -67,6 +67,6 @@ stdenv.mkDerivation rec {
       publicDomain
     ];
     platforms = lib.platforms.all;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ enovamaker ];
   };
 }
