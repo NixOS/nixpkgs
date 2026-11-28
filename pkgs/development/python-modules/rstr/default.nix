@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "rstr";
-  version = "3.2.2";
+  version = "4.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-xKVk1N+0Ry2THRRcQ9HPGteMJFkhQud1W4hmF57qwBI=";
+    hash = "sha256-Gh5/MEsCke28EpVanLQJO/4cfB1I4Hl+dSuzvyokV0o=";
   };
 
   pyproject = true;
