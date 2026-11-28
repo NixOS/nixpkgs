@@ -58,6 +58,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # sandbox ("required built-in appearance SystemAppearance not found").
   postPatch = ''
     sed -i -E '/^(egui_demo_lib|egui_inspection|egui_system_font_provider) = /d' Cargo.toml
+
+    # No upstream opt-out yet: https://github.com/storytold/craft-libs/issues/492
+    substituteInPlace apps/gridcraft/src/main.rs \
+      --replace-fail 'app.start_update_check();' '// app.start_update_check();'
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     rm apps/gridcraft/tests/mac_menu_appkit.rs
