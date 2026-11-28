@@ -1,7 +1,6 @@
 {
   cmake,
   fetchFromGitHub,
-  fetchpatch2,
   glibcLocales,
   lib,
   meson,
@@ -14,7 +13,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tomlplusplus";
-  version = "3.4.0";
+  version = "3.5.1";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -23,18 +22,8 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "marzer";
     repo = "tomlplusplus";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-h5tbO0Rv2tZezY58yUbyRVpsfRjY3i+5TPkkxr6La8M=";
+    hash = "sha256-I10kkBxE5h052ZN2MfZVguk23XCxO/vQCeDkEXAcpto=";
   };
-
-  patches = [
-    # TODO: Remove this patch at the next update
-    # https://github.com/marzer/tomlplusplus/pull/233
-    (fetchpatch2 {
-      name = "tomlplusplus-install-example-programs.patch";
-      url = "https://github.com/marzer/tomlplusplus/commit/8128eb632325d1820f4d17dd8250dcda6ab07743.patch";
-      hash = "sha256-7m2P+e1/OASHrzm9LSy6RnayS/kGxFC82xOyGBGXeG0=";
-    })
-  ];
 
   nativeBuildInputs = [
     meson
@@ -48,8 +37,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   mesonFlags = [
-    "-Dbuild_tests=${lib.boolToString finalAttrs.finalPackage.doCheck}"
-    "-Dbuild_examples=true"
+    (lib.mesonBool "build_examples" true)
+    (lib.mesonBool "build_lib" true) # build_tests and build_examples already imply build_lib
+    (lib.mesonBool "build_tests" finalAttrs.finalPackage.doCheck)
   ];
 
   # locale tests seem to only work with glibc

@@ -67,6 +67,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-3Bt4df3TM7shQGxQbSDBjYk74oemNvRl4KT3DmLZGF4=";
   };
 
+  patches = [
+    ./tomlplusplus-3.5.0-compat.patch
+  ];
+
   strictDeps = true;
 
   nativeBuildInputs = [
