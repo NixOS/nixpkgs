@@ -9,14 +9,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "changedetection-io";
-  version = "0.70.3";
+  version = "0.70.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dgtlmoon";
     repo = "changedetection.io";
     tag = finalAttrs.version;
-    hash = "sha256-Y+Fmhyj3jAisMNkp7p1baKt246v+T1Uw5JXfStNOQyQ=";
+    hash = "sha256-qz7fnFE2Hj7EAbX5pArkEvb1FDJg3g/U/DXNHXZKVjc=";
   };
 
   build-system = with python3Packages; [ setuptools ];
