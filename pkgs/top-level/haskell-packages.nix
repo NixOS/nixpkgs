@@ -213,6 +213,14 @@ in
         inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
         inherit buildTargetLlvmPackages llvmPackages;
       };
+      ghc1001 = callPackage ../development/compilers/ghc/10.0.1.nix {
+        bootPkgs =
+          # No suitable bindist packaged yet
+          bb.packages.ghc9103;
+        inherit (buildPackages.python3Packages) sphinx;
+        inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
+        inherit buildTargetLlvmPackages llvmPackages;
+      };
       ghcHEAD = callPackage ../development/compilers/ghc/head.nix {
         bootPkgs =
           # No suitable bindist packaged yet
@@ -326,6 +334,11 @@ in
         buildHaskellPackages = bh.packages.ghc9142;
         ghc = bh.compiler.ghc9142;
         compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.14.x.nix { };
+      };
+      ghc1001 = callPackage ../development/haskell-modules {
+        buildHaskellPackages = bh.packages.ghc1001;
+        ghc = bh.compiler.ghc1000;
+        compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-10.0.x.nix { };
       };
       ghcHEAD = callPackage ../development/haskell-modules {
         buildHaskellPackages = bh.packages.ghcHEAD;
