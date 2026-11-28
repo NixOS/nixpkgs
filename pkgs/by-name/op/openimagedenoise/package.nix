@@ -9,6 +9,7 @@
   python3,
   stdenv,
   onetbb,
+  testers,
   xcodebuild,
 }:
 
@@ -23,6 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   strictDeps = true;
+  __structuredAttrs = true;
 
   patches = lib.optionals cudaSupport [
     ./cuda.patch
@@ -56,6 +58,11 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "TBB_INCLUDE_DIR" "${lib.getDev onetbb}/include")
     (lib.cmakeFeature "TBB_ROOT" "${onetbb}")
   ];
+
+  passthru.tests.cmake-config = testers.hasCmakeConfigModules {
+    moduleNames = [ "OpenImageDenoise" ];
+    package = finalAttrs.finalPackage;
+  };
 
   meta = {
     homepage = "https://www.openimagedenoise.org";
