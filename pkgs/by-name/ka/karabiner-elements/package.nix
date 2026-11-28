@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "karabiner-elements";
-  version = "15.7.0";
+  version = "16.3.0";
 
   src = fetchurl {
     url = "https://github.com/pqrs-org/Karabiner-Elements/releases/download/v${finalAttrs.version}/Karabiner-Elements-${finalAttrs.version}.dmg";
-    hash = "sha256-Uy0k4xxkr33j92jxEhD/6DF0hhkdf8acU7lr3hTaFa4=";
+    hash = "sha256-GcznvtPUinIiQspoO9G65Aa2qH/tUgco0ckd7hdbdeQ=";
   };
 
   outputs = [
@@ -54,7 +54,8 @@ stdenv.mkDerivation (finalAttrs: {
     cp -R Installer.pkg/Applications Installer.pkg/Library $out
     cp -R Karabiner-DriverKit-VirtualHIDDevice.pkg/Applications Karabiner-DriverKit-VirtualHIDDevice.pkg/Library $driver
 
-    cp "$out/Library/Application Support/org.pqrs/Karabiner-Elements/package-version" "$out/Library/Application Support/org.pqrs/Karabiner-Elements/version"
+    # Upstream dropped the package-version file in 16.0.0; keep providing `version`
+    echo "${finalAttrs.version}" > "$out/Library/Application Support/org.pqrs/Karabiner-Elements/version"
     runHook postInstall
   '';
 
