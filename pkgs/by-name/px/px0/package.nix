@@ -3,29 +3,52 @@
   stdenv,
   buildGoModule,
   fetchFromGitHub,
+  git,
+  nodejs,
   versionCheckHook,
   nix-update-script,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "px0";
-  version = "0.1.4";
+  version = "0.1.21";
 
   src = fetchFromGitHub {
     owner = "px0-ai";
     repo = "px0";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1r000izgL1EFsBpIkyb8u6+RVhV58qHf+AshSYtINmY=";
+    hash = "sha256-rOWJV6kEMHjnC0mEOGUeoB0HPOWk1Tv9OMRnRNk2Qvk=";
   };
 
   __structuredAttrs = true;
 
-  vendorHash = "sha256-71+6I0u3en/Aw3PVMXx6dF+NQtCiE1T+kd7MENCKnlk=";
+  __darwinAllowLocalNetworking = true;
 
-  checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
-    "-skip"
-    "TestListenPortFallback|TestTelemetrySessionLifecycle"
-  ];
+  vendorHash = "sha256-GJAd0mo4s7ybFizzXvfT79CyDR/qC6BkbUtS/2y1XEI=";
+
+  nativeBuildInputs = [ nodejs ];
+
+  nativeCheckInputs = [ git ];
+
+  preBuild = ''
+    node scripts/build-web.js
+  '';
+
+  checkFlags =
+    let
+      skippedTests = [
+        # The source tag does not contain the bundled Mermaid script.
+        "TestStaticAssetServing"
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        "TestListenPortFallback"
+        "TestTelemetrySessionLifecycle"
+      ];
+    in
+    [
+      "-skip"
+      "^(${lib.concatStringsSep "|" skippedTests})$"
+    ];
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
