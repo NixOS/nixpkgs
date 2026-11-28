@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonPackage,
+  cacert,
   fetchFromGitHub,
   pythonAtLeast,
 
@@ -153,6 +154,7 @@ buildPythonPackage (finalAttrs: {
   };
 
   nativeCheckInputs = [
+    cacert
     brotli
     pyrsistent
     responses

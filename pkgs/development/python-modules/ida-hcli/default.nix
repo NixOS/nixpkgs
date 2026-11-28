@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonPackage,
+  cacert,
   click,
   fetchFromGitHub,
   httpx,
@@ -63,6 +64,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   nativeCheckInputs = [
+    cacert
     pexpect
     pytest-asyncio
     pytest-httpx

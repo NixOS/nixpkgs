@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonPackage,
+  cacert,
   fetchFromGitHub,
   flit-core,
   httpx,
@@ -40,6 +41,7 @@ buildPythonPackage (finalAttrs: {
   ++ httpx.optional-dependencies.http2;
 
   nativeCheckInputs = [
+    cacert
     mypy
     pytest-asyncio
     pytest-mock

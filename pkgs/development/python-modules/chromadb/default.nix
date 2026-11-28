@@ -2,6 +2,7 @@
   lib,
   stdenv,
   buildPythonPackage,
+  cacert,
   fetchFromGitHub,
   fetchurl,
 
@@ -169,6 +170,7 @@ buildPythonPackage (finalAttrs: {
   };
 
   nativeCheckInputs = [
+    cacert
     chroma-hnswlib
     fastapi
     hnswlib

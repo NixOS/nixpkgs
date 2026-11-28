@@ -1,5 +1,6 @@
 {
   buildPythonPackage,
+  cacert,
   fetchFromGitHub,
   freezegun,
   httmock,
@@ -32,6 +33,7 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [ "snowplow_tracker" ];
 
   nativeCheckInputs = [
+    cacert
     httmock
     freezegun
     pytestCheckHook

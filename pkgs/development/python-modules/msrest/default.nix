@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonPackage,
+  cacert,
   fetchFromGitHub,
   pythonAtLeast,
 
@@ -50,6 +51,7 @@ buildPythonPackage {
   ];
 
   nativeCheckInputs = [
+    cacert
     httpretty
     pytest-aiohttp
     pytestCheckHook

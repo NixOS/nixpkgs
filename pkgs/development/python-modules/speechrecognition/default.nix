@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonPackage,
+  cacert,
   fetchFromGitHub,
 
   flac,
@@ -91,6 +92,7 @@ buildPythonPackage (finalAttrs: {
   };
 
   nativeCheckInputs = [
+    cacert
     groq
     pocketsphinx
     pytest-httpserver

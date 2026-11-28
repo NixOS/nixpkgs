@@ -2,6 +2,7 @@
   lib,
   stdenv,
   buildPythonPackage,
+  cacert,
   fetchFromGitHub,
 
   # build-system
@@ -185,6 +186,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   nativeCheckInputs = [
+    cacert
     azure-core
     azure-storage-blob
     boto3
