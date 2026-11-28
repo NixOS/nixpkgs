@@ -92,12 +92,12 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hey-mail";
-  version = "1.3.9";
-  rev = "36";
+  version = "1.3.10";
+  rev = "37";
 
   src = fetchurl {
     url = "https://api.snapcraft.io/api/v1/snaps/download/lfWUNpR7PrPGsDfuxIhVxbj0wZHoH7bK_${finalAttrs.rev}.snap";
-    hash = "sha512-GPC3zd0B21CbFb5TuQ+7cZ0HZ87pnEePaMAkczd17yOfW9F0VEq3WuU4RepokOYBgteRL7tiJ71rbks+dEpI3A==";
+    hash = "sha512-fNW5YVf7QJG0RjDyH8yhqOAiA8y5Q2qrK6qvFL+DqQOU1IGKRNbqm8b6+gJX4FkSjvF/XKpx+Yt4bmJbWdNwVQ==";
   };
 
   nativeBuildInputs = [
