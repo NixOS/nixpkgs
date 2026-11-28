@@ -13,11 +13,20 @@ in
 {
   imports = [
     ../../../modules/virtualisation/openstack-config.nix
+    ../../../modules/image/config-file-option.nix
     ../../../modules/image/file-options.nix
   ]
   ++ (lib.optional copyChannel ../../../modules/installer/cd-dvd/channel.nix);
 
   documentation.enable = copyChannel;
+
+  virtualisation.configFile = lib.mkDefault (
+    pkgs.writeText "configuration.nix" ''
+      {
+        imports = [ <nixpkgs/nixos/modules/virtualisation/openstack-config.nix> ];
+      }
+    ''
+  );
 
   image.extension = format;
   system.nixos.tags = [ "openstack" ];
@@ -32,11 +41,7 @@ in
     inherit (config.image) baseName;
     additionalSpace = "1024M";
     pkgs = import ../../../.. { inherit (pkgs.stdenv.hostPlatform) system; }; # ensure we use the regular qemu-kvm package
-    configFile = pkgs.writeText "configuration.nix" ''
-      {
-        imports = [ <nixpkgs/nixos/modules/virtualisation/openstack-config.nix> ];
-      }
-    '';
+    inherit (config.virtualisation) configFile;
   };
 
 }

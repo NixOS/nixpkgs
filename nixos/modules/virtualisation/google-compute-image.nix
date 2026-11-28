@@ -21,6 +21,7 @@ in
 
   imports = [
     ./google-compute-config.nix
+    ../image/config-file-option.nix
     ./disk-size-option.nix
     ../image/file-options.nix
     (lib.mkRenamedOptionModuleWith {
@@ -43,9 +44,9 @@ in
       default = null;
       description = ''
         A path to a configuration file which will be placed at `/etc/nixos/configuration.nix`
-        and be used when switching to a new configuration.
-        If set to `null`, a default configuration is used, where the only import is
-        `<nixpkgs/nixos/modules/virtualisation/google-compute-image.nix>`.
+        and be used when switching to a new configuration. Prefer setting
+        `virtualisation.configFile` for image-builder-agnostic configurations.
+        If set to `null`, `virtualisation.configFile` is used.
       '';
     };
 
@@ -106,6 +107,15 @@ in
       fsType = "vfat";
     };
 
+    warnings =
+      optional (cfg.configFile != null)
+        "The option `virtualisation.googleComputeImage.configFile` is deprecated, use `virtualisation.configFile` instead.";
+
+    virtualisation.configFile = lib.mkMerge [
+      (lib.mkDefault defaultConfigFile)
+      (lib.mkIf (cfg.configFile != null) cfg.configFile)
+    ];
+
     system.nixos.tags = [ "google-compute" ];
     image.extension = "raw.tar.gz";
     system.build.image = config.system.build.googleComputeImage;
@@ -131,10 +141,9 @@ in
         popd
       '';
       format = "raw";
-      configFile = if cfg.configFile == null then defaultConfigFile else cfg.configFile;
       inherit (cfg) contents;
       partitionTableType = if cfg.efi then "efi" else "legacy";
-      inherit (config.virtualisation) diskSize;
+      inherit (config.virtualisation) configFile diskSize;
       memSize = cfg.buildMemSize;
       inherit config lib pkgs;
     };
