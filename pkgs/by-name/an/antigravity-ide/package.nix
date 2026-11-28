@@ -3,6 +3,7 @@
   stdenv,
   buildVscode,
   fetchurl,
+  antigravity-cli,
   writeShellScript,
   coreutils,
   commandLineArgs ? "",
@@ -15,6 +16,7 @@ let
   source =
     information.sources."${hostPlatform.system}"
       or (throw "antigravity-ide: unsupported system ${hostPlatform.system}");
+  src = fetchurl { inherit (source) url sha256; };
 in
 buildVscode {
   inherit commandLineArgs useVSCodeRipgrep;
@@ -27,9 +29,26 @@ buildVscode {
   libraryName = "antigravity-ide";
   iconName = "antigravity-ide";
 
-  src = fetchurl { inherit (source) url sha256; };
+  inherit src;
 
   sourceRoot = if hostPlatform.isDarwin then "Antigravity IDE.app" else "Antigravity IDE";
+
+  extraPostPatch = lib.optionalString hostPlatform.isLinux ''
+    # Use the preinstalled agy path outside Cloud Workstations as well.
+    substituteInPlace resources/app/extensions/agy/vscode/extension.js \
+      --replace-fail 'CDE_PREINSTALLED_BINARY_PATH="/usr/bin/agy"' \
+        'CDE_PREINSTALLED_BINARY_PATH="${lib.getExe antigravity-cli}"' \
+      --replace-fail 'qa.CdeAuthService.getInstance().isCdeEnvironment()&&(0,na.existsSync)(a)?a:Ac()' \
+        '(0,na.existsSync)(a)?a:Ac()' \
+      --replace-fail 'if(qa.CdeAuthService.getInstance().isCdeEnvironment()){let kc=' \
+        '{let kc='
+  '';
+
+  extraWrapperArgs = lib.optionals hostPlatform.isLinux [
+    "--set"
+    "ANTIGRAVITY_PERIODIC_UPDATE_CHECK_INTERVAL_MS"
+    "0"
+  ];
 
   tests = { };
   updateScript = ./update.js;
