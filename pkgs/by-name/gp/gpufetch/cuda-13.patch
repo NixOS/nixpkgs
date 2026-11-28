@@ -1,0 +1,24 @@
+--- a/src/cuda/cuda.cpp
++++ b/src/cuda/cuda.cpp
+@@ -76,7 +76,9 @@
+   struct memory* mem = (struct memory*) emalloc(sizeof(struct memory));
+
+   mem->size_bytes = (unsigned long long) prop.totalGlobalMem;
+-  mem->freq = prop.memoryClockRate * 0.001f;
++  int memoryClockRate = 0;
++  cudaDeviceGetAttribute(&memoryClockRate, cudaDevAttrMemoryClockRate, gpu->idx);
++  mem->freq = memoryClockRate * 0.001f;
+   mem->bus_width = prop.memoryBusWidth;
+   mem->clk_mul = guess_clock_multipilier(gpu, mem);
+   mem->type = guess_memtype_from_cmul_and_uarch(mem->clk_mul, gpu->arch);
+@@ -146,7 +148,9 @@
+     return NULL;
+   }
+
+-  gpu->freq = deviceProp.clockRate * 1e-3f;
++  int clockRate = 0;
++  cudaDeviceGetAttribute(&clockRate, cudaDevAttrClockRate, gpu->idx);
++  gpu->freq = clockRate * 1e-3f;
+   gpu->vendor = GPU_VENDOR_NVIDIA;
+   gpu->name = (char *) emalloc(sizeof(char) * (strlen(deviceProp.name) + 1));
+   strcpy(gpu->name, deviceProp.name);
