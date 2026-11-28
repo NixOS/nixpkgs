@@ -20,7 +20,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "vampire";
-  version = "5.1.0";
+  version = "5.1.2";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "vprover";
     repo = "vampire";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zPE2GmaHupBhyPEZFcoRADzClPKYydlJ74dNkyQpJa8=";
+    hash = "sha256-ct8frl086sa7RzrywA5RlqyYlTxKEZoQ9lzREOS3NtE=";
     fetchSubmodules = true;
   };
 
