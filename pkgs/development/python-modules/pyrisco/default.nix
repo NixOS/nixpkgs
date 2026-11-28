@@ -9,14 +9,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyrisco";
-  version = "0.8.1";
+  version = "0.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "OnFreund";
     repo = "pyrisco";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-kk72tWbRESl3BgEHBA6eyvsaapl41TxNCCSCUjJa+V0=";
+    hash = "sha256-Stv/WKoGsfdfQMHI4xZEgqhWZ90Ni+kUg3bTKonnJsw=";
   };
 
   build-system = [
