@@ -527,7 +527,7 @@ in
 
         virtio_vmmci = callPackage ../os-specific/linux/virtio_vmmci { };
 
-        virtualbox = callPackage ../os-specific/linux/virtualbox { };
+        virtualbox = callPackage ../by-name/vi/virtualbox/kernel.nix { };
 
         virtualboxGuestAdditions = callPackage ../by-name/vi/virtualbox/guest-additions { };
 
