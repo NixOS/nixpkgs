@@ -1,57 +1,56 @@
 {
-  # scintilla
-  "scintilla557.tgz" = {
-    url = "https://www.scintilla.org/scintilla557.tgz";
-    sha256 = "sha256-s34aI5/4x3zr1y22ziUmSzXL7Lv/rWD5zn6Dj1GVoh4=";
+  "scintilla563.tgz" = {
+    url = "https://www.scintilla.org/scintilla563.tgz";
+    sha256 = "f64339c504960c5a95510e6c3306ab5e95f23abaf8aed82897e57bff78e74616";
   };
-  # scinterm
-  "scinterm_5.5.zip" = {
-    url = "https://github.com/orbitalquark/scinterm/archive/scinterm_5.5.zip";
-    sha256 = "sha256-G/CEzNVkwJl8CIFmSjtVEOX1bDqnnnO9hJR3VjLQf3k=";
+
+  "scinterm_6.0.zip" = {
+    url = "https://github.com/orbitalquark/scinterm/archive/scinterm_6.0.zip";
+    sha256 = "af65b064ed1486b715d91a6c7d6e290d01c74ba618b87cef21823f170ebda06e";
   };
-  # scintillua
-  "scintillua_6.6.zip" = {
-    url = "https://github.com/orbitalquark/scintillua/archive/scintillua_6.6.zip";
-    sha256 = "sha256-rFza9/ISeet3GsEi9mCM6mUl9mptBfOKWbxMyYKQvGA=";
+
+  "b9986ecad77b1ea73d75bf1e82e6e0fd3b4958b1.zip" = {
+    url = "https://github.com/orbitalquark/scintillua/archive/b9986ecad77b1ea73d75bf1e82e6e0fd3b4958b1.zip";
+    sha256 = "9ca802b0e06a24f410df9545d02802fff9eff2b5aa7254bc6e51173ed38feae6";
   };
-  # lua
-  "lua-5.4.8.tar.gz" = {
-    url = "http://www.lua.org/ftp/lua-5.4.8.tar.gz";
-    sha256 = "sha256-TxjdrhVOeT5G7qtyfFnvHAwMK3ROe5QhlxDXb1MGKa4=";
+
+  "lua-5.5.0.tar.gz" = {
+    url = "https://lua.org/ftp/lua-5.5.0.tar.gz";
+    sha256 = "sha256-V8zDK7vQBcq3W8xSREBSU1r2kXiduiuQFtXFBkDWiz0=";
   };
-  # lpeg
+
   "lpeg-1.1.0.tar.gz" = {
-    url = "http://www.inf.puc-rio.br/~roberto/lpeg/lpeg-1.1.0.tar.gz";
-    sha256 = "sha256-SxVdZ9IkbB/6ete8RmweqJm7xA/vAlfMnAPOy67UNSo=";
+    url = "https://www.inf.puc-rio.br/~roberto/lpeg/lpeg-1.1.0.tar.gz";
+    sha256 = "4b155d67d2246c1ffa7ad7bc466c1ea899bbc40fef0257cc9c03cecbaed4352a";
   };
-  # lfs
+
   "v1_8_0.zip" = {
     url = "https://github.com/keplerproject/luafilesystem/archive/v1_8_0.zip";
-    sha256 = "sha256-46a+ynqKkFIu7THbbM3F7WWkM4JlAMaGJ4TidnG54Yo=";
+    sha256 = "e3a6beca7a8a90522eed31db6ccdc5ed65a433826500c6862784e27671b9e18a";
   };
-  # regex
+
   "1.0.zip" = {
     url = "https://github.com/orbitalquark/lua-std-regex/archive/1.0.zip";
-    sha256 = "sha256-W2hKHOfqYyo3qk+YvPJlzZfZ1wxZmMVphSlcaql+dOE=";
+    sha256 = "5b684a1ce7ea632a37aa4f98bcf265cd97d9d70c5998c56985295c6aa97e74e1";
   };
-  # cdk
-  "t20240619.tar.gz" = {
-    url = "https://github.com/ThomasDickey/cdk-snapshots/archive/refs/tags/t20240619.tar.gz";
-    sha256 = "sha256-aaLJbOI7MTeSnswBHGewMFVMxTKrAKARy7zPAdrKphE=";
+
+  "t20260119.tar.gz" = {
+    url = "https://github.com/ThomasDickey/cdk-snapshots/archive/refs/tags/t20260119.tar.gz";
+    sha256 = "0f3095d7983227c06d1d326a6c95e0255e944be8a0f9748174840bfb3edd0cb5";
   };
-  # termkey
+
   "libtermkey-0.22.tar.gz" = {
-    url = "http://www.leonerd.org.uk/code/libtermkey/libtermkey-0.22.tar.gz";
-    sha256 = "sha256-aUW9PEqqg9qD2AoEXFVj2k7dfQN0xiwNNa7AnrMBRgA=";
+    url = "https://www.leonerd.org.uk/code/libtermkey/libtermkey-0.22.tar.gz";
+    sha256 = "6945bd3c4aaa83da83d80a045c5563da4edd7d0374c62c0d35aec09eb3014600";
   };
-  # reproc
+
   "v14.2.5.zip" = {
     url = "https://github.com/DaanDeMeyer/reproc/archive/refs/tags/v14.2.5.zip";
-    sha256 = "sha256-IbFow4rbIvS0g5HYGT28OSfx8uZ4wgWNaUSim2Ssxsk=";
+    sha256 = "21b168c38adb22f4b48391d8193dbc3927f1f2e678c2058d6944a29b64acc6c9";
   };
-  # singleapp
-  "v3.5.3.zip" = {
-    url = "https://github.com/itay-grudev/SingleApplication/archive/refs/tags/v3.5.3.zip";
-    sha256 = "sha256-7Ipook2pdDl2aDcKWp0f4oG/y9c5DtGxRkKSFjTxiB8=";
+
+  "777e95ba69952f11eaec0adfb0cb987fabcdecb3.zip" = {
+    url = "https://github.com/qtproject/qt-solutions/archive/777e95ba69952f11eaec0adfb0cb987fabcdecb3.zip";
+    sha256 = "195f1fcabe80e711199517f20b916d603ea260b1a2d7abcc8ce980af67f3cc96";
   };
 }
