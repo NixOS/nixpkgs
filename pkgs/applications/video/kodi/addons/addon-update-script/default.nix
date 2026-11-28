@@ -10,7 +10,7 @@
 { attrPath }:
 
 let
-  url = "http://mirrors.kodi.tv/addons/omega/addons.xml.gz";
+  url = "http://mirrors.kodi.tv/addons/piers/addons.xml.gz";
   updateScript = writeShellScript "update.sh" ''
     set -ex
 

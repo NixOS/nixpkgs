@@ -8748,7 +8748,6 @@ with pkgs;
   kodiPackages = recurseIntoAttrs (kodi.packages);
 
   kodi = callPackage ../applications/video/kodi {
-    ffmpeg = ffmpeg_6;
     # JDK 11 has no riscv64 port.
     jre_headless =
       if lib.meta.availableOn stdenv.buildPlatform jdk11_headless then
@@ -8758,7 +8757,6 @@ with pkgs;
   };
 
   kodi-wayland = callPackage ../applications/video/kodi {
-    ffmpeg = ffmpeg_6;
     # JDK 11 has no riscv64 port.
     jre_headless =
       if lib.meta.availableOn stdenv.buildPlatform jdk11_headless then
@@ -8769,7 +8767,6 @@ with pkgs;
   };
 
   kodi-gbm = callPackage ../applications/video/kodi {
-    ffmpeg = ffmpeg_6;
     # JDK 11 has no riscv64 port.
     jre_headless =
       if lib.meta.availableOn stdenv.buildPlatform jdk11_headless then
