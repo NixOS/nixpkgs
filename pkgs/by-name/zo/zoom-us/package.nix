@@ -128,6 +128,8 @@ let
     '';
 
     dontPatchELF = true;
+    # Stripping replaces the signature on the vendor-signed app.
+    dontStrip = if stdenv.hostPlatform.isDarwin then true else null;
 
     passthru.updateScript = ./update.sh;
     passthru.tests.nixos-module = nixosTests.zoom-us;
