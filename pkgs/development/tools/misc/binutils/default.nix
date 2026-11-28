@@ -120,6 +120,10 @@ stdenv.mkDerivation (finalAttrs: {
     ./avr-size.patch
 
     ./windres-locate-gcc.patch
+
+    # Fix relaxation alignment with ld -r on LoongArch
+    # https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=8bf4b69718d406abc99dd9cdc4c9cef79d7344cf
+    ./loongarch-fix-relaxation-alignment-ld-r.patch
   ];
 
   outputs = [
