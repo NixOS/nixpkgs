@@ -14,6 +14,10 @@
   testers,
   writableTmpDirAsHomeHook,
   buildPackages,
+
+  enableCurses ? true,
+  enableIconv ? true,
+  enableX11 ? stdenv.hostPlatform.isUnix,
 }:
 let
   inherit (stdenv.hostPlatform) extensions;
@@ -56,15 +60,13 @@ stdenv.mkDerivation (finalAttrs: {
     ];
 
   buildInputs = [
-    ncurses
-    libiconv
     zlib
     lz4
     libffi
   ]
-  ++ lib.optionals stdenv.hostPlatform.isUnix [
-    libx11
-  ];
+  ++ lib.optional enableCurses ncurses
+  ++ lib.optional enableIconv libiconv
+  ++ lib.optional enableX11 libx11;
 
   /*
     ** Set to use Nixpkgs dependencies when possible
@@ -95,6 +97,9 @@ stdenv.mkDerivation (finalAttrs: {
     # Don't set CFLAGS so it can do some detections stuff
     "CFLAGS+=${lib.optionalString stdenv.cc.isGNU "-Wno-error=format-truncation"}"
   ]
+  ++ lib.optionals (!enableCurses) [ "--disable-curses" ]
+  ++ lib.optionals (!enableIconv) [ "--disable-iconv" ]
+  ++ lib.optionals (!enableX11) [ "--disable-x11" ]
   ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "--cross"
     "-m=${arch}"
