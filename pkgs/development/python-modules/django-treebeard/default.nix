@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "django-treebeard";
-  version = "7.0.0";
+  version = "7.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "django-treebeard";
     repo = "django-treebeard";
     tag = finalAttrs.version;
-    hash = "sha256-GvW5QjCuour56NhAt2o2eQ6g2UoXZnukXGVWop1tjSk=";
+    hash = "sha256-7FdZ7U71srWa6JP2MWloH91OnrQ1y/z2ugfW+PyAJGc=";
   };
 
   build-system = [ setuptools ];
