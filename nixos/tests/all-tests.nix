@@ -551,6 +551,7 @@ in
   deluge = runTest ./deluge.nix;
   dendrite = runTest ./matrix/dendrite.nix;
   dependency-track = runTest ./dependency-track.nix;
+  devolo-cockpit = runTest ./devolo-cockpit.nix;
   devpi-server = runTest ./devpi-server.nix;
   dex-oidc = runTest ./dex-oidc.nix;
   dictd = runTest ./dictd.nix;
