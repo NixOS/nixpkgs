@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   fetchurl,
   rustPlatform,
@@ -40,10 +41,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libfaketime
   ];
 
-  postInstall = ''
-    ln -s ../target rust/target
+  # don't use cargoInstallHook's installPhase because the Makefile handles installing both the binaries and the extra files
+  installPhase = ''
+    runHook preInstall
+
+    # the target location and layout created by cargoBuildHook is different than what the Makefile expects
+    substituteInPlace Makefile \
+      --replace-fail 'rust/target/release' 'target/${stdenv.hostPlatform.rust.cargoShortTarget}/release'
+
     source_date=$(date --utc --date=@$SOURCE_DATE_EPOCH "+%F %T")
     PREFIX=$out LIBDIR=$out/lib RELEASE=1 SKIP_PYTHON_INSTALL=1 faketime -f "$source_date" make install
+
+    runHook postInstall
   '';
 
   meta = {
