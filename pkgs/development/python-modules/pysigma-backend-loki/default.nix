@@ -9,14 +9,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pysigma-backend-loki";
-  version = "0.15.1";
+  version = "0.17.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "pySigma-backend-loki";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/xci4LKDCbT9vDG/ldFUL32y3r4tXUM0g6dSE0TVHpw=";
+    hash = "sha256-/Q5XyHpvHJdX88IsAKBRj2grIKb7YXFpT6USgbPdOow=";
   };
 
   build-system = [ poetry-core ];
