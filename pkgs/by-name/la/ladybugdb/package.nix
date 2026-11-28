@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  cctools,
   cmake,
   ninja,
   python3,
@@ -33,7 +34,8 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     ninja
     python3
-  ];
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin cctools.libtool;
 
   nativeInstallCheckInputs = [
     versionCheckHook
