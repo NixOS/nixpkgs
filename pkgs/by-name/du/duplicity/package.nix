@@ -23,14 +23,14 @@
 let
   self = python3.pkgs.buildPythonApplication rec {
     pname = "duplicity";
-    version = "3.0.7";
+    version = "3.2.2";
     format = "setuptools";
 
     src = fetchFromGitLab {
       owner = "duplicity";
       repo = "duplicity";
       rev = "rel.${version}";
-      hash = "sha256-t2YFp/AuQ9xKZSPmNA/IuQYNOcnPO0l8xhXyLBKSuqA=";
+      hash = "sha256-1kQj2M9iUPozqGjwuEw95hNa5RGun/vj7i8Y5od+cVE=";
     };
 
     patches = [
@@ -106,6 +106,7 @@ let
       pexpect
       pytestCheckHook
       fasteners
+      pytest-xdist
     ]);
 
     # Prevent double wrapping, let the Python wrapper use the args in preFixup.
