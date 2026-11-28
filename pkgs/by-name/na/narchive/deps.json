@@ -1,0 +1,12 @@
+[
+  {
+    "pname": "McMaster.Extensions.CommandLineUtils",
+    "version": "2.2.5",
+    "hash": "sha256-nLbooxhFuyXDtlaClO7HayjKbv8OQYPvikB2dAiXqoo="
+  },
+  {
+    "pname": "System.ComponentModel.Annotations",
+    "version": "4.4.1",
+    "hash": "sha256-8NZ0tWPqRYf3ovkn4OQapGsHeseEYKg91nqZAU33hrQ="
+  }
+]
