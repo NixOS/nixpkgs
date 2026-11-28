@@ -9,6 +9,7 @@
   glib,
   buildPackages,
   pixman,
+  cacert,
   vde2,
   alsa-lib,
   flex,
@@ -153,6 +154,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals hexagonSupport [ pkg-config ];
 
   nativeBuildInputs = [
+    cacert
     makeWrapper
     removeReferencesTo
     pkg-config

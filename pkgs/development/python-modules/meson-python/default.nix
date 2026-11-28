@@ -9,6 +9,7 @@
   pyproject-metadata,
 
   # tests
+  cacert,
   cmake,
   cython,
   gitMinimal,
@@ -41,6 +42,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   nativeCheckInputs = [
+    cacert
     cmake
     cython
     gitMinimal
