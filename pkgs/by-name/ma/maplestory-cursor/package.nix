@@ -10,13 +10,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "maplestory-cursor";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "Liam-Weitzel";
     repo = "maplestory-cursor";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-doUnd0XyA7Nk078eDEIrRltj3zBODHpGn8Rqx2rl5/o=";
+    hash = "sha256-NFkEwaeyD+vlp3sGz3Hq2R9adYZnv0huV4lyOOTEHuA=";
   };
 
   nativeBuildInputs = [
