@@ -24,6 +24,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "0.7.0";
   pname = "ripasso-cursive";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "cortex";
     repo = "ripasso";
@@ -37,7 +39,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ./fix-tests.patch
   ];
 
-  cargoBuildFlags = [ "-p ripasso-cursive" ];
+  cargoBuildFlags = [ "--package=ripasso-cursive" ];
 
   nativeBuildInputs = [
     gpgme
