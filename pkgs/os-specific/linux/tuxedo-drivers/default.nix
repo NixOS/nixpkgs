@@ -13,24 +13,26 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tuxedo-drivers-${kernel.version}";
-  version = "4.20.1";
+  version = "4.25.0";
 
   src = fetchFromGitLab {
     group = "tuxedocomputers";
     owner = "development/packages";
     repo = "tuxedo-drivers";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-t+Y1qYFJ9EeYtMFtBIsHzG1J4IVunpZHevYsEZNHGH0=";
+    hash = "sha256-AER+JPl3lem1OFV51VdOZAnr3Uy1BFSpEJNrE+shYis=";
   };
 
   patches = [ ./no-cp-usr.patch ];
 
   postInstall = ''
-    echo "Running postInstallhook"
-    substituteInPlace usr/lib/udev/rules.d/* \
+    substituteInPlace files/usr/lib/udev/rules.d/* \
       --replace-quiet "/bin/bash" "${lib.getExe bash}" \
       --replace-quiet "/bin/sh" "${lib.getExe bash}"
-    install -Dm 0644 -t $out/etc/udev/rules.d usr/lib/udev/rules.d/*
+
+    install -Dm0644 \
+      -t "$out/etc/udev/rules.d" \
+      files/usr/lib/udev/rules.d/*
   '';
 
   buildInputs = [ pahole ];
