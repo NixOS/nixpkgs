@@ -10162,6 +10162,8 @@ self: super: with self; {
 
   lit = callPackage ../development/python-modules/lit { };
 
+  litdata = callPackage ../development/python-modules/litdata { };
+
   litecli = callPackage ../development/python-modules/litecli { };
 
   litellm = callPackage ../development/python-modules/litellm { };
@@ -15475,6 +15477,8 @@ self: super: with self; {
   pyhcl = callPackage ../development/python-modules/pyhcl { };
 
   pyhdfe = callPackage ../development/python-modules/pyhdfe { };
+
+  pyhealth = callPackage ../development/python-modules/pyhealth { };
 
   pyheck = callPackage ../development/python-modules/pyheck { };
 
