@@ -54,13 +54,13 @@
 }:
 
 let
-  version = "2026.10.2";
+  version = "2026.10.3";
 
   src = fetchFromGitHub {
     owner = "discourse";
     repo = "discourse";
     tag = "v${version}";
-    hash = "sha256-MhNm5htlCXXO/oCKzyr2EZxXQczqsWhjtM0KUcJ/S1Q=";
+    hash = "sha256-03JU1sLPfb4R1bdHhCZIrl78quqrrboJpKB8BakJ7GQ=";
   };
 
   pnpm = pnpm_12;

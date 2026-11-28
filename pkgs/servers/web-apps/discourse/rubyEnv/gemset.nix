@@ -1717,10 +1717,10 @@ src: {
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "1ky0lk2nw4n1znna1b4gr4c5rf9f99kx1did2y2hh503h4xl3fwv";
+      sha256 = "0xf19qrwrpg5j14mna147r5njnq6idz4p5zqlnf3bmq2l5jg732x";
       type = "gem";
     };
-    version = "5.0.0";
+    version = "5.1.0";
   };
   messageformat-wrapper = {
     dependencies = [ "mini_racer" ];
