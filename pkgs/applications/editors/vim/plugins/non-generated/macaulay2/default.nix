@@ -6,7 +6,7 @@
   macaulay2,
 }:
 let
-  version = "1.26.06";
+  version = "1.26.11";
 
   # we don't need the whole (rather large) repo
   src = fetchFromGitHub {
