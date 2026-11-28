@@ -28028,6 +28028,12 @@
     github = "syvb";
     githubId = 10530973;
   };
+  smolpatches = {
+    name = "Robert Hall";
+    github = "SmolPatches";
+    githubId = 102612257;
+    matrix = "@smolp:matrix.org";
+  };
   smona = {
     name = "Mel Bourgeois";
     email = "mason.bourgeois@gmail.com";
