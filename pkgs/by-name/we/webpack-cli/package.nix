@@ -1,59 +1,53 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
-  fetchYarnDeps,
-  yarnConfigHook,
-  yarnBuildHook,
-  yarnInstallHook,
-  nodejs,
-  gitUpdater,
+  buildNpmPackage,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+buildNpmPackage (finalAttrs: {
   pname = "webpack-cli";
-  version = "6.0.1";
+  version = "7.3.1";
 
   src = fetchFromGitHub {
     owner = "webpack";
     repo = "webpack-cli";
     tag = "webpack-cli@${finalAttrs.version}";
-    hash = "sha256-teQWaWWt3rKHEVbj3twt8WQXQO9HuzIBNuvFUfRmxqY=";
+    hash = "sha256-WAfjDPGgoLkwth7UzQpOw44RGf524BysV4i62OiVM28=";
   };
 
-  yarnKeepDevDeps = true;
+  npmWorkspace = "packages/webpack-cli";
 
-  yarnOfflineCache = fetchYarnDeps {
-    yarnLock = finalAttrs.src + "/yarn.lock";
-    hash = "sha256-iYyH1/ZyNKq4MqMcCl7y5WvDnuGnRY0sj8hHsQhe7z4=";
-  };
+  npmDepsFetcherVersion = 2;
+  npmDepsHash = "sha256-UbsO5I4cHFMJ7PX7V2X/r5N0rpPwm+QPCEVhxO/UZHg=";
+  npmFlags = [ "--legacy-peer-deps" ];
 
-  nativeBuildInputs = [
-    yarnConfigHook
-    yarnBuildHook
-    yarnInstallHook
-    # Needed for executing package.json scripts
-    nodejs
-  ];
-
-  preInstall = ''
-    cp -r node_modules/* packages/webpack-cli/node_modules/
-    cp yarn.lock packages/webpack-cli/yarn.lock
-    cd packages/webpack-cli
-  '';
-
-  # Removes dangling symlinks that are created as part of the `yarn pack` process.
-  # They are not needed at runtime, so it's safe to remove them.
-  postInstall = ''
-    rm -rf $out/lib/node_modules/webpack-cli/node_modules/{.bin,webpack-cli,create-new-webpack-app,@webpack-cli}
+  # `npmBuildHook` runs the workspace's build script but we don't want that here since it doesn't have that
+  dontNpmBuild = true;
+  buildPhase = ''
+    runHook preBuild
+    npm run build
+    runHook postBuild
   '';
 
   postFixup = ''
-    mv $out/bin/webpack-cli $out/bin/webpack
+    ln -s $out/bin/webpack-cli $out/bin/webpack
   '';
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "webpack-cli@";
+  # fix `noBrokenSymlinks` errors
+  postInstall = ''
+    cp -r ./packages $out/lib/node_modules/webpack-cli-monorepo/packages
+    pushd $out/lib/node_modules/webpack-cli-monorepo
+    rm -rf node_modules/.bin
+    ls -la
+    popd
+  '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "webpack-cli@(.*)"
+    ];
   };
 
   meta = {
