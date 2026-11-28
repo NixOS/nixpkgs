@@ -36,11 +36,11 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "omada-software-controller";
-  version = "6.3.0.45";
+  version = "6.3.0.112";
 
   src = fetchurl {
-    url = "https://static.tp-link.com/upload/software/2026/202609/20260904/Omada_Network_Application_v6.3.0.45_linux_x64_20260903171900.tar.gz";
-    hash = "sha256-2t9+GH+ishiSo/Jkda4VNg9B1k9XinDwgB0q4Z2p62o=";
+    url = "https://static.tp-link.com/upload/software/2026/202611/20261125/Omada_Network_Application_v6.3.0.112_linux_x64_20261111091118.tar.gz";
+    hash = "sha256-OdaZL4Rq7zrV9oQrocrEXQcvsmErAOHoItoNi+YGpWw=";
   };
 
   __structuredAttrs = true;
