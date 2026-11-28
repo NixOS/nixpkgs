@@ -1,6 +1,7 @@
 {
   lib,
   nix-update-script,
+  nixosTests,
   buildGoModule,
   fetchFromGitHub,
   testers,
@@ -40,9 +41,12 @@ buildGoModule (finalAttrs: {
 
   passthru = {
     updateScript = nix-update-script { };
-    tests.version = testers.testVersion {
-      package = mautrix-whatsapp;
-      version = "v${finalAttrs.version}";
+    tests = {
+      version = testers.testVersion {
+        package = mautrix-whatsapp;
+        version = "v${finalAttrs.version}";
+      };
+      mautrix-whatsapp = nixosTests.mautrix-whatsapp;
     };
   };
 
