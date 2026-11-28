@@ -60,7 +60,17 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optional withVtk vtk;
 
-  env.NIX_CFLAGS_COMPILE = "-fpermissive";
+  env.NIX_CFLAGS_COMPILE = toString (
+    [ "-fpermissive" ]
+    # GCC 16 IPA-CP cloning miscompiles BRepClass3d_SClassifier::Perform, so classifying a point on an edge segfaults
+    # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=127917
+    # OCCT 8 walks the tree iteratively and is not affected
+    ++ lib.optional (
+      stdenv.cc.isGNU
+      && lib.versionAtLeast stdenv.cc.version "16"
+      && lib.versionOlder finalAttrs.version "8"
+    ) "-fno-ipa-cp-clone"
+  );
   cmakeFlags = [
     (lib.cmakeBool "USE_RAPIDJSON" true)
     # Enable exception handling for release builds.
@@ -73,6 +83,31 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "USE_VTK" true)
     (lib.cmakeFeature "3RDPARTY_VTK_INCLUDE_DIR" "${lib.getDev vtk}/include/vtk")
   ];
+
+  # Classifying a point on an edge segfaults when the build is miscompiled, as with GCC 16 without -fno-ipa-cp-clone
+  doInstallCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    export LD_LIBRARY_PATH=$out/lib CASROOT=$out
+    export CSF_OCCTResourcePath=$out/share/opencascade/resources
+    export DRAWHOME=$CSF_OCCTResourcePath/DrawResources
+    export DRAWDEFAULT=$DRAWHOME/DrawDefault CSF_DrawPluginDefaults=$DRAWHOME
+    export CSF_StandardDefaults=$CSF_OCCTResourcePath/StdResource
+    export CSF_PluginDefaults=$CSF_OCCTResourcePath/StdResource
+    cat > classify.tcl <<'EOF'
+    pload MODELING
+    box b 10 10 10
+    point p 0 0 5
+    puts [bclassify b p]
+    exit
+    EOF
+    result=$($out/bin/DRAWEXE -b -f classify.tcl 2>&1)
+    echo "$result"
+    [[ $result == *"The point is ON shape"* ]]
+
+    runHook postInstallCheck
+  '';
 
   passthru = {
     tests = {
