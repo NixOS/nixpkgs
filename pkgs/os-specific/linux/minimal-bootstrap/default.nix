@@ -65,6 +65,7 @@ lib.makeScope
           gcc = gcc-latest;
           gnumake = gnumake-musl;
           gnutar = gnutar-latest;
+          targetPlatform = hostPlatform;
         };
 
         bison = callPackage ./bison {
@@ -175,7 +176,6 @@ lib.makeScope
           gnumake = gnumake-musl;
           gnutar = gnutar-latest;
           libc-headers = musl;
-          libc = musl;
           targetPlatform = hostPlatform;
         };
         gcc-latest = callPackage ./gcc/wrapper.nix {
@@ -343,7 +343,7 @@ lib.makeScope
         };
 
         linux-headers = callPackage ./linux-headers {
-          gcc = gcc-latest;
+          gcc-buildbuild = gcc10;
           gnumake = gnumake-musl;
           gnutar = gnutar-latest;
         };
@@ -540,7 +540,6 @@ lib.makeScope
           gcc-buildbuild = gcc-latest;
           gnumake = gnumake-musl;
           gnutar = gnutar-latest;
-          libc = glibc;
           libc-headers = glibc;
           targetPlatform = hostPlatform;
         };

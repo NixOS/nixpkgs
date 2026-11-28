@@ -66,7 +66,8 @@ bash.runCommand "${pname}-${common.version}"
   }
   ''
     # Unpack
-    pushd ${common.monorepoSrc}
+    ln -s ${common.monorepoSrc} src
+    pushd src/
 
     mkdir -p "$out/gcc" "$out/libgcc"
     cp gcc/BASE-VER gcc/DATESTAMP "$out/gcc"
@@ -115,7 +116,8 @@ bash.runCommand "${pname}-${common.version}"
     export LD="${binutilsTargetPrefix}ld"
     export NM="${binutilsTargetPrefix}nm"
     export OBJCOPY="${binutilsTargetPrefix}objcopy"
-    ${common.monorepoSrc}/libstdc++-v3/configure \
+
+    ../src/libstdc++-v3/configure \
       --build=${fakeBuildPlatform} \
       --host=${fakeHostPlatform} \
       --prefix="$out" \

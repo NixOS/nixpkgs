@@ -82,7 +82,8 @@ bash.runCommand "${pname}-${version}"
       src/misc/wordexp.c
 
     # Configure
-    export CC="${binutilsTargetPrefix}gcc -B${libgcc}/lib/gcc/${hostPlatform.config}/${libgcc.version} -Wl,-rpath,${libgcc}/lib/gcc/${hostPlatform.config}/${libgcc.version}"
+    LIBGCC_PATH=${libgcc}/lib/gcc/${hostPlatform.config}/${libgcc.version}
+    export CC="${binutilsTargetPrefix}gcc -B$LIBGCC_PATH -Wl,-rpath,$LIBGCC_PATH"
     bash ./configure \
       --prefix=$out \
       --build=${buildPlatform.config} \

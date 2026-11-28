@@ -1,6 +1,5 @@
 {
   lib,
-  libc,
   buildPlatform,
   hostPlatform,
   targetPlatform,
@@ -70,6 +69,9 @@ bash.runCommand "${pname}-${common.version}"
   }
   (
     ''
+      # Unpack
+      ln -s ${common.monorepoSrc} src
+
       # Configure
       mkdir -p build
       cd build
@@ -104,8 +106,7 @@ bash.runCommand "${pname}-${common.version}"
 
       export CFLAGS="-O1"
       export CXXFLAGS="-O1"
-      export LDFLAGS="-Wl,-rpath,${libmpc}/lib,-rpath,${libmpfr}/lib,-rpath,${libgmp}/lib,-rpath-link,${libc}/lib"
-      bash ${common.monorepoSrc}/configure \
+      bash ../src/configure \
         --prefix=$out \
         --build=${buildPlatform.config} \
         --host=${hostPlatform.config} \
