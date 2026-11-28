@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "peakperf";
-  version = "1.17-unstable-2024-10-07";
+  version = "1.17-unstable-2026-04-05";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -22,8 +22,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Dr-Noob";
     repo = "peakperf";
-    rev = "289c8a2f58eb51712d346d5c993b3c1d136bf031";
-    hash = "sha256-CoGWj+zskcv8caFjhy55GKTKqFq2y1/nMjiVc6TzU1c=";
+    rev = "ebb5c632bd10ca6e5971a19e6975b94eea418838";
+    hash = "sha256-ILClzqjjQmk0Quk27XYMH5Dq6hQg+YHNscQwwxF2JI4=";
   };
 
   nativeBuildInputs = [
@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   preVersionCheck = ''
-    export version=1.17
+    export version=1.18
   '';
 
   doInstallCheck = true;
