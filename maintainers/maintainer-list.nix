@@ -18675,6 +18675,11 @@
     githubId = 2412121;
     email = "matshch@gmail.com";
   };
+  matsjfunke = {
+    name = "Mats Julius Funke";
+    github = "matsjfunke";
+    githubId = 125814808;
+  };
   matt-snider = {
     email = "matt.snider@protonmail.com";
     github = "matt-snider";
