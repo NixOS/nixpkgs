@@ -12,7 +12,7 @@ use anyhow::{Context, Result};
 
 use super::files::{BootFiles, file_name};
 use crate::bootspec::{BootJson, Xen, join_params};
-use crate::config::InstallConfig;
+use crate::config::{ExtraEntriesPosition, InstallConfig};
 use crate::profiles::{self, Profile};
 
 pub(super) fn render(
@@ -49,12 +49,13 @@ impl Renderer<'_> {
         }
         writeln!(header, "\n# {distro} boot entries start here")?;
 
+        let expand = if config.expand_generations { "+" } else { "" };
         let mut generations = String::new();
         let mut current_matches = Vec::new();
         for profile in Profile::all(profiles_dir)? {
             match profile.name() {
-                None => writeln!(generations, "/+{distro} generations")?,
-                Some(name) => writeln!(generations, "/+{distro} profile '{name}'")?,
+                None => writeln!(generations, "/{expand}{distro} generations")?,
+                Some(name) => writeln!(generations, "/{expand}{distro} profile '{name}'")?,
             }
             let mut numbers = profile.generations(config.max_generations)?;
             numbers.reverse();
@@ -76,10 +77,12 @@ impl Renderer<'_> {
         };
         header += &self.entry(1, &current, distro, time, generation)?;
 
-        let conf = format!(
-            "{header}{generations}\n# {distro} boot entries end here\n\n{}",
-            config.extra_entries
-        );
+        let (before, after) = match config.extra_entries_position {
+            ExtraEntriesPosition::End => ("", config.extra_entries.as_str()),
+            ExtraEntriesPosition::BeforeGenerations => (config.extra_entries.as_str(), ""),
+        };
+        let conf =
+            format!("{header}{before}{generations}\n# {distro} boot entries end here\n\n{after}");
         Ok(conf.trim().to_owned())
     }
 
