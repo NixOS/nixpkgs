@@ -4,31 +4,18 @@
   fetchFromGitHub,
   python3Packages,
 }:
-
-let
+python3Packages.buildPythonPackage (finalAttrs: {
+  pname = "scuba";
   version = "2.14.2";
+
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "JonathonReinhart";
     repo = "scuba";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-kYr7JyrwDDMJkazZ1cMZNkLo19stnOtc/gSp3nRWAuU=";
   };
-
-  # This must be built statically because scuba will execute unknown docker environments
-  scubainit = pkgsStatic.rustPlatform.buildRustPackage rec {
-    pname = "scubainit";
-    inherit src version;
-
-    sourceRoot = "${src.name}/scubainit";
-
-    cargoHash = "sha256-YUYo2B5hzzmDeNiWUC+198Qbz+JPgUJfpAqyPWAXTRA=";
-  };
-in
-python3Packages.buildPythonPackage rec {
-  pname = "scuba";
-  inherit src version;
-  pyproject = true;
 
   build-system = with python3Packages; [
     setuptools
@@ -43,7 +30,7 @@ python3Packages.buildPythonPackage rec {
     # Version detection fails
     # Patch in the version instead
     substituteInPlace scuba/version.py \
-      --replace-fail "__version__ = get_version()" "__version__ = \"${version}\""
+      --replace-fail "__version__ = get_version()" "__version__ = \"${finalAttrs.version}\""
 
     # Disable calling cargo through the make file
     # scubainit has already been built
@@ -51,18 +38,13 @@ python3Packages.buildPythonPackage rec {
       --replace-fail "check_call([\"make\"])" "pass"
   '';
 
-  preBuild = ''
-    # Link scubainit into the build tree
-    ln -s ${scubainit}/bin/scubainit scuba/scubainit
-  '';
-
   meta = {
     description = "Simple Container-Utilizing Build Apparatus";
     homepage = "https://github.com/JonathonReinhart/scuba";
-    changelog = "https://github.com/JonathonReinhart/scuba/releases/tag/${src.tag}";
+    changelog = "https://github.com/JonathonReinhart/scuba/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ tbaldwin ];
     mainProgram = "scuba";
   };
-}
+})
