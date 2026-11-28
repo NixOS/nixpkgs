@@ -23179,6 +23179,11 @@
     githubId = 81905706;
     name = "Pau Kaifler";
   };
+  paulfariello = {
+    name = "Paul Fariello";
+    github = "paulfariello";
+    githubId = 273684;
+  };
   PaulGrandperrin = {
     name = "Paul Grandperrin";
     email = "paul.grandperrin@gmail.com";
