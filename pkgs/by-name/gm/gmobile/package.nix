@@ -18,7 +18,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gmobile";
-  version = "0.7.1";
+  version = "0.7.5";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -26,15 +26,10 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Phosh";
     repo = "gmobile";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RXkH+48WzACgNcIROlSTSO4l/ujWVHJDG+Xtk4k7Rdw=";
+    hash = "sha256-CVTSfrvXamq4vCitXPsn3BenOWRdvN8RYydHdsO6lOc=";
   };
 
   patches = [
-    (fetchpatch2 {
-      name = "dont-set-libexecdir.patch";
-      url = "https://gitlab.gnome.org/World/Phosh/gmobile/-/commit/b085e13898edddf31b6da8c8fc4119bb2cb59c38.patch";
-      hash = "sha256-S3S1FORPC8czFx0ivLVOUhamStaJsKd6oXnh1jbdr3Y=";
-    })
   ];
 
   nativeBuildInputs = [
