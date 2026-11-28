@@ -192,7 +192,7 @@ in
       + "${lib.optionalString (cfg.sidechain == "nano") " \\\n --nano"}"
       + "${lib.optionalString cfg.socks5.enable " \\\n--socks5 ${cfg.socks5.ip}:${toString cfg.socks5.port}"}"
       + "${lib.optionalString (cfg.walletAddress != "") " \\\n--wallet ${cfg.walletAddress}"}"
-      + lib.optionalString (cfg.extraArgs != [ ]) (lib.strings.concatStringsSep " \\\n" cfg.extraArgs);
+      + lib.optionalString (cfg.extraArgs != [ ]) (" \\\n" + lib.strings.concatStringsSep " \\\n" cfg.extraArgs);
 
       serviceConfig = {
         Type = "exec";
