@@ -12,7 +12,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aioproxmox";
-  version = "0.1.5";
+  version = "0.1.7";
   pyproject = true;
 
   disabled = pythonOlder "3.14";
@@ -21,7 +21,7 @@ buildPythonPackage (finalAttrs: {
     owner = "compatech";
     repo = "aioproxmox";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6ZfYZobh2CspIqzaJ5bmkFlONnavukeAs6SNzFzihl4=";
+    hash = "sha256-NiyHz5jf3q51XCxt0bhO3lwHsFCn9q2peHDFnkIheSE=";
   };
 
   postPatch = ''
