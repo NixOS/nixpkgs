@@ -9,13 +9,13 @@
 buildHomeAssistantComponent rec {
   owner = "dckiller51";
   domain = "bodymiscale";
-  version = "2026.11.2";
+  version = "2026.11.3";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = domain;
     rev = version;
-    hash = "sha256-rELOMOt0G1SCwIsP6RPYoPUjL+rMHH+D87emOpx39L0=";
+    hash = "sha256-j7SoqqzB8DU67/RuGgCPvEeqFIy03x1VAqmZyGky0K8=";
   };
 
   dependencies = [
