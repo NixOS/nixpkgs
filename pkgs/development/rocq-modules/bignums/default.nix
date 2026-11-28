@@ -50,7 +50,10 @@ mkRocqDerivation {
 
   mlPlugin = true;
 
-  propagatedBuildInputs = [ stdlib ];
+  propagatedBuildInputs = [
+    stdlib
+    rocq-core.ocamlPackages.findlib
+  ];
 
   useCoqifVersion = v: v != null && v != "dev" && lib.versions.isLt "9.0.0+rocq" v;
 
