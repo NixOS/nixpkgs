@@ -9,16 +9,16 @@
 
 php.buildComposerProject2 (finalAttrs: {
   pname = "strichliste-backend";
-  version = "2.1.0";
+  version = "2.1.2";
 
   src = fetchFromGitHub {
     owner = "strichliste";
     repo = "strichliste-backend";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ps0IJBXVchPaW2Tx4rfD02EFYiv3oTyaNB6/V7txeM0=";
+    hash = "sha256-ocaawrzvBelwNzefhEntdr5YFWTnnaTiXnFsMQRucmI=";
   };
 
-  vendorHash = "sha256-PLq+XiZIJyyzVq+87timGO/jbPB4ZYQqSZilZMIE4Cw=";
+  vendorHash = "sha256-FC3g8ty6eVlO4SjV28+YEI3IWIXWs8XzOdOUtTRTJJw=";
   composerNoDev = true;
   composerNoPlugins = false;
   composerStrictValidation = true;
