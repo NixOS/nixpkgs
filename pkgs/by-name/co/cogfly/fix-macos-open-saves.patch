@@ -1,0 +1,18 @@
+diff --git a/src/main/java/dev/ambershadow/cogfly/util/FileUtils.java b/src/main/java/dev/ambershadow/cogfly/util/FileUtils.java
+index 4bf7e77363..564b55765f 100644
+--- a/src/main/java/dev/ambershadow/cogfly/util/FileUtils.java
++++ b/src/main/java/dev/ambershadow/cogfly/util/FileUtils.java
+@@ -284,10 +284,9 @@ public static void openURI(URI uri) {
+         }
+     }
+     public static void openSavePath() {
+-        if (Files.isDirectory(GameUtils.getSavePath())) {
+-            try (Stream<Path> stream = Files.list(GameUtils.getSavePath())) {
+-                stream.findFirst().ifPresent(FileUtils::openPath);
+-            } catch (IOException ignored) {}
++        Path savePath = GameUtils.getSavePath();
++        if (Files.isDirectory(savePath)) {
++            openPath(savePath);
+         }
+     }
+ 
