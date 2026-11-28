@@ -4,7 +4,6 @@
   boost,
   buildPythonPackage,
   cmake,
-  distutils,
   doxygen,
   draco,
   embree,
@@ -53,31 +52,28 @@ in
 
 buildPythonPackage rec {
   pname = "openusd";
-  version = "25.05.01";
+  version = "26.11.1";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "PixarAnimationStudios";
     repo = "OpenUSD";
     tag = "v${version}";
-    hash = "sha256-gxikEC4MqTkhgYaRsCVYtS/VmXClSaCMdzpQ0LmiR7Q=";
+    hash = "sha256-mNqtPJMHxMJTl1FG6eihkJGjTZ8FB6zBRVPP7u5FjY4=";
   };
 
   outputs = [ "out" ] ++ lib.optional withDocs "doc";
 
   patches = [
     (fetchpatch {
-      name = "port-to-embree-4.patch";
-      # https://github.com/PixarAnimationStudios/OpenUSD/pull/2266
-      url = "https://github.com/PixarAnimationStudios/OpenUSD/commit/9ea3bc1ab550ec46c426dab04292d9667ccd2518.patch?full_index=1";
-      hash = "sha256-QjA3kjUDsSleUr+S/bQLb+QK723SNFvnmRPT+ojjgq8=";
-    })
-    (fetchpatch {
       # https://github.com/PixarAnimationStudios/OpenUSD/pull/3648
       name = "propagate-dependencies-opengl.patch";
       url = "https://gitlab.archlinux.org/archlinux/packaging/packages/usd/-/raw/41469f20113d3550c5b42e67d1139dedc1062b8c/usd-find-dependency-OpenGL.patch?full_index=1";
       hash = "sha256-aUWGKn365qov0ttGOq5GgNxYGIGZ4DfmeMJfakbOugQ=";
     })
+    # Plugins link the imported targets of OpenImageIO and Embree, but
+    # pxrConfig.cmake doesn't find them, breaking consumers like f3d
+    ./pxrconfig-find-dependencies.patch
   ];
 
   env.OSL_LOCATION = lib.optionalString withOsl "${openshadinglanguage}";
@@ -89,9 +85,11 @@ buildPythonPackage rec {
     "-DPXR_BUILD_EXAMPLES=OFF"
     "-DPXR_BUILD_IMAGING=ON"
     "-DPXR_BUILD_MONOLITHIC=ON" # Seems to be commonly linked to monolithically
+    "-DPXR_BUILD_OPENIMAGEIO_PLUGIN=ON"
     "-DPXR_BUILD_TESTS=OFF"
     "-DPXR_BUILD_TUTORIALS=OFF"
     "-DPXR_BUILD_USD_IMAGING=ON"
+    "-DPXR_PYTHON_INSTALL_DIR=${python.sitePackages}"
     "-DPYSIDE_BIN_DIR=${pyside-tools-uic}/bin"
     (lib.cmakeBool "PXR_BUILD_DOCUMENTATION" withDocs)
     (lib.cmakeBool "PXR_BUILD_PYTHON_DOCUMENTATION" withDocs)
@@ -138,11 +136,12 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     boost
+    embree
     jinja2
     numpy
+    openimageio
     opensubdiv
     pyopengl
-    distutils
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libGL
@@ -158,13 +157,7 @@ buildPythonPackage rec {
     "pxr.Usd"
   ];
 
-  postInstall = ''
-    # Make python lib properly accessible
-    target_dir=$out/${python.sitePackages}
-    mkdir -p $(dirname $target_dir)
-    mv $out/lib/python $target_dir
-  ''
-  + lib.optionalString withDocs ''
+  postInstall = lib.optionalString withDocs ''
     mv $out/docs $doc
   '';
 
