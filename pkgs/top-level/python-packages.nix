@@ -20019,6 +20019,8 @@ self: super: with self; {
     callPackage ../development/python-modules/sphinx-last-updated-by-git
       { };
 
+  sphinx-lint = callPackage ../development/python-modules/sphinx-lint { };
+
   sphinx-llm = callPackage ../development/python-modules/sphinx-llm { };
 
   sphinx-llms-txt = callPackage ../development/python-modules/sphinx-llms-txt { };
