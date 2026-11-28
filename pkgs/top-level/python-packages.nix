@@ -9699,6 +9699,8 @@ self: super: with self; {
 
   lektricowifi = callPackage ../development/python-modules/lektricowifi { };
 
+  lenstronomy = callPackage ../development/python-modules/lenstronomy { };
+
   lerobot = callPackage ../development/python-modules/lerobot { };
 
   lesscpy = toPythonModule (pkgs.lesscpy.override { python3Packages = self; });
@@ -19041,6 +19043,8 @@ self: super: with self; {
   scholarly = callPackage ../development/python-modules/scholarly { };
 
   schwifty = callPackage ../development/python-modules/schwifty { };
+
+  schwimmbad = callPackage ../development/python-modules/schwimmbad { };
 
   scienceplots = callPackage ../development/python-modules/scienceplots { };
 
