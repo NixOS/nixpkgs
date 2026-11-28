@@ -2,25 +2,34 @@
   buildPythonPackage,
   fetchFromGitHub,
   lib,
+  packaging,
   pip,
+  platformdirs,
   setuptools,
+  wheel,
 }:
 
 buildPythonPackage rec {
   pname = "zc-buildout";
-  version = "5.1.1";
+  version = "6.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "buildout";
     repo = "buildout";
     tag = version;
-    hash = "sha256-Z47j0RbQXP4DjJM+Fz0FXP2DuXwqluV64uCbioWtqW4=";
+    hash = "sha256-qZ+FNBQih6DBWH9gZehIVb/0VWsQlDhqD0LEijInEf4=";
   };
 
   build-system = [ setuptools ];
 
-  dependencies = [ pip ];
+  dependencies = [
+    packaging
+    pip
+    platformdirs
+    setuptools
+    wheel
+  ];
 
   doCheck = false; # Missing package & BLOCKED on "zc.recipe.egg"
 
