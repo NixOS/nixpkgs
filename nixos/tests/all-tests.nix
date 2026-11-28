@@ -1688,6 +1688,7 @@ in
   seatd = runTest ./seatd.nix;
   seerr = runTest ./seerr.nix;
   selfoss = runTest ./selfoss.nix;
+  selinux = runTest ./selinux;
   send = runTest ./send.nix;
   service-runner = runTest ./service-runner.nix;
   servo = runTest ./servo.nix;
