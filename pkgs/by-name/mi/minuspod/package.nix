@@ -12,13 +12,13 @@
 }:
 
 let
-  version = "2.101.11";
+  version = "2.102.25";
 
   src = fetchFromGitHub {
     owner = "ttlequals0";
     repo = "MinusPod";
     tag = "v${version}";
-    hash = "sha256-cvIWLZjdzoohf4VogKKXBhujHmqdE+jpo5crOtl2qWo=";
+    hash = "sha256-5s9hVfgin7/C4TxFKhpEo3nl23xJTA4MOawkmuamQjs=";
   };
 
   frontend = callPackage ./frontend.nix {
