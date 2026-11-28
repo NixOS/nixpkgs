@@ -35,7 +35,10 @@ stdenv.mkDerivation (finalAttrs: {
     systemdLibs
   ];
 
-  mesonFlags = [ "-Dsd-bus-provider=libsystemd" ];
+  mesonFlags = [
+    "-Dsd-bus-provider=libsystemd"
+    "-Dsysconfdir=/etc"
+  ];
 
   passthru.updateScript = nix-update-script { };
 
