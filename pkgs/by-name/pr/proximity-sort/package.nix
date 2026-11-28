@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "proximity-sort";
-  version = "1.3.0";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "jonhoo";
     repo = "proximity-sort";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-MRLQvspv6kjirljhAkk1KT+hPA4hdjA1b7RL9eEyglQ=";
+    hash = "sha256-IW+NWFLuRbtRWbb9Hoxwi4rQKICdxUJD70zCprq3fg4=";
   };
 
-  cargoHash = "sha256-rlxNvIYtVdWth5ZEdbmxOf3GKXIBpHnGDcSO883Ldjg=";
+  cargoHash = "sha256-jSjPbb7a/M6iRjhsvjbxrC0kpakHUnhBk996Np/Ashw=";
 
   meta = {
     description = "Simple command-line utility for sorting inputs by proximity to a path argument";
