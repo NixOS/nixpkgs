@@ -10,11 +10,11 @@ let
   images = {
     x86_64-linux = {
       suffix = "amd64";
-      hash = "sha256-ea4/6xjuoiqFebGF+NegGa4B+3Imf/4uULfQbJxqKtc=";
+      hash = "sha256-KQXril6wYOLQGxAimMfnLyGLbe1R2zFYKnsmt4gFA3A=";
     };
     aarch64-linux = {
       suffix = "arm64";
-      hash = "sha256-cPx6uHXyMZ0x56dLUKx91FjhgkJaYW0nUtLrnfHz0as=";
+      hash = "sha256-8WFKJzEqDNnLC+GzU2/aqjM4wgjjEAo5Py0jyU3gmaA=";
     };
   };
 
