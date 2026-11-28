@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  fetchpatch,
   installShellFiles,
   versionCheckHook,
 }:
@@ -21,6 +22,16 @@ buildGoModule (finalAttrs: {
 
   proxyVendor = true;
   vendorHash = "sha256-RYQ78aqd64YNDGBkYXpSJZ1HJZeX5MzU7KytUnRpJmo=";
+
+  patches = [
+    # Fix shell completions: let cobra's hidden `__complete` commands through pre-parse.
+    # See https://github.com/DingTalk-Real-AI/dingtalk-workspace-cli/pull/1533.
+    (fetchpatch {
+      name = "fix-shell-completion-reserved-commands.patch";
+      url = "https://github.com/DingTalk-Real-AI/dingtalk-workspace-cli/commit/d2f07d8611a7a61ce2eac34aa9983b8a2b1eb0f0.patch";
+      hash = "sha256-KUpyCmrvspD3S2sTELpmO/hd9UqJL0qmBt68YicZOUA=";
+    })
+  ];
 
   subPackages = [ "cmd" ];
 
