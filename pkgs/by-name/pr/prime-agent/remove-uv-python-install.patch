@@ -1,0 +1,10 @@
+--- a/packages/coding-agent/src/core/kernel/bootstrap.ts
++++ b/packages/coding-agent/src/core/kernel/bootstrap.ts
+@@ -817,7 +817,6 @@
+ 	const runtimeRequirement = sourceDir ?? RUNTIME_REQUIREMENT;
+ 	const runtimeIdentity = await resolveRuntimeIdentity();
+
+-	await run(uv, ["python", "install", PYTHON_VERSION]);
+ 	// Nothing invokes the venv's own pip; every kernel-venv package is installed
+ 	// through `uv pip install --python`, so the venv is created unseeded.
+ 	await run(uv, ["venv", venv, "--python", PYTHON_VERSION]);
