@@ -6,13 +6,13 @@
 }:
 mkLibretroCore {
   core = "jollycv";
-  version = "0-unstable-2026-04-02";
+  version = "0-unstable-2026-09-11";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "jollycv";
-    rev = "9ceb88e4370b2e04a597b03a9ffe4551c899d6c2";
-    hash = "sha256-r0qqv6MipTJecCxxrSs0ptNT0hsWrdwuzdbyZQ5U1jU=";
+    rev = "2790d59c7194d29e83f8603ffd7e9da17f11575e";
+    hash = "sha256-jPIlvy77zdTTeaEdFVdzKwGQIf9ipvZqK8u9r4QwFtQ=";
   };
 
   sourceRoot = "source/libretro";
