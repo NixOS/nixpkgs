@@ -45,11 +45,11 @@ let
 
   setSessionScript = pkgs.callPackage ../x11/display-managers/account-service-util.nix { };
 
-  greeterUsers = lib.genAttrs' [ null 1 2 3 4 ] (
+  greeterUsers = lib.genAttrs' [ null 2 3 4 5 ] (
     i:
     let
-      # adding 1 to create `gdm-greeter{-2,-3,-4,-5}`
-      suffix = lib.optionalString (i != null) "-${toString (i + 1)}";
+      # creating `gdm-greeter{-2,-3,-4,-5}`
+      suffix = lib.optionalString (i != null) "-${toString i}";
     in
     lib.nameValuePair "gdm-greeter${suffix}" {
       isSystemUser = true;
