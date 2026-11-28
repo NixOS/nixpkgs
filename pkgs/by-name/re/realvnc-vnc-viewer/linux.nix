@@ -27,7 +27,7 @@ let
         "x86_64-linux" = fetchurl rec {
           name = "RealVNC-Connect-Viewer-${finalAttrs.version}-Linux-x64.rpm";
           url = "https://downloads.realvnc.com/download/file/realvnc-connect-viewer/${name}";
-          hash = "sha256-x/NG9ivYUbtrFxksglCLF+lGA2OO2VdEN1qPsvum7tQ=";
+          hash = "sha256-VNA7jxPzjanrMhOlFEi5D2N9cgOCNtv/ZuycTOTApzo=";
         };
       }
       .${stdenv.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
