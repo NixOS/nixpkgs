@@ -1,0 +1,11 @@
+--- a/test_runner.sh
++++ b/test_runner.sh
+@@ -1,7 +1,3 @@
+ #!/usr/bin/env bash
+
+-if command -v sudo &> /dev/null; then
+-    sudo -E $@
+-else
+-    $@
+-fi
++$@
