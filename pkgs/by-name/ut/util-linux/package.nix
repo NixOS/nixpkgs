@@ -55,6 +55,14 @@ stdenv.mkDerivation (finalAttrs: {
     # which isn't valid on NixOS (and a compatibility link on most other modern
     # distros anyway).
     ./rtcwake-search-PATH-for-shutdown.patch
+    # Fix incompatible pointer types error with Clang 23
+    (fetchurl {
+      url = "https://github.com/util-linux/util-linux/commit/34625df4ee63fdc5c851902c94e13b56bcdef6cb.patch?full_index=1";
+      hash = "sha256-5+cPf/Wa4JZkL1F9dgs7z6p0uz+JJspr4x1opGqskrk=";
+    })
+    # Backport of https://github.com/util-linux/util-linux/commit/afd37d05c1c793eb7a2ece5e755798b39485a4c8,
+    # which does not apply cleanly to 2.42.4.
+    ./fdisk-use-the-correct-format-specifiers-for-integer-types.patch
   ];
 
   # We separate some of the utilities into their own outputs. This

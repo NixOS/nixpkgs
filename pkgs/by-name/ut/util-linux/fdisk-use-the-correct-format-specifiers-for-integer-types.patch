@@ -1,0 +1,242 @@
+diff --git a/disk-utils/fdisk-list.c b/disk-utils/fdisk-list.c
+index 1967a6a4b9..dd4438c25e 100644
+--- a/disk-utils/fdisk-list.c
++++ b/disk-utils/fdisk-list.c
+@@ -70,7 +70,7 @@ void list_disk_geometry(struct fdisk_context *cxt)
+ 	color_scheme_enable("header", UL_COLOR_BOLD);
+ 	fdisk_info(cxt,	_("Disk %s: %s, %ju bytes, %ju sectors"),
+ 			fdisk_get_devname(cxt), strsz,
+-			bytes, (uintmax_t) fdisk_get_nsectors(cxt));
++			(uintmax_t)bytes, (uintmax_t) fdisk_get_nsectors(cxt));
+ 	color_disable();
+ 	free(strsz);
+ 
+diff --git a/disk-utils/fdisk.c b/disk-utils/fdisk.c
+index a3d1dfe714..0625483918 100644
+--- a/disk-utils/fdisk.c
++++ b/disk-utils/fdisk.c
+@@ -682,7 +682,8 @@ void resize_partition(struct fdisk_context *cxt)
+ 	struct fdisk_partition *pa = NULL, *npa = NULL, *next = NULL;
+ 	char *query = NULL, *response = NULL, *default_size;
+ 	struct fdisk_table *tb = NULL;
+-	uint64_t max_size, size, secs;
++	uint64_t max_size, secs;
++	uintmax_t size;
+ 	size_t i;
+ 	int rc;
+ 
+diff --git a/disk-utils/sfdisk.c b/disk-utils/sfdisk.c
+index aeab826c27..792da8b489 100644
+--- a/disk-utils/sfdisk.c
++++ b/disk-utils/sfdisk.c
+@@ -517,7 +517,7 @@ static int move_partition_data(struct sfdisk *sf, size_t partno, struct fdisk_pa
+ 		fprintf(f, "# Area size (sectors/bytes): %ju/%ju\n",
+ 			(uintmax_t)nsectors, (uintmax_t)nsectors * ss);
+ 				fprintf(f, "# Step size (sectors/bytes): %" PRIu64 "/%zu\n", step, step_bytes);
+-		fprintf(f, "# Steps: %ju\n", ((uintmax_t) nsectors / step) + 1);
++		fprintf(f, "# Steps: %ju\n", (uintmax_t)((uintmax_t) nsectors / step) + 1);
+ 		fprintf(f, "#\n");
+ 		fprintf(f, "# <step>: <from> <to> (step offsets in bytes)\n");
+ 	}
+@@ -594,12 +594,12 @@ static int move_partition_data(struct sfdisk *sf, size_t partno, struct fdisk_pa
+ 
+ 			if (bytes_per_sec)
+ 				fprintf(stdout, _("Moved %ju from %ju sectors (%.3f%%, %.1f MiB/s)."),
+-					i + 1, nsectors,
++					(uintmax_t)i + 1, (uintmax_t)nsectors,
+ 					100.0 / ((double) nsectors/(i+1)),
+ 					(double) (bytes_per_sec / (1024 * 1024)));
+ 			else
+ 				fprintf(stdout, _("Moved %ju from %ju sectors (%.3f%%)."),
+-					i + 1, nsectors,
++					(uintmax_t)i + 1, (uintmax_t)nsectors,
+ 					100.0 / ((double) nsectors/(i+1)));
+ 			fflush(stdout);
+ 			fputc('\r', stdout);
+@@ -623,7 +623,7 @@ static int move_partition_data(struct sfdisk *sf, size_t partno, struct fdisk_pa
+ 			i = nsectors;
+ 
+ 		fprintf(stdout, _("Moved %ju from %ju sectors (%.0f%%)."),
+-				i, nsectors,
++				(uintmax_t)i, (uintmax_t)nsectors,
+ 				100.0 / ((double) nsectors/(i+1)));
+ 		fputc('\n', stdout);
+ 	}
+diff --git a/libfdisk/src/ask.c b/libfdisk/src/ask.c
+index 507cc6fc63..d693974f95 100644
+--- a/libfdisk/src/ask.c
++++ b/libfdisk/src/ask.c
+@@ -508,7 +508,7 @@ int fdisk_ask_partnum(struct fdisk_context *cxt, size_t *partnum, int wantnew)
+ 		if (num->low > 0) {
+ 			/* only one existing partition, don't ask, return the number */
+ 			fdisk_ask_number_set_result(ask, num->low);
+-			fdisk_info(cxt, _("Selected partition %ju"), num->low);
++			fdisk_info(cxt, _("Selected partition %ju"), (uintmax_t)num->low);
+ 
+ 		} else if (num->low == 0) {
+ 			fdisk_warnx(cxt, _("No partition is defined yet!"));
+@@ -520,7 +520,7 @@ int fdisk_ask_partnum(struct fdisk_context *cxt, size_t *partnum, int wantnew)
+ 		if (num->low > 0) {
+ 			/* only one free partition, don't ask, return the number */
+ 			fdisk_ask_number_set_result(ask, num->low);
+-			fdisk_info(cxt, _("Selected partition %ju"), num->low);
++			fdisk_info(cxt, _("Selected partition %ju"), (uintmax_t)num->low);
+ 		}
+ 		if (num->low == 0) {
+ 			fdisk_warnx(cxt, _("No free partition available!"));
+diff --git a/libfdisk/src/dos.c b/libfdisk/src/dos.c
+index 99208c3eb2..a06b51cd78 100644
+--- a/libfdisk/src/dos.c
++++ b/libfdisk/src/dos.c
+@@ -366,7 +366,7 @@ static void dos_init(struct fdisk_context *cxt)
+ 		  "partition table format cannot be used on drives for "
+ 		  "volumes larger than %lu bytes for %lu-byte "
+ 		  "sectors. Use GUID partition table format (GPT)."),
+-			szstr, bytes,
++			szstr, (uintmax_t) bytes,
+ 			UINT_MAX * cxt->sector_size,
+ 			cxt->sector_size);
+ 		free(szstr);
+@@ -1341,7 +1341,7 @@ static int add_partition(struct fdisk_context *cxt, size_t n,
+ 
+ 		temp = start;
+ 
+-		DBG(LABEL, ul_debug("DOS: >>> search for first free from %ju", start));
++		DBG(LABEL, ul_debug("DOS: >>> search for first free from %"PRIu64, start));
+ 		rc = find_first_free_sector(cxt, is_logical, start, &dflt);
+ 		if (rc == -ENOSPC)
+ 			fdisk_warnx(cxt, _("No free sectors available."));
+@@ -1388,8 +1388,8 @@ static int add_partition(struct fdisk_context *cxt, size_t n,
+ 
+ 			rc = find_last_free(cxt, is_logical, start, limit, &last);
+ 			if (rc == 0 && last - start + 1 < fdisk_partition_get_size(pa)) {
+-				DBG(LABEL, ul_debug("DOS: area <%ju,%ju> too small [wanted=%ju aval=%ju]",
+-							(uintmax_t) start, (uintmax_t) last,
++				DBG(LABEL, ul_debug("DOS: area <%"PRIu64",%"PRIu64"> too small [wanted=%"PRIu64" aval=%"PRIu64"]",
++							start, last,
+ 							fdisk_partition_get_size(pa),
+ 							last - start));
+ 
+@@ -1423,7 +1423,7 @@ static int add_partition(struct fdisk_context *cxt, size_t n,
+ 		assert(start >= cxt->first_lba);
+ 
+ 		pe->offset = start - cxt->first_lba;
+-		DBG(LABEL, ul_debug("DOS: setting EBR offset to %ju [start=%ju]", pe->offset, start));
++		DBG(LABEL, ul_debug("DOS: setting EBR offset to %"PRIu64" [start=%"PRIu64"]", pe->offset, start));
+ 
+ 		if (pe->offset == l->ext_offset) { /* must be corrected */
+ 			pe->offset++;
+@@ -1850,7 +1850,7 @@ static int dos_verify_disklabel(struct fdisk_context *cxt)
+ 				"than the maximum %ju."), (uintmax_t) total, (uintmax_t) n_sectors);
+ 		else if (total < n_sectors)
+ 			fdisk_info(cxt, _("Remaining %ju unallocated %ld-byte "
+-				"sectors."), (uintmax_t) n_sectors - total, cxt->sector_size);
++				"sectors."), (uintmax_t) (n_sectors - total), cxt->sector_size);
+ 	} else
+ 		fdisk_warnx(cxt,
+ 			P_("%d error detected.", "%d errors detected.", nerrors),
+diff --git a/libfdisk/src/gpt.c b/libfdisk/src/gpt.c
+index efc44abc8d..64024cdb13 100644
+--- a/libfdisk/src/gpt.c
++++ b/libfdisk/src/gpt.c
+@@ -2345,7 +2345,7 @@ static int gpt_verify_disklabel(struct fdisk_context *cxt)
+ 			   P_("A total of %ju free sectors is available in %u segment.",
+ 			      "A total of %ju free sectors is available in %u segments "
+ 			      "(the largest is %s).", nsegments),
+-			   free_sectors, nsegments, strsz ? : "0 B");
++			   (uintmax_t)free_sectors, nsegments, strsz ? : "0 B");
+ 		free(strsz);
+ 
+ 	} else
+@@ -2521,7 +2521,7 @@ static int gpt_add_partition(
+ 
+ 			user_f = fdisk_ask_number_get_result(ask);
+ 			if (user_f != find_first_available(gpt, user_f)) {
+-				fdisk_warnx(cxt, _("Sector %ju already used."), user_f);
++				fdisk_warnx(cxt, _("Sector %ju already used."), (uintmax_t)user_f);
+ 				continue;
+ 			}
+ 			break;
+@@ -2603,14 +2603,14 @@ static int gpt_add_partition(
+ 	/* Be paranoid and check against on-disk setting rather than against libfdisk cxt */
+ 	if (user_l > le64_to_cpu(pheader->last_usable_lba)) {
+ 		fdisk_warnx(cxt, _("The last usable GPT sector is %ju, but %ju is requested."),
+-				le64_to_cpu(pheader->last_usable_lba), user_l);
++				(uintmax_t)le64_to_cpu(pheader->last_usable_lba), (uintmax_t)user_l);
+ 		rc = -EINVAL;
+ 		goto done;
+ 	}
+ 
+ 	if (user_f < le64_to_cpu(pheader->first_usable_lba)) {
+ 		fdisk_warnx(cxt, _("The first usable GPT sector is %ju, but %ju is requested."),
+-				le64_to_cpu(pheader->first_usable_lba), user_f);
++				(uintmax_t)le64_to_cpu(pheader->first_usable_lba), (uintmax_t)user_f);
+ 		rc = -EINVAL;
+ 		goto done;
+ 	}
+diff --git a/libfdisk/src/label.c b/libfdisk/src/label.c
+index 04afe8d26c..7788553e60 100644
+--- a/libfdisk/src/label.c
++++ b/libfdisk/src/label.c
+@@ -1,3 +1,4 @@
++#include <inttypes.h>
+ 
+ #include "fdiskP.h"
+ #include "cctype.h"
+@@ -318,7 +319,7 @@ int fdisk_list_disklabel(struct fdisk_context *cxt)
+ 			continue;
+ 		switch (item.type) {
+ 		case 'j':
+-			fdisk_info(cxt, "%s: %ju", item.name, item.data.num64);
++			fdisk_info(cxt, "%s: %"PRIu64, item.name, item.data.num64);
+ 			break;
+ 		case 's':
+ 			if (item.data.str && item.name)
+diff --git a/libfdisk/src/script.c b/libfdisk/src/script.c
+index c7164fe0d6..ac23ffa4be 100644
+--- a/libfdisk/src/script.c
++++ b/libfdisk/src/script.c
+@@ -1058,7 +1058,7 @@ static int parse_start_value(struct fdisk_script *dp, struct fdisk_partition *pa
+ 	}
+ 
+ done:
+-	DBG(SCRIPT, ul_debugobj(dp, "  start parse result: rc=%d, move=%s, start=%ju, default=%s",
++	DBG(SCRIPT, ul_debugobj(dp, "  start parse result: rc=%d, move=%s, start=%"PRIu64", default=%s",
+ 				rc, pa->movestart == FDISK_MOVE_DOWN ? "down" :
+ 				    pa->movestart == FDISK_MOVE_UP ? "up" : "none",
+ 				    pa->start,
+@@ -1115,7 +1115,7 @@ static int parse_size_value(struct fdisk_script *dp, struct fdisk_partition *pa,
+ 	}
+ 
+ done:
+-	DBG(SCRIPT, ul_debugobj(dp, "  size parse result: rc=%d, move=%s, size=%ju, default=%s",
++	DBG(SCRIPT, ul_debugobj(dp, "  start parse result: rc=%d, move=%s, start=%"PRIu64", default=%s",
+ 				rc, pa->resize == FDISK_RESIZE_REDUCE ? "reduce" :
+ 				    pa->resize == FDISK_RESIZE_ENLARGE ? "enlarge" : "none",
+ 				    pa->size,
+diff --git a/libfdisk/src/script.c.rej b/libfdisk/src/script.c.rej
+new file mode 100644
+index 0000000000..e8b01e9e85
+--- /dev/null
++++ b/libfdisk/src/script.c.rej
+@@ -0,0 +1,20 @@
++--- libfdisk/src/script.c
+++++ libfdisk/src/script.c
++@@ -1058,7 +1058,7 @@ static int parse_start_value(struct fdisk_script *dp, struct fdisk_partition *pa
++ 	}
++ 
++ done:
++-	DBG_OBJ(SCRIPT, dp, ul_debug("  start parse result: rc=%d, move=%s, start=%ju, default=%s",
+++	DBG_OBJ(SCRIPT, dp, ul_debug("  start parse result: rc=%d, move=%s, start=%"PRIu64", default=%s",
++ 				rc, pa->movestart == FDISK_MOVE_DOWN ? "down" :
++ 				    pa->movestart == FDISK_MOVE_UP ? "up" : "none",
++ 				    pa->start,
++@@ -1115,7 +1115,7 @@ static int parse_size_value(struct fdisk_script *dp, struct fdisk_partition *pa,
++ 	}
++ 
++ done:
++-	DBG_OBJ(SCRIPT, dp, ul_debug("  size parse result: rc=%d, move=%s, size=%ju, default=%s",
+++	DBG_OBJ(SCRIPT, dp, ul_debug("  size parse result: rc=%d, move=%s, size=%"PRIu64", default=%s",
++ 				rc, pa->resize == FDISK_RESIZE_REDUCE ? "reduce" :
++ 				    pa->resize == FDISK_RESIZE_ENLARGE ? "enlarge" : "none",
++ 				    pa->size,
