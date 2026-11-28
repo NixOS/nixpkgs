@@ -9,13 +9,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "enpass-cli";
-  version = "1.14.0";
+  version = "1.14.1";
 
   src = fetchFromGitHub {
     owner = "HazCod";
     repo = "enpass-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cVPPBuluUvPnPAlF+OEMYOOTSdPGbJmI1iSRlYqveFQ=";
+    hash = "sha256-Do2PP5rnWBk43W7H1pKcjjKH2OHx/jJm5yGmRNAzPb0=";
   };
 
   vendorHash = "sha256-U9tnzok21yCFPDZprsvqq0NaO07qPS0L+IgVtF2hpvM=";
