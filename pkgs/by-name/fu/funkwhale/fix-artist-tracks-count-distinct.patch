@@ -1,0 +1,98 @@
+diff --git a/funkwhale_api/music/filters.py b/funkwhale_api/music/filters.py
+index 0b98219c3..a260c8032 100644
+--- a/funkwhale_api/music/filters.py
++++ b/funkwhale_api/music/filters.py
+@@ -224,9 +224,13 @@ class TrackFilter(
+         return queryset.playable_by(actor, value).distinct()
+ 
+     def filter_artist(self, queryset, name, value):
+-        return queryset.filter(
+-            Q(artist_credit__artist=value) | Q(album__artist_credit__artist=value)
++        track_credits = models.ArtistCredit.objects.filter(
++            tracks=OuterRef("pk"), artist=value
+         )
++        album_credits = models.ArtistCredit.objects.filter(
++            albums=OuterRef("album_id"), artist=value
++        )
++        return queryset.filter(Exists(track_credits) | Exists(album_credits))
+ 
+     def filter_has_mbid(self, queryset, name, value):
+         return queryset.filter(mbid__isnull=(not value))
+@@ -370,7 +374,10 @@ class AlbumFilter(
+         return queryset.filter(release_date__isnull=(not value))
+ 
+     def filter_artist(self, queryset, name, value):
+-        return queryset.filter(artist_credit__artist=value)
++        album_credits = models.ArtistCredit.objects.filter(
++            albums=OuterRef("pk"), artist=value
++        )
++        return queryset.filter(Exists(album_credits))
+ 
+     def filter_content_category(self, queryset, name, value):
+         exists = models.ArtistCredit.objects.filter(
+diff --git a/tests/music/test_filters.py b/tests/music/test_filters.py
+index 6de48dc6a..2dfa1685a 100644
+--- a/tests/music/test_filters.py
++++ b/tests/music/test_filters.py
+@@ -261,6 +261,61 @@ def test_track_filter_artist_includes_album_artist(
+     assert filterset.qs == [track2, track1]
+ 
+ 
++def test_track_filter_artist_no_duplicates(factories, mocker, anonymous_user):
++    artist = factories["music.Artist"]()
++    credit1 = factories["music.ArtistCredit"](artist=artist)
++    credit2 = factories["music.ArtistCredit"]()
++    album = factories["music.Album"]()
++    album.artist_credit.set([credit1])
++
++    # track with artist credited on both track and album
++    track1 = factories["music.Track"](album=album)
++    track1.artist_credit.set([credit1, credit2])
++
++    # standalone track without album
++    track2 = factories["music.Track"](album=None)
++    track2.artist_credit.set([credit1])
++
++    # track with artist only on album
++    track3 = factories["music.Track"](album=album)
++    track3.artist_credit.set([credit2])
++
++    # unrelated track
++    factories["music.Track"]()
++
++    qs = models.Track.objects.all().order_by("id")
++    filterset = filters.TrackFilter(
++        {"artist": artist.pk},
++        request=mocker.Mock(user=anonymous_user),
++        queryset=qs,
++    )
++
++    result = list(filterset.qs)
++    assert len(result) == 3
++    assert set(result) == {track1, track2, track3}
++
++
++def test_album_filter_artist_no_duplicates(factories, mocker, anonymous_user):
++    artist = factories["music.Artist"]()
++    credit1 = factories["music.ArtistCredit"](artist=artist)
++    credit2 = factories["music.ArtistCredit"]()
++
++    album1 = factories["music.Album"]()
++    album1.artist_credit.set([credit1, credit2])
++
++    factories["music.Album"]()
++
++    qs = models.Album.objects.all().order_by("id")
++    filterset = filters.AlbumFilter(
++        {"artist": artist.pk},
++        request=mocker.Mock(user=anonymous_user),
++        queryset=qs,
++    )
++
++    result = list(filterset.qs)
++    assert result == [album1]
++
++
+ @pytest.mark.parametrize(
+     "factory_name, filterset_class",
+     [

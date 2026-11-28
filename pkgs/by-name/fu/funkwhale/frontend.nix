@@ -1,0 +1,72 @@
+{
+  lib,
+  stdenv,
+  yarn-berry_4,
+  nodejs,
+  dart-sass,
+  funkwhale,
+}:
+stdenv.mkDerivation (finalAttrs: {
+  pname = "funkwhale-frontend";
+  inherit (funkwhale) version src;
+  sourceRoot = "${finalAttrs.src.name}/front";
+
+  strictDeps = true;
+  __structuredAttrs = true;
+
+  patches = [
+    # yarn 4.14 update breaks this https://github.com/NixOS/nixpkgs/pull/513745
+    # Remove patches after upstream updates to Yarn 4.14
+    # see `packageManager` field in package.json
+    # https://dev.funkwhale.audio/funkwhale/funkwhale/-/blob/develop/front/package.json?ref_type=heads#L139
+    ./yarn-4.14-support.patch
+
+    # when signing up the ui errors with a length not found in the console
+    ./signup-bug.patch
+
+    # Prevent sidebar search input from scrolling independently from sidebar
+    ./fix-sidebar-search-scroll.patch
+  ];
+
+  missingHashes = ./missing-hashes.json;
+  offlineCache = yarn-berry_4.fetchYarnBerryDeps {
+    inherit (finalAttrs) src sourceRoot;
+    patches = [ ./yarn-4.14-support.patch ];
+    missingHashes = ./missing-hashes.json;
+    hash = "sha256-N6hgAw1mi+vazXJGO+t5kqoGrmz8AmosLObcZMVhQBg=";
+  };
+
+  # There are basic cypress tests which are testing the demo deployment
+  # So it requires a running funkwhale server to test it, we do it without cypress in nixos test
+  doCheck = false;
+
+  env.CYPRESS_INSTALL_BINARY = 0;
+
+  nativeBuildInputs = [
+    yarn-berry_4.yarnBerryConfigHook
+    yarn-berry_4
+    nodejs
+    dart-sass
+  ];
+
+  buildPhase = ''
+    runHook preBuild
+
+    # force sass-embedded to use our own sass instead of the bundled one
+    substituteInPlace node_modules/sass-embedded/dist/lib/src/compiler-path.js \
+        --replace-fail 'compilerCommand = (() => {' 'compilerCommand = (() => { return ["${lib.getExe dart-sass}"];'
+
+    yarn run build:deployment
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
+    cp -r dist $out
+    runHook postInstall
+  '';
+
+  meta = funkwhale.meta // {
+    description = "Frontend for the federated audio platform, Funkwhale";
+  };
+})

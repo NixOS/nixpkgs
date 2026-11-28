@@ -1,0 +1,65 @@
+diff --git a/funkwhale_api/music/migrations/0070_normalize_flac_mimetype.py b/funkwhale_api/music/migrations/0070_normalize_flac_mimetype.py
+new file mode 100644
+index 000000000..a31927930
+--- /dev/null
++++ b/funkwhale_api/music/migrations/0070_normalize_flac_mimetype.py
+@@ -0,0 +1,23 @@
++from django.db import migrations
++
++
++def update_flac_mimetype(apps, schema_editor):
++    Upload = apps.get_model("music", "Upload")
++    Upload.objects.filter(mimetype="audio/x-flac").update(mimetype="audio/flac")
++
++    UploadVersion = apps.get_model("music", "UploadVersion")
++    UploadVersion.objects.filter(mimetype="audio/x-flac").update(mimetype="audio/flac")
++
++
++def backwards(apps, schema_editor):
++    pass
++
++
++class Migration(migrations.Migration):
++    dependencies = [
++        ("music", "0069_sharelink"),
++    ]
++
++    operations = [
++        migrations.RunPython(update_flac_mimetype, backwards),
++    ]
+diff --git a/funkwhale_api/music/models.py b/funkwhale_api/music/models.py
+index 5ad283f3a..2513d5f1a 100644
+--- a/funkwhale_api/music/models.py
++++ b/funkwhale_api/music/models.py
+@@ -1116,6 +1116,8 @@ class Upload(models.Model):
+                 self.mimetype = utils.guess_mimetype(self.audio_file)
+             elif self.source and self.source.startswith("file://"):
+                 self.mimetype = utils.guess_mimetype_from_name(self.source)
++        if self.mimetype == "audio/x-flac":
++            self.mimetype = "audio/flac"
+         if not self.size and self.audio_file:
+             self.size = self.audio_file.size
+         if not self.checksum:
+diff --git a/funkwhale_api/music/utils.py b/funkwhale_api/music/utils.py
+index dd7b5472d..7be52e9b0 100644
+--- a/funkwhale_api/music/utils.py
++++ b/funkwhale_api/music/utils.py
+@@ -19,7 +19,8 @@ def guess_mimetype(f):
+     t = magic.from_buffer(f.read(b), mime=True)
+     if not t.startswith("audio/"):
+         t = guess_mimetype_from_name(f.name)
+-
++    if t == "audio/x-flac":
++        t = "audio/flac"
+     return t
+ 
+ 
+@@ -30,6 +31,8 @@ def guess_mimetype_from_name(name):
+         t = mt
+     else:
+         t = EXTENSION_TO_MIMETYPE.get(name.split(".")[-1])
++    if t == "audio/x-flac":
++        t = "audio/flac"
+     return t
+ 
+ 

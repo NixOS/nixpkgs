@@ -1,0 +1,15 @@
+--- a/config/settings/common.py
++++ b/config/settings/common.py
+@@ -874,7 +874,12 @@ CACHES = {
+ CHANNEL_LAYERS = {
+     "default": {
+         "BACKEND": "channels_redis.core.RedisChannelLayer",
+-        "CONFIG": {"hosts": [CACHES["default"]["LOCATION"]]},
++        "CONFIG": {
++            "hosts": [{
++                "address": CACHES["default"]["LOCATION"],
++                "socket_timeout": None,
++            }],
++        },
+     }
+ }

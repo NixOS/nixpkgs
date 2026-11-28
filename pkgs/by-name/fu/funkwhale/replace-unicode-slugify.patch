@@ -1,0 +1,74 @@
+diff --git a/funkwhale_api/common/storage.py b/funkwhale_api/common/storage.py
+index 97ef6cfd4..1e396400f 100644
+--- a/funkwhale_api/common/storage.py
++++ b/funkwhale_api/common/storage.py
+@@ -1,5 +1,6 @@
+ import functools
+ import os
++import re
+ import shutil
+ 
+ import slugify
+@@ -9,8 +10,18 @@ from django.core.files.storage import FileSystemStorage
+ def asciionly(name):
+     """
+     Convert unicode characters in name to ASCII characters.
++    Using separator="" drops non-whitelisted characters without turning them into
++    hyphens, while re.sub converts whitespace to hyphens.
+     """
+-    return slugify.slugify(name, ok=slugify.SLUG_OK + ".", only_ascii=True)
++    return re.sub(
++        r"[\s]+",
++        "-",
++        slugify.slugify(
++            name,
++            regex_pattern=r"[^\s\-_~\.a-zA-Z0-9]+",
++            separator="",
++        ),
++    )
+ 
+ 
+ class ASCIIFileSystemStorage(FileSystemStorage):
+diff --git a/funkwhale_api/music/models.py b/funkwhale_api/music/models.py
+index 5ad283f3a..7ad35a2fb 100644
+--- a/funkwhale_api/music/models.py
++++ b/funkwhale_api/music/models.py
+@@ -10,7 +10,6 @@ import uuid
+ 
+ import arrow
+ import ffmpeg
+-import slugify
+ from django.conf import settings
+ from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
+ from django.contrib.contenttypes.models import ContentType
+@@ -32,7 +31,7 @@ from django.utils import timezone
+ from funkwhale_api import musicbrainz
+ from funkwhale_api.common import fields
+ from funkwhale_api.common import models as common_models
+-from funkwhale_api.common import preferences, session
++from funkwhale_api.common import preferences, session, storage
+ from funkwhale_api.common import utils as common_utils
+ from funkwhale_api.common.validators import hex_color_validator
+ from funkwhale_api.federation import models as federation_models
+@@ -877,7 +876,7 @@ TRACK_FILE_IMPORT_STATUS_CHOICES = (
+ 
+ def get_file_path(instance, filename):
+     # Convert unicode characters in name to ASCII characters.
+-    filename = slugify.slugify(filename, ok=slugify.SLUG_OK + ".", only_ascii=True)
++    filename = storage.asciionly(filename)
+ 
+     if isinstance(instance, UploadVersion):
+         return common_utils.ChunkedPath("transcoded")(instance, filename)
+diff --git a/pyproject.toml b/pyproject.toml
+index a7754034e..ec4c44fb0 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -99,7 +99,7 @@ typesense = { version = "==2.0.0", optional = true }
+ ipython = "==9.10.0"
+ pluralizer = "==2.0.0"
+ service-identity = "==26.1.0"
+-unicode-slugify = "==0.1.5"
++python-slugify = "==8.0.4"
+ 
+ [tool.poetry.group.dev.dependencies]
+ aioresponses = "==0.7.8"

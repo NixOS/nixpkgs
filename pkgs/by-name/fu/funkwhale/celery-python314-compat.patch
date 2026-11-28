@@ -1,0 +1,8 @@
+--- a/funkwhale_api/taskapp/celery.py
++++ b/funkwhale_api/taskapp/celery.py
+@@ -53,4 +53,5 @@ def require_instance(model_or_qs, parameter_name, id_kwarg_name=None, allow_null=False):
+             kwargs[parameter_name] = instance
+             return function(*args, **kwargs)
+ 
++        del inner.__wrapped__
+         return inner

@@ -1,0 +1,262 @@
+diff -u -r a/src/App.vue b/src/App.vue
+--- a/src/App.vue	2026-11-26 19:29:22.912193949 +0530
++++ b/src/App.vue	2026-11-26 19:29:22.912681146 +0530
+@@ -147,7 +147,7 @@
+ .responsive {
+   display: grid !important;
+   grid-template-columns: 300px minmax(0, 1fr);
+-  grid-template-rows: min-content auto 4rem;
++  grid-template-rows: min-content auto min-content;
+ 
+   min-height: 100vh;
+ 
+@@ -161,6 +161,7 @@
+       "sidebar main"
+       "sidebar main"
+       "player player";
++    grid-template-rows: 1fr 1fr min-content;
+   }
+ }
+ </style>
+diff -u -r a/src/shell/Search.vue b/src/shell/Search.vue
+--- a/src/shell/Search.vue	2026-11-26 19:29:22.912374415 +0530
++++ b/src/shell/Search.vue	2026-11-26 19:29:22.942469883 +0530
+@@ -1,8 +1,8 @@
+ <script setup lang="ts">
+-import { refDebounced, watchDebounced, useElementBounding } from '@vueuse/core'
++import { refDebounced, watchDebounced } from '@vueuse/core'
+ import axios from 'axios'
+ import { trim } from 'lodash-es'
+-import { computed, ref, useTemplateRef, watch } from 'vue'
++import { computed, nextTick, ref, useTemplateRef, watch } from 'vue'
+ import { useI18n } from 'vue-i18n'
+ 
+ import onKeyboardShortcut from '~/composables/onKeyboardShortcut'
+@@ -38,10 +38,23 @@
+ 
+ const { t } = useI18n()
+ 
+-const globalSearchInput = useTemplateRef('globalSearchInput')
++const sidebarSearchInput = useTemplateRef('sidebarSearchInput')
++const modalSearchInput = useTemplateRef('modalSearchInput')
++
++const openSearch = () => {
++  isOpen.value = true
++  nextTick(() => {
++    modalSearchInput.value?.focus()
++  })
++}
++
++const onSidebarKeydown = (e: KeyboardEvent) => {
++  if (e.key === 'Tab' || e.key === 'Escape') return
++  openSearch()
++}
+ 
+ const focusSearch = () => {
+-  globalSearchInput.value?.focus();
++  openSearch()
+ }
+ 
+ onKeyboardShortcut(['shift', 'f'], focusSearch, true)
+@@ -64,39 +77,6 @@
+ 
+ const isLoading = ref(false)
+ 
+-// Search input sizing
+-const outerRef = useTemplateRef('outer')
+-const innerRef = useTemplateRef('inner')
+-
+-const outerBounds = useElementBounding(outerRef)
+-const innerBounds = useElementBounding(innerRef)
+-
+-const searchStyle = computed(() => {
+-  const b = isOpen.value ? innerBounds : outerBounds
+-
+-  // Guard against the split-second where the element might be unmounted (0 width)
+-  if (b.width.value === 0) return ''
+-
+-  return `left: ${b.left.value}px; top: ${b.top.value}px; width: ${b.width.value}px;`
+-})
+-
+-watch(isOpen, (newVal) => {
+-  setTimeout(() => {
+-    if (newVal) innerBounds.update()
+-    else outerBounds.update()
+-  }, 300)
+-
+-  setTimeout(() => {
+-    if (newVal) innerBounds.update()
+-    else outerBounds.update()
+-  }, 50)
+-
+-  setTimeout(() => {
+-    if (newVal) innerBounds.update()
+-    else outerBounds.update()
+-  }, 100)
+-})
+-
+ // RSS and Federation (remote object) search
+ 
+ type Category = 'rss' | 'federation'
+@@ -286,9 +266,26 @@
+ 
+ <template>
+   <div
+-    ref="outer"
+-    class="secondary raised interactive solid" :class="[$style.placeholder]"
+-  />
++    :class="$style.sidebarSearch"
++    @click="openSearch"
++  >
++    <Input
++      ref="sidebarSearchInput"
++      v-model="query"
++      class="shape-field-full"
++      ui-sunken
++      autocomplete="search"
++      type="search"
++      icon="bi:search"
++      :placeholder="t('components.audio.SearchBar.placeholder.search')"
++      @click="openSearch"
++      @keydown="onSidebarKeydown"
++    >
++      <template #start>
++        <Icon icon="bi:search" />
++      </template>
++    </Input>
++  </div>
+   <Modal
+     v-model="isOpen"
+     autofocus="off"
+@@ -297,12 +294,23 @@
+     :priority="12"
+   >
+     <template #topleft>
+-      <!-- The following is a placeholder for the original input element and contributes only its position and dimensions -->
+-      <div
+-        ref="inner"
+-        ui-raised
+-        class="color-default-solid" :class="[$style.placeholder]"
+-      />
++      <div :class="$style.modalSearch">
++        <Input
++          ref="modalSearchInput"
++          v-model="query"
++          class="shape-field-full"
++          ui-sunken
++          autocomplete="search"
++          type="search"
++          icon="bi:search"
++          :placeholder="t('components.audio.SearchBar.placeholder.search')"
++          autofocus
++        >
++          <template #start>
++            <Icon icon="bi:search" />
++          </template>
++        </Input>
++      </div>
+     </template>
+ 
+     <!-- Federation (Fetch) -->
+@@ -857,53 +865,33 @@
+     </template>
+   </Modal>
+ 
+-  <!-- Global search input (either in sidebar or on modal - follows the placeholder) -->
+-
+-  <Teleport to="body">
+-    <div
+-      :style="searchStyle"
+-      :class="$style.input"
+-    >
+-      <Input
+-        ref="globalSearchInput"
+-        v-model="query"
+-        class="shape-field-full"
+-        ui-sunken
+-        autocomplete="search"
+-        type="search"
+-        icon="bi:search"
+-        :placeholder="t('components.audio.SearchBar.placeholder.search')"
+-        :autofocus="isOpen || undefined"
+-      >
+-        <template #start>
+-          <Icon icon="bi:search" />
+-        </template>
+-      </Input>
+-    </div>
+-  </Teleport>
+ </template>
+ 
+ <style module>
+   :global(.search-section)~.hideIfAfterSection {
+     display: none;
+   }
+-.placeholder {
+-    position: relative;
+-    flex-grow: 1;
+-    border: none;
+-    border-radius: 8px;
++  .sidebarSearch {
++    width: 100%;
+     height: 48px;
+     flex-shrink: 0;
+-    opacity: .2;
+-    transition: all .2s;
+-}
+-.input.input.input {
++    cursor: pointer;
++  }
++
++  .modalSearch {
++    flex-grow: 1;
+     height: 48px;
+-    z-index: v-bind("isOpen ? 99999 : 0");
+-    position: fixed;
+-    &> * {
+-        z-index: 99999;
+-    }
+-    transition: width .2s, top .3s, left .4s;
+-}
++    display: flex;
++  }
++
++  .sidebarSearch :global([ui-inline-size]),
++  .modalSearch :global([ui-inline-size]),
++  .sidebarSearch :global(.shape-field-full),
++  .modalSearch :global(.shape-field-full) {
++    inline-size: 100%;
++    max-inline-size: 100%;
++    width: 100%;
++    flex-grow: 1;
++    height: 48px;
++  }
+ </style>
+diff -u -r a/src/shell/Sidebar.vue b/src/shell/Sidebar.vue
+--- a/src/shell/Sidebar.vue	2026-11-26 19:29:22.912502249 +0530
++++ b/src/shell/Sidebar.vue	2026-11-26 19:29:22.944634631 +0530
+@@ -402,7 +402,6 @@
+ 
+ .sidebar {
+   &.sticky-content {
+-    overflow: auto;
+     top: 0;
+ 
+     .upload-progress {
+@@ -473,6 +472,8 @@
+     .menu-links {
+       padding: 0 16px 72px;
+       flex-grow: 1;
++      overflow-y: auto;
++      overscroll-behavior: contain;
+     }
+   }
+ 
+@@ -484,7 +485,6 @@
+   }
+ 
+   @media screen and (min-width: 1024px) {
+-    height: 100%;
+ 
+     :global(.hide-on-desktop) {
+       display: none !important;

@@ -732,6 +732,8 @@ in
   fsck = runTest ./fsck.nix;
   fscrypt = runTest ./fscrypt.nix;
   ft2-clone = runTest ./ft2-clone.nix;
+  funkwhale = runTest ./web-apps/funkwhale;
+  funkwhale-federation = import ./web-apps/funkwhale/federation.nix { inherit pkgs lib; };
   galene = import ./galene.nix { inherit runTest; };
   gancio = runTest ./gancio.nix;
   garage_2 = import ./garage {
