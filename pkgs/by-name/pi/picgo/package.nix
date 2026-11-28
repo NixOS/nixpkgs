@@ -18,20 +18,20 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "picgo";
-  version = "3.0.3";
+  version = "3.0.4";
 
   src = fetchFromGitHub {
     owner = "Molunerfinn";
     repo = "PicGo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jbmhufj7GwwpSrYiO54SSD3gz0sOjiKIMffSlspyyUY=";
+    hash = "sha256-tcxWYhOA2YQ07BMbD7EfSSu5hU8Y4Z7HjtJjdJbvAIQ=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) version src;
     inherit pnpm;
     pname = "picgo";
-    hash = "sha256-x7q1vqWGzSLjy92lCyyGF4AGBlEu3FiINTLvakpVTH0=";
+    hash = "sha256-BPYwOkXYIFFNo2RoqQXMKlTtYPgAo7XekwnMlJidzrs=";
     fetcherVersion = 3; # lockfileVersion 9.0 corresponds to fetcherVersion 3
   };
 
