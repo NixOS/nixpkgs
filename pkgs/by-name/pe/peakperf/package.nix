@@ -61,21 +61,11 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = unstableGitUpdater { };
   };
 
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
-
-  versionCheckProgramArg = [
-    "-v"
-  ];
-
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
   preVersionCheck = ''
     export version=1.18
   '';
-
-  doInstallCheck = true;
-
-  versionCheckProgram = "${placeholder "out"}/bin/peakperf";
 
   meta = {
     homepage = "https://github.com/Dr-Noob/peakperf";
