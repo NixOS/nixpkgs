@@ -76,6 +76,8 @@ stdenv.mkDerivation (finalAttrs: {
     })
     # https://github.com/networkupstools/nut/pull/3499 , but does not apply cleanly
     ./CVE-2026-54161.patch
+
+    ./hardcode-systemd-analyze.patch
   ];
 
   buildInputs = [

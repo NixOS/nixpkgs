@@ -1,0 +1,57 @@
+diff --git a/configure.ac b/configure.ac
+index ef1addd86d..d4ae3aa32a 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -5364,50 +5364,8 @@ AS_IF([test x"${SYSTEMD_SUPPORTS_EXEC_CONDITION}" = xyes], [
+ 	SYSTEMD_AVAILABLE_EXEC_CONDITION="### Since systemd v243 ### "
+ ])
+ 
+-dnl Relevant since 2023: https://github.com/systemd/systemd/pull/25916
+-SYSTEMD_SUPPORTS_DAEMON_TYPE_NOTIFY=no
+-AS_IF([test -x "$SYSTEMD_ANALYZE_PROGRAM"], [
+-	AC_MSG_CHECKING([if your systemd version supports Type=notify])
+-	myFILE="`${MKTEMP} systemd-analyze-XXXXXX.service`"
+-	cat > "$myFILE" << EOF
+-@<:@Unit@:>@
+-Description=temp
+-@<:@Service@:>@
+-ExecStart=/bin/true
+-Type=notify
+-EOF
+-	if myOUT="`\"$SYSTEMD_ANALYZE_PROGRAM\" verify \"$myFILE\" 2>&1`" ; then
+-		if (echo "$myOUT" | ${GREP} "Failed to parse service type, ignoring") ; then
+-			true
+-		else
+-			SYSTEMD_SUPPORTS_DAEMON_TYPE_NOTIFY=yes
+-		fi
+-	fi
+-	rm -f "$myFILE"
+-	AC_MSG_RESULT([${SYSTEMD_SUPPORTS_DAEMON_TYPE_NOTIFY}])
+-	])
+-
+-SYSTEMD_SUPPORTS_DAEMON_TYPE_NOTIFY_RELOAD=no
+-AS_IF([test -x "$SYSTEMD_ANALYZE_PROGRAM"], [
+-	AC_MSG_CHECKING([if your systemd version supports Type=notify-reload])
+-	myFILE="`${MKTEMP} systemd-analyze-XXXXXX.service`"
+-	cat > "$myFILE" << EOF
+-@<:@Unit@:>@
+-Description=temp
+-@<:@Service@:>@
+-ExecStart=/bin/true
+-Type=notify-reload
+-EOF
+-	if myOUT="`\"$SYSTEMD_ANALYZE_PROGRAM\" verify \"$myFILE\" 2>&1`" ; then
+-		if (echo "$myOUT" | ${GREP} "Failed to parse service type, ignoring") ; then
+-			true
+-		else
+-			SYSTEMD_SUPPORTS_DAEMON_TYPE_NOTIFY_RELOAD=yes
+-		fi
+-	fi
+-	rm -f "$myFILE"
+-	AC_MSG_RESULT([${SYSTEMD_SUPPORTS_DAEMON_TYPE_NOTIFY_RELOAD}])
+-	])
++SYSTEMD_SUPPORTS_DAEMON_TYPE_NOTIFY=yes
++SYSTEMD_SUPPORTS_DAEMON_TYPE_NOTIFY_RELOAD=yes
+ 
+ AS_IF([test x"${with_libsystemd}" = xyes && test x"${SYSTEMD_SUPPORTS_DAEMON_TYPE_NOTIFY}" = xyes], [
+ 	dnl Built with sd_notify support
