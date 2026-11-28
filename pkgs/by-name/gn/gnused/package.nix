@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     license = lib.licenses.gpl3Plus;
 
-    platforms = lib.platforms.unix;
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
     maintainers = with lib.maintainers; [ mic92 ];
     mainProgram = "sed";
   };
