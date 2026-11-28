@@ -1410,7 +1410,6 @@ mapAliases {
   kup = throw "'kup' has been removed due to outdated KF5 dependencies. A Qt6 version is available at 'kdePackages.kup'."; # Added 2026-05-01
   kuzu = throw "'kuzu' was removed from nixpkgs because it was broken and the upstream repo is archived"; # Added 2026-11-15
   kwalletcli = throw "'kwalletcli' has been removed, as Plasma 5 has reached end of life. A Qt6 version is available at 'kdePackages.kwallet' with the application 'kwallet-query'."; # Added 2026-05-14
-  kwm = throw "'kwm' has been removed since upstream is a 404"; # Added 2025-12-21
   ladspaH = warnAlias "'ladspaH' has been renamed to 'ladspa-header'" ladspa-header; # Added 2026-02-08
   languageMachines.frog = frog; # Added 2025-10-7
   languageMachines.frogdata = frogdata; # Added 2025-10-7
