@@ -1257,8 +1257,12 @@ let
       }
       // lib.optionalAttrs stdenv.hostPlatform.isAarch64 {
         # Enable v4l2 video decoder for hardware acceleratation on aarch64:
-        use_vaapi = false;
         use_v4l2_codec = true;
+      }
+      // lib.optionalAttrs (stdenv.hostPlatform.isAarch64 && !chromiumVersionAtLeast "152") {
+        # use_vaapi && use_v4l2_codec only permitted since M152
+        # https://chromium-review.googlesource.com/c/chromium/src/+/8061367
+        use_vaapi = false;
       }
       // {
         use_pulseaudio = true;
