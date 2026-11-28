@@ -16,13 +16,13 @@
 
 buildPythonPackage rec {
   pname = "ldappool";
-  version = "3.0.0";
+  version = "3.1.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "ldappool";
     inherit version;
-    hash = "sha256-S7WbfWsRQH9I7gGngSZ+PIupjZH0JoBqxyCGEq4Ie4Y=";
+    hash = "sha256-cBjTwihGEZPnbEbffLkLFAmZ23YK6nwrczCIqa3dX/c=";
   };
 
   build-system = [
