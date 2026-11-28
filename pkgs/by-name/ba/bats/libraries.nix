@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
 }:
 {
   bats-assert = stdenv.mkDerivation (finalAttrs: {
@@ -39,6 +40,14 @@
       rev = "v${finalAttrs.version}";
       hash = "sha256-NJzpu1fGAw8zxRKFU2awiFM2Z3Va5WONAD2Nusgrf4o=";
     };
+    patches = [
+      # unreleased fix for test broken on macOS:
+      # not ok 149 temp_make() <var>: returns 1 and displays an error message if the directory can not be created
+      (fetchpatch {
+        url = "https://github.com/bats-core/bats-file/commit/7d839ca2a08db33e1014ae98d301c0e492f4f340.patch";
+        hash = "sha256-MLPWTrfrBvveE7EVp6jw2MVwNc0JxJuWpOuPrlPIgj8=";
+      })
+    ];
     dontBuild = true;
     installPhase = ''
       runHook preInstall
@@ -47,6 +56,22 @@
       cp -r src "$out/share/bats/bats-file"
       runHook postInstall
     '';
+    passthru.testPatch = ''
+      echo removing block/character special-device tests test/54-55
+      rm test/54* test/55*
+
+      echo removing ownership-changing tests test/59
+      rm test/59*
+
+      echo removing setuid/gid tests test/62* test/63*
+      rm test/62* test/63*
+
+    ''
+    + (lib.optionalString stdenv.hostPlatform.isDarwin ''
+      echo "removing stat-invoking tests that try to force BSD flags on macOS:" test/60*
+      echo can remove when https://github.com/bats-core/bats-file/issues/111 is fixed
+      rm test/60*
+    '');
     meta = {
       description = "Common filesystem assertions for Bats";
       platforms = lib.platforms.all;
@@ -58,12 +83,12 @@
 
   bats-detik = stdenv.mkDerivation (finalAttrs: {
     pname = "bats-detik";
-    version = "1.3.3";
+    version = "1.4.0";
     src = fetchFromGitHub {
       owner = "bats-core";
       repo = "bats-detik";
       rev = "v${finalAttrs.version}";
-      hash = "sha256-NM8/WDiTOJORC6+pAa6tYJC7wnuMH9OP5LBaatXyaYw=";
+      hash = "sha256-vFR7i14adkbtTpJCx6WVzdboINHHoEEUODEZTOh840k=";
     };
     dontBuild = true;
     installPhase = ''
