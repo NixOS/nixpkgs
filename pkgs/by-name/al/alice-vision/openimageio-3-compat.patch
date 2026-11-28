@@ -1,0 +1,44 @@
+--- a/src/CMakeLists.txt	1970-01-01 01:00:01.000000000 +0100
++++ b/src/CMakeLists.txt	2026-03-04 13:28:12.598278820 +0100
+@@ -333,7 +333,7 @@
+ # ==============================================================================
+ # OpenImageIO
+ # ==============================================================================
+-find_package(OpenImageIO 2.0.9 REQUIRED)
++find_package(OpenImageIO 3.1.10.0 REQUIRED)
+ if (OPENIMAGEIO_FOUND OR OpenImageIO_FOUND)
+     message(STATUS "OpenImageIO found.")
+ else()
+--- a/src/cmake/AliceVisionConfig.cmake.in	1970-01-01 01:00:01.000000000 +0100
++++ b/src/cmake/AliceVisionConfig.cmake.in	2026-03-05 14:24:41.082290112 +0100
+@@ -48,7 +48,7 @@
+ set(Ceres_DIR @Ceres_DIR@)
+ find_dependency(Ceres)
+ 
+-find_dependency(OpenImageIO 2.1)
++find_dependency(OpenImageIO 3.1)
+ 
+ # whether it is built with CCTags
+ set(ALICEVISION_HAVE_CCTAG @ALICEVISION_HAVE_CCTAG@)
+--- a/src/aliceVision/image/io.cpp	1970-01-01 01:00:01.000000000 +0100
++++ b/src/aliceVision/image/io.cpp	2026-03-04 13:27:08.447975800 +0100
+@@ -1284,7 +1284,7 @@
+ 
+ void logOIIOImageCacheInfo()
+ {
+-    oiio::ImageCache* cache = oiio::ImageCache::create(true);
++    auto cache = oiio::ImageCache::create(true);
+ 
+     int maxOpenFiles = -1;
+     cache->getattribute("max_open_files", maxOpenFiles);
+--- a/src/software/pipeline/main_panoramaInit.cpp	1970-01-01 01:00:01.000000000 +0100
++++ b/src/software/pipeline/main_panoramaInit.cpp	2026-03-04 14:29:24.118244363 +0100
+@@ -91,7 +91,7 @@
+             oiio::ImageBuf buf_src(spec_src, const_cast<float*>(_levels[level - 1].data()));
+             oiio::ImageBuf buf_dst(spec_dst, const_cast<float*>(_levels[level].data()));
+ 
+-            oiio::ImageBufAlgo::resize(buf_dst, buf_src, "gaussian");
++            oiio::ImageBufAlgo::resize(buf_dst, buf_src, { { "filtername", "gaussian" } });
+         }
+ 
+         return true;
