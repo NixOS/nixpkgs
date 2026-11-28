@@ -6,6 +6,7 @@
   openssl,
   dbus,
   libgit2,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage {
@@ -22,8 +23,6 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-ELIXmphp+7lvWQsuUz2iyxhjQs0N3gzepQ4H8g13xg0=";
 
-  env.LIBGIT2_NO_VENDOR = 1;
-
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     openssl
@@ -32,8 +31,11 @@ rustPlatform.buildRustPackage {
   ];
   buildFeatures = [ "bin" ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   meta = {
-    description = "Package manager for the Luau programming language, supporting multiple runtimes including Roblox and Lune.";
+    description = "Package manager for the Luau programming language, supporting multiple runtimes including Roblox and Lune";
     homepage = "https://github.com/pesde-pkg/pesde";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
