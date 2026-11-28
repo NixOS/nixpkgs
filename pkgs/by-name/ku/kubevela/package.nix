@@ -14,16 +14,16 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "kubevela";
-  version = "1.11.1";
+  version = "1.11.2";
 
   src = fetchFromGitHub {
     owner = "kubevela";
     repo = "kubevela";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-L9hrNVgK8n/Ctqan6UeQLlQ/xmhI407WK6b1qeoVX/g=";
+    hash = "sha256-ubQxE2/ZPnkCHweMt4xV7AYxVcn++87rEhVZT1oKwxE=";
   };
 
-  vendorHash = "sha256-SLi/sLYzdzWoEyqgwEneEQ2i7c9BbWKH7lU5Ha/OQB4=";
+  vendorHash = "sha256-ONmaUfqtjNY0WWdtyUJdFFkFF/s4Zpbf5QzZ+NBsGjY=";
 
   ldflags = [
     "-s"
