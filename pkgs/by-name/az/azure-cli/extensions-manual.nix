@@ -205,6 +205,12 @@
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/connectedk8s-${version}-py2.py3-none-any.whl";
     hash = "sha256-Hl/+mS1Aj5Vsq2VFWrJuYmhXglt/wCr0ld67tK+tMak=";
     description = "Microsoft Azure Command-Line Tools Connectedk8s Extension";
+    pythonRelaxDeps = [
+      "azure-mgmt-hybridcompute"
+      "kubernetes"
+      "oras"
+      "pycryptodome"
+    ];
     propagatedBuildInputs = with python3Packages; [
       azure-graphrbac
       azure-mgmt-hybridcompute
