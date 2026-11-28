@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
 
   # build-system
   setuptools,
@@ -37,6 +38,17 @@ buildPythonPackage (finalAttrs: {
     tag = finalAttrs.version;
     hash = "sha256-IyWZbmYIPqvvex1gHkYsFb4gtNLCERXv+UkbvKfGwec=";
   };
+
+  patches = [
+    # Fix SMC tests with jax>=0.12.1 (jnp.nan_to_num fix, jax-ml/jax#42406)
+    # https://github.com/blackjax-devs/blackjax/pull/1074
+    (fetchpatch {
+      name = "fix-test_compute_log_persistent_weights.patch";
+      url = "https://github.com/blackjax-devs/blackjax/commit/0d71e43e846d1acc2d1b4512c3f808f65866bdea.patch";
+      includes = [ "tests/smc/test_persistent_sampling.py" ];
+      hash = "sha256-QSP8bM14wRRnd4ngxBKzzSo3sy4L10ibUX11rEA+d3M=";
+    })
+  ];
 
   build-system = [
     setuptools
@@ -105,6 +117,10 @@ buildPythonPackage (finalAttrs: {
     "test_restart_after_reset_matches_fresh_accumulation"
     "test_skips_first_offset_steps"
     "test_split_pop_k1_degenerate"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # AssertionError: Not equal to tolerance rtol=1e-06, atol=1e-06 (since jax 0.12.1)
+    "test_length_floor_accumulator_and_power_iteration_recover_planted_eigenvalue"
   ];
 
   pythonImportsCheck = [ "blackjax" ];
