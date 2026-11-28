@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "scalar-fastapi";
-  version = "1.8.2";
+  version = "release-2026-07-08-8cbf82d";
   pyproject = true;
 
   src = fetchFromGitHub {
