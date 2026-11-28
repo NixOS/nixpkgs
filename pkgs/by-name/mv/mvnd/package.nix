@@ -39,6 +39,10 @@ maven.buildMavenPackage (finalAttrs: {
     makeWrapper
   ];
 
+  # native-image links against zlib, which graalvm propagates; it only reaches the linker as a host input
+  # (see `buildGraalvmNativeImage`)
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ graalvmPackages.graalvm-ce ];
+
   mvnDepsParameters = finalAttrs.mvnParameters;
   mvnParameters = lib.concatStringsSep " " (
     [
