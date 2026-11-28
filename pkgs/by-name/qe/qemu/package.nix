@@ -291,6 +291,10 @@ stdenv.mkDerivation (finalAttrs: {
     # Otherwise tries to ensure /var/run exists.
     sed -i "/install_emptydir(get_option('localstatedir') \/ 'run')/d" \
         qga/meson.build
+  ''
+  + lib.optionalString nixosTestRunner ''
+    # ARM virt has PCI, but its default configuration omits the IPMI interfaces.
+    echo 'CONFIG_PCI_IPMI_KCS=y' >> configs/devices/arm-softmmu/default.mak
   '';
 
   preConfigure = ''
