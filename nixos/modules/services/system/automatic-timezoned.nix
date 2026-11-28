@@ -6,6 +6,33 @@
 }:
 let
   cfg = config.services.automatic-timezoned;
+  commonHardening = {
+    ProtectSystem = "strict";
+    ProtectHome = true;
+    PrivateTmp = true;
+    PrivateDevices = true;
+    ProtectKernelTunables = true;
+    ProtectControlGroups = true;
+    RestrictSUIDSGID = true;
+    PrivateMounts = true;
+    RemoveIPC = true;
+    UMask = "0077";
+    CapabilityBoundingSet = "";
+    NoNewPrivileges = true;
+    ProtectKernelModules = true;
+    SystemCallArchitectures = "native";
+    SystemCallFilter = [ "@system-service" ];
+    ProtectKernelLogs = true;
+    ProtectClock = true;
+    RestrictAddressFamilies = [ "AF_UNIX" ];
+    PrivateNetwork = true;
+    LockPersonality = true;
+    ProtectHostname = true;
+    RestrictRealtime = true;
+    MemoryDenyWriteExecute = true;
+    PrivateUsers = true;
+    RestrictNamespaces = true;
+  };
 in
 {
   options = {
@@ -65,7 +92,8 @@ in
           Type = "exec";
           User = "automatic-timezoned";
           ExecStart = "${cfg.package}/bin/automatic-timezoned";
-        };
+        }
+        // commonHardening;
         wantedBy = [ "multi-user.target" ];
       };
 
@@ -78,8 +106,8 @@ in
           User = "automatic-timezoned";
           ExecStart = "${pkgs.geoclue2-with-demo-agent}/libexec/geoclue-2.0/demos/agent";
           Restart = "on-failure";
-          PrivateTmp = true;
-        };
+        }
+        // commonHardening;
       };
 
     };
