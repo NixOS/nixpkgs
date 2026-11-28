@@ -32,13 +32,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "element-desktop";
-  version = "1.12.33";
+  version = "1.12.36";
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "element-web";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eNa91kkOPH4su4xp5Nejrd6Y1gnrNjHhjfoLRckpxAY=";
+    hash = "sha256-SnZjhi7gXH+e8uI2DIKjLw7qwJN3vVailJSMU3hqxck=";
   };
 
   pnpmDeps = fetchPnpmDeps {
@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     inherit pnpm;
     fetcherVersion = 4;
-    hash = "sha256-x/fZlTMVrsYUzZJWZ6RTeDhrKh0Si+mnTbx0eESP/qM=";
+    hash = "sha256-+vDpUucpvUcg8GeCwSccEQFIX1TVfwXBU/L/O+6Y5wA=";
   };
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
