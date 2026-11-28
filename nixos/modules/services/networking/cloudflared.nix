@@ -154,6 +154,7 @@ let
       '';
     };
   };
+
 in
 {
   imports = [
@@ -311,12 +312,83 @@ in
                 description = ''
                   Ingress rules.
 
+                  The order of these rules can not be controlled, use
+                  [](#opt-services.cloudflared.tunnels._name_.ingressList) for that.
+
                   See [Ingress rules](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/configuration/local-management/ingress/).
                 '';
                 example = {
                   "*.domain.com" = "http://localhost:80";
                   "*.anotherone.com" = "http://localhost:80";
                 };
+              };
+
+              ingressList = lib.mkOption {
+                type =
+                  with lib.types;
+                  listOf (submodule {
+                    options = {
+                      inherit originRequest;
+
+                      hostname = lib.mkOption {
+                        type = with lib.types; nullOr str;
+                        default = null;
+                        description = ''
+                          Hostname to match.
+
+                          If not specified, all hostnames will be matched.
+                        '';
+                        example = "*.example.com";
+                      };
+
+                      service = lib.mkOption {
+                        type = lib.types.str;
+                        description = ''
+                          Service to pass the traffic.
+
+                          See [Supported protocols](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/configuration/local-management/ingress/#supported-protocols).
+                        '';
+                        example = "http://localhost:80, tcp://localhost:8000, unix:/home/production/echo.sock, hello_world or http_status:404";
+                      };
+
+                      path = lib.mkOption {
+                        type = with lib.types; nullOr str;
+                        default = null;
+                        description = ''
+                          Path filter.
+
+                          If not specified, all paths will be matched.
+                        '';
+                        example = "/*.(jpg|png|css|js)";
+                      };
+                    };
+                  });
+                default = [ ];
+                description = ''
+                  Ingress rules, matched in order. The first rule matching a request is used, so
+                  more specific rules (e.g. with a `path`) must come before more general ones.
+                  Rules from [](#opt-services.cloudflared.tunnels._name_.ingress) are matched
+                  after these.
+
+                  See [Ingress rules](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/configuration/local-management/ingress/).
+                '';
+                example = lib.literalExpression ''
+                  [
+                    {
+                      hostname = "app.example.com";
+                      path = "/api/.*";
+                      service = "http://localhost:8080";
+                    }
+                    {
+                      hostname = "app.example.com";
+                      service = "http://localhost:3000";
+                    }
+                    {
+                      hostname = "*.example.com";
+                      service = "http://localhost:80";
+                    }
+                  ]
+                '';
               };
             };
           }
@@ -373,7 +445,8 @@ in
           warp-routing = filterConfig tunnel.warp-routing;
           originRequest = filterConfig tunnel.originRequest;
           ingress =
-            (map (
+            (map (rule: filterConfig (filterConfig rule)) tunnel.ingressList)
+            ++ (map (
               key:
               {
                 hostname = key;
