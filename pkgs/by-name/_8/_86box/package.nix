@@ -43,6 +43,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "86box";
   version = "6.0";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "86Box";
     repo = "86Box";
@@ -65,7 +68,6 @@ stdenv.mkDerivation (finalAttrs: {
     qt5.wrapQtAppsHook
   ]
   ++ lib.optionals enableWayland [
-    kdePackages.extra-cmake-modules
     wayland-scanner
   ];
 
@@ -91,7 +93,11 @@ stdenv.mkDerivation (finalAttrs: {
     libmpg123.dev
   ]
   ++ lib.optional stdenv.hostPlatform.isLinux alsa-lib
-  ++ lib.optional enableWayland wayland
+  ++ lib.optionals enableWayland [
+    wayland
+    kdePackages.extra-cmake-modules
+    qt5.qtwayland
+  ]
   ++ lib.optionals enableVncRenderer [
     libvncserver
     libgcrypt
