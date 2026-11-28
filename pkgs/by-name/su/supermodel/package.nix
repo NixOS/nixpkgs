@@ -1,43 +1,46 @@
 {
-  fetchFromGitHub,
   lib,
-  libGLU,
-  SDL2,
-  SDL2_net,
-  libx11,
+  fetchFromGitHub,
   stdenv,
+
+  # nativeBuildInputs
+  SDL2,
+
+  # buildInputs
+  libGL,
+  libGLU,
+  libx11,
+  SDL2_net,
   zlib,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "supermodel";
-  version = "0-unstable-2026-03-01";
+  version = "0.3a-20260528-git-77d28ee";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "trzy";
-    repo = "supermodel";
-    rev = "d6dec3dcf0922459801907950d966e5767c674de";
-    hash = "sha256-3FdLBGxmi4Xj7ao2nvjLleJSTXvKQrhUWvnQr8DK/RY=";
+    repo = "Supermodel";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-uH4QGaS6Jm4c6L8Tu42qJvKHZPDNEkWXBG0tjMJ0Cvw=";
   };
 
-  # Game.h is missing #include <cstdint>, which GCC 15 no longer provides transitively.
-  postPatch = ''
-    sed -i '/^#include <memory>/a #include <cstdint>' Src/Game.h
-  '';
+  nativeBuildInputs = [
+    SDL2 # sdl2-config
+  ];
 
   buildInputs = [
+    libGL
     libGLU
-    SDL2
-    SDL2_net
     libx11
+    SDL2_net
     zlib
   ];
 
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=format-security";
-
   makefile = "Makefiles/Makefile.UNIX";
-
-  makeFlags = [ "NET_BOARD=1" ];
 
   installPhase = ''
     runHook preInstall
@@ -52,8 +55,6 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Sega Model 3 Arcade Emulator";
-    homepage = "https://github.com/trzy/supermodel";
-    license = lib.licenses.gpl3;
     longDescription = ''
       Supermodel requires specific files to be present in the $HOME directory of
       the user running the emulator. To ensure these files are present, move the
@@ -65,8 +66,23 @@ stdenv.mkDerivation {
       Then the emulator can be started with:
       <code>supermodel -game-xml-file=$out/share/supermodel/Config/Games.xml /path/to/romset</code>.
     '';
-    mainProgram = "supermodel";
+    homepage = "https://github.com/trzy/supermodel";
+    downloadPage = "https://github.com/trzy/Supermodel/releases";
+    changelog = "https://github.com/trzy/Supermodel/releases/tag/v${finalAttrs.version}";
+    license = with lib.licenses; [
+      gpl3Plus
+
+      # Src/Pkgs/wglew.h
+      bsd3
+
+      # Src/Pkgs/imgui
+      mit
+
+      # Src/Pkgs/unzip.c
+      info-zip
+    ];
     maintainers = with lib.maintainers; [ msanft ];
+    mainProgram = "supermodel";
     platforms = lib.platforms.linux;
   };
-}
+})
