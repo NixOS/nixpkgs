@@ -2039,7 +2039,7 @@ in
   whoami = runTest ./whoami.nix;
   whois = runTest ./whois.nix;
   whoogle-search = runTest ./whoogle-search.nix;
-  wiki-js = runTest ./wiki-js.nix;
+  wiki-js = import ./wiki-js { inherit runTest; };
   windmill = import ./windmill {
     inherit runTest;
   };
