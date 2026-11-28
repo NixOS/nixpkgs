@@ -5,7 +5,7 @@
 ## Configuration {#module-services-mautrix-signal-configuration}
 
 1. Set [](#opt-services.mautrix-signal.enable) to `true`. The service will use
-   SQLite by default.
+   SQLite (`sqlite3-fk-wal`) by default.
 2. To create your configuration check the default configuration for
    [](#opt-services.mautrix-signal.settings). To obtain the complete default
    configuration, run
@@ -13,11 +13,12 @@
 
 ::: {.warning}
 Mautrix-Signal allows for some options like `encryption.pickle_key`,
-`provisioning.shared_secret`, allow the value `generate` to be set.
+`provisioning.shared_secret`, `public_media.signing_key`, and
+`direct_media.server_key` to accept the value `generate`.
 Since the configuration file is regenerated on every start of the
-service, the generated values would be discarded and might break your
-installation. Instead, set those values via
-[](#opt-services.mautrix-signal.environmentFile).
+registration service, generated values would be discarded and might break your
+installation. Instead, set persistent values via
+[](#opt-services.mautrix-signal.environmentFiles).
 :::
 
 ## Migrating from an older configuration {#module-services-mautrix-signal-migrate-configuration}
