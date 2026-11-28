@@ -5,15 +5,17 @@
 }:
 
 # Testing this requires a Thinkpad or the presence of /proc/acpi/ibm/fan
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation {
   pname = "zcfan";
-  version = "1.4.0";
+  version = "1.4.0-unstable-2025-12-19";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "cdown";
     repo = "zcfan";
-    rev = finalAttrs.version;
-    hash = "sha256-/q9jDqjG4g211CTb4ahagpxux2BsZWTEyoAY8kRRTB8=";
+    rev = "b4c49eb16d34123d3259fed35f62b48d1afbd1a3";
+    hash = "sha256-odO2blW3QeImHB8WShIQ3pLELkGhrhkOTVEQXcJbH/s=";
   };
 
   postPatch = ''
@@ -35,7 +37,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Zero-configuration fan daemon for ThinkPads";
     mainProgram = "zcfan";
     homepage = "https://github.com/cdown/zcfan";
-    changelog = "https://github.com/cdown/zcfan/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       luftmensch-luftmensch
@@ -43,4 +44,4 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     platforms = lib.platforms.linux;
   };
-})
+}
