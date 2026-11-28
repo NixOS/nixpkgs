@@ -9,13 +9,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "numcpp";
-  version = "2.17.0";
+  version = "2.18.0";
 
   src = fetchFromGitHub {
     owner = "dpilger26";
     repo = "NumCpp";
     tag = "Version_${finalAttrs.version}";
-    hash = "sha256-DkHfgO7KXB4wxyzwXSOOqDaCksMpytOSmCNXvTF3pjs=";
+    hash = "sha256-EpkTmp/jWtaNmFPtPNOf3VC8T/X2ifT95t8Ppg07hUk=";
   };
 
   patches = [ ./pytest-CMakeLists.patch ];
