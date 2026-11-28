@@ -22,12 +22,12 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aiomisc";
-  version = "18.0.40";
+  version = "18.0.44";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-zl8yIP30LuVUoczax9ZaTKm/kH5TmJSYWNwSNkVV47A=";
+    hash = "sha256-E+Q7KWB64xoA9lLYmXnSwtyTITPtD/cB50fvID2F/As=";
   };
 
   build-system = [
