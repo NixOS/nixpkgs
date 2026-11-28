@@ -162,6 +162,7 @@
   ./misc/passthru.nix
   ./misc/version.nix
   ./misc/wordlist.nix
+  ./programs/0wm.nix
   ./programs/_1password-gui.nix
   ./programs/_1password.nix
   ./programs/alvr.nix
@@ -1183,6 +1184,7 @@
   ./services/network-filesystems/webdav-server-rs.nix
   ./services/network-filesystems/webdav.nix
   ./services/network-filesystems/yandex-disk.nix
+  ./services/networking/0wm.nix
   ./services/networking/3proxy.nix
   ./services/networking/acme-dns.nix
   ./services/networking/adguardhome.nix
