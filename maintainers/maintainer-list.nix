@@ -33344,6 +33344,12 @@
     githubId = 176372446;
     name = "Katja Kwast";
   };
+  ZappD0S = {
+    email = "gzappavigna@protonmail.com";
+    github = "ZappD0S";
+    githubId = 11756924;
+    name = "Gianluca Zappavigna";
+  };
   zareix = {
     email = "contact@raphael-catarino.fr";
     github = "zareix";
