@@ -96,6 +96,7 @@ lib.makeOverridable (
       // {
         # Explicitly opt in: builder.pl reads all configuration from file $ENV["NIX_ATTRS_JSON_FILE"].
         __structuredAttrs = true;
+        strictDeps = true;
 
         inherit
           extraOutputsToInstall
