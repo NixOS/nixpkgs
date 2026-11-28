@@ -162,5 +162,8 @@ buildNpmPackage (finalAttrs: {
       jlbribeiro
     ];
   }
-  // lib.optionalAttrs (!webVersion) { mainProgram = "feishin"; };
+  // lib.optionalAttrs (!webVersion) {
+    mainProgram = "feishin";
+    mainDarwinApp = "Feishin.app";
+  };
 })
