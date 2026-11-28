@@ -6,13 +6,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "gvproxy";
-  version = "0.9.0";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "gvisor-tap-vsock";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-3vOREfNONdfpu/7QEOfBP/2jsjV4Fi+yesD1UD9I3ZU=";
+    hash = "sha256-yc8kGAN0NWIY1xE4eWihJ0coPsXaNI7cswYYTGmJ5Hk=";
   };
 
   vendorHash = null;

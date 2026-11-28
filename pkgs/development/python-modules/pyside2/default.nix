@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
     ./Final-details-to-enable-3.12-wheel-compatibility.patch
     ./Python-3.12-Fix-the-structure-of-class-property.patch
     ./Support-running-PySide-on-Python-3.12.patch
+    ./Support-building-with-Python-3.13.patch
     ./shiboken2-clang-Fix-and-simplify-resolveType-helper.patch
     ./shiboken2-clang-Fix-build-with-clang-16.patch
     ./shiboken2-clang-Fix-clashes-between-type-name-and-enumera.patch

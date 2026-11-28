@@ -158,6 +158,12 @@ buildFHSEnv {
       # Snes9x
       libepoxy
       minizip
+      gtkmm3
+      glibmm_2_4
+      cairomm_1_0
+      libsigcxx_2_0
+      gdk-pixbuf
+      portaudio
 
       # Vice
       bison
