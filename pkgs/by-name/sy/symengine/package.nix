@@ -8,6 +8,7 @@
   flint,
   mpfr,
   libmpc,
+  libllvm,
   withShared ? !stdenv.hostPlatform.isStatic,
 }:
 
@@ -46,6 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     flint
     mpfr
     libmpc
+    libllvm
   ];
 
   cmakeFlags = [
@@ -53,6 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "INTEGER_CLASS" "flint")
     (lib.cmakeBool "WITH_SYMENGINE_THREAD_SAFE" true)
     (lib.cmakeBool "WITH_MPC" true)
+    (lib.cmakeBool "WITH_LLVM" true)
     (lib.cmakeBool "BUILD_FOR_DISTRIBUTION" true)
     (lib.cmakeBool "BUILD_TESTS" finalAttrs.finalPackage.doCheck)
     (lib.cmakeBool "BUILD_SHARED_LIBS" withShared)
