@@ -94,4 +94,14 @@ rec {
     inherit pkgs lib-tests;
     nix = pkgs.nixVersions.latest;
   };
+  release-checks = import ../pkgs/top-level/nixpkgs-basic-release-checks.nix {
+    inherit pkgs;
+    nixpkgs = {
+      outPath = pkgs.lib.cleanSource ../.;
+      revCount = 1234;
+      shortRev = "abcdef";
+      revision = "0000000000000000000000000000000000000000";
+    };
+    supportedSystems = [ system ];
+  };
 }
