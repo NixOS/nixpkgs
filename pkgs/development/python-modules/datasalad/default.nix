@@ -1,6 +1,6 @@
 {
   buildPythonPackage,
-  fetchFromGitHub,
+  fetchgit,
   hatchling,
   hatch-vcs,
   lib,
@@ -11,16 +11,15 @@
   unzip,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "datasalad";
-  version = "0.6.0";
+  version = "0.9.0";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "datalad";
-    repo = "datasalad";
-    tag = "v${version}";
-    hash = "sha256-w00QY6oz0FgfgdY3f+mVRRnsOT0WJZV64ymgsXAINac=";
+  src = fetchgit {
+    url = "https://hub.datalad.org/datalad/datasalad.git";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-yImgMl5HGWovnACCvgsDyetPoE2ubrZq0eZAddkF4Tk=";
   };
 
   build-system = [
@@ -40,9 +39,9 @@ buildPythonPackage rec {
 
   meta = {
     description = "Pure-Python library with a collection of utilities for working with Git and git-annex";
-    changelog = "https://github.com/datalad/datasalad/blob/main/CHANGELOG.md";
-    homepage = "https://github.com/datalad/datasalad";
+    changelog = "https://hub.datalad.org/datalad/datasalad/src/branch/main/CHANGELOG.md";
+    homepage = "https://hub.datalad.org/datalad/datasalad";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ gador ];
   };
-}
+})
