@@ -5925,6 +5925,12 @@
     githubId = 6487079;
     name = "Dane Rieber";
   };
+  concurac = {
+    email = "connor@scequ.com";
+    github = "ConcurAc";
+    githubId = 118907421;
+    name = "Connor Davis";
+  };
   conduktorbot = {
     email = "automation@conduktor.io";
     github = "conduktorbot";
