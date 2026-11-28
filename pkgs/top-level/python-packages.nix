@@ -14018,6 +14018,8 @@ self: super: with self; {
 
   plotext = callPackage ../development/python-modules/plotext { };
 
+  plotext_6 = callPackage ../development/python-modules/plotext/6.nix { };
+
   plotille = callPackage ../development/python-modules/plotille { };
 
   plotly = callPackage ../development/python-modules/plotly { };
@@ -18117,6 +18119,8 @@ self: super: with self; {
   quandl = callPackage ../development/python-modules/quandl { };
 
   quango = callPackage ../development/python-modules/quango { };
+
+  quantconnect-stubs = callPackage ../development/python-modules/quantconnect-stubs { };
 
   quantile-forest = callPackage ../development/python-modules/quantile-forest { };
 
