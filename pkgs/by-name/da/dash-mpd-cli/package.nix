@@ -8,18 +8,24 @@
   aws-lc,
   sqlite,
   zstd,
-  bento4,
   protobuf,
+  bento4,
   ffmpeg,
   gpac,
   libxslt,
   shaka-packager,
   nix-update-script,
+  replaceVars,
   runCommand,
   versionCheckHook,
 }:
 
 let
+  # Patch the dash-mpd crate to allow access to the Nix store in the sandbox.
+  dash-mpd-patch = replaceVars ./dash-mpd-rs-nix-sandbox.patch {
+    storeDir = builtins.storeDir;
+  };
+
   # dash-mpd-cli looks for a binary named `shaka-packager`, while
   # shaka-packager provides `packager`.
   shaka-packager-wrapped = runCommand "shaka-packager-wrapped" { } ''
@@ -41,6 +47,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-KzBJwmFWd8ztOcWOqCnHuztnnM764aDKz92whVJ3W4E=";
 
   __structuredAttrs = true;
+
+  postPatch = ''
+    patch -d $cargoDepsCopy/*/dash-mpd-* -i ${dash-mpd-patch} -p 1
+  '';
+
+  buildFeatures = lib.optionals stdenvNoCC.hostPlatform.isLinux [ "sandbox" ];
 
   # Needed for HTTP3 support (which is enabled by default):
   # https://github.com/emarsden/dash-mpd-cli/blob/2d53fa0c077ede18c9cee198903a7884e880d47a/.github/workflows/ci.yml#L5-L7
