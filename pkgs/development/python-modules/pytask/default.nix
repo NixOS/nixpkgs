@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "pytask";
-  version = "0.6.0";
+  version = "0.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytask-dev";
     repo = "pytask";
     tag = "v${version}";
-    hash = "sha256-l7jQAUBb8iW5S8Am2cMCgqYcvtLq8UgEhrCNnSx9N1E=";
+    hash = "sha256-Cjd5UyRV1TTCUN9R5uxNtSLTuGLnskUVBOD3VCLHEms=";
   };
 
   build-system = [
