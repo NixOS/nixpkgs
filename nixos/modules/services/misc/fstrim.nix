@@ -17,7 +17,8 @@ in
       enable = (
         lib.mkEnableOption "periodic SSD TRIM of mounted partitions in background"
         // {
-          default = true;
+          default = !config.boot.isContainer;
+          defaultText = lib.literalExpression "!config.boot.isContainer";
         }
       );
 
