@@ -17,6 +17,9 @@ buildGoModule (finalAttrs: {
 
   vendorHash = "sha256-HOeMkyH7voQAXCRCdfpv/Cy9oLJDY+DXwh4h2yFf7Nk=";
 
+  # The web UI is for `GOOS=js` only.
+  excludedPackages = [ "web" ];
+
   meta = {
     description = "Small tool to convert an IAM Policy in JSON format into a Terraform aws_iam_policy_document";
     homepage = "https://github.com/flosell/iam-policy-json-to-terraform";
