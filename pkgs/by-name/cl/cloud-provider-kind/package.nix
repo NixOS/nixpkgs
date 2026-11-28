@@ -4,22 +4,33 @@
   fetchFromGitHub,
   gitUpdater,
   stdenv,
+  versionCheckHook,
 }:
 buildGoModule (finalAttrs: {
   pname = "cloud-provider-kind";
-  version = "0.10.0";
+  version = "0.11.1";
 
   src = fetchFromGitHub {
     owner = "kubernetes-sigs";
     repo = "cloud-provider-kind";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cepXHW5L7aqo6L1rtjvH35aMxv7CcB0Ii8Ci0FXcw5k=";
+    hash = "sha256-CHO9TeZxE8HEzQA7ezdn7AexO14jXyf2lwRm+mY7VLE=";
   };
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
-  vendorHash = "sha256-kFcAY78xPGiRQ8a3mAdnO2OylrLi6JTtp0YCsc6jXvo=";
+  vendorHash = "sha256-ZqCfe4Iu0Q76DxKNMi8AXPLNAJn6iywgmXIN2F0QyZI=";
 
   checkFlags = lib.optional stdenv.hostPlatform.isDarwin "-skip=^Test_firstSuccessfulProbe$";
+
+  ldflags = [
+    "-s"
+    "-w"
+    "-X sigs.k8s.io/cloud-provider-kind/cmd.version=${finalAttrs.version}"
+  ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "version";
+  doInstallCheck = true;
 
   meta = {
     description = "Load Balancer implementation for Kubernetes-in-Docker";
