@@ -10,6 +10,8 @@ let
 in
 
 {
+  meta.maintainers = with lib.maintainers; [ fsrv-xyz ];
+
   options.services.lldpd = {
     enable = lib.mkEnableOption "Link Layer Discovery Protocol Daemon";
 
