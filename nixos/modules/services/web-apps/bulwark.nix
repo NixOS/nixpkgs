@@ -7,15 +7,26 @@
 let
   inherit (lib)
     attrsToList
+    concatMapAttrs
+    concatStringsSep
     elem
     filter
+    filterAttrsRecursive
+    hasSuffix
+    isAttrs
+    length
     literalExpression
+    mapAttrs'
+    mapAttrsRecursive
+    mapAttrsToList
     mkEnableOption
     mkIf
     mkOption
     mkPackageOption
     nameValuePair
+    optional
     optionalAttrs
+    pathIsRegularFile
     recursiveUpdate
     trivial
     ;
@@ -28,22 +39,53 @@ let
     listOf
     nullOr
     package
+    path
     port
     str
     submodule
     ;
 
   cfg = config.services.bulwark;
+
   format = pkgs.formats.json { };
+
+  # Remove null values
+  filterConfig = lib.converge (filterAttrsRecursive (k: v: v != null));
 
   flattenAttrSet =
     key: keyName: value:
     nameValuePair key (map (it: { "${keyName}" = it.name; } // it.value) (attrsToList value));
   renameOptions =
     parent:
-    lib.mapAttrs' (
-      name: value: lib.nameValuePair (lib.strings.toCamelCase "${parent}_${name}") value
+    mapAttrs' (
+      name: value: nameValuePair (lib.strings.toCamelCase "${parent}_${name}") value
     ) cfg.settings."${parent}";
+
+  loadCredentials = credentials: mapAttrsToList (n: path: "${n}:${path}") credentials;
+
+  merge_level =
+    parent_name: v:
+    mapAttrs' (child_name: child_value: nameValuePair "${parent_name}_${child_name}" child_value) v;
+  flatten =
+    attrs: concatMapAttrs (n: v: if isAttrs v then flatten (merge_level n v) else { ${n} = v; }) attrs;
+
+  credentials = filterAttrsRecursive (n: v: isAttrs v || (hasSuffix "File" n && v != null)) {
+    settings =
+      removeAttrs
+        (
+          cfg.settings
+          // cfg.settings.branding
+          // optionalAttrs cfg.settings.oauth.enabled (renameOptions "oauth")
+        )
+        [
+          "branding"
+          "oauth"
+        ];
+    admin = cfg.admin;
+  };
+  credentials_systemd = mapAttrsRecursive (
+    path: _: "/run/credentials/bulwark.service/${concatStringsSep "_" path}"
+  ) credentials;
 
   brandingModule = {
     appName = mkOption {
@@ -73,6 +115,18 @@ in
       type = str;
       default = "/var/lib/bulwark/settings";
       description = "Directory for storing encrypted settings files.";
+    };
+    plugin_secrets_dir = mkOption {
+      type = str;
+      default = "/var/lib/bulwark/plugin-secrets";
+      description = "Directory for credentials users save for plugins, encrypted.";
+    };
+    admin_config_dir = mkOption {
+      type = str;
+      default = "/var/lib/bulwark/admin";
+      description = ''
+        Admin config dir. Everything inside is replaced when the service starts.
+      '';
     };
     admin_state_dir = mkOption {
       type = str;
@@ -210,7 +264,7 @@ in
                   description = "OAuth client ID registered with your identity provider.";
                 };
                 clientSecretFile = mkOption {
-                  type = nullOr str;
+                  type = nullOr path;
                   description = "Path to a file containing the OAuth client secret (server-side only, never exposed to the browser).";
                 };
                 issuerUrl = mkOption {
@@ -258,11 +312,11 @@ in
           };
 
           sessionSecretFile = mkOption {
-            type = nullOr str;
+            type = nullOr path;
             description = ''
               Path to a file containing the secret key for encrypting "Remember me" sessions and settings sync data.
               Required for both "Remember me" and settings sync features.
-              Generate with: openssl rand -base64 32
+              Generate with: openssl rand -hex 32
             '';
           };
 
@@ -318,7 +372,7 @@ in
               options = brandingModule;
             };
             default = { };
-            description = "Branding configuration. Check [the example env configuration](https://github.com/bulwarkmail/webmail/blob/1.8.1/.env.example#L191), keys are written in camel case.";
+            description = "Branding configuration. Check [upstream](https://github.com/bulwarkmail/webmail/blob/1.21.2/app/(main)/admin/_pages/branding.tsx#L35) for all available options.";
           };
 
           domainBranding = mkOption {
@@ -345,10 +399,22 @@ in
             default = "https://extensions.bulwarkmail.org";
             description = "URL of the BulwarkMail extension directory for the admin marketplace.";
           };
+
+          pluginSigningKeyFile = mkOption {
+            type = path;
+            description = ''
+              Path to a file containing an Ed25519 private key, which is used for signing plugins, so the browser can verify them.
+
+              Generate with
+              ```
+              openssl genpkey -algorithm ed25519 -out plugin-signing.key
+              ```
+            '';
+          };
         };
       };
       default = { };
-      description = "Bulwark configuration. Check [the example env configuration](https://github.com/bulwarkmail/webmail/blob/1.8.1/.env.example) for more configuration options, keys are written in camel case. ";
+      description = "Bulwark configuration. Check [upstream](https://github.com/bulwarkmail/webmail/blob/1.21.2/.env.example) for all available options, keys are written in camel case.";
     };
 
     admin = mkOption {
@@ -357,7 +423,7 @@ in
 
         options = {
           passwordHashFile = mkOption {
-            type = str;
+            type = path;
             description = ''
               File containing the admin password hash
 
@@ -396,95 +462,89 @@ in
         freeformType = format.type;
 
         options = {
-          features =
-            let
-              feature =
-                description:
-                mkOption {
-                  type = bool;
-                  default = true;
-                  description = description;
-                };
-            in
-            {
-              pluginsEnabled = feature "Allow the plugin system to load and run plugins for users.";
-              requirePluginApproval = feature "User-uploaded plugins must be approved by an admin before they can be enabled.";
-              themesEnabled = feature "Allow users to select and apply themes.";
-              sidebarAppsEnabled = feature "Allow custom web apps in navigation rail.";
-              settingsExportEnabled = feature "Allow users to export and import settings JSON.";
-              customKeywordsEnabled = feature "Allow user-created labels and tags.";
-              templatesEnabled = feature "Allow email template creation and library.";
-              calendarTasksEnabled = feature "Show task panel in calendar view.";
-              smimeEnabled = feature "Enable certificate management and email signing.";
-              externalContentEnabled = feature "Allow users to choose external content loading policy.";
-              debugModeEnabled = feature "Allow users to enable debug/diagnostic mode.";
-              folderIconsEnabled = feature "Allow custom folder icon picker.";
-              hoverActionsConfigEnabled = feature "Allow users to customize email hover actions.";
-              filesEnabled = feature "Enable file storage via WebDAV. WARNING: Large uploads can cause Stalwart/RocksDB instability. Not recommended for production.";
-              contactsEnabled = feature "Enable contacts/address book features.";
-              crossUnreadViewEnabled = feature ''
-                Allow an Unread entry in the Unified Mailbox section that lists unread mail across the account and its shared folders
-                (or every account when the cross-account sub-option is on). Honors the user's folder selection.
-                Requires the matching per-user toggle in Settings → Appearance.
-              '';
-              crossStarredViewEnabled = feature ''
-                Allow a Starred entry in the Unified Mailbox section that lists flagged/starred mail across the account and its shared folders
-                (or every account when the cross-account sub-option is on). Honors the user's folder selection.
-                Requires the matching per-user toggle in Settings → Appearance.
-              '';
-              crossAllViewEnabled = feature ''
-                Allow an All mail entry in the Unified Mailbox section that lists all mail across the account and its shared folders
-                (or every account when the cross-account sub-option is on).
-                Honors the user's folder selection. Requires the matching per-user toggle in Settings → Appearance.
-              '';
-              unifiedCrossAccountEnabled = feature ''
-                Allow users to expand the Unified Mailbox beyond the active account boundary so its lists merge across every logged-in account.
-                When off, the Unified Mailbox stays within the active account and its shared folders.
-              '';
+          features = mkOption {
+            type = submodule {
+              freeformType = format.type;
             };
-          restrictions =
-            let
-              restricted =
-                description:
-                mkOption {
+            default = { };
+            example = literalExpression ''
+              sidebarAppsEnabled = true;
+            '';
+            description = "Enabled features. Check the `FEATURE_GATE_LABELS` [upstream](https://github.com/bulwarkmail/webmail/blob/1.21.2/app/(main)/admin/_pages/policy.tsx#L36) for all available features. Most are on per default, so you don’t need to manually enable them.";
+          };
+          restrictions = mkOption {
+            type = submodule {
+              freeformType = format.type;
+            };
+            default = { };
+            example = literalExpression ''
+              debugMode.hidden = true;
+              deleteAction = {
+                locked = true;
+                value = "trash-and-read";
+              };
+            '';
+            description = "Restricted settings. Check the `RESTRICTION_KEYS` [upstream](https://github.com/bulwarkmail/webmail/blob/1.21.2/lib/admin/restriction-keys.ts#L31) for all available restrictions.";
+          };
+          defaults = mkOption {
+            type = submodule {
+              freeformType = format.type;
+            };
+            default = { };
+            example = literalExpression ''
+              fontSize = "x-large";
+            '';
+            description = "Restricted settings. Check the [UNLOCKABLE_SETTING_KEYS](https://github.com/bulwarkmail/webmail/blob/1.21.2/lib/accessibility-settings.ts#L197) and [ACCESSIBILITY_ALLOWED](https://github.com/bulwarkmail/webmail/blob/1.21.2/lib/accessibility-settings.ts#L163) upstream for all available defaults.";
+          };
+          organisation = mkOption {
+            type = submodule {
+              freeformType = format.type;
+            };
+            default = { };
+            example = literalExpression ''
+              externalMail.senderLabel = true;
+            '';
+            description = "Organisation settings. Check the `OrganisationPolicy` [upstream](https://github.com/bulwarkmail/webmail/blob/1.21.2/lib/admin/organisation-policy.ts#L81) for all available settings.";
+          };
+          scopes = mkOption {
+            type = listOf (submodule {
+              freeformType = format.type;
+            });
+            default = [ ];
+            example = literalExpression ''
+              {
+                id = "scope-example";
+                label = "Example domain";
+                match.domains = [ "example.com" ];
+                policy.features.sidebarAppsEnabled = true;
+              }
+            '';
+            description = "Policy scopes. Check the `PolicyScope` [upstream](https://github.com/bulwarkmail/webmail/blob/1.21.2/lib/admin/policy-scopes.ts#L35) for all available settings.";
+          };
+
+          pushRelays = mkOption {
+            type = listOf (submodule {
+              options = {
+                label = mkOption {
+                  type = str;
+                  description = "Web Push relay name";
+                };
+                url = mkOption {
+                  type = str;
+                  description = "Web Push relay URL";
+                };
+                config = mkOption {
                   type = submodule {
-                    options = {
-                      locked = mkOption {
-                        type = bool;
-                        default = false;
-                        description = "Whether this option is locked.";
-                      };
-                      hidden = mkOption {
-                        type = bool;
-                        default = false;
-                        description = "Whether this option is hidden.";
-                      };
-                    };
+                    freeformType = format.type;
                   };
                   default = { };
-                  description = description;
+                  description = "Web Push relay configuration";
                 };
-            in
-            {
-              fontSize = restricted "Appearance: Font Size";
-              density = restricted "Appearance: Density";
-              animationsEnabled = restricted "Appearance: Animations";
-              markAsReadDelay = restricted "Email: Mark as Read Delay";
-              deleteAction = restricted "Email: Delete Action";
-              showPreview = restricted "Email: Show Preview";
-              mailLayout = restricted "Email: Mail Layout";
-              emailsPerPage = restricted "Email: Emails Per Page";
-              externalContentPolicy = restricted "Email: External Content Policy";
-              sendConfirmation = restricted "Composer: Send Confirmation";
-              defaultReplyMode = restricted "Composer: Default Reply Mode";
-              autoSelectReplyIdentity = restricted "Composer: Auto-select Reply Identity";
-              plainTextMode = restricted "Composer: Plain Text Only";
-              sessionTimeout = restricted "Privacy: Session Timeout";
-              emailNotificationsEnabled = restricted "Notifications: Email Notifications";
-              calendarNotificationsEnabled = restricted "Notifications: Calendar Notifications";
-              debugMode = restricted "Advanced: Debug Mode";
-            };
-
+              };
+            });
+            default = [ ];
+            description = "List of Web Push relays the users can choose from.";
+          };
           pushRelayUrl = mkOption {
             type = str;
             default = "";
@@ -523,6 +583,18 @@ in
                 type = nullOr (enum builtinThemes);
                 description = "Theme applied when users have not chosen one.";
               };
+              defaultColorMode = mkOption {
+                type = nullOr (enum [
+                  "light"
+                  "dark"
+                ]);
+                description = "Color mode applied when users have not chosen one.";
+              };
+              lockColorMode = mkOption {
+                type = bool;
+                default = false;
+                description = "Whether the color mode is locked.";
+              };
             };
 
           forceEnabledPlugins = mkOption {
@@ -537,14 +609,14 @@ in
             '';
             description = "Force-enabled Plugins";
           };
-          approvedPlugins = mkOption {
-            type = listOf str;
-            default = [ ];
-            description = "Approved Plugins";
-          };
           forceEnabledThemes = mkOption {
             type = listOf str;
-            default = [ ];
+            default = map (theme: theme.package.themeName) (filter (theme: theme.forceEnabled) cfg.themes);
+            defaultText = literalExpression ''
+              map (theme: theme.package.themeName) (
+                filter (theme: theme.forceEnabled) config.services.bulwark.themes
+              );
+            '';
             description = "Force-enabled Themes";
           };
         };
@@ -590,15 +662,66 @@ in
           }
         ] ++ [
           {
-            package = mkBulwarkPlugin {
-              name = "gravatar";
+            package = mkBulwarkPlugin (finalAttrs: {
+              pname = "gravatar";
               version = "1.3.1";
-              hash = "sha256-Rz+xgBw4mfQcdGvQnPLrrW5i4nDQYwMt5Y37gZ2WxyE=";
-            };
+              src = fetchzip {
+                url = "https://extensions.bulwarkmail.org/api/v1/bundle/$${finalAttrs.pname}/$${finalAttrs.version}";
+                hash = "sha256-Rz+xgBw4mfQcdGvQnPLrrW5i4nDQYwMt5Y37gZ2WxyE=";
+                extension = "zip";
+                stripRoot = false;
+              };
+            });
           }
         ]
       '';
       description = "Additional plugins to be used.";
+    };
+
+    themes = mkOption {
+      type = listOf (submodule {
+        options = {
+          package = mkOption {
+            type = package;
+            description = "Theme package";
+          };
+          forceEnabled = mkOption {
+            type = bool;
+            default = false;
+            description = "Whether this theme is force-enabled (users cannot disable).";
+          };
+          config = mkOption {
+            type = submodule {
+              freeformType = format.type;
+            };
+            default = { };
+            description = "Theme configuration";
+          };
+        };
+      });
+      default = [ ];
+      example = literalExpression ''
+        with pkgs.bulwark-themes; [
+          {
+            package = bolt;
+            forceEnabled = true;
+          }
+        ] ++ [
+          {
+            package = mkBulwarkTheme (finalAttrs: {
+              pname = "bolt";
+              version = "1.0.0";
+              src = fetchzip {
+                url = "https://extensions.bulwarkmail.org/api/v1/bundle/bolt/$${finalAttrs.version}";
+                hash = "sha256-KeaUzCQfL6Bnv4qzzts3KM41NdvcepBLSL0PD3U0PCo=";
+                extension = "zip";
+                stripRoot = false;
+              };
+            });
+          }
+        ]
+      '';
+      description = "Additional themes to be used.";
     };
   };
 
@@ -625,6 +748,14 @@ in
       }
       {
         assertion =
+          cfg.policies.pushRelayUrl == ""
+          || elem cfg.policies.pushRelayUrl (map (it: it.url) cfg.policies.pushRelays);
+        message = ''
+          The Web Push relay URL specified in <option>services.bulwark.policies.pushRelayUrl</option> must be empty or included in <option>services.bulwark.policies.pushRelays</option>.
+        '';
+      }
+      {
+        assertion =
           lib.lists.intersectLists cfg.policies.themePolicy.disabledThemes cfg.policies.forceEnabledThemes
           == [ ];
         message = ''
@@ -632,12 +763,6 @@ in
         '';
       }
     ];
-
-    users.users.bulwark = {
-      isSystemUser = true;
-      group = "bulwark";
-    };
-    users.groups.bulwark = { };
 
     systemd.services.bulwark = {
       description = "bulwark service";
@@ -648,10 +773,137 @@ in
       wants = [
         "network-online.target"
       ];
+
+      preStart =
+        let
+          config-json = format.generate "config.json" (
+            recursiveUpdate (filterConfig (
+              lib.mapAttrs'
+                (
+                  n: v:
+                  if n == "jmapServers" then
+                    flattenAttrSet n "id" v
+                  else if n == "domainBranding" then
+                    flattenAttrSet n "host" v
+                  else
+                    nameValuePair n v
+                )
+                (
+                  removeAttrs
+                    (
+                      cfg.settings
+                      // cfg.settings.branding
+                      // optionalAttrs cfg.settings.oauth.enabled (renameOptions "oauth")
+                    )
+                    [
+                      "branding"
+                      "oauth"
+                    ]
+                )
+              // {
+                setupComplete = true;
+              }
+            )) credentials_systemd.settings
+          );
+          policy-json = format.generate "policy.json" (
+            recursiveUpdate cfg.policies {
+              features.pluginsEnabled = length cfg.plugins != 0;
+              features.pluginsUploadEnabled = false;
+              features.requirePluginApproval = true;
+              features.userThemesEnabled = false;
+            }
+          );
+          plugins = toString (
+            pkgs.linkFarm "bulwark-plugins" (
+              [
+                {
+                  name = "registry.json";
+                  path = format.generate "registry.json" {
+                    plugins = map (
+                      plugin:
+                      (trivial.importJSON "${plugin.package.outPath}/manifest.json")
+                      // {
+                        enabled = true;
+                        forceEnabled = plugin.forceEnabled;
+                      }
+                    ) cfg.plugins;
+                  };
+                }
+              ]
+              ++ (map (plugin: {
+                name = "${plugin.package.pluginName}.js";
+                path = "${plugin.package.outPath}/index.js";
+              }) cfg.plugins)
+            )
+          );
+          plugin-config = toString (
+            pkgs.linkFarm "bulwark-plugin-config" (
+              map (plugin: {
+                name = "${plugin.package.pluginName}.json";
+                path = format.generate "${plugin.package.pluginName}.json" plugin.config;
+              }) (filter (plugin: plugin.config != { }) cfg.plugins)
+            )
+          );
+          themes = toString (
+            pkgs.linkFarm "bulwark-themes" (
+              [
+                {
+                  name = "registry.json";
+                  path = format.generate "registry.json" {
+                    themes = map (
+                      theme:
+                      (trivial.importJSON "${theme.package.outPath}/manifest.json")
+                      // {
+                        enabled = true;
+                        forceEnabled = theme.forceEnabled;
+                      }
+                    ) cfg.themes;
+                  };
+                }
+              ]
+              ++ lib.lists.flatten (
+                map (
+                  theme:
+                  [
+                    {
+                      name = "${theme.package.themeName}.css";
+                      path = "${theme.package.outPath}/theme.css";
+                    }
+                  ]
+                  ++ (optional (pathIsRegularFile "${theme.package.outPath}/skin.css") {
+                    name = "${theme.package.themeName}.skin.css";
+                    path = "${theme.package.outPath}/skin.css";
+                  })
+                ) cfg.themes
+              )
+            )
+          );
+          admin-json = format.generate "admin.json" (recursiveUpdate cfg.admin credentials_systemd.admin);
+        in
+        ''
+          rm -rf ${cfg.admin_config_dir}
+          mkdir ${cfg.admin_config_dir}
+          cd ${cfg.admin_config_dir}
+
+          ln -sf ${config-json} config.json
+          ln -sf ${policy-json} policy.json
+          ln -sf ${plugin-config} plugin-config
+          ln -sf ${themes} themes
+          cp --no-preserve=mode -r ${plugins} plugins
+          ${if (cfg.admin != null) then "ln -sf ${admin-json} admin.json" else ""}
+
+          # Create plugin signatures
+          cd plugins
+          ${concatStringsSep "\n" (
+            map (
+              plugin:
+              "${pkgs.openssl}/bin/openssl pkeyutl -sign -inkey ${cfg.settings.pluginSigningKeyFile} -out - -rawin -in ${plugin.package.pluginName}.js | ${pkgs.openssl}/bin/openssl enc -base64 > ${plugin.package.pluginName}.sig"
+            ) cfg.plugins
+          )}
+        '';
+
       serviceConfig = {
         ExecStart = lib.getExe cfg.package;
-        User = "bulwark";
-        Group = "bulwark";
         DynamicUser = true;
 
         AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
@@ -660,15 +912,15 @@ in
           "/nix/store"
         ];
         CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
+        DevicePolicy = "closed";
+        LoadCredential = loadCredentials (flatten credentials);
         LockPersonality = true;
-        NoNewPrivileges = true;
-        PrivateUsers = true;
+        MemoryDenyWriteExecute = false; # Does not work with node
+        PrivateDevices = true;
+        PrivateUsers = false; # Incompatible with CAP_NET_BIND_SERVICE
         PrivateMounts = true;
         PrivateTmp = true;
-        PrivateDevices = true;
-        DevicePolicy = "closed";
         ProcSubset = "pid";
-        ProtectSystem = "strict";
         ProtectClock = true;
         ProtectHome = true;
         ProtectHostname = true;
@@ -679,7 +931,6 @@ in
         ProtectProc = "invisible";
         RemoveIPC = true;
         RestrictAddressFamilies = [
-          "AF_UNIX"
           "AF_INET"
           "AF_INET6"
         ];
@@ -689,103 +940,19 @@ in
         SystemCallArchitectures = "native";
         SystemCallFilter = [
           "@system-service"
+          "~@privileged"
+          "~@resources"
         ];
       };
 
       environment = {
-        ADMIN_CONFIG_DIR = toString (
-          pkgs.linkFarm "bulwark-admin-config-dir" (
-            [
-              {
-                name = "config.json";
-                path = format.generate "config.json" (
-                  lib.mapAttrs'
-                    (
-                      name: value:
-                      if name == "jmapServers" then
-                        flattenAttrSet name "id" value
-                      else if name == "domainBranding" then
-                        flattenAttrSet name "host" value
-                      else
-                        nameValuePair name value
-                    )
-                    (
-                      removeAttrs
-                        (
-                          cfg.settings
-                          // cfg.settings.branding
-                          // optionalAttrs cfg.settings.oauth.enabled (renameOptions "oauth")
-                        )
-                        [
-                          "branding"
-                          "oauth"
-                        ]
-                    )
-
-                  // {
-                    setupComplete = true;
-                  }
-                );
-              }
-              {
-                name = "policy.json";
-                path = format.generate "policy.json" (
-                  recursiveUpdate cfg.policies {
-                    features.pluginsUploadEnabled = false;
-                    features.userThemesEnabled = false;
-                  }
-                );
-              }
-              {
-                name = "plugins";
-                path = toString (
-                  pkgs.linkFarm "bulwark-plugins" (
-                    [
-                      {
-                        name = "registry.json";
-                        path = format.generate "registry.json" {
-                          plugins = map (
-                            plugin:
-                            (trivial.importJSON "${plugin.package.outPath}/manifest.json")
-                            // {
-                              enabled = true;
-                              forceEnabled = plugin.forceEnabled;
-                            }
-                          ) cfg.plugins;
-                        };
-                      }
-                    ]
-                    ++ (map (plugin: {
-                      name = "${plugin.package.pluginName}.js";
-                      path = "${plugin.package.outPath}/index.js";
-                    }) cfg.plugins)
-                  )
-                );
-              }
-              {
-                name = "plugin-config";
-                path = toString (
-                  pkgs.linkFarm "bulwark-plugin-config" (
-                    map (plugin: {
-                      name = "${plugin.package.pluginName}.json";
-                      path = format.generate "${plugin.package.pluginName}.json" plugin.config;
-                    }) (filter (plugin: plugin.config != { }) cfg.plugins)
-                  )
-                );
-              }
-            ]
-            ++ lib.optionals (cfg.admin != null) [
-              {
-                name = "admin.json";
-                path = format.generate "admin.json" cfg.admin;
-              }
-            ]
-          )
-        );
+        ADMIN_CONFIG_DIR = cfg.admin_config_dir;
         ADMIN_CONFIG_READONLY = "true";
 
         HOSTNAME = cfg.hostname;
         PORT = toString cfg.port;
+        PLUGIN_SECRETS_DIR = cfg.plugin_secrets_dir;
+        PLUGIN_SIGNING_KEY_FILE = cfg.settings.pluginSigningKeyFile;
         ADMIN_STATE_DIR = cfg.admin_state_dir;
         VERSION_CHECK_DATA_DIR = cfg.version_check_data_dir;
         # Read (and created) even with telemetry off to resolve consent state;
