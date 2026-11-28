@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libseccomp";
-  version = "2.6.1";
+  version = "2.6.2";
 
   src = fetchurl {
     url = "https://github.com/seccomp/libseccomp/releases/download/v${finalAttrs.version}/libseccomp-${finalAttrs.version}.tar.gz";
-    hash = "sha256-UB9mxmciXVN5G5fh18+Fq3ZMKX0EiB9g849FHEsO4b4=";
+    hash = "sha256-a4RdNSxteIfY0TTEPYaFDUD13O4RrRZ1wYGXrk2GnUI=";
   };
 
   outputs = [
