@@ -1,39 +1,38 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   fetchurl,
   makeWrapper,
-  jdk,
+  jdk_headless,
+  testers,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "quarkus-cli";
-  version = "3.40.1.1";
+  version = "4.0.1";
 
   src = fetchurl {
-    url = "https://github.com/quarkusio/quarkus/releases/download/${finalAttrs.version}/quarkus-cli-${finalAttrs.version}.tar.gz";
-    hash = "sha256-g1XFXOEWzaBi5v9WqAEP7u98BMcPCr16zdLoaEjccYQ=";
+    url = "mirror://maven/io/quarkus/quarkus-cli/${finalAttrs.version}/quarkus-cli-${finalAttrs.version}-runner.jar";
+    hash = "sha256-wV9OLpO6LpzUjE0lL9g5VV+0Y/oMhG32hV/dRLw5LAc=";
   };
 
+  dontUnpack = true;
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/{lib,bin}
-    cp ./lib/quarkus-cli-${finalAttrs.version}-runner.jar $out/lib
+    install -Dm644 "$src" "$out/lib/quarkus-cli-${finalAttrs.version}-runner.jar"
 
-    makeWrapper ${jdk}/bin/java $out/bin/quarkus \
-          --add-flags "-classpath $out/lib/quarkus-cli-${finalAttrs.version}-runner.jar" \
-          --add-flags "-Dapp.name=quarkus" \
-          --add-flags "-Dapp-pid='\$\$'" \
-          --add-flags "-Dapp.repo=$out/lib" \
-          --add-flags "-Dapp.home=$out" \
-          --add-flags "-Dbasedir=$out" \
-          --add-flags "io.quarkus.cli.Main"
+    makeWrapper ${jdk_headless}/bin/java "$out/bin/quarkus" \
+      --add-flags "-jar $out/lib/quarkus-cli-${finalAttrs.version}-runner.jar"
 
     runHook postInstall
   '';
+
+  passthru.tests.version = testers.testVersion {
+    package = finalAttrs.finalPackage;
+  };
 
   meta = {
     description = "Kubernetes-native Java framework tailored for GraalVM and HotSpot, crafted from best-of-breed Java libraries and standards";
