@@ -7,7 +7,7 @@
   ninja,
   pkg-config,
   blueprint-compiler,
-  typescript_5,
+  typescript_7,
   desktop-file-utils,
   wrapGAppsHook4,
   gjs,
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     blueprint-compiler
-    typescript_5
+    typescript_7
     desktop-file-utils
     wrapGAppsHook4
   ];
