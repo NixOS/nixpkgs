@@ -17,11 +17,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "soapui";
-  version = "5.10.0";
+  version = "5.10.1";
 
   src = fetchurl {
     url = "https://dl.eviware.com/soapuios/${finalAttrs.version}/SoapUI-${finalAttrs.version}-linux-bin.tar.gz";
-    sha256 = "sha256-5zwE/snEYApm23wjTnTWfgiEM0ymSNHPcIzKoY6ZK3c=";
+    sha256 = "sha256-szaBEI5M0S/kHusB6e/xnUnrRqHcI7DYnNM/ZlyncHU=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
