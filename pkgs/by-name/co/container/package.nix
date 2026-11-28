@@ -20,23 +20,48 @@
 }:
 
 let
+  # Plugin directory name -> SwiftPM executable and source directory under Sources/Plugins,
+  # matching the layout of upstream's `make install`
   plugins = {
-    container-runtime-linux = "RuntimeLinux";
-    container-network-vmnet = "NetworkVmnet";
-    container-core-images = "CoreImages";
-    machine-apiserver = "MachineAPIServer";
-    k8s = "K8s";
+    container-runtime-linux = {
+      executable = "container-runtime-linux";
+      source = "RuntimeLinux";
+    };
+    container-network-vmnet = {
+      executable = "container-network-vmnet";
+      source = "NetworkVmnet";
+    };
+    container-core-images = {
+      executable = "container-core-images";
+      source = "CoreImages";
+    };
+    machine-apiserver = {
+      executable = "machine-apiserver";
+      source = "MachineAPIServer";
+    };
+    cluster = {
+      executable = "cluster";
+      source = "Cluster";
+    };
+    build = {
+      executable = "container-build";
+      source = "ContainerBuild";
+    };
+    builder = {
+      executable = "container-builder";
+      source = "ContainerBuilder";
+    };
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "container";
-  version = "1.5.0";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "apple";
     repo = "container";
     tag = finalAttrs.version;
-    hash = "sha256-RJBtzWD/jTobi5VmwivInxpRFDAQ7MrHW2e3CNUxE1k=";
+    hash = "sha256-2CKREVTZvXIrGtmgj84Wnrg6ML4Bm5aAF0SPuAqEh9I=";
   };
 
   nativeBuildInputs = [
@@ -59,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   swiftpmDeps = fetchSwiftPMDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-pKk4/AGmtumu/+JZmTIIqXiGw3zRGD79duIgteIVS+4=";
+    hash = "sha256-g2ZdIqfcNGFpRS9aN6zoB3dmm1SKzApYWwsFtrJDT8M=";
   };
 
   # Sources/Plugins/MachineAPIServer/Resources/{init,create-user.sh}
@@ -81,12 +106,12 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm755 "$binPath/container" "$out/bin/container"
     install -Dm755 "$binPath/container-apiserver" "$out/bin/container-apiserver"
     ${lib.concatStringsSep "\n" (
-      lib.mapAttrsToList (name: directory: ''
+      lib.mapAttrsToList (name: plugin: ''
         pluginDir="$out/libexec/container/plugins/${name}"
-        install -Dm755 "$binPath/${name}" "$pluginDir/bin/${name}"
-        install -Dm644 Sources/Plugins/${directory}/config.toml "$pluginDir/config.toml"
-        if [ -d Sources/Plugins/${directory}/Resources ]; then
-          cp -R Sources/Plugins/${directory}/Resources "$pluginDir/resources"
+        install -Dm755 "$binPath/${plugin.executable}" "$pluginDir/bin/${name}"
+        install -Dm644 Sources/Plugins/${plugin.source}/config.toml "$pluginDir/config.toml"
+        if [ -d Sources/Plugins/${plugin.source}/Resources ]; then
+          cp -R Sources/Plugins/${plugin.source}/Resources "$pluginDir/resources"
         fi
       '') plugins
     )}
