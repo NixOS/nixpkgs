@@ -18,18 +18,18 @@
   p11-kit,
   which,
   ncurses,
-  fetchpatch,
+  nix-update-script,
 }:
 
 let
 
-  version = "2.85.9";
+  version = "2.88.0";
 
   src = fetchFromGitHub {
     owner = "grame-cncm";
     repo = "faust";
     tag = version;
-    hash = "sha256-aUIbvMShhzi0QmFwZUOodzl3BY5TGt3TdquSeZ44C2k=";
+    hash = "sha256-S6P0WqxnCvMp7DsbAnGkBZg/wOedu4b9TggcGA2iQdw=";
     fetchSubmodules = true;
   };
 
@@ -75,7 +75,16 @@ let
         libxml2
       ];
 
-      passthru = { inherit wrap wrapWithBuildEnv faust2ApplBase; };
+      passthru = {
+        inherit wrap wrapWithBuildEnv faust2ApplBase;
+        updateScript = nix-update-script {
+          # Only match tags formatted as x.y.z (e.g., 1.2.3)
+          extraArgs = [
+            "--version-regex"
+            "^([0-9]+\\.[0-9]+\\.[0-9]+)$"
+          ];
+        };
+      };
 
       preConfigure = ''
         # include llvm-config in path
@@ -104,7 +113,7 @@ let
 
         cd ..
         shopt -s globstar
-        for f in **/Makefile **/Makefile.library **/CMakeLists.txt build/Make.llvm.static embedded/faustjava/faust2engine architecture/autodiff/autodiff.sh source/tools/faust2appls/* **/llvm.cmake tools/benchmark/faust2object; do
+        for f in **/Makefile **/Makefile.library **/CMakeLists.txt build/Make.llvm.static embedded/faustjava/faust2engine source/tools/faust2appls/* **/llvm.cmake tools/benchmark/faust2object; do
           echo $f "llvm-config${lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) "-native"}"
           substituteInPlace $f \
             --replace-quiet "llvm-config" "llvm-config${
