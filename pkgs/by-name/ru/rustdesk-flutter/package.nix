@@ -159,6 +159,13 @@ flutter329.buildFlutterApplication rec {
     wayland-scanner
   ];
 
+  # Since 1.5.0 the vendored libxdo-sys is replaced by libs/libxdo-sys-stub,
+  # which dlopen()s libxdo at runtime, so nothing links it and its directory
+  # never reaches the loader's search path. Every xdo call then fails silently
+  # and all mouse input is dropped. buildDartApplication's fixup hook exists for
+  # exactly this case and adds these to the wrapper's LD_LIBRARY_PATH.
+  runtimeDependencies = [ xdotool ];
+
   prePatch = ''
     chmod -R +w ..
     cd ..
