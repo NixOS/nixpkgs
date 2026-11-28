@@ -1,0 +1,96 @@
+--- a/src/runtime-rs/crates/hypervisor/src/utils.rs
++++ b/src/runtime-rs/crates/hypervisor/src/utils.rs
+@@ -9,7 +9,7 @@
+     fs::{metadata, set_permissions, File, OpenOptions, Permissions},
+     io,
+     os::{
+-        fd::{BorrowedFd, RawFd},
++        fd::{AsRawFd, BorrowedFd, RawFd},
+         unix::fs::{MetadataExt, PermissionsExt},
+     },
+     path::{Path, PathBuf},
+@@ -288,7 +288,72 @@
+     remove_dir_all_if_exists(vmm_user_runtime_dir(uid))
+ }
+
++// Build-time opt-in to pick VMM users from a pre-provisioned pool instead of
++// running useradd/userdel, for hosts whose /etc/passwd is not writable at
++// runtime (e.g. NixOS with immutable users).
++const VMM_USER_POOL_PREFIX: Option<&str> = option_env!("KATA_VMM_USER_POOL_PREFIX");
++const VMM_USER_POOL_SIZE: Option<&str> = option_env!("KATA_VMM_USER_POOL_SIZE");
++const VMM_USER_POOL_LOCK_DIR: Option<&str> = option_env!("KATA_VMM_USER_POOL_LOCK_DIR");
++
++lazy_static! {
++    // Held until the shim, which serves a single sandbox, exits.
++    static ref VMM_USER_POOL_LOCK: std::sync::Mutex<Option<File>> = std::sync::Mutex::new(None);
++}
++
++fn create_vmm_user_from_pool(prefix: &str) -> Result<String> {
++    let size: u32 = VMM_USER_POOL_SIZE
++        .unwrap_or("0")
++        .parse()
++        .context("invalid KATA_VMM_USER_POOL_SIZE")?;
++    let lock_dir = Path::new(VMM_USER_POOL_LOCK_DIR.unwrap_or("/run/kata-vmm-users"));
++    std::fs::create_dir_all(lock_dir)?;
++    set_permissions(lock_dir, Permissions::from_mode(0o700))?;
++
++    for i in 0..size {
++        let name = format!("{}{}", prefix, i);
++        let file = OpenOptions::new()
++            .create(true)
++            .truncate(false)
++            .write(true)
++            .open(lock_dir.join(&name))?;
++        // SAFETY: the fd stays valid for the lifetime of `file`.
++        if unsafe { libc::flock(file.as_raw_fd(), libc::LOCK_EX | libc::LOCK_NB) } != 0 {
++            continue;
++        }
++        let uid = nix::unistd::User::from_name(&name)?
++            .ok_or_else(|| anyhow!("pool user {} does not exist", name))?
++            .uid
++            .as_raw();
++        // A VMM left behind by a crashed shim may still run as this user.
++        if uid_in_use(uid)? {
++            continue;
++        }
++        *VMM_USER_POOL_LOCK.lock().unwrap() = Some(file);
++        return Ok(name);
++    }
++    Err(anyhow!("all {} pooled VMM users are in use", size))
++}
++
++fn uid_in_use(uid: u32) -> Result<bool> {
++    for entry in std::fs::read_dir("/proc")? {
++        let entry = entry?;
++        if !entry.file_name().to_string_lossy().bytes().all(|b| b.is_ascii_digit()) {
++            continue;
++        }
++        if let Ok(m) = metadata(entry.path()) {
++            if m.uid() == uid {
++                return Ok(true);
++            }
++        }
++    }
++    Ok(false)
++}
++
+ pub fn create_vmm_user() -> Result<String> {
++    if let Some(prefix) = VMM_USER_POOL_PREFIX {
++        return create_vmm_user_from_pool(prefix);
++    }
++
+     let useradd_path =
+         first_valid_executable_path(&["/usr/sbin/useradd", "/sbin/useradd", "/bin/useradd"])?;
+     let nologin_path =
+@@ -313,6 +378,11 @@
+ }
+
+ pub fn remove_vmm_user(user: &str) -> Result<()> {
++    if VMM_USER_POOL_PREFIX.is_some() {
++        VMM_USER_POOL_LOCK.lock().unwrap().take();
++        return Ok(());
++    }
++
+     let userdel_path =
+         first_valid_executable_path(&["/usr/sbin/userdel", "/sbin/userdel", "/bin/userdel"])?;
+
