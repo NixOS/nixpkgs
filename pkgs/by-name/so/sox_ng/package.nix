@@ -49,13 +49,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sox";
-  version = "14.8.1";
+  version = "14.9.0";
 
   src = fetchFromCodeberg {
     owner = "sox_ng";
     repo = "sox_ng";
     tag = "sox_ng-${finalAttrs.version}";
-    hash = "sha256-dCpYG9iUS374cedXk2dSO8N4qifLCXqlXfoiyJsxMIo=";
+    hash = "sha256-Myz81OYZyP5c7/R8QKBX3+37XS2lNJbNkNcpAqJHA74=";
   };
 
   strictDeps = true;
