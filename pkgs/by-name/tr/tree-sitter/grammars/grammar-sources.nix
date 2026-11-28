@@ -2925,9 +2925,9 @@
   };
 
   sql = {
-    version = "0.3.11";
+    version = "0.3.13";
     url = "github:derekstride/tree-sitter-sql";
-    hash = "sha256-efeDAUgCwV9UBXbLyZ1a4Rwcvr/+wke8IzkxRUQnddM=";
+    hash = "sha256-kSNjFlxjjtgKUOaEoB9u0UK5QjRJxwqdlh5WQUYzQg8=";
     generate = true;
     meta = {
       license = lib.licenses.mit;
