@@ -1,0 +1,23 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: winston <hey@winston.sh>
+Date: Tue, 19 May 2026 22:21:23 +0200
+Subject: [PATCH] system: treat "linked" services as enabled
+
+This will enable the "Remote Desktop" panel.
+---
+ panels/system/cc-systemd-service.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/panels/system/cc-systemd-service.c b/panels/system/cc-systemd-service.c
+index 841f10f32..2cf7f9127 100644
+--- a/panels/system/cc-systemd-service.c
++++ b/panels/system/cc-systemd-service.c
+@@ -58,7 +58,7 @@ cc_get_service_state (const char *service,
+   }
+ 
+   g_variant_get_child (unit_path_variant, 0, "&s", &state);
+-  if (g_strcmp0 (state, "enabled") == 0)
++  if (g_strcmp0 (state, "enabled") == 0 || g_strcmp0 (state, "linked") == 0)
+     return CC_SERVICE_STATE_ENABLED;
+   if (g_strcmp0 (state, "disabled") == 0)
+     return CC_SERVICE_STATE_DISABLED;
