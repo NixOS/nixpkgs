@@ -113,6 +113,9 @@ stdenv.mkDerivation (finalAttrs: {
     ./fix-build-poppler-26.06.0.patch
     # https://gitlab.com/inkscape/inkscape/-/merge_requests/8034
     ./fix-build-poppler-26.07.0.patch
+    # Patch is modified slightly to remove the gitlab-ci change which fails to apply
+    # https://gitlab.com/inkscape/inkscape/-/merge_requests/7996
+    ./fix-drag-crash.patch
   ];
 
   postPatch = ''
