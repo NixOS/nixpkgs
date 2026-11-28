@@ -22,6 +22,8 @@ Please keep the section headings and do not remove the template as a whole, even
   - [ ] x86_64-linux
   - [ ] aarch64-linux
   - [ ] aarch64-darwin
+  - [ ] x86_64-freebsd
+  - [ ] aarch64-freebsd
 - Tested, as applicable:
   - [ ] Basic functionality of all binary files, usually in `./result/bin/`.
   - [ ] Ran `nixpkgs-review` on this PR. See [nixpkgs-review usage].
