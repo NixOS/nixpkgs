@@ -2,7 +2,6 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
-  fetchpatch,
   flavour ? [ "frappe" ],
   accents ? [ "blue" ],
   winDecStyles ? [ "modern" ],
@@ -53,20 +52,17 @@ lib.checkListOfEnum "Invalid accent, valid accents are ${toString validAccents}"
   stdenvNoCC.mkDerivation
   rec {
     pname = "kde";
-    version = "0.2.6";
+    version = "0.3.1";
 
     src = fetchFromGitHub {
       owner = "catppuccin";
       repo = "kde";
-      rev = "v${version}";
-      hash = "sha256-pfG0L4eSXLYLZM8Mhla4yalpEro74S9kc0sOmQtnG3w=";
+      tag = "v${version}";
+      hash = "sha256-+2z9uzWhnNIsaQm6MfHWduweKidb3HgJpgR5qobkf3c=";
     };
 
     patches = [
-      (fetchpatch {
-        url = "https://github.com/GiggleSquid/catppuccin-kde/commit/f0291c17d2e4711b0d0aac00e3dbb94ee89b4a82.patch";
-        hash = "sha256-iD+mEX2LRFmrCwLr3VAs6kzcTuZ231TKDn+U188iOss=";
-      })
+      ./install-script.patch
     ];
 
     installPhase = ''
