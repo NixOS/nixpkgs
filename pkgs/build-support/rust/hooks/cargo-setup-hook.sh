@@ -158,6 +158,16 @@ cargoSetupBuildJobs() {
 
 postUnpackHooks+=(cargoSetupBuildJobs)
 
+# pkg-config-rs calls Cargo's build platform HOST. Without this mapping,
+# build dependencies and proc macros can probe libraries for the Nix host.
+cargoSetupPkgConfig() {
+  if [[ -n "${PKG_CONFIG_FOR_BUILD-}" && ! -v HOST_PKG_CONFIG ]]; then
+    export HOST_PKG_CONFIG="$PKG_CONFIG_FOR_BUILD"
+  fi
+}
+
+preConfigureHooks+=(cargoSetupPkgConfig)
+
 if [[ -z "${dontCargoUseSystemLibs-}" ]]; then
   preConfigureHooks+=(cargoUseSystemLibs)
 fi

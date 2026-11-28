@@ -2,6 +2,10 @@
   rustPlatform,
   stdenv,
   cargo,
+  lib,
+  pkg-config,
+  buildPackages,
+  zlib,
 }:
 {
   /*
@@ -23,6 +27,33 @@
     installPhase = ''
       mkdir -p $out/bin
       mv target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/hello $out/bin/
+    '';
+  };
+
+  cargoSetupHookPkgConfig = stdenv.mkDerivation {
+    name = "test-cargoSetupHook-pkg-config";
+    strictDeps = true;
+    dontCargoSetupPostUnpack = true;
+    dontCargoUseSystemLibs = true;
+    cargoVendorDir = ".";
+    depsBuildBuild = [ pkg-config ];
+    nativeBuildInputs = [
+      rustPlatform.cargoSetupHook
+      pkg-config
+      zlib
+    ];
+    buildInputs = [ zlib ];
+
+    phases = [
+      "configurePhase"
+      "installPhase"
+    ];
+    postConfigure = ''
+      test "$("$HOST_PKG_CONFIG" --variable=includedir zlib)" = "${lib.getDev buildPackages.zlib}/include"
+      test "$("$PKG_CONFIG" --variable=includedir zlib)" = "${lib.getDev zlib}/include"
+    '';
+    installPhase = ''
+      touch "$out"
     '';
   };
 

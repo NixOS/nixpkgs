@@ -302,6 +302,26 @@ where they are known to differ. But there are ways to customize the argument:
    --target /nix/store/...-rust/mips64el_mips3-unknown-linux-gnuabi64.json
    ```
 
+If a crate uses `pkg-config` to find a native library for both a build
+dependency (such as a procedural macro) and the final program, declare both
+versions of the library. For example:
+
+```nix
+rustPlatform.buildRustPackage {
+  # ...
+  depsBuildBuild = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    sqlite
+  ];
+  buildInputs = [ sqlite ];
+}
+```
+
+`cargoSetupHook` makes the `depsBuildBuild` wrapper available as
+`HOST_PKG_CONFIG`, which is the name the Rust `pkg-config` crate uses for
+build-platform probes. Probes for the final program keep using `PKG_CONFIG`.
+
 ### Running package tests {#running-package-tests}
 
 When using `buildRustPackage`, the `checkPhase` is enabled by default and runs
