@@ -180,6 +180,22 @@ stdenv.mkDerivation (
         customizedArgs = customizeFHSEnv defaultArgs;
       in
       buildFHSEnv customizedArgs;
+
+    # see https://www.npmjs.com/package/@vscode/ripgrep-universal?activeTab=code
+    targetSystem =
+      {
+        aarch64-darwin = "darwin-arm64";
+        armv7l-linux = "linux-arm";
+        aarch64-linux = "linux-arm64";
+        i686-linux = "linux-ia32";
+        loongarch64-linux = "linux-loong64";
+        powerpc64-linux = "linux-ppc64";
+        riscv64-linux = "linux-riscv64";
+        s390x-linux = "linux-s390x";
+        x86_64-linux = "linux-x64";
+      }
+      .${stdenv.hostPlatform.system}
+        or (throw "Unknown system for ripgrep-universal: ${stdenv.hostPlatform.system}");
   in
   {
     inherit
@@ -459,25 +475,9 @@ stdenv.mkDerivation (
             else
               "resources/app/node_modules";
 
-          # see https://www.npmjs.com/package/@vscode/ripgrep-universal?activeTab=code
-          ripgrepSystem =
-            {
-              aarch64-darwin = "darwin-arm64";
-              armv7l-linux = "linux-arm";
-              aarch64-linux = "linux-arm64";
-              i686-linux = "linux-ia32";
-              loongarch64-linux = "linux-loong64";
-              powerpc64-linux = "linux-ppc64";
-              riscv64-linux = "linux-riscv64";
-              s390x-linux = "linux-s390x";
-              x86_64-linux = "linux-x64";
-            }
-            .${stdenv.hostPlatform.system}
-              or (throw "Unknown system for ripgrep-universal: ${stdenv.hostPlatform.system}");
-
           ripgrepPath =
             if lib.versionAtLeast vscodeVersion "1.122.0" then
-              "@vscode/ripgrep-universal/bin/${ripgrepSystem}/rg"
+              "@vscode/ripgrep-universal/bin/${targetSystem}/rg"
             else
               "@vscode/ripgrep/bin/rg";
 
@@ -501,6 +501,10 @@ stdenv.mkDerivation (
           --add-needed ${libglvnd}/lib/libGL.so.1 \
           --add-needed ${libglvnd}/lib/libEGL.so.1 \
           $out/lib/${libraryName}/${executableName}
+
+        patchelf \
+          --add-needed ${lib.getLib openssl}/lib/libssl.so.3 \
+          $out/lib/vscode/resources/app/node_modules.asar.unpacked/@github/copilot-sdk-${targetSystem}/prebuilds/${targetSystem}/runtime.node
       ''
       # restore original vsce-sign, which has integrity checks
       + (lib.optionalString hasVsceSign ''
