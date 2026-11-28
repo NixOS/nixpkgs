@@ -13,6 +13,7 @@
   zstd,
   nixosTests,
   nix-update-script,
+  runCommand,
   provider ? [ ],
 }:
 symlinkJoin (
@@ -20,11 +21,34 @@ symlinkJoin (
   let
     inherit (finalAttrs) version;
 
+    # Upstream embeds this file at host compile time (rosec-wasm/build.rs).
+    # Paths are the provider outputs themselves: discovery scans those
+    # directories, and trust is the exact path plus both file hashes.
+    # symlinkJoin would present a different path, which would fail closed.
+    packagedProvidersManifest = runCommand "rosec-packaged-providers.json" { } ''
+      set -eu
+      {
+        echo '['
+        ${lib.concatMapStringsSep "\n        echo ','\n" (p: ''
+          wasm="${p}/lib/rosec/providers/${p.rosecWasmFile}"
+          policy="$wasm.policy.toml"
+          test -f "$wasm"
+          test -f "$policy"
+          wasm_sha256=$(sha256sum "$wasm" | cut -d' ' -f1)
+          policy_sha256=$(sha256sum "$policy" | cut -d' ' -f1)
+          printf '  {"path":"%s","wasm_sha256":"%s","policy_sha256":"%s"}' \
+            "$wasm" "$wasm_sha256" "$policy_sha256"
+        '') provider}
+        echo
+        echo ']'
+      } > "$out"
+    '';
+
     src = fetchFromGitHub {
       owner = "jmylchreest";
       repo = "rosec";
       tag = "v${version}";
-      hash = "sha256-dlHOzUW/kH9SS/mPl+VvEetCzOY/L2qEpoYLJTCWR90=";
+      hash = "sha256-/wMNLuy64E8Ypaw7kCkig7WXfnuk9Sl6+LY8PRYWsr8=";
     };
 
     rosecPam = stdenv.mkDerivation {
@@ -50,7 +74,7 @@ symlinkJoin (
       pname = "rosec-unwrapped";
       inherit version src;
 
-      cargoHash = "sha256-X1LEL8/ntKkdRQLU+XBJ7oaDhNph2WAeVWVJ2KnzVzA=";
+      cargoHash = "sha256-Z/QGE5OgIKcJokPycSkgvfpiRHSU2nrSM8mbZTx1WYE=";
 
       nativeBuildInputs = [
         autoPatchelfHook
@@ -67,8 +91,28 @@ symlinkJoin (
         stdenv.cc.cc.lib
         zstd
       ];
+      env = lib.optionalAttrs (provider != [ ]) {
+        ROSEC_PACKAGED_PROVIDERS = packagedProvidersManifest;
+      };
 
       preCheck = ''
+        # 0.0.40 tests spawn dbus-daemon, which opens the compiled-in
+        # /etc/dbus-1/session.conf and machine-id paths. The sandbox cannot
+        # create those, so use a copy with equal-length replacements under /tmp.
+        mkdir -p /tmp/bin /tmp/dbus-1 /tmp/lib/dbus
+        cp ${dbus}/share/dbus-1/session.conf /tmp/dbus-1/session.conf
+        echo 0123456789abcdef0123456789abcdef > /tmp/machine-id
+        cp /tmp/machine-id /tmp/lib/dbus/machine-id
+        cp ${dbus}/bin/dbus-daemon /tmp/bin/dbus-daemon
+        sed -i \
+          -e 's|/etc/dbus-1/session.conf|/tmp/dbus-1/session.conf|' \
+          -e 's|/etc/machine-id|/tmp/machine-id|' \
+          -e 's|/var/lib/dbus/machine-id|/tmp/lib/dbus/machine-id|' \
+          /tmp/bin/dbus-daemon
+        export PATH="/tmp/bin:$PATH"
+        export HOME="$TMPDIR/home"
+        mkdir -p "$HOME"
+        export XDG_CACHE_HOME="$TMPDIR/cache"
         export $(dbus-launch --config-file=${dbus}/share/dbus-1/session.conf)
         # rosec-vault sidecar tests require writable xdg data directory
         export XDG_DATA_HOME=$TMPDIR/xdg-data
@@ -91,7 +135,7 @@ symlinkJoin (
   in
   {
     pname = "rosec";
-    version = "0.0.34";
+    version = "0.0.40";
 
     paths = [
       rosecCore

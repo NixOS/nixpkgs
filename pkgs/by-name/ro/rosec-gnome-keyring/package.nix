@@ -12,12 +12,25 @@ rustPlatform.buildRustPackage (finalAttrs: rec {
 
   sourceRoot = "${src.name}/rosec-gnome-keyring";
 
-  cargoHash = "sha256-DaEdT/E4blOM/wFwuZoEuquwMgcSmTKlHT5CtSsqJ3g=";
+  cargoHash = "sha256-puK69pWm+fCPjDgYJJKM/TDBC9/J9R1LGFxyUFYFLwg=";
+
+  installPhase = ''
+    runHook preInstall
+    wasm=$(find target -type f \( -name rosec_gnome_keyring.wasm -o -name librosec_gnome_keyring.wasm \) -print -quit)
+    test -n "$wasm"
+    install -Dm644 "$wasm" "$out/lib/rosec/providers/${finalAttrs.passthru.rosecWasmFile}"
+    install -Dm644 rosec_gnome_keyring.wasm.policy.toml \
+      "$out/lib/rosec/providers/${finalAttrs.passthru.rosecWasmFile}.policy.toml"
+    runHook postInstall
+  '';
+
+  passthru = {
+    rosecWasmFile = "rosec_gnome_keyring.wasm";
+    updateScript = nix-update-script { };
+  };
 
   env.RUSTFLAGS = "-C linker=wasm-ld";
   nativeBuildInputs = [ lld ];
-
-  passthru.updateScript = nix-update-script { };
 
   __structuredAttrs = true;
 
