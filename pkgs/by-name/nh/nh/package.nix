@@ -15,13 +15,13 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nh";
-  version = "4.5.1";
+  version = "4.5.2";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nh";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OMbnPuFzKXbkzn4mHXH+ILLHcmerzMC0dKeG4cxbtlE=";
+    hash = "sha256-pcukQMZ+dkuwoH5hC7hcU6wPYeHFxd5tjyoZXUYR/WQ=";
   };
 
   __structuredAttrs = true;
@@ -115,7 +115,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       rm $out/bin/xtask
     '';
 
-  cargoHash = "sha256-JSPuhEEFRVvnCG+Zb35BIb7ANB9z/H3KhdNky7Roc5Q=";
+  cargoHash = "sha256-+DhqaVhtXY+/0jJdDUMkni/Wq9tAjQHVmnGf5NQWUTk=";
 
   passthru.updateScript = nix-update-script { };
 
