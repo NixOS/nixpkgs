@@ -6,11 +6,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "last-resort";
-  version = "17.000";
+  version = "18.000";
 
   src = fetchurl {
     url = "https://github.com/unicode-org/last-resort-font/releases/download/${version}/LastResortHE-Regular.ttf";
-    hash = "sha256-OpNv4jeenhZKj5gZCVy/U9kwWi0IUy2b5bSW9L5FvN4=";
+    hash = "sha256-y3wiYsuGoz5736vQpRdG5ziw3RCSQSbEUwxBTF/H5LY=";
   };
 
   dontUnpack = true;
