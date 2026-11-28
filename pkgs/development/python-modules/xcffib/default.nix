@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "xcffib";
-  version = "1.12.0";
+  version = "1.13.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Q0Ut5QnBJk1bzqS8Alyhv2gnLSQO8m0zQLRuEfY9PUo=";
+    hash = "sha256-sbVTWqKEoN8wh8GhAb/abtnFClmvS5G6k9R6exfsCmU=";
   };
 
   postPatch = ''
