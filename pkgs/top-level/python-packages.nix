@@ -13619,8 +13619,6 @@ self: super: with self; {
 
   pdf2image = callPackage ../development/python-modules/pdf2image { };
 
-  pdfkit = callPackage ../development/python-modules/pdfkit { };
-
   pdfminer-six = callPackage ../development/python-modules/pdfminer-six { };
 
   pdfplumber = callPackage ../development/python-modules/pdfplumber { };
