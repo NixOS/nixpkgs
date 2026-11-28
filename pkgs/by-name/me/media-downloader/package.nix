@@ -1,17 +1,29 @@
 {
-  aria2,
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  qt6,
   cmake,
   extraPackages ? [
-    aria2
-    ffmpeg
     python3
+    deno
+    ffmpeg
+    yt-dlp
+    gallery-dl
+    you-get
+    svtplay-dl
+    aria2
+    wget2
   ],
-  fetchFromGitHub,
-  ffmpeg,
-  lib,
   python3,
-  qt6,
-  stdenv,
+  deno,
+  ffmpeg,
+  yt-dlp,
+  gallery-dl,
+  you-get,
+  svtplay-dl,
+  aria2,
+  wget2,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -24,6 +36,12 @@ stdenv.mkDerivation (finalAttrs: {
     rev = finalAttrs.version;
     hash = "sha256-IgA+RZp20GXAboNJrJPPKIZvSMEl7Zf1EJ8aIroU9Vo=";
   };
+
+  postPatch = ''
+    substituteInPlace src/settings.cpp \
+      --replace-fail 'return this->getOption( "UseSystemEngine",false ) ;' \
+                     'return this->getOption( "UseSystemEngine",true ) ;'
+  '';
 
   nativeBuildInputs = [
     cmake
