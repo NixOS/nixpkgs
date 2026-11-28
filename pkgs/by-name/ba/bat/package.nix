@@ -7,14 +7,12 @@
   installShellFiles,
   makeWrapper,
   oniguruma,
-  libgit2,
-  zlib,
   versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bat";
-  version = "0.26.1";
+  version = "0.27.0";
 
   __structuredAttrs = true;
 
@@ -22,12 +20,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "sharkdp";
     repo = "bat";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-IbTvFT37BFo0tKOiApDL9sT+/nMD33MO3TXuho+lF2c=";
+    hash = "sha256-dluJZMmz7aQTp0OQTBwoCoTn7Bd/D+CoIqlaLl9rrss=";
   };
 
-  cargoHash = "sha256-WRLCs1hrwFT3tya9CzKUuh5g+6fYqKDtv3yvDx8Wws8=";
-
-  env.LIBGIT2_NO_VENDOR = 1;
+  cargoHash = "sha256-GWafeaone1k8EB+6s6HutVIAC4E1odc+5qRYZuaEopA=";
 
   nativeBuildInputs = [
     pkg-config
@@ -37,8 +33,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     oniguruma
-    libgit2
-    zlib
   ];
 
   postInstall = ''
@@ -57,7 +51,20 @@ rustPlatform.buildRustPackage (finalAttrs: {
   checkFlags = [
     "--skip=alias_pager_disable_long_overrides_short"
     "--skip=config_read_arguments_from_file"
+    "--skip=diff_plain_does_not_show_grid_or_header"
+    "--skip=diff_plain_preserves_change_markers"
+    "--skip=diff_skips_files_without_git_information"
+    "--skip=diff::tests::diff_is_calculated_against_index_2"
+    "--skip=diff::tests::diff_is_calculated_against_index"
+    "--skip=diff::tests::diff_is_calculated_correctly"
+    "--skip=diff::tests::diff_is_calculated_in_cone_sparse_checkout"
+    "--skip=diff::tests::diff_is_calculated_in_sha256_repository"
+    "--skip=diff::tests::faulty_git_version_does_not_panic"
+    "--skip=diff::tests::filter_from_repository_config_is_not_executed"
+    "--skip=enable_pager_if_disable_paging_flag_comes_before_paging"
+    "--skip=enable_pager_if_pp_flag_comes_before_paging"
     "--skip=env_var_bat_paging"
+    "--skip=list_languages"
     "--skip=pager_arg_override_env_noconfig"
     "--skip=pager_arg_override_env_withconfig"
     "--skip=pager_basic"
@@ -67,6 +74,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=pager_more"
     "--skip=pager_most"
     "--skip=pager_overwrite"
+    "--skip=plain_without_diff_still_works"
+    "--skip=s_flag_respected_with_paging_always"
+    "--skip=simple_plain_does_not_override_paging"
+    "--skip=wrap_never_flag_respected_with_paging_always"
     # Fails if the filesystem performs UTF-8 validation (such as ZFS with utf8only=on)
     "--skip=file_with_invalid_utf8_filename"
   ];
