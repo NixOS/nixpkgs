@@ -12,7 +12,10 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.3.6";
 
   src = fetchurl {
-    url = "https://mujs.com/downloads/mujs-${finalAttrs.version}.tar.gz";
+    urls = [
+      "https://mujs.com/downloads/mujs-${finalAttrs.version}.tar.gz"
+      "https://mirror.sobukus.de/object/7b/88/7b88fd69954f0c9886587c020c149a4c-129253-1738334448/mujs-${finalAttrs.version}.tar.gz"
+    ];
     hash = "sha256-fPOl5iLP9BkD7/8DNFGPyUrwYyVnUsOLpGGKUZHkTxg=";
   };
 
