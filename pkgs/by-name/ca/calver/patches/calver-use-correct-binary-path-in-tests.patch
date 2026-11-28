@@ -1,0 +1,13 @@
+diff --git a/src/main.rs b/src/main.rs
+index ca9e549..40c0468 100644
+--- a/src/main.rs
++++ b/src/main.rs
+@@ -657,7 +657,7 @@ mod integration_tests {
+     use std::process::Command;
+ 
+     fn run_calver_command(args: &[&str]) -> (String, String, i32) {
+-        let output = Command::new("target/debug/calver")
++        let output = Command::new("target/@target_triple@/release/calver")
+             .args(args)
+             .output()
+             .expect("Failed to execute calver command");

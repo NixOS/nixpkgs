@@ -31753,6 +31753,12 @@
     github = "Voxi0";
     githubId = 113725768;
   };
+  vpayno = {
+    email = "vpayno.oss@gmail.com";
+    github = "vpayno";
+    githubId = 3181575;
+    name = "Victor Payno";
+  };
   vpetersson = {
     email = "vpetersson@screenly.io";
     github = "vpetersson";
