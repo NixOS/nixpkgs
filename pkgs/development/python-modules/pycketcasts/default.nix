@@ -1,24 +1,27 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
+  fetchFromCodeberg,
   python-magic,
   requests,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "pycketcasts";
-  version = "1.0.1";
-  format = "setuptools";
+  version = "0-unstable-2022-07-12";
+  pyproject = true;
 
-  src = fetchFromGitHub {
+  src = fetchFromCodeberg {
     owner = "nwithan8";
     repo = "pycketcasts";
-    rev = version;
+    rev = "b80cd20f8afd32c37c141829f878ae83324b3a1f";
     hash = "sha256-O4j89fE7fYPthhCH8b2gGskkelEA4mU6GvSbKIl+4Mk=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     python-magic
     requests
   ];
@@ -30,7 +33,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Module to interact with PocketCast's unofficial API";
-    homepage = "https://github.com/nwithan8/pycketcasts";
+    homepage = "https://codeberg.org/nwithan8/pycketcasts";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
   };
