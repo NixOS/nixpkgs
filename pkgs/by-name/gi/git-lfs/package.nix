@@ -3,6 +3,7 @@
   stdenv,
   buildGoModule,
   fetchFromGitHub,
+  fetchpatch2,
   asciidoctor,
   installShellFiles,
   git,
@@ -23,6 +24,18 @@ buildGoModule (finalAttrs: {
 
   proxyVendor = true;
   vendorHash = "sha256-M8wYdEMYUrmEXPUCnSa4zL9/G4w/+CL+jXwmZDDNOrw=";
+
+  patches = [
+    # Make sure git-lfs works with Git v3
+    #
+    # https://github.com/NixOS/nixpkgs/issues/571745
+    # https://github.com/git-lfs/git-lfs/issues/6391
+    # https://github.com/git-lfs/git-lfs/pull/6400
+    (fetchpatch2 {
+      url = "https://github.com/git-lfs/git-lfs/commit/fea23646dda522949f91c7c71b6993b3d7ba7069.patch?full_index=1";
+      hash = "sha256-RwjgteY/KvkadV3BGPEgxV8IUayLVxt8AmJjiFl8Lvo=";
+    })
+  ];
 
   nativeBuildInputs = [
     asciidoctor
