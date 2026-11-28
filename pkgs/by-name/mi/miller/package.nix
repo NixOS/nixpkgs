@@ -8,13 +8,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "miller";
-  version = "6.22.0";
+  version = "6.23.0";
 
   src = fetchFromGitHub {
     owner = "johnkerl";
     repo = "miller";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VIdX7yO45jjaYApNCays4knwLIjRG8GNkWeNGXKIs6M=";
+    hash = "sha256-zBEh71/2I8t1NQadyR/hYdCItNMLdHSLOr6rCIFYn0A=";
   };
 
   outputs = [
@@ -22,7 +22,7 @@ buildGoModule (finalAttrs: {
     "man"
   ];
 
-  vendorHash = "sha256-9ioeIPtEWmC3vY3rIPdRl3+0a2cKpH7VhmLVi7ioQK8=";
+  vendorHash = "sha256-0QpTunOoNVgiPI4lh0smkmPBv3owCPShRETxivsk274=";
 
   subPackages = [ "cmd/mlr" ];
 
