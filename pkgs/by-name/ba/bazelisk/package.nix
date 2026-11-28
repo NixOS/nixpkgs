@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "bazelisk";
-  version = "1.30.0";
+  version = "1.31.0";
 
   src = fetchFromGitHub {
     owner = "bazelbuild";
     repo = "bazelisk";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1WZuycxXZ7jiu7GX8ZfwcgnNEengGTUBN09jht+cTZA=";
+    hash = "sha256-axKP+88ELTRWPgkjYbQ5icLtVH7HeyoQ1ITAxAdkIS4=";
   };
 
-  vendorHash = "sha256-oycCqzUAn/lNFjeLjM+PQfYNscaTi5E9D7Pnv8jrO8M=";
+  vendorHash = "sha256-ISnsLuk3+FbpCiQmcyCuPq3vz2uVEawtto0F9NRo9vo=";
 
   ldflags = [
     "-s"
