@@ -27,6 +27,8 @@ buildGoModule (finalAttrs: {
 
   doInstallCheck = true;
 
+  __darwinAllowLocalNetworking = true;
+
   passthru.updateScript = nix-update-script { };
 
   meta = {
