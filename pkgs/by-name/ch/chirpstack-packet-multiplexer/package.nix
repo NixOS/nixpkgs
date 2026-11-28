@@ -5,14 +5,14 @@
   nix-update-script,
   versionCheckHook,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "chirpstack-packet-multiplexer";
   version = "4.0.1";
 
   src = fetchFromGitHub {
     owner = "chirpstack";
     repo = "chirpstack-packet-multiplexer";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-GZygrejsenunkPlvejbi0MEIw226hrcbEYoBCRPQXMM=";
   };
 
@@ -31,4 +31,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ lib.maintainers.stv0g ];
     mainProgram = "chirpstack-packet-multiplexer";
   };
-}
+})
