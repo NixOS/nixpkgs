@@ -5,19 +5,22 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
+  aws-lc,
+  libgit2,
   openssl,
+  sqlite,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   __structuredAttrs = true;
   pname = "tola";
-  version = "0.8.1";
+  version = "0.8.3";
 
   src = fetchFromGitHub {
     owner = "tola-rs";
     repo = "tola-ssg";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+3KXgmGsMMtzF75hslACj+Ko/FV0TcquYNeAEolhzRQ=";
+    hash = "sha256-qd0OlY7GK0aONzF7e+nVZBBw7u6W1z+g//VwsaJEMbw=";
   };
 
   nativeBuildInputs = [
@@ -26,24 +29,25 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
+    libgit2
     openssl
+    sqlite
   ];
 
-  cargoHash = "sha256-WxuWDHeX0qobwMz8Ttypls1qQiqUewOfkLwp01CFVXg=";
+  cargoHash = "sha256-MNkfhiQf9Rt9kTkwxjmPCgnjMizuztn4Gf/Y6qQK9tE=";
 
   # Tests bind localhost TCP listeners on macOS.
   __darwinAllowLocalNetworking = true;
 
-  # TODO: drop this list once upstream feature-gates these tests.
-  # FSEvents is unavailable in the Darwin sandbox.
-  checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
-    "--skip=dev::rebuild::tests::failed_font_reads_remain_watched"
-    "--skip=dev::rebuild::tests::rejected_config_frees_generator_events"
-    "--skip=dev::watch::fs::tests::failed_candidate_keeps_hook_inputs"
-    "--skip=dev::watch::fs::tests::failed_chain_retry_follows_recorded_hook_output"
-    "--skip=dev::watch::fs::tests::failed_hook_outputs_never_suppress"
-    "--skip=dev::watch::fs::tests::missing_candidate_inputs_wake_recovery"
-    "--skip=dev::watch::fs::tests::repaired_package_input_rechecks_once"
+  # In the Darwin sandbox, FSEvents is not available.  Therefore, we only turn on tests that
+  # require it if we are not on the Darwin platform.
+  checkFeatures = lib.optional (!stdenv.hostPlatform.isDarwin) "fsevents-tests";
+
+  # Skip tests that require network access.
+  checkFlags = [
+    "--skip=icon::tests::remote_collection_lock_and_invalidate"
+    "--skip=resources::tests::resources_drop_inside_async_host"
   ];
 
   cargoTestFlags = [ "--workspace" ];
@@ -57,6 +61,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       kawayww
       matthiasbeyer
+      jthulhu
     ];
   };
 })
