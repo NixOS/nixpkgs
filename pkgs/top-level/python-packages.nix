@@ -13878,6 +13878,8 @@ self: super: with self; {
 
   pinboard = callPackage ../development/python-modules/pinboard { };
 
+  pindakaas = callPackage ../development/python-modules/pindakaas { };
+
   pinecone = callPackage ../development/python-modules/pinecone { };
 
   ping3 = callPackage ../development/python-modules/ping3 { };
