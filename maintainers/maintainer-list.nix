@@ -29696,6 +29696,11 @@
     githubId = 2453136;
     keys = [ { fingerprint = "D2A2 F0A1 E7A8 5E6F B711  DEE5 63A4 4817 A52E AB7B"; } ];
   };
+  thde = {
+    name = "Demian";
+    github = "thde";
+    githubId = 1387040;
+  };
   the-argus = {
     email = "i.mcfarlane2002@gmail.com";
     github = "the-argus";
