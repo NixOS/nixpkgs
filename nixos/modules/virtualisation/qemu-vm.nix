@@ -225,6 +225,12 @@ let
       }
         chmod 0644 "$NIX_EFI_VARS"
       fi
+
+      ${lib.optionalString cfg.efi.mutableFirmware ''
+        NIX_EFI_FIRMWARE=$(readlink -f "''${NIX_EFI_FIRMWARE:-${config.system.name}-efi-fw.fd}")
+        cp ${cfg.efi.firmware} "$NIX_EFI_FIRMWARE"
+        chmod 0644 "$NIX_EFI_FIRMWARE"
+      ''}
     ''}
 
     ${lib.optionalString cfg.tpm.enable ''
@@ -1029,6 +1035,8 @@ in
         defaultText = literalExpression "cfg.useBootLoader";
         description = "Whether to keep EFI variable values from the generated system image";
       };
+
+      mutableFirmware = mkEnableOption "Whether to allow firmware to be mutatable.";
     };
 
     virtualisation.tpm = {
@@ -1345,7 +1353,12 @@ in
         ]
       )
       (mkIf cfg.useEFIBoot [
-        "-drive if=pflash,format=raw,unit=0,readonly=on,file=${cfg.efi.firmware}"
+        "-drive if=pflash,format=raw,unit=0,${
+          if cfg.efi.mutableFirmware then
+            "readonly=off,file=$NIX_EFI_FIRMWARE"
+          else
+            "readonly=on,file=${cfg.efi.firmware}"
+        }"
         "-drive if=pflash,format=raw,unit=1,readonly=off,file=$NIX_EFI_VARS"
       ])
       (mkIf (cfg.bios != null) [
