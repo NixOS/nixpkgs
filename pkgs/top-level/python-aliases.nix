@@ -83,6 +83,7 @@ mapAliases {
   affine-gaps = throw "'affine-gaps' has been renamed to 'affinegaps'"; # Added 2026-11-16
   ailment = throw "'ailment' has been merged into 'angr'"; # Added 2026-08-20
   aioinflux = throw "'aioinflux' was removed because it is abandoned upstream. For InfluxDB v2+ support, please use the official Python client library"; # Added 2026-01-15
+  aioquic_1_2 = throw "'aioquic_1_2' has been removed because Nixpkgs no longer requires a pinned version of `aioquic`."; # Added 2026-11-22
   aiosasl = throw "'aiosasl' was removed because it is abandoned upstream and does not work on modern Python versions."; # Added 2026-06-28
   aiosenz = throw "aiosenz was removed because Home Assistant switched to pysenz"; # added 2025-12-29
   aioshutil = throw "'aioshutil' was removed because uiprotect no longer depends on it"; # added 2026-02-16
