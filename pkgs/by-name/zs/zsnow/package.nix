@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
   # no tests
   dontUseZigCheck = true;
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
   meta = {
     description = "XSnow for Wayland";

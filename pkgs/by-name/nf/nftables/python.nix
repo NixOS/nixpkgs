@@ -24,6 +24,9 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "nftables" ];
 
+  # The version and src come from nftables, nix-update on this package cannot update them
+  passthru.updateScript = null;
+
   meta = {
     inherit (nftables.meta)
       description

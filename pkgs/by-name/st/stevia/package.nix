@@ -82,7 +82,11 @@ stdenv.mkDerivation (finalAttrs: {
     dconf
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--url=https://gitlab.gnome.org/api/v4/projects/World%2FPhosh%2Fstevia/repository/archive.tar.gz?sha=HEAD"
+    ];
+  };
 
   meta = {
     description = "User friendly on screen keyboard for Phosh";

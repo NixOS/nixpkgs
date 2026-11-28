@@ -21,7 +21,10 @@ buildNpmPackage rec {
 
   dontNpmBuild = true;
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    # skip prerelease tags such as 18.0.0-next.0
+    extraArgs = [ "--version-regex=^([0-9.]+)$" ];
+  };
 
   meta = {
     description = "Mighty CSS linter that helps you avoid errors and enforce conventions";

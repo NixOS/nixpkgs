@@ -27,7 +27,7 @@ stdenv.mkDerivation {
     # otherwise does not find SIGWINCH
     + lib.optionalString stdenv.hostPlatform.isDarwin " -D_DARWIN_C_SOURCE";
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
   meta = {
     description = "Simple ASCII Render using Pure C";
