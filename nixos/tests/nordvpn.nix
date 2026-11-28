@@ -134,6 +134,8 @@
 
       def verify_polkit_rules(self):
         rules = self.machine.succeed("cat /etc/polkit-1/rules.d/10-nixos.rules")
+        for action in [ "revert", "set-default-route", "set-dns-servers", "set-dnssec", "set-domains" ]:
+          assert f'"org.freedesktop.resolve1.{action}"' in rules, f"expected polkit rules to allow resolve1 {action}"
         expected = f'subject.isInGroup("{self.nordvpn_group}")'
         assert expected in rules, f"expected polkit rules to reference group {self.nordvpn_group}"
 

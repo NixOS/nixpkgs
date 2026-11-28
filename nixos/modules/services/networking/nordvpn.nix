@@ -87,7 +87,14 @@ in
       enable = true;
       extraConfig = ''
         polkit.addRule(function(action, subject) {
-          if (action.id == "org.freedesktop.resolve1.set-dns-servers"
+          var actions = [
+            "org.freedesktop.resolve1.revert",
+            "org.freedesktop.resolve1.set-default-route",
+            "org.freedesktop.resolve1.set-dns-servers",
+            "org.freedesktop.resolve1.set-dnssec",
+            "org.freedesktop.resolve1.set-domains",
+          ];
+          if (actions.indexOf(action.id) >= 0
               && subject.isInGroup("${cfg.group}")) {
             return polkit.Result.YES;
           }
