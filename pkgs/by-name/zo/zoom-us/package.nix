@@ -144,6 +144,7 @@ let
         ryan4yin
       ];
       mainProgram = "zoom";
+      mainDarwinApp = "zoom.us.app";
     };
   };
 
