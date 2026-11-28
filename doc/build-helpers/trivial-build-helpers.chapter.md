@@ -233,7 +233,8 @@ This function is usually used to add desktop items to a package through the `cop
 
 `makeDesktopItem` takes an attribute set that accepts most values from the [XDG specification](https://specifications.freedesktop.org/desktop-entry-spec/latest/ar01s06.html).
 
-All recognised keys from the specification are supported with the exception of the "Hidden" field. The keys are converted into camelCase format, but correspond 1:1 to their equivalent in the specification: `genericName`, `noDisplay`, `comment`, `icon`, `onlyShowIn`, `notShowIn`, `dbusActivatable`, `tryExec`, `exec`, `path`, `terminal`, `mimeTypes`, `categories`, `implements`, `keywords`, `startupNotify`, `startupWMClass`, `url`, `prefersNonDefaultGPU`.
+All recognised keys from the specification are supported with the exception of the "Hidden" field.
+The following arguments use camelCase and correspond to keys in the specification: `genericName`, `noDisplay`, `comment`, `icon`, `onlyShowIn`, `notShowIn`, `dbusActivatable`, `tryExec`, `exec`, `path`, `terminal`, `mimeTypes`, `categories`, `implements`, `keywords`, `startupNotify`, `startupWMClass`, `url`, `prefersNonDefaultGPU`, `singleMainWindow`.
 
 The "Version" field is hardcoded to the version `makeDesktopItem` currently adheres to.
 
@@ -251,9 +252,10 @@ The following fields are either required, are of a different type than in the sp
 
 : Corresponds to the "Name" field of the specification.
 
-`actions` (List of Attribute set; _optional_)
+`actions` (Attribute set; _optional_)
 
-: A list of attribute sets {name, exec?, icon?}
+: An attribute set keyed by action ID.
+  Each action requires `name` and can also specify `exec` and `icon`.
 
 `extraConfig` (Attribute set; _optional_)
 
