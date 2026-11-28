@@ -22,19 +22,21 @@
   python3,
   libx11,
   zlib,
-  enableWayland ? false,
 }:
 
-clangStdenv.mkDerivation rec {
+clangStdenv.mkDerivation (finalAttrs: {
   pname = "friction";
-  version = "1.0.0-rc.3";
+  version = "1.0.0";
   src = fetchFromGitHub {
     owner = "friction2d";
     repo = "friction";
-    rev = "v${version}";
-    hash = "sha256-JUDqjUhtYiDll7bTNmYCItT8eQHS5pV38OwqiTXKowM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-6sBHwyqcyJwccWCVW5w5R90bYBBMP/L1ROREM5bf16I=";
     fetchSubmodules = true;
   };
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
     cmake
@@ -75,7 +77,7 @@ clangStdenv.mkDerivation rec {
     "-DQSCINTILLA_LIBRARIES=${
       if clangStdenv.hostPlatform.isDarwin then "libqscintilla2.dylib" else "libqscintilla2.so"
     }"
-    "-DCMAKE_INSTALL_RPATH=${lib.makeLibraryPath buildInputs}"
+    "-DCMAKE_INSTALL_RPATH=${lib.makeLibraryPath finalAttrs.buildInputs}"
   ]
   ++ lib.optionals clangStdenv.hostPlatform.isDarwin [
     "-DCMAKE_OSX_DEPLOYMENT_TARGET=12.7"
@@ -84,9 +86,6 @@ clangStdenv.mkDerivation rec {
 
   postPatch = ''
     grep -rl 'hb' src/skia | xargs sed -Ei 's/(["<])(hb.*\.h)/\1harfbuzz\/\2/'
-  ''
-  + lib.optionalString enableWayland ''
-    sed -i '/qputenv("QT_QPA_PLATFORM", "xcb")/d' src/core/appsupport.cpp
   '';
 
   meta = {
@@ -98,4 +97,4 @@ clangStdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ socksy ];
     mainProgram = "friction";
   };
-}
+})
