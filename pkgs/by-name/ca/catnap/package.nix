@@ -20,27 +20,16 @@
 # buildNimPackage doesn't work because there is no .nimble file
 stdenv.mkDerivation (finalAttrs: {
   pname = "catnap";
-  version = "0-unstable-2024-11-19";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "iinsertNameHere";
     repo = "catnap";
-    rev = "268e207ab39d217b6768229e371c9520688a3e68";
-    hash = "sha256-Q3Mjo3v9u6Y+CZA/08iTBBq5DmorfiDw1KEHQXvGaJE=";
-    leaveDotGit = true;
-    postFetch = ''
-      pushd $out
-      git rev-parse HEAD | tr -d '\n' > .commit-hash
-      rm -rf .git
-      popd
-    '';
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-r/bZPrM+HpIcRPlUStDIBaU8ls9+S5g6XBSev4n00hw=";
   };
 
   postPatch = ''
-    substituteInPlace scripts/git-commit-id.sh \
-    --replace-fail '$(git rev-parse HEAD)' "$(cat .commit-hash)"
-    source ./scripts/git-commit-id.sh
-
     # As we need the $out reference, we can't use `replaceVars` here.
     cp ${./fallback-config.patch} fallback-config.patch
     substituteInPlace fallback-config.patch \
