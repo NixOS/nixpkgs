@@ -9,17 +9,17 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "iocaine";
-  version = "3.5.1";
+  version = "3.6.0";
 
   src = fetchFromGitea {
     domain = "git.madhouse-project.org";
     owner = "iocaine";
     repo = "iocaine";
     tag = "iocaine-${finalAttrs.version}";
-    hash = "sha256-FkIgrptTiYZwHBa6blFeB4HrgTpMREbW004hKpcAKx0=";
+    hash = "sha256-3tjk6yKeWS2dP0mFkIL3NbxiNkiGMY41IQA+x0ZHxW4=";
   };
 
-  cargoHash = "sha256-GHveoZ19VaQie9D9i+yoKevB/cnxKd7GLnNOZcAqtJ0=";
+  cargoHash = "sha256-YGQ+y/LSkd2O5AodqWZeMiVLEz0ymDqTJOEyaLvgG+M=";
 
   __structuredAttrs = true;
 
