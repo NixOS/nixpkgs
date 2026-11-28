@@ -10,6 +10,7 @@
   pytestCheckHook,
   pytest-asyncio,
   looptime,
+  pythonOlder,
   withVoice ? true,
   ffmpeg,
 }:
@@ -54,7 +55,12 @@ buildPythonPackage rec {
   pytestFlags = [
     # DeprecationWarning: There is no current event loop
     "-Wignore::DeprecationWarning"
+    # disnake.Client() in sync test fixtures leaks an event loop
+    "-Wignore:unclosed event loop:ResourceWarning"
   ];
+
+  # RuntimeError: There is no current event loop, since pytest-asyncio 1.4
+  disabledTestPaths = lib.optionals (pythonOlder "3.14") [ "tests/test_events.py" ];
 
   pythonImportsCheck = [
     "disnake"
