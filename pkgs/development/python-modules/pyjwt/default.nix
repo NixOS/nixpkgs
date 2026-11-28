@@ -48,6 +48,8 @@ buildPythonPackage (finalAttrs: {
     "test_get_jwt_set_sslcontext_default"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   pythonImportsCheck = [ "jwt" ];
 
   passthru.tests = {
