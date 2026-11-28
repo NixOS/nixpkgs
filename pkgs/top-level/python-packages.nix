@@ -1774,6 +1774,8 @@ self: super: with self; {
     callPackage ../development/python-modules/azure-ai-documentintelligence
       { };
 
+  azure-ai-ml = callPackage ../development/python-modules/azure-ai-ml { };
+
   azure-ai-projects = callPackage ../development/python-modules/azure-ai-projects { };
 
   azure-ai-vision-imageanalysis =
@@ -10755,6 +10757,8 @@ self: super: with self; {
   marshmallow-polyfield = callPackage ../development/python-modules/marshmallow-polyfield { };
 
   marshmallow-sqlalchemy = callPackage ../development/python-modules/marshmallow-sqlalchemy { };
+
+  marshmallow_3 = callPackage ../development/python-modules/marshmallow/3.nix { };
 
   mashumaro = callPackage ../development/python-modules/mashumaro { };
 
