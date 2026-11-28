@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "django-cte";
-  version = "3.0.0";
+  version = "5.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dimagi";
     repo = "django-cte";
     tag = "v${version}";
-    hash = "sha256-pXTnk3Z+6jiqq7Q2JTpHxZSNHaTRT3lAAeuHTQIuzBM=";
+    hash = "sha256-bbZfocnYlVWE3Q+VPGWGlgAbVlkdEKpJhpge7YE9M60=";
   };
 
   build-system = [
