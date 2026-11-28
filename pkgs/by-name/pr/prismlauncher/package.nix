@@ -78,13 +78,25 @@ symlinkJoin {
   ]
   ++ lib.optional stdenv.hostPlatform.isLinux kdePackages.qtwayland;
 
+  dontWrapQtApps = stdenv.hostPlatform.isDarwin;
+
   postBuild = ''
     # Required for org.gtk.Settings.FileChooser
     gappsWrapperArgsHook
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
-
-    wrapQtAppsHook
-  '';
+  ''
+  + (
+    if stdenv.hostPlatform.isDarwin then
+      ''
+        wrapQtApp "$out/Applications/PrismLauncher.app/Contents/MacOS/prismlauncher"
+        mkdir -p "$out/bin"
+        ln -s "$out/Applications/PrismLauncher.app/Contents/MacOS/prismlauncher" "$out/bin/prismlauncher"
+      ''
+    else
+      ''
+        wrapQtAppsHook
+      ''
+  );
 
   qtWrapperArgs =
     let
