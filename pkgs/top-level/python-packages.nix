@@ -7140,6 +7140,8 @@ self: super: with self; {
     callPackage ../development/python-modules/google-cloud-access-context-manager
       { };
 
+  google-cloud-aiplatform = callPackage ../development/python-modules/google-cloud-aiplatform { };
+
   google-cloud-appengine-logging =
     callPackage ../development/python-modules/google-cloud-appengine-logging
       { };
@@ -13392,6 +13394,8 @@ self: super: with self; {
   padne = callPackage ../development/python-modules/padne { };
 
   pagelabels = callPackage ../development/python-modules/pagelabels { };
+
+  pagerduty = callPackage ../development/python-modules/pagerduty { };
 
   paginate = callPackage ../development/python-modules/paginate { };
 
@@ -23138,6 +23142,8 @@ self: super: with self; {
   wordfreq = callPackage ../development/python-modules/wordfreq { };
 
   wordninja = callPackage ../development/python-modules/wordninja { };
+
+  workos = callPackage ../development/python-modules/workos { };
 
   world-bank-data = callPackage ../development/python-modules/world-bank-data { };
 
