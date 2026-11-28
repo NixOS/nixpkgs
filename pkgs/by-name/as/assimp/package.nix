@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "assimp";
-  version = "6.0.5";
+  version = "6.0.6";
   outputs = [
     "out"
     "lib"
@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "assimp";
     repo = "assimp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QWBi1pl5C76UtPhB6SmFipm9oEdnfhELMT3MqfV6oxg=";
+    hash = "sha256-p0f+deb5ba96k3iNlPE6M8i97xHIvEWeufWQ3qJ54pQ=";
   };
 
   # assimp vendors many libraries that we have available in Nixpkgs, and offers no good way of pulling them from non-vendored sources.
