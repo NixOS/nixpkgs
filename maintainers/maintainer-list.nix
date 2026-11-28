@@ -12481,6 +12481,12 @@
     github = "iko-soy";
     githubId = 6209627;
   };
+  IlyasKhallouki = {
+    name = "Ilyas Khallouki";
+    email = "khalloukielias@gmail.com";
+    github = "IlyasKhallouki";
+    githubId = 78560074;
+  };
   ilys = {
     name = "ilys";
     github = "ilyist";
