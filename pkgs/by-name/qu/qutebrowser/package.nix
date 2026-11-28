@@ -124,7 +124,7 @@ python3.pkgs.buildPythonApplication {
 
   postInstall = ''
     # Patch python scripts
-    buildPythonPath "$out $propagatedBuildInputs"
+    buildPythonPath "$out ''${propagatedBuildInputs[*]}"
     scripts=$(grep -rl python "$out"/share/qutebrowser/{user,}scripts/)
     for i in $scripts; do
       patchPythonScript "$i"

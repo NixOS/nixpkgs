@@ -216,19 +216,6 @@ let
     [ baseIsolinuxCfg ] ++ lib.optional config.boot.loader.grub.memtest86.enable isolinuxMemtest86Entry
   );
 
-  refindBinary =
-    if targetArch == "x64" || targetArch == "aa64" then "refind_${targetArch}.efi" else null;
-
-  # Setup instructions for rEFInd.
-  refind =
-    if refindBinary != null then
-      ''
-        # Adds rEFInd to the ISO.
-        cp -v ${pkgs.refind}/share/refind/${refindBinary} $out/EFI/BOOT/
-      ''
-    else
-      "# No refind for ${targetArch}";
-
   grubPkgs = if config.boot.loader.grub.forcei686 then pkgs.pkgsi686Linux else pkgs;
 
   grubMenuCfg = ''
@@ -447,17 +434,6 @@ let
           ) optionsSubMenus}
         }
 
-        ${lib.optionalString (refindBinary != null) ''
-          # GRUB apparently cannot do "chainloader" operations on "CD".
-          if [ "\$root" != "cd0" ]; then
-            menuentry 'rEFInd' --class refind {
-              # Force root to be the FAT partition
-              # Otherwise it breaks rEFInd's boot
-              search --set=root --no-floppy --fs-uuid 1234-5678
-              chainloader (\$root)/EFI/BOOT/${refindBinary}
-            }
-          fi
-        ''}
         ${lib.optionalString config.boot.loader.grub.memtest86.enable ''
           menuentry 'Memtest86+' --class debug {
             linux (\$root)/boot/memtest.bin ${toString config.boot.loader.grub.memtest86.params}
@@ -476,8 +452,6 @@ let
         EOF
 
         grub-script-check $out/EFI/BOOT/grub.cfg
-
-        ${refind}
       '';
 
   efiImg =

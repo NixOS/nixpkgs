@@ -19,14 +19,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pysigma";
-  version = "2.1.0";
+  version = "2.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SigmaHQ";
     repo = "pySigma";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-g3oUFDYMao9NIzPEvhvWM9sFirbiiHNX771QbFqthgw=";
+    hash = "sha256-Jg2ESiZCCsA1JJZPypCARgU/7U8cm0wnofZyb1QLVfM=";
   };
 
   pythonRelaxDeps = [ "types-pyyaml" ];

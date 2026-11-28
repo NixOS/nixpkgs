@@ -2024,7 +2024,6 @@
   ./system/boot/loader/init-script/init-script.nix
   ./system/boot/loader/limine/limine.nix
   ./system/boot/loader/loader.nix
-  ./system/boot/loader/refind/refind.nix
   ./system/boot/loader/systemd-boot/systemd-boot.nix
   ./system/boot/luksroot.nix
   ./system/boot/modprobe.nix

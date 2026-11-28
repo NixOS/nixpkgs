@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "oapi-codegen";
-  version = "2.8.2";
+  version = "2.9.0";
 
   src = fetchFromGitHub {
     owner = "oapi-codegen";
     repo = "oapi-codegen";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-P9L2tf5AeGm7FJ3ocCxL+sRWFcD2L4kDDtG/GGXseas=";
+    hash = "sha256-lBfYZTr3YEwVsQO8YZ+z+5nmLlB9ehJWvUrrxUHM7AU=";
   };
 
-  vendorHash = "sha256-Oom7OcyWv+iXDb1AUsHXJ74eMYN9L7InrNuq4pfggYA=";
+  vendorHash = "sha256-AgFmVUnSmstfe1l4leS+3Dt8eL3Lercj1+6MuWsjvqY=";
 
   # Tests use network
   doCheck = false;

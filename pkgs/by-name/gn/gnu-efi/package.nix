@@ -6,7 +6,6 @@
   pciutils,
   fwupd-efi,
   ipxe,
-  refind,
   syslinux,
 }:
 

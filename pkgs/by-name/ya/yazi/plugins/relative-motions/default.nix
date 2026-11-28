@@ -5,18 +5,18 @@
 }:
 mkYaziPlugin {
   pname = "relative-motions.yazi";
-  version = "0-unstable-2025-07-09";
+  version = "0-unstable-2026-04-05";
 
   src = fetchFromGitHub {
-    owner = "dedukun";
+    owner = "jormala";
     repo = "relative-motions.yazi";
-    rev = "a603d9ea924dfc0610bcf9d3129e7cba605d4501";
-    hash = "sha256-9i6x/VxGOA3bB3FPieB7mQ1zGaMK5wnMhYqsq4CvaM4=";
+    rev = "d4f2003b90a6129847e17107df76ba43091c7755";
+    hash = "sha256-lyzwbs1u4qXuIamE31QAD6e22RPJxROs7Q/tuTkz12Q=";
   };
 
   meta = {
     description = "Yazi plugin based about vim motions";
-    homepage = "https://github.com/dedukun/relative-motions.yazi";
+    homepage = "https://github.com/jormala/relative-motions.yazi";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ khaneliman ];
   };
