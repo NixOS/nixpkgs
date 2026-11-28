@@ -1,18 +1,15 @@
 {
   lib,
   fetchurl,
-  stdenv,
   appimageTools,
   makeWrapper,
-  electron,
   libxtst,
   libxt,
-
   nix-update-script,
   commandLineArgs ? [ ],
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+appimageTools.wrapType2 (finalAttrs: {
   pname = "awakened-poe-trade";
   version = "3.30.102";
 
@@ -21,47 +18,30 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-h/hTWuuvFvHX+lvFSWc8rAd5Eeylp3eZBDzWkWu7zGM=";
   };
 
-  passthru = {
-    appImageContents = appimageTools.extract {
-      inherit (finalAttrs) pname src version;
-    };
-
-    updateScript = nix-update-script { };
-  };
-
-  dontUnpack = true;
-  dontConfigure = true;
-  dontBuild = true;
+  extraPkgs = _: [
+    libxtst
+    libxt
+  ];
 
   nativeBuildInputs = [ makeWrapper ];
 
-  installPhase = ''
-    runHook preInstall
-    mkdir -p $out/bin $out/share/awakened-poe-trade $out/share/applications
-
-    cp -a ${finalAttrs.passthru.appImageContents}/{locales,resources} $out/share/awakened-poe-trade
-    cp -a ${finalAttrs.passthru.appImageContents}/awakened-poe-trade.desktop $out/share/applications/
-    cp -a ${finalAttrs.passthru.appImageContents}/usr/share/icons $out/share
+  extraInstallCommands = ''
+    mkdir -p $out/share/applications
+    cp -a ${finalAttrs.contents}/awakened-poe-trade.desktop $out/share/applications/
+    cp -a ${finalAttrs.contents}/usr/share/icons $out/share
 
     substituteInPlace $out/share/applications/awakened-poe-trade.desktop \
       --replace-fail 'Exec=AppRun' 'Exec=awakened-poe-trade ${lib.escapeShellArgs commandLineArgs}'
 
-    runHook postInstall
+    ${lib.optionalString (commandLineArgs != [ ]) ''
+      wrapProgram $out/bin/awakened-poe-trade \
+        --add-flags ${lib.escapeShellArgs commandLineArgs}
+    ''}
   '';
 
-  postFixup = ''
-    makeWrapper ${lib.getExe electron} $out/bin/awakened-poe-trade \
-      --add-flags $out/share/awakened-poe-trade/resources/app.asar \
-      ${
-        lib.optionalString (commandLineArgs != [ ]) "--add-flags ${lib.escapeShellArgs commandLineArgs}"
-      } \
-      --prefix LD_LIBRARY_PATH : "${
-        lib.makeLibraryPath [
-          libxtst
-          libxt
-        ]
-      }"
-  '';
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Path of Exile trading app for price checking";
