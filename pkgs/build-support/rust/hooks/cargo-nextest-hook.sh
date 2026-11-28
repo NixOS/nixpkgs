@@ -15,10 +15,10 @@ cargoNextestHook() {
         "--show-progress=none"
     )
 
-    if [[ -z ${dontUseCargoParallelTests-} ]]; then
-        flagsArray+=("-j" "$NIX_BUILD_CORES")
-    else
+    if [[ -n ${dontUseCargoParallelTests-} ]]; then
         flagsArray+=("-j" "1")
+    elif ! inJobserver; then
+        flagsArray+=("-j" "$NIX_BUILD_CORES")
     fi
 
     if [ "${cargoCheckType}" != "debug" ]; then

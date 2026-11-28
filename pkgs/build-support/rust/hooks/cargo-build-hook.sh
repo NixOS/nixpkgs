@@ -18,10 +18,14 @@ cargoBuildHook() {
     fi
 
     local flagsArray=(
-        "-j" "$NIX_BUILD_CORES"
         "--target" "@rustcTargetSpec@"
         "--offline"
     )
+
+    # cargo will reject -j when it's in jobserver mode.
+    if ! inJobserver; then
+      flagsArray+=("-j" "$NIX_BUILD_CORES")
+    fi
 
     if [ "${cargoBuildType}" != "debug" ]; then
         flagsArray+=("--profile" "${cargoBuildType}")
