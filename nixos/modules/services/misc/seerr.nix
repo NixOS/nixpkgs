@@ -81,6 +81,8 @@ in
         PrivateDevices = true;
         ProtectHostname = true;
         ProtectClock = true;
+        ProtectProc = "invisible";
+        PrivateIPC = true;
         ProtectKernelTunables = true;
         ProtectKernelModules = true;
         ProtectKernelLogs = true;
@@ -90,6 +92,17 @@ in
         RestrictSUIDSGID = true;
         RemoveIPC = true;
         PrivateMounts = true;
+        CapabilityBoundingSet = "";
+        LockPersonality = true;
+        SystemCallArchitectures = "native";
+        RestrictNamespaces = true;
+        RestrictAddressFamilies = [
+          "AF_INET" # ipv4
+          "AF_INET6" # ipv6
+        ];
+        SystemCallFilter = [
+          "@system-service"
+        ];
       };
       unitConfig.RequiresMountsFor = [ cfg.configDir ];
     };
