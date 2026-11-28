@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  callPackage,
   darwin,
   fetchzip,
   makeBinaryWrapper,
@@ -111,6 +112,8 @@ stdenv.mkDerivation (finalAttrs: {
       wrapProgram $out/bin/frama-c \
         --prefix OCAMLPATH : ${ocamlPath}:$out/lib/
     '';
+
+  passthru.withPlugins = callPackage ./with-plugins.nix { };
 
   meta = {
     description = "Extensible and collaborative platform dedicated to source-code analysis of C software";
