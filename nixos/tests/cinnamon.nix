@@ -9,14 +9,16 @@
     {
       imports = [ ./common/user-account.nix ];
       services.xserver.enable = true;
-      services.xserver.desktopManager.cinnamon.enable = true;
+      services.desktopManager.cinnamon.enable = true;
 
       # We don't ship gnome-text-editor in Cinnamon module, we add this line mainly
       # to catch eval issues related to this option.
       environment.cinnamon.excludePackages = [ pkgs.gnome-text-editor ];
 
       # For the sessionPath subtest.
-      services.xserver.desktopManager.cinnamon.sessionPath = [ pkgs.gpaste ];
+      services.desktopManager.cinnamon.sessionPath = [ pkgs.gpaste ];
+
+      virtualisation.memorySize = 2047;
 
       # For OCR test.
       services.xserver.displayManager.lightdm.greeters.slick.extraConfig = ''
@@ -68,7 +70,7 @@
 
       with subtest("Check if Cinnamon components actually start"):
           # https://unix.stackexchange.com/a/74186
-          for i in ["[c]sd-media-keys", "[c]innamon-killer-daemon", "[x]app-sn-watcher", "[n]emo-desktop"]:
+          for i in ["[c]sd-media-keys", "[c]innamon-killer-daemon", "[x]app-sn-watcher", "[n]emo-desktop", "[c]innamon-background-daemon"]:
             machine.wait_until_succeeds(f"pgrep -f \"{i}\"")
           machine.wait_until_succeeds("journalctl -b --grep 'Loaded applet menu@cinnamon.org'")
           machine.wait_until_succeeds("journalctl -b --grep 'calendar@cinnamon.org: Calendar events supported'")
@@ -95,13 +97,13 @@
           machine.wait_until_succeeds("${su "cinnamon-screensaver-command -q"} | grep 'The screensaver is active'")
           machine.sleep(datetime.timedelta(seconds=2))
           machine.screenshot("cinnamon_screensaver")
-          machine.send_chars("${user.password}\n", delay=0.2)
+          machine.send_chars("${user.password}\n", delay=datetime.timedelta(seconds=0.2))
           machine.wait_until_succeeds("${su "cinnamon-screensaver-command -q"} | grep 'The screensaver is inactive'")
           machine.sleep(datetime.timedelta(seconds=2))
 
-      with subtest("Open GNOME Terminal"):
-          machine.succeed("${su "gnome-terminal"}")
-          machine.wait_until_succeeds("${eval "global.display.focus_window.wm_class"} | grep -i 'gnome-terminal'")
+      with subtest("Open Velocitty"):
+          machine.succeed("${su "velocitty >&2 &"}")
+          machine.wait_until_succeeds("${eval "global.display.focus_window.wm_class"} | grep -i 'velocitty'")
           machine.sleep(datetime.timedelta(seconds=2))
 
       with subtest("Open virtual keyboard"):

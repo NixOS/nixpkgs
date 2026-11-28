@@ -3,6 +3,7 @@
   glib,
   gobject-introspection,
   gtk3,
+  gtk-layer-shell,
   libgnomekbd,
   gdk-pixbuf,
   cairo,
@@ -14,6 +15,8 @@
   lib,
   stdenv,
   vala,
+  wayland,
+  wayland-scanner,
   wrapGAppsHook3,
   file,
   inxi,
@@ -24,7 +27,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xapp";
-  version = "3.2.3";
+  version = "3.4.3";
 
   outputs = [
     "out"
@@ -35,12 +38,16 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "linuxmint";
     repo = "xapp";
     rev = finalAttrs.version;
-    hash = "sha256-WisSymt3l+bt02aUy+SaqDa5S9V+xxgy8mkFQfB+shM=";
+    hash = "sha256-3uBBZ2DZtew/MKwavu5jxqEToK0MIa8SNgxeVAARBek=";
   };
 
   # Recommended by upstream, which enables the build of xapp-debug.
   # https://github.com/linuxmint/xapp/issues/169#issuecomment-1574962071
   mesonBuildType = "debugoptimized";
+
+  depsBuildBuild = [
+    pkg-config
+  ];
 
   nativeBuildInputs = [
     meson
@@ -48,6 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     python3
     vala
+    wayland-scanner
     wrapGAppsHook3
     gobject-introspection
   ];
@@ -62,6 +70,8 @@ stdenv.mkDerivation (finalAttrs: {
     libgnomekbd
     gdk-pixbuf
     libxkbfile
+    gtk-layer-shell
+    wayland
     python3.pkgs.pygobject3 # for .pc file
     mate-panel # for gobject-introspection
     dbus
@@ -76,6 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   mesonFlags = [
+    "-Dgtk-layer-shell=enabled"
     "-Dpy-overrides-dir=${placeholder "out"}/${python3.sitePackages}/gi/overrides"
   ];
 

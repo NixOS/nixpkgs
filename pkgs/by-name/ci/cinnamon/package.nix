@@ -1,4 +1,5 @@
 {
+  at-spi2-core,
   atk,
   cacert,
   dbus,
@@ -10,19 +11,22 @@
   cjs,
   evolution-data-server,
   fetchFromGitHub,
-  fetchpatch,
   gcr_3,
   gdk-pixbuf,
   gettext,
-  libgnomekbd,
   glib,
   gobject-introspection,
   gsound,
   gtk3,
+  gtk4,
+  gtk4-layer-shell,
   ibus,
+  iso-flags-png-320x240,
   json-glib,
   libsecret,
   libstartup_notification,
+  libxcomposite,
+  libxext,
   libxtst,
   libxdamage,
   libgbm,
@@ -33,7 +37,6 @@
   lib,
   stdenv,
   wrapGAppsHook3,
-  libxml2,
   gtk-doc,
   python3,
   keybinder3,
@@ -52,7 +55,10 @@
   meson,
   ninja,
   gst_all_1,
+  pam,
   perl,
+  xdotool,
+  xkeyboard_config,
 }:
 
 let
@@ -64,38 +70,43 @@ let
       python-xapp
       pillow
       pyinotify # for looking-glass
-      pytz
+      babel
       tinycss2
+      xkbcommon
       python-pam
       pexpect
       distro
       requests
+      # https://github.com/NixOS/nixpkgs/issues/129946
+      (toPythonModule xapp)
     ]
   );
+
+  pythonScriptsToPatch = [
+    # https://github.com/NixOS/nixpkgs/issues/200397
+    "bin/cinnamon-spice-updater"
+    "bin/cinnamon-install-spice"
+    "share/cinnamon/cinnamon-settings/cinnamon-settings.py"
+  ];
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "cinnamon";
-  version = "6.6.9";
+  version = "6.8.4";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cinnamon";
     tag = finalAttrs.version;
-    hash = "sha256-RQsgfPvdt1xe7HhZamynAvATVlBeLLElatjpN1Tgt2M=";
+    hash = "sha256-Rvqgx/kIqiKc5IQzHmU+c5YbOUI+7fYNDmU2sRGu0dw=";
   };
 
   patches = [
     ./use-sane-install-dir.patch
     ./libdir.patch
-
-    # util.js: Adapt to GIR 2.0
-    (fetchpatch {
-      url = "https://github.com/linuxmint/cinnamon/commit/3a2d558aa575f0ea364c5b4e30d2eb3ee604ee58.patch";
-      hash = "sha256-+uAGuQJ0VsIvMvPFafyoXmU4MiHfbbRXLzeW/n62ucw=";
-    })
   ];
 
   buildInputs = [
+    at-spi2-core
     atk
     cacert
     cinnamon-control-center
@@ -110,19 +121,22 @@ stdenv.mkDerivation (finalAttrs: {
     graphene
     gsound
     gtk3
+    gtk4 # for cinnamon-background-daemon
+    gtk4-layer-shell
     ibus
     json-glib
     libsecret
     libstartup_notification
+    libxcomposite
+    libxext
     libxtst
     libxdamage
     libgbm
     muffin
     networkmanager
+    pam
     polkit
     pythonEnv
-    libxml2
-    libgnomekbd
     gst_all_1.gstreamer
 
     # bindings
@@ -130,6 +144,7 @@ stdenv.mkDerivation (finalAttrs: {
     keybinder3
     upower
     xapp
+    xdotool
     timezonemap
     nemo
     libnotify
@@ -154,9 +169,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
-    find . -type f -exec sed -i \
+    find . -type f ! -name meson.build -exec sed -i \
       -e s,/usr/share/cinnamon,$out/share/cinnamon,g \
       -e s,/usr/share/locale,/run/current-system/sw/share/locale,g \
+      -e s,/usr/share/iso-flag-png,${iso-flags-png-320x240}/share/iso-flags-png,g \
       {} +
 
     # All optional and may introduce circular dependency.
@@ -165,22 +181,23 @@ stdenv.mkDerivation (finalAttrs: {
       {} +
 
     pushd ./files/usr/share/cinnamon/cinnamon-settings
+      substituteInPlace ./bin/AddKeyboardLayout.py        --replace-fail "/usr/share/X11/xkb" "${xkeyboard_config}/share/X11/xkb"
       substituteInPlace ./bin/capi.py                     --replace-fail '"/usr/lib"' '"${cinnamon-control-center}/lib"'
       substituteInPlace ./bin/SettingsWidgets.py          --replace-fail "/usr/share/sounds" "/run/current-system/sw/share/sounds"
-      substituteInPlace ./bin/Spices.py                   --replace-fail "subprocess.run(['/usr/bin/" "subprocess.run(['" \
-                                                          --replace-fail 'subprocess.run(["/usr/bin/' 'subprocess.run(["' \
-                                                          --replace-fail "msgfmt" "${gettext}/bin/msgfmt"
+      substituteInPlace ./bin/Spices.py                   --replace-fail "subprocess.run(['/usr/bin/" "subprocess.run(['"
       substituteInPlace ./modules/cs_info.py              --replace-fail "lspci" "${pciutils}/bin/lspci"
       substituteInPlace ./modules/cs_themes.py            --replace-fail "$out/share/cinnamon/styles.d" "/run/current-system/sw/share/cinnamon/styles.d"
       substituteInPlace ./modules/cs_user.py              --replace-fail "/usr/bin/passwd" "/run/wrappers/bin/passwd"
     popd
 
-    # In preFixup we make these executable.
-    substituteInPlace ./files/usr/share/cinnamon/applets/printers@cinnamon.org/applet.js \
-      --replace-fail "Util.spawn_async(['python3'," "Util.spawn_async(["
-
-    substituteInPlace ./files/usr/bin/cinnamon-session-{cinnamon,cinnamon2d} \
+    substituteInPlace ./files/usr/bin/cinnamon-session-cinnamon \
       --replace-fail "exec cinnamon-session" "exec ${cinnamon-session}/bin/cinnamon-session"
+
+    substituteInPlace ./python3/cinnamon/harvester.py \
+      --replace-fail "/usr/bin/msgfmt" "${gettext}/bin/msgfmt"
+
+    substituteInPlace files/usr/share/cinnamon/cinnamon-menu-editor/cme/config.py \
+      --replace-fail "/usr/share" "$out/share"
 
     patchShebangs src/data-to-c.pl
   '';
@@ -191,26 +208,16 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   preFixup = ''
-    buildPythonPath "$out ${python3.pkgs.python-xapp}"
-
-    # https://github.com/NixOS/nixpkgs/issues/200397
-    patchPythonScript $out/bin/cinnamon-spice-updater
-
-    # https://github.com/NixOS/nixpkgs/issues/129946
-    patchPythonScript $out/share/cinnamon/cinnamon-desktop-editor/cinnamon-desktop-editor.py
+    buildPythonPath "$out"
+    ${lib.concatMapStringsSep "\n" (script: "patchPythonScript $out/${script}") pythonScriptsToPatch}
 
     # Called as `pkexec cinnamon-settings-users.py`.
     wrapGApp $out/share/cinnamon/cinnamon-settings-users/cinnamon-settings-users.py
-
-    # postPatch touches both but we mainly want to wrap cancel-print-dialog.
-    chmod +x $out/share/cinnamon/applets/printers@cinnamon.org/{cancel-print-dialog,lpstat-a}.py
-    wrapGApp $out/share/cinnamon/applets/printers@cinnamon.org/cancel-print-dialog.py
   '';
 
   passthru = {
     providedSessions = [
       "cinnamon"
-      "cinnamon2d"
       "cinnamon-wayland"
     ];
   };
