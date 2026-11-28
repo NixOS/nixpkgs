@@ -1,0 +1,52 @@
+diff --git a/refind/lib.c b/refind/lib.c
+index 7a9f28e..a446b62 100644
+--- a/refind/lib.c
++++ b/refind/lib.c
+@@ -531,13 +531,31 @@ VOID AddListElement(IN OUT VOID ***ListPtr, IN OUT UINTN *ElementCount, IN VOID
+     UINTN AllocateCount;
+ 
+     if ((*ElementCount & 15) == 0) {
++        VOID *OldList = *ListPtr;
+         AllocateCount = *ElementCount + 16;
+         if (*ElementCount == 0) {
+             *ListPtr = AllocatePool(sizeof(VOID *) * AllocateCount);
+             LOG(2, LOG_LINE_NORMAL, L"Allocating memory in AddListElement()");
+         } else {
+             LOG(2, LOG_LINE_NORMAL, L"Reallocating memory in AddListElement(); *ElementCount is %ld", *ElementCount);
+-            *ListPtr = EfiReallocatePool(*ListPtr, sizeof(VOID *) * (*ElementCount), sizeof(VOID *) * AllocateCount);
++            // Do not use EfiReallocatePool() here: it frees the old list even
++            // when the allocation fails, so the existing list could not be
++            // preserved. Allocate the new list first and free the old one only
++            // after its contents have been copied over.
++            *ListPtr = AllocatePool(sizeof(VOID *) * AllocateCount);
++            if (*ListPtr != NULL) {
++                MyCopyMem(*ListPtr, OldList, sizeof(VOID *) * (*ElementCount));
++                MyFreePool(OldList);
++            }
++        }
++        if (*ListPtr == NULL) {
++            // The pool is exhausted or too fragmented to grow the list. Keep
++            // the existing list intact and drop the new element instead of
++            // dereferencing NULL, which would hard-crash the firmware before
++            // the first frame has been drawn.
++            *ListPtr = OldList;
++            LOG(1, LOG_LINE_NORMAL, L"ERROR: Pool allocation failed in AddListElement(); dropping new element");
++            return;
+         }
+     }
+     (*ListPtr)[*ElementCount] = NewElement;
+@@ -1477,6 +1495,14 @@ EFI_STATUS DirNextEntry(IN EFI_FILE_PROTOCOL *Directory, IN OUT EFI_FILE_INFO **
+                     LastBufferSize, BufferSize);
+             }
+             Buffer = EfiReallocatePool(Buffer, LastBufferSize, BufferSize);
++            if (Buffer == NULL) {
++                // The reallocation failed and the old buffer has already been
++                // freed by EfiReallocatePool(). Abort this directory read
++                // instead of handing NULL to Directory->Read() on the next
++                // iteration, which would crash the firmware.
++                Status = EFI_OUT_OF_RESOURCES;
++                break;
++            }
+             LastBufferSize = BufferSize;
+         }
+         if (EFI_ERROR(Status)) {

@@ -77,6 +77,13 @@ stdenv.mkDerivation (finalAttrs: {
     # https://gitweb.gentoo.org/repo/gentoo.git/tree/sys-boot/refind/files/refind-0.14.2-fix-gnu-efi-3.0.18.patch?id=7cea90df5543b29b629b40e12235e3cc864bc698
     # https://bugs.gentoo.org/934474
     ./0003-fix-gnu-efi-3.0.18-setmem.patch
+
+    # AddListElement() and DirNextEntry() dereference the result of a pool
+    # allocation without checking it for NULL. When the firmware's pool is
+    # exhausted or too fragmented, this dereferences NULL and hard-crashes
+    # the firmware before the first frame has been drawn. Add the missing
+    # NULL checks on the failure paths.
+    ./0004-check-pool-allocation-failure.patch
   ];
 
   nativeBuildInputs = [
