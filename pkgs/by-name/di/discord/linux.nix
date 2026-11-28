@@ -255,7 +255,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     ln -s $out/opt/${binaryName}/discord.png $out/share/icons/hicolor/256x256/apps/${pname}.png
 
-    ln -s "$desktopItem/share/applications" $out/share/
+    mkdir -p "$out/share/applications"
+    ln -s "$desktopItem/share/applications/${pname}.desktop" $out/share/applications/
 
     runHook postInstall
   '';
