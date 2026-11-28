@@ -2,11 +2,9 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   autoreconfHook,
   pkg-config,
   openssl,
-  libgcrypt,
   libplist,
   libtasn1,
   libtatsu,
@@ -25,6 +23,10 @@ stdenv.mkDerivation (finalAttrs: {
     tag = finalAttrs.version;
     hash = "sha256-SWWsa7asCXpcz80VNhxoePWr74QY8SP0byGSCp+nGG0=";
   };
+
+  patches = [
+    ./0001-afc-validate-packet-lengths.patch
+  ];
 
   preAutoreconf = ''
     export RELEASE_VERSION=${finalAttrs.version}
@@ -75,6 +77,9 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ RossComputerGuy ];
+    maintainers = with lib.maintainers; [
+      RossComputerGuy
+      mirdukkkkk
+    ];
   };
 })
