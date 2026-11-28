@@ -57,6 +57,11 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     ./0001-spawn-sh-instead-of-bin-sh.patch
   ]
+  # jobserver support only exist since 1.13.
+  ++ lib.optionals (lib.versionAtLeast finalAttrs.version "1.13") [
+    # TODO: remove once 1.13.3 is out, see 71cb2a4d69.
+    ./0002-jobserver-accept-character-devices.patch
+  ]
   # TODO: remove together with ninja 1.11
   ++ lib.optionals (lib.versionOlder finalAttrs.version "1.12") [
     (fetchpatch {

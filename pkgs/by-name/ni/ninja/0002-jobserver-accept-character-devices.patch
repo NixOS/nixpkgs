@@ -1,0 +1,26 @@
+Subject: [PATCH] accept a character device as a jobserver
+
+The jobserver token protocol only needs read(2)/write(2), so a character
+device serving tokens (e.g. a CUSE device such as /dev/steve) is as valid a
+transport as a named pipe.
+
+Backport of upstream 71cb2a4d69 ("Permit jobserver on character device in
+addition to a named pipe"), which landed after v1.13.2.
+---
+--- a/src/jobserver-posix.cc
++++ b/src/jobserver-posix.cc
+@@ -26,11 +26,12 @@
+ 
+ namespace {
+ 
+-// Return true if |fd| is a fifo or pipe descriptor.
++// Return true if |fd| is a fifo or a character device.
+ bool IsFifoDescriptor(int fd) {
+   struct stat info;
+   int ret = ::fstat(fd, &info);
+-  return (ret == 0) && ((info.st_mode & S_IFMT) == S_IFIFO);
++  return (ret == 0) && (((info.st_mode & S_IFMT) == S_IFIFO) ||
++                        ((info.st_mode & S_IFMT) == S_IFCHR));
+ }
+ 
+ // Implementation of Jobserver::Client for Posix systems
