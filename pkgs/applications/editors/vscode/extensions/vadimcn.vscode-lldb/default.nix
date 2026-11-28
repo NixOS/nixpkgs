@@ -105,6 +105,9 @@ stdenv.mkDerivation {
     vscodeExtName
     ;
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   installPrefix = "share/vscode/extensions/${vscodeExtUniqueId}";
 
   nativeBuildInputs = [

@@ -16,6 +16,8 @@ buildNpmPackage {
   pname = "${pname}-node-deps";
   inherit version src;
 
+  __structuredAttrs = true;
+
   npmDepsHash = "sha256-TCeIBrlsNuphW2gVsX97+Wu1lOG5gDwS7559YA1d10M=";
 
   nativeBuildInputs = [
