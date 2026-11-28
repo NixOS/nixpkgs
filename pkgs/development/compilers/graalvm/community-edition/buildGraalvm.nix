@@ -3,12 +3,14 @@
   stdenv,
   alsa-lib,
   autoPatchelfHook,
+  cacert,
   cairo,
   cups,
   fontconfig,
   glib,
   glibc,
   gtk3,
+  jre-generate-cacerts,
   makeWrapper,
   musl,
   runCommandCC,
@@ -33,6 +35,7 @@ let
     "stdenv"
     "alsa-lib"
     "autoPatchelfHook"
+    "cacert"
     "cairo"
     "cups"
     "darwin"
@@ -41,6 +44,7 @@ let
     "glib"
     "glibc"
     "gtk3"
+    "jre-generate-cacerts"
     "makeWrapper"
     "musl"
     "runCommandCC"
@@ -208,6 +212,23 @@ let
           wrapProgram "$bin" --prefix LD_LIBRARY_PATH : "${runtimeLibraryPath}"
         done
       '';
+
+      # keytool must already be patched when postFixup regenerates cacerts
+      dontAutoPatchelf = true;
+
+      postFixup =
+        lib.optionalString stdenv.hostPlatform.isLinux ''
+          autoPatchelf -- "$out"
+        ''
+        # regenerate the CA keystore from cacert, as openjdk does; native-image copies it into its images
+        + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+          pushd "$out/lib/security"
+          rm cacerts
+          JAVA_TOOL_OPTIONS="-Dkeystore.pkcs12.certProtectionAlgorithm=NONE -Dkeystore.pkcs12.macAlgorithm=NONE" \
+            ${jre-generate-cacerts} "$out/bin/keytool" ${cacert}/etc/ssl/certs/ca-bundle.crt
+          [ -s cacerts ] || { echo "failed to generate $out/lib/security/cacerts" >&2; exit 1; }
+          popd
+        '';
 
       doInstallCheck = true;
       installCheckPhase = ''
