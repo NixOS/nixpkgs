@@ -335,6 +335,8 @@ in
           inherit kernel;
         };
 
+        efa = callPackage ../os-specific/linux/efa { };
+
         ethercat = callPackage pkgs.ethercat.kernelModule { };
 
         evdi = callPackage ../os-specific/linux/evdi { };
