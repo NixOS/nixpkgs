@@ -1,6 +1,6 @@
 {
   lib,
-  buildGo126Module,
+  buildGo127Module,
   fetchFromGitHub,
   stdenvNoCC,
   nixosTests,
@@ -11,15 +11,16 @@
   pnpmConfigHook,
   typescript,
   versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
-buildGo126Module (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "qui";
-  version = "1.26.0";
+  version = "1.36.1";
   src = fetchFromGitHub {
     owner = "autobrr";
     repo = "qui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sBtuOlNx0/qYqXTIdszrdVhhNoH/fWmt2QCRDGExHb0=";
+    hash = "sha256-xsWSDXJAUHcK2x0+ljK372bB2FG4gvdr+713mypczTo=";
   };
 
   qui-web = stdenvNoCC.mkDerivation (finalAttrs': {
@@ -44,7 +45,7 @@ buildGo126Module (finalAttrs: {
         ;
       pnpm = pnpm_11;
       fetcherVersion = 4;
-      hash = "sha256-bizOVrot/FrZ+NDefXJkll9YxjxbRut5tdPqGd3u5kE=";
+      hash = "sha256-2gDYiO/tBJMAUR93jy8L9bG1IU8/Ebv4K+g6Gs7KT5k=";
     };
 
     postBuild = ''
@@ -56,7 +57,7 @@ buildGo126Module (finalAttrs: {
     '';
   });
 
-  vendorHash = "sha256-Zam5xkJUsGbzvX5q9NKNiN0n7UxhCUk9e43GMzE4M18=";
+  vendorHash = "sha256-j4KkQXCJFy+m9GG09CtPGIlBdHdsxhE/6Vn/vWr8ykQ=";
 
   preBuild = ''
     cp -r ${finalAttrs.qui-web}/* web/dist
@@ -67,17 +68,24 @@ buildGo126Module (finalAttrs: {
     "-X main.PolarOrgID="
   ];
 
+  nativeCheckInputs = [
+    writableTmpDirAsHomeHook
+  ];
+
   # some season-pack tests use non-existent source paths (e.g. /media/...) and
   # assert on a same-filesystem check that resolves them up to /. go's
   # t.TempDir honours $TMPDIR, which defaults to /build. so just point it to
-  # something sane
+  # something sane. We use realpath, because on macOS it's symliked to
+  # /private/tmp during the build, and tests were failing when comparing
+  # non-resolved paths to resolved paths.
   preCheck = ''
-    export TMPDIR=/tmp
+    export TMPDIR="$(realpath /tmp)"
   '';
 
   checkFlags = [
-    # broken in sandbox for some reason
-    "-skip=TestRollback"
+    # TestRollback fails in the sandbox. The capture tests need go-qbittorrent
+    # fixtures from the module cache, which go mod vendor does not include.
+    "-skip=TestRollback|^(TestStatusRuleMatchesQBittorrent|TestCategoryAndTagRulesMatchQBittorrent|TestCapabilityTableMatchesCaptures)$"
   ];
 
   nativeInstallCheckInputs = [
