@@ -36,7 +36,7 @@ buildDotnetModule rec {
 
   doCheck = true;
 
-  dotnetTestFlags = "-p:UseAppHost=false";
+  dotnetTestFlags = [ "-p:UseAppHost=false" ];
 
   testProjectFile = "src/Bicep.Cli.UnitTests/Bicep.Cli.UnitTests.csproj";
 

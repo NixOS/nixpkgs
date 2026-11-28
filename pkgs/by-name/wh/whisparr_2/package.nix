@@ -90,11 +90,6 @@ buildDotnetModule (finalAttrs: {
     "src/Whisparr.Http.Test/Whisparr.Http.Test.csproj"
   ];
 
-  # https://github.com/NixOS/nixpkgs/pull/491217
-  dotnetTestFlags = lib.optionals stdenvNoCC.buildPlatform.isDarwin [
-    "--environment:DOTNET_SYSTEM_NET_DISABLEIPV6=1"
-  ];
-
   testFilters = [
     "TestCategory!=IntegrationTest"
     "TestCategory!=ManualTest"

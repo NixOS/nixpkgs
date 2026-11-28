@@ -119,11 +119,17 @@ let
       dotnetSelfContainedBuild = selfContainedBuild;
       dotnetUseAppHost = useAppHost;
 
+      # https://github.com/microsoft/vstest/issues/16758
+      dotnetTestFlags =
+        lib.optional (
+          stdenvNoCC.buildPlatform.isDarwin && finalAttrs.__darwinAllowLocalNetworking or false
+        ) "--environment:DOTNET_SYSTEM_NET_DISABLEIPV6=1"
+        ++ dotnetTestFlags;
+
       inherit
         enableParallelBuilding
         dotnetRestoreFlags
         dotnetBuildFlags
-        dotnetTestFlags
         dotnetInstallFlags
         dotnetPackFlags
         dotnetFlags
