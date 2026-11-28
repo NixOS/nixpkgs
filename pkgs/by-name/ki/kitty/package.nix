@@ -42,7 +42,8 @@
   nixosTests,
   go_1_26,
   buildGo126Module,
-  nix-update-script,
+  nix-update,
+  writeShellApplication,
   makeBinaryWrapper,
   darwin,
   cairo,
@@ -337,7 +338,18 @@ buildPythonApplication rec {
     tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
       default = nixosTests.terminal-emulators.kitty;
     };
-    updateScript = nix-update-script { };
+    # kitty-bin is darwin-only, so nixpkgs-update cannot build it directly on x86_64-linux.
+    # Update it alongside kitty, without failing if the macOS DMG is not uploaded yet.
+    updateScript = lib.getExe (writeShellApplication {
+      name = "kitty-update";
+      runtimeInputs = [ nix-update ];
+      text = ''
+        nix-update kitty "$@"
+        if ! nix-update kitty-bin "$@"; then
+          echo "Warning: failed to update kitty-bin (is the DMG uploaded yet?)" >&2
+        fi
+      '';
+    });
   };
 
   meta = {

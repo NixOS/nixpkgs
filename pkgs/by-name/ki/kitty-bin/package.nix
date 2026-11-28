@@ -8,14 +8,14 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "kitty-bin";
-  version = "0.49.2";
+  version = "0.51.1";
 
   __structuredAttrs = true;
   strictDeps = true;
 
   src = fetchurl {
     url = "https://github.com/kovidgoyal/kitty/releases/download/v${finalAttrs.version}/kitty-${finalAttrs.version}.dmg";
-    hash = "sha256-5SS4lBRdict2tYTjqWkRlq5Wv6MdUThKRKp3QlK3zvc=";
+    hash = "sha256-ehxJIQPX5f+CU1G92hgzvfb5XTPanhriLlL2HMXsAT4=";
   };
 
   nativeBuildInputs = [ _7zz ];
