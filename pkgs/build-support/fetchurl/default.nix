@@ -202,6 +202,9 @@ lib.extendMkDerivation {
       # If true, set executable bit on downloaded file
       executable ? false,
 
+      # Make download resumable
+      resumable ? true,
+
       # If set, don't download the file, but write a list of all possible
       # URLs (resulting from resolving mirror:// URLs) to $out.
       showURLs ? false,
@@ -378,6 +381,7 @@ lib.extendMkDerivation {
       inherit
         curlOptsList
         downloadToTemp
+        resumable
         executable
         mirrorsListFile
         postFetch

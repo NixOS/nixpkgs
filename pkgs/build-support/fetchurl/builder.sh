@@ -27,11 +27,14 @@ curl=(
     --max-redirs 20
     --retry 3
     --retry-all-errors
-    --continue-at -
     --disable-epsv
     --cookie-jar cookies
     --user-agent "curl/$curlVersion Nixpkgs/$nixpkgsVersion"
 )
+
+if [[ "$resumable" == "1" ]]; then
+  curl+=(--continue-at -)
+fi
 
 if ! [ -f "$SSL_CERT_FILE" ]; then
     curl+=(--insecure)
@@ -63,7 +66,7 @@ tryDownload() {
     # if we get error code 18, resume partial download
     while [ "$curlexit" -eq 18 ]; do
        # keep this inside an if statement, since on failure it doesn't abort the script
-       if "${curl[@]}" -C - --fail "$url" --output "$target" 2> >(tr '\r' '\n'); then
+       if "${curl[@]}" --fail "$url" --output "$target" 2> >(tr '\r' '\n'); then
           success=1
           break
        else
