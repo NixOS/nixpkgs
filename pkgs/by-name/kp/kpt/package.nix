@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "kpt";
-  version = "1.0.0-beta.55";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "kptdev";
     repo = "kpt";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-MVrJUsMpt1L56ezy2b2G6Aac9kpe4QgfSosR+PeTuBQ=";
+    hash = "sha256-HHqjBLSS3BYGJEvjgn/42ydRI/rmSrMLIaSZJlVyPV8=";
   };
 
-  vendorHash = "sha256-2jJCvBtTiIYmpxA92p8eZnKl1UO74pKr1YFRH14keZY=";
+  vendorHash = "sha256-G7634QruXFTDEO+hS1GImsvrpMbEn1WabX+E2YW/LlA=";
 
   subPackages = [ "." ];
 
