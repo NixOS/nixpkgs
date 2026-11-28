@@ -29,7 +29,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-1Xmb8OPZSVP4xtSBGuwwKwdVQXixEugMgQfvAJueJAg=";
   };
 
-  patches = lib.optionals stdenv.hostPlatform.isLinux [ ./einval.patch ];
+  patches = lib.optionals stdenv.hostPlatform.isLinux [
+    ./einval.patch
+    ./ignore_selinux_attr.patch
+  ];
 
   nativeBuildInputs = [
     autoreconfHook
