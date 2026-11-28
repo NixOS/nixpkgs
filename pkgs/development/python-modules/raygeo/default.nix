@@ -22,19 +22,19 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "raygeo";
-  version = "1.76.0";
+  version = "1.102.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "barebaric";
     repo = "raygeo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eTUM9mgt02i3e2g9kIaHCtPtetkSBGtBeMniwP/GH5U=";
+    hash = "sha256-qpl6qlOy0c7qclsr14jAnPD1zuK0XQD6xkHXx4RMPgM=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-0TyUurWGFKHgLvrLJBRFZC/0vWaLf+SxE+lnHMMT3WI=";
+    hash = "sha256-0d2eokrO5ze5T3Wv89d1G/z7s+bKbVIBi76UCSVs3BA=";
   };
 
   nativeBuildInputs = [
