@@ -24,14 +24,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "linearmodels";
-  version = "7.0";
+  version = "7.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bashtage";
     repo = "linearmodels";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/unFszNGaEPsoXDtaS3tsLnsX4A6e7Y88O8pDrf4nKc=";
+    hash = "sha256-j+W1AHiIX8qTvtGoms8UPBkcniarlTLNACksnlIc7b8=";
   };
 
   # tries to execute linearmodels/_build/git_version.py at build time
