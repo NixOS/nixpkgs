@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   python3Packages,
-  awscli,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -10,13 +9,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   version = "1.17";
   pyproject = true;
   disabled = !python3Packages.isPy3k;
-
-  # The check dependency awscli has some overrides
-  # which yield a different botocore.
-  # This results in a duplicate version during installation
-  # of the wheel, even though it does not matter
-  # because it is only a test dependency.
-  catchConflicts = false;
 
   src = fetchFromGitHub {
     owner = "aws";
@@ -29,15 +21,15 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   dependencies = with python3Packages; [ botocore ];
 
-  nativeCheckInputs = [
-    awscli
-  ]
-  ++ (with python3Packages; [
+  nativeCheckInputs = with python3Packages; [
     pytestCheckHook
     mock
     flake8
     tox
-  ]);
+  ];
+
+  # Requires AWS CLI v1
+  disabledTestPaths = [ "test/context_test.py" ];
 
   meta = {
     description = "Git remote prefix to simplify pushing to and pulling from CodeCommit";
