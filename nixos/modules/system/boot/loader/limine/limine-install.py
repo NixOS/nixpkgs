@@ -727,14 +727,22 @@ def install_bootloader() -> None:
             raise Exception(f"Unsupported CPU family: {cpu_family}")
 
         efi_path = os.path.join(str(config("liminePath")), "share", "limine", boot_file)
-        dest_path = os.path.join(
-            str(config("efiMountPoint")),
-            "efi",
-            "boot" if config("efiRemovable") else "limine",
-            boot_file,
-        )
-
-        copy_file(efi_path, dest_path)
+        if config("efiRemovable"):
+            dest_path = os.path.join(
+                str(config("efiMountPoint")),
+                "efi",
+                "boot",
+                boot_file,
+            )
+            copy_file(efi_path, dest_path)
+        if not config("efiRemovable") or config("canTouchEfiVariables"):
+            dest_path = os.path.join(
+                str(config("efiMountPoint")),
+                "efi",
+                "limine",
+                boot_file,
+            )
+            copy_file(efi_path, dest_path)
 
         if config("enrollConfig"):
             b2sum = hashlib.blake2b()
@@ -811,88 +819,83 @@ def install_bootloader() -> None:
             )
 
         if config("canTouchEfiVariables"):
-            if config("efiRemovable"):
-                print(
-                    "note: boot.loader.limine.efiInstallAsRemovable is true, no need to add EFI entry."
-                )
-            else:
-                efibootmgr = os.path.join(
-                    str(config("efiBootMgrPath")), "bin", "efibootmgr"
-                )
-                efi_partition = find_mounted_device(str(config("efiMountPoint")))
-                efi_disk = find_disk_device(efi_partition)
+            efibootmgr = os.path.join(
+                str(config("efiBootMgrPath")), "bin", "efibootmgr"
+            )
+            efi_partition = find_mounted_device(str(config("efiMountPoint")))
+            efi_disk = find_disk_device(efi_partition)
+
+            efibootmgr_output = subprocess.check_output(
+                [efibootmgr], stderr=subprocess.STDOUT, universal_newlines=True
+            )
+
+            # Check the output of `efibootmgr` to find if limine is already installed and present in the boot record
+            limine_boot_entry = None
+            if matches := re.findall(
+                r"Boot([0-9a-fA-F]{4})\*? Limine", efibootmgr_output
+            ):
+                limine_boot_entry = matches[0]
+
+            # If there's already a Limine entry, replace it
+            if limine_boot_entry:
+                boot_order = re.findall(
+                    r"BootOrder: ((?:[0-9a-fA-F]{4},?)*)", efibootmgr_output
+                )[0]
+                normalized_boot_order = boot_order.upper().split(",")
+                create_options = ["-C"]
+                if limine_boot_entry.upper() in normalized_boot_order:
+                    create_options = [
+                        "-c",
+                        "--index",
+                        str(normalized_boot_order.index(limine_boot_entry.upper())),
+                    ]
 
                 efibootmgr_output = subprocess.check_output(
-                    [efibootmgr], stderr=subprocess.STDOUT, universal_newlines=True
+                    [
+                        efibootmgr,
+                        "-b",
+                        limine_boot_entry,
+                        "-B",
+                    ],
+                    stderr=subprocess.STDOUT,
+                    universal_newlines=True,
                 )
 
-                # Check the output of `efibootmgr` to find if limine is already installed and present in the boot record
-                limine_boot_entry = None
-                if matches := re.findall(
-                    r"Boot([0-9a-fA-F]{4})\*? Limine", efibootmgr_output
-                ):
-                    limine_boot_entry = matches[0]
-
-                # If there's already a Limine entry, replace it
-                if limine_boot_entry:
-                    boot_order = re.findall(
-                        r"BootOrder: ((?:[0-9a-fA-F]{4},?)*)", efibootmgr_output
-                    )[0]
-                    normalized_boot_order = boot_order.upper().split(",")
-                    create_options = ["-C"]
-                    if limine_boot_entry.upper() in normalized_boot_order:
-                        create_options = [
-                            "-c",
-                            "--index",
-                            str(normalized_boot_order.index(limine_boot_entry.upper())),
-                        ]
-
-                    efibootmgr_output = subprocess.check_output(
-                        [
-                            efibootmgr,
-                            "-b",
-                            limine_boot_entry,
-                            "-B",
-                        ],
-                        stderr=subprocess.STDOUT,
-                        universal_newlines=True,
-                    )
-
-                    efibootmgr_output = subprocess.check_output(
-                        [
-                            efibootmgr,
-                            *create_options,
-                            "-b",
-                            limine_boot_entry,
-                            "-d",
-                            efi_disk,
-                            "-p",
-                            efi_partition.removeprefix(efi_disk).removeprefix("p"),
-                            "-l",
-                            f"\\efi\\limine\\{boot_file}",
-                            "-L",
-                            "Limine",
-                        ],
-                        stderr=subprocess.STDOUT,
-                        universal_newlines=True,
-                    )
-                else:
-                    efibootmgr_output = subprocess.check_output(
-                        [
-                            efibootmgr,
-                            "-c",
-                            "-d",
-                            efi_disk,
-                            "-p",
-                            efi_partition.removeprefix(efi_disk).removeprefix("p"),
-                            "-l",
-                            f"\\efi\\limine\\{boot_file}",
-                            "-L",
-                            "Limine",
-                        ],
-                        stderr=subprocess.STDOUT,
-                        universal_newlines=True,
-                    )
+                efibootmgr_output = subprocess.check_output(
+                    [
+                        efibootmgr,
+                        *create_options,
+                        "-b",
+                        limine_boot_entry,
+                        "-d",
+                        efi_disk,
+                        "-p",
+                        efi_partition.removeprefix(efi_disk).removeprefix("p"),
+                        "-l",
+                        f"\\efi\\limine\\{boot_file}",
+                        "-L",
+                        "Limine",
+                    ],
+                    stderr=subprocess.STDOUT,
+                    universal_newlines=True,
+                )
+            else:
+                efibootmgr_output = subprocess.check_output(
+                    [
+                        efibootmgr,
+                        "-c",
+                        "-d",
+                        efi_disk,
+                        "-p",
+                        efi_partition.removeprefix(efi_disk).removeprefix("p"),
+                        "-l",
+                        f"\\efi\\limine\\{boot_file}",
+                        "-L",
+                        "Limine",
+                    ],
+                    stderr=subprocess.STDOUT,
+                    universal_newlines=True,
+                )
 
     if config("biosSupport"):
         if cpu_family != "x86":

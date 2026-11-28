@@ -9,5 +9,7 @@
   specialisations = runTest ./specialisations.nix;
   stableEntry = runTest ./stable-entry.nix;
   uefi = runTest ./uefi.nix;
+  uefiDual = runTest ./uefi-dual.nix;
+  uefiRemovable = runTest ./uefi-removable.nix;
   distroName = runTest ./distroName.nix;
 }
