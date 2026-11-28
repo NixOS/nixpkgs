@@ -354,6 +354,8 @@ let
   # TODO(@Ericson2314): Make always true and remove / resolve #178468
   defaultStrictDeps = if config.strictDepsByDefault then true else hostPlatform != buildPlatform;
 
+  defaultDisallowCheckInputReferences = config.disallowCheckInputReferencesByDefault;
+
   canExecuteHostOnBuild = buildPlatform.canExecute hostPlatform;
   defaultHardeningFlags = stdenv.cc.defaultHardeningFlags or knownHardeningFlags;
   hostSuffixNecessary = hostPlatform != buildPlatform && stdenvHasCC;
@@ -430,6 +432,8 @@ let
 
       # TODO(@Ericson2314): Make always true and remove / resolve #178468
       strictDeps ? defaultStrictDeps,
+
+      disallowCheckInputReferences ? defaultDisallowCheckInputReferences && !isStatic,
 
       enableParallelBuilding ? enableParallelBuildingByDefault,
 
@@ -866,6 +870,10 @@ let
             let
               attrsOutputChecks = makeOutputChecks attrs;
               attrsOutputChecksFiltered = filterAttrs (_: v: v != null) attrsOutputChecks;
+              checkInputs' = checkInputs ++ nativeCheckInputs;
+              installCheckInputs' = installCheckInputs ++ nativeInstallCheckInputs;
+              anyDisallowedCheckInputs = doCheck && checkInputs' != [ ];
+              anyDisallowedInstallCheckInputs = doInstallCheck && installCheckInputs' != [ ];
             in
             # to avoid the listToAttrs in most common situations, we replicate
             # what it would produce for most derivations. this can be improved
@@ -875,6 +883,7 @@ let
               !attrs ? outputs
               && !attrs ? outputChecks
               && (attrsOutputChecks == { } || attrsOutputChecksFiltered == { })
+              && (disallowCheckInputReferences -> !anyDisallowedCheckInputs && !anyDisallowedInstallCheckInputs)
             then
               if separateDebugInfo' then debugCachedOutputChecks else cachedOutputChecks
             else
@@ -886,6 +895,22 @@ let
                       raw = zipAttrsWith (_: concatLists) [
                         attrsOutputChecksFiltered
                         (makeOutputChecks (attrs.outputChecks.${name} or { }))
+                        (
+                          if disallowCheckInputReferences && anyDisallowedCheckInputs then
+                            {
+                              disallowedReferences = map unsafeDerivationToUntrackedOutpath checkInputs';
+                            }
+                          else
+                            { }
+                        )
+                        (
+                          if disallowCheckInputReferences && anyDisallowedInstallCheckInputs then
+                            {
+                              disallowedReferences = map unsafeDerivationToUntrackedOutpath installCheckInputs';
+                            }
+                          else
+                            { }
+                        )
                       ];
                     in
                     # separateDebugInfo = true will put all sorts of files in
