@@ -9,7 +9,7 @@
 
 buildPythonPackage {
   pname = "xlwt";
-  version = "1.3.0-unstable-2018-09-16";
+  version = "1.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
