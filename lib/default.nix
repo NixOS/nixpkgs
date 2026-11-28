@@ -96,6 +96,7 @@ let
       genericModules = {
         meta-maintainers = ./modules/generic/meta-maintainers.nix;
         assertions = ./modules/generic/assertions.nix;
+        command-line = ./modules/generic/command-line.nix;
       };
 
       # Eval-time filesystem handling
