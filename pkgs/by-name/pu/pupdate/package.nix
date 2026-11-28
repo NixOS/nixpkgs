@@ -1,63 +1,50 @@
 {
-  stdenv,
   lib,
   fetchFromGitHub,
   buildDotnetModule,
   dotnetCorePackages,
-  openssl,
-  zlib,
   nix-update-script,
+  versionCheckHook,
 }:
 
-buildDotnetModule rec {
+buildDotnetModule (finalAttrs: {
   pname = "pupdate";
-  version = "4.14.0";
+  version = "5.10.2";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "mattpannella";
     repo = "pupdate";
-    rev = "${version}";
-    hash = "sha256-0xjrw0ivSjQ7iQmDF9ZkDhYnbE34qW2uMD4DXvCfBZE=";
+    tag = finalAttrs.version;
+    hash = "sha256-up5teudXfI9RKRePp/pCs0ubXKDp8jU6uA1a40OX1x8=";
   };
 
-  buildInputs = [
-    (lib.getLib stdenv.cc.cc)
-    zlib
-    openssl
-  ];
-
-  # See https://github.com/NixOS/nixpkgs/pull/196648/commits/0fb17c04fe34ac45247d35a1e4e0521652d9c494
-  patches = [ ./add-runtime-identifier.patch ];
-  postPatch = ''
-    substituteInPlace pupdate.csproj \
-      --replace-fail @RuntimeIdentifier@ "${dotnetCorePackages.systemToDotnetRid stdenv.hostPlatform.system}"
-  '';
-
   projectFile = "pupdate.csproj";
-
+  testProjectFile = "tests/pupdate.Tests/pupdate.Tests.csproj";
   nugetDeps = ./deps.json;
 
-  selfContainedBuild = true;
+  dotnetInstallFlags = [ "-p:PublishSingleFile=false" ];
 
   executables = [ "pupdate" ];
 
-  dotnetFlags = [
-    "-p:PackageRuntime=${dotnetCorePackages.systemToDotnetRid stdenv.hostPlatform.system} -p:TrimMode=partial"
-  ];
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
+  dotnet-runtime = dotnetCorePackages.runtime_10_0;
 
-  dotnet-sdk = dotnetCorePackages.sdk_9_0;
-  dotnet-runtime = dotnetCorePackages.runtime_9_0;
+  doCheck = true;
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
-  passthru = {
-    updateScript = nix-update-script { };
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
-    homepage = "https://github.com/mattpannella/pupdate";
     description = "Update utility for the openFPGA cores, firmware, and other stuff on your Analogue Pocket";
+    homepage = "https://github.com/mattpannella/pupdate";
+    changelog = "https://github.com/mattpannella/pupdate/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    platforms = lib.platforms.linux;
     maintainers = [ ];
+    platforms = lib.platforms.linux;
     mainProgram = "pupdate";
   };
-}
+})
