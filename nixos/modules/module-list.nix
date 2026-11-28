@@ -274,6 +274,7 @@
   ./programs/librepods.nix
   ./programs/lix.nix
   ./programs/localsend.nix
+  ./programs/matrix-nexus.nix
   ./programs/mdevctl.nix
   ./programs/mepo.nix
   ./programs/mininet.nix
