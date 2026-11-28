@@ -32,7 +32,6 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-
     systemd.services.fancontrol = {
       documentation = [ "man:fancontrol(8)" ];
       description = "software fan control";
@@ -42,6 +41,57 @@ in
       serviceConfig = {
         Restart = "on-failure";
         ExecStart = "${lib.getExe' pkgs.lm_sensors "fancontrol"} ${configFile}";
+
+        CapabilityBoundingSet = "";
+        NoNewPrivileges = true;
+
+        PrivateDevices = true;
+        PrivateNetwork = true;
+        PrivateTmp = true;
+
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelModules = true;
+        ProtectKernelLogs = true;
+        ProtectProc = "noaccess";
+        ProtectSystem = "strict";
+
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+
+        DeviceAllow = "";
+        DevicePolicy = "closed";
+        ReadWritePaths = [
+          "/sys/class/hwmon"
+        ];
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        RemoveIPC = true;
+        SystemCallArchitectures = "native";
+        IPAddressDeny = "any";
+        UMask = "0077";
+        RestrictAddressFamilies = "none";
+        SystemCallFilter = [
+          "@system-service"
+          (lib.concatStringsSep " " [
+            "~"
+            "@clock"
+            "@cpu-emulation"
+            "@debug"
+            "@keyring"
+            "@module"
+            "@mount"
+            "@obsolete"
+            "@privileged"
+            "@raw-io"
+            "@reboot"
+            "@resources"
+            "@swap"
+          ])
+        ];
       };
     };
 
