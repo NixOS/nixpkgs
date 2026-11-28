@@ -1,0 +1,72 @@
+diff --git a/exp_chan.c b/exp_chan.c
+index 79f486ce2e..cf0833cced 100644
+--- a/exp_chan.c
++++ b/exp_chan.c
+@@ -42,6 +42,8 @@ static int		ExpBlockModeProc _ANSI_ARGS_((ClientData instanceData,
+ 			    int mode));
+ static int		ExpCloseProc _ANSI_ARGS_((ClientData instanceData,
+ 			    Tcl_Interp *interp));
++static int		ExpClose2Proc _ANSI_ARGS_((ClientData instanceData,
++			    Tcl_Interp *interp, int whatever));
+ static int		ExpInputProc _ANSI_ARGS_((ClientData instanceData,
+ 		            char *buf, int toRead, int *errorCode));
+ static int		ExpOutputProc _ANSI_ARGS_((
+@@ -58,16 +60,26 @@ static int		ExpGetHandleProc _ANSI_ARGS_((ClientData instanceData,
+ 
+ Tcl_ChannelType expChannelType = {
+     "exp",				/* Type name. */
+-    ExpBlockModeProc,			/* Set blocking/nonblocking mode.*/
+-    ExpCloseProc,			/* Close proc. */
++    (Tcl_ChannelTypeVersion)TCL_CHANNEL_VERSION_5,	/* Version. */
++    #if TCL_MAJOR_VERSION < 9
++    ExpCloseProc,			 /* Close proc. */
++#else
++    NULL,
++#endif
+     ExpInputProc,			/* Input proc. */
+     ExpOutputProc,			/* Output proc. */
+-    NULL,				/* Seek proc. */
+-    NULL,				/* Set option proc. */
+-    NULL,				/* Get option proc. */
++    NULL,				/* Seek. */
++    NULL,
++    NULL,
+     ExpWatchProc,			/* Initialize notifier. */
+     ExpGetHandleProc,			/* Get OS handles out of channel. */
+-    NULL,				/* Close2 proc */
++    ExpClose2Proc,			 /* Close proc. */
++    ExpBlockModeProc,			/* Set blocking/nonblocking mode.*/
++    NULL, /* FlushProc. Must be NULL as per Tcl docs */
++    NULL, /* HandlerProc. Only valid for stacked channels */
++    NULL, /* WideSeekProc. */
++    NULL, /* ThreadActionProc. */
++    NULL, /* TruncateProc. */
+ };
+ 
+ typedef struct ThreadSpecificData {
+@@ -364,6 +376,25 @@ ExpCloseProc(instanceData, interp)
+     }
+     return 0;
+ }
++/*ARGSUSED*/
++static int
++ExpClose2Proc(
++    ClientData instanceData,	/* Exp state. */
++    Tcl_Interp *interp,		/* For error reporting - unused. */
++    int flags)			/* 0 or TCL_CLOSE_READ or TCL_CLOSE_WRITE */
++{
++    /*
++     * Ignore calls that have either TCL_CLOSE_READ or TCL_CLOSE_WRITE set.
++     * Important as otherwise Tcl will call this procedure twice, once with
++     * one of those set and then again with flags=0 for the final close.
++     * EINVAL is code required to be returned to Tcl for channels that do
++     * not support half closes.
++     */
++    if ((flags & (TCL_CLOSE_READ | TCL_CLOSE_WRITE)) != 0) {
++	return EINVAL;
++    }
++    return ExpCloseProc(instanceData, interp);
++}
+ 
+ /*
+  *----------------------------------------------------------------------
