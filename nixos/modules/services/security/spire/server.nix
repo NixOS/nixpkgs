@@ -87,6 +87,61 @@ in
                       }
                     );
                   };
+                  options.http_challenge = lib.mkOption {
+                    default = null;
+                    description = ''
+                      The `http_challenge` plugin handshakes via http to ensure the agent is
+                      running on a valid dns name.
+
+                      See [the plugin documentation](https://github.com/spiffe/spire/blob/main/doc/plugin_server_nodeattestor_http_challenge.md).
+                    '';
+                    type = lib.types.nullOr (
+                      lib.types.submodule {
+                        freeformType = format.type;
+                        options.plugin_data = lib.mkOption {
+                          default = { };
+                          description = "Plugin data for the http_challenge NodeAttestor.";
+                          type = lib.types.submodule {
+                            freeformType = format.type;
+                            options = {
+                              allowed_dns_patterns = lib.mkOption {
+                                type = lib.types.listOf lib.types.str;
+                                default = [ ];
+                                example = [ ''p[0-9]\.example\.com'' ];
+                                description = ''
+                                  A list of regular expressions to match to the hostname being attested.
+                                  If none match, attestation will fail. If unset, all hostnames are allowed.
+                                '';
+                              };
+                              required_port = lib.mkOption {
+                                type = lib.types.nullOr lib.types.port;
+                                default = null;
+                                description = ''
+                                  Set to a port number to require clients to listen only on that port.
+                                  If unset, all port numbers are allowed.
+                                '';
+                              };
+                              allow_non_root_ports = lib.mkOption {
+                                type = lib.types.bool;
+                                default = true;
+                                description = ''
+                                  Set to true to allow ports >= 1024 to be used by the agents with the advertised_port.
+                                '';
+                              };
+                              tofu = lib.mkOption {
+                                type = lib.types.bool;
+                                default = true;
+                                description = ''
+                                  Trust on first use of the successful challenge. Can only be disabled
+                                  if allow_non_root_ports=false or required_port < 1024.
+                                '';
+                              };
+                            };
+                          };
+                        };
+                      }
+                    );
+                  };
                 };
               };
             };

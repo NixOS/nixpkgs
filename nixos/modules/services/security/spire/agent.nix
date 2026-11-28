@@ -125,7 +125,10 @@ in
     };
 
   };
-  imports = [ ./agent-tpm.nix ];
+  imports = [
+    ./agent-tpm.nix
+    ./agent-http-challenge.nix
+  ];
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
