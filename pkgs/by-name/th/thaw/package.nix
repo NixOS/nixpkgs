@@ -8,11 +8,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "thaw";
-  version = "1.2.0";
+  version = "2.1.0";
 
   src = fetchurl {
-    url = "https://github.com/stonerl/Thaw/releases/download/${finalAttrs.version}/Thaw_${finalAttrs.version}.zip";
-    hash = "sha256-1n9NMe+foFeEmphUC4EM+kLgvGYBnTYFq9CORcaaoG8=";
+    url = "https://github.com/thaw-app/Thaw/releases/download/${finalAttrs.version}/Thaw_${finalAttrs.version}.zip";
+    hash = "sha256-I/6FDda24/girwCi2nbG1GE1wvqKDe746PoJ0e/T7sE=";
   };
 
   __structuredAttrs = true;
@@ -31,8 +31,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "Menu bar manager for macOS 26";
-    homepage = "https://github.com/stonerl/Thaw";
+    description = "Open source menu bar manager for macOS";
+    homepage = "https://github.com/thaw-app/Thaw";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ Br1ght0ne ];
     platforms = lib.platforms.darwin;
