@@ -63,7 +63,6 @@ buildFishPlugin (finalAttrs: {
     changelog = "https://github.com/PatrickF1/fzf.fish/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      euxane
       natsukium
     ];
     broken = stdenv.hostPlatform.isDarwin;
