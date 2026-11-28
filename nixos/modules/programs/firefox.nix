@@ -78,7 +78,7 @@ in
       description = ''
         Group policies to install.
 
-        See [Mozilla's documentation](https://mozilla.github.io/policy-templates/)
+        See [Mozilla's documentation](https://firefox-admin-docs.mozilla.org/reference/policies/)
         for a list of available options.
 
         This can be used to install extensions declaratively! Check out the

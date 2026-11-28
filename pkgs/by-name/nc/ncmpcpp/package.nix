@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   boost187,
   libmpdclient,
   ncurses,
@@ -31,6 +32,16 @@ stdenv.mkDerivation (finalAttrs: {
     tag = finalAttrs.version;
     hash = "sha256-w3deSy71SWWD2kZKREowZh3KMNCBfBJbrjM0vW4/GrI=";
   };
+
+  # fix darwin build
+  # https://github.com/ncmpcpp/ncmpcpp/issues/663
+  patches = [
+    (fetchpatch2 {
+      url = "https://github.com/ncmpcpp/ncmpcpp/commit/10718bbfb69ad54d54324d3e4e86514815d4245c.patch";
+      excludes = [ "CHANGELOG.md" ];
+      hash = "sha256-aG+zGGpe0hUVUaBfMiPrcCeM1O7iIIgIs+50c3N1rYo=";
+    })
+  ];
 
   enableParallelBuilding = true;
 
