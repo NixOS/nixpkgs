@@ -6,9 +6,10 @@ pluggable providers, for example [garm-provider-incus](https://github.com/cloudb
 which runs them as Incus containers or virtual machines.
 
 This module configures the GARM daemon. Everything GARM manages (forge
-credentials, repositories and runner pools) lives in its database, and for now
-has to be set up imperatively with `garm-cli` once the service runs, see
-[first steps](https://github.com/cloudbase/garm/blob/main/doc/first-steps.md)
+credentials, repositories and runner pools) lives in its database. It can be
+[declared](#module-garm-provision) as well, or set up imperatively with
+`garm-cli` once the service runs, see [first
+steps](https://github.com/cloudbase/garm/blob/main/doc/first-steps.md)
 upstream.
 
 ## Secrets {#module-garm-secrets}
@@ -118,10 +119,71 @@ GARM serves its API, the runner metadata endpoints and, if enabled with
 port to untrusted networks without putting a reverse proxy in front of it.
 :::
 
-## Initial setup {#module-garm-setup}
+## Declarative configuration {#module-garm-provision}
 
-Once the service runs, initialize the controller and add credentials, an entity
-and a pool as described in the [upstream
+[](#opt-services.garm.provision.enable) applies a desired state to GARM with
+[garm-reconcile](https://github.com/katexochen/garm-reconcile), whose
+documentation describes all settings. The state is checked when the system is
+built and applied by `garm-provision.service` after GARM has started. On a new
+installation this also creates the admin user, so nothing is left to do by
+hand:
+
+```nix
+{
+  services.garm.provision = {
+    enable = true;
+    settings = {
+      admin = {
+        username = "admin";
+        email = "admin@example.com";
+        password._secret = "/var/lib/secrets/garm-admin-password";
+      };
+      # The addresses the runners use, not localhost.
+      controller = {
+        metadata_url = "http://10.0.10.1:9997/api/v1/metadata";
+        callback_url = "http://10.0.10.1:9997/api/v1/callbacks";
+        agent_url = "http://10.0.10.1:9997/agent";
+        webhook_url = "http://10.0.10.1:9997/webhooks";
+      };
+      github = {
+        credentials.cred1 = {
+          endpoint = "github.com";
+          pat.oauth2_token._secret = "/var/lib/secrets/github-token";
+        };
+        repositories."owner/name" = {
+          credentials_name = "cred1";
+          pools.linux = {
+            provider_name = "incus";
+            image = "images:ubuntu/24.04/cloud";
+            flavor = "default";
+            os_type = "linux";
+            os_arch = "amd64";
+            tags = [ "self-hosted" ];
+            max_runners = 2;
+            enabled = true;
+          };
+        };
+      };
+    };
+  };
+}
+```
+
+GARM requires the password of the admin user to pass a strength check. Like for
+the settings of GARM, secrets are given as `{ _secret = "/path/to/file"; }`.
+
+By default, nothing is deleted from GARM.
+With [](#opt-services.garm.provision.prune), everything that is not declared
+is removed. Pools and scale sets are disabled first and deleted once the jobs
+on their runners finished.
+
+`garm-reconcile export` helps to migrate an existing installation.
+
+## Imperative setup {#module-garm-setup}
+
+Without [](#opt-services.garm.provision.enable), initialize the controller once
+the service runs and add credentials, an entity and a pool as described in the
+[upstream
 documentation](https://github.com/cloudbase/garm/blob/main/doc/first-steps.md).
 Pass `garm-cli init` the address the runners use, not `localhost`:
 

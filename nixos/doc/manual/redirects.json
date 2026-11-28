@@ -3080,6 +3080,9 @@
   "module-garm-providers": [
     "index.html#module-garm-providers"
   ],
+  "module-garm-provision": [
+    "index.html#module-garm-provision"
+  ],
   "module-garm-reachability": [
     "index.html#module-garm-reachability"
   ],

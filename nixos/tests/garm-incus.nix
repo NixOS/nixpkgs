@@ -1,5 +1,6 @@
 # End-to-end test of GARM with the external incus provider and a local Gitea
-# as the forge. GARM creates a runner instance from a locally imported NixOS
+# as the forge. GARM is configured declaratively with garm-reconcile. It
+# creates a runner instance from a locally imported NixOS
 # container image, the runner registers with Gitea and executes a workflow.
 # Everything runs offline: instead of fetching the runner release info and
 # binary from gitea.com, a stub serves the gitea-actions-runner package.
@@ -66,6 +67,10 @@ let
 
   # The host as seen from the runner containers.
   hostIP = "10.0.10.1";
+  garmURL = "http://${hostIP}:9997";
+
+  # Must pass the strength check of GARM.
+  adminPassword = "CbIhvLQTXCCfVROvLcJ2B7A85BGWbasV";
 
   # /etc/systemd/system is a symlink into the store, so the stock install script
   # can't drop the runner unit there. Install the unit into /run/systemd/system
@@ -87,7 +92,7 @@ in
   meta.maintainers = with lib.maintainers; [ katexochen ];
 
   nodes.machine =
-    { pkgs, ... }:
+    { config, pkgs, ... }:
     {
       virtualisation = {
         cores = 2;
@@ -210,8 +215,104 @@ in
       };
       systemd.services.garm.serviceConfig.SupplementaryGroups = [ "incus-admin" ];
 
+      services.garm.provision = {
+        enable = true;
+        prune = true;
+        settings = {
+          admin = {
+            username = "admin";
+            email = "admin@example.com";
+            password._secret = "/etc/garm-admin-password";
+          };
+          controller = {
+            metadata_url = "${garmURL}/api/v1/metadata";
+            callback_url = "${garmURL}/api/v1/callbacks";
+            agent_url = "${garmURL}/agent";
+            webhook_url = "${garmURL}/webhooks";
+          };
+          gitea = {
+            endpoints.local = {
+              api_base_url = "http://${hostIP}:3000";
+              base_url = "http://${hostIP}:3000";
+              tools_metadata_url = "http://${hostIP}:8080/releases.json";
+            };
+            credentials.test = {
+              endpoint = "local";
+              pat.oauth2_token._secret = "/run/gitea-token";
+            };
+            templates.nixos = {
+              os_type = "linux";
+              data._secret = "${runnerInstallTemplate}";
+            };
+            repositories."test/test" = {
+              credentials_name = "test";
+              pools.nixos = {
+                provider_name = "incus";
+                image = "nixos";
+                flavor = "default";
+                os_type = "linux";
+                os_arch = "amd64";
+                tags = [ "nixos-test" ];
+                template = "nixos";
+                min_idle_runners = 1;
+                max_runners = 1;
+                enabled = true;
+              };
+            };
+          };
+        };
+      };
+
+      # GARM fetches the runner release feed, ensure the nginx serving is is up first.
+      systemd.services.garm-provision = {
+        wants = [ "nginx.service" ];
+        after = [ "nginx.service" ];
+      };
+      systemd.services.incus-image-import = {
+        requiredBy = [ "garm-provision.service" ];
+        before = [ "garm-provision.service" ];
+        requires = [ "incus-preseed.service" ];
+        after = [ "incus-preseed.service" ];
+        path = [ config.virtualisation.incus.package ];
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+        };
+        script = "incus image import ${incusImageMeta} ${incusImageRoot} --alias nixos";
+      };
+
+      systemd.services.gitea-setup = {
+        requiredBy = [ "garm-provision.service" ];
+        before = [ "garm-provision.service" ];
+        requires = [ "gitea.service" ];
+        after = [ "gitea.service" ];
+        path = [
+          pkgs.curl
+          pkgs.jq
+          config.services.gitea.package
+        ];
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+        };
+        script = ''
+          api() {
+            curl --fail --silent --show-error --retry 30 --retry-connrefused --retry-delay 1 \
+              -H 'Content-Type: application/json' "$@"
+          }
+          ${lib.getExe' pkgs.util-linux "runuser"} -u gitea -- env GITEA_WORK_DIR=/var/lib/gitea \
+            gitea admin user create --username test --password totallysafe --email test@localhost
+          api -X POST http://test:totallysafe@localhost:3000/api/v1/users/test/tokens \
+            -d '{"name": "garm", "scopes": ["all"]}' | jq -r .sha1 > /run/gitea-token
+          api -X POST http://localhost:3000/api/v1/user/repos \
+            -H "Authorization: token $(cat /run/gitea-token)" \
+            -d '{"name": "test", "auto_init": true}'
+        '';
+      };
+
       environment.etc."garm-jwt-secret".text = "uhAVE3d5hiA4f93yPJcVo5xRbvUSbvVUSLGC8tG8WTzxtqtS";
       environment.etc."garm-db-passphrase".text = "6ahIZPHobW5SvKR92a8nrahCLsZvWBnD"; # must be exactly 32 chars
+      environment.etc."garm-admin-password".text = adminPassword;
 
       environment.systemPackages = [
         pkgs.gitea
@@ -234,64 +335,22 @@ in
           - run: echo it works
     """.encode()).decode()
 
-    machine.wait_for_unit("incus-preseed.service")
-    machine.succeed("incus image import ${incusImageMeta} ${incusImageRoot} --alias nixos")
-
-    machine.wait_for_unit("gitea.service")
-    machine.wait_for_open_port(3000)
-    machine.succeed(
-        "su -l gitea -c 'GITEA_WORK_DIR=/var/lib/gitea gitea admin user create"
-        " --username test --password totallysafe --email test@localhost'"
-    )
-    token = machine.succeed(
-        "curl --fail --silent --show-error -X POST http://test:totallysafe@localhost:3000/api/v1/users/test/tokens"
-        " -H 'Content-Type: application/json'"
-        " -d '{\"name\": \"garm\", \"scopes\": [\"all\"]}'"
-        " | jq -r .sha1"
-    ).strip()
-    machine.succeed(
-        "curl --fail --silent --show-error -X POST http://localhost:3000/api/v1/user/repos"
-        f" -H 'Authorization: token {token}'"
-        " -H 'Content-Type: application/json'"
-        " -d '{\"name\": \"test\", \"auto_init\": true}'"
-    )
-
     machine.wait_for_unit("garm.service")
     machine.wait_for_open_port(9997)
 
     webui = machine.succeed("curl -fsS http://127.0.0.1:9997/ui/")
     assert "_app/immutable" in webui, f"expected web UI, got: {webui}"
 
+    # garm-reconcile created the admin user, the endpoint, credentials,
+    # template, repository and pool.
+    machine.wait_for_unit("garm-provision.service")
+    token = machine.succeed("cat /run/gitea-token").strip()
     machine.succeed(
-        "garm-cli init --name garm --url http://${hostIP}:9997"
-        " --username admin --email admin@example.com"
-        " --password CbIhvLQTXCCfVROvLcJ2B7A85BGWbasV"
+        "garm-cli profile add --name garm --url ${garmURL}"
+        " --username admin --password ${adminPassword}"
     )
-    machine.succeed(
-        "garm-cli gitea endpoint create --name local"
-        " --base-url http://${hostIP}:3000 --api-base-url http://${hostIP}:3000"
-        " --tools-metadata-url http://${hostIP}:8080/releases.json"
-    )
-    machine.succeed(
-        "garm-cli gitea credentials add --name test --endpoint local"
-        f" --auth-type pat --pat-oauth-token {token} --description test"
-    )
-    machine.succeed(
-        "garm-cli template create --name nixos --forge-type gitea --os-type linux"
-        " --path ${runnerInstallTemplate}"
-    )
-    repo_id = machine.succeed(
-        "garm-cli repo add --forge-type gitea --credentials test"
-        " --owner test --name test --random-webhook-secret"
-        " --format json | jq -r .id"
-    ).strip()
-    machine.succeed(
-        f"garm-cli pool add --repo {repo_id} --enabled"
-        " --provider-name incus --image nixos --flavor default"
-        " --runner-install-template nixos"
-        " --min-idle-runners 1 --max-runners 1 --tags nixos-test"
-        " --os-type linux --os-arch amd64"
-    )
+    pools = json.loads(machine.succeed("garm-cli pool list --format json"))
+    assert [p["runner_prefix"] for p in pools] == ["nixos"], f"unexpected pools: {pools}"
 
     # The instance boots, downloads the runner from the stub server, registers
     # with Gitea through a GARM-provided registration token and reports back to GARM.
