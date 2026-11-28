@@ -1030,6 +1030,9 @@ with pkgs;
 
   waydroid-nftables = waydroid.override { withNftables = true; };
 
+  wal-g = wal-g-pg;
+  wal-g-mysql = wal-g-pg.override { variant = "mysql"; };
+
   winbox = winbox4;
 
   datalad = with python3Packages; toPythonApplication datalad;
