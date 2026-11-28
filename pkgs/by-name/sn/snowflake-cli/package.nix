@@ -36,14 +36,14 @@ let
 in
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "snowflake-cli";
-  version = "3.33.0";
+  version = "3.34.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "snowflakedb";
     repo = "snowflake-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9E/TYnCC3+1hsZvkN4ceL+N/xmvJoWv3OJJc+G3tPPM=";
+    hash = "sha256-VmLdPIQRLuaHGzERGbrteiMLuAXLdAA3eeiB42wq0gU=";
   };
 
   build-system = with python3Packages; [
