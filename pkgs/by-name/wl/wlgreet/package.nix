@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wlgreet";
-  version = "0.5.0";
+  version = "77261f8e8c40045b0eb83b679e2d5288bdc03ab4";
 
   src = fetchFromSourcehut {
     owner = "~kennylevinsen";
     repo = "wlgreet";
     rev = finalAttrs.version;
-    hash = "sha256-TQTHFBOTxtSuzrAG4cjZ9oirl80xc0rPdYeLJ0t39DQ=";
+    hash = "sha256-hAn3zu1G8H5qgfkzSQUo/RcQPuwoEoAD6etHnlxhDrc=";
   };
 
-  cargoHash = "sha256-ITo9qvcT5aOybWLV7kn9BZbux6uxx1RwRGWCGQYdZ2I=";
+  cargoHash = "sha256-YpSdlhyndPir2hnOEtmTiclc3fWMewjxbEH5Hzyhg7k=";
 
   nativeBuildInputs = [ autoPatchelfHook ];
   buildInputs = [ gcc-unwrapped ];
