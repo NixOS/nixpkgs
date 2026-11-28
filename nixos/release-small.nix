@@ -59,6 +59,7 @@ rec {
         containers-ip
         firewall
         ipv6
+        kernel-module-verification
         login
         misc
         nat
@@ -69,10 +70,13 @@ rec {
         proxy
         simple-container
         simple-vm
+        systemd-nsresourced-mountfsd
         ;
       latestKernel = {
         inherit (nixos'.tests.latestKernel)
           login
+          kernel-module-verification
+          systemd-nsresourced-mountfsd
           ;
       };
       installer = {
@@ -152,8 +156,11 @@ rec {
           "nixos.tests.firewall"
           "nixos.tests.ipv6"
           "nixos.tests.installer.simpleUefiSystemdBoot"
+          "nixos.tests.kernel-module-verification"
+          "nixos.tests.latestKernel.kernel-module-verification"
           "nixos.tests.login"
           "nixos.tests.latestKernel.login"
+          "nixos.tests.latestKernel.systemd-nsresourced-mountfsd"
           "nixos.tests.misc"
           "nixos.tests.nat.firewall"
           "nixos.tests.nat.standalone"
@@ -168,6 +175,7 @@ rec {
           "nixos.tests.proxy"
           "nixos.tests.simple-container"
           "nixos.tests.simple-vm"
+          "nixos.tests.systemd-nsresourced-mountfsd"
           "nixpkgs.jdk"
           "nixpkgs.tests.stdenv.tests-stdenv-gcc-stageCompare"
           "nixpkgs.opensshTest"
