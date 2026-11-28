@@ -17,14 +17,14 @@
 buildPythonPackage (finalAttrs: {
   pname = "django-fsm-2";
   # 4.3.0 changed the `State.get_state` signature, breaking inventree
-  version = "4.2.4";
+  version = "4.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "django-commons";
     repo = "django-fsm-2";
     tag = finalAttrs.version;
-    hash = "sha256-iSFNhAJNrag7EeLO55TFonGU9E0P1mqJtR8PGwK1QCk=";
+    hash = "sha256-fk8Oto1ccjAzObJknKPmHzs3S5ywcd2zwu8J2mz8UcI=";
   };
 
   build-system = [
