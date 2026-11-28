@@ -204,7 +204,7 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck =
     (!isCross)
     && (stdenv.hostPlatform.libc == "glibc" || stdenv.hostPlatform.libc == "musl")
-    && !stdenv.hostPlatform.isAarch32;
+    && !stdenv.hostPlatform.is32bit;
 
   enableParallelBuilding = true;
 
