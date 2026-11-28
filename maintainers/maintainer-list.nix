@@ -21934,6 +21934,11 @@
     github = "NONPLAYT";
     githubId = 76615486;
   };
+  NoobInTheNet = {
+    github = "NoobInTheNet";
+    githubId = 103246614;
+    name = "Jorge B.";
+  };
   noodlez1232 = {
     email = "contact@nathanielbarragan.xyz";
     matrix = "@noodlez1232:matrix.org";
