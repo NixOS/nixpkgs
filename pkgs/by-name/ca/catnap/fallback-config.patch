@@ -1,0 +1,59 @@
+diff --git a/scripts/test_config.toml b/scripts/test_config.toml
+index 08d189c..b074663 100644
+--- a/scripts/test_config.toml
++++ b/scripts/test_config.toml
+@@ -11,8 +11,8 @@ kernel    = {icon = ">", name = "kernel", color = "(MA)"}
+ desktop   = {icon = ">", name = "desktp", color = "(CN)"}
+ terminal  = {icon = ">", name = "term", color = "(RD)"}
+ shell     = {icon = ">", name = "shell", color = "(MA)"}
+-packages  = {icon = ">", name = "packages", color = "(GN)"}
+-weather   = {icon = ">", name = "weather", color = "(BE)"}
++# packages  = {icon = ">", name = "packages", color = "(GN)"}
++# weather   = {icon = ">", name = "weather", color = "(BE)"}
+ gpu       = {icon = ">", name = "gpu", color = "(MA)"}
+ cpu       = {icon = ">", name = "cpu", color = "(RD)"}
+ disk_0    = {icon = ">", name = "disk", color = "(GN)"}
+diff --git a/src/catnaplib/global/config.nim b/src/catnaplib/global/config.nim
+index 0b929fb..e883d5e 100644
+--- a/src/catnaplib/global/config.nim
++++ b/src/catnaplib/global/config.nim
+@@ -18,16 +18,18 @@ proc isImageTerm(): bool =
+         term = getEnv("TERM")
+     return (term in VALID_TERMS or "iTerm" in term or "WezTerm" in term or "mintty" in term or "kitty" in term)
+
+-proc LoadConfig*(cfgPath: string, dstPath: string): Config =
++proc LoadConfig*(cfgArg: string, dstArg: string): Config =
++    var cfgPath = cfgArg
++    var dstPath = dstArg
+     # Lads a config file and validates it
+
+     # Validate the config file
+     if not fileExists(cfgPath):
+-        logError(&"{cfgPath} - file not found!")
+-    
++        cfgPath = "@out@/share/config/config.toml"
++
+     # Validate the art file
+     if not fileExists(dstPath):
+-        logError(&"{dstPath} - file not found!")
++        dstPath = "@out@/share/config/distros.toml"
+
+     let tcfg = parsetoml.parseFile(cfgPath)
+     let tdistros = parsetoml.parseFile(dstPath)
+diff --git a/src/catnaplib/global/definitions.nim b/src/catnaplib/global/definitions.nim
+index 6b30857..a88fb71 100644
+--- a/src/catnaplib/global/definitions.nim
++++ b/src/catnaplib/global/definitions.nim
+@@ -140,9 +140,10 @@ const
+         "homebrew": "brew list | wc -l",
+     }.toOrderedTable
+
++var
+     # Files / Dirs
+-    CONFIGPATH*   = static: joinPath(getConfigDir(), "catnap/config.toml")
+-    DISTROSPATH*  = static: joinPath(getConfigDir(), "catnap/distros.toml")
++    CONFIGPATH*   = joinPath(getConfigDir(), "catnap/config.toml")
++    DISTROSPATH*  = joinPath(getConfigDir(), "catnap/distros.toml")
+
+
+ proc getCachePath*(): string =
