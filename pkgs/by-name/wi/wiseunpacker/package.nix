@@ -1,39 +1,50 @@
 {
+  lib,
   fetchFromGitHub,
   buildDotnetModule,
   dotnetCorePackages,
-  lib,
+  nix-update-script,
 }:
 
 buildDotnetModule (finalAttrs: {
-  pname = "WiseUnpacker";
-  version = "1.3.3";
+  pname = "wiseunpacker";
+  version = "3.1.0";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "mnadareski";
     repo = "WiseUnpacker";
-    rev = finalAttrs.version;
-    hash = "sha256-APbfo2D/p733AwNNByu5MvC9LA8WW4mAzq6t2w/YNrs=";
+    tag = finalAttrs.version;
+    hash = "sha256-7TKXGI3XO4oLIZCD21xOpxD5bZKiI6Qk+pyLdzo+kQ8=";
   };
 
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
-  dotnet-runtime = dotnetCorePackages.runtime_8_0;
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
+  dotnet-runtime = dotnetCorePackages.runtime_10_0;
 
-  dotnetFlags = [ "-p:TargetFramework=net8.0" ];
-
-  # Rename to something sensible
-  postFixup = ''
-    mv "$out/bin/Test" "$out/bin/WiseUnpacker"
-  '';
+  dotnetFlags = [ "-p:TargetFramework=net10.0" ];
 
   nugetDeps = ./deps.json;
 
-  projectFile = "Test/Test.csproj";
+  projectFile = "WiseUnpacker/WiseUnpacker.csproj";
+
+  executables = [ "WiseUnpacker" ];
+
+  doCheck = false;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/mnadareski/WiseUnpacker/";
-    description = "C# Wise installer unpacker based on HWUN and E_WISE ";
+    changelog = "https://github.com/mnadareski/WiseUnpacker/releases/tag/${finalAttrs.src.tag}";
+    description = "Wise installer unpacker based on REWise";
     maintainers = [ lib.maintainers.gigahawk ];
+    mainProgram = "WiseUnpacker";
     license = lib.licenses.mit;
+    sourceProvenance = with lib.sourceTypes; [
+      fromSource
+      binaryNativeCode # libGrindCore from NuGet
+    ];
   };
 })
