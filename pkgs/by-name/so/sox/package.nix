@@ -86,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Sample Rate Converter for audio";
     homepage = "https://sox.sourceforge.net/";
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.kamadorueda ];
     license = if enableAMR then lib.licenses.unfree else lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
   };
