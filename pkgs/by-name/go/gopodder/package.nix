@@ -2,7 +2,7 @@
   lib,
   buildGo127Module,
   fetchFromGitHub,
-  gitUpdater,
+  nix-update-script,
   versionCheckHook,
 }:
 # Temporary until buildGoModule updates to 1.27
@@ -38,9 +38,7 @@ buildGo127Module (finalAttrs: {
 
   __darwinAllowLocalNetworking = true;
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "v";
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Self-hostable podcast synchronization server compatible with the gPodder API";
