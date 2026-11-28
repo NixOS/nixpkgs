@@ -9,14 +9,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "proton-vpn-cli";
-  version = "1.1.0";
+  version = "1.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ProtonVPN";
     repo = "proton-vpn-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-IUik3aLv1zuN72/Uc78NbChNHfIkbPky0Rr3i+Acz3w=";
+    hash = "sha256-XJjXxpTI7UMf0rSfGbK+YzNyhnvxUL/UVeKwY+I5RgQ=";
   };
 
   nativeBuildInputs = [
