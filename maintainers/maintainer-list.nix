@@ -8458,6 +8458,12 @@
     githubId = 411447;
     name = "Leo Gaspard";
   };
+  ekollof = {
+    name = "Emiel (Andrath) Kollof";
+    email = "emiel@kollof.nl";
+    github = "ekollof";
+    githubId = 324236;
+  };
   ekzyis = {
     email = "ramdip.singhgill@gmail.com";
     github = "ekzyis";
