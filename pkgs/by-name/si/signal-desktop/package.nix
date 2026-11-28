@@ -19,6 +19,8 @@
   makeDesktopItem,
   copyDesktopItems,
   xcodebuild,
+  rcodesign,
+  makeSetupHook,
   replaceVars,
   noto-fonts-color-emoji,
   nixosTests,
@@ -32,6 +34,14 @@ assert lib.throwIf (commandLineArgs != "")
   "`commandLineArgs` has been removed. Consider creating a wrapper script or a desktop entry with your desired flags."
   true;
 let
+  signDarwinAppHook = makeSetupHook {
+    name = "signal-desktop-darwin-signing-hook";
+    propagatedBuildInputs = [
+      python3
+      rcodesign
+    ];
+  } ./sign-darwin-app.sh;
+
   nodejs = nodejs_24;
   pnpm = pnpm_11;
   electron = electron_45;
@@ -123,6 +133,7 @@ stdenv.mkDerivation (finalAttrs: {
     jq
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    signDarwinAppHook
     xcodebuild
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
