@@ -25,5 +25,6 @@ mkLibretroCore rec {
     description = "Uzebox emulator for Libretro";
     homepage = "https://github.com/libretro/libretro-uzem";
     license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kaistarkk ];
   };
 }
