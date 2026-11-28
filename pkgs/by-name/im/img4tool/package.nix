@@ -12,13 +12,13 @@
 }:
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "img4tool";
-  version = "227";
+  version = "229";
 
   src = fetchFromGitHub {
     owner = "tihmstar";
     repo = "img4tool";
     tag = finalAttrs.version;
-    hash = "sha256-sPNPjkAvmShpb9tdaXws9Eq251JBEBOdwgeJMP46Jv4=";
+    hash = "sha256-iF8ZyGG7cZ5mq/nh250NeG7rxBBR7CXnufPgGg6EsGA=";
   };
 
   # Do not depend on git to calculate version, instead
