@@ -4916,6 +4916,8 @@ with pkgs;
 
   yq = python3.pkgs.toPythonApplication python3.pkgs.yq;
 
+  mycelium-map = with python3Packages; toPythonApplication mycelium-map;
+
   mypy = with python3Packages; toPythonApplication mypy;
 
   mypy-protobuf = with python3Packages; toPythonApplication mypy-protobuf;
