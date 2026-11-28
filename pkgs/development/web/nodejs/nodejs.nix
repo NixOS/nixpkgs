@@ -417,6 +417,9 @@ let
               "test-child-process-uid-gid"
               "test-process-euid-egid"
               "test-process-uid-gid"
+              # dont work on zfs
+              "test-fs-readdir-ucs2"
+              "test-fileurltopathbuffer"
             ]
             ++ lib.optional (majorVersion == "22") "test-runner-watch-mode"
             ++ lib.optionals stdenv.hostPlatform.is32bit [
