@@ -8,14 +8,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "firecrawl-anydoc";
-  version = "0.2.4";
+  version = "0.2.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "firecrawl";
     repo = "anydoc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rGv3Bh+zmF9xFUgf8RaSmfyB/gfuQ13iC389i6VZIlM=";
+    hash = "sha256-iez4SnQxpQlwOfznq3wPHSgmeLAIqWEiq4wd0DF6e20=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/python";
@@ -37,7 +37,7 @@ buildPythonPackage (finalAttrs: {
       cargoRoot
       sourceRoot
       ;
-    hash = "sha256-yhW5HSzVrZCms4x36J2NGIn1e5YLIgjuNKXM9EJ9J8c=";
+    hash = "sha256-WwGQEQD1/DkV+vjXMT0Ai7EBZ1SUK+ipxgNoRRQeZpw=";
   };
 
   nativeCheckInputs = [
