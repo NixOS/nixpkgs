@@ -3,7 +3,7 @@
   fetchFromGitHub,
   makeBinaryWrapper,
   nix-update-script,
-  nodejs,
+  nodejs_26,
   pnpm_12,
   fetchPnpmDeps,
   pnpmConfigHook,
@@ -12,31 +12,32 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "rsshub";
-  version = "2026.11.15-8657.a747f0e";
+  version = "2026.11.27-8770.gea99cee";
 
   src = fetchFromGitHub {
     owner = "DIYgod";
     repo = "RSSHub";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XG4E3oWN/vD2rWamKLdk3gzUhGUB3qI/tZBbREl3UJg=";
+    hash = "sha256-MP9qm1XtYaZ1ecC7QvGWLhbp/JHtCSfEKrgSfW+7vQI=";
   };
 
   patches = [
     (replaceVars ./0001-fix-git-hash.patch {
-      GIT_HASH = lib.last (lib.splitString "." finalAttrs.version);
+      # Follow upstream tag format: v$(date -u +%Y.%-m.%-d)-${GITHUB_RUN_NUMBER}.g${GITHUB_SHA:0:7}
+      GIT_HASH = lib.last (lib.splitString ".g" finalAttrs.version);
     })
   ];
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     fetcherVersion = 5;
-    hash = "sha256-QunJ0EG6/RRBN7bmmyf8fUomWWOxhY2jD3U5wtKjJYA=";
+    hash = "sha256-2o6hP9il5q8ngjP+W6r1ES59Xo3W2P1HIcXbt6uGhuU=";
     pnpm = pnpm_12;
   };
 
   nativeBuildInputs = [
     makeBinaryWrapper
-    nodejs
+    nodejs_26
     pnpmConfigHook
     pnpm_12
   ];
@@ -63,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   preFixup = ''
-    makeWrapper ${lib.getExe nodejs} $out/bin/rsshub \
+    makeWrapper ${lib.getExe nodejs_26} $out/bin/rsshub \
       --set "NODE_ENV" "production" \
       --set "NO_LOGFILES" "true" \
       --add-flags "$out/lib/rsshub/dist/index.mjs"
