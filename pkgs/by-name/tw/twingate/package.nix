@@ -12,25 +12,14 @@
   nixosTests,
 }:
 
-let
-  version = "2026.239.6882";
-
-  sources = {
-    x86_64-linux = {
-      url = "https://binaries.twingate.com/client/linux/DEB/x86_64/${version}/twingate-amd64.deb";
-      hash = "sha256-BLPXDW21LeidOAbwuTd+LrZo/hF3Zp6F56F015CXPm4=";
-    };
-    aarch64-linux = {
-      url = "https://binaries.twingate.com/client/linux/DEB/aarch64/${version}/twingate-arm64.deb";
-      hash = "sha256-EdCxpsTw1H2MS6tk++xKs66m/fXzP2wNGcv6PP/9G8I=";
-    };
-  };
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "twingate";
-  inherit version;
+  version = "2026.302.7126";
 
-  src = fetchurl sources.${stdenv.hostPlatform.system};
+  src = fetchurl {
+    url = "https://binaries.twingate.com/client/linux/DEB/x86_64/${version}/twingate-amd64.deb";
+    hash = "sha256-7bsNBnDYCQnXUJJ+W8mh0I1txVUA+jmM2LXrY0KhCPQ=";
+  };
 
   buildInputs = [
     dbus
@@ -54,30 +43,22 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
-    runHook preInstall
-
     mkdir $out
     mv etc $out/
     mv usr/bin $out/bin
     mv usr/sbin/* $out/bin
     mv usr/lib $out/lib
     mv usr/share $out/share
-
-    # 2026.188 renamed the CLI to `twingate-classic`
+    # Expose the user-facing `twingate` command (no update-alternatives under Nix).
     ln -s twingate-classic $out/bin/twingate
-
-    runHook postInstall
   '';
 
   passthru.tests = { inherit (nixosTests) twingate; };
 
-  meta = {
+  meta = with lib; {
     description = "Twingate Client";
     homepage = "https://twingate.com";
-    license = lib.licenses.unfree;
-    platforms = [
-      "x86_64-linux"
-      "aarch64-linux"
-    ];
+    license = licenses.unfree;
+    platforms = [ "x86_64-linux" ];
   };
 }
