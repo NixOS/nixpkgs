@@ -9,11 +9,11 @@
   python3,
 }:
 let
-  chromium_version = "140.0.7324.1";
+  chromium_version = "151.0.7891.2";
 
   hsts_list = fetchurl {
     url = "https://raw.github.com/chromium/chromium/${chromium_version}/net/http/transport_security_state_static.json";
-    hash = "sha256-XV3yZA3Ai4It7S/y4V0h+UtKm8SXm6x1hlITD7jGY9I=";
+    hash = "sha256-YuiotSk0Lf3IHz/UjgCmU/brdB1lszob6DN4DXyjiWU=";
   };
 
 in
