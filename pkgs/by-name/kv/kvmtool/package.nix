@@ -1,6 +1,7 @@
 {
   stdenv,
   fetchgit,
+  fetchpatch,
   lib,
   dtc,
 }:
@@ -18,6 +19,15 @@ stdenv.mkDerivation {
     rev = "4b4aceb1dae7f75c22b53d36a2f021f2a88ebeec";
     hash = "sha256-qdJiQiUiSpxaIUdpfBIyuqQz+5B8+3JVjBp57F6AbXo=";
   };
+
+  patches = [
+    # Fixes the build with musl, which has no pthread_attr_setaffinity_np; drop once kvmtool has it
+    (fetchpatch {
+      name = "set-vcpu-affinity-with-sched-setaffinity.patch";
+      url = "https://lore.kernel.org/kvm/20261128061232.64870-1-mikatammi@gmail.com/raw";
+      hash = "sha256-ID7BtAms8xFiyJYNKEA5m9VgJSgm2A+PUVemD36FCNQ=";
+    })
+  ];
 
   buildInputs = lib.optionals withLibfdt [ dtc ];
 
