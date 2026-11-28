@@ -1,51 +1,79 @@
 {
   lib,
-  buildGoModule,
+  stdenvNoCC,
+  bun,
   fetchFromGitHub,
+  fetchPnpmDeps,
   installShellFiles,
+  pnpm,
+  pnpmConfigHook,
   versionCheckHook,
   nix-update-script,
 }:
 
-buildGoModule (finalAttrs: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "supabase-cli";
-  version = "2.111.0";
+  version = "3.1.0";
 
   __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "supabase";
     repo = "cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-uZXSlrzNtX7pdT4ppWKQ8rddiD6TPMTi9nBUWtUH5mM=";
+    hash = "sha256-i8pqD32rfGnlCNRrnvaQlbqoKHCzfQpq3S1zB+ln8Q8=";
   };
 
-  # Supabase is in the process of porting the CLI to TS, for now we continue with the Go cli.
-  sourceRoot = "${finalAttrs.src.name}/apps/cli-go";
+  pnpmWorkspaces = [ "supabase..." ];
 
-  vendorHash = "sha256-CkDH+8SsReL8+XtCPW0M2Ohd2HJJgOLzCU0TdZhTqmI=";
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      pnpmWorkspaces
+      ;
+    inherit pnpm;
+    fetcherVersion = 5;
+    hash = "sha256-y9rkFHns3k+/fWBf93cGZMNztn2tibgH0HOIDQNNFkE=";
+  };
 
-  ldflags = [
-    "-s"
-    "-X=github.com/supabase/cli/internal/utils.Version=${finalAttrs.version}"
+  nativeBuildInputs = [
+    bun
+    installShellFiles
+    pnpm
+    pnpmConfigHook
   ];
 
-  subPackages = [ "." ];
+  postPatch = ''
+    substituteInPlace apps/cli/package.json \
+      --replace-fail '"version": "0.0.0-automated"' '"version": "${finalAttrs.version}"'
+  '';
 
-  nativeBuildInputs = [ installShellFiles ];
+  buildPhase = ''
+    runHook preBuild
+    cd apps/cli
+    bun scripts/build-binary.ts
+    runHook postBuild
+  '';
 
-  doCheck = false; # Root Go package does not have any tests.
+  # Stripping makes the executable run plain Bun instead of the embedded CLI.
+  dontStrip = true;
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
+  versionCheckKeepEnvironment = [ "HOME" ];
 
-  postInstall = ''
-    mv $out/bin/{cli,supabase}
+  installPhase = ''
+    runHook preInstall
+    install -Dm755 dist/supabase $out/bin/supabase
 
     installShellCompletion --cmd supabase \
       --bash <($out/bin/supabase completion bash) \
       --fish <($out/bin/supabase completion fish) \
       --zsh <($out/bin/supabase completion zsh)
+    runHook postInstall
   '';
 
   passthru.updateScript = nix-update-script {
@@ -64,5 +92,6 @@ buildGoModule (finalAttrs: {
       yuannan
     ];
     mainProgram = "supabase";
+    inherit (bun.meta) platforms;
   };
 })
