@@ -85,6 +85,11 @@ stdenv.mkDerivation (
 
     __darwinAllowLocalNetworking = true;
 
+    # the gradle daemon is unreachable over IPv6 in the darwin sandbox
+    env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+      JAVA_TOOL_OPTIONS = "-Djava.net.preferIPv4Stack=true";
+    };
+
     nativeBuildInputs = [
       gradle
       perl
