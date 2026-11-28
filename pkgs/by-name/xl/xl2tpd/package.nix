@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xl2tpd";
-  version = "1.3.20";
+  version = "1.3.21";
 
   src = fetchFromGitHub {
     owner = "xelerance";
     repo = "xl2tpd";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-T4oEMMLb/SPkXfJ55fxBx9ii98qZVZRxPoU/eXlKb4U=";
+    sha256 = "sha256-Vq7ZxgcwOhauem456D8FC81bQtuTXldJ0/eE+8Jx7Fo=";
   };
 
   buildInputs = [ libpcap ];
