@@ -4,24 +4,24 @@
   fetchFromGitHub,
   fetchpatch,
   setuptools,
+  setuptools-scm,
   requests,
   pytestCheckHook,
   aiohttp,
   pytest-asyncio,
   pytest-cov-stub,
-  python,
 }:
 
 buildPythonPackage rec {
   pname = "py-consul";
-  version = "1.7.1";
+  version = "1.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "criteo";
     repo = "py-consul";
     tag = "v${version}";
-    hash = "sha256-DpGSiwpxAF1kCraRFl6XPJ1eSzvR6Rdq8PkK30J/vA0=";
+    hash = "sha256-h8gtgmn52+wsT12jtvqjb12W6AGX5IdDJ6Au/TGPwnY=";
   };
 
   patches = [
@@ -36,17 +36,13 @@ buildPythonPackage rec {
 
   build-system = [
     setuptools
+    setuptools-scm
   ];
 
   dependencies = [
     requests
     aiohttp
   ];
-
-  # Exclude sphinx config from installation
-  postInstall = ''
-    rm -r $out/${python.sitePackages}/docs
-  '';
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -81,8 +77,6 @@ buildPythonPackage rec {
     "test_event_targeted"
     "test_health_service"
     "test_health_state"
-    "test_health_service"
-    "test_health_state"
     "test_health_node"
     "test_health_checks"
     "test_kv"
@@ -93,8 +87,6 @@ buildPythonPackage rec {
     "test_kv_recurse"
     "test_kv_delete"
     "test_kv_delete_cas"
-    "test_kv_acquire_release"
-    "test_kv_keys_only"
     "test_kv_acquire_release"
     "test_kv_keys_only"
     "test_operator"
@@ -111,6 +103,43 @@ buildPythonPackage rec {
     "test_acl_templated_policy_wrote"
     "test_agent_service_tagged_addresses"
     "test_agent_service_connect"
+    "test_acl_policy_update"
+    "test_acl_policy_delete"
+    "test_acl_token_service_identities"
+    "test_acl_token_local"
+    "test_acl_token_expiration_ttl"
+    "test_acl_bootstrap_already_done"
+    "test_acl_login_unknown_auth_method"
+    "test_acl_logout_invalid_token"
+    "test_acl_role_crud"
+    "test_acl_role_permission_denied"
+    "test_acl_auth_method_crud"
+    "test_acl_binding_rule_crud"
+    "test_agent_service_register_kind_proxy_locality"
+    "test_agent_force_leave_prune"
+    "test_agent_reload"
+    "test_agent_metrics"
+    "test_agent_monitor_rejects_invalid_loglevel"
+    "test_agent_token_permission_denied"
+    "test_agent_token_invalid_type"
+    "test_agent_token_set"
+    "test_agent_leave"
+    "test_catalog"
+    "test_catalog_register_skip_node_update_and_tagged_addresses"
+    "test_catalog_filter"
+    "test_catalog_service_merge_central_config"
+    "test_catalog_service_peer_unknown"
+    "test_catalog_gateway_services"
+    "test_config_entry_crud"
+    "test_config_entry_cas"
+    "test_intentions_crud"
+    "test_intentions_deny_check"
+    "test_ca_update_configuration"
+    "test_discovery_chain_get"
+    "test_health_connect"
+    "test_health_ingress"
+    "test_snapshot_save_and_restore"
+    "test_snapshot_requires_management_token"
   ];
 
   pythonImportsCheck = [ "consul" ];
