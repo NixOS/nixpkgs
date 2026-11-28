@@ -9,16 +9,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "yaegi";
-  version = "0.16.1";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "traefik";
     repo = "yaegi";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-jpLx2z65KeCPC4AQgFmUUphmmiT4EeHwrYn3/rD4Rzg=";
+    hash = "sha256-6nxOQgxNFa7kfJJGgfiwhxCWmwifT2H4rdBqoASfOog=";
   };
 
-  vendorHash = null;
+  vendorHash = "sha256-8IEFmv3YKuSo8Hqi6mz+5ki8uo4jjG0Geh0zfxvHEW0=";
 
   subPackages = [
     "cmd/yaegi"
