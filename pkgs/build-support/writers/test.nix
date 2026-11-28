@@ -50,6 +50,8 @@ let
     writeRscript
     writeRscriptBin
     writeRuby
+    writeGo
+    writeGoBin
     writeRust
     writeRustBin
     writeText
@@ -127,6 +129,18 @@ recurseIntoAttrs {
     guile = expectSuccessBin (
       writeGuileBin "test-writers-guile-bin" { } ''
         (display "success\n")
+      ''
+    );
+
+    go = expectSuccessBin (
+      writeGoBin "test-writers-go-bin" { } ''
+        package main
+
+        import "fmt"
+
+        func main() {
+            fmt.Println("success")
+        }
       ''
     );
 
@@ -649,6 +663,31 @@ recurseIntoAttrs {
 
           if os.environ.get("ThaigerSprint") == "Thailand":
               print("success")
+        ''
+    );
+
+    go = expectSuccess (
+      writeGo "test-writers-wrapping-go"
+        {
+          makeWrapperArgs = [
+            "--set"
+            "ThaigerSprint"
+            "Thailand"
+          ];
+        }
+        ''
+          package main
+
+          import (
+            "fmt"
+            "os"
+          )
+
+          func main() {
+            if os.Getenv("ThaigerSprint") == "Thailand" {
+              fmt.Println("success")
+            }
+          }
         ''
     );
 
