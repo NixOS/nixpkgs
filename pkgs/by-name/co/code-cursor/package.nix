@@ -85,6 +85,7 @@ in
     ]
     ++ lib.platforms.darwin;
     mainProgram = "cursor";
+    mainDarwinApp = "Cursor.app";
   };
 }).overrideAttrs
   (oldAttrs: {
