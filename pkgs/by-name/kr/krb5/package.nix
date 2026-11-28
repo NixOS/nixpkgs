@@ -34,20 +34,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "krb5";
-  version = "1.22.2";
+  version = "1.22.3";
 
   __structuredAttrs = true;
 
   src = fetchurl {
     url = "https://kerberos.org/dist/krb5/${lib.versions.majorMinor finalAttrs.version}/krb5-${finalAttrs.version}.tar.gz";
-    hash = "sha256-MkP/vI6k1Kwi3cfdKh3FTFeHTEBki2D/lwCXY1VOrxM=";
+    hash = "sha256-/pCvhEGtn6mwZLjlMHfO+3gqlvimgnawMdxUrxeJ/ws=";
   };
 
   patches = [
-    # https://github.com/krb5/krb5/pull/1505
-    ./CVE-2026-11850.patch
-    # https://github.com/krb5/krb5/pull/1506
-    ./CVE-2026-40355-and-CVE-2026-40356.patch
+    # krb5 1.22.3 uses `secure_getenv` if available and falls back when it’s not. Unfortunately, this fallback is not
+    # linked everywhere it’s needed in the build. See: https://github.com/krb5/krb5/pull/1564.
+    # vendored: https://github.com/krb5/krb5/commit/76d5e90c8a686235b27c6b3934f8295a9c619e5e
+    ./add-libkrb5support-to-gssrpc-library-dependencies.patch
   ]
   ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
     (fetchpatch {

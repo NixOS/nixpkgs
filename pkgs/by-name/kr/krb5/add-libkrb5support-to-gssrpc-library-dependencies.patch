@@ -1,0 +1,42 @@
+From 76d5e90c8a686235b27c6b3934f8295a9c619e5e Mon Sep 17 00:00:00 2001
+From: catalin-h <catalin.horghidan@gmail.com>
+Date: Thu, 12 Nov 2026 18:19:17 +0200
+Subject: [PATCH] Add libkrb5support to gssrpc library dependencies
+
+Commit 8aab893c6eb17125e1518f9926bc3593cf19303c added a libgssrpc
+dependency on libkrb5support for secure_getenv() on some platforms.
+Add it as a library dependency by using $(KRB5_BASE_LIBS) and
+$(KRB5_BASE_DEPLIBS).
+
+[ghudson@mit.edu: used KRB5_BASE variables; adjusted SHLIB_EXPDEPS as
+well as SHLIB_EXPLIBS; rewrote commit message]
+
+ticket: 9288 (new)
+tags: pullup
+target_version: 1.22-next
+---
+ lib/rpc/Makefile.in | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
+
+diff --git a/lib/rpc/Makefile.in b/lib/rpc/Makefile.in
+index 39db2d3ce..01265d939 100644
+--- a/lib/rpc/Makefile.in
++++ b/lib/rpc/Makefile.in
+@@ -10,12 +10,8 @@ SUBDIRS=unit-test
+ LIBBASE=gssrpc
+ LIBMAJOR=4
+ LIBMINOR=2
+-SHLIB_EXPDEPS= \
+-	$(TOPLIBD)/libgssapi_krb5$(SHLIBEXT) \
+-	$(TOPLIBD)/libkrb5$(SHLIBEXT) \
+-	$(TOPLIBD)/libk5crypto$(SHLIBEXT) \
+-	$(COM_ERR_DEPLIB)
+-SHLIB_EXPLIBS=-lgssapi_krb5 -lkrb5 -lk5crypto $(COM_ERR_LIB) $(LIBS)
++SHLIB_EXPDEPS=$(GSS_DEPLIB) $(KRB5_BASE_DEPLIBS)
++SHLIB_EXPLIBS=$(GSS_LIBS) $(KRB5_BASE_LIBS)
+ RELDIR=rpc
+ 
+ SRCS = $(srcdir)/auth_none.c \
+-- 
+2.56.1
+
