@@ -1090,7 +1090,7 @@ let
                 proot -r $PWD/old_out ${bind-paths} --pwd=/ fakeroot bash -e -c '
                   if [ -e "$NIX_ATTRS_SH_FILE" ]; then . "$NIX_ATTRS_SH_FILE"; fi
                   source $stdenv/setup
-                  eval "$fakeRootCommands"
+                  (eval "$fakeRootCommands")
                   tar \
                     --sort name \
                     --exclude=./dev \
@@ -1109,7 +1109,7 @@ let
                   if [ -e "$NIX_ATTRS_SH_FILE" ]; then . "$NIX_ATTRS_SH_FILE"; fi
                   source $stdenv/setup
                   cd old_out
-                  eval "$fakeRootCommands"
+                  (eval "$fakeRootCommands")
                   tar \
                     --sort name \
                     --numeric-owner --mtime "@$SOURCE_DATE_EPOCH" \
