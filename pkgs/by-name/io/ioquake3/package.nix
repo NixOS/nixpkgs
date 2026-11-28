@@ -20,6 +20,7 @@
   unstableGitUpdater,
   bc,
   cmake,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -95,7 +96,10 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru = {
+    inherit (nixosTests) ioquake3;
+    updateScript = unstableGitUpdater { };
+  };
 
   meta = {
     homepage = "https://ioquake3.org/";

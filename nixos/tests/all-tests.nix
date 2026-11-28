@@ -921,6 +921,7 @@ in
   invoiceplane = runTest ./invoiceplane.nix;
   iocaine = runTest ./iocaine.nix;
   iodine = runTest ./iodine.nix;
+  ioquake3 = runTest ./ioquake3.nix;
   iosched = runTest ./iosched.nix;
   ipv6 = runTest ./ipv6.nix;
   irqbalance = runTest ./irqbalance.nix;
@@ -1595,7 +1596,6 @@ in
   qownnotes = runTest ./qownnotes.nix;
   qtile = runTestOn [ "x86_64-linux" "aarch64-linux" ] ./qtile/default.nix;
   qtile-extras = runTestOn [ "x86_64-linux" "aarch64-linux" ] ./qtile-extras/default.nix;
-  quake3 = runTest ./quake3.nix;
   qui = runTest ./qui.nix;
   quicktun = runTest ./quicktun.nix;
   quickwit = runTest ./quickwit.nix;
