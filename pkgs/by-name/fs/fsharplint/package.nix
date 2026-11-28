@@ -6,9 +6,9 @@
 buildDotnetGlobalTool {
   pname = "fsharplint";
   nugetName = "dotnet-fsharplint";
-  version = "0.27.0";
+  version = "0.27.2";
   executables = "dotnet-fsharplint";
-  nugetHash = "sha256-VXgCDoQad1p8K1zyw4ZynqwX8UB7F6NLXh13DafzYGw=";
+  nugetHash = "sha256-OVA/e/VD7pkWvHe0ZlBFD+xPw9AiZM0qf3TRWfrcRu4=";
   useDotnetFromEnv = true;
   strictDeps = true;
   __structuredAttrs = true;
