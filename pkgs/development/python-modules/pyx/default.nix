@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "pyx";
-  version = "0.17";
+  version = "0.18";
   format = "setuptools";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-O8iqgJExVZ96XA4fESm0LHGt423wMyET9cV3k4SjmvE=";
+    hash = "sha256-lm2mtRhuBv04ScIQ2uksiOEgJ5wLvs/gO9o/dj6S18w=";
   };
 
   # No tests in archive
