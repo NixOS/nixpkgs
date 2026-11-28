@@ -6,14 +6,14 @@
 
 buildGoModule (finalAttrs: {
   pname = "toofan";
-  version = "2.4.2";
+  version = "2.4.3";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "vyrx-dev";
     repo = "toofan";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-koYZKGDYI+8JN5fEvBWYbHefGm/oxv61Rw04M/XxoaY=";
+    hash = "sha256-c58tQhSu600MtcOJqp9XEmJdMt5GJn+tv5O3JghG0os=";
   };
 
   vendorHash = "sha256-YSjJ8NOL97hXZLnfGYIjoKmARv+gWOsv+5qkl9konnA=";
