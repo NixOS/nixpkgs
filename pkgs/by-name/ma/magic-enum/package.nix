@@ -7,14 +7,14 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "magic-enum";
-  version = "0.9.8";
+  version = "0.10.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Neargye";
     repo = "magic_enum";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-P26B9vEdvqmy8RO22EGbpKbuQTgosLJbdCJ5efTYA4U=";
+    hash = "sha256-z4SqLGczKtSIEnppPgl1uIoZbt/brmZ4dNIXDt09F0g=";
   };
 
   nativeBuildInputs = [ cmake ];
