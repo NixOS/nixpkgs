@@ -33,6 +33,8 @@ buildGoModule (finalAttrs: {
   pname = "elephant";
   version = "2.22.0";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "abenz1267";
     repo = "elephant";
