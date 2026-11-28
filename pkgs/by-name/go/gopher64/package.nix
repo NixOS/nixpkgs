@@ -24,7 +24,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gopher64";
-  version = "1.1.42";
+  version = "1.2.2";
 
   __structuredAttrs = true;
 
@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     repo = "gopher64";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-kVX0lcdo9tuUr5rFyipeXh6Ru6RngUHgYz44CMWxses=";
+    hash = "sha256-+swQAyhYpwIXxjRML2QEX+hwE8yN3b+91/xV2oJ9LOU=";
   };
 
   cargoPatches = [
@@ -46,7 +46,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ./no-homebrew.patch
   ];
 
-  cargoHash = "sha256-JFTe2Tpiej3G56rRfyn62pAA7PK8C/fQEcgQwChz2mw=";
+  cargoHash = "sha256-rFpXgvh5xdqXM1D/E2G0d2OOZeGSp+oj7rvaj0u+Lck=";
 
   # don't use lld on aarch64-linux
   postPatch = ''
