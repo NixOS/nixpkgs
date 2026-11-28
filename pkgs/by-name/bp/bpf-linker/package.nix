@@ -15,6 +15,8 @@ rustPlatform.buildRustPackage rec {
   pname = "bpf-linker";
   version = "0.13.0";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "aya-rs";
     repo = "bpf-linker";
