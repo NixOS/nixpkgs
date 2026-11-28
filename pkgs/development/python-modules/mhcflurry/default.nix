@@ -8,10 +8,8 @@
   setuptools,
 
   # dependencies
-  ahocorasick-rs,
-  appdirs,
   argcomplete,
-  filelock,
+  datacache,
   matplotlib,
   mhcgnomes,
   numpy,
@@ -25,6 +23,7 @@
 
   # tests
   addBinToPathHook,
+  ahocorasick-rs,
   gitMinimal,
   pytestCheckHook,
   versionCheckHook,
@@ -32,14 +31,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "mhcflurry";
-  version = "2.3.32";
+  version = "2.5.16";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openvax";
     repo = "mhcflurry";
     tag = finalAttrs.version;
-    hash = "sha256-Jrgvg8wU3dClo9sHErp6Jku4E/QLdxTGVdJdh+HBJeE=";
+    hash = "sha256-4Vl8vxtFFn1pEXSI+3vvGh6MGVVgOk1RpaG8MWz3Xwk=";
   };
 
   build-system = [
@@ -47,10 +46,8 @@ buildPythonPackage (finalAttrs: {
   ];
 
   dependencies = [
-    ahocorasick-rs
-    appdirs
     argcomplete
-    filelock
+    datacache
     matplotlib
     mhcgnomes
     numpy
@@ -65,6 +62,7 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     addBinToPathHook # Some tests invoke the `mhcflurry` executable
+    ahocorasick-rs
     gitMinimal
     pytestCheckHook
     versionCheckHook
@@ -87,7 +85,10 @@ buildPythonPackage (finalAttrs: {
         "env['PYTHONPATH'] = root + os.pathsep + os.environ['PYTHONPATH']" \
       --replace-fail \
         "env['PYTHONPATH'] = str(Path(__file__).resolve().parents[1])" \
-        "env['PYTHONPATH'] = str(Path(__file__).resolve().parents[1]) + os.pathsep + os.environ['PYTHONPATH']"
+        "env['PYTHONPATH'] = str(Path(__file__).resolve().parents[1]) + os.pathsep + os.environ['PYTHONPATH']" \
+      --replace-fail \
+        "env = dict(os.environ, PYTHONPATH=root)" \
+        "env = dict(os.environ, PYTHONPATH=root + os.pathsep + os.environ['PYTHONPATH'])"
   '';
 
   disabledTests = [
