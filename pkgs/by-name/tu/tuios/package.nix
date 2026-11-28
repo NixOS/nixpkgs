@@ -1,15 +1,20 @@
 {
+  ghosttyBackend ? true,
+
   lib,
   stdenv,
+
   buildGoModule,
   fetchFromGitHub,
+  installShellFiles,
+  libghostty-vt,
+  pkg-config,
   nix-update-script,
   versionCheckHook,
-  installShellFiles,
 }:
 
 buildGoModule (finalAttrs: {
-  pname = "tuios";
+  pname = "tuios" + lib.optionalString (!ghosttyBackend) "-go";
   version = "0.13.3";
 
   __structuredAttrs = true;
@@ -23,6 +28,8 @@ buildGoModule (finalAttrs: {
 
   vendorHash = "sha256-6PboUWkjWLZjD0dxfLKmLjK0CV8S2cl2iMxt+3CybfU=";
 
+  tags = lib.optionals ghosttyBackend [ "ghostty" ];
+
   ldflags = [
     "-s"
     "-w"
@@ -32,7 +39,11 @@ buildGoModule (finalAttrs: {
     "-X=main.builtBy=nixpkgs"
   ];
 
-  env.GOWORK = "off";
+  env = {
+    GOWORK = "off";
+    CGO_ENABLED = if ghosttyBackend then "1" else "0";
+  };
+
   __darwinAllowLocalNetworking = true;
 
   subPackages = [
@@ -40,11 +51,16 @@ buildGoModule (finalAttrs: {
     "cmd/tuios-web"
   ];
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [ installShellFiles ] ++ lib.optionals ghosttyBackend [ pkg-config ];
+  buildInputs = lib.optionals ghosttyBackend [ libghostty-vt ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
   versionCheckProgramArg = "--version";
+  postVersionCheck = ''
+    "$out/bin/tuios" --version \
+      | grep --fixed-strings -- "[${if ghosttyBackend then "ghostty" else "pure-Go"} backend]"
+  '';
 
   checkFlags =
     let
