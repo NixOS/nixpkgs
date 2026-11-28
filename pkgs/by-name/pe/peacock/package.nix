@@ -13,13 +13,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "peacock";
-  version = "8.10.2";
+  version = "8.11.0";
 
   src = fetchFromGitHub {
     owner = "thepeacockproject";
     repo = "Peacock";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Ob7MJ0Xlj9QyphyP1l5PLLtwJjTG39KBdZkyG3B48C4=";
+    hash = "sha256-mBSD20S6wVX7goxh70Pad09b1hoOXnmVyaDIy9rKofw=";
   };
 
   patches = [
