@@ -23,14 +23,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "hishel";
-  version = "1.4.0";
+  version = "2.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "karpetrosyan";
     repo = "hishel";
     tag = finalAttrs.version;
-    hash = "sha256-55hoTxa8rQB4ZPQQ7dwTk0t3juUU2QJ0bjieXj9+MM4=";
+    hash = "sha256-iirbOmqiZg5CeAjG1PdT5acb5IAOLACs9L4bX1ebN5Y=";
   };
 
   postPatch = ''
