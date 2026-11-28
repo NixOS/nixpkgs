@@ -18,6 +18,8 @@ let
   inherit (pkgs.lib.strings) toJSON;
 in
 {
+  aggregate-modules = callPackage ./aggregate-modules.nix { };
+
   cc-wrapper =
     let
       pkgNames = (attrNames pkgs);
