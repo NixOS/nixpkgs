@@ -8,6 +8,7 @@
   # nativeBuildInputs
   cmake,
   pkg-config,
+  wrapGAppsHook3,
   # Qt
   qt6,
   # buildInputs
@@ -44,6 +45,9 @@ let
       python3
       python3.pkgs.shiboken6-generator
       qt6.wrapQtAppsHook
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      wrapGAppsHook3
     ];
 
     propagatedBuildInputs = [
