@@ -124,7 +124,21 @@ stdenv.mkDerivation (finalAttrs: {
     moveToOutput etc/security/namespace.init $scripts
   '';
 
-  doCheck = false; # fails
+  doCheck = true;
+  disabledTests = [
+    "tst-pam_start"
+    "tst-pam_end"
+    "tst-pam_fail_delay"
+    "tst-pam_get_item"
+    "tst-pam_set_item"
+    "tst-pam_get_data"
+    "tst-pam_set_data"
+    "tst-pam_get_user"
+    "tst-pam_getenvlist"
+
+    # this takes a few seconds while all other tests are very quick, therefore let's just skip it
+    "tst-pam_faillock-retval"
+  ];
 
   outputChecks.out.disallowedRequisites = [
     bash
