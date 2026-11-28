@@ -31,6 +31,10 @@
     if optional schema exists. Its invocation will be replaced with TRUE
     for known schemas.
 
+  - `preferDefaultSchemaSource`: when true, generated patches will first
+    look up the schema in the default schema source and only fall back to
+    the hardcoded schema directory if it is missing there.
+
   - `patches`: A list of patches to apply before generating the patch.
 
   Example:
@@ -59,8 +63,16 @@
   patches ? [ ],
   schemaIdToVariableMapping,
   schemaExistsFunction ? null,
+  preferDefaultSchemaSource ? false,
 }:
 
+let
+  spFile =
+    if preferDefaultSchemaSource then
+      ./hardcode-gsettings-default-first.cocci
+    else
+      ./hardcode-gsettings.cocci;
+in
 runCommand "hardcode-gsettings.patch"
   {
     inherit src patches;
@@ -79,6 +91,6 @@ runCommand "hardcode-gsettings.patch"
     cp ${builtins.toFile "glib-schema-exists-function.json" (builtins.toJSON schemaExistsFunction)} ./glib-schema-exists-function.json
     git init
     git add -A
-    spatch --sp-file "${./hardcode-gsettings.cocci}" --dir . --in-place
+    spatch --sp-file "${spFile}" --dir . --in-place
     git diff > "$out"
   ''

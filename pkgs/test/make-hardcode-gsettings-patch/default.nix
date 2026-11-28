@@ -66,6 +66,20 @@ in
     expected = ./fixtures/example-project-patched;
   };
 
+  defaultFirst = mkTest {
+    name = "default-first";
+    src = ./fixtures/example-project;
+    args = {
+      schemaIdToVariableMapping = {
+        "org.gnome.evolution-data-server.addressbook" = "EDS";
+        "org.gnome.evolution.calendar" = "EVO";
+        "org.gnome.seahorse.nautilus.window" = "SEANAUT";
+      };
+      preferDefaultSchemaSource = true;
+    };
+    expected = ./fixtures/example-project-patched-default-first;
+  };
+
   patches = mkTest {
     name = "patches";
     src = ./fixtures/example-project-wrapped-settings-constructor;
