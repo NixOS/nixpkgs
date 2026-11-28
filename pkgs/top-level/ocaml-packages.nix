@@ -1669,6 +1669,12 @@ let
 
         omd = callPackage ../development/ocaml-modules/omd { };
 
+        omd_2 = omd.overrideAttrs (_: {
+          version = "2.0.0.alpha4";
+          __intentionallyOverridingVersion = true;
+          minimalOCamlVersion = "4.13";
+        });
+
         opam-0install-cudf = callPackage ../development/ocaml-modules/opam-0install-cudf { };
 
         opam-core = callPackage ../development/ocaml-modules/opam-core {
