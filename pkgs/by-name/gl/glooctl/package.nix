@@ -46,6 +46,6 @@ buildGoModule (finalAttrs: {
     homepage = "https://docs.solo.io/gloo-edge/latest/reference/cli/glooctl/";
     changelog = "https://github.com/solo-io/gloo/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ kamadorueda ];
   };
 })
