@@ -81,6 +81,8 @@ let
 
     arteplussept = callPackage ../applications/video/kodi/addons/arteplussept { };
 
+    ardundzdf = callPackage ../applications/video/kodi/addons/ardundzdf { };
+
     bluetooth-manager = callPackage ../applications/video/kodi/addons/bluetooth-manager { };
 
     controller-topology-project =
