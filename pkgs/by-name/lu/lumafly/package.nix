@@ -1,9 +1,11 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   buildDotnetModule,
   dotnetCorePackages,
   zlib,
+  libGL,
   icu,
   openssl,
   icoutils,
@@ -12,39 +14,38 @@
   nix-update-script,
   unzip,
   python3,
-  stdenv,
 }:
-buildDotnetModule rec {
+
+buildDotnetModule (finalAttrs: {
   pname = "lumafly";
-  version = "3.3.0.0";
+  version = "3.3.0.0-unstable-2026-10-15";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "TheMulhima";
     repo = "lumafly";
-    tag = "v${version}";
-    hash = "sha256-GVPMAwxbq9XlKjMKd9G5yUol42f+6lSyHukN7NMCVDA=";
+    rev = "9765dd7b70b5e49136e60f817f00a45a08d337a8";
+    hash = "sha256-9PD0/mV7sJoN224QOE08Jzf0eEfZ/Tavh01B5UAEHCo=";
   };
 
   patches = [ ./no_timestamp_check.patch ];
 
-  # Use .NET 9.0 since 7.0 is EOL
-  dotnetFlags = [ "-p:TargetFramework=net9.0" ];
-
   projectFile = "Lumafly/Lumafly.csproj";
+  testProjectFile = "Lumafly.Tests/Lumafly.Tests.csproj";
 
   nugetDeps = ./deps.json;
 
-  dotnet-sdk = dotnetCorePackages.sdk_9_0;
-  dotnet-runtime = dotnetCorePackages.sdk_9_0;
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
 
   selfContainedBuild = true;
-
-  passthru.updateScript = nix-update-script { };
 
   runtimeDeps = [
     zlib
     icu
     openssl
+    libGL
   ];
 
   nativeBuildInputs = [
@@ -58,32 +59,45 @@ buildDotnetModule rec {
 
   executables = [ "Lumafly" ];
 
-  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+  __darwinAllowLocalNetworking = true;
+  doCheck = true;
+
+  dotnetTestFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+    "--environment"
+    "DOTNET_SYSTEM_NET_DISABLEIPV6=1"
+  ];
+
+  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    export CFFIXED_USER_HOME="$HOME"
+  '';
+
+  postInstall = ''
+    icotool -x Lumafly/Assets/Lumafly.ico
+    install -Dm644 Lumafly_1_32x32x32.png $out/share/icons/hicolor/32x32/apps/lumafly.png
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
     (
       cd Scripts
-      python3 make_mac_app.py Lumafly.app $out/lib/${pname} ../out
+      python3 make_mac_app.py Lumafly.app $out/lib/${finalAttrs.pname} ../out
     )
     mkdir -p $out/Applications
     unzip -o out/mac.zip -d $out/Applications
-  '';
-
-  postFixup = ''
-    # Icon for the desktop file
-    icotool -x $src/Lumafly/Assets/Lumafly.ico
-    install -D Lumafly_1_32x32x32.png $out/share/icons/hicolor/32x32/apps/lumafly.png
   '';
 
   desktopItems = [
     (makeDesktopItem {
       desktopName = "Lumafly";
       name = "lumafly";
-      exec = "Lumafly";
+      exec = "Lumafly %U";
       icon = "lumafly";
-      comment = "A cross platform mod manager for Hollow Knight written in Avalonia";
+      comment = "Cross platform mod manager for Hollow Knight written in Avalonia";
       type = "Application";
       categories = [ "Game" ];
+      mimeTypes = [ "x-scheme-handler/scarab" ];
     })
   ];
+
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
   meta = {
     description = "Cross platform mod manager for Hollow Knight written in Avalonia";
@@ -93,4 +107,4 @@ buildDotnetModule rec {
     maintainers = with lib.maintainers; [ rohanssrao ];
     platforms = with lib.platforms; linux ++ darwin;
   };
-}
+})
