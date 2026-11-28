@@ -230,6 +230,7 @@ stdenv.mkDerivation (finalAttrs: {
       delafthi
       DuskyElf
       graham33
+      MishowHD
       xiaoxiangmoe
     ];
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
