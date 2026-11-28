@@ -1,13 +1,14 @@
 {
   lib,
-  antlr4,
-  antlr4-python3-runtime,
   attrs,
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
+  git,
+  jq,
   jre_minimal,
   pydevd,
+  typing-extensions,
   pytest-mock,
   pytest7CheckHook,
   pythonAtLeast,
@@ -17,42 +18,32 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "omegaconf";
-  version = "2.3.1";
+  version = "2.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hydra-ecosystem";
     repo = "omegaconf";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HvK6bNInPIkfdpNh8DifH7Wxt8m9uR+Y/qL3voIUw6w=";
+    hash = "sha256-6wZ3liuMXkWPRbwDwhoO7dW1GicHQib6ogw8fAos9uM=";
   };
-
-  patches = [
-    (replaceVars ./antlr4.patch {
-      antlr_jar = "${antlr4.out}/share/java/antlr-${antlr4.version}-complete.jar";
-    })
-  ];
-
-  postPatch = ''
-    # We substitute the path to the jar with the one from our antlr4
-    # package, so this file becomes unused
-    rm -v build_helpers/bin/antlr*-complete.jar
-
-    sed -i 's/antlr4-python3-runtime==.*/antlr4-python3-runtime/' requirements/base.txt
-  '';
 
   build-system = [ setuptools ];
 
-  nativeBuildInputs = [ jre_minimal ];
+  nativeBuildInputs = [
+    jre_minimal
+  ];
 
   dependencies = [
-    antlr4-python3-runtime
+    typing-extensions
     pyyaml
   ];
 
   nativeCheckInputs = [
     attrs
     pydevd
+    git
+    jq
     pytest-mock
     pytest7CheckHook
   ];
@@ -67,6 +58,8 @@ buildPythonPackage (finalAttrs: {
   disabledTests = [
     # assert (1560791320562868035 == 1560791320562868035) == False
     "test_eq"
+    # fails with No such file or directory: jq
+    "test_dependency_audit_workflow"
   ]
   ++ lib.optionals (pythonAtLeast "3.13") [
     # pathlib._local.Path != pathlib.Path type check mismatch
