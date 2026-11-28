@@ -73,6 +73,8 @@ in
 
     boot.initrd.kernelModules = [ "af_packet" ];
 
+    boot.kernelParams = mkIf config.networking.useDHCP [ "ip=dhcp" ];
+
   };
 
 }

@@ -284,7 +284,10 @@ let
     networking = {
       NET = yes;
       IP_ADVANCED_ROUTER = yes;
-      IP_PNP = no;
+      IP_PNP = yes;
+      IP_PNP_BOOTP = yes;
+      IP_PNP_DHCP = yes;
+      IP_PNP_RARP = yes;
       IP_ROUTE_MULTIPATH = yes;
       IP_VS_PROTO_TCP = yes;
       IP_VS_PROTO_UDP = yes;
