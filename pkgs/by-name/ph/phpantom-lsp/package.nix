@@ -12,13 +12,13 @@ let
   stubsSrc = fetchFromGitHub {
     owner = "JetBrains";
     repo = "phpstorm-stubs";
-    rev = "5f68c1021badebe34119fb8fa10ba7cc25de6c0c";
-    hash = "sha256-GQW+N5FrWKf6PpLyhJ6Gywbe1lESwW/rxiv2ESNdH1s=";
+    rev = "2049ca3cfa1feabf52db074108fe776a5713cf02";
+    hash = "sha256-6mPZjMg0NBB55MUIbJIPGVIZCdiDQO79/MEiIzJDH24=";
   };
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "phpantom-lsp";
-  version = "0.11.1";
+  version = "1.1.0";
 
   __structuredAttrs = true;
 
@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "PHPantom-dev";
     repo = "phpantom_lsp";
     tag = finalAttrs.version;
-    hash = "sha256-OTMe7T/TK9lpQGXPQA8VIfZ+SA6/7T/2WBdwym3A+0E=";
+    hash = "sha256-YP+tkWJwuacDz3K0cLviWMIuUjmt1FHOdYda39wYa3I=";
   };
 
   postPatch = ''
@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       > stubs/jetbrains/phpstorm-stubs/.commit
   '';
 
-  cargoHash = "sha256-PH2Q38v2eX51jwHjGEObbaiJKZdv4qf/8eup0d97Iis=";
+  cargoHash = "sha256-19HR5WlN9AMSZ90QRuCfo9NZMSyZzYao+cAhR0crTtM=";
 
   nativeBuildInputs = [ pkg-config ];
 
