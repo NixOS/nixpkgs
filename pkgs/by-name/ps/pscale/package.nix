@@ -10,16 +10,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "pscale";
-  version = "0.353.0";
+  version = "0.357.0";
 
   src = fetchFromGitHub {
     owner = "planetscale";
     repo = "cli";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-l+C2OXfGABlMt0yVe02rFFNYNIVTQ+dmexNP/zWFMao=";
+    sha256 = "sha256-MZc69JmAZLzVf7De/OQritGVBqQSqxGx+FlvyA/C5fw=";
   };
 
-  vendorHash = "sha256-w8gg1rZJ7sl/1kLA7App0h3bBKq+Ey4zgWTv2U7tzNs=";
+  vendorHash = "sha256-5Nb1L+YUqmTi9PQ5nBZ54oXlURFrHPMXW0CB24ifR6A=";
 
   ldflags = [
     "-s"
