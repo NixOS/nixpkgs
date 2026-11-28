@@ -140,8 +140,13 @@
       def verify_kernel_modules_loaded(self):
         lines = self.machine.succeed("lsmod").splitlines()
         loaded = {line.split()[0] for line in lines[1:] if line.strip()}
+        # Built-in modules (e.g. tun on aarch64) never show up in lsmod.
+        builtin = self.machine.succeed(
+          "cat /run/booted-system/kernel-modules/lib/modules/$(uname -r)/modules.builtin"
+        ).splitlines()
+        loaded |= {line.rsplit("/", 1)[-1].removesuffix(".ko") for line in builtin if line.strip()}
         for module in KERNEL_MODULES:
-          assert module in loaded, f"expected kernel module {module} to be loaded, got {loaded}"
+          assert module in loaded, f"expected kernel module {module} to be loaded or built in, got {loaded}"
 
       def verify_nordvpnd_process_ownership(self):
         pid = self.machine.succeed("pidof nordvpnd").strip()
