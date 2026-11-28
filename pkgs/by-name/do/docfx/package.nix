@@ -8,8 +8,8 @@ buildDotnetGlobalTool {
   pname = "docfx";
   version = "2.81.0";
 
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
-  dotnet-runtime = dotnetCorePackages.runtime_8_0;
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
+  dotnet-runtime = dotnetCorePackages.aspnetcore_10_0;
 
   nugetHash = "sha256-9AQN5UUVVgchNLx8wqXB0GKZGi3sqf0hEaXISGCtPD4=";
 
