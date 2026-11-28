@@ -1051,6 +1051,17 @@ let
       clevisFallbackTest = fallback;
       enableOCR = fallback;
       extraInstallerConfig = {
+        imports = [
+          (
+            { config, ... }:
+            {
+              # The target's initrd uses clevis built against its systemd.
+              system.extraDependencies = [
+                (pkgs.clevis.override { systemd = config.boot.initrd.systemd.package; })
+              ];
+            }
+          )
+        ];
         environment.systemPackages = with pkgs; [ clevis ];
       };
       createPartitions = ''
