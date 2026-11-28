@@ -7002,6 +7002,7 @@ with pkgs;
     armTrustedFirmwareRK3328
     armTrustedFirmwareRK3399
     armTrustedFirmwareRK3568
+    armTrustedFirmwareRK3576
     armTrustedFirmwareRK3588
     armTrustedFirmwareS905
     ;
