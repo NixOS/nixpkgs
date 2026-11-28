@@ -7,21 +7,28 @@
   bc,
 }:
 
+let
+  KDIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
+in
 stdenv.mkDerivation {
   pname = "rtl8821cu";
-  version = "${kernel.version}-unstable-2025-12-15";
+  version = "${kernel.version}-unstable-2026-08-21";
 
   src = fetchFromGitHub {
     owner = "morrownr";
     repo = "8821cu-20210916";
-    rev = "7f63a9da2e8ed83403f6f920e9b1628a37b38ef4";
-    hash = "sha256-RgGO6r2mx6MiDOWpPJIC0MvX7rejWu+TdHWtsW1PNOY=";
+    rev = "bda65aac150d2cde0df9603206eec23a6f3b77c4";
+    hash = "sha256-9qaQdvXL4aBnXnIJkhHu+e3VMuAQQq8MVoL7N36Vz90=";
   };
 
   hardeningDisable = [ "pic" ];
 
   nativeBuildInputs = [ bc ] ++ kernel.moduleBuildDependencies;
-  makeFlags = kernelModuleMakeFlags;
+
+  makeFlags = kernelModuleMakeFlags ++ [
+    "INSTALL_MOD_PATH=${placeholder "out"}"
+    "INSTALL_MOD_DIR=kernel/net/wireless"
+  ];
 
   prePatch = ''
     substituteInPlace ./Makefile \
@@ -30,9 +37,13 @@ stdenv.mkDerivation {
       --replace-fail '$(MODDESTDIR)' "$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
   '';
 
-  preInstall = ''
-    mkdir -p "$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
-  '';
+  installTargets = [ "modules_install" ];
+
+  installFlags = [
+    "-C"
+    "${KDIR}"
+    "M=$(PWD)"
+  ];
 
   enableParallelBuilding = true;
 
