@@ -12077,7 +12077,7 @@ self: super: with self; {
 
   nanoleaf = callPackage ../development/python-modules/nanoleaf { };
 
-  nanomsg-python = callPackage ../development/python-modules/nanomsg-python {
+  nanomsg = callPackage ../development/python-modules/nanomsg {
     inherit (pkgs) nanomsg;
   };
 

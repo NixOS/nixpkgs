@@ -7,8 +7,8 @@
 }:
 
 buildPythonPackage {
-  pname = "nanomsg-python";
-  version = "1.0.20190114";
+  pname = "nanomsg";
+  version = "1.0-unstable-2018-05-28";
   pyproject = true;
 
   src = fetchFromGitHub {
