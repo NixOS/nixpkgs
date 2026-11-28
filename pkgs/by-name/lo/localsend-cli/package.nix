@@ -7,6 +7,7 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "localsend-cli";
   version = "1.19.0";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "localsend";
