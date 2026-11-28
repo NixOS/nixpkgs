@@ -4,8 +4,8 @@
   fetchFromGitHub,
   pkg-config,
   perl,
-  systemd,
-  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  systemdLibs,
+  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     perl
   ];
-  buildInputs = lib.optionals systemdSupport [ systemd ];
+  buildInputs = lib.optionals systemdSupport [ systemdLibs ];
 
   makeFlags = [
     "PREFIX=$(out)"

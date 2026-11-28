@@ -11,7 +11,7 @@
 
   alsa-lib,
   libxslt,
-  systemd,
+  systemdLibs,
   libusb-compat-0_1,
   libftdi1,
   libice,
@@ -84,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     alsa-lib
-    systemd
+    systemdLibs
     libusb-compat-0_1
     libftdi1
     libice

@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   pkg-config,
-  systemd,
+  systemdLibs,
   coreutils,
   udevCheckHook,
 }:
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     udevCheckHook
   ];
-  buildInputs = [ systemd ];
+  buildInputs = [ systemdLibs ];
 
   doInstallCheck = true;
 

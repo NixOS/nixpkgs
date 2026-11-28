@@ -5,7 +5,7 @@
 }:
 buildNpmPackage (finalAttrs: {
   pname = "safe-chain";
-  version = "1.5.25";
+  version = "1.5.30";
 
   __structuredAttrs = true;
 
@@ -13,7 +13,7 @@ buildNpmPackage (finalAttrs: {
     owner = "AikidoSec";
     repo = "safe-chain";
     tag = finalAttrs.version;
-    hash = "sha256-bWSNimc6DERPoHzS7Fr22R2eHhJyEWNo7a95a/qwLVE=";
+    hash = "sha256-HMVnsRXZC6r+2OAbVyuQ4Ux2cKEzoZgvwMRdXhr0dLE=";
   };
 
   postPatch = ''
@@ -21,7 +21,7 @@ buildNpmPackage (finalAttrs: {
   '';
 
   dontNpmBuild = true;
-  npmDepsHash = "sha256-LjuQ31NYepEZBS8PNSEDmRpNMSB+gYM/DbZHDjCBw3s=";
+  npmDepsHash = "sha256-8WJ932QfvPUE3CG1Je5Np6KSD6zt6yxmVS8tAXZB4Gg=";
   npmWorkspace = "packages/safe-chain";
 
   postInstall = ''

@@ -3,6 +3,7 @@
   rustPlatform,
   fetchCrate,
   fetchFromGitHub,
+  fetchurl,
   aws-lc,
   pkg-config,
   protobuf,
@@ -38,7 +39,24 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-PhaF+ume7uiTKxG4MOC42FUdlEgadRjByYQeq06p5VU=";
   };
 
+  # prebuilt dashboard UI, versioned by src/servers/dashboard/VERSION
+  dashboardVersion = "0.14.6";
+  dashboardAssets = fetchurl {
+    url = "https://github.com/GreptimeTeam/dashboard/releases/download/v${finalAttrs.dashboardVersion}/build.tar.gz";
+    hash = "sha256-UGMCHRVzsL1rFfP9MOf2hRrb3W4bKimVh2z9vMoS07k=";
+  };
+
   postPatch = ''
+    # The servers build script downloads the dashboard bundle it embeds, which the
+    # sandbox forbids. The release tarball unpacks to dashboard/dist/index.html,
+    # which the build script then takes as already present.
+    versionInSource=$(cat src/servers/dashboard/VERSION)
+    if [ "$versionInSource" != "v${finalAttrs.dashboardVersion}" ]; then
+      echo "dashboardAssets ${finalAttrs.dashboardVersion} does not match $versionInSource" >&2
+      exit 1
+    fi
+    tar xzf ${finalAttrs.dashboardAssets} -C src/servers/dashboard
+
     # otel-arrow-rust regenerates its protos from a directory that sits outside the
     # crate, which cargo vendoring drops. Its generated sources are committed, so
     # the codegen is redundant.
@@ -91,6 +109,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoBuildFlags = [
     "--package"
     "cmd"
+    # release builds serve the dashboard UI from /dashboard
+    "--features"
+    "servers/dashboard"
   ];
 
   # the suite starts a real cluster and reaches object stores over the network

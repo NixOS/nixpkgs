@@ -52,14 +52,15 @@ let
 
   # This is used for VS Code - Remote SSH test
   rev = "661626d0e72f97806550790a98fb87116c9db825";
+  longName = "Visual Studio Code" + lib.optionalString isInsiders " - Insiders";
 in
 buildVscode {
   pname = "vscode" + lib.optionalString isInsiders "-insiders";
 
   executableName = "code" + lib.optionalString isInsiders "-insiders";
-  longName = "Visual Studio Code" + lib.optionalString isInsiders " - Insiders";
   shortName = "Code" + lib.optionalString isInsiders " - Insiders";
   inherit
+    longName
     version
     rev
     commandLineArgs
@@ -103,6 +104,7 @@ buildVscode {
   meta = {
     description = "Code editor developed by Microsoft";
     mainProgram = "code";
+    mainDarwinApp = "${longName}.app";
     longDescription = ''
       Code editor developed by Microsoft. It includes support for debugging,
       embedded Git control, syntax highlighting, intelligent code completion,

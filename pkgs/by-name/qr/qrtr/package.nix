@@ -4,7 +4,7 @@
   fetchFromGitHub,
   meson,
   pkg-config,
-  systemd,
+  systemdLibs,
   ninja,
   nix-update-script,
 }:
@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
   ];
 
-  buildInputs = [ systemd ];
+  buildInputs = [ systemdLibs ];
 
   installFlags = [ "prefix=$(out)" ];
 
