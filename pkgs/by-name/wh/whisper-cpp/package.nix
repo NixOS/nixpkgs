@@ -72,6 +72,9 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "whisper-cpp";
   version = "1.9.5";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "ggml-org";
     repo = "whisper.cpp";
@@ -151,6 +154,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
       use the `whisper-cpp-download-ggml-model` binary from this package.
     '';
     homepage = "https://github.com/ggerganov/whisper.cpp";
+    changelog = "https://github.com/ggml-org/whisper.cpp/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     mainProgram = "whisper-cli";
     platforms = lib.platforms.all;
