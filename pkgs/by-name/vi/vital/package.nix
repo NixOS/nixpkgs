@@ -97,6 +97,17 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  doInstallCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    # Exercise the loader without opening a display or reading user settings.
+    binary="$out/bin/.Vital-wrapped"
+    "$(patchelf --print-interpreter "$binary")" --list "$binary" > /dev/null
+
+    runHook postInstallCheck
+  '';
+
   meta = {
     description = "Spectral warping wavetable synth";
     homepage = "https://vital.audio/";
