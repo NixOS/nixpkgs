@@ -23,6 +23,7 @@
   libunwind,
   orc,
   pkgsBuildBuild,
+  replaceVars,
 }:
 
 qtModule {
@@ -58,10 +59,16 @@ qtModule {
     gst-libav
   ];
 
-  patches = lib.optionals stdenv.hostPlatform.isMinGW [
-    ./windows-no-uppercase-libs.patch
-    ./windows-resolve-function-name.patch
-  ];
+  patches =
+    lib.optionals stdenv.hostPlatform.isMinGW [
+      ./windows-no-uppercase-libs.patch
+      ./windows-resolve-function-name.patch
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isMinGW) [
+      (replaceVars ./non-windows-patch-ffmpeg.patch {
+        ffmpeg-lib = ffmpeg.dev;
+      })
+    ];
 
   cmakeFlags = [
     "-DENABLE_DYNAMIC_RESOLVE_VAAPI_SYMBOLS=0"
