@@ -6,15 +6,15 @@
 
 buildGoModule (finalAttrs: {
   pname = "mouseless";
-  version = "0.2.0";
+  version = "0.4.0";
 
-  vendorHash = "sha256-2q7L9BVcAaT4h/vUcNjVc5nOAFnb4J3WabcEGxI+hsA=";
+  vendorHash = "sha256-X5qNtvUMM5UFcH7zAryAU/WnBUpkNpY+KwA/Hy1U+OQ=";
 
   src = fetchFromGitHub {
     owner = "jbensmann";
     repo = "mouseless";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-iDSTV2ugvHoBuQWmMg2ILXP/Mlt7eq5B2dVaB0jwJOE=";
+    hash = "sha256-iWGxtx76+Fwuo3+SJ/mklu/4nLG/rbgF7/jF+2zME2g=";
   };
 
   meta = {
