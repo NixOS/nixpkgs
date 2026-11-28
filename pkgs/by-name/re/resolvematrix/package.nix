@@ -4,6 +4,7 @@
   rustPlatform,
   aws-lc,
   pkg-config,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -30,6 +31,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     inherit (finalAttrs) src;
     hash = "sha256-H2IpJdYp/J/C9GmxPyPlijumjJ0qxONMwJUhKvszI6s=";
   };
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://forgejo.ellis.link/continuwuation/resolvematrix";
