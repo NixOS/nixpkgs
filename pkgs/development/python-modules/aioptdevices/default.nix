@@ -9,24 +9,24 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
+  pyprojectVersionPatchHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "aioptdevices";
-  version = "2026.07.1";
+  version = "2026.11.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ParemTech-Inc";
     repo = "aioptdevices";
-    tag = "v2026.07.1";
-    hash = "sha256-6vF64lmPSU95YpkrqNh5jAWnoUHZqXn7WK9xtc4sKs8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/w/tbqPqGWTm4OX9mkkqsn3XaL0ocd380JDNo6z1PKQ=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail ", 'versioningit'" "" \
-      --replace-fail 'dynamic = ["version"]' 'version = "${finalAttrs.version}"'
+      --replace-fail ", 'versioningit'" ""
 
     # test_connection.py imports secret.py at module level. It holds live API
     # credentials and is gitignored upstream, so create a stub to allow collection
@@ -35,6 +35,8 @@ buildPythonPackage (finalAttrs: {
   '';
 
   build-system = [ setuptools ];
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   dependencies = [
     aiohttp
