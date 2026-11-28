@@ -19,7 +19,8 @@
   cargo,
   staticCompiler ? false,
   enableShared ? stdenv.targetPlatform.hasSharedLibraries,
-  enableDefaultPie ? stdenv.targetPlatform.hasSharedLibraries,
+  enableDefaultPie ? stdenv.targetPlatform.canReloc,
+  enableDefaultStaticPie ? enableDefaultPie, # static -> static-pie
   enableLTO ? stdenv.hostPlatform.hasSharedLibraries,
   texinfo ? null,
   perl ? null, # optional, for texi2pod (then pod2man)
@@ -145,6 +146,7 @@ let
       enableMultilib
       enablePlugin
       enableShared
+      enableDefaultStaticPie
       fetchpatch
       fetchurl
       flex
