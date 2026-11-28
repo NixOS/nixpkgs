@@ -2,7 +2,10 @@
   lib,
   python3Packages,
   fetchFromGitHub,
-  pkgs,
+  which,
+  zbar,
+  graphicsmagick-imagemagick-compat,
+  gnupg,
   installShellFiles,
   nix-update-script,
   versionCheckHook,
@@ -26,15 +29,18 @@ python3Packages.buildPythonApplication (finalAttrs: {
     installShellFiles
   ];
 
-  dependencies = with pkgs; [
-    python3Packages.pillow
-    python3Packages.qrcode
-    python3Packages.reedsolo
-    which
-    zbar
-    imagemagickBig
-    gnupg
-  ];
+  dependencies =
+    (with python3Packages; [
+      pillow
+      qrcode
+      reedsolo
+    ])
+    ++ [
+      which
+      zbar
+      graphicsmagick-imagemagick-compat
+      gnupg
+    ];
 
   patches = [
     # Backported from the upstream master branch so we can `doCheck` on
@@ -70,7 +76,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   doCheck = true;
   doInstallCheck = true;
-  nativeCheckInputs = with pkgs; [
+  nativeCheckInputs = [
     versionCheckHook
     which
     zbar
