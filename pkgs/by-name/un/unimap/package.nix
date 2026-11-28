@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "unimap";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "Edu4rdSHL";
     repo = "unimap";
     rev = finalAttrs.version;
-    hash = "sha256-QQZNeZUB6aHnYz7B7uqL8I9gkk4JvQJ4TD9NxECd6JA=";
+    hash = "sha256-bRPOxK4wU8giK+fF7cFWEoWl2z7le5nOm4H6XvSYANA=";
   };
 
-  cargoHash = "sha256-1haSdmhK14XvKunSbj9jPTuHJK5tWdzdFAqxhg2TI0s=";
+  cargoHash = "sha256-CFyFjASiuCPwWlv3fC0P9P5yIsb2tQt7hKbBYKyDOnQ=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -35,6 +35,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = lib.optionals (stdenv.hostPlatform.isAarch && stdenv.hostPlatform.isLinux) [
     openssl
   ];
+
+  nativeCheckInputs = [ nmap ];
 
   env = lib.optionalAttrs (stdenv.hostPlatform.isAarch && stdenv.hostPlatform.isLinux) {
     OPENSSL_NO_VENDOR = true;
