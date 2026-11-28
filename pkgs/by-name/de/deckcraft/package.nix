@@ -67,6 +67,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # [[patch.unused]] egui fork entries break cargo --offline.
   postPatch = ''
     sed -i -E '/^(egui_demo_lib|egui_inspection|egui_system_font_provider) = /d' Cargo.toml
+
+    # No upstream opt-out yet: https://github.com/storytold/craft-libs/issues/492
+    substituteInPlace apps/deckcraft/src/main.rs \
+      --replace-fail 'app.enable_update_checks();' '// app.enable_update_checks();'
   '';
 
   nativeBuildInputs = [

@@ -71,6 +71,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # Leave egui_extras: it is a real workspace.dependencies entry.
   postPatch = ''
     sed -i -E '/^(egui_demo_lib|egui_inspection|egui_system_font_provider) = /d' Cargo.toml
+
+    # No upstream opt-out yet: https://github.com/storytold/craft-libs/issues/492
     substituteInPlace apps/filmcraft/src/main.rs \
       --replace-fail 'app.set_startup_update_check(true);' 'app.set_startup_update_check(false);'
   '';

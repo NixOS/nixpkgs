@@ -71,6 +71,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # [[patch.unused]] egui fork entries in Cargo.toml break cargo --offline in the sandbox.
   postPatch = ''
     sed -i -E '/^(egui_demo_lib|egui_inspection|egui_system_font_provider) = /d' Cargo.toml
+
+    # No upstream opt-out yet: https://github.com/storytold/craft-libs/issues/492
+    substituteInPlace apps/vectorcraft/src/main.rs \
+      --replace-fail 'app.set_startup_update_check(true);' 'app.set_startup_update_check(false);'
   '';
 
   postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
