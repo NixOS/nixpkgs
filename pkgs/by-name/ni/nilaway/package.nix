@@ -1,34 +1,40 @@
 {
   lib,
-  buildGoModule,
+  # use latest go since it does code analysis
+  buildGoLatestModule,
   fetchFromGitHub,
+
+  unstableGitUpdater,
 }:
 
-buildGoModule {
+buildGoLatestModule {
   pname = "nilaway";
-  version = "0-unstable-2025-03-07";
+  version = "0-unstable-2026-09-18";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "uber-go";
     repo = "nilaway";
-    rev = "19305c7c699bd0d370acd26d6769df1d7af8fb29";
-    hash = "sha256-99L9dF76vZbh1NdXtKu5Bcnnca94Roybm3q18SDmZAk=";
+    rev = "acb8859b9031bb9496be97e027df5573f9fb5340";
+    hash = "sha256-GvDZ5tlvOrTI93tYcIcLd45ZHdqwFopVtoBffD/kbuM=";
   };
 
-  vendorHash = "sha256-pthCLpy5pISKwdmeaJxPq8BxJLUwLwS2/hGMBt6/O4I=";
+  vendorHash = "sha256-qVmvDneq6V/q5UHZ/Cjjqd5/XPPNfvVGoxwg9nz4/Ds=";
 
   subPackages = [ "cmd/nilaway" ];
   excludedPackages = [ "tools" ];
 
   ldflags = [
     "-s"
-    "-w"
   ];
 
   preCheck = ''
     # test all paths
     unset subPackages
   '';
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = {
     description = "Static Analysis tool to detect potential Nil panics in Go code";
