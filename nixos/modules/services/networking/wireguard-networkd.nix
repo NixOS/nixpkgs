@@ -227,6 +227,10 @@ in
             assertion = peer.dynamicEndpointRefreshRestartSeconds == null;
             message = "networking.wireguard.interfaces.${name}.peers[].dynamicEndpointRefreshRestartSeconds cannot be used with networkd.";
           }
+          {
+            assertion = builtins.match "[ -.0-9;-~]*" peer.name != null;
+            message = "networking.wireguard.interfaces.${name}.peers[].name value \"${peer.name}\" is not a valid systemd credential name when using networkd.";
+          }
         ])
       )
     );
