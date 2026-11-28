@@ -17,6 +17,7 @@
   docbook_xml_dtd_412,
   docbook_xsl,
   glib,
+  pkgConfigCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -78,6 +79,9 @@ stdenv.mkDerivation (finalAttrs: {
       --fish tools/completions/fish-completion.fish \
       --zsh tools/completions/zsh-completion.zsh
   '';
+
+  nativeInstallCheckInputs = [ pkgConfigCheckHook ];
+  pkgConfigModules = [ "chafa" ];
 
   meta = {
     description = "Terminal graphics for the 21st century";
