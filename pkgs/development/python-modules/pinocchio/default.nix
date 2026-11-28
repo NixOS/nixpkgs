@@ -27,12 +27,11 @@ toPythonModule (
       python
     ];
 
-    propagatedBuildInputs = [
-      casadi
-      coal
-    ]
-    ++ super.propagatedBuildInputs
-    ++ lib.optional buildStandalone pinocchio;
+    propagatedBuildInputs =
+      lib.optional pinocchio.casadiSupport casadi
+      ++ lib.optional pinocchio.collisionSupport coal
+      ++ super.propagatedBuildInputs
+      ++ lib.optional buildStandalone pinocchio;
 
     checkInputs = super.checkInputs ++ [
       matplotlib
