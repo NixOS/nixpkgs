@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "jinja2-humanize-extension";
-  version = "0.4.0";
+  version = "0.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "metwork-framework";
     repo = "jinja2_humanize_extension";
     tag = "v${version}";
-    hash = "sha256-bSSwPCPLIWIRhIgaSwHnVTj5mpvwn259GXYeGr5NHBQ=";
+    hash = "sha256-hB43GWnuxWoSgkiQp1mhLgve75VuePdse5euObqILBk=";
   };
 
   build-system = [
