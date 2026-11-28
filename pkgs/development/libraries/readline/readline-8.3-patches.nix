@@ -4,4 +4,7 @@ patch: [
   (patch "001" "1pl4midx7kc56bw4ansrdpdjpanv1vmp0p6jghrrgrnv0qqs1w11")
   (patch "002" "0wklr6h8p2nafk57wzz038j58a1bkrk1mbxsgjzxxxm9dcwn8wz2")
   (patch "003" "0afvmkj17wm1af0yrcayzzhzhmkwkackjlmidrsgcf6f04vf3pkj")
+  (patch "004" "0x2s5x6rszzbcff14j30p111x0hspv1rwyv4ch4raddacr2rq60z")
+  (patch "005" "1ini8xia06iscx5cqd9hvz9m38vsikhvjkf7falnp7qw2szav0al")
+  (patch "006" "19618y66kdl44kdcqak78qp15qx1yndfmw0s2xp7k1w2c0d2dgaf")
 ]
