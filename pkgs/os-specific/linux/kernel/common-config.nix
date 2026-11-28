@@ -1284,6 +1284,7 @@ let
         # This is unsupported on x86 due to a custom decompression mechanism.
         EFI_ZBOOT = lib.mkIf stdenv.hostPlatform.isAarch64 yes;
 
+        CUSE = yes; # used by steve, a system wide jobserver
         CGROUPS = yes; # used by systemd
         FHANDLE = yes; # used by systemd
         SECCOMP = yes; # used by systemd >= 231
