@@ -29132,6 +29132,12 @@
     githubId = 28858039;
     name = "Tuomas Mäkinen";
   };
+  t520z520 = {
+    email = "t520_z520@outlook.com";
+    github = "t520z520";
+    githubId = 225636713;
+    name = "Thomas Zhang";
+  };
   taciturnaxolotl = {
     email = "me@dunkirk.sh";
     github = "taciturnaxolotl";
