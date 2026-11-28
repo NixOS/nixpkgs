@@ -79,8 +79,8 @@ stdenv.mkDerivation {
 
   preFixup = ''
     wrapQtApp "$out/bin/backintime-qt" \
-      --prefix PATH : "${lib.getBin backintime-common}/bin:$PATH" \
-      --prefix PATH : "${diffProgram}:$PATH"
+      --prefix PATH : "${lib.getBin backintime-common}/bin" \
+      --prefix PATH : "${diffProgram}"
 
     substituteInPlace "$out/share/polkit-1/actions/net.launchpad.backintime.policy" \
       --replace-fail "/usr/bin/backintime-qt" "$out/bin/backintime-qt"
@@ -102,7 +102,7 @@ stdenv.mkDerivation {
       --replace-fail "/usr/bin/backintime-qt" "$out/bin/backintime-qt"
 
     wrapProgram "$out/bin/backintime-qt_polkit" \
-      --prefix PATH : "${lib.getBin polkit}/bin:$PATH"
+      --prefix PATH : "${lib.getBin polkit}/bin"
   '';
 
   meta = {
