@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>$(ResolverTargetFramework)</TargetFramework>
+    <Nullable>enable</Nullable>
+    <RestoreSources>$(MSBuildThisFileDirectory)empty-feed</RestoreSources>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.NET.Sdk.WorkloadManifestReader">
+      <HintPath>$(SDKDirectory)/Microsoft.NET.Sdk.WorkloadManifestReader.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Deployment.DotNet.Releases">
+      <HintPath>$(SDKDirectory)/Microsoft.Deployment.DotNet.Releases.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+</Project>
