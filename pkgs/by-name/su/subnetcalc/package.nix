@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "subnetcalc";
-  version = "2.7.5";
+  version = "2.7.6";
 
   src = fetchFromGitHub {
     owner = "dreibh";
     repo = "subnetcalc";
     tag = "subnetcalc-${finalAttrs.version}";
-    hash = "sha256-xMWEd8F6tQuKVL4aybdwsidBbmPItuNd6iCZUfzjVLA=";
+    hash = "sha256-rjDgPHTrZUHf5x6joqqWgUCiXw043yZfsGq3WOFTpu4=";
   };
 
   nativeBuildInputs = [
