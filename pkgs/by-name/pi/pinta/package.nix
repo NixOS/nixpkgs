@@ -68,8 +68,13 @@ buildDotnetModule rec {
 
   buildInputs = runtimeDeps;
 
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
-  dotnet-runtime = dotnetCorePackages.runtime_8_0;
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
+  dotnet-runtime = dotnetCorePackages.runtime_10_0;
+
+  postPatch = ''
+    substituteInPlace Directory.Build.props \
+      --replace-fail 'net8.0' 'net10.0'
+  '';
 
   nugetDeps = ./deps.json;
 
