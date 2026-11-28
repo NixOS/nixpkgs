@@ -10,9 +10,9 @@
   mpi,
   mpiCheckPhaseHook,
   ninja,
-  cudaPackages_12,
+  cudaPackages_13,
   boost186,
-  fmt_10,
+  fmt_12,
   git,
   jsoncpp,
   libevent,
@@ -30,7 +30,7 @@ let
   # The runtime closure, thankfully, is quite small as it does not
   # include the CUDA libraries.
   cudaPackageSets = [
-    cudaPackages_12
+    cudaPackages_13
   ];
 
   # Select needed redist packages from cudaPackages
@@ -39,6 +39,7 @@ let
     p: with p; [
       cccl
       cuda_cudart
+      cuda_crt
       cuda_nvcc
       cuda_nvml_dev
       libcublas
@@ -70,21 +71,20 @@ let
       ))
     ];
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dcgm";
-  version = "4.3.1"; # N.B: If you change this, be sure prometheus-dcgm-exporter supports this version.
+  version = "4.6.1"; # N.B: If you change this, be sure prometheus-dcgm-exporter supports this version.
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "DCGM";
-    # No tag for 4.3.1 yet.
-    #tag = "v${version}";
-    rev = "1477d8785e899ab3450fdff2b486102e9bed096b";
-    hash = "sha256-FebqG28aodENGLNBBbiGpckzzeuP+y44dCALtYnN1yU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Diru85WoWqbDnNRR/CIvUioJfxcVSJ6+kQ86MPhUGDs=";
   };
 
   patches = [
-    ./remove-cuda-11.patch
+    ./remove-non-cuda13.patch
+    ./drop-lfs-prebuilt-binaries.patch
     ./dynamic-libs.patch
     ./fix-gcc15.patch
     (replaceVars ./fix-paths.patch {
@@ -120,7 +120,7 @@ stdenv.mkDerivation {
     plog.dev
     tclap_1_4
 
-    fmt_10
+    fmt_12
     yaml-cpp
     jsoncpp
     libevent
@@ -149,6 +149,9 @@ stdenv.mkDerivation {
     # Test assumes plugins are installed relative to the binary with a
     # populated `cudaless/` directory
     "GetPluginCudalessDir returns cudaless directory in plugin directory"
+    # Ownership/permission checks against FHS system files absent from the sandbox.
+    "PermissionCheck: Valid executable"
+    "PermissionCheck: Not Executable"
   ];
 
   # Add our paths to the CMake flags so FindCuda.cmake can find them.
@@ -182,4 +185,4 @@ stdenv.mkDerivation {
     mainProgram = "dcgmi";
     platforms = lib.platforms.linux;
   };
-}
+})
