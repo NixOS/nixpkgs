@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glib-networking";
-  version = "2.90.0";
+  version = "2.90.1";
 
   outputs = [
     "out"
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib-networking/${lib.versions.majorMinor finalAttrs.version}/glib-networking-${finalAttrs.version}.tar.xz";
-    hash = "sha256-g6dePZw2tm7obTKBwvyZeBYQGWilEmujIrKsuadN2MA=";
+    hash = "sha256-6pVjZZAJg1WgXjAnV526GpqVCwXkVrJIjqA9guS2wYo=";
   };
 
   patches = [
