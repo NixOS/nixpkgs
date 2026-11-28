@@ -115,13 +115,15 @@
 
   attestation = mkAzExtension {
     pname = "attestation";
-    version = "1.0.0";
-    url = "https://azcliprod.blob.core.windows.net/cli-extensions/attestation-1.0.0-py3-none-any.whl";
-    hash = "sha256-5YJ3wpIhTjsKHmbeXFI0De3yX1x8NWRgsgJZ1frO70Y=";
+    version = "1.0.2";
+    url = "https://azcliprod.blob.core.windows.net/cli-extensions/attestation-1.0.2-py3-none-any.whl";
+    hash = "sha256-NYSYItwXqlaMt34cyowVNnPOd9XB/eW6Evun5jROH5I=";
     description = "Microsoft Azure Command-Line Tools AttestationManagementClient Extension";
     propagatedBuildInputs = with python3Packages; [
       pyjwt
     ];
+    # pinned to pyjwt~=2.13.0, but works with newer pyjwt
+    pythonRelaxDeps = [ "pyjwt" ];
     meta.maintainers = with lib.maintainers; [ techknowlogick ];
   };
 
