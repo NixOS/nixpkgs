@@ -6,13 +6,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "sipexer";
-  version = "2.0.0";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "miconda";
     repo = "sipexer";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-I3Z0CK2XtKf+BXiHmLfVusCHVNN45Ej0hHOf/Csz+3w=";
+    hash = "sha256-IOYXhzwvEMeiBl7Fx+f0iBOTQIURP7FU4UxcVFSauH4=";
   };
 
   vendorHash = "sha256-q2uNqKZc6Zye7YimPDrg40o68Fo4ux4fygjVjJdhqQU=";
