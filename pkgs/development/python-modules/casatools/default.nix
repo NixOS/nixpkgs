@@ -27,31 +27,32 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "casatools";
-  version = "6.7.5.18";
+  version = "6.7.6.14";
+  pyproject = true;
 
   src = fetchgit {
     url = "https://open-bitbucket.nrao.edu/scm/casa/casa6.git";
     rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-75oIlaNAyu70KWSjz38LoYAvV7RJgzH/X9uBnGpriF4=";
+    hash = "sha256-ZMcowd7EqP5CO6JNbvbOZ3X9boPKKMUwRL2RBCHTo34=";
     fetchSubmodules = false;
   };
 
   sourceRoot = "${finalAttrs.src.name}/casatools";
 
-  format = "pyproject";
-
   nativeBuildInputs = [
     cmake
     pkg-config
     swig
-    flex
-    bison
-    gfortran
+    #flex
+    #bison
+    #gfortran
     jdk
-    grpc
+    #grpc
+  ];
+
+  build-system = [
+    numpy
     setuptools
-    wheel
-    build
   ];
 
   dontConfigure = true;
@@ -59,10 +60,10 @@ buildPythonPackage (finalAttrs: {
   buildInputs = [
     casacpp
     xercesc
-    readline
+    #readline
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
     casaconfig
   ];
@@ -79,6 +80,11 @@ buildPythonPackage (finalAttrs: {
     cp ${finalAttrs.xml_jar} scripts/java/${finalAttrs.jarName}
     echo "${finalAttrs.version} ${finalAttrs.version}" > version.txt
     sed -i 's/def compute_version():/def compute_version():\n    return "${finalAttrs.version}"\ndef _compute_version_orig():/' setup.py
+
+    substituteInPlace src/code/CMakeLists.txt src/tools/CMakeLists.txt \
+      --replace-fail 'set(CMAKE_CXX_STANDARD 17)' 'set(CMAKE_CXX_STANDARD 20)' \
+      --replace-fail 'set(CMAKE_CXX_FLAGS "''${CMAKE_CXX_FLAGS} -std=c++17")' \
+                     'set(CMAKE_CXX_FLAGS "''${CMAKE_CXX_FLAGS} -std=c++20")'
   '';
 
   # Tests require a full CASA data directory and network access
