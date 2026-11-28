@@ -12,7 +12,7 @@
 buildPythonPackage {
 
   pname = "gower";
-  version = "0.1.2";
+  version = "0-unstable-2022-11-13";
   pyproject = true;
 
   src = fetchFromGitHub {
