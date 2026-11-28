@@ -86,6 +86,8 @@
       name: cfg:
       let
         svcName = "github-runner-${name}";
+        # Ephemeral runners register for every job, so there is nothing to reuse.
+        reuseAppRegistration = cfg.githubApp != null && cfg.githubApp.reuseRegistration && !cfg.ephemeral;
         systemdDir = "github-runner/${name}";
 
         # %t: Runtime directory root (usually /run); see systemd.unit(5)
@@ -201,16 +203,22 @@
             # - Set up the directory structure by creating the necessary symlinks.
             ExecStartPre =
               let
-                runnerRegistrationConfig = lib.getAttrs [
-                  "ephemeral"
-                  "extraLabels"
-                  "name"
-                  "noDefaultLabels"
-                  "runnerGroup"
-                  "tokenFile"
-                  "url"
-                  "workDir"
-                ] cfg;
+                runnerRegistrationConfig =
+                  lib.getAttrs [
+                    "ephemeral"
+                    "extraLabels"
+                    "name"
+                    "noDefaultLabels"
+                    "runnerGroup"
+                    "tokenFile"
+                    "url"
+                    "workDir"
+                  ] cfg
+                  # Only App runners that reuse their registration compare it, so
+                  # other runners keep their current registration on upgrade.
+                  // lib.optionalAttrs reuseAppRegistration {
+                    githubApp = { inherit (cfg.githubApp) id login; };
+                  };
                 newConfigPath = builtins.toFile "${svcName}-config.json" (builtins.toJSON runnerRegistrationConfig);
                 currentConfigPath = "$STATE_DIRECTORY/.nixos-current-config.json";
 
@@ -262,6 +270,20 @@
                   find -H "$WORK_DIRECTORY" -mindepth 1 -delete
                 '';
                 unconfigureRunnerGitHubApp = writeScript "unconfigure-github-app" ''
+                  ${lib.optionalString reuseAppRegistration ''
+                    # Reuse the previous registration when its credentials and the
+                    # module configuration are unchanged.
+                    reusable=1
+                    for f in ${lib.concatStringsSep " " runnerCredFiles}; do
+                      [[ -s "$STATE_DIRECTORY/$f" ]] || reusable=0
+                    done
+                    ${pkgs.diffutils}/bin/diff -q '${newConfigPath}' "${currentConfigPath}" >/dev/null 2>&1 || reusable=0
+                    if [[ "$reusable" -eq 1 ]]; then
+                      echo "Reusing the existing runner registration."
+                      find -H "$WORK_DIRECTORY" -mindepth 1 -delete
+                      exit 0
+                    fi
+                  ''}
                   ${appEnv}
                   ACCESS_TOKEN="$(${lib.getExe' fetchAccessToken "github-app-access-token"})"
                   export ACCESS_TOKEN
@@ -365,12 +387,24 @@
 
             ExecStopPost = lib.optionals (cfg.githubApp != null) (
               let
-                unregister = writeScript "unregister-github-app" ''
-                  ${appEnv}
-                  ACCESS_TOKEN="$(${lib.getExe' fetchAccessToken "github-app-access-token"})"
-                  export ACCESS_TOKEN
-                  ${lib.getExe' removeRunner "github-runner-remove"} || true
-                '';
+                unregister =
+                  if reuseAppRegistration then
+                    # Keep the registration for the next start, unless this run
+                    # failed: then the next start registers again. A start an
+                    # `ExecCondition=` skipped did not run, so it is no failure.
+                    writeScript "drop-failed-registration" ''
+                      case "$SERVICE_RESULT" in
+                        success | exec-condition) ;;
+                        *) rm -f "$1"/{.credentials,.credentials_rsaparams,.runner} ;;
+                      esac
+                    ''
+                  else
+                    writeScript "unregister-github-app" ''
+                      ${appEnv}
+                      ACCESS_TOKEN="$(${lib.getExe' fetchAccessToken "github-app-access-token"})"
+                      export ACCESS_TOKEN
+                      ${lib.getExe' removeRunner "github-runner-remove"} || true
+                    '';
               in
               map (
                 x:

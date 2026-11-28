@@ -195,6 +195,25 @@
                       '';
                       example = "/run/secrets/github-app.pem";
                     };
+
+                    reuseRegistration = lib.mkOption {
+                      type = lib.types.bool;
+                      default = false;
+                      description = ''
+                        Keep the runner's registration across restarts instead of
+                        de-registering on stop and registering again on start, as a
+                        `tokenFile` runner already does. A start with credentials
+                        from a previous registration and an unchanged configuration
+                        then skips the GitHub API calls and the registration, and
+                        only cleans the work directory; a start without them
+                        registers as usual. After a failed run the credentials are
+                        dropped, so the next start registers again.
+
+                        Persist the runner's state directory across reboots to also
+                        keep the registration over a reboot. Has no effect on
+                        `ephemeral` runners, which register for every job.
+                      '';
+                    };
                   };
                 }
               );
