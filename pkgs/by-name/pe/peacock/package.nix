@@ -14,13 +14,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "peacock";
-  version = "8.10.2";
+  version = "8.11.0";
 
   src = fetchFromGitHub {
     owner = "thepeacockproject";
     repo = "Peacock";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yEJLVAUeSRUwPjg6gMz/EHZmR2uNvsG7TnKE+3YTVSI=";
+    hash = "sha256-X6xX6zgLBJgRmbXx60nZu0smEVJm7X2wxuO47DOSQjU=";
 
     # Remove after upstream updates to Yarn 4.15
     # https://github.com/thepeacockproject/Peacock/blob/master/package.json#L107
