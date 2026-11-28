@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=Pleazyng
+Comment=Plex client with Jellyfin and Emby support, offline downloads, and HDR
+Exec=pleazyng %u
+MimeType=x-scheme-handler/pleazyng;x-scheme-handler/plezyng;x-scheme-handler/plezxyng;
+Icon=pleazyng
+Terminal=false
+Categories=AudioVideo;Video;Player;
+Keywords=plex;jellyfin;media;streaming;video;
+StartupWMClass=pleazyng
