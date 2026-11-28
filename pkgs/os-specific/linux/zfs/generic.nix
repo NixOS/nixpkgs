@@ -285,14 +285,6 @@ let
           # Remove provided services as they are buggy
           rm $out/etc/systemd/system/zfs-import-*.service
 
-          for i in $out/etc/systemd/system/*; do
-             if [ -L $i ]; then
-               continue
-             fi
-             sed -i '/zfs-import-scan.service/d' $i
-             substituteInPlace $i --replace-warn "zfs-import-cache.service" "zfs-import.target"
-          done
-
           # Remove tests because they add a runtime dependency on gcc
           rm -rf $out/share/zfs/zfs-tests
         '';
