@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "myuplink";
-  version = "0.7.0";
+  version = "0.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pajzo";
     repo = "myuplink";
     tag = version;
-    hash = "sha256-r06aap8FiRslRRgKKSH7vNzpoVn6rX8ZR0oQ0D68xDo=";
+    hash = "sha256-/9gKaNvb8U15hGo1sar13dnJOgxQ2/Zd+uMcQnG2uC8=";
   };
 
   postPatch = ''
