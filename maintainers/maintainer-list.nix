@@ -33331,6 +33331,12 @@
     githubId = 4423262;
     keys = [ { fingerprint = "61AE D40F 368B 6F26 9DAE  3892 6861 6B2D 8AC4 DCC5"; } ];
   };
+  ZaneH = {
+    email = "me@zaaane.com";
+    github = "ZaneH";
+    githubId = 8400251;
+    name = "Zane Helton";
+  };
   zaninime = {
     email = "francesco@zanini.me";
     github = "zaninime";
