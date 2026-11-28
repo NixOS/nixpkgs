@@ -18,6 +18,7 @@ stdenv.mkDerivation {
     src
     setupHooks
     meta
+    passthru
     ;
 
   nativeBuildInputs = [

@@ -1,0 +1,42 @@
+From 8a65c41a15b0c6bec4fe660d0e3711eb13bc4821 Mon Sep 17 00:00:00 2001
+From: sempiternal-aurora
+ <78790545+sempiternal-aurora@users.noreply.github.com>
+Date: Wed, 27 May 2026 17:28:21 +1000
+Subject: [PATCH] fix install
+
+---
+ Makefile | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 4ec7f693fc..088c60e9f3 100644
+--- a/Makefile
++++ b/Makefile
+@@ -108,15 +108,15 @@ install:
+ 	$(CP) share/spark/theories/*mlw $(THEORIESDIR)
+ 	$(CP) share/spark/runtimes/README $(RUNTIMESDIR)
+ 	@echo "Generate Coq files by preprocessing context files:"
+-	$(MAKE) -C include generate
+-	$(CP) include/src/*.ad? $(INCLUDEDIR)
+-	mkdir -p $(INCLUDEDIR)/full
+-	mkdir -p $(INCLUDEDIR)/light
+-	$(CP) include/src/full/*.ad? $(INCLUDEDIR)/full
+-	$(CP) include/src/light/*.ad? $(INCLUDEDIR)/light
+-	$(CP) include/*.gpr $(LIBDIR)
+-	$(CP) include/*.gpr.templ $(LIBDIR)
+-	$(CP) include/proof $(LIBDIR)
++	# $(MAKE) -C include generate
++	# $(CP) include/src/*.ad? $(INCLUDEDIR)
++	# mkdir -p $(INCLUDEDIR)/full
++	# mkdir -p $(INCLUDEDIR)/light
++	# $(CP) include/src/full/*.ad? $(INCLUDEDIR)/full
++	# $(CP) include/src/light/*.ad? $(INCLUDEDIR)/light
++	# $(CP) include/*.gpr $(LIBDIR)
++	# $(CP) include/*.gpr.templ $(LIBDIR)
++	# $(CP) include/proof $(LIBDIR)
+ 
+ doc: $(DOC)
+ 
+-- 
+2.54.0
+
