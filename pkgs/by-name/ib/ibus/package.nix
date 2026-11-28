@@ -5,6 +5,7 @@
   fetchFromGitHub,
   fetchpatch,
   autoreconfHook,
+  bash,
   gettext,
   makeWrapper,
   pkg-config,
@@ -99,6 +100,11 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/ibus/ibus/commit/c534999a9dbea2666864250d74e058ecfb46e76f.patch";
       hash = "sha256-1h48hvdrDh2Qh4+SufL147CxlfiwvP/Jv509X0WnbrA=";
     })
+
+    # IBus recognizes system compose files by FHS paths such as /usr,
+    # but libX11 installs them in the Nix store. This patch adds the
+    # nix managed files as system compose files.
+    ./system-compose-path.patch
   ];
 
   outputs = [
@@ -117,6 +123,10 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace configure.ac --replace "m4_define([ibus_released], [0])" "m4_define([ibus_released], [1])"
 
     patchShebangs --build data/dconf/make-dconf-override-db.sh
+    # xkb-latin-layouts needs echo and glib's gsettings command to enumerate layouts.
+    substituteInPlace src/tests/xkb-latin-layouts \
+      --replace-fail '/usr/bin/echo' 'echo' \
+      --replace-fail 'gsettings get' '${lib.getExe' glib "gsettings"} get'
     cp ${buildPackages.gtk-doc}/share/gtk-doc/data/gtk-doc.make .
     substituteInPlace bus/services/org.freedesktop.IBus.session.GNOME.service.in --replace "ExecStart=sh" "ExecStart=${runtimeShell}"
     substituteInPlace bus/services/org.freedesktop.IBus.session.generic.service.in --replace "ExecStart=sh" "ExecStart=${runtimeShell}"
@@ -188,6 +198,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    bash
     dbus
     dconf
     isocodes
