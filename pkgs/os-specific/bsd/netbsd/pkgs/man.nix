@@ -1,4 +1,8 @@
-{ mkDerivation, defaultMakeFlags }:
+{
+  lib,
+  mkDerivation,
+  defaultMakeFlags,
+}:
 
 mkDerivation {
   path = "share/man";
@@ -12,4 +16,6 @@ mkDerivation {
     "FILESDIR=$(out)/share"
     "MKRUMP=no" # would require to have additional path sys/rump/share/man
   ];
+
+  meta.platforms = lib.platforms.netbsd;
 }
