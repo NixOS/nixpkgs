@@ -7,11 +7,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "reflex-app";
-  version = "2.0";
+  version = "2.1";
 
   src = fetchurl {
     url = "https://stuntsoftware.com/download/reflex_${finalAttrs.version}.zip";
-    hash = "sha256-2CfNMs9zDFyFgrIAuh37bB3wPjDDrGsyyFY65n0CtIk=";
+    hash = "sha256-wzFkRXjFfjmiuCRMALT9oiWG6NZWQTQqbFZZO3Aoi/w=";
   };
 
   strictDeps = true;
