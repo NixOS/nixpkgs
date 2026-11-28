@@ -10,6 +10,7 @@
   curl,
   perl,
   python3,
+  versionCheckHook,
   nix-update-script,
 }:
 
@@ -24,6 +25,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-ZwlrnfCUwrBpS1CfwPtw1To94ygbK4qoGeiuhkDPm2Q=";
   };
 
+  # The perl/python helper scripts go to `scripts` so that `out` does not depend on perl and python
+  outputs = [
+    "out"
+    "scripts"
+  ];
+
   nativeBuildInputs = [
     autoreconfHook
     perl
@@ -36,6 +43,9 @@ stdenv.mkDerivation (finalAttrs: {
     bzip2
     xz
     curl
+    # Interpreters for the helper scripts' shebangs
+    perl
+    python3
   ];
 
   nativeCheckInputs = [
@@ -43,6 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   strictDeps = true;
+  __structuredAttrs = true;
 
   makeFlags = [
     "HSTDIR=${htslib}"
@@ -55,9 +66,22 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs test/
   '';
 
+  postInstall = ''
+    for f in "$out"/bin/*; do
+      if [[ "$(basename "$f")" != bcftools ]]; then
+        moveToOutput "bin/$(basename "$f")" "$scripts"
+      fi
+    done
+  '';
+
   enableParallelBuilding = true;
 
   doCheck = true;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
 
@@ -68,5 +92,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/samtools/bcftools/releases/tag/${finalAttrs.src.tag}";
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.mimame ];
+    mainProgram = "bcftools";
   };
 })
