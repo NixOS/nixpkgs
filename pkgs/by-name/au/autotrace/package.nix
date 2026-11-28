@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "autotrace";
-  version = "0.31.11";
+  version = "0.31.13";
 
   src = fetchFromGitHub {
     owner = "autotrace";
     repo = "autotrace";
     tag = version;
-    hash = "sha256-M4a+/RbuAfH7i7Dbo8YA0I34VhChSu6UbM3a0aUj5qw=";
+    hash = "sha256-wqfvJhN0sx6ZK+6BeMgvaYdYlXC/p9DmlPZZgYOQIuY=";
   };
 
   nativeBuildInputs = [
