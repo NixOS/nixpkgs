@@ -12,6 +12,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pngquant";
   version = "3.0.3";
 
+  __structuredAttrs = true;
+
   outputs = [
     "out"
     "man"

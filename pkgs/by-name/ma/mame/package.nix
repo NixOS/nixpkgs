@@ -193,6 +193,12 @@ stdenv.mkDerivation (finalAttrs: {
       runHook postInstall
     '';
 
+  dontWrapQtApps = true;
+
+  preFixup = ''
+    wrapQtApp $out/bin/mame
+  '';
+
   # man1 is the tools documentation, man6 is the emulator documentation
   # Need to be done in postFixup otherwise multi-output hook will move it back to $out
   postFixup = ''

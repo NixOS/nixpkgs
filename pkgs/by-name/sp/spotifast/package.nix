@@ -38,7 +38,7 @@ let
     libpulseaudio
   ];
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "spotifast";
   version = "0.17.2";
 
@@ -47,7 +47,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "crmne";
     repo = "spotifast";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ccMYbLHgoHYzb+ikQgfegheLNTB6t6Bx7o9VAoqlPCg=";
   };
 
@@ -126,8 +126,8 @@ rustPlatform.buildRustPackage rec {
       cp "$out/bin/spotifast" "$app/MacOS/$executable"
       icnsify packaging/macos/icon-1024.png -o "$app/Resources/spotifast.icns"
       substitute packaging/macos/Info.plist "$app/Info.plist" \
-        --replace-fail __VERSION__ "${version}" \
-        --replace-fail __BUILD__ "${lib.head (lib.splitString "-" version)}" \
+        --replace-fail __VERSION__ "${finalAttrs.version}" \
+        --replace-fail __BUILD__ "${lib.head (lib.splitString "-" finalAttrs.version)}" \
         --replace-fail __EXECUTABLE__ "$executable" \
         --replace-fail __IDENTIFIER__ "$identifier"
     '';
@@ -143,10 +143,10 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Fast native Spotify client with local playback and Spotify Connect";
     homepage = "https://spotifast.rocks";
-    changelog = "https://github.com/crmne/spotifast/releases/tag/v${version}";
+    changelog = "https://github.com/crmne/spotifast/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ DmitrySkibitsky ];
     mainProgram = "spotifast";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

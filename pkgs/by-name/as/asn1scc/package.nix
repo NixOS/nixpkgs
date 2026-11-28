@@ -10,13 +10,13 @@
 }:
 buildDotnetModule (finalAttrs: {
   pname = "asn1scc";
-  version = "4.9.109.0";
+  version = "4.9.170.0";
 
   src = fetchFromGitHub {
     owner = "esa";
     repo = "asn1scc";
     tag = finalAttrs.version;
-    hash = "sha256-6zHdQ8DiPr2u5dl1ca9fFqawgsaUYHprgDaJofTWocw=";
+    hash = "sha256-fKZt1nBkNj3Imy9LAroHepD+HyAsHcYipe88plvZ6/c=";
   };
 
   nativeBuildInputs = with pkgs; [ jre ];

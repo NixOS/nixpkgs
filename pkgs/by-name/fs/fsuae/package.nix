@@ -70,7 +70,10 @@ stdenv.mkDerivation (finalAttrs: {
     strip-nondeterminism --type zip $out/share/fs-uae/fs-uae.dat
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    # Upstream also tags development versions, only follow releases
+    extraArgs = [ "--use-github-releases" ];
+  };
 
   meta = {
     homepage = "https://fs-uae.net";

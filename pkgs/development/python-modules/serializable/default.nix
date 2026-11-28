@@ -9,14 +9,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "serializable";
-  version = "1.7.0";
+  version = "1.8.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openvax";
     repo = "serializable";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AvwoXxCWs2RF6F15mjrce84Vmg1N53V6Jk/HoOW/R70=";
+    hash = "sha256-KZBx1Jmq+Y0nRf6miNOIQRTkbTdXMduchTx8bckt3Dc=";
   };
 
   build-system = [ setuptools ];

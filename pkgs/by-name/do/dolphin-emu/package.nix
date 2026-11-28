@@ -62,6 +62,10 @@ let
     "normal" = finalAttrs: {
       pname = "dolphin-emu";
       version = "2609b"; # Please backport to stable for netplay compat
+      updateScriptArgs = [
+        "--version-regex"
+        "^([0-9]{4}[a-z]*)$"
+      ];
 
       src = fetchFromGitHub {
         owner = "dolphin-emu";
@@ -291,12 +295,11 @@ stdenv.mkDerivation (
         };
 
       };
-      updateScript = nix-update-script {
-        extraArgs = [
-          "--version-regex"
-          "([0-9]+[a-z]*)"
-        ];
-      };
+      updateScript = nix-update-script (
+        lib.optionalAttrs (variantInfo ? updateScriptArgs) {
+          extraArgs = variantInfo.updateScriptArgs;
+        }
+      );
     };
   }
 )

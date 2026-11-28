@@ -49,7 +49,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isx86_64 [ nasm ];
 
-  nativeCheckInputs = lib.optionals stdenv.hostPlatform.isLinux [ cacert ];
+  nativeCheckInputs = [ cacert ];
 
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     wrapProgram "$out/bin/concord" \

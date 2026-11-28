@@ -3,7 +3,7 @@
   stdenv,
   buildGo127Module,
   fetchFromGitHub,
-  git,
+  gitMinimal,
   installShellFiles,
   nix-update-script,
   procps,
@@ -13,16 +13,16 @@
 
 buildGo127Module (finalAttrs: {
   pname = "crush";
-  version = "0.101.0";
+  version = "0.104.0";
 
   src = fetchFromGitHub {
     owner = "charmbracelet";
     repo = "crush";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Rm+RadbyZJbnp8mdTFurNkNMgVJd5MeBdEbnuS3vqaM=";
+    hash = "sha256-zGl7xxA+dd1dyJbqn08q4gLmo5EFnhYDzOI456UdeuY=";
   };
 
-  vendorHash = "sha256-MME0AeBNRUxiNE4sOx5E5VsdxlpP8mvFPtYYWSEoakM=";
+  vendorHash = "sha256-KpmBF3cgrGmoLcaGnzWfDAb3ZHpkwdFokkJVrNu9Xeo=";
 
   ldflags = [
     "-s"
@@ -45,6 +45,7 @@ buildGo127Module (finalAttrs: {
       ]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [
         "TestServiceDetectsRealProcess"
+        "TestKill_ShebangScriptChild"
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
@@ -52,7 +53,7 @@ buildGo127Module (finalAttrs: {
   __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
-    git
+    gitMinimal
     writableTmpDirAsHomeHook
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [

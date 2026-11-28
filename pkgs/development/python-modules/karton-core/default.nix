@@ -18,14 +18,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "karton-core";
-  version = "6.1.0";
+  version = "6.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "CERT-Polska";
     repo = "karton";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pSk/OnymFGD5i9olApuJysoltgA70kBDAhPUosH7fE0=";
+    hash = "sha256-/IV7G6Lim7h9rFr073g7SBGbK/tCA0MNaVfYC+a6S98=";
   };
 
   build-system = [ setuptools ];

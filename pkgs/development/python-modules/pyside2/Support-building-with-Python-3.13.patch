@@ -1,0 +1,30 @@
+Python 3.13 removed the private _PyLong_AsInt() from its headers and added
+the public PyLong_AsInt(). Use the public function there.
+
+The build scripts refuse to run on a Python version that is not listed in
+the classifiers, so list 3.13.
+
+--- a/build_scripts/config.py
++++ b/build_scripts/config.py
+@@ -96,6 +96,7 @@
+             'Programming Language :: Python :: 3.10',
+             'Programming Language :: Python :: 3.11',
+             'Programming Language :: Python :: 3.12',
++            'Programming Language :: Python :: 3.13',
+         ]
+ 
+         self.setup_script_dir = None
+--- a/sources/shiboken2/libshiboken/pep384impl.h
++++ b/sources/shiboken2/libshiboken/pep384impl.h
+@@ -184,7 +184,11 @@
+ #ifdef Py_LIMITED_API
+ LIBSHIBOKEN_API int _PepLong_AsInt(PyObject *);
+ #else
++#if PY_VERSION_HEX >= 0x030d0000
++#define _PepLong_AsInt PyLong_AsInt
++#else
+ #define _PepLong_AsInt _PyLong_AsInt
+ #endif
++#endif
+
+ /*****************************************************************************

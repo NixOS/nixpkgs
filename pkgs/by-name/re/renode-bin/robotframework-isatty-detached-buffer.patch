@@ -1,0 +1,20 @@
+Backport of https://github.com/robotframework/robotframework/commit/ca249542582f2b5d69a409e32bc7e11967ff7237
+
+--- a/src/robot/utils/misc.py
++++ b/src/robot/utils/misc.py
+@@ -114,14 +114,11 @@
+ 
+ 
+ def isatty(stream):
+-    # first check if buffer was detached
+-    if hasattr(stream, 'buffer') and stream.buffer is None:
+-        return False
+     if not hasattr(stream, 'isatty'):
+         return False
+     try:
+         return stream.isatty()
+-    except ValueError:    # Occurs if file is closed.
++    except ValueError:    # Occurs if stream is closed or its buffer is detached.
+         return False
+ 
+ 

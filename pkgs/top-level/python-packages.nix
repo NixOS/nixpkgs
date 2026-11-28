@@ -506,6 +506,8 @@ self: super: with self; {
 
   aioprometheus = callPackage ../development/python-modules/aioprometheus { };
 
+  aioproxmox = callPackage ../development/python-modules/aioproxmox { };
+
   aioptdevices = callPackage ../development/python-modules/aioptdevices { };
 
   aiopulse = callPackage ../development/python-modules/aiopulse { };
@@ -619,6 +621,8 @@ self: super: with self; {
   aiotools = callPackage ../development/python-modules/aiotools { };
 
   aiotractive = callPackage ../development/python-modules/aiotractive { };
+
+  aiotrimlight = callPackage ../development/python-modules/aiotrimlight { };
 
   aiounifi = callPackage ../development/python-modules/aiounifi { };
 
@@ -5468,6 +5472,8 @@ self: super: with self; {
 
   e3-core = callPackage ../development/python-modules/e3-core { };
 
+  e3dc-ess-modbus = callPackage ../development/python-modules/e3dc-ess-modbus { };
+
   e3nn = callPackage ../development/python-modules/e3nn { };
 
   eagle100 = callPackage ../development/python-modules/eagle100 { };
@@ -5590,6 +5596,10 @@ self: super: with self; {
   elasticsearchdsl = self.elasticsearch-dsl;
 
   electrickiwi-api = callPackage ../development/python-modules/electrickiwi-api { };
+
+  electrolux-group-developer-sdk =
+    callPackage ../development/python-modules/electrolux-group-developer-sdk
+      { };
 
   electrum-aionostr = callPackage ../development/python-modules/electrum-aionostr { };
 
@@ -8233,6 +8243,10 @@ self: super: with self; {
 
   human-readable = callPackage ../development/python-modules/human-readable { };
 
+  humanbound = callPackage ../development/python-modules/humanbound { };
+
+  humanbound-firewall = callPackage ../development/python-modules/humanbound-firewall { };
+
   humanfriendly = callPackage ../development/python-modules/humanfriendly { };
 
   humanize = callPackage ../development/python-modules/humanize { };
@@ -8396,7 +8410,7 @@ self: super: with self; {
   ifconfig-parser = callPackage ../development/python-modules/ifconfig-parser { };
 
   ifcopenshell = callPackage ../development/python-modules/ifcopenshell {
-    inherit (pkgs) cgal_5 libxml2;
+    inherit (pkgs) ifcopenshell;
   };
 
   iglo = callPackage ../development/python-modules/iglo { };
@@ -8611,6 +8625,8 @@ self: super: with self; {
   intervals = callPackage ../development/python-modules/intervals { };
 
   intervaltree = callPackage ../development/python-modules/intervaltree { };
+
+  intesis-gw-modbus = callPackage ../development/python-modules/intesis-gw-modbus { };
 
   into-dbus-python = callPackage ../development/python-modules/into-dbus-python { };
 
@@ -10977,6 +10993,8 @@ self: super: with self; {
   metawear = callPackage ../development/python-modules/metawear { };
 
   meteo-lt-pkg = callPackage ../development/python-modules/meteo-lt-pkg { };
+
+  meteoalarmapi = callPackage ../development/python-modules/meteoalarmapi { };
 
   meteoalertapi = callPackage ../development/python-modules/meteoalertapi { };
 
@@ -14192,6 +14210,8 @@ self: super: with self; {
 
   powerline-mem-segment = callPackage ../development/python-modules/powerline-mem-segment { };
 
+  powersensor-local = callPackage ../development/python-modules/powersensor-local { };
+
   pox = callPackage ../development/python-modules/pox { };
 
   poyo = callPackage ../development/python-modules/poyo { };
@@ -14329,6 +14349,8 @@ self: super: with self; {
   prompthub-py = callPackage ../development/python-modules/prompthub-py { };
 
   propcache = callPackage ../development/python-modules/propcache { };
+
+  properdocs = callPackage ../development/python-modules/properdocs { };
 
   property-cached = callPackage ../development/python-modules/property-cached { };
 

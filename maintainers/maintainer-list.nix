@@ -11278,6 +11278,11 @@
     github = "GZGavinZhao";
     githubId = 74938940;
   };
+  h-yuqi = {
+    name = "Yuqi Huang";
+    github = "h-yuqi";
+    githubId = 62862318;
+  };
   h0nIg = {
     name = "Hans-Joachim Kliemeck";
     email = "git@kliemeck.de";
@@ -14160,6 +14165,12 @@
     github = "JosephSalisbury";
     githubId = 297653;
     name = "Joe Salisbury";
+  };
+  Joey574 = {
+    email = "joeysoroka@outlook.com";
+    github = "Joey574";
+    githubId = 90403963;
+    name = "Joey Soroka";
   };
   johannwagner = {
     email = "nix@wagner.digital";
@@ -19736,7 +19747,7 @@
   };
   mio = {
     name = "Mio";
-    email = "mio@mio19.uk";
+    email = "mio-aotearoa@mio19.uk";
     github = "mio-aotearoa";
     githubId = 57285379;
   };
@@ -30920,6 +30931,11 @@
     github = "typedrat";
     githubId = 1057789;
     matrix = "@typedrat:thisratis.gay";
+  };
+  typeparameter = {
+    name = "Drew Davis";
+    github = "typeparameter";
+    githubId = 9686215;
   };
   typetetris = {
     email = "ericwolf42@mail.com";

@@ -93,18 +93,18 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "moonshine";
-  version = "0.19.0";
+  version = "0.19.2";
 
   src = fetchFromGitHub {
     owner = "hgaiser";
     repo = "moonshine";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9nHJpSQg/yK9RgTSnxPPpKcIYzAZONTMyD9DNpPbKZw=";
+    hash = "sha256-/oF/aM8/NPHGelFEZHajK0VSFAiHr23OicJSj6KPR3s=";
   };
 
   __structuredAttrs = true;
 
-  cargoHash = "sha256-hcx6XWb86rwT+aFCEr1r8ynJtYRbRTi0A8EYBAqP0ho=";
+  cargoHash = "sha256-iGU1aAs7tPdsFYZ0juHbF4sAbqLVJeoK4Tg7usQz2zA=";
 
   cargoBuildFlags = [
     "-p"

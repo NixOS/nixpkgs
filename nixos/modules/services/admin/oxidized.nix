@@ -20,6 +20,9 @@ let
         # unquote Ruby YAML tags into YAML scalars
         sed -i -E "s/'(!ruby\/[^']*)'/\1/g" "$out"
       '';
+
+  configFile =
+    if cfg.settings != null then toYamlFile "oxidized.yaml" cfg.settings else cfg.configFile;
 in
 {
   options.services.oxidized = {
@@ -171,8 +174,7 @@ in
       isSystemUser = true;
     };
 
-    environment.etc."oxidized/config".source =
-      if cfg.settings != null then toYamlFile "oxidized.yaml" cfg.settings else cfg.configFile;
+    environment.etc."oxidized/config".source = configFile;
 
     systemd.tmpfiles.settings."10-oxidized" = {
       "${cfg.dataDir}" = {
@@ -223,9 +225,18 @@ in
     systemd.services.oxidized = {
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
+      reloadTriggers = [
+        configFile
+      ]
+      ++ lib.optionals (cfg.userConfigFile != null) [ cfg.userConfigFile ];
 
       serviceConfig = {
         ExecStart = lib.getExe cfg.package;
+        ExecReload = toString [
+          "${lib.getExe' pkgs.util-linux "kill"}"
+          "-HUP"
+          "$MAINPID"
+        ];
         User = cfg.user;
         Group = cfg.group;
         UMask = "0077";
