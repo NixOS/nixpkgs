@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   alsa-utils,
   autoconf,
   automake,
@@ -80,14 +81,24 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "--enable-docbook-stylesheet=${docbook-xsl-ns}/share/xml/docbook-xsl-ns/html/chunk.xsl"
   ];
 
+  # Csound is broken on Darwin; leave its command configurable at runtime there.
   preBuild = ''
-    sed -i -e 's|wav_player=.*|wav_player=${alsa-utils}/bin/aplay|' \
+    sed -i -e 's|wav_player=.*|wav_player=${
+      if stdenv.hostPlatform.isDarwin then "/usr/bin/afplay" else "${alsa-utils}/bin/aplay"
+    }|' \
            -e 's|midi_player=.*|midi_player=${timidity}/bin/timidity|' \
            -e 's|mp3_player=.*|mp3_player=${mpg123}/bin/mpg123|' \
            -e 's|ogg_player=.*|ogg_player=${vorbis-tools}/bin/ogg123|' \
-           -e 's|csound=.*|csound=${csound}/bin/csound|' \
+           ${
+             lib.optionalString (!stdenv.hostPlatform.isDarwin) "-e 's|csound=.*|csound=${csound}/bin/csound|'"
+           } \
            -e 's|lilypond-book=.*|lilypond-book=${lilypond}/bin/lilypond-book|' \
            default.config
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # Select native macOS audio instead of TiMidity's default JACK output.
+    substituteInPlace default.config \
+      --replace-fail 'midi_player_options=-idqq %s' 'midi_player_options=-Od -idqq %s'
   '';
 
   postBuild = ''
@@ -106,7 +117,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     description = "Ear training program";
     homepage = "https://www.gnu.org/software/solfege/";
     license = lib.licenses.gpl3Only;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [
       bjornfor
       anthonyroussel
