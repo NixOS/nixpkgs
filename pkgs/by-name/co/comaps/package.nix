@@ -60,7 +60,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "comaps";
-  version = "2026.08.31-14";
+  version = "2026.09.23-2-car";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "comaps";
     repo = "comaps";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mnLvDuXCi7guw0vU3TnqmvvgB1l7mN/AKwtF/79LGd4=";
+    hash = "sha256-qq/UTR3GCo5oh9DT0rGbkbLVQy2Uzl8mIm+bCipsKV4=";
     fetchSubmodules = true;
   };
 
