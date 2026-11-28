@@ -11,14 +11,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "onlinepayments-sdk-python3";
-  version = "4.23.0";
+  version = "11.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "wl-online-payments-direct";
     repo = "sdk-python3";
     rev = finalAttrs.version;
-    hash = "sha256-IX9kiM5ZtX4uzW+D+Bbt8535CqMtdTtv0mpDo5Swstg=";
+    hash = "sha256-Kv+0q0y9Wu0D305nLszfP+fP6niI/mlDm+KzZVZ/9E4=";
   };
 
   build-system = [ setuptools ];
