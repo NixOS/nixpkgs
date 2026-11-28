@@ -33,6 +33,9 @@ stdenv.mkDerivation {
   pname = "basalt-monado";
   version = "0-unstable-2025-09-25";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "mateosss";
@@ -47,6 +50,9 @@ stdenv.mkDerivation {
     cmake
     kdePackages.extra-cmake-modules
     pkg-config
+  ]
+  ++ lib.optionals enableCuda [
+    cudaPackages.cuda_nvcc
   ];
 
   buildInputs = [
@@ -64,9 +70,6 @@ stdenv.mkDerivation {
     opencv'.cxxdev
     onetbb
     libx11
-  ]
-  ++ lib.optionals enableCuda [
-    cudaPackages.cuda_nvcc
   ];
 
   cmakeFlags = [
