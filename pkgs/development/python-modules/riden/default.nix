@@ -1,52 +1,56 @@
 {
   lib,
   buildPythonPackage,
-  click,
+  bleak,
   fetchFromGitHub,
   modbus-tk,
-  poetry-core,
-  pyprojectVersionPatchHook,
-  pyserial,
-  setuptools,
+  uv-build,
+  pytest-asyncio,
+  pytestCheckHook,
+  tenacity,
+  tmodbus,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "riden";
-  version = "1.2.1";
+  version = "2.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "geeksville";
+    owner = "acc15";
     repo = "riden";
-    tag = version;
-    hash = "sha256-uR1CsVsGn/QC4krHaxl6GqRnTPbFdRaqyMEl2RVMHPU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ZGLvw0W4xNmdl/HMIqqqcHUm1ZUWny6W7TR71ffi2Fk=";
   };
 
-  build-system = [
-    poetry-core
-    setuptools
-  ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.13.7,<0.14.0" "uv_build"
+  '';
 
-  nativeBuildInputs = [
-    pyprojectVersionPatchHook
-  ];
+  pythonRelaxDeps = [ "bleak" ];
+
+  build-system = [ uv-build ];
 
   dependencies = [
-    click
-    modbus-tk
-    pyserial
-  ];
+    bleak
+    tmodbus
+    tenacity
+  ]
+  ++ tmodbus.optional-dependencies.async-serial;
 
-  # Module has no tests
-  doCheck = false;
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "riden" ];
 
   meta = {
     description = "Module for Riden RD power supplies";
-    homepage = "https://github.com/geeksville/riden";
-    changelog = "https://github.com/geeksville/Riden/releases/tag/${version}";
+    homepage = "https://github.com/acc15/riden";
+    changelog = "https://github.com/acc15/riden/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
