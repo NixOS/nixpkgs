@@ -3,13 +3,12 @@
   stdenv,
   fetchurl,
   singular,
-  dimensions ? 6, # works for <= dimensions dimensions, but is only optimized for that exact value
-  allDimensions ? false,
+  defaultDimension ? 6, # the dimension for the default executables to be symlinked to
   doSymlink ? true, # symlink the executables to the default location (without dimension postfix)
 }:
 
 let
-  dim = toString dimensions;
+  dim = toString defaultDimension;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "palp";
@@ -34,12 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  preBuild = lib.optionalString (!allDimensions) ''
-    echo Building PALP optimized for ${dim} dimensions
-    sed -i "s/^#define[^a-zA-Z]*POLY_Dmax.*/#define POLY_Dmax ${dim}/" Global.h
-  '';
-
-  buildFlags = lib.optionals allDimensions [
+  buildFlags = [
     "all-dims"
   ];
 
@@ -47,12 +41,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeCheckInputs = [
     singular
   ];
-
-  preInstall = lib.optionalString (!allDimensions) ''
-    for file in poly class cws nef mori; do
-      mv $file.x $file-${dim}d.x
-    done
-  '';
 
   installPhase = ''
     runHook preInstall
