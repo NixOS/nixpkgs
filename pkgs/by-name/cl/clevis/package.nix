@@ -107,6 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
       includeIntoPath = [
         coreutils
         cryptsetup
+        curl
         gnugrep
         gnused
         jose
