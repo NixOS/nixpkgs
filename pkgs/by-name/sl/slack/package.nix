@@ -25,6 +25,7 @@ let
       faukah
       mmahut
       prince213
+      tallesCoelho
     ];
     platforms = [
       "x86_64-linux"
