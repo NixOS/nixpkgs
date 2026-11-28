@@ -4,7 +4,7 @@
   fetchFromGitHub,
   copyPkgconfigItems,
   makePkgconfigItem,
-  version ? "3.0.1",
+  version ? "3.1.0",
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -17,11 +17,11 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "rel-${finalAttrs.version}";
     hash =
       {
+        "3.1.0" = "sha256-yXS0sLkTDOlaOAovoot3omE8ylHk8mYD3y5CptXbCQc=";
         "3.0.1" = "sha256-oHebG9VBtEnxmBpfP6A/f/UNIx2AXbLPs0NHPoNlZfY=";
         "3.0.0" = "sha256-pymbSC6bwQQ0YCtJd3xWZiC22UEkFiKSLObSOnoQj9I=";
         "2.2.1" = "sha256-dYRaw9DI63Nqz0IJkfQYU4y00KSfq1Xv0xZuL1G15CY=";
         "2.1.3" = "sha256-W3kO+6nVzkmJXyHJU+NZWP0oatK3gon4EWF1/03rgL4=";
-        "2.0.0" = "sha256-qoeEM9SdpuFuBPeQlCzuhPLcJ+bMQkTUTGiT8QdU8rc=";
       }
       .${finalAttrs.version};
   };
@@ -69,9 +69,18 @@ stdenv.mkDerivation (finalAttrs: {
   ''
   # Racy/flaky tests that sometimes spontaneously combust on darwin.
   +
-    lib.optionalString (stdenv.hostPlatform.isDarwin && (lib.versionAtLeast finalAttrs.version "2.1.1"))
+    lib.optionalString
+      (
+        stdenv.hostPlatform.isDarwin
+        && (lib.versionAtLeast finalAttrs.version "2.1.1")
+        && !(lib.versionAtLeast finalAttrs.version "3.1.0")
+      )
       ''
         substituteInPlace test/api/run.sh --replace-fail 'run parcompwrite' ""
+      ''
+  +
+    lib.optionalString (stdenv.hostPlatform.isDarwin && (lib.versionAtLeast finalAttrs.version "2.1.1"))
+      ''
         substituteInPlace test/api/run.sh --replace-fail 'run example_tracer' ""
       '';
 
@@ -109,7 +118,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     platforms = lib.platforms.unix;
     license = lib.licenses.mit;
-    homepage = "https://fmv.jku.at/cadical/";
+    homepage = "https://github.com/arminbiere/cadical";
     mainProgram = "cadical";
   };
 })
