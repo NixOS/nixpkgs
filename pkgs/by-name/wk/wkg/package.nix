@@ -9,6 +9,9 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wkg";
   version = "0.15.1";
+
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "bytecodealliance";
     repo = "wasm-pkg-tools";
