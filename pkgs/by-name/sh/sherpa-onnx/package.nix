@@ -132,6 +132,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "sherpa-onnx";
   version = "1.13.8";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "k2-fsa";
     repo = "sherpa-onnx";
