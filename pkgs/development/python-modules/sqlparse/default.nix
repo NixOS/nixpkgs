@@ -14,12 +14,12 @@
 
 buildPythonPackage rec {
   pname = "sqlparse";
-  version = "0.6.0";
+  version = "0.6.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ETw1x1Nlq5zJxyMdaMZCj7EcCF/I6esa1lm33b9s0rk=";
+    hash = "sha256-ynIlc/hI/y0w5A6jD1OhBLfep2NeqShYkSY+ssWPtuc=";
   };
 
   build-system = [ hatchling ];
