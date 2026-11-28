@@ -1,9 +1,8 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 34b1f55ad..fd91d6e1c 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -692,10 +692,6 @@ if(CMAKE_C_COMPILER_ID MATCHES "GNU|Clang")
-     message(STATUS "Added compiler and linker flags for better stack trace support")
+@@ -226,10 +226,6 @@
+   netdata_bundle_dlib()
  endif()
  
 -if(ENABLE_LIBBACKTRACE)
@@ -12,8 +11,11 @@ index 34b1f55ad..fd91d6e1c 100644
 -
  netdata_bundle_sqlite3()
  
- #
-@@ -2584,8 +2580,10 @@ if(OS_LINUX OR OS_WINDOWS)
+ netdata_detect_protobuf()
+diff --git a/src/libnetdata/CMakeLists.txt b/src/libnetdata/CMakeLists.txt
+--- a/src/libnetdata/CMakeLists.txt
++++ b/src/libnetdata/CMakeLists.txt
+@@ -152,8 +152,10 @@
      target_link_libraries(libnetdata PUBLIC netipc)
  endif()
  
