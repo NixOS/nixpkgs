@@ -32,7 +32,7 @@ buildPythonPackage rec {
     description = "Uses ctypes and libespeak-ng to transform test into IPA phonemes";
     mainProgram = "espeak-phonemizer";
     homepage = "https://github.com/rhasspy/espeak-phonemizer";
-    license = lib.licenses.mit;
+    license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ hexa ];
     platforms = lib.platforms.linux;
   };
