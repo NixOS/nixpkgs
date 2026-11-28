@@ -41,13 +41,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "newlab-plugins";
-  version = "0-unstable-2025-08-15";
+  version = "stn-v7.0.3-unstable-2026-10-27";
 
   src = fetchFromGitHub {
     owner = "nicolasdittlo";
     repo = "newlab-plugins";
-    rev = "9957c39cd672dd13bea0bee428ad8096f62e2d10";
-    hash = "sha256-R5268gaHX8l9lzkJ1ONng2b589rKfdf7Ium+HoK/+64=";
+    rev = "8891e5cd15badeff0bc69448132cc191a9fdbd9f";
+    hash = "sha256-WUb1+FAQyTbcOWpeZOGdpJhzSXLDqAKGC9XiRGuprjA=";
   };
 
   # Upstream only ships Projucer (.jucer) projects. This adds a CMake build
