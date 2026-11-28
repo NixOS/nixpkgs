@@ -5,6 +5,7 @@
   buildPackages,
   fetchPnpmDeps,
   cacert,
+  callPackage,
   aws-lc,
   makeBinaryWrapper,
   nodejs,
@@ -236,6 +237,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
       # Upstream's package QA (Mesh-LLM/mesh-packaging): mesh-llm lists the
       # bundle it is built with.
       runtime-discovery = runtimeDiscovery finalAttrs.finalPackage runtime;
+      # Every plugin of mesh-llmPlugins starts with this mesh-llm.
+      plugins = callPackage ./plugins/starts-test.nix { mesh-llm = finalAttrs.finalPackage; };
       # Upstream's package QA (Mesh-LLM/mesh-packaging): a client reaches
       # readiness offline and stops cleanly on SIGINT.
       client-ready =
