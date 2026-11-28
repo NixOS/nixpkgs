@@ -2,92 +2,85 @@
   lib,
   python3Packages,
   fetchFromGitHub,
+  cacert,
   groff,
   less,
   nix-update-script,
-  testers,
-  awscli,
   versionCheckHook,
 }:
 
-let
-  self = python3Packages.buildPythonApplication (finalAttrs: {
-    pname = "awscli";
-    # N.B: if you change this, change botocore and boto3 to a matching version too
-    # check e.g. https://github.com/aws/aws-cli/blob/1.33.21/setup.py
-    version = "1.44.21";
-    pyproject = true;
+python3Packages.buildPythonApplication (finalAttrs: {
+  pname = "awscli";
+  version = "1.46.1";
+  pyproject = true;
 
-    src = fetchFromGitHub {
-      owner = "aws";
-      repo = "aws-cli";
-      tag = finalAttrs.version;
-      hash = "sha256-yQFK1YjehmACZGMXfMQLc5OiiIGDO08OtwFSpaRyi58=";
-    };
+  src = fetchFromGitHub {
+    owner = "aws";
+    repo = "aws-cli";
+    tag = finalAttrs.version;
+    hash = "sha256-qA4FOgzulvGDQoCDeooID/A7ASfVi25NJayOxTc6wqo=";
+  };
 
-    pythonRelaxDeps = [
-      # botocore must not be relaxed
-      "docutils"
-      "rsa"
-    ];
+  postPatch = ''
+    ln -sf ${cacert}/etc/ssl/certs/ca-no-trust-rules-bundle.crt awscli/botocore/cacert.pem
+  '';
 
-    build-system = with python3Packages; [
-      setuptools
-    ];
+  pythonRelaxDeps = [
+    "docutils"
+    "rsa"
+  ];
 
-    dependencies = with python3Packages; [
-      botocore
-      docutils
-      s3transfer
-      pyyaml
-      colorama
-      rsa
+  build-system = with python3Packages; [
+    setuptools
+  ];
 
-      groff
-      less
-    ];
+  dependencies = with python3Packages; [
+    docutils
+    jmespath
+    python-dateutil
+    urllib3
+    pyyaml
+    colorama
+    rsa
 
-    postInstall = ''
-      mkdir -p $out/share/bash-completion/completions
-      echo "complete -C $out/bin/aws_completer aws" > $out/share/bash-completion/completions/awscli
+    groff
+    less
+  ];
 
-      mkdir -p $out/share/zsh/site-functions
-      mv $out/bin/aws_zsh_completer.sh $out/share/zsh/site-functions
+  postInstall = ''
+    mkdir -p $out/share/bash-completion/completions
+    echo "complete -C $out/bin/aws_completer aws" > $out/share/bash-completion/completions/awscli
 
-      rm $out/bin/aws.cmd
-    '';
+    mkdir -p $out/share/zsh/site-functions
+    mv $out/bin/aws_zsh_completer.sh $out/share/zsh/site-functions
 
-    doInstallCheck = true;
+    rm $out/bin/aws.cmd
+  '';
 
-    installCheckPhase = ''
-      runHook preInstallCheck
+  doInstallCheck = true;
 
-      $out/bin/aws --version | grep "${python3Packages.botocore.version}"
-      $out/bin/aws --version | grep "${finalAttrs.version}"
+  installCheckPhase = ''
+    runHook preInstallCheck
 
-      runHook postInstallCheck
-    '';
+    $out/bin/aws --version | grep "${finalAttrs.version}"
 
-    nativeInstallCheckInputs = [
-      versionCheckHook
-    ];
+    runHook postInstallCheck
+  '';
 
-    passthru = {
-      python = python3Packages.python; # for aws_shell
-      updateScript = nix-update-script {
-        extraArgs = [ "--version=skip" ];
-      };
-    };
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
 
-    meta = {
-      homepage = "https://aws.amazon.com/cli/";
-      changelog = "https://github.com/aws/aws-cli/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
-      description = "Unified tool to manage your AWS services";
-      license = lib.licenses.asl20;
-      mainProgram = "aws";
-      maintainers = with lib.maintainers; [ anthonyroussel ];
-    };
-  });
-in
-assert self ? pythonRelaxDeps -> !(lib.elem "botocore" self.pythonRelaxDeps);
-self
+  passthru = {
+    inherit (python3Packages) python; # for aws_shell
+  };
+
+  meta = {
+    homepage = "https://aws.amazon.com/cli/";
+    changelog = "https://github.com/aws/aws-cli/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
+    description = "Unified tool to manage your AWS services";
+    license = lib.licenses.asl20;
+    mainProgram = "aws";
+    maintainers = with lib.maintainers; [ anthonyroussel ];
+  };
+})
