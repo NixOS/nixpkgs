@@ -9,8 +9,8 @@ lib:
   # taken from ./scripts/version.sh VERSION_ROOT
   k3sRootVersion,
   k3sRootSha256 ? lib.fakeHash,
-  # Based on the traefik charts here: https://github.com/k3s-io/k3s/blob/d71ab6317e22dd34673faa307a412a37a16767f6/scripts/download#L29-L32
-  # see also https://github.com/k3s-io/k3s/blob/d71ab6317e22dd34673faa307a412a37a16767f6/manifests/traefik.yaml#L8
+  # Charts referenced by HelmChart manifests, embedded as static files. Mirrors
+  # https://github.com/k3s-io/k3s/blob/v1.37.0%2Bk3s1/scripts/download
   chartVersions,
   # Air gap container images that are released as assets with every k3s release
   imagesVersions,
@@ -174,15 +174,11 @@ let
       "-X ${PKG_HELM_CONTROLLER}/pkg/controllers/chart.DefaultJobImage=rancher/klipper-helm:${helmJobVersion}"
     ];
 
-  # bundled into the k3s binary
-  traefik = {
-    chart = fetchurl chartVersions.traefik;
-    name = baseNameOf chartVersions.traefik.url;
-  };
-  traefik-crd = {
-    chart = fetchurl chartVersions.traefik-crd;
-    name = baseNameOf chartVersions.traefik-crd.url;
-  };
+  # bundled into the k3s binary, one chart per HelmChart in k3s's manifests
+  staticCharts = lib.mapAttrsToList (_: chart: {
+    src = fetchurl chart;
+    name = baseNameOf chart.url;
+  }) chartVersions;
 
   # a shortcut that provides the images archive for the host platform. Currently only supports
   # aarch64 (arm64) and x86_64 (amd64), throws on other architectures.
@@ -326,8 +322,9 @@ let
         cp -av manifests/* ./pkg/deploy/embed/
 
         mkdir -p ./pkg/static/embed/charts/
-        cp -v ${traefik.chart} ./pkg/static/embed/charts/${traefik.name}
-        cp -v ${traefik-crd.chart} ./pkg/static/embed/charts/${traefik-crd.name}
+        ${lib.concatMapStringsSep "\n" (
+          chart: "cp -v ${chart.src} ./pkg/static/embed/charts/${chart.name}"
+        ) staticCharts}
       '';
 
       # create the multicall symlinks for k3s
