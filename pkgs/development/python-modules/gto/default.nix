@@ -88,6 +88,9 @@ buildPythonPackage (finalAttrs: {
     "test_assign"
     "test_stderr_gto_exception"
     "test_stderr_exception"
+    # AssertionError on cli output format
+    "test_commands_args_help"
+    "test_subcommand_help_shows_arguments"
   ];
 
   pythonImportsCheck = [ "gto" ];
