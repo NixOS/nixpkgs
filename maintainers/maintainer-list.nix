@@ -4555,6 +4555,12 @@
     githubId = 17603372;
     name = "Vilem Liepelt";
   };
+  bugsaplenty = {
+    email = "cryptmold@proton.me";
+    github = "BugsAplenty";
+    githubId = 28706245;
+    name = "Michael Neiman";
+  };
   bugworm = {
     email = "bugworm@zoho.com";
     github = "bugworm";
