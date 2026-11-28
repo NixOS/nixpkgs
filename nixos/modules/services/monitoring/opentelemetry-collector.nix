@@ -74,7 +74,8 @@ in
         Property overrides passed to `otelcol validate` as `--set` arguments,
         used only for validation and not for the configuration that is
         deployed. Use this configuration option if you are relying on confmap
-        providers like `''${file:/path}` and `''${env:VAR}` in your setup.
+        providers that cannot be resolved at build time, like `''${file:/path}`,
+        or `''${env:VAR}` in a property that must not be empty.
 
         Note: `::` separates path elements, because component names may
         themselves contain `.` and `/`.
