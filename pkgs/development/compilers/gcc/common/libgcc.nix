@@ -84,11 +84,14 @@ lib.pipe drv
               # in bash instead of nix (we should fix that).
               preFixupPhases =
                 (previousAttrs.preFixupPhases or [ ])
-                ++ lib.optionals ((!langC) || enableLibGccOutput) [ "preFixupLibGccPhase" ];
+                ++ lib.optionals ((!langC && !langJit) || enableLibGccOutput) [ "preFixupLibGccPhase" ];
               preFixupLibGccPhase =
                 # delete extra/unused builds of libgcc_s in non-langC builds
-                # (i.e. libgccjit, gnat, etc) to avoid potential confusion
-                lib.optionalString (!langC) ''
+                # (gnat, etc) to avoid potential confusion.  libgccjit is the
+                # exception: its embedded driver links the code it compiles
+                # against the libgcc_s in its own lib directory (see
+                # jitDriverFlags in configure-flags.nix), so keep it.
+                lib.optionalString (!langC && !langJit) ''
                   rm -f $out/lib/libgcc_s.so*
                 ''
 

@@ -57,7 +57,9 @@ let
         {
           inherit explicitRequires lndir emacs;
         }
-        // lib.optionalAttrs withNativeCompilation {
+        # Only set where Emacs itself still sets it, which is only on Darwin
+        # (see make-emacs.nix).
+        // lib.optionalAttrs (emacs ? LIBRARY_PATH) {
           inherit (emacs) LIBRARY_PATH;
         }
       )
