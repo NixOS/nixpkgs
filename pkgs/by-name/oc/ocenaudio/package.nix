@@ -10,16 +10,18 @@
   bzip2,
   libpulseaudio,
   xz,
+  libxcrypt-legacy,
+  pipewire,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ocenaudio";
-  version = "3.20.1";
+  version = "3.22.2";
 
   src = fetchurl {
     name = "ocenaudio.deb";
     url = "https://www.ocenaudio.com/downloads/index.php/ocenaudio_debian12.deb?version=v${finalAttrs.version}";
-    hash = "sha256-flO5jlWZllUPl31okwmNjHI/9ctR0pziUx4/i+YRWQY=";
+    hash = "sha256-/iMkScPmqlUNV3ddhEK/LonHd66kOK5NqOVxtoQhiRk=";
   };
 
   autoPatchelfIgnoreMissingDeps = [
@@ -40,7 +42,11 @@ stdenv.mkDerivation (finalAttrs: {
     libjack2
     alsa-lib
     libpulseaudio
+    libxcrypt-legacy
   ];
+
+  dontWrapQtApps = true;
+  appendRunpaths = [ "${pipewire}/lib" ];
 
   dontBuild = true;
   dontStrip = true;
@@ -54,8 +60,6 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "/opt/ocenaudio/bin/ocenaudio" "ocenaudio"
     mkdir -p $out/share/licenses/ocenaudio
     mv $out/bin/ocenaudio_license.txt $out/share/licenses/ocenaudio/LICENSE
-    # Create symlink bzip2 library
-    ln -s ${bzip2.out}/lib/libbz2.so.1 $out/lib/libbz2.so.1.0
 
     runHook postInstall
   '';
