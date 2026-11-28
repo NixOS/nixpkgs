@@ -16,6 +16,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "peakperf";
   version = "1.17-unstable-2024-10-07";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "Dr-Noob";
     repo = "peakperf";
