@@ -29,11 +29,7 @@ jetbrains.mkJetBrainsProduct {
   src = fetchurl (versionInfo.urls.${system} or (throw "Unsupported system: ${system}"));
 
   # the jdk is bundled on Darwin.
-  jdk =
-    if lib.meta.availableOn stdenv.hostPlatform jetbrains.jdk-no-jcef then
-      jetbrains.jdk-no-jcef
-    else
-      null;
+  jdk = if lib.meta.availableOn stdenv.hostPlatform jetbrains.jdk then jetbrains.jdk else null;
 
   extraLdPath = [ zlib ];
   extraWrapperArgs = [
