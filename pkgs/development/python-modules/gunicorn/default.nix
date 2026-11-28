@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  stdenv,
 
   # build-system
   setuptools,
@@ -10,27 +11,29 @@
   packaging,
 
   # optional-dependencies
-  eventlet,
   gevent,
+  h2,
   tornado,
   setproctitle,
 
   # tests
+  inotify,
   pytest-asyncio,
   pytestCheckHook,
   pytest-cov-stub,
+  versionCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "gunicorn";
-  version = "26.0.0";
+  version = "27.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "benoitc";
     repo = "gunicorn";
-    tag = version;
-    hash = "sha256-duq5ghUuiuZL644jHgZ0qXHkcc8POHt7BX91m9F5BGE=";
+    tag = finalAttrs.version;
+    hash = "sha256-ac51uUcXvh3Tur9k4HCwTcwfY+N5dMFVsVRR/V4kmes=";
   };
 
   build-system = [ setuptools ];
@@ -38,11 +41,14 @@ buildPythonPackage rec {
   dependencies = [ packaging ];
 
   optional-dependencies = {
-    gevent = [ gevent ];
-    eventlet = [ eventlet ];
+    gevent = [
+      gevent
+      packaging
+    ];
     tornado = [ tornado ];
     gthread = [ ];
     setproctitle = [ setproctitle ];
+    http2 = [ h2 ];
   };
 
   pythonImportsCheck = [ "gunicorn" ];
@@ -51,8 +57,10 @@ buildPythonPackage rec {
     pytest-asyncio
     pytestCheckHook
     pytest-cov-stub
+    versionCheckHook
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ inotify ];
 
   disabledTests = [
     # failure while starting a gunicorn instance
@@ -67,9 +75,9 @@ buildPythonPackage rec {
   meta = {
     description = "WSGI HTTP Server for UNIX, fast clients and sleepy applications";
     homepage = "https://github.com/benoitc/gunicorn";
-    changelog = "https://github.com/benoitc/gunicorn/releases/tag/${version}";
+    changelog = "https://github.com/benoitc/gunicorn/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ getchoo ];
     mainProgram = "gunicorn";
   };
-}
+})
