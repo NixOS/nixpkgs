@@ -156,6 +156,12 @@ let
                 toString stdenv.hostPlatform.parsed.cpu.bits
               )
             }"
+          else if stdenv.hostPlatform.isWindows then
+            "./Configure VC-WIN${
+              lib.optionalString (stdenv.hostPlatform.parsed.cpu.bits != 32) (
+                toString stdenv.hostPlatform.parsed.cpu.bits
+              )
+            }"
           else if stdenv.hostPlatform.isLinux then
             if stdenv.hostPlatform.isx86_64 then
               "./Configure linux-x86_64"
