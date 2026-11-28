@@ -10,10 +10,16 @@
   zulu21,
   dpkg,
   zip,
-  xz,
+  unzip,
+  patchelf,
   gnupg,
   coreutils,
-  tor,
+  util-linux,
+
+  # The libraries which the Tor expert bundle of the .deb expects from the
+  # distribution; see buildPhase.
+  glibc,
+  zlib,
 
   # Native libraries required by the JavaFX natives that Bisq extracts from its bundled
   # javafx-graphics jar into ~/.openjfx/cache at runtime. Those .so files are
@@ -103,9 +109,25 @@ let
     };
   };
 
+  # The Tor which Bisq runs comes with the .deb; the system's tor is unused.
+  # The Tor library starts Tor in a session of its own with setsid, which it
+  # looks up in PATH and which util-linux provides.
   binPath = lib.makeBinPath [
     coreutils
-    tor
+    util-linux
+  ];
+
+  # The Tor bundle brings its own libevent and OpenSSL, but expects glibc and
+  # zlib from the system (bisq/docs/specifications/network/tor-startup.md).
+  # Bisq runs Tor in the sandy sandbox, which grants Tor's ELF interpreter from
+  # the store but no other store path, so these copies go into the bundle.
+  torBundleLibs = [
+    "libc.so.6"
+    "libm.so.6"
+    "libdl.so.2"
+    "libpthread.so.0"
+    # The pluggable transports use it for name resolution.
+    "libresolv.so.2"
   ];
 
   libraryPath = lib.makeLibraryPath [
@@ -169,9 +191,17 @@ stdenv.mkDerivation (finalAttrs: {
     dpkg
     imagemagick
     makeBinaryWrapper
+    patchelf
+    unzip
     zip
-    xz
     gnupg
+  ];
+
+  # Host dependencies of which the build ships copies inside the Tor bundle;
+  # see buildPhase.
+  buildInputs = [
+    glibc
+    zlib
   ];
 
   desktopItems = [
@@ -209,14 +239,66 @@ stdenv.mkDerivation (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
-    # Replace the Tor binary bundled in tor-binary-linux64-*.jar
-    # (native/linux/x64/tor.tar.xz) with the Tor binary from Nixpkgs. The
-    # bundled tor is a dynamically-linked ELF expecting the
-    # /lib64/ld-linux-x86-64.so.2 interpreter, which does not exist on NixOS.
-    makeWrapper ${lib.getExe' tor "tor"} ./tor
-    mkdir -p native/linux/x64
-    tar -cf - ./tor | xz > native/linux/x64/tor.tar.xz
-    zip opt/bisq/lib/app/tor-binary-linux64-*.jar native/linux/x64/tor.tar.xz >/dev/null
+    # The Tor expert bundle inside the jar of the Tor library is built for a
+    # distribution which has glibc in /lib64 and zlib in the system: its
+    # programs name /lib64/ld-linux-x86-64.so.2 as their interpreter, and tor
+    # links against libz.so.1. Bisq runs them in a sandy sandbox which lets
+    # them read nothing but their own directory, their data directory and
+    # their ELF interpreter, so the interpreter has to point into the store
+    # and the libraries have to sit next to the programs, where tor's
+    # LD_LIBRARY_PATH finds them.
+    ldso=${glibc}/lib/ld-linux-x86-64.so.2
+
+    # The jar is named after the version of the Tor library, which releases
+    # bump without a change of the bundle layout. Patch every jar which
+    # carries the resource; the classpath order of lib/app/* is unspecified.
+    for jar in opt/bisq/lib/app/tor-[0-9]*.jar; do
+      unzip -qo "$jar" tor.zip
+      rm -rf tor-bundle
+      mkdir tor-bundle
+      unzip -q tor.zip -d tor-bundle
+      rm tor.zip
+
+      pushd tor-bundle
+      # Every dynamically-linked program of the bundle: the set grows with
+      # the pluggable transports which upstream adds. Libraries carry an
+      # interpreter of their own (glibc's libc does), but a loader never
+      # execs it, and unpatched copies stay identical to the store.
+      elfs=$(find . -type f -not -name '*.so*' | while read -r f; do
+        if readelf -l "$f" 2>/dev/null | grep INTERP > /dev/null; then
+          echo "$f"
+        fi
+      done)
+      for f in $elfs; do
+        patchelf --set-interpreter "$ldso" "$f"
+      done
+      for lib in ${lib.escapeShellArgs torBundleLibs}; do
+        cp -L "${glibc}/lib/$lib" .
+      done
+      cp -L ${zlib}/lib/libz.so.1 .
+
+      # The sandbox leaves the bundle directory as the only library search
+      # path besides the interpreter: fail the build when a program of the
+      # bundle would not load there, as it does when the copies above miss a
+      # library of the bundle.
+      for f in $elfs; do
+        trace=$(LD_LIBRARY_PATH=$PWD LD_TRACE_LOADED_OBJECTS=1 "$ldso" "$f" || true)
+        if grep -q "not found" <<<"$trace"; then
+          echo "Libraries of $f unresolved from the bundle directory:" >&2
+          printf '%s\n' "$trace" >&2
+          exit 1
+        fi
+      done
+
+      # Normalise the timestamps which zip stores, so that rebuilds of the
+      # package produce the same bytes.
+      find . -exec touch -d @0 {} +
+      find . -mindepth 1 -printf '%P\n' | LC_ALL=C sort | zip -qX ../tor.zip -@
+      popd
+
+      touch -d @0 tor.zip
+      zip -q "$jar" tor.zip
+    done
 
     runHook postBuild
   '';
@@ -226,6 +308,11 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p $out/lib $out/bin
     cp -r opt/bisq/lib/app $out/lib
+
+    # The libraries copied into the bundle sit in a compressed archive, so the
+    # reference scanner cannot see the store paths they come from.
+    mkdir -p $out/share/bisq1
+    printf '%s\n' ${glibc} ${zlib} > $out/share/bisq1/bundled-tor-libs
 
     install -D -m 777 ${bisq-launcher ""} $out/bin/bisq
     substituteAllInPlace $out/bin/bisq
@@ -237,7 +324,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     for n in 16 24 32 48 64 96 128 256; do
       size=$n"x"$n
-      magick opt/bisq/lib/Bisq.png -resize $size bisq.png
+      # exclude-chunk keeps the build time out of the icons.
+      magick opt/bisq/lib/Bisq.png -define png:exclude-chunk=date,time -resize $size bisq.png
       install -Dm644 -t $out/share/icons/hicolor/$size/apps bisq.png
     done
 
