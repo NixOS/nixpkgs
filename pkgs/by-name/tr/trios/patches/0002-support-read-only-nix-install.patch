@@ -1,0 +1,199 @@
+diff --git a/lib/onboarding/onboarding_page.dart b/lib/onboarding/onboarding_page.dart
+index b6640168..bb454fb9 100644
+--- a/lib/onboarding/onboarding_page.dart
++++ b/lib/onboarding/onboarding_page.dart
+@@ -47,6 +47,11 @@ class _OnboardingCarouselState extends ConsumerState<OnboardingCarousel> {
+     super.initState();
+     final settings = ref.read(appSettings);
+     gameDirPath = ref.read(AppState.gameFolder).value?.path;
++    // On first run, honour STARSECTOR_DIR so a read-only install is found
++    // without the user having to locate it by hand.
++    if (gameDirPath == null || gameDirPath!.isEmpty) {
++      gameDirPath = gameDirFromEnvironment();
++    }
+     textEditingController = TextEditingController(text: gameDirPath);
+     enableMultipleVersions = settings.keepLastNVersions != 1;
+     lastNVersionsSetting = enableMultipleVersions
+@@ -179,8 +184,11 @@ class _OnboardingCarouselState extends ConsumerState<OnboardingCarousel> {
+                 IconButton(
+                   icon: const Icon(Icons.folder),
+                   onPressed: () async {
+-                    var newGameDir = await FilePicker.platform
+-                        .getDirectoryPath();
++                    var newGameDir =
++                        await FilePicker.platform.getDirectoryPath(
++                          initialDirectory:
++                              gameDirPath ?? gameDirFromEnvironment(),
++                        );
+                     if (newGameDir == null) return;
+                     setState(() {
+                       textEditingController.text = newGameDir;
+diff --git a/lib/trios/app_state.dart b/lib/trios/app_state.dart
+index c220f277..cfeed91c 100644
+--- a/lib/trios/app_state.dart
++++ b/lib/trios/app_state.dart
+@@ -309,10 +309,19 @@ class AppState {
+     return true;
+   });
+ 
+-  static final gameFolder = FutureProvider<Directory?>(
+-    (ref) async =>
+-        ref.watch(appSettings.select((value) => value.gameDir))?.toDirectory(),
+-  );
++  static final gameFolder = FutureProvider<Directory?>((ref) async {
++    final configured = ref.watch(
++      appSettings.select((value) => value.gameDir),
++    );
++    if (configured != null && configured.path.isNotEmpty) {
++      return configured;
++    }
++    // Nothing configured yet (a fresh install leaves gameDir empty): fall back
++    // to a read-only install advertised through STARSECTOR_DIR. Resolved on
++    // every read rather than persisted, so an updated game path is followed
++    // instead of going stale.
++    return gameDirFromEnvironment()?.toDirectory();
++  });
+ 
+   static final modsFolder = FutureProvider<Directory?>((ref) async {
+     // Compute the *effective* mods path based on settings,
+diff --git a/lib/utils/platform_paths.dart b/lib/utils/platform_paths.dart
+index 47aaff34..fd28c75c 100644
+--- a/lib/utils/platform_paths.dart
++++ b/lib/utils/platform_paths.dart
+@@ -28,7 +28,14 @@ File getLogPath(Directory gamePath, {TargetPlatform? platform}) {
+     TargetPlatform.windows => generateGameCorePath(
+       gamePath,
+     )!.resolve("starsector.log"),
+-    TargetPlatform.linux => gamePath.resolve("starsector.log"),
++    TargetPlatform.linux =>
++      // A read-only install is given its log directory by the launcher
++      // (-Dcom.fs.starfarer.settings.paths.logs), so the log the game actually
++      // writes is not next to the game folder.
++      (isEnvAdvertisedGameRoot(gamePath)
++              ? xdgStarsectorHome()?.resolve("starsector.log")
++              : null) ??
++          gamePath.resolve("starsector.log"),
+     TargetPlatform.macOS => gamePath.resolve("logs/starsector.log"),
+     _ => throw UnsupportedError("Platform not supported: $platform"),
+   }.toFile().normalize;
+@@ -59,6 +66,18 @@ bool isGameExecutableADirectory() {
+   };
+ }
+ 
++/// The game folder from [gameDirEnvVar], but only if it is set and looks like a
++/// Starsector installation. Lets a read-only install (Nixpkgs, for example)
++/// point TriOS at the game from its own configuration instead of having a store
++/// path baked into the application.
++String? gameDirFromEnvironment() {
++  final candidate = gameDirFromEnvironmentRaw();
++  if (candidate == null) {
++    return null;
++  }
++  return validateGameRootFolderPath(candidate) ? candidate : null;
++}
++
+ /// WARNING: This checks to see if things are set up according to DEFAULTS.
+ /// It does not check for custom exe paths, and will fail on Arch Linux because
+ /// its script doesn't end in .sh.
+diff --git a/lib/utils/util.dart b/lib/utils/util.dart
+index 92380c7f..5f735eef 100644
+--- a/lib/utils/util.dart
++++ b/lib/utils/util.dart
+@@ -79,8 +79,84 @@ Directory? generateGameCorePath(Directory gamePath) {
+   }
+ }
+ 
++/// Environment variable pointing TriOS at a Starsector installation that lives
++/// outside the user's reach for writes — a Nixpkgs store path, for example.
++const gameDirEnvVar = 'STARSECTOR_DIR';
++
++/// The raw [gameDirEnvVar] value, or null when unset. Use
++/// `gameDirFromEnvironment()` from `platform_paths.dart` for a validated one.
++String? gameDirFromEnvironmentRaw() {
++  final candidate = Platform.environment[gameDirEnvVar];
++  if (candidate == null || candidate.isEmpty) {
++    return null;
++  }
++  return candidate;
++}
++
++/// The XDG base directory for user-specific data, or null when it cannot be
++/// determined. Follows the Base Directory Specification: `$XDG_DATA_HOME`,
++/// falling back to `$HOME/.local/share`.
++Directory? xdgDataHome() {
++  final fromEnv = Platform.environment['XDG_DATA_HOME'];
++  if (fromEnv != null && fromEnv.isNotEmpty) {
++    return Directory(fromEnv);
++  }
++  final home = Platform.environment['HOME'];
++  if (home == null || home.isEmpty) {
++    return null;
++  }
++  return Directory(p.join(home, ".local", "share"));
++}
++
++/// [path] with symlinks resolved, falling back to an absolute lexical path when
++/// it cannot be resolved (it may not exist yet).
++String _resolvedPath(String path) {
++  try {
++    return Directory(path).resolveSymbolicLinksSync();
++  } catch (_) {
++    return Directory(path).absolute.normalize.path;
++  }
++}
++
++/// Whether [gamePath] is the installation advertised through [gameDirEnvVar].
++///
++/// Distributions such as Nixpkgs install the game into a read-only prefix and
++/// hand the game its writable directories via
++///   -Dcom.fs.starfarer.settings.paths.mods=<data home>/starsector/mods
++///   -Dcom.fs.starfarer.settings.paths.saves=<data home>/starsector/saves
++///   -Dcom.fs.starfarer.settings.paths.logs=<data home>/starsector
++/// so that is where TriOS has to read and write them. This is deliberately
++/// gated on the *selected* game folder being that installation, compared with
++/// symlinks resolved so a profile symlink and the store path it points at
++/// compare equal: a second, writable copy the user picked keeps upstream's
++/// layout, where mods, saves and the log sit next to the game.
++bool isEnvAdvertisedGameRoot(Directory gamePath) {
++  final fromEnv = gameDirFromEnvironmentRaw();
++  if (fromEnv == null) {
++    return false;
++  }
++  return p.equals(_resolvedPath(gamePath.path), _resolvedPath(fromEnv));
++}
++
++/// The per-user Starsector directory the game is pointed at when it is installed
++/// read-only, i.e. `$XDG_DATA_HOME/starsector`, or null when it cannot be
++/// determined.
++Directory? xdgStarsectorHome() {
++  final dataHome = xdgDataHome();
++  if (dataHome == null) {
++    return null;
++  }
++  return Directory(p.join(dataHome.path, "starsector")).normalize;
++}
++
+ Directory? generateModsFolderPath(Directory gamePath) {
+   if (Platform.isWindows || Platform.isMacOS || Platform.isLinux) {
++    if (isEnvAdvertisedGameRoot(gamePath)) {
++      final home = xdgStarsectorHome();
++      if (home != null) {
++        return Directory(p.join(home.path, "mods")).normalize;
++      }
++    }
+     return Directory(p.join(gamePath.path, "mods")).normalize;
+   } else {
+     return null;
+@@ -89,6 +165,12 @@ Directory? generateModsFolderPath(Directory gamePath) {
+ 
+ Directory? generateSavesFolderPath(Directory gamePath) {
+   if (Platform.isWindows || Platform.isMacOS || Platform.isLinux) {
++    if (isEnvAdvertisedGameRoot(gamePath)) {
++      final home = xdgStarsectorHome();
++      if (home != null) {
++        return Directory(p.join(home.path, "saves")).normalize;
++      }
++    }
+     return Directory(p.join(gamePath.path, "saves")).normalize;
+   } else {
+     return null;
