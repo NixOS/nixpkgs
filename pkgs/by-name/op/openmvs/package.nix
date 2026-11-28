@@ -38,6 +38,9 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   version = "2.4.0";
   pname = "openmvs";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "cdcseacave";
     repo = "openmvs";
