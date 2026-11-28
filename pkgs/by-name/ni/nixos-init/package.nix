@@ -45,6 +45,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   binaries = [
+    "activate"
     "initrd-init"
     "find-etc"
     "clear-etc-opaque"
