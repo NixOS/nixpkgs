@@ -53,7 +53,8 @@
             exploratory.outbound.length = 1;
           };
 
-          serverTunnels.testserver = {
+          tunnels.testserver = {
+            type = "server";
             host = "127.0.0.1";
             port = 8080;
             keys = "testserver-keys.dat";
@@ -128,7 +129,8 @@
             exploratory.outbound.length = 1;
           };
 
-          clientTunnels.toServer = {
+          tunnels.toServer = {
+            type = "client";
             port = 10800;
             destination._secret = "/run/i2pd-secrets/server-destination";
             inbound.length = 1;
