@@ -14,6 +14,7 @@
   autoPatchelfHook,
   glib-networking,
   openssl,
+  cacert,
   webkitgtk_4_1,
   libayatana-appindicator,
   sqlite,
@@ -119,6 +120,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --set APPIMAGE "$out/bin/rayburst"
     )
     wrapGApp $out/bin/rayburst
+
+    # The bundled Aria2 Next engine is a prebuilt binary with its own OpenSSL,
+    # which only looks for trust anchors under OPENSSLDIR (/etc/ssl): cert.pem
+    # plus a hashed certs/ directory. NixOS provides neither, so every HTTPS
+    # download aborts with "self-signed certificate in certificate chain (19)"
+    # or "unable to get local issuer certificate (20)". The app spawns this
+    # same binary as its sidecar, so wrapping it covers the GUI and direct CLI
+    # use alike.
+    wrapProgram $out/bin/aria2-next \
+      --set-default SSL_CERT_FILE ${cacert}/etc/ssl/certs/ca-bundle.crt
   '';
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
