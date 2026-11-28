@@ -39,18 +39,18 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "deltalake";
-  version = "1.6.6";
+  version = "1.7.0";
   pyproject = true;
 
   # The GitHub repository does not ship a Cargo.lock
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-kYZNl620KfqLh0i09o1pras9BBf/qfEAvbhYBYkMmX8=";
+    hash = "sha256-1ZntO4NczXmlajDqx73vaiMIck7X7zRXzK/jKFEvspo=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
-    hash = "sha256-PELrTQyjD+Rqh+kco57WahmpW/qBykd/3MVbejHsozk=";
+    hash = "sha256-BkT1nb86Sz1Ex9bubuocQ+EH/HjN2TQx4eXqZoKhmc8=";
   };
 
   # maturin >= 1.13 skips adding `-undefined dynamic_lookup` on darwin as it finds it in
