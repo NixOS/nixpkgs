@@ -6,6 +6,7 @@
   pkg-config,
   openssl,
   ppp,
+  systemd,
   systemdLibs,
   withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
   withPpp ? stdenv.hostPlatform.isLinux,
@@ -44,7 +45,10 @@ stdenv.mkDerivation (finalAttrs: {
   configureFlags = [
     "--sysconfdir=/etc"
   ]
-  ++ lib.optional withSystemd "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
+  ++ lib.optionals withSystemd [
+    "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
+    "--with-resolvconf=${systemd}/bin/resolvconf"
+  ]
   ++ lib.optional withPpp "--with-pppd=${ppp}/bin/pppd"
   # configure: error: cannot check for file existence when cross compiling
   ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "--disable-proc";
