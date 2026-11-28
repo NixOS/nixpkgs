@@ -34,7 +34,7 @@ buildPythonPackage (finalAttrs: {
   # no tests
   doCheck = false;
 
-  passthru.tests = jupyter-collaboration;
+  passthru.tests.jupyter-collaboration = jupyter-collaboration;
 
   meta = {
     description = "JupyterLab/Jupyter Notebook 7+ extension providing user interface integration for real time collaboration";
