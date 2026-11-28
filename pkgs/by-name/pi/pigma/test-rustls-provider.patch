@@ -1,0 +1,8 @@
+--- a/crates/sonar/src/search.rs
++++ b/crates/sonar/src/search.rs
+@@ -692,5 +692,6 @@
+     fn score(name: &str, singer: &str, keyword: &str) -> f64 {
++        let _ = rustls::crypto::ring::default_provider().install_default();
+         let finder = SonarFinder::new(SearchConfig::default()).unwrap();
+         let query = SearchQuery::new(keyword);
+         finder.score_with(&song(name, singer), &SonarFinder::normalize_query(&query))
