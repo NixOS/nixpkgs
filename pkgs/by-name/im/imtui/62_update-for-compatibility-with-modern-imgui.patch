@@ -1,0 +1,209 @@
+From 54e92c15176cfe05d854ccc1d1f071111c80de7f Mon Sep 17 00:00:00 2001
+From: Willy <jemand771@gmx.net>
+Date: Mon, 30 Mar 2026 21:28:17 +0200
+Subject: [PATCH] update for compatibility with modern imgui
+
+`KeysDown` and `KeyMap` have been removed in version 1.91.5
+---
+ examples/hnterm/main.cpp   | 20 ++++++------
+ src/imtui-impl-ncurses.cpp | 64 +++++++++++---------------------------
+ 2 files changed, 28 insertions(+), 56 deletions(-)
+
+diff --git a/examples/hnterm/main.cpp b/examples/hnterm/main.cpp
+index 741a22438ea2734bc9250b5aa8b0abeb318453f5..31b4eb2526253375f46ddc60ddf960cb0dbf8433 100644
+--- a/examples/hnterm/main.cpp
++++ b/examples/hnterm/main.cpp
+@@ -386,7 +386,7 @@ extern "C" {
+ 
+                     if (windowId == stateUI.hoveredWindowId) {
+                         if (ImGui::IsMouseDoubleClicked(0) ||
+-                            ImGui::IsKeyPressed(ImGui::GetIO().KeyMap[ImGuiKey_Enter], false)) {
++                            ImGui::IsKeyPressed(ImGuiKey_Enter, false)) {
+                             if (stateUI.showHelpModal == false && window.hoveredStoryId < (int) storyIds.size()) {
+                                 window.showComments = true;
+                                 window.selectedStoryId = storyIds[window.hoveredStoryId];
+@@ -398,12 +398,12 @@ extern "C" {
+                         }
+ 
+                         if (ImGui::IsKeyPressed('k', true) ||
+-                            ImGui::IsKeyPressed(ImGui::GetIO().KeyMap[ImGuiKey_UpArrow], true)) {
++                            ImGui::IsKeyPressed(ImGuiKey_UpArrow, true)) {
+                             window.hoveredStoryId = std::max(0, window.hoveredStoryId - 1);
+                         }
+ 
+                         if (ImGui::IsKeyPressed('j', true) ||
+-                            ImGui::IsKeyPressed(ImGui::GetIO().KeyMap[ImGuiKey_DownArrow], true)) {
++                            ImGui::IsKeyPressed(ImGuiKey_DownArrow, true)) {
+                             window.hoveredStoryId = std::max(0, std::min(nShow - 1, window.hoveredStoryId + 1));
+                         }
+ 
+@@ -415,7 +415,7 @@ extern "C" {
+                             window.hoveredStoryId = nShow - 1;
+                         }
+ 
+-                        if (ImGui::IsKeyPressed(ImGui::GetIO().KeyMap[ImGuiKey_Tab])) {
++                        if (ImGui::IsKeyPressed(ImGuiKey_Tab)) {
+                             stateUI.windows[stateUI.hoveredWindowId].content =
+                                 (UI::WindowContent) ((int(stateUI.windows[stateUI.hoveredWindowId].content) + 1)%int(UI::WindowContent::Count));
+                         }
+@@ -503,7 +503,7 @@ extern "C" {
+                                     }
+ 
+                                     if (ImGui::IsMouseDoubleClicked(0) ||
+-                                        ImGui::IsKeyPressed(ImGui::GetIO().KeyMap[ImGuiKey_Enter], false)) {
++                                        ImGui::IsKeyPressed(ImGuiKey_Enter, false)) {
+                                         stateUI.collapsed[id] = !stateUI.collapsed[id];
+                                     }
+                                 }
+@@ -539,12 +539,12 @@ extern "C" {
+ 
+                         if (windowId == stateUI.hoveredWindowId) {
+                             if (ImGui::IsKeyPressed('k', true) ||
+-                                ImGui::IsKeyPressed(ImGui::GetIO().KeyMap[ImGuiKey_UpArrow], true)) {
++                                ImGui::IsKeyPressed(ImGuiKey_UpArrow, true)) {
+                                 window.hoveredCommentId = std::max(0, window.hoveredCommentId - 1);
+                             }
+ 
+                             if (ImGui::IsKeyPressed('j', true) ||
+-                                ImGui::IsKeyPressed(ImGui::GetIO().KeyMap[ImGuiKey_DownArrow], true)) {
++                                ImGui::IsKeyPressed(ImGuiKey_DownArrow, true)) {
+                                 window.hoveredCommentId = std::min(curCommentId - 1, window.hoveredCommentId + 1);
+                             }
+ 
+@@ -564,7 +564,7 @@ extern "C" {
+                                 ImGui::IsMouseClicked(2) ||
+                                 ImGui::IsKeyPressed('q', false) ||
+                                 ImGui::IsKeyPressed('b', false) ||
+-                                ImGui::IsKeyPressed(ImGui::GetIO().KeyMap[ImGuiKey_Backspace], false)) {
++                                ImGui::IsKeyPressed(ImGuiKey_Backspace, false)) {
+                                 window.showComments = false;
+                             }
+                         }
+@@ -576,11 +576,11 @@ extern "C" {
+                 ImGui::End();
+             }
+ 
+-            if (ImGui::IsKeyPressed(ImGui::GetIO().KeyMap[ImGuiKey_LeftArrow], true)) {
++            if (ImGui::IsKeyPressed(ImGuiKey_LeftArrow, true)) {
+                 stateUI.hoveredWindowId = std::max(0, stateUI.hoveredWindowId - 1);
+             }
+ 
+-            if (ImGui::IsKeyPressed(ImGui::GetIO().KeyMap[ImGuiKey_RightArrow], true)) {
++            if (ImGui::IsKeyPressed(ImGuiKey_RightArrow, true)) {
+                 stateUI.hoveredWindowId = std::min(stateUI.nWindows - 1, stateUI.hoveredWindowId + 1);
+             }
+ 
+diff --git a/src/imtui-impl-ncurses.cpp b/src/imtui-impl-ncurses.cpp
+index 1d454ba36139ce08b1da415f78a635c5481d16c3..6ecab101cdb376b9c4989a79fa06771899e2d42e 100644
+--- a/src/imtui-impl-ncurses.cpp
++++ b/src/imtui-impl-ncurses.cpp
+@@ -119,29 +119,6 @@ ImTui::TScreen * ImTui_ImplNcurses_Init(bool mouseSupport, float fps_active, flo
+         printf("\033[?1003h\n");
+     }
+ 
+-    ImGui::GetIO().KeyMap[ImGuiKey_Tab]         = 9;
+-    ImGui::GetIO().KeyMap[ImGuiKey_LeftArrow]   = 260;
+-    ImGui::GetIO().KeyMap[ImGuiKey_RightArrow]  = 261;
+-    ImGui::GetIO().KeyMap[ImGuiKey_UpArrow]     = 259;
+-    ImGui::GetIO().KeyMap[ImGuiKey_DownArrow]   = 258;
+-    ImGui::GetIO().KeyMap[ImGuiKey_PageUp]      = 339;
+-    ImGui::GetIO().KeyMap[ImGuiKey_PageDown]    = 338;
+-    ImGui::GetIO().KeyMap[ImGuiKey_Home]        = 262;
+-    ImGui::GetIO().KeyMap[ImGuiKey_End]         = 360;
+-    ImGui::GetIO().KeyMap[ImGuiKey_Insert]      = 331;
+-    ImGui::GetIO().KeyMap[ImGuiKey_Delete]      = 330;
+-    ImGui::GetIO().KeyMap[ImGuiKey_Backspace]   = 263;
+-    ImGui::GetIO().KeyMap[ImGuiKey_Space]       = 32;
+-    ImGui::GetIO().KeyMap[ImGuiKey_Enter]       = 10;
+-    ImGui::GetIO().KeyMap[ImGuiKey_Escape]      = 27;
+-    ImGui::GetIO().KeyMap[ImGuiKey_KeyPadEnter] = 343;
+-    ImGui::GetIO().KeyMap[ImGuiKey_A]           = 1;
+-    ImGui::GetIO().KeyMap[ImGuiKey_C]           = 3;
+-    ImGui::GetIO().KeyMap[ImGuiKey_V]           = 22;
+-    ImGui::GetIO().KeyMap[ImGuiKey_X]           = 24;
+-    ImGui::GetIO().KeyMap[ImGuiKey_Y]           = 25;
+-    ImGui::GetIO().KeyMap[ImGuiKey_Z]           = 26;
+-
+     ImGui::GetIO().KeyRepeatDelay = 0.050;
+     ImGui::GetIO().KeyRepeatRate = 0.050;
+ 
+@@ -185,9 +162,6 @@ bool ImTui_ImplNcurses_NewFrame() {
+ 
+     input[2] = 0;
+ 
+-    auto & keysDown = ImGui::GetIO().KeysDown;
+-    std::fill(keysDown, keysDown + 512, 0);
+-
+     ImGui::GetIO().KeyCtrl = false;
+     ImGui::GetIO().KeyShift = false;
+ 
+@@ -218,51 +192,49 @@ bool ImTui_ImplNcurses_NewFrame() {
+             input[1] = (c & 0x0000FF00) >> 8;
+             //printf("c = %d, c0 = %d, c1 = %d xxx\n", c, input[0], input[1]);
+             if (c < 127) {
+-                if (c != ImGui::GetIO().KeyMap[ImGuiKey_Enter]) {
++                if (c != '\n') {
+                     ImGui::GetIO().AddInputCharactersUTF8(input);
+                 }
+             }
+             if (c == 330) {
+-                ImGui::GetIO().KeysDown[ImGui::GetIO().KeyMap[ImGuiKey_Delete]] = true;
++                ImGui::GetIO().AddKeyEvent(ImGuiKey_Delete, true);
+             } else if (c == KEY_BACKSPACE || c == KEY_DC || c == 127) {
+-                ImGui::GetIO().KeysDown[ImGui::GetIO().KeyMap[ImGuiKey_Backspace]] = true;
++                ImGui::GetIO().AddKeyEvent(ImGuiKey_Backspace, true);
+             // Shift + arrows (probably not portable :()
+             } else if (c == 393) {
+-                ImGui::GetIO().KeysDown[ImGui::GetIO().KeyMap[ImGuiKey_LeftArrow]] = true;
++                ImGui::GetIO().AddKeyEvent(ImGuiKey_LeftArrow, true);
+                 ImGui::GetIO().KeyShift = true;
+             } else if (c == 402) {
+-                ImGui::GetIO().KeysDown[ImGui::GetIO().KeyMap[ImGuiKey_RightArrow]] = true;
++                ImGui::GetIO().AddKeyEvent(ImGuiKey_RightArrow, true);
+                 ImGui::GetIO().KeyShift = true;
+             } else if (c == 337) {
+-                ImGui::GetIO().KeysDown[ImGui::GetIO().KeyMap[ImGuiKey_UpArrow]] = true;
++                ImGui::GetIO().AddKeyEvent(ImGuiKey_UpArrow, true);
+                 ImGui::GetIO().KeyShift = true;
+             } else if (c == 336) {
+-                ImGui::GetIO().KeysDown[ImGui::GetIO().KeyMap[ImGuiKey_DownArrow]] = true;
++                ImGui::GetIO().AddKeyEvent(ImGuiKey_DownArrow, true);
+                 ImGui::GetIO().KeyShift = true;
+             } else if (c == KEY_BACKSPACE) {
+-                ImGui::GetIO().KeysDown[ImGui::GetIO().KeyMap[ImGuiKey_Backspace]] = true;
++                ImGui::GetIO().AddKeyEvent(ImGuiKey_Backspace, true);
+             } else if (c == KEY_LEFT) {
+-                ImGui::GetIO().KeysDown[ImGui::GetIO().KeyMap[ImGuiKey_LeftArrow]] = true;
++                ImGui::GetIO().AddKeyEvent(ImGuiKey_LeftArrow, true);
+             } else if (c == KEY_RIGHT) {
+-                ImGui::GetIO().KeysDown[ImGui::GetIO().KeyMap[ImGuiKey_RightArrow]] = true;
++                ImGui::GetIO().AddKeyEvent(ImGuiKey_RightArrow, true);
+             } else if (c == KEY_UP) {
+-                ImGui::GetIO().KeysDown[ImGui::GetIO().KeyMap[ImGuiKey_UpArrow]] = true;
++                ImGui::GetIO().AddKeyEvent(ImGuiKey_UpArrow, true);
+             } else if (c == KEY_DOWN) {
+-                ImGui::GetIO().KeysDown[ImGui::GetIO().KeyMap[ImGuiKey_DownArrow]] = true;
+-            } else {
+-                keysDown[c] = true;
++                ImGui::GetIO().AddKeyEvent(ImGuiKey_DownArrow, true);
+             }
+         }
+ 
+         hasInput = true;
+     }
+ 
+-    if (ImGui::GetIO().KeysDown[ImGui::GetIO().KeyMap[ImGuiKey_A]]) ImGui::GetIO().KeyCtrl = true;
+-    if (ImGui::GetIO().KeysDown[ImGui::GetIO().KeyMap[ImGuiKey_C]]) ImGui::GetIO().KeyCtrl = true;
+-    if (ImGui::GetIO().KeysDown[ImGui::GetIO().KeyMap[ImGuiKey_V]]) ImGui::GetIO().KeyCtrl = true;
+-    if (ImGui::GetIO().KeysDown[ImGui::GetIO().KeyMap[ImGuiKey_X]]) ImGui::GetIO().KeyCtrl = true;
+-    if (ImGui::GetIO().KeysDown[ImGui::GetIO().KeyMap[ImGuiKey_Y]]) ImGui::GetIO().KeyCtrl = true;
+-    if (ImGui::GetIO().KeysDown[ImGui::GetIO().KeyMap[ImGuiKey_Z]]) ImGui::GetIO().KeyCtrl = true;
++    if (ImGui::IsKeyDown(ImGuiKey_A)) ImGui::GetIO().KeyCtrl = true;
++    if (ImGui::IsKeyDown(ImGuiKey_C)) ImGui::GetIO().KeyCtrl = true;
++    if (ImGui::IsKeyDown(ImGuiKey_V)) ImGui::GetIO().KeyCtrl = true;
++    if (ImGui::IsKeyDown(ImGuiKey_X)) ImGui::GetIO().KeyCtrl = true;
++    if (ImGui::IsKeyDown(ImGuiKey_Y)) ImGui::GetIO().KeyCtrl = true;
++    if (ImGui::IsKeyDown(ImGuiKey_Z)) ImGui::GetIO().KeyCtrl = true;
+ 
+     ImGui::GetIO().MousePos.x = mx;
+     ImGui::GetIO().MousePos.y = my;
