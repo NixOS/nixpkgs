@@ -1,26 +1,52 @@
 {
   lib,
   stdenv,
+  autoreconfHook,
+  pkg-config,
   fetchurl,
-  readline,
-  gettext,
   ncurses,
+  gtk3,
+  libxcb,
+  libx11,
+  postgresql,
+  sqlite,
+  fftw,
+  gsl,
+  libpng,
+  zlib,
+  pcre2,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnu-apl";
-  version = "1.9";
+  version = "2.0";
 
   src = fetchurl {
     url = "mirror://gnu/apl/apl-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-KRhn8bGTdpOrtXvn2aN2GLA3bj4nCVdIVKe75Suyjrg=";
+    sha256 = "sha256-JLu3RPzkfmKDcjSgU73uzuUbnqYcgseffMGRvGpUwKE=";
   };
 
-  buildInputs = [
-    readline
-    gettext
-    ncurses
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    postgresql.pg_config
   ];
+
+  buildInputs = [
+    ncurses
+    gtk3
+    libx11
+    libxcb
+    postgresql.lib
+    sqlite
+    fftw
+    gsl
+    libpng
+    zlib
+    pcre2
+  ];
+
+  configureFlags = [ "--with-sqlite3=${lib.getDev sqlite}" ];
 
   env.NIX_CFLAGS_COMPILE = toString (
     (lib.optionals stdenv.cc.isGNU [
