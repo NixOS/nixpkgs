@@ -9,14 +9,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aiorwlock";
-  version = "1.5.1";
+  version = "1.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "aiorwlock";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+favszX1mVuuLWqKCIk+i5frX+y2kOArAUVIAJG1otY=";
+    hash = "sha256-8bphLyarlnAlUKEkcuRzcbAJgA7XcC+pqNhUYd4+xak=";
   };
 
   build-system = [ poetry-core ];
