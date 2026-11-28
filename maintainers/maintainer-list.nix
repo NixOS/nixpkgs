@@ -10006,6 +10006,12 @@
     githubId = 82884264;
     name = "Faidz Arante";
   };
+  fractuscontext = {
+    name = "Claire Tam";
+    email = "claire2026t@posteo.net";
+    github = "fractuscontext";
+    githubId = 106440141;
+  };
   fragamus = {
     email = "innovative.engineer@gmail.com";
     github = "fragamus";
