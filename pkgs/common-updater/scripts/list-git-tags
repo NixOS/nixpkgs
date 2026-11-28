@@ -40,14 +40,12 @@ fi
 
 # By default we set url to src.url or src.meta.homepage
 if [[ -z "$url" ]]; then
-    url="$(nix-instantiate $systemArg --eval -E \
-               "with import ./. {}; $attr_path.src.meta.homepage or $attr_path.src.url" \
-        | tr -d '"')"
+    url="$(nix-instantiate --raw --eval -E "with import ./. {}; $attr_path.src.meta.homepage or $attr_path.src.url or \"null\"")"
 fi
 
 # print a debugging message
 if [[ -n "$file" ]]; then
-    echo "# Listing tags for '$pname' at $url" >> $file
+    echo "# Listing tags for '$pname' at $url" >> "$file"
 fi
 
 # list all tags from the remote repository
