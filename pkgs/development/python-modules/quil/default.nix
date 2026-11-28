@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  hypothesis,
   rustPlatform,
   numpy,
   pytestCheckHook,
@@ -10,19 +11,19 @@
 
 buildPythonPackage rec {
   pname = "quil";
-  version = "0.35.0";
+  version = "0.37.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rigetti";
     repo = "quil-rs";
     tag = "quil-rs/v${version}";
-    hash = "sha256-QWW8+cup81eyedDTU3jgslNanaj0+D2jI5XQMS3ZUIo=";
+    hash = "sha256-P9CSHbmzPWrr6DYt7mlqxyXuHb1p1CaGArX+pLYm4Ak=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-cIWnTuxoFqkl+0W6NH9DwNokq7RKdNggFLwPYgkbHho=";
+    hash = "sha256-Cu2wyBF1bjwQkn22JJlMPBSuEn09f5zxebVp8CWI13o=";
   };
 
   buildAndTestSubdir = "quil-rs";
@@ -42,6 +43,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    hypothesis
     pytestCheckHook
     syrupy
   ];
