@@ -84,6 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   checkPhase = ''
     runHook preCheck
+    export NIX_CFLAGS_COMPILE+=" -Wno-error=unused-but-set-variable"
     # Build all tests in parallel, the script does it in sequence
     make -C "$(mmaketool --toppath)/build/$(mmaketool --userbuild)" -j$NIX_BUILD_CORES
     scripts/run_unit_tests.sh
