@@ -22,6 +22,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-lCTybqJPP7CuqdACjzuiR/kufu6fJxKhpa71/Z3oWXA=";
   };
 
+  # fix octomap v2 support
+  # ref. https://github.com/coal-library/coal/issues/928
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail \
+      "ADD_PROJECT_DEPENDENCY(octomap 1.8.0" \
+      "ADD_PROJECT_DEPENDENCY(octomap"
+  '';
+
   strictDeps = true;
 
   nativeBuildInputs = jrl-cmakemodules.docsNativeBuildInputs;
