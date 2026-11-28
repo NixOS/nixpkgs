@@ -85,6 +85,9 @@ let
           "man"
         ];
 
+        strictDeps = lib.versionAtLeast finalAttrs.version "12.3";
+        __structuredAttrs = lib.versionAtLeast finalAttrs.version "12.3";
+
         nativeBuildInputs = [
           cmake
           pkg-config
@@ -312,6 +315,12 @@ let
         postPatch = ''
           substituteInPlace scripts/galera_new_cluster.sh \
             --replace ":-mariadb" ":-mysql"
+        ''
+        # Since 12.3.4 the MTR PAM test files are only installed if INSTALL_MYSQLTESTDIR is set
+        # TODO: clear version gate with bumps to 10.11/11.4/11.8
+        + lib.optionalString (lib.versionAtLeast finalAttrs.version "12.3.4") ''
+          substituteInPlace plugin/auth_pam/testing/CMakeLists.txt \
+            --replace-fail "IF(INSTALL_MYSQLTESTDIR)" "IF(TRUE)"
         '';
 
         cmakeFlags =
@@ -422,5 +431,10 @@ self: {
     # Supported until 2028-06-04
     version = "11.8.9";
     hash = "sha256-LgFbfpEAQULtqLOiDTzrh1zyrlXnJgPnIizUl9Tlb8Y=";
+  };
+  mariadb_123 = self.callPackage generic {
+    # Supported until June 2029
+    version = "12.3.4";
+    hash = "sha256-dark1I35BXNOJKhblVu83EP0sSK0ULxK0ryS9dGsV40=";
   };
 }
