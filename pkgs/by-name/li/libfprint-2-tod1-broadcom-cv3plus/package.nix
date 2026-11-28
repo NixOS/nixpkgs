@@ -1,6 +1,7 @@
 {
   autoPatchelfHook,
   fetchgit,
+  gitUpdater,
   lib,
   libfprint-tod,
   openssl,
@@ -10,13 +11,12 @@
 
 let
   pname = "libfprint-2-tod1-broadcom-cv3plus";
-  version = "6.3.299-6.3.040.0";
+  version = "6.4.372-6.4.062.0";
 
   src = fetchgit {
-    url = "git://git.launchpad.net/~oem-solutions-engineers/pc-enablement/+git/libfprint-2-tod1-broadcom-cv3plus/";
-    branchName = "ubuntu/latest";
-    rev = "ac7a8ab2318216e603c8c23b279bbad28a301d3";
-    hash = "sha256-4JwoUuvskj8GqTUQpKBECCL+jkSfxpaukqRTTVTmSLk=";
+    url = "https://git.launchpad.net/~oem-solutions-engineers/pc-enablement/+git/libfprint-2-tod1-broadcom-cv3plus/";
+    tag = "upstream/${version}";
+    hash = "sha256-sBndqe97UIiwDru2HWrcw39Omr0dQvAqUFHHOoRh+qw=";
   };
 
   wrapperLibName = "wrapper-lib.so";
@@ -75,7 +75,10 @@ stdenv.mkDerivation {
       "$out/lib/libfprint-2/tod-1/libfprint-2-tod-1-broadcom-cv3plus.so"
   '';
 
-  passthru.driverPath = "/lib/libfprint-2/tod-1";
+  passthru = {
+    driverPath = "/lib/libfprint-2/tod-1";
+    updateScript = gitUpdater { rev-prefix = "upstream/"; };
+  };
 
   meta = {
     description = "Broadcom driver module for libfprint-2-tod Touch OEM Driver for Dell ControlVault v3+";
