@@ -15,7 +15,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dprint";
-  version = "0.64.3";
+  version = "0.65.0";
   __structuredAttrs = true;
 
   # Prefer repository rather than crate here
@@ -25,10 +25,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "dprint";
     repo = "dprint";
     tag = finalAttrs.version;
-    hash = "sha256-F5hsWyApk/a3rTHZqUF8gGxOsu8b1pJKiUwfdC6uG9w=";
+    hash = "sha256-TA2Nw7eXdQQLI7WhIPZ5vxN5n4zuZhVLrEczIzo2uPs=";
   };
 
-  cargoHash = "sha256-Q9U6HrRd/uv7VipV7hZkKHBt0ERDBpqMj7IW9nIMP4g=";
+  cargoHash = "sha256-SbBRlOlmy641YK4YN13+XtPpjYlTysVBGphoPJv2Tzk=";
 
   nativeBuildInputs = [
     makeBinaryWrapper
@@ -63,6 +63,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   checkFlags = [
     # Require cargo is running
     "--skip=utils::process::test"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+    # Fails in sandbox
+    "--skip=environment::real_environment::test::should_watch_files_that_may_not_exist"
   ];
 
   postInstall =

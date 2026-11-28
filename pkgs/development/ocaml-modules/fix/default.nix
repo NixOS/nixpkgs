@@ -6,17 +6,15 @@
 
 buildDunePackage (finalAttrs: {
   pname = "fix";
-  version = "20250919";
+  version = "20261126";
 
   src = fetchFromGitLab {
     domain = "gitlab.inria.fr";
     owner = "fpottier";
     repo = "fix";
     tag = finalAttrs.version;
-    hash = "sha256-CVxOLlSKKX1kb1bi6IbSo7SH5GsVynI4de0c5NUmq+s=";
+    hash = "sha256-Huns1EfuTRugaaItDbFAlHsa4Wy2VB+fAZb+LWWw6ko=";
   };
-
-  minimalOCamlVersion = "4.03";
 
   meta = {
     homepage = "https://gitlab.inria.fr/fpottier/fix/";

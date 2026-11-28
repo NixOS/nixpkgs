@@ -5,13 +5,13 @@
 }:
 mkLibretroCore {
   core = "nestopia";
-  version = "0-unstable-2026-10-31";
+  version = "0-unstable-2026-11-27";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "nestopia";
-    rev = "f1e02d12664834536edbf7352995a3d0cd1caef4";
-    hash = "sha256-Ezfy+VGCPfxAvXw95CMuvqZHWJ3WYPfbjvHmEp7rjOw=";
+    rev = "349bc90ce4963b73120104590b3d6d893c9df8ce";
+    hash = "sha256-Efv9JJ7jjWKXHVK2cr3xWFaFTmTdRR/3BOYQdOk7rPo=";
   };
 
   makefile = "Makefile";

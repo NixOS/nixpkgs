@@ -15,14 +15,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "tagoio-sdk";
-  version = "5.1.8";
+  version = "5.1.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tago-io";
     repo = "sdk-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zfKm9nFWaSLfYOCzq2IOfDkDuG8N9ZTUuzaUt/Je2ro=";
+    hash = "sha256-iU1NtZSCRNUeyz4gevmc2J8e/bdVdd96Vv/YivIBi70=";
   };
 
   pythonRelaxDeps = [ "requests" ];

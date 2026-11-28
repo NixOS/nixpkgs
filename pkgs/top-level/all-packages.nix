@@ -5788,8 +5788,6 @@ with pkgs;
 
   nvidia-vaapi-driver = hiPrio (callPackage ../development/libraries/nvidia-vaapi-driver { });
 
-  nvtopPackages = recurseIntoAttrs (import ../tools/system/nvtop { inherit callPackage stdenv; });
-
   inherit (callPackages ../development/libraries/ogre { })
     ogre_13
     ogre_14
@@ -8283,8 +8281,6 @@ with pkgs;
 
   puredata-with-plugins =
     plugins: callPackage ../by-name/pu/puredata/wrapper.nix { inherit plugins; };
-
-  qbittorrent-nox = qbittorrent.override { guiSupport = false; };
 
   qbittorrent-enhanced-nox = qbittorrent-enhanced.override { guiSupport = false; };
 

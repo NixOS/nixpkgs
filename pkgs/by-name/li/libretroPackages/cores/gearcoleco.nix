@@ -8,13 +8,13 @@
 
 mkLibretroCore (finalAttrs: {
   core = "gearcoleco";
-  version = "1.8.0";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "drhelius";
     repo = "Gearcoleco";
     tag = finalAttrs.version;
-    hash = "sha256-5ZjA0ZHqha5rubYTG2HkrAreDddeCiG+7cf62V043L0=";
+    hash = "sha256-0/vTbf9ELoBv1A2bwAb6G0jxpx/AhNucVsA9JiKH0vA=";
   };
 
   sourceRoot = "source/platforms/libretro";
