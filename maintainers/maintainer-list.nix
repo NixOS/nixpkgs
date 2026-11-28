@@ -5172,6 +5172,12 @@
     name = "ChaosAttractor";
     keys = [ { fingerprint = "A137 4415 DB7C 6439 10EA  5BF1 0FEE 4E47 5940 E125"; } ];
   };
+  charafsalmi = {
+    email = "charaf.salmi@sonarsource.com";
+    github = "charafsalmi";
+    githubId = 278809;
+    name = "Charaf Salmi";
+  };
   charain = {
     email = "charain_li@outlook.com";
     github = "chai-yuan";
@@ -6478,6 +6484,12 @@
     github = "damidoug";
     githubId = 75175586;
     name = "Douglas Damiano";
+  };
+  damien-urruty-sonarsource = {
+    email = "damien.urruty@sonarsource.com";
+    github = "damien-urruty-sonarsource";
+    githubId = 64742703;
+    name = "Damien Urruty";
   };
   DamienCassou = {
     email = "damien@cassou.me";
@@ -10565,6 +10577,12 @@
     github = "georgewhewell";
     githubId = 1176131;
     name = "George Whewell";
+  };
+  georgii-borovinskikh-sonarsource = {
+    email = "georgii.borovinskikh@sonarsource.com";
+    github = "georgii-borovinskikh-sonarsource";
+    githubId = 117642191;
+    name = "Georgii Borovinskikh";
   };
   georgyo = {
     email = "george@shamm.as";
@@ -15641,6 +15659,12 @@
     githubId = 451835;
     name = "Kirill Elagin";
   };
+  kirill-knize-sonarsource = {
+    email = "kirill.knize@sonarsource.com";
+    github = "kirill-knize-sonarsource";
+    githubId = 62898885;
+    name = "Kirill Knize";
+  };
   kirillrdy = {
     email = "kirillrdy@gmail.com";
     github = "kirillrdy";
@@ -16142,6 +16166,12 @@
     githubId = 45591621;
     name = "Kristoffer Longva Eriksen";
     matrix = "@krisleri:pvv.ntnu.no";
+  };
+  Krosovok = {
+    email = "viacheslav.tsuvariev@sonarsource.com";
+    github = "Krosovok";
+    githubId = 17496080;
+    name = "Viacheslav Tsuvariev";
   };
   krostar = {
     email = "alexis.destrez@pm.me";
@@ -22093,6 +22123,12 @@
     github = "npulidomateo";
     githubId = 13149442;
     name = "Nico Pulido-Mateo";
+  };
+  nquinquenel = {
+    email = "nicolas.quinquenel@sonarsource.com";
+    github = "nquinquenel";
+    githubId = 14952624;
+    name = "Nicolas QUINQUENEL";
   };
   nrabulinski = {
     email = "1337-nix@nrab.lol";
@@ -28222,6 +28258,12 @@
     github = "sophiebsw";
     githubId = 4594464;
   };
+  sophio-japharidze-sonarsource = {
+    email = "sophio.japharidze@sonarsource.com";
+    github = "sophio-japharidze-sonarsource";
+    githubId = 104207951;
+    name = "Sophio Japharidze";
+  };
   sophronesis = {
     email = "oleksandr.buzynnyi@gmail.com";
     github = "sophronesis";
@@ -30468,6 +30510,12 @@
     name = "Tomodachi94";
     keys = [ { fingerprint = "B208 D6E5 B8ED F47D 5687  627B 2E27 5F21 C4D5 54A3"; } ];
   };
+  tomshafir-sonarsource = {
+    email = "tom.shafir@sonarsource.com";
+    github = "tomshafir-sonarsource";
+    githubId = 274245499;
+    name = "Tom Spirer Shafir";
+  };
   tomsmeets = {
     email = "tom.tsmeets@gmail.com";
     github = "TomSmeets";
@@ -30717,6 +30765,12 @@
     github = "tsheinen";
     githubId = 1759360;
     name = "Thea Heinen";
+  };
+  tsiaraskon-sonar = {
+    email = "konstantinos.tsiaras@sonarsource.com";
+    github = "tsiaraskon-sonar";
+    githubId = 326433106;
+    name = "Konstantinos Tsiaras";
   };
   tsowell = {
     email = "tom@ldtlb.com";
@@ -31620,6 +31674,12 @@
     github = "vmfunc";
     githubId = 59031302;
     name = "vmfunc";
+  };
+  vnaskos-sonar = {
+    email = "vasileios.naskos@sonarsource.com";
+    github = "vnaskos-sonar";
+    githubId = 168648790;
+    name = "Vasileios Naskos";
   };
   vncsb = {
     email = "viniciusbernardino1@hotmail.com";
