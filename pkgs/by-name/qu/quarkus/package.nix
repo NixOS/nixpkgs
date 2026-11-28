@@ -3,7 +3,7 @@
   stdenvNoCC,
   fetchurl,
   makeWrapper,
-  jdk,
+  jdk_headless,
   testers,
 }:
 
@@ -24,7 +24,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     install -Dm644 "$src" "$out/lib/quarkus-cli-${finalAttrs.version}-runner.jar"
 
-    makeWrapper ${jdk}/bin/java "$out/bin/quarkus" \
+    makeWrapper ${jdk_headless}/bin/java "$out/bin/quarkus" \
       --add-flags "-jar $out/lib/quarkus-cli-${finalAttrs.version}-runner.jar"
 
     runHook postInstall
