@@ -17,8 +17,20 @@
 lib: pkgs: actuallySplice:
 
 let
+  inherit (builtins) isList isString tryEval;
   inherit (lib.customisation) mapCrossIndex renameCrossIndexFrom;
-  inherit (lib) mapAttrs;
+  inherit (lib)
+    attrByPath
+    callPackageWith
+    filterAttrs
+    genAttrs
+    isAttrs
+    isDerivation
+    mapAttrs
+    optional
+    optionalAttrs
+    splitString
+    ;
 
   spliceReal =
     inputs:
@@ -39,7 +51,7 @@ let
           value' = mapCrossIndex (x: x.${name} or { }) inputs;
 
           augmentedValue = defaultValue // {
-            __spliced = lib.filterAttrs (k: v: inputs.${k} ? ${name}) value';
+            __spliced = filterAttrs (k: v: inputs.${k} ? ${name}) value';
           };
           # Get the set of outputs of a derivation. If one derivation fails to
           # evaluate we don't want to diverge the entire splice, so we fall back
@@ -47,21 +59,21 @@ let
           tryGetOutputs =
             value0:
             let
-              inherit (builtins.tryEval value0) success value;
+              inherit (tryEval value0) success value;
             in
-            getOutputs (lib.optionalAttrs success value);
+            getOutputs (optionalAttrs success value);
           getOutputs =
-            value: lib.genAttrs (value.outputs or (lib.optional (value ? out) "out")) (output: value.${output});
-          outputNames = defaultValue.outputs or (lib.optional (defaultValue ? out) "out");
+            value: genAttrs (value.outputs or (optional (value ? out) "out")) (output: value.${output});
+          outputNames = defaultValue.outputs or (optional (defaultValue ? out) "out");
           outputSplice = spliceReal (
             mapCrossIndex tryGetOutputs value' // { hostTarget = getOutputs value'.hostTarget; }
           );
         in
         # The derivation along with its outputs, which we recur
         # on to splice them together.
-        if lib.isDerivation defaultValue then
-          augmentedValue // lib.genAttrs outputNames (out: outputSplice.${out})
-        else if lib.isAttrs defaultValue then
+        if isDerivation defaultValue then
+          augmentedValue // genAttrs outputNames (out: outputSplice.${out})
+        else if isAttrs defaultValue then
           spliceReal value'
         else
           # Don't be fancy about non-derivations. But we could have used used
@@ -121,7 +133,7 @@ in
 
   callPackages = lib.callPackagesWith pkgsForCall;
 
-  newScope = extra: lib.callPackageWith (pkgsForCall // extra);
+  newScope = extra: callPackageWith (pkgsForCall // extra);
 
   pkgs = if actuallySplice then splicedPackages // { recurseForDerivations = false; } else pkgs;
 
@@ -140,22 +152,22 @@ in
         X:
         [ X ]
         ++ (
-          if builtins.isList attrs then
+          if isList attrs then
             attrs
-          else if builtins.isString attrs then
-            lib.splitString "." attrs
+          else if isString attrs then
+            splitString "." attrs
           else
             throw "generateSplicesForMkScope must be passed a list of string or string"
         );
       bad = throw "attribute should be found";
     in
     {
-      selfBuildBuild = lib.attrByPath (split "pkgsBuildBuild") bad pkgs;
-      selfBuildHost = lib.attrByPath (split "pkgsBuildHost") bad pkgs;
-      selfBuildTarget = lib.attrByPath (split "pkgsBuildTarget") bad pkgs;
-      selfHostHost = lib.attrByPath (split "pkgsHostHost") bad pkgs;
-      selfHostTarget = lib.attrByPath (split "pkgsHostTarget") bad pkgs;
-      selfTargetTarget = lib.attrByPath (split "pkgsTargetTarget") { } pkgs;
+      selfBuildBuild = attrByPath (split "pkgsBuildBuild") bad pkgs;
+      selfBuildHost = attrByPath (split "pkgsBuildHost") bad pkgs;
+      selfBuildTarget = attrByPath (split "pkgsBuildTarget") bad pkgs;
+      selfHostHost = attrByPath (split "pkgsHostHost") bad pkgs;
+      selfHostTarget = attrByPath (split "pkgsHostTarget") bad pkgs;
+      selfTargetTarget = attrByPath (split "pkgsTargetTarget") { } pkgs;
     };
 
   # Haskell package sets need this because they reimplement their own
