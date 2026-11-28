@@ -1,0 +1,34 @@
+Check the compressed size against output_len before copying the ZFP
+stream into the output buffer. Only input_len was checked, so a
+stream smaller than the input but larger than the output buffer
+overflowed it.
+
+--- a/plugins/codecs/zfp/blosc2-zfp.c
++++ b/plugins/codecs/zfp/blosc2-zfp.c
+@@ -278,7 +278,7 @@
+     free(aux_out);
+     return (int) zfpsize;
+   }
+-  if ((int32_t) zfpsize >= input_len) {
++  if ((int32_t) zfpsize >= input_len || (int32_t) zfpsize > output_len) {
+     BLOSC_TRACE_ERROR("\n ZFP: Compressed data is bigger than input! \n");
+     free(aux_out);
+     return 0;
+@@ -577,7 +577,7 @@
+     free(aux_out);
+     return (int) zfpsize;
+   }
+-  if ((int32_t) zfpsize >= input_len) {
++  if ((int32_t) zfpsize >= input_len || (int32_t) zfpsize > output_len) {
+     BLOSC_TRACE_ERROR("\n ZFP: Compressed data is bigger than input! \n");
+     free(aux_out);
+     return 0;
+@@ -887,7 +887,7 @@
+     free(aux_out);
+     return (int) zfpsize;
+   }
+-  if ((int32_t) zfpsize >= input_len) {
++  if ((int32_t) zfpsize >= input_len || (int32_t) zfpsize > output_len) {
+     BLOSC_TRACE_ERROR("\n ZFP: Compressed data is bigger than input! \n");
+     free(aux_out);
+     return 0;

@@ -16,14 +16,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "c-blosc2";
-  version = "3.5.0";
+  version = "3.7.0";
 
   src = fetchFromGitHub {
     owner = "Blosc";
     repo = "c-blosc2";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-Q4HGkPdf1xqIVduaFLXlE5z86gD1OisVYJVdz2huhck=";
+    sha256 = "sha256-nNwCWOgE+W/RQ+ms/Ov6EQp7DnZXlnYOHJZZWizzWew=";
   };
+
+  patches = [
+    # Fix heap buffer overflow in the ZFP compressors when the compressed
+    # stream is smaller than the input but larger than the output buffer
+    ./zfp-check-output-size.patch
+  ];
 
   # https://github.com/NixOS/nixpkgs/issues/144170
   postPatch = ''
@@ -57,14 +63,12 @@ stdenv.mkDerivation (finalAttrs: {
   # possibly https://github.com/Blosc/c-blosc2/issues/432
   enableParallelChecking = false;
 
-  # FIXME: This syntax was added to avoid unncessary rebuilds
-  # Can use `lib.optionals` instead, during next bump of c-blosc2
-  ${if (zfp.passthru.bitStreamWordSize != 64) then "disabledTests" else null} = [
+  nativeCheckInputs = [
+    ctestCheckHook
+  ];
+  disabledTests = lib.optionals (zfp.passthru.bitStreamWordSize != 64) [
     # This test only supports the default 64-bit bitstream word of zfp
     "test_plugin_test_zfp_rate_getitem_cells"
-  ];
-  ${if (zfp.passthru.bitStreamWordSize != 64) then "nativeCheckInputs" else null} = [
-    ctestCheckHook
   ];
 
   passthru.tests = {
