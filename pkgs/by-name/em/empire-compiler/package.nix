@@ -36,7 +36,7 @@ buildDotnetModule (finalAttrs: {
   meta = {
     homepage = "https://github.com/BC-SECURITY/Empire-Compiler";
     license = lib.licenses.gpl3Only;
-    platforms = lib.platforms.linux ++ [ "aarch64-darwin" ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     description = "C# Compiler for Empire";
     maintainers = with lib.maintainers; [
       fzakaria

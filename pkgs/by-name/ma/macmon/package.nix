@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Sudoless performance monitoring for Apple Silicon processors";
     homepage = "https://github.com/vladkens/macmon";
     changelog = "https://github.com/vladkens/macmon/releases/tag/${finalAttrs.src.tag}";
-    platforms = [ "aarch64-darwin" ];
+    platforms = lib.platforms.darwin;
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ schrobingus ];
     mainProgram = "macmon";

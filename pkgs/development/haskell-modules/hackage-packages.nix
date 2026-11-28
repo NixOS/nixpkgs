@@ -764185,7 +764185,7 @@ self: {
       executableHaskellDepends = [ base ];
       description = "Access GPIO pins on Raspberry Pi via wiringPi library";
       license = lib.licenses.bsd3;
-      badPlatforms = [ "aarch64-darwin" ];
+      badPlatforms = lib.platforms.darwin;
     }
   ) { };
 
