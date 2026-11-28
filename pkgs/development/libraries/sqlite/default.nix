@@ -28,17 +28,17 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sqlite${lib.optionalString interactive "-interactive"}";
-  version = "3.54.0";
+  version = "3.54.1";
 
   # nixpkgs-update: no auto update
   # NB! Make sure to update ./tools.nix src (in the same directory).
   src = fetchurl {
     url = "https://sqlite.org/2026/sqlite-src-${archiveVersion finalAttrs.version}.zip";
-    hash = "sha256-iEdlmCHgxRFr0UqUZEyCupMrLZoFrIGvLjSvgUqtfFg=";
+    hash = "sha256-OH5/bK1Hl7F4SMB9RT3GYGkXuzVqbP5aOrr9OMJAxxs=";
   };
   docsrc = fetchurl {
     url = "https://sqlite.org/2026/sqlite-doc-${archiveVersion finalAttrs.version}.zip";
-    hash = "sha256-oXlaxb9JHz57W07OBBDuO04EgPaod7wnzSEnxZH+J74=";
+    hash = "sha256-6fY0rCikx7SPXDieSwjAOWVOwUh1EgkrMwzPz9wIFuA=";
   };
 
   outputs = [
@@ -66,6 +66,28 @@ stdenv.mkDerivation (finalAttrs: {
     (fetchurl {
       url = "https://src.fedoraproject.org/rpms/sqlite/raw/faea37529752d0134154f3678443e2822a105834/f/sqlite-3.53.3-fix-fts3corrupt4-test.patch";
       hash = "sha256-cfwBOomIjm8szInOqKZfg2lmRM9K663ujKR3wVmAtrE=";
+    })
+
+    # CVE-2026-119586, backported by openSUSE
+    # https://sqlite.org/src/info/d684ccc9ec4e41d8
+    (fetchurl {
+      url = "https://build.opensuse.org/public/source/openSUSE:Factory/sqlite3/sqlite-3.54.1-CVE-2026-119586-recover-strip-trailing-sql.patch?rev=180";
+      hash = "sha256-DyHzz+bTMZOIMIdLlQKfwYEzkIalwKV6dN7YSUNwg+M=";
+    })
+    # https://sqlite.org/src/info/f2be7c2a98f2dc65
+    (fetchurl {
+      url = "https://build.opensuse.org/public/source/openSUSE:Factory/sqlite3/sqlite-3.54.1-CVE-2026-119586-recover-safe-mode.patch?rev=180";
+      hash = "sha256-WH3oOdvDqr379IjP9c7+eW5rKvo9YuJ8cMEIbQVHQlY=";
+    })
+    # https://sqlite.org/src/info/d486e997908bbd1b
+    (fetchurl {
+      url = "https://build.opensuse.org/public/source/openSUSE:Factory/sqlite3/sqlite-3.54.1-CVE-2026-119586-safe-mode-hardening.patch?rev=180";
+      hash = "sha256-4tk8k1JWVY8v0lQ2Vj/zPiScShvob+6NmgP3jn0JqQQ=";
+    })
+    # https://sqlite.org/src/info/8981033053d69c0a
+    (fetchurl {
+      url = "https://build.opensuse.org/public/source/openSUSE:Factory/sqlite3/sqlite-3.54.1-CVE-2026-119586-dump-recover-hardening.patch?rev=180";
+      hash = "sha256-mzTIhEfZY0U1UPcw+1We4mfxBhwOUoMEd33tr9Q5ZLE=";
     })
   ];
 

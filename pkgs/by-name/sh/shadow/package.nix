@@ -33,13 +33,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "shadow";
-  version = "4.20.3";
+  version = "4.20.4";
 
   src = fetchFromGitHub {
     owner = "shadow-maint";
     repo = "shadow";
     tag = finalAttrs.version;
-    hash = "sha256-BD0EWOhpFyNeb4WDcLQNmUYWcXthe4o7WV4sG8kJB7E=";
+    hash = "sha256-GQEKnH3un4TYhmyDBdBKTw2gry62tmG/M6l4j8N6PR0=";
   };
 
   outputs = [
@@ -133,6 +133,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/shadow-maint/shadow";
+    changelog = "https://github.com/shadow-maint/shadow/releases/tag/${finalAttrs.src.tag}";
     description = "Suite containing authentication-related tools such as passwd and su";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ mdaniels5757 ];

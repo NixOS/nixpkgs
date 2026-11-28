@@ -49,6 +49,13 @@ buildNodejs {
 
       # TODO: remove once https://github.com/nodejs/node/pull/66735 in included in a release
       ./gtest-integration-fix.patch
+
+      # TODO: remove once upstream has caught up with updated histogram support
+      (fetchpatch2 {
+        url = "https://github.com/nodejs/node/commit/9f57d91e42c7400cf0a5d22ea2aface1e9077531.patch?full_index=1";
+        hash = "sha256-9mDytOz3MLHr/yUMmGELN6lp4PWrq5KqpfjyYejYjBQ=";
+        excludes = [ "deps/*" ];
+      })
     ]
     ++ gypPatches;
 }

@@ -88,7 +88,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pipewire";
-  version = "1.6.11";
+  version = "1.6.12";
 
   outputs = [
     "out"
@@ -104,7 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "pipewire";
     repo = "pipewire";
     tag = finalAttrs.version;
-    hash = "sha256-QNEU3nPvn//TOoN984TlH6zT59HYTS4UDyzZW9/SgCQ=";
+    hash = "sha256-Gi0YsGnvyI0RFDDdDZ06An8os9a8uOQ4BWsqCQCfQGw=";
   };
 
   patches = [
@@ -118,9 +118,6 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/49ce385c44f4c2882ef0aeac0312e6ae9bc85f8a.patch";
       hash = "sha256-u8DLe6smodalVn3GwhI9RaDZTw4qZs8+Ylg9lxunMF0=";
     })
-
-    # fix references to symbols renamed in libcamera 0.8
-    ./libcamera-0.8-compat.patch
   ];
 
   strictDeps = true;

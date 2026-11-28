@@ -9,7 +9,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "backports-zstd";
-  version = "1.8.0";
+  version = "1.8.1";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -20,7 +20,7 @@ buildPythonPackage (finalAttrs: {
     postFetch = ''
       rm -r "$out/src/c/zstd"
     '';
-    hash = "sha256-Rq9ofN84GNzBZAg1tkw526k1dJHg8xPRGfnNOLmAieg=";
+    hash = "sha256-X2zpyou5jPcxyPK3OSuoc6qGt1VyGx1SLGwU/p6SDho=";
   };
 
   postPatch = ''

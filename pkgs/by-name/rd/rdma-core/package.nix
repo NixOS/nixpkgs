@@ -16,12 +16,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rdma-core";
-  version = "65.0";
+  version = "66.0";
 
   # Use release tarball instead of git sources (contains pre-built man pages and avoids Pandoc dependency)
   src = fetchurl {
     url = "https://github.com/linux-rdma/rdma-core/releases/download/v${finalAttrs.version}/rdma-core-${finalAttrs.version}.tar.gz";
-    hash = "sha256-jrk8FHQBRuBMKKwlh04Qa2HH06tmo20HCZ6TiYXvBoA=";
+    hash = "sha256-oD+tuytSNQV0P/APTg+G07/W4L6s8zA1ex36j72dJGs=";
   };
 
   __structuredAttrs = true;
