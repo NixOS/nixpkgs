@@ -18,15 +18,14 @@ buildGoModule (finalAttrs: {
   # many tests rely on writable $HOME/.bitrise and require network access
   doCheck = false;
 
-  # resolves error: main module (github.com/bitrise-io/bitrise/v2) does not contain package github.com/bitrise-io/bitrise/v2/integrationtests/config
-  excludedPackages = [
-    "./integrationtests"
-  ];
+  # Do not built other main packages in the repo (e.g. tools/gendocs, integrationtests)
+  subPackages = [ "." ];
 
   vendorHash = null;
   ldflags = [
-    "-X github.com/bitrise-io/bitrise/version.Commit=${finalAttrs.src.rev}"
-    "-X github.com/bitrise-io/bitrise/version.BuildNumber=0"
+    "-X github.com/bitrise-io/bitrise/v3/version.VERSION=${finalAttrs.src.rev}"
+    "-X github.com/bitrise-io/bitrise/v3/version.Commit=${finalAttrs.src.rev}"
+    "-X github.com/bitrise-io/bitrise/v3/version.BuildNumber=0"
   ];
   env.CGO_ENABLED = 0;
 
