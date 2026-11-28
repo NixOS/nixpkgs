@@ -77,7 +77,7 @@
           assert not found_manual_stop, "switch-to-configuration wants to stop the manual instance!"
 
       with subtest("Perform the actual switch and verify system state"):
-          machine.succeed(f"{new_gen}/bin/switch-to-configuration switch")
+          machine.succeed(f"{new_gen}/bin/switch-to-configuration switch >&2")
 
           # The managed instance should be dead
           machine.fail(f"systemctl is-active {managed_unit}")

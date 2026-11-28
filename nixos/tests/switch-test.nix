@@ -509,6 +509,45 @@ in
 
           }
           // forPart "units" rec {
+            cycle0.configuration = {
+              systemd.services.openssh = {
+                wantedBy = [ "multi-user.target" ];
+                path = [ pkgs.coreutils ];
+                script = "while :; do echo important to be running after a switch; sleep 1; done";
+              };
+              systemd.services.a = {
+                wantedBy = [ "multi-user.target" ];
+                path = [ pkgs.coreutils ];
+                script = "while :; do echo hi; sleep 1; done";
+              };
+              systemd.services.b = {
+                wantedBy = [ "multi-user.target" ];
+                path = [ pkgs.coreutils ];
+                script = "while :; do echo hi; sleep 1; done";
+              };
+            };
+            cycle.configuration = {
+              systemd.services.openssh = {
+                wantedBy = [ "multi-user.target" ];
+                path = [ pkgs.coreutils ];
+                script = "while :; do echo important to be running after a switch with change; sleep 1; done";
+              };
+              systemd.services.a = {
+                wantedBy = [ "multi-user.target" ];
+                after = [ "b.service" ];
+                requires = [ "b.service" ];
+                path = [ pkgs.coreutils ];
+                script = "while :; do echo hi; sleep 1; done";
+              };
+              systemd.services.b = {
+                wantedBy = [ "multi-user.target" ];
+                after = [ "a.service" ];
+                requires = [ "a.service" ];
+                path = [ pkgs.coreutils ];
+                script = "while :; do echo hi; sleep 1; done";
+              };
+            };
+
             simple-socket.configuration = {
               systemd.services.socket-activated = {
                 description = "A socket-activated service";
@@ -1594,6 +1633,26 @@ in
     ''
     + scriptForPart "units" ''
       switch_to_specialisation("${machine}", "")
+
+      with subtest("cycle"):
+          with subtest("switch to problematic config"):
+              out = switch_to_specialisation("${machine}", "cycle0")
+              t.assertIn("the following new units were started: a.service, b.service", out)
+              machine.wait_for_unit("b.service")
+              out = switch_to_specialisation("${machine}", "cycle", fail=True)
+              t.assertIn("Trying to start individually", out)
+              t.assertIn("Failed to start system units: Transaction order is cyclic. See system logs for details.", out)
+              t.assertIn("stopping the following units: a.service, b.service, openssh.service", out)
+              machine.wait_for_unit("openssh.service")
+              machine.require_unit_state("a.service", "inactive")
+              machine.require_unit_state("b.service", "inactive")
+
+          with subtest("switch from problematic config"):
+              out = switch_to_specialisation("${machine}", "cycle0")
+              t.assertIn("the following new units were started: a.service, b.service", out)
+              machine.wait_for_unit("openssh.service")
+              machine.wait_for_unit("a.service")
+              machine.wait_for_unit("b.service")
 
       with subtest("socket-activated services"):
           # Socket-activated services don't get started, just the socket
