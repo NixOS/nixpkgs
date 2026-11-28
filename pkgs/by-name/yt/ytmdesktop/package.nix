@@ -6,10 +6,11 @@
   makeDesktopItem,
 
   copyDesktopItems,
+  fetchPnpmDeps,
   makeWrapper,
   nodejs,
-  yarn-berry_4,
-  substitute,
+  pnpm_12,
+  pnpmConfigHook,
   zip,
 
   electron,
@@ -18,74 +19,49 @@
   nix-update-script,
 }:
 
-let
-  yarn-berry = yarn-berry_4;
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ytmdesktop";
-  version = "2.0.12";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "ytmdesktop";
     repo = "ytmdesktop";
     tag = "v${finalAttrs.version}";
-    leaveDotGit = true;
-
-    postFetch = ''
-      cd $out
-      git rev-parse HEAD > .COMMIT
-      find -name .git -print0 | xargs -0 rm -rf
-
-      # Remove after upstream updates to Yarn 4.14
-      # https://github.com/ytmdesktop/ytmdesktop/blob/v2.0.11/package.json#L77
-      patch -p1 < ${
-        (substitute {
-          src = ./yarn-fix.patch;
-          substitutions = [
-            "--replace-fail"
-            "YARN_LOCKFILE_VERSION_PLACEHOLDER"
-            yarn-berry.lockfileVersion
-          ];
-        })
-      }
-    '';
-
-    hash = "sha256-48PeFM6azfPJBc3c6gNRE6mQnfYWMkMI9WQOcnFQCuA=";
+    hash = "sha256-fXwjU8aSi4L83z7yakmLQzDymIjYDsjot2B3AWd69yo=";
   };
 
-  patches = [
-    # instead of running git during the build process
-    # use the .COMMIT file generated in the fetcher FOD
-    ./git-rev-parse.patch
-  ];
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      ;
+    pnpm = pnpm_12;
+    fetcherVersion = 5;
+    hash = "sha256-PEb/i5OwGF224XxZ+pQMAvarRP0LsytCUOXYjBBmm7c=";
+  };
 
-  postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
-    substituteInPlace viteconfig/main.ts
-
-    # workaround for https://github.com/electron/electron/issues/31121
-    substituteInPlace src/main/index.ts \
-      --replace-fail "process.resourcesPath" "'$out/share/ytmdesktop/resources'"
+  postPatch = ''
+    # On Linux the app.asar is run with the nixpkgs Electron binary, so
+    # process.resourcesPath points at Electron's resources instead of the app's.
+    # app.getAppPath() is the app.asar in both cases; use its parent directory.
+    substituteInPlace \
+      src/main/index.ts \
+      src/main/util.ts \
+      src/main/services/protocolmanager/index.ts \
+      --replace-fail "process.resourcesPath" "path.dirname(app.getAppPath())"
   '';
-
-  missingHashes = ./missing-hashes.json;
-
-  yarnOfflineCache = yarn-berry.fetchYarnBerryDeps {
-    inherit (finalAttrs) src missingHashes patches;
-    hash = "sha256-18H8hlhMPwBptTd2oBY2pjLgAnxG9QNzcjmney4EaMc=";
-  };
 
   nativeBuildInputs = [
     copyDesktopItems
     makeWrapper
     nodejs
-    yarn-berry
-    yarn-berry.yarnBerryConfigHook
+    pnpm_12
+    pnpmConfigHook
     zip
   ];
 
-  # Don't auto-run scripts of dependencies
-  # We don't need any native modules, so this is fine
-  env.YARN_ENABLE_SCRIPTS = "0";
+  env.ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
 
   buildPhase = ''
     runHook preBuild
@@ -106,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
     # electron-forge's console output is squeezed into one narrow column if unset
     export CI="1";
 
-    yarn run package
+    pnpm run package
 
     runHook postBuild
   '';
@@ -124,7 +100,10 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper ${lib.getExe electron} "$out"/bin/ytmdesktop \
       --add-flags "$out"/share/ytmdesktop/resources/app.asar \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
-      --add-flags ${lib.escapeShellArg commandLineArgs}
+      --add-flags ${lib.escapeShellArg commandLineArgs} \
+      --set-default ELECTRON_FORCE_IS_PACKAGED 1 \
+      --set-default ELECTRON_IS_DEV 0 \
+      --inherit-argv0
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/Applications
