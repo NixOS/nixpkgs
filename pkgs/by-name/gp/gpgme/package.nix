@@ -22,7 +22,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gpgme";
-  version = "2.0.1";
+  version = "2.3.1";
 
   outputs = [
     "out"
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnupg/gpgme/gpgme-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-ghqwaVyELqtRdSqBmAySsEEMfq3QQQP3kdXSpSZ4SWY=";
+    hash = "sha256-K/lODmd+Wo/DH3ndMj+RxUFrNvuFEFi8HovOOfJkJDQ=";
   };
 
   postPatch = ''
@@ -103,14 +103,14 @@ stdenv.mkDerivation (finalAttrs: {
       package = finalAttrs.finalPackage;
       versionCheck = true;
     };
-    python = python3.pkgs.gpgme;
+    python = python3.pkgs.gpg;
     qt5 = libsForQt5.qgpgme;
     qt6 = qt6Packages.qgpgme;
   };
 
   meta = {
     homepage = "https://gnupg.org/software/gpgme/index.html";
-    changelog = "https://git.gnupg.org/cgi-bin/gitweb.cgi?p=gpgme.git;f=NEWS;hb=gpgme-${finalAttrs.version}";
+    changelog = "https://dev.gnupg.org/source/gpgme/browse/master/NEWS;gpgme-${finalAttrs.version}?as=remarkup";
     description = "Library for making GnuPG easier to use";
     longDescription = ''
       GnuPG Made Easy (GPGME) is a library designed to make access to GnuPG
