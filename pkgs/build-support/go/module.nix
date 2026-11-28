@@ -66,6 +66,8 @@ lib.extendMkDerivation {
       # that won't run within the sandbox.
       buildTestBinaries ? false,
 
+      __structuredAttrs ? true,
+
       ...
     }@args:
     {
@@ -397,6 +399,7 @@ lib.extendMkDerivation {
         '';
 
       strictDeps = true;
+      inherit __structuredAttrs;
 
       inherit allowGoReference;
       disallowedReferences = lib.optional (!finalAttrs.allowGoReference) go;
