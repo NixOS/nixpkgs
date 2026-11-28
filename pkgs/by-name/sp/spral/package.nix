@@ -28,6 +28,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "spral";
   version = "2025.09.18";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "ralna";
     repo = "spral";
