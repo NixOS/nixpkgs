@@ -1,17 +1,19 @@
 {
-  stdenv,
   lib,
+  stdenv,
   fasm-bin,
-  isx86_64,
+  isx86_64 ? stdenv.hostPlatform.isx86_64,
+  pkgsi686Linux,
+  # Run the updater with native tools rather than the 32-bit bootstrap tools.
   updateScript ? fasm-bin.updateScript,
 }:
 
-stdenv.mkDerivation {
-  inherit (fasm-bin) version src meta;
+pkgsi686Linux.stdenv.mkDerivation {
+  inherit (pkgsi686Linux.fasm-bin) version src meta;
 
   pname = "fasm";
 
-  nativeBuildInputs = [ fasm-bin ];
+  nativeBuildInputs = [ pkgsi686Linux.fasm-bin ];
 
   buildPhase = ''
     fasm source/linux${lib.optionalString isx86_64 "/x64"}/fasm.asm fasm
