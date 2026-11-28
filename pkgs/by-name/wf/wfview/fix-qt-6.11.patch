@@ -1,0 +1,24 @@
+From: Cryolitia PukNgae <cryolitia@gmail.com>
+Subject: [PATCH] Backport Qt 6.11.1 compatibility fix to wfview 2.11
+
+Adapt upstream commit b26c898c219df8935dcb85969465ed995f64d875 to
+the source layout and surrounding context in wfview 2.11.
+
+QMultiMap::remove compares values through a const iterator in Qt 6.11.1
+and later. Make queueItem's equality operator callable on const values.
+
+Upstream: https://gitlab.com/eliggett/wfview/-/merge_requests/51
+Fixes: https://github.com/NixOS/nixpkgs/issues/562961
+
+diff --git a/cachingqueue.h b/cachingqueue.h
+--- a/cachingqueue.h
++++ b/cachingqueue.h
+@@ -39,7 +39,7 @@ struct queueItem {
+     uchar receiver;
+     bool recurring;
+     qint64 id = QDateTime::currentMSecsSinceEpoch();
+-    bool operator==(const queueItem& lhs)
++    bool operator==(const queueItem& lhs) const
+     {
+         return (lhs.command == command && lhs.receiver == receiver && lhs.recurring == recurring);
+     }
