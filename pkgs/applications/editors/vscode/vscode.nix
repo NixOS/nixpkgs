@@ -117,6 +117,7 @@ buildVscode {
       lib.replaceString "." "_" (lib.versions.majorMinor version)
     }";
     license = lib.licenses.unfree;
+    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     maintainers = with lib.maintainers; [
       eadwu
       bobby285271
