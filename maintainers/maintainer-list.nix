@@ -28760,6 +28760,11 @@
     githubId = 1694705;
     name = "Sam Stites";
   };
+  Stormageddon37 = {
+    github = "Stormageddon37";
+    githubId = 80216549;
+    name = "Nitzan Bresler";
+  };
   storopoli = {
     email = "jose@storopoli.com";
     github = "storopoli";
