@@ -4201,8 +4201,8 @@ let
         mktplcRef = {
           name = "jinjahtml";
           publisher = "samuelcolvin";
-          version = "0.20.0";
-          sha256 = "c000cbdc090b7d3d8df62a3c87a5d881c78aca5b490b3e591d9841d788a9aa93";
+          version = "0.21.0";
+          sha256 = "sha256-CNMXd3HLrViQSVtqKTGlbQUnti1VRvNl1ni+ZTp1534=";
         };
         meta = {
           description = "Syntax highlighting for jinja(2) including HTML, Markdown, YAML, Ruby and LaTeX templates";
