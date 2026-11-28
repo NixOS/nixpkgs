@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "ihm";
-  version = "2.10";
+  version = "2.13";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ihmwg";
     repo = "python-ihm";
     tag = finalAttrs.version;
-    hash = "sha256-X7hWuSltv6XZ7ugRcJQRYR0MNoqqVbl+i7tF9JafwFg=";
+    hash = "sha256-nWlD+aZBj+NtX1oZ8TPLhaIS93PqSPdtt2oXWTnXTX8=";
   };
 
   nativeBuildInputs = [ swig ];
