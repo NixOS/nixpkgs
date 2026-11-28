@@ -39,7 +39,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wordcraft";
-  version = "0.18.1";
+  version = "0.19.1";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -55,10 +55,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "storytold";
     repo = "wordcraft";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-n8BQIiX6C3D8pd8pil/reM/ffSW+cPEsI/OuQSUrYus=";
+    hash = "sha256-3WNMejMynXJE6fDwZvVeYX43/bhpYUmTSE5t5ugbODI=";
   };
 
-  cargoHash = "sha256-gsiSbjdpjKKtWfYr2xcyLiGWamy7qGGSKOraRvnaVAM=";
+  cargoHash = "sha256-L/BZueDHcwEeEzmbqC+Ekk1bWTrLGrKueIin4/OeoY4=";
 
   postPatch = ''
     sed -i -E '/^(egui_demo_lib|egui_inspection|egui_system_font_provider) = /d' Cargo.toml
