@@ -22,7 +22,11 @@ stdenv.mkDerivation {
     pkg-config
   ];
 
-  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-std=gnu17"
+    # Fix build w/ glibc-2.44
+    "-Wno-error=discarded-qualifiers"
+  ];
 
   cmakeFlags = [
     # -DARM64=ON disables all targets that only build on 32-bit ARM; this allows
