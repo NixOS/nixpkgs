@@ -1,0 +1,50 @@
+From 36e6e8bb83e94c92f29ef94c59fc3119b8ba425d Mon Sep 17 00:00:00 2001
+From: Seth Flynn <getchoo@tuta.io>
+Date: Wed, 5 Mar 2025 16:34:50 -0500
+Subject: [PATCH 2/5] build: allow local kotlin
+
+Adapted from https://cgit.freebsd.org/ports/commit/?id=680dc7bb031d0f708c2dd38f055ec8d63ee68b8a
+---
+ config/build-definitions.xml | 3 ++-
+ update-dependencies.xml      | 4 ++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/config/build-definitions.xml b/config/build-definitions.xml
+index fdba3a476..7a3cace54 100644
+--- a/config/build-definitions.xml
++++ b/config/build-definitions.xml
+@@ -100,7 +100,8 @@ This script is included in /build.xml and /config/update-dependencies.xml.
+ 
+     <property name="lib" location="bin/libs" relative="true"/>
+ 
+-    <property name="kotlinc" location="${lib}/kotlinc" relative="true"/>
++    <property name="kotlinc" location="${lib}/kotlinc" relative="true" unless:set="local.kotlin" />
++    <property name="kotlinc" location="${local.kotlin}" relative="false" if:set="local.kotlin"/>
+ 
+     <property name="module.lwjgl" location="modules/lwjgl" relative="true"/>
+ 
+diff --git a/update-dependencies.xml b/update-dependencies.xml
+index 87b110045..10a9da19d 100644
+--- a/update-dependencies.xml
++++ b/update-dependencies.xml
+@@ -27,7 +27,7 @@
+     <target name="check-dependencies" description="Updates LWJGL dependencies, if required" unless="${build.offline}">
+         <!-- Checks if the Kotlin compiler must be updated -->
+         <local name="kotlinc-build-current"/>
+-        <loadfile property="kotlinc-build-current" srcfile="${kotlinc}/build.txt" quiet="true" taskname="kotlinc"/>
++        <loadfile property="kotlinc-build-current" srcfile="${kotlinc}/build.txt" quiet="true" taskname="kotlinc" unless:set="local.kotlin" />
+         <condition property="kotlinc-uptodate">
+             <and>
+                 <isset property="kotlinc-build-current"/>
+@@ -54,7 +54,7 @@
+         <mkdir dir="${lib}"/>
+         <mkdir dir="${lib}/java"/>
+         <antcall target="-lib-download"/>
+-        <antcall target="-kotlinc-download"/>
++        <antcall target="-kotlinc-download" unless:set="local.kotlin" />
+     </target>
+ 
+     <!-- Downloads and extracts the Kotlin compiler. -->
+-- 
+2.48.1
+
