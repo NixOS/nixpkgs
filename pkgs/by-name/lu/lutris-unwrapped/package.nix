@@ -2,7 +2,6 @@
   python3Packages,
   lib,
   fetchFromGitHub,
-  fetchpatch,
 
   # build inputs
   atk,
@@ -64,22 +63,14 @@ let
 in
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "lutris-unwrapped";
-  version = "0.5.22";
+  version = "0.5.23";
 
   src = fetchFromGitHub {
     owner = "lutris";
     repo = "lutris";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4mNknvfJQJEPZjQoNdKLQcW4CI93D6BUDPj8LtD940A=";
+    hash = "sha256-3kR7I9vG7bWbuqn5luomn3f6nuJIc+9z90NLXRFolRY=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "fix-GnomeDesktop-AttributeError.patch";
-      url = "https://github.com/lutris/lutris/commit/fd91646fbae9b0f7ce90fb5d7dda34e8f13856fe.patch";
-      hash = "sha256-FCIEawp58JR9ImsFod2TMvWdXo2PmBi+4eoJz7rgcMo=";
-    })
-  ];
 
   pyproject = false;
 
@@ -125,7 +116,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     pypresence
     pyyaml
     requests
-    protobuf
     moddb
   ];
 

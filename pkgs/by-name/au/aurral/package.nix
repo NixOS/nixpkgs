@@ -33,7 +33,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "aurral";
-  version = "3.0.1";
+  version = "3.1.0";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "lklynet";
     repo = "aurral";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4F/bwmTYB1qC68VPiXh3tjLQdNNVwftpy05i7B8poTE=";
+    hash = "sha256-rORCv0O9OvgfIC4qQeNZMaISu3ciiwecWNTYIQ0NFas=";
   };
 
   postPatch = relaxNodeVersion;

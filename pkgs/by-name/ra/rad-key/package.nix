@@ -13,7 +13,7 @@ in
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "rad-key";
-  version = "0.2.2";
+  version = "0.3.0";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -22,7 +22,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     seed = "radicle.defelo.de";
     repo = "zFF3JpT1VrrsDYogDPtVZMHw6P4x";
     tag = "releases/${finalAttrs.version}";
-    hash = "sha256-tHMq0nToYLg9YbcF8p5MTTTNaJK3GWuuA+bTd3qJHoU=";
+    hash = "sha256-0/6dc7UWV1QH1r4C1RzC/dBeJsikhq2i6o43TQnroX0=";
   };
 
   nativeBuildInputs = [ zig ];
