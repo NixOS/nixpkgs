@@ -1,0 +1,143 @@
+Add missing #ifndef guards to types from DXVK windows_base.h
+
+types_compat.h defines HANDLE, HWND, HINSTANCE, HKEY, HDC, HMONITOR,
+LONG, and FLOAT without #ifndef guards.  DXVK's windows_base.h
+already provides these types and is now included first (via
+windows_compat.h), causing redefinition errors.
+
+--- a/Generals/Code/CompatLib/Include/types_compat.h
++++ b/Generals/Code/CompatLib/Include/types_compat.h
+@@ -53,10 +53,14 @@
+ // DECLARE_HANDLE macro (from windef.h) - creates opaque handle types
+ #ifndef DECLARE_HANDLE
+ #ifdef STRICT
++#ifndef HANDLE
+ typedef void *HANDLE;
++#endif
+ #define DECLARE_HANDLE(name) struct name##__ { int unused; }; typedef struct name##__ *name
+ #else
++#ifndef HANDLE
+ typedef void *HANDLE;
++#endif
+ #define DECLARE_HANDLE(name) typedef HANDLE name
+ #endif
+ #endif
+@@ -63,11 +67,21 @@
+ 
+ #ifndef _HANDLE_TYPES_DEFINED
+ #define _HANDLE_TYPES_DEFINED
++#ifndef HANDLE
+ typedef void *HANDLE;
++#endif
++#ifndef HWND
+ typedef HANDLE HWND;
++#endif
++#ifndef HINSTANCE
+ typedef HANDLE HINSTANCE;
++#endif
++#ifndef HKEY
+ typedef HANDLE HKEY;
++#endif
++#ifndef HDC
+ typedef HANDLE HDC;
++#endif
+ typedef HANDLE HFONT;     // GeneralsX @build BenderAI 10/02/2026 - GDI font handle
+ typedef HANDLE HBITMAP;   // GeneralsX @build BenderAI 10/02/2026 - GDI bitmap handle
+ typedef HANDLE HGDIOBJ;   // GeneralsX @build fbraz 11/02/2026 BenderAI - Generic GDI object handle
+@@ -74,4 +88,6 @@
++#ifndef HMONITOR
+ typedef HANDLE HMONITOR;  // Monitor handle (multi-monitor APIs)
++#endif
+ typedef int32_t HRESULT;
+ #endif /* _HANDLE_TYPES_DEFINED */
+ 
+@@ -79,10 +95,14 @@
+ 
+ typedef void *LPVOID;
+ 
++#ifndef LONG
+ typedef int32_t LONG;
++#endif
+ 
+ // DirectX types not in bittype.h
++#ifndef FLOAT
+ typedef float FLOAT;
++#endif
+ 
+ // Microsoft const specifier (DirectX uses it extensively)
+ #ifndef CONST
+@@ -128,4 +148,4 @@
+ #define OUT
+ 
+ #define _isnan isnan
+-#define _finite isfinite
+\ No newline at end of file
++#define _finite isfinite
+--- a/GeneralsMD/Code/CompatLib/Include/types_compat.h
++++ b/GeneralsMD/Code/CompatLib/Include/types_compat.h
+@@ -53,10 +53,14 @@
+ // DECLARE_HANDLE macro (from windef.h) - creates opaque handle types
+ #ifndef DECLARE_HANDLE
+ #ifdef STRICT
++#ifndef HANDLE
+ typedef void *HANDLE;
++#endif
+ #define DECLARE_HANDLE(name) struct name##__ { int unused; }; typedef struct name##__ *name
+ #else
++#ifndef HANDLE
+ typedef void *HANDLE;
++#endif
+ #define DECLARE_HANDLE(name) typedef HANDLE name
+ #endif
+ #endif
+@@ -63,11 +67,21 @@
+ 
+ #ifndef _HANDLE_TYPES_DEFINED
+ #define _HANDLE_TYPES_DEFINED
++#ifndef HANDLE
+ typedef void *HANDLE;
++#endif
++#ifndef HWND
+ typedef HANDLE HWND;
++#endif
++#ifndef HINSTANCE
+ typedef HANDLE HINSTANCE;
++#endif
++#ifndef HKEY
+ typedef HANDLE HKEY;
++#endif
++#ifndef HDC
+ typedef HANDLE HDC;
++#endif
+ typedef HANDLE HFONT;     // GeneralsX @build BenderAI 10/02/2026 - GDI font handle
+ typedef HANDLE HBITMAP;   // GeneralsX @build BenderAI 10/02/2026 - GDI bitmap handle
+ typedef HANDLE HGDIOBJ;   // GeneralsX @build fbraz 11/02/2026 BenderAI - Generic GDI object handle
+@@ -74,4 +88,6 @@
++#ifndef HMONITOR
+ typedef HANDLE HMONITOR;  // Monitor handle (multi-monitor APIs)
++#endif
+ typedef int32_t HRESULT;
+ #endif /* _HANDLE_TYPES_DEFINED */
+ 
+@@ -79,10 +95,14 @@
+ 
+ typedef void *LPVOID;
+ 
++#ifndef LONG
+ typedef int32_t LONG;
++#endif
+ 
+ // DirectX types not in bittype.h
++#ifndef FLOAT
+ typedef float FLOAT;
++#endif
+ 
+ // Microsoft const specifier (DirectX uses it extensively)
+ #ifndef CONST
+@@ -128,4 +148,4 @@
+ #define OUT
+ 
+ #define _isnan isnan
+-#define _finite isfinite
+\ No newline at end of file
++#define _finite isfinite
