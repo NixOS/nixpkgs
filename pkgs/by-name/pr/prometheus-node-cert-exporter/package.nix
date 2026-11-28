@@ -11,7 +11,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "node-cert-exporter";
-  version = "1.1.7-unstable-2025-03-10";
+  version = "node-cert-exporter-1.1.8-unstable-2025-03-10";
 
   src = fetchFromGitHub {
     owner = "amimof";
