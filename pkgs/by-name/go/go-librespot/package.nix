@@ -13,7 +13,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "go-librespot";
-  version = "0.10.6";
+  version = "0.10.7";
 
   __structuredAttrs = true;
 
@@ -21,7 +21,7 @@ buildGoModule (finalAttrs: {
     owner = "devgianlu";
     repo = "go-librespot";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-P9XWG+tmeQH5VfQzoZH72fWtBgm/23ZPlQbUUcpnH4I=";
+    hash = "sha256-B2nxHf9QCfPhK7KMiEG5aPbXlXndhfOnaqgZTvs+08Q=";
   };
 
   vendorHash = "sha256-CZI3Xv1N5dZ0YV9le7mw3+awgRC2SPLxwCbS/0464+E=";
