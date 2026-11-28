@@ -6,23 +6,22 @@
   rustPlatform,
 }:
 
-let
-  blake3-src = fetchFromGitHub {
-    owner = "BLAKE3-team";
-    repo = "BLAKE3";
-    tag = "1.5.1";
-    hash = "sha256-STWAnJjKrtb2Xyj6i1ACwxX/gTkQo5jUHilcqcgJYxc=";
-  };
-in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cached-nix-shell";
   version = "0.1.6";
 
   src = fetchFromGitHub {
     owner = "xzfc";
     repo = "cached-nix-shell";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-LI/hecqeRg3eCzU2bASJA8VoG4nvrSeHSeaGYn7M/UI=";
+  };
+
+  blake3-src = fetchFromGitHub {
+    owner = "BLAKE3-team";
+    repo = "BLAKE3";
+    tag = "1.5.1";
+    hash = "sha256-STWAnJjKrtb2Xyj6i1ACwxX/gTkQo5jUHilcqcgJYxc=";
   };
 
   cargoHash = "sha256-Rl+PgNr29OAl6P/iUfkuFlQycyeYNmxUIIdigk7PgV4=";
@@ -35,7 +34,7 @@ rustPlatform.buildRustPackage rec {
   # The BLAKE3 C library is intended to be built by the project depending on it
   # rather than as a standalone library.
   # https://github.com/BLAKE3-team/BLAKE3/blob/0.3.1/c/README.md#building
-  env.BLAKE3_CSRC = "${blake3-src}/c";
+  env.BLAKE3_CSRC = "${finalAttrs.blake3-src}/c";
 
   postBuild = ''
     make -f nix/Makefile post-build
@@ -49,7 +48,7 @@ rustPlatform.buildRustPackage rec {
     description = "Instant startup time for nix-shell";
     mainProgram = "cached-nix-shell";
     homepage = "https://github.com/xzfc/cached-nix-shell";
-    changelog = "https://github.com/xzfc/cached-nix-shell/releases/tag/v${version}";
+    changelog = "https://github.com/xzfc/cached-nix-shell/releases/tag/v${finalAttrs.version}";
     license =
       with lib.licenses;
       OR [
@@ -59,4 +58,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ xzfc ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})
