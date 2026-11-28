@@ -8,7 +8,7 @@ let
   inherit (lib) types;
   inherit (lib.attrsets) mapAttrs' mapAttrsToList nameValuePair;
   inherit (lib.generators) toINI;
-  inherit (lib.modules) mkDefault mkIf mkRemovedOptionModule;
+  inherit (lib.modules) mkDefault mkIf;
   inherit (lib.options) literalExpression mkEnableOption mkOption;
   inherit (lib.strings) concatStringsSep;
 
@@ -109,86 +109,130 @@ in
         Configuration for one or more device IDs. Corresponding files in the /etc/keyd/ directory are created according to the name of the keys (like `default` or `externalKeyboard`).
       '';
     };
-  };
 
-  config = mkIf cfg.enable {
-    # Creates separate files in the `/etc/keyd/` directory for each key in the dictionary
-    environment.etc = mapAttrs' (
-      name: options:
-      nameValuePair "keyd/${name}.conf" {
-        text = ''
-          [ids]
-          ${concatStringsSep "\n" options.ids}
-
-          ${toINI { } options.settings}
-          ${options.extraConfig}
-        '';
-      }
-    ) cfg.keyboards;
-
-    hardware.uinput.enable = mkDefault true;
-
-    systemd.services.keyd = {
-      description = "Keyd remapping daemon";
-      documentation = [ "man:keyd(1)" ];
-
-      wantedBy = [ "multi-user.target" ];
-
-      restartTriggers = mapAttrsToList (
-        name: _options: config.environment.etc."keyd/${name}.conf".source
-      ) cfg.keyboards;
-
-      serviceConfig = {
-        ExecStart = lib.getExe cfg.package;
-        Restart = "always";
-
-        # TODO investigate why it doesn't work propeprly with DynamicUser
-        # See issue: https://github.com/NixOS/nixpkgs/issues/226346
-        # DynamicUser = true;
-        SupplementaryGroups = [
-          config.users.groups.input.name
-          config.users.groups.uinput.name
-        ];
-
-        RuntimeDirectory = "keyd";
-
-        # Hardening
-        CapabilityBoundingSet = [
-          "CAP_SYS_NICE"
-          "CAP_IPC_LOCK"
-        ];
-        DeviceAllow = [
-          "char-input rw"
-          "/dev/uinput rw"
-        ];
-        ProtectClock = true;
-        PrivateNetwork = true;
-        ProtectHome = true;
-        ProtectHostname = true;
-        PrivateUsers = false;
-        PrivateMounts = true;
-        PrivateTmp = true;
-        RestrictNamespaces = true;
-        ProtectKernelLogs = true;
-        ProtectKernelModules = true;
-        ProtectKernelTunables = true;
-        ProtectControlGroups = true;
-        MemoryDenyWriteExecute = true;
-        LockPersonality = true;
-        ProtectProc = "invisible";
-        SystemCallFilter = [
-          "nice"
-          "@system-service"
-          "~@privileged"
-        ];
-        RestrictAddressFamilies = [ "AF_UNIX" ];
-        RestrictSUIDSGID = true;
-        IPAddressDeny = [ "any" ];
-        NoNewPrivileges = true;
-        ProtectSystem = "strict";
-        ProcSubset = "pid";
-        UMask = "0077";
+    applicationMapper = mkOption {
+      type = types.submodule {
+        options = {
+          enable = mkEnableOption "keyd application mapper";
+          users = mkOption {
+            type = types.listOf types.str;
+            default = [ ];
+            example = [ "alice" ];
+            description = ''
+              Users to add to the `keyd` group and start the mapper service for.
+            '';
+          };
+        };
       };
+      default = { };
+      description = ''
+        Enables the keyd application mapper, which applies per-application key bindings by watching the focused window.
+        The per-application configuration is read from {file}`~/.config/keyd/app.conf` in each user's home directory.
+        See <https://github.com/rvaiya/keyd> for the file format.
+      '';
     };
   };
+
+  config = lib.mkMerge [
+    (mkIf cfg.enable {
+      # Creates separate files in the `/etc/keyd/` directory for each key in the dictionary
+      environment.etc = mapAttrs' (
+        name: options:
+        nameValuePair "keyd/${name}.conf" {
+          text = ''
+            [ids]
+            ${concatStringsSep "\n" options.ids}
+
+            ${toINI { } options.settings}
+            ${options.extraConfig}
+          '';
+        }
+      ) cfg.keyboards;
+
+      hardware.uinput.enable = mkDefault true;
+
+      systemd.services.keyd = {
+        description = "Keyd remapping daemon";
+        documentation = [ "man:keyd(1)" ];
+
+        wantedBy = [ "multi-user.target" ];
+
+        restartTriggers = mapAttrsToList (
+          name: _options: config.environment.etc."keyd/${name}.conf".source
+        ) cfg.keyboards;
+
+        serviceConfig = {
+          ExecStart = lib.getExe cfg.package;
+          Restart = "always";
+
+          # TODO investigate why it doesn't work propeprly with DynamicUser
+          # See issue: https://github.com/NixOS/nixpkgs/issues/226346
+          # DynamicUser = true;
+          SupplementaryGroups = [
+            config.users.groups.input.name
+            config.users.groups.uinput.name
+          ];
+
+          RuntimeDirectory = "keyd";
+
+          # Hardening
+          CapabilityBoundingSet = [
+            "CAP_SYS_NICE"
+            "CAP_IPC_LOCK"
+            "CAP_SETGID"
+          ];
+          DeviceAllow = [
+            "char-input rw"
+            "/dev/uinput rw"
+          ];
+          ProtectClock = true;
+          PrivateNetwork = true;
+          ProtectHome = true;
+          ProtectHostname = true;
+          PrivateUsers = false;
+          PrivateMounts = true;
+          PrivateTmp = true;
+          RestrictNamespaces = true;
+          ProtectKernelLogs = true;
+          ProtectKernelModules = true;
+          ProtectKernelTunables = true;
+          ProtectControlGroups = true;
+          MemoryDenyWriteExecute = true;
+          LockPersonality = true;
+          ProtectProc = "invisible";
+          SystemCallFilter = [
+            "nice"
+            "@system-service"
+            "~@privileged"
+          ];
+          RestrictAddressFamilies = [ "AF_UNIX" ];
+          RestrictSUIDSGID = true;
+          IPAddressDeny = [ "any" ];
+          NoNewPrivileges = true;
+          ProtectSystem = "strict";
+          ProcSubset = "pid";
+          UMask = "0077";
+        };
+      };
+    })
+    (lib.mkIf (cfg.enable && cfg.applicationMapper.enable) {
+      users.groups.keyd = { };
+
+      users.users = builtins.mapAttrs (_: _v: { extraGroups = [ "keyd" ]; }) (
+        lib.genAttrs cfg.applicationMapper.users (x: { })
+      );
+
+      systemd.user.services.keyd-application-mapper = {
+        description = "keyd application mapper";
+        wantedBy = [ "default.target" ];
+        serviceConfig = {
+          ExecStart = "${pkgs.keyd.passthru.appMap}/bin/keyd-application-mapper";
+          Environment = [ "PATH=${pkgs.keyd}/bin" ];
+          # The mapper may start before the desktop is ready and exit, restart it so it picks the desktop up on the next attempt
+          Restart = "on-failure";
+          RestartSec = "5";
+        };
+      };
+    })
+  ];
 }
