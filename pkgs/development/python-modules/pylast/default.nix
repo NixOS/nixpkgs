@@ -5,7 +5,7 @@
   flaky,
   hatch-vcs,
   hatchling,
-  httpx,
+  httpx2,
   pytest-random-order,
   pytest-recording,
   pytestCheckHook,
@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "pylast";
-  version = "7.0.2";
+  version = "7.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pylast";
     repo = "pylast";
     tag = version;
-    hash = "sha256-NA49V9s4k0l0icoiKVjxTAdhC+MuNgbbeImAjzGB8Xo=";
+    hash = "sha256-RpJDCEySM09C9/PGYuT+6+YH7kNFWCSnwbGmUSMqE1I=";
   };
 
   build-system = [
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     hatchling
   ];
 
-  dependencies = [ httpx ];
+  dependencies = [ httpx2 ];
 
   nativeCheckInputs = [
     flaky

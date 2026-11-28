@@ -18,3 +18,104 @@
          "type_" / CEnum(
              Int8ub,
              **{t.name: t.value for t in DeviceTypes}
+--- a/pywidevine/pssh.py
++++ b/pywidevine/pssh.py
+@@ -88,21 +88,25 @@
+                     if data_serialized != data:  # not actually a WidevinePsshData
+                         raise DecodeError()
+                     box = Box.parse(Box.build(dict(
+-                        type=b"pssh",
+-                        version=0,
+-                        flags=0,
+-                        system_ID=PSSH.SystemId.Widevine,
+-                        init_data=data_serialized
++                        type="pssh",
++                        data=dict(
++                            version=0,
++                            flags=0,
++                            system_ID=PSSH.SystemId.Widevine,
++                            init_data=data_serialized
++                        )
+                     )))
+                 except DecodeError:  # not a widevine cenc header
+                     if "</WRMHEADER>".encode("utf-16-le") in data:
+                         # TODO: Actually parse `data` as a PlayReadyHeader object and store that instead
+                         box = Box.parse(Box.build(dict(
+-                            type=b"pssh",
+-                            version=0,
+-                            flags=0,
+-                            system_ID=PSSH.SystemId.PlayReady,
+-                            init_data=data
++                            type="pssh",
++                            data=dict(
++                                version=0,
++                                flags=0,
++                                system_ID=PSSH.SystemId.PlayReady,
++                                init_data=data
++                            )
+                         )))
+                     elif strict:
+                         raise DecodeError(f"Could not parse data as a {Container} nor a {WidevinePsshData}.")
+@@ -111,13 +115,17 @@
+                         # The license server likely has something custom to parse it.
+                         # See doc-string about Lenient mode for more information.
+                         box = Box.parse(Box.build(dict(
+-                            type=b"pssh",
+-                            version=0,
+-                            flags=0,
+-                            system_ID=PSSH.SystemId.Widevine,
+-                            init_data=data
++                            type="pssh",
++                            data=dict(
++                                version=0,
++                                flags=0,
++                                system_ID=PSSH.SystemId.Widevine,
++                                init_data=data
++                            )
+                         )))
+ 
++        # pymp4 exposes parsed box payload fields under ``data``.
++        box = box.data if hasattr(box, "data") else box
+         self.version = box.version
+         self.flags = box.flags
+         self.system_id = box.system_ID
+@@ -184,12 +192,14 @@
+                 )
+ 
+         pssh = cls(Box.parse(Box.build(dict(
+-            type=b"pssh",
+-            version=version,
+-            flags=flags,
+-            system_ID=system_id,
+-            init_data=[init_data, b""][init_data is None]
+-            # key_IDs should not be set yet
++            type="pssh",
++            data=dict(
++                version=version,
++                flags=flags,
++                system_ID=system_id,
++                init_data=[init_data, b""][init_data is None]
++                # key_IDs should not be set yet
++            )
+         ))))
+ 
+         if key_ids:
+@@ -284,12 +294,14 @@
+     def dump(self) -> bytes:
+         """Export the PSSH object as a full PSSH box in bytes form."""
+         return Box.build(dict(
+-            type=b"pssh",
+-            version=self.version,
+-            flags=self.flags,
+-            system_ID=self.system_id,
+-            key_IDs=self.key_ids if self.version == 1 and self.key_ids else None,
+-            init_data=self.init_data
++            type="pssh",
++            data=dict(
++                version=self.version,
++                flags=self.flags,
++                system_ID=self.system_id,
++                key_IDs=self.key_ids if self.version == 1 and self.key_ids else None,
++                init_data=self.init_data
++            )
+         ))
