@@ -1,7 +1,9 @@
 {
   lib,
+  stdenv,
   buildGo126Module,
   fetchFromGitHub,
+  installShellFiles,
   nix-update-script,
   nixosTests,
   ciMode ? true, # Override to false to run time-sensitive tests locally
@@ -25,6 +27,8 @@ buildGo126Module (finalAttrs: {
 
   vendorHash = "sha256-A9K2/bWYUdMA8ypSisxk4NMOavHz51FaHEaxahz+0ek=";
 
+  nativeBuildInputs = [ installShellFiles ];
+
   excludedPackages = [
     "acceptance"
     "demo"
@@ -41,6 +45,22 @@ buildGo126Module (finalAttrs: {
     mv $out/bin/control $out/bin/scion-control
     mv $out/bin/daemon $out/bin/scion-daemon
     set -e
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    for cmd in \
+      ${lib.optionalString stdenv.hostPlatform.isLinux "controller"} \
+      scion \
+      scion-control \
+      scion-daemon \
+      scion-dispatcher \
+      scion-ip-gateway \
+      scion-pki \
+      scion-router; do
+      installShellCompletion --cmd "$cmd" \
+        --bash <($out/bin/$cmd completion bash) \
+        --fish <($out/bin/$cmd completion fish) \
+        --zsh <($out/bin/$cmd completion zsh)
+    done
   '';
 
   doCheck = true;
