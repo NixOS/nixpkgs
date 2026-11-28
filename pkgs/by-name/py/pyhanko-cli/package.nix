@@ -7,14 +7,14 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pyhanko-cli";
-  version = "0.4.2";
+  version = "0.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "MatthiasValvekens";
     repo = "pyhanko";
     tag = "pyhanko-cli/v${finalAttrs.version}";
-    hash = "sha256-PyCVebWLtDeYFDxAE2mZ8tGaVQF60czU8ZyVbSyVONo=";
+    hash = "sha256-od9t6OmCYQ+j5HGTPa44VxNqTgT1S53VTBhjqD5/Ynw=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/pkgs/pyhanko-cli";
