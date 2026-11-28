@@ -7,7 +7,6 @@
   hatchling,
   hatch-fancy-pypi-readme,
   toml,
-  tomli,
 }:
 
 buildPythonPackage rec {
@@ -31,7 +30,6 @@ buildPythonPackage rec {
   dependencies = [
     coverage
     toml
-    tomli
   ];
 
   # xdist related tests fail with the following error
@@ -50,6 +48,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pytest-dev/pytest-cov";
     changelog = "https://github.com/pytest-dev/pytest-cov/blob/v${version}/CHANGELOG.rst";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ jfly ];
   };
 }
