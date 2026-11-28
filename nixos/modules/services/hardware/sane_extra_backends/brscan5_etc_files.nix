@@ -50,7 +50,7 @@ in
 stdenv.mkDerivation {
 
   name = "brscan5-etc-files";
-  version = "1.2.6-0";
+  version = "1.8.1-0";
   src = "${brscan5}/opt/brother/scanner/brscan5";
 
   nativeBuildInputs = [ brscan5 ];
@@ -62,7 +62,7 @@ stdenv.mkDerivation {
     mkdir -p "$TARGET_DIR"
     cp -rp "./models" "$TARGET_DIR"
     cp -rp "./brscan5.ini" "$TARGET_DIR"
-    cp -rp "./brsanenetdevice.cfg" "$TARGET_DIR"
+    cp -rp "./brsanenetdevice" "$TARGET_DIR"
     export NIX_REDIRECTS="/etc/opt/brother/scanner/brscan5/=$TARGET_DIR/"
     printf '${addAllNetDev netDevices}\n'
     ${addAllNetDev netDevices}

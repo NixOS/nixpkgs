@@ -33,7 +33,7 @@
     assert len([x for x in strace if re.match(regexp,x)]) > 0
 
     # module creates a config
-    cfg = machine.succeed('cat /etc/opt/brother/scanner/brscan5/brsanenetdevice.cfg')
+    cfg = machine.succeed('cat /etc/opt/brother/scanner/brscan5/brsanenetdevice/brsanenetdevice.cfg')
     assert 'DEVICE=a , "ADS-1200" , 0x4f9:0x459 , NODENAME=BRW0080927AFBCE' in cfg
     assert 'DEVICE=b , "ADS-1200" , 0x4f9:0x459 , IP-ADDRESS=192.168.1.2' in cfg
 

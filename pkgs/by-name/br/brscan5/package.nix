@@ -22,16 +22,18 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "brscan5";
-  version = "1.3.1-0";
+  version = "1.8.1-0";
   src =
     {
+      # Note that these downloads may be region-locked; testing further updates locally could
+      # require a VPN depending on your region.
       "i686-linux" = fetchurl {
         url = "https://download.brother.com/welcome/dlf104034/${pname}-${version}.i386.deb";
-        hash = "sha256-BgS64vwsKESJBDz9H2MDwcGiresROSNFP1b+7+zlE5c=";
+        hash = "sha256-uOX2NX7H+Tsyz5TX7SyAQD0UYYg6qGjAG6qxQu/wxLI=";
       };
       "x86_64-linux" = fetchurl {
         url = "https://download.brother.com/welcome/dlf104033/${pname}-${version}.amd64.deb";
-        hash = "sha256-0UMbXMBlyiZI90WG5FWEP2mIZEBsxXd11dtgtyuSDnY=";
+        hash = "sha256-jmxEnstL6zkXWTPkZS7SeUJjIvWfR1bsLh8FH8ELL+g=";
       };
     }
     ."${system}" or (throw "Unsupported system: ${system}");
@@ -61,9 +63,9 @@ stdenv.mkDerivation rec {
       # strings -n 10 --radix=d opt/brother/scanner/brscan5/libsane-brother5.so.1.0.7 | grep "/opt/brother/scanner/brscan5/models"
       patchOffsetBytes =
         if system == "x86_64-linux" then
-          86592
+          86976
         else if system == "i686-linux" then
-          79236
+          79536
         else
           throw "Unsupported system: ${system}";
     in
@@ -74,7 +76,7 @@ stdenv.mkDerivation rec {
 
       for file in opt/brother/scanner/brscan5/*.so.* opt/brother/scanner/brscan5/brscan_[cg]netconfig; do
         if ! test -L $file; then
-          patchelf --set-rpath ${lib.makeLibraryPath buildInputs} $file
+          patchelf --set-rpath ${lib.makeLibraryPath buildInputs}:$out/opt/brother/scanner/brscan5 $file
         fi
       done
 
@@ -96,7 +98,7 @@ stdenv.mkDerivation rec {
     pushd $out/$PATH_TO_BRSCAN5
       ln -s libLxBsDeviceAccs.so.1.0.0 libLxBsDeviceAccs.so.1
       ln -s libLxBsNetDevAccs.so.1.0.0 libLxBsNetDevAccs.so.1
-      ln -s libLxBsScanCoreApi.so.3.2.0 libLxBsScanCoreApi.so.3
+      ln -s libLxBsScanCoreApi.so.3.2.6 libLxBsScanCoreApi.so.3
       ln -s libLxBsUsbDevAccs.so.1.0.0 libLxBsUsbDevAccs.so.1
       ln -s libsane-brother5.so.1.0.7 libsane-brother5.so.1
     popd
@@ -121,7 +123,7 @@ stdenv.mkDerivation rec {
 
     ETCDIR=$out/etc/opt/brother/scanner/brscan5
     mkdir -p $ETCDIR
-    cp -rp $PATH_TO_BRSCAN5/{models,brscan5.ini,brsanenetdevice.cfg} $ETCDIR/
+    cp -rp $PATH_TO_BRSCAN5/{models,brscan5.ini,brsanenetdevice} $ETCDIR/
 
     runHook postInstall
   '';
@@ -131,7 +133,10 @@ stdenv.mkDerivation rec {
 
   dontPatchELF = true;
 
-  passthru.tests = { inherit (nixosTests) brscan5; };
+  passthru = {
+    saneBackendNames = [ "brother5" ];
+    tests = { inherit (nixosTests) brscan5; };
+  };
 
   meta = {
     description = "Brother brscan5 sane backend driver";
