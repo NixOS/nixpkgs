@@ -16,14 +16,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "storage3";
-  version = "2.29.0";
+  version = "2.33.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "supabase";
     repo = "supabase-py";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LaSlAYFvx/HHdfmc9J+KScVQ9JFGS98Yfihzn8F7t3g=";
+    hash = "sha256-8AGAAE+GsP07sRsjn9UAvLaH6t0kvmSOjLc8T1f/mEI=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src/storage";
