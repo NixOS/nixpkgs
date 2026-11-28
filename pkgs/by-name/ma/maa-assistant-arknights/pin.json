@@ -1,10 +1,8 @@
 {
-  "stable": {
-    "version": "5.24.2",
-    "hash": "sha256-wZRC/GnAodyzVh7+hKwwF3oobYmkWQb3sD1TL80YGgY="
-  },
-  "beta": {
-    "version": "5.24.2",
-    "hash": "sha256-wZRC/GnAodyzVh7+hKwwF3oobYmkWQb3sD1TL80YGgY="
+  "version": "6.22.0",
+  "hash": "sha256-hWgJu5fjHfG450cRqUmh0iUIKZFb6zKZwB2gsUmZl3U=",
+  "maaUtils": {
+    "rev": "f093a19d07db89f2a03bf0ec50c2061a49758783",
+    "hash": "sha256-zu8KDAo+VuJ2O6UIAAjgn6PIEV2uQwfXWVDpzw/Oj54="
   }
 }

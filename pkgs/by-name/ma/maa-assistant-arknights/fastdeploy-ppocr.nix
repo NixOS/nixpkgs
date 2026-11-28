@@ -16,14 +16,17 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "fastdeploy-ppocr";
-  version = "0-unstable-2023-10-09";
+  version = "0-unstable-2026-09-18";
 
   src = fetchFromGitHub {
-    owner = "MaaAssistantArknights";
+    owner = "MaaXYZ";
     repo = "FastDeploy";
-    # follows but not fully follows https://github.com/MaaAssistantArknights/MaaDeps/blob/master/vcpkg-overlay/ports/maa-fastdeploy/portfile.cmake#L4
-    rev = "0db6000aaac250824266ac37451f43ce272d80a3";
-    hash = "sha256-5TItnPDc5WShpZAgBYeqgI9KKkk3qw/M8HPMlq/H4BM=";
+    # MAA pins its MaaDeps release here:
+    # https://github.com/MaaAssistantArknights/MaaAssistantArknights/blob/v6.22.0/tools/maadeps-download.py#L13
+    # Match the FastDeploy REF from that MaaDeps release:
+    # https://github.com/MaaAssistantArknights/MaaDeps/blob/v2.15.1/vcpkg-overlay/ports/maa-fastdeploy/portfile.cmake#L4
+    rev = "e11935e4595360e7038573db1a7ab08dd0e096ec";
+    hash = "sha256-7g0T5TZ2M2I12nIq9Cytbi8qGw60ssxAgYr2o1pAUVU=";
   };
 
   outputs = [
@@ -33,11 +36,11 @@ effectiveStdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    eigen
   ]
   ++ lib.optionals cudaSupport [ cudaPackages.cuda_nvcc ];
 
   buildInputs = [
+    eigen
     onnxruntime
     opencv
   ]
@@ -58,10 +61,20 @@ effectiveStdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_SHARED_LIBS" true)
+    (lib.cmakeBool "WITH_CUDA" cudaSupport)
   ]
   ++ lib.optionals cudaSupport [
+    (lib.cmakeFeature "CUDA_DIRECTORY" "${lib.getDev cudaPackages.cuda_cudart}")
     (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaPackages.flags.cmakeCudaArchitecturesString)
   ];
+
+  # Use CMake's CUDA architecture selection.
+  postPatch = ''
+    substituteInPlace fastdeploy/runtime/backends/ort/ort_backend.cc \
+      --replace-fail '#if defined(WITH_COREML) && __has_include(<coreml_provider_factory.h>)' '#if defined(__APPLE__) && defined(WITH_COREML) && __has_include(<coreml_provider_factory.h>)'
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'include(cmake/cuda.cmake)' ""
+  '';
 
   postInstall = ''
     mkdir $cmake
@@ -70,7 +83,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "MaaAssistantArknights stripped-down version of FastDeploy";
-    homepage = "https://github.com/MaaAssistantArknights/FastDeploy";
+    homepage = "https://github.com/MaaXYZ/FastDeploy";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     license = lib.licenses.asl20;
     broken = cudaSupport && stdenv.hostPlatform.system != "x86_64-linux";
