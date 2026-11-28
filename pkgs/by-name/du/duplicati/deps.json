@@ -145,6 +145,11 @@
     "hash": "sha256-seyWi9XyRefeldHLUYnX6+AACAwSHq6Yn6Da6ks210A="
   },
   {
+    "pname": "AWSSDK.SecurityToken",
+    "version": "4.0.100.4",
+    "hash": "sha256-JIeFRw21JYSq6FxWHTaah/iHNlXUzPzlflebgipGVqs="
+  },
+  {
     "pname": "Azure.Core",
     "version": "1.53.0",
     "hash": "sha256-zipwAcBBWNCb1uV3tUWOIwwQfYYeuEAWv1P8agCyqG8="
@@ -221,8 +226,8 @@
   },
   {
     "pname": "Duplicati.StreamUtil",
-    "version": "1.0.5",
-    "hash": "sha256-1+8mCFEbCA6igVMVJW3VMayfxW/Mt72Ukod/+iPbhOw="
+    "version": "1.0.6",
+    "hash": "sha256-5hJwSYSM37EwEgER92UonM3g+SFgnOd+2iRC37jsmEI="
   },
   {
     "pname": "FluentFTP",
@@ -1086,8 +1091,8 @@
   },
   {
     "pname": "SQLite",
-    "version": "3.54.0",
-    "hash": "sha256-gBdMIDIXbX9/wIhXGGgud1QkOd4b8luqs2i0XusKQRU="
+    "version": "3.54.1",
+    "hash": "sha256-oI6hAOAse8alApBfDcdjCmr4zmjfXJbZIDLp77DsUkQ="
   },
   {
     "pname": "sqlite-net-pcl",
