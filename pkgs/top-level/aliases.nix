@@ -1585,6 +1585,7 @@ mapAliases {
   libXft = libxft; # Added 2026-02-06
   libXi = libxi; # Added 2026-02-06
   libXinerama = libxinerama; # Added 2026-02-06
+  libxml2Python = throw "'libxml2Python' has been removed; use 'python3Packages.libxml2' (for Python bindings) or 'libxml2' instead"; # Added 2026-11-27
   libXmu = libxmu; # Added 2026-02-06
   libXp = libxp; # Added 2026-02-06
   libXpm = libxpm; # Added 2026-02-06
