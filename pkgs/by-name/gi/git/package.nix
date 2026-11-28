@@ -475,6 +475,9 @@ stdenv.mkDerivation (finalAttrs: {
     cat > $out/etc/gitconfig << EOF
     [credential]
       helper = osxkeychain
+    # load a potential system wide git config
+    [include]
+      path = /etc/gitconfig
     EOF
   ''
   + ''
