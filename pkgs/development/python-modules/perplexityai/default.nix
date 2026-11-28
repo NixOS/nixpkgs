@@ -25,14 +25,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "perplexityai";
-  version = "0.46.1";
+  version = "0.50.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "perplexityai";
     repo = "perplexity-py";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+lX9vG2/a7OMzSyePMXDCm3ymf5DIdGhrMDHBynfAi0=";
+    hash = "sha256-AkRgxHEnDAuItDU9bSpQ+ZPAR5vnfVkT/X1RoToTnwY=";
   };
 
   # The license classifier conflicts with the SPDX license expression
