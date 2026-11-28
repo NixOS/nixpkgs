@@ -7749,8 +7749,6 @@ with pkgs;
 
   electrum = callPackage ../applications/misc/electrum { };
 
-  electrum-ltc = callPackage ../applications/misc/electrum/ltc.nix { };
-
   inherit (recurseIntoAttrs (callPackage ../applications/editors/emacs { }))
     emacs31
     emacs31-gtk3
