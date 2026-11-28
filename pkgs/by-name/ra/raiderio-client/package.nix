@@ -8,12 +8,12 @@
 
 let
   pname = "raiderio-client";
-  version = "6.0.4";
+  version = "6.0.6";
 
   sources = {
     x86_64-linux = {
       arch = "x86_64";
-      hash = "sha256-gWTkiuexMe79AwJ2aQSMzo5C89ONmhsstKEOVm2Z0o8=";
+      hash = "sha256-v5fub2YNql3kiL7nNdhXyS3OuYftgUKIcIM8Q2voJ/s=";
     };
     aarch64-linux = {
       arch = "arm64";
