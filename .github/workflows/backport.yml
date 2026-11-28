@@ -11,7 +11,7 @@ on:
 
 permissions:
   contents: read
-  issues: write # adding the 'has: port to stable' and 'has: backport failed' label
+  issues: write # setting the 'has: port to stable' and 'has: failed backport' labels
   pull-requests: write # creating backport pull requests
 
 defaults:
@@ -75,28 +75,28 @@ jobs:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: gh api /rate_limit | jq
 
-      - name: "Add 'has: port to stable' label"
-        if: steps.backport.outputs.created_pull_numbers != ''
-        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+      # Checked out after the backport, because checking out to the workspace root above would delete it.
+      # This is the target branch of the pull request, so the script is trusted.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          # Not using the app on purpose to avoid triggering another workflow run after adding this label.
-          script: |
-            await github.rest.issues.addLabels({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.payload.pull_request.number,
-              labels: [ '8.has: port to stable' ]
-            })
+          persist-credentials: false
+          path: trusted
+          sparse-checkout: |
+            ci/github-script
 
-      - name: "Add 'has: failed backport' label"
-        if: steps.backport.outputs.was_successful == 'false'
+      - name: Update backport labels
         uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        env:
+          WAS_SUCCESSFUL: ${{ steps.backport.outputs.was_successful }}
+          CREATED_PULL_NUMBERS: ${{ steps.backport.outputs.created_pull_numbers }}
         with:
-          # Not using the app on purpose to avoid triggering another workflow run after adding this label.
+          # Not using the app on purpose to avoid triggering another workflow run after changing labels.
           script: |
-            await github.rest.issues.addLabels({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.payload.pull_request.number,
-              labels: [ '8.has: failed backport' ]
+            const { default: labelBackport } = await import('${{ github.workspace }}/trusted/ci/github-script/backport.ts')
+            await labelBackport({
+              github,
+              context,
+              core,
+              wasSuccessful: process.env.WAS_SUCCESSFUL,
+              createdPullNumbers: process.env.CREATED_PULL_NUMBERS,
             })
