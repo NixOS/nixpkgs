@@ -1,13 +1,13 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   fetchurl,
   makeWrapper,
   jdk,
   testers,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "quarkus-cli";
   version = "4.0.1";
 
