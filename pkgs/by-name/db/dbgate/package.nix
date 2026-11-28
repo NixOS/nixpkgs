@@ -70,10 +70,7 @@ if stdenv.hostPlatform.isDarwin then
     '';
   }
 else
-  let
-    appimageContents = appimageTools.extract { inherit pname src version; };
-  in
-  appimageTools.wrapType2 {
+  appimageTools.wrapType2 (finalAttrs: {
     inherit
       pname
       version
@@ -83,9 +80,9 @@ else
       ;
 
     extraInstallCommands = ''
-      install -Dm644 ${appimageContents}/dbgate.desktop -t $out/share/applications
+      install -Dm644 ${finalAttrs.contents}/dbgate.desktop -t $out/share/applications
       substituteInPlace $out/share/applications/dbgate.desktop \
         --replace-warn "Exec=AppRun --no-sandbox" "Exec=dbgate"
-      cp -r ${appimageContents}/usr/share/icons $out/share
+      cp -r ${finalAttrs.contents}/usr/share/icons $out/share
     '';
-  }
+  })
