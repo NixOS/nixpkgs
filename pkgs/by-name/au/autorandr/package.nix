@@ -2,7 +2,7 @@
   lib,
   python3,
   fetchFromGitHub,
-  systemd,
+  systemdLibs,
   xrandr,
   installShellFiles,
   desktop-file-utils,
@@ -58,7 +58,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     make install TARGETS='manpage' PREFIX=$man
 
     ${
-      if systemd != null then
+      if systemdLibs != null then
         ''
           make install TARGETS='systemd udev' PREFIX=$out DESTDIR=$out \
             SYSTEMD_UNIT_DIR=/lib/systemd/system \

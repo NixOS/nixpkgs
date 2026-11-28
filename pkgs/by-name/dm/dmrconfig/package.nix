@@ -4,7 +4,7 @@
   fetchFromGitHub,
   fetchpatch,
   libusb1,
-  systemd,
+  systemdLibs,
   udevCheckHook,
 }:
 
@@ -30,7 +30,7 @@ gcc15Stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libusb1
-    systemd
+    systemdLibs
   ];
 
   doInstallCheck = true;

@@ -3,7 +3,7 @@
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
-  systemd,
+  systemdLibs,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
-    systemd
+    systemdLibs
   ];
 
   checkFlags = [

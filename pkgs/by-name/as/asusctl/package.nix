@@ -2,7 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  systemd,
+  systemdLibs,
   coreutils,
   gnugrep,
   pkg-config,
@@ -74,7 +74,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libxkbcommon
     libgbm
     seatd
-    systemd
+    systemdLibs
     wayland
   ];
 

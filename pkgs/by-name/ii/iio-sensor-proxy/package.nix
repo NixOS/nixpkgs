@@ -9,7 +9,7 @@
   ninja,
   pkg-config,
   libgudev,
-  systemd,
+  systemdLibs,
   polkit,
   udevCheckHook,
   libssc,
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libgudev
-    systemd
+    systemdLibs
     polkit
     libssc
   ];

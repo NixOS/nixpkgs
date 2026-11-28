@@ -43,7 +43,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://git.madhouse-project.org/iocaine/iocaine/src/tag/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ sugar700 ];
     mainProgram = "iocaine";
   };
 })

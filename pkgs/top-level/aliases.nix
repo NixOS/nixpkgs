@@ -1585,6 +1585,7 @@ mapAliases {
   libXft = libxft; # Added 2026-02-06
   libXi = libxi; # Added 2026-02-06
   libXinerama = libxinerama; # Added 2026-02-06
+  libxml2Python = throw "'libxml2Python' has been removed; use 'python3Packages.libxml2' (for Python bindings) or 'libxml2' instead"; # Added 2026-11-27
   libXmu = libxmu; # Added 2026-02-06
   libXp = libxp; # Added 2026-02-06
   libXpm = libxpm; # Added 2026-02-06
@@ -3393,6 +3394,7 @@ mapAliases {
   zandronum-alpha-server = throw "'zandronum-alpha-server' has been removed as it was broken and the stable version has caught up"; # Added 2025-10-19
   zap-chip-gui = throw "the gui variant of zap-chip was removed as it was not really functional"; # Added 2026-05-30
   zbackup = throw "'zbackup' has been removed due to being unmaintained upstream"; # Added 2025-08-22
+  zcash = throw "'zcash' has been removed because zcashd reached end of life and was archived upstream"; # Added 2026-11-18
   zdoom = throw "'zdoom' has been removed as it was broken and unmaintained upstream. Consider using UZDoom instead."; # Added 2026-04-04
   zeal-qt5 = warnAlias "'zeal-qt5' has been removed from nixpkgs. Please use 'zeal' instead" zeal; # Added 2025-08-31
   zeal-qt6 = warnAlias "'zeal-qt6' has been renamed to 'zeal'" zeal; # Added 2025-08-31

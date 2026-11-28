@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "aiostream";
-  version = "0.8.1";
+  version = "0.8.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "vxgmichel";
     repo = "aiostream";
     tag = "v${version}";
-    hash = "sha256-eO1vcLH+WICMDzm6tSEOxQXNS3KBIW1x0M/0fKkrRUE=";
+    hash = "sha256-7tAezAg6Utqgl++yt1ksz1aZRe0XMtu+Jv7y+t1+wKQ=";
   };
 
   build-system = [ setuptools ];

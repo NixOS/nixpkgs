@@ -28,6 +28,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-LIvFveN3NhQUXWu809S7GviLKwcsS2E6Wt/vFku4fVE=";
 
+  outputs = [
+    "out"
+  ]
+  ++ lib.optional (stdenv.buildPlatform.canExecute stdenv.hostPlatform) "man";
+
   # Tests require a TTY, which the Nix sandbox does not provide.
   doCheck = false;
   nativeBuildInputs = [
@@ -45,7 +50,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildFeatures = lib.optional gitImportSupport "git";
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) /* bash */ ''
+    manpages=$(mktemp -d)
+    $out/bin/pijul docgen man "$manpages"
+    installManPage "$manpages"/*.1
+
     installShellCompletion --cmd pijul \
       --bash <($out/bin/pijul completion bash) \
       --fish <($out/bin/pijul completion fish) \

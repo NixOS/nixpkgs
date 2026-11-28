@@ -15,21 +15,21 @@ mkProtonBinDerivation (finalAttrs: {
   steamDisplayName = "GE-Proton";
 
   pname = "proton-ge-bin";
-  version = "GE-Proton11-12";
+  version = "GE-Proton11-14";
 
   variants = {
     "x86_64-linux" = {
       toolName = "${finalAttrs.version}-x86_64";
       src = fetchzip {
         url = "https://github.com/GloriousEggroll/proton-ge-custom/releases/download/${finalAttrs.version}/${finalAttrs.version}-x86_64.tar.gz";
-        hash = "sha256-i20g9lDz7bR0SXWmvHZHztN4m8AHkcD0/OVGSC4ZzI8=";
+        hash = "sha256-Bru3l0AqrvDl+XYC1dYhmy5XqKP49yFjWVJwZzel60Q=";
       };
     };
     "aarch64-linux" = {
       toolName = "${finalAttrs.version}-aarch64";
       src = fetchzip {
         url = "https://github.com/GloriousEggroll/proton-ge-custom/releases/download/${finalAttrs.version}/${finalAttrs.version}-aarch64.tar.gz";
-        hash = "sha256-0+ChUSgJa1IUl4yUIYAxP6hbY1oY48zzJYZkAcQZ/0Q=";
+        hash = "sha256-n51sElFtNZQRJOpWdH1jpg+H0Wq7Q6TjCtg1wl3a44Y=";
       };
     };
   };

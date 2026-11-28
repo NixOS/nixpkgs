@@ -6658,6 +6658,12 @@
     githubId = 39523942;
     name = "Alex Clarke";
   };
+  darkguibrine = {
+    email = "me@darkgui.com.br";
+    github = "DarkGuibrine";
+    githubId = 112888817;
+    name = "Guilherme Hermando";
+  };
   darkonion0 = {
     name = "Alexandre Peruggia";
     email = "darkgenius1@protonmail.com";
@@ -28843,12 +28849,6 @@
     github = "sudosubin";
     githubId = 32478597;
     name = "Subin Kim";
-  };
-  sugar700 = {
-    email = "sugar@sugar.lgbt";
-    github = "sugar700";
-    githubId = 1297598;
-    name = "sugar";
   };
   suhr = {
     email = "suhr@i2pmail.org";

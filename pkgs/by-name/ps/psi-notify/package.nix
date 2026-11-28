@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  systemd,
+  systemdLibs,
   libnotify,
   pkg-config,
 }:
@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   buildInputs = [
-    systemd
+    systemdLibs
     libnotify
   ];
   nativeBuildInputs = [ pkg-config ];
