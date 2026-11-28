@@ -13,7 +13,7 @@ NixOS uses this path.
  5 files changed, 20 insertions(+), 20 deletions(-)
 
 diff --git a/man/localtime.xml b/man/localtime.xml
-index 3a13e04..4fd5806 100644
+index 3a13e04a27..4fd58068a1 100644
 --- a/man/localtime.xml
 +++ b/man/localtime.xml
 @@ -20,7 +20,7 @@
@@ -35,10 +35,10 @@ index 3a13e04..4fd5806 100644
      <literal>Etc/UTC</literal>. The resulting link should lead to the
      corresponding binary
 diff --git a/src/basic/time-util.c b/src/basic/time-util.c
-index 44c5306..9772d8f 100644
+index 1017498aba..cf156d437e 100644
 --- a/src/basic/time-util.c
 +++ b/src/basic/time-util.c
-@@ -1459,7 +1459,7 @@ static int get_timezones_from_zone1970_tab(char ***ret) {
+@@ -1454,7 +1454,7 @@ static int get_timezones_from_zone1970_tab(char ***ret) {
  
          assert(ret);
  
@@ -47,7 +47,7 @@ index 44c5306..9772d8f 100644
          if (!f)
                  return -errno;
  
-@@ -1504,7 +1504,7 @@ static int get_timezones_from_tzdata_zi(char ***ret) {
+@@ -1499,7 +1499,7 @@ static int get_timezones_from_tzdata_zi(char ***ret) {
  
          assert(ret);
  
@@ -56,16 +56,16 @@ index 44c5306..9772d8f 100644
          if (!f)
                  return -errno;
  
-@@ -1619,7 +1619,7 @@ int verify_timezone(const char *name, int log_level) {
+@@ -1614,7 +1614,7 @@ int verify_timezone(const char *name, int log_level) {
          if (p - name >= PATH_MAX)
                  return -ENAMETOOLONG;
  
 -        t = strjoina("/usr/share/zoneinfo/", name);
 +        t = strjoina("/etc/zoneinfo/", name);
  
-         fd = open(t, O_RDONLY|O_CLOEXEC);
+         fd = xopenat(AT_FDCWD, t, O_RDONLY);
          if (fd < 0)
-@@ -1691,7 +1691,7 @@ int get_timezone(char **ret) {
+@@ -1686,7 +1686,7 @@ int get_timezone(char **ret) {
          if (r < 0)
                  return r; /* Return EINVAL if not a symlink */
  
@@ -75,38 +75,38 @@ index 44c5306..9772d8f 100644
                  return -EINVAL;
          if (!timezone_is_valid(e, LOG_DEBUG))
 diff --git a/src/firstboot/firstboot.c b/src/firstboot/firstboot.c
-index 3941618..4469dfb 100644
+index f575f51e8a..7c32a7717a 100644
 --- a/src/firstboot/firstboot.c
 +++ b/src/firstboot/firstboot.c
-@@ -631,7 +631,7 @@ static int prompt_timezone(int rfd, sd_varlink **mute_console_link) {
+@@ -725,7 +725,7 @@ static int prompt_timezone(Context *c, int rfd, sd_varlink **mute_console_link)
  
- static int process_timezone(int rfd, sd_varlink **mute_console_link) {
+ static int process_timezone(Context *c, int rfd, sd_varlink **mute_console_link) {
          _cleanup_close_ int pfd = -EBADF;
 -        _cleanup_free_ char *f = NULL, *relpath = NULL;
 +        _cleanup_free_ char *f = NULL;
          const char *e;
          int r;
  
-@@ -677,12 +677,9 @@ static int process_timezone(int rfd, sd_varlink **mute_console_link) {
-         if (isempty(arg_timezone))
+@@ -772,12 +772,9 @@ static int process_timezone(Context *c, int rfd, sd_varlink **mute_console_link)
+         if (isempty(c->timezone))
                  return 0;
  
--        e = strjoina("/usr/share/zoneinfo/", arg_timezone);
+-        e = strjoina("/usr/share/zoneinfo/", c->timezone);
 -        r = path_make_relative_parent(etc_localtime(), e, &relpath);
 -        if (r < 0)
 -                return r;
 +        e = strjoina("zoneinfo/", arg_timezone);
  
--        r = symlinkat_atomic_full_label(relpath, pfd, f, SYMLINK_LABEL, arg_label_context);
-+        r = symlinkat_atomic_full_label(e, pfd, f, SYMLINK_LABEL, arg_label_context);
+-        r = symlinkat_atomic_full_label(relpath, pfd, f, SYMLINK_LABEL, c->label_context);
++        r = symlinkat_atomic_full_label(e, pfd, f, SYMLINK_LABEL, c->label_context);
          if (r < 0)
                  return log_error_errno(r, "Failed to create /etc/localtime symlink: %m");
  
 diff --git a/src/nspawn/nspawn.c b/src/nspawn/nspawn.c
-index 1c68738..4b2efeb 100644
+index 41760045c4..0fb5f53ad5 100644
 --- a/src/nspawn/nspawn.c
 +++ b/src/nspawn/nspawn.c
-@@ -1711,8 +1711,8 @@ int userns_mkdir(const char *root, const char *path, mode_t mode, uid_t uid, gid
+@@ -1709,8 +1709,8 @@ int userns_mkdir(const char *root, const char *path, mode_t mode, uid_t uid, gid
  static const char *timezone_from_path(const char *path) {
          return PATH_STARTSWITH_SET(
                          path,
@@ -118,10 +118,10 @@ index 1c68738..4b2efeb 100644
  
  static bool etc_writable(void) {
 diff --git a/src/timedate/timedated.c b/src/timedate/timedated.c
-index e9c0c56..35c606b 100644
+index bb7173b465..775b20a2a2 100644
 --- a/src/timedate/timedated.c
 +++ b/src/timedate/timedated.c
-@@ -270,7 +270,7 @@ static int context_read_data(Context *c) {
+@@ -286,7 +286,7 @@ static int context_read_data(Context *c) {
  
          r = get_timezone(&t);
          if (r == -EINVAL)
@@ -130,7 +130,7 @@ index e9c0c56..35c606b 100644
          else if (r < 0)
                  log_warning_errno(r, "Failed to get target of /etc/localtime: %m");
  
-@@ -294,7 +294,7 @@ static int context_write_data_timezone(Context *c) {
+@@ -310,7 +310,7 @@ static int context_write_data_timezone(Context *c) {
  
          if (isempty(c->zone) || streq(c->zone, "UTC")) {
  
@@ -139,7 +139,7 @@ index e9c0c56..35c606b 100644
  
                          if (unlink(etc_localtime()) < 0 && errno != ENOENT)
                                  return -errno;
-@@ -302,17 +302,20 @@ static int context_write_data_timezone(Context *c) {
+@@ -318,17 +318,20 @@ static int context_write_data_timezone(Context *c) {
                          return 0;
                  }
  

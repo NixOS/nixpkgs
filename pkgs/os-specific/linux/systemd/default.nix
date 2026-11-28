@@ -64,6 +64,8 @@
   qrencode,
   libarchive,
   llvmPackages,
+  rustc,
+  rust-bindgen,
 
   # the (optional) BPF feature requires bpftool, libbpf, clang and llvm-strip to
   # be available during build time.
@@ -90,6 +92,7 @@
   withAnalyze ? true,
   withApparmor ? true,
   withAudit ? true,
+  withBatteryCheck ? true,
   # compiles systemd-boot, assumes EFI is available.
   withBootloader ?
     withEfi
@@ -99,16 +102,19 @@
   withCompression ? true,
   withCoredump ? true,
   withCryptsetup ? true,
+  withClonesetup ? true,
   withRepart ? true,
   withDocumentation ? true,
   withEfi ? stdenv.hostPlatform.isEfi,
   withFido2 ? true,
   withFirstboot ? true,
+  withGrowfs ? true,
   withHomed ? true,
   withHostnamed ? true,
   withHwdb ? true,
   withImportd ? true,
   withImds ? true,
+  withIntegritysetup ? true,
   withKmod ? true,
   withLibBPF ?
     lib.versionAtLeast buildPackages.llvmPackages.clang.version "10.0"
@@ -132,6 +138,8 @@
   withLogind ? true,
   withMachined ? true,
   withMan ? !buildLibsOnly,
+  withMeasure ? true,
+  withMime ? true,
   withNetworkd ? true,
   withNspawn ? !buildLibsOnly,
   withNss ? !stdenv.hostPlatform.isMusl,
@@ -144,8 +152,13 @@
   withPortabled ? true,
   withQrencode ? true,
   withRemote ? true,
+  withReport ? true,
   withResolved ? true,
+  # Enable Rust components (currently systemd-keyring-setup). Upstream does not
+  # support Rust when cross-compiling yet.
+  withRust ? lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform,
   withShellCompletions ? true,
+  withSleep ? true,
   withStorage ? true,
   withSysinstall ? true,
   withSysusers ? true,
@@ -162,10 +175,13 @@
   # attempt to load a service which does not exist, resulting in errors.
   withUtmp ? !stdenv.hostPlatform.isMusl,
   withVmspawn ? true,
+  withVeritysetup ? true,
+  withValidatefs ? true,
   # The BPF programs backing nsresourced/mountfsd need a vmlinux.h, which is
   # only available when a kernel BTF is provided (see vmlinux-btf above).
   withNsresourced ? withLibBPF && vmlinux-btf != null,
   withMountfsd ? withLibBPF && vmlinux-btf != null,
+  withVarlinkMonitord ? withLibBPF && vmlinux-btf != null,
   # kernel-install shouldn't usually be used on NixOS, but can be useful, e.g. for
   # building disk images for non-NixOS systems. To save users from trying to use it
   # on their live NixOS system, we disable it by default.
@@ -188,6 +204,7 @@
 }:
 
 assert withImportd -> withCompression;
+assert withIntegritysetup -> withCryptsetup;
 assert withCoredump -> withCompression;
 assert withHomed -> withCryptsetup;
 assert withHomed -> withPam;
@@ -196,11 +213,13 @@ assert withFido2 -> withOpenSSL;
 assert withSysupdate -> withOpenSSL;
 assert withNsresourced -> withLibBPF;
 assert withMountfsd -> withLibBPF;
+assert withMeasure -> (withOpenSSL && withTpm2Tss);
 assert withImportd -> withOpenSSL;
 assert withUkify -> (withEfi && withBootloader);
 assert withRepart -> withCryptsetup;
 assert withBootloader -> withEfi;
-assert withStorage; # installed by default in 262, meson option in 263
+assert withVeritysetup -> withCryptsetup;
+assert withVarlinkMonitord -> withLibBPF;
 
 let
   wantCurl = withRemote || withImportd || withImds;
@@ -214,13 +233,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;
-  version = "262.2";
+  version = "263-rc1";
 
   src = fetchFromGitHub {
     owner = "systemd";
     repo = "systemd";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BNL7ah1mtw4G94Sbuj9RL7/XDliI3lZFi0XBeQcMtqg=";
+    hash = "sha256-31OLKPs/PwSc0fn1FhN92hplnXBbQV4fRwl0eEVhdAw=";
   };
 
   # PATCH POLICY
@@ -248,33 +267,30 @@ stdenv.mkDerivation (finalAttrs: {
     ./0001-Don-t-try-to-unmount-nix-or-nix-store.patch
     ./0002-Change-usr-share-zoneinfo-to-etc-zoneinfo.patch
     ./0003-add-rootprefix-to-lookup-dir-paths.patch
-    ./0004-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
-    ./0005-core-don-t-taint-on-unmerged-usr.patch
+    ./0004-core-don-t-taint-on-unmerged-usr.patch
   ];
 
-  postPatch = ''
-    substituteInPlace src/basic/path-util.h --replace-fail "@defaultPathNormal@" "${placeholder "out"}/bin/"
-  ''
-  + lib.optionalString withLibBPF ''
-    substituteInPlace src/bpf/meson.build \
-      --replace-fail "find_program('clang'" "find_program('${stdenv.cc.targetPrefix}clang'"
-  ''
-  + lib.optionalString withUkify ''
-    substituteInPlace src/ukify/ukify.py \
-      --replace-fail \
-      "'readelf'" \
-      "'${targetPackages.stdenv.cc.bintools.targetPrefix}readelf'" \
-      --replace-fail \
-      "/usr/lib/systemd/boot/efi" \
-      "$out/lib/systemd/boot/efi"
-  ''
-  # Finally, patch shebangs in scripts used at build time. This must not patch
-  # scripts that will end up in the output, to avoid build platform references
-  # when cross-compiling.
-  + ''
-    shopt -s extglob
-    patchShebangs tools test src/!(rpm|kernel-install|ukify) src/kernel-install/test-kernel-install.sh
-  '';
+  postPatch =
+    lib.optionalString withLibBPF ''
+      substituteInPlace src/bpf/meson.build \
+        --replace-fail "find_program('clang'" "find_program('${stdenv.cc.targetPrefix}clang'"
+    ''
+    + lib.optionalString withUkify ''
+      substituteInPlace src/ukify/ukify.py \
+        --replace-fail \
+        "'readelf'" \
+        "'${targetPackages.stdenv.cc.bintools.targetPrefix}readelf'" \
+        --replace-fail \
+        "/usr/lib/systemd/boot/efi" \
+        "$out/lib/systemd/boot/efi"
+    ''
+    # Finally, patch shebangs in scripts used at build time. This must not patch
+    # scripts that will end up in the output, to avoid build platform references
+    # when cross-compiling.
+    + ''
+      shopt -s extglob
+      patchShebangs tools test src/!(rpm|kernel-install|ukify) src/kernel-install/test-kernel-install.sh
+    '';
 
   outputs = [
     "out"
@@ -327,6 +343,10 @@ stdenv.mkDerivation (finalAttrs: {
     bpftools
     buildPackages.llvmPackages.clang
     buildPackages.llvmPackages.libllvm
+  ]
+  ++ lib.optionals withRust [
+    rustc
+    rust-bindgen
   ];
 
   autoPatchelfFlags = [
@@ -422,6 +442,10 @@ stdenv.mkDerivation (finalAttrs: {
     # homed), which otherwise defaults to /bin/bash.
     (lib.mesonOption "default-user-shell" "/run/current-system/sw/bin/bash")
 
+    # Let systemd find it's own binaries by default (most importantly in
+    # units).
+    (lib.mesonOption "extra-exec-search-path" "${placeholder "out"}/bin/")
+
     # Attempts to check /usr/sbin and that fails in macOS sandbox because
     # permission is denied. If /usr/sbin is not a symlink, it defaults to true.
     # We set it to false since stdenv moves sbin/* to bin and creates a symlink,
@@ -468,6 +492,11 @@ stdenv.mkDerivation (finalAttrs: {
     # This stops building/installing RPM specific tools.
     (lib.mesonOption "rpmmacrosdir" "no")
 
+    # Experimental features require opt-in via $SYSTEMD_EXPERIMENTAL=1.
+    # Explicitly set this so that we're independent of upstream changes to the
+    # default.
+    (lib.mesonOption "experimental" "envvar")
+
     # Features
 
     # Tests
@@ -509,18 +538,24 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "acl" withAcl)
     (lib.mesonEnable "audit" withAudit)
     (lib.mesonEnable "apparmor" withApparmor)
+    (lib.mesonEnable "battery-check" withBatteryCheck)
     (lib.mesonEnable "importd" withImportd)
     (lib.mesonEnable "imds" withImds)
+    (lib.mesonEnable "integritysetup" withIntegritysetup)
     (lib.mesonEnable "homed" withHomed)
     (lib.mesonEnable "polkit" withPolkit)
     (lib.mesonEnable "elfutils" withCoredump)
     (lib.mesonEnable "libcurl" wantCurl)
     (lib.mesonEnable "libidn2" withLibidn2)
     (lib.mesonEnable "repart" withRepart)
+    (lib.mesonEnable "report" withReport)
+    (lib.mesonEnable "rust" withRust)
     (lib.mesonEnable "sysupdate" withSysupdate)
     (lib.mesonEnable "sysupdated" withSysupdate)
     (lib.mesonEnable "seccomp" withLibseccomp)
     (lib.mesonEnable "selinux" withSelinux)
+    (lib.mesonEnable "sleep" withSleep)
+    (lib.mesonEnable "storage" withStorage)
     (lib.mesonEnable "tpm2" withTpm2Tss)
     (lib.mesonEnable "pcre2" withPCRE2)
     (lib.mesonEnable "bpf-framework" withLibBPF)
@@ -529,14 +564,21 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "kmod" withKmod)
     (lib.mesonEnable "qrencode" withQrencode)
     (lib.mesonEnable "vmspawn" withVmspawn)
+    (lib.mesonEnable "veritysetup" withVeritysetup)
+    (lib.mesonEnable "validatefs" withValidatefs)
     (lib.mesonEnable "libarchive" withLibarchive)
     (lib.mesonEnable "xenctrl" false)
     (lib.mesonEnable "gnutls" false)
     (lib.mesonEnable "xkbcommon" false)
     (lib.mesonEnable "man" withMan)
+    (lib.mesonEnable "measure" withMeasure)
+    (lib.mesonEnable "mime" withMime)
     (lib.mesonEnable "nspawn" withNspawn)
+    (lib.mesonEnable "clonesetup" withClonesetup)
+    (lib.mesonEnable "growfs" withGrowfs)
 
     (lib.mesonBool "vconsole" withVConsole)
+    (lib.mesonBool "varlink-monitord" withVarlinkMonitord)
     (lib.mesonBool "analyze" withAnalyze)
     (lib.mesonBool "logind" withLogind)
     (lib.mesonBool "localed" withLocaled)
@@ -717,21 +759,29 @@ stdenv.mkDerivation (finalAttrs: {
       withFido2
       withHostnamed
       withImportd
+      withIntegritysetup
       withKmod
       withLocaled
       withLogind
       withMachined
+      withMeasure
       withNetworkd
       withNsresourced
       withMountfsd
       withNspawn
       withRepart
+      withReport
+      withRust
       withPortabled
+      withSleep
       withStorage
       withSysupdate
       withTimedated
       withTpm2Tss
       withUtmp
+      withValidatefs
+      withVarlinkMonitord
+      withVeritysetup
       withVmspawn
       util-linux
       kmod

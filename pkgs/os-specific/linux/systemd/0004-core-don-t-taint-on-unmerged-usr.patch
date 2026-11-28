@@ -17,7 +17,7 @@ See also: https://github.com/systemd/systemd/issues/24191
  1 file changed, 10 deletions(-)
 
 diff --git a/src/core/taint.c b/src/core/taint.c
-index 9dca625..0492446 100644
+index b36651223e..f7966b4957 100644
 --- a/src/core/taint.c
 +++ b/src/core/taint.c
 @@ -44,16 +44,6 @@ char** taint_strv(void) {
