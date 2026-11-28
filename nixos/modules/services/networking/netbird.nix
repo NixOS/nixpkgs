@@ -729,6 +729,8 @@ in
             "org.freedesktop.resolve1.set-dns-servers",
             "org.freedesktop.resolve1.set-domains",
             "org.freedesktop.resolve1.set-dnssec",
+            "org.freedesktop.resolve1.set-dns-over-tls",
+            "org.freedesktop.resolve1.flush-caches",
           ];
           var users = ${builtins.toJSON (toHardenedClientList (client: client.user.name))};
 
