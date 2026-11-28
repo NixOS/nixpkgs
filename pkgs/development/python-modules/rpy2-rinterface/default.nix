@@ -17,7 +17,7 @@
 }:
 
 buildPythonPackage rec {
-  version = "3.6.6";
+  version = "3.6.7";
   pyproject = true;
   pname = "rpy2-rinterface";
 
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${
       builtins.replaceStrings [ "-" ] [ "_" ] pname
     }-${version}.tar.gz";
-    hash = "sha256-qcwTQc5ctN8dxnxA3Dss4Mr6znIVvUJi/g7QEZWKM2k=";
+    hash = "sha256-Ou4LRLkgTZbC6yUDsvmwP22cnlJfmi0aLhlLOniYVsE=";
   };
 
   patches = [
