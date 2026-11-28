@@ -9,6 +9,7 @@ buildDotnetGlobalTool rec {
   version = "4.9.0";
 
   dotnet-sdk = dotnetCorePackages.sdk_10_0;
+  dotnet-runtime = dotnet-sdk;
 
   nugetHash = "sha256-NnOJmBB/Qq0RS8CQ7dRS4pCarYUW8FZYBmvplDigyJQ=";
 
