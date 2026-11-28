@@ -16421,6 +16421,8 @@ self: super: with self; {
 
   pyrss2gen = callPackage ../development/python-modules/pyrss2gen { };
 
+  pyrtcm = callPackage ../development/python-modules/pyrtcm { };
+
   pyrtlsdr = callPackage ../development/python-modules/pyrtlsdr { };
 
   pyrympro = callPackage ../development/python-modules/pyrympro { };
@@ -17813,6 +17815,8 @@ self: super: with self; {
   pytz-deprecation-shim = callPackage ../development/python-modules/pytz-deprecation-shim { };
 
   pyu2f = callPackage ../development/python-modules/pyu2f { };
+
+  pyubx2 = callPackage ../development/python-modules/pyubx2 { };
 
   pyuca = callPackage ../development/python-modules/pyuca { };
 
