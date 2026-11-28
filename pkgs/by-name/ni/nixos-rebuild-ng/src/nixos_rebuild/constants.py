@@ -8,3 +8,7 @@ EXECUTABLE: Final[str] = "@executable@"
 # Use either `== "true"` if the default (e.g.: `python -m nixos_rebuild`) is
 # `False` or `!= "false"` if the default is `True`
 WITH_SHELL_FILES: Final[bool] = "@withShellFiles@" == "true"
+# Host system architecture
+# None if architecture is unknown
+SYSTEM: Final[str | None] = None if "@system@".startswith("@") else "@system@"
+
