@@ -20632,6 +20632,11 @@
     github = "musjj";
     githubId = 72612857;
   };
+  MuslumYilmaz = {
+    name = "Müslim Yılmaz";
+    github = "MuslumYilmaz";
+    githubId = 46666748;
+  };
   mvisonneau = {
     name = "Maxime VISONNEAU";
     email = "maxime@visonneau.fr";
