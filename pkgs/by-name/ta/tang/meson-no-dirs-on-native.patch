@@ -1,0 +1,19 @@
+When `dirs` is passed to find_library(), meson skips the plain `-l` probe
+(the only search that goes through the cc-wrapper, and thus sees the -L
+flags in NIX_LDFLAGS) and only searches the given directories plus the
+compiler's built-in library paths. On native builds the external `lib_dir`
+property is just its /usr/local/lib default, which never contains llhttp
+(or http-parser) in Nix. Call find_library() without `dirs` on non-freebsd
+systems, like tang v15 did, so wrapper-supplied library paths are honoured.
+
+--- a/meson.build
++++ b/meson.build
+@@ -92,7 +92,7 @@
+ if host_machine.system() == 'freebsd'
+   http_parser = compiler.find_library(http_lib, dirs : '/usr/local/lib')
+ else
+-  http_parser = compiler.find_library(http_lib, dirs: [lib_dir])
++  http_parser = compiler.find_library(http_lib)
+ endif
+ 
+ licenses = ['COPYING']
