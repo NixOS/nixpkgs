@@ -188,18 +188,30 @@ let
         prevAttrs
     ) prevAttrs prevAttrs.passthru.sbom.components;
 
-  compose =
-    callerArg: sbom: finalAttrs:
-    let
-      callerAttrs = if builtins.isAttrs callerArg then callerArg else callerArg finalAttrs;
-      sbomAttrs = callerAttrs // (applySbom sbom callerAttrs);
-      overrideAttrs = sbomAttrs // (applyOverrides sbomAttrs);
-    in
-    overrideAttrs;
 in
 callerArg: sbomArg:
 let
   sbom = if builtins.isAttrs sbomArg then sbomArg else builtins.fromJSON (builtins.readFile sbomArg);
-  overrideSbom = f: stdenv.mkDerivation (compose callerArg (sbom // (f sbom)));
+
+  mkNimSbomDerivation =
+    sbom':
+    lib.extendMkDerivation {
+      constructDrv = stdenv.mkDerivation;
+
+      extendDrvArgs =
+        finalAttrs: previousAttrs:
+        let
+          sbomAttrs = previousAttrs // (applySbom sbom' previousAttrs);
+        in
+        sbomAttrs // (applyOverrides sbomAttrs);
+
+      transformDrv =
+        drv:
+        drv
+        // {
+          # Allow overriding the SBOM before the derivation is composed.
+          overrideSbom = f: mkNimSbomDerivation (sbom' // (f sbom'));
+        };
+    } callerArg;
 in
-(stdenv.mkDerivation (compose callerArg sbom)) // { inherit overrideSbom; }
+mkNimSbomDerivation sbom
