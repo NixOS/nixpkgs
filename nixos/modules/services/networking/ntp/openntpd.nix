@@ -6,19 +6,24 @@
   ...
 }:
 
-with lib;
-
 let
   cfg = config.services.openntpd;
 
   package = pkgs.openntpd_nixos;
 
-  configFile = ''
-    ${concatStringsSep "\n" (map (s: "server ${s}") cfg.servers)}
+  inherit (lib)
+    mkEnableOption
+    mkIf
+    mkForce
+    mkOption
+    literalExpression
+    types
+    ;
+
+  configFile = pkgs.writeText "ntpd.conf" ''
+    ${builtins.concatStringsSep "\n" (map (s: "servers ${s}") cfg.servers)}
     ${cfg.extraConfig}
   '';
-
-  pidFile = "/run/openntpd.pid";
 
 in
 {
@@ -66,8 +71,6 @@ in
     # Add ntpctl to the environment for status checking
     environment.systemPackages = [ package ];
 
-    environment.etc."ntpd.conf".text = configFile;
-
     users.users.ntp = {
       isSystemUser = true;
       group = "ntp";
@@ -76,24 +79,29 @@ in
     };
     users.groups.ntp = { };
 
-    systemd.services.openntpd = {
-      description = "OpenNTP Server";
-      wantedBy = [ "multi-user.target" ];
-      wants = [
-        "network-online.target"
-        "time-sync.target"
-      ];
-      before = [ "time-sync.target" ];
-      after = [
-        "dnsmasq.service"
-        "bind.service"
-        "network-online.target"
-      ];
-      serviceConfig = {
-        ExecStart = "${package}/sbin/ntpd -p ${pidFile} ${cfg.extraOptions}";
-        Type = "forking";
-        PIDFile = pidFile;
+    systemd = {
+      services.openntpd = {
+        description = "OpenNTP Server";
+        wantedBy = [ "multi-user.target" ];
+        wants = [
+          "network-online.target"
+          "time-sync.target"
+        ];
+        before = [ "time-sync.target" ];
+        after = [
+          "dnsmasq.service"
+          "bind.service"
+          "network-online.target"
+        ];
+        serviceConfig = {
+          ExecStart = "${package}/sbin/ntpd -d -f ${configFile} ${cfg.extraOptions}";
+          Type = "exec";
+        };
       };
+
+      tmpfiles.rules = [
+        "f /var/db/ntpd.drift 0600 root root - 0.000"
+      ];
     };
   };
 }
