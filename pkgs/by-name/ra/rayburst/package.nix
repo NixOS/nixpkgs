@@ -21,6 +21,7 @@
   wrapGAppsHook4,
   desktop-file-utils,
   xdg-utils,
+  cacert,
   nix-update-script,
 }:
 let
@@ -119,6 +120,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --set APPIMAGE "$out/bin/rayburst"
     )
     wrapGApp $out/bin/rayburst
+
+    wrapProgram $out/bin/aria2-next \
+      --set-default SSL_CERT_FILE ${cacert}/etc/ssl/certs/ca-bundle.crt
   '';
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
