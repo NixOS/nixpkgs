@@ -27,16 +27,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mise";
-  version = "2026.10.17";
+  version = "2026.11.6";
 
   src = fetchFromGitHub {
     owner = "jdx";
     repo = "mise";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3JBs2i+07hY27EpIrmbMu7D5p6rGV6wuerilx0BECjw=";
+    hash = "sha256-3F3KGCq2HeNRJVGPG9juojmhrPObZM6l0r6lIa54hXg=";
   };
 
-  cargoHash = "sha256-94BNmTVcJoY9ujO7boBzxMxaMy2tjLzpD+s+RLJxBEs=";
+  cargoHash = "sha256-nN/TdmKrNtQIyVhRzKlYPBEh8yGB1+CZli2fjlO/OTo=";
 
   nativeBuildInputs = [
     cmake
@@ -80,6 +80,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     substituteInPlace ./crates/mise-util/src/agecrypt/fixtures/age-plugin-se.py \
       --replace-fail '#!/usr/bin/env python3' '#!${lib.getExe python3}'
+  ''
+  # the darwin sandbox refuses /usr/bin/codesign, and sigtool only signs Mach-O
+  # files, not bundles. The ad-hoc signed helper is never used at runtime
+  # (MISE_NOTIFICATION_RELEASE_SIGNED=0), but its files are embedded via
+  # include_bytes!, so the bundle seal must still exist.
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace ./crates/mise-system/build.rs \
+      --replace-fail 'Command::new("/usr/bin/codesign")' 'Command::new("${lib.getExe' darwin.sigtool "codesign"}")' \
+      --replace-fail 'let signed = codesign.arg(&app).output()?;' \
+        'fs::create_dir_all(contents.join("_CodeSignature"))?; fs::write(contents.join("_CodeSignature/CodeResources"), b"")?; let signed = codesign.arg(&output).output()?;'
   '';
 
   nativeCheckInputs = [
@@ -120,11 +130,50 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # we don't care about brew tests and a lot of them fails here
     "--skip"
     "system::packages::brew::cask::tests::"
+    # fetching the sigstore TUF trust root requires network access
+    "--skip"
+    "github::sigstore::tests::test_slsa_accepts_a_rename_github_confirms"
+    "--skip"
+    "github::sigstore::tests::test_slsa_accepts_provenance_of_its_release"
+    "--skip"
+    "github::sigstore::tests::test_slsa_refuses_a_rename_github_does_not_confirm"
+    "--skip"
+    "github::sigstore::tests::test_slsa_rejects_provenance_of_another_release"
+    "--skip"
+    "github::sigstore::tests::test_slsa_rename_cannot_be_confirmed_by_a_mirror"
+    # the tests below use system binaries that the Linux sandbox does not
+    # provide and the darwin sandbox refuses to exec
+    # the copy probe symlinks /bin/cp
+    "--skip"
+    "backend::spm::tests::test_inline_install_command_uses_install_environment"
+    # copy sleep from /usr/bin or /bin
+    "--skip"
+    "toolset::running::tests::finds_a_process_by_its_executable"
+    "--skip"
+    "toolset::running::tests::finds_a_process_through_a_symlinked_install_path"
+    "--skip"
+    "toolset::running::tests::matches_whole_path_components"
+    "--skip"
+    "toolset::running::tests::an_executable_linked_inside_its_version_keeps_only_its_version"
+    "--skip"
+    "toolset::running::tests::an_executable_started_through_a_retargeted_link_keeps_only_its_version"
+    "--skip"
+    "toolset::running::tests::an_identity_layout_executable_keeps_only_its_version"
+    # the generated wrapper uses /usr/bin/env
+    "--skip"
+    "backend::gem::tests::unix_wrapper_quotes_paths_with_shell_metacharacters"
+    # runs the completer with PATH=/usr/bin:/bin, which needs awk
+    "--skip"
+    "cli::completion::shell_name_tests::a_run_completer_does_not_evaluate_the_words_it_is_given"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # shell out to macOS system binaries that the darwin sandbox refuses to exec
     "--skip"
     "system::defaults::tests::test_status_missing_keys_are_unset"
+    "--skip"
+    "file::tests::extraction::test_extract_archive_folds_appledouble_sidecars_into_their_files"
+    "--skip"
+    "file::tests::extraction::test_extract_archive_folds_appledouble_sidecars_when_stripping"
     # need a running cfprefsd
     "--skip"
     "system::defaults::tests::test_dock_apps_native_round_trip"
@@ -152,19 +201,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "file::tests::links::un_dmg_extracts_app_without_license"
     "--skip"
     "file::tests::links::un_dmg_detaches_image_left_attached_by_interrupted_run"
-    # the copy probe symlinks /bin/cp, which the sandbox does not provide
-    "--skip"
-    "backend::spm::tests::test_inline_install_command_uses_install_environment"
     # chmods setuid, which the sandbox refuses
     "--skip"
     "system_install::tests::archive_boundary"
-    # copy sleep from /usr/bin or /bin, which the sandbox does not provide
-    "--skip"
-    "toolset::running::tests::finds_a_process_by_its_executable"
-    "--skip"
-    "toolset::running::tests::finds_a_process_through_a_symlinked_install_path"
-    "--skip"
-    "toolset::running::tests::matches_whole_path_components"
   ];
 
   # every test process resets the same fixed $HOME/cwd
