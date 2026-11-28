@@ -15412,6 +15412,11 @@
     githubId = 10122937;
     name = "ketzacoatl";
   };
+  kevinastone = {
+    github = "kevinastone";
+    githubId = 1234915;
+    name = "Kevin Stone";
+  };
   kevincox = {
     email = "kevincox@kevincox.ca";
     matrix = "@kevincox:kevincox.ca";
