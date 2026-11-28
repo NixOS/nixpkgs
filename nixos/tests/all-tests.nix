@@ -863,7 +863,6 @@ in
   # This test happens to work on x86_64-linux but not on other platforms.
   hibernate = handleTestOn [ "x86_64-linux" ] ./hibernate.nix { };
   hickory-dns = runTest ./hickory-dns.nix;
-  hister = runTest ./hister.nix;
   hitch = runTest ./hitch;
   hledger-web = runTest ./hledger-web.nix;
   hockeypuck = runTest ./hockeypuck.nix;
@@ -1307,6 +1306,7 @@ in
   nixseparatedebuginfod2 = runTest ./nixseparatedebuginfod2.nix;
   nmtrust = runTest ./nmtrust.nix;
   node-red = runTest ./node-red.nix;
+  nogon = runTest ./nogon.nix;
   nohang = runTest ./nohang.nix;
   nomad = runTest ./nomad.nix;
   nominatim = runTest ./nominatim.nix;

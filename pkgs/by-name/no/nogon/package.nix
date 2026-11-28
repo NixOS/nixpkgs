@@ -3,7 +3,6 @@
   buildGoModule,
   buildNpmPackage,
   fetchFromGitHub,
-  nodejs_22,
   sqlite,
   yt-dlp-light,
   makeBinaryWrapper,
@@ -13,19 +12,19 @@
   nixosTests,
 }:
 buildGoModule (finalAttrs: {
-  pname = "hister";
-  version = "0.21.0";
+  pname = "nogon";
+  version = "0.22.0";
 
   src = fetchFromGitHub {
     owner = "asciimoo";
-    repo = "hister";
+    repo = "nogon";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4B7RkqhuuEfXYxvmkoU4yHVFw5M8KJsa3E30g0sYvx0=";
+    hash = "sha256-tzaB2PmBtxJQlMy/4FV0ZwARmjmtu6VFa8j9pCAxS0s=";
   };
 
   __structuredAttrs = true;
 
-  vendorHash = "sha256-RoViVw/r/BzAmq5qG3AGAX5LnuJUGdRQQ5ubFXElM04=";
+  vendorHash = "sha256-BXs1VMZWxoLXvI2hDeiJoJIFwpz2xPCHg7NzegNrJ8o=";
   proxyVendor = true;
 
   nativeBuildInputs = [
@@ -48,23 +47,24 @@ buildGoModule (finalAttrs: {
   subPackages = [ "." ];
 
   postInstall = ''
-    wrapProgram $out/bin/hister \
+    wrapProgram $out/bin/nogon \
       --prefix PATH : ${lib.makeBinPath [ yt-dlp-light ]}
+    ln -s nogon $out/bin/hister
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
 
   passthru = {
-    frontend = (buildNpmPackage.override { nodejs = nodejs_22; }) {
-      pname = "${finalAttrs.pname}-frontend";
+    frontend = buildNpmPackage {
+      pname = "nogon-frontend";
       inherit (finalAttrs) version src;
 
       strictDeps = true;
 
       npmWorkspace = "webui/app";
       npmDepsFetcherVersion = 2;
-      npmDepsHash = "sha256-1agWFtnCag5gFRobWXg34itd6z2KSq4/ZauEJ7x9W7E=";
+      npmDepsHash = "sha256-H15/vZbtJWqswRCLDPKcGJ2mvkek4Umo8V8G0dHaJW8=";
 
       # vite 8's rolldown pipeline does a dns.lookup('localhost') during `vite build`
       # which fails in darwin's relaxed sandbox without loopback access
@@ -87,16 +87,18 @@ buildGoModule (finalAttrs: {
         "frontend"
       ];
     };
-    tests = { inherit (nixosTests) hister; };
+    tests = { inherit (nixosTests) nogon; };
   };
 
   meta = {
-    changelog = "https://github.com/asciimoo/hister/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/asciimoo/nogon/releases/tag/v${finalAttrs.version}";
     description = "Web history on steroids - blazing fast, content-based search for visited websites";
-    homepage = "https://github.com/asciimoo/hister";
+    downloadPage = "https://github.com/asciimoo/nogon";
+    homepage = "https://nogon.eu";
     license = lib.licenses.agpl3Plus;
-    mainProgram = "hister";
+    mainProgram = "nogon";
     maintainers = with lib.maintainers; [ _4evy ];
     platforms = lib.platforms.unix;
+    teams = with lib.teams; [ ngi ];
   };
 })

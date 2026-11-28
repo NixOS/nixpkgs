@@ -6,57 +6,66 @@
 }:
 
 let
-  cfg = config.services.hister;
+  cfg = config.services.nogon;
+
+  useLegacyDefault = lib.versionOlder config.system.stateVersion "27.05";
+  defaultName = if useLegacyDefault then "hister" else "nogon";
 
   yamlFormat = pkgs.formats.yaml { };
 
-  dataDir = if cfg.dataDir != null then cfg.dataDir else "/var/lib/hister";
-  generatedConfig = yamlFormat.generate "hister-config.yml" cfg.settings;
+  dataDir = if cfg.dataDir != null then cfg.dataDir else "/var/lib/${defaultName}";
+  generatedConfig = yamlFormat.generate "nogon-config.yml" cfg.settings;
   hasConfig = cfg.configPath != null || cfg.settings != { };
   runtimeConfigSource = if cfg.settings != { } then generatedConfig else cfg.configPath;
-  runtimeConfig = "/run/hister/config.yml";
+  runtimeConfig = "/run/nogon/config.yml";
 
-  histerEnv =
+  nogonEnv =
     lib.optionalAttrs (cfg.port != null) {
-      HISTER_PORT = toString cfg.port;
+      NOGON_PORT = toString cfg.port;
     }
     // lib.optionalAttrs hasConfig {
-      HISTER_CONFIG = runtimeConfig;
+      NOGON_CONFIG = runtimeConfig;
     }
     // {
-      HISTER_DATA_DIR = dataDir;
+      NOGON_DATA_DIR = dataDir;
     };
 
   privilegedPort = cfg.port != null && cfg.port < 1024;
 in
 {
+  imports = [
+    (lib.mkRenamedOptionModule [ "services" "hister" ] [ "services" "nogon" ])
+  ];
+
   meta.maintainers = with lib.maintainers; [ _4evy ];
 
-  options.services.hister = {
-    enable = lib.mkEnableOption "Hister, a web history service with content-based search";
+  options.services.nogon = {
+    enable = lib.mkEnableOption "Nogon, a web history service with content-based search";
 
-    package = lib.mkPackageOption pkgs "hister" { };
+    package = lib.mkPackageOption pkgs "nogon" { };
 
     user = lib.mkOption {
       type = lib.types.str;
-      default = "hister";
-      description = "User account under which Hister runs.";
+      default = defaultName;
+      defaultText = lib.literalMD ''`"hister"` if `config.system.stateVersion` < "27.05", otherwise `"nogon"`'';
+      description = "User account under which Nogon runs.";
     };
 
     group = lib.mkOption {
       type = lib.types.str;
-      default = "hister";
-      description = "Group under which Hister runs.";
+      default = defaultName;
+      defaultText = lib.literalMD ''`"hister"` if `config.system.stateVersion` < "27.05", otherwise `"nogon"`'';
+      description = "Group under which Nogon runs.";
     };
 
     dataDir = lib.mkOption {
       type = lib.types.nullOr lib.types.path;
       default = null;
-      example = "/var/lib/hister";
+      example = "/var/lib/nogon";
       description = ''
-        Directory where Hister stores its data. When `null` (the default), the
-        service is isolated under `/var/lib/hister` via systemd's
-        `StateDirectory=`. When set to an explicit path, that path is created
+        Directory where Nogon stores its data. When `null` (the default), the
+        service is isolated under `/var/lib/nogon` (or `/var/lib/hister` if `stateVersion` < "27.05")
+        via systemd's `StateDirectory=`. When set to an explicit path, that path is created
         with `systemd-tmpfiles` and granted via `ReadWritePaths=` instead.
       '';
     };
@@ -66,8 +75,8 @@ in
       default = null;
       example = 4433;
       description = ''
-        Port on which Hister listens. When set, this overrides the port in
-        `server.address` from the configuration file via the `HISTER_PORT`
+        Port on which Nogon listens. When set, this overrides the port in
+        `server.address` from the configuration file via the `NOGON_PORT`
         environment variable.
       '';
     };
@@ -76,7 +85,7 @@ in
       type = lib.types.bool;
       default = false;
       description = ''
-        Whether to open {option}`services.hister.port` in the firewall. Has no
+        Whether to open {option}`services.nogon.port` in the firewall. Has no
         effect if `port` is `null`.
       '';
     };
@@ -84,21 +93,21 @@ in
     configPath = lib.mkOption {
       type = lib.types.nullOr lib.types.path;
       default = null;
-      example = "/etc/hister/config.yml";
+      example = "/etc/nogon/config.yml";
       description = ''
-        Path to an existing Hister configuration file mounted read-only into
-        the service runtime directory and passed via `HISTER_CONFIG`. Mutually
-        exclusive with {option}`services.hister.settings`.
+        Path to an existing Nogon configuration file mounted read-only into
+        the service runtime directory and passed via `NOGON_CONFIG`. Mutually
+        exclusive with {option}`services.nogon.settings`.
       '';
     };
 
     environmentFile = lib.mkOption {
       type = lib.types.nullOr lib.types.path;
       default = null;
-      example = "/run/secrets/hister.env";
+      example = "/run/secrets/nogon.env";
       description = ''
         Path to an environment file (read at service start) used to inject
-        secrets such as `HISTER__APP__ACCESS_TOKEN` without placing them in the
+        secrets such as `NOGON__APP__ACCESS_TOKEN` without placing them in the
         world-readable Nix store.
       '';
     };
@@ -107,7 +116,7 @@ in
       type = yamlFormat.type;
       default = { };
       description = ''
-        Hister configuration rendered to YAML and passed via `HISTER_CONFIG`.
+        Nogon configuration rendered to YAML and passed via `NOGON_CONFIG`.
         Accepts any structure the server accepts: see the `app`, `server`,
         `indexer`, `crawler`, `hotkeys`, `extractors`, `semantic_search`, and
         `sensitive_content_patterns` blocks documented upstream.
@@ -135,32 +144,33 @@ in
     assertions = [
       {
         assertion = !(cfg.configPath != null && cfg.settings != { });
-        message = "Only one of services.hister.configPath and services.hister.settings can be set";
+        message = "Only one of services.nogon.configPath and services.nogon.settings can be set";
       }
     ];
 
     environment.systemPackages = [ cfg.package ];
 
-    users.users = lib.mkIf (cfg.user == "hister") {
-      hister = {
-        description = "Hister web history service";
+    users.users = lib.mkIf (cfg.user == defaultName) {
+      ${cfg.user} = {
+        description = "Nogon web history service";
         group = cfg.group;
         isSystemUser = true;
       };
     };
 
-    users.groups = lib.mkIf (cfg.group == "hister") {
-      hister = { };
+    users.groups = lib.mkIf (cfg.group == defaultName) {
+      ${cfg.group} = { };
     };
 
-    systemd.tmpfiles.settings."10-hister"."${dataDir}".d = lib.mkIf (cfg.dataDir != null) {
+    systemd.tmpfiles.settings."10-nogon"."${dataDir}".d = lib.mkIf (cfg.dataDir != null) {
       user = cfg.user;
       group = cfg.group;
       mode = "0750";
     };
 
-    systemd.services.hister = {
-      description = "Hister web history service";
+    systemd.services.nogon = {
+      description = "Nogon web history service";
+      aliases = [ "hister.service" ];
       after = [
         "network.target"
         "systemd-tmpfiles-setup.service"
@@ -168,17 +178,17 @@ in
       ];
       wantedBy = [ "multi-user.target" ];
 
-      environment = histerEnv;
+      environment = nogonEnv;
 
       serviceConfig = {
         ExecStart = "${lib.getExe cfg.package} listen";
         Restart = "on-failure";
         User = cfg.user;
         Group = cfg.group;
-        RuntimeDirectory = lib.mkIf hasConfig "hister";
+        RuntimeDirectory = lib.mkIf hasConfig "nogon";
         RuntimeDirectoryMode = lib.mkIf hasConfig "0750";
         BindReadOnlyPaths = lib.mkIf hasConfig [ "${runtimeConfigSource}:${runtimeConfig}" ];
-        StateDirectory = lib.mkIf (cfg.dataDir == null) "hister";
+        StateDirectory = lib.mkIf (cfg.dataDir == null) defaultName;
         StateDirectoryMode = lib.mkIf (cfg.dataDir == null) "0750";
         ReadWritePaths = lib.mkIf (cfg.dataDir != null) [ cfg.dataDir ];
         EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
