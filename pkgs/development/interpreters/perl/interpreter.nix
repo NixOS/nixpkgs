@@ -141,10 +141,12 @@ stdenv.mkDerivation (
     # bootstrap tools when building bootstrap perl.
     postPatch =
       (
-        if crossCompiling then
+        if !lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform then
           ''
             substituteInPlace dist/PathTools/Cwd.pm \
               --replace "/bin/pwd" '${coreutils}/bin/pwd'
+          ''
+          + lib.optionalString crossCompiling ''
             substituteInPlace cnf/configure_tool.sh --replace "cc -E -P" "cc -E"
           ''
         else
@@ -345,6 +347,18 @@ stdenv.mkDerivation (
         }" /no-such-path \
         --replace "$man" /no-such-path
     ''
+    +
+      lib.optionalString (!crossCompiling && !lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform)
+        ''
+          # Configure records build-platform coreutils paths (uname, ln, rm) when
+          # buildPlatform can execute hostPlatform binaries (e.g. x86_64 glibc -> musl).
+          # Rewrite them to host-platform coreutils so build libc does not leak into
+          # the runtime closure.
+          substituteInPlace \
+            "$out"/lib/perl5/*/*/Config_heavy.pl \
+            "$out"/lib/perl5/*/*/CORE/config.h \
+            --replace-quiet "${buildPackages.coreutils}" "${coreutils}"
+        ''
     + lib.optionalString crossCompiling ''
       mkdir -p $mini/lib/perl5/cross_perl/${version}
       for dir in cnf/{stub,cpan}; do
