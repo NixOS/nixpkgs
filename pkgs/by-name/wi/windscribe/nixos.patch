@@ -1,0 +1,421 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index db7cd90..6f2b8b4 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -122,9 +122,7 @@ endif()
+ # ------------------------------------------------------------------------------
+ 
+ # vcpkg integration (only needed for build operations, must be before project())
+-if(BUILD_APP OR BUILD_INSTALLER OR BUILD_BOOTSTRAP)
+-    include(cmake/vcpkg.cmake)
+-endif()
++# vcpkg disabled for Nix
+ 
+ project(WS LANGUAGES CXX C)
+ 
+@@ -135,9 +133,7 @@ project(WS LANGUAGES CXX C)
+ # wsnet ahead of the install only fails on CI.  The macro depends solely on state established before
+ # project() (VCPKG_ROOT, VCPKG_TARGET_TRIPLET, CMAKE_BUILD_TYPE, the manifest root), so hoisting it
+ # here is safe.
+-if(BUILD_APP OR BUILD_INSTALLER OR BUILD_BOOTSTRAP)
+-    install_vcpkg_dependencies()
+-endif()
++# vcpkg install disabled for Nix
+ 
+ # Fetch wsnet here, in a pristine directory scope, BEFORE any project-wide compile/link options
+ # exist: the Objective-C ARC option and the Windows hardening flags below, the AUTOMOC/AUTOUIC/
+@@ -213,13 +209,13 @@ endif()
+ # leaving VCPKG_ROOT unset. Defined only here so an unguarded use fails to compile rather than
+ # silently getting "".
+ if(BUILD_APP)
+-    ws_resolve_openvpn_version(WS_OPENVPN_VERSION)
++    set(WS_OPENVPN_VERSION "@OPENVPN_VERSION@")
+     add_compile_definitions(WS_OPENVPN_VERSION="${WS_OPENVPN_VERSION}")
+ 
+     # Resolved here rather than next to ws_resolve_shared_libs() below, because the names are needed
+     # by the branding definitions that follow and by the subdirectories those definitions reach.
+     if(NOT WIN32)
+-        ws_resolve_openssl_libs()
++        # ws_resolve_openssl_libs skipped
+         if(APPLE)
+             # Not in the branding block below: the value is platform-specific, so a WS_MAC_ name must
+             # not be defined anywhere it would hold something other than the macOS one.
+@@ -342,8 +338,10 @@ if(NOT EXISTS "${WINDSCRIBE_BUILD_LIBS_PATH}")
+ endif()
+ 
+ # ------------------------------------------------------------------------------
+-ws_resolve_bundled_helpers()
+-ws_resolve_shared_libs()
++if(BUILD_INSTALLER)
++    ws_resolve_bundled_helpers()
++    ws_resolve_shared_libs()
++endif()
+ 
+ # ------------------------------------------------------------------------------
+ # Code Signing Configuration
+diff --git a/cmake/fetch_wsnet.cmake b/cmake/fetch_wsnet.cmake
+index 11afc32..d04e584 100644
+--- a/cmake/fetch_wsnet.cmake
++++ b/cmake/fetch_wsnet.cmake
+@@ -1,9 +1,8 @@
+ if(NOT TARGET wsnet::wsnet)
+-    include(FetchContent)
+-    FetchContent_Declare(wsnet
+-        GIT_REPOSITORY https://github.com/Windscribe/wsnet.git
+-        GIT_TAG        1.5.32
++    add_library(wsnet SHARED IMPORTED GLOBAL)
++    set_target_properties(wsnet PROPERTIES
++        IMPORTED_LOCATION "${WSNET_DIR}/lib/libwsnet.so"
++        INTERFACE_INCLUDE_DIRECTORIES "${WSNET_DIR}/include;${WSNET_DIR}/include/wsnet_internal"
+     )
+-    set(IS_BUILD_TESTS OFF)
+-    FetchContent_MakeAvailable(wsnet)
++    add_library(wsnet::wsnet ALIAS wsnet)
+ endif()
+diff --git a/src/client/CMakeLists.txt b/src/client/CMakeLists.txt
+index cada3aa..e21d1ee 100644
+--- a/src/client/CMakeLists.txt
++++ b/src/client/CMakeLists.txt
+@@ -183,7 +183,7 @@ if (WIN32)
+     target_link_options(${WS_APP_TARGET} PRIVATE "/IGNORE:4099")
+ endif()
+ 
+-target_link_libraries(${WS_APP_TARGET} PRIVATE ${FRONTEND_TYPE} frontend-common ${WS_CLIENT_EXTRA_LIBS} engine client-common wsnet::wsnet spdlog::spdlog Qt6::Network ${OS_SPECIFIC_LIBRARIES})
++target_link_libraries(${WS_APP_TARGET} PRIVATE ${FRONTEND_TYPE} frontend-common ${WS_CLIENT_EXTRA_LIBS} engine client-common wsnet::wsnet cares spdlog::spdlog Qt6::Network ${OS_SPECIFIC_LIBRARIES})
+ 
+ if (UNIX AND (NOT APPLE))
+     qt_import_plugins(${WS_APP_TARGET} INCLUDE Qt6::QWaylandIntegrationPlugin Qt6::QXcbIntegrationPlugin)
+diff --git a/src/client/client-common/types/proxysettings.cpp b/src/client/client-common/types/proxysettings.cpp
+index d51c3d9..f97a0bc 100644
+--- a/src/client/client-common/types/proxysettings.cpp
++++ b/src/client/client-common/types/proxysettings.cpp
+@@ -94,7 +94,7 @@ QString ProxySettings::curlAddress() const
+     if (option_ == PROXY_OPTION_HTTP)
+         return "http://" + address_ + ":" + QString::number(port_);
+     else if (option_ == PROXY_OPTION_SOCKS)
+-        return "socks5://" + address_ + ":" + QString::number(port_);
++        return "socks5h://" + address_ + ":" + QString::number(port_);
+     else
+         return "";
+ }
+@@ -185,14 +185,14 @@ bool ProxySettings::isProxyEnabled() const
+ void ProxySettings::validate()
+ {
+     option_ = enumFromInt<PROXY_OPTION>(static_cast<int>(option_));
+-    if (option_ == PROXY_OPTION_AUTODETECT || option_ == PROXY_OPTION_SOCKS) {
++    if (option_ == PROXY_OPTION_AUTODETECT) {
+         qCWarning(LOG_BASIC) << "ProxySettings: unsupported proxy option, resetting";
+         option_ = PROXY_OPTION_NONE;
+     }
+ 
+     bool needsReset = false;
+-    if (option_ == PROXY_OPTION_HTTP) {
+-        if (!NetworkingValidation::isIp(address_)) {
++    if (option_ == PROXY_OPTION_HTTP || option_ == PROXY_OPTION_SOCKS) {
++        if (!NetworkingValidation::isIpOrDomain(address_)) {
+             qCWarning(LOG_BASIC) << "ProxySettings: invalid address, disabling proxy";
+             needsReset = true;
+         } else if (!NetworkingValidation::isValidPort(static_cast<int>(port_))) {
+diff --git a/src/client/client-common/utils/linuxutils.cpp b/src/client/client-common/utils/linuxutils.cpp
+index cfeb2ef..784c17c 100644
+--- a/src/client/client-common/utils/linuxutils.cpp
++++ b/src/client/client-common/utils/linuxutils.cpp
+@@ -131,7 +131,7 @@ QMap<QString, QString> enumerateInstalledPrograms()
+     // On Linux, we are looking for desktop entries. These are located under the applications dir at ~/.local/share, and each dir in $XDG_DATA_DIRS
+     QByteArray xdgDataDirs = qgetenv("XDG_DATA_DIRS");
+     if (xdgDataDirs.isEmpty()) {
+-        xdgDataDirs = "/usr/local/share/:/usr/share/";
++        xdgDataDirs = "/run/current-system/sw/share:/usr/share/";
+     }
+     QStringList dirs = QString::fromLocal8Bit(xdgDataDirs).split(":");
+     QByteArray xdgDataHome = qgetenv("XDG_DATA_HOME");
+@@ -275,7 +275,7 @@ static QHash<QString, QString> enumerateFlatpakCommandMap()
+ 
+     QByteArray xdgDataDirs = qgetenv("XDG_DATA_DIRS");
+     if (xdgDataDirs.isEmpty()) {
+-        xdgDataDirs = "/usr/local/share/:/usr/share/";
++        xdgDataDirs = "/run/current-system/sw/share:/usr/share/";
+     }
+     QStringList dirs = QString::fromLocal8Bit(xdgDataDirs).split(":");
+     QByteArray xdgDataHome = qgetenv("XDG_DATA_HOME");
+diff --git a/src/client/frontend/cli/main.cpp b/src/client/frontend/cli/main.cpp
+index e60f3af..55f14d9 100644
+--- a/src/client/frontend/cli/main.cpp
++++ b/src/client/frontend/cli/main.cpp
+@@ -58,7 +58,7 @@ int main(int argc, char *argv[])
+     }
+     QStringList pluginsPath;
+     pluginsPath << QString::fromStdString(path) + "/plugins";
+-    QCoreApplication::setLibraryPaths(pluginsPath);
++    // QCoreApplication::setLibraryPaths disabled for Nix
+ #endif
+ 
+     qSetMessagePattern("[{gmt_time} %{time process}] [%{category}]\t %{message}");
+diff --git a/src/client/frontend/gui/main.cpp b/src/client/frontend/gui/main.cpp
+index b32ddf7..b8291f1 100644
+--- a/src/client/frontend/gui/main.cpp
++++ b/src/client/frontend/gui/main.cpp
+@@ -170,7 +170,7 @@ int main(int argc, char *argv[])
+         }
+         QStringList pluginsPath;
+         pluginsPath << QString::fromStdString(path) + "/plugins";
+-        QCoreApplication::setLibraryPaths(pluginsPath);
++        QCoreApplication::addLibraryPath(QString::fromStdString(path) + "/plugins");
+     #endif
+ #endif
+ 
+@@ -180,7 +180,7 @@ int main(int argc, char *argv[])
+     // Must precede the gid drop: some loaders (e.g. Mesa) re-honor these once egid == gid.
+     // GL is disabled (pure Widgets, no GL context); QT_QPA_PLATFORM_PLUGIN_PATH is read separately
+     // from setLibraryPaths above, so unset it to keep the platform plugin in the bundled dir.
+-    if (!qputenv("QT_XCB_GL_INTEGRATION", "none") || !qunsetenv("QT_QPA_PLATFORM_PLUGIN_PATH")) {
++    if (!qputenv("QT_XCB_GL_INTEGRATION", "none")) {
+         qCCritical(LOG_BASIC) << "Could not neutralize environment";
+         return -1;
+     }
+diff --git a/src/client/frontend/gui/preferenceswindow/proxysettingswindow/proxysettingsgroup.cpp b/src/client/frontend/gui/preferenceswindow/proxysettingswindow/proxysettingsgroup.cpp
+index 589b038..21f853d 100644
+--- a/src/client/frontend/gui/preferenceswindow/proxysettingswindow/proxysettingsgroup.cpp
++++ b/src/client/frontend/gui/preferenceswindow/proxysettingswindow/proxysettingsgroup.cpp
+@@ -11,8 +11,7 @@ namespace PreferencesWindow {
+ 
+ static bool IsProxyOptionAllowed(int option_number) {
+     // Temporarily hide Auto-detect and SOCKS proxy options in the GUI.
+-    return option_number != PROXY_OPTION_AUTODETECT &&
+-           option_number != PROXY_OPTION_SOCKS;
++    return option_number != PROXY_OPTION_AUTODETECT;
+ }
+ 
+ ProxySettingsGroup::ProxySettingsGroup(ScalableGraphicsObject *parent, const QString &desc, const QString &descUrl)
+diff --git a/src/helper/linux/installer_verifier.cpp b/src/helper/linux/installer_verifier.cpp
+index 5cba132..b50ba7f 100644
+--- a/src/helper/linux/installer_verifier.cpp
++++ b/src/helper/linux/installer_verifier.cpp
+@@ -24,7 +24,7 @@
+ namespace {
+ 
+ constexpr const char *kStagingDir = "/var/lib/windscribe/update";
+-constexpr const char *kGpgvPath = "/usr/bin/gpgv";
++constexpr const char *kGpgvPath = "gpgv";
+ 
+ constexpr off_t kMaxPubBytes = 64 * 1024;
+ constexpr off_t kMaxSigBytes = 8 * 1024;
+diff --git a/src/helper/linux/split_tunneling/hostnames_manager/dns_resolver.h b/src/helper/linux/split_tunneling/hostnames_manager/dns_resolver.h
+index 7df7fa0..891c208 100644
+--- a/src/helper/linux/split_tunneling/hostnames_manager/dns_resolver.h
++++ b/src/helper/linux/split_tunneling/hostnames_manager/dns_resolver.h
+@@ -5,6 +5,7 @@
+ #include <optional>
+ #include <wsnet/WSNet.h>
+ #include <boost/asio.hpp>
++#include <boost/asio/deadline_timer.hpp>
+ 
+ // measuring time in ms helper
+ template <
+diff --git a/src/helper/linux/utils.cpp b/src/helper/linux/utils.cpp
+index f9c6ac2..4ecdd90 100644
+--- a/src/helper/linux/utils.cpp
++++ b/src/helper/linux/utils.cpp
+@@ -102,9 +102,13 @@ bool resolveExePath(const std::string &exePath, const std::string &executable, s
+ 
+ // check only for non-dev builds
+ #ifndef WINDSCRIBE_DEV_MODE
+-    if (strcmp(canonicalPath, WS_LINUX_INSTALL_DIR) != 0 && strcmp(canonicalPath, "/usr/lib" WS_LINUX_INSTALL_DIR) != 0) {
+-        // Don't execute arbitrary commands, only executables that are in our application directory
+-        spdlog::warn("Executable not in correct path, ignoring.");
++    char *expectedCanonical = realpath(WS_LINUX_INSTALL_DIR, NULL);
++    bool valid = (strcmp(canonicalPath, WS_LINUX_INSTALL_DIR) == 0) ||
++                 (strcmp(canonicalPath, "/usr/lib" WS_LINUX_INSTALL_DIR) == 0) ||
++                 (expectedCanonical && strcmp(canonicalPath, expectedCanonical) == 0);
++    if (expectedCanonical) free(expectedCanonical);
++    if (!valid) {
++        spdlog::warn("Executable not in correct path, ignoring: {}", canonicalPath);
+         free(canonicalPath);
+         return false;
+     }
+diff --git a/src/installer/windscribe/linux/opt/windscribe/scripts/update-systemd-resolved b/src/installer/windscribe/linux/opt/windscribe/scripts/update-systemd-resolved
+index d4aacc3..7f1ce43 100755
+--- a/src/installer/windscribe/linux/opt/windscribe/scripts/update-systemd-resolved
++++ b/src/installer/windscribe/linux/opt/windscribe/scripts/update-systemd-resolved
+@@ -28,7 +28,7 @@
+ # Define what needs to be called via DBus
+ DBUS_DEST="org.freedesktop.resolve1"
+ DBUS_NODE="/org/freedesktop/resolve1"
+-WINDSCRIBE_SYSTEMD_CONFIG_DIR="/usr/local/lib/systemd/resolved.conf.d"
++WINDSCRIBE_SYSTEMD_CONFIG_DIR="/run/systemd/resolved.conf.d"
+ WINDSCRIBE_SYSTEMD_CONFIG_FILE="$WINDSCRIBE_SYSTEMD_CONFIG_DIR/windscribe.conf"
+ 
+ SCRIPT_NAME="${BASH_SOURCE[0]##*/}"
+
+diff --git a/src/installer/windscribe/linux/opt/windscribe/scripts/cgroups-down b/src/installer/windscribe/linux/opt/windscribe/scripts/cgroups-down
+index 85c060d..a17be2a 100755
+--- a/src/installer/windscribe/linux/opt/windscribe/scripts/cgroups-down
++++ b/src/installer/windscribe/linux/opt/windscribe/scripts/cgroups-down
+@@ -2,18 +2,18 @@
+ 
+ # Delete our routing table
+ ip rule del priority 16383 table main suppress_prefixlength 1 2>/dev/null
+-ip rule flush table windscribe 2>/dev/null
+-ip route flush table windscribe 2>/dev/null
+-ip rule flush table windscribe_include 2>/dev/null
+-ip route flush table windscribe_include 2>/dev/null
++ip rule flush table 69 2>/dev/null
++ip route flush table 69 2>/dev/null
++ip rule flush table 70 2>/dev/null
++ip route flush table 70 2>/dev/null
+ 
+ # IPv6 sibling — always attempted (the script takes no args, and missing v6
+ # rules are a no-op once stderr is swallowed). Matches the v4 block above.
+ ip -6 rule del priority 16383 table main suppress_prefixlength 1 2>/dev/null
+-ip -6 rule flush table windscribe 2>/dev/null
+-ip -6 route flush table windscribe 2>/dev/null
+-ip -6 rule flush table windscribe_include 2>/dev/null
+-ip -6 route flush table windscribe_include 2>/dev/null
++ip -6 rule flush table 69 2>/dev/null
++ip -6 route flush table 69 2>/dev/null
++ip -6 rule flush table 70 2>/dev/null
++ip -6 route flush table 70 2>/dev/null
+ 
+ # Clear net_cls id. Below the routing cleanup, which needs no cgroup: an absent hierarchy
+ # just means there is nothing left to tear down.
+diff --git a/src/installer/windscribe/linux/opt/windscribe/scripts/cgroups-up b/src/installer/windscribe/linux/opt/windscribe/scripts/cgroups-up
+index c18a9c8..138ccb4 100755
+--- a/src/installer/windscribe/linux/opt/windscribe/scripts/cgroups-up
++++ b/src/installer/windscribe/linux/opt/windscribe/scripts/cgroups-up
+@@ -52,25 +52,25 @@ if [ ! -f "$net_cls_root/windscribe/net_cls.classid" ]; then
+         fi
+     fi
+ 
+-    mkdir -p /etc/iproute2 # create dir if it doesn't exist
+-    touch /etc/iproute2/rt_tables # create file if it doesn't exist
++    true # create dir if it doesn't exist
++    touch /dev/null # create file if it doesn't exist
+ 
+     # Add "windscribe" table definition if it doesn't exist
+-    if [ "`grep -c "69 windscribe" /etc/iproute2/rt_tables`" -eq 0 ]; then
+-        echo "69 windscribe" >> /etc/iproute2/rt_tables
++    if [ "`grep -c "69 windscribe" /dev/null`" -eq 0 ]; then
++        echo "69 windscribe" >> /dev/null
+     fi
+-    if [ "`grep -c "70 windscribe_include" /etc/iproute2/rt_tables`" -eq 0 ]; then
+-        echo "70 windscribe_include" >> /etc/iproute2/rt_tables
++    if [ "`grep -c "70 windscribe_include" /dev/null`" -eq 0 ]; then
++        echo "70 windscribe_include" >> /dev/null
+     fi
+ 
+     # Create separate routing table for packets with our mark
+-    ip rule add fwmark "$mark" priority 16384 table windscribe
+-    ip route add default via "$def_gateway" dev "$def_interface" table windscribe
+-    ip route add 10.255.255.0/24 dev "$vpn_interface" table windscribe
++    ip rule add fwmark "$mark" priority 16384 table 69
++    ip route add default via "$def_gateway" dev "$def_interface" table 69
++    ip route add 10.255.255.0/24 dev "$vpn_interface" table 69
+ 
+     # Create separate routing table for packets that should always go into tunnel
+-    ip route add default via "$vpn_gateway" dev "$vpn_interface" table windscribe_include
+-    ip route add "$remote_ip" dev "$def_interface" table windscribe_include
++    ip route add default via "$vpn_gateway" dev "$vpn_interface" table 70
++    ip route add "$remote_ip" dev "$def_interface" table 70
+ 
+     # IPv6 sibling of the rules above. 10.255.255.0/24 and $remote_ip are v4-only
+     # and have no v6 counterpart. Use the v6 default interface for the physical route;
+@@ -78,23 +78,23 @@ if [ ! -f "$net_cls_root/windscribe/net_cls.classid" ]; then
+     # interface exists, so it is non-empty whenever a v6 default was found.
+     v6_iface="$def_interface_v6"
+     if [ -n "$def_gateway_v6" ] || [ -n "$def_ip_v6" ] || [ -n "$vpn_gateway_v6" ]; then
+-        ip -6 rule add fwmark "$mark" priority 16384 table windscribe
++        ip -6 rule add fwmark "$mark" priority 16384 table 69
+     fi
+     if [ -n "$def_gateway_v6" ]; then
+-        ip -6 route add default via "$def_gateway_v6" dev "$v6_iface" table windscribe
++        ip -6 route add default via "$def_gateway_v6" dev "$v6_iface" table 69
+     elif [ -n "$def_ip_v6" ]; then
+         # Dual-stack host whose v6 default route is on-link / point-to-point (no nexthop):
+         # route marked v6 out the physical v6 interface directly. Gated on a real physical
+         # v6 address, not the interface name (which falls back to the v4 NIC), so a v4-only
+         # host or a ::/0 reject route does not install a bogus default here.
+-        ip -6 route add default dev "$v6_iface" table windscribe
++        ip -6 route add default dev "$v6_iface" table 69
+     elif [ -n "$vpn_gateway_v6" ]; then
+         # Genuinely v4-only host with a dual-stack VPN: terminate marked v6 packets here so
+         # they don't fall through to the WG 'not fwmark' rule and leak into the tunnel.
+-        ip -6 route add unreachable default table windscribe
++        ip -6 route add unreachable default table 69
+     fi
+     if [ -n "$vpn_gateway_v6" ]; then
+-        ip -6 route add default via "$vpn_gateway_v6" dev "$vpn_interface" table windscribe_include
++        ip -6 route add default via "$vpn_gateway_v6" dev "$vpn_interface" table 70
+     fi
+ 
+     # Create net_cls id
+@@ -112,7 +112,7 @@ if [ -n "$priority" ]; then
+     ip rule add priority $((priority - 1)) table main suppress_prefixlength 0
+ else
+     # For non-WG protocols, remove rule forcing other traffic into the tunnel
+-    ip rule del priority 16385 table windscribe_include
++    ip rule del priority 16385 table 70
+ fi
+ 
+ # IPv6 sibling of the priority adjust above. Same gate as the windscribe-table v6 rule above.
+@@ -122,7 +122,7 @@ if [ -n "$def_gateway_v6" ] || [ -n "$def_ip_v6" ] || [ -n "$vpn_gateway_v6" ];
+     if [ -n "$priority_v6" ]; then
+         ip -6 rule add priority $((priority_v6 - 1)) table main suppress_prefixlength 0
+     else
+-        ip -6 rule del priority 16385 table windscribe_include
++        ip -6 rule del priority 16385 table 70
+     fi
+ fi
+ 
+@@ -131,10 +131,10 @@ fi
+ # the VPN. Terminate it before main; marked bypass traffic already escaped at 16384, LAN at 16383.
+ # Must stay below the block above, whose non-WG branch deletes the 16385 rule.
+ if [ "$mode" = "inclusive" ] && [ -z "$vpn_gateway_v6" ] && { [ -n "$def_gateway_v6" ] || [ -n "$def_ip_v6" ]; }; then
+-    ip -6 route add unreachable default table windscribe_include
+-    ip -6 rule add priority 16385 table windscribe_include
++    ip -6 route add unreachable default table 70
++    ip -6 rule add priority 16385 table 70
+ else
+-    ip -6 rule del priority 16385 table windscribe_include
++    ip -6 rule del priority 16385 table 70
+ fi
+ 
+ # make sure to exit with code 0 since an above command may fail if we are adding a duplicate rule or
+diff --git a/src/installer/windscribe/linux/opt/windscribe/scripts/gai-ipv4-priority b/src/installer/windscribe/linux/opt/windscribe/scripts/gai-ipv4-priority
+index f33ee3d..ceb8852 100755
+--- a/src/installer/windscribe/linux/opt/windscribe/scripts/gai-ipv4-priority
++++ b/src/installer/windscribe/linux/opt/windscribe/scripts/gai-ipv4-priority
+@@ -4,7 +4,7 @@
+ # Manages /etc/gai.conf to prioritize IPv4 when VPN blocks IPv6
+ # Usage: gai-ipv4-priority up|down
+ 
+-GAI_CONF="/etc/gai.conf"
++GAI_CONF="/etc/gai.conf"; [ -L "$GAI_CONF" ] && exit 0
+ WINDSCRIBE_MARKER="# Added by Windscribe to prioritize IPv4 when IPv6 is blocked"
+ 
+ # Enable IPv4 priority by modifying gai.conf
+diff --git a/src/windscribe-cli/main.cpp b/src/windscribe-cli/main.cpp
+index 563f6b5..4163692 100644
+--- a/src/windscribe-cli/main.cpp
++++ b/src/windscribe-cli/main.cpp
+@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
+ 
+     // clear Qt plugin library paths for release build
+ #ifndef QT_DEBUG
+-    QCoreApplication::setLibraryPaths(QStringList());
++    // QCoreApplication::setLibraryPaths disabled for Nix
+ #endif
+ 
+     QCoreApplication::setApplicationName(WS_SETTINGS_APP);
+diff --git a/src/helper/linux/main.cpp b/src/helper/linux/main.cpp
+index 8873e7d..004e1fb 100644
+--- a/src/helper/linux/main.cpp
++++ b/src/helper/linux/main.cpp
+@@ -21,7 +21,7 @@ int main(int argc, const char *argv[])
+     // Pin before anything can spawn a child: every command we run as root goes through a shell,
+     // and the packages invoke us outside systemd (--reset-mac-addresses from prerm/preun), where
+     // the unit's Environment=PATH does not apply and dpkg hands us /usr/local/{sbin,bin} first.
+-    setenv("PATH", "/usr/sbin:/usr/bin:/sbin:/bin", 1);
++    setenv("PATH", "/usr/sbin:/usr/bin:/sbin:/bin", 0);
+
+     // Initialize logger
+     std::string path = WS_LINUX_LOG_DIR;
