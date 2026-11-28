@@ -11,14 +11,14 @@
 }:
 buildPythonPackage rec {
   pname = "geoarrow-c";
-  version = "0.3.1";
+  version = "0.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     repo = "geoarrow-c";
     owner = "geoarrow";
     tag = "geoarrow-c-python-${version}";
-    hash = "sha256-cSvFCIMHuwDh83DT3R3V86S+RjPzhqcnTaFXqKL43Ns=";
+    hash = "sha256-hPVtrhzxhImn5rw2TU5149UctKKSF/qva4gtvKvbzbw=";
   };
 
   sourceRoot = "${src.name}/python/geoarrow-c";
