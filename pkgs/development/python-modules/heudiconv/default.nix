@@ -18,14 +18,14 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "heudiconv";
-  version = "1.5.1";
+  version = "1.6.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-EO3iKhFs7U/ekueeUK8PRif6NFcV6xoDIMC+9js0Q8o=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-ZLhlw11bOSEpZf17WXckn8/9nzAEkuRjNhGLYLIks6k=";
   };
 
   postPatch = ''
@@ -61,6 +61,8 @@ buildPythonPackage rec {
   disabledTests = [
     # No such file or directory
     "test_bvals_are_zero"
+    "test_convert_multiorient"
+    "test_convert_multiorient_nonunique"
 
     # tries to access internet
     "test_partial_xa_conversion"
@@ -69,8 +71,8 @@ buildPythonPackage rec {
   meta = {
     description = "Flexible DICOM converter for organizing imaging data";
     homepage = "https://heudiconv.readthedocs.io";
-    changelog = "https://github.com/nipy/heudiconv/releases/tag/v${version}";
+    changelog = "https://github.com/nipy/heudiconv/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };
-}
+})
