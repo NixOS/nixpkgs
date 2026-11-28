@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libmeshb";
-  version = "7.80";
+  version = "8.02";
 
   src = fetchFromGitHub {
     owner = "LoicMarechal";
     repo = "libMeshb";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-nkQ7Lq0rUCbqaWq6GkHejDqWFa21/pGBLZg93LSVvjc=";
+    hash = "sha256-LdnjdamWzm/iihnBwjbUBMwLXNhtM+LRsTUEX4GYkgk=";
   };
 
   strictDeps = true;
