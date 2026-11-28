@@ -34,6 +34,16 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+  # Fix gcc-16 build failures of the vendored rocksdb due to missing <cstdint>,
+  # like pkgs/by-name/ro/rocksdb does for versions older than 10.4.2
+  postPatch = ''
+    sed -e '1i #include <cstdint>' -i \
+      submodules/rocksdb/db/blob/blob_file_meta.h \
+      submodules/rocksdb/include/rocksdb/sst_partitioner.h \
+      submodules/rocksdb/include/rocksdb/write_batch_base.h \
+      submodules/rocksdb/include/rocksdb/trace_record.h
+  '';
+
   cmakeFlags =
     let
       options = {
