@@ -3,30 +3,49 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
+  mlarray,
+  nibabel,
   numpy,
+  pynrrd,
   simpleitk,
+  # optional-dependencies
+  highdicom,
+  pydicom,
+  # nativeCheckInputs
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "medvol";
-  version = "0.0.20";
+  version = "1.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "MIC-DKFZ";
     repo = "medvol";
     tag = "v${version}";
-    hash = "sha256-U73Whle2/4QwlU9MyRclB5o+pHWdpbCCiYJIdMsMoMg=";
+    hash = "sha256-R8A++5qlTdeSBp5DW7aj8l/JpWEzxqo5EinI7Jm5uy0=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
+    mlarray
+    nibabel
     numpy
+    pynrrd
     simpleitk
   ];
 
-  doCheck = false; # no tests
+  optional-dependencies.dicom = [
+    highdicom
+    pydicom
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ]
+  ++ optional-dependencies.dicom;
 
   pythonImportsCheck = [ "medvol" ];
 

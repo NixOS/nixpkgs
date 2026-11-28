@@ -11280,6 +11280,8 @@ self: super: with self; {
 
   ml-dtypes = callPackage ../development/python-modules/ml-dtypes { };
 
+  mlarray = callPackage ../development/python-modules/mlarray { };
+
   mlcroissant = callPackage ../development/python-modules/mlcroissant { };
 
   mlflow = callPackage ../development/python-modules/mlflow { };
@@ -12115,7 +12117,11 @@ self: super: with self; {
 
   napari = callPackage ../development/python-modules/napari { };
 
+  napari-bboxes = callPackage ../development/python-modules/napari-bboxes { };
+
   napari-console = callPackage ../development/python-modules/napari-console { };
+
+  napari-mlarray = callPackage ../development/python-modules/napari-mlarray { };
 
   napari-nifti = callPackage ../development/python-modules/napari-nifti { };
 

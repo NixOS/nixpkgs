@@ -3,28 +3,40 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
+  napari-mlarray,
   medvol,
+  numpy,
+  pytestCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "napari-nifti";
-  version = "0.0.19";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "MIC-DKFZ";
     repo = "napari-nifti";
     tag = "v${version}";
-    hash = "sha256-pj2olQ0znppG0xE/fpFNIGXx0nzN+lAgGdEOtrzS7Vc=";
+    hash = "sha256-vR0Wy6MN0GsWUIawT9u8ufltIPaa+j75WoWJcziAY8A=";
   };
 
   build-system = [ setuptools ];
 
-  dependencies = [ medvol ];
+  dependencies = [
+    medvol
+    napari-mlarray
+    numpy
+  ]
+  ++ medvol.optional-dependencies.dicom;
 
   pythonImportsCheck = [ "napari_nifti" ];
 
-  doCheck = false; # no tests
+  nativeCheckInputs = [
+    pytestCheckHook
+    writableTmpDirAsHomeHook
+  ];
 
   meta = {
     description = "Napari plugin for reading and writing NIFTI files";
