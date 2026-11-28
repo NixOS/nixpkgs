@@ -81,6 +81,7 @@ in
             Comment=Dynamic window manager for Wayland
             Exec=/etc/xdg/dwl-session
             Type=Application
+            DesktopNames=dwl
           '';
         };
 
