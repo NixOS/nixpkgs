@@ -10,18 +10,19 @@
   jq,
   lib,
   resholve,
+  unstableGitUpdater,
   wireguard-tools,
 }:
 
 resholve.mkDerivation (finalAttrs: {
   pname = "wgnord";
-  version = "0.2.2";
+  version = "0.2.2-unstable-2026-11-01";
 
   src = fetchFromGitHub {
     owner = "phirecc";
     repo = "wgnord";
-    rev = finalAttrs.version;
-    hash = "sha256-K7O3SI24bkaLuEF+7FmbXUx7H0gPKsLttEmSCc3PT2c=";
+    rev = "40dd4efea71b1843e8abe9f3b6931dfe1253f7a7";
+    hash = "sha256-uPNatCT5/anyRPljTzGombWsA2iY54Hjd3TpHwQTBX8=";
   };
 
   postPatch = ''
@@ -60,6 +61,10 @@ resholve.mkDerivation (finalAttrs: {
       "cannot:${wireguard-tools}/bin/wg-quick"
     ];
   };
+
+  # Upstream bumps the NordApp version sent as User-Agent without tagging
+  # releases. Outdated versions get "DEPRECATED" instead of a private key.
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = {
     description = "NordVPN Wireguard (NordLynx) client in POSIX shell";
