@@ -13,6 +13,8 @@ buildGoModule (finalAttrs: {
   pname = "yq-go";
   version = "4.54.1";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "mikefarah";
     repo = "yq";
