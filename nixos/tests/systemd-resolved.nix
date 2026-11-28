@@ -70,7 +70,7 @@
     };
 
   nodes.client =
-    { nodes, ... }:
+    { nodes, config, ... }:
     let
       serverAddress = (lib.head nodes.server.networking.interfaces.eth1.ipv4.addresses).address;
       delegateAddress =
@@ -92,6 +92,22 @@
           Domains = [ "delegated.example.org" ];
         };
       };
+      services.resolved.rr.example-net = [
+        {
+          key = {
+            name = "static.example.net";
+            type = 1;
+          };
+          address = (lib.head config.networking.interfaces.eth1.ipv4.addresses).address;
+        }
+        {
+          key = {
+            name = "static.example.net";
+            type = 28;
+          };
+          address = (lib.head config.networking.interfaces.eth1.ipv6.addresses).address;
+        }
+      ];
       networking.useNetworkd = true;
       networking.useDHCP = false;
       systemd.network.networks."40-eth0".enable = false;
@@ -113,6 +129,8 @@
         (lib.head nodes.delegate_server.networking.interfaces.eth1.ipv4.addresses).address;
       delegateAddress6 =
         (lib.head nodes.delegate_server.networking.interfaces.eth1.ipv6.addresses).address;
+      staticAddress4 = (lib.head nodes.client.networking.interfaces.eth1.ipv4.addresses).address;
+      staticAddress6 = (lib.head nodes.client.networking.interfaces.eth1.ipv6.addresses).address;
     in
     #python
     ''
@@ -139,5 +157,8 @@
 
       with subtest("dns-delegate resolves delegated subdomain"):
           test_resolve("test.delegated.example.org", ["${delegateAddress4}", "${delegateAddress6}"])
+
+      with subtest("static record resolves"):
+          test_resolve("static.example.net", ["${staticAddress4}", "${staticAddress6}"])
     '';
 }
