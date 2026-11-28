@@ -33382,6 +33382,12 @@
     github = "zazedd";
     githubId = 93401987;
   };
+  zdrng = {
+    email = "zdrng@proton.me";
+    github = "zdrng";
+    githubId = 189017315;
+    name = "zdrng";
+  };
   zebradil = {
     email = "german.lashevich+nixpkgs@gmail.com";
     github = "zebradil";
