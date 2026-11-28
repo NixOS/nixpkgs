@@ -44,7 +44,7 @@ in
   imports = [
     ../modules/generic/meta-maintainers.nix
     ../modules/generic/assertions.nix
-    (lib.modules.importApply ./config-data.nix { inherit pkgs; })
+    (lib.modules.importApply ../modules/generic/config-data.nix { inherit pkgs; })
   ];
   options = {
     services = mkOption {
