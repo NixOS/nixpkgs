@@ -751,6 +751,11 @@
     githubId = 749381;
     name = "Adam Tulinius";
   };
+  adamwett = {
+    github = "adamwett";
+    githubId = 80975389;
+    name = "Adam Wettreich";
+  };
   adda = {
     email = "chocholaty.david@protonmail.com";
     matrix = "@adda0:matrix.org";
