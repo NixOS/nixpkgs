@@ -18,6 +18,9 @@ buildGoModule (finalAttrs: {
   # The new and improved "License Classifier v2" is hidden in a subdirectory.
   sourceRoot = "${finalAttrs.src.name}/v2";
 
+  # https://github.com/google/licenseclassifier/pull/76, which also adds an API.
+  patches = [ ./fix-send-on-closed-channel.patch ];
+
   vendorHash = "sha256-u0VR8DCmbZS0MF26Y4HfqtLaGyX2n2INdAidVNbnXPE=";
 
   ldflags = [
