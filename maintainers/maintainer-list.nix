@@ -16464,6 +16464,12 @@
     github = "lachrymaLF";
     githubId = 13716477;
   };
+  lachstec = {
+    email = "git@1ux.dev";
+    name = "Lachstec";
+    github = "Lachstec";
+    githubId = 52079984;
+  };
   lactose = {
     name = "lactose";
     email = "mail@lactose.dev";
