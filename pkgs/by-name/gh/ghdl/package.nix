@@ -30,13 +30,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ghdl-${backend}";
-  version = "6.0.0";
+  version = "6.1.0";
 
   src = fetchFromGitHub {
     owner = "ghdl";
     repo = "ghdl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Q5lAWMa1SFjoIJTdWlHSbS4Cg5RYWiej8F05Xrz9ArY=";
+    hash = "sha256-B9uh9offcL/EIDdXok597DtomO1HemvoazA7KRDIheg=";
   };
 
   strictDeps = true;
