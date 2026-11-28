@@ -18,6 +18,11 @@
   desktop-file-utils,
   polkit,
   glib-testing,
+  gi-docgen,
+  libgsystemservice,
+  tinycdb,
+  gnome-desktop,
+  json-glib,
 }:
 
 stdenv.mkDerivation {
@@ -29,6 +34,7 @@ stdenv.mkDerivation {
     "out"
     "lib"
     "dev"
+    "installedTests"
   ];
 
   patches = [
@@ -47,6 +53,7 @@ stdenv.mkDerivation {
     itstool
     desktop-file-utils
     wrapGAppsHook4
+    gi-docgen
   ];
 
   buildInputs = [
@@ -55,6 +62,9 @@ stdenv.mkDerivation {
     polkit
     glib-testing
     flatpak
+    libgsystemservice
+    gnome-desktop
+    json-glib
   ];
 
   propagatedBuildInputs = [
@@ -71,6 +81,11 @@ stdenv.mkDerivation {
     "-Duse_system_libmalcontent=true"
     "-Dui=enabled"
   ];
+
+  postPatch = ''
+    tar -xzf ${tinycdb.src} -C subprojects
+    cp -r subprojects/packagefiles/tinycdb/* subprojects/tinycdb-0.81/
+  '';
 
   meta = {
     description = "UI components for parental controls library";
