@@ -3,6 +3,7 @@
   stdenv,
   testers,
   fetchFromGitHub,
+  fetchpatch2,
   autoreconfHook,
   lcms2,
   pkg-config,
@@ -41,6 +42,14 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   enableParallelBuilding = true;
+
+  patches = [
+    (fetchpatch2 {
+      name = "CVE-2026-135167";
+      url = "https://github.com/LibRaw/LibRaw/commit/d270dbf557ff1f68757e1b93a84b91c3c1a13ce7.patch?full_index=1";
+      hash = "sha256-1bkUNgeZzDVMHEzX/R5Cg4EDpG2+5MkZpZLFUh9VO5A=";
+    })
+  ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isFreeBSD ''
     substituteInPlace libraw*.pc.in --replace-fail -lstdc++ ""
