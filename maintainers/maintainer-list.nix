@@ -30018,6 +30018,12 @@
     githubId = 678511;
     name = "Thomas Mader";
   };
+  ThomShark = {
+    email = "thomas@nodecode.ai";
+    github = "ThomShark";
+    githubId = 134332456;
+    name = "Foresight Labs";
+  };
   thornoar = {
     email = "r.a.maksimovich@gmail.com";
     github = "thornoar";
