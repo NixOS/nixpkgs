@@ -11,14 +11,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pyxel";
-  version = "3.0.1";
+  version = "3.0.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kitao";
     repo = "pyxel";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jMpCfam23zK7qdj8sdYH5V82GY7A8l6DSVJmJRkuhlM=";
+    hash = "sha256-oQtHcws7vUM4ZIiVeN7H6+TCeHuCwzGzhjtiXwEN1w0=";
   };
 
   cargoRoot = "crates";
@@ -30,7 +30,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       version
       cargoRoot
       ;
-    hash = "sha256-T+AtF9HHJGiA01eVWVlkiTwuipSJV6nTaNkmQvPNfMg=";
+    hash = "sha256-q4lL3PtELEHkNbycxzjm6VbDrTWCHsXTzDghpuvtMTk=";
   };
 
   buildAndTestSubdir = "python";
