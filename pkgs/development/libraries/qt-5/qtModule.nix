@@ -26,6 +26,7 @@ mkDerivation (
   args
   // {
     inherit pname version src;
+    pos = builtins.unsafeGetAttrPos "pname" args;
     patches = (args.patches or [ ]) ++ (patches.${pname} or [ ]);
 
     buildInputs = args.buildInputs or [ ];

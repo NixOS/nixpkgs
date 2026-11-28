@@ -23,9 +23,11 @@
       ...
     }@attrs:
     let
+      pos = builtins.unsafeGetAttrPos "src" attrs;
       drv = stdenv.mkDerivation (
         attrs
         // {
+          inherit pos;
           __structuredAttrs = true;
           inherit
             unpackPhase

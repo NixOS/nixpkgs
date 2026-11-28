@@ -116,6 +116,7 @@ lib.makeScope pkgs.newScope (
       stdenv.mkDerivation (
         (removeAttrs args [ "name" ])
         // {
+          pos = builtins.unsafeGetAttrPos "name" args;
           pname = "php-${name}";
           extensionName = extName;
 

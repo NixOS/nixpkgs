@@ -12,6 +12,7 @@
   pname ? (lib.head paks).pname,
   version ? (lib.head paks).version,
   description ? "",
+  meta ? { },
 }:
 
 let
@@ -73,5 +74,6 @@ stdenv.mkDerivation {
       license
       ;
     inherit (ioquake3.meta) platforms;
-  };
+  }
+  // meta;
 }

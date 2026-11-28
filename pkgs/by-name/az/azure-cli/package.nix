@@ -55,6 +55,7 @@ let
         {
           format = "wheel";
           src = fetchurl { inherit url hash; };
+          pos = builtins.unsafeGetAttrPos "description" args;
           passthru = {
             updateScript = extensionUpdateScript { inherit pname; };
             tests.azWithExtension = testAzWithExts [ self ];

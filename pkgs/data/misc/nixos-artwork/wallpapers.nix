@@ -13,6 +13,7 @@ let
       description,
       dimensions,
       license ? lib.licenses.free,
+      meta ? { },
     }:
 
     let
@@ -85,7 +86,8 @@ let
           inherit description license;
           homepage = "https://github.com/NixOS/nixos-artwork";
           platforms = lib.platforms.all;
-        };
+        }
+        // meta;
       };
     in
     pkg;
