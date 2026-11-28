@@ -6,16 +6,23 @@
   coreutils,
   libblocksruntime,
   llvmPackages,
-  ninja,
+  ninjaMinimal,
   pkg-config,
   python3,
+  python3MinimalForMeson,
   replaceVars,
   writableTmpDirAsHomeHook,
   writeShellScriptBin,
   zlib,
+
+  minimal ? false,
 }:
 
-python3.pkgs.buildPythonApplication (finalAttrs: {
+let
+  python3' = if minimal then python3MinimalForMeson else python3;
+in
+
+python3'.pkgs.buildPythonApplication (finalAttrs: {
   pname = "meson";
   version = "1.12.1";
   pyproject = true;
@@ -70,7 +77,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   ];
 
   postPatch =
-    if python3.isPyPy then
+    if python3'.isPyPy then
       ''
         substituteInPlace mesonbuild/modules/python.py \
           --replace-fail "PythonExternalProgram('python3', mesonlib.python_command" \
@@ -86,22 +93,22 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     else
       null;
 
-  build-system = [ python3.pkgs.setuptools ];
+  build-system = [ python3'.pkgs.setuptools ];
 
   nativeBuildInputs = [ installShellFiles ];
 
   optional-dependencies = {
-    ninja = [ python3.pkgs.ninja ];
-    progress = [ python3.pkgs.tqdm ];
-    typing = [ python3.pkgs.mypy ];
+    ninja = [ python3'.pkgs.ninja ];
+    progress = [ python3'.pkgs.tqdm ];
+    typing = [ python3'.pkgs.mypy ];
   };
 
   nativeCheckInputs = [
-    ninja
+    ninjaMinimal
     pkg-config
     writableTmpDirAsHomeHook
   ]
-  ++ lib.optionals python3.isPyPy [
+  ++ lib.optionals python3'.isPyPy [
     # Several tests hardcode python3.
     (writeShellScriptBin "python3" ''exec pypy3 "$@"'')
   ];
@@ -147,6 +154,10 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
         # being allowed by the package definition)
         "test cases/common/282 -D_FORTIFY_SOURCE=2 and -O0"
       ]
+      ++ lib.optionals minimal [
+        # tries to decompress a tar.xz archive, but python3Minimal does not support xz
+        "test cases/common/153 wrap file should not failed"
+      ]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [
         # requires llvmPackages.openmp, creating cyclic dependency
         "test cases/common/184 openmp"
@@ -155,7 +166,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
         # pch doesn't work quite right on FreeBSD, I think
         "test cases/common/13 pch"
       ]
-      ++ lib.optionals python3.isPyPy [
+      ++ lib.optionals python3'.isPyPy [
         # fails for unknown reason
         "test cases/python/4 custom target depends extmodule"
         # we patch the path to the binary...
@@ -163,7 +174,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
       ]
     ))
     ++ [
-      "${if python3.isPyPy then python3.interpreter else "python"} ./run_project_tests.py"
+      "${if python3'.isPyPy then python3'.interpreter else "python"} ./run_project_tests.py"
       "runHook postCheck"
     ]
   );
@@ -186,7 +197,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     rm $out/nix-support/propagated-build-inputs
 
     substituteInPlace "$out/share/bash-completion/completions/meson" \
-      --replace-fail "python3 -c " "${python3.interpreter} -c "
+      --replace-fail "python3 -c " "${python3'.interpreter} -c "
   '';
 
   setupHook = ./setup-hook.sh;
@@ -207,7 +218,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     '';
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ qyliss ];
-    inherit (python3.meta) platforms;
+    inherit (python3'.meta) platforms;
   };
 })
 # TODO: a more Nixpkgs-tailoired test suite

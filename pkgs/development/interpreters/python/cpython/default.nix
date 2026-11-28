@@ -270,7 +270,10 @@ let
       ];
 
   buildInputs = lib.filter (p: p != null) (
-    optionals (!withMinimalDeps) [
+    optionals withZlib [
+      zlib
+    ]
+    ++ optionals (!withMinimalDeps) [
       bzip2
       libffi
       libuuid
