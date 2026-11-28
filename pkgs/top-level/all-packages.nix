@@ -7215,14 +7215,6 @@ with pkgs;
 
   # pam_bioapi ( see http://www.thinkwiki.org/wiki/How_to_enable_the_fingerprint_reader )
 
-  procps =
-    # some platforms refer back to this from unixtools, so this is needed to
-    # break the cycle
-    if stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isCygwin then
-      callPackage ../os-specific/linux/procps-ng { }
-    else
-      unixtools.procps;
-
   qemu_kvm = lowPrio (qemu.override { hostCpuOnly = true; });
   qemu_full = lowPrio (
     qemu.override {
