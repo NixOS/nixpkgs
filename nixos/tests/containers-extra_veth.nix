@@ -55,6 +55,7 @@
           veth1 = {
             hostBridge = "br1";
             localAddress = "192.168.1.100/24";
+            localMacAddress = "02:00:00:00:00:01";
           };
           veth2 = {
             hostAddress = "192.168.2.1";
@@ -78,9 +79,9 @@
         assert "up" in machine.succeed("nixos-container status webserver")
 
     with subtest("Ensure that the veths are inside the container"):
-        assert "state UP" in machine.succeed(
-            "nixos-container run webserver -- ip link show veth1"
-        )
+        veth1 = machine.succeed("nixos-container run webserver -- ip link show veth1")
+        assert "state UP" in veth1
+        assert "02:00:00:00:00:01" in veth1
         assert "state UP" in machine.succeed(
             "nixos-container run webserver -- ip link show veth2"
         )
