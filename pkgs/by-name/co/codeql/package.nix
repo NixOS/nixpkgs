@@ -17,7 +17,13 @@
 }:
 
 let
-  platform = if stdenv.hostPlatform.isAarch64 then "linux-arm64" else "linux64";
+  platform =
+    if stdenv.hostPlatform.isDarwin then
+      "osx64"
+    else if stdenv.hostPlatform.isAarch64 then
+      "linux-arm64"
+    else
+      "linux64";
 
   toolsDir = "codeql/tools/${platform}";
 
@@ -25,7 +31,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "codeql";
-  version = "2.27.4";
+  version = "2.27.5";
 
   dontConfigure = true;
   dontBuild = true;
@@ -35,13 +41,14 @@ stdenv.mkDerivation rec {
     url = "https://github.com/github/codeql-cli-binaries/releases/download/v${version}/codeql-${platform}.zip";
     hash =
       {
-        x86_64-linux = "sha256-gDEusgeeuKGEYcJkgZOzQKJvlGohnhAY2loguWxOwrU=";
-        aarch64-linux = "sha256-skJmDV8dLXZiZUwp2aMfxnOel/BeuCRWYWnybuJqg5g=";
+        x86_64-linux = "sha256-91hjL1U4C6LklkUmVISr+J21zbtvfnIH5e+mpjYFf04=";
+        aarch64-linux = "sha256-1W4sQ44gH10V+DgpfZ8Q9Nl0qaiJ8Wnjh+mOz2kX5BY=";
+        aarch64-darwin = "sha256-An3mrL3qzuDeFmFKZEh+I+xxLDG1IouuSIjU/vdLEN0=";
       }
       .${stdenv.hostPlatform.system};
   };
 
-  nativeBuildInputs = [ autoPatchelfHook ];
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
   buildInputs = [
     zlib
@@ -54,6 +61,8 @@ stdenv.mkDerivation rec {
     jdk21
     (lib.getLib stdenv.cc.cc)
     curl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
     lttng-ust_2_12
   ];
@@ -100,6 +109,7 @@ stdenv.mkDerivation rec {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
+      "aarch64-darwin"
     ];
     license = lib.licenses.unfree;
   };
