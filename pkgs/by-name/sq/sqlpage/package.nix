@@ -1,4 +1,5 @@
 {
+  aws-lc,
   fetchFromGitHub,
   fetchNpmDeps,
   lib,
@@ -30,6 +31,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-bp8+lP7cUAWf/4EieiwEryFbIBmO0AxXJvHfABruj6g=";
   };
 
+  # sqlx opens its shared in-memory database as "file:sqlx-in-memory-N" without
+  # SQLITE_OPEN_URI. The bundled SQLite is built with SQLITE_USE_URI and parses
+  # the URI anyway; the system SQLite doesn't, so every pooled connection gets
+  # its own empty database.
+  postPatch = ''
+    substituteInPlace $cargoDepsCopy/*/sqlx-core-oldapi-*/src/sqlite/connection/establish.rs \
+      --replace-fail 'flags |= SQLITE_OPEN_MEMORY;' 'flags |= SQLITE_OPEN_MEMORY | libsqlite3_sys::SQLITE_OPEN_URI;'
+  '';
+
   preBuild = ''
     npm run build
   '';
@@ -41,12 +51,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
     sqlite
     unixodbc
     zstd
   ];
 
   env.ZSTD_SYS_USE_PKG_CONFIG = true;
+
+  # Tests bind to and connect to localhost
+  __darwinAllowLocalNetworking = true;
 
   passthru.updateScript = nix-update-script { };
 
