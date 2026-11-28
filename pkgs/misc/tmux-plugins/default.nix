@@ -928,7 +928,7 @@ in
 
   sidebar = mkTmuxPlugin {
     pluginName = "sidebar";
-    version = "0.7.0-unstable-2018-11-30";
+    version = "0.7.0";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "tmux-sidebar";
