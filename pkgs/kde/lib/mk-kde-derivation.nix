@@ -67,6 +67,7 @@ in
   extraNativeBuildInputs ? [ ],
   extraPropagatedBuildInputs ? [ ],
   extraCmakeFlags ? [ ],
+  extraOutputs ? [ ],
   excludeDependencies ? [ ],
   hasPythonBindings ? false,
   ...
@@ -106,7 +107,8 @@ let
       "dev"
       "devtools"
     ]
-    ++ lib.optionals hasPythonBindings [ "python" ];
+    ++ lib.optionals hasPythonBindings [ "python" ]
+    ++ extraOutputs;
 
     nativeBuildInputs = [
       cmake
@@ -155,6 +157,7 @@ let
     "extraNativeBuildInputs"
     "extraPropagatedBuildInputs"
     "extraCmakeFlags"
+    "extraOutputs"
     "excludeDependencies"
     "hasPythonBindings"
     "meta"
