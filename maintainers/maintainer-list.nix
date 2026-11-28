@@ -11472,6 +11472,12 @@
     githubId = 62279738;
     name = "Håkon Arvidsen";
   };
+  hashcube = {
+    name = "Madeline Hashcube";
+    email = "madeline@hashcube.dev";
+    github = "hashcube-dev";
+    githubId = 110939089;
+  };
   HaskellHegemonie = {
     name = "HaskellHegemonie";
     email = "haskellisierer@proton.me";
