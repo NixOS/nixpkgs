@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "devialet";
-  version = "1.5.7";
+  version = "1.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fwestenberg";
     repo = "devialet";
     tag = "v${version}";
-    hash = "sha256-HmTiHa7DEmjARaYn7/OoGotnTirE7S7zXLK/TfHdEAg=";
+    hash = "sha256-5SOaVPSl3pmCV3t6687e+pjTrOrWV5RiOMW06WYDFaQ=";
   };
 
   build-system = [ setuptools ];
