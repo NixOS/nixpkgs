@@ -107,6 +107,23 @@ let
                 file = "dump.tar.zst";
               };
             };
+            # The dump directory on a filesystem of its own, which exists only once its mount unit
+            # has run, so the tmpfiles rule for the directory cannot make it
+            specialisation.dump-filesystem = {
+              inheritParentConfig = true;
+              configuration = {
+                fileSystems."/dump" = {
+                  device = "tmpfs";
+                  fsType = "tmpfs";
+                };
+                services.forgejo.dump = {
+                  enable = true;
+                  type = "tar.zst";
+                  file = "dump.tar.zst";
+                  backupDir = "/dump/backup";
+                };
+              };
+            };
           };
         client =
           { ... }:
@@ -134,6 +151,9 @@ let
           serverSystem = nodes.server.system.build.toplevel;
           dumpFile =
             with nodes.server.specialisation.dump.configuration.services.forgejo.dump;
+            "${backupDir}/${file}";
+          dumpFileOnFilesystem =
+            with nodes.server.specialisation.dump-filesystem.configuration.services.forgejo.dump;
             "${backupDir}/${file}";
           remoteUri = "forgejo@server:test/repo";
           remoteUriCheckoutAction = "forgejo@server:test/checkout";
@@ -293,6 +313,16 @@ let
               server.systemctl("start forgejo-dump")
               assert "Zstandard compressed data" in server.succeed("file ${dumpFile}")
               server.copy_from_machine("${dumpFile}")
+
+          with subtest("Testing backup service with a directory on a filesystem of its own"):
+              server.succeed("${serverSystem}/specialisation/dump-filesystem/bin/switch-to-configuration test")
+              # The activation of the switch runs the tmpfiles rule after the mount and so makes the
+              # directory; a boot into that filesystem finds it missing, because the rule runs first
+              server.succeed("rm -rf /dump/backup && systemctl reset-failed forgejo.service forgejo-dump.service")
+              server.succeed("systemctl restart forgejo.service")
+              server.systemctl("start forgejo-dump")
+              assert "Zstandard compressed data" in server.succeed("file ${dumpFileOnFilesystem}")
+              server.copy_from_machine("${dumpFileOnFilesystem}")
         '';
     };
 in

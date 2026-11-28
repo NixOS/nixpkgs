@@ -13,6 +13,20 @@ let
 
   exe = lib.getExe cfg.package;
 
+  # The dump writes into the working directory, which the service enters before running it
+  dumpCommand = lib.escapeShellArgs (
+    [
+      exe
+      "dump"
+      "--type"
+      cfg.dump.type
+    ]
+    ++ lib.optionals (cfg.dump.file != null) [
+      "--file"
+      cfg.dump.file
+    ]
+  );
+
   pg = config.services.postgresql;
   useMysql = cfg.database.type == "mysql";
   usePostgresql = cfg.database.type == "postgres";
@@ -737,7 +751,9 @@ in
         # Access write directories
         ReadWritePaths = [
           cfg.customDir
-          cfg.dump.backupDir
+          # The directory is created by forgejo-dump, and may live on a filesystem that is not
+          # mounted when this unit starts
+          "-${cfg.dump.backupDir}"
           cfg.repositoryRoot
           cfg.stateDir
           cfg.lfs.contentDir
@@ -821,13 +837,23 @@ in
         FORGEJO_CUSTOM = cfg.customDir;
       };
 
+      # The dump may live on a filesystem of its own, which is mounted only once its unit has run
+      unitConfig.RequiresMountsFor = [ cfg.dump.backupDir ];
+
       serviceConfig = {
         Type = "oneshot";
         User = cfg.user;
-        ExecStart =
-          "${exe} dump --type ${cfg.dump.type}"
-          + optionalString (cfg.dump.file != null) " --file ${cfg.dump.file}";
-        WorkingDirectory = cfg.dump.backupDir;
+        # WorkingDirectory= applies to every command of the unit, so an ExecStartPre= cannot create
+        # a directory that is not there yet: systemd changes into it before it runs the first one
+        ExecStartPre = [
+          # + because the dump may live on a mountpoint that belongs to root
+          "+${lib.getExe' pkgs.coreutils "install"} -d -m 0750 -o ${cfg.user} -g ${cfg.group} ${lib.escapeShellArg cfg.dump.backupDir}"
+        ];
+        ExecStart = pkgs.writeShellScript "forgejo-dump" ''
+          set -eu
+          cd ${lib.escapeShellArg cfg.dump.backupDir}
+          exec ${dumpCommand}
+        '';
       };
     };
 
