@@ -221,14 +221,15 @@ stdenv.mkDerivation (
 
     desktopItems = [
       (makeDesktopItem {
-        name = "t3code";
+        name = "com.t3tools.T3Code";
         desktopName = appName;
         comment = "Minimal web GUI for coding agents";
         exec = "t3code-desktop %U";
         terminal = false;
         icon = "t3code";
-        startupWMClass = "t3code";
+        startupWMClass = "com.t3tools.T3Code";
         categories = [ "Development" ];
+        mimeTypes = [ "x-scheme-handler/t3code" ];
       })
     ];
 
