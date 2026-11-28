@@ -1690,6 +1690,7 @@ in
   selfoss = runTest ./selfoss.nix;
   send = runTest ./send.nix;
   service-runner = runTest ./service-runner.nix;
+  services-udev-rules = runTest ./services-udev-rules.nix;
   servo = runTest ./servo.nix;
   sftpgo = runTest ./sftpgo.nix;
   sfxr-qt = runTest ./sfxr-qt.nix;
