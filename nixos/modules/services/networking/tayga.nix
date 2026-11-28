@@ -12,24 +12,24 @@ let
   # Converts an address set to a string
   strAddr = addr: "${addr.address}/${toString addr.prefixLength}";
 
-  configFile = pkgs.writeText "tayga.conf" ''
-    tun-device ${cfg.tunDevice}
+  settingsFormat = pkgs.formats.keyValue {
+    listsAsDuplicateKeys = true;
+    mkKeyValue = generators.mkKeyValueDefault {
+      mkValueString = v: if isBool v then boolToYesNo v else generators.mkValueStringDefault { } v;
+    } " ";
+  };
 
-    ipv4-addr ${cfg.ipv4.address}
-    ${optionalString (cfg.ipv6.address != null) "ipv6-addr ${cfg.ipv6.address}"}
-
-    prefix ${strAddr cfg.ipv6.pool}
-    dynamic-pool ${strAddr cfg.ipv4.pool}
-    data-dir ${cfg.dataDir}
-
-    ${concatStringsSep "\n" (mapAttrsToList (ipv4: ipv6: "map " + ipv4 + " " + ipv6) cfg.mappings)}
-
-    ${optionalString ((builtins.length cfg.log) > 0) ''
-      log ${concatStringsSep " " cfg.log}
-    ''}
-
-    wkpf-strict ${boolToYesNo cfg.wkpfStrict}
-  '';
+  # map is the only directive that may appear more than once, all other
+  # directives, including log, must fit on a single line.
+  configFile = settingsFormat.generate "tayga.conf" (
+    filterAttrs (_: v: v != null && v != [ ] && v != "") (
+      cfg.settings
+      // {
+        map = mapAttrsToList (ipv4: ipv6: "${ipv4} ${ipv6}") cfg.settings.map;
+        log = concatStringsSep " " cfg.settings.log;
+      }
+    )
+  );
 
   addrOpts =
     v:
@@ -52,106 +52,168 @@ let
     };
 
   versionOpts = v: {
-    options = {
-      router = {
-        address = mkOption {
-          type = types.str;
-          description = "The IPv${toString v} address of the router.";
-        };
-      };
-
+    router = {
       address = mkOption {
-        type = types.nullOr types.str;
-        default = null;
-        description = "The source IPv${toString v} address of the TAYGA server.";
-      };
-
-      pool = mkOption {
-        type = with types; nullOr (submodule (addrOpts v));
-        description = "The pool of IPv${toString v} addresses which are used for translation.";
+        type = types.str;
+        description = "The IPv${toString v} address of the router.";
       };
     };
+
+    pool = mkOption {
+      type = with types; nullOr (submodule (addrOpts v));
+      description = "The pool of IPv${toString v} addresses which are used for translation.";
+    };
   };
+
+  renamed =
+    from: to:
+    mkRenamedOptionModule
+      (
+        [
+          "services"
+          "tayga"
+        ]
+        ++ from
+      )
+      [
+        "services"
+        "tayga"
+        "settings"
+        to
+      ];
 in
 {
+  imports = [
+    (renamed [ "ipv4" "address" ] "ipv4-addr")
+    (renamed [ "ipv6" "address" ] "ipv6-addr")
+    (renamed [ "dataDir" ] "data-dir")
+    (renamed [ "tunDevice" ] "tun-device")
+    (renamed [ "mappings" ] "map")
+    (renamed [ "log" ] "log")
+    (renamed [ "wkpfStrict" ] "wkpf-strict")
+  ];
+
   options = {
     services.tayga = {
       enable = mkEnableOption "Tayga";
 
       package = mkPackageOption pkgs "tayga" { };
 
-      ipv4 = mkOption {
-        type = types.submodule (versionOpts 4);
-        description = "IPv4-specific configuration.";
-        example = literalExpression ''
-          {
-            address = "192.0.2.0";
-            router = {
-              address = "192.0.2.1";
-            };
-            pool = {
-              address = "192.0.2.1";
-              prefixLength = 24;
-            };
-          }
+      ipv4 = versionOpts 4;
+
+      ipv6 = versionOpts 6;
+
+      settings = mkOption {
+        description = ''
+          Configuration for TAYGA, see {manpage}`tayga.conf(5)` for the
+          available directives. `null` values are omitted.
         '';
-      };
-
-      ipv6 = mkOption {
-        type = types.submodule (versionOpts 6);
-        description = "IPv6-specific configuration.";
-        example = literalExpression ''
-          {
-            address = "2001:db8::1";
-            router = {
-              address = "64:ff9b::1";
-            };
-            pool = {
-              address = "64:ff9b::";
-              prefixLength = 96;
-            };
-          }
-        '';
-      };
-
-      dataDir = mkOption {
-        type = types.path;
-        default = "/var/lib/tayga";
-        description = "Directory for persistent data.";
-      };
-
-      tunDevice = mkOption {
-        type = types.str;
-        default = "nat64";
-        description = "Name of the nat64 tun device.";
-      };
-
-      mappings = mkOption {
-        type = types.attrsOf types.str;
         default = { };
-        description = "Static IPv4 -> IPv6 host mappings.";
-        example = literalExpression ''
-          {
-            "192.168.5.42" = "2001:db8:1:4444::1";
-            "192.168.5.43" = "2001:db8:1:4444::2";
-            "192.168.255.2" = "2001:db8:1:569::143";
-          }
-        '';
-      };
+        type = types.submodule {
+          freeformType =
+            with types;
+            attrsOf (
+              nullOr (oneOf [
+                bool
+                int
+                str
+              ])
+            );
 
-      log = mkOption {
-        type = types.listOf types.str;
-        default = [ ];
-        description = "Packet errors to log (drop, reject, icmp, self)";
-        example = literalExpression ''
-          [ "drop" "reject" "icmp" "self" ]
-        '';
-      };
+          options = {
+            tun-device = mkOption {
+              type = types.str;
+              default = "nat64";
+              description = "Name of the nat64 tun device.";
+            };
 
-      wkpfStrict = mkOption {
-        type = types.bool;
-        default = true;
-        description = "Enable restrictions on the use of the well-known prefix (64:ff9b::/96) - prevents translation of non-global IPv4 ranges when using the well-known prefix. Must be enabled for RFC 6052 compatibility.";
+            ipv4-addr = mkOption {
+              type = types.str;
+              description = "The source IPv4 address of the TAYGA server.";
+            };
+
+            ipv6-addr = mkOption {
+              type = types.nullOr types.str;
+              default = null;
+              description = "The source IPv6 address of the TAYGA server.";
+            };
+
+            prefix = mkOption {
+              type = types.nullOr types.str;
+              default = if cfg.ipv6.pool != null then strAddr cfg.ipv6.pool else null;
+              defaultText = literalExpression ''"''${config.services.tayga.ipv6.pool.address}/''${toString config.services.tayga.ipv6.pool.prefixLength}"'';
+              description = "The NAT64 prefix.";
+            };
+
+            dynamic-pool = mkOption {
+              type = types.nullOr types.str;
+              default = if cfg.ipv4.pool != null then strAddr cfg.ipv4.pool else null;
+              defaultText = literalExpression ''"''${config.services.tayga.ipv4.pool.address}/''${toString config.services.tayga.ipv4.pool.prefixLength}"'';
+              description = "The IPv4 pool from which TAYGA assigns addresses to IPv6 hosts.";
+            };
+
+            data-dir = mkOption {
+              type = types.path;
+              default = "/var/lib/tayga";
+              description = "Directory for persistent data.";
+            };
+
+            map = mkOption {
+              type = types.attrsOf types.str;
+              default = { };
+              description = "Static IPv4 -> IPv6 host mappings.";
+              example = literalExpression ''
+                {
+                  "192.168.5.42" = "2001:db8:1:4444::1";
+                  "192.168.5.43" = "2001:db8:1:4444::2";
+                  "192.168.255.2" = "2001:db8:1:569::143";
+                }
+              '';
+            };
+
+            log = mkOption {
+              type = types.listOf (
+                types.enum [
+                  "drop"
+                  "reject"
+                  "icmp"
+                  "self"
+                  "dyn"
+                ]
+              );
+              default = [ ];
+              description = "Packet errors to log.";
+              example = [
+                "drop"
+                "reject"
+                "icmp"
+                "self"
+              ];
+            };
+
+            wkpf-strict = mkOption {
+              type = types.bool;
+              default = true;
+              description = "Enable restrictions on the use of the well-known prefix (64:ff9b::/96) - prevents translation of non-global IPv4 ranges when using the well-known prefix. Must be enabled for RFC 6052 compatibility.";
+            };
+
+            udp-cksum-mode = mkOption {
+              type = types.enum [
+                "drop"
+                "calc"
+                "fwd"
+              ];
+              default = "drop";
+              description = ''
+                How to handle IPv4 UDP packets with a zero checksum, which
+                IPv6 does not allow. `calc` computes a checksum, `fwd`
+                forwards the packet unchanged and `drop` discards it.
+                Zero checksums are common for ESP-in-UDP (RFC 3948), for
+                example with VoWiFi.
+              '';
+            };
+          };
+        };
       };
     };
   };
@@ -159,14 +221,14 @@ in
   config = mkIf cfg.enable {
     assertions = [
       {
-        assertion = allUnique (attrValues cfg.mappings);
+        assertion = allUnique (attrValues cfg.settings.map);
         message = "Neither the IPv4 nor the IPv6 addresses must be entered twice in the mappings.";
       }
     ];
 
     users.groups.tayga-tun = { };
 
-    networking.interfaces."${cfg.tunDevice}" = {
+    networking.interfaces."${cfg.settings.tun-device}" = {
       virtual = true;
       virtualType = "tun";
       virtualOwner = null;
