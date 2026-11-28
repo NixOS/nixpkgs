@@ -4,6 +4,7 @@
   brotlicffi,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   hatchling,
   h11,
   isPyPy,
@@ -35,7 +36,20 @@ buildPythonPackage rec {
     hash = "sha256-XYZsnvFe4WNOAGN0TJuJiVVOHh5wElfngTPe6EfVJsE=";
   };
 
+  patches = [
+    # fix gzip responses with trailing garbage on Python with stricter zlib flush()
+    (fetchpatch {
+      url = "https://github.com/jawah/urllib3.future/commit/fe229e326a08f5a41cf26a06a422ae0a2282d5ad.patch";
+      excludes = [ "CHANGES.rst" ];
+      hash = "sha256-W52CVUzBI6JHvTObVOefzgnybDnCo+iGFDURXagpU2k=";
+    })
+  ];
+
   postPatch = ''
+    # https://github.com/jawah/urllib3.future/commit/7adb310b643d0f785e5f7151b1240e9943ad27c8
+    substituteInPlace test/test_ssltransport.py \
+      --replace-fail "SSLTransport(sock, context)" "SSLTransport(sock, context, server_hostname=\"localhost\")"
+
     substituteInPlace pyproject.toml \
       --replace-fail "''''ignore:.*but not measured.*:coverage.exceptions.CoverageWarning''''," "" \
       --replace-fail "''''ignore:.*No data was collected.*:coverage.exceptions.CoverageWarning''''," ""
