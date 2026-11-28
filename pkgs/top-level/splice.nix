@@ -12,9 +12,15 @@
 # `__spliced.hostTarget` field for the run-time version.
 #
 # For performance reasons, rather than uniformally splice in all cases, we only
-# do so when `pkgs` and `buildPackages` are distinct. The `actuallySplice`
-# parameter there the boolean value of that equality check.
-lib: pkgs: actuallySplice:
+# do so when `pkgs` and `buildPackages` are distinct. The
+# `defaultActuallySplice` parameter there the boolean value of that equality
+# check.
+#
+# A caller of `splicePackages` may override it. That equality is a fact about
+# `pkgs`, and does not settle the question for everything built on top: a
+# package set that bootstraps has a build set distinct from itself whatever the
+# platforms are doing, and needs the splice regardless.
+lib: pkgs: defaultActuallySplice:
 
 let
   inherit (lib.customisation) mapCrossIndex renameCrossIndexFrom;
@@ -78,6 +84,7 @@ let
       pkgsHostHost,
       pkgsHostTarget,
       pkgsTargetTarget,
+      actuallySplice ? defaultActuallySplice,
     }@args:
     if actuallySplice then spliceReal (renameCrossIndexFrom "pkgs" args) else pkgsHostTarget;
 
@@ -107,7 +114,7 @@ let
         ;
     };
 
-  pkgsForCall = if actuallySplice then splicedPackages else pkgs;
+  pkgsForCall = if defaultActuallySplice then splicedPackages else pkgs;
 
 in
 
@@ -123,7 +130,8 @@ in
 
   newScope = extra: lib.callPackageWith (pkgsForCall // extra);
 
-  pkgs = if actuallySplice then splicedPackages // { recurseForDerivations = false; } else pkgs;
+  pkgs =
+    if defaultActuallySplice then splicedPackages // { recurseForDerivations = false; } else pkgs;
 
   # prefill 2 fields of the function for convenience
   makeScopeWithSplicing = lib.makeScopeWithSplicing splicePackages pkgs.newScope;
@@ -161,5 +169,5 @@ in
   # Haskell package sets need this because they reimplement their own
   # `newScope`.
   __splicedPackages =
-    if actuallySplice then splicedPackages // { recurseForDerivations = false; } else pkgs;
+    if defaultActuallySplice then splicedPackages // { recurseForDerivations = false; } else pkgs;
 }
