@@ -19,8 +19,11 @@
   wasmedge,
   wasmer,
   wasmtime,
+  pkgsStatic,
+  fermyon-spin ? pkgsStatic.fermyon-spin,
   withLibkrun ? lib.meta.availableOn stdenv.hostPlatform libkrun,
   withLibkrunSEV ? false,
+  withSpin ? false,
   withWamr ? false,
   withWasmedge ? false,
   withWasmer ? false,
@@ -28,10 +31,6 @@
 }:
 
 let
-  wamrShared = wamr.overrideAttrs (old: {
-    cmakeFlags = (old.cmakeFlags or [ ]) ++ [ "-DBUILD_SHARED_LIBS=ON" ];
-  });
-
   # these tests require additional permissions
   disabledTests = [
     "test_capabilities.py"
@@ -101,7 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
     wasmedge
   ]
   ++ lib.optionals withWamr [
-    wamrShared
+    wamr
   ]
   ++ lib.optionals withWasmer [
     wasmer
@@ -122,14 +121,16 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals withWasmtime [
       "--with-wasmtime"
+    ]
+    ++ lib.optionals withSpin [
+      "--with-spin"
     ];
 
   enableParallelBuilding = true;
   strictDeps = true;
 
   env = {
-    # wamr.c calls two functions directly instead of via dlsym (upstream bug)
-    NIX_LDFLAGS = "-lcriu" + lib.optionalString withWamr " -liwasm";
+    NIX_LDFLAGS = "-lcriu";
   };
 
   # we need this before autoreconfHook does its thing in order to initialize
@@ -152,7 +153,7 @@ stdenv.mkDerivation (finalAttrs: {
   ''
   + lib.optionalString withWamr ''
     substituteInPlace src/libcrun/handlers/wamr.c \
-      --replace-fail '"libiwasm.so"' '"${wamrShared}/lib/libiwasm.so"'
+      --replace-fail '"libiwasm.so"' '"${wamr}/lib/libiwasm.so"'
   ''
   + lib.optionalString withWasmedge ''
     substituteInPlace src/libcrun/handlers/wasmedge.c \
@@ -165,6 +166,10 @@ stdenv.mkDerivation (finalAttrs: {
   + lib.optionalString withWasmtime ''
     substituteInPlace src/libcrun/handlers/wasmtime.c \
       --replace-fail '"libwasmtime.so"' '"${wasmtime.lib}/lib/libwasmtime.so"'
+  ''
+  + lib.optionalString withSpin ''
+    substituteInPlace src/libcrun/handlers/spin.c \
+      --replace-fail '"/usr/local/bin/spin"' '"${fermyon-spin}/bin/spin"'
   '';
 
   doCheck = true;
