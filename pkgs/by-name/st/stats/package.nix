@@ -96,19 +96,6 @@ stdenv.mkDerivation (finalAttrs: {
   # Stats uses IOReport private API symbols declared in bridging headers
   env.NIX_LDFLAGS = "-lIOReport";
 
-  # Swift 5.10 doesn't support trailing commas in argument lists (Swift 6 feature)
-  # Remove them from all Swift source files
-  postPatch = ''
-    find . -name '*.swift' -exec perl -0777 -pi -e '
-      s/,(\s*\))/$1/g;
-      s/\@retroactive //g;
-    ' {} +
-
-    # CWPHYMode.mode11be (WiFi 7) requires macOS 15+ SDK; @unknown default covers it
-    sed -i '/mode11be/d' Modules/Net/readers.swift
-
-  '';
-
   dontConfigure = true;
 
   buildPhase = ''
@@ -123,10 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
       -Xcc -IKit/lldb/include
       -Xcc -I${leveldb.dev}/include/leveldb
       -disable-bridging-pch
-      # Stamp binaries with macOS 26 SDK version so the system applies Liquid Glass UI
-      # The Swift compiler in nixpkgs uses SDK 14 headers (which compile fine), but without
-      # this flag the linker records SDK 14 and macOS withholds it (Liquid Glass)
-      -Xlinker -platform_version -Xlinker macos -Xlinker 14.0 -Xlinker 26.0
+      -target ${stdenv.hostPlatform.swift.triple}
     )
 
     buildFramework() {

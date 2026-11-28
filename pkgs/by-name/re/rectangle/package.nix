@@ -1,6 +1,5 @@
 {
   lib,
-  apple-sdk_26,
   fetchFromGitHub,
   darwin,
   actool,
@@ -143,22 +142,6 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
   ];
 
-  buildInputs = [
-    apple-sdk_26
-  ];
-
-  postPatch = ''
-    # Requires the macOS 27 SDK, whose Swift interfaces are too new for our Swift
-    substituteInPlace Rectangle/AppDelegate.swift \
-      --replace-fail "newMenuItem.preferredImageVisibility = .visible" ""
-
-    # Annotate the closure type, otherwise the type checker times out
-    substituteInPlace Rectangle/MultiWindow/GridTiling.swift \
-      --replace-fail \
-        "let candidates = (0..<stages.count).map { step in" \
-        "let candidates = (0..<stages.count).map { (step: Int) -> Int in"
-  '';
-
   dontConfigure = true;
 
   buildPhase = ''
@@ -173,6 +156,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     nixLog "building Sparkle stub framework"
     swiftc "''${commonSwiftFlags[@]}" -emit-module -emit-library \
+      -target ${stdenv.hostPlatform.swift.triple} \
       -module-name Sparkle -module-link-name Sparkle \
       -emit-module-path "$buildDir/Sparkle.swiftmodule" \
       -Xlinker -install_name -Xlinker "@rpath/Sparkle.framework/Sparkle" \
@@ -213,6 +197,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     nixLog "compiling Rectangle (''${#rectSwiftFiles[@]} swift files)"
     swiftc "''${commonSwiftFlags[@]}" -emit-executable \
+      -target ${stdenv.hostPlatform.swift.triple} \
       -module-name Rectangle \
       -import-objc-header Rectangle/Rectangle-Bridging-Header.h \
       -I "$buildDir" -L "$buildDir" \
