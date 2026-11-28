@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xcb-imdkit";
-  version = "1.0.9";
+  version = "1.0.10";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = "xcb-imdkit";
     rev = finalAttrs.version;
-    hash = "sha256-QfuetGPY6u4OhFiE5/CoVEpdODWnd1PHWBtM3ymsZ98=";
+    hash = "sha256-ERGdtSxi6082V2Fahr6oxFerYpYbX2jY4bB6xkD4C/I=";
   };
 
   strictDeps = true;
