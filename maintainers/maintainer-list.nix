@@ -13938,6 +13938,12 @@
     githubId = 168290368;
     email = "luuk.machielse@gmail.com";
   };
+  kaayzouee = {
+    name = "Andre";
+    email = "kaayzouee@gmail.com";
+    github = "kaayzouee";
+    githubId = 193052566;
+  };
   kachick = {
     email = "kachick1@gmail.com";
     github = "kachick";
