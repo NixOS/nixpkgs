@@ -6983,7 +6983,6 @@ with pkgs;
 
   zabbix74 = recurseIntoAttrs (zabbixFor "v74");
   zabbix70 = recurseIntoAttrs (zabbixFor "v70");
-  zabbix60 = recurseIntoAttrs (zabbixFor "v60");
 
   zabbix = zabbix74;
 
