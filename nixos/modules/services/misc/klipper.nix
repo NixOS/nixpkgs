@@ -16,12 +16,23 @@ let
         lib.concatMapStrings (s: "\n  ${lib.generators.mkValueStringDefault { } s}") l;
     mkKeyValue =
       key: value:
-      lib.generators.mkKeyValueDefault { } ":" key (
-        if builtins.isString value && lib.hasInfix "\n" value then
-          "\n  ${lib.replaceString "\n" "\n  " value}"
-        else
-          value
-      );
+      lib.generators.mkKeyValueDefault
+        {
+          mkValueString =
+            v:
+            if builtins.isBool v then
+              (if v then "True" else "False")
+            else
+              lib.generators.mkValueStringDefault { } v;
+        }
+        ":"
+        key
+        (
+          if builtins.isString value && lib.hasInfix "\n" value then
+            "\n  ${lib.replaceString "\n" "\n  " value}"
+          else
+            value
+        );
   };
   firmwareSubmodule = lib.types.submodule (
     { name, ... }@local:
