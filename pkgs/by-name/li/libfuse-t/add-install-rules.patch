@@ -1,0 +1,44 @@
+diff --git a/lib/CMakeLists.txt b/lib/CMakeLists.txt
+index db6f2ac..301d23a 100644
+--- a/lib/CMakeLists.txt
++++ b/lib/CMakeLists.txt
+@@ -38,3 +38,24 @@ target_include_directories (fuse-t PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../include
+ target_include_directories (fuse-t-static PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../include)
+ 
+ target_link_libraries (fuse-t LINK_PUBLIC ${LIBS})
++
++include(GNUInstallDirs)
++
++install(TARGETS fuse-t fuse-t-static
++    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
++    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
++)
++
++install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/
++    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/fuse
++    FILES_MATCHING
++        PATTERN "fuse*.h"
++        PATTERN "cuse_lowlevel.h"
++        PATTERN "ulockmgr.h"
++        PATTERN "old" EXCLUDE
++)
++
++configure_file(fuse-t.pc.in fuse-t.pc @ONLY)
++install(FILES ${CMAKE_CURRENT_BINARY_DIR}/fuse-t.pc
++    DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig
++)
+diff --git a/lib/fuse-t.pc.in b/lib/fuse-t.pc.in
+new file mode 100644
+index 0000000..79516f2
+--- /dev/null
++++ b/lib/fuse-t.pc.in
+@@ -0,0 +1,9 @@
++prefix=@CMAKE_INSTALL_PREFIX@
++libdir=@CMAKE_INSTALL_FULL_LIBDIR@
++includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@/fuse
++
++Name: fuse-t
++Description: Userspace FUSE implementation for macOS
++Version: @PROJECT_VERSION@
++Libs: -L${libdir} -lfuse-t
++Cflags: -I${includedir} -D_FILE_OFFSET_BITS=64
