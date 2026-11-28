@@ -1005,6 +1005,8 @@ mapAliases {
   frozen-bubble = throw "'frozen-bubble' has been removed because it is broken and unmaintained"; # Added 2026-05-17
   frugal = throw "'frugal' was removed because upstream has been pulled"; # Added 2025-12-20
   fscrypt-experimental = warnAlias "'fscrypt-experimental' has been renamed to/replaced by 'fscrypt'" fscrypt; # Added 2026-01-19
+  fteqcc = warnAlias "'fteqcc' has been merged into 'fteqw'" fteqw; # Added 2026-11-08
+  fteqw-dedicated = warnAlias "'fteqw-dedicated' has been merged into 'fteqw'; the server binary is now 'fteqw-sv'" fteqw; # Added 2026-11-08
   fuse2 = throw "'fuse2' has been removed because it has reached end of life."; # Added 2026-10-25
   fuse-7z-ng = throw "'fuse-7z-ng' was removed as it is unmaintained, and depends on fuse2"; # Added 2026-05-05
   fuse-ext2 = throw "'fuse-ext2' was removed as it is unmaintained, and depends on fuse2"; # Added 2026-08-05

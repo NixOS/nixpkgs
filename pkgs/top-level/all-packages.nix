@@ -8882,10 +8882,6 @@ with pkgs;
 
   ### GAMES
 
-  fteqw-dedicated = callPackage ../by-name/ft/fteqw/fteqw-dedicated.nix { };
-
-  fteqcc = callPackage ../by-name/ft/fteqw/fteqcc.nix { };
-
   pmars-x11 = pmars.override { enableXwinGraphics = true; };
 
   vanillara = vanillatd.override { appName = "vanillara"; };
