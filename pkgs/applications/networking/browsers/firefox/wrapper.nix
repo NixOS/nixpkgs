@@ -161,8 +161,6 @@ let
       extensions =
         if nameArray != (lib.unique nameArray) then
           throw "Firefox addon name needs to be unique"
-        else if browser.enableAddonSigning || !browser.enableAddonSideload then
-          throw "Nix addons are only supported with signature enforcement disabled and addon sideloading enabled (eg. LibreWolf)"
         else
           map (
             a:
