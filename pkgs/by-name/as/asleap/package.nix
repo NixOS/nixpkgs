@@ -4,46 +4,36 @@
   fetchFromGitHub,
   openssl,
   libpcap,
-  libxcrypt,
   nix-update-script,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "asleap";
-  version = "0-unstable-2021-06-21";
+  version = "2.5";
 
   src = fetchFromGitHub {
-    owner = "zackw";
+    owner = "OscarAkaElvis";
     repo = "asleap";
-    rev = "eb3bd42098cba42b65f499c9d8c73d890861b94f";
-    hash = "sha256-S6jS0cg9tHSfmP6VHyISkXJxczhPx3HDdxT46c+YmE8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Xhj+yhmWX0blFkmVLVERYoz7SKCNrOrQoBmlXC0Vz24=";
   };
 
   buildInputs = [
     openssl
     libpcap
-    libxcrypt
   ];
 
-  installPhase = ''
-    runHook preInstall
+  env.PREFIX = placeholder "out";
 
-    install -Dm755 asleap $out/bin/asleap
-    install -Dm755 genkeys $out/bin/genkeys
-
-    runHook postInstall
-  '';
-
-  passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version=branch=zack/no-external-crypto" ];
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
-    homepage = "https://github.com/zackw/asleap";
-    description = "Recovers weak LEAP and PPTP passwords";
+    changelog = "https://github.com/OscarAkaElvis/asleap/releases/tag/v${finalAttrs.version}";
+    homepage = "https://github.com/OscarAkaElvis/asleap";
+    description = "Cisco LEAP and Generic MS-CHAPv2 Dictionary Attack";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ pyrox0 ];
     mainProgram = "asleap";
     platforms = lib.platforms.linux;
   };
-}
+})
