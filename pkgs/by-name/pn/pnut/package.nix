@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  buildPackages,
   fetchFromGitHub,
   gcc,
 }:
@@ -18,6 +19,13 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "pnut-${finalAttrs.version}";
     hash = "sha256-q0JoW8Tw25m+Hp9W/LxzC3yt78J1AmeV1G3h41RHIOI=";
   };
+
+  # The Makefile runs the new `pnut-sh` to make `pnut-sh.sh`.
+  # When the build platform cannot run it, use the `pnut` of the build platform.
+  ${if stdenv.buildPlatform.canExecute stdenv.hostPlatform then null else "postPatch"} = ''
+    substituteInPlace Makefile \
+      --replace-fail './$(BUILD_DIR)/pnut-sh $(BUILD_OPT_SH)' '${lib.getExe buildPackages.pnut} $(BUILD_OPT_SH)'
+  '';
 
   preInstall = "mkdir -p $out/bin";
 
@@ -48,6 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = [
       "aarch64-darwin"
       "x86_64-linux"
-    ];
+    ]
+    ++ lib.platforms.wasi;
   };
 })
