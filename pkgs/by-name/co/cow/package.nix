@@ -22,7 +22,7 @@
 
 }:
 stdenv.mkDerivation (finalAttrs: {
-  name = "cow";
+  pname = "cow";
   version = "0.3";
 
   src = fetchFromCodeberg {
