@@ -20,13 +20,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "nextflow";
-  version = "25.10.2";
+  version = "25.10.6";
 
   src = fetchFromGitHub {
     owner = "nextflow-io";
     repo = "nextflow";
-    rev = "c03082c9b816774c799660d22c2b56d72218fddc";
-    hash = "sha256-k8B393GOsU1gs+ZS5x3VZUmz+n8lH8/cmXkpzU301lY=";
+    rev = "d48e9beed7fcda769c04652c926f74b9d6efba9e";
+    hash = "sha256-XsL1oR2YeF8i9CLe8oCDvYwswmK3w2f9hQPFfLiHte8=";
   };
 
   nativeBuildInputs = [
