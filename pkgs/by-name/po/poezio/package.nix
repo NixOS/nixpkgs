@@ -29,6 +29,8 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     dependency-groups
     setuptools
     slixmpp
+    pyasn1
+    pyasn1-modules
   ];
 
   optional-dependencies = {
@@ -79,5 +81,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     homepage = "https://poez.io";
     changelog = "https://codeberg.org/poezio/poezio/src/tag/v${finalAttrs.version}/CHANGELOG";
     license = lib.licenses.zlib;
+    maintainers = with lib.maintainers; [ haansn08 ];
   };
 })
