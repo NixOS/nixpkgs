@@ -4,17 +4,17 @@
   fetchFromGitHub,
   rustPlatform,
   libiconv,
-  testers,
   nix-update-script,
-  maturin,
-  python3,
+  python3Packages,
   pkg-config,
+  versionCheckHook,
   zstd,
 }:
 
-rustPlatform.buildRustPackage (finalAttrs: {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "maturin";
   version = "1.16.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PyO3";
@@ -23,9 +23,26 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-Bqqq+oVivqrpbEXoWRwMQ6slefnPcEGSnLRXy5SIyys=";
   };
 
-  cargoHash = "sha256-Ch2FOMk7KkZrb+iqJeUI0NfHltEI2sXpGkT0m6jnbp0=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-Ch2FOMk7KkZrb+iqJeUI0NfHltEI2sXpGkT0m6jnbp0=";
+  };
+
+  build-system = with python3Packages; [
+    setuptools
+    setuptools-rust
+  ];
+
+  env = {
+    MATURIN_NO_INSTALL_RUST = "1";
+    # setup.py otherwise disables all default features
+    MATURIN_SETUP_ARGS = "--features default";
+  };
 
   nativeBuildInputs = [
+    rustPlatform.cargoSetupHook
+    rustPlatform.rust.cargo
+    rustPlatform.rust.rustc
     pkg-config
   ];
 
@@ -36,13 +53,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libiconv
   ];
 
-  # Requires network access, fails in sandbox.
-  doCheck = false;
+  optional-dependencies = {
+    zig = [ python3Packages.ziglang ];
+  };
+
+  nativeCheckInputs = [ versionCheckHook ];
 
   passthru = {
     tests = {
-      version = testers.testVersion { package = maturin; };
-      pyo3 = python3.pkgs.callPackage ./pyo3-test {
+      pyo3 = python3Packages.callPackage ./pyo3-test {
         pyproject = true;
         buildAndTestSubdir = "examples/word-count";
         preConfigure = "";
@@ -57,7 +76,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  __structuredAttrs = true;
+  pythonImportsCheck = [ "maturin" ];
 
   meta = {
     description = "Build and publish Rust crates Python packages";
