@@ -1,7 +1,7 @@
 {
   fetchurl,
   lib,
-  virtualbox,
+  virtualboxHardened,
 }:
 fetchurl rec {
   pname = "virtualbox-extpack";
