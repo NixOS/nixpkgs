@@ -5,7 +5,24 @@ npmConfigHook() {
 
     # Use npm patches in the nodejs package
     export NIX_NODEJS_BUILDNPMPACKAGE=1
+
+    # Read by node-npm-build-npm-package-logic.patch to prepare Git
+    # dependencies. `__structuredAttrs = true` doesn't export attributes.
+    export stdenv
+    export forceGitDeps
     export prefetchNpmDeps="@prefetchNpmDeps@"
+
+    local nixNpmFlags=()
+    local nixNpmInstallFlags=()
+    local nixNpmRebuildFlags=()
+    concatTo nixNpmFlags npmFlags npmFlagsArray
+    concatTo nixNpmInstallFlags npmInstallFlags npmInstallFlagsArray
+    concatTo nixNpmRebuildFlags npmRebuildFlags npmRebuildFlagsArray
+
+    # For the nested npm, which `eval`s these back into arrays.
+    export NIX_NPM_FLAGS="${nixNpmFlags[*]@Q}"
+    export NIX_NPM_INSTALL_FLAGS="${nixNpmInstallFlags[*]@Q}"
+    export NIX_NPM_REBUILD_FLAGS="${nixNpmRebuildFlags[*]@Q}"
 
     if [ -n "${npmRoot-}" ]; then
       pushd "$npmRoot"
@@ -122,7 +139,9 @@ npmConfigHook() {
 
     echo "Installing dependencies"
 
-    if ! npm ci --ignore-scripts $npmInstallFlags "${npmInstallFlagsArray[@]}" $npmFlags "${npmFlagsArray[@]}"; then
+    echoCmd 'npmConfigHook ci flags' "${nixNpmInstallFlags[@]}" "${nixNpmFlags[@]}"
+
+    if ! npm ci --ignore-scripts "${nixNpmInstallFlags[@]}" "${nixNpmFlags[@]}"; then
         echo
         echo "ERROR: npm failed to install dependencies"
         echo
@@ -138,7 +157,9 @@ npmConfigHook() {
 
     patchShebangs node_modules
 
-    npm rebuild $npmRebuildFlags "${npmRebuildFlagsArray[@]}" $npmFlags "${npmFlagsArray[@]}"
+    echoCmd 'npmConfigHook rebuild flags' "${nixNpmRebuildFlags[@]}" "${nixNpmFlags[@]}"
+
+    npm rebuild "${nixNpmRebuildFlags[@]}" "${nixNpmFlags[@]}"
 
     patchShebangs node_modules
 
