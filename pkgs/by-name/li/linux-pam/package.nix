@@ -122,9 +122,27 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     moveToOutput sbin/pam_namespace_helper $scripts
     moveToOutput etc/security/namespace.init $scripts
+    mkdir -p $out/etc/pam.d
   '';
 
-  doCheck = false; # fails
+  doInstallCheck = true;
+
+  preInstallCheck = ''
+    touch $out/etc/pam.d/{dummy,other}
+  '';
+
+  # hack: pam tests try to read $vendordir/pam.d/{other,dummy} and fail if those don't exist
+  # to make this work, we run the tests in installCheckPhase when $vendordir/pam.d exists
+  # we also create and remove the required files for testing
+  installCheckPhase = ''
+    runHook preInstallCheck
+    mesonCheckPhase
+    runHook postInstallCheck
+  '';
+
+  postInstallCheck = ''
+    rm $out/etc/pam.d/{dummy,other}
+  '';
 
   outputChecks.out.disallowedRequisites = [
     bash
