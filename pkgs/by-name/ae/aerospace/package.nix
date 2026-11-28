@@ -52,6 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     license = lib.licenses.mit;
     mainProgram = "aerospace";
+    mainDarwinApp = appName;
     homepage = "https://github.com/nikitabobko/AeroSpace";
     description = "i3-like tiling window manager for macOS";
     platforms = lib.platforms.darwin;
