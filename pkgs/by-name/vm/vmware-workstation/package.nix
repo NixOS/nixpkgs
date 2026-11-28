@@ -49,12 +49,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vmware-workstation";
-  version = "25H2u1";
-  build = "25219725";
+  version = "26H1u1";
+  build = "25688693";
 
   src = fetchurl {
     url = "https://archive.org/download/VMware-Workstation-Full-${finalAttrs.version}-${finalAttrs.build}.x86_64/VMware-Workstation-Full-${finalAttrs.version}-${finalAttrs.build}.x86_64.bundle";
-    hash = "sha256-chqpPE68qlGsbbde2Xx6TbEKqIEQRGiQ2x5Av6/HVmo=";
+    hash = "sha256-2oI8hTzH5XvnubBwyK7SD+nXX9UZrm8XWrHa/HKDAC4=";
   };
 
   vmware-unpack-env = buildFHSEnv {
@@ -268,13 +268,12 @@ stdenv.mkDerivation (finalAttrs: {
 
     ## VMware Player Application
     echo "Installing VMware Player Application"
-    unpacked="unpacked/vmware-player-app"
+    unpacked="unpacked/vmware-other-apps"
     cp -r $unpacked/lib/* $out/lib/vmware/
     cp -r $unpacked/share/* $out/share/
-    cp -r $unpacked/bin/* $out/bin/
     cp -r $unpacked/doc/* $out/share/doc/ # Licences
 
-    for target in "vmplayer" "vmware-enter-serial" "vmware-setup-helper" "licenseTool" "vmware-mount" "vmware-fuseUI" "vmware-app-control" "vmware-zenity"
+    for target in "vmware-setup-helper" "vmware-mount" "vmware-fuseUI" "vmware-app-control" "vmware-zenity"
     do
       ln -s $out/lib/vmware/bin/appLoader $out/lib/vmware/bin/$target
     done
@@ -282,11 +281,6 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s $out/lib/vmware/bin/vmware-mount $out/bin/vmware-mount
     ln -s $out/lib/vmware/bin/vmware-fuseUI $out/bin/vmware-fuseUI
     ln -s $out/lib/vmware/bin/vmrest $out/bin/vmrest
-
-    # Patch vmplayer
-    sed -i -e "s,ETCDIR=/etc/vmware,ETCDIR=$out/etc/vmware," $out/bin/vmplayer
-    sed -i -e "s,/sbin/modprobe,${kmod}/bin/modprobe," $out/bin/vmplayer
-    sed -i -e "s,@@BINARY@@,$out/bin/vmplayer," $out/share/applications/vmware-player.desktop
 
     ## VMware OVF Tool component
     echo "Installing VMware OVF Tool for Linux"
@@ -379,7 +373,7 @@ stdenv.mkDerivation (finalAttrs: {
     done
 
     # VMware upgraded their shipped libxml2 without recompiling these libraries against it?
-    for lib in $out/lib/vmware/lib/{libcroco-0.6.so.3/libcroco-0.6.so.3,librsvg-2.so.2/librsvg-2.so.2} $out/lib/vmware/libconf/lib/gtk-3.0/3.0.0/loaders/libpixbufloader-svg.so; do
+    for lib in $out/lib/vmware/lib/librsvg-2.so.2/librsvg-2.so.2 $out/lib/vmware/libconf/lib/gtk-3.0/3.0.0/loaders/libpixbufloader-svg.so; do
       patchelf $lib --replace-needed libxml2.so.2 libxml2.so.16
     done
 
