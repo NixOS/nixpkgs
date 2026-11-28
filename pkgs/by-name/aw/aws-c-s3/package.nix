@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-c-s3";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-s3oH2Z7pctiH00W2TN6WTDrTX1dLhZ/mes1JmPemIGw=";
   };
 
@@ -41,6 +41,8 @@ stdenv.mkDerivation (finalAttrs: {
     s2n-tls
   ];
 
+  strictDeps = true;
+
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
   ];
@@ -48,6 +50,8 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests = {
     inherit nix;
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "C99 library implementation for communicating with the S3 service";

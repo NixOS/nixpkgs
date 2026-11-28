@@ -15,8 +15,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-c-compression";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-JEByt04Rg3Yl/IgqTNSIzF+zb2TQpqkqKZgiKpnsoi0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-JEByt04Rg3Yl/IgqTNSIzF+zb2TQpqkqKZgiKpnsoi0=";
   };
 
   nativeBuildInputs = [
@@ -27,6 +27,8 @@ stdenv.mkDerivation (finalAttrs: {
     aws-c-common
   ];
 
+  strictDeps = true;
+
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
   ];
@@ -34,6 +36,8 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests = {
     inherit nix;
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "C99 implementation of huffman encoding/decoding";

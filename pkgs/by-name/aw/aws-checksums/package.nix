@@ -15,13 +15,15 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-checksums";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-Yvv4NT90715zMBqBeJz7o2WTDRSjszPpBsFGMVTMc4I=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Yvv4NT90715zMBqBeJz7o2WTDRSjszPpBsFGMVTMc4I=";
   };
 
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [ aws-c-common ];
+
+  strictDeps = true;
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
@@ -30,6 +32,8 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests = {
     inherit nix;
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "HW accelerated CRC32c and CRC32";
