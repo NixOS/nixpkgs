@@ -179,7 +179,12 @@ in
             extraPackages =
               cfg.extraPackages
               ++ [
-                "/run/wrappers" # setuid shadow
+                (
+                  if config.security.account-utils.enable then
+                    config.security.account-utils.package # non-suid newuidmap/newgidmap
+                  else
+                    "/run/wrappers" # setuid shadow
+                )
                 config.systemd.package # To allow systemd-based container healthchecks
               ]
               ++ lib.optional (config.boot.supportedFilesystems.zfs or false) config.boot.zfs.package;
