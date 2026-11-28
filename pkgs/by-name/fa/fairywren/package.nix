@@ -25,13 +25,13 @@ lib.checkListOfEnum "${pname}: colorVariants" colorVariantList colorVariants
     strictDeps = true;
 
     inherit pname;
-    version = "0-unstable-2026-11-01";
+    version = "0-unstable-2026-11-27";
 
     src = fetchFromGitLab {
       owner = "FreshDoctor";
       repo = "FairyWren-Icons";
-      rev = "bfd1885e12d39dc21ded0b154d04642e2ebb401c";
-      hash = "sha256-OFMnjVi+I/l5PmTRj810HybAMX1N3uQYqNKx18bXj74=";
+      rev = "dcdf32598224cb10d9c895a06c12b040feca1247";
+      hash = "sha256-/aRXiqFUAQ9ABuSvMyBjQqiKr6CTRwTCJy1rpl7qlAc=";
     };
 
     propagatedBuildInputs = [
