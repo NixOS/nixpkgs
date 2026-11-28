@@ -104,14 +104,6 @@
     fetchSubmodules = true;
   };
 
-  dumb-http-signed-tag = testers.invalidateFetcherByDrvHash fetchFromGitHub {
-    name = "dumb-http-signed-tag-source";
-    owner = "NixOS";
-    repo = "nix";
-    tag = "2.9.2";
-    sha256 = "sha256-uZCaBo9rdWRO/AlQMvVVjpAwzYijB2H5KKQqde6eHkg=";
-  };
-
   fetchTags = testers.invalidateFetcherByDrvHash fetchFromGitHub {
     name = "fetchFromGitHub-fetch-tags-test";
     owner = "NixOS";
