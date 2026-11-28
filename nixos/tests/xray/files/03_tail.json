@@ -1,0 +1,8 @@
+{
+  "outbounds": [
+    {
+      "tag": "direct2",
+      "protocol": "freedom"
+    }
+  ]
+}
