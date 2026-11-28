@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "mapbox-earcut";
-  version = "2.0.0";
+  version = "2.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "skogler";
     repo = "mapbox_earcut_python";
     tag = "v${version}";
-    hash = "sha256-R5YDJbfDNf6jAvG3VJQMYay6i8dw616SUs0tPgrJt6I=";
+    hash = "sha256-fHUbmCo+r9IkP7PuAgxf7bu7lUFItjgAJprc6B2rGqU=";
   };
 
   build-system = [
