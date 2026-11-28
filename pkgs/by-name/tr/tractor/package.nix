@@ -17,7 +17,7 @@
 
 let
   # This package and pkgs/by-name/ca/carburetor/package.nix should be updated to their latest available versions together.
-  version = "5.2.0";
+  version = "5.1.0";
 in
 python3Packages.buildPythonApplication {
   pname = "tractor";
@@ -30,7 +30,7 @@ python3Packages.buildPythonApplication {
     owner = "tractor";
     repo = "tractor";
     tag = version;
-    hash = "sha256-aO8lRtOE+nrgfwLZhNEriSL/2FZ6UtFCazVBU7evx64=";
+    hash = "sha256-pyGDxHOpaZutUhXRwGAN77fGNn68EWIGgWu80avkuSI=";
   };
 
   nativeBuildInputs = [
