@@ -8311,8 +8311,6 @@ with pkgs;
   puredata-with-plugins =
     plugins: callPackage ../by-name/pu/puredata/wrapper.nix { inherit plugins; };
 
-  qbittorrent-nox = qbittorrent.override { guiSupport = false; };
-
   qbittorrent-enhanced-nox = qbittorrent-enhanced.override { guiSupport = false; };
 
   qemu-python-utils = python3Packages.toPythonApplication (
