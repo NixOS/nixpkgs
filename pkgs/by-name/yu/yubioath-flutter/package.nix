@@ -16,13 +16,13 @@
 
 flutter347.buildFlutterApplication rec {
   pname = "yubioath-flutter";
-  version = "7.5.0";
+  version = "7.5.1";
 
   src = fetchFromGitHub {
     owner = "Yubico";
     repo = "yubioath-flutter";
     tag = version;
-    hash = "sha256-QBxb5xm2K7UaAhK7UwIlIrLQNkERc0jpBQEhv1/Z/9s=";
+    hash = "sha256-Q27+yX9OzOGJHt7CDGHjQZ8jpL2cHUdbELx1gkIJz54=";
     fetchSubmodules = true;
   };
 
