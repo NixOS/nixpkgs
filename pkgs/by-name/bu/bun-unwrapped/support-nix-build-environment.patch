@@ -1,0 +1,80 @@
+diff --git a/scripts/build/codegen.ts b/scripts/build/codegen.ts
+index 2488108..bb3d0f9 100644
+--- a/scripts/build/codegen.ts
++++ b/scripts/build/codegen.ts
+@@ -163,7 +163,7 @@ export function registerCodegenRules(n: Ninja, cfg: CodegenFields): void {
+   n.rule("bun_install", {
+     command: hostWin
+       ? `cmd /c "cd /d $dir && ${bun} install --frozen-lockfile && ${touch} $stamp"`
+-      : `cd $dir && ${bun} install --frozen-lockfile && ${touch} $stamp`,
++      : `touch $stamp`,
+     description: "install $dir",
+     restat: true,
+     // bun install can be memory-hungry and grabs a lockfile; serialize.
+diff --git a/scripts/build/config.ts b/scripts/build/config.ts
+index a4dfed0..c15853b 100644
+--- a/scripts/build/config.ts
++++ b/scripts/build/config.ts
+@@ -545,6 +545,8 @@ export function detectHost(): Host {
+  * so it must be requested explicitly via --abi=android.
+  */
+ export function detectLinuxAbi(): Abi {
++  const nixAbi = process.env.BUN_NIX_BUILD_ABI;
++  if (nixAbi === "musl" || nixAbi === "gnu") return nixAbi;
+   return existsSync("/etc/alpine-release") ? "musl" : "gnu";
+ }
+ 
+@@ -1143,7 +1145,7 @@ export function resolveConfig(partial: PartialConfig, toolchain: Toolchain): Con
+       sysroot = detectLinuxMuslSysroot(arch);
+       if (sysroot !== undefined || isCross) {
+         crossTarget = `${llvmArch}-alpine-linux-musl`;
+-        if (sysroot === undefined) {
++        if (sysroot === undefined && process.env.BUN_NIX_CROSS !== "1") {
+           const p = locations.muslSysroot[arch];
+           throw new BuildError(`--os=linux --arch=${arch} --abi=musl requires a musl sysroot when cross-compiling`, {
+             hint: `Set LINUX_MUSL_SYSROOT or provision ${p} (see the muslSysroot tool of scripts/build/ci-images/spec.ts).`,
+@@ -1159,7 +1161,7 @@ export function resolveConfig(partial: PartialConfig, toolchain: Toolchain): Con
+           : detectLinuxGlibcSysroot(arch);
+       if (sysroot !== undefined || isCross) {
+         crossTarget = `${llvmArch}-linux-gnu`;
+-        if (sysroot === undefined) {
++        if (sysroot === undefined && process.env.BUN_NIX_CROSS !== "1") {
+           const p = locations.glibcSysroot[arch];
+           throw new BuildError(`--os=linux --arch=${arch} --abi=gnu cross-compile requires a glibc sysroot`, {
+             hint: `Set LINUX_GLIBC_SYSROOT or provision ${p} (see the glibcSysroot tool of scripts/build/ci-images/spec.ts).`,
+diff --git a/scripts/build/flags.ts b/scripts/build/flags.ts
+index 64dcf87..25d06b0 100644
+--- a/scripts/build/flags.ts
++++ b/scripts/build/flags.ts
+@@ -1138,14 +1138,6 @@ export const linkerFlags: Flag[] = [
+     when: c => c.darwin && linksWithLld(c),
+     desc: "macOS cross-link: fold identical address-insignificant functions (release)",
+   },
+-  {
+-    // -ld_new selects Apple's new linker — only meaningful (and only
+-    // understood) when Apple's ld driver does the link. ld64.lld (the
+-    // cross-link path) parses it as `-l d_new` and fails.
+-    flag: "-Wl,-ld_new",
+-    when: c => c.darwin && c.crossTarget === undefined,
+-    desc: "Use new Apple linker (native darwin links only)",
+-  },
+   {
+     // Cross-link from a non-darwin host: same pattern as Android/FreeBSD —
+     // target triple + explicit linker. -isysroot is added by the deployment-
+diff --git a/scripts/build/tools.ts b/scripts/build/tools.ts
+index be695c0..15aa1a9 100644
+--- a/scripts/build/tools.ts
++++ b/scripts/build/tools.ts
+@@ -579,9 +579,9 @@ export function resolveLlvmToolchain(
+   // host, cc/cxx are clang-cl (which defaults to a *-windows-msvc triple,
+   // emits COFF, and can't drive an ELF link) — host tools must stay on plain
+   // clang/clang++.
+-  let hostCc: string | undefined;
+-  let hostCxx: string | undefined;
+-  if (msvcTarget && os !== "windows") {
++  let hostCc = process.env.BUN_NIX_HOST_CC || undefined;
++  let hostCxx = process.env.BUN_NIX_HOST_CXX || undefined;
++  if (hostCc === undefined && hostCxx === undefined && msvcTarget && os !== "windows") {
+     hostCc = findLlvmTool("clang", paths, os, { checkVersion: false, required: true })?.path;
+     hostCxx = findLlvmTool("clang++", paths, os, { checkVersion: false, required: true })?.path;
+   }
