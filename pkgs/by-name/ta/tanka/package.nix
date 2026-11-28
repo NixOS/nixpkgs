@@ -3,17 +3,19 @@
   fetchFromGitHub,
   lib,
   installShellFiles,
+  nix-update-script,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "tanka";
-  version = "0.40.1";
+  version = "0.40.2";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "tanka";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-/h9W2BIPfc1ts8bm/NM6l//L/Qv+mfvUT/rZVi23Qj4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-xJUEVYZvSbTNKqB0jO17cSO7ndsih8qsiFZ1NcJLlXU=";
   };
 
   vendorHash = "sha256-X0rPhhZUJ5slXsEII/w0iRIBKLuBKVTDOQCExQyyh9A=";
@@ -61,11 +63,17 @@ buildGoModule (finalAttrs: {
       --zsh tk.zsh
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Flexible, reusable and concise configuration for Kubernetes";
     homepage = "https://tanka.dev";
+    changelog = "https://github.com/grafana/tanka/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ kamadorueda ];
     mainProgram = "tk";
   };
 })
