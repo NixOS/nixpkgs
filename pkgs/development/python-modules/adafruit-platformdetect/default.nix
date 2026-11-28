@@ -12,7 +12,7 @@ buildPythonPackage (finalAttrs: {
 
   src = fetchPypi {
     pname = "adafruit_platformdetect";
-    inherit (finalAttrs) version;
+    version = finalAttrs.version;
     hash = "sha256-ycOmVj0cxkwzwqT7JksQyHUqgHPGUdVG19rtDqBA3+U=";
   };
 
