@@ -116,6 +116,7 @@ in
           VerityMatchKey = lib.mkDefault verityMatchKey;
           Label = lib.mkDefault "store";
           Minimize = lib.mkDefault "best";
+          FileSystemSectorSize = lib.mkDefault 4096;
         };
       };
 
