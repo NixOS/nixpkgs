@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "z13ctl";
-  version = "1.3.2";
+  version = "1.4.3";
 
   src = fetchFromGitHub {
     owner = "dahui";
     repo = "z13ctl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-oHGZS45ciompNiSWqP1yS4WnKV47QrO7lBQS4cLwgDs=";
+    hash = "sha256-U7bQygIzUzca5eC5PUpWIQBeHdi1WjB0un+dGkqBmM8=";
   };
 
-  vendorHash = "sha256-KtH7NnJczELuDXCQK7VnI1Cg7if9USxyuADEuYhETwk=";
+  vendorHash = "sha256-MmTbodDm6g8HFWOF4ziOUJkk7T0WIy3ZldYQFMX+ID0=";
 
   subPackages = [ "." ];
 
