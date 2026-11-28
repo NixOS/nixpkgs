@@ -521,7 +521,7 @@ in
 
               ReadWritePaths = fullDataDir cfg;
               StateDirectory = cfg.dataDir;
-              EnvironmentFile = cfg.environmentFile;
+              EnvironmentFile = lib.optionals (cfg.environmentFile != null) [ cfg.environmentFile ];
             };
 
             restartTriggers = [ (settingsFileUnsubstituted cfg) ];
@@ -568,7 +568,7 @@ in
               WorkingDirectory = fullDataDir cfg;
               ReadWritePaths = fullDataDir cfg;
               StateDirectory = cfg.dataDir;
-              EnvironmentFile = cfg.environmentFile;
+              EnvironmentFile = lib.optionals (cfg.environmentFile != null) [ cfg.environmentFile ];
 
               ExecStart = lib.escapeShellArgs [
                 (lib.getExe' upperCfg.package (packageName cfg.settings.network.mode))

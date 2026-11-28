@@ -114,7 +114,7 @@ in
           LockPersonality = true;
           SystemCallArchitectures = "native";
 
-          EnvironmentFile = cfg.secretsFile;
+          EnvironmentFile = lib.optionals (cfg.secretsFile != null) [ cfg.secretsFile ];
           AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
           CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
 

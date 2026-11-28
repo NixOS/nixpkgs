@@ -577,7 +577,7 @@ in
         # Access write directories
         ReadWritePaths = cfg.dataDirs;
         # Environment
-        EnvironmentFile = cfg.serviceEnvironmentFile;
+        EnvironmentFile = lib.optionals (cfg.serviceEnvironmentFile != null) [ cfg.serviceEnvironmentFile ];
         # Sandboxing
         RestrictAddressFamilies = [
           "AF_UNIX"
