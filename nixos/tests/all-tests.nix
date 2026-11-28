@@ -1047,7 +1047,7 @@ in
   lightdm = runTest ./lightdm.nix;
   lighttpd = runTest ./lighttpd.nix;
   limesurvey = runTest ./limesurvey.nix;
-  limine = import ./limine { inherit runTest; };
+  limine = import ./limine { inherit lib runTest; };
   linkding = runTest ./web-apps/linkding.nix;
   linkding-postgres = runTest ./web-apps/linkding-postgres.nix;
   linkwarden = runTest ./web-apps/linkwarden.nix;

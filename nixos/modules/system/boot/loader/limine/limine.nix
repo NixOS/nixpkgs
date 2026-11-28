@@ -7,11 +7,55 @@
 let
   cfg = config.boot.loader.limine;
   efi = config.boot.loader.efi;
+  globalConfig =
+    let
+      boolToYesNo = value: if value then "yes" else "no";
+      option = name: value: lib.optionalString (value != null) "${name}: ${toString value}\n";
+      boolOption = name: value: "${name}: ${boolToYesNo value}\n";
+      inherit (cfg) style;
+      inherit (style) interface graphicalTerminal;
+    in
+    lib.concatStrings [
+      (lib.optionalString (cfg.extraConfig != "") "${lib.removeSuffix "\n" cfg.extraConfig}\n\n")
+      (option "timeout" (if config.boot.loader.timeout == null then "no" else config.boot.loader.timeout))
+      (boolOption "editor_enabled" cfg.enableEditor)
+      (boolOption "hash_mismatch_panic" cfg.panicOnChecksumMismatch)
+      (boolOption "graphics" graphicalTerminal.enable)
+      "default_entry: 1\n"
+      (option "wallpaper_style" style.wallpaperStyle)
+      (option "backdrop" style.backdrop)
+      (option "interface_resolution" interface.resolution)
+      (option "interface_branding" interface.branding)
+      (option "interface_branding_colour" interface.brandingColor)
+      (option "interface_help_colour" interface.helpColor)
+      (option "interface_help_colour_bright" interface.helpColorBright)
+      (boolOption "interface_help_hidden" interface.helpHidden)
+      (lib.optionalString graphicalTerminal.enable (
+        lib.concatStrings [
+          (option "term_font_scale" graphicalTerminal.font.scale)
+          (option "term_font_spacing" graphicalTerminal.font.spacing)
+          (option "term_palette" graphicalTerminal.palette)
+          (option "term_palette_bright" graphicalTerminal.brightPalette)
+          (option "term_foreground" graphicalTerminal.foreground)
+          (option "term_background" graphicalTerminal.background)
+          (option "term_foreground_bright" graphicalTerminal.brightForeground)
+          (option "term_background_bright" graphicalTerminal.brightBackground)
+          (option "term_margin" graphicalTerminal.margin)
+          (option "term_margin_gradient" graphicalTerminal.marginGradient)
+        ]
+      ))
+    ];
   limineInstallConfig = pkgs.writeText "limine-install.json" (
     builtins.toJSON {
       inherit (config.system.nixos) distroName;
-      nixPath = config.nix.package;
-      efiBootMgrPath = if cfg.efiSupport then pkgs.efibootmgr else null;
+      inherit globalConfig;
+      inherit (cfg.style) wallpapers;
+      nixPath = if cfg.enableNg then null else config.nix.package;
+      efiBootMgrPath =
+        if cfg.efiSupport && efi.canTouchEfiVariables && !cfg.efiInstallAsRemovable then
+          pkgs.efibootmgr
+        else
+          null;
       liminePath = cfg.package;
       efiMountPoint = efi.efiSysMountPoint;
       fileSystems = config.fileSystems;
@@ -19,23 +63,22 @@ let
       canTouchEfiVariables = efi.canTouchEfiVariables;
       efiSupport = cfg.efiSupport;
       efiRemovable = cfg.efiInstallAsRemovable;
-      secureBoot = cfg.secureBoot;
+      efiBootFile =
+        if cfg.efiSupport then "BOOT${lib.toUpper pkgs.stdenv.hostPlatform.efiArch}.EFI" else null;
+      secureBoot = cfg.secureBoot // {
+        sbctl = if cfg.secureBoot.enable then cfg.secureBoot.sbctl else null;
+      };
       biosSupport = cfg.biosSupport;
       biosDevice = cfg.biosDevice;
       partitionIndex = cfg.partitionIndex;
       force = cfg.force;
       enrollConfig = cfg.enrollConfig;
-      style = cfg.style;
       resolution = cfg.resolution;
       maxGenerations = if cfg.maxGenerations == null then 0 else cfg.maxGenerations;
       hostArchitecture = pkgs.stdenv.hostPlatform.parsed.cpu;
-      timeout = if config.boot.loader.timeout == null then "no" else config.boot.loader.timeout;
-      enableEditor = cfg.enableEditor;
-      extraConfig = cfg.extraConfig;
       extraEntries = cfg.extraEntries;
       additionalFiles = cfg.additionalFiles;
       validateChecksums = cfg.validateChecksums;
-      panicOnChecksumMismatch = cfg.panicOnChecksumMismatch;
     }
   );
   defaultWallpaper = pkgs.nixos-artwork.wallpapers.simple-dark-gray-bootloader.gnomeFilePath;
@@ -55,6 +98,16 @@ in
   options.boot.loader.limine = {
     enable = lib.mkEnableOption "the Limine Bootloader";
     package = lib.mkPackageOption pkgs "limine" { };
+
+    enableNg = lib.mkEnableOption null // {
+      description = ''
+        Whether to install Limine with `limine-install-ng`, a Rust rewrite of
+        the Python installer that does not need Python at install time.
+
+        The Python installer is deprecated and will be removed once
+        `limine-install-ng` becomes the default.
+      '';
+    };
 
     enableEditor = lib.mkEnableOption null // {
       description = ''
@@ -184,7 +237,7 @@ in
 
     partitionIndex = lib.mkOption {
       default = null;
-      type = lib.types.nullOr lib.types.int;
+      type = lib.types.nullOr lib.types.ints.positive;
       description = ''
         The 1-based index of the dedicated partition for limine's second stage.
       '';
@@ -482,6 +535,10 @@ in
           assertion = cfg.efiSupport || cfg.biosSupport;
           message = "Both UEFI support and BIOS support for Limine are disabled, this will result in an unbootable system";
         }
+        {
+          assertion = cfg.biosSupport -> pkgs.stdenv.hostPlatform.isx86;
+          message = "Limine BIOS support is only available on x86 platforms";
+        }
       ];
 
       boot.loader.grub.enable = lib.mkDefault false;
@@ -492,14 +549,18 @@ in
         boot.loader.id = "limine";
         build.installBootLoader =
           let
-            install = pkgs.replaceVarsWith {
-              src = ./limine-install.py;
-              isExecutable = true;
-              replacements = {
-                python3 = pkgs.python3.withPackages (python-packages: [ python-packages.psutil ]);
-                configPath = limineInstallConfig;
-              };
-            };
+            install =
+              if cfg.enableNg then
+                "${lib.getExe pkgs.limine-install-ng} ${limineInstallConfig}"
+              else
+                pkgs.replaceVarsWith {
+                  src = ./limine-install.py;
+                  isExecutable = true;
+                  replacements = {
+                    python3 = pkgs.python3.withPackages (python-packages: [ python-packages.psutil ]);
+                    configPath = limineInstallConfig;
+                  };
+                };
 
             final = pkgs.writeScript "limine-install.sh" ''
               #!${pkgs.runtimeShell}
