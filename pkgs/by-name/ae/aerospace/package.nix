@@ -21,6 +21,9 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-JHXtF3IKUbge7z2cMBi4L9IruiByNPCIKugLe4ymvys=";
   };
 
+  # Stripping replaces the signature on the vendor-signed app.
+  dontStrip = true;
+
   nativeBuildInputs = [ installShellFiles ];
 
   installPhase = ''
