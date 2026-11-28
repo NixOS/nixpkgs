@@ -1,7 +1,8 @@
 {
   bctoolbox,
   bzrtp,
-  ffmpeg_4,
+  fetchpatch,
+  ffmpeg,
   glew,
   gsm,
   lib,
@@ -32,6 +33,20 @@ mkLinphoneDerivation (finalAttrs: {
     # plugin directory with desired plugins and wrap executables so that the
     # environment variable points to that directory.
     ./plugins_dir.patch
+
+    # Port to the FFmpeg 5+ API, from OpenMandriva
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/OpenMandrivaAssociation/mediastreamer/ccb74d4e23946ed0e63a4409c5524165a51eabb8/mediastreamer2-5.0.66-ffmpeg-6.0.patch";
+      hash = "sha256-/2dijreltg9WDtzXpnH1T+xRVgDPWHGO3j2OzzxKek8=";
+    })
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/OpenMandrivaAssociation/mediastreamer/ccb74d4e23946ed0e63a4409c5524165a51eabb8/mediastreamer2-5.4.106-ffmpeg-8.patch";
+      hash = "sha256-PicfYfwAxN78afHB2HzbOm45O/6zPU2jkhdaL67+axA=";
+    })
+    # Fix the FFmpeg port's decoder: allocate the AVCodecContext (an embedded one
+    # has no defaults and crashes on a NULL get_format) and set the MPEG-4
+    # config as extradata before opening the codec (FFmpeg ignores it after)
+    ./ffmpeg-decoder-alloc-context.patch
   ];
 
   nativeBuildInputs = [
@@ -46,7 +61,7 @@ mkLinphoneDerivation (finalAttrs: {
     bzrtp
     ortp
 
-    ffmpeg_4
+    ffmpeg
     glew
     libsm
     libx11

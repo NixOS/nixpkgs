@@ -1,0 +1,104 @@
+diff --git a/src/videofilters/videodec.c b/src/videofilters/videodec.c
+index 80741cb..002fa3e 100644
+--- a/src/videofilters/videodec.c
++++ b/src/videofilters/videodec.c
+@@ -47,7 +47,7 @@
+ extern void ms_ffmpeg_check_init(void);
+ 
+ typedef struct DecState {
+-	AVCodecContext av_context;
++	AVCodecContext *av_context;
+ 	const AVCodec *av_codec;
+ 	enum CodecID codec;
+ 	mblk_t *input;
+@@ -67,7 +67,7 @@ static void dec_init(MSFilter *f, enum CodecID cid) {
+ 	DecState *s = (DecState *)ms_new0(DecState, 1);
+ 	ms_ffmpeg_check_init();
+ 
+-	avcodec_get_context_defaults3(&s->av_context, NULL);
++	s->av_context = avcodec_alloc_context3(NULL);
+ 	s->allocator = ms_yuv_buf_allocator_new();
+ 	s->av_codec = NULL;
+ 	s->codec = cid;
+@@ -118,10 +118,8 @@ static void dec_uninit(MSFilter *f) {
+ 		av_frame_free(&s->orig);
+ 		s->orig = NULL;
+ 	}
+-	if (s->av_context.codec != NULL) {
+-		if(avcodec_is_open(&s->av_context))
+-			avcodec_flush_buffers(&s->av_context);
+-		s->av_context.codec = NULL;
++	if (s->av_context != NULL) {
++		avcodec_free_context(&s->av_context);
+ 	}
+ 	ms_yuv_buf_allocator_free(s->allocator);
+ 	if (s->input != NULL) freemsg(s->input);
+@@ -160,17 +158,21 @@ static void dec_preprocess(MSFilter *f) {
+ 
+ 	s->first_image_decoded = FALSE;
+ 	ms_average_fps_init(&s->fps, "Video decoder: FPS: %f");
+-	if (s->av_context.codec == NULL) {
++	if (s->av_context->codec == NULL) {
+ 		/* we must know picture size before initializing snow decoder*/
+ #if HAVE_AVCODEC_SNOW
+ 		if (s->codec != CODEC_ID_SNOW) {
+ #endif
+-			error = avcodec_open2(&s->av_context, s->av_codec, NULL);
+-			if (error != 0) ms_error("avcodec_open() failed: %i", error);
++			/* FFmpeg only reads extradata when opening the codec, and frees it with the context */
+ 			if (s->codec == CODEC_ID_MPEG4 && s->dci_size > 0) {
+-				s->av_context.extradata = s->dci;
+-				s->av_context.extradata_size = s->dci_size;
++				s->av_context->extradata = av_mallocz(s->dci_size + AV_INPUT_BUFFER_PADDING_SIZE);
++				if (s->av_context->extradata != NULL) {
++					memcpy(s->av_context->extradata, s->dci, s->dci_size);
++					s->av_context->extradata_size = s->dci_size;
++				}
+ 			}
++			error = avcodec_open2(s->av_context, s->av_codec, NULL);
++			if (error != 0) ms_error("avcodec_open() failed: %i", error);
+ #if HAVE_AVCODEC_SNOW
+ 		}
+ #else
+@@ -259,13 +261,13 @@ static mblk_t *parse_snow_header(DecState *s, mblk_t *inm) {
+ 		uint32_t h = ntohl(*(uint32_t *)inm->b_rptr);
+ 		if (!s->snow_initialized) {
+ 			int error;
+-			s->av_context.width = h >> 16;
+-			s->av_context.height = h & 0xffff;
+-			error = avcodec_open2(&s->av_context, s->av_codec, NULL);
++			s->av_context->width = h >> 16;
++			s->av_context->height = h & 0xffff;
++			error = avcodec_open2(s->av_context, s->av_codec, NULL);
+ 			if (error != 0) ms_error("avcodec_open() failed for snow: %i", error);
+ 			else {
+ 				s->snow_initialized = TRUE;
+-				ms_message("Snow decoder initialized,size=%ix%i", s->av_context.width, s->av_context.height);
++				ms_message("Snow decoder initialized,size=%ix%i", s->av_context->width, s->av_context->height);
+ 			}
+ 		}
+ 		inm->b_rptr += 4;
+@@ -559,7 +561,7 @@ static mblk_t *read_rfc2435_header(DecState *s, mblk_t *inm) {
+ }
+ 
+ static mblk_t *get_as_yuvmsg(MSFilter *f, DecState *s, AVFrame *orig) {
+-	AVCodecContext *ctx = &s->av_context;
++	AVCodecContext *ctx = s->av_context;
+ 	mblk_t *yuv_msg;
+ 
+ 	if (ctx->width == 0 || ctx->height == 0) {
+@@ -655,11 +657,11 @@ static void dec_process_frame(MSFilter *f, mblk_t *inm) {
+ 				pkt.size = remain;
+ 				pkt.pts = frame_ts;
+ #if LIBAVCODEC_VERSION_MAJOR < 59
+-				len = avcodec_decode_video2(&s->av_context, s->orig, &got_picture, &pkt);
++				len = avcodec_decode_video2(s->av_context, s->orig, &got_picture, &pkt);
+ #else
+-				int ret = avcodec_receive_frame(&s->av_context, s->orig);
++				int ret = avcodec_receive_frame(s->av_context, s->orig);
+ 				got_picture = (ret == 0);
+-				ret = avcodec_send_packet(&s->av_context, &pkt);
++				ret = avcodec_send_packet(s->av_context, &pkt);
+ 				if (ret < 0)
+ 					len = ret;
+ 				else
