@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "way-displays";
-  version = "2.0.1";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "alex-courtis";
     repo = "way-displays";
     rev = finalAttrs.version;
-    sha256 = "sha256-OHIztOHxqkGuOCaNn/1w+qHSZAw7PrVOeXKRAsqJYTk=";
+    sha256 = "sha256-O6oVTGP4fWXH+QJ6HDuaKgYwtm9pju1IPFKYVHD9flA=";
   };
 
   strictDeps = true;
