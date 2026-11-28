@@ -7,16 +7,16 @@
 
 buildGo127Module (finalAttrs: {
   pname = "gogcli";
-  version = "0.48.1";
+  version = "0.48.2";
 
   src = fetchFromGitHub {
     owner = "openclaw";
     repo = "gogcli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jsyXBhLTImA1pIQ/MyHrq672Sp+glj3pYbmxMMRKXd8=";
+    hash = "sha256-M6Dt5IzpWPbjrJ0Iryeub0l5uCMCxzeyiw1u0drKOK8=";
   };
 
-  vendorHash = "sha256-18pPtme/0QoeX1PkCdlhWStX3MYJT83ULHSJI3RIOlo=";
+  vendorHash = "sha256-ZDKRGXRFfjMp1z/aV4gBjmHY8AjCfFU3Ath8t4bwjNA=";
 
   subPackages = [ "cmd/gog" ];
 
