@@ -38,6 +38,7 @@ let
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with lib.maintainers; [
       gepbird
+      sployt
       stepbrobd
       Guanran928
     ];
