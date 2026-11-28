@@ -1181,7 +1181,7 @@ If you don't specify a `name` attribute, you'll encounter an evaluation error an
 When building Docker images with Nix, you might also want to add certain files that are expected to be available globally by the software you're packaging.
 Simple examples are the `env` utility in `/usr/bin/env`, or trusted root TLS/SSL certificates.
 Such files will most likely not be included if you're building a Docker image from scratch with Nix, and they might also not be included if you're starting from a Docker image that doesn't include them.
-The helpers in this section are packages that provide some of these commonly-needed global files.
+`dockerTools` provides helpers with some of these commonly-needed global files.
 
 Most of these helpers are packages, which means you have to add them to the list of contents to be included in the image (this changes depending on the function you're using to build the image).
 [](#ex-dockerTools-helpers-buildImage) and [](#ex-dockerTools-helpers-buildLayeredImage) show how to include these packages on `dockerTools` functions that build an image.

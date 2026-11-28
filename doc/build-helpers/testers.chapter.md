@@ -1,6 +1,6 @@
 # Testers {#chap-testers}
 
-This chapter describes several testing builders which are available in the `testers` namespace.
+The `testers` namespace provides several testing builders.
 
 ## `hasPkgConfigModules` {#tester-hasPkgConfigModules}
 

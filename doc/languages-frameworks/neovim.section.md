@@ -7,7 +7,6 @@ This is the closest to what you encounter on other distributions.
 instance, to set the various language providers like Python.
 The wrapper can be further configured to include your favorite plugins and
 configurations for a reproducible neovim across machines.
-See the next section for more details.
 
 ## Custom configuration {#neovim-custom-configuration}
 
