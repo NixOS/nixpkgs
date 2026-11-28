@@ -24,6 +24,10 @@
       croniter
       oras
     ];
+    pythonRelaxDeps = [
+      "croniter"
+      "oras"
+    ];
     meta.maintainers = with lib.maintainers; [ techknowlogick ];
   };
 
