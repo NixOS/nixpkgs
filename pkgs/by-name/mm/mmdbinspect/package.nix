@@ -6,17 +6,19 @@
 
 buildGoModule (finalAttrs: {
   pname = "mmdbinspect";
-  version = "2.0.0";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "maxmind";
     repo = "mmdbinspect";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3QEk8glTtUd1BACKNKNjli8cI8qsdGMeFb9fVVAbLSs=";
+    hash = "sha256-mDBdKZzHKJz2uhqFcK/IQSAHf1KHijsbgve8aymALIA=";
     fetchSubmodules = true;
   };
 
-  vendorHash = "sha256-qQTllOx1GRKven+zItnU9Uf0l9HfRt5b6YkloJSrDKk=";
+  vendorHash = "sha256-iYrI2NJohPs7s5KMvw22buaw9OchvwPLKe6Ev8ESuw8=";
+
+  subPackages = [ "cmd/mmdbinspect" ];
 
   ldflags = [
     "-s"
