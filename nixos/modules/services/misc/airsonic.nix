@@ -153,7 +153,7 @@ in
           -jar ${cfg.war}
         '';
         Restart = "always";
-        User = "airsonic";
+        User = cfg.user;
         UMask = "0022";
       };
     };
@@ -166,10 +166,9 @@ in
       };
     };
 
-    users.users.airsonic = {
+    users.users.${cfg.user} = {
       description = "Airsonic service user";
       group = "airsonic";
-      name = cfg.user;
       home = cfg.home;
       createHome = true;
       isSystemUser = true;
