@@ -136,9 +136,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.quantum-espresso.org/";
     license = lib.licenses.gpl2;
-    platforms = [
-      "x86_64-linux"
-    ];
+    platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.costrouc ];
   };
 }
