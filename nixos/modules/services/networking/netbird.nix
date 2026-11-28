@@ -589,6 +589,11 @@ in
           after = [ "network.target" ];
           wantedBy = [ "multi-user.target" ];
 
+          # config.d is merged into config.json in preStart only
+          restartTriggers = [
+            config.environment.etc."${client.dir.baseName}/config.d/50-nixos.json".source
+          ];
+
           path = [ pkgs.shadow ] ++ optionals (!config.services.resolved.enable) [ pkgs.openresolv ];
 
           serviceConfig = {
@@ -747,11 +752,20 @@ in
           nameValuePair "${client.service.name}-login" {
             after = [ "${client.service.name}.service" ] ++ client.login.systemdDependencies;
             requires = [ "${client.service.name}.service" ] ++ client.login.systemdDependencies;
-            wantedBy = [ "${client.service.name}.service" ];
+            # also wanted by multi-user.target, so that `switch` starts a login
+            # enabled while the client is already running; on a registered
+            # client it sees `Connected` and exits right away
+            wantedBy = [
+              "${client.service.name}.service"
+              "multi-user.target"
+            ];
 
             serviceConfig = {
               Type = "oneshot";
               RemainAfterExit = true;
+              # give up eventually, so a login that never succeeds
+              # cannot hold `nixos-rebuild switch` forever
+              TimeoutStartSec = mkDefault "10min";
 
               LoadCredential = [ "setup-key:${client.login.setupKeyFile}" ];
             };
@@ -768,15 +782,21 @@ in
               main() {
                 # grep for `: Connected` as well, as `Connected` appears other
                 # places even when not connected, and before NeedsLogin
-                until get_status | grep --quiet ': Connected\|NeedsLogin' ; do
+                # after a failed `up` the daemon reports LoginFailed instead
+                # of NeedsLogin, which needs another `up` just the same
+                until get_status | grep --quiet ': Connected\|NeedsLogin\|LoginFailed' ; do
                   sleep 1
                 done
 
-                if get_status | grep --quiet 'NeedsLogin' ; then
+                until get_status | grep --quiet ': Connected' ; do
                   # setup key is in $NB_SETUP_KEY_FILE, and is
                   # automatically picked up by the cli
-                  '${lib.getExe client.wrapper}' up
-                fi
+                  if '${lib.getExe client.wrapper}' up ; then
+                    break
+                  fi
+                  echo "netbird up failed, retrying in 15 seconds" >&2
+                  sleep 15
+                done
               }
 
               main "$@"

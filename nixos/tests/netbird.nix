@@ -1,4 +1,9 @@
-{ pkgs, lib, ... }:
+{
+  pkgs,
+  lib,
+  nodes,
+  ...
+}:
 {
   name = "netbird";
 
@@ -12,6 +17,28 @@
         enable = true;
         clients.custom.port = 51819;
         ui.enable = true;
+      };
+    };
+
+    # no management server is reachable, so a login never succeeds;
+    # the specialisations only check what `switch` starts or restarts
+    switch = {
+      services.netbird.clients.test = {
+        port = 51818;
+        environment.NB_MANAGEMENT_URL = "http://127.0.0.1:1";
+      };
+
+      specialisation.login.configuration = {
+        services.netbird.clients.test.login = {
+          enable = true;
+          setupKeyFile = toString (pkgs.writeText "setup-key" "00000000-0000-0000-0000-000000000000");
+        };
+        # would otherwise keep `switch` waiting for the full timeout
+        systemd.services.netbird-test-login.serviceConfig.TimeoutStartSec = lib.mkForce "5s";
+      };
+
+      specialisation.config.configuration = {
+        services.netbird.clients.test.config.RosenpassEnabled = true;
       };
     };
   };
@@ -87,6 +114,32 @@
 
     for name in instances:
       wait_until_rcode(node, f"{name} status |& grep -C20 Disconnected", 0, retries=5)
+
+    toplevel = "${nodes.switch.system.build.toplevel}"
+
+    def switch_to(path):
+      # the login cannot succeed, so the switch may report a failed unit
+      switch.execute(f"{path}/bin/switch-to-configuration test")
+      switch.wait_for_unit("netbird-test.service")
+
+    def unit_property(unit, prop):
+      return switch.succeed(f"systemctl show --value --property={prop} {unit}").strip()
+
+    # switch only starts units wanted by targets that are already active
+    switch.wait_for_unit("multi-user.target")
+    switch.wait_for_unit("netbird-test.service")
+
+    with subtest("switch starts a login enabled while the client runs"):
+      assert unit_property("netbird-test-login.service", "ExecMainStartTimestampMonotonic") in ("", "0")
+      switch_to(f"{toplevel}/specialisation/login")
+      assert unit_property("netbird-test-login.service", "ExecMainStartTimestampMonotonic") not in ("", "0")
+
+    with subtest("switch restarts the client when its config.d changes"):
+      switch_to(toplevel)
+      pid = unit_property("netbird-test.service", "MainPID")
+      switch_to(f"{toplevel}/specialisation/config")
+      assert unit_property("netbird-test.service", "MainPID") != pid
+      switch.succeed("grep -q '\"RosenpassEnabled\": *true' /var/lib/netbird-test/config.json")
   ''
   # The status used to turn into `NeedsLogin`, but recently started crashing instead.
   # leaving the snippets in here, in case some update goes back to the old behavior and can be tested again
