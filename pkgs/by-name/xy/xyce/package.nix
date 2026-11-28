@@ -155,7 +155,8 @@ stdenv.mkDerivation rec {
     # This test makes Xyce access /sys/class/net when run with MPI
     ${lib.optionalString withMPI "echo \"CommandLine/command_line.cir\" >> $EXCLUDE_TESTS_FILE"}
 
-    $TEST_ROOT/TestScripts/run_xyce_regression \
+    $TEST_ROOT/TestScripts/run_xyce_regressionMP \
+      --numproc=$NIX_BUILD_CORES \
       --output="$(pwd)/Xyce_Test" \
       --xyce_test="''${TEST_ROOT}" \
       --taglist="$($TEST_ROOT/TestScripts/suggestXyceTagList.sh "$XYCE_BINARY" | sed -E -e 's/TAGLIST=([^ ]+).*/\1/' -e '2,$d')" \
