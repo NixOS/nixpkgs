@@ -1,0 +1,31 @@
+From: Hauke Wintjen <hwintjen@rimpl-consulting.de>
+Date: Fri, 29 Mar 2013 21:16:28 +0100
+Subject: Change path of config files to /etc/openni2
+
+---
+ Source/Drivers/PS1080/Sensor/XnSensor.cpp |    2 +-
+ Source/Tools/NiViewer/NiViewer.cpp        |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+--- a/Source/Tools/NiViewer/NiViewer.cpp
++++ b/Source/Tools/NiViewer/NiViewer.cpp
+@@ -96,7 +96,7 @@
+ // --------------------------------
+ // Defines
+ // --------------------------------
+-#define SAMPLE_XML_PATH "../../../../Data/SamplesConfig.xml"
++#define SAMPLE_XML_PATH "/etc/openni2/SamplesConfig.xml"
+ 
+ // --------------------------------
+ // Types
+--- a/Source/Core/OniContext.cpp
++++ b/Source/Core/OniContext.cpp
+@@ -23,7 +23,7 @@
+ #include <XnLog.h>
+ #include <XnOSCpp.h>
+ 
+-static const char* ONI_CONFIGURATION_FILE = "OpenNI.ini";
++static const char* ONI_CONFIGURATION_FILE = "/etc/openni2/OpenNI.ini";
+ static const char* ONI_DEFAULT_DRIVERS_REPOSITORY = "OpenNI2" XN_FILE_DIR_SEP "Drivers";
+ 
+ #define XN_MASK_ONI_CONTEXT "OniContext"
