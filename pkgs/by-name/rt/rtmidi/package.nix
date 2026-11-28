@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rtmidi";
-  version = "6.0.0";
+  version = "6.1.0";
 
   src = fetchFromGitHub {
     owner = "thestk";
     repo = "rtmidi";
     tag = version;
-    hash = "sha256-QuUeFx8rPpe0+exB3chT6dUceDa/7ygVy+cQYykq7e0=";
+    hash = "sha256-XUoRaQWROVBOdd4B5Mt0h7Dqm1dRCUCqML/NAGrxfqQ=";
   };
 
   nativeBuildInputs = [
