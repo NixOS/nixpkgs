@@ -2261,9 +2261,9 @@
   };
 
   php = {
-    version = "0.24.2";
+    version = "0.25.2";
     url = "github:tree-sitter/tree-sitter-php";
-    hash = "sha256-jI7yzcoHS/tNxUqJI4aD1rdEZV3jMn1GZD0J+81Dyf0=";
+    hash = "sha256-gHEWu+kN6gGJSl15R04NBo4XFaBplIPytmL06YyPRh0=";
     meta = {
       license = lib.licenses.mit;
     };
