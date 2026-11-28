@@ -8,29 +8,27 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "styx-cli";
-  version = "1.0.1";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "bearcove";
     repo = "styx";
     tag = "styx-cli-v${finalAttrs.version}";
-    hash = "sha256-1XS1voPdqr2GJSsOdm93alknS5vwdoFi1WF9bzMCf0o=";
+    hash = "sha256-uvOUKbJUTDy9ejJI47Zl3JYi8YNISWWeC/IBjxRK47U=";
   };
 
-  cargoHash = "sha256-7eqw0Qjj2VV2KYGSOVoLl8nyuMCTMpLte2lVL7MQPpI=";
+  postPatch = ''
+    patchShebangs ./scripts
+  '';
+
+  cargoHash = "sha256-9HJ6snG4+naBa2c0j+hAXUNnaEfzTaLZ7eU/XYCiCSQ=";
 
   cargoBuildFlags = [
     "--package"
     "styx-cli"
   ];
 
-  checkFlags = [
-    # These tests don't like nix's build environment
-    "--skip=error::tests::test_missing_field_diagnostic"
-    "--skip=error::tests::test_unknown_field_diagnostic"
-    "--skip=error::tests::test_ariadne_config_respects_no_color_env"
-    "--skip=error::tests::test_invalid_scalar_diagnostic"
-  ];
+  useNextest = true;
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
