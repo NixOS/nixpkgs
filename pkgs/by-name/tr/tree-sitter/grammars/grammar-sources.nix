@@ -211,9 +211,9 @@
   };
 
   c-sharp = {
-    version = "0.23.5";
+    version = "0.24.0";
     url = "github:tree-sitter/tree-sitter-c-sharp";
-    hash = "sha256-N5AAlwQFGGi47cj0m7Te08bA486gwY6NBOx4Qcy4lpo=";
+    hash = "sha256-O1gIlpFNJOao/JsKgYkXxwkxLro0y5pPFIlEZhxfQyg=";
     meta = {
       license = lib.licenses.mit;
     };
