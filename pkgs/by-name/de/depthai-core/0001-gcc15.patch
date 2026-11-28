@@ -1,0 +1,172 @@
+diff --git a/src/pipeline/Pipeline.cpp b/src/pipeline/Pipeline.cpp
+index aa961ba2b..eba9a9fa2 100644
+--- a/src/pipeline/Pipeline.cpp
++++ b/src/pipeline/Pipeline.cpp
+@@ -1033,20 +1033,20 @@ std::vector<uint8_t> PipelineImpl::loadResourceCwd(fs::path uri, fs::path cwd, b
+         {"asset",
+          [moveAsset](PipelineImpl& p, const fs::path& uri) -> std::vector<uint8_t> {
+              // First check the pipeline asset manager
+-             auto asset = p.assetManager.get(uri.u8string());
++             auto asset = p.assetManager.get(uri.string());
+              if(asset != nullptr) {
+                  if(moveAsset) {
+-                     p.assetManager.remove(uri.u8string());
++                     p.assetManager.remove(uri.string());
+                      return std::move(asset->data);
+                  }
+                  return asset->data;
+              }
+              for(auto& node : p.nodes) {
+                  auto& assetManager = node->getAssetManager();
+-                 auto asset = assetManager.get(uri.u8string());
++                 auto asset = assetManager.get(uri.string());
+                  if(asset != nullptr) {
+                      if(moveAsset) {
+-                         assetManager.remove(uri.u8string());
++                         assetManager.remove(uri.string());
+                          return std::move(asset->data);
+                      }
+                      return asset->data;
+@@ -1060,7 +1060,7 @@ std::vector<uint8_t> PipelineImpl::loadResourceCwd(fs::path uri, fs::path cwd, b
+     for(const auto& handler : protocolHandlers) {
+         std::string protocolPrefix = std::string(handler.protocol) + ":";
+ 
+-        if(uri.u8string().find(protocolPrefix) == 0) {
++        if(uri.string().find(protocolPrefix) == 0) {
+             // // protocol matches, resolve URI and call handler
+             // std::filesystem::path path(uri.substr(protocolPrefix.size()));
+             // // Create full path, and normalize
+@@ -1073,9 +1073,9 @@ std::vector<uint8_t> PipelineImpl::loadResourceCwd(fs::path uri, fs::path cwd, b
+             fs::path path;
+             if(protocolPrefix == "asset:") {
+                 auto absUri = getAbsUri(uri, cwd);
+-                path = static_cast<fs::path>(absUri.u8string().substr(protocolPrefix.size()));
++                path = static_cast<fs::path>(absUri.string().substr(protocolPrefix.size()));
+             } else {
+-                path = static_cast<fs::path>(uri.u8string().substr(protocolPrefix.size()));
++                path = static_cast<fs::path>(uri.string().substr(protocolPrefix.size()));
+             }
+             return handler.handle(*this, path);
+         }
+diff --git a/src/pipeline/node/BenchmarkIn.cpp b/src/pipeline/node/BenchmarkIn.cpp
+index 6b6697e10..e969f2457 100644
+--- a/src/pipeline/node/BenchmarkIn.cpp
++++ b/src/pipeline/node/BenchmarkIn.cpp
+@@ -113,11 +113,11 @@ void BenchmarkIn::run() {
+             }
+ 
+             // Decide how to log (warn or info) once, then do all the logs
+-            auto logFunc = [&](auto fmt, auto... args) {
++            auto logFunc = [&](const char* fmt, auto&&... args) {
+                 if(properties.logReportsAsWarnings) {
+-                    logger->warn(fmt, std::forward<decltype(args)>(args)...);
++                    logger->warn(fmt::runtime(fmt), std::forward<decltype(args)>(args)...);
+                 } else {
+-                    logger->trace(fmt, std::forward<decltype(args)>(args)...);
++                    logger->trace(fmt::runtime(fmt), std::forward<decltype(args)>(args)...);
+                 }
+             };
+ 
+diff --git a/src/pipeline/node/Script.cpp b/src/pipeline/node/Script.cpp
+index 38b6705b0..578eeb5fd 100644
+--- a/src/pipeline/node/Script.cpp
++++ b/src/pipeline/node/Script.cpp
+@@ -18,7 +18,7 @@ void Script::setScriptPath(const std::filesystem::path& path, const std::string&
+     properties.scriptUri = assetManager.set("__script", path)->getRelativeUri();
+     scriptPath = path;
+     if(name.empty()) {
+-        properties.scriptName = path.u8string();
++        properties.scriptName = path.string();
+     } else {
+         properties.scriptName = name;
+     }
+diff --git a/src/utility/ErrorMacros.hpp b/src/utility/ErrorMacros.hpp
+index 129397a89..db70bc302 100644
+--- a/src/utility/ErrorMacros.hpp
++++ b/src/utility/ErrorMacros.hpp
+@@ -34,7 +34,7 @@
+ 
+ #define DAI_CHECK_V(A, M, ...) \
+     if(!(A)) { \
+-        throw std::runtime_error(fmt::format( M, ##__VA_ARGS__ )); \
++        throw std::runtime_error(fmt::format(fmt::runtime(M), ##__VA_ARGS__)); \
+     }
+ 
+ // clang-format on
+diff --git a/src/utility/Logging.hpp b/src/utility/Logging.hpp
+index 2412d48f8..764fcc91b 100644
+--- a/src/utility/Logging.hpp
++++ b/src/utility/Logging.hpp
+@@ -39,43 +39,43 @@ inline spdlog::level::level_enum get_level() {
+     return Logging::getInstance().logger.level();
+ }
+ 
+-template <typename FormatString, typename... Args>
+-inline void log(spdlog::source_loc source, spdlog::level::level_enum lvl, const FormatString& fmt, Args&&... args) {
++template <typename... Args>
++inline void log(spdlog::source_loc source, spdlog::level::level_enum lvl, fmt::format_string<Args...> fmt, Args&&... args) {
+     Logging::getInstance().logger.log(source, lvl, fmt, std::forward<Args>(args)...);
+ }
+ 
+-template <typename FormatString, typename... Args>
+-inline void log(spdlog::level::level_enum lvl, const FormatString& fmt, Args&&... args) {
++template <typename... Args>
++inline void log(spdlog::level::level_enum lvl, fmt::format_string<Args...> fmt, Args&&... args) {
+     Logging::getInstance().logger.log(spdlog::source_loc{}, lvl, fmt, std::forward<Args>(args)...);
+ }
+ 
+-template <typename FormatString, typename... Args>
+-inline void trace(const FormatString& fmt, Args&&... args) {
++template <typename... Args>
++inline void trace(fmt::format_string<Args...> fmt, Args&&... args) {
+     Logging::getInstance().logger.trace(fmt, std::forward<Args>(args)...);
+ }
+ 
+-template <typename FormatString, typename... Args>
+-inline void debug(const FormatString& fmt, Args&&... args) {
++template <typename... Args>
++inline void debug(fmt::format_string<Args...> fmt, Args&&... args) {
+     Logging::getInstance().logger.debug(fmt, std::forward<Args>(args)...);
+ }
+ 
+-template <typename FormatString, typename... Args>
+-inline void info(const FormatString& fmt, Args&&... args) {
++template <typename... Args>
++inline void info(fmt::format_string<Args...> fmt, Args&&... args) {
+     Logging::getInstance().logger.info(fmt, std::forward<Args>(args)...);
+ }
+ 
+-template <typename FormatString, typename... Args>
+-inline void warn(const FormatString& fmt, Args&&... args) {
++template <typename... Args>
++inline void warn(fmt::format_string<Args...> fmt, Args&&... args) {
+     Logging::getInstance().logger.warn(fmt, std::forward<Args>(args)...);
+ }
+ 
+-template <typename FormatString, typename... Args>
+-inline void error(const FormatString& fmt, Args&&... args) {
++template <typename... Args>
++inline void error(fmt::format_string<Args...> fmt, Args&&... args) {
+     Logging::getInstance().logger.error(fmt, std::forward<Args>(args)...);
+ }
+ 
+-template <typename FormatString, typename... Args>
+-inline void critical(const FormatString& fmt, Args&&... args) {
++template <typename... Args>
++inline void critical(fmt::format_string<Args...> fmt, Args&&... args) {
+     Logging::getInstance().logger.critical(fmt, std::forward<Args>(args)...);
+ }
+ 
+diff --git a/src/utility/ObjectTrackerImpl.cpp b/src/utility/ObjectTrackerImpl.cpp
+index c278082d5..386c9a463 100644
+--- a/src/utility/ObjectTrackerImpl.cpp
++++ b/src/utility/ObjectTrackerImpl.cpp
+@@ -855,7 +855,7 @@ std::tuple<std::vector<Eigen::Matrix<int, 1, 2>>, std::vector<int>, std::vector<
+     Eigen::MatrixXf inertia_X_ = inertia_X.replicate(1, X.cols());
+     Eigen::MatrixXf diff_angle_cos = inertia_X_.array() * X.array() + inertia_Y_.array() * Y.array();
+ 
+-    diff_angle_cos = (diff_angle_cos.array().min(1).max(-1)).matrix();
++    diff_angle_cos = (diff_angle_cos.array().min(1.0f).max(-1.0f)).matrix();
+ 
+     Eigen::MatrixXf diff_angle = Eigen::acos(diff_angle_cos.array());
+ 
