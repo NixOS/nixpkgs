@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "pysatochip";
-  version = "0.18.7";
+  version = "0.18.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Toporin";
     repo = "pysatochip";
     tag = "v${version}";
-    hash = "sha256-J4VGdeC+IowqWnCP8JFWGU8yPEaYCzfVn6F025/mwKY=";
+    hash = "sha256-Gq3FNcTTr8t6jX7/MNBMsOSwZKVNw+7FeVlSPAidqno=";
   };
 
   postPatch = ''
