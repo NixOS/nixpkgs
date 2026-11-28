@@ -22759,7 +22759,7 @@ self: super: with self; {
   vizaio = callPackage ../development/python-modules/vizaio { };
 
   vl-convert-python = callPackage ../development/python-modules/vl-convert-python {
-    inherit (pkgs) protobuf;
+    inherit (pkgs) protobuf zstd;
   };
 
   vllm = callPackage ../development/python-modules/vllm { inherit (pkgs) zstd; };
