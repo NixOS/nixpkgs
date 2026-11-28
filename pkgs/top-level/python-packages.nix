@@ -3875,6 +3875,8 @@ self: super: with self; {
 
   crossplane = callPackage ../development/python-modules/crossplane { };
 
+  crowdstrike-falconpy = callPackage ../development/python-modules/crowdstrike-falconpy { };
+
   crownstone-cloud = callPackage ../development/python-modules/crownstone-cloud { };
 
   crownstone-core = callPackage ../development/python-modules/crownstone-core { };
@@ -6005,8 +6007,6 @@ self: super: with self; {
   falcon = callPackage ../development/python-modules/falcon { };
 
   falcon-cors = callPackage ../development/python-modules/falcon-cors { };
-
-  falconpy = callPackage ../development/python-modules/falconpy { };
 
   faraday-agent-parameters-types =
     callPackage ../development/python-modules/faraday-agent-parameters-types

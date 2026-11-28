@@ -7,7 +7,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "falconpy";
+  pname = "crowdstrike-falconpy";
   version = "1.6.3";
   pyproject = true;
 
