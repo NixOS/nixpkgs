@@ -14,7 +14,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aioengiebelgium";
-  version = "0.8.2";
+  version = "0.14.0";
   pyproject = true;
 
   disabled = pythonOlder "3.14";
@@ -23,7 +23,7 @@ buildPythonPackage (finalAttrs: {
     owner = "DaanVervacke";
     repo = "aioengiebelgium";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TfecqqRA+2nTMj+8wqSOMznHdFe0ZdVwTM3j557uHB8=";
+    hash = "sha256-wcDkloLyVL9glIWuGib554PYNCD5A4+1en2hx2lxDHI=";
   };
 
   build-system = [ uv-build ];
