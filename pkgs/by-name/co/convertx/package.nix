@@ -57,7 +57,7 @@ let
     buildPhase = ''
       runHook preBuild
 
-      bun install --frozen-lockfile --no-progress
+      bun install --cpu="*" --os="*" --libc="*" --frozen-lockfile --no-progress
 
       runHook postBuild
     '';
@@ -71,7 +71,7 @@ let
       cp package.json $out/lib
     '';
 
-    outputHash = pin."${stdenvNoCC.system}";
+    outputHash = pin.nodeModulesHash;
     outputHashMode = "recursive";
   });
 in

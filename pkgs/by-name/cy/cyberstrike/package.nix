@@ -49,8 +49,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
       export BUN_INSTALL_CACHE_DIR=$(mktemp -d)
       bun install \
-        --cpu="${if stdenvNoCC.hostPlatform.isAarch64 then "arm64" else "x64"}" \
-        --os="${if stdenvNoCC.hostPlatform.isLinux then "linux" else "darwin"}" \
+        --cpu="*" \
+        --os="*" \
+        --libc="*" \
         --filter '!./' \
         --filter './packages/cyberstrike' \
         --frozen-lockfile \
@@ -75,7 +76,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     # Required so fixed-output derivation does not retain store references
     dontFixup = true;
 
-    outputHash = "sha256-SydjB3kzq/5m69tUZMMEAqTcK0JZJgwq3/ajL6Gjvbs=";
+    outputHash = "sha256-xygDjh1YCWZQhBHuj3a42Ou9QhHNc3QkSINqXq4jcro=";
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
   };

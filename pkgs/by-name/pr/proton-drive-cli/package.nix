@@ -104,7 +104,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         # so the output does not depend on the build directory.
         bun install --force --no-progress --production \
                     --frozen-lockfile --ignore-scripts \
-                    --os="*" --cpu="*" --linker=isolated
+                    --os="*" --cpu="*" --libc="*" --linker=isolated
         runHook postBuild
       '';
       installPhase = ''
