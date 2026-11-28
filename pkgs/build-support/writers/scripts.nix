@@ -1547,16 +1547,9 @@ rec {
       bytecode =
         content:
         let
-          env =
-            if types.str.check content then
-              {
-                inherit content;
-                passAsFile = [ "content" ];
-              }
-            else
-              { contentPath = content; };
+          contentPath = if types.str.check content then pkgs.writeText "${name}.cosh" content else content;
         in
-        pkgs.runCommandLocal "${name}.chc" env /* bash */ ''
+        pkgs.runCommandLocal "${name}.chc" { inherit contentPath; } /* bash */ ''
           set -euf
           ${interpreter} -c -o "$out" "$contentPath"
           [ -f "$out" ]
