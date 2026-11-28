@@ -74,6 +74,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   qmakeFlags = [ "CONFIG+=disable-prebuilts" ];
 
+  # Moonlight's QML is compiled into the binary as Qt resources (qrc:/), which
+  # qtdeclarative's dont-cache-nix-store-paths.patch doesn't cover. Their disk cache
+  # entries look current across versions, so after an update the previous version's
+  # QML runs (6.2.0 then hangs at "Starting Desktop..."). Upstream's Flatpak disables
+  # the cache too: https://github.com/moonlight-stream/moonlight-qt/issues/2029
+  # https://github.com/NixOS/nixpkgs/issues/585085
+  qtWrapperArgs = [
+    "--set"
+    "QML_DISABLE_DISK_CACHE"
+    "1"
+  ];
+
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir $out/Applications $out/bin
     mv app/Moonlight.app $out/Applications
