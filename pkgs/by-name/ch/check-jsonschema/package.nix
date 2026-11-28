@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "check-jsonschema";
-  version = "0.39.0";
+  version = "0.40.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-jsonschema";
     repo = "check-jsonschema";
     tag = finalAttrs.version;
-    hash = "sha256-sm/VOMLnlwUrHeil6FxWuU+aNLwxZGZ45FCp0e4/hHU=";
+    hash = "sha256-bgTG5/ywosQNECkDLEr9nGLGUiMZzVUgOR+URCipMBY=";
   };
 
   build-system = with python3Packages; [ flit-core ];
