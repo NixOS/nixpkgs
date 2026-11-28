@@ -67,5 +67,9 @@ stdenv.mkDerivation (finalAttrs: {
     teams = [ lib.teams.geospatial ];
     platforms = lib.platforms.unix;
     mainProgram = "ili2c";
+    # current version is broken
+    # newer version works with gradle, but only <= v7
+    # so we need an upstream patch to make it work with current nixpkgs
+    broken = true;
   };
 })
