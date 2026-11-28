@@ -64,7 +64,7 @@ in
         # Start dwl, then set up the systemd user environment once dwl
         # has actually set WAYLAND_DISPLAY (see dwl(1) -s), instead of
         # importing it before dwl exists.
-        exec ${lib.getExe cfg.package} -s "systemctl --user import-environment DISPLAY WAYLAND_DISPLAY; systemctl --user start dwl-session.target"
+        exec ${lib.getExe cfg.package} -s "systemctl --user import-environment DISPLAY WAYLAND_DISPLAY XDG_CURRENT_DESKTOP; systemctl --user start dwl-session.target"
       '';
       mode = "0755"; # Make it executable
     };
@@ -81,6 +81,7 @@ in
             Comment=Dynamic window manager for Wayland
             Exec=/etc/xdg/dwl-session
             Type=Application
+            DesktopNames=dwl
           '';
         };
 
