@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  buildFHSEnv,
   python3Packages,
   fetchFromGitHub,
   installShellFiles,
@@ -17,8 +18,44 @@
 
 let
   python = python3Packages.python;
+
+  # The toolchains ESPHome downloads (ESP-IDF, and its own Arduino toolchain
+  # for ESP8266) are built for generic Linux and use the FHS dynamic loader
+  # path, so on Linux the CLI runs in an FHS env, like arduino-cli.
+  wrapInFHSEnv =
+    unwrapped:
+    buildFHSEnv {
+      inherit (unwrapped) pname version meta;
+
+      runScript = lib.getExe unwrapped;
+
+      targetPkgs =
+        pkgs: with pkgs; [
+          zlib
+          zstd
+          ncurses
+          libusb1
+          udev
+        ];
+
+      extraInstallCommands = ''
+        ln -s ${unwrapped}/share $out/share
+      '';
+
+      passthru = {
+        inherit unwrapped;
+        inherit (unwrapped) src tests;
+      };
+    };
+
+  buildEsphome =
+    attrs:
+    let
+      unwrapped = python3Packages.buildPythonApplication attrs;
+    in
+    if stdenv.hostPlatform.isLinux then wrapInFHSEnv unwrapped else unwrapped;
 in
-python3Packages.buildPythonApplication (finalAttrs: {
+buildEsphome (finalAttrs: {
   pname = "esphome";
   version = "2026.11.0";
   pyproject = true;

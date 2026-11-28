@@ -25,7 +25,7 @@ let
 
   pythonPackages = python3Packages.overrideScope (
     self: super: {
-      esphome = self.toPythonModule esphome;
+      esphome = self.toPythonModule (esphome.unwrapped or esphome);
       esphome-device-builder-frontend = self.callPackage ./frontend.nix {
         inherit meta;
       };
@@ -53,7 +53,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
   ];
 
   dependencies = with pythonPackages; [
-    esphome
+    pythonPackages.esphome
     esphome-device-builder-frontend
 
     aiohttp
@@ -84,7 +84,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
 
   postPatch = ''
     substituteInPlace esphome_device_builder/helpers/sibling_cli.py \
-      --replace-fail 'list(_find_sibling_cli("esphome"))' '["${lib.getExe pythonPackages.esphome}"]' \
+      --replace-fail 'list(_find_sibling_cli("esphome"))' '["${lib.getExe esphome}"]' \
       --replace-fail 'list(_find_sibling_cli("esptool"))' '["${lib.getExe esptool}"]'
 
     substituteInPlace esphome_device_builder/controllers/version_history/git_repo.py \
