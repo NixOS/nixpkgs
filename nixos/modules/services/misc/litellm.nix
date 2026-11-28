@@ -162,6 +162,19 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    warnings =
+      lib.optional
+        (
+          cfg.package == pkgs.litellm
+          && ((cfg.settings.general_settings.database_url or null) != null || cfg.environment ? DATABASE_URL)
+        )
+        ''
+          services.litellm is configured with a database, but the litellm package in Nixpkgs
+          does not include a Prisma client generated against its schema, so the proxy will not
+          start (https://github.com/NixOS/nixpkgs/issues/432925). Override
+          services.litellm.package with a build that generates one.
+        '';
+
     systemd.tmpfiles.rules = [
       "d '${cfg.stateDir}/ui' 0700 - - - -"
       "d '${cfg.stateDir}/tiktoken-cache' 0700 - - - -"
