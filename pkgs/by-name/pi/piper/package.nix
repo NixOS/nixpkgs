@@ -18,15 +18,15 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "piper";
-  version = "0.8";
+  version = "0.8-unstable-2026-07-21";
 
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "libratbag";
     repo = "piper";
-    rev = finalAttrs.version;
-    hash = "sha256-j58fL6jJAzeagy5/1FmygUhdBm+PAlIkw22Rl/fLff4=";
+    rev = "452f46ce861948cacdf0f7948964e67a29d027b9";
+    hash = "sha256-0PLf8YZmEV1SQcEMEa0fm9GZkrD8jvtNG+iIeqRkJJw=";
   };
 
   nativeBuildInputs = [
