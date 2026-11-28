@@ -20,6 +20,66 @@ The Longhorn container has trouble with the NixOS path. Solution is to override 
 PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/run/wrappers/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin
 ```
 
+**Kubernetes 1.36+ Mutating Admission Policy for Fixing Longhorn Container for NixOS**
+
+```yaml
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: longhorn-nixos-path
+  namespace: longhorn-system
+data:
+  PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/run/wrappers/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: MutatingAdmissionPolicy
+metadata:
+  name: longhorn-add-nixos-path
+spec:
+  failurePolicy: Fail
+  reinvocationPolicy: IfNeeded
+  matchConstraints:
+    resourceRules:
+      - apiGroups: [""]
+        apiVersions: ["v1"]
+        operations: ["CREATE"]
+        resources: ["pods"]
+  mutations:
+    - patchType: JSONPatch
+      jsonPatch:
+        expression: >-
+          object.spec.containers
+            .filter(c, !has(c.envFrom) || !c.envFrom.exists(e, has(e.configMapRef) && e.configMapRef.name == 'longhorn-nixos-path' && (!has(e.prefix) || e.prefix == '')))
+            .map(c, JSONPatch{
+              op: 'add',
+              path: '/spec/containers/' + string(object.spec.containers.indexOf(c)) + '/envFrom',
+              value: (has(c.envFrom) ? c.envFrom : []) + [Object.spec.containers.envFrom{
+                configMapRef: Object.spec.containers.envFrom.configMapRef{name: 'longhorn-nixos-path'}
+              }]
+            })
+          + (has(object.spec.initContainers) ? object.spec.initContainers
+            .filter(c, !has(c.envFrom) || !c.envFrom.exists(e, has(e.configMapRef) && e.configMapRef.name == 'longhorn-nixos-path' && (!has(e.prefix) || e.prefix == '')))
+            .map(c, JSONPatch{
+              op: 'add',
+              path: '/spec/initContainers/' + string(object.spec.initContainers.indexOf(c)) + '/envFrom',
+              value: (has(c.envFrom) ? c.envFrom : []) + [Object.spec.initContainers.envFrom{
+                configMapRef: Object.spec.initContainers.envFrom.configMapRef{name: 'longhorn-nixos-path'}
+              }]
+            }) : [])
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: MutatingAdmissionPolicyBinding
+metadata:
+  name: longhorn-add-nixos-path
+spec:
+  policyName: longhorn-add-nixos-path
+  matchResources:
+    namespaceSelector:
+      matchLabels:
+        kubernetes.io/metadata.name: longhorn-system
+```
+
 **Kyverno Policy for Fixing Longhorn Container for NixOS**
 
 ```
