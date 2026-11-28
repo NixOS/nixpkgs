@@ -14,12 +14,12 @@
 
 buildPythonPackage rec {
   pname = "ufoprocessor";
-  version = "1.14.1";
+  version = "1.14.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-/TjTzDWblBcbqNP9weTe/eIgas70+X11tIUDu4rAOwE=";
+    hash = "sha256-sMT0KwkDsHceSZBkiV0GYSGkgqwGD0a3jcAMXywyKOU=";
   };
 
   build-system = [ setuptools-scm ];
