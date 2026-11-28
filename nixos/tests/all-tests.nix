@@ -640,6 +640,7 @@ in
   extra-initrd = import ./extra-initrd.nix { inherit runTest; };
   facter = runTest ./facter;
   fail2ban = runTest ./fail2ban.nix;
+  fail2ban-dashboard = runTest ./fail2ban-dashboard.nix;
   fakeroute = runTest ./fakeroute.nix;
   falco = runTest ./falco.nix;
   fancontrol = runTest ./fancontrol.nix;
