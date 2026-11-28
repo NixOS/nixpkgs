@@ -18559,6 +18559,11 @@
     githubId = 3674056;
     name = "Asad Saeeduddin";
   };
+  masanork = {
+    github = "masanork";
+    githubId = 2642715;
+    name = "Masanori Kusunoki";
+  };
   MaskedBelgian = {
     email = "michael.colicchia@imio.be";
     github = "MaskedBelgian";
