@@ -384,6 +384,7 @@ lib.makeOverridable (
             {
               inherit versionDoesNotDependOnPatchesEtc;
               testsForKernel = nixosTests.kernel-generic.passthru.testsForKernel overridableKernel;
+              selftestsForKernel = nixosTests.kernel-generic.passthru.selftestsForKernel overridableKernel;
               # Disabled by default, because the infinite recursion is hard to understand. The other test's error is better and produces a shorter trace.
               # inherit versionDoesNotDependOnPatchesEtcNixOS;
             }

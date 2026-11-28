@@ -94,5 +94,7 @@ mapAttrs (_: lP: testsForLinuxPackages lP) kernels
     configfiles = mapAttrs (_: lP: lP.kernel.configfile) kernels;
 
     testsForKernel = kernel: testsForLinuxPackages (patchedPkgs.linuxPackagesFor kernel);
+
+    selftestsForKernel = kernel: import ./selftests.nix args (pkgs.linuxPackagesFor kernel);
   };
 }
