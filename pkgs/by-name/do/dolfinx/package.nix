@@ -14,6 +14,9 @@
   python3Packages,
   catch2_3,
   withParmetis ? false,
+  # On darwin, kaffpa binds to the copy exported by libparhip_interface,
+  # which traps in the KaHIP configure check
+  withKahip ? !stdenv.hostPlatform.isDarwin,
 }:
 let
   dolfinxPackages = petsc.petscPackages.overrideScope (
@@ -41,9 +44,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    dolfinxPackages.kahip
     dolfinxPackages.scotch
   ]
+  ++ lib.optional withKahip dolfinxPackages.kahip
   ++ lib.optional withParmetis dolfinxPackages.parmetis;
 
   propagatedBuildInputs = [
@@ -66,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "DOLFIN_ENABLE_PARMETIS" withParmetis)
     (lib.cmakeBool "DOLFINX_ENABLE_SCOTCH" true)
     (lib.cmakeBool "DOLFINX_ENABLE_SLEPC" true)
-    (lib.cmakeBool "DOLFINX_ENABLE_KAHIP" true)
+    (lib.cmakeBool "DOLFINX_ENABLE_KAHIP" withKahip)
     (lib.cmakeFeature "CMAKE_INSTALL_BINDIR" "bin")
     (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
     (lib.cmakeFeature "CMAKE_INSTALL_INCLUDEDIR" "include")
