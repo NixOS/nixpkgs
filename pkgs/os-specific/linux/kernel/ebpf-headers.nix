@@ -9,6 +9,8 @@
 # machine even when the kernel targets another architecture.
 runCommand "linux-${kernel.version}-ebpf-headers"
   {
+    pname = "ebpf-headers";
+    inherit (kernel) version;
     nativeBuildInputs = [ bpftools ];
 
     passthru = {
