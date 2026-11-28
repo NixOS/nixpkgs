@@ -99,17 +99,21 @@ diff --git a/src/builder-source-patch.c b/src/builder-source-patch.c
 index 8721e1e4..d7f4d840 100644
 --- a/src/builder-source-patch.c
 +++ b/src/builder-source-patch.c
-@@ -250,16 +250,16 @@ patch (GFile      *dir,
- 
+@@ -269,20 +269,20 @@ patch (GFile      *dir,
+
    args = g_ptr_array_new ();
    if (use_git) {
 -    g_ptr_array_add (args, "git");
 +    g_ptr_array_add (args, "@git@");
+     g_ptr_array_add (args, "-c");
+     g_ptr_array_add (args, "core.hooksPath=/dev/null");
      g_ptr_array_add (args, "apply");
      g_ptr_array_add (args, "-v");
    } else if (use_git_am) {
 -    g_ptr_array_add (args, "git");
 +    g_ptr_array_add (args, "@git@");
+     g_ptr_array_add (args, "-c");
+     g_ptr_array_add (args, "core.hooksPath=/dev/null");
      g_ptr_array_add (args, "am");
      g_ptr_array_add (args, "--keep-cr");
      g_ptr_array_add (args, "--no-gpg-sign");
