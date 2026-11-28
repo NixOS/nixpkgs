@@ -33726,5 +33726,10 @@
     githubId = 59917878;
     name = "Mathias Zhang";
   };
+  robert-mcdowell = {
+    name = "robert-mcdowell";
+    github = "ROBERT-MCDOWELL";
+    githubId = 2649072;
+  };
   # keep-sorted end
 }
