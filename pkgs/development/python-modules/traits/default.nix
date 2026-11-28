@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "traits";
-  version = "7.1.0";
+  version = "7.3.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-r0d1dH4R4F/+E9O6Rj2S9n8fPRqeT0a6M6ROoisMlkQ=";
+    hash = "sha256-4GLahv9ANEPDcMX3Sy1YuTmNPnWsnXxkuiwGkBqIgTM=";
   };
 
   build-system = [ setuptools ];
