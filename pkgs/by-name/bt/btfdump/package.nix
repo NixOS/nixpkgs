@@ -13,6 +13,8 @@ rustPlatform.buildRustPackage rec {
   pname = "btfdump";
   version = "0.0.4";
 
+  __structuredAttrs = true;
+
   src = fetchCrate {
     inherit pname version;
     hash = "sha256-iLYGFXB4goiY7eJXXBhX9Y1TOltsW40ogeBhvTV2NvU=";
