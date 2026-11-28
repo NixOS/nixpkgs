@@ -7120,6 +7120,8 @@ self: super: with self; {
 
   google = callPackage ../development/python-modules/google { };
 
+  google-adk = callPackage ../development/python-modules/google-adk { };
+
   google-ai-generativelanguage =
     callPackage ../development/python-modules/google-ai-generativelanguage
       { };
@@ -7139,6 +7141,8 @@ self: super: with self; {
   google-cloud-access-context-manager =
     callPackage ../development/python-modules/google-cloud-access-context-manager
       { };
+
+  google-cloud-aiplatform = callPackage ../development/python-modules/google-cloud-aiplatform { };
 
   google-cloud-appengine-logging =
     callPackage ../development/python-modules/google-cloud-appengine-logging
