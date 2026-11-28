@@ -101,6 +101,13 @@ in
         PrivateTmp = true;
         DynamicUser = true;
         DevicePolicy = "closed";
+        DeviceAllow = [
+          "char-nvidia rw"
+          "char-nvidia-uvm rw"
+          "char-nvidia-frontend rw"
+          "char-nvidia-caps rw"
+          "char-nvidiactl rw"
+        ];
         LockPersonality = true;
         PrivateUsers = true;
         ProtectHome = true;
