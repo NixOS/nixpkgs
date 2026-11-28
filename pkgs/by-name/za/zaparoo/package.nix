@@ -18,21 +18,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "zaparoo";
-  version = "2.23.0";
+  version = "2.23.1";
 
   src = fetchFromGitHub {
     owner = "ZaparooProject";
     repo = "zaparoo-core";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hcHnOK9XkWBWfteOnGHN9Axrys+Ccmzk1uFUkd0Dvog=";
+    hash = "sha256-CRsN1H63IdrukVtGWGefjOfLOqCcTEaey7w2QBlulBs=";
   };
 
   patches = [
-    # Report the install as managed by a package manager, so it doesn't offer to replace itself
-    (fetchpatch {
-      url = "https://github.com/ZaparooProject/zaparoo-core/commit/aec6bfb003a671484a80baea86e66acfffe0fcb2.patch";
-      hash = "sha256-ZSKgm6stLmKTRcxohGj/gz2KqxGHYIXpmKfJX272UmM=";
-    })
   ];
 
   vendorHash = "sha256-Cc1FkZrH9pfm4gUKCPOxrrbbQZPJCfp8/18fn/4hSi8=";
