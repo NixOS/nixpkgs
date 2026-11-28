@@ -1,41 +1,77 @@
 {
-  fetchurl,
+  actool,
+  fetchFromGitHub,
   lib,
   makeWrapper,
   nix-update-script,
   rcodesign,
-  stdenvNoCC,
-  unzip,
+  stdenv,
+  swift,
 }:
 
-stdenvNoCC.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "powertop-macos";
-  version = "1.3.7";
+  version = "1.4.4";
 
   strictDeps = true;
   __structuredAttrs = true;
 
-  src = fetchurl {
-    url = "https://github.com/kDolphin/PowerTop/releases/download/v${finalAttrs.version}/PowerTop.zip";
-    hash = "sha256-rwzwCIwyXI9RKSFC4OaNGJZS16zeaw1WpY8ntctDssQ=";
+  src = fetchFromGitHub {
+    owner = "kDolphin";
+    repo = "PowerTop";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-GZT/FfaDOymdREv6maQ7rBERJl5z20pEGG9xeygBSlw=";
   };
 
   nativeBuildInputs = [
+    actool
     makeWrapper
     rcodesign
-    unzip
+    swift
   ];
 
   dontConfigure = true;
-  dontBuild = true;
-  sourceRoot = ".";
+
+  # Mirrors upstream's build.sh, which hardcodes Xcode paths and an arm64 target.
+  buildPhase = ''
+    runHook preBuild
+
+    shopt -s globstar
+
+    # Without -target, swiftc defaults to the build host's macOS major version.
+    swiftc \
+      -target ${stdenv.hostPlatform.swift.triple} \
+      -O \
+      -parse-as-library \
+      -module-name PowerTop \
+      -framework AppKit \
+      -framework CoreFoundation \
+      -framework Foundation \
+      -framework IOKit \
+      -framework ServiceManagement \
+      -framework SwiftUI \
+      PowerTop/**/*.swift \
+      -o PowerTop-bin
+
+    runHook postBuild
+  '';
 
   installPhase = ''
     runHook preInstall
 
     app="$out/Applications/PowerTop.app"
-    mkdir -p "$out/Applications"
-    cp -R PowerTop.app "$app"
+    mkdir -p "$app/Contents/"{MacOS,Resources}
+
+    install -Dm755 PowerTop-bin "$app/Contents/MacOS/PowerTop"
+    cp PowerTop/Info.plist "$app/Contents/Info.plist"
+    cp -R PowerTop/*.lproj "$app/Contents/Resources/"
+
+    actool --compile "$app/Contents/Resources" \
+      --platform macosx \
+      --minimum-deployment-target ${stdenv.hostPlatform.darwinMinVersion} \
+      --app-icon AppIcon \
+      --output-partial-info-plist /dev/null \
+      PowerTop/Assets.xcassets
 
     makeWrapper "$app/Contents/MacOS/PowerTop" "$out/bin/powertop-macos"
 
@@ -46,7 +82,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     ${lib.getExe rcodesign} sign "$out/Applications/PowerTop.app"
   '';
 
-  passthru.updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/kDolphin/PowerTop/releases/tag/v${finalAttrs.version}";
@@ -55,7 +91,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mnixry ];
     mainProgram = "powertop-macos";
-    platforms = [ "aarch64-darwin" ];
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    platforms = lib.platforms.darwin;
   };
 })
