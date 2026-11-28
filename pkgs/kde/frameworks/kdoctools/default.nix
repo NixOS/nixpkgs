@@ -9,6 +9,9 @@
 mkKdeDerivation {
   pname = "kdoctools";
 
+  # In nixpkgs KDE_INSTALL_DATADIR_KF is an absolute path, the below logic assumes it's a relative path.
+  patches = [ ./datadir-absolute-path.patch ];
+
   # Perl could be used both at build time and at runtime.
   extraNativeBuildInputs = [
     perl

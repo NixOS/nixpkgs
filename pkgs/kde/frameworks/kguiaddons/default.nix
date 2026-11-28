@@ -2,6 +2,8 @@
   mkKdeDerivation,
   qtwayland,
   pkg-config,
+  lib,
+  stdenv,
 }:
 mkKdeDerivation {
   pname = "kguiaddons";
@@ -9,6 +11,9 @@ mkKdeDerivation {
   hasPythonBindings = true;
 
   extraNativeBuildInputs = [ pkg-config ];
-  extraBuildInputs = [ qtwayland ];
+  extraBuildInputs = lib.filter (lib.meta.availableOn stdenv.hostPlatform) [
+    qtwayland
+  ];
+
   meta.mainProgram = "kde-geo-uri-handler";
 }

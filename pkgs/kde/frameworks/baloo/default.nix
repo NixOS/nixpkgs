@@ -1,5 +1,6 @@
 {
   mkKdeDerivation,
+  lib,
   qtdeclarative,
   lmdb,
 }:
@@ -15,4 +16,6 @@ mkKdeDerivation {
     qtdeclarative
     lmdb
   ];
+
+  meta.badPlatforms = lib.platforms.darwin;
 }
