@@ -13,14 +13,14 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "colcon-ros-domain-id-coordinator";
-  version = "0.2.4";
+  version = "0.2.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "colcon";
     repo = "colcon-ros-domain-id-coordinator";
     tag = finalAttrs.version;
-    hash = "sha256-B7BBBng/fODqVtneVgjoPgU6Cyon66PQa2QcGuRLfFU=";
+    hash = "sha256-7h2VPxUXN+r9aYgH1JHxPyDBkn4fBI2aGE+PHOROk1M=";
   };
   build-system = [ setuptools ];
 
