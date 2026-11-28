@@ -9,6 +9,7 @@
 
 let
   modDestDir = "$out/lib/modules/${kernel.modDirVersion}/kernel/drivers/net/wireless/realtek/rtw88";
+  KSRC = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
 in
 stdenv.mkDerivation {
   pname = "rtw88";
@@ -22,21 +23,22 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
+
   makeFlags = kernelModuleMakeFlags ++ [
-    "KSRC=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+    "KSRC=${KSRC}"
+    "INSTALL_MOD_PATH=${placeholder "out"}"
+    "INSTALL_MOD_DIR=kernel/drivers/net/wireless/realtek/rtw88"
   ];
 
   enableParallelBuilding = true;
 
-  installPhase = ''
-    runHook preInstall
+  installTargets = [ "modules_install" ];
 
-    mkdir -p ${modDestDir}
-    find . -name '*.ko' -exec cp --parents {} ${modDestDir} \;
-    find ${modDestDir} -name '*.ko' -exec xz -f {} \;
-
-    runHook postInstall
-  '';
+  installFlags = [
+    "-C"
+    "${KSRC}"
+    "M=$(PWD)"
+  ];
 
   passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
 
