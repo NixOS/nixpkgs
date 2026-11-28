@@ -75,6 +75,7 @@ let
     npmDepsHash = "sha256-xpissa3UVBdQcFcRmW33lV+NSihKuNMDvEk3JAVijhc=";
     npmFlags = [ "--loglevel=verbose" ];
     dontNpmBuild = true;
+    meta.mainProgram = "docservice";
     postInstall = ''
       # it would be neater if this were a 'ln -s', but this is not possible
       # because common/sources/notificationService.js has a circular dependency
@@ -97,6 +98,7 @@ let
 
     dontNpmBuild = true;
 
+    meta.mainProgram = "fileconverter";
     postInstall = ''
       ln -s ${common}/lib/node_modules/common $out/lib/node_modules/Common
       # it would be neater if this were a 'ln -s', but this is not possible
