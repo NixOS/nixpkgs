@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "comrak";
-  version = "1.0.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "kivikakk";
     repo = "comrak";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-N1VP7KcpLK/KEXoWpE/qUq2S0aPKxGOdoZYSwpFpQhM=";
+    sha256 = "sha256-xDzQu1sTJeYrqtXGf8MPi5Nz8AlYfGAsaXRVVaN76xU=";
   };
 
-  cargoHash = "sha256-KhQFBv4RsKjfCNxGenWikNDcrPercNd5y8NAvBnS9LA=";
+  cargoHash = "sha256-PvmYCT+o7839XkRazrFsdmFUe4HDhsPPPafTIu/wiEM=";
 
   nativeBuildInputs = [ pkg-config ];
 
