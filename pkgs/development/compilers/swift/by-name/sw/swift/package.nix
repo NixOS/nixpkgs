@@ -15,15 +15,25 @@
   swift-corelibs-foundation,
   swift-corelibs-libdispatch,
   swift-corelibs-xctest,
+  swift-docc,
   swift-driver,
+  swift-format,
   swift-foundation,
   swift-foundation-icu,
   swift-testing,
   swiftc,
+  swiftpm,
   symlinkJoin,
   swift_release,
   enableRepl ? true, # Whether to build and include LLDB for the Swift REPL.
-  enableSourceKitLSP ? true, # Whether to include sourcekit-lsp, which is expected to be in the toolchain.
+  # Toolchain options.
+  toolchain-name ? "swift" + lib.removePrefix "swiftc" (lib.getName swiftc),
+  enableClangTools ? false,
+  enableDocC ? false,
+  enableLlvmTools ? false,
+  enableSourceKitLSP ? true,
+  enableSwiftFormat ? false,
+  enableSwiftPM ? false,
 }:
 
 let
@@ -51,9 +61,15 @@ let
       # LLDB is used by `swift repl` to provide the REPL.
       llvmPackages.lldb.out
     ]
+    ++ lib.optionals enableDocC [
+      swift-docc.out
+    ]
     ++ lib.optionals enableSourceKitLSP [
       sourcekit-lsp.out
       indexstore-db.out
+    ]
+    ++ lib.optionals enableSwiftFormat [
+      swift-format.out
     ]
     ++ lib.optionals includeTesting [
       swift-corelibs-xctest.dev
@@ -102,7 +118,7 @@ let
 in
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "swift" + lib.removePrefix "swiftc" (lib.getName swiftc);
+  pname = toolchain-name;
   version = swift_release;
 
   outputs = [
@@ -113,6 +129,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
+  # SwiftPM can’t be symlinked into the toolchain. Deployment targets on Darwin don’t work correctly when it is.
+  propagatedBuildInputs = lib.optionals enableSwiftPM [ swiftpm.out ];
+
   # Will effectively be `buildInputs` when swift is put in `nativeBuildInputs`.
   depsTargetTargetPropagated =
     lib.optionals stdenv.targetPlatform.isDarwin [ propagated-sdk ]
@@ -120,6 +139,7 @@ stdenv.mkDerivation (finalAttrs: {
       # Propagate the stdlib to make sure the linker wrapper will pick up the dynamic and static libraries.
       stdlib
     ]
+    ++ lib.optionals enableSwiftPM [ swiftpm ]
     ++ lib.optionals includeTesting [
       swift-corelibs-xctest.out
       swift-testing.out
@@ -195,6 +215,28 @@ stdenv.mkDerivation (finalAttrs: {
 
     recordPropagatedDependencies
 
+    ${lib.optionalString enableClangTools ''
+      # Use the Swift LLVM version of Clang to match the version the version of clangd.
+      rm "$out/bin/clang" "$out/bin/clang++"
+      ln -s ${lib.escapeShellArg (lib.getExe' llvmPackages.clang "clang")} "$out/bin/clang"
+      ln -s ${lib.escapeShellArg (lib.getExe' llvmPackages.clang "clang++")} "$out/bin/clang++"
+      ln -s ${lib.escapeShellArg (lib.getExe' llvmPackages.clang-tools "clangd")} "$out/bin/clangd"
+    ''}
+    ${lib.optionalString enableLlvmTools ''
+      declare -a llvmTools=(
+        llvm-ar
+        llvm-cov
+        llvm-nm
+        llvm-objcopy
+        llvm-objdump
+        llvm-profdata
+        llvm-symbolizer
+      )
+      for tool in "''${llvmTools[@]}"; do
+        ln -s ${lib.escapeShellArg llvmPackages.llvm}/bin/$tool "$out/bin/$(basename "$tool")"
+      done
+      ln -s llvm-ar "$out/bin/llvm-ranlib"
+    ''}
     ${lib.optionalString (stdlib != null) ''
       # Can’t use `replaceVars` because it needs to substitute $out.
       substitute ${./setup-hook.sh} "$out/nix-support/setup-hook" \

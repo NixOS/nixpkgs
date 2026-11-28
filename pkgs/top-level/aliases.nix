@@ -251,6 +251,8 @@ mapAliases {
   lua5 = lua5_5_compat; # Added 2026-10-03 preserve, reason: convenience
   luaPackages = lua55Packages; # Added 2026-10-03 preserve, reason: convenience
 
+  swift-toolchain = swiftPackages.swift-toolchain; # Added 2026-11-25 preserve, reason: end-user convenience
+
   # Various to preserve
   autoReconfHook = throw "You meant 'autoreconfHook', with a lowercase 'r'."; # preserve, reason: common typo
   elasticsearch7Plugins = elasticsearchPlugins; # preserve, reason: until v8
