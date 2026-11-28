@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fokus";
-  version = "3.2.0";
+  version = "3.2.1";
 
   src = fetchFromGitHub {
     owner = "divinae";
     repo = "focus-plasmoid";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-t8C0zLyUL2Trb7WzTm5XXgqrjsZmZ8Cxf/5C8pHXYSw=";
+    hash = "sha256-2f8eGgLXx/VTQp2E4btqzCFavlldKSirrnLccC5jsys=";
   };
 
   dontWrapQtApps = true;
