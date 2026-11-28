@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<project name="ant-javac-test" default="compile">
+  <target name="compile">
+    <mkdir dir="build"/>
+    <javac srcdir="." destdir="build"/>
+  </target>
+</project>
