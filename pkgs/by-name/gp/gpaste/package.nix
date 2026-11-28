@@ -2,10 +2,8 @@
   stdenv,
   lib,
   fetchurl,
-  gjs,
   glib,
   gobject-introspection,
-  gtk3,
   gtk4,
   gcr_4,
   libadwaita,
@@ -21,15 +19,16 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gpaste";
-  version = "45.5";
+  version = "50.11";
 
   src = fetchurl {
     url = "https://www.imagination-land.org/files/gpaste/GPaste-${finalAttrs.version}.tar.xz";
-    hash = "sha256-seoPqmec9F4/zwmLjpAOUBBIVvLbFRMVPZ3jcloRrZE=";
+    hash = "sha256-RtFKvSuFBuyWbuPCj+ZadFLCK7LCmgJSQwZnszD2Bwo=";
   };
 
   patches = [
     ./fix-paths.patch
+    ./fix-test-autoptr.patch
   ];
 
   # TODO: switch to substituteAll with placeholder
@@ -50,9 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    gjs
     glib
-    gtk3
     gtk4
     gcr_4
     libadwaita
