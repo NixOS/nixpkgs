@@ -16,14 +16,14 @@
 
 buildPythonPackage.override { stdenv = llvmPackages.stdenv; } rec {
   pname = "verilogae";
-  version = "24.0.0mob-unstable-2026-08-01";
+  version = "24.0.2mob-unstable-2026-10-25";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "OpenVAF";
     repo = "OpenVAF-Reloaded";
-    rev = "3369a83f9c626f6d298f9f881379f561ce432e27";
-    hash = "sha256-+7Ni75QPkgHm1jh7ppiP0oRtDhmzV3OpNqpPWtGhVF4=";
+    rev = "b6622cd8befed2ae2293593ff50ee7d5caa21f2c";
+    hash = "sha256-cikGoam99rxbaPlfb977cNAEeajvgr4dNPCf8JZyYbE=";
   };
 
   # upstream's ./configure is an LLVM auto-detection script, not autotools
@@ -41,7 +41,7 @@ buildPythonPackage.override { stdenv = llvmPackages.stdenv; } rec {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-+jvaiBCmjd3RrlES+Sc1SskEMOtO1ykOdInMTH/Gazo=";
+    hash = "sha256-NFO88d/4uiBYd81TQFL4J3gmfFyTVnQ5I113jTaCvA0=";
   };
 
   nativeBuildInputs = [
