@@ -20,24 +20,25 @@
   libsoup_3,
   openssl_3_5,
   libayatana-appindicator,
+  libpulseaudio,
 }:
 
 let
   pname = "github-copilot-app";
-  version = "1.1.32";
+  version = "1.5.0";
 
   sources = {
     x86_64-linux = fetchurl {
       url = "https://github.com/github/app/releases/download/v${version}/GitHub-Copilot-linux-x64.deb";
-      hash = "sha256-bOfgGPjdn4TgKbnYHutfBd6u8j1U+WKhB0t3iRv/VBU=";
+      hash = "sha256-R0tVgDreodeyjbIM/iXsUVhULqIll5W0S0nTOL+NMsM=";
     };
     aarch64-linux = fetchurl {
       url = "https://github.com/github/app/releases/download/v${version}/GitHub-Copilot-linux-arm64.deb";
-      hash = "sha256-HRjyzwA99a7Pl+P6Iw6zYV6H6n5aLeH0MJgIlKYtoao=";
+      hash = "sha256-R//1Ukfaf/punAzTOscSFLWcwzlJk0+e9Eia4CU7MbU=";
     };
     aarch64-darwin = fetchurl {
       url = "https://github.com/github/app/releases/download/v${version}/GitHub-Copilot-darwin-arm64.dmg";
-      hash = "sha256-kXggAP7sFODF2N5CkepsaHLK6c9HOmtGBy8G9CgIf3c=";
+      hash = "sha256-b3y0VuALeEnhnxBxwF0trWTYLbfpUOBWoBjdiTS/fHA=";
     };
   };
 
@@ -73,6 +74,7 @@ stdenv.mkDerivation {
     libsoup_3
     openssl_3_5
     libayatana-appindicator
+    libpulseaudio
     stdenv.cc.cc.lib
   ];
 
@@ -113,6 +115,11 @@ stdenv.mkDerivation {
 
         cp -r usr/share/* $out/share/
         cp -r usr/lib/* $out/lib/
+
+        # The bundled libonnxruntime.so has the SONAME libonnxruntime.so.1, but upstream
+        # only ships the unversioned file name, so add the missing symlink that
+        # libfoundry_local.so and the dynamic linker look up.
+        ln -sf libonnxruntime.so "$out/lib/GitHub Copilot/libonnxruntime.so.1"
 
         # Rename the main executable from github to github-copilot-app to avoid conflicts
         mv usr/bin/github $out/bin/github-copilot-app
