@@ -9,19 +9,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jbofihe";
-  version = "0.43";
+  version = "0.44";
 
   src = fetchFromGitHub {
     owner = "lojban";
     repo = "jbofihe";
-    rev = "v${finalAttrs.version}";
-    sha256 = "1xx7x1256sjncyzx656jl6jl546vn8zz0siymqalz6v9yf341p98";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Aybnpm93URikXrqmYnikzFo9vxm9j/MNdxoil6l41Uw=";
   };
 
   patches = [
-    # fix build with gcc14:
-    # https://github.com/lojban/jbofihe/pull/19
-    ./fix-gcc14-errors.patch
+    # fix linking on aarch64-darwin:
+    # https://github.com/lojban/jbofihe/pull/21
+    ./fix-unaligned-pointers.patch
   ];
 
   nativeBuildInputs = [
@@ -29,6 +29,8 @@ stdenv.mkDerivation (finalAttrs: {
     flex
     perl
   ];
+
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   doCheck = true;
   checkPhase = ''

@@ -1,0 +1,26 @@
+From 3b180e020d7d1d3b2603cd5a6c944f341e7507ea Mon Sep 17 00:00:00 2001
+From: Rafael Ieda <git@ieda.me>
+Date: Mon, 23 Nov 2026 03:59:09 -0300
+Subject: [PATCH] Fix linking on arm64 macOS by not packing CmavoCell
+
+Assisted-by: Claude Code (claude-opus-5-5)
+---
+ cmavotab.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/cmavotab.h b/cmavotab.h
+index 2bed1b5..a43dfc4 100644
+--- a/cmavotab.h
++++ b/cmavotab.h
+@@ -778,7 +778,7 @@ typedef struct {
+   CmavoCodes code;
+   SelmaoCodes ssm_code; /* e.g. KOhA2 */
+   char *meaning;
+-} __attribute__ ((packed)) CmavoCell;
++} CmavoCell;
+ 
+ extern CmavoCell cmavo_table[];
+ extern char *selmao_names[];
+-- 
+2.56.0
+
