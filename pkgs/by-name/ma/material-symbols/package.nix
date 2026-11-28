@@ -7,13 +7,13 @@
 }:
 stdenvNoCC.mkDerivation {
   pname = "material-symbols";
-  version = "4.0.0-unstable-2026-10-02";
+  version = "4.0.0-unstable-2026-10-23";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "material-design-icons";
-    rev = "737e3324305806514d7909874fa1818ae1808232";
-    hash = "sha256-Zogmx2CEqXjlCP4ActsfMAspy9xjlgLcLViWF+4izcA=";
+    rev = "10ecc14790612ca8fd164e3f4ffe9c16fc50d5b7";
+    hash = "sha256-MmElYjJLMbxqeCHyzPUg5U/VF3/DlwOZiymyHm0IiYU=";
     sparseCheckout = [ "variablefont" ];
   };
 
