@@ -1,0 +1,39 @@
+--- a/platform/build-scripts/src/org/jetbrains/intellij/build/impl/JpsCompilationRunner.kt
++++ b/platform/build-scripts/src/org/jetbrains/intellij/build/impl/JpsCompilationRunner.kt
+@@ -50,7 +50,7 @@
+   }
+ 
+   fun buildModules(modules: List<JpsModule>, canceledStatus: CanceledStatus = CanceledStatus.NULL) {
+-    throw NotImplementedError("JPS compilation was broken on purpose, for details see MRI-3677")
++    runBuild()
+   }
+ 
+   fun resolveProjectDependencies() {
+@@ -58,15 +58,15 @@
+   }
+ 
+   fun buildModuleTests(module: JpsModule, canceledStatus: CanceledStatus = CanceledStatus.NULL) {
+-    throw NotImplementedError("JPS compilation was broken on purpose, for details see MRI-3677")
++    runBuild()
+   }
+ 
+   fun buildAll(canceledStatus: CanceledStatus = CanceledStatus.NULL) {
+-    throw NotImplementedError("JPS compilation was broken on purpose, for details see MRI-3677")
++    runBuild()
+   }
+ 
+   fun buildProduction(canceledStatus: CanceledStatus = CanceledStatus.NULL) {
+-    throw NotImplementedError("JPS compilation was broken on purpose, for details see MRI-3677")
++    runBuild()
+   }
+ 
+   private fun runBuild() = context.withCompilationLock {
+@@ -88,6 +88,8 @@
+           .build()
+       )
+     }
++    scopes.add(TargetTypeBuildScope.newBuilder().setTypeId("java-production").setForceBuild(false).setAllTargets(true).build())
++    scopes.add(TargetTypeBuildScope.newBuilder().setTypeId("java-test").setForceBuild(false).setAllTargets(true).build())
+ 
+     val compilationStart = System.nanoTime()
+     spanBuilder("compilation")

@@ -1,25 +1,26 @@
 {
-  "version": "2025.3.4",
-  "buildNumber": "253.32098.37",
+  "version": "2026.3",
+  "buildNumber": "263.7307.200",
   "buildType": "idea",
-  "ideaHash": "sha256-5rPaXIGOeWY9tcHRs5p376kgo4EbUtEltwcmNpPSsM8=",
-  "androidHash": "sha256-uvoDTv/7RlyxRp1d9v2tN9IJkv9d1QEkZpp23hae84k=",
-  "jpsHash": "sha256-iHpt926BDLNUwHRXvkqVgwlWiLo1qSZEaGeJcS0Fjmk=",
+  "ideaHash": "sha256-9RWLBAZN8OGS8o1a+KwYiO94YwQ4qWRbp1jZRbGHS6o=",
+  "androidHash": "sha256-xt0Vcs/fkTDj7umEXto3kr9WEytTBwDBA0e2DqCbicU=",
+  "jpsHash": "sha256-KzTRLvrF9+gHR20COUB8yJXYA8RxcnFa4x1jHHuNg8k=",
   "restarterHash": "sha256-acCmC58URd6p9uKZrm0qWgdZkqu9yqCs23v8qgxV2Ag=",
   "repositories": [
     "repo1.maven.org/maven2",
     "packages.jetbrains.team/maven/p/ij/intellij-dependencies",
     "dl.google.com/dl/android/maven2",
-    "download.jetbrains.com/teamcity-repository",
     "packages.jetbrains.team/maven/p/grazi/grazie-platform-public",
     "packages.jetbrains.team/maven/p/kpm/public",
     "packages.jetbrains.team/maven/p/ki/maven",
     "maven.pkg.jetbrains.space/public/p/compose/dev",
     "packages.jetbrains.team/maven/p/amper/amper",
-    "packages.jetbrains.team/maven/p/kt/bootstrap"
+    "jcp-github-mirror-public",
+    "packages.jetbrains.team/maven/p/kt/bootstrap",
+    "packages.jetbrains.team/maven/p/kt/experimental"
   ],
   "kotlin-jps-plugin": {
-    "version": "2.2.20",
-    "hash": "sha256-+jGghK2+yq+YFm5zT7ob+WTgTiJnHXAjDtlZjOzSISQ="
+    "version": "2.4.21-RC",
+    "hash": "sha256-n1cXPW4d6kI0WqlYyq1Tk2EzG2O6bNzYtrhv490ZqEk="
   }
 }

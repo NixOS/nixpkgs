@@ -1,0 +1,186 @@
+--- a/platform/build-scripts/downloader/src/org/jetbrains/intellij/build/download.kt
++++ b/platform/build-scripts/downloader/src/org/jetbrains/intellij/build/download.kt
+@@ -104,6 +104,9 @@
+ /** Returns a read-only preloaded input directly, or downloads a writable copy into the cache. */
+ @JvmOverloads
+ fun resolveFileForReading(url: String, communityRoot: BuildDependenciesCommunityRoot, session: BuildHttpSession? = null): ResolvedDownload {
++  // Nix pre-populates dependencies in the store and passes absolute paths instead of URLs.
++  val localFile = Path.of(url)
++  if (localFile.isAbsolute) return ResolvedDownload(file = localFile, sha256 = null)
+   val preloaded = PreloadedDownloads.findByUrl(url)
+   if (preloaded != null) return ResolvedDownload(file = preloaded.source, sha256 = preloaded.sha256)
+   return ResolvedDownload(file = downloadFileToCacheLocation(url, communityRoot, session), sha256 = null)
+--- a/platform/build-scripts/downloader/src/org/jetbrains/intellij/build/dependencies/BuildDependenciesDownloader.kt
++++ b/platform/build-scripts/downloader/src/org/jetbrains/intellij/build/dependencies/BuildDependenciesDownloader.kt
+@@ -103,7 +103,7 @@
+     classifier: String?,
+     packaging: String,
+   ): URI {
+-    val base = mavenRepository.trim('/')
++    val base = mavenRepository.trimEnd('/')
+     val groupStr = groupId.replace('.', '/')
+     val classifierStr = if (classifier != null) "-${classifier}" else ""
+     return URI.create("${base}/${groupStr}/${artifactId}/${version}/${artifactId}-${version}${classifierStr}.${packaging}")
+--- a/build/deps/src/org/jetbrains/intellij/build/impl/BundledMavenDownloader.kt
++++ b/build/deps/src/org/jetbrains/intellij/build/impl/BundledMavenDownloader.kt
+@@ -166,7 +166,7 @@
+       }
+       val fileName = "${split[1]}-${split[2]}.jar"
+       val uri = BuildDependenciesDownloader.getUriForMavenArtifact(
+-        mavenRepository = BuildDependenciesConstants.MAVEN_CENTRAL_URL,
++        mavenRepository = "MAVEN_REPO_HERE",
+         groupId = split[0],
+         artifactId = split[1],
+         version = split[2],
+@@ -212,32 +212,7 @@
+    */
+   @JvmOverloads
+   fun downloadMavenDistribution(communityRoot: BuildDependenciesCommunityRoot, useProjectLocalCache: Boolean, session: BuildHttpSession? = null): Path {
+-    val properties = BuildDependenciesDownloader.getDependencyProperties(communityRoot)
+-    val bundledMavenVersion = properties.property("bundledMavenVersion")
+-    return distributionLock.withLock {
+-      val uri = BuildDependenciesDownloader.getUriForMavenArtifact(
+-        mavenRepository = BuildDependenciesConstants.MAVEN_CENTRAL_URL,
+-        groupId = "org.apache.maven",
+-        artifactId = "apache-maven",
+-        version = bundledMavenVersion,
+-        classifier = "bin",
+-        packaging = "zip"
+-      )
+-      if (!useProjectLocalCache) {
+-        return@withLock resolveAndExtractToCacheLocation(uri.toString(), communityRoot, session, BuildDependenciesExtractOptions.STRIP_ROOT)
+-      }
+-
+-      val resolved = resolveFileForReading(url = uri.toString(), communityRoot = communityRoot, session = session)
+-      val mavenHome = BuildDependenciesDownloader.getDownloadCacheDirectory(communityRoot).resolve("apache-maven-$bundledMavenVersion")
+-      BuildDependenciesDownloader.extractFile(
+-        archiveFile = resolved.file,
+-        target = mavenHome,
+-        communityRoot = communityRoot,
+-        sha256 = resolved.sha256,
+-        options = arrayOf(BuildDependenciesExtractOptions.STRIP_ROOT),
+-      )
+-      mavenHome
+-    }
++    return Path.of("MAVEN_PATH_HERE")
+   }
+ 
+   @JvmOverloads
+--- a/platform/build-scripts/downloader/src/org/jetbrains/intellij/build/dependencies/JdkDownloader.kt
++++ b/platform/build-scripts/downloader/src/org/jetbrains/intellij/build/dependencies/JdkDownloader.kt
+@@ -81,8 +81,7 @@
+     infoLog: (String) -> Unit,
+   ): Path {
+     val effectiveVariation = if (isMusl) null else variation
+-    val jdkUrl = getUrl(communityRoot = communityRoot, os = os, arch = arch, isMusl = isMusl, jdkBuildNumber = jdkBuildNumber, variation = effectiveVariation)
+-    val jdkExtracted = resolveAndExtractToCacheLocation(jdkUrl, communityRoot, session, BuildDependenciesExtractOptions.STRIP_ROOT)
++    val jdkExtracted = Path.of("JDK_PATH_HERE")
+     val jdkHome = if (os == OS.MACOSX) jdkExtracted.resolve("Contents").resolve("Home") else jdkExtracted
+     infoLog("JPS-bootstrap JDK (jdkHome=$jdkHome, executable=${getJavaExecutable(jdkHome)})")
+     return jdkHome
+--- a/platform/build-scripts/src/org/jetbrains/intellij/build/impl/brokenPlugins.kt
++++ b/platform/build-scripts/src/org/jetbrains/intellij/build/impl/brokenPlugins.kt
+@@ -10,7 +10,9 @@
+ import java.io.ByteArrayOutputStream
+ import java.io.DataOutputStream
+ import java.util.TreeMap
++import java.nio.file.Path
+ import java.util.TreeSet
++import kotlin.io.path.readText
+ 
+ private const val MARKETPLACE_BROKEN_PLUGINS_URL = "https://plugins.jetbrains.com/files/brokenPlugins.json"
+ 
+@@ -21,7 +23,7 @@
+   val span = Span.current()
+ 
+   val allBrokenPlugins = try {
+-    val content = downloadAsText(MARKETPLACE_BROKEN_PLUGINS_URL, session)
++    val content = Path.of("BROKEN_PLUGINS_HERE").readText()
+     @Suppress("JSON_FORMAT_REDUNDANT")
+     Json { ignoreUnknownKeys = true }.decodeFromString(ListSerializer(MarketplaceBrokenPlugin.serializer()), content)
+   }
+--- a/platform/build-scripts/src/org/jetbrains/intellij/build/kotlin/KotlinCompilerDependencyDownloader.kt
++++ b/platform/build-scripts/src/org/jetbrains/intellij/build/kotlin/KotlinCompilerDependencyDownloader.kt
+@@ -39,30 +39,12 @@
+ 
+   @JvmOverloads
+   fun downloadAndExtractKotlinCompiler(communityRoot: BuildDependenciesCommunityRoot, session: BuildHttpSession? = null): Path {
+-    val kotlinJpsPluginVersion = getKotlinJpsPluginVersion(communityRoot)
+-    val kotlinDistUrl = getUriForMavenArtifact(getMavenRepositoryUrl(), ARTIFACT_GROUP_ID, "kotlin-dist-for-ide", kotlinJpsPluginVersion, "jar")
+-    val kotlinDistJar = if (shouldUseMavenLocal()) {
+-      val path = kotlinDistUrl.toPath()
+-      check(path.exists()) { "kotlin-dist-for-ide was not found in the local Maven repository" }
+-      path
+-    } else {
+-      downloadFileToCacheLocation(communityRoot, kotlinDistUrl, session)
+-    }
+-    return extractFileToCacheLocation(communityRoot, kotlinDistJar)
++    return Path.of("KOTLIN_PATH_HERE")
+   }
+ 
+   @JvmOverloads
+   fun downloadKotlinJpsPlugin(communityRoot: BuildDependenciesCommunityRoot, session: BuildHttpSession? = null): Path {
+-    val kotlinJpsPluginVersion = getKotlinJpsPluginVersion(communityRoot)
+-    val kotlinJpsPluginUrl = getUriForMavenArtifact(getMavenRepositoryUrl(), ARTIFACT_GROUP_ID, "kotlin-jps-plugin-classpath", kotlinJpsPluginVersion, "jar")
+-
+-    if (shouldUseMavenLocal()) {
+-      val kotlinJpsPluginJar = kotlinJpsPluginUrl.toPath()
+-      check(kotlinJpsPluginJar.exists()) { "kotlin-jps-plugin-classpath was not found in the local Maven repository" }
+-      return kotlinJpsPluginJar
+-    }
+-
+-    return downloadFileToCacheLocation(communityRoot, kotlinJpsPluginUrl, session)
++    return Path.of("JPS_PLUGIN_CLASSPATH_HERE")
+   }
+ 
+   fun getKotlinJpsPluginVersion(communityRoot: BuildDependenciesCommunityRoot): String {
+--- a/platform/build-scripts/src/org/jetbrains/intellij/build/LinuxDistributionCustomizer.kt
++++ b/platform/build-scripts/src/org/jetbrains/intellij/build/LinuxDistributionCustomizer.kt
+@@ -71,7 +71,7 @@
+   /**
+    * If `true`, a separate `*[org.jetbrains.intellij.build.impl.NO_RUNTIME_SUFFIX].tar.gz` artifact without a runtime will be produced.
+    */
+-  var buildArtifactWithoutRuntime: Boolean = false
++  var buildArtifactWithoutRuntime: Boolean = true
+ 
+   /**
+    * Add an instance of [LinuxDistributionCustomizer.Snap] if a .snap package should be produced.
+--- a/platform/build-scripts/src/org/jetbrains/intellij/build/impl/LinuxDistributionBuilder.kt
++++ b/platform/build-scripts/src/org/jetbrains/intellij/build/impl/LinuxDistributionBuilder.kt
+@@ -136,6 +136,9 @@
+         }
+       }
+ 
++      // Nix only builds the runtime-less artifact; never fetch a JBR.
++      return@executeStep
++
+       val runtimeDir = stageRuntimeWithoutExcludedPaths(
+         runtimeDir = context.bundledRuntime.extract(OsFamily.LINUX, arch, targetLibcImpl),
+         excludedRuntimePaths = context.productProperties.excludedRuntimePaths,
+@@ -447,7 +450,8 @@
+   }
+ 
+   private fun addNativeLauncher(distBinDir: Path, targetPath: Path, arch: JvmArchitecture, context: BuildContext) {
+-    val (execPath, licensePath) = NativeBinaryDownloader.getLauncher(context, OsFamily.LINUX, arch)
++    val execPath = Path.of("XPLAT_LAUNCHER_PREBUILT_PATH_HERE/Linux-${arch.archName}/xplat-launcher")
++    val licensePath = Path.of("XPLAT_LAUNCHER_PREBUILT_PATH_HERE/license/xplat-launcher-third-party-licenses.html")
+     copyFile(execPath, distBinDir.resolve(context.productProperties.baseFileName))
+     copyFile(licensePath, targetPath.resolve("license/launcher-third-party-libraries.html"))
+   }
+--- a/platform/build-scripts/src/org/jetbrains/intellij/build/CommunityRepositoryModules.kt
++++ b/platform/build-scripts/src/org/jetbrains/intellij/build/CommunityRepositoryModules.kt
+@@ -368,13 +368,8 @@
+ 
+     spec.withGeneratedResources(jcefLayoutAssetSpec(os, arch)) { targetDir, context ->
+       val communityRoot = context.paths.communityHomeDirRoot
+-      val properties = BuildDependenciesDownloader.getDependencyProperties(communityRoot)
+-      val jcefBuildNumber = properties.property("jcefBuild")
+-
+-      // extracted into the content-keyed cache rather than straight into the layout: a dev run directory is wiped
+-      // on every launch (`IdeBuilder`), so an extraction that lands in it is an extraction repeated every launch
+       val extracted = resolveAndExtractToCacheLocation(
+-        url = jcefDownloadUrl(os, arch, jcefBuildNumber),
++        url = "JCEF_ARCHIVE_HERE",
+         communityRoot = communityRoot,
+         session = context.httpSession,
+         BuildDependenciesExtractOptions.STRIP_ROOT,
