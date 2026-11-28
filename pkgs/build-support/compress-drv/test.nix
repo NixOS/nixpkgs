@@ -2,18 +2,39 @@
   gzip,
   runCommand,
   compressDrv,
+  compressDrvWeb,
+  testers,
 }:
 let
   example = runCommand "sample-drv" { } ''
     mkdir $out
-    echo 42 > $out/1.txt
-    echo 43 > $out/1.md
+    printf '42\n%.0s' {1..1000} > $out/1.txt
+    printf '43\n%.0s' {1..1000} > $out/1.md
     touch $out/2.png
+    echo 42 > $out/tiny.txt
+    touch $out/'" '.txt # filenames must not be eval'ed or split by a shell
   '';
-  drv = compressDrv example {
+  compressTxtArgs = {
     formats = [ "txt" ];
     compressors.gz = "${gzip}/bin/gzip --force --keep --fast {}";
   };
+  drv = compressDrv example compressTxtArgs;
+  prunedDrv = compressDrv example {
+    formats = [ "txt" ];
+    removeIfSmaller = true;
+    compressors = compressTxtArgs.compressors // {
+      same = "sh -c 'cp -L \"$0\" \"$0.same\"' {}";
+    };
+  };
+  webDrv = compressDrvWeb example { };
+  webPrunedDrv = compressDrvWeb example { removeIfSmaller = true; };
+  noSidecar = testers.testBuildFailure (
+    compressDrv example {
+      formats = [ "txt" ];
+      removeIfSmaller = true;
+      compressors.none = "true {}";
+    }
+  );
   wrapped = compressDrv drv {
     formats = [ "md" ];
     compressors.gz = "${gzip}/bin/gzip --force --keep --fast {}";
@@ -28,7 +49,20 @@ runCommand "test-compressDrv" { } ''
   cmp ${drv}/1.txt <(${gzip}/bin/zcat ${drv}/1.txt.gz)
 
   test -h ${drv}/2.png
-  test ! -a ${drv}/2.png.gz
+  test ! -e ${drv}/2.png.gz
+
+  test -h ${drv}/tiny.txt
+  test "$(stat -c%s ${drv}/tiny.txt.gz)" -ge "$(stat -L -c%s ${drv}/tiny.txt)"
+  cmp ${drv}/tiny.txt <(${gzip}/bin/zcat ${drv}/tiny.txt.gz)
+
+  cmp ${drv}/1.txt <(${gzip}/bin/zcat ${prunedDrv}/1.txt.gz)
+  test -h ${prunedDrv}/tiny.txt
+  test ! -e ${prunedDrv}/tiny.txt.gz
+  test ! -e ${prunedDrv}/1.txt.same
+  test -f ${webDrv}/tiny.txt.zst
+  test -f ${webPrunedDrv}/1.txt.zst
+  test ! -e ${webPrunedDrv}/tiny.txt.zst
+  grep -q 'tiny.txt.none' ${noSidecar}/testBuildFailure.log
 
   # compressDrv always points to the final file, no matter how many times
   # it's been wrapped
