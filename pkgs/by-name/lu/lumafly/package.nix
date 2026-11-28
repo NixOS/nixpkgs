@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   buildDotnetModule,
   dotnetCorePackages,
@@ -12,11 +13,14 @@
   nix-update-script,
   unzip,
   python3,
-  stdenv,
 }:
-buildDotnetModule rec {
+
+buildDotnetModule (finalAttrs: {
   pname = "lumafly";
   version = "3.3.0.0-unstable-2026-10-15";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "TheMulhima";
@@ -28,15 +32,13 @@ buildDotnetModule rec {
   patches = [ ./no_timestamp_check.patch ];
 
   projectFile = "Lumafly/Lumafly.csproj";
+  testProjectFile = "Lumafly.Tests/Lumafly.Tests.csproj";
 
   nugetDeps = ./deps.json;
 
   dotnet-sdk = dotnetCorePackages.sdk_10_0;
-  dotnet-runtime = dotnetCorePackages.sdk_10_0;
 
   selfContainedBuild = true;
-
-  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
   runtimeDeps = [
     zlib
@@ -55,19 +57,29 @@ buildDotnetModule rec {
 
   executables = [ "Lumafly" ];
 
-  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+  __darwinAllowLocalNetworking = true;
+  doCheck = true;
+
+  dotnetTestFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+    "--environment"
+    "DOTNET_SYSTEM_NET_DISABLEIPV6=1"
+  ];
+
+  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    export CFFIXED_USER_HOME="$HOME"
+  '';
+
+  postInstall = ''
+    icotool -x Lumafly/Assets/Lumafly.ico
+    install -Dm644 Lumafly_1_32x32x32.png $out/share/icons/hicolor/32x32/apps/lumafly.png
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
     (
       cd Scripts
-      python3 make_mac_app.py Lumafly.app $out/lib/${pname} ../out
+      python3 make_mac_app.py Lumafly.app $out/lib/${finalAttrs.pname} ../out
     )
     mkdir -p $out/Applications
     unzip -o out/mac.zip -d $out/Applications
-  '';
-
-  postFixup = ''
-    # Icon for the desktop file
-    icotool -x $src/Lumafly/Assets/Lumafly.ico
-    install -D Lumafly_1_32x32x32.png $out/share/icons/hicolor/32x32/apps/lumafly.png
   '';
 
   desktopItems = [
@@ -76,11 +88,13 @@ buildDotnetModule rec {
       name = "lumafly";
       exec = "Lumafly";
       icon = "lumafly";
-      comment = "A cross platform mod manager for Hollow Knight written in Avalonia";
+      comment = "Cross platform mod manager for Hollow Knight written in Avalonia";
       type = "Application";
       categories = [ "Game" ];
     })
   ];
+
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
   meta = {
     description = "Cross platform mod manager for Hollow Knight written in Avalonia";
@@ -90,4 +104,4 @@ buildDotnetModule rec {
     maintainers = with lib.maintainers; [ rohanssrao ];
     platforms = with lib.platforms; linux ++ darwin;
   };
-}
+})
