@@ -78,6 +78,7 @@ makeTest {
           };
         };
       };
+      services.prometheus.exporters.oxidized.enable = true;
       systemd.services.oxidized = {
         stopIfChanged = false;
         environment.HOME = "/var/lib/oxidized";
@@ -107,5 +108,8 @@ makeTest {
         server.wait_until_succeeds(("curl --silent --fail --resolve oxidized:8888:127.0.0.1 --location http://oxidized:8888/ | grep '${nodes.server.services.oxidized.package.version}' >&2"))
       with subtest("Check if oxidized can connect to linuxgeneric model"):
         server.wait_until_succeeds("journalctl -b --grep 'Oxidized::Worker -- Configuration updated for /localhost' -t oxidized")
+      with subtest("Check if the Prometheus exporter provides metrics"):
+        server.wait_for_unit("prometheus-oxidized-exporter.service")
+        server.succeed("curl --fail http://localhost:${toString nodes.server.services.prometheus.exporters.oxidized.port}/metrics | grep -qE '^oxidized_device_status\\{.*\\} 2$'")
     '';
 }
