@@ -6,6 +6,9 @@
   fetchurl,
   glib,
   libsecret,
+  libpulseaudio,
+  onnxruntime,
+  onnxruntime-genai,
   makeBinaryWrapper,
   bash,
   nodejs,
@@ -44,6 +47,9 @@ stdenv.mkDerivation (finalAttrs: {
     stdenv.cc.cc.lib
     glib
     libsecret
+    libpulseaudio
+    onnxruntime
+    onnxruntime-genai
   ];
   sourceRoot = "package";
   dontStrip = true;
@@ -68,14 +74,38 @@ stdenv.mkDerivation (finalAttrs: {
     "libwayland-client.so.0"
     "libdbus-1.so.3"
     "libxdo.so.3"
-    "libonnxruntime-genai.so"
-    "libonnxruntime.so.1"
   ];
 
   installPhase = ''
     runHook preInstall
     mkdir -p "$out"/lib/github-copilot-cli
     cp -r * "$out"/lib/github-copilot-cli
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    runtime="$out/lib/github-copilot-cli/foundry-local-sdk/node_modules/foundry-local-sdk/prebuilds/linux-${arch}"
+    ln -s ${lib.getLib onnxruntime}/lib/libonnxruntime.so.1 "$runtime/"
+    ln -s ${lib.getLib onnxruntime-genai}/lib/libonnxruntime-genai.so "$runtime/"
+
+    # Keep runtime installation in the store; model downloads remain in the user cache.
+    ${lib.getExe nodejs} --input-type=module - "$out/lib/github-copilot-cli" <<'JS'
+    import { readFileSync, writeFileSync } from 'node:fs';
+    import { join } from 'node:path';
+
+    for (const name of ['voice-server.js', 'voice-engine.worker.js']) {
+      const path = join(process.argv[2], name);
+      const source = readFileSync(path, 'utf8');
+      const factory = /function (\w+)\(\)\{let \w+,\w+;return\{async inspect\(\)\{.*?return \w+=\w+,\w+\}\}\}/g;
+      const matches = [...source.matchAll(factory)];
+      if (matches.length !== 1) {
+        throw new Error('Expected one voice runtime installer in ' + name + ', found ' + matches.length);
+      }
+      writeFileSync(path, source.replace(factory, (_, name) =>
+        'function ' + name + '(){const location={corePath:new URL("./foundry-local-sdk/node_modules/foundry-local-sdk/prebuilds/linux-${arch}/libfoundry_local.so",import.meta.url).pathname};return{async inspect(){return{kind:"downloaded",location}},async install(){return location}}}'
+      ));
+    }
+    JS
+  ''
+  + ''
     runHook postInstall
   '';
 
@@ -86,6 +116,11 @@ stdenv.mkDerivation (finalAttrs: {
       --set-default NODE_NO_WARNINGS 1 \
       --set-default SSL_CERT_DIR ${cacert}/etc/ssl/certs \
       --prefix PATH : "${lib.makeBinPath [ bash ]}"
+  '';
+
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
+    patchelf --add-rpath ${lib.getLib libpulseaudio}/lib \
+      "$out/lib/github-copilot-cli/pvrecorder/node_modules/@picovoice/pvrecorder-node/lib/linux/${stdenv.hostPlatform.parsed.cpu.name}/pv_recorder.node"
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
