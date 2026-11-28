@@ -606,8 +606,8 @@ in
 
     system.build.units = cfg.units;
 
-    system.nssModules = [ cfg.package.out ];
-    system.nssDatabases = {
+    system.nssModules = lib.optional (cfg.package.withNss or true) cfg.package.out;
+    system.nssDatabases = lib.mkIf (cfg.package.withNss or true) {
       hosts = (
         mkMerge [
           (mkOrder 400 [ "mymachines" ]) # 400 to ensure it comes before resolve (which is 501)
@@ -764,7 +764,9 @@ in
         # systemd-ssh-generator needs sshd in PATH
         ++ lib.optional config.services.openssh.enable config.services.openssh.package
       );
-      LOCALE_ARCHIVE = "/run/current-system/sw/lib/locale/locale-archive";
+      LOCALE_ARCHIVE = lib.mkIf (
+        config.i18n.glibcLocales != null
+      ) "/run/current-system/sw/lib/locale/locale-archive";
       TZDIR = "/etc/zoneinfo";
       # If SYSTEMD_UNIT_PATH ends with an empty component (":"), the usual unit load path will be appended to the contents of the variable
       SYSTEMD_UNIT_PATH = lib.mkIf (
@@ -840,7 +842,9 @@ in
     };
     systemd.services.systemd-random-seed.restartIfChanged = false;
     systemd.services.systemd-remount-fs.restartIfChanged = false;
-    systemd.services.systemd-update-utmp.restartIfChanged = false;
+    systemd.services.systemd-update-utmp = lib.mkIf cfg.package.withUtmp {
+      restartIfChanged = false;
+    };
     # `systemd-bless-boot good` fails once the current boot has been blessed.
     systemd.services.systemd-bless-boot = lib.mkIf cfg.package.withBootloader {
       restartIfChanged = false;

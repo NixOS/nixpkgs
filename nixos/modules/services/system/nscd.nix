@@ -21,11 +21,12 @@ in
 
       enable = lib.mkOption {
         type = lib.types.bool;
-        default = true;
+        default = pkgs.stdenv.hostPlatform.libc == "glibc";
+        defaultText = lib.literalExpression ''pkgs.stdenv.hostPlatform.libc == "glibc"'';
         description = ''
           Whether to enable the Name Service Cache Daemon.
-          Disabling this is strongly discouraged, as this effectively disables NSS Lookups
-          from all non-glibc NSS modules, including the ones provided by systemd.
+          Disabling this on glibc systems is strongly discouraged, as this effectively disables
+          NSS lookups from all non-glibc NSS modules, including the ones provided by systemd.
         '';
       };
 

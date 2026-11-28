@@ -197,17 +197,18 @@ in
         lib.setPrio (-1) cfg.glibcLocales
       );
 
-    environment.sessionVariables = {
-      LOCALE_ARCHIVE = "/run/current-system/sw/lib/locale/locale-archive";
-    }
-    # When imperative, leave LANG/LC_* to pam_systemd so /etc/set-environment
-    # does not override what localectl wrote to /etc/locale.conf.
-    // lib.optionalAttrs (!cfg.imperativeLocale) (
-      {
-        LANG = cfg.defaultLocale;
+    environment.sessionVariables =
+      lib.optionalAttrs (cfg.glibcLocales != null && cfg.supportedLocales != [ ]) {
+        LOCALE_ARCHIVE = "/run/current-system/sw/lib/locale/locale-archive";
       }
-      // cfg.extraLocaleSettings
-    );
+      # When imperative, leave LANG/LC_* to pam_systemd so /etc/set-environment
+      # does not override what localectl wrote to /etc/locale.conf.
+      // lib.optionalAttrs (!cfg.imperativeLocale) (
+        {
+          LANG = cfg.defaultLocale;
+        }
+        // cfg.extraLocaleSettings
+      );
 
     systemd.globalEnvironment = lib.mkIf (cfg.glibcLocales != null && cfg.supportedLocales != [ ]) {
       LOCALE_ARCHIVE = "${cfg.glibcLocales}/lib/locale/locale-archive";

@@ -722,6 +722,7 @@ stdenv.mkDerivation (finalAttrs: {
       withLogind
       withMachined
       withNetworkd
+      withNss
       withNsresourced
       withMountfsd
       withNspawn
