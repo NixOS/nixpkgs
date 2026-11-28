@@ -5630,9 +5630,6 @@ with pkgs;
 
   libva-minimal = callPackage ../development/libraries/libva { minimal = true; };
   libva = libva-minimal.override { minimal = false; };
-  libwpd = callPackage ../development/libraries/libwpd { };
-
-  libwpd_08 = callPackage ../development/libraries/libwpd/0.8.nix { };
 
   libxcrypt = callPackage ../development/libraries/libxcrypt {
     fetchurl = stdenv.fetchurlBoot;
