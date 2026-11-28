@@ -11985,6 +11985,12 @@
     githubId = 130903;
     name = "Ana Hobden";
   };
+  hpenney2 = {
+    name = "purpld";
+    github = "hpenney2";
+    githubId = 24281994;
+    email = "me@purpld.dev";
+  };
   hpfr = {
     email = "liam@hpfr.net";
     github = "hpfr";

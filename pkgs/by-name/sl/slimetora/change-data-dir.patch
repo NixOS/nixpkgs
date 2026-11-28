@@ -1,0 +1,45 @@
+diff --git a/src/main.ts b/src/main.ts
+index 67644b0..50053bb 100644
+--- a/src/main.ts
++++ b/src/main.ts
+@@ -12,15 +12,18 @@ import fs, { PathLike } from "fs";
+ import { FPSMode, HaritoraX, MagStatus, SensorAutoCorrection, SensorMode, TrackerModel } from "haritorax-interpreter";
+ import path, { dirname } from "path";
+ import { fileURLToPath, format } from "url";
++import os from "os";
+ const Binding = autoDetect();
+ const __filename = fileURLToPath(import.meta.url);
+ const __dirname = dirname(__filename);
+ 
+ const mainPath = app.isPackaged ? path.dirname(app.getPath("exe")) : __dirname;
+-const configPath = app.isPackaged
+-    ? path.resolve(mainPath, "config.json")
+-    : path.resolve(path.join(mainPath, ".."), "config.json");
+-const dataDebugPath = path.resolve(mainPath, "debug.txt");
++const dataPath = process.env.XDG_DATA_HOME && path.isAbsolute(process.env.XDG_DATA_HOME)
++    ? process.env.XDG_DATA_HOME
++    : path.join(os.homedir(), ".local", "share", "slimetora");
++
++const configPath = path.resolve(dataPath, "config.json")
++const dataDebugPath = path.resolve(dataPath, "debug.txt");
+ const isMac = process.platform === "darwin";
+ // don't mess with this or languages will fail to load cause of how the project is structured, lol
+ // i hate how this is done.
+@@ -808,7 +811,7 @@ ipcMain.on("open-support-page", async () => {
+ });
+ 
+ ipcMain.on("open-logs-folder", async () => {
+-    const logDir = path.resolve(mainPath, "logs");
++    const logDir = path.resolve(dataPath, "logs");
+     try {
+         await fs.promises.access(logDir);
+         await shell.openPath(logDir);
+@@ -1920,7 +1923,7 @@ async function logMessage(level: string, msg: string, where: string, err?: Error
+ 
+     if (!canLogToFile) return;
+ 
+-    const logDir = path.resolve(mainPath, "logs");
++    const logDir = path.resolve(dataPath, "logs");
+     await initializeLogDirectory(logDir);
+ 
+     const logPath = path.join(logDir, `log-${formatDateForFile(date)}.txt`);
