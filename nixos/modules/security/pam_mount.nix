@@ -172,7 +172,9 @@ in
           <!-- if activated, requires ofl from hxtools to be present -->
           <logout wait="${toString cfg.logoutWait}" hup="${lib.boolToYesNo cfg.logoutHup}" term="${lib.boolToYesNo cfg.logoutTerm}" kill="${lib.boolToYesNo cfg.logoutKill}" />
           <!-- set PATH variable for pam_mount module -->
-          <path>${lib.makeBinPath ([ pkgs.util-linux ] ++ cfg.additionalSearchPaths)}</path>
+          <path>${lib.optionalString config.security.enableWrappers (config.security.wrapperDir + ":")}${
+            lib.makeBinPath ([ pkgs.util-linux ] ++ cfg.additionalSearchPaths)
+          }</path>
           <!-- create mount point if not present -->
           <mkmountpoint enable="${if cfg.createMountPoints then "1" else "0"}" remove="${
             if cfg.removeCreatedMountPoints then "true" else "false"
