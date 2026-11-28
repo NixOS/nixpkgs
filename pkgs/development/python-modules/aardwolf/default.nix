@@ -21,7 +21,7 @@
   unicrypto,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aardwolf";
   version = "0.2.13";
   pyproject = true;
@@ -29,20 +29,20 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "skelsec";
     repo = "aardwolf";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-8QXPvfVeT3qadxTvt/LQX3XM5tGj6SpfOhP/9xcZHW4=";
   };
 
   patches = [ ./update-pyo3.patch ];
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit
+    inherit (finalAttrs)
       pname
       version
       src
       patches
       ;
-    sourceRoot = "${src.name}/aardwolf/utils/rlers";
+    sourceRoot = "${finalAttrs.src.name}/aardwolf/utils/rlers";
     hash = "sha256-n28jzS2+zbXsdR7rT0PBvcqNacuFMJKUug0mBYc4eFE=";
     patchFlags = [ "-p4" ]; # strip i/aardwolf/utils/rlers/ prefix
   };
@@ -83,8 +83,8 @@ buildPythonPackage rec {
     description = "Asynchronous RDP protocol implementation";
     mainProgram = "ardpscan";
     homepage = "https://github.com/skelsec/aardwolf";
-    changelog = "https://github.com/skelsec/aardwolf/releases/tag/${version}";
+    changelog = "https://github.com/skelsec/aardwolf/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
