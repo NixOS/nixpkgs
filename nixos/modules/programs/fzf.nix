@@ -46,6 +46,14 @@ in
       fish.interactiveShellInit = lib.optionalString cfg.keybindings ''
         source ${pkgs.fzf}/share/fzf/key-bindings.fish && fzf_key_bindings
       '';
+
+      nushell.interactiveShellInit =
+        lib.optionalString cfg.fuzzyCompletion ''
+          source ${pkgs.fzf}/share/fzf/completion.nu
+        ''
+        + lib.optionalString cfg.keybindings ''
+          source ${pkgs.fzf}/share/fzf/key-bindings.nu
+        '';
     };
   };
 
