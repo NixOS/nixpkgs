@@ -10,7 +10,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "oracledb";
-  version = "26.1.0";
+  version = "26.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -18,7 +18,7 @@ buildPythonPackage (finalAttrs: {
     repo = "python-oracledb";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-GVzdqsDAQNeRPLDWwFNhOM+P/VZlQpLdNAv5QzHG438=";
+    hash = "sha256-RTdCNhmp8SDhar9gztIt26loTS1iIrq9wS1mjO0mBhI=";
   };
 
   build-system = [
