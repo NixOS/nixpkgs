@@ -13,14 +13,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "matio";
-  version = "1.5.30";
+  version = "1.6.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/matio/matio-${finalAttrs.version}.tar.gz";
-    hash = "sha256-i9O5R3BC7MAN1xwEdi+lhGjhTMzDL9jGgmwtoei8MQc=";
+    url = "https://github.com/tbeu/matio/releases/download/v${finalAttrs.version}/matio-${finalAttrs.version}.tar.gz";
+    hash = "sha256-FIHcdOAdJJ6Q8GQzP5aTaf490R1sxpY+hjXFgapddxE=";
   };
 
-  configureFlags = [ "ac_cv_va_copy=1" ];
+  configureFlags = [ "ac_cv_va_copy=C99" ];
 
   nativeBuildInputs = [
     pkgconf
@@ -31,6 +31,8 @@ stdenv.mkDerivation (finalAttrs: {
     hdf5
     zlib
   ];
+
+  doCheck = true;
 
   passthru = {
     tests = {
@@ -46,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    changelog = "https://sourceforge.net/p/matio/news/";
+    changelog = "https://github.com/tbeu/matio/releases/tag/v${finalAttrs.version}";
     description = "C library for reading and writing Matlab MAT files";
     homepage = "https://matio.sourceforge.net/";
     license = lib.licenses.bsd2;
