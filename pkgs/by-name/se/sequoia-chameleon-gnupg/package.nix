@@ -13,14 +13,14 @@
   installShellFiles,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sequoia-chameleon-gnupg";
   version = "0.13.1";
 
   src = fetchFromGitLab {
     owner = "sequoia-pgp";
     repo = "sequoia-chameleon-gnupg";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-K9aeWrqJGPx2RymCXWNdNUTXXtO4NNm6Rd3jz+YxEi0=";
   };
 
@@ -60,11 +60,11 @@ rustPlatform.buildRustPackage rec {
     ln -s gpg $out/bin/gpg2
     ln -s ${lib.getExe' gnupg "gpg"} $out/bin/gpg-g10code
 
-    installManPage ${env.ASSET_OUT_DIR}/man-pages/*.1
+    installManPage ${finalAttrs.env.ASSET_OUT_DIR}/man-pages/*.1
     installShellCompletion --cmd gpg-sq \
-      --bash ${env.ASSET_OUT_DIR}/shell-completions/gpg-sq.bash \
-      --zsh ${env.ASSET_OUT_DIR}/shell-completions/_gpg-sq \
-      --fish ${env.ASSET_OUT_DIR}/shell-completions/gpg-sq.fish
+      --bash ${finalAttrs.env.ASSET_OUT_DIR}/shell-completions/gpg-sq.bash \
+      --zsh ${finalAttrs.env.ASSET_OUT_DIR}/shell-completions/_gpg-sq \
+      --fish ${finalAttrs.env.ASSET_OUT_DIR}/shell-completions/gpg-sq.fish
   '';
 
   # gpgconf: error creating socket directory
@@ -77,4 +77,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ nickcao ];
     mainProgram = "gpg-sq";
   };
-}
+})
