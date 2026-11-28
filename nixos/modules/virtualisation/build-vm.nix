@@ -31,6 +31,17 @@ in
 {
   options = {
 
+    virtualisation.isVmVariant = mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = ''
+        This option is `true` if the machine configurations was produced by `nixos-rebuild build-vm`.
+        Unlike {option}`virtualisation.vmVariant`, where you can set definitions that are only for the
+        VM, this option can be read from to make definitions conditional in the context being _not_ the VM variant.
+        Example: `lib.mkIf (!config.virtualisation.isVmVariant) { ... }`.
+      '';
+    };
+
     virtualisation.vmVariant = mkOption {
       description = ''
         Machine configuration to be added for the vm script produced by `nixos-rebuild build-vm`.
@@ -67,6 +78,10 @@ in
           apply =
             _: throw "virtualisation.vmVariant*.virtualisation.vmVariantWithBootloader is not supported";
         };
+      };
+      config = {
+        # `lib.mkOverride 0` to match `isSpecialisation` behavior
+        virtualisation.isVmVariant = lib.mkOverride 0 true;
       };
     };
 
