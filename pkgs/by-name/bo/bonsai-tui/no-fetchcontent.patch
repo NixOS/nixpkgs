@@ -1,0 +1,18 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 1ae10ee..5b952c9 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -6,12 +6,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
+ 
+ include(FetchContent)
+ 
+-FetchContent_Declare(
+-  ftxui
+-  GIT_REPOSITORY https://github.com/ArthurSonzogni/ftxui.git
+-  GIT_TAG v7.0.3
+-)
+-FetchContent_MakeAvailable(ftxui)
++find_package(FTXUI REQUIRED)
+ 
+ set(SRC
+     src/main.cpp
