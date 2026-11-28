@@ -61,9 +61,14 @@ lib.throwIf (attrs ? name)
           builder = ./builder.sh;
 
           buildInputs = buildInputs ++ [ perl ];
-          nativeBuildInputs =
-            nativeBuildInputs
-            ++ (if !(stdenv.buildPlatform.canExecute stdenv.hostPlatform) then [ perl.mini ] else [ perl ]);
+          nativeBuildInputs = nativeBuildInputs ++ [
+            (
+              if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
+                perl.__spliced.hostTarget or perl
+              else
+                perl.mini
+            )
+          ];
 
           inherit
             outputs
@@ -74,7 +79,11 @@ lib.throwIf (attrs ? name)
             ;
           env = {
             inherit PERL_AUTOINSTALL AUTOMATED_TESTING PERL_USE_UNSAFE_INC;
-            fullperl = perl.__spliced.buildHost or perl;
+            fullperl =
+              if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
+                perl.__spliced.hostTarget or perl
+              else
+                perl.__spliced.buildHost or perl;
           }
           // env;
 
