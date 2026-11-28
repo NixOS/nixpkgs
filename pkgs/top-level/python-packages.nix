@@ -18140,6 +18140,8 @@ self: super: with self; {
 
   quart-trio = callPackage ../development/python-modules/quart-trio { };
 
+  quartodoc = callPackage ../development/python-modules/quartodoc { };
+
   qudida = callPackage ../development/python-modules/qudida { };
 
   querystring-parser = callPackage ../development/python-modules/querystring-parser { };
@@ -20165,6 +20167,8 @@ self: super: with self; {
 
   sphinxfeed-lsaffre = callPackage ../development/python-modules/sphinxfeed-lsaffre { };
 
+  sphobjinv = callPackage ../development/python-modules/sphobjinv { };
+
   spidev = callPackage ../development/python-modules/spidev { };
 
   spinev-ble = callPackage ../development/python-modules/spinev-ble { };
@@ -20437,6 +20441,8 @@ self: super: with self; {
   std-uritemplate = callPackage ../development/python-modules/std-uritemplate { };
 
   std2 = callPackage ../development/python-modules/std2 { };
+
+  stdio-mgr = callPackage ../development/python-modules/stdio-mgr { };
 
   stdiomask = callPackage ../development/python-modules/stdiomask { };
 
