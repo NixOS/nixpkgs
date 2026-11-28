@@ -43,14 +43,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "jupyter-server";
-  version = "2.21.0";
+  version = "2.21.1";
   pyproject = true;
 
   # Using the pypi archive to avoid building the node artifacts from source
   src = fetchPypi {
     pname = "jupyter_server";
     inherit (finalAttrs) version;
-    hash = "sha256-cNmhiD9X01duoX9M4GHsGnqtfvOI0AQoz7f15PACInE=";
+    hash = "sha256-qJYKopJj9gQSg+l9R1awmftJt2e6q2NxiR7LG9QKY98=";
   };
 
   build-system = [
