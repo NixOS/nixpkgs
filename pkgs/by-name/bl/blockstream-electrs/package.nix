@@ -11,7 +11,7 @@
   stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "blockstream-electrs";
   version = "0.4.1-unstable-2026-04-20";
 
@@ -70,7 +70,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   # Integration tests require us to pass in some external deps via env.
-  preCheck = lib.optionalString doCheck ''
+  preCheck = lib.optionalString finalAttrs.doCheck ''
     export BITCOIND_EXE=${bitcoind}/bin/bitcoind
     export ELECTRUMD_EXE=${electrum}/bin/electrum
   '';
@@ -99,4 +99,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ phlip9 ];
     mainProgram = "electrs";
   };
-}
+})
