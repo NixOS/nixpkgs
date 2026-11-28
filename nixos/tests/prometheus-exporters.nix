@@ -1367,6 +1367,50 @@ let
           };
       };
 
+    nut =
+      { pkgs, ... }:
+      {
+        maintainers = [ lib.maintainers.booxter ];
+        exporterConfig = {
+          enable = true;
+        };
+        metricProvider = {
+          power.ups = {
+            enable = true;
+            upsmon.enable = false;
+            upsd.listen = [ { address = "127.0.0.1"; } ];
+            ups.test = {
+              driver = "dummy-ups";
+              port = "${pkgs.writeText "test-ups.dev" ''
+                battery.charge: 42
+                ups.status: OL
+              ''}";
+            };
+          };
+        };
+        exporterTest = ''
+          wait_for_unit("upsd.service")
+          wait_for_unit("upsdrv.service")
+          wait_for_unit("prometheus-nut-exporter.service")
+          wait_for_open_port(9199)
+          wait_until_succeeds(
+              "curl -sSf http://localhost:9199/ups_metrics | grep '^network_ups_tools_battery_charge 42$'"
+          )
+          succeed(
+              "curl -sSf http://localhost:9199/ups_metrics | grep '^network_ups_tools_ups_status{flag=\"OL\"} 1$'"
+          )
+
+          systemctl("stop upsd.service")
+          succeed(
+              "curl -sS --max-time 10 -o /dev/null -w '%{http_code}' http://localhost:9199/ups_metrics | grep '^500$'"
+          )
+          systemctl("start upsd.service")
+          wait_until_succeeds(
+              "curl -sSf http://localhost:9199/ups_metrics | grep '^network_ups_tools_battery_charge 42$'"
+          )
+        '';
+      };
+
     pgbouncer =
       { pkgs, lib, ... }:
       {
