@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   unzip,
   tcl,
   zlib,
@@ -89,6 +90,16 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://build.opensuse.org/public/source/openSUSE:Factory/sqlite3/sqlite-3.54.1-CVE-2026-119586-dump-recover-hardening.patch?rev=180";
       hash = "sha256-mzTIhEfZY0U1UPcw+1We4mfxBhwOUoMEd33tr9Q5ZLE=";
     })
+    # Fix concurrency-related hang in notify2.test
+    (fetchpatch {
+      name = "sqlite-test1-hash-mutex.patch";
+      url = "https://github.com/sqlite/sqlite/commit/c3e073420ff9e35ea80c783e3664e32449b5b703.patch";
+      includes = [
+        "src/test1.c"
+        "test/notify2.test"
+      ];
+      hash = "sha256-oHXttbYDq510kaYZEvoxG2zdBRN0lxeO0RvyYwwfhcE=";
+    })
   ];
 
   # capi3c.test is a copy of capi3.test, but upstream only disabled the
@@ -99,7 +110,19 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail \
         'if {[clang_sanitize_address]==0} {' \
         'if {0 && [clang_sanitize_address]==0} {'
-  '';
+  ''
+  +
+    lib.optionalString
+      (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform && !stdenv.hostPlatform.isStatic)
+      ''
+        substituteInPlace test/testrunner_data.tcl \
+          --replace-fail \
+            'set tcldir [::tcl::pkgconfig get libdir,install]' \
+            'set tcldir "${lib.getLib tcl}/lib"' \
+          --replace-fail \
+            '\$SRCDIR/configure --with-tcl=\$TCLDIR $configOpts' \
+            '\$SRCDIR/configure --host=${stdenv.hostPlatform.config} --with-tcl=\$TCLDIR --with-tclsh=${lib.getExe' buildPackages.tcl "tclsh"} $configOpts'
+      '';
 
   buildInputs = [
     zlib
@@ -172,6 +195,10 @@ stdenv.mkDerivation (finalAttrs: {
     echo ""
     echo "NIX_CFLAGS_COMPILE = $NIX_CFLAGS_COMPILE"
     echo ""
+  ''
+  + lib.optionalString stdenv.hostPlatform.isMusl ''
+    # musl's default 128 KiB thread stack overflows in multi-threaded debug tests (e.g. notify2.test)
+    export NIX_LDFLAGS="$NIX_LDFLAGS -z stack-size=2097152"
   '';
 
   postInstall = ''
@@ -187,7 +214,9 @@ stdenv.mkDerivation (finalAttrs: {
   checkTarget = lib.optionalString stdenv.hostPlatform.isStatic "fuzztest sourcetest";
   # Neither GCC's libsanitizer nor compiler-rt's sanitizers are built for
   # musl, so the fuzzcheck-asan and fuzzcheck-ubsan programs cannot be linked.
-  checkFlags = lib.optionals stdenv.hostPlatform.isMusl [ "TSTRNNR_OPTS=~fuzzcheck-%san" ];
+  checkFlags = lib.optionals stdenv.hostPlatform.isMusl [
+    "TSTRNNR_OPTS=~fuzzcheck-%san"
+  ];
 
   passthru = {
     tests = {
