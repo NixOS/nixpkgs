@@ -13,6 +13,7 @@
   libuuid,
   libxml2,
   llvmPackages,
+  llvmPackages_upstream,
   llvm_libtool,
   ninja_1_11,
   patchesForVersion,
@@ -72,6 +73,17 @@
 let
   # Swift 6.2.4 requires different settings and disables LTO to improve build times.
   isBootstrapToolchain62 = lib.versions.majorMinor swift_release == "6.2";
+
+  enableLTO =
+    let
+      swiftLlvmMajor = lib.versions.major llvmPackages.release_version;
+      upstreamLlvmMajor = lib.versions.major llvmPackages_upstream.release_version;
+    in
+    # LTO requires using LLD from the Swift LLVM fork, but the fork’s LLVM version needs to be at least as new as the
+    # default LLVM version in Nixpkgs. Otherwise, Clang may generate bitcode it does not understand.
+    lib.versionAtLeast swiftLlvmMajor upstreamLlvmMajor
+    # Disable LTO when building the bootstrap toolchain.
+    && !isBootstrapToolchain62;
 
   # SDK versions past 14.x don’t work with the c++-based bootstrap compiler due to unconditionally exposing macros.
   build-sdk =
@@ -299,7 +311,7 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.cmakeBool "SWIFT_ENABLE_RUNTIME_MODULE" true)
       (lib.cmakeBool "SWIFT_STDLIB_ENABLE_STRICT_AVAILABILITY" true)
     ]
-    ++ lib.optionals (!isBootstrapToolchain62) (
+    ++ lib.optionals enableLTO (
       [
         # Build Swift with LTO for better performance. Only enable it for tools. The stdlib will enable it separately.
         (lib.cmakeFeature "SWIFT_TOOLS_ENABLE_LTO" "thin")
