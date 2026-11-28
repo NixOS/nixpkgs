@@ -1,11 +1,10 @@
-{ pycryptodome }:
+{
+  mkPythonMetaPackage,
+  pycryptodome,
+}:
 
-(pycryptodome.overrideAttrs (oldAttrs: {
+mkPythonMetaPackage {
   pname = "pycryptodomex";
-
-  postPatch = ''
-    touch .separate_namespace
-  '';
-
-  pythonImportsCheck = [ "Cryptodome" ];
-}))
+  inherit (pycryptodome) version;
+  dependencies = [ pycryptodome ];
+}
