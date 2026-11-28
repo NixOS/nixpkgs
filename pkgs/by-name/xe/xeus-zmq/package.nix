@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xeus-zmq";
-  version = "4.1.1";
+  version = "4.1.2";
 
   src = fetchFromGitHub {
     owner = "jupyter-xeus";
     repo = "xeus-zmq";
     tag = finalAttrs.version;
-    hash = "sha256-D/1rKU2CrDv9Y7CVluo9RnDvVGQfAbJX/iynLRdCPQA=";
+    hash = "sha256-58eJMZK3pDxW3BJHuBznXa008OBd3cvBrhLKAP5Nrrs=";
   };
 
   nativeBuildInputs = [ cmake ];
