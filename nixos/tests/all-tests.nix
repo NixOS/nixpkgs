@@ -738,6 +738,10 @@ in
     inherit runTest;
     package = pkgsLinux.garage_2;
   };
+  garage_3 = import ./garage {
+    inherit runTest;
+    package = pkgsLinux.garage_3;
+  };
   garm-incus = runTestOn [ "x86_64-linux" ] ./garm-incus.nix;
   gatus = runTest ./gatus.nix;
   gemstash = import ./gemstash.nix { inherit pkgs runTest; };

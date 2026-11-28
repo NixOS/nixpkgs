@@ -93,6 +93,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     };
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "S3-compatible object store for small self-hosted geo-distributed deployments";
     changelog = "https://git.deuxfleurs.fr/Deuxfleurs/garage/releases/tag/${finalAttrs.src.tag}";
