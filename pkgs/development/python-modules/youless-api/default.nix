@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "youless-api";
-  version = "2.2.0";
+  version = "2.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gjong";
     repo = "youless-python-bridge";
     tag = version;
-    hash = "sha256-BAIwShbIZaX5QOkxajwv6vtL8/EouHA3ELCLAm9ylKA=";
+    hash = "sha256-uYKPn8P8AUtnFdgYEbxrQEgbviNRD8+2PBrO6ehMM1g=";
   };
 
   env.PUBLISH_VERSION = version;
