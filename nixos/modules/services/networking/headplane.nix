@@ -258,7 +258,7 @@ in
 
                 config_path = mkOption {
                   type = types.nullOr types.path;
-                  default = config.services.headscale.configFile;
+                  default = "${config.services.headscale.configFile}";
                   defaultText = lib.literalExpression "config.services.headscale.configFile";
                   description = ''
                     Path to the Headscale configuration file.
