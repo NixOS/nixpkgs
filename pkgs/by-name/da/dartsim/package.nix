@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
 
   pythonSupport ? false,
   python3Packages,
@@ -36,6 +35,9 @@
   urdfdom,
   urdfdom-headers,
 
+  # nativeCheckInputs
+  ctestCheckHook,
+
   # checkInputs
   gbenchmark,
   gtest,
@@ -43,51 +45,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dartsim";
-  version = "6.15.0";
+  version = "6.20.3";
 
   src = fetchFromGitHub {
     owner = "dartsim";
     repo = "dart";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ik6FwrN5Ta1LinrXpZZc7AmzdFPoLjG07/zo1IZdmgI=";
+    hash = "sha256-hOFJEV3cWo83QrBIMSYY27Mb0WCsQj7bBNa2B2TW0ME=";
   };
 
-  patches = [
-    # disable failing tests. CMAKE_CTEST_ARGUMENTS does not work.
-    ./disable-failing-tests.patch
-    # Fix use of system gbenchmark, merged upstream
-    # ref. https://github.com/dartsim/dart/pull/1904
-    (fetchpatch {
-      url = "https://github.com/dartsim/dart/commit/c18c48a1b0beff6660b9923e8a6f8f09a86a6039.patch";
-      hash = "sha256-i8Ga0FGVQ3OMprEoGEwVy0j139wjnmR6ABxr/3syhzw=";
-    })
-    # Fix use of system pybind11, merged upstream
-    # ref. https://github.com/dartsim/dart/pull/1907
-    (fetchpatch {
-      url = "https://github.com/dartsim/dart/commit/940c425c19e50a9ded2629422db54785802143af.patch";
-      hash = "sha256-T3992uD0Z36tTxlcFaikVaLt08N9EP4gOHP0Y2AFBzQ=";
-    })
-    # fix use of absolute CMake paths in .pc, merged upstream
-    # ref. https://github.com/dartsim/dart/pull/2006
-    (fetchpatch {
-      url = "https://github.com/dartsim/dart/commit/6f3d6086780a311ef6e1928697f56a4d845ae028.patch";
-      hash = "sha256-sfbTm9C74fl7lVnGPZ1h3cvKXILHhkeNYxd/BpSQvg8=";
-    })
-  ];
-
-  # Install python bindings
-  postPatch = ''
-    echo "install(TARGETS $""{pybind_module} DESTINATION ${python3Packages.python.sitePackages})" \
-      >> python/dartpy/CMakeLists.txt
-  '';
-
-  buildFlags = [
-    # build unit tests
-    "tests"
-  ]
-  ++ lib.optionals pythonSupport [
-    "dartpy"
-  ];
+  buildFlags =
+    lib.optional finalAttrs.finalPackage.doCheck "tests" ++ lib.optional pythonSupport "dartpy";
 
   nativeBuildInputs = [
     cmake
@@ -133,9 +101,18 @@ stdenv.mkDerivation (finalAttrs: {
     gtest
   ];
 
-  nativeCheckInputs = lib.optionals pythonSupport [
+  nativeCheckInputs = [
+    ctestCheckHook
+  ]
+  ++ lib.optionals pythonSupport [
     python3Packages.pytest
     python3Packages.pythonImportsCheckHook
+  ];
+
+  disabledTests = [
+    "test_Collision"
+    "test_ForceDependentSlip"
+    "test_SoftFootSimbiconModel"
   ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=deprecated-literal-operator";
@@ -147,6 +124,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "DART_VERBOSE" true)
     (lib.cmakeBool "DART_BUILD_DARTPY" pythonSupport)
+    (lib.cmakeBool "DART_BUILD_EXAMPLES" false)
     (lib.cmakeBool "DART_USE_SYSTEM_GOOGLEBENCHMARK" true)
     (lib.cmakeBool "DART_USE_SYSTEM_GOOGLETEST" true)
     (lib.cmakeBool "DART_USE_SYSTEM_IMGUI" true)
