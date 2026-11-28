@@ -9,11 +9,7 @@
   options = {
 
     services.nullmailer = {
-      enable = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        description = "Whether to enable nullmailer daemon.";
-      };
+      enable = lib.mkEnableOption "nullmailer daemon";
 
       user = lib.mkOption {
         type = lib.types.str;

@@ -9,11 +9,7 @@ let
 in
 {
   options.services.interception-tools = {
-    enable = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Whether to enable the interception tools service.";
-    };
+    enable = lib.mkEnableOption "the interception tools service";
 
     plugins = lib.mkOption {
       type = lib.types.listOf lib.types.package;

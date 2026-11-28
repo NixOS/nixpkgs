@@ -16,11 +16,7 @@ in
   options = {
 
     services.canto-daemon = {
-      enable = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        description = "Whether to enable the canto RSS daemon.";
-      };
+      enable = lib.mkEnableOption "the canto RSS daemon";
     };
 
   };

@@ -48,11 +48,7 @@ in
               default = "*";
               description = "IP to listen on. 0.0.0.0 for IPv4 only, * for all.";
             };
-            ssl = mkOption {
-              type = types.bool;
-              default = false;
-              description = "Whether to enable SSL (https) support.";
-            };
+            ssl = lib.mkEnableOption "SSL (https) support";
           };
         });
       default = [ ];

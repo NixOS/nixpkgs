@@ -54,11 +54,7 @@ in
 
     services.openafsClient = {
 
-      enable = mkOption {
-        default = false;
-        type = types.bool;
-        description = "Whether to enable the OpenAFS client.";
-      };
+      enable = lib.mkEnableOption "the OpenAFS client";
 
       afsdb = mkOption {
         default = true;

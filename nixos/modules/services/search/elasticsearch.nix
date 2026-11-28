@@ -49,11 +49,7 @@ in
   ###### interface
 
   options.services.elasticsearch = {
-    enable = mkOption {
-      description = "Whether to enable elasticsearch.";
-      default = false;
-      type = types.bool;
-    };
+    enable = lib.mkEnableOption "elasticsearch";
 
     package = mkPackageOption pkgs "elasticsearch" { };
 

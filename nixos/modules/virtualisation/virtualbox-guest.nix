@@ -59,11 +59,7 @@ in
   ];
 
   options.virtualisation.virtualbox.guest = {
-    enable = lib.mkOption {
-      default = false;
-      type = lib.types.bool;
-      description = "Whether to enable the VirtualBox service and other guest additions.";
-    };
+    enable = lib.mkEnableOption "the VirtualBox service and other guest additions";
 
     package = lib.mkPackageOption config.boot.kernelPackages "virtualboxGuestAdditions" {
       pkgsText = "config.boot.kernelPackages";

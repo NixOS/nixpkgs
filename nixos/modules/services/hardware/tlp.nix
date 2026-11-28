@@ -20,11 +20,7 @@ in
   ###### interface
   options = {
     services.tlp = {
-      enable = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        description = "Whether to enable the TLP power management daemon.";
-      };
+      enable = lib.mkEnableOption "the TLP power management daemon";
 
       pd = {
         enable = lib.mkEnableOption "the power-profiles-daemon like DBus interface for TLP";

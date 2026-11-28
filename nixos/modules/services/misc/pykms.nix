@@ -18,11 +18,7 @@ in
 
   options = {
     services.pykms = {
-      enable = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        description = "Whether to enable the PyKMS service.";
-      };
+      enable = lib.mkEnableOption "the PyKMS service";
 
       package = lib.mkPackageOption pkgs "pykms" { };
 

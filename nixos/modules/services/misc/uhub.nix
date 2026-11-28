@@ -36,11 +36,7 @@ in
               default = true;
             };
 
-            enableTLS = lib.mkOption {
-              type = lib.types.bool;
-              default = false;
-              description = "Whether to enable TLS support.";
-            };
+            enableTLS = lib.mkEnableOption "TLS support";
 
             settings = lib.mkOption {
               inherit (settingsFormat) type;

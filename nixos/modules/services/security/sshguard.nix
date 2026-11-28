@@ -33,11 +33,7 @@ in
   options = {
 
     services.sshguard = {
-      enable = lib.mkOption {
-        default = false;
-        type = lib.types.bool;
-        description = "Whether to enable the sshguard service.";
-      };
+      enable = lib.mkEnableOption "the sshguard service";
 
       attack_threshold = lib.mkOption {
         default = 30;

@@ -107,11 +107,7 @@ in
 {
   options = {
     services.openldap = {
-      enable = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        description = "Whether to enable the ldap server.";
-      };
+      enable = lib.mkEnableOption "the ldap server";
 
       package = lib.mkPackageOption pkgs "openldap" {
         extraDescription = ''

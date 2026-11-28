@@ -16,11 +16,7 @@ in
 {
   options = {
     services.hologram-agent = {
-      enable = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        description = "Whether to enable the Hologram agent for AWS instance credentials";
-      };
+      enable = lib.mkEnableOption "the Hologram agent for AWS instance credentials";
 
       dialAddress = lib.mkOption {
         type = lib.types.str;

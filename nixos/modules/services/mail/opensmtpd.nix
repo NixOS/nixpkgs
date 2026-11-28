@@ -31,11 +31,7 @@ in
 
     services.opensmtpd = {
 
-      enable = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        description = "Whether to enable the OpenSMTPD server.";
-      };
+      enable = lib.mkEnableOption "the OpenSMTPD server";
 
       package = lib.mkPackageOption pkgs "opensmtpd" { };
 

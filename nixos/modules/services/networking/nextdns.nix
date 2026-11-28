@@ -13,11 +13,7 @@ in
 {
   options = {
     services.nextdns = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Whether to enable the NextDNS DNS/53 to DoH Proxy service.";
-      };
+      enable = lib.mkEnableOption "the NextDNS DNS/53 to DoH Proxy service";
       arguments = mkOption {
         type = types.listOf types.str;
         default = [ ];
