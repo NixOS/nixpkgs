@@ -20,14 +20,14 @@ let
     mapAttrsToList
     ;
 
-  version = "0.33.4";
+  version = "0.34.2";
   src = fetchFromGitHub {
     owner = "pomerium";
     repo = "pomerium";
     rev = "v${version}";
-    hash = "sha256-oXq7ZZt2DsgUEIB8BvxbTMWVUD5kaLgG8KssYYk8yQg=";
+    hash = "sha256-CYeP8pxJSQLsiweurdug953G/BMtrP5IDdVDT/+f4LA=";
   };
-  vendorHash = "sha256-CZGgCEUfUj2+7G9OpRrhJvZ3exFxAqWYsBmUd59pYPo=";
+  vendorHash = "sha256-dBDsHFV+G32aAoj8pNPyC/AHu+teFmmkB+MaBOwTmDQ=";
 
   # Needed because buildGoModule does not support go workspaces yet.
   # We use Go's workspace vendor command.
@@ -75,11 +75,15 @@ buildGoModule (finalAttrs: {
 
         outputHashAlgo = "sha256";
         outputHashMode = "recursive";
-        outputHash = "sha256-SX+LpYGwMb33eVRo6TO7rPUfSlMMfD0N4zvZZRnkG2w=";
+        outputHash = "sha256-wA3YT2Sw1OtDt4ZwDK+K5DQSiIYL+8PiGLv1eTS9aD8=";
 
         meta = {
           homepage = "https://github.com/pomerium/envoy-custom";
           sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
+
+          # These envoy binaries are under the Pomerium Community Edition license
+          # https://github.com/pomerium/pomerium/blob/main/licenses/POMERIUM-COMMUNITY-LICENSE-1.0.txt
+          license = lib.licenses.unfree;
         };
       }
       ''
@@ -113,7 +117,7 @@ buildGoModule (finalAttrs: {
     inherit (finalAttrs) version;
     src = "${finalAttrs.src}/ui";
 
-    npmDepsHash = "sha256-Vag3gRsCMCMcf+aPE9MRLweZkiFsY6FjGdlkhgC1CBg=";
+    npmDepsHash = "sha256-JdoPbA7FohM/siodHW9byymL9LRNu4iuNbVYB/i4bDo=";
 
     installPhase = ''
       runHook preInstall
@@ -174,7 +178,15 @@ buildGoModule (finalAttrs: {
     homepage = "https://pomerium.io";
     description = "Authenticating reverse proxy";
     mainProgram = "pomerium";
-    license = lib.licenses.asl20;
+
+    # Note: Pomerium binaries fall under the Pomerium Community Edition license,
+    # but we build from source, so this is still Apache-2.0 licensed.
+    # The Envoy binaries we bundle are, however, PCE licensed.
+    license = lib.licenses.AND [
+      lib.licenses.asl20
+      lib.licenses.unfree # embedded Envoy binaries
+    ];
+
     maintainers = with lib.maintainers; [
       lukegb
       devusb
