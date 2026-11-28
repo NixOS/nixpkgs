@@ -33,12 +33,12 @@ let
 in
 buildPythonPackage rec {
   pname = "pwntools";
-  version = "4.15.0";
+  version = "4.15.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-2ZqRcpjBynJBtRu6mtIhLyr0Qe9mSIBZskJlCOmip3Y=";
+    hash = "sha256-fWGq2QV81Vdx2jBuO6P4DU1B7y6n/6LvFci/+s7Sc6I=";
   };
 
   postPatch = ''
