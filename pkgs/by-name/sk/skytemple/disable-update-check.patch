@@ -1,0 +1,19 @@
+diff --git a/skytemple/controller/main.py b/skytemple/controller/main.py
+index f3ed6ef4..524acb90 100644
+--- a/skytemple/controller/main.py
++++ b/skytemple/controller/main.py
+@@ -976,14 +976,6 @@ class MainController:
+         # TODO Update recent files store too!
+ 
+     def _check_for_updates(self):
+-        try:
+-            new_version = check_newest_release(ReleaseType.SKYTEMPLE)
+-            if packaging.version.parse(version()) < packaging.version.parse(new_version):
+-                builder_get_assert(self.builder, Gtk.Label, "update_new_version").set_text(new_version)
+-                return
+-        except Exception:
+-            pass
+-        # else/except:
+         builder_get_assert(self.builder, Gtk.Box, "update_info").hide()
+ 
+     def _check_for_banner(self):
