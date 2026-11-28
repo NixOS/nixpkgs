@@ -213,6 +213,12 @@
     github = "1nv0k32";
     githubId = 30079271;
   };
+  _1stvamp = {
+    name = "Wes Mason";
+    email = "wes@1stvamp.org";
+    github = "1stvamp";
+    githubId = 35831;
+  };
   _21CSM = {
     name = "21CSM";
     email = "21CSM@tutanota.com";
