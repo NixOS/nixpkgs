@@ -2,6 +2,9 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  pkg-config,
+  sqlite,
+  zstd,
 }:
 
 buildGoModule (finalAttrs: {
@@ -16,6 +19,13 @@ buildGoModule (finalAttrs: {
   };
 
   vendorHash = "sha256-3CXp4W3SYnRTpZlksWy+oz4uTVoqJ9FG41jePQPfx/Y=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [
+    sqlite
+    zstd
+  ];
 
   excludedPackages = [ "sdk/java/libjfs" ];
 

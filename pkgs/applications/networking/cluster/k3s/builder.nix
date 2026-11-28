@@ -307,6 +307,7 @@ let
       buildInputs = [
         libseccomp
         sqlite.dev
+        zstd
       ];
 
       subPackages = [ "cmd/server" ];

@@ -10,6 +10,7 @@
   versionCheckHook,
   postgresqlTestHook,
   postgresql,
+  sqlite,
   defaultApiEndPoint ? "https://api.getdnote.com",
 }:
 
@@ -64,6 +65,8 @@ buildGoModule rec {
     npmHooks.npmConfigHook
     nodejs
   ];
+
+  buildInputs = [ sqlite ];
 
   nativeCheckInputs = [
     postgresqlTestHook

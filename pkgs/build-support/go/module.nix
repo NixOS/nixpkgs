@@ -258,6 +258,14 @@ lib.extendMkDerivation {
             fi
             cd "$modRoot"
           ''
+          # https://github.com/DataDog/zstd/blob/b46aeb3bb69844d56ae93251fdef6be87223f769/external_zstd.go
+          # https://github.com/duckdb/duckdb-go-bindings/blob/8220f278910d9a2a9897521958829e9cf9e4d3b2/cgo_dynamic.go
+          # https://github.com/mattn/go-sqlite3/blob/8ff398bed68d13ffdacad010ad6f65c6993de6b2/sqlite3_libsqlite3.go
+          + ''
+            if [[ -z "''${dontGoUseSystemLibs-}" ]]; then
+              appendToVar tags external_libzstd duckdb_use_lib libsqlite3
+            fi
+          ''
           + lib.optionalString (finalAttrs.vendorHash != null) ''
             ${
               if finalAttrs.proxyVendor then

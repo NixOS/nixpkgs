@@ -2,8 +2,10 @@
   lib,
   stdenv,
   buildGoModule,
+  duckdb,
   fetchFromGitHub,
   installShellFiles,
+  sqlite,
   testers,
   sq,
 }:
@@ -26,6 +28,11 @@ buildGoModule (finalAttrs: {
   proxyVendor = true;
 
   nativeBuildInputs = [ installShellFiles ];
+
+  buildInputs = [
+    duckdb
+    sqlite
+  ];
 
   # Some tests violates sandbox constraints.
   doCheck = false;
