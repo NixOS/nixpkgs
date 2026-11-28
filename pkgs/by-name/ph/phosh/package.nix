@@ -1,49 +1,51 @@
 {
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  nix-update-script,
-  meson,
-  ninja,
-  pkg-config,
-  python3,
-  wayland-scanner,
-  wrapGAppsHook4,
-  libadwaita,
-  libhandy,
-  libxkbcommon,
-  libgudev,
+  appstream,
   callaudiod,
-  pulseaudio,
+  dbus,
+  dconf,
+  docutils,
   evince,
+  evolution-data-server,
+  feedbackd,
+  fetchFromGitLab,
+  gcr_3,
+  gi-docgen,
   glib,
-  modemmanager,
-  gtk4,
+  gmobile,
   gnome-bluetooth,
   gnome-control-center,
   gnome-desktop,
   gnome-session,
   gnome-shell,
-  gcr_3,
+  gobject-introspection,
+  gtk4,
+  lib,
+  libadwaita,
+  libgudev,
+  libhandy,
+  libsecret,
+  libxkbcommon,
+  meson,
+  modemmanager,
+  networkmanager,
+  ninja,
+  nix-update-script,
+  nixosTests,
   pam,
+  phoc,
+  pipewire,
+  pkg-config,
+  polkit,
+  pulseaudio,
+  python3,
+  qrcodegen,
+  stdenv,
   systemdLibs,
   upower,
   wayland,
-  dbus,
+  wayland-scanner,
+  wrapGAppsHook4,
   xvfb-run,
-  phoc,
-  feedbackd,
-  networkmanager,
-  polkit,
-  libsecret,
-  evolution-data-server,
-  nixosTests,
-  gmobile,
-  appstream,
-  qrcodegen,
-  gobject-introspection,
-  docutils,
-  gi-docgen,
 }:
 
 let
@@ -55,8 +57,6 @@ let
     repo = "libcall-ui";
     tag = "v0.1.5";
     hash = "sha256-4lSTwSRZditK51N/4s3tmIOgffe5+WyKxVq2IGqWRn4=";
-    # Workaround for https://github.com/NixOS/nixpkgs/issues/485701
-    forceFetchGit = true;
   };
 
   # Derived from subprojects/gvc.wrap
@@ -64,15 +64,13 @@ let
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "libgnome-volume-control";
-    rev = "d2442f455844e5292cb4a74ffc66ecc8d7595a9f";
-    hash = "sha256-10n441b7m/mvQRdrmEsxGxqjKUWzjGvnzJy256NZN5s=";
-    # Workaround for https://github.com/NixOS/nixpkgs/issues/485701
-    forceFetchGit = true;
+    rev = "0a4eda0cdc2deb352bebc70ec697c42af46094e4";
+    hash = "sha256-4s9S6m/rcroR38FSnLeWKZhnym4KROfibgRCjpGMKpY=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "phosh";
-  version = "0.54.0";
+  version = "0.59.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -80,12 +78,12 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Phosh";
     repo = "phosh";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gByZRyUe17JY5imgtRdubJl1VH1JxlzmDQkHOtEIvj8=";
-    # Workaround for https://github.com/NixOS/nixpkgs/issues/485701
-    forceFetchGit = true;
+    hash = "sha256-Cxnldwp+BtT9i57Lfjvd83i2xsy69/UlQa4o5uYfRWg=";
   };
 
   nativeBuildInputs = [
+    docutils
+    gi-docgen
     libadwaita
     meson
     ninja
@@ -93,38 +91,38 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     wayland-scanner
     wrapGAppsHook4
-    docutils
-    gi-docgen
   ];
 
   buildInputs = [
-    evince
-    phoc
-    libhandy
-    libsecret
-    libxkbcommon
-    libgudev
+    appstream
     callaudiod
+    dconf
+    evince
     evolution-data-server
-    pulseaudio
-    modemmanager
+    feedbackd
     gcr_3
-    networkmanager
-    polkit
     gmobile
     gnome-bluetooth
     gnome-control-center
     gnome-desktop
     gnome-session
+    gobject-introspection
     gtk4
+    libgudev
+    libhandy
+    libsecret
+    libxkbcommon
+    modemmanager
+    networkmanager
     pam
+    phoc
+    pipewire
+    polkit
+    pulseaudio
+    qrcodegen
     systemdLibs
     upower
     wayland
-    feedbackd
-    appstream
-    qrcodegen
-    gobject-introspection
   ];
 
   nativeCheckInputs = [

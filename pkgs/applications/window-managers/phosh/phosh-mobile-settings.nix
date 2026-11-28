@@ -1,36 +1,40 @@
 {
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  nixosTests,
-  nix-update-script,
-  meson,
-  ninja,
-  pkg-config,
-  wayland-scanner,
-  wrapGAppsHook4,
+  accountsservice,
+  appstream,
+  cmake,
   desktop-file-utils,
   feedbackd,
-  gtk4,
-  libadwaita,
-  lm_sensors,
-  phoc,
-  phosh,
-  wayland-protocols,
-  json-glib,
-  gsound,
+  fetchFromGitLab,
+  glib,
   gmobile,
   gnome-desktop,
-  libpulseaudio,
+  gobject-introspection,
+  gsound,
+  gst_all_1,
+  gtk4,
+  json-glib,
+  lib,
+  libadwaita,
   libportal,
   libportal-gtk4,
-  glib,
+  libpulseaudio,
   libyaml,
+  lm_sensors,
+  meson,
   mobile-broadband-provider-info,
   modemmanager,
-  gobject-introspection,
-  appstream,
-  gst_all_1,
+  networkmanager,
+  ninja,
+  nix-update-script,
+  nixosTests,
+  phoc,
+  phosh,
+  pkg-config,
+  polkit,
+  stdenv,
+  wayland-protocols,
+  wayland-scanner,
+  wrapGAppsHook4,
 }:
 
 let
@@ -41,76 +45,72 @@ let
     repo = "libgnome-volume-control";
     rev = "d2442f455844e5292cb4a74ffc66ecc8d7595a9f";
     hash = "sha256-10n441b7m/mvQRdrmEsxGxqjKUWzjGvnzJy256NZN5s=";
-    # Workaround for https://github.com/NixOS/nixpkgs/issues/485701
-    forceFetchGit = true;
   };
   # Derived from subprojects/glibcellbroadcast.wrap
   libcellbroadcast = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "devrtz";
     repo = "cellbroadcastd";
-    tag = "v0.0.2";
-    hash = "sha256-rs9MoC54sVrs3HK0cbX4msYWA63y+DlDOZ5LboVtW9Y=";
-    # Workaround for https://github.com/NixOS/nixpkgs/issues/485701
-    forceFetchGit = true;
+    tag = "v0.0.3";
+    hash = "sha256-QMx/E631aWJIwvRDbzyrO9K+7xdd54ZbiE4Eoune3Co=";
   };
   # Derived from subprojects/libcellbroadcast/subprojects/gvdb.wrap
   gvdb = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "gvdb";
-    rev = "4758f6fb7f889e074e13df3f914328f3eecb1fd3";
-    hash = "sha256-4mqoHPlrMPenoGPwDqbtv4/rJ/uq9Skcm82pRvOxNIk=";
-    # Workaround for https://github.com/NixOS/nixpkgs/issues/485701
-    forceFetchGit = true;
+    rev = "c6f2359cc1d00f16e0a0e2527fa0bc1882b8b5ab";
+    hash = "sha256-FQPctq+fj6du0sBawaJxtO0PRO0KIHHhdA2jh24Yacw=";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "phosh-mobile-settings";
-  version = "0.54.0";
+  version = "0.59.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     group = "World";
     owner = "Phosh";
     repo = "phosh-mobile-settings";
-    rev = "v${version}";
-    hash = "sha256-TuwxzzalNhNJwPmmPJmxsHebzksPYv8jV6K0vYntQIw=";
-    # Workaround for https://github.com/NixOS/nixpkgs/issues/485701
-    forceFetchGit = true;
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-3n/HIaN3sibnhTXqFlHVvtdtmtiQ5X+/a7hn0+6iJ/E=";
   };
 
   nativeBuildInputs = [
+    appstream
+    glib.dev
+    gobject-introspection
     meson
     ninja
     phosh
     pkg-config
     wayland-scanner
     wrapGAppsHook4
-    glib.dev
-    gobject-introspection
-    appstream
   ];
 
   buildInputs = [
+    accountsservice
+    cmake
     desktop-file-utils
     feedbackd
-    gtk4
-    libadwaita
-    lm_sensors
-    phoc
-    wayland-protocols
-    json-glib
-    gsound
     gmobile
     gnome-desktop
-    libpulseaudio
+    gsound
+    gst_all_1.gst-plugins-base
+    gtk4
+    json-glib
+    libadwaita
     libportal
     libportal-gtk4
+    libpulseaudio
     libyaml
+    lm_sensors
     mobile-broadband-provider-info
     modemmanager
-    gst_all_1.gst-plugins-base
+    networkmanager
+    phoc
+    polkit
+    wayland-protocols
   ];
 
   postPatch = ''
@@ -134,7 +134,7 @@ stdenv.mkDerivation rec {
     description = "Settings app for mobile specific things";
     mainProgram = "phosh-mobile-settings";
     homepage = "https://gitlab.gnome.org/World/Phosh/phosh-mobile-settings";
-    changelog = "https://gitlab.gnome.org/World/Phosh/phosh-mobile-settings/-/blob/v${version}/debian/changelog";
+    changelog = "https://gitlab.gnome.org/World/Phosh/phosh-mobile-settings/-/blob/v${finalAttrs.version}/debian/changelog";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       rvl
@@ -142,4 +142,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})
