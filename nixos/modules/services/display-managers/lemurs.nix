@@ -7,6 +7,19 @@
 let
   cfg = config.services.displayManager.lemurs;
   settingsFormat = pkgs.formats.toml { };
+  xcfg = config.services.xserver;
+  xEnv = config.systemd.services.display-manager.environment;
+
+  # Start X with the NixOS generated config, so that the module path
+  # (including input drivers) and xkb dir are set.
+  # `-terminate` is dropped, since short-lived clients of the session setup
+  # (e.g. xrdb) would otherwise shut down X before the session starts.
+  xserverWrapper = pkgs.writeShellScript "xserver-wrapper" ''
+    ${lib.concatMapStrings (n: ''
+      export ${n}="${lib.getAttr n xEnv}"
+    '') (lib.attrNames xEnv)}
+    exec systemd-cat -t xserver-wrapper ${xcfg.displayManager.xserverBin} ${toString (lib.remove "-terminate" xcfg.displayManager.xserverArgs)} "$@"
+  '';
 in
 {
   imports = [
@@ -91,7 +104,7 @@ in
             initial_path = lib.mkDefault "/run/current-system/sw/bin";
             x11 = {
               xauth_path = lib.mkDefault "${pkgs.xauth}/bin/xauth";
-              xserver_path = lib.mkDefault "${pkgs.xorg-server}/bin/X";
+              xserver_path = lib.mkDefault "${xserverWrapper}";
               xsessions_path = lib.mkDefault "${desktops}/share/xsessions";
               xsetup_path = lib.mkDefault config.services.displayManager.sessionData.wrapper;
             };
