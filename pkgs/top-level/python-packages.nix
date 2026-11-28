@@ -5406,6 +5406,8 @@ self: super: with self; {
 
   dufte = callPackage ../development/python-modules/dufte { };
 
+  dukpy = callPackage ../development/python-modules/dukpy { };
+
   dulwich = callPackage ../development/python-modules/dulwich { inherit (pkgs) gnupg; };
 
   dunamai = callPackage ../development/python-modules/dunamai { };
@@ -10726,6 +10728,8 @@ self: super: with self; {
 
   markdown-macros = callPackage ../development/python-modules/markdown-macros { };
 
+  markdown-to-confluence = callPackage ../development/python-modules/markdown-to-confluence { };
+
   markdown2 = callPackage ../development/python-modules/markdown2 { };
 
   markdownify = callPackage ../development/python-modules/markdownify { };
@@ -16032,6 +16036,10 @@ self: super: with self; {
 
   pyobjc-framework-Security = callPackage ../development/python-modules/pyobjc-framework-Security { };
 
+  pyobjc-framework-SystemConfiguration =
+    callPackage ../development/python-modules/pyobjc-framework-SystemConfiguration
+      { };
+
   pyobjc-framework-WebKit = callPackage ../development/python-modules/pyobjc-framework-WebKit { };
 
   pyobjc-framework-libdispatch =
@@ -16119,6 +16127,8 @@ self: super: with self; {
   pyoxigraph = callPackage ../development/python-modules/pyoxigraph { };
 
   pyoxipng = callPackage ../development/python-modules/pyoxipng { };
+
+  pypac = callPackage ../development/python-modules/pypac { };
 
   pypager = callPackage ../development/python-modules/pypager { };
 
