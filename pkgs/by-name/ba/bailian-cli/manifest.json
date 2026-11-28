@@ -1,0 +1,34 @@
+{
+  "name": "bailian-cli",
+  "channel": "latest",
+  "version": "2.1.0",
+  "releasedAt": "2026-09-28T05:32:28.289Z",
+  "assets": {
+    "darwin-arm64": {
+      "file": "bl-2.1.0-darwin-arm64.zip",
+      "sha256": "f36ad86e868cd25afa4f94fe92eb8bcdf1f23885104d076a3fcc5626ea969dec",
+      "inner": "bl-2.1.0-darwin-arm64",
+      "tar": "bl-2.1.0-darwin-arm64.tar.gz",
+      "tarSha256": "bbbec0afe0315c2f924f26c0e1e1bb31bc0784544790d7e43d6c5b92af1922d7"
+    },
+    "darwin-x64": {
+      "file": "bl-2.1.0-darwin-x64.zip",
+      "sha256": "c6ec74e7914b61067cb88fbb4a936d39ca47c7b57d8d659a048f533f06d6f809",
+      "inner": "bl-2.1.0-darwin-x64",
+      "tar": "bl-2.1.0-darwin-x64.tar.gz",
+      "tarSha256": "074fe9f9dca49724f8f052fceb9af409e21c30b5634c3d4d9936603ccdc89243"
+    },
+    "linux-x64": {
+      "file": "bl-2.1.0-linux-x64.zip",
+      "sha256": "1c9d79471bb9f6c7bc787bc3092c0257a7900c10ac8426a4686bd3f0e8886688",
+      "inner": "bl-2.1.0-linux-x64",
+      "tar": "bl-2.1.0-linux-x64.tar.gz",
+      "tarSha256": "37439b6e850c901dbb5eb1349383ad0e525af7bec42ec0dbaaf295cc92f98a82"
+    },
+    "windows-x64": {
+      "file": "bl-2.1.0-windows-x64.zip",
+      "sha256": "8787a67592466a17a52ba4147fc79db6b813390bdeb9add2d20559b9c0e6d8d7",
+      "inner": "bl-2.1.0-windows-x64.exe"
+    }
+  }
+}
