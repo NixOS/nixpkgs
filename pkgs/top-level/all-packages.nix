@@ -1813,9 +1813,9 @@ with pkgs;
   tsm-client-withGui = callPackage ../by-name/ts/tsm-client/package.nix { enableGui = true; };
 
   inherit (callPackages ../by-name/tr/tracy/package-versions.nix { })
-    tracy_0_11
-    tracy_0_12
     tracy_0_13
+    tracy_0_14
+    tracy_0_15
     ;
 
   inherit (callPackages ../by-name/so/solana-platform-tools/package-versions.nix { })

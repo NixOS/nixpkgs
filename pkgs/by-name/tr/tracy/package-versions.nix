@@ -2,10 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchFromGitLab,
   fetchpatch,
-  fetchurl,
-  callPackage,
 
   coreutils,
   cmake,
@@ -13,7 +10,6 @@
   pkg-config,
   wayland-scanner,
 
-  capstone,
   dbus,
   freetype,
   glfw,
@@ -36,6 +32,8 @@
   nlohmann_json,
   nativefiledialog-extended,
   html-tidy,
+  python3,
+  pandoc,
 }:
 
 assert withGtkFileSelector -> stdenv.hostPlatform.isLinux;
@@ -48,6 +46,7 @@ let
       cpmSrcs ? [ ],
       patches ? [ ],
       extraBuildInputs ? [ ],
+      extraNativeBuildInputs ? [ ],
     }:
     stdenv.mkDerivation {
       patches =
@@ -95,6 +94,7 @@ let
         ninja
         pkg-config
       ]
+      ++ extraNativeBuildInputs
       ++ lib.optionals stdenv.hostPlatform.isLinux [ wayland-scanner ]
       ++ lib.optionals stdenv.cc.isClang [ stdenv.cc.cc.libllvm ];
 
@@ -115,6 +115,9 @@ let
       ++ lib.optionals (stdenv.hostPlatform.isDarwin || (stdenv.hostPlatform.isLinux && !withWayland)) [
         glfw
       ];
+
+      strictDeps = true;
+      __structuredAttrs = true;
 
       cmakeFlags = [
         (lib.cmakeBool "DOWNLOAD_CAPSTONE" false)
@@ -143,14 +146,14 @@ let
         # The workaround is to first configure the profiler since it includes all of the
         # dependencies and then short-circuit the patch command for the remaining projects.
         ''
-          cmake -B profiler/build -S profiler $cmakeFlags
+          cmake -B profiler/build -S profiler ''${cmakeFlags[@]}
 
           appendToVar cmakeFlags -DPATCH_EXECUTABLE=${coreutils}/bin/true
 
-          cmake -B capture/build -S capture $cmakeFlags
-          cmake -B csvexport/build -S csvexport $cmakeFlags
-          cmake -B import/build -S import $cmakeFlags
-          cmake -B update/build -S update $cmakeFlags
+          cmake -B capture/build -S capture ''${cmakeFlags[@]}
+          cmake -B csvexport/build -S csvexport ''${cmakeFlags[@]}
+          cmake -B import/build -S import ''${cmakeFlags[@]}
+          cmake -B update/build -S update ''${cmakeFlags[@]}
         '';
 
       postBuild = ''
@@ -169,8 +172,10 @@ let
         install -D -m 0555 update/build/tracy-update -t $out/bin
       ''
       + lib.optionalString stdenv.hostPlatform.isLinux ''
-        substituteInPlace extra/desktop/tracy.desktop \
-          --replace-fail Exec=/usr/bin/tracy Exec=tracy
+        ${lib.optionalString (lib.versionOlder version "0.14.0") ''
+          substituteInPlace extra/desktop/tracy.desktop \
+            --replace-fail Exec=/usr/bin/tracy Exec=tracy
+        ''}
 
         install -D -m 0444 extra/desktop/application-tracy.xml $out/share/mime/packages/application-tracy.xml
         install -D -m 0444 extra/desktop/tracy.desktop $out/share/applications/tracy.desktop
@@ -187,33 +192,13 @@ let
         maintainers = with lib.maintainers; [
           mpickering
           nagisa
+          davidkern
         ];
         platforms = lib.platforms.linux ++ lib.optionals (!withWayland) lib.platforms.darwin;
       };
     };
 in
 rec {
-  tracy_0_11 = mkTracyPackage (
-    import ./tracy-0.11.nix {
-      inherit
-        lib
-        stdenv
-        capstone
-        ;
-    }
-  );
-
-  tracy_0_12 = mkTracyPackage (
-    import ./tracy-0.12.nix {
-      inherit
-        fetchFromGitHub
-        fetchFromGitLab
-        zstd
-        nativefiledialog-extended
-        ;
-    }
-  );
-
   tracy_0_13 = mkTracyPackage (
     import ./tracy-0.13.nix {
       inherit
@@ -230,5 +215,35 @@ rec {
     }
   );
 
-  tracy_latest = tracy_0_13;
+  tracy_0_14 = mkTracyPackage (
+    import ./tracy-0.14.nix {
+      inherit
+        fetchFromGitHub
+
+        pugixml
+        curl
+        zstd
+        nlohmann_json
+        html-tidy
+        ;
+    }
+  );
+
+  tracy_0_15 = mkTracyPackage (
+    import ./tracy-0.15.nix {
+      inherit
+        fetchFromGitHub
+
+        pugixml
+        curl
+        zstd
+        nlohmann_json
+        html-tidy
+        python3
+        pandoc
+        ;
+    }
+  );
+
+  tracy_latest = tracy_0_15;
 }

@@ -2,10 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchFromGitLab,
   fetchpatch,
-  fetchurl,
-  callPackage,
 
   coreutils,
   cmake,
@@ -13,7 +10,6 @@
   pkg-config,
   wayland-scanner,
 
-  capstone,
   dbus,
   freetype,
   glfw,
@@ -36,6 +32,8 @@
   nlohmann_json,
   nativefiledialog-extended,
   html-tidy,
+  python3,
+  pandoc,
 }:
 
 (import ./package-versions.nix {
@@ -43,10 +41,7 @@
     lib
     stdenv
     fetchFromGitHub
-    fetchFromGitLab
     fetchpatch
-    fetchurl
-    callPackage
 
     coreutils
     cmake
@@ -54,7 +49,6 @@
     pkg-config
     wayland-scanner
 
-    capstone
     dbus
     freetype
     glfw
@@ -77,5 +71,7 @@
     nlohmann_json
     nativefiledialog-extended
     html-tidy
+    python3
+    pandoc
     ;
 }).tracy_latest
