@@ -4,7 +4,7 @@
   fetchFromGitHub,
   fetchpatch,
   nix-update-script,
-  systemd,
+  systemdLibs,
   libinput,
   pugixml,
   cairo,
@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    systemd
+    systemdLibs
     libinput
     pugixml
     cairo

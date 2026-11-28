@@ -16,7 +16,7 @@
   docbook_xml_dtd_45,
   docbook-xsl-nons,
   glib,
-  systemd,
+  systemdLibs,
   polkit,
   udevCheckHook,
 }:
@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     polkit
-    systemd
+    systemdLibs
   ];
 
   preCheck = ''

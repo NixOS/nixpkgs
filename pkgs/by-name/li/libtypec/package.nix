@@ -6,7 +6,7 @@
   ninja,
   pkg-config,
   libusb1,
-  systemd,
+  systemdLibs,
   libudev0-shim,
   gtk3, # utils
 }:
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libusb1
     libudev0-shim
-    systemd
+    systemdLibs
     gtk3
   ];
 

@@ -6,7 +6,7 @@
   ninja,
   pkg-config,
   scdoc,
-  systemd,
+  systemdLibs,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   buildInputs = [
-    systemd
+    systemdLibs
   ];
 
   nativeBuildInputs = [
