@@ -20,6 +20,12 @@ let
   agentSettingsFormat = pkgs.formats.keyValue {
     mkKeyValue = lib.generators.mkKeyValueDefault { } " ";
   };
+
+  gnupgSettingsFormat = pkgs.formats.keyValue {
+    mkKeyValue =
+      key: value: if lib.isBool value then lib.optionalString value key else "${key} ${toString value}";
+    listsAsDuplicateKeys = true;
+  };
 in
 {
   imports = [
@@ -101,6 +107,18 @@ in
         Enables GnuPG network certificate management daemon with socket-activation for every user session.
       '';
     };
+
+    dirmngr.settings = mkOption {
+      type = gnupgSettingsFormat.type;
+      default = { };
+      example = {
+        allow-version-check = true;
+      };
+      description = ''
+        Configuration for /etc/gnupg/dirmngr.conf.
+        See {manpage}`dirmngr(1)` for supported options.
+      '';
+    };
   };
 
   config = mkIf cfg.agent.enable {
@@ -110,6 +128,10 @@ in
 
     environment.etc."gnupg/gpg-agent.conf".source =
       agentSettingsFormat.generate "gpg-agent.conf" cfg.agent.settings;
+
+    environment.etc."gnupg/dirmngr.conf" = mkIf (cfg.dirmngr.settings != { }) {
+      source = gnupgSettingsFormat.generate "dirmngr.conf" cfg.dirmngr.settings;
+    };
 
     # This overrides the systemd user unit shipped with the gnupg package
     systemd.user.services.gpg-agent = {
