@@ -208,6 +208,8 @@ checkConfigOutput '"ok"' config.result ./specialArgs-lib.nix
 # https://github.com/NixOS/nixpkgs/pull/131205
 # We currently throw this error already in `config`, but throwing in `config.wrong1` would be acceptable.
 checkConfigError 'It seems as if you.re trying to declare an option by placing it into .config. rather than .options.' config.wrong1 ./error-mkOption-in-config.nix
+# Large invalid option values should not evaluate omitted attributes.
+checkConfigError 'A definition for option .value. is not of type .package.. Definition values:\n\s*- In .*:\n\s*\{\n\s*a = 1;' config.value ./error-large-attrset.nix
 # We currently throw this error already in `config`, but throwing in `config.nest.wrong2` would be acceptable.
 checkConfigError 'It seems as if you.re trying to declare an option by placing it into .config. rather than .options.' config.nest.wrong2 ./error-mkOption-in-config.nix
 checkConfigError 'The option .sub.wrong2. does not exist. Definition values:' config.sub ./error-mkOption-in-submodule-config.nix
