@@ -1,0 +1,100 @@
+From 306b961db16c52892883265058015c1e6253ed8a Mon Sep 17 00:00:00 2001
+From: Rafael Ieda <git@ieda.me>
+Date: Wed, 25 Nov 2026 20:17:15 -0300
+Subject: [PATCH] osd/retro: use PATH_DEFAULT_SLASH from libretro-common
+
+The libretro-common update in 6596f3248b renamed path_default_slash()
+to PATH_DEFAULT_SLASH(), and retromain.c still used the old name, so
+the build failed.
+---
+ src/osd/retro/retromain.c | 36 ++++++++++++++++++------------------
+ 1 file changed, 18 insertions(+), 18 deletions(-)
+
+diff --git a/src/osd/retro/retromain.c b/src/osd/retro/retromain.c
+index 0831671..2efdb44 100755
+--- a/src/osd/retro/retromain.c
++++ b/src/osd/retro/retromain.c
+@@ -280,13 +280,13 @@ void retro_init (void)
+    if (environ_cb(RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY, &system_dir) && system_dir)
+    {
+        // use a subfolder in the system directory with the core name (ie mame2010)
+-        snprintf(libretro_system_directory, sizeof(libretro_system_directory), "%s%s%s", system_dir, path_default_slash(), core_name);
++        snprintf(libretro_system_directory, sizeof(libretro_system_directory), "%s%s%s", system_dir, PATH_DEFAULT_SLASH(), core_name);
+    }
+ 
+    if (environ_cb(RETRO_ENVIRONMENT_GET_SAVE_DIRECTORY, &save_dir) && save_dir)
+    {
+        // use a subfolder in the save directory with the core name (ie mame2010)
+-        snprintf(libretro_save_directory, sizeof(libretro_save_directory), "%s%s%s", save_dir, path_default_slash(), core_name);
++        snprintf(libretro_save_directory, sizeof(libretro_save_directory), "%s%s%s", save_dir, PATH_DEFAULT_SLASH(), core_name);
+    }
+    else
+    {
+@@ -297,40 +297,40 @@ void retro_init (void)
+     path_mkdir(libretro_save_directory);
+  
+     // content loaded from mame2010 subfolder within the libretro system folder
+-    snprintf(samplepath, sizeof(samplepath), "%s%s%s", libretro_system_directory, path_default_slash(), "samples");
++    snprintf(samplepath, sizeof(samplepath), "%s%s%s", libretro_system_directory, PATH_DEFAULT_SLASH(), "samples");
+     path_mkdir(samplepath);
+-    snprintf(artpath, sizeof(artpath), "%s%s%s", libretro_system_directory, path_default_slash(), "artwork");
++    snprintf(artpath, sizeof(artpath), "%s%s%s", libretro_system_directory, PATH_DEFAULT_SLASH(), "artwork");
+     path_mkdir(artpath);
+-    snprintf(fontpath, sizeof(fontpath), "%s%s%s", libretro_system_directory, path_default_slash(), "fonts");
++    snprintf(fontpath, sizeof(fontpath), "%s%s%s", libretro_system_directory, PATH_DEFAULT_SLASH(), "fonts");
+     path_mkdir(fontpath);
+-    snprintf(crosshairpath, sizeof(crosshairpath), "%s%s%s", libretro_system_directory, path_default_slash(), "crosshairs");
++    snprintf(crosshairpath, sizeof(crosshairpath), "%s%s%s", libretro_system_directory, PATH_DEFAULT_SLASH(), "crosshairs");
+     path_mkdir(crosshairpath);
+ 
+     // user-generated content loaded from mame2010 subfolder within the libretro save folder
+-    snprintf(ctrlrpath, sizeof(ctrlrpath), "%s%s%s", libretro_save_directory, path_default_slash(), "ctrlr");
++    snprintf(ctrlrpath, sizeof(ctrlrpath), "%s%s%s", libretro_save_directory, PATH_DEFAULT_SLASH(), "ctrlr");
+     path_mkdir(ctrlrpath);
+-    snprintf(inipath, sizeof(inipath), "%s%s%s", libretro_save_directory, path_default_slash(), "ini");
++    snprintf(inipath, sizeof(inipath), "%s%s%s", libretro_save_directory, PATH_DEFAULT_SLASH(), "ini");
+     path_mkdir(inipath);
+-    snprintf(cfg_directory, sizeof(cfg_directory), "%s%s%s", libretro_save_directory, path_default_slash(), "cfg");
++    snprintf(cfg_directory, sizeof(cfg_directory), "%s%s%s", libretro_save_directory, PATH_DEFAULT_SLASH(), "cfg");
+     path_mkdir(cfg_directory);
+-    snprintf(nvram_directory, sizeof(nvram_directory), "%s%s%s", libretro_save_directory, path_default_slash(), "nvram");
++    snprintf(nvram_directory, sizeof(nvram_directory), "%s%s%s", libretro_save_directory, PATH_DEFAULT_SLASH(), "nvram");
+     path_mkdir(nvram_directory);
+-    snprintf(memcard_directory, sizeof(memcard_directory), "%s%s%s", libretro_save_directory, path_default_slash(), "memcard");
++    snprintf(memcard_directory, sizeof(memcard_directory), "%s%s%s", libretro_save_directory, PATH_DEFAULT_SLASH(), "memcard");
+     path_mkdir(memcard_directory);
+-    snprintf(input_directory, sizeof(input_directory), "%s%s%s", libretro_save_directory, path_default_slash(), "input");
++    snprintf(input_directory, sizeof(input_directory), "%s%s%s", libretro_save_directory, PATH_DEFAULT_SLASH(), "input");
+     path_mkdir(input_directory);
+-    snprintf(image_directory, sizeof(image_directory), "%s%s%s", libretro_save_directory, path_default_slash(), "image");
++    snprintf(image_directory, sizeof(image_directory), "%s%s%s", libretro_save_directory, PATH_DEFAULT_SLASH(), "image");
+     path_mkdir(image_directory);
+-    snprintf(diff_directory, sizeof(diff_directory), "%s%s%s", libretro_save_directory, path_default_slash(), "diff");
++    snprintf(diff_directory, sizeof(diff_directory), "%s%s%s", libretro_save_directory, PATH_DEFAULT_SLASH(), "diff");
+     path_mkdir(diff_directory);
+-    snprintf(hiscore_directory, sizeof(hiscore_directory), "%s%s%s", libretro_save_directory, path_default_slash(), "hi");
++    snprintf(hiscore_directory, sizeof(hiscore_directory), "%s%s%s", libretro_save_directory, PATH_DEFAULT_SLASH(), "hi");
+     path_mkdir(hiscore_directory);    
+-    snprintf(comment_directory, sizeof(comment_directory), "%s%s%s", libretro_save_directory, path_default_slash(), "comment");
++    snprintf(comment_directory, sizeof(comment_directory), "%s%s%s", libretro_save_directory, PATH_DEFAULT_SLASH(), "comment");
+     path_mkdir(comment_directory);
+ 
+     char mameini_path[1024];
+     
+-    snprintf(mameini_path, sizeof(mameini_path), "%s%s%s", inipath, path_default_slash(), "mame.ini");
++    snprintf(mameini_path, sizeof(mameini_path), "%s%s%s", inipath, PATH_DEFAULT_SLASH(), "mame.ini");
+     if(!path_is_valid(mameini_path))
+     {
+         retro_log(RETRO_LOG_INFO, "[MAME 2010] mame.ini not found at: %s\n", mameini_path);
+@@ -362,7 +362,7 @@ static int parse_path(char* path, char* gamePath, char* gameName)
+ 		return 0;
+ 
+ 	for (i = len - 1; i >=0; i--) {
+-		if (path[i] == path_default_slash()[0]) {
++		if (path[i] == PATH_DEFAULT_SLASH()[0]) {
+ 			slashIndex = i;
+ 			break;
+ 		} else
+-- 
+2.56.0
+
