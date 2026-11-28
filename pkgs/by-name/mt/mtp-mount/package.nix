@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mtp-mount";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "vdavid";
     repo = "mtp-mount";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RxLFqonT+j1B9yyb7cQuoeFqtDAv26rqf5MI3x/v2iM=";
+    hash = "sha256-SRB1fc7dqgY7jdpVYAnoEiH+MToQb0E1F93eHbduW1o=";
   };
 
-  cargoHash = "sha256-4aUbMWeCbWoLJaqtANUjts0hXoe1HR85M0I75niHmqQ=";
+  cargoHash = "sha256-DHevvcyP2yNIDFPnVsyothGfdum2e3F73KGHjyqgf38=";
 
   nativeBuildInputs = [ pkg-config ];
 
