@@ -296,6 +296,9 @@ in
     systemd.sockets.nix-daemon.wantedBy = [ "sockets.target" ];
 
     systemd.services.nix-daemon = {
+      after = [ "nss-user-lookup.target" ];
+      wants = [ "nss-user-lookup.target" ];
+
       path = [
         nixPackage
         config.programs.ssh.package
