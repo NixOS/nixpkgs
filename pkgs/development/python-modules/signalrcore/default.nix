@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "signalrcore";
-  version = "1.0.2";
+  version = "1.0.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mandrewcito";
     repo = "signalrcore";
     tag = version;
-    hash = "sha256-BLbD6IYo4YN1bvB33MIfHUVPEIm1DND5oh/k07e4odI=";
+    hash = "sha256-KY8neeCtjHz/7ARrwDqG4B64SciVEn7RUgmR+qQ12No=";
   };
 
   build-system = [ setuptools ];

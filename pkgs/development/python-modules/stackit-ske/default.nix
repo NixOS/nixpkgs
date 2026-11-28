@@ -12,15 +12,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "stackit-ske";
-  version = "1.13.0";
+  version = "1.14.0";
   pyproject = true;
-
-  __structuredAttrs = true;
 
   src = fetchPypi {
     pname = "stackit_ske";
     inherit (finalAttrs) version;
-    hash = "sha256-Bo/i/BVkEDSJWi3VVZY6hDiQ1sygFgywQ0NQ8gX28Eg=";
+    hash = "sha256-3Vol2OoFPeV0hYd8NjMmwuHUlA1/uh6miavqD7AbJ44=";
   };
 
   build-system = [ hatchling ];

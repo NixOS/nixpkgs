@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "pyvcd";
-  version = "0.5.0";
+  version = "0.5.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-luPHuUCeY/WOtLXCKwF/nzQS3b38c0zsLh361cKag98=";
+    hash = "sha256-zSmPXZA4qMuYvUrdvXtFk1Y+MgEElX5wXelJuZOO1/c=";
   };
 
   build-system = [ uv-build ];

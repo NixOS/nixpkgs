@@ -14,8 +14,6 @@
 }:
 
 buildPythonPackage (finalAttrs: {
-  __structuredAttrs = true;
-
   pname = "netbox-plugin-prometheus-sd";
   version = "2.2.0";
   pyproject = true;

@@ -92,9 +92,5 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ];
     mainProgram = "magika";
     platforms = with lib.platforms; unix ++ windows;
-
-    # The package test fails on Darwin with this error, even though the build succeeds:
-    # libc++abi: terminating due to uncaught exception of type std::__1::system_error: mutex lock failed: Invalid argument
-    broken = stdenv.hostPlatform.isDarwin;
   };
 })

@@ -31,6 +31,10 @@
   libxml2,
   xmlsec,
   libxslt,
+  aws-lc,
+  oniguruma,
+  rust-jemalloc-sys,
+  zstd,
   flock,
   powershell,
   uv,
@@ -158,6 +162,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libxml2
     xmlsec
     libxslt
+    aws-lc
+    oniguruma
+    rust-jemalloc-sys
+    zstd
   ];
 
   nativeBuildInputs = [

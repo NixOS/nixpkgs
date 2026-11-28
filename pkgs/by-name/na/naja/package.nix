@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0.4.1";
 
   src = fetchFromGitHub {
-    owner = "najaeda";
+    owner = "keplertech";
     repo = "naja";
     tag = "v${finalAttrs.version}";
     hash = "sha256-QKKV1+xhodA66404ez7w+V0gYatsCoAYq3IuvB3QPnA=";
@@ -109,8 +109,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Structural Netlist API (and more) for EDA post synthesis flow development";
-    homepage = "https://github.com/najaeda/naja";
-    changelog = "https://github.com/najaeda/naja/releases/tag/${finalAttrs.src.tag}";
+    homepage = "https://github.com/keplertech/naja";
+    changelog = "https://github.com/keplertech/naja/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     teams = [ lib.teams.ngi ];
     mainProgram = "naja_edit";

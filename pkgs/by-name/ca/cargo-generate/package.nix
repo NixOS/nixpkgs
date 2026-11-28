@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-generate";
-  version = "0.25.0";
+  version = "0.25.1";
 
   src = fetchFromGitHub {
     owner = "cargo-generate";
     repo = "cargo-generate";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-x0UkYgYJ1xe6ensm3yU5SEW+nnxHmnN+CbGCJXth8WQ=";
+    hash = "sha256-rkzCfHT1zfUbfao3ejeHVj5akBjx/JCxAeuKN/Kjh48=";
   };
 
-  cargoHash = "sha256-cXPks2uTUVnVyBXP9JT5Xm87pFkCvPHQy86R7vd2/zU=";
+  cargoHash = "sha256-RIMRgv0XSyMIxy7bW5ot+Ymyn7qSW5YALuqOL9ArxRM=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -68,10 +68,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "cargo-generate";
     homepage = "https://github.com/cargo-generate/cargo-generate";
     changelog = "https://github.com/cargo-generate/cargo-generate/blob/v${finalAttrs.version}/CHANGELOG.md";
-    license = with lib.licenses; [
-      asl20 # or
-      mit
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
     maintainers = with lib.maintainers; [
       turbomack
       matthiasbeyer

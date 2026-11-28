@@ -26,7 +26,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "Anonymous and neutral programming typeface focused on creating a better reading experience";
     homepage = "https://commitmono.com/";
     license = lib.licenses.ofl;
-    maintainers = with lib.maintainers; [ yoavlavi ];
+    maintainers = with lib.maintainers; [
+      MisterKartoffel
+      yoavlavi
+    ];
     platforms = lib.platforms.all;
   };
 })

@@ -3,8 +3,10 @@
   fetchFromGitHub,
   rustPlatform,
   nix-update-script,
+  pkg-config,
   polaris-web,
   nixosTests,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -28,6 +30,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
         -e 's/\[\[package\]\]\nname = "polaris"\nversion = "0.0.0"/[[package]]\nname = "polaris"\nversion = "'"${finalAttrs.version}"'"/g'
     '';
   };
+
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
+  buildInputs = [
+    zstd
+  ];
 
   cargoHash = "sha256-bVXz/rSfkmdQlAa3B4zamZebpRBOkch6zNOFiyEQBbY=";
 

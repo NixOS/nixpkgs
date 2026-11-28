@@ -6,16 +6,14 @@
 }:
 python3.pkgs.buildPythonApplication {
   pname = "yaookctl";
-  version = "0-unstable-2026-08-14";
+  version = "0-unstable-2026-11-26";
 
   src = fetchFromGitLab {
     owner = "yaook";
     repo = "yaookctl";
-    rev = "fe2319291ce129fd8001fdc404e825ab001cfe90";
-    hash = "sha256-nWRtQcBIQWMa5zt83tmCfB96LV2w6ueTD1ruALPOXk0=";
+    rev = "2f80e460ec2f456c17edff05260bc1984b21dd7d";
+    hash = "sha256-YxZP6wpEp9YH2cWdZBHl2fudd9Ij6Frr8B7Cw4WpIwc=";
   };
-
-  __structuredAttrs = true;
 
   pyproject = true;
   build-system = [ python3.pkgs.setuptools ];

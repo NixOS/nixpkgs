@@ -12,7 +12,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pname = "babeldoc";
   version = "0.6.4";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "funstory-ai";

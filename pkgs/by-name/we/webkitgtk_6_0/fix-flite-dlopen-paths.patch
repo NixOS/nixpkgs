@@ -1,0 +1,41 @@
+diff --git a/Source/WebCore/platform/gstreamer/WebKitFliteSourceGStreamer.cpp b/Source/WebCore/platform/gstreamer/WebKitFliteSourceGStreamer.cpp
+index 0fe35c4888df..e7f10e2b1b9e 100644
+--- a/Source/WebCore/platform/gstreamer/WebKitFliteSourceGStreamer.cpp
++++ b/Source/WebCore/platform/gstreamer/WebKitFliteSourceGStreamer.cpp
+@@ -62,24 +62,24 @@ static const FliteLibrary* fliteLibrary()
+     static std::once_flag onceFlag;
+     std::call_once(onceFlag, [] {
+         FliteLibrary loaded {
+-            reinterpret_cast<decltype(&flite_init)>(fliteSymbol("libflite.so.1", "flite_init")),
+-            reinterpret_cast<decltype(&flite_add_lang)>(fliteSymbol("libflite.so.1", "flite_add_lang")),
+-            reinterpret_cast<decltype(&flite_text_to_wave)>(fliteSymbol("libflite.so.1", "flite_text_to_wave")),
+-            reinterpret_cast<decltype(&cst_wave_resample)>(fliteSymbol("libflite.so.1", "cst_wave_resample")),
+-            reinterpret_cast<decltype(&delete_voice)>(fliteSymbol("libflite.so.1", "delete_voice")),
+-            reinterpret_cast<decltype(&delete_wave)>(fliteSymbol("libflite.so.1", "delete_wave")),
+-            reinterpret_cast<void (*)(cst_voice*)>(fliteSymbol("libflite_usenglish.so.1", "usenglish_init")),
+-            reinterpret_cast<cst_lexicon* (*)()>(fliteSymbol("libflite_cmulex.so.1", "cmulex_init")),
++            reinterpret_cast<decltype(&flite_init)>(fliteSymbol("@fliteLib@/libflite.so.1", "flite_init")),
++            reinterpret_cast<decltype(&flite_add_lang)>(fliteSymbol("@fliteLib@/libflite.so.1", "flite_add_lang")),
++            reinterpret_cast<decltype(&flite_text_to_wave)>(fliteSymbol("@fliteLib@/libflite.so.1", "flite_text_to_wave")),
++            reinterpret_cast<decltype(&cst_wave_resample)>(fliteSymbol("@fliteLib@/libflite.so.1", "cst_wave_resample")),
++            reinterpret_cast<decltype(&delete_voice)>(fliteSymbol("@fliteLib@/libflite.so.1", "delete_voice")),
++            reinterpret_cast<decltype(&delete_wave)>(fliteSymbol("@fliteLib@/libflite.so.1", "delete_wave")),
++            reinterpret_cast<void (*)(cst_voice*)>(fliteSymbol("@fliteLib@/libflite_usenglish.so.1", "usenglish_init")),
++            reinterpret_cast<cst_lexicon* (*)()>(fliteSymbol("@fliteLib@/libflite_cmulex.so.1", "cmulex_init")),
+             { }
+         };
+         if (!loaded.init || !loaded.addLang || !loaded.textToWave || !loaded.waveResample || !loaded.deleteVoice || !loaded.deleteWave || !loaded.usenglishInit || !loaded.cmulexInit)
+             return;
+ 
+         static constexpr std::array<std::pair<const char*, const char*>, 4> voices { {
+-            { "libflite_cmu_us_kal.so.1", "register_cmu_us_kal" },
+-            { "libflite_cmu_us_slt.so.1", "register_cmu_us_slt" },
+-            { "libflite_cmu_us_rms.so.1", "register_cmu_us_rms" },
+-            { "libflite_cmu_us_awb.so.1", "register_cmu_us_awb" },
++            { "@fliteLib@/libflite_cmu_us_kal.so.1", "register_cmu_us_kal" },
++            { "@fliteLib@/libflite_cmu_us_slt.so.1", "register_cmu_us_slt" },
++            { "@fliteLib@/libflite_cmu_us_rms.so.1", "register_cmu_us_rms" },
++            { "@fliteLib@/libflite_cmu_us_awb.so.1", "register_cmu_us_awb" },
+         } };
+         for (auto [voiceLibrary, registerFunction] : voices) {
+             if (auto function = reinterpret_cast<cst_voice* (*)(const char*)>(fliteSymbol(voiceLibrary, registerFunction)))

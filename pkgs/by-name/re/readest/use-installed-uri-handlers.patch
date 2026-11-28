@@ -1,0 +1,11 @@
+diff --git a/src-tauri/src/lib.rs b/src-tauri/src/lib.rs
+--- a/src-tauri/src/lib.rs
++++ b/src-tauri/src/lib.rs
+@@ -850,4 +850,6 @@ pub fn run() {
+-            #[cfg(any(target_os = "windows", target_os = "linux"))]
++            // On Linux, use the installed desktop file. Runtime registration
++            // points at the executable directly and bypasses the Nix wrapper.
++            #[cfg(target_os = "windows")]
+             {
+                 use tauri_plugin_deep_link::DeepLinkExt;
+                 let _ = app.deep_link().register_all();

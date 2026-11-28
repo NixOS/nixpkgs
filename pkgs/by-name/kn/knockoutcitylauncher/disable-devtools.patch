@@ -1,0 +1,16 @@
+diff --git a/src/main/index.ts b/src/main/index.ts
+index 48e103d..c2619a1 100644
+--- a/src/main/index.ts
++++ b/src/main/index.ts
+@@ -134,11 +134,6 @@ function createWindow(): void {
+     return { action: 'deny' }
+   })
+ 
+-  if (!app.isPackaged)
+-    win.webContents.openDevTools({
+-      mode: 'detach'
+-    })
+-
+   async function updateServerList(): Promise<void> {
+     try {
+       serverList = [

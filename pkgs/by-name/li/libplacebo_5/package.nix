@@ -68,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace meson.build \
-      --replace 'python_env.append' '#'
+      --replace-fail 'python_env.append' '#'
   '';
 
   meta = {

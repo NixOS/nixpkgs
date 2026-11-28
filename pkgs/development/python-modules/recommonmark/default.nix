@@ -15,7 +15,7 @@ buildPythonPackage rec {
   format = "setuptools";
 
   src = fetchFromGitHub {
-    owner = "rtfd";
+    owner = "readthedocs";
     repo = "recommonmark";
     rev = version;
     hash = "sha256-6Qw0fq1pTu9lIIEk3qpK+I3l8qPb9bk8YAC/1asmlU8=";
@@ -39,7 +39,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Docutils-compatibility bridge to CommonMark";
-    homepage = "https://github.com/rtfd/recommonmark";
+    homepage = "https://github.com/readthedocs/recommonmark";
     license = lib.licenses.mit;
   };
 }

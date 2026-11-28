@@ -15,7 +15,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "Hackndo";
+    owner = "login-securite";
     repo = "lsassy";
     tag = "v${finalAttrs.version}";
     hash = "sha256-lPbZnoR6qWfVBSRAbTJsKpjBieidNsYgAXI3CXHEt1w=";
@@ -43,8 +43,8 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Python module to extract data from Local Security Authority Subsystem Service (LSASS)";
-    homepage = "https://github.com/Hackndo/lsassy";
-    changelog = "https://github.com/Hackndo/lsassy/releases/tag/${finalAttrs.src.tag}";
+    homepage = "https://github.com/login-securite/lsassy";
+    changelog = "https://github.com/login-securite/lsassy/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "lsassy";

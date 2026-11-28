@@ -1,24 +1,25 @@
 {
   lib,
   stdenv,
-  buildGo127Module,
+  buildGoModule,
   fetchFromGitHub,
+  writableTmpDirAsHomeHook,
   callPackage,
   gitUpdater,
 }:
 
-buildGo127Module (finalAttrs: {
+buildGoModule (finalAttrs: {
   pname = "cloudflared";
-  version = "2026.10.1";
+  version = "2026.11.1";
 
   src = fetchFromGitHub {
     owner = "cloudflare";
     repo = "cloudflared";
     tag = finalAttrs.version;
-    hash = "sha256-dbpFR4X7Y+4BzwrHoJ6UGWZ+pwtggnsh00ETFAbfFoY=";
+    hash = "sha256-8QtcFT7H+pNrphkp0dM6RnVahLiOlvLv5A8C4jowdJQ=";
   };
 
-  vendorHash = "sha256-KqTLXEm0jxJ1TsyYzxAwYMe8niIgJxBHQPz/aZKmS40=";
+  vendorHash = "sha256-F6uCv7vxiRx7AZRqK37b4QG++JnEMez6yhM1qjipxdQ=";
 
   ldflags = [
     "-s"
@@ -27,10 +28,10 @@ buildGo127Module (finalAttrs: {
     "-X github.com/cloudflare/cloudflared/cmd/cloudflared/updater.BuiltForPackageManager=nixpkgs"
   ];
 
-  preCheck = ''
-    # Workaround for: sshgen_test.go:74: mkdir /homeless-shelter/.cloudflared: no such file or directory
-    export HOME="$(mktemp -d)"
+  # Workaround for: sshgen_test.go:74: mkdir /homeless-shelter/.cloudflared: no such file or directory
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
+  preCheck = ''
     # Workaround for: origin_icmp_proxy_test.go:46:
     #   cannot create ICMPv4 proxy: socket: permission denied nor ICMPv6 proxy: socket: permission denied
     substituteInPlace "ingress/origin_icmp_proxy_test.go" \

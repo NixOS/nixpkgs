@@ -2,6 +2,7 @@
   lib,
   buildHomeAssistantComponent,
   fetchFromGitHub,
+  modbus-connection,
   pymodbus,
   pytestCheckHook,
   pytest-homeassistant-custom-component,
@@ -10,18 +11,20 @@
 buildHomeAssistantComponent (finalAttrs: {
   owner = "Pho3niX90";
   domain = "solis_modbus";
-  version = "4.3.0";
+  version = "4.5.0";
 
   src = fetchFromGitHub {
     owner = "Pho3niX90";
     repo = "solis_modbus";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mJ9v0QwP8SOfZwQW6eXoyOQfg3+Bq9B+th5FE0+Kfco=";
+    hash = "sha256-mezX13lhuSC3XOYtadbkpktp7T/M1bI6qUZZXW+YpGE=";
   };
 
   dependencies = [
+    modbus-connection
     pymodbus
-  ];
+  ]
+  ++ modbus-connection.optional-dependencies.tmodbus;
 
   nativeCheckInputs = [
     pytest-homeassistant-custom-component

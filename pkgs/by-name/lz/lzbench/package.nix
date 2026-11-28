@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lzbench";
-  version = "2.3";
+  version = "2.4";
 
   src = fetchFromGitHub {
     owner = "inikep";
     repo = "lzbench";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-/rRLD7lK8YGyx6dHxw5BPydf2YigZn/dF5NF2Q2Misg=";
+    sha256 = "sha256-3P0HqRlBVudvzqLSJihRsSD2ngA++NpfXC2o+Qf3Yqg=";
   };
 
   enableParallelBuilding = true;

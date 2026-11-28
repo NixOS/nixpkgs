@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "eudev";
-  version = "3.2.15";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "eudev-project";
     repo = "eudev";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-dhMfdC/AOUsrd+QlhEnxTWDnt4jQRTtU/muTjY9F12M=";
+    hash = "sha256-lPifXhj7fV1NJirOQCPF6JWigaY0B/OM7k/mBBUgfck=";
   };
 
   nativeBuildInputs = [

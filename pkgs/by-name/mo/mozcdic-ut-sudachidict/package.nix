@@ -7,19 +7,19 @@
 
 stdenvNoCC.mkDerivation {
   pname = "mozcdic-ut-sudachidict";
-  version = "0-unstable-2024-10-12";
+  version = "0-unstable-2026-10-16";
 
   src = fetchFromGitHub {
     owner = "utuhiro78";
     repo = "mozcdic-ut-sudachidict";
-    rev = "a807010ef3fdc9573a83f41594e9d79b969c3f80";
-    hash = "sha256-AGs/MleR/UMtVUDfxpE9clyD1uaI3SvTGFZInOo8ms0=";
+    rev = "13129ddebe1cb8eabb63feccbe157adec4e1de01";
+    hash = "sha256-RIOmVNh22aX1pty2kKFwDBYg57fs2pKYZ+jBNOPxgNg=";
   };
 
   installPhase = ''
     runHook preInstall
 
-    install -Dt $out mozcdic-ut-sudachidict.txt.tar.bz2
+    install -Dt $out mozcdic-ut-sudachidict.txt.bz2
 
     runHook postInstall
   '';
@@ -37,8 +37,5 @@ stdenvNoCC.mkDerivation {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ pineapplehunter ];
     platforms = lib.platforms.all;
-    # this does not need to be separately built
-    # it only provides some zip files
-    hydraPlatforms = [ ];
   };
 }

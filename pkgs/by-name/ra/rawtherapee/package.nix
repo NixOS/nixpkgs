@@ -72,8 +72,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     util-linux
-    libselinux
-    libsepol
     lerc
     libthai
     libdatrie
@@ -100,6 +98,8 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libcanberra-gtk3
+    libselinux
+    libsepol
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     gtk-mac-integration

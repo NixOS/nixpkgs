@@ -18,6 +18,7 @@
   copyDesktopItems,
   makeDesktopItem,
   nix-update-script,
+  writableTmpDirAsHomeHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -36,6 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     pkg-config
     copyDesktopItems
+    writableTmpDirAsHomeHook
   ];
 
   buildInputs = [
@@ -59,11 +61,6 @@ stdenv.mkDerivation (finalAttrs: {
     "-lXinerama"
     "-lXrandr"
   ];
-
-  # JUCE wants to write to $HOME/.{lv2,vst3}
-  preConfigure = ''
-    export HOME="$TMPDIR"
-  '';
 
   cmakeFlags = [
     "-DCMAKE_AR=${gcc-unwrapped}/bin/gcc-ar"

@@ -6,6 +6,7 @@
   libxslt,
   pkg-config,
   rustPlatform,
+  sqlite,
   stdenv,
   texliveBasic,
 }:
@@ -37,6 +38,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     libxml2
     libxslt
+    sqlite
   ];
 
   # use kpsewhich in PATH instead of linking to libkpathsea, which Nixpkgs does not provide

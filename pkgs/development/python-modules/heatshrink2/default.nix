@@ -6,7 +6,7 @@
 
 buildPythonPackage rec {
   pname = "heatshrink2";
-  version = "0.14.0";
+  version = "0.15.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
@@ -14,7 +14,7 @@ buildPythonPackage rec {
     repo = "pyheatshrink";
     tag = version;
     fetchSubmodules = true;
-    hash = "sha256-2bCk9bS/6hjbBJ30fpTt750A3vAvq4HOXmbpxOLRuj4=";
+    hash = "sha256-gP2DqFzGdlhQeG4QYHR+2ofVKlYISjLS9dnzg+u77tc=";
   };
 
   pythonImportsCheck = [ "heatshrink2" ];

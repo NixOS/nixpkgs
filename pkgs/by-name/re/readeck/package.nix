@@ -3,7 +3,7 @@
   fetchFromCodeberg,
   fetchNpmDeps,
   buildGoModule,
-  nodejs_22,
+  nodejs,
   npmHooks,
   python3,
   templ,
@@ -13,17 +13,17 @@
 
 buildGoModule (finalAttrs: {
   pname = "readeck";
-  version = "0.23.4";
+  version = "0.23.6";
 
   src = fetchFromCodeberg {
     owner = "readeck";
     repo = "readeck";
     tag = finalAttrs.version;
-    hash = "sha256-EUamQWH0ATc/6ofQHuFX3V2aXzU85nXcYQO+iZR9+Ys=";
+    hash = "sha256-M+Jv2W8QWsNg0tVzRG8Mql0y+Lr+zl9x7V2IbL8ZfdI=";
   };
 
   nativeBuildInputs = [
-    nodejs_22
+    nodejs
     npmHooks.npmConfigHook
     (python3.withPackages (ps: with ps; [ babel ]))
     templ
@@ -69,10 +69,10 @@ buildGoModule (finalAttrs: {
 
   npmDeps = fetchNpmDeps {
     src = "${finalAttrs.src}/web";
-    hash = "sha256-H8l9cpGYbLhbaU4PsU6KBhr8QZGh5sihE+3XdFwQRTg=";
+    hash = "sha256-adMpMQRDWCwSplPzghuI5NclRW9BZUSmbgsBDeIGRA0=";
   };
 
-  vendorHash = "sha256-9BTNWePXmmKUMWM1evhgIMYipHX+pxozONZCbcCt8lo=";
+  vendorHash = "sha256-82Benb/uN6kXRBPHN51UBTCjr02aYyTXw/CcKSQ2bj0=";
 
   passthru = {
     tests = { inherit (nixosTests) readeck; };

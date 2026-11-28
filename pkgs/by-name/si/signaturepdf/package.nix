@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "signaturepdf";
-  version = "1.9.2";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "24eme";
     repo = "signaturepdf";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-hQPYS3SskakS+8S2gIjoXojDgIET20nz4ig9+VRv8TM=";
+    hash = "sha256-E29RyIlf1plZkjGcHoBK2KzBZKUo2uBAhBs2hnABN7k=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

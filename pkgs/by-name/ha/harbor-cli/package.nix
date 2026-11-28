@@ -10,7 +10,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "harbor-cli";
-  version = "0.0.26";
+  version = "0.0.28";
 
   __structuredAttrs = true;
 
@@ -18,10 +18,10 @@ buildGoModule (finalAttrs: {
     owner = "goharbor";
     repo = "harbor-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xaON2tgF2WvL2yffNS8VfS7AwmUo8J5uyZEWVmZlBLg=";
+    hash = "sha256-Ug7j4q7CCGFFV68nPCv70TkZ5P3w2BcKtyiuOS/ze6Y=";
   };
 
-  vendorHash = "sha256-HVaWa8LH2jlXPB+wDjRA0r20XiFBNUFD2gPJ5A7yPU4=";
+  vendorHash = "sha256-8ANLTDYDfAAOf0c5hqVpxgVJ47PUZvIXFFdZH1XCghU=";
 
   excludedPackages = [
     "dagger"

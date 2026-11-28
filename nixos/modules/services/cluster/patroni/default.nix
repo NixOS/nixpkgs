@@ -29,10 +29,10 @@ in
 
     postgresqlPackage = lib.mkOption {
       type = lib.types.package;
-      example = lib.literalExpression "pkgs.postgresql_14";
+      example = lib.literalExpression "pkgs.postgresql_18";
       description = ''
         PostgreSQL package to use.
-        Plugins can be enabled like this `pkgs.postgresql_14.withPackages (p: [ p.pg_safeupdate p.postgis ])`.
+        Plugins can be enabled like this `pkgs.postgresql_18.withPackages (p: [ p.pg_safeupdate p.postgis ])`.
       '';
     };
 

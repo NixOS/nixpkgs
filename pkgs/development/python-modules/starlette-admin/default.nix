@@ -42,14 +42,14 @@
 
 buildPythonPackage rec {
   pname = "starlette-admin";
-  version = "1.0.2";
+  version = "1.0.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jowilf";
     repo = "starlette-admin";
     tag = version;
-    hash = "sha256-7D7TQZl2edPb4W/Ix0K1qUF8GDTffiFbiPLNOAbpqI0=";
+    hash = "sha256-i5PT5bqm8W0L/88TnhW04nCrk7H/JoICt9HGvX6JN2c=";
   };
 
   build-system = [ hatchling ];

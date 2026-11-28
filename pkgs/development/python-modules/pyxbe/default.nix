@@ -13,7 +13,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "mborgerson";
+    owner = "XboxDev";
     repo = "pyxbe";
     tag = "v${finalAttrs.version}";
     hash = "sha256-MtkY4vwPvlYoS4ws8MzIFR8D6ORVqFXA0JvOEspzmtQ=";
@@ -30,7 +30,7 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Library to work with XBE files";
-    homepage = "https://github.com/mborgerson/pyxbe";
+    homepage = "https://github.com/XboxDev/pyxbe";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };

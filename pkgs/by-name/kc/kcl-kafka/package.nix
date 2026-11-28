@@ -7,16 +7,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "kcl-kafka";
-  version = "0.19.0";
+  version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "twmb";
     repo = "kcl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dZb0NiT7K6V7itG/G8Zazl29N9Um2j6sPYU70XPXLCc=";
+    hash = "sha256-yqkhc+4wwiQ0ZbwtFNcGMmwS3Pzw2AAhRwpTxy2Yix4=";
   };
 
-  vendorHash = "sha256-u037xAngVhFe9MK+IVk85TNiZzqVzSNmuuI8sz/fya4=";
+  vendorHash = "sha256-+AoXU2kN+qfEzMRbcb3PK+g5D14fHE/IQEcjG2/uYtQ=";
 
   subPackages = [ "." ];
 

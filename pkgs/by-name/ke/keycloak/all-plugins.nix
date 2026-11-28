@@ -5,6 +5,7 @@
   fetchMavenArtifact,
   junixsocket-common,
   junixsocket-native-common,
+  junixsocket-mysql,
 }:
 {
   apple-identity-provider-keycloak = callPackage ./apple-identity-provider-keycloak { };
@@ -36,10 +37,11 @@
   keycloak-restrict-client-auth = callPackage ./keycloak-restrict-client-auth { };
   keycloak-secrets-vault-provider = callPackage ./keycloak-secrets-vault-provider { };
 
-  # junixsocket provides Unix domain socket support for JDBC connections,
-  # which is required for connecting to PostgreSQL via Unix socket.
+  # junixsocket provides Unix domain socket support for JDBC connections to
+  # PostgreSQL and MySQL, whose drivers lack native Unix socket support.
   junixsocket-common = junixsocket-common.passthru.jar;
   junixsocket-native-common = junixsocket-native-common.passthru.jar;
+  junixsocket-mysql = junixsocket-mysql.passthru.jar;
 
   # These could theoretically be used by something other than Keycloak, but
   # there are no other quarkus apps in nixpkgs (as of 2023-08-21)

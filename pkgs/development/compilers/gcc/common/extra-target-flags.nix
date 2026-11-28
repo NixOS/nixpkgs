@@ -25,7 +25,7 @@
         );
     in
     mkFlags libcCross
-    ++ lib.optionals (!withoutTargetLibc) (mkFlags (threadsCross.package or null))
+    ++ lib.optionals (!withoutTargetLibc) (mkFlags threadsCross)
     ++ mkFlags (libcCross.w32api or null);
 
   EXTRA_LDFLAGS_FOR_TARGET =
@@ -50,6 +50,6 @@
         );
     in
     mkFlags libcCross
-    ++ lib.optionals (!withoutTargetLibc) (mkFlags (threadsCross.package or null))
+    ++ lib.optionals (!withoutTargetLibc) (mkFlags threadsCross)
     ++ mkFlags (libcCross.w32api or null);
 }

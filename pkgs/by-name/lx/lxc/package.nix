@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
 
   bashInteractive,
   dbus,
@@ -57,6 +58,22 @@ stdenv.mkDerivation (finalAttrs: {
     # Fix hardcoded path of lxc-user-nic
     # This is needed to use unprivileged containers
     ./user-nic.diff
+
+    # CVE-2026-100395, GHSA-r23j-58gg-pjjc: lxc-copy followed symlinks while
+    # rewriting /etc/hostname in a cloned rootfs. Backported from git until a
+    # release containing the fix is available.
+    (fetchpatch {
+      name = "CVE-2026-100395-1-hostname-open.patch";
+      url = "https://github.com/lxc/lxc/commit/6424a91a55efc54edc25ca46e9165bd9f35b50b7.patch";
+      hash = "sha256-trkFDYxKO4g/7KH4PEwvjDS2+aKja4MXI5xrfXbWFT4=";
+    })
+
+    # follow-up to the same fix: keep fopen()'s truncation behavior
+    (fetchpatch {
+      name = "CVE-2026-100395-2-hostname-truncate.patch";
+      url = "https://github.com/lxc/lxc/commit/fa12709a79c2b63b3918297d7505108fcc840eb6.patch";
+      hash = "sha256-r0vEyUwG2NTiRzlVoSady2rro2S8wsF3AJnZEGIx7Ik=";
+    })
   ];
 
   mesonFlags = [

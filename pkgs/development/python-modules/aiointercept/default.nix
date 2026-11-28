@@ -4,23 +4,25 @@
   ddt,
   fetchFromGitHub,
   hatchling,
+  httpx,
   lib,
   multidict,
   pytest-asyncio,
   pytestCheckHook,
+  requests,
   yarl,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "aiointercept";
-  version = "0.1.12";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Polandia94";
     repo = "aiointercept";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-siO1Oey2Qu4pFpOZpQFjtNvZa9muo96OOaMeZwaBx1I=";
+    tag = "v.${finalAttrs.version}";
+    hash = "sha256-yDCWoMIWj0H9Zmac0WYZTzM28ooBC9dEKAKKkb4LSDs=";
   };
 
   build-system = [ hatchling ];
@@ -38,8 +40,10 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     ddt
+    httpx
     pytest-asyncio
     pytestCheckHook
+    requests
   ];
 
   disabledTests = [

@@ -6,6 +6,7 @@
   testers,
   nix-update-script,
   extraPackages ? [ ],
+  writableTmpDirAsHomeHook,
 }:
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "dooit";
@@ -41,10 +42,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     ]
     ++ extraPackages;
 
-  # /homeless-shelter
-  preBuild = ''
-    export HOME=$(mktemp -d)
-  '';
+  nativeBuildInputs = [ writableTmpDirAsHomeHook ];
 
   nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook

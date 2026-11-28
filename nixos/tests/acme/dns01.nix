@@ -62,7 +62,7 @@ in
           description = "Pebble ACME challenge test server";
           wantedBy = [ "network.target" ];
           serviceConfig = {
-            ExecStart = "${pkgs.pebble}/bin/pebble-challtestsrv -dns01 ':53' -defaultIPv6 '' -defaultIPv4 '${nodes.client.networking.primaryIPAddress}'";
+            ExecStart = "${pkgs.pebble}/bin/pebble-challtestsrv -dnsserver ':53' -defaultIPv6 '' -defaultIPv4 '${nodes.client.networking.primaryIPAddress}'";
             # Required to bind on privileged ports.
             AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
           };
@@ -82,7 +82,7 @@ in
         security.acme.certs."${domain}" = {
           domain = "*.${domain}";
           dnsProvider = "exec";
-          dnsPropagationCheck = false;
+          dnsAuthoritativePropagationCheck = false;
           environmentFile = pkgs.writeText "wildcard.env" ''
             EXEC_PATH=${dnsScript}
             EXEC_POLLING_INTERVAL=1

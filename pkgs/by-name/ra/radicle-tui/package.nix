@@ -8,6 +8,7 @@
   gitMinimal,
   radicle-node,
   makeBinaryWrapper,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -62,17 +63,20 @@ rustPlatform.buildRustPackage (finalAttrs: {
     runHook postInstallCheck
   '';
 
-  passthru.updateScript = ./update.sh;
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Radicle terminal user interface";
     homepage = "https://radicle.network/nodes/seed.radicle.dev/rad:z39mP9rQAaGmERfUMPULfPUi473tY";
     changelog = "https://radicle.network/nodes/seed.radicle.dev/rad:z39mP9rQAaGmERfUMPULfPUi473tY/tree/CHANGELOG.md";
-    license = with lib.licenses; [
-      asl20 # or
-      mit
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
     teams = [ lib.teams.radicle ];
     mainProgram = "rad-tui";
+    problems.broken.message = "src is not fetchable due to missing canonical references for release tags, the package depends on an outdated version of libgit2, and upstream is effectively not being maintained at the moment.";
   };
 })

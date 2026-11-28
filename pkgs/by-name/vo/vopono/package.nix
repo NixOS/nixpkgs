@@ -2,6 +2,9 @@
   lib,
   fetchCrate,
   rustPlatform,
+  pkg-config,
+  aws-lc,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -14,6 +17,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-vCHYYUXLhVZq09GPEBEtyumgJEMPqDTKuv7HIY65ToM=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [
+    aws-lc
+    zstd
+  ];
 
   meta = {
     description = "Run applications through VPN connections in network namespaces";

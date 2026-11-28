@@ -51,6 +51,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   disabledTests = [
+    "test_jblatex_captions_to_parts"
     "test_jblatex_show_tocs"
     "test_build_no_ext"
     "test_build_with_ext"

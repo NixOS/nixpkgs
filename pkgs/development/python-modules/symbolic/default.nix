@@ -7,6 +7,8 @@
   rustc,
   cargo,
   milksnake,
+  pkg-config,
+  zstd,
   cffi,
   pytestCheckHook,
   nix-update-script,
@@ -37,6 +39,11 @@ buildPythonPackage (finalAttrs: {
     rustc
     cargo
     milksnake
+    pkg-config
+  ];
+
+  buildInputs = [
+    zstd
   ];
 
   dependencies = [ cffi ];
@@ -62,6 +69,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/getsentry/symbolic";
     changelog = "https://github.com/getsentry/symbolic/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ defelo ];
+    maintainers = [ ];
   };
 })

@@ -8,9 +8,15 @@
 let
   cfg = config.services.paperless;
   opt = options.services.paperless;
-
-  defaultUser = "paperless";
+  pythonPkgs = cfg.package.python.pkgs;
+  defaultUsername = "paperless";
   defaultFont = "${pkgs.liberation_ttf}/share/fonts/truetype/LiberationSerif-Regular.ttf";
+
+  # In case any aliases are configured, forward them to the django settings, so that they work as expected.
+  nginxAliases =
+    lib.optionals cfg.configureNginx
+      config.services.nginx.virtualHosts.${cfg.domain}.serverAliases;
+  nginxAliasOrigins = lib.concatMapStringsSep "," (d: "https://${d}") nginxAliases;
 
   # Don't start a redis instance if the user sets a custom redis connection
   enableRedis = !(cfg.settings ? PAPERLESS_REDIS);
@@ -19,6 +25,8 @@ let
   # Runtime-generated PAPERLESS_SECRET_KEY (see paperless-secret-key.service),
   # shared with every service and the paperless-manage wrapper via EnvironmentFile.
   secretKeyFile = "${cfg.dataDir}/nixos-paperless-secret-key.env";
+
+  extraPythonPath = pythonPkgs.makePythonPath (cfg.extraPythonPackages pythonPkgs);
 
   env = {
     PAPERLESS_DATA_DIR = cfg.dataDir;
@@ -40,8 +48,11 @@ let
   // lib.optionalAttrs (cfg.settings.PAPERLESS_AI_ENABLED or true) {
     TIKTOKEN_CACHE_DIR = cfg.package.tiktokenCacheDir;
   }
-  // lib.optionalAttrs (cfg.openMPThreadingWorkaround) {
+  // lib.optionalAttrs cfg.openMPThreadingWorkaround {
     OMP_NUM_THREADS = "1";
+  }
+  // lib.optionalAttrs (cfg.extraPythonPackages pythonPkgs != [ ]) {
+    PYTHONPATH = extraPythonPath;
   }
   // (lib.mapAttrs (
     _: s:
@@ -53,26 +64,39 @@ let
       toString s
   ) cfg.settings);
 
-  manage = pkgs.writeShellScriptBin "paperless-manage" ''
+  loadEnv = pkgs.writeShellScriptBin "paperless-manage-load-env" ''
     set -o allexport # Export the following env vars
     ${lib.toShellVars env}
     ${lib.optionalString (cfg.environmentFile != null) "source ${cfg.environmentFile}"}
     if [[ -z "''${PAPERLESS_SECRET_KEY:-}" && -e '${secretKeyFile}' ]]; then
       source '${secretKeyFile}'
     fi
-
+    set +o allexport
     cd '${cfg.dataDir}'
-    sudo=exec
-    if [[ "$USER" != ${cfg.user} ]]; then
-      ${
-        if config.security.sudo.enable then
-          "sudo='exec ${config.security.wrapperDir}/sudo -u ${cfg.user} -E'"
-        else
-          ">&2 echo 'Aborting, paperless-manage must be run as user `${cfg.user}`!'; exit 2"
-      }
-    fi
-    $sudo ${lib.getExe cfg.package} "$@"
+    ${lib.getExe cfg.package} "$@"
   '';
+  paperlessManageScript = (
+    pkgs.writeShellScriptBin "paperless-manage" ''
+      # Switch user and run script
+      case "$(whoami)" in
+        "root")
+          ${lib.getExe' pkgs.util-linux "runuser"} ${
+            lib.cli.toCommandLineShellGNU { } {
+              preserve-environment = true;
+              user = cfg.user;
+              group = cfg.group;
+              supp-group = if enableRedis then redisServer.group else null;
+            }
+          } -- ${lib.getExe loadEnv} "$@";;
+        "${cfg.user}")
+          ${lib.getExe loadEnv} "$@"  ;;
+        *)
+          echo "Aborting, paperless-manage must be run as 'root' or user '${cfg.user}'!" >&2
+          echo "You may wish to rerun this with 'sudo'  " >&2
+          exit 2
+      esac
+    ''
+  );
 
   defaultServiceConfig = {
     Slice = "system-paperless.slice";
@@ -117,6 +141,10 @@ let
     RestrictNamespaces = true;
     RestrictRealtime = true;
     RestrictSUIDSGID = true;
+    User = cfg.user;
+    Group = cfg.group;
+    # Fallback for when `cfg.user != defaultUsername`
+    SupplementaryGroups = lib.optional enableRedis redisServer.group;
     SystemCallArchitectures = "native";
     SystemCallFilter = [
       "@system-service"
@@ -264,7 +292,7 @@ in
 
     user = lib.mkOption {
       type = lib.types.str;
-      default = defaultUser;
+      default = defaultUsername;
       description = ''
         User under which Paperless runs
 
@@ -278,7 +306,7 @@ in
 
     group = lib.mkOption {
       type = lib.types.str;
-      default = defaultUser;
+      default = defaultUsername;
       description = ''
         Primary group under which Paperless runs
 
@@ -289,23 +317,45 @@ in
         :::
       '';
     };
+    tesseractLanguages = lib.mkOption {
+      type = with lib.types; nullOr (listOf str);
+      default =
+        if cfg.settings ? PAPERLESS_OCR_LANGUAGE then
+          lib.splitString "+" cfg.settings.PAPERLESS_OCR_LANGUAGE
+        else
+          null;
+      defaultText = lib.literalExpression ''
+        lib.splitString "+" config.services.paperless.settings.PAPERLESS_OCR_LANGUAGE
+        # or null if setting is unset
+      '';
+      example = [
+        "deu"
+        "eng"
+      ];
+      description = ''
+        Languages to build into Tesseract. `null` includes all languages and may use
+        binary-cached packages. Setting a smaller-than-default list reduces closure
+        size, but means tesseract, ocrmypdf and paperless-ngx cannot be fetched from
+        the cache and have to be built.
+
+        `eng`, `equ` and `osd` are always included.
+      '';
+    };
 
     package = lib.mkPackageOption pkgs "paperless-ngx" { } // {
       apply =
         pkg:
         pkg.override {
           tesseract5 = pkg.tesseract5.override {
-            # always enable detection modules
-            # tesseract fails to build when eng is not present
             enableLanguages =
-              if cfg.settings ? PAPERLESS_OCR_LANGUAGE then
-                lib.lists.unique (
+              if cfg.tesseractLanguages != null then
+                lib.unique (
                   [
                     "equ"
                     "osd"
                     "eng"
                   ]
-                  ++ lib.splitString "+" cfg.settings.PAPERLESS_OCR_LANGUAGE
+                  ++ cfg.tesseractLanguages
                 )
               else
                 null;
@@ -409,6 +459,18 @@ in
       '';
     };
 
+    extraPythonPackages = lib.mkOption {
+      type = with lib.types; functionTo (listOf package);
+      default = _: [ ];
+      defaultText = lib.literalExpression "_: [ ]";
+      example = lib.literalExpression "with ps; [ paperless-ngx-erechnung ]";
+      description = ''
+        Additional Python packages to add to add to Paperless-ngx' Python environment.
+
+        This is mainly used to add and automatically load Paperless-ngx Plugins as defined in <https://docs.paperless-ngx.com/development#plugin-discovery>.
+      '';
+    };
+
     manage = lib.mkOption {
       type = lib.types.package;
       readOnly = true;
@@ -429,8 +491,8 @@ in
           }
         ];
 
-        services.paperless.manage = manage;
-        environment.systemPackages = [ manage ];
+        services.paperless.manage = paperlessManageScript;
+        environment.systemPackages = [ paperlessManageScript ];
 
         services.nginx = lib.mkIf cfg.configureNginx {
           enable = true;
@@ -438,7 +500,10 @@ in
           virtualHosts.${cfg.domain} = {
             forceSSL = lib.mkDefault true;
             locations = {
-              "/".proxyPass = "http://paperless";
+              "/" = {
+                proxyPass = "http://paperless";
+                recommendedProxySettings = lib.mkDefault true;
+              };
               "/static/" = {
                 root = config.services.paperless.package;
                 extraConfig = ''
@@ -448,6 +513,7 @@ in
               "/ws/status" = {
                 proxyPass = "http://paperless";
                 proxyWebsockets = true;
+                recommendedProxySettings = lib.mkDefault true;
               };
             };
           };
@@ -469,6 +535,11 @@ in
         services.paperless.settings = lib.mkMerge [
           (lib.mkIf (cfg.domain != null) {
             PAPERLESS_URL = "https://${cfg.domain}";
+          })
+          (lib.mkIf (nginxAliases != [ ]) {
+            PAPERLESS_ALLOWED_HOSTS = lib.mkDefault (lib.concatStringsSep "," nginxAliases);
+            PAPERLESS_CSRF_TRUSTED_ORIGINS = lib.mkDefault nginxAliasOrigins;
+            PAPERLESS_CORS_ALLOWED_HOSTS = lib.mkDefault nginxAliasOrigins;
           })
           (lib.mkIf cfg.database.createLocally {
             PAPERLESS_DBENGINE = "postgresql";
@@ -492,8 +563,7 @@ in
         systemd.tmpfiles.settings."10-paperless" =
           let
             defaultRule = {
-              inherit (cfg) user;
-              inherit (config.users.users.${cfg.user}) group;
+              inherit (cfg) user group;
             };
           in
           {
@@ -527,7 +597,7 @@ in
             Type = "oneshot";
             RemainAfterExit = true;
             User = cfg.user;
-            Group = config.users.users.${cfg.user}.group;
+            Group = cfg.group;
             UMask = "0077";
             Slice = "system-paperless.slice";
             EnvironmentFile = lib.optional (cfg.environmentFile != null) cfg.environmentFile;
@@ -561,7 +631,6 @@ in
             "paperless-task-queue.service"
           ];
           serviceConfig = defaultServiceConfig // {
-            User = cfg.user;
             ExecStart = "${cfg.package}/bin/celery --app paperless beat --loglevel INFO";
             Restart = "on-failure";
             LoadCredential = lib.optionalString (
@@ -620,7 +689,6 @@ in
           ]
           ++ lib.optional cfg.database.createLocally "postgresql.target";
           serviceConfig = defaultServiceConfig // {
-            User = cfg.user;
             ExecStart = "${cfg.package}/bin/celery --app paperless worker --loglevel INFO";
             Restart = "on-failure";
             # The `mbind` syscall is needed for running the classifier.
@@ -642,7 +710,6 @@ in
           ]
           ++ lib.optional cfg.database.createLocally "postgresql.target";
           serviceConfig = defaultServiceConfig // {
-            User = cfg.user;
             ExecStart = "${lib.getExe cfg.package} document_consumer";
             Restart = "on-failure";
             PrivateNetwork = cfg.database.createLocally; # defaultServiceConfig enables this by default, needs to be disabled for remote DBs
@@ -664,7 +731,6 @@ in
           ]
           ++ lib.optional cfg.database.createLocally "postgresql.target";
           serviceConfig = defaultServiceConfig // {
-            User = cfg.user;
             ExecStart = "${lib.getExe cfg.package.python.pkgs.granian} --interface asginl --ws paperless.asgi:application";
             Restart = "on-failure";
 
@@ -675,31 +741,38 @@ in
             PrivateNetwork = false;
           };
           environment = env // {
-            PYTHONPATH = "${cfg.package.python.pkgs.makePythonPath cfg.package.passthru.dependencies}:${cfg.package}/lib/paperless-ngx/src";
+            PYTHONPATH = lib.concatStringsSep ":" (
+              lib.optional (env ? PYTHONPATH) env.PYTHONPATH
+              ++ [
+                "${pythonPkgs.makePythonPath cfg.package.passthru.dependencies}:${cfg.package}/lib/paperless-ngx/src"
+              ]
+            );
           };
           # Allow the web interface to access the private /tmp directory of the server.
           # This is required to support uploading files via the web interface.
           unitConfig.JoinsNamespaceOf = "paperless-task-queue.service";
         };
 
-        users = lib.optionalAttrs (cfg.user == defaultUser) {
-          users.${defaultUser} = {
-            extraGroups = [ config.services.redis.servers.paperless.group ];
-            group = defaultUser;
+        users = lib.optionalAttrs (cfg.user == defaultUsername) {
+          users.${cfg.user} = {
+            extraGroups = lib.optional enableRedis redisServer.group;
+            group = cfg.group;
             home = cfg.dataDir;
             uid = config.ids.uids.paperless;
           };
 
-          groups.${defaultUser} = {
-            gid = config.ids.gids.paperless;
+          groups = lib.optionalAttrs (cfg.group == defaultUsername) {
+            ${cfg.group} = {
+              gid = config.ids.gids.paperless;
+            };
           };
         };
 
         services.gotenberg = lib.mkIf cfg.configureTika {
           enable = true;
-          # https://github.com/paperless-ngx/paperless-ngx/blob/v2.18.2/docker/compose/docker-compose.sqlite-tika.yml#L60-L65
+          # https://github.com/paperless-ngx/paperless-ngx/blob/v3.3.1/docker/compose/docker-compose.sqlite-tika.yml#L64-L66
           chromium.disableJavascript = true;
-          extraArgs = [ "--chromium-allow-list=file:///tmp/.*" ];
+          extraArgs = [ "--chromium-allow-list=^file:///tmp/.*" ];
         };
 
         services.tika = lib.mkIf cfg.configureTika {
@@ -710,7 +783,7 @@ in
 
       (lib.mkIf cfg.exporter.enable {
         systemd.tmpfiles.rules = [
-          "d '${cfg.exporter.directory}' - ${cfg.user} ${config.users.users.${cfg.user}.group} - -"
+          "d '${cfg.exporter.directory}' - ${cfg.user} ${cfg.group} - -"
         ];
 
         services.paperless.exporter.settings = lib.mapAttrs (
@@ -721,6 +794,7 @@ in
           startAt = lib.defaultTo [ ] cfg.exporter.onCalendar;
           serviceConfig = {
             User = cfg.user;
+            Group = cfg.group;
             WorkingDirectory = cfg.dataDir;
           };
           unitConfig =
@@ -741,7 +815,7 @@ in
               OnSuccess = services;
             };
           enableStrictShellChecks = true;
-          path = [ manage ];
+          path = [ paperlessManageScript ];
           script = ''
             paperless-manage document_exporter ${cfg.exporter.directory} ${
               lib.cli.toCommandLineShellGNU { } cfg.exporter.settings

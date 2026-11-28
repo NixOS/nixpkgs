@@ -11,13 +11,13 @@
 }:
 melpaBuild {
   pname = "majutsu";
-  version = "0.6.0-unstable-2026-09-14";
+  version = "0.6.0-unstable-2026-10-29";
 
   src = fetchFromGitHub {
     owner = "0WD0";
     repo = "majutsu";
-    rev = "0fdb3c2b3ab826724949cd2cc714f2eff32ec152";
-    hash = "sha256-4K5pSnSTh1GpdcQMPkhUouQQ3JM8vR22yBOBgPPo7vI=";
+    rev = "a21d0a9905a0f68d1b969b1199611e13ae9f9c40";
+    hash = "sha256-H8U1y7XKfzefZtWFABvzPHFo3lXrItivneEp0R8xTM4=";
   };
 
   packageRequires = [

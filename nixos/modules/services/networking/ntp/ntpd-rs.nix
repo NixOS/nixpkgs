@@ -44,7 +44,7 @@ in
       description = ''
         Settings to write to {file}`ntp.toml`
 
-        See <https://docs.ntpd-rs.pendulum-project.org/man/ntp.toml.5>
+        See <https://docs.ntpd-rs.pendulum-project.org/latest/man/ntp.toml.5/>
         for more information about available options.
       '';
     };

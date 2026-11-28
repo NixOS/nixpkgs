@@ -12,13 +12,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "mathicgb";
-  version = "1.4";
+  version = "1.6";
 
   src = fetchFromGitHub {
     owner = "Macaulay2";
     repo = "mathicgb";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-34ASkRPNH6d8TSJmyZmYZVOi1p02nHgMVXXWVJMNZ1c=";
+    hash = "sha256-dXU7AWHDU+RWadsuS0KWiSe5INwbslpVcCEyvj4WZn0=";
   };
 
   buildInputs = [

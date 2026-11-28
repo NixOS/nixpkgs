@@ -5,11 +5,12 @@
   avahi,
   bison,
   cairo,
+  dav1d,
   dbus,
   faad2,
   fetchFromGitLab,
   fetchpatch,
-  ffmpeg_7,
+  ffmpeg_8,
   flac,
   flex,
   fluidsynth,
@@ -137,9 +138,10 @@ stdenv.mkDerivation (finalAttrs: {
     alsa-lib
     avahi
     cairo
+    dav1d
     dbus
     faad2
-    ffmpeg_7
+    ffmpeg_8
     flac
     fluidsynth
     fontconfig

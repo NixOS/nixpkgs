@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "plinss";
-    repo = "uri_template";
+    repo = "uri-template";
     tag = "v${version}";
     hash = "sha256-38HFFqM6yfpsPrhIpE639ePy/NbLqKw7gbnE3y8sL3w=";
   };
@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Implementation of RFC 6570 URI Templates";
-    homepage = "https://github.com/plinss/uri_template/";
+    homepage = "https://github.com/plinss/uri-template/";
     license = lib.licenses.mit;
     maintainers = [ ];
   };

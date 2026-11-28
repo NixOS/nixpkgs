@@ -26,16 +26,16 @@
   websockets,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "bumble";
-  version = "0.0.234";
+  version = "0.0.236";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "bumble";
-    tag = "v${version}";
-    hash = "sha256-7GtmFpnaCSAXMc58X6NMTVzZWblAghKEs8x3nEPykNc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-CHCzR22gxiWSePOlxwmuCo38t9FwYnz9h7MghnIHvsM=";
   };
 
   build-system = [
@@ -83,13 +83,15 @@ buildPythonPackage rec {
     # tests require networking
     "test_android_netsim_connection"
     "test_open_transport_with_metadata"
+    # flaky on higher core counts
+    "test_resync_fails_when_the_reset_is_not_answered"
   ];
 
   meta = {
-    changelog = "https://github.com/google/bumble/releases/tag/${src.tag}";
+    changelog = "https://github.com/google/bumble/releases/tag/${finalAttrs.src.tag}";
     description = "Bluetooth Stack for Apps, Emulation, Test and Experimentation";
     homepage = "https://github.com/google/bumble";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.dotlambda ];
   };
-}
+})

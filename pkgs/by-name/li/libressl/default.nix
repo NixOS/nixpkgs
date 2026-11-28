@@ -3,13 +3,19 @@
   fetchurl,
   lib,
   cmake,
-  cacert,
-  fetchpatch,
+  fetchpatch2,
   buildShared ? !stdenv.hostPlatform.isStatic,
 }:
 
 let
   ldLibPathEnvName = if stdenv.hostPlatform.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH";
+
+  # Same paths as openssl's use-etc-ssl-certs patches.
+  hostCaFile =
+    if stdenv.hostPlatform.isDarwin then
+      "/nix/var/nix/profiles/default/etc/ssl/certs/ca-bundle.crt"
+    else
+      "/etc/ssl/certs/ca-certificates.crt";
 
   generic =
     {
@@ -40,7 +46,9 @@ let
         # .note.GNU-stack section, and if that section is missing from any object,
         # the linker will make the stack executable.
         "-DCMAKE_C_FLAGS=-DHAVE_GNU_STACK"
-        "-DTLS_DEFAULT_CA_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt"
+        "-DTLS_DEFAULT_CA_FILE=${hostCaFile}"
+        # The default is the relative path "etc/ssl", resolved against the current directory.
+        "-DOPENSSLDIR=${placeholder "out"}/etc/ssl"
       ]
       ++ lib.optional buildShared "-DBUILD_SHARED_LIBS=ON";
 
@@ -52,10 +60,12 @@ let
         rm configure
       '';
 
-      inherit patches;
+      patches = [ ./nix-ssl-cert-file.patch ] ++ patches;
 
       postPatch = ''
         patchShebangs tests/
+        substituteInPlace crypto/crypto_local.h \
+          --replace-fail 'OPENSSLDIR "/cert.pem"' '"${hostCaFile}"'
       ''
       + postPatch;
 
@@ -93,6 +103,11 @@ let
         "nc"
       ];
 
+      # Unused vendored CA bundle.
+      postInstall = ''
+        rm $out/etc/ssl/cert.pem
+      '';
+
       postFixup = ''
         moveToOutput "bin/nc" "$nc"
         moveToOutput "bin/openssl" "$bin"
@@ -104,9 +119,9 @@ let
       installCheckPhase = ''
         runHook preInstallCheck
 
-        # Check whether the build target actually contains our cacert.
         # A simple binary match for the path is enough.
-        grep "${cacert}/etc/ssl/certs/ca-bundle.crt" $out/lib/*libtls*
+        grep "${hostCaFile}" $out/lib/*libtls*
+        grep "${hostCaFile}" $out/lib/*libcrypto*
 
         runHook postInstallCheck
       '';
@@ -143,40 +158,42 @@ let
         identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "openbsd" version;
       };
     };
-
-  # https://github.com/libressl/portable/pull/1206
-  # This got merged in February 2026 and is included as of LibreSSL 4.3.0.
-  common-cmake-install-full-dirs-patch = fetchpatch {
-    url = "https://github.com/libressl/portable/commit/a15ea0710398eaeed3be53cf643e80a1e80c981d.patch";
-    hash = "sha256-Mlf4SrGCCqALQicbGtmVGdkdfcE8DEGYkOuVyG2CozM=";
-  };
-
-  # https://github.com/libressl/portable/issues/1295
-  # https://github.com/libressl/portable/pull/1303
-  tls-default-ca-patch = fetchpatch {
-    url = "https://github.com/libressl/portable/commit/c85e07d0d68129fc1b1c9039b266099c8d735c3d.patch";
-    hash = "sha256-oNL3v8Ef1HrayXn+/3T4UhHLJos8eVMlqebVyaxnWVo=";
-  };
 in
 {
-  # 4.2 was released October 2025 and will become unsupported on October 22,
-  # 2026, one year after the release of OpenBSD 7.8.
-  libressl_4_2 = generic {
-    version = "4.2.1";
-    hash = "sha256-bVwvWFg1iOp5H0yGRQBAcdAN+lVKW/eIoAbKHrWr1ws=";
-    patches = [
-      common-cmake-install-full-dirs-patch
-      tls-default-ca-patch
-    ];
-  };
-
   # 4.3 was released April 2026 and will become unsupported on May 19, 2027,
   # one year after the release of OpenBSD 7.9.
   libressl_4_3 = generic {
-    version = "4.3.2";
-    hash = "sha256-7fAa7iTGXWnmqe/LnUS82mgv+dTzu72V55Th36kIR7U=";
+    version = "4.3.5";
+    hash = "sha256-YtNJePX3jbxjnjqOvZycqsRfCWXgPG+zKJaEXF5n37c=";
     patches = [
-      tls-default-ca-patch
+      # Back-apply a security patch from v4.4.1.
+      #
+      # https://tracker.security.nixos.org/suggestions/by-id/62597
+      # https://www.vulncheck.com/advisories/libressl-ocspcheck-through-4.4.0-cleartext-transmission-of-ocsp-requests-via-url2host
+      # https://github.com/NixOS/nixpkgs/issues/580855
+      #
+      # This is a slightly awkward patch because of the way libressl is built:
+      # we're taking a patch from the upstream repository and adapting it to
+      # fix the layout of the OpenBSD distribution tarball.
+      (fetchpatch2 {
+        url = "https://github.com/openbsd/src/commit/0f7039667044d1cd252cc72134e499186da4da25.patch";
+        hash = "sha256-nWYL3eCxeriljchfeCjky0fjNu5tx8rHbx2qrbPqiWU=";
+
+        # Rearrange the patch to match the source layout.
+        stripLen = 2;
+        extraPrefix = "apps/";
+
+        # Strip the CVS metadata changes, as these don't cleanly back-apply.
+        hunks = [ "x1" ];
+      })
     ];
+  };
+
+  # 4.4 was released October 2026 and will become unsupported on October 20,
+  # 2027, one year after the release of OpenBSD 8.0.
+  libressl_4_4 = generic {
+    version = "4.4.1";
+    hash = "sha256-KQzfG1PAhiVdwwLxGLmGAqRE6a5tEem/3YybG2CqOiI=";
+    patches = [ ];
   };
 }

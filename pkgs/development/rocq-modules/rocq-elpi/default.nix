@@ -17,6 +17,7 @@ let
       in
       with lib.versions;
       lib.switch rocq-core.rocq-version [
+        (case (range "9.0" "9.3") "4.1.1")
         (case (range "9.0" "9.3") "3.8.0")
         (case (range "9.0" "9.1") "3.4.5")
         (case (range "9.0" "9.1") "2.0.7")
@@ -37,12 +38,14 @@ let
       in
       with lib.versions;
       lib.switch rocq-core.rocq-version [
+        (case (range "9.0" "9.3") "3.7.0")
         (case (range "9.0" "9.3") "3.5.0")
         (case (range "9.0" "9.2") "3.4.0")
         (case (range "9.0" "9.1") "3.2.0")
         (case (range "9.0" "9.1") "2.6.0")
         (case "9.0" "2.5.2")
       ] null;
+    release."3.7.0".sha256 = "sha256-SR1mZZUFIBQxgDaRBivkduXR2gq1FYEg19SVyMnoq2o=";
     release."3.5.0".sha256 = "sha256-k6kbkFRngQmKUP0owiFOxJzdJVRte5IlZWG4Tpqd3YU=";
     release."3.4.0".sha256 = "sha256-8x2Sa/+pUpXEqB+NdyfOyw6Yyzp6Q1k5LnhrjG/qJNM=";
     release."3.3.0".sha256 = "sha256-wcsUpw7S+H9CaXuz+W3g22IFWO2cLllJ4xm2qLTG0nM=";

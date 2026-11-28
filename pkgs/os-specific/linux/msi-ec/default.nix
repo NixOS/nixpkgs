@@ -43,7 +43,10 @@ stdenv.mkDerivation {
     homepage = "https://github.com/BeardOverflow/msi-ec";
     license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.m1dugh ];
-    platforms = lib.platforms.linux;
+    platforms = [
+      "i686-linux"
+      "x86_64-linux"
+    ];
     broken = kernel.kernelOlder "6.5";
   };
 }

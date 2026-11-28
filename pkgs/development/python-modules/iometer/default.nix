@@ -6,6 +6,7 @@
   fetchFromGitHub,
   lib,
   poetry-core,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytestCheckHook,
   yarl,
@@ -13,15 +14,17 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "iometer";
-  version = "1.0.2";
+  version = "1.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "iometer-gmbh";
+    owner = "energy-smart-control";
     repo = "iometer.py";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-50tq+z1+8CX58Yj6GztYXStHMG+IncOHDgwK8WhxVcQ=";
+    hash = "sha256-qXzj0aZrbca2q/KE+yS6aQ9N6tT5u6Siq/hvSCeYoAY=";
   };
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   build-system = [ poetry-core ];
 
@@ -44,9 +47,9 @@ buildPythonPackage (finalAttrs: {
   ];
 
   meta = {
-    changelog = "https://github.com/iometer-gmbh/iometer.py/releases/tag/${finalAttrs.src.tag}";
+    changelog = "https://github.com/energy-smart-control/iometer.py/releases/tag/${finalAttrs.src.tag}";
     description = "Python client for interacting with IOmeter devices over HTTP";
-    homepage = "https://github.com/iometer-gmbh/iometer.py";
+    homepage = "https://github.com/energy-smart-control/iometer.py";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };

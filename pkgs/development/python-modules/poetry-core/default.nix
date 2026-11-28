@@ -25,14 +25,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "poetry-core";
-  version = "2.4.1";
+  version = "2.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-poetry";
     repo = "poetry-core";
     tag = finalAttrs.version;
-    hash = "sha256-Io2VpLxnJesO4QohsunD7ogr87NiNjGeTmEl9wFswkw=";
+    hash = "sha256-KEjdHHiXphtVqkq08VCSwmpw3r5SaDgftw1wxcujJPc=";
   };
 
   inherit doCheck;

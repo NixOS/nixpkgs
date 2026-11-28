@@ -1,0 +1,13 @@
+ClientWorkload.h uses fixed-width integer types, so include <cstdint>
+explicitly rather than relying on transitive includes removed in GCC 16.
+
+--- a/bindings/c/foundationdb/ClientWorkload.h
++++ b/bindings/c/foundationdb/ClientWorkload.h
+@@ -21,6 +21,7 @@
+ #pragma once
+ #ifndef CLIENT_WORKLOAD_H
+ #define CLIENT_WORKLOAD_H
++#include <cstdint>
+ #include <string>
+ #include <vector>
+ #include <functional>

@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "diamond";
-  version = "2.2.8";
+  version = "2.2.9";
 
   src = fetchFromGitHub {
     owner = "bbuchfink";
     repo = "diamond";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Z1+CJyKBRjTDVDAJ3uWPQd9KLIc03JNIoTTUuzHMB5U=";
+    hash = "sha256-Derjh9qDEtS4/yVnwT7P2Q0hRPwgIo110Ozg7VDZfnE=";
   };
 
   nativeBuildInputs = [ cmake ];

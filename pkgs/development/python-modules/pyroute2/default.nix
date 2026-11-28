@@ -7,14 +7,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyroute2";
-  version = "0.9.6";
+  version = "0.9.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "svinota";
     repo = "pyroute2";
     tag = finalAttrs.version;
-    hash = "sha256-ZseZQFiR+btDsR+ozcd8DBp0vsNTb6tIzaArQfOk7CI=";
+    hash = "sha256-vMgEsYChuHc1FjgcEuxpWOMtIvYRvzQvRppivOU9Pvg=";
   };
 
   build-system = [ setuptools ];
@@ -44,10 +44,12 @@ buildPythonPackage (finalAttrs: {
     description = "Python Netlink library";
     homepage = "https://github.com/svinota/pyroute2";
     changelog = "https://github.com/svinota/pyroute2/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
-    license = with lib.licenses; [
-      asl20 # or
-      gpl2Plus
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        gpl2Plus
+      ];
     maintainers = with lib.maintainers; [
       fab
       mic92

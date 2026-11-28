@@ -20,14 +20,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kaidan";
-  version = "0.16.0";
+  version = "0.17.0";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "network";
     repo = "kaidan";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-24Gls5FNOPOFg0uXidqe/FnLxraOGfT5OX6FbfdhtuQ=";
+    hash = "sha256-2lhdrtc9UAUpUV6cQe2WZB/L9rLkK1dGIQj2lBE9a9k=";
   };
 
   nativeBuildInputs = [

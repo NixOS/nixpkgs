@@ -55,6 +55,8 @@ stdenv.mkDerivation rec {
     homepage = "https://osmocom.org/projects/osmo-hnodeb";
     license = lib.licenses.agpl3Plus;
     maintainers = [ ];
+    # Relies on ortp from linphonePackages
+    broken = true;
     platforms = lib.platforms.linux;
   };
 }

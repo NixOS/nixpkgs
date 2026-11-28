@@ -2,17 +2,18 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "do-agent";
-  version = "3.18.16";
+  version = "3.18.17";
 
   src = fetchFromGitHub {
     owner = "digitalocean";
     repo = "do-agent";
-    rev = finalAttrs.version;
-    sha256 = "sha256-ciOeyE+mampH80meOAFvULhnKTulz3hSvfWkdmFose0=";
+    tag = finalAttrs.version;
+    sha256 = "sha256-P+AirJUMmCIitsHyGbAD8KK4ab/Vk7c8xZG1FhgUDPE=";
   };
 
   ldflags = [
@@ -27,6 +28,9 @@ buildGoModule (finalAttrs: {
     install -Dm444 -t $out/lib/systemd/system $src/packaging/etc/systemd/system/do-agent.service
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   meta = {
     description = "DigitalOcean droplet system metrics agent";
     mainProgram = "do-agent";
@@ -37,7 +41,7 @@ buildGoModule (finalAttrs: {
     '';
     homepage = "https://github.com/digitalocean/do-agent";
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ kamadorueda ];
     platforms = lib.platforms.linux;
   };
 })

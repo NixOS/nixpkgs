@@ -83,7 +83,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   env.SHADERC_LIB_DIR = "${lib.getLib shaderc}/lib";
 
   postPatch = ''
-    substituteAllInPlace dash-frontend/src/util/pactl_wrapper.rs \
+    substituteInPlace dash-frontend/src/util/pactl_wrapper.rs \
       --replace-fail '"pactl"' '"${lib.getExe' pulseaudio "pactl"}"'
 
     # steam_utils also calls xdg-open as well as steam. Those should probably be pulled from the environment
@@ -137,6 +137,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       Scrumplex
       ImSapphire
+      ShyAssassin
     ];
     platforms = lib.platforms.linux;
     broken = stdenv.hostPlatform.isAarch64 && withOpenVR;

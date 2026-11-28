@@ -106,7 +106,7 @@ buildPythonPackage {
       # `cynthion flash` looks for them.
       export BUILD_GATEWARE_MAX_WORKERS="''${NIX_BUILD_CORES:-1}"
       PYTHONPATH="$out/${python.sitePackages}''${PYTHONPATH:+:$PYTHONPATH}" \
-        python ${./build_gateware.py} "${assets}"
+        python -P ${./build_gateware.py} "${assets}"
 
       # Install the moondancer SoC firmware for `cynthion flash facedancer`.
       install -Dm444 ${moondancer}/bin/moondancer.bin "${assets}/moondancer.bin"
@@ -124,6 +124,6 @@ buildPythonPackage {
     homepage = "https://github.com/greatscottgadgets/cynthion";
     changelog = "https://github.com/greatscottgadgets/cynthion/releases/tag/${src.tag}";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ carlossless ];
+    maintainers = with lib.maintainers; [ karstx ];
   };
 }

@@ -7,30 +7,20 @@
   scipy,
   matplotlib,
   pytestCheckHook,
-  isPy3k,
   stdenv, # for meta.broken
 }:
 
-buildPythonPackage {
+buildPythonPackage (finalAttrs: {
   pname = "filterpy";
-  version = "1.4.5-unstable-2022-08-23";
+  version = "2.0.0";
   pyproject = true;
-
-  disabled = !isPy3k;
 
   src = fetchFromGitHub {
     owner = "rlabbe";
     repo = "filterpy";
-    rev = "3b51149ebcff0401ff1e10bf08ffca7b6bbc4a33";
-    hash = "sha256-KuuVu0tqrmQuNKYmDmdy+TU6BnnhDxh4G8n9BGzjGag=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-IGK0luLLfISxCaOQAy04nLWAf+ZlVllaPoMuepL/Gk8=";
   };
-
-  patches = [
-    ./numpy-2.4-compat.patch
-
-    # https://github.com/rlabbe/filterpy/pull/331
-    ./scipy-1.12-deprecation.patch
-  ];
 
   build-system = [ setuptools ];
 
@@ -42,12 +32,8 @@ buildPythonPackage {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  disabledTests = [
-    # ValueError: Unable to avoid copy while creating an array as requested."
-    "test_multivariate_gaussian"
-  ];
-
   meta = {
+    changelog = "https://github.com/rlabbe/filterpy/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://github.com/rlabbe/filterpy";
     description = "Kalman filtering and optimal estimation library";
     license = lib.licenses.mit;
@@ -55,4 +41,4 @@ buildPythonPackage {
     # last successful hydra build on darwin was in 2025
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

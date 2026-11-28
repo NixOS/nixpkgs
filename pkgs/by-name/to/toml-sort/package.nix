@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 let
-  version = "0.24.4";
+  version = "0.26.0";
 in
 python3Packages.buildPythonApplication {
   pname = "toml-sort";
@@ -15,12 +15,12 @@ python3Packages.buildPythonApplication {
     owner = "pappasam";
     repo = "toml-sort";
     tag = "v${version}";
-    hash = "sha256-3xuCnzZ6SKUclvyyWRxHUJy0xF1rnJYwWPZD0OKWFxQ=";
+    hash = "sha256-NBHBCq79/g+cgjmq3Qom/xRZQHpJwPpLSdM/Fe7FX40=";
   };
 
   build-system = [ python3Packages.poetry-core ];
 
-  dependencies = [ python3Packages.tomlkit ];
+  dependencies = [ python3Packages.tomlrt ];
 
   nativeCheckInputs = [ python3Packages.pytestCheckHook ];
 

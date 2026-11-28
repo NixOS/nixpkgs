@@ -1,0 +1,3 @@
+import Outer
+
+print(outerVersion())

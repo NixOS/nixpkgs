@@ -3,32 +3,30 @@
   buildPythonPackage,
   fetchFromGitHub,
   poetry-core,
-  httpx,
+  httpx2,
   pydicom,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "pyorthanc";
-  version = "1.23.0";
+  version = "2.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gacou54";
     repo = "pyorthanc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-L1vIU6oDZ95lFt2w/TYFpHdmHmDE2XPn10XdEUIlxRQ=";
+    hash = "sha256-Know1ciqeqqVatIik5Sv0t1l3PaWQo6Irl0IMm5+gzc=";
   };
 
   build-system = [ poetry-core ];
 
-  pythonRelaxDeps = [ "pydicom" ];
-
   dependencies = [
-    httpx
+    httpx2
     pydicom
   ];
 
-  doCheck = false; # requires orthanc server (not in Nixpkgs)
+  doCheck = false; # requires running Orthanc server (available as a NixOS module)
 
   pythonImportsCheck = [ "pyorthanc" ];
 

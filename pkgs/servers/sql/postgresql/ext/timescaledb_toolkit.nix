@@ -12,16 +12,16 @@ buildPgrxExtension (finalAttrs: {
   cargo-pgrx = cargo-pgrx_0_18_0;
 
   pname = "timescaledb_toolkit";
-  version = "1.23.0";
+  version = "1.28.0";
 
   src = fetchFromGitHub {
     owner = "timescale";
     repo = "timescaledb-toolkit";
     tag = finalAttrs.version;
-    hash = "sha256-we2w2rYGRC9Did9oocgCWbIUxb8a/g0BlCHXQUe1f8I=";
+    hash = "sha256-Mg6yZeRvbqrMvVnctxLrTAmbNdMEp7MdU0B0bEfe5J4=";
   };
 
-  cargoHash = "sha256-R6daWAQssopVps+IqF94dGBcZMC/u1J4eEg6WouAwOo=";
+  cargoHash = "sha256-uoJihIiFA4ldSLtbnNNwXAhni3/cjq4nG7ihPGwnyvg=";
   buildAndTestSubdir = "extension";
 
   postInstall = ''
@@ -43,10 +43,10 @@ buildPgrxExtension (finalAttrs: {
     platforms = postgresql.meta.platforms;
     license = lib.licenses.tsl;
     broken =
-      lib.versionOlder postgresql.version "15"
+      lib.versionOlder postgresql.version "16"
       ||
         # Check after next package update.
-        lib.warnIf (finalAttrs.version != "1.23.0")
+        lib.warnIf (finalAttrs.version != "1.28.0")
           "Is postgresql19Packages.timescaledb_toolkit still broken?"
           (lib.versionAtLeast postgresql.version "19");
   };

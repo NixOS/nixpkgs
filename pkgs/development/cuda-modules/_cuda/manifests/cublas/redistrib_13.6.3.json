@@ -1,0 +1,30 @@
+{
+    "release_date": "2026-10-27",
+    "release_label": "13.6.3",
+    "release_product": "cublas",
+    "libcublas": {
+        "name": "CUDA cuBLAS",
+        "license": "cuBLAS library",
+        "license_path": "libcublas/LICENSE.txt",
+        "version": "13.6.3.23",
+        "linux-x86_64": {
+            "cuda13": {
+                "relative_path": "libcublas/linux-x86_64/libcublas-linux-x86_64-13.6.3.23_cuda13-archive.tar.xz",
+                "sha256": "b2310a211a8aed0a26155d4d80f73d6e400e0ab5239c23b475a002a0d7b28581",
+                "md5": "f6c5e3fea3471cf3f6984f5a2ff82a57",
+                "size": "817648972"
+            }
+        },
+        "cuda_variant": [
+            "13"
+        ],
+        "linux-sbsa": {
+            "cuda13": {
+                "relative_path": "libcublas/linux-sbsa/libcublas-linux-sbsa-13.6.3.23_cuda13-archive.tar.xz",
+                "sha256": "6500159d03fba57e5f8e0c2771fb613e7702f0f74583917f7eb4c50498a72ee6",
+                "md5": "a287494e1435e0b89e26b22daae40798",
+                "size": "1032025240"
+            }
+        }
+    }
+}

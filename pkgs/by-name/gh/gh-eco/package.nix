@@ -4,7 +4,7 @@
   buildGoModule,
 }:
 let
-  version = "0.1.6";
+  version = "0.1.8";
 in
 buildGoModule {
   pname = "gh-eco";
@@ -14,10 +14,10 @@ buildGoModule {
     owner = "jrnxf";
     repo = "gh-eco";
     tag = "v${version}";
-    hash = "sha256-PkZ/5mYAbPAELxW4l4BIck4qedOJ7htWqrH0KEKrF9o=";
+    hash = "sha256-DFidh2IWT5pvrsxp1sm59KB+Xunm6KhdYoMGJsM0gQw=";
   };
 
-  vendorHash = "sha256-LrD6mfzilN+5nHBY/j2Jn+poc8ZXpr5rAs2oOkhDZNs=";
+  vendorHash = "sha256-WuAV6g/UVaCexRzWxNuJwFntQA0Vexp8D/Z+DcNLbZE=";
 
   ldflags = [
     "-s"

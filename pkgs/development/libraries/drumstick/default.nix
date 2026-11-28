@@ -25,11 +25,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "drumstick";
-  version = "2.11.1";
+  version = "2.11.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/drumstick/${version}/drumstick-${version}.tar.bz2";
-    hash = "sha256-fVN67Kd0hvyPV6hK898b0N3dtAGmGTXotIIVQtFgtnc=";
+    hash = "sha256-fT9TIeFH2NKLC/uQGFBJHmoW0HlGoAt/9qdnpmnQB4c=";
   };
 
   patches = [ ./drumstick-plugins.patch ];

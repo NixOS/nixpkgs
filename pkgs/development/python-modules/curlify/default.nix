@@ -11,8 +11,6 @@ buildPythonPackage {
   version = "2.2.1";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "ofw";
     repo = "curlify";

@@ -10,6 +10,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tauri-asset-gst-plugin";
   version = "0.0.1";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "tauri-apps";
     repo = "tauri-gstreamer-plugin";

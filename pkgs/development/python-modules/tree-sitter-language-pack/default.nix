@@ -4,16 +4,18 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchurl,
+  pkg-config,
   python,
   pytestCheckHook,
   rustPlatform,
   stdenv,
   tree-sitter,
+  zstd,
 }:
 
 let
   parserReleaseUrl =
-    version: "https://github.com/kreuzberg-dev/tree-sitter-language-pack/releases/download/v${version}";
+    version: "https://github.com/xberg-io/tree-sitter-language-pack/releases/download/v${version}";
 
   parserBundleSpecs = {
     aarch64-darwin = {
@@ -36,7 +38,7 @@ buildPythonPackage (finalAttrs: {
   version = "1.4.1";
 
   src = fetchFromGitHub {
-    owner = "kreuzberg-dev";
+    owner = "xberg-io";
     repo = "tree-sitter-language-pack";
     tag = "v${finalAttrs.version}";
     hash = "sha256-kN2htitEOo+JF6DCrC4RHmHkZXnUA0fUo2jSbMELQHI=";
@@ -72,9 +74,12 @@ buildPythonPackage (finalAttrs: {
 
   nativeBuildInputs = [
     buildPackages.zstd
+    pkg-config
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
   ];
+
+  buildInputs = [ zstd ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -150,8 +155,8 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Comprehensive collection of tree-sitter language parsers with polyglot bindings";
-    homepage = "https://github.com/kreuzberg-dev/tree-sitter-language-pack";
-    changelog = "https://github.com/kreuzberg-dev/tree-sitter-language-pack/releases/tag/v${finalAttrs.version}";
+    homepage = "https://github.com/xberg-io/tree-sitter-language-pack";
+    changelog = "https://github.com/xberg-io/tree-sitter-language-pack/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ yzx9 ];
     platforms = builtins.attrNames parserBundleSpecs;

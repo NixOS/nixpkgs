@@ -125,4 +125,18 @@ lib.recurseIntoAttrs {
         touch $out
       '';
 
+  # Checks that dependencies added via overrideAttrs end up in Lua environments
+  checkOverriddenPropagatedBuildInputs =
+    let
+      base = lua.pkgs.toLuaModule (pkgs.runCommandLocal "test-pkg" { } "mkdir -p $out");
+      pkg = base.overrideAttrs (old: {
+        propagatedBuildInputs = (old.propagatedBuildInputs or [ ]) ++ [ lua.pkgs.cjson ];
+      });
+      luaEnv = lua.withPackages (_: [ pkg ]);
+    in
+    pkgs.runCommandLocal "test-${lua.name}-overridden-propagated-build-inputs" { } ''
+      ${luaEnv}/bin/lua -e "require'cjson'"
+      touch $out
+    '';
+
 }

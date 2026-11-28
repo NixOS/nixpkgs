@@ -42,13 +42,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "warpinator";
-  version = "2.0.5";
+  version = "2.0.8";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "warpinator";
     rev = finalAttrs.version;
-    hash = "sha256-txbQKsKGXusXKK6PY1qb8HZVjlAF0Qb+gWxlBWzhXU4=";
+    hash = "sha256-DnQ5BjvPjMAwe2Rp8OeOKRjOraUwn8YQ1KtX13yqNNg=";
   };
 
   nativeBuildInputs = [

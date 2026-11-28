@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "p4est-sc";
-  version = "2.8.7";
+  version = "2.8.8";
 
   src = fetchFromGitHub {
     owner = "cburstedde";
     repo = "libsc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-oeEYNaYx1IdEWefctgUZVUa6wnb8K3z5Il2Y9MtQwBc=";
+    hash = "sha256-hm2dUrYAfoHucqAJPv5tMRROkCicY+HpGC37iLHEn8c=";
   };
 
   strictDeps = true;

@@ -1,67 +1,93 @@
 {
   lib,
   buildPythonPackage,
+  cargo,
   fetchFromGitHub,
-  graphviz,
-  hatchling,
-  hatch-vcs,
-  packaging,
-  pip-requirements-parser,
-  pytestCheckHook,
+  gitMinimal,
+  graphviz-nox,
+  hatch-fancy-pypi-readme,
+  meson-python,
+  meson,
+  nab-index,
+  nab-project,
+  nab,
+  ninja,
   pytest-mock,
-  pytest-subprocess,
-  rich,
-  virtualenv,
+  pytestCheckHook,
+  python-sbom,
+  rustPackages_1_100,
+  scikit-build-core,
+  setuptools-scm,
+  versionCheckHook,
 }:
 
+let
+  rustPackages = rustPackages_1_100;
+in
 buildPythonPackage (finalAttrs: {
   pname = "pipdeptree";
-  version = "3.1.1";
+  version = "4.2.16";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tox-dev";
     repo = "pipdeptree";
     tag = finalAttrs.version;
-    hash = "sha256-EDpKJBDb3CkTMfiLyYMakbm5riIHsf+49yM99uQDPT8=";
+    hash = "sha256-MrIhETMECoo1P7v/8KUwgHDq8Apcp3QMWtv6AreK2KE=";
   };
+
+  cargoDeps = rustPackages.rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-LrhB2L75y/Ejz3TW6++PelMrVWigvV4XAU8ItAE+xQs=";
+  };
+
+  postPatch = ''
+    patchShebangs tools
+
+    substituteInPlace pyproject.toml \
+      --replace-fail "\"patchelf>=0.11; sys_platform=='linux'\"," ""
+  '';
+
+  nativeBuildInputs = [
+    cargo
+    rustPackages.rustc
+    rustPackages.rustPlatform.cargoSetupHook
+  ];
 
   build-system = [
-    hatchling
-    hatch-vcs
+    hatch-fancy-pypi-readme
+    meson
+    meson-python
+    ninja
+    python-sbom
+    scikit-build-core
+    setuptools-scm
   ];
 
-  dependencies = [ packaging ];
+  dontUseMesonConfigure = true;
 
-  optional-dependencies = {
-    graphviz = [ graphviz ];
-    index = [
-      # nab-index # Unstable + not packaged yet
-      # nab-python # Same
-      pip-requirements-parser
-    ];
-    rich = [ rich ];
-  };
+  env.PIPDEPTREE_VERSION = finalAttrs.version;
+
+  dependencies = [
+    nab
+    nab-index
+    nab-project
+  ];
 
   nativeCheckInputs = [
+    gitMinimal
+    graphviz-nox
     pytest-mock
-    pytest-subprocess
     pytestCheckHook
-    virtualenv
-  ]
-  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
+    versionCheckHook
+  ];
 
   pythonImportsCheck = [ "pipdeptree" ];
-
-  disabledTests = [
-    # Don't run console tests
-    "test_console"
-  ];
 
   meta = {
     description = "Command line utility to show dependency tree of packages";
     homepage = "https://github.com/tox-dev/pipdeptree";
-    changelog = "https://github.com/tox-dev/pipdeptree/releases/tag/${finalAttrs.src.tag}";
+    changelog = "https://github.com/tox-dev/pipdeptree/blob/${finalAttrs.src.rev}/docs/changelog.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       charlesbaynham

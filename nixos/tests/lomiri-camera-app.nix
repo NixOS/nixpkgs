@@ -65,6 +65,8 @@ in
           qrContent = "Test";
         in
         ''
+          import datetime
+
           machine.wait_for_x()
 
           with subtest("lomiri camera launches"):
@@ -72,9 +74,9 @@ in
               # emitted twice
               machine.wait_for_console_text("updateViewfinderResolution: viewfinder resolutions is not known yet")
               machine.wait_for_console_text("updateViewfinderResolution: viewfinder resolutions is not known yet")
-              machine.sleep(10)
+              machine.sleep(datetime.timedelta(seconds=10))
               machine.send_key("alt-f10")
-              machine.sleep(5)
+              machine.sleep(datetime.timedelta(seconds=5))
               machine.wait_for_text("Cannot access")
               machine.screenshot("lomiri-camera_open")
 
@@ -85,16 +87,16 @@ in
           # Sometimes, GStreamer errors out on camera init with: CameraBin error: "Failed to allocate required memory."
           # Adding more VM memory didn't affect this. Maybe flaky in general?
           # Current assumption: Camera access gets requested in a weird/still-in-use state, so sleep abit
-          machine.sleep(10)
+          machine.sleep(datetime.timedelta(seconds=10))
 
           with subtest("lomiri camera localisation works"):
               machine.succeed("env LANG=de_DE.UTF-8 lomiri-camera-app >&2 &")
               # emitted twice
               machine.wait_for_console_text("updateViewfinderResolution: viewfinder resolutions is not known yet")
               machine.wait_for_console_text("updateViewfinderResolution: viewfinder resolutions is not known yet")
-              machine.sleep(10)
+              machine.sleep(datetime.timedelta(seconds=10))
               machine.send_key("alt-f10")
-              machine.sleep(5)
+              machine.sleep(datetime.timedelta(seconds=5))
               machine.wait_for_text("Zugriff auf")
               machine.screenshot("lomiri-camera_localised")
         '';
@@ -149,6 +151,8 @@ in
       enableOCR = true;
 
       testScript = ''
+        import datetime
+
         machine.wait_for_x()
 
         # Setup fake v4l2 camera
@@ -160,9 +164,9 @@ in
             # emitted twice
             machine.wait_for_console_text("No flash control support")
             machine.wait_for_console_text("No flash control support")
-            machine.sleep(10)
+            machine.sleep(datetime.timedelta(seconds=10))
             machine.send_key("alt-f10")
-            machine.sleep(5)
+            machine.sleep(datetime.timedelta(seconds=5))
             machine.wait_for_text("${feedLabel}")
             machine.screenshot("lomiri-camera_feed")
 
@@ -173,9 +177,9 @@ in
             machine.send_key("ctrl-alt-right")
             machine.succeed("magick /root/Pictures/camera.ubports/IMG_00000001.jpg -flop photo_flip.png")
             machine.succeed("feh photo_flip.png >&2 &")
-            machine.sleep(10)
+            machine.sleep(datetime.timedelta(seconds=10))
             machine.send_key("alt-f10")
-            machine.sleep(5)
+            machine.sleep(datetime.timedelta(seconds=5))
             machine.wait_for_text("${feedLabel}")
             machine.screenshot("lomiri-camera_photo")
       '';
@@ -229,6 +233,8 @@ in
       enableOCR = true;
 
       testScript = ''
+        import datetime
+
         machine.wait_for_x()
 
         # Setup fake v4l2 camera
@@ -240,14 +246,14 @@ in
             # emitted twice
             machine.wait_for_console_text("No flash control support")
             machine.wait_for_console_text("No flash control support")
-            machine.sleep(10)
+            machine.sleep(datetime.timedelta(seconds=10))
             machine.send_key("alt-f10")
-            machine.sleep(5)
+            machine.sleep(datetime.timedelta(seconds=5))
             machine.wait_for_text("${feedLabel}")
             machine.succeed("xdotool mousemove 510 720 click 1") # open up QR decode result
 
             # OCR is struggling to recognise the text. Click the clipboard button, check what got copied
-            machine.sleep(5)
+            machine.sleep(datetime.timedelta(seconds=5))
             machine.screenshot("lomiri-barcode_decode")
             machine.succeed("xdotool mousemove 540 640 click 1")
             machine.wait_until_succeeds("env DISPLAY=:0 xclip -selection clipboard -o | grep -q '${feedQrContent}'")

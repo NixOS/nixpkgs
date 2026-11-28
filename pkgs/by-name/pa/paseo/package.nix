@@ -7,14 +7,14 @@
   libuv,
   makeWrapper,
   nix-update-script,
-  nodejs_22,
+  nodejs_26,
   python3,
   stdenv,
 }:
 
 buildNpmPackage (finalAttrs: {
   pname = "paseo";
-  version = "0.12.0";
+  version = "0.18.1";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -23,12 +23,13 @@ buildNpmPackage (finalAttrs: {
     owner = "getpaseo";
     repo = "paseo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vi1LplKz2f4bRQgJi5PFwJSih4WEv6Uh0CRfwi1oEuU=";
+    hash = "sha256-WUJIjIvTIKFgA42ypVdnw4c0p/tQTDVb7m6nIGAX0uk=";
   };
 
-  nodejs = nodejs_22;
+  nodejs = nodejs_26;
 
-  npmDepsHash = "sha256-ObBdUmNSW+vDjzA7EbCDfZrB0nYDmcWmWe+UCoTMh/M=";
+  npmDepsFetcherVersion = 2;
+  npmDepsHash = "sha256-ZRO7jRu+2l/SDht7GQT6z+PokN0sIF9v1bGr3/0RKOY=";
 
   npmRebuildFlags = [ "--ignore-scripts" ];
 
@@ -49,6 +50,8 @@ buildNpmPackage (finalAttrs: {
 
   buildPhase = ''
     runHook preBuild
+
+    npm run postinstall
 
     npm_config_build_from_source=true npm_config_nodedir=${finalAttrs.nodejs} \
       npm rebuild node-pty --workspace @getpaseo/server
@@ -105,6 +108,7 @@ buildNpmPackage (finalAttrs: {
         meta
         nodejs
         npmDeps
+        npmDepsFetcherVersion
         src
         version
         ;

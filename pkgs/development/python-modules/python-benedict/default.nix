@@ -27,14 +27,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "python-benedict";
-  version = "0.39.0";
+  version = "0.40.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fabiocaccamo";
     repo = "python-benedict";
     tag = finalAttrs.version;
-    hash = "sha256-xU4BuratvIJOFljozi1j1nvsBnKDZpeF9BPeRAWGbWk=";
+    hash = "sha256-Nv9QPIPr3yxHQoSGcAzD9j/LfTOFhZoKpVveirDkxss=";
   };
 
   pythonRelaxDeps = [

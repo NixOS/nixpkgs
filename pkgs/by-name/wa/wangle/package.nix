@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   src = fetchFromGitHub {
-    owner = "facebook";
+    owner = "meta";
     repo = "wangle";
     tag = "v${finalAttrs.version}";
     hash = "sha256-BGl1LGaYRmYdG4h98HhAT7X4tXEMjlzh27nGLCY/B1c=";
@@ -97,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
       abstractions for building services in a consistent, modular, and
       composable way.
     '';
-    homepage = "https://github.com/facebook/wangle";
+    homepage = "https://github.com/meta/wangle";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [

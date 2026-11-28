@@ -1,6 +1,7 @@
 {
   buildGoModule,
   fetchFromGitHub,
+  fetchpatch,
   installShellFiles,
   lib,
   nixosTests,
@@ -9,11 +10,11 @@
 }:
 
 let
-  version = "3.6.15";
-  etcdSrcHash = "sha256-rnipUdLe5cZNouEuk86Wl8GDav3pk3stuGYj1ZTjy90=";
-  etcdCtlVendorHash = "sha256-2rWlwRaZ00iZqE2IHQtICmVVN6DvRNPYtnmqSS8fU0E=";
-  etcdUtlVendorHash = "sha256-bhnYxDB8xB7As938IVlvHAViqxlLKIDjye17VD5tPiQ=";
-  etcdServerVendorHash = "sha256-p0ka3KRlfaQmK3UPwjNICdtqjixgvs1oTQWxY0pOrq8=";
+  version = "3.6.17";
+  etcdSrcHash = "sha256-xPNgHQ5++zsfNg1+m1GUMq8E7izLecBhlNqxwoSTqP4=";
+  etcdCtlVendorHash = "sha256-8nDEqoSWDqOQYBhpCRgHlZdHAPktNqT7AViKi1EbO5Q=";
+  etcdUtlVendorHash = "sha256-qgUSJ2nO7dZ8wo0Pp/faUxsQZ7tEkLKB0dYop2p4uUA=";
+  etcdServerVendorHash = "sha256-1GugyQiussvJ+2bPeg2B23hlBQU9gskTFv2Eiqw7hw8=";
 
   src = fetchFromGitHub {
     owner = "etcd-io";
@@ -50,6 +51,17 @@ let
     __darwinAllowLocalNetworking = true;
 
     modRoot = "./server";
+
+    patches = [
+      (fetchpatch {
+        name = "go_1_27.patch";
+        url = "https://github.com/etcd-io/etcd/commit/b5b40fba5e69f6662fff673d1ffe5c2ce2e3b863.patch";
+        includes = [
+          "server/embed/config_test.go"
+        ];
+        hash = "sha256-mNboTMWuK9Y6/7bBXflOcxGIPnBjTqIctBKNXgKzSCU=";
+      })
+    ];
 
     preInstall = ''
       mv $GOPATH/bin/{server,etcd}

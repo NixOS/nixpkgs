@@ -10,19 +10,29 @@
 }:
 
 buildGo127Module (finalAttrs: {
+  __structuredAttrs = true;
+
   pname = "entire";
-  version = "0.11.5";
+  version = "0.13.4";
 
   src = fetchFromGitHub {
     owner = "entireio";
     repo = "cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MpTJt9HyEWkPGZIBST+iop0iCHHfy/4Hw3T5TmwB6Yo=";
+    hash = "sha256-Nakjm46p/OF1oixgVSvrj/XRxy9Mtj9lNtzQSzkEHNY=";
   };
 
-  vendorHash = "sha256-SgjJ2+eXUzN5YAafVII7Lgj9i2s1JDRBLanNNvhP0gA=";
+  vendorHash = "sha256-/0dek0VPV2GOC8uGrFXJPFSm+T5eWNr91WaVZOQHl+U=";
 
-  subPackages = [ "cmd/entire" ];
+  postPatch = ''
+    # Remove when Go in Nixpkgs is updated to 1.27.4.
+    substituteInPlace go.mod --replace-fail 'go 1.27.4' 'go 1.27.3'
+  '';
+
+  subPackages = [
+    "cmd/entire"
+    "cmd/git-remote-entire"
+  ];
 
   ldflags = [
     "-s"
@@ -36,6 +46,9 @@ buildGo127Module (finalAttrs: {
     git
     writableTmpDirAsHomeHook
   ];
+
+  # git-remote-entire tests bind localhost via httptest
+  __darwinAllowLocalNetworking = true;
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd entire \
@@ -60,6 +73,7 @@ buildGo127Module (finalAttrs: {
       iamanaws
       sheeeng
       squishykid
+      toothbrush
     ];
     mainProgram = "entire";
   };

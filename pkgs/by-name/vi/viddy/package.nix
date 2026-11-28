@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  sqlite,
   versionCheckHook,
 }:
 
@@ -17,6 +18,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-P+TtxV2kuHeBHr8GQeJ0VWPkjimfcAtBUFt0z79ML6A=";
+
+  buildInputs = [ sqlite ];
 
   __structuredAttrs = true;
 

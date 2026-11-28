@@ -1,25 +1,32 @@
 diff --git a/package.json b/package.json
+index 78c815148..cbfa07ade 100644
 --- a/package.json
 +++ b/package.json
-@@ -5,8 +5 @@
+@@ -2,13 +2,6 @@
+   "name": "matrix-authentication-service",
+   "private": true,
+   "packageManager": "pnpm@11.28.9+sha512.35421cea2720eca3f5ad722b67e8ef18f4d3cd4745ed2fcfeb0dc288d4e9437fad3870d91ee6e83f268f0f6f7e0f62723317b19617bb45ee4333172ef51159f8",
 -  "devEngines": {
 -    "runtime": {
 -      "name": "node",
--      "version": "24.15.0",
+-      "version": "24.22.1",
 -      "onFail": "download"
 -    }
 -  },
    "devDependencies": {
+     "@localazy/cli": "^2.0.12",
+     "semver": "^7.8.5"
 diff --git a/pnpm-lock.yaml b/pnpm-lock.yaml
+index 45fee3ff9..9b9993295 100644
 --- a/pnpm-lock.yaml
 +++ b/pnpm-lock.yaml
-@@ -14,9 +14,6 @@ importers:
+@@ -16,9 +16,6 @@ importers:
        '@localazy/cli':
-         specifier: ^2.0.11
-         version: 2.0.11
+         specifier: ^2.0.12
+         version: 2.0.12
 -      node:
--        specifier: runtime:24.15.0
--        version: runtime:24.15.0
+-        specifier: runtime:24.22.1
+-        version: runtime:24.22.1
        semver:
          specifier: ^7.8.5
          version: 7.8.5

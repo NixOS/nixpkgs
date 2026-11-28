@@ -23,13 +23,15 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "gotosocial";
-  version = "0.22.2";
+  version = "0.22.3";
+
+  __structuredAttrs = true;
 
   src = fetchFromCodeberg {
     owner = "superseriousbusiness";
     repo = "gotosocial";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gzTiXcDiE7QwX/xcvtLOroDd1p1TU+XyH/On00Q51gU=";
+    hash = "sha256-kDFfM47FQzZzkMUEPnYFi0Frm2DNL240O3T4qggYn8I=";
   };
 
   vendorHash = null;
@@ -123,6 +125,7 @@ buildGoModule (finalAttrs: {
       blakesmith
       cherrykitten
     ];
+    teams = with lib.teams; [ ngi ];
     license = lib.licenses.agpl3Only;
   };
 })

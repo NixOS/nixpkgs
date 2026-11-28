@@ -11,16 +11,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "granted";
-  version = "0.39.0";
+  version = "0.40.0";
 
   src = fetchFromGitHub {
     owner = "fwdcloudsec";
     repo = "granted";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-/5JP6laC+k+O8GWSl1eo0slqzYzYB86UF3irDX6Z0iQ=";
+    sha256 = "sha256-mirBLZ/ahSOCisbvNI7qO3rEWmk2UycWtSrsrsVm79s=";
   };
 
-  vendorHash = "sha256-L96zj/AEUze/SfuFeK+I1+w2zXcxr5BSW3wGQFbTbJU=";
+  vendorHash = "sha256-QCVjMIaWBwGcceZhU8Qptdd8cWuiSa89puZ1zDg5vKY=";
 
   nativeBuildInputs = [ makeWrapper ];
 

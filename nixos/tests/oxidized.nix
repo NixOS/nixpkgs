@@ -28,48 +28,57 @@ makeTest {
           routerDB = pkgs.writeText "oxidized-router.db" ''
             localhost:linuxgeneric:root
           '';
-          configFile = pkgs.writeText "oxidized-config.yml" ''
-            # vi: ft=yaml
-            ---
-            extensions:
-              oxidized-web:
-                load: true
-                listen: 127.0.0.1
-                port: 8888
-                vhosts:
-                  - localhost
-                  - 127.0.0.1
-                  - oxidized
-                  - oxidized.example.com
-            interval: 3600
-            retries: 3
-            model: linuxgeneric
-            username: root
-            source:
-              default: csv
-              csv:
-                file: "/var/lib/oxidized/.config/oxidized/router.db"
-                delimiter: !ruby/regexp /:/
-                map:
-                  name: 0
-                  model: 1
-                  username: 2
-                  password: 3
-                vars_map:
-                  enable: 4
-            input:
-              default: ssh
-              utf8_encoded: true
-            output:
-              default: git
-              git:
-                single_repo:  true
-                user: oxidized
-                email: oxidized@example.com
-                repo: /var/lib/oxidized/git
-          '';
+          settings = {
+            interval = 3600;
+            retries = 3;
+            model = "linuxgeneric";
+            username = "root";
+            source = {
+              default = "csv";
+              csv = {
+                file = "/var/lib/oxidized/.config/oxidized/router.db";
+                delimiter = "!ruby/regexp /:/";
+                map = {
+                  name = 0;
+                  model = 1;
+                  username = 2;
+                  password = 3;
+                };
+                vars_map = {
+                  enable = 4;
+                };
+              };
+            };
+            input = {
+              default = "ssh";
+              utf8_encoded = true;
+            };
+            output = {
+              default = "git";
+              git = {
+                single_repo = true;
+                user = "oxidized";
+                email = "oxidized@example.com";
+                repo = "/var/lib/oxidized/git";
+              };
+            };
+            extensions = {
+              oxidized-web = {
+                load = true;
+                listen = "127.0.0.1";
+                port = 8888;
+                vhosts = [
+                  "localhost"
+                  "127.0.0.1"
+                  "oxidized"
+                  "oxidized.example.com"
+                ];
+              };
+            };
+          };
         };
       };
+      services.prometheus.exporters.oxidized.enable = true;
       systemd.services.oxidized = {
         stopIfChanged = false;
         environment.HOME = "/var/lib/oxidized";
@@ -84,7 +93,6 @@ makeTest {
 
         path = [ config.programs.ssh.package ];
       };
-
     };
 
   testScript =
@@ -100,5 +108,8 @@ makeTest {
         server.wait_until_succeeds(("curl --silent --fail --resolve oxidized:8888:127.0.0.1 --location http://oxidized:8888/ | grep '${nodes.server.services.oxidized.package.version}' >&2"))
       with subtest("Check if oxidized can connect to linuxgeneric model"):
         server.wait_until_succeeds("journalctl -b --grep 'Oxidized::Worker -- Configuration updated for /localhost' -t oxidized")
+      with subtest("Check if the Prometheus exporter provides metrics"):
+        server.wait_for_unit("prometheus-oxidized-exporter.service")
+        server.succeed("curl --fail http://localhost:${toString nodes.server.services.prometheus.exporters.oxidized.port}/metrics | grep -qE '^oxidized_device_status\\{.*\\} 2$'")
     '';
 }

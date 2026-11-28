@@ -9,13 +9,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "llama-index-vector-stores-google";
-  version = "0.6.0";
+  version = "0.7.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "llama_index_vector_stores_google";
     inherit (finalAttrs) version;
-    hash = "sha256-bGxsNAE6tC0bOLfjzn3kY1Se17yh6c7jjk/sgyMPdck=";
+    hash = "sha256-v0H/POrVPVNDXuJXSVfCJ9KhjT2uMRKCYrceLJ3PdxI=";
   };
 
   pythonRelaxDeps = [ "google-generativeai" ];

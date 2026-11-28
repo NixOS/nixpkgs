@@ -10,13 +10,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "guile-lsp-server";
-  version = "0.4.8";
+  version = "0.4.10";
 
   src = fetchFromCodeberg {
     owner = "rgherdt";
     repo = "scheme-lsp-server";
     tag = finalAttrs.version;
-    hash = "sha256-x0BqN2JM1eVmaHp+F4N8OsotqL8hlWNIE2rmCq9Qn+w=";
+    hash = "sha256-GBfl9oOY4N5CZaOgcoBE6tt3TikxBXAElonwDtFGi5g=";
   };
 
   strictDeps = true;

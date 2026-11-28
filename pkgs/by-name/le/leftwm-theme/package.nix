@@ -4,6 +4,7 @@
   rustPlatform,
   openssl,
   pkg-config,
+  libgit2,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -27,7 +28,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl ];
+  buildInputs = [
+    openssl
+    libgit2
+  ];
 
   env = {
     OPENSSL_NO_VENDOR = 1;

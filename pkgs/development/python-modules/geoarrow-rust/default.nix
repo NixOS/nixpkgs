@@ -3,6 +3,8 @@
   buildPythonPackage,
   fetchFromGitHub,
   rustPlatform,
+  pkg-config,
+  pkgs,
   pytestCheckHook,
   arro3-core,
   obstore,
@@ -69,12 +71,14 @@ let
 
       sourceRoot = "${src.name}/python/${subdir}";
       cargoRoot = "..";
-      __structuredAttrs = true;
 
-      nativeBuildInputs = with rustPlatform; [
-        cargoSetupHook
-        maturinBuildHook
+      nativeBuildInputs = [
+        pkg-config
+        rustPlatform.cargoSetupHook
+        rustPlatform.maturinBuildHook
       ];
+
+      buildInputs = [ pkgs.zstd ];
 
       postPatch = ''
         chmod -R +w ../..

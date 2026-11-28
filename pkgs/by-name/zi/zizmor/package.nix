@@ -2,31 +2,37 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  aws-lc,
   rust-jemalloc-sys,
   installShellFiles,
   nix-update-script,
+  pkg-config,
   rustPlatform,
   versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zizmor";
-  version = "1.31.1";
+  version = "1.33.1";
 
   src = fetchFromGitHub {
     owner = "zizmorcore";
     repo = "zizmor";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eoFgGUBA4OjzW9ktCx25Ydg2ckIcBxLerEDRr4IFFfA=";
+    hash = "sha256-3XRSwP+uuRTlJWmpf+LzpmtgxG9LlL20Q38k/uoYuv4=";
   };
 
-  cargoHash = "sha256-i1tFtUUg7QOgepVjJH+KWtGh/Cw7oiSDQloh+eqc3yk=";
+  cargoHash = "sha256-/vECumn81Dw0R6Q7hpB44HLUHH70+MPaxb06wzMhThQ=";
 
   buildInputs = [
+    aws-lc
     rust-jemalloc-sys
   ];
 
-  nativeBuildInputs = lib.optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+  nativeBuildInputs = [
+    pkg-config
+  ]
+  ++ lib.optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     installShellFiles
   ];
 

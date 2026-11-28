@@ -1,0 +1,67 @@
+--- a/src/com/eteks/sweethome3d/SweetHome3D.java
++++ b/src/com/eteks/sweethome3d/SweetHome3D.java
+@@ -99,7 +99,6 @@
+ import com.eteks.sweethome3d.viewcontroller.HomeController;
+ import com.eteks.sweethome3d.viewcontroller.View;
+ import com.eteks.sweethome3d.viewcontroller.ViewFactory;
+-import com.sm.sweethome3d.sourceforge.SourceForgeSupport;
+ 
+ /**
+  * Sweet Home 3D main class. Sweet Home 3D accepts the parameter
+@@ -487,8 +486,6 @@
+ 
+     addComponent3DRenderingErrorObserver();
+ 
+-    // Detect new users before preferences file is created and download remote configuration
+-    SourceForgeSupport.initialize();
+     getUserPreferences();
+     try {
+       // Set User Agent to follow statistics on used operating systems
+@@ -514,12 +511,7 @@
+     // Run everything else in Event Dispatch Thread
+     EventQueue.invokeLater(new Runnable() {
+       public void run() {
+-        // Display onboarding to new users before any home
+-        SourceForgeSupport.showOnboardingIfNeeded(getUserPreferences(), new Runnable() {
+-            public void run() {
+-              SweetHome3D.this.start(args);
+-            }
+-          });
++        SweetHome3D.this.start(args);
+       }
+     });
+   }
+@@ -780,14 +772,6 @@
+    * This method is executed from Event Dispatch Thread.
+    */
+   protected void start(final String [] args) {
+-    // Open homes requested during onboarding (from Finder or Dock under macOS) once it's closed
+-    if (SourceForgeSupport.runAfterOnboarding(new Runnable() {
+-          public void run() {
+-            start(args);
+-          }
+-        })) {
+-      return;
+-    }
+     startAfterOnboarding(args);
+   }
+ 
+--- a/src/com/eteks/sweethome3d/swing/HomePane.java
++++ b/src/com/eteks/sweethome3d/swing/HomePane.java
+@@ -213,7 +213,6 @@
+ import com.eteks.sweethome3d.tools.URLContent;
+ import com.eteks.sweethome3d.viewcontroller.ContentManager;
+ import com.eteks.sweethome3d.viewcontroller.ExportableView;
+-import com.sm.sweethome3d.sourceforge.SourceForgeSupport;
+ import com.eteks.sweethome3d.viewcontroller.FurnitureController;
+ import com.eteks.sweethome3d.viewcontroller.HomeController;
+ import com.eteks.sweethome3d.viewcontroller.HomeController3D;
+@@ -2638,8 +2637,6 @@
+     }
+ 
+     addActionToToolBar(ActionType.HELP, toolBar);
+-    // Add the button controlled by the remote configuration of the SourceForge version
+-    SourceForgeSupport.addToolbarButton(toolBar, preferences);
+ 
+     // Remove useless separators
+     for (int i = toolBar.getComponentCount() - 1; i > 0; i--) {

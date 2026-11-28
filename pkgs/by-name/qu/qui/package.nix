@@ -14,12 +14,12 @@
 }:
 buildGo127Module (finalAttrs: {
   pname = "qui";
-  version = "1.32.0";
+  version = "1.36.1";
   src = fetchFromGitHub {
     owner = "autobrr";
     repo = "qui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xMyZ2TDDKYObl1DpcrSn2UnhXBOQktJKFmK2C+zrfqY=";
+    hash = "sha256-xsWSDXJAUHcK2x0+ljK372bB2FG4gvdr+713mypczTo=";
   };
 
   qui-web = stdenvNoCC.mkDerivation (finalAttrs': {
@@ -43,7 +43,7 @@ buildGo127Module (finalAttrs: {
         ;
       pnpm = pnpm_11;
       fetcherVersion = 4;
-      hash = "sha256-F+B1rj9fcgaDfPYC+8hUZfpNQNiiK9TnT/Ld68fW/WA=";
+      hash = "sha256-2gDYiO/tBJMAUR93jy8L9bG1IU8/Ebv4K+g6Gs7KT5k=";
     };
 
     postBuild = ''
@@ -55,7 +55,7 @@ buildGo127Module (finalAttrs: {
     '';
   });
 
-  vendorHash = "sha256-9ZfUUgVDcIvHLgeMbyGnVI/i9oicS6Ny9+HOzK1VP4o=";
+  vendorHash = "sha256-j4KkQXCJFy+m9GG09CtPGIlBdHdsxhE/6Vn/vWr8ykQ=";
 
   preBuild = ''
     cp -r ${finalAttrs.qui-web}/* web/dist
@@ -73,14 +73,17 @@ buildGo127Module (finalAttrs: {
   # some season-pack tests use non-existent source paths (e.g. /media/...) and
   # assert on a same-filesystem check that resolves them up to /. go's
   # t.TempDir honours $TMPDIR, which defaults to /build. so just point it to
-  # something sane
+  # something sane. We use realpath, because on macOS it's symliked to
+  # /private/tmp during the build, and tests were failing when comparing
+  # non-resolved paths to resolved paths.
   preCheck = ''
-    export TMPDIR=/tmp
+    export TMPDIR="$(realpath /tmp)"
   '';
 
   checkFlags = [
-    # broken in sandbox for some reason
-    "-skip=TestRollback"
+    # TestRollback fails in the sandbox. The capture tests need go-qbittorrent
+    # fixtures from the module cache, which go mod vendor does not include.
+    "-skip=TestRollback|^(TestStatusRuleMatchesQBittorrent|TestCategoryAndTagRulesMatchQBittorrent|TestCapabilityTableMatchesCaptures)$"
   ];
 
   nativeInstallCheckInputs = [
@@ -109,7 +112,7 @@ buildGo127Module (finalAttrs: {
     changelog = "https://github.com/autobrr/qui/releases/tag/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [
       pta2002
-      tmarkus
+      AAAAAASomeThingsFailToEvaluate
     ];
     mainProgram = "qui";
     platforms = lib.platforms.unix;

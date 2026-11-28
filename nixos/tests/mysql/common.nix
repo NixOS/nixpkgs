@@ -8,6 +8,7 @@
   };
   perconaPackages = {
     inherit (pkgs) percona-server_8_4;
+    inherit (pkgs) percona-server_9_7;
   };
   mkTestName =
     pkg:

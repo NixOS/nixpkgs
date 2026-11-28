@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "ebooklib";
-  version = "0.20";
+  version = "0.21";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "aerkalov";
     repo = "ebooklib";
     tag = "v${version}";
-    hash = "sha256-XrciVPaVU8tKhgNMJdN4uwGJT36iccyF8QMj/shSahw=";
+    hash = "sha256-jRieIOB1FBBzz4JNvXZE1GepJv+ZFzzD7pGLAsdeIl8=";
   };
 
   propagatedBuildInputs = [

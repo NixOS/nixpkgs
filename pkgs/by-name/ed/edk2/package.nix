@@ -1,5 +1,6 @@
 {
   stdenv,
+  fetchpatch,
   fetchFromGitHub,
   applyPatches,
   libuuid,
@@ -53,6 +54,11 @@ stdenv.mkDerivation (finalAttrs: {
 
     patches = [
       ./fix-cross-compilation-antlr-dlg.patch
+      (fetchpatch {
+        url = "https://github.com/tianocore/edk2/pull/13302.patch";
+        name = "GHSA-99cj-7hg9-mp4m_CVE-2026-97631.patch";
+        hash = "sha256-Hec2ei9mFOYXuleeoOYahv7ibbaTOD5LdW2V53lacQc=";
+      })
     ];
 
     postPatch = ''
@@ -79,6 +85,19 @@ stdenv.mkDerivation (finalAttrs: {
         lib.concatStrings
       ]}
       )
+
+      # de-vendor brotli
+      local -r path=BaseTools/Source/C/BrotliCompress/brotli
+      rm -r $path
+      cp -r ${buildPackages.brotli.src} $path
+      chmod -R u+w $path
+
+      ${lib.concatMapStringsSep "\n" (
+        patch: "patch -p1 -d $path < ${patch}"
+      ) buildPackages.brotli.patches}
+
+      rm -r MdeModulePkg/Library/BrotliCustomDecompressLib/brotli
+      cp -r $path MdeModulePkg/Library/BrotliCustomDecompressLib/brotli
 
       # enable compilation using Clang
       # https://bugzilla.tianocore.org/show_bug.cgi?id=4620

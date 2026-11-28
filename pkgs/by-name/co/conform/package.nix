@@ -7,16 +7,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "conform";
-  version = "0.1.0-alpha.29";
+  version = "0.1.0-alpha.33";
 
   src = fetchFromGitHub {
     owner = "siderolabs";
     repo = "conform";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-5knN+lTedUdgWG8rb3zuJAxx9N0lt7LjJvmSJhdTSgw=";
+    hash = "sha256-upFOgkbwndXKcu+aHjznXDmooNmzfSnlCe7NxiNzkO8=";
   };
 
-  vendorHash = "sha256-hDdNYXy5NIrlqT6yyOglFg2v7HOM9nE+oh7mx2kLdnQ=";
+  vendorHash = "sha256-OLZtNaPb587mjm0Ux+OA3FgjafbzMo25+DRq92uWzGQ=";
 
   ldflags = [
     "-s"
@@ -33,6 +33,7 @@ buildGoModule (finalAttrs: {
     maintainers = with lib.maintainers; [
       jmgilman
       jk
+      terlar
     ];
     mainProgram = "conform";
   };

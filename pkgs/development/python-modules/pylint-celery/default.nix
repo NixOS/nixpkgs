@@ -13,7 +13,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "PyCQA";
+    owner = "pylint-dev";
     repo = "pylint-celery";
     tag = finalAttrs.version;
     hash = "sha256-V3mjFovlUjvOZB+ZHlbWNRf/5Qr+EnuJOIKJgFXm0BU=";
@@ -32,7 +32,7 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Pylint plugin to analyze Celery applications";
-    homepage = "https://github.com/PyCQA/pylint-celery";
+    homepage = "https://github.com/pylint-dev/pylint-celery";
     license = lib.licenses.gpl2Only;
     maintainers = [ ];
   };

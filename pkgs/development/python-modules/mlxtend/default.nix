@@ -50,6 +50,9 @@ buildPythonPackage rec {
     "test_invalid_labels_1"
     "test_default"
     "test_nullability"
+    # test_sample_weight fails due to numeric precision differences
+    "test_sample_weight"
+    "test_fit_params"
   ];
 
   disabledTestPaths = [

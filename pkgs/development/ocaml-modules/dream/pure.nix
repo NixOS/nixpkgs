@@ -12,11 +12,11 @@
 
 buildDunePackage (finalAttrs: {
   pname = "dream-pure";
-  version = "1.0.0-alpha8";
+  version = "1.0.0";
 
   src = fetchurl {
-    url = "https://github.com/aantron/dream/releases/download/${finalAttrs.version}/dream-${finalAttrs.version}.tar.gz";
-    hash = "sha256-I+2BKJDAP+XJl0pJYano5iEmvte8fX0UQLhGUslc8pY=";
+    url = "https://github.com/camlworks/dream/releases/download/${finalAttrs.version}/dream-${finalAttrs.version}.tbz";
+    hash = "sha256-vrNn6aviUJfGxDxGbm7ZrDJJI9sKzczazoNl9SEPhW4=";
   };
 
   buildInputs = [ lwt_ppx ];
@@ -31,7 +31,7 @@ buildDunePackage (finalAttrs: {
 
   meta = {
     description = "Shared HTTP types for Dream (server) and Hyper (client)";
-    homepage = "https://aantron.github.io/dream/";
+    homepage = "https://camlworks.github.io/dream/";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.vbgl ];
   };

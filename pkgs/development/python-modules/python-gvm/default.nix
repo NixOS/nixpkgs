@@ -2,38 +2,37 @@
   lib,
   stdenv,
   buildPythonPackage,
-  defusedxml,
   fetchFromGitHub,
+  hatchling,
+  httpx,
   lxml,
   paramiko,
-  poetry-core,
   pontos,
   pytestCheckHook,
-  typing-extensions,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "python-gvm";
-  version = "26.11.1";
+  version = "27.10.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "greenbone";
     repo = "python-gvm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NTUDFZnDavHhl5AELMNj8AkwwVtY+96cMB9uhm4veQg=";
+    hash = "sha256-c8L7RAX9Zdnze9/vIR4bMPEHeRMPSYXxVUUD+vW4N+g=";
   };
-
-  build-system = [ poetry-core ];
 
   pythonRelaxDeps = [ "defusedxml" ];
 
+  build-system = [ hatchling ];
+
   dependencies = [
-    defusedxml
+    httpx
     lxml
     paramiko
-    typing-extensions
-  ];
+  ]
+  ++ httpx.optional-dependencies.http2;
 
   nativeCheckInputs = [
     pontos

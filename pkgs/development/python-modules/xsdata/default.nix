@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "xsdata";
-  version = "26.2";
+  version = "26.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tefra";
     repo = "xsdata";
     tag = "v${version}";
-    hash = "sha256-h5VGXGXQSG4o8H+Q+Z0SN9rw4mFI8EORNtB+4VAKg/k=";
+    hash = "sha256-FsmE7Jru4iCQjEREFK9N7+0Q6UkiEg9EwN2whbBsIAA=";
   };
 
   patches = [

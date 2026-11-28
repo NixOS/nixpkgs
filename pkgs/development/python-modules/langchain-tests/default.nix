@@ -30,7 +30,6 @@ buildPythonPackage (finalAttrs: {
   pname = "langchain-tests";
   version = "1.1.9";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
@@ -49,6 +48,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   pythonRelaxDeps = [
+    "langchain-core"
     "pytest"
     "syrupy"
     "vcrpy"

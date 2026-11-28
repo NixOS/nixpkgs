@@ -5,20 +5,21 @@
   lib,
   sqlcmd,
   testers,
+  writableTmpDirAsHomeHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "sqlcmd";
-  version = "1.10.0";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     repo = "go-sqlcmd";
     owner = "microsoft";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-FZJiIC8rhZGE0nLY81GUHVXouvhNbx5gj+Xy2z8uxjw=";
+    sha256 = "sha256-Rex3Hr2JKU16fy2HLxNFrMq+RDXZdZ1/9j1pFDlHxFQ=";
   };
 
-  vendorHash = "sha256-y2AuRgi8o2ttGkBI/rUEtMbcoIj/BvpVdSVamDbaCpo=";
+  vendorHash = "sha256-PONBoXFJh752BStvNYvS9/O4IV4oH9i37Jz+dnCXl1A=";
   proxyVendor = true;
 
   ldflags = [
@@ -31,9 +32,7 @@ buildGoModule (finalAttrs: {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
   postInstall = ''
     mv $out/bin/modern $out/bin/sqlcmd

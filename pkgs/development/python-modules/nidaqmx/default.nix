@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "nidaqmx";
-  version = "1.6.0";
+  version = "1.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ni";
     repo = "nidaqmx-python";
     tag = version;
-    hash = "sha256-dxSHaqNTzzMcUk/wtMtxmiHMpoL8f2T3p/h37tw/5AA=";
+    hash = "sha256-jg/1vhLraM6lvdOcO45ocG4y3DqMappZ+EUxM/naeuA=";
   };
 
   build-system = [ poetry-core ];

@@ -28,7 +28,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gedit";
-  version = "50.0";
+  version = "51.1";
 
   outputs = [
     "out"
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "gedit";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-UkKd1H7twf9r9Jf5Cx6br/8lVT2F2O9U5jR2Ihom0ZA=";
+    hash = "sha256-EhzOrezw8HF0dK2ec/QlejbEchTLg/kQskMb0Hgc45g=";
   };
 
   patches = [

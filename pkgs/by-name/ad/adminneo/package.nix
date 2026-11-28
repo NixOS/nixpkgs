@@ -8,22 +8,26 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "adminneo";
-  version = "5.5.1";
+  version = "5.9.1";
 
   src = fetchFromGitHub {
     owner = "adminneo-org";
     repo = "adminneo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hGRuEtOgk2EBCTBv2jMGsV3KjiHRapxDvjnFDTSnPqg=";
+    hash = "sha256-CPXCnGEKVdSHbKudpKzpsoYAlbZXhrH0NNTkZqyW59U=";
   };
 
   nativeBuildInputs = [
     php
   ];
 
-  makeFlags = [
-    "PHP=${php}/bin/php"
-  ];
+  buildPhase = ''
+    runHook preBuild
+
+    php bin/compile.php
+
+    runHook postBuild
+  '';
 
   installPhase = ''
     runHook preInstall

@@ -13,15 +13,14 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "harlequin";
-  version = "2.16.1";
+  version = "2.17.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "tconbeer";
     repo = "harlequin";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0ZVqA7A8JWpUSx4uABWgaKtNlINwzY4Gld1z2cypJKc=";
+    hash = "sha256-NfjYY+wdFuPjq9I9c6735ENRWPqRSa+UtAKMvfr0OYk=";
   };
 
   postPatch =
@@ -86,6 +85,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     versionCheckHook
     writableTmpDirAsHomeHook
   ];
+  versionCheckKeepEnvironment = [ "HOME" ];
 
   disabledTests = [
     # Compare the source checkout with the installed package
@@ -119,6 +119,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
     # positional argument), and this test requires every installed adapter to
     # declare at least one.
     "test_spec_covers_every_installed_adapter"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Test seems to be failing because of concurrency issues
+    "test_a_second_client_waits_its_turn"
   ];
 
   disabledTestPaths = [

@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "aaa";
-  version = "2.1.0";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "asciimoth";
     repo = "aaa";
     tag = "${finalAttrs.version}";
-    sha256 = "sha256-z8PXkX6Bh3oD8tRf+tsLJHbx5wIz2mBYhJSEL88hBDc=";
+    sha256 = "sha256-LJjpxfSQ+R1oohqROacdT5YrkDyzXzeC/ExqkqSQDaA=";
   };
 
-  cargoHash = "sha256-dt3nbVS8i075O8m9x+FsDi3VeihVKVIV0wnPqyYUaIk=";
+  cargoHash = "sha256-FMarQiPAtPeo3XmGy9uXSLQsmnw2+uYhe/rJxUvp38w=";
 
   meta = {
     description = "Swiss Army knife for animated ascii art";

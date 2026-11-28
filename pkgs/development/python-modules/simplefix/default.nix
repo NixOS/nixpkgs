@@ -5,7 +5,7 @@
   unittestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "simplefix";
   version = "1.0.17";
   format = "setuptools";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     repo = "simplefix";
     owner = "da4089";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-D85JW3JRQ1xErw6krMbAg94WYjPi76Xqjv/MGNMY5ZU=";
   };
 
@@ -21,15 +21,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "simplefix" ];
 
-  unittestFlagsArray = [
-    "-s"
-    "test"
+  unittestFlags = [
+    "--start-directory=test"
   ];
 
   meta = {
     description = "Simple FIX Protocol implementation for Python";
     homepage = "https://github.com/da4089/simplefix";
-    changelog = "https://github.com/da4089/simplefix/releases/tag/v${version}";
+    changelog = "https://github.com/da4089/simplefix/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
   };
-}
+})

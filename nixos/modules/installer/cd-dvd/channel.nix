@@ -44,6 +44,10 @@ in
     // {
       default = true;
     };
+
+  options.system.installer.channel.disableSandbox =
+    lib.mkEnableOption "disabling the Nix build sandbox when initializing the bundled channel";
+
   config = lib.mkIf config.system.installer.channel.enable {
     # Pin the nixpkgs flake in the installer to our cleaned up nixpkgs source.
     # FIXME: this might be surprising and is really only needed for offline installations,
@@ -89,8 +93,7 @@ in
           echo "unpacking the NixOS/Nixpkgs sources..."
           mkdir -p /nix/var/nix/profiles/per-user/root
           ${lib.getExe' config.nix.package.out "nix-env"} -p /nix/var/nix/profiles/per-user/root/channels \
-            -i ${channelSources} --quiet --option build-use-substitutes false \
-            ${lib.optionalString config.boot.initrd.systemd.enable "--option sandbox false"} # There's an issue with pivot_root
+            -i ${channelSources} --quiet --option build-use-substitutes false${lib.optionalString config.system.installer.channel.disableSandbox " --option sandbox false"}
           mkdir -m 0700 -p /root/.nix-defexpr
           ln -sfvT /nix/var/nix/profiles/per-user/root/channels /root/.nix-defexpr/channels
           mkdir -m 0755 -p /var/lib/nixos

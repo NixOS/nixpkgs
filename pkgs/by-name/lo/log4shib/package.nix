@@ -24,6 +24,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ autoreconfHook ];
 
+  # Broken snprintf probe (missing <stdlib.h>) selects a bundled snprintf clang rejects
+  configureFlags = [ "ac_cv_func_snprintf=yes" ];
+
   passthru.updateScript = gitUpdater { };
 
   meta = {

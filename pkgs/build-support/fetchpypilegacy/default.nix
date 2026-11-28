@@ -62,7 +62,7 @@ lib.makeOverridable (
       // optionalAttrs (!inPureEvalMode) { env.NETRC = netrc_file; }
     )
     ''
-      python ${./fetch-legacy.py} ${
+      python -P ${./fetch-legacy.py} ${
         concatStringsSep " " (map (url: "--url ${escapeShellArg url}") urls')
       } --pname ${pname} --filename ${file}
       mv ${file} $out

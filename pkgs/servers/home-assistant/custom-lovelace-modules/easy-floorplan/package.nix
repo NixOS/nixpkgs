@@ -7,13 +7,13 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "easy-floorplan";
-  version = "3.1.0";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "nicosandller";
     repo = "easy-floorplan";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PavhBlVsuCL1cG2zVhiWKUmmsCbj9nEvXXXX8ehlL64=";
+    hash = "sha256-MF4nOPuvT1SaLgtHg5xDIjgZ+cdunb75u5KaKxVGAM8=";
   };
 
   npmDepsHash = "sha256-hY9YRAac/gr2iOQD5ionYKh1mCh4tgXGIpXjFPjcHeE=";

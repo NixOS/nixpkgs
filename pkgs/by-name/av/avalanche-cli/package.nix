@@ -13,6 +13,8 @@
   nix-update-script,
 }:
 buildGoModule (finalAttrs: {
+  __structuredAttrs = true;
+
   pname = "avalanche-cli";
   version = "1.9.7";
 
@@ -31,6 +33,9 @@ buildGoModule (finalAttrs: {
     # https://github.com/bnb-chain/bsc/issues/1521
     CGO_CFLAGS = "-O -D__BLST_PORTABLE__";
     CGO_CFLAGS_ALLOW = "-O -D__BLST_PORTABLE__";
+
+    # The bundled avalanchego version panics decoding genesis checkpoints with Go 1.27's JSON implementation.
+    GOEXPERIMENT = "nojsonv2";
   };
 
   ldflags = [

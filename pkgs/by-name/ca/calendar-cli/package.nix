@@ -75,5 +75,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     mainProgram = "calendar-cli";
     maintainers = with lib.maintainers; [ dotlambda ];
+    teams = with lib.teams; [ ngi ];
   };
 })

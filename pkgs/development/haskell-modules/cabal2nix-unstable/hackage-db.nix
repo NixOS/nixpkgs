@@ -16,10 +16,10 @@
 }:
 mkDerivation {
   pname = "hackage-db";
-  version = "2.1.3-unstable-2026-03-30";
+  version = "2.1.3-unstable-2026-11-06";
   src = fetchzip {
-    url = "https://github.com/NixOS/cabal2nix/archive/41239bcc0622a0975c6705a03a44dfeffeb56f23.tar.gz";
-    sha256 = "01qj6cvaif0810v83r6izcj1bbfpcqqxw4wybq04qsq92sqybpw2";
+    url = "https://github.com/NixOS/cabal2nix/archive/422b50d0e6fdd033f20ae1f0e013cb5c0674f731.tar.gz";
+    sha256 = "0dfis02hsh44h9k95mfsp4v422zw94w2pfz6dk43yx3dvqisv72c";
   };
   postUnpack = "sourceRoot+=/hackage-db; echo source root reset to $sourceRoot";
   isLibrary = true;
@@ -38,5 +38,5 @@ mkDerivation {
   ];
   homepage = "https://github.com/NixOS/cabal2nix/tree/master/hackage-db#readme";
   description = "Access cabal-install's Hackage database via Data.Map";
-  license = lib.licensesSpdx."BSD-3-Clause";
+  license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
 }

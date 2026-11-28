@@ -142,7 +142,7 @@ in
               vector_sink = {
                 type = "vector";
                 inputs = [ "journald_remap" ];
-                address = "clickhouse:6000";
+                address = "http://clickhouse:6000";
               };
             };
           };

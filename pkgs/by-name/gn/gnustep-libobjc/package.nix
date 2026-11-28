@@ -29,10 +29,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     description = "Objective-C runtime for use with GNUstep";
     homepage = "https://gnustep.github.io/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      ashalkhakov
-      dblsaiko
-    ];
+    maintainers = with lib.maintainers; [ dblsaiko ];
     platforms = lib.platforms.unix;
   };
 })

@@ -135,12 +135,12 @@ stdenv.mkDerivation (finalAttrs: {
     '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "Omada Software Controller";
     homepage = "https://www.tp-link.com/us/business-networking/omada-sdn-controller/omada-software-controller/";
     downloadPage = "https://www.tp-link.com/us/support/download/omada-software-controller/";
-    license = licenses.unfree;
-    maintainers = with maintainers; [ pathob ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ pathob ];
     platforms = [
       "x86_64-linux"
     ];

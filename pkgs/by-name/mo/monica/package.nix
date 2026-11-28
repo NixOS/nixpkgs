@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchurl,
+  cacert,
   nixosTests,
   dataDir ? "/var/lib/monica",
 }:
@@ -19,6 +20,10 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     mkdir $out
     cp -R * $out/
+    rm $out/vendor/composer/ca-bundle/res/cacert.pem
+    ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $out/vendor/composer/ca-bundle/res/cacert.pem
+    rm $out/vendor/stripe/stripe-php/data/ca-certificates.crt
+    ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $out/vendor/stripe/stripe-php/data/ca-certificates.crt
     rm -rf $out/storage
     ln -s ${dataDir}/.env $out/.env
     ln -s ${dataDir}/storage $out/storage

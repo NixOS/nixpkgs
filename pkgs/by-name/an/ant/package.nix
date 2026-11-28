@@ -2,82 +2,59 @@
   fetchurl,
   lib,
   stdenv,
-  coreutils,
+  jdk,
   makeWrapper,
+  coreutils,
+  gnused,
   gitUpdater,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ant";
   version = "1.10.18";
+  __structuredAttrs = true;
+  strictDeps = true;
+
+  src = fetchurl {
+    url = "mirror://apache/ant/source/apache-ant-${finalAttrs.version}-src.tar.bz2";
+    hash = "sha256-nItxykMLxRNcSRTTfJR+prjwRMgarjrf/76Pusew4YU=";
+  };
 
   nativeBuildInputs = [ makeWrapper ];
 
-  src = fetchurl {
-    url = "mirror://apache/ant/binaries/apache-ant-${finalAttrs.version}-bin.tar.bz2";
-    hash = "sha256-vBK+cMtcGwdMHnPYKj89pV88ZbigxzQqbrbR0CQmUoA=";
-  };
+  env.JAVA_HOME = jdk.home;
+
+  buildPhase = ''
+    runHook preBuild
+    ./build.sh
+    runHook postBuild
+  '';
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin $out/share/ant
-    mv * $out/share/ant/
+    cp -r dist/* $out/share/ant/
 
-    # Get rid of the manual (35 MiB).  Maybe we should put this in a
-    # separate output.  Keep the antRun script since it's vanilla sh
-    # and needed for the <exec/> task (but since we set ANT_HOME to
-    # a weird value, we have to move antRun to a weird location).
-    # Get rid of the other Ant scripts since we provide our own.
-    mv $out/share/ant/bin/antRun $out/bin/
-    rm -rf $out/share/ant/{manual,bin,WHATSNEW}
-    mkdir $out/share/ant/bin
-    mv $out/bin/antRun $out/share/ant/bin/
-
-    cat >> $out/bin/ant <<EOF
-    #! ${stdenv.shell} -e
-
-    ANT_HOME=$out/share/ant
-
-    # Find the JDK by looking for javac.  As a fall-back, find the
-    # JRE by looking for java.  The latter allows just the JRE to be
-    # used with (say) ECJ as the compiler.  Finally, allow the GNU
-    # JVM.
-    if [ -z "\''${JAVA_HOME-}" ]; then
-        for i in javac java gij; do
-            if p="\$(type -p \$i)"; then
-                export JAVA_HOME="\$(${coreutils}/bin/dirname \$(${coreutils}/bin/dirname \$(${coreutils}/bin/readlink -f \$p)))"
-                break
-            fi
-        done
-        if [ -z "\''${JAVA_HOME-}" ]; then
-            echo "\$0: cannot find the JDK or JRE" >&2
-            exit 1
-        fi
-    fi
-
-    if [ -z \$NIX_JVM ]; then
-        if [ -e \$JAVA_HOME/bin/java ]; then
-            NIX_JVM=\$JAVA_HOME/bin/java
-        elif [ -e \$JAVA_HOME/bin/gij ]; then
-            NIX_JVM=\$JAVA_HOME/bin/gij
-        else
-            NIX_JVM=java
-        fi
-    fi
-
-    LOCALCLASSPATH="\$ANT_HOME/lib/ant-launcher.jar\''${LOCALCLASSPATH:+:}\$LOCALCLASSPATH"
-
-    if [ -n "\$ANT_LIB" ]; then
-        ANT_LIB_ARG="-Dant.library.dir=\$ANT_LIB"
-    fi
-
-    exec \$NIX_JVM \$NIX_ANT_OPTS \$ANT_OPTS -classpath "\$LOCALCLASSPATH" \\
-        -Dant.home=\$ANT_HOME \''${ANT_LIB_ARG:+"\$ANT_LIB_ARG"} \\
-        org.apache.tools.ant.launch.Launcher \$NIX_ANT_ARGS \$ANT_ARGS \\
-        -cp "\$CLASSPATH" "\$@"
-    EOF
-
-    chmod +x $out/bin/ant
+    # upstream dist/bin/ant honours JAVA_HOME, then falls back to `java`
+    # on PATH — so add our JDK as a *fallback*, user's JDK still wins
+    makeWrapper $out/share/ant/bin/ant $out/bin/ant \
+      --set-default JAVA_HOME ${jdk.home} \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          jdk
+          coreutils
+          gnused
+        ]
+      }
+    runHook postInstall
   '';
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+  versionCheckProgramArg = "-version";
 
   passthru = {
     home = "${finalAttrs.finalPackage}/share/ant";

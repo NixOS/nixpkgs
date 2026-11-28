@@ -2,34 +2,23 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch2,
   SDL2,
   callPackage,
   zlib,
   nix-update-script,
-  fetchpatch,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "x16-emulator";
-  version = "48";
+  version = "49";
   # nixpkgs-update: no auto update
 
   src = fetchFromGitHub {
     owner = "X16Community";
     repo = "x16-emulator";
     tag = "r${finalAttrs.version}";
-    hash = "sha256-E4TosRoORCWLotOIXROP9oqwqo1IRSa6X13GnmuxE9A=";
+    hash = "sha256-BGo2YCyaWcOkMkzyRBlg8A4rb6hZ19eZTQXkA5Njv/g=";
   };
-
-  # Fix build on GCC 14
-  # TODO: Remove for next release as it should already be included in upstream
-  patches = [
-    (fetchpatch2 {
-      url = "https://github.com/X16Community/x16-emulator/commit/3da83c93d46a99635cf73a6f9fdcf1bd4a4ae04f.patch";
-      hash = "sha256-DZItqq7B1lXZ6VFsQUdQKn0wt1HaX4ymq2pI2DamY3w=";
-    })
-  ];
 
   # fix build w/ glibc-2.44
   env.NIX_CFLAGS_COMPILE = "-Wno-error=discarded-qualifiers";

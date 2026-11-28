@@ -1,0 +1,13 @@
+diff --git a/src/convo_info_volatile_config.cpp b/src/convo_info_volatile_config.cpp
+index 570b315..680e936 100644
+--- a/src/convo_info_volatile_config.cpp
++++ b/src/convo_info_volatile_config.cpp
+@@ -58,7 +58,7 @@ struct toJs_impl<convo::one_to_one> {
+         obj["pubkeyHex"] = toJs(env, info_1o1.session_id);
+         addBaseValues(env, obj, info_1o1);
+
+-        if (info_1o1.pro_revocation_tag->empty() ||
++        if (!info_1o1.pro_revocation_tag ||
+             !info_1o1.pro_expiry_at.time_since_epoch().count()) {
+             obj["proRevocationTagB64"] = env.Null();
+             obj["proExpiryTsMs"] = env.Null();

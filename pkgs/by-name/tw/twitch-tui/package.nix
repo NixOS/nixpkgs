@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "twitch-tui";
-  version = "2.6.19";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "Xithrius";
     repo = "twitch-tui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hA66YcxbQem9ymOu3tGA4biKUCoJ2jKnUSK+9+0P2Eg=";
+    hash = "sha256-xPCv+69e9JIPl7K59r8PfGeuqqJcwO4ZXXHNuWMc/FA=";
   };
 
-  cargoHash = "sha256-DMUE3sTJEz2AxUctnjm0CkvOqMeAw5urLPZkkHvf9A8=";
+  cargoHash = "sha256-kUAv0+BpC3l2Z8Tos/X7bysrjoqXODBPdJ9fz6Wocx4=";
 
   nativeBuildInputs = [
     pkg-config
@@ -27,6 +27,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     openssl
   ];
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   passthru.updateScript = nix-update-script { };
 

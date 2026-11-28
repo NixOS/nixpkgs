@@ -19,15 +19,15 @@
   docbook_xml_dtd_45,
   libxslt,
   gettext,
-  systemd,
+  systemdLibs,
   gnome-session-ctl,
   wrapGAppsNoGuiHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-session";
-  # Also bump ./ctl.nix when bumping major version.
-  version = "50.1";
+  # Also bump ../gnome-session-ctl/package.nix when bumping major version.
+  version = "51.0";
 
   outputs = [
     "out"
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-session/${lib.versions.major finalAttrs.version}/gnome-session-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Yom2r6RNPkyZnOV2H/iywQujCfVflCXysT+YIIyB9vs=";
+    hash = "sha256-UZXE9gVCqVOrbr0ojzeFuOd0YpLYwWfgyZ01NDihhNE=";
   };
 
   patches = [
@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     gnome-desktop
     gnome-settings-daemon
     gsettings-desktop-schemas
-    systemd
+    systemdLibs
   ];
 
   postPatch = ''

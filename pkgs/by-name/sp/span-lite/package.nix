@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "C++20-like span for C++98, C++11 and later in a single-file header-only library";
     homepage = "https://github.com/nonstd-lite/span-lite";
-    license = lib.licenses.bsd1;
+    license = lib.licenses.boost;
     maintainers = with lib.maintainers; [ icewind1991 ];
     platforms = lib.platforms.all;
   };

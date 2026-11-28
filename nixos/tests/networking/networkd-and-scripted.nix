@@ -20,13 +20,33 @@ let
   testCases = {
     loopback = {
       name = "Loopback";
-      nodes.client = clientConfig { };
+      nodes.client = clientConfig {
+        networking.interfaces.lo = {
+          ipv4.addresses = [
+            {
+              address = "10.99.0.1";
+              prefixLength = 32;
+            }
+          ];
+          ipv6.addresses = [
+            {
+              address = "fd00:99::1";
+              prefixLength = 128;
+            }
+          ];
+        };
+      };
       testScript = ''
         start_all()
         client.wait_for_unit("network.target")
+        ${lib.optionalString (!networkd) ''
+          client.require_unit_state("network-addresses-lo.service", "active")
+        ''}
         loopback_addresses = client.succeed("ip addr show lo")
         assert "inet 127.0.0.1/8" in loopback_addresses
         assert "inet6 ::1/128" in loopback_addresses
+        client.wait_until_succeeds("ip addr show lo | grep -q 'inet 10.99.0.1/32'")
+        client.wait_until_succeeds("ip addr show lo | grep -q 'inet6 fd00:99::1/128'")
       '';
     };
     static = {
@@ -1143,12 +1163,18 @@ let
           virtualOwner = "root";
           mtu = 1343;
         };
+        networking.interfaces.tun1 = {
+          virtual = true;
+          virtualOwner = null;
+          virtualGroup = "root";
+        };
       };
 
       testScript = ''
         targetList = """
         tap0: tap persist
         tun0: tun persist user 0
+        tun1: tun persist group 0
         """.strip()
 
         with subtest("Wait for networking to come up"):
@@ -1173,9 +1199,13 @@ let
             machine.wait_until_succeeds("ip link show dev tun0 | grep 'mtu 1343'")
             assert "02:de:ad:be:ef:01" in machine.succeed("ip link show dev tap0")
         with subtest("Test virtualOwner are configured"):
-            for interface, expected_owner in [("tap0", "-1"), ("tun0", "0")]:
+            for interface, expected_owner in [("tap0", "-1"), ("tun0", "0"), ("tun1", "-1")]:
                 actual_owner = machine.succeed(f"cat /sys/class/net/{interface}/owner").strip()
                 assert expected_owner == actual_owner, f"{interface} owner: expect {expected_owner}, got {actual_owner}"
+        with subtest("Test virtualGroup are configured"):
+            for interface, expected_group in [("tap0", "-1"), ("tun0", "-1"), ("tun1", "0")]:
+                actual_group = machine.succeed(f"cat /sys/class/net/{interface}/group").strip()
+                assert expected_group == actual_group, f"{interface} group: expect {expected_group}, got {actual_group}"
       '' # network-addresses-* only exist in scripted networking
       + lib.optionalString (!networkd) ''
         with subtest("Test interfaces' addresses clean up"):
@@ -1194,6 +1224,8 @@ let
             machine.succeed("systemctl stop tap0-netdev")
             machine.sleep(10)
             machine.succeed("systemctl stop tun0-netdev")
+            machine.sleep(10)
+            machine.succeed("systemctl stop tun1-netdev")
             machine.sleep(10)
             residue = machine.succeed("ip tuntap list")
             assert (
@@ -1523,6 +1555,50 @@ let
     };
   };
 
+  # dhcpcd is only used by the scripted backend.
+  scriptedTestCases = {
+    dhcpReadGroup = {
+      name = "ReadGroupDHCP";
+      nodes.router = router;
+      nodes.client = clientConfig {
+        virtualisation.interfaces.enp1s0.vlan = 1;
+        virtualisation.interfaces.enp2s0.vlan = 2;
+        networking = {
+          interfaces.enp1s0.useDHCP = true;
+          # A static IPv6 address puts an `interface enp2s0` block in
+          # dhcpcd.conf, which must not swallow the global readgroup.
+          interfaces.enp2s0.ipv6.addresses = [
+            {
+              address = "fd00:1234:5678:2::42";
+              prefixLength = 64;
+            }
+          ];
+          dhcpcd.readGroup = "dhcpcd-read";
+        };
+        # Merges with the group the dhcpcd module creates.
+        users.groups.dhcpcd-read.members = [ "alice" ];
+        users.users.alice.isNormalUser = true;
+        users.users.bob.isNormalUser = true;
+      };
+      testScript = ''
+        start_all()
+        client.wait_for_unit("dhcpcd.service")
+        client.wait_until_succeeds("ip addr show dev enp1s0 | grep -q '192.168.1'")
+
+        with subtest("The control socket belongs to the read group"):
+            client.succeed("test \"$(stat -c '%a %G' /run/dhcpcd/sock)\" = '660 dhcpcd-read'")
+
+        with subtest("Root and members of the read group can read leases"):
+            client.succeed("dhcpcd -U enp1s0 | grep -q '^ip_address=192.168.1'")
+            client.succeed("runuser -u alice -- dhcpcd -U enp1s0 | grep -q '^ip_address=192.168.1'")
+            client.succeed("runuser -u alice -- dhcpcd --dumplease enp1s0 | grep -q '^ip_address=192.168.1'")
+
+        with subtest("Other users cannot"):
+            client.fail("runuser -u bob -- dhcpcd -U enp1s0")
+      '';
+    };
+  };
+
 in
 lib.mapAttrs (lib.const (
   attrs:
@@ -1533,4 +1609,4 @@ lib.mapAttrs (lib.const (
       meta.maintainers = with lib.maintainers; [ rnhmjoj ];
     }
   )
-)) testCases
+)) (testCases // lib.optionalAttrs (!networkd) scriptedTestCases)

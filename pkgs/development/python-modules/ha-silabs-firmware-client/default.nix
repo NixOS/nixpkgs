@@ -4,6 +4,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   lib,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
@@ -11,9 +12,9 @@
   yarl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ha-silabs-firmware-client";
-  version = "0.3.0";
+  version = "0.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.13";
@@ -21,15 +22,18 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "ha-silabs-firmware-client";
-    tag = "v${version}";
-    hash = "sha256-OCDMJtcgBfVKATJQgqH/YuEU8112tSBjqT81jDUu4b8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-f2Lu1bzbmEfXvmefeBGC62I5mht6v84/xc5cXP8tck8=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail ', "setuptools-git-versioning<3"' "" \
-      --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
+      --replace-fail ', "setuptools-git-versioning<3"' ""
   '';
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   build-system = [ setuptools ];
 
@@ -47,10 +51,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/home-assistant-libs/ha-silabs-firmware-client/releases/tag/${src.tag}";
+    changelog = "https://github.com/home-assistant-libs/ha-silabs-firmware-client/releases/tag/${finalAttrs.src.tag}";
     description = "Home Assistant client for firmwares released with silabs-firmware-builder";
     homepage = "https://github.com/home-assistant-libs/ha-silabs-firmware-client";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

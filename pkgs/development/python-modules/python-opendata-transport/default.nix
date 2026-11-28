@@ -11,14 +11,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "python-opendata-transport";
-  version = "0.6.2";
+  version = "0.6.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "home-assistant-ecosystem";
     repo = "python-opendata-transport";
     tag = finalAttrs.version;
-    hash = "sha256-CN+zy2x+4IKdAcpa2vIrOGXW39d+anU4HGPU83dGif0=";
+    hash = "sha256-lAiEmrzv3zkg1oRc0b5b5fkGYOD4cbkXFdduQSj/zrQ=";
   };
 
   build-system = [ hatchling ];

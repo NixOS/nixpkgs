@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fastchess";
-  version = "1.8.2-alpha";
+  version = "1.8.3-alpha";
 
   src = fetchFromGitHub {
     owner = "Disservin";
     repo = "fastchess";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jeD29xc7xcNapvHKWw4deTCxyCNdpcnBY4/BGe3S8Zw=";
+    hash = "sha256-eFUda+N+3tCYdtNMBRn4+zF6KqiAm46FKc68IfRe/9g=";
   };
 
   nativeBuildInputs = [
@@ -34,7 +34,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   passthru = {
-    updateScript = nix-update-script { };
+    # every upstream release is tagged vX.Y.Z-alpha, which nix-update skips as unstable
+    updateScript = nix-update-script { extraArgs = [ "--version=unstable" ]; };
   };
 
   meta = {

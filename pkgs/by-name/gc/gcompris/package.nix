@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gcompris";
-  version = "26.1";
+  version = "26.2";
 
   src = fetchurl {
     url = "mirror://kde/stable/gcompris/qt/src/gcompris-qt-${finalAttrs.version}.tar.xz";
-    hash = "sha256-w4m4Y7KfASzMGz7vdAmC/2x2VME6LjQzl+5GYSTzEzk=";
+    hash = "sha256-+HYjnzk5f1VABvQhijwilifir0MXqHZez5Ri8AWN/LQ=";
   };
 
   postPatch = ''

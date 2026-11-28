@@ -2,36 +2,40 @@
   lib,
   stdenv,
   buildNpmPackage,
-  electron_42,
+  electron_44,
   fetchFromGitHub,
   jq,
   makeDesktopItem,
 }:
 
 let
-  electron = electron_42;
+  electron = electron_44;
   description = "Visualizer for neural network, deep learning and machine learning models";
   icon = "netron";
 
 in
 buildNpmPackage (finalAttrs: {
   pname = "netron";
-  version = "9.0.9";
+  version = "9.3.2";
 
   src = fetchFromGitHub {
     owner = "lutzroeder";
     repo = "netron";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SNBNjMmOVkOpLGnzrXotUecQuEKii8bg22GPA1wiF3s=";
+    hash = "sha256-FIl6ZyHNBHOSpHoo8p8GRLfUblKb8cU+zjazGSpc5ww=";
   };
 
-  npmDepsHash = "sha256-KgMf4qWM8HeaZ6UQNVqLjbFZvlFZ/Y2YydI/dtGaeEw=";
+  npmDepsHash = "sha256-HDK504wNBNhZTUdLNxHK3GeXo2CcrnPCWb69mNiaebA=";
 
   nativeBuildInputs = [ jq ];
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+  # tries to `npx install-electron` during fetching otherwise
+  env.NPM_CONFIG_IGNORE_SCRIPTS = "1";
 
-  makeCacheWritable = true;
+  # Do not run the default build script, it tries to do way too much that
+  # wouldn't work on NixOS and require patching.
+  dontNpmBuild = true;
 
   preBuild = ''
     if [[ $(jq --raw-output '.devDependencies.electron' < package.json | grep -E --only-matching '^[0-9]+') != ${lib.escapeShellArg (lib.versions.major electron.version)} ]]; then
@@ -39,10 +43,6 @@ buildNpmPackage (finalAttrs: {
       exit 1
     fi
   '';
-
-  # Do not run the default build script, it tries to do way too much that
-  # wouldn't work on NixOS and require patching.
-  dontNpmBuild = true;
 
   postBuild = ''
     npm exec electron-builder -- \

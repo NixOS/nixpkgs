@@ -57,8 +57,9 @@ jetbrains.mkJetBrainsProduct {
       Also known as IntelliJ.
     '';
     maintainers = with lib.maintainers; [
-      gytis-ivaskevicius
+      charlieprm88
       tymscar
+      jadewilk
     ];
     teams = [ lib.teams.jetbrains ];
     license = lib.licenses.unfree;

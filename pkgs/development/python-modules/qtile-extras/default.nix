@@ -85,8 +85,8 @@ buildPythonPackage (finalAttrs: {
   ];
 
   pytestFlags = [
-    "--reruns 3"
-    "--reruns-delay 5"
+    "--reruns=3"
+    "--reruns-delay=5"
   ];
 
   preCheck = ''
@@ -104,6 +104,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/elParaguayo/qtile-extras";
     changelog = "https://github.com/elParaguayo/qtile-extras/blob/${finalAttrs.src.tag}/CHANGELOG";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ arjan-s ];
+    maintainers = with lib.maintainers; [ sigmanificient ];
   };
 })

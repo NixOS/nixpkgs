@@ -15,7 +15,6 @@ buildPythonPackage (finalAttrs: {
   pname = "wcwidth";
   version = "0.9.2";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "jquast";

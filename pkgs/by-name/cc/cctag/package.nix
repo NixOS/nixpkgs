@@ -73,6 +73,6 @@ stdenv.mkDerivation (finalAttrs: {
     downloadPage = "https://github.com/alicevision/CCTag";
     license = lib.licenses.mpl20;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ tmarkus ];
+    maintainers = with lib.maintainers; [ AAAAAASomeThingsFailToEvaluate ];
   };
 })

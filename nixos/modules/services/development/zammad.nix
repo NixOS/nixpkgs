@@ -275,7 +275,7 @@ in
       nginx = lib.mkIf cfg.nginx.configure {
         enable = true;
         virtualHosts."${cfg.nginx.domain}" = {
-          forceSSL = true;
+          forceSSL = lib.mkDefault true;
           locations = {
             "/" = {
               proxyPass = "http://127.0.0.1:${toString config.services.zammad.port}";
@@ -284,6 +284,9 @@ in
               extraConfig = # nginx
                 ''
                   proxy_set_header CLIENT_IP $remote_addr;
+                  # Recommended in https://zammad.com/en/product/releases/7-2-3
+                  proxy_set_header X-Forwarded-User "";
+                  proxy_set_header Remote-User "";
                 '';
             };
             "/cable" = {
@@ -292,6 +295,9 @@ in
               extraConfig = # nginx
                 ''
                   proxy_set_header CLIENT_IP $remote_addr;
+                  # Recommended in https://zammad.com/en/product/releases/7-2-3
+                  proxy_set_header X-Forwarded-User "";
+                  proxy_set_header Remote-User "";
                 '';
             };
             "/ws" = {
@@ -300,6 +306,9 @@ in
               extraConfig = # nginx
                 ''
                   proxy_set_header CLIENT_IP $remote_addr;
+                  # Recommended in https://zammad.com/en/product/releases/7-2-3
+                  proxy_set_header X-Forwarded-User "";
+                  proxy_set_header Remote-User "";
                 '';
             };
           };
@@ -330,6 +339,10 @@ in
       serviceConfig = serviceConfig // {
         # loading all the gems takes time
         TimeoutStartSec = 1200;
+        ExecStart = "${package}/script/rails server -b ${cfg.host} -p ${toString cfg.port}";
+        Type = "notify";
+        NotifyAccess = "all";
+        WatchdogSec = 10;
       };
       after = [
         "network.target"
@@ -387,7 +400,6 @@ in
         fi
         echo "Done"
       '';
-      script = "./script/rails server -b ${cfg.host} -p ${toString cfg.port}";
     };
 
     systemd.tmpfiles.rules = [
@@ -402,21 +414,25 @@ in
     ];
 
     systemd.services.zammad-websocket = {
-      inherit serviceConfig environment;
+      inherit environment;
       after = [ "zammad-web.service" ];
       requires = [ "zammad-web.service" ];
       description = "Zammad websocket";
       wantedBy = [ "multi-user.target" ];
-      script = "./script/websocket-server.rb -b ${cfg.host} -p ${toString cfg.websocketPort} start";
+      serviceConfig = serviceConfig // {
+        ExecStart = "${package}/script/websocket-server.rb -b ${cfg.host} -p ${toString cfg.websocketPort} start";
+      };
     };
 
     systemd.services.zammad-worker = {
-      inherit serviceConfig environment;
+      inherit environment;
       after = [ "zammad-web.service" ];
       requires = [ "zammad-web.service" ];
       description = "Zammad background worker";
       wantedBy = [ "multi-user.target" ];
-      script = "./script/background-worker.rb start";
+      serviceConfig = serviceConfig // {
+        ExecStart = "${package}/script/background-worker.rb start";
+      };
     };
   };
 

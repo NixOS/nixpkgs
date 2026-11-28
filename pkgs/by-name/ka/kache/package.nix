@@ -4,11 +4,14 @@
   nix-update-script,
   rustPlatform,
   stdenv,
+  pkg-config,
+  sqlite,
+  zstd,
   versionCheckHook,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kache";
-  version = "1.2.2";
+  version = "2.4.0";
   __structuredAttrs = true;
 
   outputs = [ "out" ] ++ lib.optional stdenv.hostPlatform.isUnix "shims";
@@ -17,10 +20,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "kunobi-ninja";
     repo = "kache";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-thzKe50UE6CKYYfKNrVyNdgQdAqr0bLRYOZzvWwlxW8=";
+    hash = "sha256-nYZXAqpcitanRuD4uKcNzjrB03wWE4x9VGoiZTVyER4=";
   };
 
-  cargoHash = "sha256-wgBi4CqPgab15O6y0n0re2aZ5QV02LbIlktQVlD8rVQ=";
+  cargoHash = "sha256-HgMSqf+HxnNi2khdHOq9grCp/UJbJkVfbGCnv1JRwO8=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [
+    sqlite
+    zstd
+  ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
@@ -39,7 +49,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postInstall = lib.optionalString stdenv.hostPlatform.isUnix ''
     mkdir -p "$shims/bin"
-    for name in cc c++ gcc g++ clang clang++; do
+    for name in cc c++ gcc g++ clang clang++ cargo rustdoc; do
       ln -s "$out/bin/kache" "$shims/bin/$name"
     done
     # Let another kache on PATH recognize and skip this shim directory.

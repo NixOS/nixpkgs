@@ -21,7 +21,7 @@ let
 in
 buildGo127Module (finalAttrs: {
   pname = "llama-swap";
-  version = "262";
+  version = "268";
 
   outputs = [
     "out"
@@ -35,7 +35,7 @@ buildGo127Module (finalAttrs: {
     owner = "mostlygeek";
     repo = "llama-swap";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DAYaR+N7alGbdLsGlaiDlsHiqxOMg65069i/vHOkLKk=";
+    hash = "sha256-nwH4AMiC5b4elrG9m/HExOYM8P3r1YaWghPXUpoW/xU=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -48,7 +48,7 @@ buildGo127Module (finalAttrs: {
     '';
   };
 
-  vendorHash = "sha256-yelob7FlaGymASUP0DAUkALQm5vnXZnN5ThbnSkH2Ak=";
+  vendorHash = "sha256-nauMUxfDugvYnA74eVm8jaUt+l1V7gNvL89f6l2Ls8w=";
 
   # Upstream only embeds the UI when this build tag is set.
   tags = lib.optionals withUI [ "embed_ui" ];

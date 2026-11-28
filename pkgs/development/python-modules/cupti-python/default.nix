@@ -20,7 +20,7 @@
 let
   inherit (stdenv.hostPlatform) system;
 
-  version = "13.4.0";
+  version = "13.5.0";
 
   platforms = {
     x86_64-linux = "manylinux_2_24_x86_64.manylinux_2_28_x86_64";
@@ -29,16 +29,16 @@ let
 
   hashes = {
     x86_64-linux = {
-      cp311 = "sha256-xJC39QsYB0+hIZQPtzV8RNQqAkjuXKZLinpa7z2PUOY=";
-      cp312 = "sha256-DWwobBkcjEZtzU3OqQ+g/RXxYohZK5A5rzo2fofjwLU=";
-      cp313 = "sha256-8xeBWqCOTi8+kjmUXBOUALJBXffi8ZBae07IgXYxjGw=";
-      cp314 = "sha256-OMr/i6qbr868gtGwSmr1jSwBlCCPhvavE/SkmPWP8mk=";
+      cp311 = "sha256-UJMwxdUm1OheKK0QBqawBnOqavYA2muR9V4Dx7djcY8=";
+      cp312 = "sha256-yORgEGqttxzK08TGWfk6R3Iy+DTXR01/7bVhBI29a3g=";
+      cp313 = "sha256-Q/SEsCaK6BlpB3xp8oZrVTzHQ7sIVVi8T62CqlqJeKo=";
+      cp314 = "sha256-DGMpsgHxKBQaMgkuQf6VNJkYVHLLmsVlyqjQJNLF5/8=";
     };
     aarch64-linux = {
-      cp311 = "sha256-BYmPWvcPw+Hv6bSh/kCFE83N+wj5inl6X2myGyxDIlk=";
-      cp312 = "sha256-EZh4dW3vNC+Q7t0CEhNE4AHRUCa/ehvixrmi2IK4Wuw=";
-      cp313 = "sha256-S4L+oUNJwCYuYarQDj9mhs0diwJ9LavJhjFyIUGUgkA=";
-      cp314 = "sha256-aDCxEjJTby+9salK8uX+hltDbRKVLhgFDeFGpki0jZI=";
+      cp311 = "sha256-40/FGLO3mZiD5tm4pB5EFbhUw+JMnRnRAW8nRyVMSgE=";
+      cp312 = "sha256-fusnd0Q2p5vBqg5oFjp4QXdBvUx4qKAwI36zbC2lFSw=";
+      cp313 = "sha256-KN3Trbf4ekYybFs3U5W57MzyLK2uNAleHajfhgo41wA=";
+      cp314 = "sha256-Xmibh1CpFTqCGPSa2S5kp518B++Qm/YRBoefXCEfHOg=";
     };
   };
 
@@ -65,7 +65,6 @@ buildPythonPackage (finalAttrs: {
   pname = "cupti-python";
   inherit version;
   format = "wheel";
-  __structuredAttrs = true;
 
   src = srcs.${srcKey} or (throw "cupti-python: no wheel for ${srcKey}");
 

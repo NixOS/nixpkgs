@@ -6,15 +6,15 @@
   obs-studio,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "obs-source-switcher";
-  version = "0.4.3";
+  version = "0.4.4";
 
   src = fetchFromGitHub {
     owner = "exeldro";
     repo = "obs-source-switcher";
-    rev = "b229f40faceb0bb39cea41ce0ce2f2f236c0cbd1";
-    hash = "sha256-5io2uMvPdHQAWFDqLyXLC6nxTEjkrk8v4v8XwGsPF7U=";
+    tag = finalAttrs.version;
+    hash = "sha256-XLeDFyb75gipHakYPMa3hRjlSF/20Tq+Dks3qw9c6iA=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -34,4 +34,4 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl2Plus;
     inherit (obs-studio.meta) platforms;
   };
-}
+})

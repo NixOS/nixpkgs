@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ readline ];
 
-  preConfigure = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
+  preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
     export ac_cv_func_lstat64=no
   '';
 

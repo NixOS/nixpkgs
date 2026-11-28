@@ -28,18 +28,13 @@ in
 
   config = mkIf cfg.enable {
     boot = {
-      initrd.kernelModules = [
+      initrd.availableKernelModules = [
         "hv_balloon"
         "hv_netvsc"
         "hv_storvsc"
         "hv_utils"
         "hv_vmbus"
-      ];
-
-      initrd.availableKernelModules = [ "hyperv_keyboard" ];
-
-      kernelParams = [
-        "elevator=noop"
+        "hyperv_keyboard"
       ];
     };
 

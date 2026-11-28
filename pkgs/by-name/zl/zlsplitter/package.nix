@@ -2,6 +2,7 @@
   lib,
   clangStdenv,
   fetchFromGitHub,
+  nix-update-script,
 
   # nativeBuildInputs
   cmake,
@@ -12,30 +13,40 @@
 
   # buildInputs
   alsa-lib,
-  curl,
-  expat,
   fontconfig,
   freetype,
-  libGL,
   libxcursor,
   libxext,
+  libxi,
   libxinerama,
   libxrandr,
-  libepoxy,
   libjack2,
-  libxkbcommon,
   lv2,
+  # Highway is built static-dispatch only upstream (HWY_COMPILE_ONLY_STATIC is
+  # forced ON), so exactly one ISA is baked in -- there is no runtime dispatch.
+  # Default to the portable baseline so the cached binary runs everywhere nixpkgs
+  # targets. Override for a faster *local* build, e.g.
+  #   zlequalizer.override { simdTarget = "AVX2"; }
+  # SSE4/AVX2 map to -march=x86-64-v2/v3 and will SIGILL on CPUs lacking that ISA,
+  # which is why this must not be raised for the binary cache.
+  simdTarget ? (if clangStdenv.hostPlatform.isAarch64 then "NEON" else "SSE2"),
 }:
+assert lib.assertOneOf "simdTarget" simdTarget [
+  "SSE2"
+  "SSE4"
+  "AVX2"
+  "NEON"
+];
 
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "zlsplitter";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "ZL-Audio";
     repo = "ZLSplitter";
     tag = finalAttrs.version;
-    hash = "sha256-QNTSxvp4trbdm6wbl0u187LTjRMIp1tvoo06+m2z+8Y=";
+    hash = "sha256-j6hPBFB8rPW5iSz9wvX9gKK9Vb/XIBWOyd0zkz0i4n0=";
     fetchSubmodules = true;
   };
 
@@ -48,29 +59,31 @@ clangStdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals clangStdenv.hostPlatform.isDarwin [ darwin.sigtool ];
 
   buildInputs = [
-    curl
-    expat
     fontconfig
     freetype
     lv2
   ]
   ++ lib.optionals clangStdenv.hostPlatform.isLinux [
     alsa-lib
-    libGL
     libxcursor
     libxext
+    libxi
     libxinerama
     libxrandr
-    libepoxy
     libjack2
-    libxkbcommon
   ];
 
   env = lib.optionalAttrs clangStdenv.hostPlatform.isLinux {
     # JUCE dlopen's these at runtime, crashes without them
+    # -lXi is essential: JUCE requests the unversioned
+    # "libXi.so", which no host has already loaded, and when that dlopen fails
+    # JUCE still believes XInput2 is present (the stub for the missing
+    # XIQueryVersion returns 0, which equals Success), so it discards all core
+    # pointer events and the GUI stops responding to the mouse entirely.
     NIX_LDFLAGS = toString [
       "-lX11"
       "-lXext"
+      "-lXi"
       "-lXcursor"
       "-lXinerama"
       "-lXrandr"
@@ -88,10 +101,7 @@ clangStdenv.mkDerivation (finalAttrs: {
   };
 
   cmakeFlags = [
-    # see: https://github.com/ZL-Audio/ZlEqualizer#clone-and-build
-    (lib.cmakeFeature "KFR_ARCHS" (
-      if clangStdenv.hostPlatform.isAarch64 then "neon64" else "sse2;avx;avx2"
-    ))
+    (lib.cmakeFeature "ZL_HWY_STATIC_TARGET" simdTarget)
     (lib.cmakeBool "ZL_JUCE_COPY_PLUGIN" false)
     # set the version for in the settings screen.
     (lib.cmakeFeature "FOOBAR_VERSION" "${finalAttrs.version}")
@@ -116,8 +126,11 @@ clangStdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     homepage = "https://zl-audio.github.io/plugins/zlsplitter/";
+    changelog = "https://github.com/ZL-Audio/ZLSplitter/releases/tag/${finalAttrs.version}";
     description = "Versatile splitter plugin for VST3, LV2 and standalone";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [

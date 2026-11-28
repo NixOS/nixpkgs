@@ -25,6 +25,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
+  strictDeps = true;
+
   cmakeFlags = [
     (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
     (lib.cmakeBool "RC_INSTALL_ALL_EXTRAS" true)
@@ -32,8 +34,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     updateScript = unstableGitUpdater { };
-    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    tests = {
+      pkg-config = testers.hasPkgConfigModules {
+        package = finalAttrs.finalPackage;
+      };
+      cmake-config = testers.hasCmakeConfigModules {
+        package = finalAttrs.finalPackage;
+      };
+    };
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "C++ framework for property based testing inspired by QuickCheck";
@@ -48,6 +59,9 @@ stdenv.mkDerivation (finalAttrs: {
       "rapidcheck_catch"
       "rapidcheck_doctest"
       "rapidcheck_gtest"
+    ];
+    cmakeConfigModules = [
+      "rapidcheck"
     ];
     platforms = lib.platforms.all;
   };

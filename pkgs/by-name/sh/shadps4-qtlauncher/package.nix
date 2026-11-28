@@ -17,13 +17,13 @@
 }:
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "shadps4-qtlauncher";
-  version = "0-unstable-2026-10-05";
+  version = "0-unstable-2026-10-31";
 
   src = fetchFromGitHub {
     owner = "shadps4-emu";
     repo = "shadps4-qtlauncher";
-    rev = "29de8facf2348a1ffd461aa52b25cc23a488e255";
-    hash = "sha256-my3nLALEDIDNVu9qahxI+9E6aVBsAufAp4m+Uv8HNb0=";
+    rev = "24fd1248155dcfce61437b0ec0a3b0a4d0320386";
+    hash = "sha256-dajvffIAnw+h7smyA/sK7Fv2aTW0/3UdDaF9lRtt5L4=";
 
     postCheckout = ''
       git -C "$out" rev-parse --short=8 HEAD > $out/COMMIT

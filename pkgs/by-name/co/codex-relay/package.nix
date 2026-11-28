@@ -7,17 +7,17 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "codex-relay";
-  version = "0.5.8";
+  version = "0.6.1";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "MetaFARS";
     repo = "codex-relay";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cdBzuurqJGT4EzgZbq4deXZKiJoOjCg+S1efnpk0/wU=";
+    hash = "sha256-6V3SU3KBApNBCf9p4mnkiW29CvF5FIk1VRdXJk9ipGQ=";
   };
 
-  cargoHash = "sha256-ak4yEKEf94NPvOlcoT97/X53sKu6+euwfWfbs52Tef0=";
+  cargoHash = "sha256-3c9jWgUpfvdpUB6XV2jHFk/TbWVI51mbnR9J+3QI8IQ=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;

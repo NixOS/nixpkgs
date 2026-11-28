@@ -218,7 +218,7 @@ let
       # AssertionError: Did not see expected warning of class 'FutureWarning'
       "test_parsing_tzlocal_deprecated"
     ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # tests/generic/test_finalize.py::test_binops[and_-args4-right] - AssertionError: assert {} == {'a': 1}
       "test_binops"
       # These tests are unreliable on aarch64-darwin. See https://github.com/pandas-dev/pandas/issues/38921.

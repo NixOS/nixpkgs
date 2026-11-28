@@ -80,6 +80,11 @@ stdenv.mkDerivation (finalAttrs: {
     libx11
   ];
 
+  cmakeFlags = [
+    (lib.cmakeFeature "CMAKE_CXX_STANDARD" "17")
+    (lib.cmakeBool "CMAKE_CXX_STANDARD_REQUIRED" true)
+  ];
+
   installPhase = ''
     runHook preInstall
 

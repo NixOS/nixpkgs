@@ -1,0 +1,54 @@
+From a95338f93e36c54f2ef16590e7943090a908304f Mon Sep 17 00:00:00 2001
+From: Fabian Affolter <fabian.affolter@gmail.com>
+Date: Tue, 17 Nov 2026 23:11:49 +0100
+Subject: [PATCH] Fix CLI tests with Typer 0.27.2
+
+---
+ tests/test_async_typer.py | 3 +--
+ tests/test_cli.py         | 3 ++-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/tests/test_async_typer.py b/tests/test_async_typer.py
+index 052c588..c4736c4 100644
+--- a/tests/test_async_typer.py
++++ b/tests/test_async_typer.py
+@@ -2,7 +2,6 @@
+
+ from __future__ import annotations
+
+-import click
+ import pytest
+ import typer
+ from typer.testing import CliRunner
+@@ -33,7 +32,7 @@ def test_async_typer_supports_async_command_and_handler() -> None:
+         raise typer.Exit(code=1)
+
+     ok_result = runner.invoke(app, ["ok"])
+-    with pytest.raises(click.exceptions.Exit) as exit_error:
++    with pytest.raises(typer.exceptions.Exit) as exit_error:
+         app(args=["fail"], prog_name="easyenergy", standalone_mode=False)
+
+     assert ok_result.exit_code == 0
+diff --git a/tests/test_cli.py b/tests/test_cli.py
+index 8871250..6583ef5 100644
+--- a/tests/test_cli.py
++++ b/tests/test_cli.py
+@@ -7,6 +7,7 @@ from datetime import UTC, date, datetime
+ from typing import TYPE_CHECKING
+
+ import click
++import typer
+ import pytest
+ from syrupy.assertion import SnapshotAssertion
+ from typer.testing import CliRunner
+@@ -380,7 +381,7 @@ def test_cli_error_handlers(
+     capsys: pytest.CaptureFixture[str],
+ ) -> None:
+     """Test the Rich-backed error handlers."""
+-    with pytest.raises(click.exceptions.Exit) as exit_error:
++    with pytest.raises(typer.exceptions.Exit) as exit_error:
+         handler()(exception)
+
+     captured = capsys.readouterr()
+--
+2.55.0

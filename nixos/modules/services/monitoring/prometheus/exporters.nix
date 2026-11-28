@@ -102,11 +102,13 @@ let
         "nut"
         "nvidia-gpu"
         "opnsense"
+        "oxidized"
         "pgbouncer"
         "php-fpm"
         "pihole"
         "ping"
         "postfix"
+        "podman"
         "postgres"
         "process"
         "pve"
@@ -191,6 +193,10 @@ let
         exportarr-sonarr = {
           name = "exportarr";
           type = "sonarr";
+        };
+        exportarr-sabnzbd = {
+          name = "exportarr";
+          type = "sabnzbd";
         };
       }
     );

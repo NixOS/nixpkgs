@@ -23,12 +23,19 @@ nix-build --no-out-link --expr '
 '
 ```
 
+The CUDA commands select `cudaPackages_12_9`, the only CUDA package set with a
+pinned dependency hash. This XLA pin's rules_ml_toolchain rejects CUDA releases
+newer than 13.1, and other sets report the `unsupported-cuda-toolkit` problem
+unless given a dependency hash (see below).
+
 Run the CUDA package's hardware-free installed-output checks, including its CPU
 plugin:
 
 ```sh
 nix-build --no-out-link --expr '
-  let x = (import ./. { config.allowUnfree = true; }).xla.override { cudaSupport = true; };
+  let
+    pkgs = import ./. { config.allowUnfree = true; };
+    x = pkgs.xla.override { cudaSupport = true; cudaPackages = pkgs.cudaPackages_12_9; };
   in [ x.tests.cpu x.tests.cuda.install x.tests.cuda.metadata ]
 '
 ```
@@ -39,15 +46,13 @@ capabilities:
 ```sh
 nix-build --no-out-link --expr '
   let
-    check = config: ((import ./. {
-      config = { allowUnfree = true; } // config;
-    }).xla.override { cudaSupport = true; }).tests.cuda.configure;
+    cuda = config:
+      let pkgs = import ./. { config = { allowUnfree = true; } // config; };
+      in pkgs.xla.override { cudaSupport = true; cudaPackages = pkgs.cudaPackages_12_9; };
   in [
-    (check {})
-    (check { cudaCapabilities = [ "8.0" "8.9" ]; cudaForwardCompat = false; })
-    ((import ./. { config.allowUnfree = true; }).xla.override {
-      cudaSupport = true;
-    }).tests.cuda.configureOverride
+    (cuda {}).tests.cuda.configure
+    (cuda { cudaCapabilities = [ "8.0" "8.9" ]; cudaForwardCompat = false; }).tests.cuda.configure
+    (cuda {}).tests.cuda.configureOverride
   ]
 '
 ```
@@ -65,7 +70,8 @@ The lightweight checker uses only Python and synthetic repository fixtures:
 
 ```sh
 nix-build --no-out-link --expr '
-  ((import ./. { config.allowUnfree = true; }).xla.override { cudaSupport = true; }).tests.cuda.configureChecker
+  let pkgs = import ./. { config.allowUnfree = true; };
+  in (pkgs.xla.override { cudaSupport = true; cudaPackages = pkgs.cudaPackages_12_9; }).tests.cuda.configureChecker
 '
 ```
 
@@ -74,7 +80,9 @@ NVIDIA GPU and matching host driver:
 
 ```sh
 nix-build --no-out-link --expr '
-  let x = (import ./. { config.allowUnfree = true; }).xla.override { cudaSupport = true; };
+  let
+    pkgs = import ./. { config.allowUnfree = true; };
+    x = pkgs.xla.override { cudaSupport = true; cudaPackages = pkgs.cudaPackages_12_9; };
   in [ x.tests.cuda.pjrt x.tests.cuda.nccl x.tests.cuda.hlo ]
 '
 ```
@@ -83,7 +91,8 @@ For an interactive run of the same PJRT suite, select its tester:
 
 ```sh
 tester=$(nix-build --no-out-link --expr '
-  ((import ./. { config.allowUnfree = true; }).xla.override { cudaSupport = true; }).testers.cuda.pjrt
+  let pkgs = import ./. { config.allowUnfree = true; };
+  in (pkgs.xla.override { cudaSupport = true; cudaPackages = pkgs.cudaPackages_12_9; }).testers.cuda.pjrt
 ')
 "$tester/bin/xla-pjrt-cuda" "$PWD/pjrt-logs"
 ```
@@ -112,7 +121,7 @@ static cudart, NVVM, NVML stubs, cuDNN, and NCCL. XLA's downloaded CCCL 3.2.0,
 Clang 18.1.8, NVSHMEM 3.2.5, and build-only real user-mode driver remain pinned.
 
 Capabilities may change the dependency derivation identity through selected NCCL,
-but the normalized fixed-output content and store path remain capability-independent.
+but the fixed-output content and store path remain capability-independent.
 A different CUDA/cuDNN manifest requires an explicit dependency hash override:
 
 ```nix

@@ -9,6 +9,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "uutils-hostname";
   version = "0-unstable-2026-05-12";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "uutils";
     repo = "hostname";
@@ -18,7 +20,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-WlXYGvzbdcGb7qWB3L00oJpMZROmKq6zDrtSj6OwtYA=";
 
-  cargoBuildFlags = [ "--package uu_hostname" ];
+  cargoBuildFlags = [ "--package=uu_hostname" ];
 
   passthru.updateScript = nix-update-script {
     extraArgs = [ "--version=branch" ];

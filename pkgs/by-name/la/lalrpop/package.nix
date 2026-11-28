@@ -37,10 +37,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "LR(1) parser generator for Rust";
     homepage = "https://github.com/lalrpop/lalrpop";
     changelog = "https://github.com/lalrpop/lalrpop/blob/${finalAttrs.src.rev}/RELEASES.md";
-    license = with lib.licenses; [
-      asl20 # or
-      mit
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
     mainProgram = "lalrpop";
     maintainers = with lib.maintainers; [ chayleaf ];
   };

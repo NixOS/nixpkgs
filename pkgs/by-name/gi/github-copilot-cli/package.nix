@@ -23,15 +23,15 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "github-copilot-cli";
-  version = "1.0.98";
+  version = "1.0.114";
 
   src = fetchurl {
     url = "https://github.com/github/copilot-cli/releases/download/v${finalAttrs.version}/github-copilot-${finalAttrs.version}-${platform}.tgz";
     hash =
       {
-        "aarch64-darwin" = "sha256-JsYWXLRbzhs3o6jWu81ITi2TjPUT1ZcMvfnvDai5KnA=";
-        "x86_64-linux" = "sha256-pPX/6cooiGypsfiQFpmjpFZQJl27RzzBdXcsv8e4io8=";
-        "aarch64-linux" = "sha256-jAlbr0kiWueOUWMy1Qa4rQil2mD6pBu5OSXb1s4pkKc=";
+        "aarch64-darwin" = "sha256-81fsZnnwXhLiOMmeuREvNCk612Jb7cKn55EiyHmIh7s=";
+        "x86_64-linux" = "sha256-6Wh1FfbbI8BeVAP74ff1KD36WPdyQLthrJNb7TnzFyc=";
+        "aarch64-linux" = "sha256-bsIYbHvNPaNHWIxm6+ypIblWi4BLssnISWRHCewzU2w=";
       }
       .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
@@ -68,6 +68,8 @@ stdenv.mkDerivation (finalAttrs: {
     "libwayland-client.so.0"
     "libdbus-1.so.3"
     "libxdo.so.3"
+    "libonnxruntime-genai.so"
+    "libonnxruntime.so.1"
   ];
 
   installPhase = ''
@@ -91,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = ./update.sh;
 
   meta = {
-    description = "GitHub Copilot CLI brings the power of Copilot coding agent directly to your terminal";
+    description = "CLI client for GitHub Copilot";
     homepage = "https://github.com/github/copilot-cli";
     changelog = "https://github.com/github/copilot-cli/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.unfree;

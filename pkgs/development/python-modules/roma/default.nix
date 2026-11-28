@@ -4,24 +4,26 @@
   fetchFromGitHub,
   pytestCheckHook,
   setuptools,
+  setuptools-scm,
   numpy,
   torch,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "roma";
-  version = "1.6.0";
+  version = "1.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "naver";
     repo = "roma";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-oHGlbce/qfrEuikPK2LfRsNbQXJ/WJZTYW85FmxGnP4=";
+    hash = "sha256-Y8pctpPCNy+Bl8dn9h37uRFL+Iz8yRk1D7wedmDErPc=";
   };
 
   build-system = [
     setuptools
+    setuptools-scm
   ];
 
   dependencies = [

@@ -24,7 +24,6 @@ buildPythonPackage (finalAttrs: {
   pname = "textual-fastdatatable";
   version = "0.19.3";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "tconbeer";

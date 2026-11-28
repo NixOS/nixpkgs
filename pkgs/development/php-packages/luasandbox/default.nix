@@ -7,14 +7,14 @@
   lua51Packages,
 }:
 
-buildPecl rec {
+buildPecl (finalAttrs: {
   pname = "luasandbox";
   version = "4.1.4";
 
   src = fetchFromGitHub {
     owner = "wikimedia";
     repo = "mediawiki-php-luasandbox";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-9P+222eKSKRHkq+IydYf14k2azUJWByHX0we4IdAKkI=";
   };
 
@@ -29,4 +29,4 @@ buildPecl rec {
     maintainers = with lib.maintainers; [ georgyo ];
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -54,6 +54,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = ''
     install -m 444 -D nselib/data/passwords.lst $out/share/wordlists/nmap.lst
+
+    # ncat trusts the union of the OpenSSL default store and this vendored bundle.
+    # Remove the bundle so that ncat uses only the system store.
+    rm -r $out/share/ncat
   '';
 
   postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''

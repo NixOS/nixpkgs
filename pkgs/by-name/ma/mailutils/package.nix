@@ -28,6 +28,7 @@
 
   pythonSupport ? true,
   guileSupport ? true,
+  pamSupport ? lib.meta.availableOn stdenv.hostPlatform pam,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -64,11 +65,11 @@ stdenv.mkDerivation (finalAttrs: {
     libmysqlclient
     mailcap
     ncurses
-    pam
     readline
     gsasl
     libxcrypt
   ]
+  ++ lib.optionals pamSupport [ pam ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ net-tools ]
   ++ lib.optionals pythonSupport [ python3 ]
   ++ lib.optionals guileSupport [ guile ];
@@ -125,6 +126,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   # On Hydra the *-linux tests are very flaky.  Maybe they're sensitive to load.
   doCheck = stdenv.hostPlatform.isDarwin;
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Rich and powerful protocol-independent mail framework";

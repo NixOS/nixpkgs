@@ -12,6 +12,7 @@
   libaom,
   libopus,
   libpulseaudio,
+  libsodium,
   libva,
   libvdpau,
   libvpx,
@@ -32,11 +33,14 @@
   addDriverRunpath,
   perl,
   openssl,
+  wayland,
+  wayland-protocols,
+  wayland-scanner,
 }:
 let
   flutterRustBridge = rustPlatform.buildRustPackage rec {
     pname = "flutter_rust_bridge_codegen";
-    version = "1.80.1"; # https://github.com/rustdesk/rustdesk/blob/1.4.4/.github/workflows/bridge.yml#L10
+    version = "1.80.1"; # https://github.com/rustdesk/rustdesk/blob/1.5.0/.github/workflows/bridge.yml#L10
 
     src = fetchFromGitHub {
       owner = "fzyzcjy";
@@ -66,23 +70,29 @@ let
 in
 flutter329.buildFlutterApplication rec {
   pname = "rustdesk";
-  version = "1.4.9";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "rustdesk";
     repo = "rustdesk";
     tag = version;
     fetchSubmodules = true;
-    hash = "sha256-AnwdIO4TveC48uMioBCvH60xun24ckK420ONSEB9lQI=";
+    hash = "sha256-1xa7X+swBIb8Lz3c6m8SeNZAiJWNCUpw+UbdSsMkeSk=";
   };
 
   strictDeps = true;
   env.VCPKG_ROOT = "/homeless-shelter"; # idk man, makes the build go since https://github.com/21pages/hwcodec/commit/1873c34e3da070a462540f61c0b782b7ab15dc84
   env.OPENSSL_NO_VENDOR = true;
+  # upstream sets rpath = true, which keeps all of rustc in the closure
+  env.CARGO_PROFILE_RELEASE_RPATH = "false";
+
+  # buildDartApplication turns stripping off, and libapp.so has to stay as it is
+  dontStrip = false;
+  stripAllList = [ "app/rustdesk/lib/librustdesk.so" ];
 
   # Configure the Flutter/Dart build
   sourceRoot = "${src.name}/flutter";
-  # curl -sL https://raw.githubusercontent.com/rustdesk/rustdesk/1.4.9/flutter/pubspec.lock | yq > pubspec.lock.json
+  # curl -sL https://raw.githubusercontent.com/rustdesk/rustdesk/1.5.0/flutter/pubspec.lock | yq > pubspec.lock.json
   # Then add flutter_test, fake_async, leak_tracker*, vm_service SDK deps manually
   pubspecLock = lib.importJSON ./pubspec.lock.json;
   gitHashes = lib.importJSON ./git-hashes.json;
@@ -96,7 +106,7 @@ flutter329.buildFlutterApplication rec {
       src
       patches
       ;
-    hash = "sha256-HPvvsTcjSErGfdNwsHgWhs930Fe0hmK1g5J/ngtlkKM=";
+    hash = "sha256-Ym4USlB1NJO0bm0cr2l/yZhoUBfxtd2uTkkjrR7iD3o=";
   };
 
   dontCargoBuild = true;
@@ -132,6 +142,7 @@ flutter329.buildFlutterApplication rec {
     libaom
     libopus
     libpulseaudio
+    libsodium
     libva
     libvdpau
     libvpx
@@ -141,6 +152,11 @@ flutter329.buildFlutterApplication rec {
     pam
     xdotool
     openssl
+    # Needed for Wayland keyboard-shortcuts-inhibit (flutter/linux/CMakeLists.txt).
+    # CMake locates wayland-scanner via pkg-config and runs it by absolute path.
+    wayland
+    wayland-protocols
+    wayland-scanner
   ];
 
   prePatch = ''
@@ -252,6 +268,7 @@ flutter329.buildFlutterApplication rec {
     maintainers = with lib.maintainers; [
       das_j
       helsinki-Jo
+      knightfemale
     ];
     mainProgram = "rustdesk";
     platforms = lib.platforms.linux; # should work on darwin as well but I have no machine to test with

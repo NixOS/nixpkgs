@@ -115,6 +115,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ username-generic ];
     mainProgram = "flightcore";
-    platforms = lib.platforms.all;
+    platforms = lib.platforms.linux;
   };
 })

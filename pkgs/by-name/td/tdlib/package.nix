@@ -38,7 +38,7 @@ in
 
 stdenv.mkDerivation {
   pname = if tde2eOnly then "tde2e" else "tdlib";
-  version = "1.8.68";
+  version = "1.8.70";
 
   src = fetchFromGitHub {
     owner = "tdlib";
@@ -47,8 +47,8 @@ stdenv.mkDerivation {
     # The tdlib authors do not set tags for minor versions, but
     # external programs depending on tdlib constrain the minor
     # version, hence we set a specific commit with a known version.
-    rev = "c15d3f5a5de6e3ba5839822c451152e5e18bb700";
-    hash = "sha256-OnITeci0oM6flxdrBZ5w7Gk4BGiNer96MYnD2P6fsMQ=";
+    rev = "23383aef218a3123f02b744bfa91bde21056a814";
+    hash = "sha256-4wR09InBx8eP7zVzvx6UXI4MGWfA9/7/H+ftKLy/xm4=";
   };
 
   buildInputs = [
@@ -88,7 +88,7 @@ stdenv.mkDerivation {
       --replace '\$'{prefix}/'$'{CMAKE_INSTALL_LIBDIR} '$'{CMAKE_INSTALL_FULL_LIBDIR} \
       --replace '\$'{prefix}/'$'{CMAKE_INSTALL_INCLUDEDIR} '$'{CMAKE_INSTALL_FULL_INCLUDEDIR}
   ''
-  + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
     sed -i "/vptr/d" test/CMakeLists.txt
   '';
 

@@ -46,7 +46,7 @@ maven.buildMavenPackage rec {
     "-Dproject.build.outputTimestamp=1980-01-01T00:00:02Z"
   ];
 
-  mvnHash = "sha256-fS7dS2Q4ORThLBwDOzJJnRboNNRmhp0RG6Dae9fl+pw=";
+  mvnHash = "sha256-2UbjYbnMzVNplS+GPau+rzUMwc/X56esFkbs7GOosrw=";
 
   nativeBuildInputs = [
     copyDesktopItems

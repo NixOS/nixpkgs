@@ -10,7 +10,7 @@ buildPythonPackage rec {
   format = "setuptools";
 
   src = fetchFromGitHub {
-    owner = "maxbachmann";
+    owner = "rapidfuzz";
     repo = "rapidfuzz_capi";
     rev = "v${version}";
     hash = "sha256-0IvJl2JU/k1WbGPWRoucVGbVsEFNPHZT1ozEQAKQnPk=";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "C-API of RapidFuzz, which can be used to extend RapidFuzz from separate packages";
-    homepage = "https://github.com/maxbachmann/rapidfuzz_capi";
+    homepage = "https://github.com/rapidfuzz/rapidfuzz_capi";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };

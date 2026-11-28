@@ -1792,7 +1792,7 @@ in
           assert_lacks(out, "\nrestarting the following units:")
           assert_lacks(out, "\nstarting the following units:")
           assert_lacks(out, "the following new units were started:")
-          machine.fail("systemctl is-active test-service.servce")  # target was restarted
+          machine.fail("systemctl is-active test-service.service")  # target was restarted
 
           # Remove the target by switching to the old specialisation
           out = switch_to_specialisation("${machine}", "timerModified")

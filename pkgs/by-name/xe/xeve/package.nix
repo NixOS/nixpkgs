@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xeve";
-  version = "0.7.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "mpeg5";
     repo = "xeve";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-QA9+0PsPyg3gQYR2TpIO1nwL5H/BFpOtCX8xBQ4Qjmg=";
+    hash = "sha256-dEgrluaJk9yeWlgcSGIrqyACE+BTX64evkaUy8rzcSs=";
   };
 
   postPatch = ''

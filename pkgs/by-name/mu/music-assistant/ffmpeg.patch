@@ -81,24 +81,26 @@ diff --git a/music_assistant/helpers/tags.py b/music_assistant/helpers/tags.py
 index 87e37be5e..d1a17e742 100644
 --- a/music_assistant/helpers/tags.py
 +++ b/music_assistant/helpers/tags.py
-@@ -697,7 +697,7 @@ def parse_tags(
-     Input_file may be a (local) filename or URL accessible by ffmpeg.
+@@ -702,8 +702,8 @@ async def async_parse_tags(
+     :param file_size: Size of the file, to estimate a missing duration from its bitrate.
+     :param require_duration: Decode the whole file when its duration is not in its header.
      """
-     args = (
+     args = [
 -        "ffprobe",
 +        "@ffprobe@",
          "-hide_banner",
          "-loglevel",
          "error",
-@@ -764,7 +764,7 @@ def get_file_duration(input_file: str) -> float:
-     NOT Async friendly.
-     """
-     args = (
--        "ffmpeg",
-+        "@ffmpeg@",
-         "-hide_banner",
-         "-loglevel",
-         "info",
+@@ -736,8 +736,8 @@ async def async_parse_tags(
+         tags = await asyncio.to_thread(_parse_tags_output, res, input_file, file_size)
+         del res
+         if not tags.duration and require_duration:
+             duration_args = [
+-                "ffmpeg",
++                "@ffmpeg@",
+                 "-hide_banner",
+                 "-loglevel",
+                 "info",
 @@ -1473,7 +1473,7 @@ async def get_embedded_image(input_file: str) -> bytes | None:
  
      # Use FFmpeg for all other cases (URLs, ID3 tags, Vorbis comments, etc.)
@@ -289,12 +291,20 @@ diff --git a/tests/helpers/test_tags.py b/tests/helpers/test_tags.py
 index e21c760ea..ae3eb0493 100644
 --- a/tests/helpers/test_tags.py
 +++ b/tests/helpers/test_tags.py
-@@ -50,7 +50,7 @@ def test_parse_tags_reports_actionable_ffprobe_error(
-     """Test that tag parsing reports a useful FFprobe failure."""
-     process_error = subprocess.CalledProcessError(
-         returncode=1,
--        cmd=("ffprobe",),
-+        cmd=("@ffprobe@",),
-         output=b'{"error":{"code":-1,"string":"Unknown error occurred"}}',
-         stderr=stderr,
-     )
+@@ -130,8 +130,8 @@ async def test_async_parse_tags_decodes_missing_duration(monkeypatch: pytest.MonkeyPatch) -> None:
+     result = await tags.async_parse_tags("https://example.com/audio", require_duration=True)
+ 
+     assert result.duration == 201.25
+     decoder_args = factory.call_args.args[0]
+-    assert decoder_args[0] == "ffmpeg"
++    assert decoder_args[0].endswith("/ffmpeg")
+     assert decoder_args[decoder_args.index("-rw_timeout") + 1] == "10000000"
+     assert decoder_args.index("-rw_timeout") < decoder_args.index("-i")
+     processes[1].communicate.assert_awaited_once_with(timeout=tags.FFMPEG_DURATION_TIMEOUT)
+@@ -154,5 +154,5 @@ async def test_async_parse_tags_reaps_hanging_process(
+     }
+ 
+     async def start_process(*args: str, **kwargs: Any) -> asyncio.subprocess.Process:
+-        hanging = args[0] == command
++        hanging = pathlib.Path(args[0]).name == command
+         code = "import time; time.sleep(60)" if hanging else f"print({json.dumps(raw)!r})"

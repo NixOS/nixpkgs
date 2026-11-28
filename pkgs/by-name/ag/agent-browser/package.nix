@@ -8,6 +8,7 @@
   pnpm_11,
   pnpmConfigHook,
   coreutils,
+  darwin,
   geist-font,
   nix-update-script,
   which,
@@ -18,18 +19,18 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "agent-browser";
-  version = "0.39.1";
+  version = "0.41.1";
 
   src = fetchFromGitHub {
     owner = "vercel-labs";
     repo = "agent-browser";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WIg6WAnk3728NrZVh8JYtu2iRoHi8lYT2e5CDgOg2Sc=";
+    hash = "sha256-/YPVYdRNhOkW09WF63xhSwELNzv/D1cOvQep5taIlVQ=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/cli";
 
-  cargoHash = "sha256-f+7fTDs/irnf/6jCmSlSKaIaVAuqmTvjhW/vBT5gBKM=";
+  cargoHash = "sha256-LSBCYZtGjWmQRE7AXRpxEwyDZySEkRsPdTZbH8JIdzc=";
 
   # Place the pre-built dashboard where RustEmbed expects it
   postUnpack = ''
@@ -52,7 +53,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeCheckInputs = [
     writableTmpDirAsHomeHook
-  ];
+  ]
+  # `install` probes the macOS version with `sw_vers`.
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.DarwinTools ];
 
   # Some tests use a shared state that makes them flaky when run concurrently.
   dontUseCargoParallelTests = true;
@@ -92,7 +95,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
         inherit pnpm;
         pnpmWorkspaces = [ "dashboard" ];
         fetcherVersion = 4;
-        hash = "sha256-iaZzDTeRzz3NocNNypzsHfJthyhVT2EA7wNnu4kbY30=";
+        hash = "sha256-9PXr76pm/3QR25tSxP0uqV462UGraSbhCRigpg2kbww=";
       };
 
       pnpmWorkspaces = [ "dashboard" ];

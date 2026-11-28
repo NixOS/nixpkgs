@@ -3,20 +3,20 @@
   fetchFromGitHub,
   lib,
   hatchling,
-  aiohttp,
-  yarl,
+  pytest-cov-stub,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "qbusmqttapi";
-  version = "1.5.1";
+  version = "1.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Qbus-iot";
     repo = "qbusmqttapi";
     tag = "v${version}";
-    hash = "sha256-dxrJzmDb+uClZYfIjhUStYcNOSm90pIZlNdxbbRl4N0=";
+    hash = "sha256-jEXG3oxm6vk4lcs1MVoD5MmqucbPQ4uzgnsQM1Jhq1c=";
   };
 
   postPatch = ''
@@ -27,15 +27,12 @@ buildPythonPackage rec {
 
   build-system = [ hatchling ];
 
-  dependencies = [
-    aiohttp
-    yarl
-  ];
-
   pythonImportsCheck = [ "qbusmqttapi" ];
 
-  # upstream has no tests
-  doCheck = false;
+  nativeCheckInputs = [
+    pytest-cov-stub
+    pytestCheckHook
+  ];
 
   meta = {
     description = "MQTT API for Qbus Home Automation";

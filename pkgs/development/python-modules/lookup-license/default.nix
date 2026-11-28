@@ -27,7 +27,6 @@ buildPythonPackage (finalAttrs: {
   pname = "lookup-license";
   version = "0.1.31";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "hesa";

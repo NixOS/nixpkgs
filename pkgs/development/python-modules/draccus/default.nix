@@ -21,7 +21,6 @@ buildPythonPackage (finalAttrs: {
   pname = "draccus";
   version = "0.11.6";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "marin-community";

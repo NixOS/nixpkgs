@@ -9,7 +9,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "proxyt";
-  version = "0.0.7";
+  version = "0.1.2";
 
   __structuredAttrs = true;
 
@@ -17,10 +17,10 @@ buildGoModule (finalAttrs: {
     owner = "jaxxstorm";
     repo = "proxyt";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6+MgmhacH0oZY9ksZdBpv/tH4su8EBtHOiBIbR3ZXxo=";
+    hash = "sha256-WxGNETvuscHzUHXM/t48dHapz7q7iVl1MO4qeflsslk=";
   };
 
-  vendorHash = "sha256-eAOU4DRnvfHdIc3cXMCAHbw7AZJWkEk/u3ae+K43CVc=";
+  vendorHash = "sha256-aB9SIedNgOHF7cNjD1iQKrZsdmuFA9SbEh9Oh1FdqtY=";
 
   ldflags = [
     "-s"
@@ -44,8 +44,10 @@ buildGoModule (finalAttrs: {
       --zsh <($out/bin/proxyt completion zsh)
   '';
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
-    changelog = "https://github.com/jaxxstorm/proxyt/releases/${finalAttrs.version}";
+    changelog = "https://github.com/jaxxstorm/proxyt/releases/v${finalAttrs.version}";
     description = "Simple proxy for the Tailscale control plane";
     homepage = "https://github.com/jaxxstorm/proxyt";
     license = lib.licenses.mit;

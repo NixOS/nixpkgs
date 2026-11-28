@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   dissect-cstruct,
+  dissect-executable,
   dissect-util,
   fetchFromGitHub,
   flow-record,
@@ -18,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "dissect-cobaltstrike";
-  version = "1.2.1";
+  version = "1.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.cobaltstrike";
     tag = "v${version}";
-    hash = "sha256-0Wi0H9jL7suF/d92Sg2LuE6M2EzbIWsEC7Jjd1eJGTw=";
+    hash = "sha256-j7aCTwt5VCvLs4v5np3rQDykxfh69cURtJFXnGlRahc=";
   };
 
   build-system = [
@@ -35,6 +36,7 @@ buildPythonPackage rec {
 
   dependencies = [
     dissect-cstruct
+    dissect-executable
     dissect-util
     lark
   ];

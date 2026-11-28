@@ -7,35 +7,39 @@
   ffmpeg,
   which,
   rustc,
-  wasm-bindgen-cli_0_2_105,
+  wasm-bindgen-cli_0_2_114,
   trunk,
   binaryen,
+  cacert,
   dart-sass,
   nixosTests,
   nix-update-script,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tuliprox";
-  version = "3.2.0";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "euzu";
     repo = "tuliprox";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-G+bVKBAxviyJShq2BG4vjMiTzHhoYaiP6FXrSWeTvkU=";
+    hash = "sha256-0dVTW1PdN9wesbnN6sbB16328b0rYLhmmnqiov2lK3w=";
   };
 
   nativeBuildInputs = [
     pkg-config
     ffmpeg
     which
-    wasm-bindgen-cli_0_2_105
+    wasm-bindgen-cli_0_2_114
     trunk
     rustc.llvmPackages.lld
     binaryen
     dart-sass
   ];
+
+  buildInputs = [ zstd ];
 
   # Needed to get openssl-sys to use pkg-config.
   env = {
@@ -44,7 +48,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     OPENSSL_DIR = "${lib.getDev openssl}";
   };
 
-  cargoHash = "sha256-bDQ4pDDTINTgotTen1/SxOZBmkUmbmmwmR4/nSoSf/A=";
+  cargoHash = "sha256-Rgp8yM13XcGVvqvr2jf5eQnfX1jldr6MFfZZ19cGzxE=";
 
   cargoBuildFlags = "--package tuliprox";
 
@@ -56,14 +60,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     popd
   '';
 
-  # Tests don't compile in 3.2.0
-  doCheck = lib.versionAtLeast finalAttrs.version "3.2.1";
+  # reqwest needs CA certificates to build its clients
+  nativeCheckInputs = [ cacert ];
 
-  checkFlags = [
-    "--skip=processing::parser::xmltv::tests::normalize"
-    "--skip=processing::parser::xtream::tests::test_read_json_file_into_struct"
-    "--skip=repository::indexed_document::tests::test_read_xt"
-  ];
+  # Tests bind to and connect to localhost
+  __darwinAllowLocalNetworking = true;
 
   postInstall = ''
     cp -rf frontend/dist $out/web

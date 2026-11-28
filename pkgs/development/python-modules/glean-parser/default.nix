@@ -44,12 +44,13 @@ buildPythonPackage rec {
     export HOME=$TMPDIR
   '';
 
-  disabledTests = [
-    # Network access
-    "test_validate_ping"
-    "test_logging"
-    # Fails since yamllint 1.27.x
-    "test_yaml_lint"
+  disabledTestPaths = [
+    # https://github.com/mozilla/glean_parser/pull/863
+    "tests/test_metrics.py::test_expires"
+    # https://github.com/mozilla/glean_parser/pull/872
+    "tests/test_parser.py::test_expire_epoch_can_be_overriden"
+    # https://github.com/mozilla/glean_parser/pull/873
+    "tests/test_python_server.py::test_logging"
   ];
 
   pythonImportsCheck = [ "glean_parser" ];

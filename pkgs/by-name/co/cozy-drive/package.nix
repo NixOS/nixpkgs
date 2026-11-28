@@ -4,24 +4,19 @@
   appimageTools,
 }:
 
-let
+appimageTools.wrapType2 (finalAttrs: {
   pname = "cozydrive";
   version = "3.42.0";
-
   src = fetchurl {
-    url = "https://github.com/cozy-labs/cozy-desktop/releases/download/v${version}/Cozy-Drive-${version}-x86_64.AppImage";
+    url = "https://github.com/cozy-labs/cozy-desktop/releases/download/v${finalAttrs.version}/Cozy-Drive-${finalAttrs.version}-x86_64.AppImage";
     sha256 = "sha256-1MsRxLp+IZAoj9yqo5n0N1kfRYmYR2tjIjnlbRPrKH4=";
   };
-  appimageContents = appimageTools.extract { inherit pname version src; };
 
-in
-appimageTools.wrapType2 {
-  inherit pname version src;
   extraInstallCommands = ''
-    install -m 444 -D ${appimageContents}/cozydrive.desktop -t $out/share/applications
+    install -m 444 -D ${finalAttrs.contents}/cozydrive.desktop -t $out/share/applications
     substituteInPlace $out/share/applications/cozydrive.desktop \
-      --replace 'Exec=AppRun' 'Exec=${pname}'
-    cp -r ${appimageContents}/usr/share/icons $out/share
+      --replace 'Exec=AppRun' 'Exec=${finalAttrs.pname}'
+    cp -r ${finalAttrs.contents}/usr/share/icons $out/share
   '';
 
   meta = {
@@ -32,4 +27,4 @@ appimageTools.wrapType2 {
     platforms = [ "x86_64-linux" ];
     mainProgram = "cozydrive";
   };
-}
+})

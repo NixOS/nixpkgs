@@ -21,16 +21,16 @@
   tornado,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-telegram-bot";
-  version = "22.7";
+  version = "22.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-telegram-bot";
     repo = "python-telegram-bot";
-    tag = "v${version}";
-    hash = "sha256-+mbVN1XFChUMYReHMjQd1tx5gYpP1CWGNtuZCoY9TMo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-BfNERx2AuzXi7H3NR5jvaaqTQdnSALo2pf4c/Aen+ao=";
   };
 
   build-system = [
@@ -63,7 +63,7 @@ buildPythonPackage rec {
     pytest-xdist
     pytestCheckHook
   ]
-  ++ optional-dependencies.all;
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   pythonImportsCheck = [ "telegram" ];
 
@@ -97,6 +97,7 @@ buildPythonPackage rec {
     "TestInvoice"
     "TestJob"
     "TestKeyboard"
+    "TestLivePhotoWithRequest"
     "TestLocation"
     "TestMask"
     "TestMenu"
@@ -132,7 +133,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python library to interface with the Telegram Bot API";
     homepage = "https://python-telegram-bot.org";
-    changelog = "https://github.com/python-telegram-bot/python-telegram-bot/blob/${src.tag}/CHANGES.rst";
+    changelog = "https://github.com/python-telegram-bot/python-telegram-bot/releases/tag/${finalAttrs.src.tag}";
     license =
       with lib.licenses;
       OR [
@@ -144,4 +145,4 @@ buildPythonPackage rec {
       pingiun
     ];
   };
-}
+})

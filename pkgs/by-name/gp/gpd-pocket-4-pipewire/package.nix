@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gpd-pocket-4-pipewire";
-  version = "0.0.1";
+  version = "0.0.3";
 
   src = fetchFromGitHub {
     owner = "Manawyrm";
     repo = "gpd-pocket-4-pipewire";
     tag = finalAttrs.version;
-    hash = "sha256-FNnEfY1a3CeFCH+dRwb7NyOeDPeHDnwacw/8jLawDK0=";
+    hash = "sha256-5jLOSknAubZXadaf7IPFVXRLfsLrYrB6vgAtjhy0PE8=";
   };
 
   postPatch = ''

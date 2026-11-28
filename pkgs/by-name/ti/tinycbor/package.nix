@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tinycbor";
-  version = "7.0";
+  version = "7.1";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "tinycbor";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Fuw/hV3tVzoKf2Xrw64xuU+7xzSRPWL/ZdLjF0qICDY=";
+    hash = "sha256-M4L6RO0G6QIRt7ALU8kV1FolGSdvWJnny7J2FJgrE5g=";
   };
 
   nativeBuildInputs = [ cmake ];

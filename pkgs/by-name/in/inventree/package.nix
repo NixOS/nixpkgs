@@ -1,5 +1,6 @@
 {
   fetchFromGitHub,
+  fetchpatch,
   fetchYarnDeps,
   lib,
   nodejs,
@@ -15,12 +16,12 @@
 }:
 let
 
-  version = "1.5.6";
+  version = "1.7.2";
   src = fetchFromGitHub {
     owner = "inventree";
     repo = "inventree";
     tag = "${version}";
-    hash = "sha256-BF7vOp8Rxke+OlvzlVSQSrdsFc/87Ur9MWTKyVeU9FE=";
+    hash = "sha256-M84zGNyR39ya+fbBxonJaAfzQIyAT4pf3J4NvOc8CBQ=";
     postCheckout = ''
       git -C $out rev-parse HEAD > $out/commit_hash.txt
       git -C $out show -s --format=%cd --date=short HEAD > $out/commit_date.txt
@@ -40,7 +41,7 @@ let
 
       yarnOfflineCache = fetchYarnDeps {
         yarnLock = finalAttrs.src + "/yarn.lock";
-        hash = "sha256-iJfu2eo8anGDGoPDx68+LyFI6/bmaUms5kkiMpuEC+Y=";
+        hash = "sha256-4jNo6YxHXJhSNhsgTMbYNhMgnHFc0n7Pd7bXvTVpvEY=";
       };
 
       nativeBuildInputs = [
@@ -77,6 +78,20 @@ python3Packages.buildPythonApplication rec {
   pyproject = true;
   inherit version src;
 
+  patches = [
+    # Compatibility with django-allauth >= 65.21
+    # https://github.com/inventree/InvenTree/pull/13236
+    (fetchpatch {
+      name = "bump-allauth.patch";
+      url = "https://github.com/inventree/InvenTree/commit/6387ae95e13913fda595276974687b6d90cb728a.patch";
+      includes = [
+        "src/backend/InvenTree/InvenTree/middleware.py"
+        "src/backend/InvenTree/users/*"
+      ];
+      hash = "sha256-Qfxp1vfA9xBD4Cb6/Viroi+zwBOoxQh9xr+mtylOwOk=";
+    })
+  ];
+
   dependencies =
     with python3Packages;
     [
@@ -91,6 +106,7 @@ python3Packages.buildPythonApplication rec {
       django-filter
       django-flags
       django-formtools
+      django-fsm-2
       django-ical
       django-import-export
       django-maintenance-mode
@@ -99,6 +115,7 @@ python3Packages.buildPythonApplication rec {
       django-mptt
       django-mailbox
       django-anymail
+      django-auditlog
       django-q2
       django-redis
       django-sesame
@@ -134,11 +151,13 @@ python3Packages.buildPythonApplication rec {
       pytz
       pyyaml
       rapidfuzz
+      scim2-models
       sentry-sdk
       structlog
       tablib
       tqdm
       tinycss2
+      typing-extensions
       weasyprint
       whitenoise
       pypdf
@@ -202,6 +221,8 @@ python3Packages.buildPythonApplication rec {
         "test_print_custom_template"
         # Unbounded recursion in pint overflows the C stack and segfaults the test worker
         "test_api_circular_unit"
+        # SCIM conformance checks added in scim2-tester 0.6 fail (upstream pins 0.5.2)
+        "test_suite"
       ];
       skippedFuncScripts = map (funcName: ''
         grep -rlZ ${funcName} . | while IFS= read -r -d "" file; do
@@ -312,6 +333,7 @@ python3Packages.buildPythonApplication rec {
     pdfminer-six
     tblib
     pytest
+    scim2-tester
   ];
   passthru =
     let

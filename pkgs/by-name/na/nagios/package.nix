@@ -84,7 +84,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       immae
       thoughtpolice
-      relrod
       anthonyroussel
     ];
   };

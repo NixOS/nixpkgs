@@ -301,3 +301,42 @@ If you ever need to update the dependencies of a package, you instead do
 * `nix-build -A package.fetch-deps` to generate the update script for `package`
 * Run `./result` to regenerate the lockfile to the path passed for `nugetDeps` (keep in mind if it can't be resolved to a local path, the script will write to `$1` or a temporary path instead)
 * Finally, ensure the correct file was written and the derivation can be built.
+
+## Dependencies on SDK packages {#dependencies-on-sdk-packages}
+
+If `deps.json` contains `Microsoft.{NETCore,AspNetCore,WindowsDesktop}.App.Ref`, a warning will be produced in evaluation.
+This is to prevent references to version-dependent packages that should be referenced from an SDK.
+Using the SDK package allows the runtime to be upgraded without breaking the dependent package.
+
+Sometimes packages from multiple SDKs are needed to build a dependent package.
+This can be accomplished without requiring both SDKs as build inputs, by doing something like:
+
+```nix
+buildDotnetModule {
+  dotnet-sdk =
+    with dotnetCorePackages;
+    sdk_10_0
+    // {
+      inherit
+        (combinePackages [
+          sdk_10_0
+          sdk_8_0
+        ])
+        packages
+        targetPackages
+        ;
+    };
+}
+```
+
+This will create a new SDK based on 10.0, with packages from both 10.0 and 8.0.
+
+If you need to disable the warning, you can do:
+
+```nix
+buildDotnetModule.override ({
+  addNuGetDeps = dotnetCorePackages.addNuGetDeps.override {
+    fetchNupkg = dotnetCorePackages.fetchNupkg.override { allowSdkPackages = true; };
+  };
+})
+```

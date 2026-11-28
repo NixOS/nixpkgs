@@ -81,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
   # Using $0 is bad, it causes --help to mention ".passage-wrapped".
   postInstall = ''
     substituteInPlace $out/bin/passage \
-              --replace-fail 'AGE="''${PASSAGE_AGE:-age}"' 'AGE=${lib.getExe age}' \
+              --replace-fail 'AGE="''${PASSAGE_AGE:-age}"' 'AGE=''${PASSAGE_AGE:-${lib.getExe age}}' \
               --replace-fail 'PROGRAM="''${0##*/}"' 'PROGRAM=passage'
     wrapProgram $out/bin/passage --prefix PATH : $extraPath --argv0 $pname
   '';
@@ -91,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
     "WITH_ALLCOMP=yes"
   ];
   passthru = {
-    withExtensions = pass.withExtensions.override {
+    withExtensions = (pass.override { dmenuSupport = false; }).withExtensions.override {
       pass = passage;
       brokenExtensions = extensionsNotSupportinPassage;
     };

@@ -18,7 +18,7 @@ maven.buildMavenPackage rec {
     hash = "sha256-5p8wVdPRsepwuXgl8weotxXrdGJcbe0Qv1VceCFrNdM=";
   };
 
-  mvnHash = "sha256-d8OVpSRQWbajXnM1eCKOOmUVHPpBR2AVeZMdJXbBbLg=";
+  mvnHash = "sha256-k5Qe+ZiWY1aWgtVBLtMcABk3mMSyy5JF2UORt7s8JaM=";
 
   mvnParameters = toString [
     "-Dproject.build.outputTimestamp=1980-01-01T00:00:02Z"

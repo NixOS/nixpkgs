@@ -43,7 +43,10 @@ let
         cuSPARSE, cuSOLVER, cuFFT, cuRAND, NPP and nvJPEG.
       '';
       license = lib.licenses.bsd3;
-      platforms = [ "x86_64-linux" ];
+      platforms = [
+        "aarch64-linux"
+        "x86_64-linux"
+      ];
       teams = [ lib.teams.cuda ];
     };
   });

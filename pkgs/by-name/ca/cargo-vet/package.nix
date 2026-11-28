@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-vet";
-  version = "0.10.2";
+  version = "0.10.4";
 
   src = fetchFromGitHub {
     owner = "mozilla";
     repo = "cargo-vet";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sdjvCMLM8ThWXbotjRIsbLYucDzGvFOktqo6OKB//RI=";
+    hash = "sha256-pib5HI2rdMFZOo8+QvCZTxBAcgjZh4MoBAmc0AsBfFg=";
   };
 
-  cargoHash = "sha256-3pfOq2VfHbtohdgv73TT480bjCjdNKPJE+m4SHeXfGA=";
+  cargoHash = "sha256-epJWvKJ6Ks3eBfL+Ve9XydrJN+ses8J3OO2jld2PBag=";
 
   # the test_project tests require internet access
   checkFlags = [ "--skip=test_project" ];
@@ -28,10 +28,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/mozilla/cargo-vet/releases/tag/v${finalAttrs.version}";
     mainProgram = "cargo-vet";
     homepage = "https://mozilla.github.io/cargo-vet";
-    license = with lib.licenses; [
-      asl20 # or
-      mit
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
     maintainers = with lib.maintainers; [
       jk
       matthiasbeyer

@@ -73,7 +73,7 @@ in
 
       serviceConfig = {
         Type = "forking";
-        ExecStart = "${pkgs.sniproxy}/bin/sniproxy -c ${configFile}";
+        ExecStart = "${pkgs.sniproxy}/bin/sniproxy -i -c ${configFile}";
         LogsDirectory = "sniproxy";
         LogsDirectoryMode = "0640";
         Restart = "always";

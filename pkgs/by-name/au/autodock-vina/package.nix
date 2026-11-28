@@ -4,6 +4,7 @@
   fetchFromGitHub,
   boost186,
   glibc,
+  versionCheckHook,
 }:
 let
   boost' = boost186.override {
@@ -13,9 +14,11 @@ in
 stdenv.mkDerivation (finalAttrs: {
   pname = "autodock-vina";
   version = "1.2.7";
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
-    owner = "ccsb-scripps";
+    owner = "forlilab";
     repo = "autodock-vina";
     tag = "v${finalAttrs.version}";
     hash = "sha256-AQJl/EUAkdIQJZSN27sbjG7dYbQxeEb8Pd+p2kKRnvA=";
@@ -46,12 +49,17 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+
   passthru.boost = boost';
 
   meta = {
     description = "One of the fastest and most widely used open-source docking engines";
     homepage = "https://vina.scripps.edu/";
-    changelog = "https://github.com/ccsb-scripps/AutoDock-Vina/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/forlilab/AutoDock-Vina/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ natsukium ];
     platforms = lib.platforms.unix;

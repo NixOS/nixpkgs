@@ -4,6 +4,8 @@
   fetchFromGitHub,
   fontconfig,
   installShellFiles,
+  callPackage,
+  libgit2,
   libGL,
   libx11,
   libxcb,
@@ -16,6 +18,7 @@
   python3,
   runCommand,
   rustPlatform,
+  sqlite,
   vulkan-loader,
   wayland,
   wezterm,
@@ -24,19 +27,20 @@
   libxcb-keysyms,
   libxcb-wm,
   zlib,
+  zstd,
   rcodesign,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wezterm";
-  version = "0-unstable-2026-10-10";
+  version = "0-unstable-2026-11-20";
 
   src = fetchFromGitHub {
     owner = "wezterm";
     repo = "wezterm";
-    rev = "e2a98e1b8af156988ad0ac778658ac27b60a55fb";
+    rev = "ee6f3044d09f83f21a32aead8dac2bc2a32e7fcb";
     fetchSubmodules = true;
-    hash = "sha256-8jRfyP39boYVxDYJush0Rc9EFwDvRL75gTMLliihTU8=";
+    hash = "sha256-Yk+GadCT6XbnZtl5YbvPec08oDo9Vf5PbZ/mr8xzpxI=";
   };
 
   postPatch = ''
@@ -59,7 +63,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # https://github.com/wezterm/wezterm/blob/main/nix/flake.nix#L134
   auditable = false;
 
-  cargoHash = "sha256-GiHuJkkcPKoQpzVKDlbI2eZVj+5Fns/CHKxRtBw39WU=";
+  cargoHash = "sha256-mzP4cd8ufA9Q7/nYN0ptmqoSmgi4BypWlfHx8KxOCNI=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -74,8 +78,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     fontconfig
+    libgit2
     openssl
+    sqlite
     zlib
+    zstd
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libx11
@@ -136,14 +143,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru = {
     # the headless variant is useful when deploying wezterm's mux server on remote severs
-    headless = import ./headless.nix {
-      inherit
-        openssl
-        pkg-config
-        rustPlatform
-        wezterm
-        ;
-    };
+    headless = callPackage ./headless.nix { };
 
     terminfo =
       runCommand "wezterm-terminfo"

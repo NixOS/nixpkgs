@@ -6,6 +6,8 @@
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
+  __structuredAttrs = true;
+
   pname = "newdoc";
   version = "2.18.7";
 

@@ -20,7 +20,7 @@ buildPythonPackage (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "solokeys";
-    repo = "solo-python";
+    repo = "solo1-cli";
     tag = finalAttrs.version;
     hash = "sha256-XVPYr7JwxeZfZ68+vQ7a7MNiAfJ2bvMbM3R1ryVJ+OU=";
   };

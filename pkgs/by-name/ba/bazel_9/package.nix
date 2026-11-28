@@ -29,12 +29,12 @@
   cctools,
   # Allow to independently override the jdks used to build and run respectively
   jdk_headless,
-  version ? "9.2.0",
+  version ? "9.3.3",
 }:
 
 let
   inherit (callPackage ./build-support/patching.nix { }) addFilePatch;
-  inherit (stdenv.hostPlatform) isDarwin isAarch64;
+  inherit (stdenv.hostPlatform) isDarwin;
 
   defaultShellUtils =
     # Keep this list conservative. For more exotic tools, prefer to use
@@ -85,11 +85,12 @@ let
   bazelSystem = if isDarwin then "darwin" else "linux";
 
   # on aarch64 Darwin, `uname -m` returns "arm64"
-  bazelArch = if isDarwin && isAarch64 then "arm64" else stdenv.hostPlatform.parsed.cpu.name;
+  bazelArch =
+    if isDarwin then stdenv.hostPlatform.darwinArch else stdenv.hostPlatform.parsed.cpu.name;
 
   src = fetchzip {
     url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
-    hash = "sha256-sL6fIV2K/00nx1+SrQTWnsPqfg6amHx4053UZNwgg0o=";
+    hash = "sha256-rvc+e935XbrXwsUtFSiVyQLNSTsbp7cAORefWFbrKO4=";
     stripRoot = false;
   };
 
@@ -296,10 +297,11 @@ stdenv.mkDerivation rec {
     #       to disassemble Jar (slow) or hardcode known references
     mkdir -p $out/nix-support
     INSTALL_BASE=$(./output/bazel --batch info install_base)
-    find "$INSTALL_BASE" -type f -exec \
-       ${gnugrep}/bin/grep --text --only-matching --no-filename "$NIX_STORE/[^/]*" '{}' \; \
-    | sort -u >> $out/nix-support/depends
-
+    {
+      find "$INSTALL_BASE" -type f -exec \
+        ${gnugrep}/bin/grep --text --only-matching --no-filename "$NIX_STORE/[^/]*" '{}' \;
+      unzip -p "$INSTALL_BASE/A-server.jar" | ${gnugrep}/bin/grep --text --only-matching "$NIX_STORE/[^/]*"
+    } | sort -u >> $out/nix-support/depends
     mkdir -p $out/bin
 
     # official wrapper scripts that searches for $WORKSPACE_ROOT/tools/bazel if

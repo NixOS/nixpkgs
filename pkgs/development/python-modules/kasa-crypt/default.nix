@@ -15,7 +15,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "bdraco";
+    owner = "python-kasa";
     repo = "kasa-crypt";
     tag = "v${version}";
     hash = "sha256-rSRLrlV3QLatI2G8sd2jDwd6U8k4MrJil62ki1kNEMc=";
@@ -36,8 +36,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "Fast kasa crypt";
-    homepage = "https://github.com/bdraco/kasa-crypt";
-    changelog = "https://github.com/bdraco/kasa-crypt/blob/${src.tag}/CHANGELOG.md";
+    homepage = "https://github.com/python-kasa/kasa-crypt";
+    changelog = "https://github.com/python-kasa/kasa-crypt/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };

@@ -7,6 +7,7 @@
   zip,
   gettext,
   perl,
+  wrapGAppsHook3,
   wxwidgets_3_2,
   libxext,
   libxi,
@@ -41,6 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     gettext
     perl
     pkg-config
+    wrapGAppsHook3
     wxwidgets_3_2
     zip
   ];

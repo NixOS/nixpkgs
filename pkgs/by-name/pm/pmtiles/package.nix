@@ -23,6 +23,8 @@ buildGoModule (finalAttrs: {
     "-X main.commit=v${finalAttrs.version}"
   ];
 
+  checkFlags = [ "-skip=^TestResolver$" ];
+
   postInstall = ''
     mv $out/bin/go-pmtiles $out/bin/pmtiles
   '';

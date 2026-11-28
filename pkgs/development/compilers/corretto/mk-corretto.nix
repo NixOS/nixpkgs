@@ -8,8 +8,11 @@
   fetchurl,
   stdenv,
   gradle,
+  cacert,
+  jre-generate-cacerts,
   nixpkgs-openjdk-updater,
   extraConfig ? [ ],
+  libarchive,
   rsync,
   runCommand,
   testers,
@@ -54,6 +57,7 @@ jdk.overrideAttrs (
     nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [
       jdk
       gradle
+      libarchive # `bsdtar`
       rsync
     ];
 
@@ -123,12 +127,36 @@ jdk.overrideAttrs (
         # openjdk/generic.nix) while giving Corretto's flags precedence.
         # Note that the OpenJdK flags contain "--with-boot-jdk=..."!
         substituteInPlace build.gradle --replace-fail "correttoCommonFlags = [" "correttoCommonFlags = [${jdk_configure_flags} ,"
-        # Finally, *append* nix-corretto-version specific flags.
-        gradleFlagsArray+=(-Pcorretto.extra_config="${extra_config}")
+        # Finally, *append* our flags. build.gradle places corretto.extra_config
+        # after Corretto's own flags, so our --with-cacerts-file (see preBuild)
+        # overrides Corretto's, and the nix-corretto-version specific flags in
+        # extra_config come last and can override ours.
+        gradleFlagsArray+=(-Pcorretto.extra_config="--with-cacerts-file=$NIX_BUILD_TOP/cacerts-gen/cacerts ${extra_config}")
+
+        # The tar packaging expects commitId.txt, which git checkouts don't
+        # have.
+        substituteInPlace build.gradle --replace-warn "'README.md', 'commitId.txt', 'version.txt'" "'README.md', 'version.txt'"
+
+        # The tar packaging also expects README.JAVASE, which is missing too.
+        # N.B.: build.gradle says
+        # "If this is a certified release build, exclude the README.JAVASE file"
+        # The Nix build is not "certified" but we do not have that file anyhow.
+        gradleFlagsArray+=(-Pcorretto.excludeReadmeJavaSE=true)
       '';
 
     # since we dontConfigure, we must run this manually
-    preBuild = "gradleConfigureHook";
+    # dontConfigure also skips OpenJDK's preConfigure, so build
+    # lib/security/cacerts from cacert here, the same way it does.
+    preBuild = ''
+      gradleConfigureHook
+
+      mkdir "$NIX_BUILD_TOP/cacerts-gen"
+      (
+        cd "$NIX_BUILD_TOP/cacerts-gen"
+        JAVA_TOOL_OPTIONS="-Dkeystore.pkcs12.certProtectionAlgorithm=NONE -Dkeystore.pkcs12.macAlgorithm=NONE" \
+          ${jre-generate-cacerts} ${jdk.home}/bin/keytool ${cacert}/etc/ssl/certs/ca-bundle.crt
+      )
+    '';
 
     # The Linux installer is placed at linux/universal/tar whereas the MacOS
     # one is at mac/tar.

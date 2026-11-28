@@ -52,9 +52,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     # https://github.com/pnpm/pnpm/issues/3645
     find node_modules -xtype l -delete
-
-    # Remove build-directory references from pnpm metadata.
-    rm node_modules/{.modules.yaml,.pnpm-workspace-state-v1.json}
   '';
 
   # Production dependencies are pruned with pnpm above.

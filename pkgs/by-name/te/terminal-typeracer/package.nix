@@ -4,27 +4,30 @@
   fetchFromGitLab,
   rustPlatform,
   pkg-config,
+  libgit2,
   openssl,
   sqlite,
   libiconv,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "terminal-typeracer";
-  version = "2.1.5";
+  version = "2.2.0";
 
   src = fetchFromGitLab {
     owner = "ttyperacer";
     repo = "terminal-typeracer";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7LKpOO+PVGGtFJh1dZW/n/zovTxxZbb2VQwzgmjZhIY=";
+    hash = "sha256-xBuHYxpMh/gfdbzCK6lWr6n2rY6WcF3v1/Kx6AtzvKk=";
   };
 
-  cargoHash = "sha256-PECQ6KoHLPgUosC7gxniIoLHA5tWb0JfAUm93XFCcpk=";
+  cargoHash = "sha256-/g7xRWN+yiN9k3+nfxvQ3Ku4Yr7orHwa5jcXY3S+HSg=";
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
+    libgit2
     openssl
     sqlite
   ]
@@ -32,10 +35,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libiconv
   ];
 
-  env = {
-    OPENSSL_NO_VENDOR = 1;
-    LIBGIT2_NO_VENDOR = 0;
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Open source terminal based version of Typeracer written in rust";

@@ -8,23 +8,17 @@
   lxqt-build-tools,
   wrapQtAppsHook,
   gitUpdater,
-  version ? "2.4.0",
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qtermwidget";
-  inherit version;
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "qtermwidget";
-    rev = version;
-    hash =
-      {
-        "1.4.0" = "sha256-wYUOqAiBjnupX1ITbFMw7sAk42V37yDz9SrjVhE4FgU=";
-        "2.4.0" = "sha256-fTE39goab0md0koS28gRiQgnEumtR5/vTKgpM/wuCrk=";
-      }
-      ."${version}";
+    rev = finalAttrs.version;
+    hash = "sha256-aQdk01vnyFC7J8zEIvIMcNgSM/cAfoX1SeaH/naKbzY=";
   };
 
   nativeBuildInputs = [
@@ -40,11 +34,6 @@ stdenv.mkDerivation {
 
   passthru.updateScript = gitUpdater { };
 
-  postPatch = lib.optionalString (version == "1.4.0") ''
-    substituteInPlace CMakeLists.txt \
-      --replace-fail "cmake_minimum_required(VERSION 3.1.0 FATAL_ERROR)" "cmake_minimum_required(VERSION 3.10)"
-  '';
-
   meta = {
     broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://github.com/lxqt/qtermwidget";
@@ -53,4 +42,4 @@ stdenv.mkDerivation {
     platforms = with lib.platforms; unix;
     teams = [ lib.teams.lxqt ];
   };
-}
+})

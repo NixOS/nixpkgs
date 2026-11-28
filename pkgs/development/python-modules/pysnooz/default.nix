@@ -18,20 +18,15 @@
 
 buildPythonPackage rec {
   pname = "pysnooz";
-  version = "0.10.0";
+  version = "0.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "AustinBrunkhorst";
     repo = "pysnooz";
     tag = "v${version}";
-    hash = "sha256-jOXmaJprU35sdNRrBBx/YUyiDyyaE1qodWksXkTSEe0=";
+    hash = "sha256-sJ2/miVwRH2ggnFi3tLp3trrNJNIiKx66fYJKyuWMx4=";
   };
-
-  patches = [
-    # https://github.com/AustinBrunkhorst/pysnooz/pull/20
-    ./bleak-compat.patch
-  ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \

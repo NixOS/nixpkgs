@@ -24,19 +24,27 @@
       croniter
       oras
     ];
+    pythonRelaxDeps = [
+      "croniter"
+      "oras"
+    ];
     meta.maintainers = with lib.maintainers; [ techknowlogick ];
   };
 
   aksarc = mkAzExtension {
     pname = "aksarc";
-    version = "1.5.62";
-    url = "https://hybridaksstorage.z13.web.core.windows.net/HybridAKS/CLI/aksarc-1.5.62-py3-none-any.whl";
-    hash = "sha256-PCy4SUbB4Vlj+fIwhufGwMJrrRehQr/W+QxAphTPnEk=";
+    version = "1.5.117";
+    url = "https://hybridaksstorage.z13.web.core.windows.net/HybridAKS/CLI/aksarc-1.5.117-py3-none-any.whl";
+    hash = "sha256-vRydbOjvQW1wPgOWwsIa5lPOjOcHdR976edWZyjfEhY=";
     description = "Microsoft Azure Command-Line Tools HybridContainerService Extension";
     propagatedBuildInputs = with python3Packages; [
+      asyncssh
+      certifi
       kubernetes
-      paramiko
+      urllib3
     ];
+    # pinned to asyncssh<2.24.0, but the APIs it uses are unchanged in 2.24
+    pythonRelaxDeps = [ "asyncssh" ];
     meta.maintainers = with lib.maintainers; [ techknowlogick ];
   };
 
@@ -86,6 +94,10 @@
     url = "https://arcplatformcliextprod.z13.web.core.windows.net/arcappliance-1.6.0-py2.py3-none-any.whl";
     hash = "sha256-1VTKp4R6ohI4C9QsZgAabJJMnkTycEQF7DDshw/7Qkw=";
     description = "Microsoft Azure Command-Line Tools Arcappliance Extension";
+    pythonRelaxDeps = [
+      "jsonschema"
+      "kubernetes"
+    ];
     propagatedBuildInputs = with python3Packages; [
       jsonschema
       kubernetes
@@ -100,6 +112,7 @@
     hash = "sha256-/ejgjd/O37GtS6/+gzsscImoLllaDYCl2LS8m+pulTw=";
     description = "Tools for managing ArcData";
     propagatedBuildInputs = with python3Packages; [
+      colorama
       jinja2
       jsonpatch
       jsonpath-ng
@@ -110,26 +123,31 @@
       pydash
       regex
     ];
+    # The wheel pins every dependency exactly and lists msrestazure, which it never imports.
+    pythonRelaxDeps = true;
+    pythonRemoveDeps = [ "msrestazure" ];
     meta.maintainers = with lib.maintainers; [ techknowlogick ];
   };
 
   attestation = mkAzExtension {
     pname = "attestation";
-    version = "1.0.0";
-    url = "https://azcliprod.blob.core.windows.net/cli-extensions/attestation-1.0.0-py3-none-any.whl";
-    hash = "sha256-5YJ3wpIhTjsKHmbeXFI0De3yX1x8NWRgsgJZ1frO70Y=";
+    version = "1.0.2";
+    url = "https://azcliprod.blob.core.windows.net/cli-extensions/attestation-1.0.2-py3-none-any.whl";
+    hash = "sha256-NYSYItwXqlaMt34cyowVNnPOd9XB/eW6Evun5jROH5I=";
     description = "Microsoft Azure Command-Line Tools AttestationManagementClient Extension";
     propagatedBuildInputs = with python3Packages; [
       pyjwt
     ];
+    # pinned to pyjwt~=2.13.0, but works with newer pyjwt
+    pythonRelaxDeps = [ "pyjwt" ];
     meta.maintainers = with lib.maintainers; [ techknowlogick ];
   };
 
   azure-devops = mkAzExtension rec {
     pname = "azure-devops";
-    version = "1.0.9";
+    version = "1.0.11";
     url = "https://github.com/Azure/azure-cli-extensions/releases/download/azure-devops-${version}/azure_devops-${version}-py2.py3-none-any.whl";
-    hash = "sha256-60k73FESyFUzgsEPSW4DTcnYkhpFA9qj+JgxQ5nj/MU=";
+    hash = "sha256-lhAlOnAnr0ttP7zqzt3KoKl65auQKUOZMSoOyXUDcVs=";
     description = "Tools for managing Azure DevOps";
     propagatedBuildInputs = with python3Packages; [ distro ];
     meta.maintainers = with lib.maintainers; [ katexochen ];
@@ -168,17 +186,16 @@
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/cloud_service-1.0.1-py3-none-any.whl";
     hash = "sha256-9rLYCn6rO6vTGFdBtGfgHQwceKbtf/t48DG4dQBzc+Q=";
     description = "Microsoft Azure Command-Line Tools ComputeManagementClient Extension";
-    propagatedBuildInputs = with python3Packages; [
-      azure-mgmt-compute
-    ];
+    pythonRelaxDeps = [ "azure-mgmt-compute" ];
+    propagatedBuildInputs = with python3Packages; [ azure-mgmt-compute ];
     meta.maintainers = with lib.maintainers; [ techknowlogick ];
   };
 
   confcom = mkAzExtension rec {
     pname = "confcom";
-    version = "2.3.0";
+    version = "2.4.1";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/confcom-${version}-py3-none-any.whl";
-    hash = "sha256-HJ9AlRjBZoYEbuiT19N1UYrHoMzYDKS/NKyLoxhut10=";
+    hash = "sha256-TZZWBFIEmudV6rGdPuIOcnO5jpVfxF0hTOVoNtBs9tA=";
     description = "Microsoft Azure Command-Line Tools Confidential Container Security Policy Generator Extension";
     nativeBuildInputs = [ autoPatchelfHook ];
     buildInputs = [ openssl ];
@@ -205,6 +222,12 @@
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/connectedk8s-${version}-py2.py3-none-any.whl";
     hash = "sha256-Hl/+mS1Aj5Vsq2VFWrJuYmhXglt/wCr0ld67tK+tMak=";
     description = "Microsoft Azure Command-Line Tools Connectedk8s Extension";
+    pythonRelaxDeps = [
+      "azure-mgmt-hybridcompute"
+      "kubernetes"
+      "oras"
+      "pycryptodome"
+    ];
     propagatedBuildInputs = with python3Packages; [
       azure-graphrbac
       azure-mgmt-hybridcompute
@@ -218,10 +241,11 @@
 
   containerapp = mkAzExtension rec {
     pname = "containerapp";
-    version = "1.3.0b2";
+    version = "1.3.0b6";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/containerapp-${version}-py2.py3-none-any.whl";
-    hash = "sha256-Br/cfKFTkqcjGRCXAbHqfwTe4g49F3zbj/tzp/O+giI=";
+    hash = "sha256-FkcY78RGjJSZbbe5PX8k9FC88QjBUt7a7uYgynec3Lw=";
     description = "Microsoft Azure Command-Line Tools Containerapp Extension";
+    pythonRelaxDeps = [ "kubernetes" ];
     propagatedBuildInputs = with python3Packages; [
       docker
       pycomposefile
@@ -236,6 +260,10 @@
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/k8s_extension-${version}-py3-none-any.whl";
     hash = "sha256-gyQxHfsXd+V6w2jMBNiYpE1MrqFeHei9RlsVhXgOjW8=";
     description = "Microsoft Azure Command-Line Tools K8s-extension Extension";
+    pythonRelaxDeps = [
+      "kubernetes"
+      "oras"
+    ];
     propagatedBuildInputs = with python3Packages; [
       kubernetes
       oras
@@ -270,6 +298,7 @@
       pycryptodome
       pyyaml
     ];
+    pythonRelaxDeps = [ "pycryptodome" ];
     meta.maintainers = with lib.maintainers; [ techknowlogick ];
   };
 
@@ -315,6 +344,7 @@
     propagatedBuildInputs = with python3Packages; [
       websocket-client
     ];
+    pythonRelaxDeps = [ "websocket-client" ];
     meta.maintainers = with lib.maintainers; [ techknowlogick ];
   };
 

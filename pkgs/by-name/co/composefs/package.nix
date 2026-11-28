@@ -47,6 +47,9 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/composefs/composefs/commit/b3cb176a771386081c993e29ae42e77dabe5a577.patch";
       hash = "sha256-nzUENLM24G6NezhPywVsRzRgWmL1VZdMfZTsXNorJl8=";
     })
+    # tests/dumpdir: Don't exit with exception if xattr not supported
+    # https://github.com/composefs/composefs/pull/450
+    ./catch_xattr_errors.patch
   ];
 
   postPatch =
@@ -92,6 +95,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   preCheck = ''
     patchShebangs --build ../tests/*dir ../tests/*.sh
+
+    # Do not access xattrs
+    substituteInPlace ../tests/test-*.sh \
+      --replace-quiet "mkcomposefs" "mkcomposefs --skip-xattrs"
   '';
 
   passthru = {

@@ -13,14 +13,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "flye";
-  version = "2.9.6";
+  version = "2.9.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mikolmogorov";
     repo = "flye";
     tag = finalAttrs.version;
-    hash = "sha256-ZdrAxPKY3+HJ388tGCdpDcvW70mJ5wd4uOUkuufyqK8=";
+    hash = "sha256-ESxJdFGxLLKP/A/E3ve7rgFADeDmSldhZsm99cpR58k=";
   };
 
   patches = [

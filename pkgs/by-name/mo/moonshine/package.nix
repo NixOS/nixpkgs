@@ -1,4 +1,6 @@
 {
+  _experimental-update-script-combinators,
+  bash,
   cmake,
   fetchFromGitHub,
   pkg-config,
@@ -12,9 +14,13 @@
   libxres,
   nix-update-script,
   rustPlatform,
+  shaderc,
+  stdenv,
   versionCheckHook,
   vulkan-loader,
-  wayland,
+  aws-lc,
+  sqlite,
+  writableTmpDirAsHomeHook,
 }:
 
 let
@@ -26,49 +32,110 @@ let
     rev = "d28ec79eb63324e68d73a7de22bcb5ff0a6f6bf8";
     hash = "sha256-xzDsJggQVX5e1twwNvqw5hDXei6OMYA4s5zU4zfp/H0=";
   };
+
+  wsiArch = stdenv.hostPlatform.uname.processor;
+
+  ferriscope-wsi = rustPlatform.buildRustPackage (finalAttrs: {
+    pname = "ferriscope-wsi";
+    version = "0.2.2";
+
+    src = fetchFromGitHub {
+      owner = "hgaiser";
+      repo = "ferriscope";
+      tag = "v${finalAttrs.version}";
+      hash = "sha256-f0yhxc3kNgnx2Iklrb+vNoGXS3WIzJEyOkxQjkAQ1Qw=";
+    };
+
+    __structuredAttrs = true;
+
+    cargoHash = "sha256-hAE3eEX59c0l+nWwhsAXtLFlkqcBCvvJFS+6Bk7aLMs=";
+
+    nativeBuildInputs = [
+      pkg-config
+    ];
+
+    buildInputs = [
+      libgbm
+      libxkbcommon
+      shaderc
+    ];
+
+    cargoBuildFlags = [
+      "-p"
+      "ferriscope-wsi"
+    ];
+
+    checkFlags = [
+      # /dev/dri/renderD128 is not accessible in the sandbox
+      "--skip=shell::render::elements::gpu_tests::picked_formats_allocate_above_1440p"
+    ];
+
+    postInstall = ''
+      if [[ ! -f "$out/lib/libferriscope_wsi.so" ]]; then
+        echo "libferriscope_wsi.so does not exist at the expected location "
+        exit 1
+      fi
+
+      mkdir -p "$out/share/vulkan/implicit_layer.d"
+      sed -e "s|@ARCH@|${wsiArch}|g" \
+        -e "s|@LIBRARY_PATH@|$out/lib/libferriscope_wsi.so|g" \
+        tools/wsi/VkLayer_FERRISCOPE_wsi.json.in \
+        > "$out/share/vulkan/implicit_layer.d/VkLayer_FERRISCOPE_wsi.${wsiArch}.json"
+    '';
+
+    meta = {
+      description = "Rust implementation of gamescope";
+      homepage = "https://github.com/hgaiser/ferriscope";
+      license = lib.licenses.bsd2;
+      platforms = lib.platforms.linux;
+    };
+  });
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "moonshine";
-  version = "0.16.1";
+  version = "0.19.2";
 
   src = fetchFromGitHub {
     owner = "hgaiser";
     repo = "moonshine";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CmSOU263HD4qDFwGRxyozo2u2BlM+bT8AE7EwFPEhnA=";
+    hash = "sha256-/oF/aM8/NPHGelFEZHajK0VSFAiHr23OicJSj6KPR3s=";
   };
 
   __structuredAttrs = true;
 
-  cargoHash = "sha256-g9X9tiO+mUW4eTYi16nvesHIvWsQgAft7ZLEK1/CQHg=";
+  cargoHash = "sha256-iGU1aAs7tPdsFYZ0juHbF4sAbqLVJeoK4Tg7usQz2zA=";
 
-  # Build Moonshine binary and Vulkan layer
   cargoBuildFlags = [
     "-p"
     "moonshine"
-    "-p"
-    "moonshine-wsi"
   ];
 
   nativeBuildInputs = [
-    pkg-config
     cmake
+    pkg-config
     rustPlatform.bindgenHook
   ];
 
   buildInputs = [
+    aws-lc
+    bash
     libevdev
     libgbm
     libopus
     libxkbcommon
-    wayland
+    shaderc
+    sqlite
   ];
 
-  # Patch build.rs from inputtino-sys with the C++ inputtino sources.
-  # Also drop the unneeded libc++ dependency.
   postPatch = ''
     grep -q 'inputtino#${inputtino-src.rev}' Cargo.lock || {
       echo "ERROR: inputtino revision needs update (must match Cargo.lock)"
+      exit 1
+    }
+
+    grep -q 'hgaiser/ferriscope/${ferriscope-wsi.src.tag}' flake.nix || {
+      echo "ERROR: ferriscope-wsi tag needs update (must match flake.lock)"
       exit 1
     }
 
@@ -78,12 +145,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   postInstall = ''
-    # Setup implicit Vulkan layer manifest as required by Moonshine
-    install -d "$out/share/vulkan/implicit_layer.d"
-    substitute dist/VkLayer_moonshine_wsi.json \
-      "$out/share/vulkan/implicit_layer.d/VkLayer_moonshine_wsi.json" \
-      --replace-fail /usr/lib/moonshine/vulkan-layers/libmoonshine_wsi.so \
-        "$out/lib/libmoonshine_wsi.so"
+    install -Dm755 dist/moonshine-gamescope "$out/bin/moonshine-gamescope"
+
+    install -Dm644 -t "$out/share/vulkan/implicit_layer.d" \
+      "${ferriscope-wsi}/share/vulkan/implicit_layer.d/VkLayer_FERRISCOPE_wsi.${wsiArch}.json"
 
     # udev rules for input
     install -Dm644 dist/60-moonshine.rules "$out/lib/udev/rules.d/60-moonshine.rules"
@@ -105,11 +170,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
     } "$out/bin/moonshine"
   '';
 
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
+
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
 
   # NOTE: If upstream bumps inputtino, this must be manually updated above
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    inherit ferriscope-wsi;
+    updateScript = _experimental-update-script-combinators.sequence [
+      (nix-update-script { })
+      (nix-update-script { attrPath = "moonshine.ferriscope-wsi"; })
+    ];
+  };
 
   meta = {
     description = "Headless streaming server for Moonlight clients";
@@ -119,7 +192,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       can play games remotely as if you were sitting in front of it.
     '';
     homepage = "https://github.com/hgaiser/moonshine";
-    changelog = "https://github.com/hgaiser/moonshine/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/hgaiser/moonshine/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [
       neobrain

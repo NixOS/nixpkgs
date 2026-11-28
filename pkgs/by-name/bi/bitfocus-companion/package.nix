@@ -9,7 +9,6 @@
   udev,
   yarn-berry_4,
   libusb1,
-  dart-sass,
   electron,
   makeWrapper,
   nix-update-script,
@@ -20,8 +19,8 @@ let
 
   builtinSurfaces = {
     elgato-stream-deck = fetchurl {
-      url = "https://s4.bitfocus.io/developer-module-builds/surface/elgato-stream-deck/v1.4.6-c7ea9961c73fc6bf184b563d03c64b5607312d8d/elgato-stream-deck-v1.4.6.tgz";
-      hash = "sha256-0zYgn2ao2yhy3CSlHbdqfV9YWWwUiQ5kibDjT4uqOn8=";
+      url = "https://developer-module-builds.s4.bitfocus.io/surface/elgato-stream-deck/v1.5.3-b7816a7b0c12-cd2da536da8d/elgato-stream-deck-v1.5.3.tgz";
+      hash = "sha256-zS2lNtqNK5u9hRNmGH4NiIFiNx2xxwa5bKfwAAZ10RE=";
     };
     xkeys = fetchurl {
       url = "https://s4.bitfocus.io/developer-module-builds/surface/xkeys/v1.0.2-876f00ee194faa57ec14468b7019bbaa516a9e6d/xkeys-v1.0.2.tgz";
@@ -41,7 +40,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "bitfocus-companion";
-  version = "5.0.5";
+  version = "5.1.3";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -50,7 +49,7 @@ stdenv.mkDerivation rec {
     owner = "bitfocus";
     repo = "companion";
     tag = "v${version}";
-    hash = "sha256-Q5XQ/r4YYYqLk6YaSlBZqcqEH8nFmpqyzMf7/fMWX74=";
+    hash = "sha256-drg4hvKL2yB+kg4BjOo7yg38UgOE0gUupMee4PAQD2w=";
   };
 
   passthru.updateScript = nix-update-script { };
@@ -61,9 +60,6 @@ stdenv.mkDerivation rec {
 
     # remove yarn config options which require network access at install time
     printf "nodeLinker: node-modules\nenableScripts: false\n" > .yarnrc.yml
-
-    # remove the yarn install during the build, since there is no internet connection, and everything has already been installed by yarnBerryConfigHook
-    substituteInPlace tools/build/package.mts --replace-fail "await $\`yarn install --no-immutable\`" ""
 
     # remove node download, since we'll use the nix version
     substituteInPlace tools/build/package.mts \
@@ -90,7 +86,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libusb1
-    dart-sass
     nodejs_26
     electron
     udev
@@ -100,7 +95,7 @@ stdenv.mkDerivation rec {
 
   offlineCache = yarn-berry.fetchYarnBerryDeps {
     inherit src missingHashes;
-    hash = "sha256-Fuh/D3FVtm08h7pW+LHgrEiyN9vmCjy+WekfpIz/Xc4=";
+    hash = "sha256-tUSNx846Lc3Gjgd+mgUfWFmsYgbnrDtd2aW1d2VhcUk=";
   };
 
   env = {
@@ -118,9 +113,10 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     runHook preBuild
 
-    # force sass-embedded to use our own sass instead of the bundled one
-    substituteInPlace node_modules/sass-embedded/dist/lib/src/compiler-path.js \
-        --replace-fail 'compilerCommand = (() => {' 'compilerCommand = (() => { return ["${lib.getExe dart-sass}"];'
+    # tools/build/package.mts runs a second `yarn install` in dist/ for the native
+    # dependencies; resolve it from the offline cache set up by yarnBerryConfigHook
+    export YARN_ENABLE_NETWORK=0
+    export YARN_CACHE_FOLDER="$PWD/.yarn/cache"
 
     # pre-populate builtin surface module cache to avoid network access during build
     mkdir -p .cache/builtin-surfaces/elgato-stream-deck

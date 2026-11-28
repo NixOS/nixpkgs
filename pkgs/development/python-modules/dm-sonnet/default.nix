@@ -29,7 +29,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "deepmind";
+    owner = "google-deepmind";
     repo = "sonnet";
     tag = "v${version}";
     hash = "sha256-WkloUbqSyPG3cbLG8ktsjdluACkCbUZ7t6rYWst8rs8=";
@@ -89,7 +89,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Library for building neural networks in TensorFlow";
-    homepage = "https://github.com/deepmind/sonnet";
+    homepage = "https://github.com/google-deepmind/sonnet";
     changelog = "https://github.com/google-deepmind/sonnet/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ onny ];

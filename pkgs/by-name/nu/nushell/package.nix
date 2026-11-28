@@ -11,6 +11,7 @@
   libx11,
   nghttp2,
   libgit2,
+  sqlite,
   withDefaultFeatures ? true,
   additionalFeatures ? (p: p),
   nix-update-script,
@@ -25,16 +26,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # NOTE: when updating this to a new non-patch version, please also try to
   # update the plugins. Plugins only work if they are compiled for the same
   # major/minor version.
-  version = "0.116.1";
+  version = "0.117.0";
 
   src = fetchFromGitHub {
     owner = "nushell";
     repo = "nushell";
     tag = finalAttrs.version;
-    hash = "sha256-b62ICCP7Li88obcju4xBNVw7D+6TtRURrOUvzqcjHis=";
+    hash = "sha256-+lA9T0Wa/K50qCfyGFdNlEmCZWCeBk8KcxIvDCKk2no=";
   };
 
-  cargoHash = "sha256-+81FRwTlR5NSJuoaH7KCK6Qy1DiU5/JKNqfaAhZmMes=";
+  cargoHash = "sha256-0t1ubpyPiXucUlJ+Nwu2u3LZ15GtX6mF2kMy9HkbClw=";
 
   nativeBuildInputs = [
     pkg-config
@@ -44,13 +45,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     zstd
+    libgit2
+    sqlite
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ zlib ]
   ++ lib.optionals (withDefaultFeatures && stdenv.hostPlatform.isLinux) [ libx11 ]
-  ++ lib.optionals (withDefaultFeatures && stdenv.hostPlatform.isDarwin) [
-    nghttp2
-    libgit2
-  ];
+  ++ lib.optionals (withDefaultFeatures && stdenv.hostPlatform.isDarwin) [ nghttp2 ];
 
   buildNoDefaultFeatures = !withDefaultFeatures;
   buildFeatures = additionalFeatures [ ];

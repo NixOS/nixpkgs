@@ -1,0 +1,43 @@
+Use Nix's shell and provide the diagnostic collector's runtime tools.
+Prefer packaged tools while preserving the caller's PATH for host probes.
+
+diff --git a/apps/gpclient/src/diagnostics.rs b/apps/gpclient/src/diagnostics.rs
+--- a/apps/gpclient/src/diagnostics.rs
++++ b/apps/gpclient/src/diagnostics.rs
+@@ -164,7 +164,7 @@
+ 
+ impl DiagnosticsArgs {
+   pub(crate) async fn run(&self, version: &str) -> anyhow::Result<()> {
+-    let mut child = Command::new("/bin/sh")
++    let mut child = Command::new("@runtimeShell@")
+       .args(["-s", "--", "--client-version", version, "--client-path"])
+       .arg(std::env::current_exe().context("Cannot locate gpclient")?)
+       .arg("--auth-path")
+diff --git a/scripts/collect-diagnostics.sh b/scripts/collect-diagnostics.sh
+--- a/scripts/collect-diagnostics.sh
++++ b/scripts/collect-diagnostics.sh
+@@ -4,6 +4,7 @@
+ umask 077
+ LC_ALL=C
+ export LC_ALL
++export PATH="@runtimePath@:$PATH"
+ GP_DIAGNOSTICS_HOME=$(printf '%s' "${HOME:-}" | tr '\000-\037\177' ' ')
+ export GP_DIAGNOSTICS_HOME
+ client_version= client_path= auth_path= gui_path= output=
+diff --git a/apps/gpclient/tests/diagnostics.rs b/apps/gpclient/tests/diagnostics.rs
+--- a/apps/gpclient/tests/diagnostics.rs
++++ b/apps/gpclient/tests/diagnostics.rs
+@@ -51,7 +51,12 @@
+   assert!(!String::from_utf8_lossy(&output.stderr).contains("unexpected-recursion"));
+   let report: serde_json::Value = serde_json::from_str(&text).unwrap();
+   assert_eq!(report["schema_version"], 1);
+-  assert_eq!(report["fields"]["os"]["value"], "Linux");
++  let os = if cfg!(target_os = "macos") {
++    "Darwin"
++  } else {
++    "Linux"
++  };
++  assert_eq!(report["fields"]["os"]["value"], os);
+   assert_eq!(report["fields"]["gpclient_path"]["status"], "ok");
+   for field in ["gpauth_path", "gpauth_version", "gpgui_path", "gpgui_version"] {
+     assert_eq!(report["fields"][field]["status"], "unavailable");

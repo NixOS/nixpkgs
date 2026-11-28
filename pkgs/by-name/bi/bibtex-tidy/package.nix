@@ -8,20 +8,16 @@
 
 buildNpmPackage rec {
   pname = "bibtex-tidy";
-  version = "1.14.0";
+  version = "1.15.1";
 
   src = fetchFromGitHub {
     owner = "FlamingTempura";
     repo = "bibtex-tidy";
     rev = "v${version}";
-    hash = "sha256-sMgy29deEfc3DFSC0Z4JZCeNAFpBKNYj+mJnFI1pSY4=";
+    hash = "sha256-iCdLxQJZsMPRzEAB1uiuxNWu+urrP88Z6qhHQj/xSFs=";
   };
 
-  npmDepsHash = "sha256-FKde5/ZZcS5g0fUaDjhRlKGLiS8kk1PvkZw9PUmvAAE=";
-
-  env = {
-    PUPPETEER_SKIP_DOWNLOAD = true;
-  };
+  npmDepsHash = "sha256-0nxqPpKM54MApd6X9/U7Eo/qnr0ya4BXi8OnsWDXha8=";
 
   passthru.tests = {
     version = testers.testVersion {

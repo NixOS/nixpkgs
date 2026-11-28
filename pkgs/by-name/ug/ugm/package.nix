@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "ugm";
-  version = "1.9.0";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "ariasmn";
     repo = "ugm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-W4oHJAEppb17t1kxKxDF5fVZkqhOtvm7gCtlmSg7YFA=";
+    hash = "sha256-rsUK52mFT2wsN8B+Y96QOepoxI+ocxUgzMH0/zmNXn8=";
   };
 
-  vendorHash = "sha256-W9v52cxhXdNyW5RGk+SoA1u7Yid+63YYdd9YaGKEWDs=";
+  vendorHash = "sha256-npVr9Gf+MwMpURyWqhzbpqJYNg+82KGPGfN5uSSdK8A=";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -36,6 +36,6 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.mit;
     mainProgram = "ugm";
     platforms = lib.platforms.linux;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ kamadorueda ];
   };
 })

@@ -4357,18 +4357,7 @@ in
 
   config = mkMerge [
     stage2Config
-    (mkIf config.boot.initrd.systemd.enable {
-      assertions = [
-        {
-          assertion =
-            !config.boot.initrd.network.udhcpc.enable && config.boot.initrd.network.udhcpc.extraArgs == [ ];
-          message = ''
-            systemd stage 1 networking does not support 'boot.initrd.network.udhcpc'. Configure
-            DHCP with 'networking.*' options or with 'boot.initrd.systemd.network' options.
-          '';
-        }
-      ];
-
+    (mkIf config.boot.initrd.enable {
       boot.initrd = stage1Config;
     })
   ];

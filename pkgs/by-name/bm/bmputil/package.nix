@@ -7,16 +7,18 @@
   versionCheckHook,
   udevCheckHook,
   pkg-config,
+  aws-lc,
+  oniguruma,
   udev,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bmputil";
   version = "1.2.0";
 
   src = fetchFromCodeberg {
     owner = "blackmagic-debug";
     repo = "bmputil";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-WX26rDFLWtEG/BvVwPjsY3X1ebvNseEpdgJRGMynyBo=";
   };
 
@@ -24,7 +26,11 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+  buildInputs = [
+    aws-lc
+    oniguruma
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     udev
   ];
 
@@ -48,7 +54,7 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "bmputil-cli";
     maintainers = [
       lib.maintainers.shimun
-      lib.maintainers.carlossless
+      lib.maintainers.karstx
     ];
   };
-}
+})

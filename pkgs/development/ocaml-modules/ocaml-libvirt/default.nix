@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "libvirt";
     repo = "libvirt-ocaml";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-U7j/SpHeL/GwdmUp20XqFyKtz0JcfMRfx56caWdt83Y=";
   };
 

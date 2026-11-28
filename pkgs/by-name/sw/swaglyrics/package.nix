@@ -3,6 +3,7 @@
   python3,
   fetchFromGitHub,
   ncurses,
+  writableTmpDirAsHomeHook,
 }:
 
 python3.pkgs.buildPythonApplication {
@@ -46,9 +47,7 @@ python3.pkgs.buildPythonApplication {
       ncurses
     ];
 
-  preBuild = ''
-    export HOME=$(mktemp -d)
-  '';
+  nativeBuildInputs = [ writableTmpDirAsHomeHook ];
 
   disabledTests = [
     # Disable tests which touch network

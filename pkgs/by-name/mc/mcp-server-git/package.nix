@@ -2,18 +2,20 @@
   lib,
   python3Packages,
   fetchFromGitHub,
+  gitMinimal,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mcp-server-git";
-  version = "2026.8.31";
+  version = "2.5.0";
   pyproject = true;
+  __darwinAllowLocalNetworking = true;
 
   src = fetchFromGitHub {
     owner = "modelcontextprotocol";
     repo = "servers";
-    tag = finalAttrs.version;
-    hash = "sha256-6woyDFfHbv8oZDN7lXrNnjZM8viYsBfMe/NtcHdDZcw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-yYfNwuNwzgguvErZRzc+M7cDt/05pU7iZuiF1L3c4hE=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src/git/";
@@ -30,7 +32,20 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   nativeCheckInputs = with python3Packages; [
+    gitMinimal
     pytestCheckHook
+    pytest-asyncio
+  ];
+
+  disabledTests = [
+    # The test fails at:
+    # script = shutil.which("mcp-server-git", path=str(Path(sys.executable).parent))
+    "test_console_script_nonexistent_repository_exits_with_one_line_error"
+    # The test fails at:
+    # result = await call(None, "git_add", {"repo_path": str(root_of(repo)), "files": ["nope.txt"]})
+    # When trying to assert the resulting test.
+    # assert 'cmdline: git add -- nope.txt' in "Error executing tool git_add: Cmd('/nix/store/2wlays4ahsvdx02v84s3x91ri2623qbl-git-minimal-2.56.0/bin/git') failed du...91ri2623qbl-git-minimal-2.56.0/bin/git add -- nope.txt\n  stderr: 'fatal: pathspec 'nope.txt' did not match any files'"
+    "test_git_add_nonexistent_file_is_git_error"
   ];
 
   pythonImportsCheck = [ "mcp_server_git" ];

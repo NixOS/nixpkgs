@@ -23,20 +23,20 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "kando";
-  version = "3.0.0";
+  version = "3.0.1";
 
   src = fetchFromGitHub {
     owner = "kando-menu";
     repo = "kando";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-UBah/yWcGGyrZpSmahYO4mdYuaP3WQ2PnoZ1gfgWSZk=";
+    hash = "sha256-ZkhN31zXqrVqHGdYfsJxDgzcmDm7+kpXvsh2oZIgwNw=";
   };
 
   patches = [
     ./add-deep-link-note.patch
   ];
 
-  npmDepsHash = "sha256-OUtUYSOjxBi8RPswGUTQKpt86ovW3k+qffcCxW2N9xw=";
+  npmDepsHash = "sha256-u/1239QXrhiOiDHnox7uW1gzJD1BGPgU7LpU2WeDD4w=";
 
   npmFlags = [ "--ignore-scripts" ];
 

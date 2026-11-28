@@ -10,20 +10,22 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "sigstore-models";
-  version = "0.0.6";
+  version = "0.0.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "sigstore-models";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XuCTS5rADDaCVRZprgEtJVUdGWX3ORij7kXPn87y+m4=";
+    hash = "sha256-3v0dH0cQ4wUAj8saf4JJ9/OBp2imh+ORiMFDlz598W0=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml --replace-fail \
       "uv_build>=0.9.0,<0.10" "uv_build"
   '';
+
+  pythonRelaxDeps = [ "pydantic" ];
 
   build-system = [ uv-build ];
 

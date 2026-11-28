@@ -12,8 +12,6 @@ buildPythonPackage (finalAttrs: {
   version = "1.3.1";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "BinaryAnalysisPlatform";
     repo = "bap-python";

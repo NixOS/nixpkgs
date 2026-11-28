@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   dask,
   duckdb,
@@ -98,11 +97,6 @@ buildPythonPackage (finalAttrs: {
     "test_join_duplicate_column_names"
     # PySpark does not yet fully support pandas >= 3.0.0
     "test_backend_version[pyspark[connect]]"
-  ];
-
-  disabledTestPaths = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-    # Segfault in included polars/lazyframe
-    "tests/tpch_q1_test.py"
   ];
 
   pytestFlags = [

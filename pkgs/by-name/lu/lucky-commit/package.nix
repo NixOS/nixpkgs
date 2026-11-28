@@ -8,6 +8,8 @@
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
+  __structuredAttrs = true;
+
   pname = "lucky-commit";
   version = "2.2.5";
 
@@ -21,7 +23,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-zuWPkaYltxOOLaR6NTVkf1WbKzUQByml45jNL+e5UJ0=";
 
   # LLVM Apple assembler rejects `:lo12:` combined with `@PAGEOFF`.
-  postPatch = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace "$cargoDepsCopy"/*/sha1-asm-*/src/aarch64_apple.S \
       --replace-fail "#:lo12:.K0@PAGEOFF" ".K0@PAGEOFF" \
       --replace-fail "#:lo12:.K1@PAGEOFF" ".K1@PAGEOFF" \

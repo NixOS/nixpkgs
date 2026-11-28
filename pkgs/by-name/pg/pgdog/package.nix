@@ -1,29 +1,37 @@
 {
+  aws-lc,
+  bison,
   lib,
   clangStdenv,
   fetchFromGitHub,
+  flex,
+  icu,
   openssl,
+  perl,
   pkg-config,
+  readline,
   rustPlatform,
+  rust-jemalloc-sys-unprefixed,
   useMoldLinker,
   versionCheckHook,
   withMold ? with clangStdenv.hostPlatform; isLinux,
+  zlib,
 }:
 let
   stdenv = if withMold then useMoldLinker clangStdenv else clangStdenv;
 in
 rustPlatform.buildRustPackage.override { inherit stdenv; } (finalAttrs: {
   pname = "pgdog";
-  version = "0.1.60";
+  version = "0.1.66";
 
   src = fetchFromGitHub {
     owner = "pgdogdev";
     repo = "pgdog";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-agjK3Ng3haFoxcFy+H5v4dqYOQyF+uIm9K+S6wLJLeo=";
+    hash = "sha256-O9nIoKGKwYnbLLg4Ms6EDdopyrzwoFdm2s/ujDWm+U4=";
   };
 
-  cargoHash = "sha256-clq0rz7yi0XSXPzFjOGDcCwwndRq29KgtvUwpvEZoYA=";
+  cargoHash = "sha256-gRMbEVQg/GpA6Pjjdo+hDKRnfX5yBMukr5wc++mM5HY=";
 
   # Hardcoded paths for C compiler and linker
   postPatch = ''
@@ -37,12 +45,20 @@ rustPlatform.buildRustPackage.override { inherit stdenv; } (finalAttrs: {
   ];
 
   nativeBuildInputs = [
+    bison
+    flex
+    perl
     pkg-config
     rustPlatform.bindgenHook
   ];
 
   buildInputs = [
+    aws-lc
+    icu
     openssl
+    readline
+    zlib
+    rust-jemalloc-sys-unprefixed
   ];
 
   # Several tests rely on networking

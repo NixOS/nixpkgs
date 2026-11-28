@@ -2,6 +2,8 @@
   lib,
   rustPlatform,
   fetchCrate,
+  pkg-config,
+  zstd,
   testers,
   nix-update-script,
   dotslash,
@@ -17,6 +19,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-+FWDeR4AcFSFz0gGQ8VMvX68/F0yEm25cNfHeedqsWE=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ zstd ];
+
   doCheck = false; # http tests
 
   passthru = {
@@ -38,10 +45,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
       your developers seamlessly get the tools they need, ensuring consistent
       builds across platforms.
     '';
-    license = with lib.licenses; [
-      asl20 # or
-      mit
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
     mainProgram = "dotslash";
     maintainers = with lib.maintainers; [ thoughtpolice ];
   };

@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildDotnetModule,
   fetchFromGitHub,
   dotnetCorePackages,
@@ -23,21 +24,23 @@
 
 buildDotnetModule (finalAttrs: {
   pname = "apps2samsung";
-  version = "2.8.2";
+  version = "3.3.1";
 
   src = fetchFromGitHub {
     owner = "Apps2Samsung";
     repo = "Apps2Samsung";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-H1cEWRIDUpMM4WvGseMgBUfMsWi2/BOgveeYW78b4sw=";
+    hash = "sha256-MnyhFc9En9ts2UJHzgqDBLhVS1MGaICWU+aauD7WBNw=";
   };
 
   postPatch = ''
-    # Treat the read-only store like the package-manager owned /usr and /opt, so the
-    # built-in auto-updater stays disabled instead of trying to replace the store path.
-    substituteInPlace Jellyfin2Samsung-CrossOS/Services/UpdaterService.cs \
-      --replace-fail 'IsUnderDirectory(appDir, "/opt")' \
-                     'IsUnderDirectory(appDir, "/opt") || IsUnderDirectory(appDir, "/nix/store")'
+    # Use the native esbuild for every supported architecture and avoid shipping
+    # upstream's prebuilt binaries for other platforms.
+    substituteInPlace Apps2Samsung.Core/Core/EsbuildHelper.cs \
+      --replace-fail 'PlatformService.GetEsbuildPath(Path.Combine(baseDir, "Assets", "esbuild"))' \
+                     '"${lib.getExe esbuild}"' \
+      --replace-fail 'EnsureExecutable(esbuildPath);' ""
+    rm -r Apps2Samsung.Desktop/Assets/esbuild
   '';
 
   strictDeps = true;
@@ -46,19 +49,19 @@ buildDotnetModule (finalAttrs: {
   dotnet-sdk = dotnetCorePackages.sdk_10_0;
   dotnet-runtime = dotnetCorePackages.runtime_10_0;
 
-  projectFile = "Jellyfin2Samsung-CrossOS/Apps2Samsung.csproj";
+  projectFile = "Apps2Samsung.Desktop/Apps2Samsung.csproj";
   nugetDeps = ./deps.json;
 
   dotnetFlags = [
+    "-p:DisableSelfUpdate=true"
     "-p:PublishSingleFile=false"
-    "-p:SelfContained=false"
   ];
 
   executables = [ "Apps2Samsung" ];
 
   # icu, fontconfig and libICE/libSM/libX11 are already provided through the
   # dotnet runtime and the Avalonia/SkiaSharp NuGet overrides.
-  runtimeDeps = [
+  runtimeDeps = lib.optionals stdenv.hostPlatform.isLinux [
     # .NET runtime: TLS and GSSAPI
     krb5
     openssl
@@ -75,7 +78,7 @@ buildDotnetModule (finalAttrs: {
     libxrandr
   ];
 
-  makeWrapperArgs = [
+  makeWrapperArgs = lib.optionals stdenv.hostPlatform.isLinux [
     "--prefix"
     "PATH"
     ":"
@@ -87,31 +90,40 @@ buildDotnetModule (finalAttrs: {
     ])
   ];
 
-  nativeBuildInputs = [ copyDesktopItems ];
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ copyDesktopItems ];
 
-  postInstall = ''
-    # Replace the bundled prebuilt esbuild (linux-x64 only, shipped without the
-    # executable bit) with the one from nixpkgs. The app always looks it up under
-    # linux-x64, whatever the architecture.
-    rm -r $out/lib/apps2samsung/Assets/esbuild
-    mkdir -p $out/lib/apps2samsung/Assets/esbuild/linux-x64
-    ln -s ${lib.getExe esbuild} $out/lib/apps2samsung/Assets/esbuild/linux-x64/esbuild
-
-    install -Dm444 Jellyfin2Samsung-CrossOS/Assets/jelly2sams.png \
+  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
+    install -Dm444 Apps2Samsung.Desktop/Assets/jelly2sams.png \
       $out/share/icons/hicolor/256x256/apps/apps2samsung.png
   '';
 
   # The executable wrappers are only created during fixup.
-  postFixup = ''
-    ln -s $out/bin/Apps2Samsung $out/bin/apps2samsung
-  '';
+  postFixup =
+    lib.optionalString stdenv.hostPlatform.isLinux ''
+      mv "$out/bin/Apps2Samsung" "$out/bin/apps2samsung"
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      appDir="$out/Applications/Apps2Samsung.app/Contents"
+      mkdir -p "$appDir/MacOS" "$appDir/Resources"
+      ln -s "$out/bin/Apps2Samsung" "$appDir/MacOS/Apps2Samsung"
+      install -m444 Apps2Samsung.Desktop/Assets/jelly2sams.icns "$appDir/Resources/"
 
-  desktopItems = [
+      # Match the minimum OS version and network permission in upstream's release workflow.
+      substitute Apps2Samsung.Desktop/Info.plist "$appDir/Info.plist" \
+        --replace-fail '<string>10.15</string>' '<string>11.0</string>' \
+        --replace-fail '</dict>' '<key>CFBundleShortVersionString</key>
+        <string>${finalAttrs.version}</string>
+        <key>NSLocalNetworkUsageDescription</key>
+        <string>Apps2Samsung scans your local network to find Samsung TVs in Developer Mode.</string>
+      </dict>'
+    '';
+
+  desktopItems = lib.optionals stdenv.hostPlatform.isLinux [
     (makeDesktopItem {
       name = "apps2samsung";
       desktopName = "Apps2Samsung";
       comment = "Install any app on Samsung TVs, projectors and smart monitors";
-      exec = "apps2samsung";
+      exec = finalAttrs.meta.mainProgram;
       icon = "apps2samsung";
       categories = [
         "Utility"
@@ -149,7 +161,11 @@ buildDotnetModule (finalAttrs: {
       confused-engineer
       schembriaiden
     ];
-    platforms = lib.platforms.linux;
-    mainProgram = "apps2samsung";
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "aarch64-darwin"
+    ];
+    mainProgram = if stdenv.hostPlatform.isLinux then "apps2samsung" else "Apps2Samsung";
   };
 })

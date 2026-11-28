@@ -19,8 +19,6 @@
 }:
 
 buildPythonPackage (finalAttrs: {
-  __structuredAttrs = true;
-
   pname = "netbox-qrcode";
   version = "1.0.0";
   pyproject = true;

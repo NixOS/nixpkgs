@@ -1,6 +1,8 @@
 {
   lib,
+  aws-lc,
   fetchFromGitHub,
+  pkg-config,
   rustPlatform,
   nixosTests,
   nix-update-script,
@@ -18,6 +20,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-UFZ8vLlIzQLmNWbap22l5KBh4DwGDiPPz35iFNhnoUc=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ aws-lc ];
 
   # No unit tests; all testing is NixOS VM-based integration tests
   doCheck = false;

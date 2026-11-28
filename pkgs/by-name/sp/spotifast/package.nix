@@ -13,6 +13,7 @@
   rcodesign,
   alsa-lib,
   libpulseaudio,
+  pipewire,
   libGL,
   libx11,
   libxkbcommon,
@@ -33,22 +34,24 @@ let
     libxcursor
     libxi
     libxrandr
+    pipewire
+    libpulseaudio
   ];
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "spotifast";
-  version = "0.13.3";
+  version = "0.17.2";
 
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "crmne";
     repo = "spotifast";
-    tag = "v${version}";
-    hash = "sha256-tYncFZI6m7W+ACj9wizmQUrFktDI3SR9dSQ0uS7iIg0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ccMYbLHgoHYzb+ikQgfegheLNTB6t6Bx7o9VAoqlPCg=";
   };
 
-  cargoHash = "sha256-ztN4srFKTtR78NPQiotOvYcrmPrL9SXo8qWluBs8WmE=";
+  cargoHash = "sha256-2mPuPkJn+46rhbJzjnCK14otZne9BwgNxP1e5b8Z65k=";
 
   # projectm-sys only searches lib, while CMake may otherwise install to lib64.
   postPatch = ''
@@ -76,14 +79,28 @@ rustPlatform.buildRustPackage rec {
 
   nativeCheckInputs = lib.optionals stdenv.hostPlatform.isLinux [ dbus ];
 
+  # Orphan soloist process never appears in the Nix sandbox; upstream CI runs it outside Nix.
+  checkFlags = [
+    "--skip=soloist::tests::reclaims_a_leftover_soloist_from_this_installation"
+  ]
+  # The child process outlives its killed parent in the Darwin sandbox.
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "--skip=soloist::owned::tests::a_child_dies_with_its_killed_parent"
+  ];
+
   buildInputs =
     lib.optionals stdenv.hostPlatform.isLinux [
       alsa-lib
       libpulseaudio
+      pipewire
       libGL
       libx11
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_15 ];
+
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    NIX_LDFLAGS = "-lclang_rt.osx"; # `soloist_audio` uses @available; needs compiler-rt on Darwin.
+  };
 
   postFixup =
     lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -109,8 +126,8 @@ rustPlatform.buildRustPackage rec {
       cp "$out/bin/spotifast" "$app/MacOS/$executable"
       icnsify packaging/macos/icon-1024.png -o "$app/Resources/spotifast.icns"
       substitute packaging/macos/Info.plist "$app/Info.plist" \
-        --replace-fail __VERSION__ "${version}" \
-        --replace-fail __BUILD__ "${lib.head (lib.splitString "-" version)}" \
+        --replace-fail __VERSION__ "${finalAttrs.version}" \
+        --replace-fail __BUILD__ "${lib.head (lib.splitString "-" finalAttrs.version)}" \
         --replace-fail __EXECUTABLE__ "$executable" \
         --replace-fail __IDENTIFIER__ "$identifier"
     '';
@@ -126,10 +143,10 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Fast native Spotify client with local playback and Spotify Connect";
     homepage = "https://spotifast.rocks";
-    changelog = "https://github.com/crmne/spotifast/releases/tag/v${version}";
+    changelog = "https://github.com/crmne/spotifast/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ DmitrySkibitsky ];
     mainProgram = "spotifast";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

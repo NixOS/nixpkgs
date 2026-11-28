@@ -29,10 +29,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Cleans all projects under specified directory";
     mainProgram = "cargo-clean-recursive";
     homepage = "https://github.com/IgaguriMK/cargo-clean-recursive";
-    license = with lib.licenses; [
-      asl20 # or
-      mit
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
     maintainers = with lib.maintainers; [ qubic ];
   };
 })

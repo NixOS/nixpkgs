@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "versitygw";
-  version = "1.9.0";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "versity";
     repo = "versitygw";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Ike6iFIRAb8ENjNp+jl8joP0bnei7AEaNvZFlosB3n0=";
+    hash = "sha256-s6AMOQzPOGvBCtkqi24s3iqhHmO36yLlFaCnqyoNj24=";
   };
 
-  vendorHash = "sha256-/dGRcQr/XgZV2h8Eju2/Reo3W6cBuYS2gDv/FddQ8ow=";
+  vendorHash = "sha256-Lknd6Bp5ESJQoPjZbPqn+NpgUheEroMIq6uXVP3GXhM=";
 
   excludedPackages = [
     # depends on cgo/cuda
@@ -45,12 +45,31 @@ buildGoModule (finalAttrs: {
         # requires real s3
         "^TestIntegration$"
 
+        # filesystem dependent
+        "^TestFallocSkipsCachedBucket$"
+
         # requires extended attributes
         "^TestObjectPublishLockHonorsContextWhileWaiting$"
         "^TestFsyncPutObject"
         "^TestFsyncFailureFailsThePut$"
         "^TestListObjectsV2ContinuationTokenEcho$"
         "^TestObjectLockModeNoneRejectsConditionalWrites$"
+        "^TestListObjectsExcludeDirsFileNotSkipped$"
+        "^TestListObjectsNestedMetaTmpDir$"
+        "^TestExcludeDirsCaseAgrees$"
+        "^TestExcludedDirKeysReserved$"
+        "^TestExcludeDirsEmptyKeysAllowed$"
+        "^TestGetObjectRemovedBeforeOpen$"
+        "^TestGetObjectPreReadOrder$"
+        "^TestGetObjectPreReadVersion$"
+        "^TestGetObjectPreReadDirObject$"
+        "^TestListBucketsVisibilityBackendCalls$"
+        "^TestListObjectsSkipsEntryWhoseDirIsGone$"
+        "^TestFileToObjSkipsEntryWhoseInfoIsGone$"
+        "^TestLiveObjVersionIdObjectRemoved$"
+        "^TestHeadObjectDeleteMarker$"
+
+        # any skips after this will be ignored
         "/xattr$"
       ];
     in

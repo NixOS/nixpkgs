@@ -1,13 +1,14 @@
 {
   lib,
   buildPythonPackage,
-  pythonAtLeast,
   fetchFromGitHub,
   setuptools,
   setuptools-scm,
   python,
   cocotb-bus,
   find-libpython,
+  ipython,
+  pexpect,
   pytestCheckHook,
   swig,
   iverilog,
@@ -17,20 +18,15 @@
 
 buildPythonPackage rec {
   pname = "cocotb";
-  version = "2.0.1";
+  version = "2.1.0";
   format = "setuptools";
-
-  # RuntimeError: cocotb 2.0.1 only supports a maximum Python version of 3.13.
-  # You can suppress this error by defining the environment variable COCOTB_IGNORE_PYTHON_REQUIRES
-  # There is no guarantee this will work and no support will be provided.
-  disabled = pythonAtLeast "3.14";
 
   # pypi source doesn't include tests
   src = fetchFromGitHub {
     owner = "cocotb";
     repo = "cocotb";
     tag = "v${version}";
-    hash = "sha256-LXQNqFlvP+WBaDGWPs5+BXBtW2dhDu+v+7lR/AMG21M=";
+    hash = "sha256-MND6d+5ymlGT597kt6rWN9ylmoGvexIylzsgjY0NRe8=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
@@ -69,6 +65,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     cocotb-bus
+    ipython
+    pexpect
     pytestCheckHook
     swig
     iverilog
@@ -91,6 +89,7 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [
       matthuszagh
       jleightcap
+      evanwporter
     ];
   };
 }

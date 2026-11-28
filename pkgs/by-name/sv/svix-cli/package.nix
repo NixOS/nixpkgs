@@ -1,47 +1,44 @@
 {
   lib,
+  rustPlatform,
   fetchFromGitHub,
-  fetchpatch,
-  buildGoModule,
+  pkg-config,
+  aws-lc,
+  cacert,
 }:
-
-buildGoModule rec {
-  version = "0.21.1";
+rustPlatform.buildRustPackage rec {
   pname = "svix-cli";
-  revision = "v${version}";
+  version = "2.8.0";
 
   src = fetchFromGitHub {
     owner = "svix";
-    repo = "svix-cli";
-    rev = revision;
-    hash = "sha256-bHcxhJs4Nu/hdiftQFZMx4M5iqFtpOzrsvXOgo9NlDc=";
+    repo = "svix-webhooks";
+    rev = "v${version}";
+    hash = "sha256-uMqutf42/clBgDKb67FnSlyexH3SAe7rE1MJAKkZWZg=";
   };
 
-  vendorHash = "sha256-qSzEpxktdAV+mHa+586mKvpclCpXR6sE7HNcPZywd4s=";
+  sourceRoot = "${src.name}/svix-cli";
 
-  # Increase minimum go version to 1.17 as the build fails with 1.16
-  # due to modules requiring code that was introduced in 1.17
-  # PR submitted upstream: https://github.com/svix/svix-cli/pull/103
-  patches = [
-    (fetchpatch {
-      name = "increase-minimum-go.patch";
-      url = "https://github.com/svix/svix-cli/commit/3c6fc06f72bd7e43165c31019b206ebad175d758.patch";
-      hash = "sha256-OwiyBZ3IZGkvo6zEZY1+XYFrqT+RseqTJ5xwCl3LtVg=";
-    })
-  ];
+  cargoHash = "sha256-hDRHsKMAs/5+giGJZcbgeHY2gnA8NoZZKFCcbHmz++4=";
 
-  subPackages = [ "." ];
+  nativeBuildInputs = [ pkg-config ];
 
-  ldflags = [
-    "-s"
-    "-w"
-    "-X github.com/svix/svix-cli/version.Version=v${version}"
-  ];
+  buildInputs = [ aws-lc ];
+
+  env.AWS_LC_SYS_USE_SYSTEM = true;
+
+  nativeCheckInputs = [ cacert ];
+
+  preCheck = ''
+    export SSL_CERT_FILE="${cacert}/etc/ssl/certs/ca-bundle.crt"
+  '';
 
   meta = {
+    mainProgram = "svix";
     description = "CLI for interacting with the Svix API";
-    homepage = "https://github.com/svix/svix-cli/";
-    license = lib.licenses.gpl3;
+    homepage = "https://github.com/svix/svix-webhooks";
+    changelog = "https://github.com/svix/svix-webhooks/releases/tag/v${version}";
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ techknowlogick ];
   };
 }

@@ -8,6 +8,7 @@
   go,
   git,
   cacert,
+  curl,
   stdenv,
 }:
 let
@@ -15,14 +16,14 @@ let
   builder = "${opentelemetry-collector-builder}/bin/ocb";
 
   # Keep the version in sync with the builder.
-  version = "0.155.0";
+  version = "0.166.0";
 
   # This is a weird meta-repo where all the open-telemetry collectors are.
   releasesSrc = fetchFromGitHub {
     owner = "open-telemetry";
     repo = "opentelemetry-collector-releases";
     rev = "v${version}";
-    hash = "sha256-w4J5Q7cztSQyjqHH5L0blDUiFO6+fK4/dLoQT+ftUSE=";
+    hash = "sha256-A7RvwIWdwtCKiC4ZsDSd2eRj6JIHYmYaquGBe6fA10U=";
   };
 
   # Then from this src, we use the tool to generate some go code, including
@@ -42,6 +43,7 @@ let
 
       nativeBuildInputs = [
         cacert
+        curl
         git
         go
       ];
@@ -51,6 +53,8 @@ let
       outputHash = hash;
       outputHashMode = "recursive";
       outputHashAlgo = if hash == "" then "sha256" else null;
+      # A fixed-output path must not reference the store; obi-src has scripts.
+      dontPatchShebangs = true;
 
       patchPhase = ''
         patchShebangs .
@@ -62,12 +66,23 @@ let
       '';
 
       buildPhase = ''
+        # Fetches the OBI source that otelcol-contrib replaces into internal/obi-src;
+        # a no-op for the other distributions.
+        ./scripts/prepare-obi.sh ${name}
+
         # Only generate the go code, skip compilation
         ./scripts/build.sh -d ${name} -b ${builder} -s true
       '';
 
       installPhase = ''
         mv ./distributions/${name}/_build $out
+
+        # go.mod replaces the OBI module with ../../../internal/obi-src, which is
+        # outside $out. Keep a copy next to go.mod and point the replace at it.
+        if [ -d internal/obi-src ]; then
+          cp -r internal/obi-src $out/obi-src
+          (cd $out && go mod edit -replace go.opentelemetry.io/obi=./obi-src)
+        fi
 
         # Make it reproducible
         rm $out/build.log
@@ -93,6 +108,9 @@ let
         };
 
         inherit proxyVendor vendorHash;
+
+        # The collector is the root package; obi-src holds a replaced module.
+        subPackages = [ "." ];
 
         nativeBuildInputs = [ installShellFiles ];
 
@@ -152,26 +170,26 @@ in
 lib.recurseIntoAttrs {
   otelcol = mkDistribution {
     name = "otelcol";
-    sourceHash = "sha256-JY/jg5SeZ90lVLo+t6MuxZAMZ5IpNwEQEz9kC2uYc+8=";
-    vendorHash = "sha256-tEA2wCtk2Pm7YJem5jOB/1Iz7K1jKKl/N9VKSumC+WA=";
+    sourceHash = "sha256-R7vDNi3nZc8WJmZecZio0Qq32SX5WdLHmPGKBe/20Do=";
+    vendorHash = "sha256-fH1cJ0gmtW+WUSlsvHF2MibnTjATyrb1tzcUumi5fmc=";
   };
 
   otelcol-contrib = mkDistribution {
     name = "otelcol-contrib";
-    sourceHash = "sha256-ANIyUa0bibTYRWC1RZbvYFitaEkmLOiubQxFfmzj4kQ=";
-    vendorHash = "sha256-dPaDmhO4XASQ1y3NyetxnJuTr+pIDwF/rwrN5QkBBCA=";
+    sourceHash = "sha256-iEWDpo892vt7YJUBeCgUlUtcC1Y20LyHaeZSo+3v56Q=";
+    vendorHash = "sha256-4i6U2McP9rd2y377TQ1XFu7wQ7lRJT2hspL7PFTv5xQ=";
     proxyVendor = true; # hash mismatch between linux and darwin
   };
 
   otelcol-k8s = mkDistribution {
     name = "otelcol-k8s";
-    sourceHash = "sha256-cZ+ok52ceYkQE9bG+FFTFYONUQfsC8kbJk5SLZ8IIYU=";
-    vendorHash = "sha256-qwlZr0LoXZWf72flpORf19PAkHdITY8bxJGkacG2j+A=";
+    sourceHash = "sha256-SvOxRld7rET1IDs8gogu/psYZ0mPeJfcD7J/OTHxWdw=";
+    vendorHash = "sha256-oj52E2qAqK2A2rQzNEZLAPUlpwhaMcKnvSdOP76QQnc=";
   };
 
   otelcol-otlp = mkDistribution {
     name = "otelcol-otlp";
-    sourceHash = "sha256-W1QHjHMn6xWVN08FpJi2YcKzkpxTPbq9MYIbdQxVHHY=";
-    vendorHash = "sha256-gX1D+RPCwcp9UMpzAzEYHDsBrn2KdfN/4RxcgKHViYQ=";
+    sourceHash = "sha256-aoewNJdcYWfOaeS2us7xUnHM4kQw2w7nbnRYbBWHCQ0=";
+    vendorHash = "sha256-+XvVXgnCyX1Kj6kVaIZboEQibU5195li3hlHjR9EK8o=";
   };
 }

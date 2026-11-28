@@ -23,7 +23,6 @@ buildPythonPackage (finalAttrs: {
   pname = "pydantic-zarr";
   version = "0.10.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "zarr-developers";

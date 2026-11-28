@@ -12,8 +12,6 @@ buildPythonPackage (finalAttrs: {
   version = "1.1.2";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     pname = "txdbus";
     inherit (finalAttrs) version;

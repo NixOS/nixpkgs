@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "opencc";
-  version = "1.4.1";
+  version = "1.4.2";
 
   src = fetchFromGitHub {
     owner = "BYVoid";
     repo = "OpenCC";
     tag = "ver.${finalAttrs.version}";
-    hash = "sha256-R4vxBLU7cjjk8hfN0TNFTrcJs//E70uBEHeL4fXtcJ0=";
+    hash = "sha256-FgpAnN9bo2H6cuLEuxxSg5I4R0zViDrJ8KueNEoTVF8=";
   };
 
   nativeBuildInputs = [

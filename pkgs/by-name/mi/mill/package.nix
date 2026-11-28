@@ -24,15 +24,15 @@ let
   sources = {
     aarch64-darwin = {
       suffix = "native-mac-aarch64";
-      hash = "sha256-QRSTbViDa64TrzpVx7hz4PNPHLufW/GKNjT9IU/4OqM=";
+      hash = "sha256-WvBjrpQIWnA1lswCuzkPjo+QHQQ9O7Vpz2bg2xzRSUM=";
     };
     aarch64-linux = {
       suffix = "native-linux-aarch64";
-      hash = "sha256-lwCt1bsYbOWIRCjphxDUub7h8onjKifdfArp0Vze3Ro=";
+      hash = "sha256-/p9tDYqbks1JJqWy1tAGcGoE98hWZH23cSvospb46oo=";
     };
     x86_64-linux = {
       suffix = "native-linux-amd64";
-      hash = "sha256-p3mXy754MUvKjbAgyg4eDX9Clgv82F3NO6OkzlsbX7A=";
+      hash = "sha256-+5Sqk4mAPwMwyAq+ZDC6hCc0bLQdvAZmQY1S984focQ=";
     };
   };
 
@@ -42,7 +42,7 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "mill";
-  version = "1.1.10";
+  version = "1.3.1";
 
   __structuredAttrs = true;
   strictDeps = true;

@@ -13,23 +13,27 @@
   libxcrypt,
   bash,
   bashNonInteractive,
-  nixosTests,
   meson,
   pkg-config,
   systemdLibs,
   docbook5,
   libxslt,
   libxml2,
+  libselinux,
   w3m-batch,
   findXMLCatalogs,
   docbook_xsl_ns,
-  nix-update-script,
   withLogind ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
   withAudit ?
     lib.meta.availableOn stdenv.hostPlatform audit
     # cross-compilation only works from platforms with linux headers
     && lib.meta.availableOn stdenv.buildPlatform linuxHeaders,
   debugMode ? false, # warning: slower execution due to debug makes VM tests fail!
+  withSelinux ? false,
+  # passthru
+  nixosTests,
+  testers,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -51,6 +55,9 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/linux-pam/linux-pam/commit/dd62bac17221911106de165607c6925ea54b18d1.patch?full_index=1";
       hash = "sha256-ddgDYdVfdXfTaMFV1hO3RJX9w1NHmE7yi3PxsHOdpvY=";
     })
+  ]
+  ++ lib.optionals withSelinux [
+    ./selinux-lockdir.patch
   ];
 
   # patching unix_chkpwd is required as the nix store entry does not have the necessary bits
@@ -95,6 +102,9 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals withLogind [
     systemdLibs
+  ]
+  ++ lib.optionals withSelinux [
+    libselinux
   ];
 
   enableParallelBuilding = true;
@@ -108,7 +118,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonOption "sysconfdir" "etc") # relative to meson prefix, which is $out
     (lib.mesonEnable "elogind" false)
     (lib.mesonEnable "econf" false)
-    (lib.mesonEnable "selinux" false)
+    (lib.mesonEnable "selinux" withSelinux)
     (lib.mesonEnable "nis" false)
     (lib.mesonBool "xtests" false)
     (lib.mesonBool "examples" false)
@@ -132,12 +142,18 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     tests = {
       inherit (nixosTests)
+        login
+        login-nosuid
         pam-oath-login
         pam-u2f
         pam-lastlog
         shadow
         sssd-ldap
         ;
+      pkg-config = testers.hasPkgConfigModules {
+        package = finalAttrs.finalPackage;
+        versionCheck = true;
+      };
     };
     updateScript = nix-update-script { };
   };
@@ -148,7 +164,13 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Pluggable Authentication Modules, a flexible mechanism for authenticating user";
     platforms = lib.platforms.linux;
     license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ grimmauld ];
     badPlatforms = [ lib.systems.inspect.platformPatterns.isStatic ];
     identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "linux-pam" finalAttrs.version;
+    pkgConfigModules = [
+      "pamc"
+      "pam_misc"
+      "pam"
+    ];
   };
 })

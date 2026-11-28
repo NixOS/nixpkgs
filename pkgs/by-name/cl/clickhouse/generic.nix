@@ -131,9 +131,19 @@ llvmStdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     patchShebangs src/ utils/
 
-    substituteInPlace contrib/liburing-cmake/CMakeLists.txt \
-      --replace-fail "set (LIBURING_CONFIG_HAS_OPEN_HOW        FALSE)" "set (LIBURING_CONFIG_HAS_OPEN_HOW        TRUE)"
   ''
+  + (
+    if lib.versionOlder version "26.10" then
+      ''
+        substituteInPlace contrib/liburing-cmake/CMakeLists.txt \
+          --replace-fail "set (LIBURING_CONFIG_HAS_OPEN_HOW        FALSE)" "set (LIBURING_CONFIG_HAS_OPEN_HOW        TRUE)"
+      ''
+    else
+      ''
+        substituteInPlace contrib/liburing-cmake/CMakeLists.txt \
+          --replace-fail "set (LIBURING_CONFIG_HAS_OPEN_HOW    FALSE)" "set (LIBURING_CONFIG_HAS_OPEN_HOW    TRUE)"
+      ''
+  )
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace cmake/tools.cmake \
       --replace-fail 'gfind' 'find' \
@@ -196,6 +206,7 @@ llvmStdenv.mkDerivation (finalAttrs: {
     "-DCOMPILER_CACHE=disabled"
     "-DDISABLE_HERMETIC_BUILD=ON"
   ]
+  ++ lib.optional (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) "-DX86_ARCH_LEVEL=1"
   ++ lib.optional (
     stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64
   ) "-DNO_ARMV81_OR_HIGHER=1";

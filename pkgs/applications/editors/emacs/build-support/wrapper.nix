@@ -172,15 +172,21 @@ let
         ;; so that the wrapper-added dir is not propagated to subprocesses.
         (let ((restore-path
                (lambda (path-env-var wrapper-dir-env-var)
-                 (when-let* ((wrapper-dir (getenv wrapper-dir-env-var)))
-                   (setenv wrapper-dir-env-var nil)
-                   (when-let* ((env-path (getenv path-env-var)))
-                     (let* ((env-path-list (split-string env-path path-separator))
-                            (restored-env-path-list (remove wrapper-dir env-path-list)))
-                       (setenv path-env-var
-                               (when restored-env-path-list
-                                 (string-join restored-env-path-list
-                                              path-separator)))))))))
+                 ;; Avoid when-let* to support older Emacs (for nix-emacs-ci).
+                 (let ((wrapper-dir (getenv wrapper-dir-env-var)))
+                   (when wrapper-dir
+                     (setenv wrapper-dir-env-var nil)
+                     (let ((env-path (getenv path-env-var)))
+                       (when env-path
+                         (let* ((env-path-list (split-string env-path path-separator))
+                                (restored-env-path-list (remove wrapper-dir env-path-list)))
+                           (setenv path-env-var
+                                   (when restored-env-path-list
+                                     ;; Inline string-join to support older Emacs
+                                     ;; (for nix-emacs-ci).
+                                     (mapconcat #'identity
+                                                restored-env-path-list
+                                                path-separator)))))))))))
           (funcall restore-path
                    "EMACSLOADPATH" "emacsWithPackages_siteLisp")
           (funcall restore-path
@@ -192,9 +198,11 @@ let
                    "XDG_DATA_DIRS" "emacsWithPackages_xdgDataDir"))
 
         (let ((set-from-env (lambda (symbol env-var &optional modify)
-                              (when-let* ((value (getenv env-var)))
-                                (set symbol (funcall (or modify #'identity) value))
-                                (setenv env-var nil)))))
+                              ;; Avoid when-let* to support older Emacs (for nix-emacs-ci).
+                              (let ((value (getenv env-var)))
+                                (when value
+                                  (set symbol (funcall (or modify #'identity) value))
+                                  (setenv env-var nil))))))
           (funcall set-from-env
                    'invocation-directory "emacsWithPackages_invocationDirectory"
                    #'file-name-as-directory)

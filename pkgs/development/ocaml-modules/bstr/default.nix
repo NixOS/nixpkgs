@@ -6,13 +6,13 @@
 
 buildDunePackage (finalAttrs: {
   pname = "bstr";
-  version = "0.1.1";
+  version = "0.1.2";
 
   minimalOCamlVersion = "4.13";
 
   src = fetchurl {
     url = "https://github.com/robur-coop/bstr/releases/download/v${finalAttrs.version}/bstr-${finalAttrs.version}.tbz";
-    hash = "sha256-5lfP/aVpELFLmMdt1uA4LqS8XQFn6IORq6kxlrAW7uA=";
+    hash = "sha256-J283wah5jbIifWA+S6R/6fTDa837LnQO8dPTr/OS1LI=";
   };
 
   meta = {

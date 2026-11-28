@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "protoc-gen-swift";
-  version = "1.39.0";
+  version = "1.41.0";
 
   src = fetchFromGitHub {
     owner = "apple";
     repo = "swift-protobuf";
     rev = "${finalAttrs.version}";
-    hash = "sha256-BINU2Lu0aUyXDCfXEuI5+iJ9Fo1ReOVNzyJ+SU3vzbw=";
+    hash = "sha256-DEXskoBnd2M64QP0hKyzMDQRQNRetKE3NpNO8CgyaPA=";
     fetchSubmodules = true;
   };
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Protobuf plugin for generating Swift code";
     homepage = "https://github.com/apple/swift-protobuf";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ matteopacini ];
+    maintainers = [ ];
     mainProgram = "protoc-gen-swift";
     inherit (swift.meta) platforms badPlatforms;
   };

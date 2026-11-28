@@ -15,6 +15,7 @@
   oniguruma,
   openssl,
   sentencepiece,
+  zstd,
   alsa-lib,
 
   # passthru
@@ -78,6 +79,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     oniguruma
     openssl
     sentencepiece
+    zstd
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib

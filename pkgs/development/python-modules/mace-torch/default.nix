@@ -37,7 +37,6 @@ buildPythonPackage (finalAttrs: {
   pname = "mace-torch";
   version = "0.3.16";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "acesuit";

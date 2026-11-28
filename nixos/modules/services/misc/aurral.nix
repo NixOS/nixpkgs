@@ -6,20 +6,42 @@
 }:
 let
   cfg = config.services.aurral;
+  libraryFolder = cfg.environment.LIBRARY_FOLDER or (cfg.environment.DOWNLOAD_FOLDER or null);
+  pluginIdType = lib.types.strMatching "[a-z0-9][a-z0-9-]*";
 in
 {
   options = {
     services.aurral = {
-      enable = lib.mkEnableOption "Aurral is the Lidarr companion for self-hosted music discovery";
+      enable = lib.mkEnableOption "Aurral, a self-hosted music discovery, library management, and streaming service";
 
       package = lib.mkPackageOption pkgs "aurral" { };
+
+      plugins = lib.mkOption {
+        type = lib.types.listOf (
+          lib.types.addCheck lib.types.package (p: pluginIdType.check (p.pluginId or null))
+        );
+        default = [ ];
+        example = lib.literalExpression "with pkgs.aurralPlugins; [ lidarr metadata ]";
+        description = ''
+          Plugin packages to install alongside plugins from the web interface.
+          Enable plugins and configure their settings in Aurral. Update or remove
+          packaged plugins through this option. A packaged plugin takes precedence
+          over a web-installed copy with the same ID while it is listed here.
+          Removing a packaged plugin can leave an empty directory under
+          `plugins/` in the data directory. If Aurral reports a missing
+          manifest for that plugin, remove the empty directory with `rmdir`.
+
+          Each package must provide `passthru.pluginId` matching its manifest ID
+          and install `manifest.json` and `index.js` at the root of its output.
+        '';
+      };
 
       directories = lib.mkOption {
         type = lib.types.listOf lib.types.externalPath;
         default = [ ];
         description = ''
-          Directories that Aurral needs access to. Other directories won't be visible by the app.
-          Environment variable `DOWNLOAD_FOLDER` is added automatically.
+          Additional directories to expose to Aurral.
+          The module also exposes the path in `LIBRARY_FOLDER`, falling back to the deprecated `DOWNLOAD_FOLDER`.
           See BindPaths in {manpage}`systemd.exec(5)`.
         '';
       };
@@ -66,7 +88,7 @@ in
         type = lib.types.attrsOf lib.types.str;
         default = { };
         example = {
-          DOWNLOAD_FOLDER = "/media/downloads";
+          LIBRARY_FOLDER = "/media/music";
           TRUST_PROXY = "true";
         };
         description = ''
@@ -86,6 +108,13 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = lib.allUnique (map (p: p.pluginId) cfg.plugins);
+        message = "services.aurral.plugins must contain at most one package per plugin ID.";
+      }
+    ];
+
     systemd.services.aurral = {
       description = "Aurral";
       after = [ "network.target" ];
@@ -99,8 +128,9 @@ in
 
       serviceConfig = {
         Type = "simple";
-        ExecStart = lib.getExe cfg.package;
-        Restart = "on-failure";
+        # Reap orphaned plugin and download processes inside the private PID namespace.
+        ExecStart = "${lib.getExe pkgs.catatonit} -- ${lib.getExe cfg.package}";
+        Restart = "always";
         User = cfg.user;
         Group = cfg.group;
         EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
@@ -112,7 +142,7 @@ in
           cfg.dataDir
         ]
         ++ (lib.map (x: "-" + x) cfg.directories)
-        ++ lib.optional (cfg.environment ? DOWNLOAD_FOLDER) cfg.environment.DOWNLOAD_FOLDER;
+        ++ lib.optional (libraryFolder != null) libraryFolder;
         BindReadOnlyPaths = [
           builtins.storeDir
           "${config.security.pki.caBundle}:/etc/ssl/certs/ca-certificates.crt"
@@ -121,7 +151,8 @@ in
         ++ lib.optionals config.services.resolved.enable [
           "/run/systemd/resolve/stub-resolv.conf"
           "/run/systemd/resolve/resolv.conf"
-        ];
+        ]
+        ++ map (p: "${p}:${cfg.dataDir}/plugins/${p.pluginId}") cfg.plugins;
         RestrictSUIDSGID = true;
         CapabilityBoundingSet = "";
         RestrictAddressFamilies = [
@@ -129,8 +160,7 @@ in
           "AF_INET"
           "AF_INET6"
         ];
-        SocketBindDeny = "any";
-        SocketBindAllow = toString cfg.port;
+        # cloudflared's QUIC transport requires binding dynamically allocated UDP ports.
         SystemCallErrorNumber = "EPERM";
         SystemCallFilter = [
           "@system-service"
@@ -159,10 +189,18 @@ in
       confinement.enable = true;
     };
 
-    systemd.tmpfiles.settings."10-aurral" = lib.mkIf (cfg.environment ? DOWNLOAD_FOLDER) {
-      ${cfg.environment.DOWNLOAD_FOLDER}.d = {
+    systemd.tmpfiles.settings."10-aurral" = lib.mkIf (libraryFolder != null) {
+      ${libraryFolder}.d = {
         inherit (cfg) user group;
         mode = "0770";
+      };
+    };
+
+    # Create the writable parent before systemd sets up the read-only mounts.
+    systemd.tmpfiles.settings."10-aurral-plugins" = lib.mkIf (cfg.plugins != [ ]) {
+      "${cfg.dataDir}/plugins".d = {
+        inherit (cfg) user group;
+        mode = "0750";
       };
     };
 

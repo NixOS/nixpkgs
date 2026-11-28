@@ -1,0 +1,41 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Anish Pallati <i@anish.land>
+Date: Fri, 23 Oct 2026 02:06:46 -0400
+Subject: [PATCH] sdk: include tarball overrides in the sdk version
+
+The SDK version stamp only records the pinned darwin-tools and
+OpenAppleMacros versions, so an SDK built from an override still counts
+as up to date after the override changes. Include the override paths in
+the stamp so xtool rebuilds the SDK when they change.
+
+Signed-off-by: Anish Pallati <i@anish.land>
+---
+ Sources/XToolSupport/SDKBuilder.swift | 14 +++++++++++---
+ 1 file changed, 11 insertions(+), 3 deletions(-)
+
+diff --git a/Sources/XToolSupport/SDKBuilder.swift b/Sources/XToolSupport/SDKBuilder.swift
+index c0632c4..a8d7175 100644
+--- a/Sources/XToolSupport/SDKBuilder.swift
++++ b/Sources/XToolSupport/SDKBuilder.swift
+@@ -83,10 +83,18 @@ struct SDKBuilder {
+     // tag from https://github.com/xtool-org/OpenAppleMacros
+     static let oamVersion = "1.4.1"
+ 
++    static let overrideEnvironmentVariables = ["XTL_TOOLSET_TARBALL", "XTL_OAM_TARBALL"]
++
+     static var currentSDKVersion: String {
+-        """
+-        epoch=\(sdkEpoch),darwinTools=\(darwinToolsVersion),oam=\(oamVersion)
+-        """
++        var version = "epoch=\(sdkEpoch),darwinTools=\(darwinToolsVersion),oam=\(oamVersion)"
++        // local overrides can change without the versions above changing
++        let environment = ProcessInfo.processInfo.environment
++        for name in overrideEnvironmentVariables {
++            if let path = environment[name] {
++                version += ",\(name)=\(path)"
++            }
++        }
++        return version
+     }
+ 
+     // swiftlint:disable:next function_body_length

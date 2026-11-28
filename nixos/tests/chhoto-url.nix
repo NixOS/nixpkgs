@@ -4,18 +4,23 @@
   name = "chhoto-url";
   meta.maintainers = with lib.maintainers; [ defelo ];
 
-  nodes.machine = {
-    services.chhoto-url = {
-      enable = true;
-      settings.port = 8000;
-      environmentFiles = [
-        (builtins.toFile "chhoto-url.env" ''
-          api_key=api_key
-          password=password
-        '')
-      ];
-    };
+  defaults.services.chhoto-url = {
+    enable = true;
+    settings.port = 8000;
+    environmentFiles = [
+      (builtins.toFile "chhoto-url.env" ''
+        api_key=api_key
+        password=password
+      '')
+    ];
   };
+
+  nodes.machine = {
+    services.chhoto-url.settings.CHHOTO_HEALTH_PORT = 1729;
+  };
+
+  # The health check endpoint is disabled by default.
+  nodes.nohealth = { };
 
   interactive.nodes.machine = {
     networking.firewall.allowedTCPPorts = [ 8000 ];
@@ -36,8 +41,18 @@
     import re
     import time
 
+    start_all()
+
+    nohealth.wait_for_unit("chhoto-url.service")
+    nohealth.wait_for_open_port(8000)
+    nohealth.succeed("curl --fail localhost:8000/")
+    nohealth.fail("curl localhost:1729/healthz")
+
     machine.wait_for_unit("chhoto-url.service")
     machine.wait_for_open_port(8000)
+    machine.wait_for_open_port(1729)
+
+    machine.succeed("curl --fail localhost:1729/healthz")
 
     resp = json.loads(machine.succeed("curl localhost:8000/api/getconfig"))
     assert resp["success"] is False

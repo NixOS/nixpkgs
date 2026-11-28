@@ -17,14 +17,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "bc-detect-secrets";
-  version = "1.5.52";
+  version = "1.5.55";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bridgecrewio";
     repo = "detect-secrets";
     tag = finalAttrs.version;
-    hash = "sha256-QCC7Psto8xIy7d2U56a5b4PTG2u9efnHtHhLQQbJkBQ=";
+    hash = "sha256-ga3XOfDxX4+7m+GrywNEmWxIHX1TBJ5h3m1HWd9oIe0=";
   };
 
   build-system = [ setuptools ];
@@ -60,6 +60,12 @@ buildPythonPackage (finalAttrs: {
     "TestGetFilesToScan"
     "TestLineNumberChanges"
     "TestModifiesBaselineFromVersionChange"
+    # unidiff 1.0.1 stopped starting a new file at a "---" header inside an
+    # open "diff --git" block (matiasb/python-unidiff#144), so the parser is
+    # still on setup.py when this fixture's last block targets
+    # .secrets.baseline, and parsing the fixture raises UnidiffParseError.
+    "test_filename_filters_are_invoked_first"
+    "test_success"
   ];
 
   pythonImportsCheck = [ "detect_secrets" ];

@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "calcurse";
-  version = "4.8.2";
+  version = "4.9.1";
 
   src = fetchurl {
     url = "https://calcurse.org/files/calcurse-${finalAttrs.version}.tar.gz";
-    hash = "sha256-hJuoUsfze2dyNlywxCqUzeD+de+6kTY+lqDn73l7pWU=";
+    hash = "sha256-ER9YQT5i1H5u2lgH9jtYmitFjkvzyA8Vbe0BB5V6pnU=";
   };
 
   buildInputs = [

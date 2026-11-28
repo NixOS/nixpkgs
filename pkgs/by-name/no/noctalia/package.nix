@@ -23,6 +23,7 @@
   harfbuzz,
   jemalloc,
   libGL,
+  libheif,
   libical,
   libjxl,
   libqalculate,
@@ -57,13 +58,13 @@ stdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "noctalia";
-  version = "5.3.0";
+  version = "5.6.0";
 
   src = fetchFromGitHub {
     owner = "noctalia-dev";
     repo = "noctalia";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gCF1P9r0UzPah0fqBTg2nVuxuuNnRxnYYHklvq8VKZI=";
+    hash = "sha256-3Bt4df3TM7shQGxQbSDBjYk74oemNvRl4KT3DmLZGF4=";
   };
 
   strictDeps = true;
@@ -87,6 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
     harfbuzz
     jemalloc
     libGL
+    libheif
     libical
     libjxl
     libqalculate

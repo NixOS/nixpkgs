@@ -42,14 +42,19 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "magic-wormhole";
-  version = "0.24.0";
+  version = "0.25.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "magic-wormhole";
     repo = "magic-wormhole";
     tag = finalAttrs.version;
-    hash = "sha256-aY8dI5K2qroY+Nbc00R5XK0AjHpdnXFYWABgPqf8gQ8=";
+    # Work around irreproducible usage of export-subst by manually fixing $Format:%d$.
+    postFetch = ''
+      sed -Ei 's/^(\s+git_refnames = ").*"$/\1 (tag: ${finalAttrs.src.tag})"/' $out/src/wormhole/_version.py
+      grep -Exq '\s+git_refnames = " \(tag: ${finalAttrs.src.tag}\)"' $out/src/wormhole/_version.py
+    '';
+    hash = "sha256-KOKxgruxHqIyyvfO3lkVrkBt7wVCTnxO4L/hSYCMuGY=";
   };
 
   postPatch =
@@ -109,14 +114,14 @@ buildPythonPackage (finalAttrs: {
   __darwinAllowLocalNetworking = true;
 
   postInstall = ''
-    install -Dm644 docs/wormhole.1 $out/share/man/man1/wormhole.1
+    installManPage docs/wormhole.1
 
     # https://github.com/magic-wormhole/magic-wormhole/issues/619
     installShellCompletion --cmd ${finalAttrs.meta.mainProgram} \
       --bash wormhole_complete.bash \
       --fish wormhole_complete.fish \
       --zsh wormhole_complete.zsh
-    rm $out/wormhole_complete.*
+    rm $out/share/*/*/wormhole_complete.*
   '';
 
   passthru.updateScript = gitUpdater { };

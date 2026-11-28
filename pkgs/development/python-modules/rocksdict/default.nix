@@ -5,6 +5,8 @@
   fetchFromGitHub,
   rustPlatform,
   pkgs,
+  pkg-config,
+  zstd,
 
   # tests
   pytestCheckHook,
@@ -29,9 +31,12 @@ buildPythonPackage (finalAttrs: {
   };
 
   nativeBuildInputs = [
+    pkg-config
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
   ];
+
+  buildInputs = [ zstd ];
 
   env = {
     # libclang.so

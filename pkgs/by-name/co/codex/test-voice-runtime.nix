@@ -8,7 +8,7 @@ runCommand "${codex.name}-voice-runtime-test"
     nativeBuildInputs = [ python3 ];
   }
   ''
-    python3 ${./test-voice-runtime.py} \
+    python3 -P ${./test-voice-runtime.py} \
       ${codex} \
       ${codex.buildCommit}
     touch $out

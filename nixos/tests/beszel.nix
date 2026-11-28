@@ -166,6 +166,7 @@
         agentHost.wait_for_unit("beszel-agent.service")
         agentHost.wait_until_succeeds("journalctl -eu beszel-agent --grep 'SSH connection established'")
         agentHost.wait_until_succeeds(f'curl -H \'Authorization: {user["token"]}\' -f ${agentCfg.environment.HUB_URL}/api/collections/systems/records | jq -e \'.items[].status == "up"\' ')
+        agentHost.wait_until_succeeds(f'curl -H \'Authorization: {user["token"]}\' -f ${agentCfg.environment.HUB_URL}/api/collections/systems/records | jq -e \'.items[].info.jl == true\' ')
 
       with subtest("Agent stays sandboxed without a GPU"):
         agentHost.succeed("systemctl show beszel-agent -p PrivateDevices --value | grep -qx yes")

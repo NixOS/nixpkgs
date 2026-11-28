@@ -5,6 +5,8 @@
   nixVersions,
   nixosTests,
   boost,
+  sqlite,
+  zstd,
   pkg-config,
   stdenv,
   installShellFiles,
@@ -23,6 +25,8 @@ rustPlatform.buildRustPackage {
   pname = "attic";
   version = "0-unstable-2026-07-06";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "zhaofengli";
     repo = "attic";
@@ -35,9 +39,16 @@ rustPlatform.buildRustPackage {
     installShellFiles
   ];
 
-  buildInputs = lib.optional needNixInclude nix ++ [ boost ];
+  buildInputs = [
+    boost
+  ]
+  ++ lib.optionals needNixInclude [ nix ]
+  ++ lib.optionals (lib.elem "attic-server" crates) [
+    sqlite
+    zstd
+  ];
 
-  cargoBuildFlags = lib.concatMapStrings (c: "-p ${c} ") crates;
+  cargoBuildFlags = map (c: "--package=${c}") crates;
   cargoHash = "sha256-UGgM78QEWJ2QgbQhxEI+yLYXH6T4ey+1oenPTMlJ3GU=";
 
   env = {

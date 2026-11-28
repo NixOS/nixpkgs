@@ -29,7 +29,12 @@ let
 
   python = python3.override {
     self = python;
-    packageOverrides = (self: super: { django = super.django_5; });
+    packageOverrides = (
+      self: super: {
+        django = self.django_5;
+        mcp = self.mcp_1;
+      }
+    );
   };
 
 in
@@ -147,8 +152,6 @@ python.pkgs.buildPythonApplication (finalAttrs: {
       login-upload-and-download-file = nixosTests.lasuite-drive;
     };
   };
-
-  __structuredAttrs = true;
 
   meta = meta // {
     description = "A collaborative file sharing and document management platform that scales. Built with Django and React. Opensource alternative to Sharepoint or Google Drive";

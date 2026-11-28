@@ -76,4 +76,43 @@ bootstrapData
   cudaArchNameToCapabilities = lib.groupBy (
     cudaCapability: db.cudaCapabilityToInfo.${cudaCapability}.archName
   ) db.allSortedCudaCapabilities;
+
+  /**
+    All architecture-specific CUDA capabilities, sorted by version.
+
+    # Type
+
+    ```
+    architectureSpecificCudaCapabilities :: [CudaCapability]
+    ```
+  */
+  architectureSpecificCudaCapabilities = lib.filter (
+    cudaCapability: db.cudaCapabilityToInfo.${cudaCapability}.isArchitectureSpecific
+  ) db.allSortedCudaCapabilities;
+
+  /**
+    All family-specific CUDA capabilities, sorted by version.
+
+    # Type
+
+    ```
+    familySpecificCudaCapabilities :: [CudaCapability]
+    ```
+  */
+  familySpecificCudaCapabilities = lib.filter (
+    cudaCapability: db.cudaCapabilityToInfo.${cudaCapability}.isFamilySpecific
+  ) db.allSortedCudaCapabilities;
+
+  /**
+    All Jetson CUDA capabilities, sorted by version.
+
+    # Type
+
+    ```
+    jetsonCudaCapabilities :: [CudaCapability]
+    ```
+  */
+  jetsonCudaCapabilities = lib.filter (
+    cudaCapability: db.cudaCapabilityToInfo.${cudaCapability}.isJetson
+  ) db.allSortedCudaCapabilities;
 }

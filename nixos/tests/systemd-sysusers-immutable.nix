@@ -25,6 +25,7 @@ in
       isSystemUser = true;
       group = "wheel";
       home = "/sysuser";
+      createHome = true;
       initialHashedPassword = sysuserPassword;
     };
 
@@ -33,6 +34,7 @@ in
         isSystemUser = true;
         group = "wheel";
         home = "/new-sysuser";
+        createHome = true;
         initialPassword = newSysuserPassword;
       };
     };

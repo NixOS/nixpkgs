@@ -21,7 +21,13 @@ let
   };
 
   cygwin = fetchurl {
-    url = "https://mirrors.kernel.org/sourceware/cygwin/x86_64/release/cygwin/cygwin-3.6.6-1-x86_64.tar.xz";
+    # Cygwin's mirrors prune old releases, so a pinned file will eventually
+    # be unavailable and break future builds.  This package is unfree, so it is
+    # not cached by Hydra.
+    # We here use an archived version from archive.org, which keeps old releases
+    # available.  EAC does not receive regular updates, so this older version
+    # will probably not cause any problems.
+    url = "https://web.archive.org/web/2id_/https://mirrors.kernel.org/sourceware/cygwin/x86_64/release/cygwin/cygwin-3.6.6-1-x86_64.tar.xz";
     hash = "sha256-xcgYjfVB9dF0twGC1ww7r4NCPHT/+aEk1CMmS7ndJuA=";
   };
 

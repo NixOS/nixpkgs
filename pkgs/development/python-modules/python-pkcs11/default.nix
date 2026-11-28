@@ -13,7 +13,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "danni";
+    owner = "pyauth";
     repo = "python-pkcs11";
     tag = "v${version}";
     hash = "sha256-9RVUtUe+Af5nTDaMeipdijLK4Un/SGRAQIztVKQZZzQ=";
@@ -36,7 +36,7 @@ buildPythonPackage rec {
   meta = {
     changelog = "https://github.com/pyauth/python-pkcs11/releases/tag/${src.tag}";
     description = "PKCS#11/Cryptoki support for Python";
-    homepage = "https://github.com/danni/python-pkcs11";
+    homepage = "https://github.com/pyauth/python-pkcs11";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };

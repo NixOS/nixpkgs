@@ -50,7 +50,7 @@ maven.buildMavenPackage rec {
   pname = "tinyMediaManager";
   version = "5.3.4";
 
-  mvnHash = "sha256-pLySrUiZz55ZpTn2JABtnFjoVa1iUlLN7oDeaIg9O8s=";
+  mvnHash = "sha256-9fKSIDQ5MJAeyqzm1SM8vJ2LjPsNW8j6yJUL9U4jtZ4=";
 
   src = fetchFromGitLab {
     owner = "tinyMediaManager";

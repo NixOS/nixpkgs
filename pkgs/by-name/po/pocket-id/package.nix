@@ -1,10 +1,10 @@
 {
   lib,
   fetchFromGitHub,
-  buildGo127Module,
+  buildGoModule,
   stdenvNoCC,
   nodejs,
-  pnpm_10,
+  pnpm_11,
   fetchPnpmDeps,
   pnpmConfigHook,
   pnpmBuildHook,
@@ -12,20 +12,20 @@
   nix-update-script,
   versionCheckHook,
 }:
-buildGo127Module (finalAttrs: {
+buildGoModule (finalAttrs: {
   pname = "pocket-id";
-  version = "2.18.0";
+  version = "2.19.3";
 
   src = fetchFromGitHub {
     owner = "pocket-id";
     repo = "pocket-id";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7QdaCb9jcf7orRuJ3SxVVuK4C1J9+lfGAugGjKs52ro=";
+    hash = "sha256-OUMV3F9exAEQEJYndv1aToncDaMQ0ILck7RF3gBM63g=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/backend";
 
-  vendorHash = "sha256-nwvgYWUMlt51dH+uYQd8KeTo0E55kSAyMkBGjObbkb8=";
+  vendorHash = "sha256-Cm/YWyByIaLgF/AVVo94kCQFncZlHafNP5aRA58rcDM=";
 
   env.CGO_ENABLED = 0;
   ldflags = [
@@ -64,13 +64,13 @@ buildGo127Module (finalAttrs: {
       nodejs
       pnpmConfigHook
       pnpmBuildHook
-      pnpm_10
+      pnpm_11
     ];
     pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs) pname version src;
-      pnpm = pnpm_10;
-      fetcherVersion = 4;
-      hash = "sha256-zCwpCnxYVEVQUjC64W3ZZlloNNtQXD8SVlpV+0JgDzQ=";
+      pnpm = pnpm_11;
+      fetcherVersion = 5;
+      hash = "sha256-ioO8DfAs5UgqsRdwIHYhqQv67PLOslk03k+LXd1yKXA=";
     };
 
     env.BUILD_OUTPUT_PATH = "dist";
@@ -108,7 +108,7 @@ buildGo127Module (finalAttrs: {
     maintainers = with lib.maintainers; [
       gepbird
       marcusramberg
-      tmarkus
+      AAAAAASomeThingsFailToEvaluate
       ymstnt
       esch
     ];

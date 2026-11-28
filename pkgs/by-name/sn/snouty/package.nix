@@ -1,28 +1,40 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
   pkg-config,
-  openssl,
+  aws-lc,
+  sqlite,
   writableTmpDirAsHomeHook,
+  cacert,
   podman,
+  docker-compose,
+  gitMinimal,
   versionCheckHook,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "snouty";
-  version = "0.5.0";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "antithesishq";
     repo = "snouty";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zO+2UFu/KD2dtE2AkUVv5A1EBFMsSTl8gP18bCxquI8=";
+    hash = "sha256-Pz2a+xnssydcOngfpKOtJ+RKE4fPn/uBoiE7WqVh4jU=";
   };
 
-  cargoHash = "sha256-fWdzaqyFT2ZFTy5AsejDgEm3E55syLKbYz5DW9Ra2PQ=";
+  # Upstream bumps their `rust-version` to latest stable quicker than we can bump our own toolchain.
+  postPatch = ''
+    shopt -s globstar
+    sed -i '/rust\-version[\. ]/d' **/Cargo.toml
+    shopt -u globstar
+  '';
+
+  cargoHash = "sha256-TiLEtrN/tbPauP9QCXeqwUANDMMoE4kMcoCJlSgJJKs=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -30,22 +42,30 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
-    openssl
+    aws-lc
+    sqlite
   ];
 
-  env.OPENSSL_NO_VENDOR = true;
-
+  # Docker and Podman run the credential helper as docker-credential-snouty,
+  # and snouty acts as the helper when it is started by that name.
   postInstall = ''
-    installShellCompletion \
-      $releaseDir/build/snouty-*/out/snouty.{bash,fish} \
-      --zsh $releaseDir/build/snouty-*/out/_snouty
+    ln -s snouty $out/bin/docker-credential-snouty
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd snouty \
+      --bash <($out/bin/snouty completions bash) \
+      --fish <($out/bin/snouty completions fish) \
+      --zsh <($out/bin/snouty completions zsh)
   '';
 
   useNextest = true;
 
   nativeCheckInputs = [
     writableTmpDirAsHomeHook
+    cacert
     podman
+    docker-compose
+    gitMinimal
   ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];

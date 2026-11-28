@@ -1,11 +1,11 @@
 {
   lib,
   stdenv,
-  pnpm_10,
+  pnpm_12,
   nodejs,
   fetchFromGitHub,
   python3,
-  electron_42,
+  electron_45,
   makeDesktopItem,
   makeBinaryWrapper,
   copyDesktopItems,
@@ -14,18 +14,18 @@
   nix-update-script,
 }:
 let
-  pnpm = pnpm_10;
-  electron = electron_42;
+  pnpm = pnpm_12;
+  electron = electron_45;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "shiru";
-  version = "6.8.0";
+  version = "6.10.1";
 
   src = fetchFromGitHub {
     owner = "RockinChaos";
     repo = "shiru";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9bSFTjoQSslye0kML8co0QKTLaN9KOMo8W3QEMxOeqE=";
+    hash = "sha256-+aVI4wTpecz19eYEMO1UJWwQ0bCk5csica0o0IRmfZM=";
   };
 
   patches = [
@@ -49,8 +49,8 @@ stdenv.mkDerivation (finalAttrs: {
     prePnpmInstall = ''
       cd electron
     '';
-    fetcherVersion = 3;
-    hash = "sha256-4WlYGN5MicJZ9b/XObLjttznLh24DEbQwLS/rW4mrsI=";
+    fetcherVersion = 5;
+    hash = "sha256-9VTlGYGyaSHnaVrRrty/SAZiHfZ63SmZH4pUnUoL2xA=";
   };
 
   buildPhase = ''

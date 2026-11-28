@@ -14,7 +14,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "iterative";
+    owner = "treeverse";
     repo = "dvc-hdfs";
     tag = finalAttrs.version;
     hash = "sha256-Bo8+El5GC7iyT8SxaJquWFG29BOeilmEMDtTG+RkDGI=";
@@ -38,8 +38,8 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "HDFS/WebHDFS plugin for dvc";
-    homepage = "https://github.com/iterative/dvc-hdfs";
-    changelog = "https://github.com/iterative/dvc-hdfs/releases/tag/${finalAttrs.src.tag}";
+    homepage = "https://github.com/treeverse/dvc-hdfs";
+    changelog = "https://github.com/treeverse/dvc-hdfs/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };

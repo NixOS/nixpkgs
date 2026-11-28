@@ -3,33 +3,34 @@
   lib,
   fetchFromGitHub,
   makeWrapper,
-  nodejs,
+  nodejs-slim,
   nixosTests,
   yarn-berry_4,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "outline";
-  version = "1.11.0";
+  version = "1.13.0";
 
   src = fetchFromGitHub {
     owner = "outline";
     repo = "outline";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-CMjgYl1RL9N1P/xCM0/yVAU280pOF2S+4b+xfv4/2WU=";
+    hash = "sha256-PxSWMex1ljHQjXy+qTlJTnYrF2ea6X80iKQuJOK/XTQ=";
   };
 
   missingHashes = ./missing-hashes.json;
 
   nativeBuildInputs = [
     makeWrapper
+    nodejs-slim
     yarn-berry_4.yarnBerryConfigHook
     yarn-berry_4
   ];
 
   offlineCache = yarn-berry_4.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
-    hash = "sha256-d36+pdV/hq4YVWCNXWqWaoltQnTQm4NfrJIjtYTill4=";
+    hash = "sha256-llWYlX/AhG5qMZllqvwbSICbTenSdzb3x1AWGbK4Ds8=";
   };
 
   buildPhase = ''
@@ -54,11 +55,11 @@ stdenv.mkDerivation (finalAttrs: {
     build=$out/share/outline/build
     server=$out/share/outline/server
 
-    makeWrapper ${nodejs}/bin/node $out/bin/outline-server \
+    makeWrapper ${nodejs-slim}/bin/node $out/bin/outline-server \
       --add-flags $build/server/index.js \
       --set NODE_ENV production \
       --set NODE_PATH $node_modules \
-      --prefix PATH : ${lib.makeBinPath [ nodejs ]} # required to run migrations
+      --prefix PATH : ${lib.makeBinPath [ nodejs-slim ]} # required to run migrations
 
     runHook postInstall
   '';

@@ -8,11 +8,8 @@
 
 ```nix
 {
-  boot.plymouth.tpm2-totp.enable = true;
-
-  # Plymouth and systemd initrd/stage-1 are required:
   boot.plymouth.enable = true;
-  boot.initrd.systemd.enable = true;
+  boot.plymouth.tpm2-totp.enable = true;
 }
 ```
 

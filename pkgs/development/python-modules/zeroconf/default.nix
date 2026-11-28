@@ -15,14 +15,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "zeroconf";
-  version = "0.151.5";
+  version = "0.153.0";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "jstasiak";
+    owner = "python-zeroconf";
     repo = "python-zeroconf";
     tag = finalAttrs.version;
-    hash = "sha256-KDHDVXg1s72iqgPYknp9dHB2oc5jNACdxplxWnPTh6w=";
+    hash = "sha256-6jxhL1fwzcYt7g6fNqMVNzFZLjfS0cErt4cjS1YQJxU=";
   };
 
   build-system = [

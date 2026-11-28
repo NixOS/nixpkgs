@@ -42,7 +42,7 @@ stdenv.mkDerivation {
   meta = {
     description = "C library for managing typed memory blocks and Python container module";
     homepage = "https://xnd.io/";
-    license = lib.licenses.bsdOriginal;
+    license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ costrouc ];
   };
 }

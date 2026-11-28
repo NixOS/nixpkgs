@@ -11,7 +11,7 @@ index e9cd89436a3..893b9a4c59e 100644
                                destname=fmode[0], chmod=fmode[1])
  
      # If this is a direct install and there are no event scripts
-@@ -901,17 +901,13 @@ def build(bld):
+@@ -901,19 +901,13 @@ def build(bld):
      ]
  
      for t in etc_scripts:
@@ -24,8 +24,10 @@ index e9cd89436a3..893b9a4c59e 100644
                        'config/notification.README',
                        destname='README')
  
+-    bld.INSTALL_DIR(bld.env.CTDB_LOCKDIR)
 -    bld.INSTALL_DIR(bld.env.CTDB_LOGDIR)
--    bld.INSTALL_DIR(bld.env.CTDB_RUNDIR)
+-    bld.INSTALL_DIR(bld.env.CTDB_PIDDIR)
+-    bld.INSTALL_DIR(bld.env.CTDB_SOCKETDIR)
 -    bld.INSTALL_DIR(bld.env.CTDB_VARDIR)
 -
      for d in ['volatile', 'persistent', 'state']:

@@ -1,23 +1,24 @@
 {
   lib,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   installShellFiles,
   iana-etc,
   libredirect,
+  nix-update-script,
   nixosTests,
   postgresql,
   stdenv,
 }:
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "headscale";
-  version = "0.29.5";
+  version = "0.29.8";
 
   src = fetchFromGitHub {
     owner = "juanfont";
     repo = "headscale";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Uyf4JvZoANwWNqw6JCoRn7Z4ZQxh+hVJVB6SBPkVEv0=";
+    hash = "sha256-hb57o443dOI0PL0BiatIO0LjvjH5dOgjPXGNLCg8p0c=";
   };
 
   postPatch = ''
@@ -26,7 +27,7 @@ buildGoModule (finalAttrs: {
       --replace-fail 'Commit:    "unknown"' 'Commit: "${finalAttrs.src.tag}"'
   '';
 
-  vendorHash = "sha256-sdSDAIBaW5c9eTgZfFSrn8LEqHg37Hnr1PszuoXPm6Y=";
+  vendorHash = "sha256-ADl65VpgS3uKYX0dYkRPPKcOelD9sJdwlq+CA0eA7Nk=";
 
   subPackages = [ "cmd/headscale" ];
 
@@ -50,10 +51,15 @@ buildGoModule (finalAttrs: {
       --zsh <($out/bin/headscale completion zsh)
   '';
 
-  passthru.tests = { inherit (nixosTests) headscale; };
+  passthru = {
+    tests = { inherit (nixosTests) headscale; };
+
+    updateScript = nix-update-script { extraArgs = [ "--version-regex=^v([0-9.]+)$" ]; };
+  };
 
   meta = {
     homepage = "https://github.com/juanfont/headscale";
+    changelog = "https://github.com/juanfont/headscale/releases/tag/v${finalAttrs.version}";
     description = "Open source, self-hosted implementation of the Tailscale control server";
     longDescription = ''
       Tailscale is a modern VPN built on top of Wireguard. It works like an

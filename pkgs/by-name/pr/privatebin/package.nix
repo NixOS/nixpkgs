@@ -7,7 +7,7 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "privatebin";
-  version = "2.1.0";
+  version = "2.1.1";
 
   __structuredAttrs = true;
 
@@ -15,7 +15,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     owner = "PrivateBin";
     repo = "PrivateBin";
     tag = finalAttrs.version;
-    hash = "sha256-vh22kLRqgAXnTT2XqTnVcMQfEFBolcKd3ocSdrXnXPU=";
+    hash = "sha256-CTXvG/VWwwYqIZKPVgX5YupJOmcaIXLChooT33jqtsU=";
   };
 
   installPhase = ''

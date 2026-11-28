@@ -2,22 +2,35 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  pkg-config,
+  aws-lc,
+  rust-jemalloc-sys-unprefixed,
   versionCheckHook,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hath-rust";
-  version = "1.17.0";
+  version = "1.19.0";
 
   src = fetchFromGitHub {
     owner = "james58899";
     repo = "hath-rust";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-X27YlTDviX8F5gZK+CV3DvLKwDCW3MyWeHAWbju2UnE=";
+    hash = "sha256-WPGQOLSRDVQHnhEHaiVJLEtZVhckHDldIJKCTpy0LQY=";
   };
 
-  cargoHash = "sha256-luXAi6JotliI0bUaXEv6qNv4hgYG/3dM8Jk/42aH7kk=";
+  cargoHash = "sha256-gC3Ca0Db/zZtMJO08VuRLMm4EGNcs6HF++b5tlaON2g=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [
+    aws-lc
+    rust-jemalloc-sys-unprefixed
+  ];
+
+  # The project has no tests.
+  doCheck = false;
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;

@@ -25,14 +25,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "openstacksdk";
-  version = "4.21.0";
+  version = "4.22.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "openstacksdk";
     tag = finalAttrs.version;
-    hash = "sha256-xpA7+KzFxKop2a+L/UTqqAXXcQ7ejsXq94yePWjIIls=";
+    hash = "sha256-REpwrtiCf91OZlkmuvLs9SDyqD7MaSzRU87vJBdm5Zs=";
   };
 
   patches = [

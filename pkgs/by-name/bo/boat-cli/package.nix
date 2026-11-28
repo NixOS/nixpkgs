@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "coko7";
-    repo = "boat-cli";
+    repo = "boat";
     tag = "v${finalAttrs.version}";
     hash = "sha256-6VrjJYrP/EDK0e303lJT045Ox4Kebn9yr4dbrd8V3F8=";
   };
@@ -34,8 +34,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Basic Opinionated Activity Tracker, a command line interface inspired by bartib.";
-    homepage = "https://github.com/coko7/boat-cli";
-    changelog = "https://github.com/coko7/boat-cli/releases/tag/v${finalAttrs.version}";
+    homepage = "https://github.com/coko7/boat";
+    changelog = "https://github.com/coko7/boat/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ tgi74 ];
     mainProgram = "boat";

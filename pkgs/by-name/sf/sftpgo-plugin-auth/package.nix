@@ -6,16 +6,16 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "sftpgo-plugin-auth";
-  version = "1.0.17";
+  version = "1.0.18";
 
   src = fetchFromGitHub {
     owner = "sftpgo";
     repo = "sftpgo-plugin-auth";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cVukrMpygPQKbQfRyIFi7Dp6gc9nKPvdo/xdDJEEe+A=";
+    hash = "sha256-i3scb/jSdM9PG1nX/DlZy22weOPgx3CPza7nfC+rCIM=";
   };
 
-  vendorHash = "sha256-PVeeBo4lbzzoiI9AI6OnFmow/VgJUtS7qc58COuV36w=";
+  vendorHash = "sha256-bkw1yq70ocoymuPOy7BNZYPCT3SNxI/oPWhmU8qlFos=";
 
   env.CGO_ENABLED = "0";
 

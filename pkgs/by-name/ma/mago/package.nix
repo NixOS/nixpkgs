@@ -6,22 +6,23 @@
   installShellFiles,
   pkg-config,
   openssl,
+  zstd,
   versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mago";
-  version = "1.50.0";
+  version = "1.59.0";
 
   src = fetchFromGitHub {
     owner = "carthage-software";
     repo = "mago";
     tag = finalAttrs.version;
-    hash = "sha256-Dk92uB9+y/E0l9Et2RbxH/u7rk5owyEYJbIFUWnko8I=";
+    hash = "sha256-AuXjk3JYfKSAH0Uk+xXbfXdkavbWxngAMA6xNqXMBxY=";
     forceFetchGit = true; # Does not download all files otherwise
   };
 
-  cargoHash = "sha256-oIxNpmw3q1DvBlaURUl8+AKud+gbGk8jD9Vw8utVRO4=";
+  cargoHash = "sha256-+5reFCiasGbfzXjgisVs20asK8VWNTVNJGBgp02FT/w=";
 
   env = {
     # Get openssl-sys to use pkg-config
@@ -33,7 +34,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [
+    openssl
+    zstd
+  ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd mago \

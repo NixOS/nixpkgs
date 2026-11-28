@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "quadprog";
-  version = "0.1.13";
+  version = "0.1.14";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "quadprog";
     repo = "quadprog";
     rev = "v${version}";
-    hash = "sha256-8gPuqDY3ajw/+B6kJdtpq+HL+Oq2Nsy/O7m+IWzxP38=";
+    hash = "sha256-pSiDQsSxcSZ9Wphq9zltIGOxnfRn+YuKKiI1X7N6CGc=";
   };
 
   nativeBuildInputs = [

@@ -7,19 +7,20 @@
   pytest-timeout,
   pytestCheckHook,
   setuptools,
+  sybil,
   typer,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "aiovlc";
-  version = "0.7.0";
+  version = "0.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "MartinHjelmare";
     repo = "aiovlc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PA8meWB0LOZX503+GVep03GiUh65MsLI+C6Fe9Iz6nc=";
+    hash = "sha256-/mKlxkzPdGW7kRS4Lgo6s0z2ADQy5BlTMpaPNrUckJk=";
   };
 
   build-system = [ setuptools ];
@@ -33,6 +34,7 @@ buildPythonPackage (finalAttrs: {
     pytest-cov-stub
     pytest-timeout
     pytestCheckHook
+    sybil
   ]
   ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 

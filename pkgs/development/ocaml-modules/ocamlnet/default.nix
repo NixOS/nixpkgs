@@ -7,7 +7,6 @@
   ncurses,
   ocaml,
   findlib,
-  ocaml_pcre,
   camlzip,
   gnutls,
   nettle,
@@ -19,7 +18,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://download.camlcity.org/download/ocamlnet-${version}.tar.gz";
-    sha256 = "1vlwxjxr946gdl61a1d7yk859cijq45f60dhn54ik3w4g6cx33pr";
+    hash = "sha256-+Y7RmXmEjxlJsbAB4wrBMrJU0PSnBRUMbc+QlLvsnO4=";
   };
 
   nativeBuildInputs = [
@@ -30,7 +29,6 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     ncurses
-    ocaml_pcre
     camlzip
     gnutls
     nettle
@@ -49,7 +47,7 @@ stdenv.mkDerivation rec {
       -bindir $out/bin
       -enable-gnutls
       -enable-zip
-      -enable-pcre
+      -disable-pcre
       -disable-gtk2
       -with-nethttpd
       -datadir $out/lib/ocaml/${ocaml.version}/ocamlnet

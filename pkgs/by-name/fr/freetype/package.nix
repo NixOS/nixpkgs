@@ -64,6 +64,8 @@ stdenv.mkDerivation (finalAttrs: {
   # FreeType requires GNU Make, which is not part of stdenv on FreeBSD.
   ++ lib.optional (!stdenv.hostPlatform.isLinux) gnumake;
 
+  strictDeps = true;
+
   patches = [
     ./enable-table-validation.patch
 
@@ -144,7 +146,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  # pkgsCross.mingwW64.pkg-config doesn't build
+  # pkgsCross.mingw-msvcrt-x86_64.pkg-config doesn't build
   # makeWrapper doesn't cross-compile to windows #120726
   postInstall = ''
     substituteInPlace $dev/bin/freetype-config \
@@ -174,6 +176,8 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (qt5) qtbase;
     pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Font rendering engine";

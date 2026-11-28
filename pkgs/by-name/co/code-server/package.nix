@@ -80,8 +80,8 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "code-server";
-  version = "4.140.0";
-  npmDepsHash = "sha256-ttccUM1xjUvnc5Y6ERtQzKNzWt8+7Kf3rPrFhjObGAo=";
+  version = "4.145.2";
+  npmDepsHash = "sha256-45vnSyVIgTvDk6WHYSwwGZ2wzVN1RLHEF9NSwp90K/o=";
 
   src = fetchFromGitHub {
     owner = "coder";
@@ -91,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
     postCheckout = ''
       git -C "$out" rev-parse HEAD > "$out/.git-revision"
     '';
-    hash = "sha256-M/Sxl08PiiTiqhfxk510FSktSp0a/j74zPzycWcV+xE=";
+    hash = "sha256-5CxXmgOvEUfdIW3rFlo3Zx7iCPIUfJja8X1O7LOUnk8=";
   };
 
   npmDeps =

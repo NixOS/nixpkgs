@@ -22,7 +22,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "sdispater";
+    owner = "python-pendulum";
     repo = "pendulum";
     tag = finalAttrs.version;
     hash = "sha256-zpBymeYhCy+yu6RPhOuN5xOVk6928hd3+oRsfiBPPuY=";
@@ -69,8 +69,8 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Python datetimes made easy";
-    homepage = "https://github.com/sdispater/pendulum";
-    changelog = "https://github.com/sdispater/pendulum/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    homepage = "https://github.com/python-pendulum/pendulum";
+    changelog = "https://github.com/python-pendulum/pendulum/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
   };

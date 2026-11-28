@@ -7,6 +7,7 @@
   backblaze-b2,
   # executable is renamed to backblaze-b2 by default, to avoid collision with boost's 'b2'
   execName ? "backblaze-b2",
+  writableTmpDirAsHomeHook,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -55,11 +56,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
     pytestCheckHook
     pytest-xdist
     tenacity
+    writableTmpDirAsHomeHook
   ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   disabledTestPaths = [
     # Test requires network

@@ -12,18 +12,18 @@
 
 buildPgrxExtension (finalAttrs: {
   pname = "postgresql_anonymizer";
-  version = "3.2.3";
+  version = "3.3.2";
 
   src = fetchFromGitLab {
     owner = "dalibo";
     repo = "postgresql_anonymizer";
     tag = finalAttrs.version;
-    hash = "sha256-RqDB0gLlQxJBfrMvAXIK62+3+DTWlTFpCaiQTLXt4BM=";
+    hash = "sha256-5HvqQKdE/VhbtQCUJhUo/Ztkuw21xT/0hbd2Y2Ajdc0=";
   };
 
   inherit postgresql;
   cargo-pgrx = cargo-pgrx_0_19_0;
-  cargoHash = "sha256-xQvBdLfxnPw+lvCM+sepfUyGyGK8WI+6kqk4DVY7+s8=";
+  cargoHash = "sha256-pPe9zYWH3ihTyRXz2EKR/c6l0bwdCZZyOqVZz6Sw2qw=";
 
   # Tries to copy extension into postgresql's store path.
   doCheck = false;

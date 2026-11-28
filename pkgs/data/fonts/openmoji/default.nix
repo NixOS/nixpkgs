@@ -2,8 +2,8 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  fonttools,
   nanoemoji,
-  python3Packages,
   woff2,
   xmlstarlet,
   # available color formats: ["cbdt" "glyf_colr_0" "glyf_colr_1" "sbix" "picosvgz" "untouchedsvgz"]
@@ -57,8 +57,8 @@ stdenvNoCC.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
+    fonttools
     nanoemoji
-    python3Packages.fonttools
     woff2
     xmlstarlet
   ];

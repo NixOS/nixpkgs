@@ -1,0 +1,26 @@
+import("//build/config/linux/pkg_config.gni")
+
+config("pdfium_printers") {
+  # Preserve PDFium's ByteString diagnostics without its Android-specific hooks.
+  include_dirs = [ "system" ]
+}
+
+foreach(name,
+        [
+          "gtest",
+          "gmock",
+          "gtest_main",
+          "gmock_main",
+        ]) {
+  pkg_config("${name}_config") {
+    packages = [ name ]
+  }
+
+  group(name) {
+    testonly = true
+    public_configs = [
+      ":pdfium_printers",
+      ":${name}_config",
+    ]
+  }
+}

@@ -11,6 +11,7 @@
   makeBinaryWrapper,
   versionCheckHook,
   librusty_v8 ? callPackage ./rusty-v8 { },
+  aws-lc,
   libffi,
   sqlite,
   pkg-config,
@@ -37,7 +38,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "deno";
-  version = "2.9.7";
+  version = "2.9.8";
 
   __structuredAttrs = true;
 
@@ -52,10 +53,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     repo = "deno";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true; # required for tests
-    hash = "sha256-GOhud8uXlsDdyAN84WscakxK2qCFTEYSUwR5Wt2QPAs=";
+    hash = "sha256-piJetMgFpg8xzEveqRQEq4kJINaLRDOrHp7Nd0z8wok=";
   };
 
-  cargoHash = "sha256-VSWkdTJiSX8O3+Kpu7RKnydxB3OcbwG9+NJCvLdFl68=";
+  cargoHash = "sha256-LNYXzS0oespQMeT/1fGcOvaDy5ErVeY7jUPL19OgeZ4=";
 
   patches = [
     ./patches/0002-tests-replace-hardcoded-paths.patch
@@ -71,6 +72,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libffi
     sqlite
     zstd
+    aws-lc
   ];
 
   nativeBuildInputs = [

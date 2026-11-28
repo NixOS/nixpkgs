@@ -48,7 +48,7 @@ let
   platform = sources.${stdenv.hostPlatform.system}.platform;
 
   src = fetchurl {
-    url = "https://paddle-whl.bj.bcebos.com/stable/${
+    url = "https://paddle-whl.cdn.bcebos.com/stable/${
       if cudaSupport then cudaVersion else "cpu"
     }/${pname}/${
       lib.replaceStrings [ "-" ] [ "_" ] pname
@@ -73,8 +73,10 @@ buildPythonPackage {
 
   buildInputs = lib.optionals cudaSupport [ rdma-core ];
 
+  # the cpu aarch64 wheels spell the requirement `opt-einsum`, all others `opt_einsum`
   pythonRelaxDeps = [
     "opt_einsum"
+    "opt-einsum"
   ];
 
   pythonRemoveDeps = lib.optionals cudaSupport [
@@ -167,7 +169,6 @@ buildPythonPackage {
     ]
     ++ lib.optionals (!cudaSupport) [
       "aarch64-linux"
-      "aarch64-darwin"
     ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };

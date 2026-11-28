@@ -15,6 +15,7 @@ let
 
       chmod u+rw -R $out/lib
       cp -r ${basegcc.libc}/lib/* $(ls -d $out/lib/gcc/*/*)
+      cp -r ${basegcc.cc.lib}/lib/* $(ls -d $out/lib/gcc/*/*)
     '';
   gcc_multi_sysroot =
     runCommand "gcc-multi-sysroot"

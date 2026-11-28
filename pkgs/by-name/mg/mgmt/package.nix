@@ -1,6 +1,6 @@
 {
   augeas,
-  buildGoModule,
+  buildGo126Module,
   fetchFromGitHub,
   gotools,
   lib,
@@ -10,7 +10,7 @@
   pkg-config,
   ragel,
 }:
-buildGoModule (finalAttrs: {
+buildGo126Module (finalAttrs: {
   pname = "mgmt";
   version = "1.1.0";
 

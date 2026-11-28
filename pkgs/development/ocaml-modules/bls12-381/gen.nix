@@ -13,7 +13,7 @@ buildDunePackage (finalAttrs: {
   src = fetchFromGitLab {
     owner = "dannywillems";
     repo = "ocaml-bls12-381";
-    rev = "${finalAttrs.version}-legacy";
+    tag = "${finalAttrs.version}-legacy";
     hash = "sha256-qocIfQdv9rniOUykRulu2zWsqkzT0OrsGczgVKALRuk=";
   };
 

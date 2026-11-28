@@ -6,6 +6,7 @@
   glib,
   gtk4,
   libadwaita,
+  libgit2,
   libx11,
   libxtst,
   pkg-config,
@@ -32,6 +33,7 @@ rustPlatform.buildRustPackage rec {
     glib
     gtk4
     libadwaita
+    libgit2
     libx11
     libxtst
   ];

@@ -1,7 +1,9 @@
 {
   lib,
   fetchFromGitHub,
+  pkg-config,
   rustPlatform,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -16,6 +18,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   sourceRoot = "${finalAttrs.src.name}/rust";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ zstd ];
 
   cargoLock = {
     lockFile = ./Cargo.lock;

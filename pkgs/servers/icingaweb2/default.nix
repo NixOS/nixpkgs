@@ -37,7 +37,7 @@ stdenvNoCC.mkDerivation rec {
       Analyse problems and act on them.
     '';
     homepage = "https://www.icinga.com/products/icinga-web-2/";
-    license = lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ helsinki-Jo ];
     mainProgram = "icingacli";
     platforms = lib.platforms.all;

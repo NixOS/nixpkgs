@@ -9,18 +9,19 @@
   SDL2_image,
 
   # Optionally bundle a ROM file
-  rom ? null,
+  romFile ? null,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tamatool";
-  version = "0.1";
+  version = "1.0";
 
   src = fetchFromGitHub {
     owner = "jcrona";
     repo = "tamatool";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-VDmpIBuMWg3TwfCf9J6/bi/DaWip6ESAQWvGh2SH+A8=";
+    # New versions are not tagged
+    rev = "6941aab9dd54f72b33a3251679edfcc87dcadf8d";
+    hash = "sha256-lHKGV+AuD0wBBJP2IIo48/DJVVSQupY8rBJTYXdheX0=";
     fetchSubmodules = true;
   };
 
@@ -29,9 +30,9 @@ stdenv.mkDerivation (finalAttrs: {
   #   program directory (it's immutable!)
   postPatch = ''
     substituteInPlace src/tamatool.c \
-      --replace '#define RES_PATH'          "#define RES_PATH         \"$out/share/tamatool/res\"          //" \
-      --replace '#define ROM_PATH'          "#define ROM_PATH         \"$out/share/tamatool/rom.bin\"      //" \
-      --replace '#define ROM_NOT_FOUND_MSG' '#define ROM_NOT_FOUND_MSG "You need to use the --rom option!" //'
+      --replace-fail '#define RES_PATH'          "#define RES_PATH         \"$out/share/tamatool/res\"          //" \
+      --replace-fail '#define ROM_PATH'          "#define ROM_PATH         \"$out/share/tamatool/rom.bin\"      //" \
+      --replace-fail '#define ROM_NOT_FOUND_MSG' '#define ROM_NOT_FOUND_MSG "You need to use the --rom option!" //'
   '';
 
   nativeBuildInputs = [
@@ -66,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/share/tamatool
     cp -r res $out/share/tamatool/res
     install -Dm644 linux/tamatool.png $out/share/icons/hicolor/128x126/apps/tamatool.png
-    ${lib.optionalString (rom != null) "install -Dm677 ${rom} $out/share/tamatool/rom.bin"}
+    ${lib.optionalString (romFile != null) "install -Dm677 ${romFile} $out/share/tamatool/rom.bin"}
     runHook postInstall
   '';
 

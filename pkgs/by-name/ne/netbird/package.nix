@@ -78,7 +78,7 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "netbird-${componentName}";
-  version = "0.81.2";
+  version = "0.83.2";
 
   __structuredAttrs = true;
 
@@ -86,7 +86,7 @@ buildGoModule (finalAttrs: {
     owner = "netbirdio";
     repo = "netbird";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-khQ3BXvHkPfHfy9+bk/dKFPvUAT3l4pj8SoQIDS+yLA=";
+    hash = "sha256-t4ldTHghqmSNQf2VFRgR/rYGd0ARnok6Bu31Vhv0t4A=";
   };
 
   overrideModAttrs = final: prev: {
@@ -100,7 +100,7 @@ buildGoModule (finalAttrs: {
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-YI49z1Yiji8I0zzlMIuXHLOGlqak546ONbqN+Ux2f7c=";
+  vendorHash = "sha256-iIbATQiIfazszBSi4jl5Ys/27uYwfweEMo+4BLSnRms=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -127,7 +127,7 @@ buildGoModule (finalAttrs: {
 
     pnpm = pnpm_11;
     fetcherVersion = 4;
-    hash = "sha256-T4E4GJgsoMZnLokJRuDm1L43OrYF99PLF4x/4HRIB4E=";
+    hash = "sha256-fcV0AeT1TZRtm/sTqZSYPE88Eh0tS/PHckN8Ef11RjM=";
   };
 
   preBuild = lib.optionalString (componentName == "ui") ''
@@ -221,7 +221,6 @@ buildGoModule (finalAttrs: {
     description = "Connect your devices into a single secure private WireGuard®-based mesh network with SSO/MFA and simple access controls";
     license = component.license;
     maintainers = with lib.maintainers; [
-      nazarewk
       saturn745
       loc
     ];

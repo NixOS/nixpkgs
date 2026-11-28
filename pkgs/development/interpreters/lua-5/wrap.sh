@@ -47,8 +47,8 @@ wrapLuaProgramsIn() {
     # (see pkgs/build-support/setup-hooks/make-wrapper.sh)
     local -a wrap_args=("$f"
       --prefix PATH ':' "$program_PATH"
-      --prefix LUA_PATH ';' "$LUA_PATH"
-      --prefix LUA_CPATH ';' "$LUA_CPATH"
+      --prefix-unchecked LUA_PATH ';' "$LUA_PATH"
+      --prefix-unchecked LUA_CPATH ';' "$LUA_CPATH"
     )
 
     # Add any additional arguments provided by makeWrapperArgs

@@ -9,8 +9,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   version = "8.2.0";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "alexandreborges";
     repo = "malwoverview";

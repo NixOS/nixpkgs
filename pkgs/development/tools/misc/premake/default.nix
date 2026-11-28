@@ -5,12 +5,12 @@
   unzip,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "premake";
   version = "4.3";
 
   src = fetchurl {
-    url = "mirror://sourceforge/premake/premake-${version}-src.zip";
+    url = "mirror://sourceforge/premake/premake-${finalAttrs.version}-src.zip";
     sha256 = "1017rd0wsjfyq2jvpjjhpszaa7kmig6q1nimw76qx3cjz2868lrn";
   };
 
@@ -35,4 +35,4 @@ stdenv.mkDerivation rec {
     mainProgram = "premake4";
     platforms = lib.platforms.unix;
   };
-}
+})

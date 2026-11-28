@@ -8,13 +8,13 @@
 
 mkTclDerivation (finalAttrs: {
   pname = "zesty";
-  version = "0.3";
+  version = "0.4";
 
   src = fetchFromGitHub {
     owner = "nico-robert";
     repo = "zesty";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TT6NXE2gNVoXrlVONvndrAkoUKH3kEZbuE9ncR37itc=";
+    hash = "sha256-FX7ub8DnkctRg5xd9GzWHADNshp40E6vhS4T94nLOdM=";
   };
 
   propagatedBuildInputs = [

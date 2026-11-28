@@ -110,7 +110,7 @@ in
           metrics = lib.mkEnableOption "Sending usage metrics containing the version of bluemap in use";
         };
       };
-      description = "Settings for the core.conf file, [see upstream docs](https://github.com/BlueMap-Minecraft/BlueMap/blob/master/BlueMapCommon/src/main/resources/de/bluecolored/bluemap/config/core.conf).";
+      description = "Settings for the core.conf file, [see upstream docs](https://github.com/BlueMap-Minecraft/BlueMap/blob/master/common/src/main/resources/de/bluecolored/bluemap/config/core.conf).";
     };
 
     webappSettings = mkOption {
@@ -127,7 +127,7 @@ in
           webroot = config.services.bluemap.webRoot;
         }
       '';
-      description = "Settings for the webapp.conf file, see [upstream docs](https://github.com/BlueMap-Minecraft/BlueMap/blob/master/BlueMapCommon/src/main/resources/de/bluecolored/bluemap/config/webapp.conf).";
+      description = "Settings for the webapp.conf file, see [upstream docs](https://github.com/BlueMap-Minecraft/BlueMap/blob/master/common/src/main/resources/de/bluecolored/bluemap/config/webapp.conf).";
     };
 
     webserverSettings = mkOption {
@@ -147,7 +147,7 @@ in
       default = { };
       description = ''
         Settings for the webserver.conf file, usually not required.
-        [See upstream docs](https://github.com/BlueMap-Minecraft/BlueMap/blob/master/BlueMapCommon/src/main/resources/de/bluecolored/bluemap/config/webserver.conf).
+        [See upstream docs](https://github.com/BlueMap-Minecraft/BlueMap/blob/master/common/src/main/resources/de/bluecolored/bluemap/config/webserver.conf).
       '';
     };
 
@@ -158,7 +158,7 @@ in
           options = {
             world = lib.mkOption {
               type = lib.types.path;
-              description = "Path to world folder containing the dimension to render";
+              description = "Path to the world directory.";
             };
           };
         }
@@ -166,12 +166,14 @@ in
       default = {
         "overworld" = {
           world = "${cfg.defaultWorld}";
+          dimension = "minecraft:overworld";
           ambient-light = 0.1;
           cave-detection-ocean-floor = -5;
         };
 
         "nether" = {
-          world = "${cfg.defaultWorld}/DIM-1";
+          world = "${cfg.defaultWorld}";
+          dimension = "minecraft:the_nether";
           sorting = 100;
           sky-color = "#290000";
           void-color = "#150000";
@@ -184,7 +186,8 @@ in
         };
 
         "end" = {
-          world = "${cfg.defaultWorld}/DIM1";
+          world = "${cfg.defaultWorld}";
+          dimension = "minecraft:the_end";
           sorting = 200;
           sky-color = "#080010";
           void-color = "#080010";
@@ -198,12 +201,14 @@ in
         {
           "overworld" = {
             world = "''${cfg.defaultWorld}";
+            dimension = "minecraft:overworld";
             ambient-light = 0.1;
             cave-detection-ocean-floor = -5;
           };
 
           "nether" = {
-            world = "''${cfg.defaultWorld}/DIM-1";
+            world = "''${cfg.defaultWorld}";
+            dimension = "minecraft:the_nether";
             sorting = 100;
             sky-color = "#290000";
             void-color = "#150000";
@@ -216,7 +221,8 @@ in
           };
 
           "end" = {
-            world = "''${cfg.defaultWorld}/DIM1";
+            world = "''${cfg.defaultWorld}";
+            dimension = "minecraft:the_end";
             sorting = 200;
             sky-color = "#080010";
             void-color = "#080010";
@@ -231,7 +237,7 @@ in
         Settings for files in `maps/`.
         If you define anything here you must define everything yourself.
         See the default for an example with good options for the different world types.
-        For valid values [consult upstream docs](https://github.com/BlueMap-Minecraft/BlueMap/blob/master/BlueMapCommon/src/main/resources/de/bluecolored/bluemap/config/maps/map.conf).
+        For valid values [consult upstream docs](https://github.com/BlueMap-Minecraft/BlueMap/blob/master/common/src/main/resources/de/bluecolored/bluemap/config/maps/map.conf).
       '';
     };
 
@@ -254,7 +260,7 @@ in
       description = ''
         Where the rendered map will be stored.
         Unless you are doing something advanced you should probably leave this alone and configure webRoot instead.
-        [See upstream docs](https://github.com/BlueMap-Minecraft/BlueMap/tree/master/BlueMapCommon/src/main/resources/de/bluecolored/bluemap/config/storages)
+        [See upstream docs](https://github.com/BlueMap-Minecraft/BlueMap/tree/master/common/src/main/resources/de/bluecolored/bluemap/config/storages)
       '';
       default = {
         "file" = {

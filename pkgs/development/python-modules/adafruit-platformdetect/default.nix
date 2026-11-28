@@ -7,13 +7,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "adafruit-platformdetect";
-  version = "3.89.1";
+  version = "3.91.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "adafruit_platformdetect";
     inherit (finalAttrs) version;
-    hash = "sha256-dFUtGvz3eahMpjUnoerumZXEKf9CLbFUkrrQw1mcq0s=";
+    hash = "sha256-ycOmVj0cxkwzwqT7JksQyHUqgHPGUdVG19rtDqBA3+U=";
   };
 
   build-system = [ setuptools-scm ];

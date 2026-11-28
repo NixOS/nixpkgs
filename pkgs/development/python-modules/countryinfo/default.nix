@@ -11,14 +11,21 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "countryinfo";
-  version = "1.0.1";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "porimol";
     repo = "countryinfo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PE9XiVH6XE+OSySL5Lo0MPWyIEX8xgeHQB7MttMfmz8=";
+    hash = "sha256-nd5KQdpQzRaPHwA2u8DCIWZEskODTkmG1r+piHvEEVo=";
+    # fix for case-insensitive filesystems
+    postFetch = ''
+      cd "$out/countryinfo/data"
+      cp curaçao.json "$TMPDIR/curacao.json"
+      rm -f Curaçao.json curaçao.json
+      cp "$TMPDIR/curacao.json" curaçao.json
+    '';
   };
 
   pythonRelaxDeps = [ "typer" ];

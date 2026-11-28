@@ -20,7 +20,6 @@ buildPythonPackage (finalAttrs: {
   pname = "git-dummy";
   version = "0.1.2";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "initialcommit-com";

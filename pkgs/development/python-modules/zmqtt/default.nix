@@ -12,14 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "zmqtt";
-  version = "0.2.5";
+  version = "0.2.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "faststream-community";
     repo = "zMQTT";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HMGLhrA6xRJu+OR4K4QJZM1HE4PRr7f3wegxVU5gsXc=";
+    hash = "sha256-oY6eXogzHQhnhUpy8vq1OieQfeRhOL2XSMvK5HdOGqc=";
   };
 
   postPatch = ''

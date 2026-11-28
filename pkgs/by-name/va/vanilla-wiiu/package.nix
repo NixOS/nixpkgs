@@ -24,13 +24,13 @@
 }:
 stdenv.mkDerivation {
   pname = "vanilla-wiiu";
-  version = "0-unstable-2026-09-22";
+  version = "0-unstable-2026-11-20";
 
   src = fetchFromGitHub {
     owner = "vanilla-wiiu";
     repo = "vanilla";
-    rev = "786e70914ff5edcc6e989fcb237fb04f78eb3151";
-    hash = "sha256-Di825OVklNKZ4kH4hZh/htKuWJrGjIDcLPOtJ33rvok=";
+    rev = "a2151e11c7384490ab5ef64ee125ca98c5ef106f";
+    hash = "sha256-tQvAsHo+QD3iy+cnrWu0x8abi6NYglNOU9n0j65SCAI=";
   };
 
   strictDeps = true;

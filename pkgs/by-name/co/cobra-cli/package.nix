@@ -58,7 +58,7 @@ buildGoModule (finalAttrs: {
     mainProgram = "cobra-cli";
     homepage = "https://github.com/spf13/cobra-cli/";
     changelog = "https://github.com/spf13/cobra-cli/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.afl20;
+    license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.ivankovnatsky ];
   };
 })

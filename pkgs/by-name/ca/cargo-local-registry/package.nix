@@ -9,6 +9,7 @@
   zlib,
   versionCheckHook,
   nix-update-script,
+  sqlite,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -34,6 +35,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libgit2
     openssl
     zlib
+    sqlite
   ];
 
   # tests require internet access

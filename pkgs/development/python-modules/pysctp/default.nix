@@ -10,7 +10,6 @@ buildPythonPackage (finalAttrs: {
   pname = "pysctp";
   version = "0.7.3";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "P1sec";

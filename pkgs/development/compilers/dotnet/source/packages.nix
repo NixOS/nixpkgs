@@ -87,7 +87,24 @@ let
 
         runHook postInstall
       '';
+
+      meta = {
+        inherit (vmr.meta)
+          homepage
+          license
+          maintainers
+          platforms
+          ;
+      };
     };
+
+  mkHostPackage =
+    pname: version:
+    (mkPackage pname version).overrideAttrs (old: {
+      meta = old.meta // {
+        platforms = [ stdenvNoCC.hostPlatform.system ];
+      };
+    });
 
   packages = [
     (mkPackage "Microsoft.AspNetCore.App.Ref" aspnetcore.version)
@@ -95,10 +112,10 @@ let
     (mkPackage "Microsoft.NETCore.App.Ref" runtime.version)
     (mkPackage "Microsoft.DotNet.ILCompiler" runtime.version)
     (mkPackage "Microsoft.NET.ILLink.Tasks" runtime.version)
-    (mkPackage "Microsoft.NETCore.App.Crossgen2.${hostRid}" runtime.version)
+    (mkHostPackage "Microsoft.NETCore.App.Crossgen2.${hostRid}" runtime.version)
   ]
   ++ lib.optional vmr.hasILCompiler (
-    mkPackage "runtime.${hostRid}.Microsoft.DotNet.ILCompiler" runtime.version
+    mkHostPackage "runtime.${hostRid}.Microsoft.DotNet.ILCompiler" runtime.version
   )
   ++ lib.optionals (lib.versionOlder runtime.version "9") [
     (mkPackage "Microsoft.NETCore.DotNetHost" runtime.version)
@@ -109,18 +126,18 @@ let
 
   targetPackages = fallbackTargetPackages // {
     ${hostRid} = [
-      (mkPackage "Microsoft.AspNetCore.App.Runtime.${hostRid}" aspnetcore.version)
-      (mkPackage "Microsoft.NETCore.App.Host.${hostRid}" runtime.version)
-      (mkPackage "Microsoft.NETCore.App.Runtime.${hostRid}" runtime.version)
-      (mkPackage "runtime.${hostRid}.Microsoft.NETCore.DotNetAppHost" runtime.version)
+      (mkHostPackage "Microsoft.AspNetCore.App.Runtime.${hostRid}" aspnetcore.version)
+      (mkHostPackage "Microsoft.NETCore.App.Host.${hostRid}" runtime.version)
+      (mkHostPackage "Microsoft.NETCore.App.Runtime.${hostRid}" runtime.version)
+      (mkHostPackage "runtime.${hostRid}.Microsoft.NETCore.DotNetAppHost" runtime.version)
     ]
     ++ lib.optionals (lib.versionOlder runtime.version "9") [
-      (mkPackage "runtime.${hostRid}.Microsoft.NETCore.DotNetHost" runtime.version)
-      (mkPackage "runtime.${hostRid}.Microsoft.NETCore.DotNetHostPolicy" runtime.version)
-      (mkPackage "runtime.${hostRid}.Microsoft.NETCore.DotNetHostResolver" runtime.version)
+      (mkHostPackage "runtime.${hostRid}.Microsoft.NETCore.DotNetHost" runtime.version)
+      (mkHostPackage "runtime.${hostRid}.Microsoft.NETCore.DotNetHostPolicy" runtime.version)
+      (mkHostPackage "runtime.${hostRid}.Microsoft.NETCore.DotNetHostResolver" runtime.version)
     ]
     ++ lib.optionals (lib.versionAtLeast runtime.version "10") [
-      (mkPackage "Microsoft.NETCore.App.Runtime.NativeAOT.${hostRid}" runtime.version)
+      (mkHostPackage "Microsoft.NETCore.App.Runtime.NativeAOT.${hostRid}" runtime.version)
     ];
   };
 

@@ -14,15 +14,14 @@
 
 buildPythonPackage rec {
   pname = "sphinx-automodapi";
-  version = "0.22.0";
+  version = "0.22.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "astropy";
     repo = "sphinx-automodapi";
     tag = "v${version}";
-    hash = "sha256-L+noKcyhT3wsbgdgyd29I9yCN81BlB8Fvfyl4fKioEw=";
-    leaveDotGit = true;
+    hash = "sha256-GQWZl9KsofeCQkpNXENSsmNtKXlnYImlK2E4J8hDRnw=";
   };
 
   build-system = [ setuptools-scm ];

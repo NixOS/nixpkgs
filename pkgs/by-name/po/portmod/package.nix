@@ -6,10 +6,12 @@
   git,
   imagemagick,
   openmw,
+  pkg-config,
   python3Packages,
   rustPlatform,
   tes3cmd,
   tr-patcher,
+  zstd,
 }:
 
 let
@@ -29,8 +31,11 @@ let
     cargoHash = "sha256-KVs1LqwsfWaQb91mhlyKMAh0uDEDDAJHsUSLMIfJq18=";
 
     nativeBuildInputs = [
+      pkg-config
       python3Packages.python
     ];
+
+    buildInputs = [ zstd ];
 
     doCheck = false;
   };

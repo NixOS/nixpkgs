@@ -19,8 +19,8 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   pyproject = false;
 
   src = fetchFromGitLab {
-    domain = "gitlab.postmarketos.org";
-    owner = "postmarketOS";
+    domain = "gitlab.nura.eco";
+    owner = "nura";
     repo = "powersupply";
     rev = finalAttrs.version;
     hash = "sha256-i0AZfxYWj8ct2jiXl2GnCGMU3xBSRRny4H0G/5Qs14Y=";
@@ -52,7 +52,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
   meta = {
     description = "Graphical app to display power status of mobile Linux platforms";
-    homepage = "https://gitlab.postmarketos.org/postmarketOS/powersupply";
+    homepage = "https://gitlab.nura.eco/nura/powersupply";
     license = lib.licenses.mit;
     mainProgram = "powersupply";
     platforms = lib.platforms.linux;

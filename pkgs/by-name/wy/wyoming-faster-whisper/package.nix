@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "wyoming-faster-whisper";
-  version = "3.8.1";
+  version = "3.9.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "OHF-Voice";
     repo = "wyoming-faster-whisper";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ciWOlcfYoA1/njH0k7oxgiJZYxRJpbAk6leWW9MFpg4=";
+    hash = "sha256-cNfMNyt+q9vBVuto+a/DCJwV+GH3QOLVEw2MUSRlNX4=";
   };
 
   build-system = with python3Packages; [
@@ -21,11 +21,13 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   pythonRelaxDeps = [
+    "av"
     "faster-whisper"
     "wyoming"
   ];
 
   dependencies = with python3Packages; [
+    av
     faster-whisper
     pysilero-vad
     wyoming

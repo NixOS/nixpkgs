@@ -8,7 +8,6 @@
   json-glib,
   libexif,
   libfm-qt,
-  menu-cache,
   qtbase,
   qttools,
   qtwayland,
@@ -18,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lxqt-archiver";
-  version = "1.4.0";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "lxqt-archiver";
     rev = version;
-    hash = "sha256-f8s29INIJeqmPr6BWqQxYWWkjbG1wy+bUYZSy2OECKg=";
+    hash = "sha256-Nvko9uwjI4+bM5d0iIzD5kWkqU+SFVfgnTNIadYsMqU=";
   };
 
   nativeBuildInputs = [
@@ -39,7 +38,6 @@ stdenv.mkDerivation rec {
     json-glib
     libexif
     libfm-qt
-    menu-cache
     qtbase
     qtwayland
   ];

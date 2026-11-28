@@ -11,7 +11,6 @@ buildPythonPackage (finalAttrs: {
   pname = "smg-grpc-proto";
   version = "0.4.14";
   pyproject = true;
-  __structuredAttrs = true;
 
   # No tags on GitHub
   src = fetchPypi {
@@ -20,6 +19,14 @@ buildPythonPackage (finalAttrs: {
     inherit (finalAttrs) version;
     hash = "sha256-qOoghyk0RyyU/6GSuvsqT3G8WRq0v7JAy1Z4ASEPvA8=";
   };
+
+  # Remove the grpcio-tools cap; that's required for upstream's CI
+  # because they use protobuf 6, nixpkgs' tools already produce
+  # protobuf 7.
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail '"grpcio-tools>=1.81.1,<1.82"' '"grpcio-tools"'
+  '';
 
   build-system = [
     grpcio-tools

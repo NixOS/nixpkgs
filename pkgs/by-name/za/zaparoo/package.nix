@@ -1,45 +1,63 @@
 {
   lib,
+  alsa-lib,
   buildGoModule,
   fetchFromGitHub,
+  fetchpatch,
   fetchurl,
+  stdenv,
   versionCheckHook,
   nix-update-script,
+  pcsclite,
   pkg-config,
   libusb1,
   libnfc,
+  libpulseaudio,
+  sqlite,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "zaparoo";
-  version = "2.5.1";
+  version = "2.23.0";
 
   src = fetchFromGitHub {
     owner = "ZaparooProject";
     repo = "zaparoo-core";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-U/MNK8K7XAEuIa06mjJdUJRKHUFWqH7BFhAgJCbdj/s=";
+    hash = "sha256-hcHnOK9XkWBWfteOnGHN9Axrys+Ccmzk1uFUkd0Dvog=";
   };
 
-  vendorHash = "sha256-UTMYZ8la4VsxIVjcRg8l1yGy52CRjv/6WZQgHJ+oFdE=";
+  patches = [
+    # Report the install as managed by a package manager, so it doesn't offer to replace itself
+    (fetchpatch {
+      url = "https://github.com/ZaparooProject/zaparoo-core/commit/aec6bfb003a671484a80baea86e66acfffe0fcb2.patch";
+      hash = "sha256-ZSKgm6stLmKTRcxohGj/gz2KqxGHYIXpmKfJX272UmM=";
+    })
+  ];
 
-  webUIVersion = "1.8.0";
+  vendorHash = "sha256-Cc1FkZrH9pfm4gUKCPOxrrbbQZPJCfp8/18fn/4hSi8=";
+
+  webUIVersion = "2.0.3";
   webUI = fetchurl {
-    url = "https://github.com/ZaparooProject/zaparoo-app/releases/download/v${finalAttrs.webUIVersion}/zaparoo_app-web-${finalAttrs.webUIVersion}.tar.gz";
-    hash = "sha256-77QyMFbx73vaKIRDCnhdqDXBb8MfQSsCWghe3XEL0tk=";
+    url = "https://github.com/ZaparooProject/zaparoo-app/releases/download/v${finalAttrs.webUIVersion}/zaparoo_app-web-core-${finalAttrs.webUIVersion}.tar.gz";
+    hash = "sha256-zC0oWgelAp4Hkh0s9CRcsF82fe2iVHm7zSbWKZ/doyM=";
   };
 
-  subPackages = [ "cmd/linux" ];
+  subPackages = [ (if stdenv.hostPlatform.isDarwin then "cmd/mac" else "cmd/linux") ];
 
   tags = [
+    "libsqlite3"
     "netgo"
     "osusergo"
     "sqlite_omit_load_extension"
+    "validator_novalidatefn"
+    "expr_static_methods"
   ];
 
   ldflags = [
     "-s"
-    "-X github.com/ZaparooProject/zaparoo-core/pkg/config.AppVersion=${finalAttrs.version}"
+    "-X github.com/ZaparooProject/zaparoo-core/v2/pkg/config.AppVersion=${finalAttrs.version}"
+    "-X github.com/ZaparooProject/zaparoo-core/v2/pkg/config.PackageManaged=true"
   ];
 
   env.CGO_ENABLED = 1;
@@ -49,6 +67,9 @@ buildGoModule (finalAttrs: {
   ];
 
   buildInputs = [
+    sqlite
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     libusb1
     libnfc
   ];
@@ -58,8 +79,24 @@ buildGoModule (finalAttrs: {
     tar xf ${finalAttrs.webUI} -C pkg/assets/_app/dist/
   '';
 
+  postConfigure = ''
+    go run ./scripts/compress-app
+  '';
+
   postInstall = ''
-    mv $out/bin/linux $out/bin/zaparoo
+    mv $out/bin/${if stdenv.hostPlatform.isDarwin then "mac" else "linux"} $out/bin/zaparoo
+  '';
+
+  # Loaded with dlopen: PC/SC for CCID readers, ALSA and PulseAudio for sounds
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
+    patchelf $out/bin/zaparoo \
+      --add-rpath ${
+        lib.makeLibraryPath [
+          alsa-lib
+          libpulseaudio
+          pcsclite
+        ]
+      }
   '';
 
   nativeInstallCheckInputs = [

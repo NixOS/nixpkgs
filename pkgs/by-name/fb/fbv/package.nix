@@ -4,7 +4,7 @@
   fetchFromGitHub,
   getopt,
   libjpeg,
-  libpng12,
+  libpng,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     getopt
     libjpeg
-    libpng12
+    libpng
   ];
 
   enableParallelBuilding = true;

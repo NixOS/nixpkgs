@@ -1,0 +1,89 @@
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  hatchling,
+
+  # dependencies
+  defusedxml,
+  httpx,
+  platformdirs,
+  protego,
+  pydantic,
+  pyyaml,
+  rich,
+  typer,
+
+  # optional-dependencies
+  xlsxwriter,
+
+  # tests
+  openpyxl,
+  pytest-asyncio,
+  pytestCheckHook,
+  respx,
+  writableTmpDirAsHomeHook,
+}:
+
+buildPythonPackage (finalAttrs: {
+  pname = "shopify-spy";
+  version = "0.5.1";
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "ndgigliotti";
+    repo = "shopify-spy";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-P7ktj/I9C4OjnIzeHfK/z+/jkbgz88AG9G03qzobk2w=";
+  };
+
+  build-system = [ hatchling ];
+
+  dependencies = [
+    defusedxml
+    httpx
+    platformdirs
+    protego
+    pydantic
+    pyyaml
+    rich
+    typer
+  ]
+  ++ httpx.optional-dependencies.socks;
+
+  optional-dependencies = {
+    excel = [ xlsxwriter ];
+  };
+
+  nativeCheckInputs = [
+    openpyxl
+    pytest-asyncio
+    pytestCheckHook
+    respx
+    writableTmpDirAsHomeHook
+  ]
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
+
+  disabledTestMarks = [
+    # Calls real stores
+    "integration"
+    # Runs the CLI against local servers with tight timeouts
+    "e2e"
+  ];
+
+  # Tests that start a local HTTP server fail in the Darwin sandbox without this
+  __darwinAllowLocalNetworking = true;
+
+  pythonImportsCheck = [ "shopify_spy" ];
+
+  meta = {
+    description = "Python library and CLI to scrape product data, images, and collections from Shopify and WooCommerce stores";
+    homepage = "https://github.com/ndgigliotti/shopify-spy";
+    changelog = "https://github.com/ndgigliotti/shopify-spy/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ndgigliotti ];
+    mainProgram = "shopify-spy";
+  };
+})

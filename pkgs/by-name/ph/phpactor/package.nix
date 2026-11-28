@@ -7,16 +7,16 @@
 }:
 php.buildComposerProject2 (finalAttrs: {
   pname = "phpactor";
-  version = "2026.10.07.0";
+  version = "2026.11.22.0";
 
   src = fetchFromGitHub {
     owner = "phpactor";
     repo = "phpactor";
     tag = finalAttrs.version;
-    hash = "sha256-FjwZpdJTHQkRHZpz69UQvY4a7pqUtkLaBBdv4IhUHas=";
+    hash = "sha256-q07GlPSojnhgp7U1YwJO5NDYmK9gZhswXebdQ8UGXxY=";
   };
 
-  vendorHash = "sha256-69gpQa5Ro/r6e6mWUmHdhSYKumRUIQugckDMPZE8m64=";
+  vendorHash = "sha256-Zh6hBxFyv5Qs6yhadUYAq2bAmF8x8zDVzzj1McY+uqc=";
 
   nativeBuildInputs = [ installShellFiles ];
 

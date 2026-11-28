@@ -8,7 +8,7 @@
   pandas,
   matplotlib,
   nbval,
-  pyvisa,
+  pyvisa-py,
   networkx,
   ipython,
   ipykernel,
@@ -25,16 +25,16 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "scikit-rf";
-  version = "1.9.0";
+  version = "2.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scikit-rf";
     repo = "scikit-rf";
-    tag = "v${version}";
-    hash = "sha256-iOKTQOOJTsj6YIQaJVWFcp9HdUEj43aytpo7VzItxr8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-g8JDTGwvijnS0LJBHn50gdfahqMovs+A1uWDAyZdHu0=";
   };
 
   build-system = [ setuptools ];
@@ -51,7 +51,7 @@ buildPythonPackage rec {
     plot = [ matplotlib ];
     xlsx = [ openpyxl ];
     netw = [ networkx ];
-    visa = [ pyvisa ];
+    visa = [ pyvisa-py ];
     docs = [
       ipython
       ipykernel
@@ -69,23 +69,17 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-mock
-    matplotlib
-    pyvisa
-    openpyxl
-    networkx
     pytestCheckHook
     pytest-cov-stub
     writableTmpDirAsHomeHook
-  ];
+  ]
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   pytestFlags = [ "-Wignore::pytest.PytestUnraisableExceptionWarning" ];
 
-  disabledTests = [
-    # numpy.exceptions.VisibleDeprecationWarning: dtype(): align should be
-    #  passed as Python or NumPy boolean but got `align=0`
-    "test_constructor_from_pathlib"
-    "test_constructor_from_pickle"
-    "test_constructor_from_touchstone_special_encoding"
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # Tests for an exact 0 but gets 1.6e-17
+    "test_passivity"
   ];
 
   pythonImportsCheck = [ "skrf" ];
@@ -93,8 +87,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for RF/Microwave engineering";
     homepage = "https://scikit-rf.org/";
-    changelog = "https://github.com/scikit-rf/scikit-rf/releases/tag/${src.tag}";
+    changelog = "https://github.com/scikit-rf/scikit-rf/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ lugarun ];
   };
-}
+})

@@ -3,39 +3,57 @@
   stdenv,
   fetchFromGitHub,
   autoreconfHook,
-  gettext,
+  c-ares,
+  curl,
+  libbsd,
   libev,
+  libseccomp,
+  openssl,
   pcre2,
+  perl,
   pkg-config,
-  udns,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sniproxy";
-  version = "0.7.0";
+  version = "0.26.0";
 
+  # Upstream dlundquist/sniproxy stopped releasing at 0.7.0.
+  # That version is vulnerable CVE-2026-119760.
+  # The fork is the maintained version. It contains additional hardening and
+  # better dependencies.
   src = fetchFromGitHub {
-    owner = "dlundquist";
+    owner = "renaudallard";
     repo = "sniproxy";
     tag = finalAttrs.version;
-    hash = "sha256-TUXwixnBFdegYRzeXlLVno2M3gVXyCw5Jdfb9ulOROs=";
+    hash = "sha256-Ze4TuWU7u6EkuW4CxTpxm1IsND4aEZh7sztu7hnLvwk=";
   };
-
-  patches = [ ./gettext-0.25.patch ];
 
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
   ];
   buildInputs = [
-    gettext
+    c-ares
+    libbsd
     libev
+    libseccomp
+    openssl
     pcre2
-    udns
   ];
 
+  postPatch = ''
+    patchShebangs tests
+  '';
+
+  nativeCheckInputs = [
+    curl
+    perl
+  ];
+  doCheck = true;
+
   meta = {
-    homepage = "https://github.com/dlundquist/sniproxy";
+    homepage = "https://github.com/renaudallard/sniproxy";
     description = "Transparent TLS and HTTP layer 4 proxy with SNI support";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [

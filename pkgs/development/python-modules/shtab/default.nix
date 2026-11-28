@@ -55,7 +55,7 @@ buildPythonPackage (finalAttrs: {
     mainProgram = "shtab";
     homepage = "https://tqdm.github.io/shtab/";
     changelog = "https://github.com/tqdm/shtab/releases/tag/${finalAttrs.src.tag}";
-    license = lib.licenses.asl20;
+    license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ fab ];
   };
 })

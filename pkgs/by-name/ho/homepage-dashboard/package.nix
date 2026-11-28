@@ -31,13 +31,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "homepage-dashboard";
-  version = "2.6.0";
+  version = "2.8.0";
 
   src = fetchFromGitHub {
     owner = "gethomepage";
     repo = "homepage";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9KzQnayvl0uSHHTiapWBnwSFDYyFgnq91QQaMJsPcrE=";
+    hash = "sha256-kKCAOpOrEGJULjRyzLtko7uReujJPwsVtSB+s14DVRU=";
   };
 
   pnpmDeps = fetchPnpmDeps {
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     pnpm = pnpm_10;
     fetcherVersion = 3;
-    hash = "sha256-zkayZVz+5fO4Wb3hzvMcqJVMEeFWUi9PsBycYI+gXpM=";
+    hash = "sha256-FPiP4XrcUadVhDQYCsH683VWSzj6+uwKUIAKt6iB0hw=";
   };
 
   nativeBuildInputs = [

@@ -7,6 +7,7 @@
   pkg-config,
   libiconv,
   protobuf,
+  rust-jemalloc-sys,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -23,6 +24,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     openssl.dev
+    rust-jemalloc-sys
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv

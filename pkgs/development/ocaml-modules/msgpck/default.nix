@@ -13,7 +13,7 @@ buildDunePackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "vbmithr";
     repo = "ocaml-msgpck";
-    rev = "${finalAttrs.version}";
+    tag = "${finalAttrs.version}";
     hash = "sha256-gBHIiicmk/5KBkKzRKyV0ymEH8dGCZG8vfE0mtpcDCM=";
   };
 

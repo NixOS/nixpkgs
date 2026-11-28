@@ -24,6 +24,7 @@ buildPythonPackage (finalAttrs: {
 
   pythonRelaxDeps = [
     "chardet"
+    "karton-core"
     "python-magic"
   ];
 
@@ -54,7 +55,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "File type classifier for the Karton framework";
     homepage = "https://github.com/CERT-Polska/karton-classifier";
-    changelog = "https://github.com/CERT-Polska/karton-classifier/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/CERT-Polska/karton-classifier/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "karton-classifier";

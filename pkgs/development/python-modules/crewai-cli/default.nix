@@ -41,9 +41,8 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "crewai-cli";
-  version = "1.15.18";
+  version = "1.15.45";
   pyproject = true;
-  __structuredAttrs = true;
 
   inherit (crewai-core) src;
 
@@ -54,16 +53,9 @@ buildPythonPackage (finalAttrs: {
   ];
 
   pythonRelaxDeps = [
-    "click"
-    "crewai-core"
     "pydantic"
-    "pydantic-settings"
-    "pyjwt"
-    "python-dotenv"
-    "textual"
     "tomli"
     "tomli-w"
-    "uv"
   ];
   dependencies = [
     appdirs

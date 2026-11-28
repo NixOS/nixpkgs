@@ -32,6 +32,11 @@ buildPythonPackage rec {
 
   build-system = [ uv-build ];
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build==0.11.*" uv_build
+  '';
+
   dependencies = [
     geopandas
     matplotlib

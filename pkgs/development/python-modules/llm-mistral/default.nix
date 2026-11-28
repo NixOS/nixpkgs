@@ -3,26 +3,25 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
-  httpx,
-  httpx-sse,
+  httpx2-pytest,
   llm,
   llm-mistral,
+  mistralai,
   pytestCheckHook,
   pytest-asyncio,
-  pytest-httpx,
   writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "llm-mistral";
-  version = "0.15";
+  version = "0.16";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "simonw";
     repo = "llm-mistral";
     tag = version;
-    hash = "sha256-4ajvsq0sm3/vdiHUuNxHsHKdX58VNNpHIwhWI0ws+08=";
+    hash = "sha256-I625+DNJxsqRzCGxb069d/AAqDxz49w7ifQPUx25ktA=";
   };
 
   build-system = [
@@ -30,15 +29,14 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    httpx
-    httpx-sse
     llm
+    mistralai
   ];
 
   nativeCheckInputs = [
+    httpx2-pytest
     pytestCheckHook
     pytest-asyncio
-    pytest-httpx
     writableTmpDirAsHomeHook
   ];
 

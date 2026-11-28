@@ -69,6 +69,7 @@
   libxcb,
   zlib,
   directoryListingUpdater,
+  buildPackages,
 }:
 let
   lua = lua5_2_compat;
@@ -93,7 +94,9 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     check
     wayland-scanner
-  ];
+  ]
+  # cross builds need native `eolian_gen`
+  ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) buildPackages.enlightenment.efl;
 
   buildInputs = [
     fontconfig

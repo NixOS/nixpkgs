@@ -1,24 +1,32 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   dulwich,
   pbr,
   sphinx,
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "openstackdocstheme";
   version = "3.6.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-U6+ltUGULIsyA0cD8gY5aR1FBI2meSb9vvUl3zV84NA=";
+  src = fetchFromGitHub {
+    owner = "openstack";
+    repo = "openstackdocstheme";
+    tag = finalAttrs.version;
+    hash = "sha256-Br8lY9kgWHQIm1Di2W7vVygVk/SRFOXottVHX8kZ9GA=";
   };
 
+  # Manually set version since pbr wants to get it from git (not in a tarball)
+  env.PBR_VERSION = finalAttrs.version;
+
   postPatch = ''
+    # pbr needs git to ship subpackages and package data
+    echo "recursive-include openstackdocstheme *" > MANIFEST.in
+
     patchShebangs bin/
   '';
 
@@ -41,4 +49,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     teams = [ lib.teams.openstack ];
   };
-}
+})

@@ -50,14 +50,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "budgie-desktop";
-  version = "10.10.3";
+  version = "10.10.4";
 
   src = fetchFromGitHub {
     owner = "BuddiesOfBudgie";
     repo = "budgie-desktop";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-WEUFB3Q3RQZfsZd/xUn6qmGXPM/dR3sUe6pBnJG3vIk=";
+    hash = "sha256-YMycbv9tllWSZyxPiRTJpelH1LeiO6YVyApKxw4BUhE=";
   };
 
   outputs = [

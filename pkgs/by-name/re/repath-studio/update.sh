@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p curl jq nix-update gitMinimal diffutils gnused
+#!nix-shell -i bash -p curl jq nix-update gitMinimal diffutils gnused common-updater-scripts
 
 set -x
 set -eou pipefail
@@ -60,6 +60,28 @@ sed -i "0,/:deps {/s|:deps {|:deps {org.clojure/clojure {:mvn/version \"$clj_ver
 diff -u --label=a/deps.edn --label=b/deps.edn a/deps.edn b/deps.edn >"$PATCH_CLJ_FILE" || true
 
 rm -rf a b
+
+# pyodide dependencies
+
+pyodide_version="$(jq -r '.devDependencies.pyodide // .dependencies.pyodide' "$src/package.json")"
+pyodide_lock="$(curl -sL "https://registry.npmjs.org/pyodide/-/pyodide-${pyodide_version}.tgz" | tar -zxOf - package/pyodide-lock.json)"
+
+update_pyodide_dep() {
+  local repo="$1"
+  local src_attr="$2"
+
+  local version
+  version="$(jq -r --arg r "$repo" '.packages[$r].version' <<<"$pyodide_lock")"
+  local current_rev
+  current_rev="$(nix-instantiate --eval -E "let pkgs = import $NIXPKGS_PATH {}; in pkgs.repath-studio.passthru.$src_attr.rev" | tr -d '"')"
+
+  if [[ -n "$version" && "$version" != "null" && "$current_rev" != "v$version" ]]; then
+    (cd "$NIXPKGS_PATH" && update-source-version repath-studio --source-key="passthru.$src_attr" --rev="v$version" --ignore-same-version)
+  fi
+}
+
+update_pyodide_dep jedi jediSrc
+update_pyodide_dep parso parsoSrc
 
 # clojure home
 

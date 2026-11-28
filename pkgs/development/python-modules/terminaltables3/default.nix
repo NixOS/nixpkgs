@@ -5,26 +5,28 @@
   colorclass,
   fetchFromGitHub,
   poetry-core,
+  pyprojectVersionPatchHook,
   pytest-cov-stub,
   pytest-xdist,
   pytestCheckHook,
   termcolor,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "terminaltables3";
-  version = "4.0.0-unstable-2024-07-21";
+  version = "4.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "matthewdeanmartin";
     repo = "terminaltables3";
-    #tag = "v${version}";
-    rev = "f1c465b36eb9b91a984d8864b21376e7c37075b8";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-UcEovh1Eb4QNPwLGDjCphPlJSSkOdhCJ2fK3tuSWOTc=";
   };
 
   build-system = [ poetry-core ];
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   nativeCheckInputs = [
     colorama
@@ -48,8 +50,8 @@ buildPythonPackage rec {
   meta = {
     description = "Generate simple tables in terminals from a nested list of strings";
     homepage = "https://github.com/matthewdeanmartin/terminaltables3";
-    changelog = "https://github.com/matthewdeanmartin/terminaltables3/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/matthewdeanmartin/terminaltables3/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

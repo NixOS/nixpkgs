@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonOlder,
 
   # build-system
   cython,
@@ -11,6 +12,7 @@
   # dependencies
   aiohappyeyeballs,
   async-interrupt,
+  backports-zstd,
   chacha20poly1305-reuseable,
   cryptography,
   noiseprotocol,
@@ -27,20 +29,19 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aioesphomeapi";
-  version = "46.6.0"; # must track the major version that home-assistant pins
+  version = "46.27.0"; # must track the major version that home-assistant pins
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "esphome";
     repo = "aioesphomeapi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-C2bbgVjuHcGpEm6bJ6zQSm8gMJZkvURBltGMXBYjkh8=";
+    hash = "sha256-IRV6yZqP56+3JiY84BQHFsuyj+gOO9gCOvj63uzo+IE=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools>=83.0.0" setuptools \
-      --replace-fail "Cython>=3.2.9" Cython
+      --replace-fail 'setuptools>=84.2.0' setuptools
   '';
 
   build-system = [
@@ -63,6 +64,9 @@ buildPythonPackage (finalAttrs: {
     tzdata
     tzlocal
     zeroconf
+  ]
+  ++ lib.optionals (pythonOlder "3.14") [
+    backports-zstd
   ];
 
   nativeCheckInputs = [

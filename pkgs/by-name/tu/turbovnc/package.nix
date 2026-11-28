@@ -46,19 +46,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "turbovnc";
-  version = "3.3.1";
+  version = "3.3.2";
 
   src = fetchFromGitHub {
     owner = "TurboVNC";
     repo = "turbovnc";
     rev = finalAttrs.version;
-    hash = "sha256-Z8VqV2gckTCJrHxrjVMKB/MqH9LvM7lST8QeYTKm4aA=";
+    hash = "sha256-NaQwupgCNTIAyIoxCFjJu8QZIp3UynybCYyiBEIPj2s=";
   };
 
   # Notes:
   # * SSH support does not require `openssh` on PATH, because turbovnc
   #   uses a built-in SSH client ("JSch fork"), as commented on e.g.:
-  #   https://github.com/TurboVNC/turbovnc/releases/tag/3.3.1
+  #   https://github.com/TurboVNC/turbovnc/releases/tag/3.3.2
   #
   # TODO:
   # * Build outputs that are unclear:
@@ -123,7 +123,7 @@ stdenv.mkDerivation (finalAttrs: {
     # use system libs
     # TurboVNC >= 3.1.4 no longer needs overrides to use system libraries
     # instead of bundling them, see
-    # https://github.com/TurboVNC/turbovnc/releases/tag/3.3.1:
+    # https://github.com/TurboVNC/turbovnc/releases/tag/3.3.2:
     # >  The TVNC_SYSTEMLIBS and TVNC_SYSTEMX11 CMake variables have been removed,
     # > and the build system now behaves as if those variables are always on.
     # > A new CMake variable (TVNC_ZLIBNG) can be used on x86 platforms

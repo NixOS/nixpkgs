@@ -14,8 +14,6 @@ buildPythonPackage (finalAttrs: {
   version = "5.0.1";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "jamesrhester";
     repo = "pycifrw";

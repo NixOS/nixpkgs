@@ -66,7 +66,11 @@ in
 
       package = lib.mkPackageOption pkgs "gerrit" { };
 
-      jvmPackage = lib.mkPackageOption pkgs "jdk21_headless" { };
+      jvmPackage =
+        if (lib.versionAtLeast cfg.package.version "3.15.0") then
+          lib.mkPackageOption pkgs "jdk25_headless" { }
+        else
+          lib.mkPackageOption pkgs "jdk21_headless" { };
 
       jvmOpts = lib.mkOption {
         type = lib.types.listOf lib.types.str;

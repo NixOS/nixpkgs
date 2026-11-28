@@ -34,15 +34,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   preBuild = ''
     substituteInPlace Makefile \
-      --replace "/lib/modules" "${kernel.dev}/lib/modules"
+      --replace-fail "/lib/modules" "${kernel.dev}/lib/modules"
   '';
 
-  makeFlags = kernelModuleMakeFlags;
+  makeFlags = kernelModuleMakeFlags ++ [
+    "INSTALL_MOD_PATH=${placeholder "out"}"
+    "INSTALL_MOD_DIR=kernel/misc"
+    "INSTALL_MOD_STRIP=1"
+    "DEPMOD=true"
+  ];
 
-  installPhase = ''
-    mkdir -p $out/lib/modules/${kernel.modDirVersion}/misc
-    cp bbswitch.ko $out/lib/modules/${kernel.modDirVersion}/misc
-
+  postInstall = ''
     mkdir -p $out/bin
     tee $out/bin/discrete_vga_poweroff << EOF
     #!${runtimeShell}
@@ -56,6 +58,13 @@ stdenv.mkDerivation (finalAttrs: {
     EOF
     chmod +x $out/bin/discrete_vga_poweroff $out/bin/discrete_vga_poweron
   '';
+
+  installFlags = [
+    "-C ${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+    "M=$(PWD)"
+  ];
+
+  installTargets = [ "modules_install" ];
 
   meta = {
     description = "Module for powering off hybrid GPUs";

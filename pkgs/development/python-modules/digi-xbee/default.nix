@@ -11,7 +11,6 @@ buildPythonPackage (finalAttrs: {
   pname = "digi-xbee";
   version = "1.5.0";
 
-  __structuredAttrs = true;
   pyproject = true;
 
   src = fetchPypi {

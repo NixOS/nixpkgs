@@ -5,6 +5,7 @@
   fetchFromGitHub,
   # Build system
   poetry-core,
+  pyprojectVersionPatchHook,
   # Dependencies
   numpy,
   requests,
@@ -40,6 +41,8 @@ buildPythonPackage rec {
       --replace-fail "poetry>=0.12" "poetry-core>=0.12" \
       --replace-fail "poetry.masonry.api" "poetry.core.masonry.api"
   '';
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   nativeCheckInputs = [
     pytestCheckHook

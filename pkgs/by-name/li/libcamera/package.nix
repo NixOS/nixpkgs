@@ -32,18 +32,21 @@
   libjpeg,
   libtiff,
   SDL2,
+
+  # for passthru.tests
+  pipewire,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libcamera";
-  version = "0.7.2";
+  version = "0.8.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "camera";
     repo = "libcamera";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vhFkeT1j2KKm+CVvGrtH5BEYJSEdaX7N7DRdA0a9EWk=";
+    hash = "sha256-HPQZEzxH1QqmNpMVvKeYl2o7rxfNNP+npCyzYHYyFP8=";
   };
 
   outputs = [
@@ -166,7 +169,10 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     updateScript = nix-update-script { };
 
-    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    tests = {
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+      inherit pipewire;
+    };
   };
 
   meta = {
@@ -181,7 +187,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     maintainers = with lib.maintainers; [
       citadelcore
-      tmarkus
+      AAAAAASomeThingsFailToEvaluate
     ];
     platforms = lib.platforms.linux;
     badPlatforms = [

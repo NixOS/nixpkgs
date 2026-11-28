@@ -7,14 +7,21 @@
 wsjtx.overrideAttrs (
   finalAttrs: old: {
     pname = "wsjtz";
-    version = "2.0.18";
+    version = "2.0.19";
 
     src = fetchFromGitHub {
       owner = "sq9fve";
       repo = "wsjt-z";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-YxO4pSdKKeO0Ye7Ay/0gdjPvceLbC5eMQk1ZBh1ZHCw=";
+      hash = "sha256-E2uXkGP+7I4ToUcKhQ5lwDN5q88IH7x6tzUkUgX8uDc=";
     };
+
+    # GCC 16 warns about uninitialized fields in HRDTransceiver's placement-new
+    # message handling. Upstream's -Werror turns these warnings into build failures.
+    postPatch = (old.postPatch or "") + ''
+      substituteInPlace CMakeLists.txt \
+        --replace-fail " -Werror " " "
+    '';
 
     postInstall = ''
       mv $out/bin/wsjtx $out/bin/wsjtz

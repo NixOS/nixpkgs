@@ -11,12 +11,12 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "tika";
-  version = "3.3.2";
+  version = "3.4.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-RopTAiSRYjUfZc/gVjLThpwDUNcmrvgqdeewT6XKyKs=";
+    hash = "sha256-Xoq88QCmElU6ezFn3QgR39cGHeSLZjtZHpgTH3OHtlM=";
   };
 
   build-system = [ setuptools ];
@@ -29,9 +29,9 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  # Only test that does not require network
   enabledTestPaths = [
-    "tika/tests/test_from_file_service.py::CreateTest::test_remote_endpoint"
+    # Only test that does not require network
+    "tests/test_from_file_service.py::test_remote_endpoint"
   ];
 
   pythonImportsCheck = [ "tika" ];

@@ -1,54 +1,91 @@
 {
   lib,
+  stdenv,
+  bun,
   nodejs_22,
-  buildNpmPackage,
-  buildGoModule,
   fetchFromGitHub,
+  writableTmpDirAsHomeHook,
 }:
 
 let
-  # The node build requires its pinned esbuild version
-  esbuild = buildGoModule rec {
-    pname = "esbuild";
-    version = "0.16.10";
-
-    src = fetchFromGitHub {
-      owner = "evanw";
-      repo = "esbuild";
-      tag = "v${version}";
-      hash = "sha256-plcI3p/m1tPODZNcBoP/kc3avO11oXww7NIA9wdX+Pc=";
-    };
-
-    vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
-
-    meta.mainProgram = "esbuild";
-  };
-in
-
-buildNpmPackage.override { nodejs = nodejs_22; } rec {
   pname = "plotly-graph-card";
-  version = "3.3.5";
+  version = "4.0.2";
 
   src = fetchFromGitHub {
     owner = "dbuezas";
     repo = "lovelace-plotly-graph-card";
     tag = "v${version}";
-    hash = "sha256-I0lP0Z0tUiuJ4cC2Ud4uePS8zEZIBNP5X3EEa9ZVQ24=";
+    hash = "sha256-8/ZwfvFxM5j/BVIh3wQRPzxV/Xob4GAHMNByPxXcA8U=";
   };
 
-  npmDepsHash = "sha256-CwIx5/kAAY+PAjEkJi7/7NpApzFSoIfuIl7zmsaqicE=";
+  node_modules = stdenv.mkDerivation {
+    pname = "${pname}-node_modules";
+    inherit version src;
 
-  # for ml-regression-logarithmic
-  forceGitDeps = true;
-  makeCacheWritable = true;
+    nativeBuildInputs = [
+      bun
+      writableTmpDirAsHomeHook
+    ];
 
-  # custom pinned esbuild version
-  env.ESBUILD_BINARY_PATH = lib.getExe esbuild;
+    dontConfigure = true;
+    dontFixup = true;
+
+    buildPhase = ''
+      runHook preBuild
+
+      export BUN_INSTALL_CACHE_DIR=$(mktemp -d)
+      bun install --frozen-lockfile --ignore-scripts --no-progress --cpu="*" --os="*"
+
+      runHook postBuild
+    '';
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p $out/node_modules
+      cp -R ./node_modules $out
+
+      runHook postInstall
+    '';
+
+    outputHash = "sha256-jSVEJ+2MG6BGHg7KhNM6S+zf20OlY5aWgnJRMIc/e4o=";
+    outputHashMode = "recursive";
+  };
+in
+stdenv.mkDerivation {
+  inherit pname version src;
+
+  nativeBuildInputs = [
+    nodejs_22
+    bun
+  ];
+
+  configurePhase = ''
+    runHook preConfigure
+
+    cp -R ${node_modules}/node_modules .
+
+    runHook postConfigure
+  '';
+
+  buildPhase = ''
+    runHook preBuild
+
+    node build.mjs
+
+    runHook postBuild
+  '';
 
   installPhase = ''
+    runHook preInstall
+
     install -d $out
-    install -m0644 dist/plotly-graph-card.js $out/
+    install -m0644 dist/*.js $out/
+
+    runHook postInstall
   '';
+
+  passthru.entrypoint = "plotly-graph-card.js";
 
   meta = {
     description = "Highly customisable Lovelace card to plot interactive graphs. Brings scrolling, zooming, and much more";

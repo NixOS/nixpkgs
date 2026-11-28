@@ -5,7 +5,7 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "adif-multitool";
-  version = "0.1.22";
+  version = "0.1.23";
 
   vendorHash = "sha256-Fin0DUvpNPqKXpbDVekvWZYghJIpMLY9IRr2wdbZczc=";
 
@@ -15,7 +15,7 @@ buildGoModule (finalAttrs: {
     owner = "flwyd";
     repo = "adif-multitool";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-UYnm4S4DP0c2ZkPkPScUHXdKiAz6JY9Lzdu4mAO49Dc=";
+    hash = "sha256-1ybbiwej3A1INtxkziaavPRXOIy/oLskU8z9XdoOZe8=";
   };
 
   meta = {

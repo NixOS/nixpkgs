@@ -1,34 +1,49 @@
 {
-  stdenv,
   lib,
-  perlPackages,
   fetchFromGitHub,
+  perl,
+  stdenvNoCC,
+  versionCheckHook,
 }:
 
-stdenv.mkDerivation {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "tes3cmd";
   version = "0.40-pre-release-2";
 
   src = fetchFromGitHub {
     owner = "john-moonsugar";
     repo = "tes3cmd";
-    rev = "f72e9ed9dd18e8545dd0dc2a4056c250cf505790";
-    sha256 = "01zqplp8yb0xnl54963n0zkz66rf3hn2x3i255jlhdhx1c43jba7";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Ry05CAsdNkhlKSKOLiwcLhvz5wd2mEQKtR0sjy69+Ac=";
   };
 
-  buildInputs = [ perlPackages.perl ];
+  __structuredAttrs = true;
+  strictDeps = true;
+
+  buildInputs = [ perl ];
 
   installPhase = ''
-    mkdir -p $out/bin
-    cp tes3cmd $out/bin/tes3cmd
+    runHook preInstall
+
+    install -Dm755 tes3cmd -t $out/bin
+
+    runHook postInstall
+  '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  preVersionCheck = ''
+    version=${lib.toUpper finalAttrs.version}
   '';
 
   meta = {
     description = "Command line tool for examining and modifying plugins for the Elder Scrolls game Morrowind by Bethesda Softworks";
-    mainProgram = "tes3cmd";
     homepage = "https://github.com/john-moonsugar/tes3cmd";
+    changelog = "https://github.com/john-moonsugar/tes3cmd/blob/${finalAttrs.src.tag}/ChangeLog";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.marius851000 ];
+    maintainers = with lib.maintainers; [ marius851000 ];
     platforms = lib.platforms.linux;
+    mainProgram = "tes3cmd";
   };
-}
+})

@@ -25,6 +25,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildFeatures = [ "go" ];
 
+  # Doctests with dangling doc comments fail since rust 1.99
+  preCheck = ''
+    substituteInPlace core/src/language/mod.rs \
+      --replace-fail '/// ```rust' '/// ```ignore'
+  '';
+
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd typeshare \
       --bash <($out/bin/typeshare completions bash) \
@@ -42,10 +48,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "typeshare";
     homepage = "https://github.com/1password/typeshare";
     changelog = "https://github.com/1password/typeshare/blob/v${finalAttrs.version}/CHANGELOG.md";
-    license = with lib.licenses; [
-      asl20 # or
-      mit
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
     maintainers = [ lib.maintainers.progrm_jarvis ];
   };
 })

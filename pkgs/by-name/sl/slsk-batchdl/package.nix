@@ -31,7 +31,19 @@ buildDotnetModule (finalAttrs: {
   # See: https://github.com/fiso64/sockseek/issues/111
   # testProjectFile = "slsk-batchdl.Tests/slsk-batchdl.Tests.csproj";
 
-  dotnet-sdk = dotnetCorePackages.sdk_10_0;
+  dotnet-sdk =
+    with dotnetCorePackages;
+    sdk_10_0
+    // {
+      inherit
+        (combinePackages [
+          sdk_10_0
+          sdk_8_0
+        ])
+        packages
+        targetPackages
+        ;
+    };
   nugetDeps = ./deps.json;
   executables = [ "sldl" ];
 

@@ -45,6 +45,8 @@ stdenv.mkDerivation (finalAttrs: {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "XCB convenience functions for the Render extension";
     homepage = "https://gitlab.freedesktop.org/xorg/lib/libxcb-render-util";

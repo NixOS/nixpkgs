@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "django-json-widget";
-  version = "2.1.1";
+  version = "2.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jmrivas86";
     repo = "django-json-widget";
     tag = "v${version}";
-    hash = "sha256-AABJHWoEIcyJyRHv3sp1d1l6ZByF8Q5h+xEHJe/4uC0=";
+    hash = "sha256-MStS5lUeaTcYr+G21zmuFxi/2Oi9qDR5gF6YjO+qB1M=";
   };
 
   build-system = [

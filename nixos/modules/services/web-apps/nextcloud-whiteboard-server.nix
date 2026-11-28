@@ -11,6 +11,7 @@ let
     mkIf
     mkEnableOption
     mkOption
+    mkPackageOption
     types
     literalExpression
     ;
@@ -21,6 +22,8 @@ in
   options.services.nextcloud-whiteboard-server = {
 
     enable = mkEnableOption "Nextcloud backend server for the Whiteboard app";
+
+    package = mkPackageOption pkgs "nextcloud-whiteboard-server" { };
 
     settings = mkOption {
       type = types.attrsOf types.str;
@@ -57,7 +60,7 @@ in
       wants = [ "network-online.target" ];
       environment = cfg.settings;
       serviceConfig = {
-        ExecStart = "${lib.getExe pkgs.nextcloud-whiteboard-server}";
+        ExecStart = lib.getExe cfg.package;
         WorkingDirectory = "%S/whiteboard";
         StateDirectory = "whiteboard";
         EnvironmentFile = [ cfg.secrets ];

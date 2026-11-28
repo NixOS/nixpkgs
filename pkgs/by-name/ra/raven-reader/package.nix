@@ -4,27 +4,22 @@
   appimageTools,
 }:
 
-let
+appimageTools.wrapType2 (finalAttrs: {
   pname = "raven-reader";
   version = "1.0.80";
   src = fetchurl {
-    url = "https://github.com/hello-efficiency-inc/raven-reader/releases/download/v${version}/Raven-Reader-${version}.AppImage";
+    url = "https://github.com/hello-efficiency-inc/raven-reader/releases/download/v${finalAttrs.version}/Raven-Reader-${finalAttrs.version}.AppImage";
     sha256 = "sha256-RkpUWM1hAH73ePpQPj2C3SOukLpcPXbaXmb1VbcHaSU=";
   };
-  appimageContents = appimageTools.extract { inherit pname version src; };
-
-in
-appimageTools.wrapType2 {
-  inherit pname version src;
 
   extraInstallCommands = ''
-    mkdir -p $out/share/${pname}
-    cp -a ${appimageContents}/locales $out/share/${pname}
-    cp -a ${appimageContents}/resources $out/share/${pname}
+    mkdir -p $out/share/${finalAttrs.pname}
+    cp -a ${finalAttrs.contents}/locales $out/share/${finalAttrs.pname}
+    cp -a ${finalAttrs.contents}/resources $out/share/${finalAttrs.pname}
 
-    install -m 444 -D ${appimageContents}/raven-reader.desktop -t $out/share/applications
+    install -m 444 -D ${finalAttrs.contents}/raven-reader.desktop -t $out/share/applications
 
-    cp -a ${appimageContents}/usr/share/icons $out/share/
+    cp -a ${finalAttrs.contents}/usr/share/icons $out/share/
 
     substituteInPlace $out/share/applications/raven-reader.desktop \
       --replace 'Exec=AppRun' 'Exec=raven-reader'
@@ -38,4 +33,4 @@ appimageTools.wrapType2 {
     maintainers = [ ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})

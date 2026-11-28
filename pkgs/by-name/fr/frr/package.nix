@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
+  fetchpatch2,
 
   # build time
   autoreconfHook,
@@ -91,6 +91,18 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-TnQLkzh9K3C9HBVORCdFRGgR+zLm+/V0+zwdwpKEUNs=";
   };
 
+  patches = [
+    # For libyang 6 support.
+    (fetchpatch2 {
+      url = "https://patch-diff.githubusercontent.com/raw/FRRouting/frr/pull/21459.patch?full_index=1";
+      hash = "sha256-YxxH4FfbTNA/C4OaqjAyP7C+vnhm/k3muNhs6aPd844=";
+    })
+    # For libyang 6 support.
+    (fetchpatch2 {
+      url = "https://patch-diff.githubusercontent.com/raw/FRRouting/frr/pull/23988.patch?full_index=1";
+      hash = "sha256-aa/lt82Ob7peMxf7RBvpSsgF/osm5N0JpyMs/KVlqcw=";
+    })
+  ];
   # Without the std explicitly set, we may run into abseil-cpp
   # compilation errors.
   env.CXXFLAGS = "-std=gnu++23";

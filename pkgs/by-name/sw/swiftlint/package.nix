@@ -79,7 +79,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     mainProgram = "swiftlint";
     maintainers = with lib.maintainers; [
-      matteopacini
       DimitarNestorov
     ];
     platforms = lib.attrNames sources.platforms;

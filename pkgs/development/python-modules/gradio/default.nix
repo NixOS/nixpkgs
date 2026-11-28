@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
   pythonAtLeast,
   writeScript,
   writeShellScriptBin,
@@ -84,7 +85,6 @@ buildPythonPackage (finalAttrs: {
   pname = "gradio";
   version = "6.29.0"; # please always backport gradio changes
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "gradio-app";
@@ -98,6 +98,10 @@ buildPythonPackage (finalAttrs: {
     # build output, which fails offline.
     # Copy it (and its dependency closure) from the already-fetched pnpm workspace.
     ./dont-npm-install-http-proxy.patch
+    (fetchpatch2 {
+      url = "https://github.com/gradio-app/gradio/commit/1028366300f10b26f0b54a1d6cda6d520895acbb.patch?full_index=1";
+      hash = "sha256-YxydWMCZTczvIMa3P2W6wwYqX3bTX7LMMUNp98DQMRE=";
+    })
   ];
 
   pnpmDeps = fetchPnpmDeps {
@@ -483,10 +487,14 @@ buildPythonPackage (finalAttrs: {
   };
 
   meta = {
+    broken = lib.versionAtLeast mcp.version "2"; # https://github.com/gradio-app/gradio/pull/13921
     homepage = "https://www.gradio.app/";
     changelog = "https://github.com/gradio-app/gradio/releases/tag/${finalAttrs.src.tag}";
     description = "Python library for easily interacting with trained machine learning models";
     license = lib.licenses.asl20;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "gradio_project" finalAttrs.version // {
+      target_sw = "python";
+    };
     maintainers = with lib.maintainers; [ pbsds ];
   };
 })

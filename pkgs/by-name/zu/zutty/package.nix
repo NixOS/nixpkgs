@@ -13,12 +13,12 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "zutty";
-  version = "0.16-unstable-2024-08-18";
+  version = "0.18-unstable-2026-11-16";
 
   src = fetchgit {
     url = "https://git.hq.sig7.se/zutty.git";
-    rev = "04b2ca3b3aaa070c41583247f8112c31b6003886"; # 20240818
-    hash = "sha256-izUbn2B3RqIIOW9tuL7DFLqJdektCftxnpQssJMYxC8=";
+    rev = "e19e0264eb6adf5f6205d324917d5a1a057c84a9";
+    hash = "sha256-3o3kXhGBwFDhi7VJdFgNGUCjDfdlPVvM2WyRMu/Jv40=";
   };
 
   postPatch =
@@ -57,6 +57,5 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.rolfschr ];
     platforms = lib.platforms.linux;
-    broken = true; # Added 2026-09-19, fails with latest glibc
   };
 })

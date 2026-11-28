@@ -5,35 +5,27 @@
   makeWrapper,
 }:
 
-let
+appimageTools.wrapType2 (finalAttrs: {
   pname = "wootility";
   version = "5.4.2";
   src = fetchurl {
-    url = "https://wootility-updates.ams3.cdn.digitaloceanspaces.com/wootility-linux/Wootility-${version}.AppImage";
+    url = "https://wootility-updates.ams3.cdn.digitaloceanspaces.com/wootility-linux/Wootility-${finalAttrs.version}.AppImage";
     hash = "sha512-3n73cnXW81w+7ta6+nnPymEriU9CpfKwX8DFNuxuNMMEBCyL6YgpQmxa0qKY6hr9WiiHQyuqvrSe+bXURwv31w==";
   };
-in
-
-appimageTools.wrapType2 {
-  inherit pname version src;
 
   passthru.updateScript = ./update.sh;
 
   nativeBuildInputs = [ makeWrapper ];
 
-  extraInstallCommands =
-    let
-      contents = appimageTools.extract { inherit pname version src; };
-    in
-    ''
-      wrapProgram $out/bin/wootility \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
+  extraInstallCommands = ''
+    wrapProgram $out/bin/wootility \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
 
-      install -Dm444 ${contents}/wootility.desktop -t $out/share/applications
-      install -Dm444 ${contents}/wootility.png -t $out/share/icons
-      substituteInPlace $out/share/applications/wootility.desktop \
-        --replace-fail 'Exec=AppRun --no-sandbox' 'Exec=wootility'
-    '';
+    install -Dm444 ${finalAttrs.contents}/wootility.desktop -t $out/share/applications
+    install -Dm444 ${finalAttrs.contents}/wootility.png -t $out/share/icons
+    substituteInPlace $out/share/applications/wootility.desktop \
+      --replace-fail 'Exec=AppRun --no-sandbox' 'Exec=wootility'
+  '';
 
   profile = ''
     export LC_ALL=C.UTF-8
@@ -56,4 +48,4 @@ appimageTools.wrapType2 {
     ];
     mainProgram = "wootility";
   };
-}
+})

@@ -21,13 +21,13 @@ in
 
 buildNpmPackage (finalAttrs: {
   pname = "draupnir";
-  version = "3.1.0";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "the-draupnir-project";
     repo = "Draupnir";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-e6d9z5dkJg4ZpkN+yJFr8J8RWl9tcAhEYTOM+9413Ok=";
+    hash = "sha256-OcP7Zf6HgoUQksKUyg2GM6ztLkLNylJW3o6ZVpQrgWQ=";
   };
 
   nativeBuildInputs = [
@@ -37,14 +37,9 @@ buildNpmPackage (finalAttrs: {
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin cctools.libtool;
 
-  patches = [
-    (fetchpatch2 {
-      url = "https://github.com/the-draupnir-project/Draupnir/commit/4e63164046153c656050c6d0a325c79f1492153a.patch?full_index=1";
-      hash = "sha256-dVG0BAE8pATfGdcHvTV8jTC+OQP0gMB7v396MtJlG4o=";
-    })
-  ];
+  npmDepsHash = "sha256-pn8oyi0mx8N/NmBUaQqArNzOVOMilf0lp9gNbNKROI0=";
 
-  npmDepsHash = "sha256-7WAfSFfPQJ9d/U9hk5wypasSoU2JwkoCq/nKAnzFf1o=";
+  npmFlags = [ "--ignore-scripts" ];
 
   preBuild = ''
     # install proper version and branch info

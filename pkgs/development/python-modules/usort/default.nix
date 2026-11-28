@@ -21,7 +21,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "facebook";
+    owner = "meta";
     repo = "usort";
     tag = "v${finalAttrs.version}";
     hash = "sha256-hoBk8KAml/YOscno9605I3t4z10vQPlh22wH1XHcQqY=";
@@ -51,8 +51,8 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Safe, minimal import sorting for Python projects";
-    homepage = "https://github.com/facebook/usort";
-    changelog = "https://github.com/facebook/usort/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    homepage = "https://github.com/meta/usort";
+    changelog = "https://github.com/meta/usort/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "usort";

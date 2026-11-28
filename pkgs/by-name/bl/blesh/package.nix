@@ -3,21 +3,24 @@
   stdenvNoCC,
   fetchFromGitHub,
   bashInteractive,
+  less,
+  procps,
   gawk,
+  glibcLocalesUtf8,
   runtimeShell,
   unstableGitUpdater,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "blesh";
-  version = "0.4.0-devel3-unstable-2026-09-08";
+  version = "0.4.0-devel3-unstable-2026-10-31";
 
   src = fetchFromGitHub {
     owner = "akinomyoga";
     repo = "ble.sh";
-    rev = "d81fd54feb0d996fdff20dca27eaf0201f7015cc";
+    rev = "152942758f567e51fd17bdc7b3783d27b3c476aa";
     fetchSubmodules = true;
-    hash = "sha256-meKnNtepyOXfVGq351AoCML/vcgML79R3HW2Tf9rIuk=";
+    hash = "sha256-JYtwux5VQwujL6e0gOXUhIAwmkhPwxOV5/Snje9+7Jo=";
   };
 
   nativeBuildInputs = [
@@ -44,9 +47,19 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   doCheck = true;
   # auto-detection runs `make -n check` without makeFlags, which fails without BLE_GIT_COMMIT_ID
   checkTarget = "check";
-  nativeCheckInputs = [ bashInteractive ];
+  nativeCheckInputs = [
+    bashInteractive
+    # the get-pager test expects less to be in PATH
+    less
+    # ble.sh refuses to load without ps, so tests would not run
+    procps
+  ]
+  # upstream tests have hard-coded LC_ALL=en_US.utf8
+  ++ lib.optionals stdenvNoCC.hostPlatform.isLinux [ glibcLocalesUtf8 ];
+
   preCheck = ''
     export HOME=$TMPDIR
+    export LANG=en_US.UTF-8
     # upstream skips its flaky sleep-timing tests under GitHub CI
     export CI=true GITHUB_ACTION=nix
   '';
@@ -88,8 +101,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       aiotter
-      recutita
       matthiasbeyer
+      recutita
     ];
     platforms = lib.platforms.unix;
   };

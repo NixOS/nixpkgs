@@ -10,6 +10,7 @@
   git,
   nix-update-script,
   versionCheckHook,
+  zstd,
   _experimental-update-script-combinators,
 }:
 
@@ -52,6 +53,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     openssl
+    zstd
   ];
 
   # Tests crash in Nix sandbox: all obscura-js tests create a V8 isolate

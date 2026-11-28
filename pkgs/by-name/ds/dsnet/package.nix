@@ -7,13 +7,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "dsnet";
-  version = "0.8.1";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "naggie";
     repo = "dsnet";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CKDtILZMWFeSU5nTSguM2fi0BCFdvR2LqELIZ6LYOMk=";
+    hash = "sha256-oiJ0JAbGkhAQq25lqqz2YyQLrEwPZ6sy7KTa5q3m+/0=";
   };
   vendorHash = "sha256-Q2Ipj9yZ+/GUBEmDvgwFLLww7EXnbvdvj/shGQnh1G8=";
 

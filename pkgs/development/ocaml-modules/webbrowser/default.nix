@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   version = "0.6.2";
   src = fetchurl {
     url = "https://erratique.ch/software/webbrowser/releases/webbrowser-${version}.tbz";
-    sha256 = "sha256-4SYAf1Qo7aUiCp5587wO1VvjcQHP3NBXeFfAaHE/s+A=";
+    hash = "sha256-4SYAf1Qo7aUiCp5587wO1VvjcQHP3NBXeFfAaHE/s+A=";
   };
 
   nativeBuildInputs = [

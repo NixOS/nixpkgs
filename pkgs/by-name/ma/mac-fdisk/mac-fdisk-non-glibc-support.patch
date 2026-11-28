@@ -1,0 +1,14 @@
+--- a/io.c    2016-01-24 03:19:51.647734970 -0600
++++ b/io.c    2016-01-24 03:27:08.952825190 -0600
+@@ -31,11 +31,9 @@
+ #ifndef __linux__
+ #include <SCSI.h>
+ #else
+-#ifdef __GLIBC__
+ #include <sys/types.h>
+ #include <sys/stat.h>
+ #endif
+-#endif
+ #include <linux/unistd.h>
+ #include <unistd.h>
+ #include <string.h>

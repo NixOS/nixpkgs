@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "trzsz-ssh";
-  version = "0.1.26";
+  version = "0.1.27";
 
   src = fetchFromGitHub {
     owner = "trzsz";
     repo = "trzsz-ssh";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-96xISHU0/C473Ohi3obsO1ihkxa0Q7Z39JIKzt5R7iM=";
+    hash = "sha256-wiObvHGSJdf8qXO1u7PvLdaQ1cvkLAgmQoGkw3hUMkQ=";
   };
 
-  vendorHash = "sha256-t/uJ+YyemTsDbuO+7VlOjFY8DvizkSZCE6uloA4mNqY=";
+  vendorHash = "sha256-C6Trg2DURrHE+cYF7BewVWONOh3soEKkbnN4JjYbC48=";
 
   ldflags = [
     "-s"

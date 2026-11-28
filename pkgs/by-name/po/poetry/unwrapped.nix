@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   findpython,
   installShellFiles,
   build,
@@ -36,23 +35,15 @@
 
 buildPythonPackage rec {
   pname = "poetry";
-  version = "2.5.1";
+  version = "2.5.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-poetry";
     repo = "poetry";
     tag = version;
-    hash = "sha256-LlE5u6dyiLGQeMREDtZcCGdDtNjqm8hwlTPfx6UeF8U=";
+    hash = "sha256-boHy+eZOqam44xwXNqMLMhP+Plzeaomb8SCvK78zI6k=";
   };
-
-  patches = [
-    # https://github.com/python-poetry/poetry/pull/11133
-    (fetchpatch {
-      url = "https://github.com/python-poetry/poetry/commit/38a86661d2ae58694c76d0bb4e628e1400d6dc6f.patch";
-      hash = "sha256-MkaA78F+vYU3V95BDhpQLpnG1gstrHVOupyN7rmygaU=";
-    })
-  ];
 
   build-system = [
     poetry-core
@@ -91,7 +82,10 @@ buildPythonPackage rec {
   ++ pbs-installer.optional-dependencies.download
   ++ pbs-installer.optional-dependencies.install;
 
-  pythonRelaxDeps = [ "installer" ];
+  pythonRelaxDeps = [
+    "cachecontrol"
+    "installer"
+  ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd poetry \
@@ -113,24 +107,19 @@ buildPythonPackage rec {
     ''
       export HOME=$TMPDIR
     ''
-    + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
       # https://github.com/python/cpython/issues/74570#issuecomment-1093748531
       export no_proxy='*';
     ''
   );
 
-  postCheck = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
+  postCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
     unset no_proxy
   '';
 
   disabledTests = [
     "test_env_system_packages_are_relative_to_lib"
     "test_application_command_not_found_messages"
-    # PermissionError: [Errno 13] Permission denied: '/build/pytest-of-nixbld/pytest-0/popen-gw3/test_find_poetry_managed_pytho1/.local/share/pypoetry/python/pypy@3.10.8/bin/python'
-    "test_list_poetry_managed"
-    "test_list_poetry_managed"
-    "test_find_all_with_poetry_managed"
-    "test_find_poetry_managed_pythons"
     # expects `sys.executable` to be able to import poetry
     "test_no_slow_imports_when_importing_the_cli_entrypoint"
     # Flaky

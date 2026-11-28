@@ -28,13 +28,13 @@
 buildHomeAssistantComponent (finalAttrs: {
   owner = "OpenDisplay";
   domain = "opendisplay";
-  version = "3.1.0";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     inherit (finalAttrs) owner;
     repo = "Home_Assistant_Integration";
     tag = finalAttrs.version;
-    hash = "sha256-hAOjCXObYkvoJ/HQLBoWjOwyHHtpJPFCrTyzfn57Hgo=";
+    hash = "sha256-f7fm6AfWAxSzLCcap79wO6Wl7hFDLGgebW0KYhsNAj4=";
   };
 
   dependencies = [
@@ -66,6 +66,12 @@ buildHomeAssistantComponent (finalAttrs: {
     pytestCheckHook
   ]
   ++ (home-assistant.getPackages "usb" home-assistant.python3Packages);
+
+  disabledTests = [
+    # new `compat_name` attribute in entity registry since 2026.11.0
+    "test_sensor_entities_usb_device"
+    "test_sensor_entities_battery_device"
+  ];
 
   disabledTestPaths = [
     # Probably mismatch in fontconfig priorities

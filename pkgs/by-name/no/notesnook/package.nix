@@ -37,10 +37,6 @@ let
     updateScript = ./update.sh;
   };
 
-  appimageContents = appimageTools.extract {
-    inherit pname version src;
-  };
-
   meta = {
     description = "Fully open source & end-to-end encrypted note taking alternative to Evernote";
     longDescription = ''
@@ -60,7 +56,7 @@ let
     mainProgram = "notesnook";
   };
 
-  linux = appimageTools.wrapType2 rec {
+  linux = appimageTools.wrapType2 (finalAttrs: {
     inherit
       pname
       version
@@ -78,12 +74,12 @@ let
     extraInstallCommands = ''
       wrapProgram $out/bin/notesnook \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
-      install -Dm444 ${appimageContents}/notesnook.desktop -t $out/share/applications
-      install -Dm444 ${appimageContents}/notesnook.png -t $out/share/icons
+      install -Dm444 ${finalAttrs.contents}/notesnook.desktop -t $out/share/applications
+      install -Dm444 ${finalAttrs.contents}/notesnook.png -t $out/share/icons
       substituteInPlace $out/share/applications/notesnook.desktop \
-        --replace-fail 'Exec=AppRun %U' 'Exec=${pname}'
+        --replace-fail 'Exec=AppRun %U' 'Exec=notesnook'
     '';
-  };
+  });
 
   darwin = stdenv.mkDerivation {
     inherit

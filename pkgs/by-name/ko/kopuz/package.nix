@@ -3,6 +3,7 @@
   stdenv,
   rustPlatform,
   pkg-config,
+  aws-lc,
   cmake,
   git,
   openssl,
@@ -13,6 +14,7 @@
   fetchFromGitHub,
   fetchurl,
   libopus,
+  sqlite,
   # Linux only
   wrapGAppsHook3,
   webkitgtk_4_1,
@@ -56,6 +58,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-lu1PaWf02D0dK+IV+fIzIKNr8ORfkSHFnRhnPdXaueI=";
 
+  # sqlx < 0.8.4 opens "sqlite::memory:" without SQLITE_OPEN_URI, so with the
+  # system SQLite every pooled connection gets its own empty database.
+  # https://github.com/launchbadge/sqlx/pull/3289
+  postPatch = ''
+    substituteInPlace $cargoDepsCopy/*/sqlx-sqlite-*/src/connection/establish.rs \
+      --replace-fail 'flags |= SQLITE_OPEN_MEMORY;' 'flags |= SQLITE_OPEN_MEMORY | libsqlite3_sys::SQLITE_OPEN_URI;'
+  '';
+
   env = {
     RUSTY_V8_ARCHIVE = librustyV8;
     SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
@@ -73,7 +83,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
     libopus
+    sqlite
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     webkitgtk_4_1

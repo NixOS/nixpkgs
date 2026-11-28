@@ -13,14 +13,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mpDris2";
-  version = "0.9.1";
+  version = "0.10.0";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "eonpatapon";
     repo = "mpDris2";
     tag = finalAttrs.version;
-    hash = "sha256-1Y6K3z8afUXeKhZzeiaEF3yqU0Ef7qdAj9vAkRlD2p8=";
+    hash = "sha256-Caw7WZIpTgwaXJ/voKI6rsDigvyrHK3t/QM4B3WJlE0=";
   };
 
   preConfigure = ''

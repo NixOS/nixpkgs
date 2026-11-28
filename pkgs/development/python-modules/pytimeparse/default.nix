@@ -8,12 +8,12 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pytimeparse";
-  version = "1.1.9";
+  version = "1.1.10";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-HxwL7c++SBt498sR26fYEDlFWvi6AU6vxt8GDJwKsVY=";
+    hash = "sha256-7PDuYTpyywsdPVQEvTmKZCZldvw2zPMUkXivby7G9zY=";
   };
 
   build-system = [ setuptools ];

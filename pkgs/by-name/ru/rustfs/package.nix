@@ -7,8 +7,10 @@
   pnpmConfigHook,
   nodejs,
   rustPlatform,
+  pkg-config,
   protobuf,
-  cacert,
+  zstd,
+  aws-lc,
   nix-update,
   nixosTests,
   writeShellApplication,
@@ -19,7 +21,7 @@ let
 
   console = stdenv.mkDerivation (finalAttrs: {
     pname = "rustfs-console";
-    version = "0.1.37";
+    version = "0.1.44";
     __structuredAttrs = true;
     __darwinAllowLocalNetworking = true;
 
@@ -27,14 +29,14 @@ let
       owner = "rustfs";
       repo = "console";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-yLzKLlZ/OZYGfrCcz1RdcXHQSu9h4FTEtzCOsvquK2U=";
+      hash = "sha256-On6/u6MpKhM8ZAp6I8En51mKISXDxqMlD48phBUVKNo=";
     };
 
     pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs) pname version src;
       inherit pnpm;
       fetcherVersion = 4;
-      hash = "sha256-tWeemxHBvWEWKECIAYzlw0MaKpkjXTTodj9Rgf8U28s=";
+      hash = "sha256-eSgTflo5B+3NpYWUo2P2JtbrObs+YUAQeNGMYxIvN3Y=";
     };
 
     nativeBuildInputs = [
@@ -56,14 +58,14 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rustfs";
-  version = "1.0.3";
+  version = "1.0.7";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "rustfs";
     repo = "rustfs";
     tag = finalAttrs.version;
-    hash = "sha256-Vzu3pA6P/BJcPxK8IcKgT8vUNYdEsKKYwsV87M/IVyQ=";
+    hash = "sha256-1EhpIpNsi/1yG3t5mjW4d3y7CiEzlMEHuubniM49N/I=";
   };
 
   postPatch = ''
@@ -71,11 +73,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
     cp -rL ${finalAttrs.console} ./rustfs/static
   '';
 
-  cargoHash = "sha256-OLaCvnyMTXYC1bO0FJo0inINjjWzIpZsi60wzGbcSZA=";
+  cargoHash = "sha256-NFA4sFA+NpH1Qx2U0x/ThRHg34oPYvM9IddOvoip8X4=";
 
   nativeBuildInputs = [
+    pkg-config
     protobuf
-    cacert
+  ];
+
+  buildInputs = [
+    zstd
+    aws-lc
   ];
 
   inherit console;
@@ -102,6 +109,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
       '';
     });
   };
+
+  # can take over 5 hours on 2 cores and can consume significant RAM
+  requiredSystemFeatures = [ "big-parallel" ];
 
   meta = {
     description = "S3-compatible high-performance object storage system supporting migration and coexistence with other S3-compatible platforms such as MinIO and Ceph";

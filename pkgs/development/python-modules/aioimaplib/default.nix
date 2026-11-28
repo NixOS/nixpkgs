@@ -12,23 +12,21 @@
   pytz,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aioimaplib";
-  version = "2.0.1";
+  version = "2.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "iroco-co";
     repo = "aioimaplib";
-    tag = version;
-    hash = "sha256-njzSpKPis033eLoRKXL538ljyMOB43chslio1wodrKU=";
+    tag = finalAttrs.version;
+    hash = "sha256-amEY44mW5EFDMTwfC7+ut28CeWTdEEMzZ/aX3k+IF7g=";
   };
 
   patches = [
     # https://github.com/iroco-co/aioimaplib/issues/125
     ./event-loop.patch
-    # https://github.com/iroco-co/aioimaplib/pull/138
-    ./python3.14.7-compat.patch
   ];
 
   postPatch = ''
@@ -63,8 +61,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python asyncio IMAP4rev1 client library";
     homepage = "https://github.com/iroco-co/aioimaplib";
-    changelog = "https://github.com/iroco-co/aioimaplib/blob/${src.tag}/CHANGES.rst";
+    changelog = "https://github.com/iroco-co/aioimaplib/blob/${finalAttrs.src.tag}/CHANGES.rst";
     license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.dotlambda ];
   };
-}
+})

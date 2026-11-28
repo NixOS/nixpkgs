@@ -34,5 +34,8 @@ buildPythonPackage rec {
       jfly
       matusf
     ];
+    knownVulnerabilities = [
+      "CVE-2026-119716: Code Injection via Bracketed Path Segments"
+    ];
   };
 }

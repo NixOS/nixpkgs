@@ -1,25 +1,28 @@
 {
   lib,
   fetchFromGitHub,
+  aws-lc,
+  cacert,
   openssl,
   pkg-config,
   rustPlatform,
   perl,
   nix-update-script,
+  sqlite,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "matrix-commander-rs";
-  version = "0.11.0";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "8go";
     repo = "matrix-commander-rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eWD1nj+xRWNkyC3lM/hIZACI2i1Awl9NTgslR8rJZSc=";
+    hash = "sha256-bdfdnMhV1O13iDL8WwL4pX8y6DTfHdBULaXdvcYObYk=";
   };
 
-  cargoHash = "sha256-OWuKwaJfwOAtwtN0so/afWeHq2oslAT2YahnJC0QB6w=";
+  cargoHash = "sha256-jsPrjoAovyGeXe+ZFs2iIHC6Bs1hZv0hTFNPvvSwoqQ=";
 
   __structuredAttrs = true;
 
@@ -28,7 +31,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     perl
   ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [
+    aws-lc
+    openssl
+    sqlite
+  ];
+
+  nativeCheckInputs = [ cacert ];
 
   passthru.updateScript = nix-update-script {
     extraArgs = [

@@ -8,6 +8,7 @@
   makeWrapper,
   python3,
   glib,
+  gettext,
 }:
 let
   pythonEnv = python3.withPackages (p: [
@@ -31,6 +32,8 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     kdePackages.extra-cmake-modules
     makeWrapper
+    gettext
+    python3
   ];
 
   buildInputs = [
@@ -54,6 +57,8 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [ ./use-dbus-service-directly.patch ];
 
   postPatch = ''
+    python3 ./kpac i18n --no-merge
+
     substituteInPlace package/contents/ui/tools/service.py \
       --replace-fail '#!/usr/bin/env python' '#!${lib.getExe pythonEnv}'
   '';

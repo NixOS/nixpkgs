@@ -33,16 +33,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "librosa";
-  version = "1.0.0";
+  version = "1.0.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "librosa";
     repo = "librosa";
     tag = finalAttrs.version;
     fetchSubmodules = true; # for test data
-    hash = "sha256-+RjGbnAP0rYjRe/QVwKsCUIhRZM8DzY1JnmoJvDagwM=";
+    hash = "sha256-A3Pc33UMegFFe30H3J35+t5yKoVRGRV74VoWVUBDmy0=";
   };
 
   build-system = [ setuptools ];
@@ -77,11 +76,6 @@ buildPythonPackage (finalAttrs: {
   ]
   ++ finalAttrs.passthru.optional-dependencies.display;
 
-  # Prevents 'Fatal Python error: Aborted' on darwin during checkPhase
-  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    export MPLBACKEND="Agg"
-  '';
-
   disabledTests = [
     # requires network access
     "test_cite_badversion"
@@ -92,7 +86,7 @@ buildPythonPackage (finalAttrs: {
     "test_load_resample"
     "test_loadx"
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # AssertionError (numerical comparison fails)
     "test_beat_track_multi"
     "test_beat_track_multi_bpm_vector"

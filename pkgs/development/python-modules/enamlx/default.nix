@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "enamlx";
-  version = "0.6.4";
+  version = "0.6.6";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "frmdstryr";
     repo = "enamlx";
     tag = "v${version}";
-    hash = "sha256-C3/G0bnu1EQh0elqdrpCwkFPZU4qmkUX7WRSRK9nkM4=";
+    hash = "sha256-Yi81Vmt+owhPEhoNx5W1XozWldDpurFCsQyCT+Kv+fI=";
   };
 
   propagatedBuildInputs = [

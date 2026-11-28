@@ -399,14 +399,14 @@ in
   mkRuby = generic;
 
   ruby_3_4 = generic {
-    version = rubyVersion "3" "4" "11" "";
-    hash = "sha256-XCK+RFJDErPUM9aHObzFMGM7HaXvi6CvoKN2gNoX094=";
+    version = rubyVersion "3" "4" "13" "";
+    hash = "sha256-0NO/PdjCJKPDt+zYFqDxssvPT4e1r8vb6R0/7xd/NRo=";
     cargoHash = "sha256-5Tp8Kth0yO89/LIcU8K01z6DdZRr8MAA0DPKqDEjIt0=";
   };
 
   ruby_4_0 = generic {
-    version = rubyVersion "4" "0" "7" "";
-    hash = "sha256-kRrOIPkNBoyg5N2m0OTw+B5S5S8t1PQATHIeJTQS6C0=";
+    version = rubyVersion "4" "0" "10" "";
+    hash = "sha256-tT7vM3H6XT47dDQO3NAV8G1diFOWjU5TmlJk/OQe2fE=";
     cargoHash = "sha256-z7NwWc4TaR042hNx0xgRkh/BQEpEJtE53cfrN0qNiE0=";
   };
 

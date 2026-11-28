@@ -1,8 +1,9 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchFromCodeberg,
   autoreconfHook,
+  libintl,
   libjpeg,
   libmcrypt,
   libmhash,
@@ -13,10 +14,13 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "steghide";
   version = "0.5.1.1";
 
-  src = fetchFromGitHub {
+  __structuredAttrs = true;
+  strictDeps = true;
+
+  src = fetchFromCodeberg {
     owner = "museoa";
     repo = "steghide";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-uUXEipIUfu9AbG7Ekz+25JkWSEGzqA7sJHZqezLzUto=";
   };
 
@@ -25,11 +29,15 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    libintl
     libjpeg
     libmcrypt
     libmhash
     zlib
   ];
+
+  # the bundled intl/ and configure's libintl check use pre-C23 syntax
+  configureFlags = [ "CFLAGS=-std=gnu17" ];
 
   postPatch = ''
     cd src
@@ -41,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    homepage = "https://github.com/museoa/steghide";
+    homepage = "https://codeberg.org/museoa/steghide";
     description = "Open source steganography program";
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];

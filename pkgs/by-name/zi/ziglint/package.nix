@@ -11,13 +11,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ziglint";
-  version = "0.6.2";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
-    owner = "rockorager";
+    owner = "baskingspot";
     repo = "ziglint";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-x6Ws83fg/9KAkTucgUpMI+PZ6BwkOCOHk9sFnyZZmrk=";
+    hash = "sha256-urHoWp+Nn1CBTlnfMGKMm9LAGYpmpUB3tIhB7qF9sdw=";
   };
 
   postPatch = ''
@@ -37,9 +37,9 @@ stdenv.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
 
   meta = {
-    homepage = "https://github.com/rockorager/ziglint";
+    homepage = "https://github.com/baskingspot/ziglint";
     description = "Linter for Zig source code";
-    changelog = "https://github.com/rockorager/ziglint/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/baskingspot/ziglint/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ xqtc161 ];
     mainProgram = "ziglint";

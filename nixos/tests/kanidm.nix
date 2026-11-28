@@ -22,7 +22,7 @@ in
     oddlama
   ];
 
-  _module.args.kanidmPackage = pkgs.lib.mkDefault pkgs.kanidm_1_11;
+  _module.args.kanidmPackage = pkgs.lib.mkDefault pkgs.kanidm_1_12;
 
   nodes.server =
     { pkgs, ... }:

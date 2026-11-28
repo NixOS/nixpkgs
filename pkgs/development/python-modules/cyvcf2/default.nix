@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   python,
 
   # build-system
@@ -27,15 +28,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "cyvcf2";
-  version = "0.34.0";
+  version = "0.35.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "brentp";
     repo = "cyvcf2";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XDo2cEcZm5y6u9Gc2e7q2tg8pt3C/5cmnWRe6Dr5x7M=";
+    hash = "sha256-ilidZhLvxFnA3qIRfifz1qCzdVgiL5zUPRJudFSPnNU=";
   };
 
   build-system = [
@@ -70,6 +70,16 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     pytestCheckHook
+  ];
+
+  # Phase was read from the second allele slot, which for haploid records is
+  # the next sample's; wrong since htslib >= 1.22 marks haploid genotypes as
+  # phased. Debian patch by Andreas Tille, brentp/cyvcf2#336.
+  patches = [
+    (fetchpatch {
+      url = "https://salsa.debian.org/med-team/cyvcf2/-/raw/46302a4a3189b579d849899960cb880bcba0c689/debian/patches/fix-haploid-genotype-phasing.patch";
+      hash = "sha256-cvSDxjX36s1dCQ56ljDfw28PWqtdYYhUqJtXo5AC78c=";
+    })
   ];
 
   # The test suite lives inside the package directory and relies on relative imports

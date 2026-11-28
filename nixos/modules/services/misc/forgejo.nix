@@ -441,17 +441,6 @@ in
                 '';
               };
             };
-
-            session = {
-              COOKIE_SECURE = mkOption {
-                type = types.bool;
-                default = false;
-                description = ''
-                  Marks session cookies as "secure" as a hint for browsers to only send
-                  them via HTTPS. This option is recommend, if Forgejo is being served over HTTPS.
-                '';
-              };
-            };
           };
         };
       };

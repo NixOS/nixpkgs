@@ -7,13 +7,13 @@
 
 mkHyprlandPlugin (finalAttrs: {
   pluginName = "hypr-darkwindow";
-  version = "0.56.2";
+  version = "0.57.2";
 
   src = fetchFromGitHub {
     owner = "micha4w";
     repo = "Hypr-DarkWindow";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2upGTy7IRhrhxf+5VPjzrua8ebOtED6i8kSN8ka+ffg=";
+    hash = "sha256-xEtR4219W93dDvQ3IH7BC3IhpqZVtlkQoL2fi2ZJaqQ=";
   };
 
   installPhase = ''

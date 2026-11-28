@@ -8,6 +8,8 @@
   vectorscan,
   openssl,
   pkg-config,
+  sqlite,
+  zstd,
   installShellFiles,
   versionCheckHook,
 }:
@@ -61,6 +63,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     boost
     vectorscan
     openssl
+    sqlite
+    zstd
   ];
 
   env.OPENSSL_NO_VENDOR = 1;

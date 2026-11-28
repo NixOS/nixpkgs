@@ -28,24 +28,25 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "svgdigitizer";
-  version = "0.14.5";
+  version = "0.16.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "echemdb";
     repo = "svgdigitizer";
     tag = finalAttrs.version;
-    hash = "sha256-7a+IY3bxZI3DpkyUx4TQeDNBz80LhfK4s70Bl94liM0=";
+    hash = "sha256-EhUfgaYISkBCybCALgpXFEzAqHRpycGK18V6hjsrGlM=";
   };
 
   build-system = [
     setuptools
   ];
 
-  # https://github.com/echemdb/svgdigitizer/issues/298
   pythonRelaxDeps = [
+    # https://github.com/echemdb/svgdigitizer/issues/298
     "astropy"
+    # Can be removed once https://github.com/echemdb/svgdigitizer/pull/331 is released
+    "pillow"
   ];
 
   dependencies = [

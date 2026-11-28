@@ -66,7 +66,7 @@ assert svnSupport -> perlSupport;
 assert withBreakingChanges -> rustSupport;
 
 let
-  version = "2.56.0";
+  version = "2.56.1";
   svn = subversionClient.override { perlBindings = perlSupport; };
   gitwebPerlLibs = with perlPackages; [
     CGI
@@ -113,7 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
         }.tar.xz"
       else
         "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-    hash = "sha256-JsVsKWs4wGlbJvqV9HXx0BcE0tOOc0ZcowsLL13HidM=";
+    hash = "sha256-8LC/iSZLm9LhxkA2PnUpZDmJ2nYoFgBHPFB0XNNKYH8=";
   };
 
   outputs = [ "out" ] ++ lib.optional withManual "doc";
@@ -597,7 +597,7 @@ stdenv.mkDerivation (finalAttrs: {
     # not ok 1 - populate workdir (with 2.33.1 on x86_64-darwin)
     disable_test t5003-archive-zip
   ''
-  + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
     disable_test t7527-builtin-fsmonitor
   ''
   +

@@ -11,8 +11,6 @@ buildPythonPackage (finalAttrs: {
   version = "1.9.1";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     pname = "versiontools";
     inherit (finalAttrs) version;

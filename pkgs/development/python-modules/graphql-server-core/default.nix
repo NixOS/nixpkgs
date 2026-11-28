@@ -15,14 +15,14 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "graphql-python";
-    repo = "graphql-server-core";
+    repo = "graphql-server";
     rev = "v${version}";
     hash = "sha256-2aUtiTiR6cypYe937n6oj6QqWCLgAy95XqEK9cWOa/A=";
   };
 
   patches = [
     (fetchpatch {
-      url = "https://github.com/graphql-python/graphql-server-core/commit/865ee9d5602f352c958f6f7e15adbe9abe216784.patch";
+      url = "https://github.com/graphql-python/graphql-server/commit/865ee9d5602f352c958f6f7e15adbe9abe216784.patch";
       hash = "sha256-hkhDAYRCbiVohsWVuzlmgim7VkxQwKpePdpnJMkl5A4=";
     })
   ];
@@ -39,7 +39,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Core package for using GraphQL in a custom server easily";
-    homepage = "https://github.com/graphql-python/graphql-server-core";
+    homepage = "https://github.com/graphql-python/graphql-server";
     license = lib.licenses.mit;
     maintainers = [ ];
   };

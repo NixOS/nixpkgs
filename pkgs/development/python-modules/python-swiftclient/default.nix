@@ -25,7 +25,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "python-swiftclient";
-  version = "4.10.0";
+  version = "4.11.0";
   pyproject = true;
 
   build-system = [
@@ -39,7 +39,7 @@ buildPythonPackage (finalAttrs: {
     owner = "openstack";
     repo = "python-swiftclient";
     tag = finalAttrs.version;
-    hash = "sha256-G3o9R3+hDQgvSnmle0paZo/KV56OMU38tIXqUJGmUaQ=";
+    hash = "sha256-/X/QQ8Sx+ndT45Y0ZEdvW94lUS15dyJ8/LaGhNhG3ZQ=";
   };
 
   nativeBuildInputs = [

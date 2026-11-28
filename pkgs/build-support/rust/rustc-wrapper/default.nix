@@ -3,8 +3,8 @@
   runCommand,
   rustc-unwrapped,
   sysroot ? null,
-  stdenvNoCC,
-  shell ? stdenvNoCC.shell,
+  runtimeShell,
+  shell ? runtimeShell,
 }:
 let
   sysrootFlag = lib.optionalString (sysroot != null) "--sysroot ${sysroot}";

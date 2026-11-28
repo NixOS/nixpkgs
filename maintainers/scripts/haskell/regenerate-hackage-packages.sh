@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i bash -E 'with import ../../.. {}; mkShell { packages = [ bash coreutils haskellPackages.cabal2nix-unstable.bin git (import ../../../ci {}).fmt.pkg ]; }'
+#! nix-shell -i bash -I nixpkgs=. -p bash coreutils haskellPackages.cabal2nix-unstable.bin git "(import <nixpkgs/ci> {}).fmt.pkg"
 
 set -euo pipefail
 

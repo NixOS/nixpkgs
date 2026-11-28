@@ -1,0 +1,11 @@
+--- a/src/fs/bcachefs/util/async_exec.rs
++++ b/src/fs/bcachefs/util/async_exec.rs
+@@ -185,7 +185,7 @@ pub fn system_unbound() -> &'static Queue {
+ 
+ #[cfg(kernel)]
+ pub fn system_unbound() -> &'static Queue {
+-    kernel::workqueue::system_unbound()
++    kernel::workqueue::system_dfl()
+ }
+ 
+ // ---- WaitGroup: an async fork-join barrier ----

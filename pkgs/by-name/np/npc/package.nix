@@ -2,13 +2,15 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  pkg-config,
+  aws-lc,
   git,
   nix,
   nix-update-script,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "npc";
-  version = "1.0.1";
+  version = "1.0.2";
 
   __structuredAttrs = true;
 
@@ -16,10 +18,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "samestep";
     repo = "npc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zimu94nLhfOa7kKBqpkOlGYvKN6NOIq4dr3qHQXHMG8=";
+    hash = "sha256-V/yc0GtpLAtLflaD7MiREfmDsDEHzH7CY9cH0d1KKKs=";
   };
 
-  cargoHash = "sha256-HqQu/Gt5S9iBgHCFPLFlCOGzPM121Ai4HKhh/h49rZA=";
+  cargoHash = "sha256-AcUet69xxrm8Vnb7vex8kDeGawx6j2vTPzCv6SrsIlM=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ aws-lc ];
 
   env = {
     GIT_BIN = lib.getExe git;

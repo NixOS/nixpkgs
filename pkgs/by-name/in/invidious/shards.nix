@@ -1,13 +1,13 @@
 {
   "ameba" = {
     url = "https://github.com/crystal-ameba/ameba.git";
-    rev = "v1.6.1";
-    sha256 = "1qlgqpgycfxvvrfzih7b9ayb6fvkffz5aw0msbj70z2q7wvsq29p";
+    rev = "v1.7.0";
+    sha256 = "0blfyizcajyrgbfxhiwnvf1xmz3wfx6kpf9jf8x7daxihany4r9z";
   };
   "athena-negotiation" = {
     url = "https://github.com/athena-framework/negotiation.git";
-    rev = "v0.1.1";
-    sha256 = "1vkk59lqrxb0l8kyzs114i3c18zb2bdiah2xhazkk8q7x6fz4yzk";
+    rev = "v0.2.0";
+    sha256 = "1rs79czg0v2bp1m5cxwkcg98qwn3rmr5wj2k1p4xr19cnfi4izav";
   };
   "backtracer" = {
     url = "https://github.com/sija/backtracer.cr.git";
@@ -26,8 +26,8 @@
   };
   "http_proxy" = {
     url = "https://github.com/mamantoha/http_proxy.git";
-    rev = "v0.10.3";
-    sha256 = "1hgghjy611m9bbmq8drvzs30mymkq2s4d18lp19543qls58h80vs";
+    rev = "v0.17.0";
+    sha256 = "0a2xkw02542npnqz3wp2gqv9ypxavj8h5cm0jvsgx6i8bmf0f2ak";
   };
   "kemal" = {
     url = "https://github.com/kemalcr/kemal.git";
@@ -51,8 +51,8 @@
   };
   "spectator" = {
     url = "https://github.com/icy-arctic-fox/spectator.git";
-    rev = "v0.10.6";
-    sha256 = "0w6mv1q44is2m19pyspkyiwm84h55nchsm4pp82gdbb0j9ylhckx";
+    rev = "v0.12.4";
+    sha256 = "1ykq1h7xl7zdssgk4ml8x3g17k4q0mz6kfddqjryx7xzd91s3x2y";
   };
   "sqlite3" = {
     url = "https://github.com/crystal-lang/crystal-sqlite3.git";

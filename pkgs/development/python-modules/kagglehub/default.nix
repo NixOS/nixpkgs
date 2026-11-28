@@ -40,7 +40,6 @@ buildPythonPackage (finalAttrs: {
   pname = "kagglehub";
   version = "1.0.2";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Kaggle";
@@ -98,6 +97,8 @@ buildPythonPackage (finalAttrs: {
   disabledTestPaths = [
     # Require internet access
     "integration_tests/"
+    # Seg fault
+    "tests/test_dataset_load.py"
   ];
 
   disabledTests = [

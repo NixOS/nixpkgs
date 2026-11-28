@@ -11,12 +11,12 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "jwcrypto";
-  version = "1.5.8";
+  version = "1.6.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-w9cRS29uZbUva32oF+uMuEI+HaMeHvE1CER8gey9zDQ=";
+    hash = "sha256-oeFXDaXC412803XsHSiRok3o6zXuLB/o6Rl477cs/pA=";
   };
 
   build-system = [ hatchling ];
@@ -34,7 +34,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Implementation of JOSE Web standards";
     homepage = "https://github.com/latchset/jwcrypto";
-    changelog = "https://github.com/latchset/jwcrypto/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/latchset/jwcrypto/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.lgpl3Plus;
     maintainers = [ ];
   };

@@ -215,7 +215,8 @@ stdenv.mkDerivation (
       (lib.cmakeBool "MIR_ENABLE_TESTS" finalAttrs.finalPackage.doCheck)
       # BadBufferTest.test_truncated_shm_file *doesn't* throw an error as the test expected, mark as such
       # https://github.com/canonical/mir/pull/1947#issuecomment-811810872
-      (lib.cmakeBool "MIR_SIGBUS_HANDLER_ENVIRONMENT_BROKEN" true)
+      # Doesn't happen anymore with 2.31, don't know at what point this got fixed...
+      (lib.cmakeBool "MIR_SIGBUS_HANDLER_ENVIRONMENT_BROKEN" pinned)
       (lib.cmakeFeature "MIR_EXCLUDE_TESTS" (
         lib.strings.concatStringsSep ";" (
           lib.optionals (lib.strings.versionOlder version "2.22.0") [
@@ -227,11 +228,6 @@ stdenv.mkDerivation (
       # These get built but don't get executed by default, yet they get installed when tests are enabled
       (lib.cmakeBool "MIR_BUILD_PERFORMANCE_TESTS" false)
       (lib.cmakeBool "MIR_BUILD_PLATFORM_TEST_HARNESS" false)
-      (lib.cmakeBool "MIR_USE_APPARMOR" true)
-      (lib.cmakeBool "MIR_ENABLE_RUST" true)
-      # https://github.com/canonical/mir/issues/2987
-      # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=106799
-      (lib.cmakeBool "MIR_USE_PRECOMPILED_HEADERS" false)
       (lib.cmakeFeature "MIR_COMPILER_QUIRKS" (
         lib.strings.concatStringsSep ";" (
           lib.optionals (lib.strings.versionOlder version "2.22.0") [
@@ -240,7 +236,17 @@ stdenv.mkDerivation (
           ]
         )
       ))
-    ];
+    ]
+    ++ lib.optionals (lib.strings.versionAtLeast version "2.18.0") [
+      (lib.cmakeBool "MIR_USE_APPARMOR" true)
+    ]
+    # Option added in 2.22, Rust dependency made unconditional & option dropped in 2.30
+    ++
+      lib.optionals
+        (lib.strings.versionAtLeast version "2.22.0" && lib.strings.versionOlder version "2.30.0")
+        [
+          (lib.cmakeBool "MIR_ENABLE_RUST" true)
+        ];
 
     env.NIX_CFLAGS_COMPILE = lib.optionalString (lib.strings.versionOlder version "2.20.0") (toString [
       # std::wstring_convert<std::codecvt_utf8[...]> in src/server/shell/decoration/renderer.cpp is deprecated in C++17, removed in C++26

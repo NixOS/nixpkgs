@@ -14,8 +14,8 @@ buildDunePackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "fxfactorial";
     repo = "ocaml-linenoise";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-yWBWMbk1anXaF4hIakTOcRZFCYmxI0xG3bHFFOAyEDA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-yWBWMbk1anXaF4hIakTOcRZFCYmxI0xG3bHFFOAyEDA=";
   };
 
   propagatedBuildInputs = [ result ];

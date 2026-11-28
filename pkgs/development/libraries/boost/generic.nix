@@ -368,7 +368,7 @@ stdenv.mkDerivation {
     + lib.optionalString enablePython ''
       cat << EOF >> user-config.jam
       using python : : ${python.pythonOnBuildForHost.interpreter}
-        : ${python}/include/python${python.pythonVersion}
+        : ${python}/include/${python.libPrefix}
         : ${python}/lib
         ;
       EOF

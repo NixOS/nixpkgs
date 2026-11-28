@@ -1,4 +1,5 @@
 {
+  stdenv,
   lib,
   fetchFromGitHub,
   buildPythonPackage,
@@ -24,16 +25,16 @@
   looptime,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "kopf";
-  version = "1.44.6";
+  version = "1.45.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nolar";
     repo = "kopf";
-    tag = version;
-    hash = "sha256-ffBdauplO1WkrXcsJuCKBhlkXpoinFqRU24uSoDQIm0=";
+    tag = finalAttrs.version;
+    hash = "sha256-TwNkfUHaBM7gfRHZlAXBj+Iundr6Bmf6X6CFxQZuN5E=";
   };
 
   build-system = [
@@ -73,6 +74,10 @@ buildPythonPackage rec {
     "tests/admission/test_webhook_ngrok.py"
     "tests/admission/test_webhook_server.py"
     "tests/authentication/test_credentials.py"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "tests/posting/test_threadsafety.py"
+    "tests/running/test_spawn_tasks.py"
   ];
 
   disabledTests = [
@@ -80,7 +85,10 @@ buildPythonPackage rec {
     "test_connection_info_as_ssl_context_when_insecure"
   ];
 
-  pytestFlags = [ "-Wignore::pytest.PytestUnraisableExceptionWarning" ];
+  pytestFlags = [
+    "-Wignore::pytest.PytestUnraisableExceptionWarning"
+    "-Wignore::DeprecationWarning"
+  ];
 
   __darwinAllowLocalNetworking = true;
 
@@ -91,8 +99,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python framework to write Kubernetes operators";
     homepage = "https://kopf.readthedocs.io/";
-    changelog = "https://github.com/nolar/kopf/releases/tag/${src.tag}";
+    changelog = "https://github.com/nolar/kopf/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ genga898 ];
   };
-}
+})

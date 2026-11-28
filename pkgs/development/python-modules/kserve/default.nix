@@ -62,7 +62,6 @@ buildPythonPackage (finalAttrs: {
   pname = "kserve";
   version = "0.21.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "kserve";
@@ -75,7 +74,9 @@ buildPythonPackage (finalAttrs: {
 
   patches = [
     # vllm 0.29.0 removed vllm.entrypoints.openai.engine.protocol
-    ./vllm-0.29-compat.patch
+    # vllm 0.32.0 moved vllm.entrypoints.chat_utils to vllm.renderers.chat_utils
+    # vllm 0.33.0 no longer re-exports some openai types from vllm.renderers.chat_utils
+    ./vllm-compat.patch
   ];
 
   build-system = [

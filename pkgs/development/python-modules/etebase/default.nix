@@ -8,6 +8,7 @@
   rustc,
   rustfmt,
   setuptools-rust,
+  libsodium,
   openssl,
   msgpack,
   nixosTests,
@@ -40,7 +41,10 @@ buildPythonPackage rec {
     rustc
   ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [
+    libsodium
+    openssl
+  ];
 
   propagatedBuildInputs = [ msgpack ];
 

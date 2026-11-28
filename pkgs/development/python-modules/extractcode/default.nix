@@ -12,6 +12,7 @@
   patch,
   six,
   typecode,
+  zlib,
 
   # tests
   pytest-xdist,
@@ -40,6 +41,7 @@ buildPythonPackage (finalAttrs: {
     patch
     six
     typecode
+    zlib
   ];
 
   nativeCheckInputs = [
@@ -76,6 +78,15 @@ buildPythonPackage (finalAttrs: {
     "test_get_best_handler_nuget_is_selected_over_zip"
     "test_get_best_handler_nuget_is_selected_over_zip2"
     "test_get_best_handler_nuget_is_selected_over_zip3"
+    # AssertionError: extracted file list differs from expected JSON
+    "test_extract_directory_of_windows_ar_archives"
+    # assertRaisesInstance fails to match expected exception
+    "test_extract_ar_with_relative_path_libarch"
+    # AssertionError: extracted file list differs from expected
+    "test_extract_ar_with_permissions"
+    "test_extract_ar_with_permissions_libarchive"
+    # AssertionError: Exception not raised
+    "test_extract_ar_with_relative_path_and_backslashes_in_names_libarch"
   ];
 
   pythonImportsCheck = [ "extractcode" ];

@@ -4,29 +4,25 @@
   lib,
   makeWrapper,
 }:
-appimageTools.wrapType2 rec {
+appimageTools.wrapType2 (finalAttrs: {
   pname = "cubelify";
   version = "1.25.14";
 
   src = fetchurl {
-    url = "https://storage.cubelify.com/overlay/v1/Cubelify%20Overlay-${version}.AppImage";
+    url = "https://storage.cubelify.com/overlay/v1/Cubelify%20Overlay-${finalAttrs.version}.AppImage";
     hash = "sha512-R2J1u+XAeOwNe6lzsntXzIU0wk7UEXa4QBncpMnc3qgp/uYzaV+rBbk5+NyL+GBjLEVPkUDoMjoL2K2iCZpdYw==";
   };
 
   nativeBuildInputs = [ makeWrapper ];
 
-  extraInstallCommands =
-    let
-      contents = appimageTools.extract { inherit pname version src; };
-    in
-    ''
-      wrapProgram $out/bin/cubelify \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
-      install -Dm444 ${contents}/cubelify-overlay.desktop -t $out/share/applications/
-      install -Dm444 ${contents}/cubelify-overlay.png -t $out/share/icons
-      substituteInPlace $out/share/applications/cubelify-overlay.desktop \
-        --replace-fail 'Exec=AppRun --no-sandbox %U' 'Exec=cubelify'
-    '';
+  extraInstallCommands = ''
+    wrapProgram $out/bin/cubelify \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
+    install -Dm444 ${finalAttrs.contents}/cubelify-overlay.desktop -t $out/share/applications/
+    install -Dm444 ${finalAttrs.contents}/cubelify-overlay.png -t $out/share/icons
+    substituteInPlace $out/share/applications/cubelify-overlay.desktop \
+      --replace-fail 'Exec=AppRun --no-sandbox %U' 'Exec=cubelify'
+  '';
 
   passthru.updateScript = ./update.sh;
 
@@ -38,4 +34,4 @@ appimageTools.wrapType2 rec {
     maintainers = with lib.maintainers; [ yunfachi ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})

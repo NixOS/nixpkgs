@@ -11,6 +11,8 @@ let
 
   toml = pkgs.formats.toml { };
 
+  otel = import ./otel.nix { inherit lib; };
+
   baseDir = "/var/lib/hydra";
 
   hydraConf = pkgs.writeScript "hydra.conf" cfg.extraConfig;
@@ -34,6 +36,8 @@ let
   env = {
     NIX_REMOTE = "daemon";
     PGPASSFILE = "${baseDir}/pgpass";
+    # Only run when no transport is configured, e.g. through `smtpHost`.
+    HYDRA_PROGRAM_SENDMAIL = cfg.sendmail;
   }
   // lib.optionalAttrs (cfg.smtpHost != null) {
     EMAIL_SENDER_TRANSPORT = "SMTP";
@@ -45,7 +49,6 @@ let
   serverEnv =
     env
     // {
-      HYDRA_TRACKER = cfg.tracker;
       XDG_CACHE_HOME = "${baseDir}/www/.cache";
       COLUMNS = "80";
       PGPASSFILE = "${baseDir}/pgpass-www"; # grrr
@@ -55,6 +58,13 @@ let
   localDbUrl = "postgres://hydra@%2Frun%2Fpostgresql:5432/hydra";
 
   haveLocalDB = cfg.dbUrl == localDbUrl;
+
+  # Which programs each of Hydra's programs runs, with the Nix this machine uses.
+  hydraPrograms = cfg.package.hydraPrograms.override { nix = config.nix.package; };
+  evaluatorPrograms = hydraPrograms.programs.hydra-evaluator;
+
+  # What plugins from outside Hydra, and the commands `RunCommand` runs, find on `PATH`.
+  pluginPath = lib.makeBinPath cfg.pluginPath;
 
   hydra-package =
     let
@@ -144,6 +154,16 @@ in
               type = lib.types.ints.positive;
               default = 4;
               description = "How many jobsets to evaluate at once.";
+            };
+
+            roots_dir = lib.mkOption {
+              type = lib.types.path;
+              default = cfg.gcRootsDir;
+              defaultText = lib.literalExpression "config.services.hydra.gcRootsDir";
+              description = ''
+                Where to root the evaluated derivations.
+                It must be the directory `hydra-update-gc-roots` tidies.
+              '';
             };
           };
         };
@@ -241,7 +261,17 @@ in
           '';
         };
 
-        package = lib.mkPackageOption pkgs "hydra-ad-hoc" { };
+        package = otel.mkPackageOption {
+          inherit pkgs;
+          name = "hydra-ad-hoc";
+          otelCfg = cfg.adHoc.otel;
+          otelPath = "services.hydra.adHoc.otel";
+        };
+
+        otel = otel.mkOtelOption {
+          component = "hydra-ad-hoc";
+          binary = "hydra-ad-hoc";
+        };
 
         socketPath = lib.mkOption {
           type = lib.types.path;
@@ -356,6 +386,28 @@ in
         '';
       };
 
+      sendmail = lib.mkOption {
+        type = lib.types.str;
+        default = "${config.security.wrapperDir}/sendmail";
+        defaultText = lib.literalExpression ''"''${config.security.wrapperDir}/sendmail"'';
+        description = ''
+          The `sendmail` program to send email with, when no
+          {option}`services.hydra.smtpHost` is set. The default is the
+          setuid wrapper that mail servers such as Postfix install.
+        '';
+      };
+
+      pluginPath = lib.mkOption {
+        type = lib.types.listOf lib.types.package;
+        default = [ ];
+        example = lib.literalExpression "[ pkgs.curl ]";
+        description = ''
+          Packages whose programs are on the `PATH` of the plugins from outside
+          Hydra and of the commands run by the `RunCommand` plugin, in the
+          evaluator and `hydra-notify`.
+        '';
+      };
+
       tracker = lib.mkOption {
         type = lib.types.str;
         default = "";
@@ -428,7 +480,17 @@ in
       };
 
       queueRunner = {
-        package = lib.mkPackageOption pkgs "hydra-queue-runner" { };
+        package = otel.mkPackageOption {
+          inherit pkgs;
+          name = "hydra-queue-runner";
+          otelCfg = queueRunnerCfg.otel;
+          otelPath = "services.hydra.queueRunner.otel";
+        };
+
+        otel = otel.mkOtelOption {
+          component = "the queue runner";
+          binary = "hydra-queue-runner";
+        };
 
         settings = lib.mkOption {
           description = ''
@@ -580,6 +642,16 @@ in
                 type = lib.types.nullOr (lib.types.listOf lib.types.path);
                 default = null;
                 description = "Paths of the accepted authentication tokens.";
+              };
+
+              uploadLocalOutputs = lib.mkOption {
+                type = lib.types.bool;
+                default = true;
+                description = ''
+                  Whether an output that the remote store lacks but the queue runner's local store holds
+                  is uploaded from the local store instead of built. If disabled, it will force a rebuild
+                  on the remote store instead of uploading from the local store.
+                '';
               };
 
               enableFodChecker = lib.mkOption {
@@ -833,6 +905,11 @@ in
       gc_roots_dir = ${cfg.gcRootsDir}
       use-substitutes = ${if cfg.useSubstitutes then "1" else "0"}
       queue_runner_endpoint = http://${queueRunnerCfg.rest.address}:${toString queueRunnerCfg.rest.port}
+      ${lib.optionalString (cfg.tracker != "") ''
+        tracker = <<TRACKER
+        ${cfg.tracker}
+        TRACKER
+      ''}
     '';
 
     environment.systemPackages = [ hydra-package ];
@@ -894,8 +971,8 @@ in
 
         ${lib.optionalString haveLocalDB ''
           if ! [ -e ${baseDir}/.db-created ]; then
-            runuser -u ${config.services.postgresql.superUser} ${config.services.postgresql.package}/bin/createuser hydra
-            runuser -u ${config.services.postgresql.superUser} ${config.services.postgresql.package}/bin/createdb -- -O hydra hydra
+            runuser -u ${config.services.postgresql.superUser} -- ${config.services.postgresql.package}/bin/createuser hydra
+            runuser -u ${config.services.postgresql.superUser} -- ${config.services.postgresql.package}/bin/createdb -O hydra hydra
             touch ${baseDir}/.db-created
           fi
           echo "create extension if not exists pg_trgm" | runuser -u ${config.services.postgresql.superUser} -- ${config.services.postgresql.package}/bin/psql hydra
@@ -930,14 +1007,11 @@ in
     };
 
     systemd.services.hydra-server = {
+      # Hydra names every program it runs by its own variable, never by `PATH`.
+      enableDefaultPath = false;
       wantedBy = [ "multi-user.target" ];
       requires = [ "hydra-init.service" ];
       after = [ "hydra-init.service" ];
-      path = [
-        # these are used to serve logs if they are compressed with zstd or bzip2
-        pkgs.zstd
-        pkgs.bzip2
-      ];
       environment = serverEnv // {
         HYDRA_DATABASE_URL = dbUrlWithAppName "hydra-server";
       };
@@ -955,6 +1029,8 @@ in
     };
 
     systemd.services.hydra-queue-runner = {
+      # Hydra names every program it runs by its own variable, never by `PATH`.
+      enableDefaultPath = false;
       description = "Hydra queue runner";
       wantedBy = [ "multi-user.target" ];
       requires = [
@@ -974,10 +1050,13 @@ in
         RUST_BACKTRACE = "1";
         # nix-store wants $HOME for its cache dir.
         HOME = "/run/hydra-queue-runner";
+        # Hydra finds the programs it runs through these variables, not `PATH`.
+        HYDRA_PROGRAM_NIX = lib.getExe' config.nix.package "nix";
       }
       // lib.optionalAttrs (queueRunnerCfg.awsCredentialsFile != null) {
         AWS_SHARED_CREDENTIALS_FILE = queueRunnerCfg.awsCredentialsFile;
-      };
+      }
+      // otel.otelEnv queueRunnerCfg.otel;
 
       serviceConfig = {
         Type = "notify";
@@ -1083,6 +1162,8 @@ in
     );
 
     systemd.services.hydra-ws = lib.mkIf cfg.ws.enable {
+      # Hydra names every program it runs by its own variable, never by `PATH`.
+      enableDefaultPath = false;
       description = "Hydra WebSocket server";
       wantedBy = [ "multi-user.target" ];
       requires = [ "hydra-ws.socket" ];
@@ -1161,6 +1242,8 @@ in
     };
 
     systemd.services.hydra-ad-hoc = lib.mkIf cfg.adHoc.enable {
+      # Hydra names every program it runs by its own variable, never by `PATH`.
+      enableDefaultPath = false;
       description = "Hydra ad hoc build daemon";
       wantedBy = [ "multi-user.target" ];
       requires = [
@@ -1174,7 +1257,10 @@ in
       # The daemon cannot reload its configuration.
       restartTriggers = [ config.environment.etc."hydra/ad-hoc.toml".source ];
 
-      environment.RUST_BACKTRACE = "1";
+      environment = {
+        RUST_BACKTRACE = "1";
+      }
+      // otel.otelEnv cfg.adHoc.otel;
 
       serviceConfig = {
         Type = "notify";
@@ -1256,6 +1342,8 @@ in
     };
 
     systemd.services.hydra-evaluator = {
+      # Hydra names every program it runs by its own variable, never by `PATH`.
+      enableDefaultPath = false;
       wantedBy = [ "multi-user.target" ];
       requires = [ "hydra-init.service" ];
       wants = [ "network-online.target" ];
@@ -1264,17 +1352,20 @@ in
         "network.target"
         "network-online.target"
       ];
-      path = [
-        pkgs.hostname-debian
-        pkgs.jq
-        hydra-package # hydra-eval-jobset
-      ];
+      # `git` and `ssh` for Nix's git fetcher, `hostname` for `Sys::Hostname::Long`.
+      path = evaluatorPrograms.path ++ [ pkgs.hostname-debian ];
       # Not `hydra.conf`: only the Perl the evaluator runs reads it, and that
       # starts afresh for each evaluation.
       restartTriggers = [ config.environment.etc."hydra/evaluator.toml".source ];
-      environment = env // {
-        HYDRA_DATABASE_URL = dbUrlWithAppName "hydra-evaluator";
-      };
+      environment =
+        env
+        // hydraPrograms.envFor {
+          localPath = name: "${hydra-package}/bin/${name}";
+        } evaluatorPrograms
+        // {
+          HYDRA_DATABASE_URL = dbUrlWithAppName "hydra-evaluator";
+          HYDRA_PLUGIN_PATH = pluginPath;
+        };
       serviceConfig = {
         ExecStart = lib.escapeShellArgs [
           "@${lib.getExe cfg.evaluatorPackage}"
@@ -1299,6 +1390,8 @@ in
       toml.generate "evaluator.toml" cfg.evaluatorSettings;
 
     systemd.services.hydra-update-gc-roots = {
+      # Hydra names every program it runs by its own variable, never by `PATH`.
+      enableDefaultPath = false;
       requires = [ "hydra-init.service" ];
       after = [ "hydra-init.service" ];
       environment = env // {
@@ -1313,6 +1406,8 @@ in
     };
 
     systemd.services.hydra-send-stats = {
+      # Hydra names every program it runs by its own variable, never by `PATH`.
+      enableDefaultPath = false;
       wantedBy = [ "multi-user.target" ];
       after = [ "hydra-init.service" ];
       environment = env // {
@@ -1326,14 +1421,16 @@ in
     };
 
     systemd.services.hydra-notify = {
+      # Hydra names every program it runs by its own variable, never by `PATH`.
+      enableDefaultPath = false;
       wantedBy = [ "multi-user.target" ];
       requires = [ "hydra-init.service" ];
       after = [ "hydra-init.service" ];
       restartTriggers = [ hydraConf ];
-      path = [ pkgs.zstd ];
       environment = env // {
         PGPASSFILE = "${baseDir}/pgpass-queue-runner";
         HYDRA_DATABASE_URL = dbUrlWithAppName "hydra-notify";
+        HYDRA_PLUGIN_PATH = pluginPath;
       };
       serviceConfig = {
         ExecStart = "@${hydra-package}/bin/hydra-notify hydra-notify";
@@ -1345,18 +1442,33 @@ in
       };
     };
 
-    # If there is less than a certain amount of free disk space, stop
-    # the queue/evaluator to prevent builds from failing or aborting.
+    # If there is less than a certain amount of free disk space, stop the
+    # queue runner/evaluator to prevent builds from failing or aborting.
+    # A tag file records this, so that the service is started again once
+    # there is 10 GiB more than the threshold.
     systemd.services.hydra-check-space = {
       script = ''
-        if [ $(($(stat -f -c '%a' /nix/store) * $(stat -f -c '%S' /nix/store))) -lt $((${toString cfg.minimumDiskFree} * 1024**3)) ]; then
-            echo "stopping Hydra queue runner due to lack of free space..."
-            systemctl stop hydra-queue-runner
-        fi
-        if [ $(($(stat -f -c '%a' /nix/store) * $(stat -f -c '%S' /nix/store))) -lt $((${toString cfg.minimumDiskFreeEvaluator} * 1024**3)) ]; then
-            echo "stopping Hydra evaluator due to lack of free space..."
-            systemctl stop hydra-evaluator
-        fi
+        spaceleft=$(($(stat -f -c '%a' /nix/store) * $(stat -f -c '%S' /nix/store)))
+        spacestopstart() {
+          service=$1
+          minFreeGB=$2
+          if [ $spaceleft -lt $(($minFreeGB * 1024**3)) ]; then
+            if [ "$(systemctl is-active $service)" == active ]; then
+              echo "stopping $service due to lack of free space..."
+              systemctl stop $service
+              date > ${baseDir}/.$service-stopped-minspace
+            fi
+          else
+            if [ $spaceleft -gt $((($minFreeGB + 10) * 1024**3)) -a \
+                 -r ${baseDir}/.$service-stopped-minspace ]; then
+              rm ${baseDir}/.$service-stopped-minspace
+              echo "restarting $service due to newly available free space..."
+              systemctl start $service
+            fi
+          fi
+        }
+        spacestopstart hydra-queue-runner ${toString cfg.minimumDiskFree}
+        spacestopstart hydra-evaluator ${toString cfg.minimumDiskFreeEvaluator}
       '';
       startAt = "*:0/5";
       serviceConfig.Slice = "system-hydra.slice";

@@ -15,7 +15,6 @@ buildPythonPackage rec {
   pname = "vncdotool";
   version = "1.2.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "sibson";

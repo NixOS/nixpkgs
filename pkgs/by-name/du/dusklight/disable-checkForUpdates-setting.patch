@@ -1,0 +1,10 @@
+diff --git a/src/dusk/ui/settings.cpp b/src/dusk/ui/settings.cpp
+index 45a710a3f4..e24a6f7b11 100644
+--- a/src/dusk/ui/settings.cpp
++++ b/src/dusk/ui/settings.cpp
+@@ -1591,4 +1591,5 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
+                 .helpText = "Checks GitHub releases for a new Dusklight version on startup.<br/><br/>"
+                             "No personal information is transmitted or collected.",
++                .isDisabled = [] { return true; },
+             });
+ #if BOREALIS_HAS_DISCORD

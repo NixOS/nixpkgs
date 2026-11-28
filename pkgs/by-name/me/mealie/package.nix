@@ -5,72 +5,69 @@
   nixosTests,
   python3,
   nltk-data,
-  writeShellScript,
   nix-update-script,
 
   # frontend
-  fetchYarnDeps,
+  pnpm_12,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   dart-sass,
   nodejs,
-  fixup-yarn-lock,
   stdenv,
-  yarn,
   writableTmpDirAsHomeHook,
 }:
 
 let
-  version = "3.22.0";
+  pnpm = pnpm_12;
+
+  version = "3.31.0";
   src = fetchFromGitHub {
     owner = "mealie-recipes";
     repo = "mealie";
     tag = "v${version}";
-    hash = "sha256-3jDKcDHiA+7ePJGEyGhBSZrhkFQYHrak+AiOHoMv2qE=";
+    hash = "sha256-12/yaK3gZprx5/uXCf8BIMCNU7tg6ironjyH0ln6Cj4=";
   };
 
-  frontend = stdenv.mkDerivation {
+  frontend = stdenv.mkDerivation (finalAttrs: {
     name = "mealie-frontend";
-    inherit version;
-    src = "${src}/frontend";
+    inherit version src;
+    sourceRoot = "${finalAttrs.src.name}/frontend";
 
     __structuredAttrs = true;
 
-    yarnOfflineCache = fetchYarnDeps {
-      yarnLock = "${src}/frontend/yarn.lock";
-      hash = "sha256-S0i7FGD6be/MIBZRDlEb65tzVUuMPLkg9rL71lkrmms=";
-    };
-
     nativeBuildInputs = [
-      fixup-yarn-lock
       nodejs
-      (yarn.override { inherit nodejs; })
+      pnpm
+      pnpmConfigHook
       writableTmpDirAsHomeHook
       dart-sass
     ];
+
+    pnpmDeps = fetchPnpmDeps {
+      pname = "mealie-frontend";
+      inherit pnpm;
+      inherit (finalAttrs) version src;
+      sourceRoot = "${finalAttrs.src.name}/frontend";
+      fetcherVersion = 5;
+      hash = "sha256-9y9ZJOb+Rx2QPDHlbkVwLRC0b61n7zVvWiEGffLAFYk=";
+    };
 
     env = {
       NUXT_TELEMETRY_DISABLED = 1;
     };
 
-    configurePhase = ''
-      runHook preConfigure
-
+    preConfigure = ''
       sed -i 's+"@nuxt/fonts",+// NUXT FONTS DISABLED+g' nuxt.config.ts
-
-      yarn config --offline set yarn-offline-mirror "$yarnOfflineCache"
-      fixup-yarn-lock yarn.lock
-      yarn install --offline --frozen-lockfile --no-progress --non-interactive --ignore-scripts
-      patchShebangs node_modules
-
-      substituteInPlace node_modules/sass-embedded/dist/lib/src/compiler-path.js \
-        --replace-fail 'compilerCommand = (() => {' 'compilerCommand = (() => { return ["dart-sass"];'
-
-      runHook postConfigure
     '';
 
     buildPhase = ''
       runHook preBuild
 
-      yarn --offline generate
+      substituteInPlace node_modules/sass-embedded/dist/lib/src/compiler-path.js \
+        --replace-fail 'compilerCommand = (() => {' 'compilerCommand = (() => { return ["dart-sass"];'
+
+      pnpm generate
+
       runHook postBuild
     '';
 
@@ -88,7 +85,7 @@ let
         esch
       ];
     };
-  };
+  });
 
   python = python3;
   pythonpkgs = python.pkgs;
@@ -98,30 +95,23 @@ pythonpkgs.buildPythonApplication (finalAttrs: {
   inherit version src;
   pyproject = true;
 
-  __structuredAttrs = true;
-
   build-system = with pythonpkgs; [ setuptools ];
 
   nativeBuildInputs = [ makeWrapper ];
-
-  dontWrapPythonPrograms = true;
 
   pythonRelaxDeps = true;
 
   dependencies =
     with pythonpkgs;
     [
-      aiofiles
       alembic
-      aniso8601
-      appdirs
       apprise
       authlib
       bcrypt
       beautifulsoup4
       extruct
       fastapi
-      freezegun
+      fpdf2
       html2text
       httpx
       httpx-curl-cffi
@@ -135,6 +125,7 @@ pythonpkgs.buildPythonApplication (finalAttrs: {
       paho-mqtt
       pillow
       pillow-heif
+      pint
       psycopg2 # pgsql optional-dependencies
       pydantic
       pydantic-settings
@@ -162,37 +153,23 @@ pythonpkgs.buildPythonApplication (finalAttrs: {
     rm -rf dev # Do not need dev scripts & code
 
     substituteInPlace pyproject.toml \
-     --replace-fail '"setuptools==83.0.0"' '"setuptools"'
+     --replace-fail '"setuptools==84.2.1"' '"setuptools"'
 
     substituteInPlace mealie/__init__.py \
       --replace-fail '__version__ = ' '__version__ = "v${version}" #'
   '';
 
-  postInstall =
-    let
-      start_script = writeShellScript "start-mealie" ''
-        ${lib.getExe pythonpkgs.gunicorn} "$@" -k uvicorn.workers.UvicornWorker mealie.app:app;
-      '';
-      init_db = writeShellScript "init-mealie-db" ''
-        ${python.interpreter} $OUT/${python.sitePackages}/mealie/db/init_db.py
-      '';
-    in
-    ''
-      mkdir -p $out/bin $out/libexec
-      rm -f $out/bin/*
-
-      makeWrapper ${start_script} $out/bin/mealie \
-        --set PYTHONPATH "$out/${python.sitePackages}:${pythonpkgs.makePythonPath finalAttrs.passthru.dependencies}" \
-        --set STATIC_FILES "${finalAttrs.passthru.frontend}"
-
-      makeWrapper ${init_db} $out/libexec/init_db \
-        --set PYTHONPATH "$out/${python.sitePackages}:${pythonpkgs.makePythonPath finalAttrs.passthru.dependencies}" \
-        --set OUT "$out"
-    '';
+  makeWrapperArgs = [
+    "--set"
+    "STATIC_FILES"
+    finalAttrs.passthru.frontend
+  ];
 
   nativeCheckInputs = with pythonpkgs; [
-    pytestCheckHook
+    freezegun
+    httpx2
     pytest-asyncio
+    pytestCheckHook
   ];
 
   # Needed for tests
@@ -200,9 +177,9 @@ pythonpkgs.buildPythonApplication (finalAttrs: {
     export NLTK_DATA=${nltk-data.averaged-perceptron-tagger-eng}
   '';
 
-  disabledTests = [
-    # pydantic_core._pydantic_core.ValidationError: 1 validation error
-    "test_pg_connection_url_encode_password"
+  disabledTestPaths = [
+    # requires unpackaged `pydantic2ts`
+    "tests/unit_tests/test_code_generation.py"
   ];
 
   passthru = {

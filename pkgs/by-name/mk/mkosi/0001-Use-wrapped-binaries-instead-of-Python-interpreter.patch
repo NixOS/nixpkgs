@@ -7,13 +7,13 @@ Rather than calling ukify and mkosi with sys.executable, which doesn't use the P
 
 Signed-off-by: Moritz Sanft <58110325+msanft@users.noreply.github.com>
 ---
- mkosi/__init__.py   | 21 +++++++++++----------
+ mkosi/__init__.py   | 22 ++++++++++++----------
  mkosi/bootloader.py |  3 +--
- mkosi/run.py        | 10 +++++++---
- 3 files changed, 19 insertions(+), 15 deletions(-)
+ mkosi/run.py        |  8 ++++++--
+ 3 files changed, 19 insertions(+), 14 deletions(-)
 
 diff --git a/mkosi/__init__.py b/mkosi/__init__.py
-index f4766ae71244a21caa5bcbf5b5376f617c706b33..e022c2e2e3ea267a78c69c219890572652e3f350 100644
+index 7f10e34d526fdf1f933c73cd55c7eefeac1b393a..0b81125f4db771911dd921ea9f394588f772d09e 100644
 --- a/mkosi/__init__.py
 +++ b/mkosi/__init__.py
 @@ -639,7 +639,7 @@ def finalize_host_scripts(
@@ -38,7 +38,7 @@ index f4766ae71244a21caa5bcbf5b5376f617c706b33..e022c2e2e3ea267a78c69c2198905726
              "--bind", "/buildroot", "/",
              "--bind", "/var/tmp", "/var/tmp",
              *apivfs_options(root=Path("/")),
-@@ -1610,7 +1614,7 @@ def run_ukify(
+@@ -1617,7 +1621,7 @@ def run_ukify(
      sign: bool = True,
      json_out: bool = False,
  ) -> dict[str, Any]:
@@ -47,7 +47,7 @@ index f4766ae71244a21caa5bcbf5b5376f617c706b33..e022c2e2e3ea267a78c69c2198905726
      if not ukify:
          die("Could not find ukify")
  
-@@ -1622,7 +1626,6 @@ def run_ukify(
+@@ -1629,7 +1633,6 @@ def run_ukify(
      (context.workspace / "cmdline").write_text(f"{' '.join(cmdline)}\x00")
  
      cmd = [
@@ -55,7 +55,7 @@ index f4766ae71244a21caa5bcbf5b5376f617c706b33..e022c2e2e3ea267a78c69c2198905726
          ukify,
          "build",
          *arguments,
-@@ -1717,7 +1720,7 @@ def build_uki(
+@@ -1724,11 +1727,11 @@ def build_uki(
      profiles: Sequence[Path],
      output: Path,
  ) -> dict[str, Any]:
@@ -64,16 +64,12 @@ index f4766ae71244a21caa5bcbf5b5376f617c706b33..e022c2e2e3ea267a78c69c2198905726
          die("Could not find ukify")
  
      json_out = False
-@@ -1776,7 +1779,7 @@ def build_uki(
-             "--pcr-banks", "sha256",
-         ]  # fmt: skip
+-    ukify_version = systemd_tool_version(python_binary(context.config), ukify, sandbox=context.sandbox)
++    ukify_version = systemd_tool_version(ukify, sandbox=context.sandbox)
  
--        ukify_version = systemd_tool_version(python_binary(context.config), ukify, sandbox=context.sandbox)
-+        ukify_version = systemd_tool_version(ukify, sandbox=context.sandbox)
- 
-         if ukify_version >= "258":
-             cert_parameter = "--pcr-certificate"
-@@ -1838,7 +1841,6 @@ def build_uki(
+     arguments: list[PathString] = [
+         "--os-release", f"@{workdir(context.root / 'usr/lib/os-release')}",
+@@ -1848,7 +1851,6 @@ def build_uki(
          # new .ucode section support?
          if (
              systemd_tool_version(
@@ -81,7 +77,7 @@ index f4766ae71244a21caa5bcbf5b5376f617c706b33..e022c2e2e3ea267a78c69c2198905726
                  ukify,
                  sandbox=context.sandbox,
              )
-@@ -1906,7 +1908,7 @@ def want_uki(context: Context) -> bool:
+@@ -1916,7 +1918,7 @@ def want_uki(context: Context) -> bool:
          or (
              context.config.unified_kernel_images == UnifiedKernelImage.auto
              and systemd_stub_binary(context).exists()
@@ -90,7 +86,7 @@ index f4766ae71244a21caa5bcbf5b5376f617c706b33..e022c2e2e3ea267a78c69c2198905726
          )
      )
  
-@@ -2844,9 +2846,9 @@ def check_ukify(
+@@ -2856,9 +2858,9 @@ def check_ukify(
      reason: str,
      hint: Optional[str] = None,
  ) -> None:
@@ -103,7 +99,7 @@ index f4766ae71244a21caa5bcbf5b5376f617c706b33..e022c2e2e3ea267a78c69c2198905726
          die(
              f"Found '{ukify}' with version {v} but version {version} or newer is required to {reason}.",
 diff --git a/mkosi/bootloader.py b/mkosi/bootloader.py
-index 7d434bb4776980c6fa58ae8f7795f3ffc319baeb..8960a6d17d153b06b029f9072a464a12f5cafe65 100644
+index 3260de15feb58543dee77f1f277b447f8d19e7f4..f499e679bac78be6331c958dac1e446fb0d9ca76 100644
 --- a/mkosi/bootloader.py
 +++ b/mkosi/bootloader.py
 @@ -315,8 +315,7 @@ def find_signed_grub_image(context: Context) -> Optional[Path]:
@@ -117,7 +113,7 @@ index 7d434bb4776980c6fa58ae8f7795f3ffc319baeb..8960a6d17d153b06b029f9072a464a12
  
  def extract_pe_section(context: Context, binary: Path, section: str, output: Path) -> Path:
 diff --git a/mkosi/run.py b/mkosi/run.py
-index 159b75c1af1b5d84e409426e566e098571086c8e..68572039cbeddcb1c32ffc1e2ba34c91dede52b0 100644
+index 3e94c5ac446581dd4d71d363d7738678c9a7f567..f8ad9486b1d04f300c57cd57795f22ff19f0f164 100644
 --- a/mkosi/run.py
 +++ b/mkosi/run.py
 @@ -352,7 +352,11 @@ def spawn(

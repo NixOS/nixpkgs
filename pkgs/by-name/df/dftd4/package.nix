@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  fetchpatch,
   gfortran,
   buildType ? "meson",
   cmake,
@@ -27,7 +26,7 @@ assert (
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dftd4";
-  version = "4.2.0";
+  version = "4.3.1";
   __structuredAttrs = true;
   strictDeps = true;
 
@@ -35,20 +34,12 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "dftd4";
     repo = "dftd4";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-uKjNOIza3/I0oREp88oFESoNqEdumo1AztIjcrVb1O8=";
+    hash = "sha256-hItJfHB3ZDFlqixrhT9Ut54I0xC3BoWeor5mVzZhLK8=";
   };
 
   patches = [
     # Fix pkg-config, meson and cmake paths for include and lib dirs
     ./build-paths.patch
-
-    # This was not declared as part of the public API, which led to linking
-    # failures with gfortran 16.
-    (fetchpatch {
-      name = "add-get_numerical_hessian_api-to-public-api.patch";
-      url = "https://github.com/dftd4/dftd4/commit/f84dc4033d9ce036e74e709b9cf42c72249f4f52.patch";
-      hash = "sha256-mdKWIKz8A92lI0sMl5rXwhzKd2UDej0yPYiKllH1Asc=";
-    })
   ];
 
   nativeBuildInputs = [
@@ -108,11 +99,8 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Generally Applicable Atomic-Charge Dependent London Dispersion Correction";
     changelog = "https://github.com/dftd4/dftd4/releases/tag/${finalAttrs.src.tag}";
     mainProgram = "dftd4";
-    license = with lib.licenses; [
-      lgpl3Plus
-      gpl3Plus
-    ];
-    homepage = "https://github.com/grimme-lab/dftd4";
+    license = lib.licenses.lgpl3Plus;
+    homepage = "https://github.com/dftd4/dftd4";
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.sheepforce ];
   };

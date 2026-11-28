@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "qlcplus";
-  version = "5.3.0";
+  version = "5.3.1";
 
   src = fetchFromGitHub {
     owner = "mcallegari";
     repo = "qlcplus";
     rev = "QLC+_${version}";
-    hash = "sha256-55Jy4t60Lc6YOGko6fW/pUjS5uAiNhVDn4bm8LBWkzI=";
+    hash = "sha256-NRJDQ+j6kc+WirBUUsal90YDPYnp9Q5HuqtSL5bWWco=";
   };
 
   nativeBuildInputs = [
@@ -101,7 +101,7 @@ stdenv.mkDerivation rec {
   versionCheckKeepEnvironment = [ "QT_QPA_PLATFORM" ];
 
   passthru.updateScript = nix-update-script {
-    # Tags look like QLC+_5.3.0
+    # Tags look like QLC+_5.3.1
     extraArgs = [ "--version-regex=^QLC\\+_(.*)$" ];
   };
 

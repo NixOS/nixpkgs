@@ -47,7 +47,6 @@ stdenv.mkDerivation {
     ];
 
   buildTargets = [ "modules" ];
-  installFlags = [ "INSTALL_MOD_STRIP=1" ];
   installTargets = [ "modules_install" ];
   enableParallelBuilding = true;
 

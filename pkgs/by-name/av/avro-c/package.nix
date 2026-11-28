@@ -12,12 +12,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "avro-c";
-  version = "1.12.1";
+  version = "1.12.2";
 
   src = fetchurl {
-    url = "mirror://apache/avro/avro-${finalAttrs.version}/c/avro-c-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-tk4xuUcZSZVJYiqpLx2W0XQpZ87SYaCTG2O+O76Qfyw=";
+    url = "mirror://apache/avro/avro-${finalAttrs.version}/avro-src-${finalAttrs.version}.tar.gz";
+    sha256 = "sha256-RJcixELslRTY5pM/nHzPLgVEy3XJUcJbgE6h2Oc9Ers=";
   };
+
+  sourceRoot = "avro-src-${finalAttrs.version}/lang/c";
 
   postPatch = ''
     patchShebangs .
@@ -39,7 +41,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "C library which implements parts of the Avro Specification";
     homepage = "https://avro.apache.org/";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ lblasc ];
+    maintainers = with lib.maintainers; [
+      lblasc
+      smancill
+    ];
     platforms = lib.platforms.all;
   };
 })

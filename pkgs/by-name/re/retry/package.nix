@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "retry";
-  version = "1.0.6";
+  version = "1.0.7";
 
   src = fetchFromGitHub {
     owner = "minfrin";
     repo = "retry";
     rev = "${pname}-${version}";
-    hash = "sha256-26sSjz4UE7TVP66foVhDFTNNzdh/6OY6CaFS/544RQU=";
+    hash = "sha256-zUkOESB8UAt/i5koLq54FUeMHkjzFxaTHpGfui7zD2g=";
   };
 
   nativeBuildInputs = [

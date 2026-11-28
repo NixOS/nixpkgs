@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  nix-update-script,
 
   rustPlatform,
   nodejs,
@@ -9,6 +10,7 @@
   bun,
   writableTmpDirAsHomeHook,
 
+  aws-lc,
   glib,
   glib-networking,
   gst_all_1,
@@ -22,13 +24,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "iloader";
-  version = "2.3.8";
+  version = "2.4.2";
 
   src = fetchFromGitHub {
     owner = "nab138";
     repo = "iloader";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-97CTooLPAhYt9tzPGWyJNyJcUqvomR1eaSpWnKleMh4=";
+    sha256 = "sha256-DGVkq/XEfHYqNtrn/oc4nGQA9Z4dk1iz7hF4EaHxfSo=";
   };
 
   nodeModules = stdenv.mkDerivation {
@@ -71,7 +73,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoRoot = "src-tauri";
   buildAndTestSubdir = "src-tauri";
-  cargoHash = "sha256-EwgiDDYDD8jDXO0cKQeJOFNGKWgXZw7txCQ3uFReXKI=";
+  cargoHash = "sha256-HcJzF7YNcbfXzbPAVJmFgAiEQJkueGf++ExcH6KnwQU=";
 
   doCheck = false;
 
@@ -92,7 +94,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isLinux [ wrapGAppsHook3 ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ makeWrapper ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+  buildInputs = [
+    aws-lc
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
     webkitgtk_4_1
@@ -112,13 +117,23 @@ rustPlatform.buildRustPackage (finalAttrs: {
     makeWrapper $out/Applications/iloader.app/Contents/MacOS/iloader $out/bin/iloader
   '';
 
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--subpackage"
+      "nodeModules"
+    ];
+  };
+
   meta = {
     changelog = "https://github.com/nab138/iloader/releases/tag/v${finalAttrs.version}";
     description = "User friendly sideloader";
     homepage = "https://github.com/nab138/iloader";
     license = lib.licenses.mit;
     mainProgram = "iloader";
-    maintainers = with lib.maintainers; [ ern775 ];
+    maintainers = with lib.maintainers; [
+      ern775
+      mirdukkkkk
+    ];
     platforms = [
       "aarch64-linux"
       "x86_64-linux"

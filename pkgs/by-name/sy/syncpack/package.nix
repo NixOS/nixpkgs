@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "syncpack";
-  version = "15.3.3";
+  version = "15.3.4";
 
   src = fetchFromGitHub {
     owner = "JamieMason";
     repo = "syncpack";
     tag = finalAttrs.version;
-    hash = "sha256-njA6NMIoY38Ej/ymZIVcCVVkM+tPFrDmXWXrDXlYUdw=";
+    hash = "sha256-uv/iBwtE5g0xBZ6KcsYs3QlekW8ONUjmd1lJ18NMQe4=";
   };
 
-  cargoHash = "sha256-phBgKoFHyqXRwf+aTuy/cwiBr1rKuERFrXuWJQKl7+4=";
+  cargoHash = "sha256-zfMeMqzdpvTmObjoFSh8M9CB0ODdnr2+2AFmqjp/NEM=";
 
   __structuredAttrs = true;
 

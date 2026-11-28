@@ -38,7 +38,6 @@ stdenv.mkDerivation {
 
   meta = meta // {
     maintainers = with lib.maintainers; [
-      matteopacini
       Enzime
     ];
   };

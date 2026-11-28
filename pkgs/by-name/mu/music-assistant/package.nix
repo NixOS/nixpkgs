@@ -4,6 +4,7 @@
   airplay-cli,
   python3Packages,
   fetchFromGitHub,
+  fetchpatch,
   ffmpeg_7-headless,
   nixosTests,
   openssl,
@@ -17,6 +18,9 @@ let
     final: prev: {
       # TODO: package properly when no longer using a fork
       aiolibdatachannel = final.callPackage ./aiolibdatachannel.nix { };
+
+      # mcp v2 breaks fastmcp-slim
+      mcp = final.mcp_1;
 
       music-assistant-frontend = final.callPackage ./frontend.nix { };
 
@@ -78,18 +82,24 @@ assert
 
 pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "music-assistant";
-  version = "2.10.6";
+  version = "2.10.13";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "music-assistant";
     repo = "server";
     tag = finalAttrs.version;
-    hash = "sha256-LnHxdaTVz0GHouPGDjQFEp7JOWOoiT4+B1NFWSL9Pys=";
+    hash = "sha256-OGAn3uDek22Scq8IFDH7ylceHoIGXHRD6GtKPpdgIVE=";
   };
 
   patches = [
+    # Fix streams tests leaking a raised log level into other tests
+    # https://github.com/music-assistant/server/pull/6344
+    (fetchpatch {
+      url = "https://github.com/music-assistant/server/commit/28a25af1674cb9a72cc9f6a9fb8faf6632857222.patch";
+      hash = "sha256-sOF1RTt8+DJ10+pMYFuwgdq00FQ9XVWSYfX8qexYP48=";
+    })
+
     (replaceVars ./ffmpeg.patch {
       ffmpeg = lib.getExe' ffmpeg_7-headless "ffmpeg";
       ffprobe = lib.getExe' ffmpeg_7-headless "ffprobe";
@@ -248,6 +258,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
       "local_audio"
       "mpd"
       "msx_bridge"
+      "musiccast"
       "opensubsonic"
       "plex"
       "plex_connect"
@@ -283,6 +294,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     "tests/providers/bandcamp"
     "tests/providers/bbc_sounds"
     "tests/providers/deezer"
+    "tests/providers/genius_lyrics"
     "tests/providers/hue_entertainment"
     "tests/providers/ibroadcast"
     "tests/providers/kion_music"
@@ -300,13 +312,14 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     # Our patches break this test
     "tests/helpers/test_util.py::TestLoadProviderModule"
     "tests/providers/airplay/test_helpers.py::test_get_cli_binary_uses_release_asset_name"
-    "tests/providers/ytmusic/test_ytmusic.py::test_init_unreachable_po_token_server_is_a_retried_setup_failure"
     # We do not have a full git repo to work with
     "tests/scripts/test_release_workflow.py"
     # save compute
     "tests/benchmarks/test_bench_helpers.py"
     # timing sensitive
     "tests/controllers/music/test_music_migrations.py::test_migrate_database_backfills_external_id_lookup"
+    # AssertionError: playback loop stalled (appears to be a race)
+    "tests/providers/sendspin/test_dsp_channel_alignment.py"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
     # RuntimeError: failed to initialize QNNPACK

@@ -9,7 +9,6 @@ buildPythonPackage (finalAttrs: {
   pname = "weblate-fonts";
   version = "2026.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   # nixpkgs-update: no auto update
   # Only weblate uses this and we want to follow its version constraints

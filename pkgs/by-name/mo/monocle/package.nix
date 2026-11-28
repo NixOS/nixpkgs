@@ -2,6 +2,11 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  cacert,
+  pkg-config,
+  aws-lc,
+  sqlite,
+  zstd,
   versionCheckHook,
   writableTmpDirAsHomeHook,
   nix-update-script,
@@ -9,18 +14,37 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "monocle";
-  version = "1.6.0";
+  version = "1.6.2";
 
   src = fetchFromGitHub {
     owner = "bgpkit";
     repo = "monocle";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Z+0YKohmgSNnGtw6yDTrLsx4Q5LFOOyIUt0ji0x18BQ=";
+    hash = "sha256-rib6T4zonSwzOaDfSP6TQaSOmkr2Tr2HzB5ystf2D8E=";
   };
 
-  cargoHash = "sha256-h/FWi+LmGObU6FEOC0yNRhN8wQS6UzYN7Gxe9YO8fos=";
+  cargoHash = "sha256-LWVFzIx28kE805DOU8U8qrGJsqN40PUfRqm6umR9Wbs=";
 
-  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
+  env = {
+    AWS_LC_SYS_USE_SYSTEM = true;
+    LIBSQLITE3_SYS_USE_PKG_CONFIG = true;
+    ZSTD_SYS_USE_PKG_CONFIG = true;
+  };
+
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
+  buildInputs = [
+    aws-lc
+    sqlite
+    zstd
+  ];
+
+  nativeCheckInputs = [
+    cacert
+    writableTmpDirAsHomeHook
+  ];
 
   # require internet access
   checkFlags = map (t: "--skip=${t}") [
@@ -33,6 +57,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "lens::search::tests::test_build_broker_with_filters"
     "lens::search::tests::test_pagination_logic"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];

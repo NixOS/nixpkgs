@@ -17,11 +17,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libcloudproviders";
-  version = "0.4.0";
+  version = "0.4.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/libcloudproviders/${lib.versions.majorMinor finalAttrs.version}/libcloudproviders-${finalAttrs.version}.tar.xz";
-    hash = "sha256-JHsijRAnsmg4aOfXCA04aTpFfpCKrdDBGdUt5Zo5gGQ=";
+    hash = "sha256-PhI/oqNPbf2ZiX6+X+w9+jXZz0sZLCj+f8kMWq+vz1s=";
   };
 
   outputs = [

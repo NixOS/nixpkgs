@@ -26,14 +26,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "weasel";
-  version = "1.0.0";
+  version = "1.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "explosion";
     repo = "weasel";
     tag = "release-v${finalAttrs.version}";
-    hash = "sha256-yiLoLdnDfKby1Ez1hKGL9DxazQto57Zn0DlRmGLurOs=";
+    hash = "sha256-QDGPYu/6+Hdc45F9jH95taQsomzef1COXCGgeJBPx5M=";
   };
 
   build-system = [ setuptools ];

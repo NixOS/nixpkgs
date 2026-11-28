@@ -149,6 +149,8 @@ stdenv.mkDerivation {
     })
   ];
 
+  passthru.saneBackendNames = [ "epsonscan2" ];
+
   meta = {
     inherit description;
     mainProgram = "epsonscan2";

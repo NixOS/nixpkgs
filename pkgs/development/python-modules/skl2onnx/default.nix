@@ -43,9 +43,8 @@ buildPythonPackage (finalAttrs: {
     unittestCheckHook
   ];
 
-  unittestFlagsArray = [
-    "-s"
-    "tests"
+  unittestFlags = [
+    "--start-directory=tests"
   ];
 
   # Core dump

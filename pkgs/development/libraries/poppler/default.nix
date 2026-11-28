@@ -59,13 +59,13 @@ let
     domain = "gitlab.freedesktop.org";
     owner = "poppler";
     repo = "test";
-    rev = "48b6219b84fc0a708040cb279d51095cc4e1c603";
-    hash = "sha256-2eH4dZs2J0CeTWrXOYEHb0Xnpfa7tX8mi7AX2E9D41U=";
+    rev = "0ef006dca68d2206387eca1d36ae06733812e387";
+    hash = "sha256-Ws6WTEa7fU9a5SO+f1yIKvOi4VHrRDP4CD1X8xafK+c=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "poppler-${suffix}";
-  version = "26.10.0";
+  version = "26.11.0";
 
   outputs = [
     "out"
@@ -74,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://poppler.freedesktop.org/poppler-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Z5LLfGkgUAeth9LpNs7MWzox+sKatU/8MXX9trKmzjU=";
+    hash = "sha256-QcMmgBYK3fWo3XqDDkhpwB6fa+4au5HkT6vRup14KPs=";
   };
 
   nativeBuildInputs = [

@@ -1,0 +1,41 @@
+Make Setup.hs of idris-1.3.4 compatible with Cabal's symbolic path API (without backwards compat).
+
+--- a/Setup.hs	2026-11-22 16:50:14.414470022 +0100
++++ b/Setup.hs	2026-11-22 17:16:14.537713307 +0100
+@@ -17,6 +17,7 @@
+ import Distribution.Simple.Utils
+ import Distribution.Compiler
+ import Distribution.PackageDescription
++import Distribution.Utils.Path (makeSymbolicPath)
+ import Distribution.Text
+ import Distribution.Verbosity
+ 
+@@ -42,7 +43,7 @@
+ (<//>) = (Px.</>)
+ idrisCmd local = Px.joinPath $ splitDirectories $ ".." <//> ".." <//> buildDir local <//> "idris" <//> "idris"
+ #else
+-idrisCmd local = ".." </> ".." </>  buildDir local </>  "idris" </>  "idris"
++idrisCmd local = ".." </> ".." </>  interpretSymbolicPathLBI local (buildDir local) </>  "idris" </>  "idris"
+ #endif
+ 
+ -- -----------------------------------------------------------------------------
+@@ -186,8 +187,8 @@
+ idrisConfigure _ flags pkgdesc local = do
+     configureRTS
+     withLibLBI pkgdesc local $ \lib libcfg -> do
+-      let libAutogenDir = autogenComponentModulesDir local libcfg
+-      let libDirs = extraLibDirs $ libBuildInfo lib
++      let libAutogenDir = interpretSymbolicPathLBI local $ autogenComponentModulesDir local libcfg
++      let libDirs = map (interpretSymbolicPathLBI local) $ extraLibDirs $ libBuildInfo lib
+       generateBuildFlagsModule verbosity libAutogenDir libDirs
+       generateVersionModule verbosity libAutogenDir (isRelease (configFlags local))
+       if isFreestanding $ configFlags local
+@@ -304,7 +305,7 @@
+ fixPkg pkg target = pkg { dataDir = target }
+ 
+ idrisTestHook args pkg local hooks flags = do
+-  let target = datadir $ L.absoluteInstallDirs pkg local NoCopyDest
++  let target = makeSymbolicPath $ datadir $ L.absoluteInstallDirs pkg local NoCopyDest
+   testHook simpleUserHooks args (fixPkg pkg target) local hooks flags
+ 
+ -- -----------------------------------------------------------------------------

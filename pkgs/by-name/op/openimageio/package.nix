@@ -16,6 +16,7 @@
   libwebp,
   opencolorio,
   openexr,
+  openjpeg,
   openjph,
   ptex,
   python3Packages,
@@ -26,13 +27,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openimageio";
-  version = "3.1.17.0";
+  version = "3.1.18.1";
 
   src = fetchFromGitHub {
     owner = "AcademySoftwareFoundation";
     repo = "OpenImageIO";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wubIGLrp3FdYEWc61EyAV6lzG+HmOja/XTvqNgi8jMo=";
+    hash = "sha256-zFi1ZuBvlv1Fs0q/qJHELrWXlmCwhi9NlHf1+AlNa7c=";
   };
 
   outputs = [
@@ -60,6 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     libultrahdr
     opencolorio
     openexr
+    openjpeg
     openjph
     ptex
     robin-map

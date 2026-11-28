@@ -5,6 +5,7 @@
   cmake,
   cppunit,
   libiconv,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -14,12 +15,16 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Martchus";
     repo = "cpp-utilities";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-/1YkxIS23YAhzrBJouZAJkOIHe/kaT5R3R+tHEDMuLk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/1YkxIS23YAhzrBJouZAJkOIHe/kaT5R3R+tHEDMuLk=";
   };
 
   nativeBuildInputs = [ cmake ];
-  nativeCheckInputs = [ cppunit ];
+
+  checkInputs = [ cppunit ];
+
+  strictDeps = true;
+
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv # needed on Darwin, see https://github.com/Martchus/cpp-utilities/issues/4
   ];
@@ -27,13 +32,16 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ];
 
   # Otherwise, tests fail since the resulting shared object libc++utilities.so is only available in PWD of the make files
-  preCheck = ''
-    checkFlagsArray+=(
-      "LD_LIBRARY_PATH=$PWD"
-    )
-  '';
+  checkFlags = [
+    "LD_LIBRARY_PATH=$(PWD)"
+  ];
+
   # tests fail on Darwin
   doCheck = !stdenv.hostPlatform.isDarwin;
+
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://github.com/Martchus/cpp-utilities";
@@ -41,5 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ doronbehar ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    pkgConfigModules = [ "c++utilities" ];
   };
 })

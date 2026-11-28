@@ -8,13 +8,13 @@ melpaBuild {
   pname = "m2";
   ename = "M2";
 
-  version = "1.26.6";
+  version = "1.26.11";
 
   src = fetchFromGitHub {
     owner = "Macaulay2";
     repo = "M2-emacs";
-    rev = "ae882ab04da19f62c62462ef9604251a0b30a9f5";
-    hash = "sha256-8qnPzLR616Oypb6YGUm1cVj8jd1QDdeajHkVaTaEnX4=";
+    rev = "aeac7105993337648eae572d2f8fbec3d4aeeaca";
+    hash = "sha256-qPBwcFfJ3JemhEKUdB7cmbvaQvx8CaFx37Z36aMnFHg=";
   };
 
   postPatch = ''

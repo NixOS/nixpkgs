@@ -5,6 +5,7 @@
   gitUpdater,
   nixosTests,
   cmake,
+  ctestCheckHook,
   exiv2,
   gettext,
   gst_all_1,
@@ -28,27 +29,27 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-camera-app";
-  version = "4.1.1";
+  version = "4.2.1";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/apps/lomiri-camera-app";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NRdZLBN+06/YCa+4L1elrmP2nQm/6DNg1EmRY73B+RQ=";
+    hash = "sha256-91Lx9TKtKbvT7IpDVof5fdHItbKRx/yVZcmdxbsZdjA=";
   };
-
-  patches = [
-    # Remove when https://gitlab.com/ubports/development/apps/lomiri-camera-app/-/merge_requests/234 merged & in release
-    ./1001-treewide-Fix-imports-in-tests-after-QML-files-were-moved.patch
-  ];
 
   # We don't want absolute paths in desktop files
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace-fail 'CAMERA_SPLASH ''${CAMERA_APP_DIR}/assets/lomiri-camera-app-splash.svg' 'CAMERA_SPLASH lomiri-app-launch/splash/lomiri-camera-app.svg' \
-      --replace-fail 'READER_SPLASH "''${CAMERA_APP_DIR}/assets/lomiri-barcode-reader-app-splash.svg"' 'READER_SPLASH lomiri-app-launch/splash/lomiri-barcode-reader-app.svg'
+      --replace-fail \
+        'CAMERA_SPLASH ''${CAMERA_APP_DIR}/assets/lomiri-camera-app-splash.svg' \
+        'CAMERA_SPLASH lomiri-app-launch/splash/lomiri-camera-app.svg' \
+      --replace-fail \
+        'READER_SPLASH "''${CAMERA_APP_DIR}/assets/lomiri-barcode-reader-app-splash.svg"' \
+        'READER_SPLASH lomiri-app-launch/splash/lomiri-barcode-reader-app.svg'
   '';
 
+  __structuredAttrs = true;
   strictDeps = true;
 
   nativeBuildInputs = [
@@ -85,23 +86,14 @@ stdenv.mkDerivation (finalAttrs: {
     gst-plugins-ugly
   ]);
 
-  nativeCheckInputs = [ xvfb-run ];
+  nativeCheckInputs = [
+    ctestCheckHook
+    xvfb-run
+  ];
 
   cmakeFlags = [
-    (lib.cmakeBool "INSTALL_TESTS" false)
-    (lib.cmakeBool "CLICK_MODE" false)
-    (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" (
-      lib.concatStringsSep ";" [
-        # Exclude tests
-        "-E"
-        (lib.strings.escapeShellArg "(${
-          lib.concatStringsSep "|" [
-            # Don't care about linter failures
-            "^flake8"
-          ]
-        })")
-      ]
-    ))
+    (lib.strings.cmakeBool "INSTALL_TESTS" false)
+    (lib.strings.cmakeBool "CLICK_MODE" false)
   ];
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
@@ -120,6 +112,11 @@ stdenv.mkDerivation (finalAttrs: {
         ]
       }
     '';
+
+  disabledTests = [
+    # Don't care about linter failures
+    "flake8"
+  ];
 
   postInstall = ''
     mkdir -p $out/share/lomiri-app-launch/splash

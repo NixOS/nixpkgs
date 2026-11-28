@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "sensorpush-ha";
-  version = "1.3.2";
+  version = "1.3.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sstallion";
     repo = "sensorpush-ha";
     tag = "v${version}";
-    hash = "sha256-Gs6WprGscr9fiu78S0OY6624LA87Of7OWkNNnaWIxJk=";
+    hash = "sha256-BsNPON2jYeqddd4vZF7SUhaXFT6AzPitcqL1sI/St/A=";
   };
 
   build-system = [ setuptools ];

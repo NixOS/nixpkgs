@@ -6,6 +6,8 @@
 }:
 
 buildGoModule {
+  __structuredAttrs = true;
+
   pname = "typer";
   version = "0-unstable-2024-05-25";
 

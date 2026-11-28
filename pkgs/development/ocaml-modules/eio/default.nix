@@ -2,7 +2,9 @@
   lib,
   ocaml,
   version ?
-    if lib.versionAtLeast ocaml.version "5.2" then
+    if lib.versionAtLeast ocaml.version "5.4" then
+      "1.7"
+    else if lib.versionAtLeast ocaml.version "5.2" then
       "1.6"
     else if lib.versionAtLeast ocaml.version "5.1" then
       "1.2"
@@ -40,6 +42,10 @@ let
         minimalOCamlVersion = "5.2";
         hash = "sha256-wfBJhrQBCUF2SUhj3eHKmykrWf3GeanXAj5VjYD7WxU=";
       };
+      "1.7" = {
+        minimalOCamlVersion = "5.4";
+        hash = "sha256-qXccDX9NnZ/he63T0UfJboXzRBCrJSEZreKkB6tBzLU=";
+      };
     }
     ."${version}";
 in
@@ -74,7 +80,7 @@ buildDunePackage (finalAttrs: {
   ];
 
   nativeCheckInputs = [
-    mdx.bin
+    mdx.out
   ];
 
   doCheck = lib.versionAtLeast ocaml.version "5.1";

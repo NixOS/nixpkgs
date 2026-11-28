@@ -11,8 +11,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.3.8";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "rainwoodman";
     repo = "sharedmem";

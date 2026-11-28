@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "charge-lnd";
-  version = "0.3.1";
+  version = "0.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "accumulator";
     repo = "charge-lnd";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rACpIHVVq4q3iOEJgJbslCzEcP3qYrc3rZQ85YJfzoQ=";
+    hash = "sha256-tnCdTautTQMzMrCvcbLC8AJApb3MQ/ImacK6u6BGr8s=";
   };
 
   build-system = with python3Packages; [

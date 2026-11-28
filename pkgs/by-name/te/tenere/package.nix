@@ -2,6 +2,8 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  pkg-config,
+  oniguruma,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tenere";
@@ -16,6 +18,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-okIn32IA6ZizfS2XjHxq8cPRIZzvZ4kIz1NI0X72Tfs=";
 
   requiredSystemFeatures = [ "big-parallel" ]; # for fat LTO from upstream
+
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [
+    oniguruma
+  ];
+
+  # Let libgit2-sys use its bundled libgit2 because nixpkgs' libgit2 is newer
+  # than the version this package supports. Revisit after updating the package.
+  preBuild = ''
+    unset LIBGIT2_NO_VENDOR
+  '';
 
   meta = {
     description = "Terminal interface for large language models (LLMs)";

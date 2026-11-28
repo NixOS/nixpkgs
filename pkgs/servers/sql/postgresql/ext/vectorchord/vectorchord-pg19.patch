@@ -1,0 +1,863 @@
+diff -ruN --exclude target --exclude vendor --exclude .cargo /tmp/vchord-orig/VectorChord-1.1.1/Cargo.lock /tmp/vchord-pg19/Cargo.lock
+--- a/Cargo.lock	2026-02-28 04:19:47.000000000 +0100
++++ b/Cargo.lock	2026-11-15 00:43:13.019188859 +0100
+@@ -37,16 +37,6 @@
+ checksum = "4b46cbb362ab8752921c97e041f5e366ee6297bd428a31275b9fcf1e380f7299"
+ 
+ [[package]]
+-name = "annotate-snippets"
+-version = "0.11.5"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "710e8eae58854cdc1790fcb56cca04d712a17be849eeb81da2a724bf4bae2bc4"
+-dependencies = [
+- "anstyle",
+- "unicode-width",
+-]
+-
+-[[package]]
+ name = "anstream"
+ version = "0.6.21"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+@@ -120,7 +110,6 @@
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "993776b509cfb49c750f11b8f07a46fa23e0a1386ffc01fb1e7d343efc387895"
+ dependencies = [
+- "annotate-snippets",
+  "bitflags",
+  "cexpr",
+  "clang-sys",
+@@ -129,15 +118,15 @@
+  "quote",
+  "regex",
+  "rustc-hash",
+- "shlex",
++ "shlex 1.3.0",
+  "syn",
+ ]
+ 
+ [[package]]
+ name = "bitflags"
+-version = "2.10.0"
++version = "2.13.2"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "812e12b5285cc515a9c72a5c1d3b6d46a19dac5acfef5265968c166106e31dd3"
++checksum = "3ded4057c258ba199e2d26386d3af3780957ecaee6c4ef4041c6b4b8b97c0b06"
+ 
+ [[package]]
+ name = "bitvec"
+@@ -180,7 +169,7 @@
+ checksum = "47b26a0954ae34af09b50f0de26458fa95369a0d478d8236d3f93082b219bd29"
+ dependencies = [
+  "find-msvc-tools",
+- "shlex",
++ "shlex 1.3.0",
+ ]
+ 
+ [[package]]
+@@ -314,9 +303,9 @@
+ 
+ [[package]]
+ name = "convert_case"
+-version = "0.8.0"
++version = "0.11.0"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "baaaa0ecca5b51987b9423ccdc971514dd8b0bb7b4060b983d3664dad3f1f89f"
++checksum = "affbf0190ed2caf063e3def54ff444b449371d55c58e513a95ab98eca50adb49"
+ dependencies = [
+  "unicode-segmentation",
+ ]
+@@ -623,18 +612,6 @@
+ 
+ [[package]]
+ name = "getrandom"
+-version = "0.3.4"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "899def5c37c4fd7b2664648c28120ecec138e4d395b459e5ca34f9cce2dd77fd"
+-dependencies = [
+- "cfg-if",
+- "libc",
+- "r-efi",
+- "wasip2",
+-]
+-
+-[[package]]
+-name = "getrandom"
+ version = "0.4.1"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "139ef39800118c7683f2fd3c98c1b23c09ae076556b435f8e9064ae108aaeeec"
+@@ -1116,9 +1093,9 @@
+ 
+ [[package]]
+ name = "pgrx"
+-version = "0.17.0"
++version = "0.19.4"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "dd42eed31a68e3e6d7cec284cdaacd8ffa9b2b3ebb3f1df9ec2fd3558834c6e7"
++checksum = "f5dd9ddc044f17a4454810e33ed6be2d48b3acbe7f031de50c846fe3f56fceb8"
+ dependencies = [
+  "bitflags",
+  "bitvec",
+@@ -1137,9 +1114,9 @@
+ 
+ [[package]]
+ name = "pgrx-bindgen"
+-version = "0.17.0"
++version = "0.19.4"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "d30fa3688ab1cb6429ca46725eb32d5d9f186806c0f0aa6419f86e418b8a81ab"
++checksum = "5d029c415ae1de92ab167ed7b571263971bee720fa49a09281ea82a303230bd8"
+ dependencies = [
+  "bindgen",
+  "cc",
+@@ -1149,16 +1126,16 @@
+  "proc-macro2",
+  "quote",
+  "regex",
+- "shlex",
++ "shlex 2.0.1",
+  "syn",
+  "walkdir",
+ ]
+ 
+ [[package]]
+ name = "pgrx-catalog"
+-version = "0.3.2"
++version = "0.4.1"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "d7b8320f441bd6aa7460a397d1a16dfb915979a1f665c85d9a7bc10d57e38cb8"
++checksum = "165222860d7ff6586806f5d933640cd820c6a9bb7b9b2df1ccf1517c7b2e9016"
+ dependencies = [
+  "paste",
+  "pgrx",
+@@ -1166,9 +1143,9 @@
+ 
+ [[package]]
+ name = "pgrx-macros"
+-version = "0.17.0"
++version = "0.19.4"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "1ca7cc537daa4cc004f12ad1d31756b506358aa900251a82c3280e719da88fa4"
++checksum = "7793f8773cb4b64a5bf06e2f3f70ab44e0e22e9d82b24a1f61c22cbc6c3f171a"
+ dependencies = [
+  "pgrx-sql-entity-graph",
+  "proc-macro2",
+@@ -1178,9 +1155,9 @@
+ 
+ [[package]]
+ name = "pgrx-pg-config"
+-version = "0.17.0"
++version = "0.19.4"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "1cd8670ad408093a83615fc68071929d7677b40021a475649a626319c464f0a3"
++checksum = "6866ba4503eafa848890635ce3b463e30497aa10b3615bb1d97d2ad1caab1800"
+ dependencies = [
+  "cargo_toml",
+  "codepage",
+@@ -1191,16 +1168,16 @@
+  "serde",
+  "serde_json",
+  "thiserror",
+- "toml 0.9.12+spec-1.1.0",
++ "toml 1.0.0+spec-1.1.0",
+  "url",
+  "winapi",
+ ]
+ 
+ [[package]]
+ name = "pgrx-pg-sys"
+-version = "0.17.0"
++version = "0.19.4"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "d9f81faae87d533b573156261b17521c0c7f66f5ca5dab2b9e6ddbf5a63dbd14"
++checksum = "3e59d69ccea6b54b9a5c66b290f95b95507798e8771916728f116df140b1ceb8"
+ dependencies = [
+  "cee-scape",
+  "libc",
+@@ -1212,9 +1189,9 @@
+ 
+ [[package]]
+ name = "pgrx-sql-entity-graph"
+-version = "0.17.0"
++version = "0.19.4"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "4800fa91a481a83d3c1aaffd1324fcd2e587df0ed342c71d6a66d0899027e505"
++checksum = "3b5144a19a62b71360925ffdc09a69077f1373aa1f75a615e9ba59fc16849c85"
+ dependencies = [
+  "convert_case",
+  "eyre",
+@@ -1341,9 +1318,9 @@
+ 
+ [[package]]
+ name = "quote"
+-version = "1.0.44"
++version = "1.0.47"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "21b2ebcf727b7760c461f091f9f0f539b77b8e87f2fd88131e7f1b433b3cece4"
++checksum = "1fbf4db142a473a8d80c26bbf18454ed458bf8d26c8219c331daecfdbd079001"
+ dependencies = [
+  "proc-macro2",
+ ]
+@@ -1377,7 +1354,7 @@
+ checksum = "bc266eb313df6c5c09c1c7b1fbe2510961e5bcd3add930c1e31f7ed9da0feff8"
+ dependencies = [
+  "chacha20",
+- "getrandom 0.4.1",
++ "getrandom",
+  "rand_core 0.10.0",
+ ]
+ 
+@@ -1607,6 +1584,12 @@
+ checksum = "0fda2ff0d084019ba4d7c6f371c95d8fd75ce3524c3cb8fb653a3023f6323e64"
+ 
+ [[package]]
++name = "shlex"
++version = "2.0.1"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "f8fadd59c855ef2080decdef8ff161eb6661b86933c9d82e5ba29dc602a55aba"
++
++[[package]]
+ name = "simd"
+ version = "0.0.0"
+ dependencies = [
+@@ -1719,7 +1702,7 @@
+ checksum = "0136791f7c95b1f6dd99f9cc786b91bb81c3800b639b3478e561ddb7be95e5f1"
+ dependencies = [
+  "fastrand",
+- "getrandom 0.4.1",
++ "getrandom",
+  "once_cell",
+  "rustix",
+  "windows-sys",
+@@ -1853,12 +1836,6 @@
+ checksum = "f6ccf251212114b54433ec949fd6a7841275f9ada20dddd2f29e9ceea4501493"
+ 
+ [[package]]
+-name = "unicode-width"
+-version = "0.2.2"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "b4ac048d71ede7ee76d585517add45da530660ef4390e49b098733c6e897f254"
+-
+-[[package]]
+ name = "unicode-xid"
+ version = "0.2.6"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+@@ -1890,11 +1867,11 @@
+ 
+ [[package]]
+ name = "uuid"
+-version = "1.20.0"
++version = "1.29.2"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "ee48d38b119b0cd71fe4141b30f5ba9c7c5d9f4e7a3a8b4a674e4b6ef789976f"
++checksum = "bed99139f7dac9b5cfe5f17be4d66dc7079a34dee1d74bcc77217119240e267c"
+ dependencies = [
+- "getrandom 0.3.4",
++ "getrandom",
+  "js-sys",
+  "wasm-bindgen",
+ ]
+@@ -2328,7 +2305,7 @@
+  "object",
+  "serde",
+  "serde_json",
+- "shlex",
++ "shlex 1.3.0",
+  "target-triple",
+  "tempfile",
+ ]
+diff -ruN --exclude target --exclude vendor --exclude .cargo /tmp/vchord-orig/VectorChord-1.1.1/Cargo.toml /tmp/vchord-pg19/Cargo.toml
+--- a/Cargo.toml	2026-02-28 04:19:47.000000000 +0100
++++ b/Cargo.toml	2026-11-15 00:42:30.572983612 +0100
+@@ -19,6 +19,7 @@
+ pg16 = ["pgrx/pg16", "pgrx-catalog/pg16"]
+ pg17 = ["pgrx/pg17", "pgrx-catalog/pg17"]
+ pg18 = ["pgrx/pg18", "pgrx-catalog/pg18"]
++pg19 = ["pgrx/pg19", "pgrx-catalog/pg19"]
+ 
+ [dependencies]
+ always_equal = { path = "./crates/always_equal" }
+@@ -39,8 +40,8 @@
+ dary_heap.workspace = true
+ humansize = "2.1.3"
+ paste.workspace = true
+-pgrx = { version = "=0.17.0", default-features = false, features = ["cshim"] }
+-pgrx-catalog = "0.3.2"
++pgrx = { version = "=0.19.4", default-features = false, features = ["cshim"] }
++pgrx-catalog = "0.4.1"
+ rand.workspace = true
+ rayon.workspace = true
+ rusqlite = { version = "0.38.0", features = ["bundled"] }
+diff -ruN --exclude target --exclude vendor --exclude .cargo /tmp/vchord-orig/VectorChord-1.1.1/src/datatype/memory_halfvec.rs /tmp/vchord-pg19/src/datatype/memory_halfvec.rs
+--- a/src/datatype/memory_halfvec.rs	2026-02-28 04:19:47.000000000 +0100
++++ b/src/datatype/memory_halfvec.rs	2026-11-15 00:45:31.665845715 +0100
+@@ -14,7 +14,6 @@
+ 
+ use pgrx::datum::{FromDatum, IntoDatum};
+ use pgrx::pg_sys::{Datum, Oid};
+-use pgrx::pgrx_sql_entity_graph::metadata::*;
+ use simd::f16;
+ use std::marker::PhantomData;
+ use std::ptr::NonNull;
+@@ -214,23 +213,8 @@
+ 
+ // SqlTranslatable
+ 
+-unsafe impl SqlTranslatable for HalfvecInput<'_> {
+-    fn argument_sql() -> Result<SqlMapping, ArgumentError> {
+-        Ok(SqlMapping::As(String::from("halfvec")))
+-    }
+-    fn return_sql() -> Result<Returns, ReturnsError> {
+-        Ok(Returns::One(SqlMapping::As(String::from("halfvec"))))
+-    }
+-}
+-
+-unsafe impl SqlTranslatable for HalfvecOutput {
+-    fn argument_sql() -> Result<SqlMapping, ArgumentError> {
+-        Ok(SqlMapping::As(String::from("halfvec")))
+-    }
+-    fn return_sql() -> Result<Returns, ReturnsError> {
+-        Ok(Returns::One(SqlMapping::As(String::from("halfvec"))))
+-    }
+-}
++pgrx::impl_sql_translatable!(HalfvecInput<'_>, "halfvec");
++pgrx::impl_sql_translatable!(HalfvecOutput, "halfvec");
+ 
+ // ArgAbi
+ 
+diff -ruN --exclude target --exclude vendor --exclude .cargo /tmp/vchord-orig/VectorChord-1.1.1/src/datatype/memory_rabitq4.rs /tmp/vchord-pg19/src/datatype/memory_rabitq4.rs
+--- a/src/datatype/memory_rabitq4.rs	2026-02-28 04:19:47.000000000 +0100
++++ b/src/datatype/memory_rabitq4.rs	2026-11-15 00:45:27.891793165 +0100
+@@ -14,7 +14,6 @@
+ 
+ use pgrx::datum::{FromDatum, IntoDatum};
+ use pgrx::pg_sys::{Datum, Oid};
+-use pgrx::pgrx_sql_entity_graph::metadata::*;
+ use std::marker::PhantomData;
+ use std::ptr::NonNull;
+ use vector::VectorBorrowed;
+@@ -231,23 +230,8 @@
+ 
+ // SqlTranslatable
+ 
+-unsafe impl SqlTranslatable for Rabitq4Input<'_> {
+-    fn argument_sql() -> Result<SqlMapping, ArgumentError> {
+-        Ok(SqlMapping::As(String::from("rabitq4")))
+-    }
+-    fn return_sql() -> Result<Returns, ReturnsError> {
+-        Ok(Returns::One(SqlMapping::As(String::from("rabitq4"))))
+-    }
+-}
+-
+-unsafe impl SqlTranslatable for Rabitq4Output {
+-    fn argument_sql() -> Result<SqlMapping, ArgumentError> {
+-        Ok(SqlMapping::As(String::from("rabitq4")))
+-    }
+-    fn return_sql() -> Result<Returns, ReturnsError> {
+-        Ok(Returns::One(SqlMapping::As(String::from("rabitq4"))))
+-    }
+-}
++pgrx::impl_sql_translatable!(Rabitq4Input<'_>, "rabitq4");
++pgrx::impl_sql_translatable!(Rabitq4Output, "rabitq4");
+ 
+ // ArgAbi
+ 
+diff -ruN --exclude target --exclude vendor --exclude .cargo /tmp/vchord-orig/VectorChord-1.1.1/src/datatype/memory_rabitq8.rs /tmp/vchord-pg19/src/datatype/memory_rabitq8.rs
+--- a/src/datatype/memory_rabitq8.rs	2026-02-28 04:19:47.000000000 +0100
++++ b/src/datatype/memory_rabitq8.rs	2026-11-15 00:45:27.891793165 +0100
+@@ -14,7 +14,6 @@
+ 
+ use pgrx::datum::{FromDatum, IntoDatum};
+ use pgrx::pg_sys::{Datum, Oid};
+-use pgrx::pgrx_sql_entity_graph::metadata::*;
+ use std::marker::PhantomData;
+ use std::ptr::NonNull;
+ use vector::VectorBorrowed;
+@@ -231,23 +230,8 @@
+ 
+ // SqlTranslatable
+ 
+-unsafe impl SqlTranslatable for Rabitq8Input<'_> {
+-    fn argument_sql() -> Result<SqlMapping, ArgumentError> {
+-        Ok(SqlMapping::As(String::from("rabitq8")))
+-    }
+-    fn return_sql() -> Result<Returns, ReturnsError> {
+-        Ok(Returns::One(SqlMapping::As(String::from("rabitq8"))))
+-    }
+-}
+-
+-unsafe impl SqlTranslatable for Rabitq8Output {
+-    fn argument_sql() -> Result<SqlMapping, ArgumentError> {
+-        Ok(SqlMapping::As(String::from("rabitq8")))
+-    }
+-    fn return_sql() -> Result<Returns, ReturnsError> {
+-        Ok(Returns::One(SqlMapping::As(String::from("rabitq8"))))
+-    }
+-}
++pgrx::impl_sql_translatable!(Rabitq8Input<'_>, "rabitq8");
++pgrx::impl_sql_translatable!(Rabitq8Output, "rabitq8");
+ 
+ // ArgAbi
+ 
+diff -ruN --exclude target --exclude vendor --exclude .cargo /tmp/vchord-orig/VectorChord-1.1.1/src/datatype/memory_vector.rs /tmp/vchord-pg19/src/datatype/memory_vector.rs
+--- a/src/datatype/memory_vector.rs	2026-02-28 04:19:47.000000000 +0100
++++ b/src/datatype/memory_vector.rs	2026-11-15 00:45:27.891793165 +0100
+@@ -14,7 +14,6 @@
+ 
+ use pgrx::datum::{FromDatum, IntoDatum};
+ use pgrx::pg_sys::{Datum, Oid};
+-use pgrx::pgrx_sql_entity_graph::metadata::*;
+ use std::marker::PhantomData;
+ use std::ptr::NonNull;
+ use vector::VectorBorrowed;
+@@ -213,23 +212,8 @@
+ 
+ // SqlTranslatable
+ 
+-unsafe impl SqlTranslatable for VectorInput<'_> {
+-    fn argument_sql() -> Result<SqlMapping, ArgumentError> {
+-        Ok(SqlMapping::As(String::from("vector")))
+-    }
+-    fn return_sql() -> Result<Returns, ReturnsError> {
+-        Ok(Returns::One(SqlMapping::As(String::from("vector"))))
+-    }
+-}
+-
+-unsafe impl SqlTranslatable for VectorOutput {
+-    fn argument_sql() -> Result<SqlMapping, ArgumentError> {
+-        Ok(SqlMapping::As(String::from("vector")))
+-    }
+-    fn return_sql() -> Result<Returns, ReturnsError> {
+-        Ok(Returns::One(SqlMapping::As(String::from("vector"))))
+-    }
+-}
++pgrx::impl_sql_translatable!(VectorInput<'_>, "vector");
++pgrx::impl_sql_translatable!(VectorOutput, "vector");
+ 
+ // ArgAbi
+ 
+diff -ruN --exclude target --exclude vendor --exclude .cargo /tmp/vchord-orig/VectorChord-1.1.1/src/index/gucs.rs /tmp/vchord-pg19/src/index/gucs.rs
+--- a/src/index/gucs.rs	2026-02-28 04:19:47.000000000 +0100
++++ b/src/index/gucs.rs	2026-11-15 00:45:35.949041096 +0100
+@@ -22,7 +22,7 @@
+     ReadBuffer,
+     #[name = c"prefetch_buffer"]
+     PrefetchBuffer,
+-    #[cfg(any(feature = "pg17", feature = "pg18"))]
++    #[cfg(any(feature = "pg17", feature = "pg18", feature = "pg19"))]
+     #[name = c"read_stream"]
+     ReadStream,
+ }
+@@ -46,14 +46,14 @@
+ static VCHORDG_IO_SEARCH: GucSetting<PostgresIo> = GucSetting::<PostgresIo>::new(
+     #[cfg(any(feature = "pg14", feature = "pg15", feature = "pg16"))]
+     PostgresIo::PrefetchBuffer,
+-    #[cfg(any(feature = "pg17", feature = "pg18"))]
++    #[cfg(any(feature = "pg17", feature = "pg18", feature = "pg19"))]
+     PostgresIo::ReadStream,
+ );
+ 
+ static VCHORDG_IO_RERANK: GucSetting<PostgresIo> = GucSetting::<PostgresIo>::new(
+     #[cfg(any(feature = "pg14", feature = "pg15", feature = "pg16"))]
+     PostgresIo::PrefetchBuffer,
+-    #[cfg(any(feature = "pg17", feature = "pg18"))]
++    #[cfg(any(feature = "pg17", feature = "pg18", feature = "pg19"))]
+     PostgresIo::ReadStream,
+ );
+ 
+@@ -83,14 +83,14 @@
+ static VCHORDRQ_IO_SEARCH: GucSetting<PostgresIo> = GucSetting::<PostgresIo>::new(
+     #[cfg(any(feature = "pg14", feature = "pg15", feature = "pg16"))]
+     PostgresIo::PrefetchBuffer,
+-    #[cfg(any(feature = "pg17", feature = "pg18"))]
++    #[cfg(any(feature = "pg17", feature = "pg18", feature = "pg19"))]
+     PostgresIo::ReadStream,
+ );
+ 
+ static VCHORDRQ_IO_RERANK: GucSetting<PostgresIo> = GucSetting::<PostgresIo>::new(
+     #[cfg(any(feature = "pg14", feature = "pg15", feature = "pg16"))]
+     PostgresIo::PrefetchBuffer,
+-    #[cfg(any(feature = "pg17", feature = "pg18"))]
++    #[cfg(any(feature = "pg17", feature = "pg18", feature = "pg19"))]
+     PostgresIo::ReadStream,
+ );
+ 
+@@ -206,7 +206,13 @@
+     unsafe {
+         #[cfg(feature = "pg14")]
+         pgrx::pg_sys::EmitWarningsOnPlaceholders(c"vchordrq".as_ptr());
+-        #[cfg(any(feature = "pg15", feature = "pg16", feature = "pg17", feature = "pg18"))]
++        #[cfg(any(
++            feature = "pg15",
++            feature = "pg16",
++            feature = "pg17",
++            feature = "pg18",
++            feature = "pg19"
++        ))]
+         pgrx::pg_sys::MarkGUCPrefixReserved(c"vchordrq".as_ptr());
+     }
+     GucRegistry::define_bool_guc(
+@@ -266,7 +272,13 @@
+     unsafe {
+         #[cfg(feature = "pg14")]
+         pgrx::pg_sys::EmitWarningsOnPlaceholders(c"vchordg".as_ptr());
+-        #[cfg(any(feature = "pg15", feature = "pg16", feature = "pg17", feature = "pg18"))]
++        #[cfg(any(
++            feature = "pg15",
++            feature = "pg16",
++            feature = "pg17",
++            feature = "pg18",
++            feature = "pg19"
++        ))]
+         pgrx::pg_sys::MarkGUCPrefixReserved(c"vchordg".as_ptr());
+     }
+     assert!(crate::is_main());
+@@ -304,7 +316,7 @@
+             assert!(check(*ptr, name), "failed to find GUC {name:?}");
+         }
+     }
+-    #[cfg(any(feature = "pg16", feature = "pg17", feature = "pg18"))]
++    #[cfg(any(feature = "pg16", feature = "pg17", feature = "pg18", feature = "pg19"))]
+     unsafe {
+         use pgrx::pg_sys::PGERROR;
+         for (name, ptr) in targets {
+@@ -363,7 +375,7 @@
+     match VCHORDG_IO_SEARCH.get() {
+         PostgresIo::ReadBuffer => Io::Plain,
+         PostgresIo::PrefetchBuffer => Io::Simple,
+-        #[cfg(any(feature = "pg17", feature = "pg18"))]
++        #[cfg(any(feature = "pg17", feature = "pg18", feature = "pg19"))]
+         PostgresIo::ReadStream => Io::Stream,
+     }
+ }
+@@ -372,7 +384,7 @@
+     match VCHORDG_IO_RERANK.get() {
+         PostgresIo::ReadBuffer => Io::Plain,
+         PostgresIo::PrefetchBuffer => Io::Simple,
+-        #[cfg(any(feature = "pg17", feature = "pg18"))]
++        #[cfg(any(feature = "pg17", feature = "pg18", feature = "pg19"))]
+         PostgresIo::ReadStream => Io::Stream,
+     }
+ }
+@@ -480,7 +492,7 @@
+     match VCHORDRQ_IO_SEARCH.get() {
+         PostgresIo::ReadBuffer => Io::Plain,
+         PostgresIo::PrefetchBuffer => Io::Simple,
+-        #[cfg(any(feature = "pg17", feature = "pg18"))]
++        #[cfg(any(feature = "pg17", feature = "pg18", feature = "pg19"))]
+         PostgresIo::ReadStream => Io::Stream,
+     }
+ }
+@@ -489,7 +501,7 @@
+     match VCHORDRQ_IO_RERANK.get() {
+         PostgresIo::ReadBuffer => Io::Plain,
+         PostgresIo::PrefetchBuffer => Io::Simple,
+-        #[cfg(any(feature = "pg17", feature = "pg18"))]
++        #[cfg(any(feature = "pg17", feature = "pg18", feature = "pg19"))]
+         PostgresIo::ReadStream => Io::Stream,
+     }
+ }
+diff -ruN --exclude target --exclude vendor --exclude .cargo /tmp/vchord-orig/VectorChord-1.1.1/src/index/hook.rs /tmp/vchord-pg19/src/index/hook.rs
+--- a/src/index/hook.rs	2026-02-28 04:19:47.000000000 +0100
++++ b/src/index/hook.rs	2026-11-15 00:42:56.262969588 +0100
+@@ -65,10 +65,12 @@
+                         (*node).ss.ss_currentRelation,
+                         (*node).iss_RelationDesc,
+                         (*(*node).ss.ps.state).es_snapshot,
+-                        #[cfg(feature = "pg18")]
++                        #[cfg(any(feature = "pg18", feature = "pg19"))]
+                         std::ptr::null_mut(),
+                         (*node).iss_NumScanKeys,
+                         (*node).iss_NumOrderByKeys,
++                        #[cfg(feature = "pg19")]
++                        pgrx::pg_sys::ScanOptions::SO_NONE,
+                     );
+ 
+                     let scanner = &mut *((*(*node).iss_ScanDesc).opaque as *mut Scanner);
+@@ -91,10 +93,12 @@
+                         (*node).ss.ss_currentRelation,
+                         (*node).iss_RelationDesc,
+                         (*(*node).ss.ps.state).es_snapshot,
+-                        #[cfg(feature = "pg18")]
++                        #[cfg(any(feature = "pg18", feature = "pg19"))]
+                         std::ptr::null_mut(),
+                         (*node).iss_NumScanKeys,
+                         (*node).iss_NumOrderByKeys,
++                        #[cfg(feature = "pg19")]
++                        pgrx::pg_sys::ScanOptions::SO_NONE,
+                     );
+ 
+                     let scanner = &mut *((*(*node).iss_ScanDesc).opaque as *mut Scanner);
+diff -ruN --exclude target --exclude vendor --exclude .cargo /tmp/vchord-orig/VectorChord-1.1.1/src/index/sample.rs /tmp/vchord-pg19/src/index/sample.rs
+--- a/src/index/sample.rs	2026-02-28 04:19:47.000000000 +0100
++++ b/src/index/sample.rs	2026-11-15 00:42:56.224897980 +0100
+@@ -82,6 +82,8 @@
+                 true,
+                 false,
+                 true,
++                #[cfg(feature = "pg19")]
++                pgrx::pg_sys::ScanOptions::SO_NONE,
+             );
+             let index_info = pgrx::pg_sys::BuildIndexInfo(self.index_relation);
+             let estate = pgrx::pg_sys::CreateExecutorState();
+diff -ruN --exclude target --exclude vendor --exclude .cargo /tmp/vchord-orig/VectorChord-1.1.1/src/index/storage/buffered.rs /tmp/vchord-pg19/src/index/storage/buffered.rs
+--- a/src/index/storage/buffered.rs	2026-02-28 04:19:47.000000000 +0100
++++ b/src/index/storage/buffered.rs	2026-11-15 00:42:43.666696598 +0100
+@@ -80,7 +80,7 @@
+     fn extend(&self, opaque: O, tracking_freespace: bool) -> Self::WriteGuard<'_> {
+         self.postgres.extend(opaque, tracking_freespace)
+     }
+-    #[cfg(any(feature = "pg16", feature = "pg17", feature = "pg18"))]
++    #[cfg(any(feature = "pg16", feature = "pg17", feature = "pg18", feature = "pg19"))]
+     fn extend(&self, opaque: O, tracking_freespace: bool) -> Self::WriteGuard<'_> {
+         unsafe {
+             use pgrx::pg_sys::{
+diff -ruN --exclude target --exclude vendor --exclude .cargo /tmp/vchord-orig/VectorChord-1.1.1/src/index/storage.rs /tmp/vchord-pg19/src/index/storage.rs
+--- a/src/index/storage.rs	2026-02-28 04:19:47.000000000 +0100
++++ b/src/index/storage.rs	2026-11-15 00:42:43.663242961 +0100
+@@ -367,7 +367,7 @@
+                 UnlockRelationForExtension(self.raw, ExclusiveLock as _);
+                 LockBuffer(buf, BUFFER_LOCK_EXCLUSIVE as _);
+             }
+-            #[cfg(any(feature = "pg16", feature = "pg17", feature = "pg18"))]
++            #[cfg(any(feature = "pg16", feature = "pg17", feature = "pg18", feature = "pg19"))]
+             {
+                 use pgrx::pg_sys::{
+                     BufferManagerRelation, ExtendBufferedFlags, ExtendBufferedRel, ForkNumber,
+@@ -495,7 +495,7 @@
+ }
+ 
+ pub struct PostgresReadStream<'b, O: Opaque, I: Iterator> {
+-    #[cfg(any(feature = "pg17", feature = "pg18"))]
++    #[cfg(any(feature = "pg17", feature = "pg18", feature = "pg19"))]
+     raw: *mut pgrx::pg_sys::ReadStream,
+     // Because of `Box`'s special alias rules, `Box` cannot be used here.
+     cache: NonNull<Cache<'b, I>>,
+@@ -503,7 +503,7 @@
+ }
+ 
+ pub struct PostgresReadStreamGuards<O, I, L> {
+-    #[cfg(any(feature = "pg17", feature = "pg18"))]
++    #[cfg(any(feature = "pg17", feature = "pg18", feature = "pg19"))]
+     raw: *mut pgrx::pg_sys::ReadStream,
+     list: L,
+     _phantom: PhantomData<fn(O, I) -> (O, I)>,
+@@ -520,7 +520,7 @@
+         unimplemented!()
+     }
+ 
+-    #[cfg(any(feature = "pg17", feature = "pg18"))]
++    #[cfg(any(feature = "pg17", feature = "pg18", feature = "pg19"))]
+     fn next(&mut self) -> Option<Self::Item> {
+         let _id = self.list.next()?;
+         unsafe {
+@@ -548,7 +548,7 @@
+ {
+ }
+ 
+-#[cfg(any(feature = "pg17", feature = "pg18"))]
++#[cfg(any(feature = "pg17", feature = "pg18", feature = "pg19"))]
+ impl<'b, O: Opaque, I: Iterator> PostgresReadStream<'b, O, I>
+ where
+     I::Item: Fetch<'b>,
+@@ -588,7 +588,7 @@
+         panic!("read_stream is not supported on PostgreSQL versions earlier than 17.");
+     }
+ 
+-    #[cfg(any(feature = "pg17", feature = "pg18"))]
++    #[cfg(any(feature = "pg17", feature = "pg18", feature = "pg19"))]
+     fn next(&mut self) -> Option<(I::Item, Self::Guards)> {
+         if let Some(e) = unsafe { self.cache.as_mut().pop_item() } {
+             let list = self.read(e.fetch());
+@@ -598,7 +598,7 @@
+         }
+     }
+ 
+-    #[cfg(any(feature = "pg17", feature = "pg18"))]
++    #[cfg(any(feature = "pg17", feature = "pg18", feature = "pg19"))]
+     fn next_if<P: FnOnce(&I::Item) -> bool>(
+         &mut self,
+         predicate: P,
+@@ -624,7 +624,7 @@
+     fn drop(&mut self) {
+         unsafe {
+             let _ = std::mem::take(self.cache.as_mut());
+-            #[cfg(any(feature = "pg17", feature = "pg18"))]
++            #[cfg(any(feature = "pg17", feature = "pg18", feature = "pg19"))]
+             if !std::thread::panicking() && pgrx::pg_sys::IsTransactionState() {
+                 pgrx::pg_sys::read_stream_end(self.raw);
+             }
+@@ -649,7 +649,7 @@
+         panic!("read_stream is not supported on PostgreSQL versions earlier than 17.");
+     }
+ 
+-    #[cfg(any(feature = "pg17", feature = "pg18"))]
++    #[cfg(any(feature = "pg17", feature = "pg18", feature = "pg19"))]
+     fn read_stream<'b, I: Iterator>(&'b self, iter: I, hints: Hints) -> Self::ReadStream<'b, I>
+     where
+         I::Item: Fetch<'b>,
+@@ -680,7 +680,7 @@
+             if hints.full {
+                 flags |= pgrx::pg_sys::READ_STREAM_FULL;
+             }
+-            #[cfg(feature = "pg18")]
++            #[cfg(any(feature = "pg18", feature = "pg19"))]
+             if hints.batch {
+                 flags |= pgrx::pg_sys::READ_STREAM_USE_BATCHING;
+             }
+diff -ruN --exclude target --exclude vendor --exclude .cargo /tmp/vchord-orig/VectorChord-1.1.1/src/index/vchordg/am/am_build.rs /tmp/vchord-pg19/src/index/vchordg/am/am_build.rs
+--- a/src/index/vchordg/am/am_build.rs	2026-02-28 04:19:47.000000000 +0100
++++ b/src/index/vchordg/am/am_build.rs	2026-11-15 00:42:56.224897980 +0100
+@@ -469,7 +469,14 @@
+ 
+     let index = unsafe { PostgresRelation::new(index_relation) };
+ 
+-    let scan = unsafe { pgrx::pg_sys::table_beginscan_parallel(heap_relation, tablescandesc) };
++    let scan = unsafe {
++        pgrx::pg_sys::table_beginscan_parallel(
++            heap_relation,
++            tablescandesc,
++            #[cfg(feature = "pg19")]
++            pgrx::pg_sys::ScanOptions::SO_NONE,
++        )
++    };
+     let opfamily = unsafe { opfamily(index_relation) };
+     let traverser = unsafe { HeapTraverser::new(heap_relation, index_relation, index_info, scan) };
+     match cached {
+@@ -562,7 +569,7 @@
+     let att = unsafe { &mut *(*index_relation).rd_att };
+     #[cfg(any(feature = "pg14", feature = "pg15", feature = "pg16", feature = "pg17"))]
+     let atts = unsafe { att.attrs.as_slice(att.natts as _) };
+-    #[cfg(feature = "pg18")]
++    #[cfg(any(feature = "pg18", feature = "pg19"))]
+     let atts = unsafe {
+         let ptr = att
+             .compact_attrs
+diff -ruN --exclude target --exclude vendor --exclude .cargo /tmp/vchord-orig/VectorChord-1.1.1/src/index/vchordg/am/mod.rs /tmp/vchord-pg19/src/index/vchordg/am/mod.rs
+--- a/src/index/vchordg/am/mod.rs	2026-02-28 04:19:47.000000000 +0100
++++ b/src/index/vchordg/am/mod.rs	2026-11-15 00:42:43.667446608 +0100
+@@ -125,7 +125,7 @@
+     am_routine.amsupport = 1;
+     am_routine.amcanorderbyop = true;
+ 
+-    #[cfg(any(feature = "pg17", feature = "pg18"))]
++    #[cfg(any(feature = "pg17", feature = "pg18", feature = "pg19"))]
+     {
+         am_routine.amcanbuildparallel = true;
+     }
+@@ -219,7 +219,8 @@
+     feature = "pg15",
+     feature = "pg16",
+     feature = "pg17",
+-    feature = "pg18"
++    feature = "pg18",
++    feature = "pg19"
+ ))]
+ #[pgrx::pg_guard]
+ pub unsafe extern "C-unwind" fn aminsert(
+@@ -275,7 +276,7 @@
+     let check = || unsafe {
+         #[cfg(any(feature = "pg14", feature = "pg15", feature = "pg16", feature = "pg17"))]
+         pgrx::pg_sys::vacuum_delay_point();
+-        #[cfg(feature = "pg18")]
++        #[cfg(any(feature = "pg18", feature = "pg19"))]
+         pgrx::pg_sys::vacuum_delay_point(false);
+     };
+     let callback = callback.expect("null function pointer");
+@@ -307,7 +308,7 @@
+     let check = || unsafe {
+         #[cfg(any(feature = "pg14", feature = "pg15", feature = "pg16", feature = "pg17"))]
+         pgrx::pg_sys::vacuum_delay_point();
+-        #[cfg(feature = "pg18")]
++        #[cfg(any(feature = "pg18", feature = "pg19"))]
+         pgrx::pg_sys::vacuum_delay_point(false);
+     };
+     crate::index::vchordg::dispatch::maintain(opfamily, &index, check);
+diff -ruN --exclude target --exclude vendor --exclude .cargo /tmp/vchord-orig/VectorChord-1.1.1/src/index/vchordrq/am/am_build.rs /tmp/vchord-pg19/src/index/vchordrq/am/am_build.rs
+--- a/src/index/vchordrq/am/am_build.rs	2026-02-28 04:19:47.000000000 +0100
++++ b/src/index/vchordrq/am/am_build.rs	2026-11-15 00:42:56.226969116 +0100
+@@ -950,7 +950,14 @@
+         std::slice::from_raw_parts(vchordrqcached.add(8), bytes as _)
+     });
+ 
+-    let scan = unsafe { pgrx::pg_sys::table_beginscan_parallel(heap_relation, tablescandesc) };
++    let scan = unsafe {
++        pgrx::pg_sys::table_beginscan_parallel(
++            heap_relation,
++            tablescandesc,
++            #[cfg(feature = "pg19")]
++            pgrx::pg_sys::ScanOptions::SO_NONE,
++        )
++    };
+     let opfamily = unsafe { opfamily(index_relation) };
+     let traverser = unsafe { HeapTraverser::new(heap_relation, index_relation, index_info, scan) };
+ 
+@@ -1214,7 +1221,7 @@
+     let att = unsafe { &mut *(*index_relation).rd_att };
+     #[cfg(any(feature = "pg14", feature = "pg15", feature = "pg16", feature = "pg17"))]
+     let atts = unsafe { att.attrs.as_slice(att.natts as _) };
+-    #[cfg(feature = "pg18")]
++    #[cfg(any(feature = "pg18", feature = "pg19"))]
+     let atts = unsafe {
+         let ptr = att
+             .compact_attrs
+diff -ruN --exclude target --exclude vendor --exclude .cargo /tmp/vchord-orig/VectorChord-1.1.1/src/index/vchordrq/am/am_vacuumcleanup.rs /tmp/vchord-pg19/src/index/vchordrq/am/am_vacuumcleanup.rs
+--- a/src/index/vchordrq/am/am_vacuumcleanup.rs	2026-02-28 04:19:47.000000000 +0100
++++ b/src/index/vchordrq/am/am_vacuumcleanup.rs	2026-11-15 00:42:43.669299333 +0100
+@@ -51,7 +51,7 @@
+     let check = || unsafe {
+         #[cfg(any(feature = "pg14", feature = "pg15", feature = "pg16", feature = "pg17"))]
+         pgrx::pg_sys::vacuum_delay_point();
+-        #[cfg(feature = "pg18")]
++        #[cfg(any(feature = "pg18", feature = "pg19"))]
+         pgrx::pg_sys::vacuum_delay_point(false);
+     };
+ 
+diff -ruN --exclude target --exclude vendor --exclude .cargo /tmp/vchord-orig/VectorChord-1.1.1/src/index/vchordrq/am/mod.rs /tmp/vchord-pg19/src/index/vchordrq/am/mod.rs
+--- a/src/index/vchordrq/am/mod.rs	2026-02-28 04:19:47.000000000 +0100
++++ b/src/index/vchordrq/am/mod.rs	2026-11-15 00:42:43.669184202 +0100
+@@ -207,7 +207,7 @@
+     am_routine.amsupport = 1;
+     am_routine.amcanorderbyop = true;
+ 
+-    #[cfg(any(feature = "pg17", feature = "pg18"))]
++    #[cfg(any(feature = "pg17", feature = "pg18", feature = "pg19"))]
+     {
+         am_routine.amcanbuildparallel = true;
+     }
+@@ -389,7 +389,8 @@
+     feature = "pg15",
+     feature = "pg16",
+     feature = "pg17",
+-    feature = "pg18"
++    feature = "pg18",
++    feature = "pg19"
+ ))]
+ #[pgrx::pg_guard]
+ pub unsafe extern "C-unwind" fn aminsert(
+@@ -462,7 +463,7 @@
+     let check = || unsafe {
+         #[cfg(any(feature = "pg14", feature = "pg15", feature = "pg16", feature = "pg17"))]
+         pgrx::pg_sys::vacuum_delay_point();
+-        #[cfg(feature = "pg18")]
++        #[cfg(any(feature = "pg18", feature = "pg19"))]
+         pgrx::pg_sys::vacuum_delay_point(false);
+     };
+     let callback = callback.expect("null function pointer");
+diff -ruN --exclude target --exclude vendor --exclude .cargo /tmp/vchord-orig/VectorChord-1.1.1/src/lib.rs /tmp/vchord-pg19/src/lib.rs
+--- a/src/lib.rs	2026-02-28 04:19:47.000000000 +0100
++++ b/src/lib.rs	2026-11-15 00:45:36.077042742 +0100
+@@ -59,7 +59,13 @@
+     unsafe {
+         #[cfg(feature = "pg14")]
+         pgrx::pg_sys::EmitWarningsOnPlaceholders(c"vchord".as_ptr());
+-        #[cfg(any(feature = "pg15", feature = "pg16", feature = "pg17", feature = "pg18"))]
++        #[cfg(any(
++            feature = "pg15",
++            feature = "pg16",
++            feature = "pg17",
++            feature = "pg18",
++            feature = "pg19"
++        ))]
+         pgrx::pg_sys::MarkGUCPrefixReserved(c"vchord".as_ptr());
+     }
+ }

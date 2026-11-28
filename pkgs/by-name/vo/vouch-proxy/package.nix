@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "vouch-proxy";
-  version = "0.48.0";
+  version = "0.50.0";
 
   src = fetchFromGitHub {
     owner = "vouch";
     repo = "vouch-proxy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QJoZqz3kQCUqEBu9hjTBrGMrNTiNi4LXKyi0EFSZNy8=";
+    hash = "sha256-orpiVQUJ66SiWISaO5FxrZlfYlD23ffTi0CHoGnRV78=";
   };
 
-  vendorHash = "sha256-Ma5/S2PXQ9lByIpIfkkLeiw/9rvmasSMElE1VoGIEHc=";
+  vendorHash = "sha256-aiwIByM619Ps/xNAVeOsII9XKzMguMF3Pi3phgPtneQ=";
 
   ldflags = [
     "-s"

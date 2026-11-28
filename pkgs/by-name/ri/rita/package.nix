@@ -6,23 +6,24 @@
 
 buildGoModule (finalAttrs: {
   pname = "rita";
-  version = "4.8.1";
+  version = "5.1.2";
 
   src = fetchFromGitHub {
     owner = "activecm";
     repo = "rita";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-By0JvQ4LTm+NEnRMadE1x2PiiYqnJQCsF3Fy+gHulXs=";
+    hash = "sha256-BGVq3JxHOGSMXEK3DoVRDNlWZ4yaf7Qjh/QRECmTFq0=";
   };
 
-  vendorHash = "sha256-KyC7VPgWlgKD6KWWRo3hFQHl2HjTub+VSMtJCpYE6Zk=";
+  vendorHash = "sha256-7QjrQHkyEYX1WkSuK3u0JVVVeYlAXalXnCsI3rZcJr4=";
 
   ldflags = [
     "-s"
-    "-w"
-    "-X=github.com/activecm/rita/config.Version=${finalAttrs.version}"
-    "-X=github.com/activecm/rita/config.ExactVersion=${finalAttrs.version}"
+    "-X=github.com/activecm/rita/v5/config.Version=${finalAttrs.version}"
   ];
+
+  # Almost all tests require a live ClickHouse container via Docker
+  doCheck = false;
 
   meta = {
     description = "Framework for detecting command and control communication through network traffic analysis";

@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "fhirpy";
-  version = "2.3.1";
+  version = "2.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "beda-software";
     repo = "fhir-py";
     tag = "v${version}";
-    hash = "sha256-thPUxsK0Nnvk4WGWQ4QuBmBrggL95G4G9Izx0oY8X8c=";
+    hash = "sha256-/t2+SDUKKQpCpub9ThHen7YbKEPZQ6c1gTDR99PF5h0=";
   };
 
   build-system = [ flit-core ];

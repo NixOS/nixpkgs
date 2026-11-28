@@ -3,25 +3,26 @@
   stdenv,
   buildGo127Module,
   fetchFromGitHub,
-  git,
+  gitMinimal,
   installShellFiles,
   nix-update-script,
+  procps,
   writableTmpDirAsHomeHook,
   versionCheckHook,
 }:
 
 buildGo127Module (finalAttrs: {
   pname = "crush";
-  version = "0.98.1";
+  version = "0.104.0";
 
   src = fetchFromGitHub {
     owner = "charmbracelet";
     repo = "crush";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sz/jlpWH43pgUqKDzaRVKJPK2u7smJLoL2eNrGkXtOY=";
+    hash = "sha256-zGl7xxA+dd1dyJbqn08q4gLmo5EFnhYDzOI456UdeuY=";
   };
 
-  vendorHash = "sha256-yEV/cBQ2XsmbsYrSWiyEj/dznzSVrpY9QHXMpuw2lpc=";
+  vendorHash = "sha256-KpmBF3cgrGmoLcaGnzWfDAb3ZHpkwdFokkJVrNu9Xeo=";
 
   ldflags = [
     "-s"
@@ -41,6 +42,10 @@ buildGo127Module (finalAttrs: {
         "TestGrepWithIgnoreFiles"
         "TestSearchImplementations"
         "TestDispatch_BinaryPassthroughExecutes"
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        "TestServiceDetectsRealProcess"
+        "TestKill_ShebangScriptChild"
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
@@ -48,8 +53,11 @@ buildGo127Module (finalAttrs: {
   __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
-    git
+    gitMinimal
     writableTmpDirAsHomeHook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    procps
   ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];

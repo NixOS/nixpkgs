@@ -1,4 +1,5 @@
 {
+  buildPackages,
   buildGoModule,
   lib,
   navidrome,
@@ -21,16 +22,34 @@ lib.extendMkDerivation {
       version,
       src,
       vendorHash,
+      bundleName ? finalAttrs.pname,
+      doCheck ? false,
       meta,
       passthru ? { },
       ...
     }@args:
+    let
+      nativeTests = buildPackages.buildGoModule {
+        inherit
+          pname
+          version
+          src
+          vendorHash
+          ;
+        doCheck = true;
+        # We don't really care about the output of this build, but if dontBuild
+        # is true tests are skipped as buildPhase contains getGoDirs()
+        dontBuild = false;
+        installPhase = "mkdir -p $out";
+      };
+    in
     {
       __structuredAttrs = true;
 
       nativeBuildInputs = [
         navidromePluginInstallHook
-      ];
+      ]
+      ++ lib.optional doCheck nativeTests;
 
       ldflags = [ "-buildmode=c-shared" ];
 
@@ -47,6 +66,8 @@ lib.extendMkDerivation {
       preInstall = ''
         find "$GOPATH"/bin/ -type f -exec cp {} "./plugin.wasm" \;
       '';
+
+      inherit bundleName;
 
       passthru = {
         isNavidromePlugin = true;

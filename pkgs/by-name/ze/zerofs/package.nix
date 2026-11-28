@@ -3,6 +3,10 @@
   lib,
   cmake,
   fetchFromGitHub,
+  aws-lc,
+  rust-jemalloc-sys,
+  zstd,
+  pkg-config,
   nix-update-script,
   rustPlatform,
   versionCheckHook,
@@ -23,7 +27,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-djeu78G0T44mULNieHlC4Dx/Zdrwcyf9DXG1Ia9dTao=";
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
+
+  buildInputs = [
+    aws-lc
+    rust-jemalloc-sys
+    zstd
+  ];
 
   env = {
     RUSTFLAGS = "--cfg tokio_unstable";

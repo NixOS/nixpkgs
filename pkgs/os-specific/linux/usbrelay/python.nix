@@ -6,8 +6,9 @@
 
 buildPythonPackage {
   pname = "usbrelay_py";
+  version = "1.1";
   pyproject = true;
-  inherit (usbrelay) version src;
+  inherit (usbrelay) src;
 
   build-system = [ setuptools ];
 
@@ -18,6 +19,8 @@ buildPythonPackage {
   buildInputs = [ usbrelay ];
 
   pythonImportsCheck = [ "usbrelay_py" ];
+
+  passthru.updateScript = null;
 
   inherit (usbrelay) meta;
 }

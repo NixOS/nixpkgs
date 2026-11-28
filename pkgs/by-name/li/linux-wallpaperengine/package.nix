@@ -54,14 +54,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "linux-wallpaperengine";
-  version = "0.0.1-unstable-2026-06-09";
+  version = "0.0.1-unstable-2026-10-30";
 
   src = fetchFromGitHub {
     owner = "Almamu";
     repo = "linux-wallpaperengine";
-    rev = "b016d7d1fdcf4e5fd2f9c9fa420a8aaa07fee02d";
+    rev = "a0ddce586e9ff12e9d31ca6b103f6036cc1b68fe";
     fetchSubmodules = true;
-    hash = "sha256-ExWAYdSFW5plPuS3/jxTPMXIly6zVb5GojE3e37imZM=";
+    hash = "sha256-4m+YUvVCN3VzL4/338qW/o4k0la0IJeAUCefHRkHHJk=";
   };
 
   nativeBuildInputs = [

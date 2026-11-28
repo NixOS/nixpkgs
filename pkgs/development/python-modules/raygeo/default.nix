@@ -1,39 +1,50 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  cargo,
-  rustc,
+  fetchFromGitHub,
+
+  # build
+  pkg-config,
+  pyprojectVersionPatchHook,
   rustPlatform,
+  zstd,
+
+  # dependencies
   msgpack,
   numpy,
+
+  # test
   dejavu_fonts,
   makeFontsConf,
   pycairo,
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "raygeo";
-  version = "1.61.0";
+  version = "1.76.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-4oy/gCMPGAAcuJVSQBduagw6AHCRXP/WpuL5UJ0sxpQ=";
+  src = fetchFromGitHub {
+    owner = "barebaric";
+    repo = "raygeo";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-eTUM9mgt02i3e2g9kIaHCtPtetkSBGtBeMniwP/GH5U=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
-    hash = "sha256-OxnLS0MbhfpNNJ6l0XNCdcBLU8S9JmpgYTr9sdzlkHQ=";
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-0TyUurWGFKHgLvrLJBRFZC/0vWaLf+SxE+lnHMMT3WI=";
   };
 
   nativeBuildInputs = [
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
-    cargo
-    rustc
+    pyprojectVersionPatchHook
+    pkg-config
   ];
+
+  buildInputs = [ zstd ];
 
   dependencies = [
     msgpack
@@ -54,7 +65,8 @@ buildPythonPackage rec {
   meta = {
     description = "High-performance 2D/3D geometry library backed by Rust";
     homepage = "https://github.com/barebaric/raygeo";
+    changelog = "https://github.com/barebaric/raygeo/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kanagawamarcos ];
   };
-}
+})

@@ -52,7 +52,7 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       mog
-      carlossless
+      karstx
     ];
     # https://github.com/greatscottgadgets/facedancer/issues/172
     broken = pythonAtLeast "3.14";

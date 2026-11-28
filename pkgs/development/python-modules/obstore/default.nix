@@ -21,7 +21,6 @@ buildPythonPackage (finalAttrs: {
   pname = "obstore";
   version = "0.9.4";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "developmentseed";

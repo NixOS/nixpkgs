@@ -4,18 +4,19 @@
   fetchFromGitHub,
   buildHomeAssistantComponent,
   music-assistant-client,
+  nix-update-script,
 }:
 
 buildHomeAssistantComponent rec {
   owner = "droans";
   domain = "mass_queue";
-  version = "0.10.4";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = "mass_queue";
-    tag = "v${version}";
-    hash = "sha256-VLX32fDcqnwYqbcHUPNtfjPgw0grxNSbUjkMce4pKDA=";
+    tag = version;
+    hash = "sha256-PpE5hZTGTkgqB8SYjTN0vIKtPUoqbYX5UskwnXbJz44=";
   };
 
   dependencies = [
@@ -25,6 +26,10 @@ buildHomeAssistantComponent rec {
 
   # tests are being fixed in https://github.com/droans/mass_queue/pull/107
   doCheck = false;
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex=^v([0-9]+\\.[0-9]+\\.[0-9]+)$" ];
+  };
 
   meta = {
     changelog = "https://github.com/droans/mass_queue/releases/tag/${src.tag}";

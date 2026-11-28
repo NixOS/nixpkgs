@@ -21,7 +21,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Z1x6pA4oRDtrf9tRAnpJ0e+mmh6nSCIpQrtQGSyxFak=";
   };
 
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  strictDeps = true;
+  __structuredAttrs = true;
+
+  depsBuildBuild = [
+    buildPackages.stdenv.cc
+    uthash
+  ];
 
   buildInputs = [ uthash ] ++ lib.optionals (finalAttrs.finalPackage.doCheck) [ check ];
 

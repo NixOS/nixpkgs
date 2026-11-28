@@ -3,26 +3,33 @@
   fetchFromGitLab,
   lib,
   runtimeShell,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "goimapnotify";
-  version = "2.5.7";
+  version = "2.6.0";
 
   src = fetchFromGitLab {
     owner = "shackra";
     repo = "goimapnotify";
     tag = finalAttrs.version;
-    hash = "sha256-c84vjn9oYb6EdKG3gLrW6kF+IESgdVyEAKE4JulEQ8k=";
+    hash = "sha256-SpbIuH13PUuyWByrIaCqRWgCyszVJoJcwGYk5KL/v8M=";
   };
 
-  vendorHash = "sha256-3yavkH0b4ZLLt1a7MhdeHSNVAAOYKiKC+D9zfEv9bSA=";
+  vendorHash = null;
 
   postPatch = ''
     for f in internal/util/command.go internal/util/command_test.go; do
       substituteInPlace $f --replace-fail '"sh"' '"${runtimeShell}"'
     done
   '';
+
+  ldflags = [ "-X main.gittag=${finalAttrs.version}" ];
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "-version";
 
   meta = {
     description = "Execute scripts on IMAP mailbox changes (new/deleted/updated messages) using IDLE";

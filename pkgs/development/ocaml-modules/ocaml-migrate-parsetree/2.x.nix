@@ -13,7 +13,7 @@ buildDunePackage (finalAttrs: {
 
   src = fetchurl {
     url = "https://github.com/ocaml-ppx/ocaml-migrate-parsetree/releases/download/${finalAttrs.version}/ocaml-migrate-parsetree-${finalAttrs.version}.tbz";
-    sha256 = "sha256-7EnEUtwzemIFVqtoK/AZi/UBglULUC2PsjClkSYKpqQ=";
+    hash = "sha256-7EnEUtwzemIFVqtoK/AZi/UBglULUC2PsjClkSYKpqQ=";
   };
 
   meta = {

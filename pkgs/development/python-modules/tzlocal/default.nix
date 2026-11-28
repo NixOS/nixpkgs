@@ -10,15 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "tzlocal";
-  version = "5.4.4"; # version needs to be compatible with APScheduler
+  version = "5.4.5"; # version needs to be compatible with APScheduler
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "regebro";
     repo = "tzlocal";
     tag = finalAttrs.version;
-    hash = "sha256-kZ3+YpmJJ7ZHKbEp5RELVnGtwAOJph19Wf32lwuokNM=";
+    hash = "sha256-I84hCUYd5mmZpoawsPPWfTKVyg1Vn7QxmUD1Gk41eiw=";
   };
 
   build-system = [ setuptools ];

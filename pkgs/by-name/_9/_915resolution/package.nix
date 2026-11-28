@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = "mkdir -p $out/sbin; cp 915resolution $out/sbin/";
 
   meta = {
-    homepage = "http://915resolution.mango-lang.org/";
+    homepage = "https://915resolution.mango-lang.org/";
     description = "Tool to modify Intel 800/900 video BIOS";
     mainProgram = "915resolution";
     platforms = [

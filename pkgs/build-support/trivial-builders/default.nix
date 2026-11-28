@@ -791,14 +791,9 @@ rec {
           inherit depsTargetTargetPropagated;
           inherit propagatedBuildInputs;
           inherit propagatedNativeBuildInputs;
+          inherit passthru;
           strictDeps = true;
           __structuredAttrs = true;
-          # TODO 2023-01, no backport: simplify to inherit passthru;
-          passthru =
-            passthru
-            // optionalAttrs (substitutions ? passthru) (
-              warn "makeSetupHook (name = ${lib.strings.escapeNixString name}): `substitutions.passthru` is deprecated. Please set `passthru` directly." substitutions.passthru
-            );
         }
       )
       (

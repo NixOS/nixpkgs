@@ -4,13 +4,14 @@
   callPackage,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch2,
   pytestCheckHook,
-  replaceVars,
   setuptools,
+  click,
   click-default-group,
   condense-json,
+  httpx2,
   numpy,
+  httpx2-pytest,
   openai,
   pip,
   pluggy,
@@ -22,11 +23,10 @@
   sqlite-migrate,
   cogapp,
   pytest-asyncio,
-  pytest-httpx,
   pytest-recording,
-  sqlite,
   sqlite-utils,
   syrupy,
+  typing-extensions,
   llm-echo,
 }:
 let
@@ -63,15 +63,19 @@ let
   withPlugins =
     # Keep this list up to date with the plugins in python3Packages!
     {
+      llm-all-models-async ? false,
       llm-anthropic ? false,
       llm-cmd ? false,
+      llm-cmd-comp ? false,
       llm-command-r ? false,
       llm-deepseek ? false,
       llm-docs ? false,
       llm-echo ? false,
       llm-fragments-github ? false,
+      llm-fragments-pdf ? false,
       llm-fragments-pypi ? false,
       llm-fragments-reader ? false,
+      llm-fragments-site-text ? false,
       llm-fragments-symbex ? false,
       llm-gemini ? false,
       llm-gguf ? false,
@@ -81,19 +85,27 @@ let
       llm-groq ? false,
       llm-hacker-news ? false,
       llm-jq ? false,
+      llm-keys-ui ? false,
       llm-llama-server ? false,
       llm-lmstudio ? false,
+      llm-mcp-client ? false,
+      llm-meta-ai ? false,
       llm-mistral ? false,
       llm-ollama ? false,
+      llm-openai-decisions ? false,
       llm-openai-plugin ? false,
       llm-openrouter ? false,
       llm-pdf-to-images ? false,
       llm-perplexity ? false,
+      llm-public-ai ? false,
       llm-sentence-transformers ? false,
       llm-templates-fabric ? false,
       llm-templates-github ? false,
       llm-tools-datasette ? false,
+      llm-tools-edit ? false,
+      llm-tools-exa ? false,
       llm-tools-quickjs ? false,
+      llm-tools-rag ? false,
       llm-tools-simpleeval ? false,
       llm-tools-sqlite ? false,
       llm-venice ? false,
@@ -166,9 +178,8 @@ let
   );
   llm = buildPythonPackage (finalAttrs: {
     pname = "llm";
-    version = "0.31.1";
+    version = "0.37.1";
     pyproject = true;
-    __structuredAttrs = true;
 
     build-system = [ setuptools ];
 
@@ -176,17 +187,11 @@ let
       owner = "simonw";
       repo = "llm";
       tag = finalAttrs.version;
-      hash = "sha256-XxQ6IQyuO1rxQtiyb4VGrM7uGoffuNN5BhyI4YDxnZg=";
+      hash = "sha256-dJoECKdRbGCAT2Q7M1pBWL37w+4qRxo+ChfdMJBVIQc=";
     };
 
     patches = [
       ./001-disable-install-uninstall-commands.patch
-      # Remove when https://github.com/simonw/llm/pull/1525 gets merged.
-      ./do-not-commit-inside-content_hash-embeddings.patch
-      (fetchpatch2 {
-        url = "https://github.com/simonw/llm/commit/67adad2c10be5c1898e3e1a664adb573f5d032cf.patch";
-        hash = "sha256-7+sBQvef94ZTUrqNKVzHzjFADNj1KNzA2tbGs5btwNA=";
-      })
     ];
 
     postPatch = ''
@@ -195,9 +200,10 @@ let
     '';
 
     dependencies = [
+      click
       click-default-group
       condense-json
-      numpy
+      httpx2
       openai
       pip
       pluggy
@@ -206,15 +212,15 @@ let
       python-ulid
       pyyaml
       setuptools # for pkg_resources
-      sqlite-migrate
       sqlite-utils
+      typing-extensions
     ];
 
     nativeCheckInputs = [
       cogapp
       numpy
       pytest-asyncio
-      pytest-httpx
+      httpx2-pytest
       pytest-recording
       syrupy
       pytestCheckHook

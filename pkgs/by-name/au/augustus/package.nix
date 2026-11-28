@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   SDL2,
   SDL2_mixer,
@@ -22,7 +23,14 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-UWJmxirRJJqvL4ZSjBvFepeKVvL77+WMp4YdZuFNEkg=";
   };
 
-  patches = [ ./darwin-fixes.patch ];
+  patches = [
+    ./darwin-fixes.patch
+    # CMake 4.5 rejects the extra arguments to install(CODE)
+    (fetchpatch {
+      url = "https://github.com/Keriew/augustus/commit/55f3c2cdf53f75818e9dfdf38efb544e6584c59a.patch";
+      hash = "sha256-VboJnLIc/sgsPJNHbwu1zVB1fbqW2JFZ/VtIyjXHZno=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -54,7 +62,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
       Thra11
-      matteopacini
     ];
   };
 })

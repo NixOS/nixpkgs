@@ -1,0 +1,12 @@
+diff --git a/NAPS2.Lib.Gtk/Platform/LinuxServiceManager.cs b/NAPS2.Lib.Gtk/Platform/LinuxServiceManager.cs
+--- a/NAPS2.Lib.Gtk/Platform/LinuxServiceManager.cs
++++ b/NAPS2.Lib.Gtk/Platform/LinuxServiceManager.cs
+@@ -25,7 +25,7 @@
+                           Type=simple
+                           Restart=always
+                           RestartSec=1
+-                          ExecStart={Environment.ProcessPath} server
++                          ExecStart=/usr/bin/env naps2 server
+                           KillMode=process
+
+                           [Install]

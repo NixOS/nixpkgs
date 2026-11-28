@@ -59,14 +59,40 @@ in
           EnvironmentFile = cfg.environmentFiles;
           ExecStart = "${lib.getExe cfg.package} -nobrowser -data=/var/lib/prowlarr";
           Restart = "on-failure";
-        };
-        unitConfig.RequiresMountsFor = [ cfg.dataDir ];
-      };
 
-      tmpfiles.settings."10-prowlarr".${cfg.dataDir}.d = lib.mkIf isCustomDataDir {
-        user = "root";
-        group = "root";
-        mode = "0700";
+          # Hardening
+          CapabilityBoundingSet = "";
+          NoNewPrivileges = true;
+          ProtectHome = true;
+          ProtectClock = true;
+          ProtectKernelLogs = true;
+          PrivateTmp = true;
+          PrivateDevices = true;
+          PrivateUsers = true;
+          ProtectKernelTunables = true;
+          ProtectKernelModules = true;
+          ProtectControlGroups = true;
+          RestrictSUIDSGID = true;
+          RemoveIPC = true;
+          ProtectHostname = true;
+          ProtectProc = "invisible";
+          RestrictAddressFamilies = [
+            "AF_INET"
+            "AF_INET6"
+            "AF_UNIX"
+          ];
+          RestrictNamespaces = true;
+          RestrictRealtime = true;
+          LockPersonality = true;
+          SystemCallArchitectures = "native";
+          SystemCallFilter = [
+            "@system-service"
+            "~@privileged"
+            "~@debug"
+            "~@mount"
+          ];
+        };
+        unitConfig.RequiresMountsFor = [ "/var/lib/private/prowlarr" ];
       };
 
       mounts = lib.optional isCustomDataDir {
@@ -81,4 +107,6 @@ in
       allowedTCPPorts = [ cfg.settings.server.port ];
     };
   };
+
+  meta.maintainers = with lib.maintainers; [ connor-grady ];
 }

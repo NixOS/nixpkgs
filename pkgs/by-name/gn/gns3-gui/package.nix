@@ -1,44 +1,35 @@
 {
   fetchFromGitHub,
-  fetchpatch,
   gns3-gui,
   gns3-server,
   lib,
   python3Packages,
   qt6,
+  stdenv,
   testers,
   writableTmpDirAsHomeHook,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "gns3-gui";
-  version = "2.2.56.1";
+  version = "2.2.61";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "GNS3";
     repo = "gns3-gui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HBTBwn7jAW/SXFTfPbO08bDG5NfS3tuic/Z0ib1/Uo8=";
+    hash = "sha256-BgLJC5boDCpQXr//5uans/Efqihmce+HCf4+xJAlxTE=";
   };
-
-  patches = [
-    # Fix tests after PyQt6 migration
-    (fetchpatch {
-      url = "https://github.com/GNS3/gns3-gui/commit/e6e2a1cafbc3ce4be9cca3428e60400f25806cde.patch";
-      hash = "sha256-T15OCqm+Te9ZOCg/kFf/fd2DY75LfaLHskAAgGYMloI=";
-    })
-  ];
-
-  pythonRelaxDeps = [
-    "jsonschema"
-    "psutil"
-    "sentry-sdk"
-  ];
 
   nativeBuildInputs = [ qt6.wrapQtAppsHook ];
 
-  buildInputs = [ qt6.qtwayland ];
+  buildInputs = [
+    qt6.qtbase
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    qt6.qtwayland
+  ];
 
   build-system = with python3Packages; [ setuptools ];
 
@@ -48,9 +39,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
     psutil
     pyqt6
     sentry-sdk
-    setuptools
-    sip
     truststore
+    qdarkstyle
   ];
 
   dontWrapQtApps = true;
@@ -85,9 +75,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
       download the official GNS3 VM).
     '';
     homepage = "https://www.gns3.com/";
-    changelog = "https://github.com/GNS3/gns3-gui/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/GNS3/gns3-gui/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [ anthonyroussel ];
     mainProgram = "gns3";
   };

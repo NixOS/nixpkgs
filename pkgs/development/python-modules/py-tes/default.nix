@@ -17,7 +17,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "ohsu-comp-bio";
+    owner = "calypr";
     repo = "py-tes";
     tag = finalAttrs.version;
     hash = "sha256-/xgycSDFp17rPzC6ICf4e+vrIKWYPftDngx/u1/KHWk=";
@@ -46,8 +46,8 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Python SDK for the GA4GH Task Execution API";
-    homepage = "https://github.com/ohsu-comp-bio/py-tes";
-    changelog = "https://github.com/ohsu-comp-bio/py-tes/releases/tag/${finalAttrs.src.tag}";
+    homepage = "https://github.com/calypr/py-tes";
+    changelog = "https://github.com/calypr/py-tes/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };

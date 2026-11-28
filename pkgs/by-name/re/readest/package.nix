@@ -1,159 +1,207 @@
 {
-  stdenv,
-  rustPlatform,
-  pnpm_11,
-  fetchPnpmDeps,
-  pnpmConfigHook,
-  cargo-tauri,
-  nodejs,
-  pkg-config,
-  webkitgtk_4_1,
-  wrapGAppsHook3,
-  fetchFromGitHub,
-  gtk3,
-  librsvg,
-  openssl,
-  glib-networking,
-  autoPatchelfHook,
   lib,
+  addDriverRunpath,
+  alsa-lib,
+  autoAddDriverRunpath,
+  autoPatchelfHook,
+  cargo-tauri,
+  cef-binary,
+  fetchFromGitHub,
+  fetchPnpmDeps,
+  gtk3,
+  libGL,
+  libpulseaudio,
+  librsvg,
+  libx11,
+  libxcursor,
+  libxi,
+  libxkbcommon,
+  libxrandr,
   nix-update-script,
-  moreutils,
-  jq,
-  gst_all_1,
+  nodejs,
+  openssl,
+  pkg-config,
+  pnpmConfigHook,
+  pnpm_11,
+  rustPlatform,
+  wrapGAppsHook3,
+  xdg-utils,
+  xz,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "readest";
-  version = "0.12.16";
+  version = "0.12.20";
 
   src = fetchFromGitHub {
     owner = "readest";
     repo = "readest";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XNN66MB13yqHCvnBUgPmdghRnXA7Kz13E0j82EqxocU=";
+    hash = "sha256-7rAQwden1p9zL7gCn54H0mT/XtjmWlwZ2GA9hr4FyRU=";
     fetchSubmodules = true;
   };
 
+  sourceRoot = "${finalAttrs.src.name}/apps/readest-app";
+
+  patches = [
+    # Use the installed desktop entry so URI launches go through the Nix wrapper.
+    ./use-installed-uri-handlers.patch
+  ];
+
   postUnpack = ''
-    # pnpm.configHook has to write to ../.., as our sourceRoot is set to
+    # pnpmConfigHook has to write to ../.., as our sourceRoot is set to
     # apps/readest-app
     chmod -R +w .
-  '';
 
-  sourceRoot = "${finalAttrs.src.name}/apps/readest-app";
+    # Select upstream's CEF lockfile and matching Tauri/Cargo overrides.
+    cp "$sourceRoot/../../Cargo.cef.lock" \
+       "$sourceRoot/../../Cargo.lock"
+
+    cp "$sourceRoot/src-tauri/.cargo/cef.toml" \
+       "$sourceRoot/src-tauri/.cargo/config.toml"
+  '';
 
   pnpmRoot = "../..";
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_11;
-    fetcherVersion = 4;
-    hash = "sha256-LPm50VC7KU1wysxSUxwFZ7pNZutULct05NB5WgjmTws=";
-    pnpmInstallFlags = [
-      # Increase number of fetch attempts to work around timeout issues on slow
-      # networks: "TimeoutError: The operation was aborted due to timeout".
-      #
-      # If this still happens on your network, consider changing some of the
-      # fetch setting and opening a pull request:
-      # https://pnpm.io/settings#request-settings
-      "--fetch-retries=5"
-    ];
+    fetcherVersion = 5;
+    hash = "sha256-sFWLTnf5WHNv2qVNkJbZD2iXSXBH3jvTOEdKLjwK7V4=";
   };
 
   cargoRoot = "../..";
-  cargoHash = "sha256-8wiIf4MFgOUPvljgLN7kbx3H/r57jjiqsxN5P5rZCAA=";
+  cargoHash = "sha256-gG1u9jMtYMEOnmzzWsWdG8otjCdxmX+dthalUYFaNGU=";
 
   buildAndTestSubdir = "src-tauri";
 
+  buildFeatures = [ "cef" ];
+  buildNoDefaultFeatures = true;
+
+  # Skip WebKit/GStreamer setup; preserve the NVIDIA workaround in preFixup.
+  # https://github.com/NixOS/nixpkgs/blob/964f593dcb68c9be87ea8b1b2fd5c093c81a3e1c/pkgs/by-name/ca/cargo-tauri/hook.nix#L39-L48
+  dontTauriFixup = true;
+
   postPatch = ''
+    # Use nixpkgs' CEF distribution instead of the crate's download cache.
+    # The archive metadata check otherwise triggers a separate download.
+    substituteInPlace $cargoDepsCopy/source-registry-*/cef-dll-sys-*/build.rs \
+      --replace-fail \
+        'download_cef::check_archive_json(&package_version, &path.to_string_lossy())?;' \
+        ""
+
+    # The frontend is built explicitly in preBuild.
     substituteInPlace src-tauri/tauri.conf.json \
       --replace-fail \
         '"beforeBuildCommand": "pnpm build && pnpm upload-sourcemaps"' \
-        '"beforeBuildCommand": "pnpm build"' \
+        '"beforeBuildCommand": ""' \
       --replace-fail '"createUpdaterArtifacts": true' '"createUpdaterArtifacts": false' \
       --replace-fail '"productName": "Readest"' '"productName": "readest"'
-    jq 'del(.plugins."deep-link")' src-tauri/tauri.conf.json | sponge src-tauri/tauri.conf.json
+
+    # Do not generate browser source maps; the upstream cleanup step is skipped.
+    substituteInPlace next.config.mjs \
+      --replace-fail \
+        'productionBrowserSourceMaps: exportOutput' \
+        'productionBrowserSourceMaps: false'
+
     substituteInPlace src/services/constants.ts \
       --replace-fail "autoCheckUpdates: true" "autoCheckUpdates: false" \
       --replace-fail "telemetryEnabled: true" "telemetryEnabled: false"
-
-    jq '.version = "${finalAttrs.version}"' package.json | sponge package.json
-
-    mkdir -p src-tauri/plugins/tauri-plugin-turso/dist-js
-    cp -r ${finalAttrs.passthru.tursoPlugin} src-tauri/plugins/tauri-plugin-turso/dist-js
-    jq '.scripts.build = "true"' \
-      src-tauri/plugins/tauri-plugin-turso/package.json | \
-      sponge src-tauri/plugins/tauri-plugin-turso/package.json
   '';
 
   nativeBuildInputs = [
+    autoAddDriverRunpath
+    autoPatchelfHook
     cargo-tauri.hook
     nodejs
+    pkg-config
     pnpmConfigHook
     pnpm_11
-    pkg-config
+    rustPlatform.bindgenHook
     wrapGAppsHook3
-    autoPatchelfHook
-    moreutils
-    jq
   ];
 
   buildInputs = [
-    webkitgtk_4_1
+    alsa-lib
     gtk3
     librsvg
     openssl
-    glib-networking
-    # TTS
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
-    gst_all_1.gst-plugins-bad
   ];
 
+  runtimeDependencies = [
+    # Loaded by Winit's X11 backend
+    libx11
+    libxcursor
+    libxi
+    libxkbcommon
+    libxrandr
+  ];
+
+  env.CEF_PATH = finalAttrs.passthru.cefPath;
+
   preBuild = ''
-    # set up pdfjs and simplecc
+    # Assert that `cef-dll-sys` and `cef-binary`'s major versions are the same
+    cefMajor=$(
+      grep -A1 '^name = "cef-dll-sys"$' "$cargoDepsLockfile" |
+        sed -nE 's/^version = "([0-9]+)\..*/\1/p'
+    )
+
+    if [ "$cefMajor" != "${lib.versions.major cef-binary.version}" ]; then
+      echo "readest: Cargo.lock wants CEF major '$cefMajor', but cef-binary is ${cef-binary.version}" >&2
+      exit 1
+    fi
+
+    # Set up pdf.js assets.
     pnpm setup-vendors
 
-    # `tauri-plugin-turso` expects frontend files to exist before the build, else it fails with:
-    #
-    # > > tauri-plugin-turso-api@0.1.0 build /build/source/apps/readest-app/src-tauri/plugins/tauri-plugin-turso
-    # > > true
-    # >
-    # >   Error Unable to find your web assets, did you forget to build your web app?
-    #     Your frontendDist is set to "../out" (which is `/build/source/apps/readest-app/out`).
+    # Tauri embeds frontendDist during the Rust build.
     pnpm --filter @readest/readest-app build
   '';
 
-  passthru.updateScript = nix-update-script { };
+  postInstall = ''
+    # Pass OAuth callback URLs and opened files to the application.
+    # Remove once cargo-tauri includes https://github.com/tauri-apps/tauri/pull/15929.
+    substituteInPlace "$out/share/applications/readest.desktop" \
+      --replace-fail $'Exec=readest\n' $'Exec=readest %U\n'
+  '';
 
-  passthru.tursoPluginDeps = fetchPnpmDeps {
-    pname = "tauri-plugin-turso";
-    version = finalAttrs.version;
-    src = "${finalAttrs.src}/apps/readest-app/src-tauri/plugins/tauri-plugin-turso";
-    pnpm = pnpm_11;
-    fetcherVersion = 4;
-    hash = "sha256-quVUYsT3u4UBhuJ75QQ4SEuW8MhGQ0vGhtwtUj/eKHs=";
-  };
+  preFixup = ''
+    addAutoPatchelfSearchPath --no-recurse ${finalAttrs.passthru.cefPath}
 
-  passthru.tursoPlugin = stdenv.mkDerivation {
-    pname = "tauri-plugin-turso";
-    version = finalAttrs.version;
-    src = "${finalAttrs.src}/apps/readest-app/src-tauri/plugins/tauri-plugin-turso";
+    gappsWrapperArgs+=(
+      # Preserve cargo-tauri.hook's NVIDIA explicit-sync workaround because
+      # dontTauriFixup = true disables the hook's entire fixup script.
+      --set-default __NV_DISABLE_EXPLICIT_SYNC 1
 
-    nativeBuildInputs = [
-      pnpm_11
-      pnpmConfigHook
-      nodejs
-    ];
+      # The opener plugin uses xdg-open to launch the browser for OAuth.
+      --prefix PATH : "${lib.makeBinPath [ xdg-utils ]}"
 
-    pnpmDeps = finalAttrs.passthru.tursoPluginDeps;
+      # CEF dlopens PulseAudio; ANGLE needs libGL and GPU drivers.
+      # Provide search paths for loads originating in the separate CEF libraries.
+      --prefix LD_LIBRARY_PATH : "${
+        lib.makeLibraryPath [
+          addDriverRunpath.driverLink
+          libGL
+          libpulseaudio
+        ]
+      }"
+    )
+  '';
 
-    buildPhase = ''
-      pnpm build
-    '';
+  passthru = {
+    cefPath = cef-binary.overrideAttrs {
+      pname = "cef-path";
 
-    installPhase = ''
-      cp -r dist-js $out
-    '';
+      postInstall = ''
+        find $out -mindepth 1 -delete
+        strip ./Release/*.so*
+        mv ./Release/* $out/
+        mv ./Resources/* $out/
+        mv ./include $out/
+
+        ${xz}/bin/xz -9 -e -c ./CREDITS.html > "$out/CREDITS.html.xz"
+      '';
+    };
+
+    updateScript = nix-update-script { };
   };
 
   meta = {
@@ -166,6 +214,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       eljamm
       kasifrasi
     ];
-    platforms = lib.platforms.linux;
+    platforms = cef-binary.meta.platforms;
   };
 })

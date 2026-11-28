@@ -6,7 +6,9 @@
   rustc,
   makeWrapper,
   nix-update-script,
+  pkg-config,
   rustPlatform,
+  sqlite,
   tailwindcss_3,
   wasm-bindgen-cli_0_2_106,
 }:
@@ -35,7 +37,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     rustc.llvmPackages.lld
     tailwindcss_3
     makeWrapper
+    pkg-config
   ];
+
+  buildInputs = [ sqlite ];
+
   buildPhase = ''
     runHook preBuild
 

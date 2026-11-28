@@ -5,21 +5,22 @@
   hatchling,
   jinja2,
   lxml,
+  openpyxl,
   pytestCheckHook,
   python,
   xmlschema,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "reqif";
-  version = "0.0.54";
+  version = "0.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "strictdoc-project";
     repo = "reqif";
-    tag = version;
-    hash = "sha256-42iDfZTlNiYMWz/l5NO4aQ/MqfhNj/RXcv9qOiAaloM=";
+    tag = finalAttrs.version;
+    hash = "sha256-e6VG3UYx/wbo+noDflHjAywzRgrA7RwC0/kJq55Wjzs=";
   };
 
   postPatch = ''
@@ -32,7 +33,7 @@ buildPythonPackage rec {
     hatchling
   ];
 
-  dependencies = with python.pkgs; [
+  dependencies = [
     lxml
     jinja2
     xmlschema
@@ -47,8 +48,8 @@ buildPythonPackage rec {
     description = "Python library for ReqIF format";
     mainProgram = "reqif";
     homepage = "https://github.com/strictdoc-project/reqif";
-    changelog = "https://github.com/strictdoc-project/reqif/releases/tag/${src.tag}";
+    changelog = "https://github.com/strictdoc-project/reqif/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

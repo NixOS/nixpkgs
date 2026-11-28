@@ -2,11 +2,12 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  testers,
-  wizer,
+  pkg-config,
+  zstd,
+  writableTmpDirAsHomeHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wizer";
   version = "11.0.3";
 
@@ -15,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "bytecodealliance";
     repo = "wizer";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-gGO09/aHkSN8Q7EcKc7FO761YOkliHt9t7iXP4EB1Fc=";
   };
 
@@ -23,18 +24,18 @@ rustPlatform.buildRustPackage rec {
 
   cargoBuildFlags = [
     "--bin"
-    pname
+    "wizer"
   ];
 
   buildFeatures = [
     "cli"
   ];
 
-  # Setting $HOME to a temporary directory is necessary to prevent checks from failing, as
-  # the test suite creates a cache directory at $HOME/Library/Caches/BytecodeAlliance.wasmtime.
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ zstd ];
+
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
   meta = {
     description = "WebAssembly pre-initializer";
@@ -45,4 +46,4 @@ rustPlatform.buildRustPackage rec {
       lucperkins
     ];
   };
-}
+})

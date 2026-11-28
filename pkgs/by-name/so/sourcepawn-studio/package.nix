@@ -5,6 +5,7 @@
   pkg-config,
   openssl,
   nix-update-script,
+  zstd,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sourcepawn-studio";
@@ -21,7 +22,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [
+    openssl
+    zstd
+  ];
 
   checkFlags = [
     # requires rustup and rustfmt

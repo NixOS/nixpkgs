@@ -1,0 +1,12 @@
+diff --git a/src/sec.c b/src/sec.c
+index 45dd649..12c5485 100644
+--- a/src/sec.c
++++ b/src/sec.c
+@@ -7,6 +7,7 @@
+ #include <errno.h>
+ #include <fcntl.h>
+ #include <grp.h>
++#include <stdio.h>
+ #include <string.h>
+ #include <termios.h>
+ #include <unistd.h>

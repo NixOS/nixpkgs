@@ -2,6 +2,7 @@
   lib,
   python3,
   fetchFromGitHub,
+  cacert,
 }:
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
@@ -19,6 +20,12 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   build-system = with python3.pkgs; [ setuptools ];
 
   dependencies = with python3.pkgs; [ click ];
+
+  postInstall = ''
+    rm $out/${python3.sitePackages}/pur/packages/pip/_vendor/certifi/cacert.pem
+    ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt \
+      $out/${python3.sitePackages}/pur/packages/pip/_vendor/certifi/cacert.pem
+  '';
 
   nativeCheckInputs = with python3.pkgs; [ pytestCheckHook ];
 

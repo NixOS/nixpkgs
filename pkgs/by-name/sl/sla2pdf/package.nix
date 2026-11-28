@@ -20,7 +20,10 @@ python3.pkgs.buildPythonApplication {
   build-system = [ python3.pkgs.setuptools ];
 
   makeWrapperArgs = [
-    "--prefix PATH : ${lib.makeBinPath [ scribus ]}"
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [ scribus ])
   ];
 
   meta = {

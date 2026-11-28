@@ -17,17 +17,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "matrix-continuwuity";
-  version = "26.9.1";
+  version = "26.9.4";
 
   src = fetchFromGitea {
     domain = "forgejo.ellis.link";
     owner = "continuwuation";
     repo = "continuwuity";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-z9iOdSjTvv+kDJaoAyKTzrY0ge2KM90H4tM8ir52RMQ=";
+    hash = "sha256-Nr3mwlAMafuJAuRI4vY5dTZEXrcd7mdFI1VJXiMapc0=";
   };
 
-  cargoHash = "sha256-dbTrgE0+OzHhD3rjQciZfRIBivvZa0YZyKpTP8XOzZI=";
+  cargoHash = "sha256-7nGl4SQZXheDWifnbIgQGkZtZt2qZCfe+dkFcBPs2vA=";
 
   nativeBuildInputs = [
     pkg-config
@@ -38,6 +38,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     bzip2
     zstd
     rust-jemalloc-sys-unprefixed
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     liburing
   ];
 
@@ -71,6 +73,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
       bartoostveen
       nyabinary
       snaki
+      logn
+      pyrox0
     ];
     # Not a typo, continuwuity is a drop-in replacement for conduwuit.
     mainProgram = "conduwuit";

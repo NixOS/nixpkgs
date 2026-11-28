@@ -24,7 +24,7 @@ buildDunePackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "xapi-project";
     repo = "oxenstored";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-+JXgVO6m63sPzVTwpq/ztDBx/x/g5vtU1Xbcd+t5ons=";
   };
 

@@ -1,19 +1,34 @@
 {
   lib,
-  gtk4,
   stdenv,
+  fetchFromGitHub,
+
   meson,
   ninja,
-  tesseract,
   pkg-config,
-  libadwaita,
   makeWrapper,
+  wayland-scanner,
+
+  gtk4,
+  gtk4-layer-shell,
+  libadwaita,
+  wayland-protocols,
+  ffmpeg,
+  libdrm,
+  pipewire,
+  rubberband,
+  libgbm,
+  libGL,
+
   wl-clipboard,
-  fetchFromGitHub,
+  gifski,
+  tesseract,
+
+  enableOcr ? true,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "waytator";
-  version = "1.2.5";
+  version = "1.6.0";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -22,28 +37,42 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "faetalize";
     repo = "waytator";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sv7UwNsW+UTIGLDIz4JwRpPU6t5bolsz/n4bO68dDi0=";
+    hash = "sha256-u4YP5zX1pMw5Efa6b/pmcLhXNB5UbCj1gNyCDialTTU=";
   };
+
+  depsBuildBuild = [ pkg-config ];
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
     makeWrapper
+    wayland-scanner
   ];
 
   buildInputs = [
     gtk4
     libadwaita
+    gtk4-layer-shell
+    wayland-protocols
+    ffmpeg
+    libdrm
+    pipewire
+    rubberband
+    libgbm
+    libGL
   ];
 
   postFixup = ''
     wrapProgram $out/bin/waytator \
       --prefix PATH : ${
-        lib.makeBinPath [
-          tesseract
-          wl-clipboard
-        ]
+        lib.makeBinPath (
+          [
+            wl-clipboard
+            gifski
+          ]
+          ++ lib.optional enableOcr tesseract
+        )
       }
   '';
 
@@ -51,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/faetalize/waytator";
-    description = "Screenshot annotator and lightweight image editor";
+    description = "Screenshot annotator and lightweight image and video editor";
     license = lib.licenses.gpl3Plus;
     mainProgram = "waytator";
     maintainers = with lib.maintainers; [

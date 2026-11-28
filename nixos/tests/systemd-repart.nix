@@ -92,8 +92,6 @@ in
       {
         imports = [ common ];
 
-        boot.initrd.systemd.enable = true;
-
         boot.initrd.systemd.repart.enable = true;
         systemd.repart.partitions = {
           "10-root" = {
@@ -127,8 +125,6 @@ in
       }:
       {
         imports = [ common ];
-
-        boot.initrd.systemd.enable = true;
 
         boot.initrd.availableKernelModules = [ "dm_crypt" ];
         boot.initrd.luks.devices = lib.mkVMOverride {
@@ -249,8 +245,6 @@ in
           copyChannel = false;
         };
 
-        boot.initrd.systemd.enable = true;
-
         boot.initrd.systemd.repart.enable = true;
         boot.initrd.systemd.repart.device = "/dev/vda";
         systemd.repart.partitions = {
@@ -301,7 +295,6 @@ in
 
           initrd = {
             systemd = {
-              enable = true;
               # avoids reaching cryptsetup.target before recreation of the
               # "state" volume completed, during the factory reset and tries to
               # ensure that devices are retriggered before trying to work with them.

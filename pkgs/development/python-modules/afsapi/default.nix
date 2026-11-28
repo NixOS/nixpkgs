@@ -13,14 +13,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "afsapi";
-  version = "1.0.2";
+  version = "1.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "wlcrs";
     repo = "python-afsapi";
     tag = finalAttrs.version;
-    hash = "sha256-ZfP8LboBDrxXULtocOTZJ0Ku/zgear4NW5ckcHUKXc4=";
+    hash = "sha256-zqwP3nzUPMcuHLLWzsZeuS203JXmzL/8B6RMU/c6Cm4=";
   };
 
   build-system = [

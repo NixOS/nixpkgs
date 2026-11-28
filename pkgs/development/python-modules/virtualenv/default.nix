@@ -8,25 +8,32 @@
   flaky,
   hatch-vcs,
   hatchling,
+  packaging,
   platformdirs,
   pytest-freezer,
   pytest-mock,
   pytestCheckHook,
   python-discovery,
   time-machine,
+  versionCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "virtualenv";
-  version = "21.6.1";
+  version = "21.14.12";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pypa";
     repo = "virtualenv";
     tag = version;
-    hash = "sha256-8LOmA1Mhfqbl3hsGZa8tQutjfjEVeDlpOKyVut5rDVI=";
+    hash = "sha256-Lkjhcs1Bj/ObaTyqVL2wGUvwxTkzL0pX8Ii5hSHdrSA=";
   };
+
+  postPatch = ''
+    substituteInPlace tests/unit/activation/test_bash.py \
+      --replace-fail '"/bin/bash"' '_BASH'
+  '';
 
   build-system = [
     hatch-vcs
@@ -36,6 +43,7 @@ buildPythonPackage rec {
   dependencies = [
     distlib
     filelock
+    packaging
     platformdirs
     python-discovery
   ];
@@ -44,6 +52,7 @@ buildPythonPackage rec {
     flaky
     pytest-mock
     pytestCheckHook
+    versionCheckHook
   ]
   ++ lib.optionals isPyPy [ pytest-freezer ]
   ++ lib.optionals (!isPyPy) [ time-machine ];
@@ -57,6 +66,10 @@ buildPythonPackage rec {
   disabledTests = [
     # Network access
     "test_seed_link_via_app_data"
+    # Assumes FHS paths
+    "test_bash_relocation_rejects_sourced_wrapper"
+    # chmod fails in sandbox
+    "test_app_data_setgid_keeps_group_write"
   ]
   ++ lib.optionals isPyPy [
     # encoding problems

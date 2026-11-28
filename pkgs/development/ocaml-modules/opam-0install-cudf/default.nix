@@ -14,7 +14,7 @@ buildDunePackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ocaml-opam";
     repo = "opam-0install-cudf";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-TETfvR1Di4c8CylsKnMal/GfQcqMSr36o7511u1bYYs=";
   };
 

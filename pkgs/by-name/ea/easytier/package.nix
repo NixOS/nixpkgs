@@ -4,6 +4,10 @@
   fetchFromGitHub,
   rustPlatform,
   protobuf,
+  pkg-config,
+  aws-lc,
+  zstd,
+  sqlite,
   nixosTests,
   nix-update-script,
   installShellFiles,
@@ -17,26 +21,37 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "easytier";
-  version = "2.6.4";
+  version = "2.7.1";
 
   src = fetchFromGitHub {
     owner = "EasyTier";
     repo = "EasyTier";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lwqpOVKFm85AiBb7NWLAkjSrWSe5pzF0AuEmmDo+v0k=";
+    hash = "sha256-dJzOUiun3Gg+lnMMmkEZkYRfwr5N0K2Y6r9aazVngWI=";
   };
 
-  cargoHash = "sha256-c+rOjokrL0U63s1CMfy6KlGI7VoSmtxuQjBNDAagSdg=";
+  cargoHash = "sha256-1GRH5lZjYtdLKJh1Re2ym7F1JJDI9rILYD/djX6p9DY=";
 
   nativeBuildInputs = [
     protobuf
     rustPlatform.bindgenHook
     installShellFiles
     mold
+    pkg-config
+  ];
+
+  buildInputs = [
+    aws-lc
+    zstd
+    sqlite
   ];
 
   buildNoDefaultFeatures = stdenv.hostPlatform.isMips;
-  buildFeatures = lib.optional stdenv.hostPlatform.isMips "mips" ++ lib.optional withQuic "quic";
+  buildFeatures = [
+    "system-certificates"
+  ]
+  ++ lib.optional stdenv.hostPlatform.isMips "mips"
+  ++ lib.optional withQuic "quic";
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd easytier-cli \
@@ -72,7 +87,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       with the Rust language and Tokio framework.
     '';
     mainProgram = "easytier-core";
-    license = lib.licenses.asl20;
+    license = lib.licenses.lgpl3Only;
     platforms = with lib.platforms; unix ++ windows;
     maintainers = with lib.maintainers; [ ltrump ];
   };

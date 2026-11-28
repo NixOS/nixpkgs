@@ -24,8 +24,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "nsh";
     homepage = "https://github.com/nuta/nsh";
     changelog = "https://github.com/nuta/nsh/raw/v${finalAttrs.version}/docs/changelog.md";
-    license = [
-      lib.licenses.cc0 # or
+    license = lib.licenses.OR [
+      lib.licenses.cc0
       lib.licenses.mit
     ];
     maintainers = with lib.maintainers; [ cafkafk ];

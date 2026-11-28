@@ -5,6 +5,7 @@
   fetchFromGitHub,
   pkg-config,
   openssl,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -23,6 +24,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ openssl ];
+
+  checkInputs = [ zstd ];
 
   env = {
     OPENSSL_NO_VENDOR = true;

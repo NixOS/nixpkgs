@@ -139,10 +139,12 @@ let
           autoAddDriverRunpath
           autoPatchelfHook
           fetchurl
+          patchelf
           srcOnly
           stdenv
           stdenvNoCC
           zstd
+          testers
           ;
         inherit (finalCudaPackages)
           autoAddCudaCompatRunpath

@@ -6,7 +6,7 @@
 
 let
   # nixpkgs-update: no auto update
-  version = "0.3.5";
+  version = "0.3.6";
 
   archMap = {
     "x86_64-linux" = "x86_64";

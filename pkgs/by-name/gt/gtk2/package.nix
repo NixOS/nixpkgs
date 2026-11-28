@@ -175,5 +175,13 @@ stdenv.mkDerivation (finalAttrs: {
       "gdk-x11-2.0"
       "gtk+-x11-2.0"
     ];
+    problems.broken = {
+      message = ''
+        gtk2 will be removed because because its final release 2.24.33 happened in December 2020.
+        Packages using it should be migrated to gtk3 or gtk4 before NixOS 27.05.
+      '';
+      urls = [ "https://github.com/NixOS/nixpkgs/issues/410814" ];
+    };
+
   };
 })

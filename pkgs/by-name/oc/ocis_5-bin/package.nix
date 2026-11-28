@@ -64,8 +64,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [
       ramblurr
-      bhankas
-      ramblurr
     ];
 
     platforms =

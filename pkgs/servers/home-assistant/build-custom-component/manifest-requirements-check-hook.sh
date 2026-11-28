@@ -18,9 +18,9 @@ function manifestCheckPhase() {
 
     readarray -d '' manifests < <(
       find . -type f \( \
-        -path ./manifest.json \
-        -o -path './custom_components/*/manifest.json' \
-        -o -path './custom_components/*/integrations/*/manifest.json' \
+        -path './manifest.json' \
+        -o -regex './custom_components/[^/]+/manifest.json' \
+        -o -regex './custom_components/[^/]+/integrations/[^/]+/manifest.json' \
       \) -print0
     )
 

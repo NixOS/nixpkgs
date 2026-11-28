@@ -1,115 +1,147 @@
 {
-  "version": "13.1.0",
+  "version": "13.1.1",
   "cp310-cp310-x86_64-darwin": {
     "platform": "macosx_10_11_x86_64",
-    "hash": "sha256-h/RF6T+M2Klz2lLl6qdF+jZWCNIG5iwvE4kTsSm9B2g="
+    "hash": "sha256-PFz+CCXoOrVUboOovDfVjD6HT5060ayC8a8GP4YDXK0="
   },
   "cp310-cp310-aarch64-darwin": {
     "platform": "macosx_11_0_arm64",
-    "hash": "sha256-ClYmdpJGWrxyA4+P6x+zSxhJcPQSxaXM/w/SiXWWUnI="
+    "hash": "sha256-1ZqXRVaBPIKF+thXqFIDdm/Ti2Z2S+xhvY/uz5PIKLQ="
   },
   "cp310-cp310-aarch64-linux": {
     "platform": "manylinux_2_24_aarch64",
-    "hash": "sha256-dRt3a2rC52h2F4rsrk23Dx+wIdCKqDh+C3pl6GbQBks="
+    "hash": "sha256-UbTcbnlVxw2rxFaDDYZyz1nMdJKKswaRtAfnWtZKyrg="
   },
   "cp310-cp310-x86_64-linux": {
     "platform": "manylinux_2_24_x86_64",
-    "hash": "sha256-oznf9R9fBzMgfQumdoqcOQuST/BcWmLicM53jfqfk7g="
+    "hash": "sha256-S8hppn0igSYKI1gi3UhHd6IdeicI7ajujvckt6+tO3A="
   },
   "cp311-cp311-x86_64-darwin": {
     "platform": "macosx_10_11_x86_64",
-    "hash": "sha256-CC/Cbb9SlKZg1BSW+D2+Lmuu84ROJ7xwiHb2UOVLHu0="
+    "hash": "sha256-Hr0ajk7dyabyL8qGBXUWkn8RqkkcQ2VqlDbuDvtDivw="
   },
   "cp311-cp311-aarch64-darwin": {
     "platform": "macosx_11_0_arm64",
-    "hash": "sha256-DemCcncctdJEGSYt2AaiyM5/8bAVENKfubjePHsS8v0="
+    "hash": "sha256-BS09uq5J6tGSMnmcYcPVD5NwID5lXoCv7bPdcCfsNKs="
   },
   "cp311-cp311-aarch64-linux": {
     "platform": "manylinux_2_24_aarch64",
-    "hash": "sha256-4Kc8QCzR+peri6rhiyvtHwOKFHR5rJD7UohbG2GuBGU="
+    "hash": "sha256-/4zLZ/EimUyp2hgHepU9Q2ktgwKXXUSdGTG6brn5L0U="
   },
   "cp311-cp311-x86_64-linux": {
     "platform": "manylinux_2_24_x86_64",
-    "hash": "sha256-Ig4I9SpZwMMRWFJ8/AWwt1IiIY1SqdB0PkywcldPSik="
+    "hash": "sha256-qSFrMjDgm1No2b1yEtTQzEL9j3Qe5Kwg/R/gOweQu/U="
   },
   "cp312-cp312-x86_64-darwin": {
     "platform": "macosx_10_11_x86_64",
-    "hash": "sha256-T+iK42v0khed2Ewm2ymfGbBpf5Y6FlHS5MsbrUDgx4o="
+    "hash": "sha256-KII+LGR2w1hAB3hnuS4eVPV7c3B3JpFj1pU2MlL4rJ4="
   },
   "cp312-cp312-aarch64-darwin": {
     "platform": "macosx_11_0_arm64",
-    "hash": "sha256-xE2cQVxEuLP1hLb8+VktX+Mc/DCvhCNuXdEsSdoI82E="
+    "hash": "sha256-775u0rJZTR2RRia8xPBRW12qgLJkhHlMOlsDZSTB0UY="
   },
   "cp312-cp312-aarch64-linux": {
     "platform": "manylinux_2_24_aarch64",
-    "hash": "sha256-ojh+FCyhemK8kn30p6B4H++pJ/DoXxnhrUoTy2kfWlA="
+    "hash": "sha256-h597NutcxJ+CoaOLn3XrXIfWgjS56j/YXSnoydOTOko="
   },
   "cp312-cp312-x86_64-linux": {
     "platform": "manylinux_2_24_x86_64",
-    "hash": "sha256-7fb/PDiDNDr9TpBxSwL8GeVWzFJ+qNj1KKOB1duZQIw="
+    "hash": "sha256-xw9Ky+pSB2YszzUDxEvJeUIDrHOl0eWadnBJ2rlvcxA="
   },
   "cp313-cp313-x86_64-darwin": {
     "platform": "macosx_10_11_x86_64",
-    "hash": "sha256-hA0XoC0L94FApS1u7Qco7bo39E/+YSiXo9uqCULU3Rg="
+    "hash": "sha256-bRrl4ytiiC3XnA+DT75BSKR7UTv+6N7OI47mducL6bs="
   },
   "cp313-cp313-aarch64-darwin": {
     "platform": "macosx_11_0_arm64",
-    "hash": "sha256-nHX/3GFDxHOPxdJPalroPv1VVUQ6W1NEHZs3fHBP+3I="
+    "hash": "sha256-GIJyhjPpx5YdhFnVBrqqVtW5/y/c3EJEK3oF02x7Npg="
   },
   "cp313-cp313-aarch64-linux": {
     "platform": "manylinux_2_24_aarch64",
-    "hash": "sha256-dom3cvxiuNs327usHIQjPVAltA0Cvx4udk9v9TknU54="
+    "hash": "sha256-uoi63e/LFwLcg67/OKetV9OEBmu+wGRewDlz3TojkHY="
   },
   "cp313-cp313-x86_64-linux": {
     "platform": "manylinux_2_24_x86_64",
-    "hash": "sha256-ehhYoLMXYPIuFi8Sks9KduXmD5hSxNE/6r9Pkand7uM="
+    "hash": "sha256-R2T2TkyWTs9HGT7aZ/T2bTqyf3xBqBR+VAvIbJ3agR0="
   },
   "cp314-cp314-aarch64-darwin": {
     "platform": "macosx_11_0_arm64",
-    "hash": "sha256-xxfLddJCD7efhYnn5+9qdOI4y3X0J0K4jSsAfQUA6fY="
+    "hash": "sha256-ZuyLugsnjy8rhwbLI5wwwR8LX5q3HSxTP2gOU58zoP0="
   },
   "cp314-cp314-x86_64-darwin": {
     "platform": "macosx_11_0_x86_64",
-    "hash": "sha256-TPr+pSyGjWH/L0bjm1Di4XGV4zwHUA/AETb7kBSDTIE="
+    "hash": "sha256-h+bIVezXlYAxR/Eq1bfwe1kw5oy0g2j7SRMD9X6Zdck="
   },
   "cp314-cp314-aarch64-linux": {
     "platform": "manylinux_2_24_aarch64",
-    "hash": "sha256-pQ2diOmDJbj83eT5H2ASieWfzmOrs6+qzIaxkMizilg="
+    "hash": "sha256-PCX1GuZd/mzz9x9bdEDbSCb38b0V2WnU89kD8y5Rfc8="
   },
   "cp314-cp314-x86_64-linux": {
     "platform": "manylinux_2_24_x86_64",
-    "hash": "sha256-+IAn8tSzFdFrgiDjIWPUkw9xA+bQa9pz+Rhkq408JEE="
+    "hash": "sha256-pCRSDsU9DztHFMJvREMvjt56sX/Im3PiMBZAFZZXsuk="
   },
   "cp314-cp314t-aarch64-darwin": {
     "platform": "macosx_11_0_arm64",
-    "hash": "sha256-XjHsn1QC8yRn8V+GYef/EEZlHkkbT0YX0DH5sKwXBFc="
+    "hash": "sha256-3LYDNwVK42gQM3xb53NMSRiU+cYF8AQ77alx3A85UR0="
   },
   "cp314-cp314t-x86_64-darwin": {
     "platform": "macosx_11_0_x86_64",
-    "hash": "sha256-cN/XcKJDyJ4KcmvmSSBTSwsw9DPXZV/AusOs1OXyU/w="
+    "hash": "sha256-lYfCD5ptsrZnynsf+aXagDIj+cCbv2rAYM3xVtJfXuw="
   },
   "cp314-cp314t-aarch64-linux": {
     "platform": "manylinux_2_24_aarch64",
-    "hash": "sha256-cBUZ0EVocAFZkvmDYcXCIYE3i40yXoLsB96ZC6UALhA="
+    "hash": "sha256-6OSfQIxiM+bpeDolEHtoad3X7X5Mxl2wmBgPYoxXzC0="
   },
   "cp314-cp314t-x86_64-linux": {
     "platform": "manylinux_2_24_x86_64",
-    "hash": "sha256-0Y0ypp8FZ1CfCfl5BjtpmBm6yyY5/IqWGV5kfm2Uzow="
+    "hash": "sha256-DKkMXheXZNIcFPq64tzwoqOwgqkWQmjJ3DBWDlvCxXM="
+  },
+  "cp315-cp315-aarch64-darwin": {
+    "platform": "macosx_11_0_arm64",
+    "hash": "sha256-1QEw3TvguEdypf4A5671rm84aAduKMrIesqfv0qe/Ls="
+  },
+  "cp315-cp315-x86_64-darwin": {
+    "platform": "macosx_11_0_x86_64",
+    "hash": "sha256-jmJ96TzUUGNhxff8VfxroK8DQG9JqCffzyGH3zZn4kw="
+  },
+  "cp315-cp315-aarch64-linux": {
+    "platform": "manylinux_2_24_aarch64",
+    "hash": "sha256-zMwd5CTGG6x9I6E4yBhhM5moQoyqu0OYZki3fwK9bi4="
+  },
+  "cp315-cp315-x86_64-linux": {
+    "platform": "manylinux_2_24_x86_64",
+    "hash": "sha256-5zbouOvzsX4ZXUGHZdm50anQyB6m/mbY5lrhPFl+BIs="
+  },
+  "cp315-cp315t-aarch64-darwin": {
+    "platform": "macosx_11_0_arm64",
+    "hash": "sha256-OKiuKY9SgUCFI9eJJXYGm3xA/wMXp2Sc6fp1J1boKzA="
+  },
+  "cp315-cp315t-x86_64-darwin": {
+    "platform": "macosx_11_0_x86_64",
+    "hash": "sha256-SmPb1mFcgYjvPAM4vJFqdrHT3229tAP6KdPvH7zVAks="
+  },
+  "cp315-cp315t-aarch64-linux": {
+    "platform": "manylinux_2_24_aarch64",
+    "hash": "sha256-yAFkWkUY737Gdpe8AM1W9B27hIKUZDEarDiQZaBMHBE="
+  },
+  "cp315-cp315t-x86_64-linux": {
+    "platform": "manylinux_2_24_x86_64",
+    "hash": "sha256-R/blcw1vzclMd8NH94Do9GcxYVb2EnPE69DTFTZk+3s="
   },
   "cp39-cp39-x86_64-darwin": {
     "platform": "macosx_10_11_x86_64",
-    "hash": "sha256-IPTKv5az2k9bqnIr3pjCMYugNcY4Ew7Fho/uotheu5o="
+    "hash": "sha256-GLFP3ghwjwJDLiQTko9FpejP+J82OPshIxmr9YhRICU="
   },
   "cp39-cp39-aarch64-darwin": {
     "platform": "macosx_11_0_arm64",
-    "hash": "sha256-4pigAM0Bk92x1sZekCWkX5fFwDqkE9Dt5u/gjhsjz/o="
+    "hash": "sha256-0o4xE+gmSzYusK8j+86jms8FU9EhG/SPVKJX7Ml1lh0="
   },
   "cp39-cp39-aarch64-linux": {
     "platform": "manylinux_2_24_aarch64",
-    "hash": "sha256-FrUVsrlIrWDT+mq6TvLnCEfVI6MsVOqStAEHuBGUgvo="
+    "hash": "sha256-iF3ac/Hse/SmBAGyo59dB1b2lH56PDApt7nkW+7fD+A="
   },
   "cp39-cp39-x86_64-linux": {
     "platform": "manylinux_2_24_x86_64",
-    "hash": "sha256-PfqnFJD2LOnTl0KjLg/JI6YhrZyU4g1hDRAGuC9ES2c="
+    "hash": "sha256-qQSnJZIMajwTxEfoHCYKIdz/fZIxHBG0tDHxVVJie9U="
   }
 }

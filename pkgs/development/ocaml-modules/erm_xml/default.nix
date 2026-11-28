@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     owner = "hannesm";
     repo = "xml";
     rev = "bbabdade807d8281fc48806da054b70dfe482479";
-    sha256 = "sha256-OQdLTq9tJZc6XlcuPv2gxzYiQAUGd6AiBzfSi169XL0=";
+    hash = "sha256-OQdLTq9tJZc6XlcuPv2gxzYiQAUGd6AiBzfSi169XL0=";
   };
 
   nativeBuildInputs = [

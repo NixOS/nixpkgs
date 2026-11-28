@@ -6,6 +6,8 @@
   pkg-config,
   versionCheckHook,
   openssl,
+  sqlite,
+  zstd,
 }:
 
 let
@@ -18,18 +20,18 @@ in
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "surfpool-cli";
-  version = "1.5.0";
+  version = "1.8.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "solana-foundation";
     repo = "surfpool";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DszqgmMW+hQ3wKhh3ZMioX1sAca333WzRIikKJFuyXg=";
+    hash = "sha256-yBdNqHWsRiXBDAZRidNuP5permUeF75CJQ3N2i3qyeM=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-eOgPoHQVQVm+aSLsxAokjMyAyZBia/j/Bxux69WfklI=";
+  cargoHash = "sha256-vWOq22CB/p+e9odT4keO7paMEDrJSOxZnZp3nF9kdYI=";
 
   env = {
     RUSTFLAGS = "-Aunused";
@@ -39,7 +41,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [
+    openssl
+    sqlite
+    zstd
+  ];
+
+  # The CLI integration tests spawn surfpool and bind loopback ports.
+  __darwinAllowLocalNetworking = true;
 
   doInstallCheck = true;
 

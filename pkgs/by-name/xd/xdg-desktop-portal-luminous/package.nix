@@ -22,18 +22,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xdg-desktop-portal-luminous";
-  version = "0.1.21";
+  version = "0.1.22";
 
   src = fetchFromGitHub {
     owner = "waycrate";
     repo = "xdg-desktop-portal-luminous";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-m1/PmGj1ZZJdH9AiUxe+6hVs0cwGuegY56gFeWSswA4=";
+    hash = "sha256-46cFFAYYn6OQUEh0lTCEe6AyekEdYxDqISDHg1vrtLM=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-N6TteUB3AC+LNxglvgQQ4RxRSaZk6E0f42BbYd3d+Rk=";
+    hash = "sha256-J+7bSjuHOk4dxgO9g8qngcdW4ihUFmqlwspnpsQa3xk=";
   };
 
   nativeBuildInputs = [
@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "xdg-desktop-portal backend for wlroots based compositors, providing screenshot and screencast";
     homepage = "https://github.com/waycrate/xdg-desktop-portal-luminous";
-    license = lib.licenses.gpl3Only;
+    license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ Rishik-Y ];
   };

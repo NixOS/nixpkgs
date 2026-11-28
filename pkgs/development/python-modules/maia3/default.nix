@@ -21,8 +21,6 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-gDgZTetHVB+KVKNJvAdcgjfvUBNwvWbDra1D8gQDvw8=";
   };
 
-  __structuredAttrs = true;
-
   # to be updated and removed when https://github.com/CSSLab/maia3/pull/10 is merged
   postPatch = ''
     substituteInPlace pyproject.toml \

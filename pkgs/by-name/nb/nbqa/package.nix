@@ -16,14 +16,14 @@
 let
   nbqa = python3Packages.buildPythonApplication rec {
     pname = "nbqa";
-    version = "1.9.1";
+    version = "1.10.0";
     pyproject = true;
 
     src = fetchFromGitHub {
       owner = "nbQA-dev";
       repo = "nbQA";
       tag = version;
-      hash = "sha256-qVNJ8f8vUlTCi5DbvG70orcSnulH60UcI5iABtXYUog=";
+      hash = "sha256-UF9l9GrWRsHcxvAgcCw2WD0bJhplMQKVfB2PD57U6JY=";
     };
 
     build-system = with python3Packages; [
@@ -118,7 +118,7 @@ let
       changelog = "https://nbqa.readthedocs.io/en/latest/history.html";
       description = "Run ruff, isort, pyupgrade, mypy, pylint, flake8, black, blacken-docs, and more on Jupyter Notebooks";
       license = lib.licenses.mit;
-      maintainers = with lib.maintainers; [ l0b0 ];
+      maintainers = [ ];
       mainProgram = "nbqa";
     };
   };

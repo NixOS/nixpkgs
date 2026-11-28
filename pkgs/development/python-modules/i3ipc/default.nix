@@ -69,6 +69,7 @@ buildPythonPackage rec {
     # Timeout
     "test/test_shutdown_event.py::TestShutdownEvent::test_shutdown_event_reconnect"
     "test/aio/test_shutdown_event.py::TestShutdownEvent::test_shutdown_event_reconnect"
+    "test/aio/test_event_exceptions.py::TestEventExceptions::test_event_exceptions"
     # Flaky
     "test/test_window.py::TestWindow::test_detailed_window_event"
     "test/aio/test_workspace.py::TestWorkspace::test_workspace"

@@ -9,7 +9,6 @@ buildPythonPackage (finalAttrs: {
   pname = "spdx-license-list";
   version = "3.29.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "JJMC89";

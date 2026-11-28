@@ -19,8 +19,6 @@ buildPythonPackage (finalAttrs: {
   version = "1.9.1";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "hardwario";
     repo = "bch-firmware-tool";

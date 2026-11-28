@@ -5,6 +5,7 @@
   binutils,
   elfutils,
   fetchFromGitHub,
+  fetchpatch,
   glib,
   libbtbb,
   libcap,
@@ -34,14 +35,30 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kismet";
-  version = "2025-09-R1";
+  version = "2026-10-R1";
 
   src = fetchFromGitHub {
     owner = "kismetwireless";
     repo = "kismet";
     tag = "kismet-${finalAttrs.version}";
-    hash = "sha256-bwgeBIa5P1he0azWBu1YTXS9EGlHdJK8hS6A5Rj9XU4=";
+    hash = "sha256-thYxqddJuRUDRLx5lhuDEHOQIqYNuj/OHo/KJETXqnc=";
   };
+
+  patches = [
+    # Fix build on arm64, PowerPC, and s390x.
+    # https://github.com/kismetwireless/kismet/issues/717
+    (fetchpatch {
+      name = "fix-arm64-build.patch";
+      url = "https://github.com/kismetwireless/kismet/commit/7410efd22776cf0921156739bd454024a603e028.patch";
+      hash = "sha256-N9rRk0wOh5LqYm5CkneXR9t8/HPpR8RW4mIMmo35Ui8=";
+    })
+    (fetchpatch {
+      name = "fix-s390x-build.patch";
+      url = "https://github.com/kismetwireless/kismet/commit/ee38d431029e0095efa32e89080b0e23bb75e0c0.patch";
+      includes = [ "protobuf_decode.h" ];
+      hash = "sha256-mDyfpt404j+N5d9r2L4qm7lWd8xPolCugJBLAlE3Hms=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace Makefile.in \
@@ -114,6 +131,9 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (!withSensors) [
     "--disable-lmsensors"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isS390x [
+    "--disable-usbwifi"
   ];
 
   enableParallelBuilding = true;

@@ -10,6 +10,9 @@
   copyDesktopItems,
   makeDesktopItem,
   nix-update-script,
+  unzip,
+  python3,
+  stdenv,
 }:
 buildDotnetModule rec {
   pname = "lumafly";
@@ -21,6 +24,8 @@ buildDotnetModule rec {
     tag = "v${version}";
     hash = "sha256-GVPMAwxbq9XlKjMKd9G5yUol42f+6lSyHukN7NMCVDA=";
   };
+
+  patches = [ ./no_timestamp_check.patch ];
 
   # Use .NET 9.0 since 7.0 is EOL
   dotnetFlags = [ "-p:TargetFramework=net9.0" ];
@@ -45,9 +50,22 @@ buildDotnetModule rec {
   nativeBuildInputs = [
     icoutils
     copyDesktopItems
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    python3
+    unzip
   ];
 
   executables = [ "Lumafly" ];
+
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    (
+      cd Scripts
+      python3 make_mac_app.py Lumafly.app $out/lib/${pname} ../out
+    )
+    mkdir -p $out/Applications
+    unzip -o out/mac.zip -d $out/Applications
+  '';
 
   postFixup = ''
     # Icon for the desktop file
@@ -73,6 +91,6 @@ buildDotnetModule rec {
     license = lib.licenses.gpl3Plus;
     mainProgram = "Lumafly";
     maintainers = with lib.maintainers; [ rohanssrao ];
-    platforms = lib.platforms.linux;
+    platforms = with lib.platforms; linux ++ darwin;
   };
 }

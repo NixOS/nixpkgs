@@ -40,7 +40,6 @@ buildPythonPackage (finalAttrs: {
   pname = "mlx";
   inherit version;
   format = "wheel";
-  __structuredAttrs = true;
 
   disabled = !(srcs ? ${sourceKey});
 
@@ -82,6 +81,11 @@ buildPythonPackage (finalAttrs: {
       metalSupport = true;
       src = finalAttrs.passthru.srcs.testSource;
     }).mlxTest;
+
+  # Check that mlx and mlx-metal can be combined with python.withPackages.
+  # In 0.32.0, both wheels shipped the same Python modules, but their generated
+  # .pyc files embedded different store paths and collided when building the environment.
+  passthru.tests.pythonEnv = python.withPackages (_: [ finalAttrs.finalPackage ]);
 
   meta = {
     description = "Prebuilt MLX wheel for Apple silicon with Metal runtime";

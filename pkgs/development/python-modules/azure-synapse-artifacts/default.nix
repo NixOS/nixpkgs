@@ -14,8 +14,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.22.0";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     pname = "azure_synapse_artifacts";
     inherit (finalAttrs) version;

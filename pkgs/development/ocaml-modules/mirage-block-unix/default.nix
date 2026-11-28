@@ -17,7 +17,7 @@ buildDunePackage (finalAttrs: {
 
   src = fetchurl {
     url = "https://github.com/mirage/mirage-block-unix/releases/download/v${finalAttrs.version}/mirage-block-unix-${finalAttrs.version}.tbz";
-    sha256 = "sha256-6ReAzd+pCd5ccmXOh6GlSxHo4GuEgptxLha62n+dBsE=";
+    hash = "sha256-6ReAzd+pCd5ccmXOh6GlSxHo4GuEgptxLha62n+dBsE=";
   };
 
   minimalOCamlVersion = "4.08";

@@ -11,14 +11,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aiotractive";
-  version = "1.2.0";
+  version = "2.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zhulik";
     repo = "aiotractive";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OoJwKzJK9pAW+hgZMVJayeJ36T7clojIifijvmUExqs=";
+    hash = "sha256-EMl3pOb3LIoONpQhhNa0DtGGu6r8OGNMGbEfoSWhNYc=";
   };
 
   build-system = [ setuptools ];
@@ -27,7 +27,10 @@ buildPythonPackage (finalAttrs: {
     pyprojectVersionPatchHook
   ];
 
-  pythonRelaxDeps = [ "orjson" ];
+  pythonRelaxDeps = [
+    "aiohttp"
+    "orjson"
+  ];
 
   dependencies = [
     aiohttp

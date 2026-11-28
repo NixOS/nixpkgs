@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sysstat";
-  version = "12.7.7";
+  version = "12.8.1";
 
   src = fetchFromGitHub {
     owner = "sysstat";
     repo = "sysstat";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-A0ja5/AtRNaXRXCXG2sJsvWrHPePgIIy/+rF+F7RvqI=";
+    hash = "sha256-5OTsYpN3uKqdr45cDkabPzt/3RnGCMElKodff3sgFEQ=";
   };
 
   buildInputs = [ gettext ];

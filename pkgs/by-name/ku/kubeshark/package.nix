@@ -10,7 +10,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "kubeshark";
-  version = "53.5.0";
+  version = "53.6.0";
 
   __structuredAttrs = true;
 
@@ -18,7 +18,7 @@ buildGoModule (finalAttrs: {
     owner = "kubeshark";
     repo = "kubeshark";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vw0CCjBqrftJBRDGZjiP3f0Smmh08LTz2YrT5QFJwus=";
+    hash = "sha256-2JF4tL4dyC0AcImhsF4ave9ZvI7YVM7g7wCVh5BI06g=";
   };
 
   vendorHash = "sha256-mJfjiVyKVGB410ned2E13i35mAN0XrPNERUa+MAzF58=";

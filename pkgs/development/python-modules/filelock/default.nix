@@ -8,18 +8,19 @@
   pytest-mock,
   pytest-timeout,
   pytestCheckHook,
+  stdenv,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "filelock";
-  version = "3.32.4";
+  version = "4.2.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tox-dev";
     repo = "filelock";
     tag = finalAttrs.version;
-    hash = "sha256-pYtfPduGEkE1cbyDn72SqAnLIg63+BwARpI10agdTIc=";
+    hash = "sha256-oN4nr4p/vPpg5620LEpqYILofYl2rpaPN5lJqySR6ZE=";
   };
 
   build-system = [
@@ -44,8 +45,10 @@ buildPythonPackage (finalAttrs: {
     "tests/test_read_write.py"
   ];
 
+  doCheck = !stdenv.hostPlatform.isFreeBSD;
+
   meta = {
-    changelog = "https://github.com/tox-dev/filelock/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/tox-dev/filelock/blob/${finalAttrs.src.tag}/docs/changelog.rst";
     description = "Platform independent file lock for Python";
     homepage = "https://github.com/benediktschmitt/py-filelock";
     license = lib.licenses.mit;

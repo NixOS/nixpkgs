@@ -40,15 +40,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "etils";
-  version = "1.14.0";
+  version = "1.15.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "etils";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gjWA+y1dXihmOBzCxfgUZJLvtSHzpRLQIhNxzk+y11M=";
+    hash = "sha256-TjIjswW+r5LCjv6mzLngKrAXm2uq1Scbus3Rdu/n7MU=";
   };
 
   build-system = [ flit-core ];

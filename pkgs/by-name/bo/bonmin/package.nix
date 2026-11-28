@@ -32,7 +32,15 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-nqjAQ1NdNJ/T4p8YljEWRt/uy2aDwyBeAsag0TmRc5Q=";
   };
 
+  outputs = [
+    "out"
+    "doc"
+  ];
+  # The old autoconf-generated configure script does not support `--docdir`
+  setOutputFlags = false;
+
   __structuredAttrs = true;
+  strictDeps = true;
 
   nativeBuildInputs = [
     doxygen
@@ -77,8 +85,17 @@ stdenv.mkDerivation (finalAttrs: {
       ""
   '';
 
-  # install documentation
-  postInstall = "make install-doxygen-docs";
+  # Install the doxygen documentation into the separate `doc` output
+  installTargets = [
+    "install"
+    "install-doxygen-docs"
+  ];
+  installFlags = [ "DocInstallDir=${placeholder "doc"}/share/doc/bonmin" ];
+
+  # The LaTeX logs from the formula rendering reference texlive
+  postInstall = ''
+    rm -f $doc/share/doc/bonmin/doxydoc/_formulas*.log
+  '';
 
   meta = {
     description = "Open-source code for solving general MINLP (Mixed Integer NonLinear Programming) problems";

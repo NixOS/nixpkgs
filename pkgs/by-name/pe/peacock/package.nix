@@ -14,13 +14,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "peacock";
-  version = "8.9.0";
+  version = "8.10.2";
 
   src = fetchFromGitHub {
     owner = "thepeacockproject";
     repo = "Peacock";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8Z2UXz/4ecQruy20RykgSXBm3JjMqZH6KVBVCXRzAI4=";
+    hash = "sha256-yEJLVAUeSRUwPjg6gMz/EHZmR2uNvsG7TnKE+3YTVSI=";
 
     # Remove after upstream updates to Yarn 4.15
     # https://github.com/thepeacockproject/Peacock/blob/master/package.json#L107
@@ -93,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
   missingHashes = ./missing-hashes.json;
   offlineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
-    hash = "sha256-O1F/OaVipYyJOIIeNcOEghxTjGYNg8Ba0KMQMnW09EQ=";
+    hash = "sha256-z0na8mKK+gBgMLZ6QOCMeNZQQlFceVAhFqfuI9l1b9c=";
   };
 
   meta = {
@@ -103,6 +103,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ marie ];
     mainProgram = "peacock";
-    platforms = lib.platforms.linux;
+    inherit (nodejs.meta) platforms;
   };
 })

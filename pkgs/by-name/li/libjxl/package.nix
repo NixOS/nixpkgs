@@ -29,9 +29,9 @@ let
   loadersPath = "${gdk-pixbuf.binaryDir}/jxl-loaders.cache";
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libjxl";
-  version = "0.12.0";
+  version = "0.13.0";
 
   outputs = [
     "out"
@@ -43,8 +43,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "libjxl";
     repo = "libjxl";
-    tag = "v${version}";
-    hash = "sha256-rJyvJo1ZveE1pvMErK9ilFQA0NXkD2ka93L+1gXeqf8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-fVT+HIAMpXnr12uNVI624SeD9oRhBTp+LPd6k30ZHwM=";
     # There are various submodules in `third_party/`.
     fetchSubmodules = true;
   };
@@ -145,9 +145,7 @@ stdenv.mkDerivation rec {
     shopt -u extglob
 
     substituteInPlace plugins/gdk-pixbuf/jxl.thumbnailer \
-      --replace '/usr/bin/gdk-pixbuf-thumbnailer' "$out/libexec/gdk-pixbuf-thumbnailer-jxl"
-    substituteInPlace CMakeLists.txt \
-      --replace 'sh$' 'sh( -e$|$)'
+      --replace-fail '/usr/bin/gdk-pixbuf-thumbnailer' "$out/libexec/gdk-pixbuf-thumbnailer-jxl"
   '';
 
   # Move `benchmark_xl` into a separate output to avoid a file collision
@@ -171,9 +169,7 @@ stdenv.mkDerivation rec {
     CXXFLAGS = "-mfp16-format=ieee";
   };
 
-  # FIXME x86_64-darwin:
-  # https://github.com/NixOS/nixpkgs/pull/204030#issuecomment-1352768690
-  doCheck = with stdenv.hostPlatform; !(isi686 || isDarwin && isx86_64);
+  doCheck = with stdenv.hostPlatform; !isi686;
 
   disabledTests = lib.optionals stdenv.hostPlatform.isBigEndian [
     # https://github.com/libjxl/libjxl/issues/3629
@@ -199,6 +195,8 @@ stdenv.mkDerivation rec {
     ".*bitSqueeze.*"
   ];
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://github.com/libjxl/libjxl";
     description = "JPEG XL image format reference implementation";
@@ -206,4 +204,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ nh2 ];
     platforms = lib.platforms.all;
   };
-}
+})

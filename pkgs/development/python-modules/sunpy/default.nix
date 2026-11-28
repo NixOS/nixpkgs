@@ -63,7 +63,6 @@ buildPythonPackage (finalAttrs: {
   pname = "sunpy";
   version = "8.0.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "sunpy";
@@ -162,6 +161,11 @@ buildPythonPackage (finalAttrs: {
     writableTmpDirAsHomeHook
   ]
   ++ finalAttrs.passthru.optional-dependencies.all;
+
+  pytestFlags = [
+    # astropy tries to download the leap-second table, which fails in the sandbox
+    "-Wignore::astropy.utils.exceptions.AstropyWarning"
+  ];
 
   disabledTests = [
     "rst" # Docs

@@ -1,3 +1,4 @@
+# nixpkgs-update: no auto update
 {
   stdenv,
   lib,
@@ -44,23 +45,10 @@
 
 ## configurability of the wrapper itself
 
-browser_:
+browser:
 
 let
   isDarwin = stdenv.hostPlatform.isDarwin;
-  browser =
-    # Wrapper breaks codesigning on macOS; though plugins that may require
-    # original mozilla signature (like 1Password) won't work with signatures
-    # stripped, at least the wrapped browser will launch.
-    if isDarwin then
-      browser_.overrideAttrs (
-        oldAttrs:
-        lib.optionalAttrs (oldAttrs.dontFixup or false) {
-          dontFixup = false;
-        }
-      )
-    else
-      browser_;
   wrapper =
     {
       applicationName ? browser.binaryName or (lib.getName browser), # Note: this is actually *binary* name and is different from browser.applicationName, which is *app* name!
@@ -88,6 +76,10 @@ let
       libName ? browser.libName or applicationName, # Important for tor package or the like
       nixExtensions ? null,
       hasMozSystemDirPatch ? (lib.hasPrefix "firefox" pname && !lib.hasSuffix "-bin" pname),
+      # Using a profile last written to by a newer version of firefox is
+      # possible in many cases but can lead to partial data loss without
+      # warning. This flag allows opting into that behaviour.
+      allowDowngrade ? false,
     }:
 
     let
@@ -233,6 +225,9 @@ let
       strictDeps = true;
       inherit pname version;
 
+      # Keep update tools from treating the wrapper as the source package.
+      pos = __curPos;
+
       desktopItem = makeDesktopItem (
         {
           name = launcherName;
@@ -338,7 +333,8 @@ let
         "--set"
         "MOZ_LEGACY_PROFILES"
         "1"
-
+      ]
+      ++ lib.optionals allowDowngrade [
         "--set"
         "MOZ_ALLOW_DOWNGRADE"
         "1"
@@ -504,6 +500,14 @@ let
             # Suffix the executable with -old, because -wrapped might already be used by the old wrapper.
             oldExe="$executablePrefix/.${applicationName}"-old
             mv "$executablePath" "$oldExe"
+        ''
+        # llvm-strip fails on Mozilla Mach-O binary:
+        # https://github.com/NixOS/nixpkgs/issues/583738
+        + lib.optionalString (isDarwin && browser.dontFixup or false) ''
+          source ${buildPackages.darwin.signingUtils}
+          signIfRequired "$oldExe"
+        ''
+        + ''
           fi
         ''
         + lib.optionalString (!isDarwin) ''

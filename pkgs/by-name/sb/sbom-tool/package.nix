@@ -18,6 +18,8 @@ buildDotnetModule rec {
     hash = "sha256-1PPNMen5j5/Uz9JXe/e3vHz6jo56xWzfBexx4LPBmuQ=";
   };
 
+  strictDeps = true;
+
   projectFile = "src/Microsoft.Sbom.Tool/Microsoft.Sbom.Tool.csproj";
   nugetDeps = ./deps.json;
 

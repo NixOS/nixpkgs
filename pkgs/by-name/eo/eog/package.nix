@@ -127,6 +127,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.gnome.org/GNOME/eog";
     changelog = "https://gitlab.gnome.org/GNOME/eog/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     license = lib.licenses.gpl2Plus;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "gnome" finalAttrs.version;
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.unix;
     mainProgram = "eog";

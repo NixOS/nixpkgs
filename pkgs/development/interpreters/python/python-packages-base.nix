@@ -203,6 +203,7 @@ in
 {
   inherit lib pkgs stdenv;
   inherit (python.passthru)
+    isFreeThreaded
     isPy311
     isPy312
     isPy313
@@ -223,7 +224,13 @@ in
   inherit toPythonModule toPythonApplication;
   inherit mkPythonMetaPackage mkPythonEditablePackage;
 
-  python = toPythonModule python;
+  python = toPythonModule python // {
+    pkgs = self;
+    withPackages = import ./with-packages.nix {
+      inherit (python) buildEnv;
+      pythonPackages = self;
+    };
+  };
 
   # Don't take pythonPackages from "global" pkgs scope to avoid mixing python versions.
   pythonPackages = self;

@@ -4,108 +4,73 @@
   rustPlatform,
   fetchFromGitHub,
   fetchNpmDeps,
-  fetchurl,
   binaryen,
   gzip,
   nodejs,
   npmHooks,
+  pkg-config,
   python3,
   rustc,
   versionCheckHook,
-  wasm-bindgen-cli_0_2_117,
+  wasm-bindgen-cli_0_2_129,
   wasm-pack,
+  zstd,
   enableExtended ? true,
 }:
 
 # TODO: package python bindings
 
-let
-
-  # the lindera-unidic v0.32.2 crate uses [1] an outdated unidic-mecab fork [2] and builds it in pure rust
-  # [1] https://github.com/lindera/lindera/blob/v0.32.2/lindera-unidic/build.rs#L5-L11
-  # [2] https://github.com/lindera/unidic-mecab
-  # To find these urls:
-  #   rg -A5 download_urls $(nix-build . -A pagefind.cargoDeps --no-out-link)/*/lindera-*/build.rs
-  lindera-srcs = {
-    unidic-mecab = fetchurl {
-      passthru.vendorDir = "lindera-unidic-*";
-      url = "https://Lindera.dev/unidic-mecab-2.1.2.tar.gz";
-      hash = "sha256-JKx1/k5E2XO1XmWEfDX6Suwtt6QaB7ScoSUUbbn8EYk=";
-    };
-    mecab-ko-dic = fetchurl {
-      passthru.vendorDir = "lindera-ko-dic-*";
-      url = "https://Lindera.dev/mecab-ko-dic-2.1.1-20180720.tar.gz";
-      hash = "sha256-cCztIcYWfp2a68Z0q17lSvWNREOXXylA030FZ8AgWRo=";
-    };
-    ipadic = fetchurl {
-      passthru.vendorDir = "lindera-ipadic-0.*";
-      url = "https://Lindera.dev/mecab-ipadic-2.7.0-20070801.tar.gz";
-      hash = "sha256-CZ5G6A1V58DWkGeDr/cTdI4a6Q9Gxe+W7BU7vwm/VVA=";
-    };
-    cc-cedict = fetchurl {
-      passthru.vendorDir = "lindera-cc-cedict-*";
-      url = "https://lindera.dev/CC-CEDICT-MeCab-0.1.0-20200409.tar.gz";
-      hash = "sha256-7Tz54+yKgGR/DseD3Ana1DuMytLplPXqtv8TpB0JFsg=";
-    };
-    ipadic-neologd = fetchurl {
-      passthru.vendorDir = "lindera-ipadic-neologd-*";
-      url = "https://lindera.dev/mecab-ipadic-neologd-0.0.7-20200820.tar.gz";
-      hash = "sha256-1VwCwgSTKFixeQUFVCdqMzZKne/+FTgM56xT7etqjqI=";
-    };
-  };
-
-in
-
 rustPlatform.buildRustPackage (finalAttrs: {
   inherit enableExtended;
 
   pname = "pagefind" + lib.optionalString (finalAttrs.enableExtended) "-extended";
-  version = "1.5.2";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "Pagefind";
     repo = "pagefind";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/4nHUEcNQ66M5+x85xiIUUA/Nt+YQCrwn7HIo3olCMM=";
+    hash = "sha256-ZWz77LVqC8VJqol9kxdsOdm3ZmmPh3PT8Ip7TjNl9e8=";
   };
 
-  cargoHash = "sha256-RdU6ZF32kyRC9C0J7NfscNhrs+NjfE5jppIt6u47fcw=";
+  cargoPatches = [ ./cargo-lock.patch ]; # html-escape has the wrong version
+  cargoHash = "sha256-9fhHc1/xDMAHdv7AquFr/qgzOajy6+SDUwZkty7i2zU=";
 
   env.cargoDeps_web = rustPlatform.fetchCargoVendor {
     name = "cargo-deps-web-${finalAttrs.version}";
     inherit (finalAttrs) src;
     sourceRoot = "${finalAttrs.src.name}/pagefind_web";
-    hash = "sha256-8DqD5QVoHOBtV11UKrunlzR7i+8PTeJGulzN6d2vqks=";
+    hash = "sha256-Idw5aqP5z32HBpBcIQkJxEWY+K1I5Din4HjqbJNrBUY=";
   };
   env.npmDeps_web_js = fetchNpmDeps {
     name = "pagefind-npm-deps-web-js-${finalAttrs.version}";
     inherit (finalAttrs) src;
     sourceRoot = "${finalAttrs.src.name}/pagefind_web_js";
-    hash = "sha256-vrPdlvd6doaIKiawsvJLnhIPhC35/qzdgUhkfMZrcP8=";
+    hash = "sha256-WgpxfMpuFJlq4dqv5+eCbeZMInuKNQAnlvTndKbfPHA=";
   };
   env.npmDeps_ui_default = fetchNpmDeps {
     name = "pagefind-npm-deps-ui-default-${finalAttrs.version}";
     inherit (finalAttrs) src;
     sourceRoot = "${finalAttrs.src.name}/pagefind_ui/default";
-    hash = "sha256-78Qyk18IzekdP6l8pkWxhGeKEST2Ju/AUBASycbggRQ=";
+    hash = "sha256-jteH1xgmw4IjHr1WWZrDgzkTHb8QRfE22gXnz3/NYv0=";
   };
   env.npmDeps_ui_modular = fetchNpmDeps {
     name = "pagefind-npm-deps-ui-modular-${finalAttrs.version}";
     inherit (finalAttrs) src;
     sourceRoot = "${finalAttrs.src.name}/pagefind_ui/modular";
-    hash = "sha256-Ja9s9EX2b9TviLA/NxwQ3Z7RMjL8LIUJAuE63EyBbN4=";
+    hash = "sha256-R6r/7bCBdW1la0TmJ6EUQ9qGz4TsbDaD+suiyTluoMI=";
   };
   env.npmDeps_ui_component = fetchNpmDeps {
     name = "pagefind-npm-deps-ui-component-${finalAttrs.version}";
     inherit (finalAttrs) src;
     sourceRoot = "${finalAttrs.src.name}/pagefind_ui/component";
-    hash = "sha256-ZSsXn+A8VVGSCjP2J7ql4rIoOto7a/vzRcVhxuo5Ngk=";
+    hash = "sha256-yc6ZZsg2NVX2lzrhWnouyVcH5j4Nyq3SRcBKnEjNlt0=";
   };
   env.npmDeps_playground = fetchNpmDeps {
     name = "pagefind-npm-deps-playground-${finalAttrs.version}";
     inherit (finalAttrs) src;
     sourceRoot = "${finalAttrs.src.name}/pagefind_playground";
-    hash = "sha256-JO2VRDxsKxYIMZKZ8UilJp76jihRHrD1IeTRfoff/+s=";
+    hash = "sha256-mHhMSoxNgIwFShooVVXRD9nz0RE11xpkHbBeI6rQ6Xw=";
   };
 
   env.GIT_VERSION = finalAttrs.version;
@@ -132,34 +97,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       npmRoot=pagefind_playground   npmDeps=$npmDeps_playground   npmConfigHook
     )
 
-    # patch build-time dependency downloads
-    (
-      # add support for file:// urls
-      patch -d $cargoDepsCopy/*/lindera-dictionary-*/ -p1 < ${./lindera-dictionary-support-file-paths.patch}
-
-      # patch urls
-      ${lib.pipe finalAttrs.passthru.lindera-srcs [
-        (lib.mapAttrsToList (
-          key: src: ''
-            # compgen is only in bashInteractive
-            declare -a expanded_glob=($cargoDepsCopy/*/${src.vendorDir}/build.rs)
-            if [[ "''${#expanded_glob[@]}" -eq 0 ]]; then
-              echo >&2 "ERROR: '$cargoDepsCopy/*/${src.vendorDir}/build.rs' not found! (pagefind.passthru.lindera-srcs.${key})"
-              false
-            elif [[ "''${#expanded_glob[@]}" -gt 1 ]]; then
-              echo >&2 "ERROR: '$cargoDepsCopy/*/${src.vendorDir}/build.rs' matches more than one file! (pagefind.passthru.lindera-srcs.${key})"
-              printf >&2 "match: %s\n" "''${expanded_glob[@]}"
-              false
-            fi
-            echo "patching $cargoDepsCopy/*/${src.vendorDir}/build.rs..."
-            substituteInPlace $cargoDepsCopy/*/${src.vendorDir}/build.rs --replace-fail "${src.url}" "file://${src}"
-            unset expanded_glob
-          ''
-        ))
-        lib.concatLines
-      ]}
-    )
-
     # nightly-only features
     substituteInPlace pagefind_web/local_build.sh \
       --replace-fail 'RUSTFLAGS="-Z unstable-options -C panic=immediate-abort"' 'RUSTFLAGS=""' \
@@ -171,13 +108,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   __darwinAllowLocalNetworking = true;
 
+  buildInputs = [
+    zstd
+  ];
+
   nativeBuildInputs = [
     binaryen
     gzip
     nodejs
+    pkg-config
     rustc
     rustc.llvmPackages.lld
-    wasm-bindgen-cli_0_2_117
+    wasm-bindgen-cli_0_2_129
     wasm-pack
   ]
   ++ lib.optionals stdenv.buildPlatform.isDarwin [
@@ -235,7 +177,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   passthru = {
-    inherit lindera-srcs;
     tests.extended = finalAttrs.finalPackage.overrideAttrs {
       enableExtended = true;
     };

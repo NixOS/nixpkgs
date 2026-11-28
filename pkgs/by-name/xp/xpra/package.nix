@@ -104,15 +104,14 @@ let
 in
 effectiveBuildPythonApplication (finalAttrs: {
   pname = "xpra";
-  version = "6.5.4";
+  version = "7.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Xpra-org";
     repo = "xpra";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TXqnheJjq3WZZffbEPjS5/u/02OlJkDJ9IqyCabYr1E=";
+    hash = "sha256-PAA5UqBW2opLULkF5K5z9k7of1QF3iDUsQfzB+iEMzw=";
   };
 
   patches = [
@@ -189,6 +188,8 @@ effectiveBuildPythonApplication (finalAttrs: {
     systemdLibs
   ]
   ++ lib.optionals withNvenc [
+    # nvcc needs cuda_runtime.h to build xpra's CUDA kernels.
+    cudaPackages.cuda_cudart
     nvencHeaders
     nvjpegHeaders
   ];

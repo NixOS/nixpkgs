@@ -20,8 +20,6 @@ python3Packages.buildPythonApplication {
     hash = "sha256-OaCHrUvUKvdTNophi9qpGMzAIDcKfRJ9o5DkT1PrwDc=";
   };
 
-  __structuredAttrs = true;
-
   dependencies = with python3Packages; [
     art
     colorama

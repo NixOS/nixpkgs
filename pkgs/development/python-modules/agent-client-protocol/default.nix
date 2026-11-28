@@ -25,7 +25,6 @@ buildPythonPackage (finalAttrs: {
   pname = "agent-client-protocol";
   version = "0.12.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "agentclientprotocol";

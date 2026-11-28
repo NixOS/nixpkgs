@@ -652,6 +652,11 @@ lib.mapAttrs mkLicense (
       spdxId = "FDK-AAC";
     };
 
+    fraunhofer-fdk-mpeg-h = {
+      fullName = "Fraunhofer FDK MPEG-H Software";
+      spdxId = "FDK-MPEG-H";
+    };
+
     free = {
       fullName = "Unspecified free software license";
     };
@@ -1602,6 +1607,11 @@ lib.mapAttrs mkLicense (
     tost = {
       spdxId = "Pixar";
       fullName = "Tomorrow Open Source Technology License 1.0";
+    };
+
+    ttyp0 = {
+      spdxId = "TTYP0";
+      fullName = "TTYP0 License";
     };
 
     ubdlException = {

@@ -11,20 +11,15 @@
 
 buildPythonPackage rec {
   pname = "qnapstats";
-  version = "0.6.0";
+  version = "0.6.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "colinodell";
     repo = "python-qnapstats";
     tag = version;
-    hash = "sha256-4zGCMwuPL9QFVLgyZ6/aV9YBQJBomPkX34C7ULEd4Fw=";
+    hash = "sha256-UoG0hHZdfXmVZPckyilWQX5YbxS1Xd+ngv09XJEm64o=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace-fail "version='0.4.0'" "version='${version}'"
-  '';
 
   build-system = [ setuptools ];
 
@@ -34,11 +29,6 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [ responses ];
-
-  # File "/build/source/tests/test-models.py", line 124, in <module>
-  #   assert json.dumps(qnap.get_system_stats(), sort_keys=True) == systemstats
-  # https://github.com/colinodell/python-qnapstats/issues/104
-  doCheck = false;
 
   checkPhase = ''
     runHook preCheck

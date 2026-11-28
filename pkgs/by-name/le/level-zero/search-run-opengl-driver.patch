@@ -1,0 +1,11 @@
+--- a/source/loader/linux/driver_discovery_lin.cpp
++++ b/source/loader/linux/driver_discovery_lin.cpp
+@@ -46,6 +46,8 @@
+     auto split = splitPaths(ldLibPath);
+     paths.insert(paths.end(), split.begin(), split.end());
+   }
++  // NixOS driver directory
++  paths.push_back("/run/opengl-driver/lib");
+ #if defined(ANDROID)
+   paths.push_back("/vendor/lib64");
+ #else

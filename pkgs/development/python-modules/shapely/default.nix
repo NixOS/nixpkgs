@@ -5,35 +5,48 @@
   fetchFromGitHub,
   pytestCheckHook,
 
+  # build deps
   cython,
+  meson-python,
+  pkg-config,
+
+  # runtime deps
   geos,
   numpy,
   oldest-supported-numpy,
-  setuptools,
-  wheel,
 }:
 
 buildPythonPackage rec {
   pname = "shapely";
-  version = "2.1.2";
+  version = "2.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "shapely";
     repo = "shapely";
     tag = version;
-    hash = "sha256-tnnOJsAI3v52ngFOIUIkeDuRIu2JlZGuHreVv4W8LeE=";
+    hash = "sha256-ddBbNAahYK1/+VtCYVqjrhOfRAtZERv7axTHrYlYBfA=";
   };
 
-  nativeBuildInputs = [
+  # Add missing version file; shapely reports unknown version otherwise
+  postPatch = ''
+    cat > _version.py <<EOF
+    __version__ = "${version}"
+    __git_version__ = "${src.tag}"
+    EOF
+  '';
+
+  nativeBuildInputs = [ pkg-config ];
+
+  build-system = [
+    meson-python
     cython
-    geos # for geos-config
-    oldest-supported-numpy
-    setuptools
-    wheel
   ];
 
-  buildInputs = [ geos ];
+  buildInputs = [
+    oldest-supported-numpy
+    geos
+  ];
 
   dependencies = [ numpy ];
 
@@ -45,7 +58,7 @@ buildPythonPackage rec {
     cd $out
   '';
 
-  disabledTests = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # FIXME(lf-): these logging tests are broken, which is definitely our
     # fault. I've tried figuring out the cause and failed.
     #

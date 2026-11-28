@@ -19,6 +19,7 @@ let
     runtimeInputs = [
       (emacs.pkgs.withPackages (epkgs: [
         hack-font
+        epkgs.all-the-icons
         epkgs.dash
         epkgs.flx-ido
         (epkgs.callPackage (mkEpkg {

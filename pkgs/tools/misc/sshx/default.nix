@@ -5,6 +5,8 @@
   fetchFromGitHub,
   protobuf,
   buildNpmPackage,
+  pkg-config,
+  zstd,
 }:
 let
   version = "0.4.1";
@@ -27,7 +29,12 @@ let
           cargoHash
           ;
 
-        nativeBuildInputs = [ protobuf ];
+        nativeBuildInputs = [
+          pkg-config
+          protobuf
+        ];
+
+        buildInputs = [ zstd ];
 
         cargoBuildFlags = [
           "--package"

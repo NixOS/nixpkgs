@@ -11,7 +11,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "plakar";
-  version = "1.1.7";
+  version = "1.1.8";
 
   # to avoid having all the Test(Get|Set|Validate)Service.* tests fail on darwin
   __darwinAllowLocalNetworking = true;
@@ -22,7 +22,7 @@ buildGoModule (finalAttrs: {
     owner = "PlakarKorp";
     repo = "plakar";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cbfPWNlTcpQsjd3a1aE+wXos5EN8b96fpA2Cz+qzyR4=";
+    hash = "sha256-NKNLSO4YZHene1EI+S5CgubGbVQnvxBozB1et70CEbU=";
   };
 
   vendorHash = "sha256-RQ1HhWL33Zi5n8G6RerLLgE2YJk/7HD4k1yiK+sQTBU=";

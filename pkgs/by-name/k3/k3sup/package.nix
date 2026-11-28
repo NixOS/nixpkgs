@@ -11,7 +11,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "k3sup";
-  version = "0.13.13";
+  version = "0.13.14";
 
   __structuredAttrs = true;
 
@@ -19,7 +19,7 @@ buildGoModule (finalAttrs: {
     owner = "alexellis";
     repo = "k3sup";
     tag = finalAttrs.version;
-    hash = "sha256-6S8PMIRITXbS5fFexCBEekVDZwTvZ4bN9sanjiDY39M=";
+    hash = "sha256-DzGW214/bOY21jbRGU2+ah1dI8OJ16TRdPyvqW5LMus=";
   };
 
   nativeBuildInputs = [

@@ -25,7 +25,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "megacmd";
-  version = "2.6.0";
+  version = "2.7.1";
 
   src = fetchFromGitHub {
     owner = "meganz";
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "${finalAttrs.version}_Linux";
     fetchSubmodules = true;
     postCheckout = "git -C $out/sdk rev-parse --short HEAD > $out/sdk/.gitrev";
-    hash = "sha256-sqclkEm6BCyk6GhMutyt9TGsevGIwrTMGSwrPGar1nI=";
+    hash = "sha256-tG/V/xy0ga8umMhpsAQ6tzxJuSJc28X8f1FXH2FfBwc=";
   };
 
   __structuredAttrs = true;
@@ -95,7 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     cryptopp
-    curl
+    (curl.override { websocketSupport = true; })
     ffmpeg
     fuse3
     icu

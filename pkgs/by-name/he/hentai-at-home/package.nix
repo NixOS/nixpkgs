@@ -1,7 +1,8 @@
 {
   lib,
   stdenvNoCC,
-  fetchzip,
+  fetchurl,
+  unzip,
   jdk_headless,
   makeWrapper,
   buildPackages,
@@ -9,15 +10,18 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "hentai-at-home";
-  version = "1.6.5";
+  version = "1.6.6";
 
-  src = fetchzip {
-    url = "https://repo.e-hentai.org/hath/HentaiAtHome_${finalAttrs.version}_src.zip";
-    hash = "sha512-oKyvzHZTPwSTcjsNOQ0LIl6rV+b7JDnuWbYKFogWWkyKcR/xDcNPNhUrKv8QLH6a1AQ2T8DYkxcJYnjhgsaovA==";
-    stripRoot = false;
+  src = fetchurl {
+    url = "https://upld.e-hentai.org/hath/HentaiAtHome_${finalAttrs.version}_src.zip";
+    # sha256 from upstream: https://e-hentai.org/hentaiathome.php
+    hash = "sha256-WyfjAC4d6OHTaKKU0koLac89wcvJchxlySt1DmUoGoc=";
   };
 
+  sourceRoot = ".";
+
   nativeBuildInputs = [
+    unzip
     jdk_headless
     makeWrapper
   ];

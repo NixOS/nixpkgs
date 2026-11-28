@@ -82,6 +82,7 @@ let
     cudaPackages.cuda_cudart
     cudaPackages.libcublas
     cudaPackages.cccl
+    cudaPackages.cuda_nvml_dev # nvml.h
   ];
 
   vulkanLibs = [
@@ -111,12 +112,12 @@ let
   # vendored in-tree. Pre-stage the pin (tracks upstream's
   # `LLAMA_CPP_VERSION` file) so the FetchContent step uses our copy
   # instead of trying to clone over the network in the sandbox.
-  llamaCppVersion = "b11521";
+  llamaCppVersion = "b12651";
   llamaCppSrc = fetchFromGitHub {
     owner = "ggml-org";
     repo = "llama.cpp";
     tag = llamaCppVersion;
-    hash = "sha256-zkHQPGopaW4JXEebCGZjwl3Jqx4yb24Msq+ZvJsyNP8=";
+    hash = "sha256-GNdA6CFxrkFNSocjHhZT2ML53WkdvTSQBMieitPR1ts=";
   };
 
   wrapperOptions = [
@@ -152,16 +153,16 @@ let
 in
 goBuild (finalAttrs: {
   pname = "ollama";
-  version = "0.40.4";
+  version = "0.40.18";
 
   src = fetchFromGitHub {
     owner = "ollama";
     repo = "ollama";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pNLexucSeop03cIkhdbkSvwNB3i0XEAlKrO4DaS59Xc=";
+    hash = "sha256-MO0AsCSNmrjf63NrdYzBDBL/xEftrHAacsf4gSXZf8g=";
   };
 
-  vendorHash = "sha256-QBwZKRnmLUHQNSx5oqE9AbMINE8PP5TVJncG9nzQryI=";
+  vendorHash = "sha256-1mzJrZUHH2ouP6I+LVojHbft7No5AumqKZVq0I/Ubsg=";
   proxyVendor = true;
 
   env =

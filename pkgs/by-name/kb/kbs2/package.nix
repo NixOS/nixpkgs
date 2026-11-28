@@ -6,6 +6,7 @@
   installShellFiles,
   python3,
   libxcb,
+  writableTmpDirAsHomeHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -25,9 +26,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ libxcb ];
 
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
   checkFlags = [
     "--skip=kbs2::config::tests::test_find_config_dir"

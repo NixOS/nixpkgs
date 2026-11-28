@@ -14,8 +14,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     publisher = "gplane";
     name = "wasm-language-tools";
-    version = "1.21.0";
-    hash = "sha256-r1gnq12O/tNx175/nmrQD3b7HVipVT0pEoLvg2HrWwI=";
+    version = "1.22.2";
+    hash = "sha256-5BpOq+YmC4hbhe7oGViFfy1vO2EjEp8HTjW3DoTPk6M=";
   };
 
   buildPhase = ''

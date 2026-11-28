@@ -20,6 +20,12 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools ];
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail "version = '0.3.3'" "version = '${version}'" \
+      --replace-fail "tarball/0.3.3" "tarball/${version}"
+  '';
+
   propagatedBuildInputs = [ pyyaml ];
 
   # No tests

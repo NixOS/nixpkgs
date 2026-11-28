@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "guile-curl";
-  version = "0.10";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "spk121";
     repo = "guile-curl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pCYihn3Z0AeGt/6HueMAz0kPFYLVSB5NDPPGOUaAI2U=";
+    hash = "sha256-KbeSrRf9H5XjOLUMoUjgSwqhqlfp2tj64hYKNBNQb6w=";
   };
 
   strictDeps = true;

@@ -5,6 +5,7 @@
   pkg-config,
   libgit2,
   openssl,
+  sqlite,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-outdated";
@@ -26,6 +27,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     libgit2
     openssl
+    sqlite
   ];
 
   meta = {
@@ -33,10 +35,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "cargo-outdated";
     homepage = "https://github.com/kbknapp/cargo-outdated";
     changelog = "https://github.com/kbknapp/cargo-outdated/blob/v${finalAttrs.version}/CHANGELOG.md";
-    license = with lib.licenses; [
-      asl20 # or
-      mit
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
     maintainers = with lib.maintainers; [
       matthiasbeyer
     ];

@@ -9,14 +9,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "hyprland-schema";
-  version = "0.7.1";
+  version = "0.8.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "BlueManCZ";
     repo = "hyprland-schema";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-36nSnuiWtJeCGcxJB2hNlbWEd0t2Ke5hhsUJddoap+w=";
+    hash = "sha256-pgQzWJ34IhhEHGv5IAxqQzBNuAn/m3zRZW+Vq3BBXDI=";
   };
 
   build-system = [ hatchling ];

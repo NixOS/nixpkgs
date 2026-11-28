@@ -7,6 +7,7 @@
   tcl,
   fontconfig,
   tk,
+  bashNonInteractive,
   ncurses,
   libxt,
   libxext,
@@ -48,6 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    bashNonInteractive
     ncurses
     fontconfig
     libx11.dev
@@ -61,24 +63,26 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
   ];
 
+  strictDeps = true;
+
   # skip interactive browser check
   buildFlags = [ "nobrowsers" ];
 
-  # Workaround build failure on -fno-common toolchains:
-  #   ld: cexp.o:(.bss+0x40): multiple definition of `obstck'; cccp.o:(.bss+0x0): first defined here
-  # Workaround build failure on "function definitions with identifier lists":
-  #   C23 throws errors on "function definitions with identifier lists". As it is pervasively used
-  #   in the upstream codebase, it's impossible to fix that legacy syntax without a full treewide
-  #   refactor. So the currently fix is to pin the standard to C17.
-  env.NIX_CFLAGS_COMPILE = "-fcommon --std=gnu17";
+  configureFlags = [
+    "--with-tcltk=${tcl} ${tk_combined}"
+    "--with-curses=${curses_combined}"
+  ];
 
-  preConfigure = ''
-    configureFlagsArray=(
-      --with-tcltk="${tcl} ${tk_combined}"
-      --with-curses="${curses_combined}"
-    )
-    export ODIN_LOCALIPC=1
-  '';
+  env = {
+    # Workaround build failure on -fno-common toolchains:
+    #   ld: cexp.o:(.bss+0x40): multiple definition of `obstck'; cccp.o:(.bss+0x0): first defined here
+    # Workaround build failure on "function definitions with identifier lists":
+    #   C23 throws errors on "function definitions with identifier lists". As it is pervasively used
+    #   in the upstream codebase, it's impossible to fix that legacy syntax without a full treewide
+    #   refactor. So the currently fix is to pin the standard to C17.
+    NIX_CFLAGS_COMPILE = "-fcommon --std=gnu17";
+    ODIN_LOCALIPC = 1;
+  };
 
   postInstall = ''
     wrapProgram "$out/bin/eli" \
@@ -92,6 +96,8 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p "$HOME"
     $out/bin/eli "!ls"
   '';
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Translator Construction Made Easy";

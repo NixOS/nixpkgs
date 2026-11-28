@@ -1,29 +1,34 @@
 {
   lib,
+  aws-lc,
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
+  pkg-config,
   versionCheckHook,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ttl";
-  version = "0.23.0";
+  version = "0.24.1";
 
   src = fetchFromGitHub {
     owner = "lance0";
     repo = "ttl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Te/VJiTEWJbePrCBeb+qB58fDI7qCxB1zWRh1XE2D7E=";
+    hash = "sha256-8gvr0qQ14gjbOfBhgio1P0Xr6kW2rgDzik3Jv8iHAHs=";
   };
 
-  cargoHash = "sha256-UusMvTNy6htfzDxjL3J6lPBvmgUiXokFyo975o6Rc+A=";
+  cargoHash = "sha256-Pu+BV+CfhH6LjuxYesdzyA+ttoFAdM0QkF/nyIHlLVw=";
 
   nativeBuildInputs = [
     installShellFiles
+    pkg-config
     versionCheckHook
   ];
+
+  buildInputs = [ aws-lc ];
 
   doInstallCheck = true;
 

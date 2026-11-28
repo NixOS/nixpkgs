@@ -22,7 +22,6 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   pname = "flash-attn-3";
   version = "3.0.0-unstable-2026-06-10";
   pyproject = true;
-  __structuredAttrs = true;
 
   # We fetch the vendored CUTLASS submodule rather than relying on `cudaPackages.cutlass`.
   # FA3 reaches deep into private cute/cutlass internals and is likely to be incompatible with

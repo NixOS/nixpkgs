@@ -3,6 +3,9 @@
   fetchFromGitHub,
   installShellFiles,
   makeWrapper,
+  pkg-config,
+  aws-lc,
+  sqlite,
   nodejs-slim,
   rustPlatform,
   stdenv,
@@ -13,6 +16,7 @@
   version,
   srcHash,
   cargoHash,
+  cargoPatches ? [ ],
   knownVulnerabilities ? [ ],
 }:
 let
@@ -20,7 +24,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pnpm";
-  inherit version cargoHash;
+  inherit version cargoHash cargoPatches;
 
   src = fetchFromGitHub {
     owner = "pnpm";
@@ -32,6 +36,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     installShellFiles
     makeWrapper
+    pkg-config
+  ];
+
+  buildInputs = [
+    aws-lc
+    sqlite
   ];
 
   postPatch = ''

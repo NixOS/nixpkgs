@@ -12,11 +12,14 @@ let
 
   wrapJulia =
     julia:
-    julia.overrideAttrs (oldAttrs: {
-      passthru = (oldAttrs.passthru or { }) // {
-        withPackages = juliaWithPackages.override { inherit julia; };
-      };
-    });
+    julia.overrideAttrs (
+      finalAttrs: oldAttrs: {
+        passthru = (oldAttrs.passthru or { }) // {
+          bundledDepot = "${finalAttrs.finalPackage}/share/julia";
+          withPackages = juliaWithPackages.override { julia = finalAttrs.finalPackage; };
+        };
+      }
+    );
 
 in
 
@@ -24,6 +27,9 @@ in
   julia_110-bin = wrapJulia (
     callPackage (import ./generic-bin.nix {
       version = "1.10.12";
+      knownVulnerabilities = [
+        "Julia 1.10 vendors outdated security dependencies (MbedTLS 2.28.10, curl 8.4.0 in Julia 1.10.12, curl 8.7.1 in Julia 1.10.13). See https://julialang.org/downloads/."
+      ];
       sha256 = {
         x86_64-linux = "03dw4zykf09wnzc7mm8yv6k8hfb2pv0f090db34gyxlx6kz0vidh";
         aarch64-linux = "18p5h0h00320rfc3yhjgp9z4f5xfgpzimphpzqmn8jbhjqhpn9fc";
@@ -34,6 +40,9 @@ in
   julia_111-bin = wrapJulia (
     callPackage (import ./generic-bin.nix {
       version = "1.11.9";
+      knownVulnerabilities = [
+        "Julia 1.11 is end-of-life and vendors outdated security dependencies (MbedTLS 2.28.6, curl 8.6.0). See https://julialang.org/downloads/."
+      ];
       sha256 = {
         x86_64-linux = "0dfy4wlrz6jbs7kd9r0bjk9d6sqgf4fakrxrnzwfl1bsdlsn6qxk";
         aarch64-linux = "0gk2zxkwz2yyg3im23jpgaxzixchyywm19nbh51szmniah31y1x2";
@@ -44,6 +53,10 @@ in
   julia_112-bin = wrapJulia (
     callPackage (import ./generic-bin.nix {
       version = "1.12.7";
+      extraMeta.problems.removal = {
+        message = "Julia 1.12 has been superseded by 1.13 and receives infrequent updates. See https://julialang.org/downloads/.";
+        urls = [ "https://julialang.org/downloads/" ];
+      };
       sha256 = {
         x86_64-linux = "1s39x8l6rgp6jw3b4bj3phaszm5h77g7rrhd4lslililcrvrwzjf";
         aarch64-linux = "1whyfcdf7bncz2n1ixxzf3h30slildgfx8a06a401wy74jsw0hwj";
@@ -53,11 +66,11 @@ in
   );
   julia_113-bin = wrapJulia (
     callPackage (import ./generic-bin.nix {
-      version = "1.13.2";
+      version = "1.13.4";
       sha256 = {
-        x86_64-linux = "01vxs4ckil94q8n2jpdx7n9lm852bf8lqh4jvmgmc2mbj2cgrk9f";
-        aarch64-linux = "0a3ich81hyizibfrq18dhgq1kiyyhxs3jdi4x1rb4hid2riaqrmk";
-        aarch64-darwin = "11q3401j5nqdnk711z2inpra61705bl6k85ln0v100k5mdsrfc33";
+        x86_64-linux = "0c21xka08bakf4nhcjagsahlh3js2bbn856laz6wryli7gqmh5ng";
+        aarch64-linux = "1rad4x05xmb6v39fxxail2mxviby4snf9w2zr78fr8a93sslr0fi";
+        aarch64-darwin = "1zm8p63k5s85rh4rcd30hm53cjs89vxfx1x9cakvkbfb7scs2n4f";
       };
     }) { }
   );
@@ -66,6 +79,9 @@ in
       (import ./generic.nix {
         version = "1.10.12";
         hash = "sha256-KIFenIPyMWflO9SnnAhea5VHrigIrLI0FatcVYqFzuw=";
+        knownVulnerabilities = [
+          "Julia 1.10 vendors outdated security dependencies (MbedTLS 2.28.10, curl 8.4.0 in Julia 1.10.12, curl 8.7.1 in Julia 1.10.13). See https://julialang.org/downloads/."
+        ];
         patches = [
           # Revert https://github.com/JuliaLang/julia/pull/55354
           # [build] Some improvements to the LLVM build system
@@ -94,6 +110,9 @@ in
       (import ./generic.nix {
         version = "1.11.9";
         hash = "sha256-SX5jIfJfxQQfP2P5sCGtglFn+GZlOIyHgnQ3qrr8GSI=";
+        knownVulnerabilities = [
+          "Julia 1.11 is end-of-life and vendors outdated security dependencies (MbedTLS 2.28.6, curl 8.6.0). See https://julialang.org/downloads/."
+        ];
         patches = [
           # stackwalk: derive glibc longjmp pointer mangling
           # https://github.com/JuliaLang/julia/pull/62776
@@ -114,6 +133,10 @@ in
       (import ./generic.nix {
         version = "1.12.7";
         hash = "sha256-XH2Ft3HeMYXuyp+8LmFz2Lz2109oQYYiqenEOtdSr1E=";
+        extraMeta.problems.removal = {
+          message = "Julia 1.12 has been superseded by 1.13 and receives infrequent updates. See https://julialang.org/downloads/.";
+          urls = [ "https://julialang.org/downloads/" ];
+        };
         patches = [
           # stackwalk: derive glibc longjmp pointer mangling
           # https://github.com/JuliaLang/julia/pull/62777
@@ -141,8 +164,8 @@ in
   julia_113 = wrapJulia (
     callPackage
       (import ./generic.nix {
-        version = "1.13.2";
-        hash = "sha256-M3A6vzCiP13Sfk4a23/GbHwDrpiWE3bpwEZhyE04kik=";
+        version = "1.13.4";
+        hash = "sha256-VbtEQsiHo+mfKHtTxGf91eeON2NE6iqEhldC0Ton1xw=";
         patches = [
           # Upstream only sets CMAKE_BUILD_RPATH on Darwin (JuliaLang/julia#63103).
           # On Linux in the Nix sandbox, intermediate build tools like llvm-min-tblgen

@@ -28,6 +28,7 @@ buildPythonPackage rec {
   build-system = [ poetry-core ];
 
   pythonRelaxDeps = [
+    "filterpy"
     "numpy"
     "rich"
   ];

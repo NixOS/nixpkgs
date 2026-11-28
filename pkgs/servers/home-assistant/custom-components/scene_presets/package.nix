@@ -11,13 +11,13 @@
 buildHomeAssistantComponent rec {
   owner = "Hypfer";
   domain = "scene_presets";
-  version = "2.4.0";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "Hypfer";
     repo = "hass-scene_presets";
     tag = version;
-    hash = "sha256-pHY68H0nr7eO3tGtVLtzj6cOZO3+VxC00VZmhZy+2Pk=";
+    hash = "sha256-UvrtcZc4afG9kSTsoBX9s5UsIewrkHvLDgKo/DrcamE=";
   };
 
   npmDeps = fetchNpmDeps {

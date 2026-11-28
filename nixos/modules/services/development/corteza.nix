@@ -58,7 +58,7 @@ in
       default = { };
       description = ''
         Configuration for Corteza, will be passed as environment variables.
-        See <https://docs.cortezaproject.org/corteza-docs/2024.9/devops-guide/references/configuration/server.html>.
+        See <https://docs.cortezaproject.org/corteza-docs/2026.9/devops-guide/references/configuration/server.html>.
       '';
     };
   };

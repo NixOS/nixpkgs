@@ -4,7 +4,9 @@
   fetchFromGitHub,
   pkg-config,
   installShellFiles,
+  aws-lc,
   dbus,
+  zstd,
   writableTmpDirAsHomeHook,
   git,
   stdenv,
@@ -30,7 +32,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
     dbus
+    zstd
   ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''

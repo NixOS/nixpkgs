@@ -60,9 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Digital modem program";
     homepage = "https://sourceforge.net/projects/fldigi/";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [
-      relrod
-    ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

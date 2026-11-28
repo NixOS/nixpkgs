@@ -4,7 +4,7 @@
   glib,
   autoreconfHook,
   pkg-config,
-  systemd,
+  systemdLibs,
   fetchFromGitLab,
   nix-update-script,
 }:
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     glib
-    systemd
+    systemdLibs
   ];
 
   enableParallelBuilding = true;

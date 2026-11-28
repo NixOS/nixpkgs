@@ -1,0 +1,13 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 03097296dd..8d9891eaa9 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -301,7 +301,7 @@ else()
+     else()
+       list(APPEND COIN_TARGET_LINK_LIBRARIES_GL OpenGL::GL)
+     endif()
+-    if(OpenGL_GLU_FOUND AND NOT COIN_BUILD_EGL)
++    if(OPENGL_GLU_FOUND)
+       set(HAVE_GLU 1)
+       if (NOT TARGET OpenGL::GLU)
+         list(APPEND COIN_TARGET_INCLUDE_DIRECTORIES ${OPENGL_INCLUDE_DIR})

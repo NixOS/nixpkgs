@@ -1,9 +1,13 @@
 {
   stdenv,
-  virtualbox,
+  virtualboxHardened,
   kernel,
+  kernelModuleMakeFlags,
 }:
 
+let
+  virtualbox = virtualboxHardened;
+in
 stdenv.mkDerivation {
   pname = "virtualbox-modules";
   version = "${virtualbox.version}-${kernel.version}";
@@ -18,7 +22,10 @@ stdenv.mkDerivation {
 
   env.KERN_DIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
 
-  makeFlags = [ "INSTALL_MOD_PATH=$(out)" ];
+  makeFlags = kernelModuleMakeFlags ++ [
+    "INSTALL_MOD_PATH=$(out)"
+    "VBOX_ALLOW_MODULE_SIGNING=1"
+  ];
   installTargets = [ "install" ];
 
   enableParallelBuilding = true;

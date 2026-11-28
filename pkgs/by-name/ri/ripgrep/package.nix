@@ -8,6 +8,7 @@
   pkg-config,
   withPCRE2 ? true,
   pcre2,
+  rust-jemalloc-sys,
   writableTmpDirAsHomeHook,
 }:
 
@@ -17,7 +18,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ripgrep";
-  version = "15.2.0";
+  version = "16.0.0";
 
   __structuredAttrs = true;
 
@@ -25,17 +26,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "BurntSushi";
     repo = "ripgrep";
     tag = finalAttrs.version;
-    hash = "sha256-BsSIbZwB6s8i3dDTRYJ1EdVbJmiO0oxcLu6qiYlPkOI=";
+    hash = "sha256-EW+k5vMcWYUdaTKpcyZcXj9DgIfsiesuJPrOD+5O/O8=";
   };
 
-  cargoHash = "sha256-AqizStE9ICd6mNDZWdeXg6dHuTiY+B0TNauQQYWUa84=";
+  cargoHash = "sha256-jq74hAlDGhkKHKkiLezAwnR0UDKc7Ydt3KYdMajagz4=";
 
   nativeBuildInputs = [
     installShellFiles
     writableTmpDirAsHomeHook # required for wine when cross-compiling to Windows
   ]
   ++ lib.optional withPCRE2 pkg-config;
-  buildInputs = lib.optional withPCRE2 pcre2;
+  buildInputs =
+    lib.optional withPCRE2 pcre2 ++ lib.optional stdenv.hostPlatform.isStatic rust-jemalloc-sys;
 
   buildFeatures = lib.optional withPCRE2 "pcre2";
 
@@ -66,10 +68,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Utility that combines the usability of The Silver Searcher with the raw speed of grep";
     homepage = "https://github.com/BurntSushi/ripgrep";
     changelog = "https://github.com/BurntSushi/ripgrep/releases/tag/${finalAttrs.version}";
-    license = with lib.licenses; [
-      unlicense # or
-      mit
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        unlicense
+        mit
+      ];
     maintainers = with lib.maintainers; [
       globin
       ma27

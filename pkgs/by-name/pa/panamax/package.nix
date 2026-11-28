@@ -31,10 +31,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Mirror rustup and crates.io repositories for offline Rust and cargo usage";
     mainProgram = "panamax";
     homepage = "https://github.com/panamax-rs/panamax";
-    license = with lib.licenses; [
-      mit # or
-      asl20
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        mit
+        asl20
+      ];
     maintainers = [ ];
   };
 })

@@ -7,13 +7,13 @@
 
 postgresqlBuildExtension (finalAttrs: {
   pname = "pg_uuidv7";
-  version = "1.7.0";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "fboulnois";
     repo = "pg_uuidv7";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1zZT3HqRnVw2pIkxFmXqYwYenXGbM91JB0jTwsdtgnw=";
+    hash = "sha256-hF0Kk1j7QBC7nlJ+32e0LICzG/fX61LpwqslUrOOXbM=";
   };
 
   meta = {

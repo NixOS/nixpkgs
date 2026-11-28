@@ -8,13 +8,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "ps3netsrv";
-  version = "20260913";
+  version = "20261110";
 
   src = fetchFromGitHub {
     owner = "aldostools";
     repo = pname;
     tag = version;
-    hash = "sha256-Lsazt178L6oP9AzpKs4MP6aMRFq7HydJ/uVZMYbOWGE=";
+    hash = "sha256-sUr4tfQxzwKN7FW5vsKyJH+6D+oDcHRdKFKuZyslhwM=";
   };
 
   __structuredAttrs = true;

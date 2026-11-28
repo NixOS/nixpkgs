@@ -12,8 +12,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.4.5.1";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromForgejo {
     domain = "code.larus.se";
     owner = "lmas";

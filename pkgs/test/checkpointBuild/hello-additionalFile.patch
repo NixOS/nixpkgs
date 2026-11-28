@@ -1,14 +1,9 @@
-:100644 100644 0000000 0000000 M	Makefile.in
-:000000 100644 0000000 0000000 A	src/additionalFile.c
-:100644 100644 0000000 0000000 M	src/hello.c
-:100644 100644 0000000 0000000 M	src/system.h
-
 diff --git a/Makefile.in b/Makefile.in
-index 7bacfe1..b0f3a3d 100644
+index ef20e53..528ff02 100644
 --- a/Makefile.in
 +++ b/Makefile.in
-@@ -500,7 +500,7 @@ am_lib_libhello_a_OBJECTS = lib/libhello_a-basename-lgpl.$(OBJEXT) \
- 	lib/libhello_a-wctype-h.$(OBJEXT) $(am__objects_51) \
+@@ -519,7 +519,7 @@ am_lib_libhello_a_OBJECTS = lib/libhello_a-basename-lgpl.$(OBJEXT) \
+ 	lib/libhello_a-wctype-h.$(OBJEXT) $(am__objects_54) \
  	lib/libhello_a-xmalloc.$(OBJEXT) \
  	lib/libhello_a-xalloc-die.$(OBJEXT) \
 -	lib/libhello_a-xstriconv.$(OBJEXT)
@@ -16,12 +11,12 @@ index 7bacfe1..b0f3a3d 100644
  lib_libhello_a_OBJECTS = $(am_lib_libhello_a_OBJECTS)
  am_hello_OBJECTS = src/hello.$(OBJEXT)
  hello_OBJECTS = $(am_hello_OBJECTS)
-@@ -2557,7 +2557,7 @@ lib_libhello_a_SOURCES = lib/basename-lgpl.c lib/c-ctype.h \
- 	$(am__append_51) $(am__append_52) lib/version-etc.h \
- 	lib/version-etc.c lib/version-etc-fsf.c lib/wctype-h.c \
- 	$(am__append_53) lib/xmalloc.c lib/xalloc-die.c \
--	lib/xstriconv.h lib/xstriconv.c
-+	lib/xstriconv.h lib/xstriconv.c src/additionalFile.c
+@@ -2599,7 +2599,7 @@ lib_libhello_a_SOURCES = lib/basename-lgpl.c lib/c-ctype.h \
+ 	lib/unistd.c $(am__append_53) $(am__append_54) \
+ 	$(am__append_55) lib/version-etc.h lib/version-etc.c \
+ 	lib/version-etc-fsf.c lib/wctype-h.c $(am__append_56) \
+-	lib/xmalloc.c lib/xalloc-die.c lib/xstriconv.h lib/xstriconv.c
++	lib/xmalloc.c lib/xalloc-die.c lib/xstriconv.h lib/xstriconv.c src/additionalFile.c
  lib_libhello_a_CFLAGS = $(AM_CFLAGS) $(GL_CFLAG_GNULIB_WARNINGS) $(GL_CFLAG_ALLOW_WARNINGS)
  lib_libhello_a_LIBADD = $(gl_libhello_LIBOBJS)
  lib_libhello_a_DEPENDENCIES = $(gl_libhello_LIBOBJS)
@@ -38,10 +33,10 @@ index 0000000..34d683d
 +    return 0;
 +}
 diff --git a/src/hello.c b/src/hello.c
-index 2e7d38e..a8e36dc 100644
+index c6b4698..8f9e786 100644
 --- a/src/hello.c
 +++ b/src/hello.c
-@@ -146,7 +146,11 @@ main (int argc, char *argv[])
+@@ -145,7 +145,11 @@ main (int argc, char *argv[])
  #endif
  
    /* Having initialized gettext, get the default message. */
@@ -55,7 +50,7 @@ index 2e7d38e..a8e36dc 100644
    /* Even exiting has subtleties.  On exit, if any writes failed, change
       the exit status.  The /dev/full device on GNU/Linux can be used for
 diff --git a/src/system.h b/src/system.h
-index d39cdb9..dc425d2 100644
+index 97ad7a5..32b5147 100644
 --- a/src/system.h
 +++ b/src/system.h
 @@ -59,4 +59,6 @@

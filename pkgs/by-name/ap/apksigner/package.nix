@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchgit,
-  jdk_headless,
   jre_minimal,
   gradle_8,
   makeWrapper,
@@ -28,14 +27,14 @@ stdenv.mkDerivation (finalAttrs: {
   # Major version is derived from the API version of the corresponding Android release.
   # Patch version is derived from the release number.
   # For example, Android 15 had releases starting at r24 -> r30 is patch 6.
-  version = "35.0.6";
+  version = "37.0.0";
 
   src = fetchgit {
     # use pname here because the final jar uses this as the filename
     name = "apksigner";
     url = "https://android.googlesource.com/platform/tools/apksig";
-    tag = "android-15.0.0_r30";
-    hash = "sha256-f/PggxvBv8nYUyL9Ukd4YVpunpRWbLL5UYsYhsiDWRE=";
+    tag = "android-17.0.0_r1";
+    hash = "sha256-emRKXg4UsHLUMhHBalhAaLIpzFfT+xydQ4ZnbBNJMT8=";
   };
 
   mitmCache = gradle.fetchDeps {

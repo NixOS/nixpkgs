@@ -2,6 +2,8 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  pkg-config,
+  zstd,
 }:
 rustPlatform.buildRustPackage {
   pname = "bdt";
@@ -15,6 +17,10 @@ rustPlatform.buildRustPackage {
   };
 
   cargoHash = "sha256-TikWh0U56x3HKca5Dj68Z59mOgedv+K5r+y7/CcpWa8=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ zstd ];
 
   meta = {
     description = "CLI tool to query parquet, json and avro files";

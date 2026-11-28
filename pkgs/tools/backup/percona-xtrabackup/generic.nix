@@ -15,6 +15,7 @@
   libevent,
   libgcrypt,
   libgpg-error,
+  libtirpc,
   lz4,
   icu,
   ncurses,
@@ -45,6 +46,9 @@ stdenv.mkDerivation (finalAttrs: {
     inherit hash fetchSubmodules;
   };
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   nativeBuildInputs = [
     bison
     boost
@@ -74,11 +78,17 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
     zstd
   ]
-  ++ (with perlPackages; [
-    perl
-    DBI
-    DBDmysql
-  ]);
+  ++ (
+    with perlPackages;
+    [
+      perl
+      DBI
+      DBDmysql
+    ]
+    ++ lib.optionals (lib.versionAtLeast version "9.7") [
+      libtirpc
+    ]
+  );
 
   patches = extraPatches;
 
@@ -99,6 +109,9 @@ stdenv.mkDerivation (finalAttrs: {
     "-DWITH_ZSTD=system"
     "-DWITH_VALGRIND=ON"
     "-DWITH_MAN_PAGES=OFF"
+  ]
+  ++ lib.optionals (lib.versionAtLeast version "9.7") [
+    "-DWITH_TIRPC=system"
   ];
 
   postInstall = ''

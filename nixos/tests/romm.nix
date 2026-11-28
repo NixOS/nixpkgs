@@ -45,7 +45,7 @@
         assert heartbeat["SYSTEM"]["VERSION"] == ${builtins.toJSON config.nodes.machine.services.romm.package.version}
 
     with subtest("nginx serves the frontend and proxies the API"):
-        machine.succeed("curl -sf http://localhost/ | grep -iq romm")
+        machine.succeed("curl -sf http://localhost/ | grep -i romm > /dev/null")
         machine.succeed("curl -sf http://localhost/api/heartbeat")
 
     with subtest("platform icons are served"):

@@ -16,7 +16,7 @@
           version
           src
           patches
-          cargoHash
+          cargoDeps
           ;
         buildAndTestSubdir = "plugins/${name}";
 

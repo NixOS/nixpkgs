@@ -1,21 +1,25 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   pbr,
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sphinxcontrib-apidoc";
   version = "0.6.0";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "sphinxcontrib_apidoc";
-    inherit version;
-    hash = "sha256-MpuYENZpiPSOEnpr0YzI77vRzSC43rRpGjVzivSa2I0=";
+  src = fetchFromGitHub {
+    owner = "sphinx-contrib";
+    repo = "apidoc";
+    tag = finalAttrs.version;
+    hash = "sha256-zJmthFeeLsEkVPiFO/42AEhfCj+e85v8nNRd6v7SlZI=";
   };
+
+  # Manually set version since pbr wants to get it from git (not in a tarball)
+  env.PBR_VERSION = finalAttrs.version;
 
   postPatch = ''
     # break infite recursion, remove pytest 4 requirement
@@ -38,4 +42,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd2;
     teams = [ lib.teams.openstack ];
   };
-}
+})

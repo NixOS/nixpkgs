@@ -8,7 +8,6 @@
   fetchNpmDeps,
   fetchFromGitHub,
   makeDesktopItem,
-  nodejs_22,
 
   autoPatchelfHook,
   copyDesktopItems,

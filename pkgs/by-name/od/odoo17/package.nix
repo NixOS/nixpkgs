@@ -47,12 +47,13 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   makeWrapperArgs = [
-    "--prefix PATH : ${
-      lib.makeBinPath [
-        wkhtmltopdf
-        rtlcss
-      ]
-    }"
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [
+      wkhtmltopdf
+      rtlcss
+    ])
   ];
 
   postPatch = ''

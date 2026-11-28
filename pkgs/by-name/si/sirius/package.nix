@@ -22,6 +22,7 @@
   boost,
   eigen,
   libvdwxc,
+  fftwMpi,
   dftd4,
   simple-dftd3,
   mctc-lib,
@@ -53,7 +54,7 @@ assert enablePython -> pythonPackages != null;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "SIRIUS";
-  version = "7.10.0";
+  version = "7.12.0";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -62,8 +63,30 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "electronic-structure";
     repo = "SIRIUS";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cq4ajtAJXfIH1B866FYhgROMSwd7nsbXf/6kbSwJAso=";
+    hash = "sha256-9PlXyJLfunbinsZM6V3PFklqY/JWJkbVD8/vvkIsywA=";
   };
+
+  postPatch = ''
+    # The Python module's CMakeLists.txt forces C++17, but the bundled camp
+    # library in umpire >= 2026.07 uses C++20 concepts. The main library
+    # already uses C++20 (set in the root CMakeLists.txt), so align the
+    # Python module to avoid compilation errors.
+    substituteInPlace python_module/CMakeLists.txt \
+      --replace-fail "set(CMAKE_CXX_STANDARD 17)" "set(CMAKE_CXX_STANDARD 20)"
+
+    # siriusConfig.cmake uses find_library with NO_DEFAULT_PATH to locate
+    # libsirius_cxx, but with split outputs the library lives in $out/lib
+    # while the config is in $dev. Remove NO_DEFAULT_PATH so the library
+    # can be found across outputs.
+    substituteInPlace cmake/siriusConfig.cmake.in \
+      --replace-fail "NO_DEFAULT_PATH" ""
+
+    # src/CMakeLists.txt uses ''${CMAKE_CUDA_ARCHITECTURES} unquoted in
+    # set_target_properties, which breaks when multiple architectures are
+    # set (semicolon-separated list splits into separate arguments).
+    substituteInPlace src/CMakeLists.txt \
+      --replace-fail 'CUDA_ARCHITECTURES ''${CMAKE_CUDA_ARCHITECTURES}' 'CUDA_ARCHITECTURES "''${CMAKE_CUDA_ARCHITECTURES}"'
+  '';
 
   outputs = [
     "out"
@@ -77,6 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ]
   ++ lib.optionals (gpuBackend == "cuda") [ cudaPackages.cuda_nvcc ]
+  ++ lib.optionals (gpuBackend == "rocm") [ rocmPackages.clr ]
   ++ lib.optionals enablePython [ pythonPackages.python ];
 
   buildInputs = [
@@ -95,6 +119,7 @@ stdenv.mkDerivation (finalAttrs: {
     boost
     eigen
     libvdwxc
+    fftwMpi
     jonquil
     simple-dftd3
     dftd4
@@ -105,7 +130,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals (gpuBackend == "cuda") [
     cudaPackages.cuda_cudart
     cudaPackages.cuda_profiler_api
-    cudaPackages.cuda_nvtx
+    cudaPackages.nvtx
     cudaPackages.libcufft
     cudaPackages.libcusolver
     cudaPackages.libcublas
@@ -161,7 +186,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (gpuBackend == "rocm") [
     "-DSIRIUS_USE_ROCM=ON"
-    "-DHIP_ROOT_DIR=${rocmPackages.clr}"
   ]
   ++ lib.optionals enablePython [
     "-DSIRIUS_CREATE_PYTHON_MODULE=ON"

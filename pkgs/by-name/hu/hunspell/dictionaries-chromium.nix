@@ -13,12 +13,12 @@ let
     }:
     stdenv.mkDerivation {
       pname = "hunspell-dict-${shortName}-chromium";
-      version = "145.0.7632.45";
+      version = "156.0.8078.84";
 
       src = fetchgit {
         url = "https://chromium.googlesource.com/chromium/deps/hunspell_dictionaries";
-        rev = "cccf64a8acc951afe3f47fee023908e55699bc58";
-        hash = "sha256-mYDPXa64IOKLMNiBiMqDrQMR7gDPI+vdyVc+M7E+ddc=";
+        rev = "cee14e319bb7603a1157bb4d1e216be64ee82b77";
+        hash = "sha256-9ySOaTS70biP/2tnlby6+L755TRuPIM4lL64aE2E/l4=";
       };
 
       dontBuild = true;
@@ -64,14 +64,14 @@ rec {
   en_US = en-us;
   en-us = mkDictFromChromium {
     shortName = "en-us";
-    dictFileName = "en-US-10-1.bdic";
+    dictFileName = "en-US-10-2.bdic";
     shortDescription = "English (United States)";
   };
 
-  en_GB = en-us;
+  en_GB = en-gb;
   en-gb = mkDictFromChromium {
     shortName = "en-gb";
-    dictFileName = "en-GB-10-1.bdic";
+    dictFileName = "en-GB-10-2.bdic";
     shortDescription = "English (United Kingdom)";
   };
 
@@ -100,5 +100,21 @@ rec {
     shortName = "sv-se";
     dictFileName = "sv-SE-3-0.bdic";
     shortDescription = "Swedish (Sweden)";
+  };
+
+  # PORTUGUESE
+
+  pt_PT = pt-pt;
+  pt-pt = mkDictFromChromium {
+    shortName = "pt-pt";
+    dictFileName = "pt-PT-3-0.bdic";
+    shortDescription = "Portuguese (Portugal)";
+  };
+
+  pt_BR = pt-br;
+  pt-br = mkDictFromChromium {
+    shortName = "pt-br";
+    dictFileName = "pt-BR-3-0.bdic";
+    shortDescription = "Portuguese (Brazil)";
   };
 }

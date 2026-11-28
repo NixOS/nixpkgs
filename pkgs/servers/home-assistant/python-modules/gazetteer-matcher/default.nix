@@ -13,7 +13,6 @@ buildPythonPackage (finalAttrs: {
   pname = "gazetteer-matcher";
   version = "1.1.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "OHF-Voice";

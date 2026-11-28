@@ -3,21 +3,23 @@
   buildHomeAssistantComponent,
   fetchFromGitHub,
   json-timeseries,
+  home-assistant,
   openplantbook-sdk,
-  pytest-homeassistant-custom-component,
+  pytest-freezer,
+  pytest-homeassistant,
   pytestCheckHook,
 }:
 
 buildHomeAssistantComponent rec {
   owner = "olen";
   domain = "openplantbook";
-  version = "1.6.0";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = "home-assistant-openplantbook";
     tag = "v${version}";
-    hash = "sha256-Lk+dyrBwTqRil64fVm28bhN+q57bA5U9FpX2wFf/g8I=";
+    hash = "sha256-oEnPIpekFs8b9iOaKIghYN8LI90hcb2kZE0D0C2pL0k=";
   };
 
   ignoreVersionRequirement = [
@@ -31,7 +33,9 @@ buildHomeAssistantComponent rec {
   ];
 
   nativeCheckInputs = [
-    pytest-homeassistant-custom-component
+    home-assistant
+    pytest-freezer
+    pytest-homeassistant
     pytestCheckHook
   ];
 

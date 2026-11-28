@@ -23,10 +23,12 @@
       in
       with lib.versions;
       lib.switch coq.coq-version [
+        (case (range "9.2" "9.2") "1.12.0")
         (case (range "8.20" "9.1") "1.11.0")
         (case (range "8.11" "8.16") "1.8.0")
         (case (range "8.10" "8.13") "1.3.0")
       ] null;
+    release."1.12.0".hash = "sha256-x+xtC7JZ23fF+gQRY60D7MLoAqnvDPs/BKmdGSvBHOE=";
     release."1.11.0".hash = "sha256-sgbH7eI4TPHOQ5qBvM6x7G3j8B40HSEMEzFaN1G9VEw=";
     release."1.10.0".hash = "sha256-67cBhLvRMWLWBL7NXK1zZTQC4PtSKu9qtesU4SqKkOw=";
     release."1.8.0".hash = "sha256-3ADNeXrBIpYRlfUW+LkLHUWV1w1HFrVc/TZISMuwvRY=";
@@ -47,6 +49,9 @@
     checkTarget = "test";
 
     useDuneifVersion = v: (lib.versionAtLeast v "1.10.0" || v == "dev");
+
+    opam-nameVersion =
+      v: if lib.versionAtLeast v "1.12.0" || v == "dev" then "rocq-simple-io" else "coq-simple-io";
 
     passthru.tests.HelloWorld = callPackage ./test.nix { };
 

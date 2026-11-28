@@ -1,8 +1,8 @@
 diff --git a/setup.py b/setup.py
-index e9b36e2a2..bc9e2f1e3 100644
+index 37bfc3e41b..8281d56590 100644
 --- a/setup.py
 +++ b/setup.py
-@@ -20,6 +20,15 @@ from setuptools.command.build_ext import build_ext
+@@ -22,6 +22,15 @@ from setuptools_rust.build import build_rust
  from setuptools_scm import get_version
  from torch.utils.cpp_extension import CUDA_HOME, ROCM_HOME
  
@@ -15,13 +15,13 @@ index e9b36e2a2..bc9e2f1e3 100644
 +else:
 +    NIX_ATTRS = { "cmakeFlags": os.environ.get("cmakeFlags", "").split() }
 +
- 
- def load_module_from_path(module_name, path):
-     spec = importlib.util.spec_from_file_location(module_name, path)
-@@ -151,6 +160,7 @@ class cmake_build_ext(build_ext):
+ # Select vLLM release tags, excluding crate tags such as "proto-v0.3.0".
+ VLLM_GIT_DESCRIBE_COMMAND = [
+     "git",
+@@ -270,6 +279,7 @@ class cmake_build_ext(build_ext):
          cmake_args = [
-             "-DCMAKE_BUILD_TYPE={}".format(cfg),
-             "-DVLLM_TARGET_DEVICE={}".format(VLLM_TARGET_DEVICE),
+             f"-DCMAKE_BUILD_TYPE={cfg}",
+             f"-DVLLM_TARGET_DEVICE={VLLM_TARGET_DEVICE}",
 +            *NIX_ATTRS["cmakeFlags"],
          ]
  

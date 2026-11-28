@@ -15,8 +15,8 @@
   dbus,
   draco,
   embree,
+  fetchFromGitea,
   fetchFromGitHub,
-  fetchzip,
   ffmpeg_7,
   fftw,
   fftwFloat,
@@ -24,8 +24,12 @@
   gettext,
   glew,
   gmp,
+  intel-compute-runtime,
+  intel-graphics-compiler,
+  intel-llvm,
   jackaudioSupport ? false,
   jemalloc,
+  level-zero,
   lib,
   libdecor,
   libepoxy,
@@ -53,8 +57,10 @@
   mesa,
   meshoptimizer,
   nix-update-script,
+  oneapiSupport ? false,
   onetbb,
   openal,
+  opencl-headers,
   opencolorio,
   openexr,
   openimagedenoise,
@@ -84,14 +90,10 @@
   wayland-protocols,
   wayland-scanner,
   waylandSupport ? stdenv.hostPlatform.isLinux,
+  weston,
+  writableTmpDirAsHomeHook,
   zlib,
   zstd,
-  level-zero,
-  intel-compute-runtime,
-  intel-llvm,
-  intel-graphics-compiler,
-  oneapiSupport ? false,
-  opencl-headers,
 }:
 
 let
@@ -125,15 +127,19 @@ in
 
 stdenv'.mkDerivation (finalAttrs: {
   pname = "blender";
-  version = "5.2.2";
+  version = "5.2.3";
 
   strictDeps = true;
   __structuredAttrs = true;
 
-  src = fetchzip {
-    name = "source";
-    url = "https://download.blender.org/source/blender-${finalAttrs.version}.tar.xz";
-    hash = "sha256-r4XT6ZoVwMXieauP5jOC0DdfNOilTmkGu8JPMAFjuDs=";
+  src = fetchFromGitea {
+    domain = "projects.blender.org";
+    owner = "blender";
+    repo = "blender";
+    tag = "v${finalAttrs.version}";
+    forceFetchGit = true; # tarball downloads are behind anti-bot protection
+    fetchLFS = true;
+    hash = "sha256-auBd3YaQ3NvzsMoI7rDcaI1m6XVT6o9p6heKtAzZnI4=";
   };
 
   patches = [
@@ -151,6 +157,10 @@ stdenv'.mkDerivation (finalAttrs: {
       --replace-fail \
         'static const char *static_libs_path = PREFIX "/" BLENDER_INSTALL_LIBDIR;' \
         'static const char *static_libs_path = BLENDER_INSTALL_LIBDIR;'
+
+    # GlfDrawTarget was removed in OpenUSD 26.11; the include is unused
+    substituteInPlace source/blender/render/hydra/viewport_engine.cc \
+      --replace-fail '#include <pxr/imaging/glf/drawTarget.h>' '#include <pxr/base/gf/vec4i.h>'
   ''
   + (lib.optionalString stdenv.hostPlatform.isDarwin ''
     : > build_files/cmake/platform/platform_apple_xcode.cmake
@@ -165,8 +175,9 @@ stdenv'.mkDerivation (finalAttrs: {
                 '${lib.getLib brotli}/lib/libbrotlidec.dylib'
   '')
   + (lib.optionalString rocmSupport ''
-    substituteInPlace extern/hipew/src/hipew.c --replace-fail '"/opt/rocm/hip/lib/libamdhip64.so.${lib.versions.major rocmPackages.clr.version}"' '"${rocmPackages.clr}/lib/libamdhip64.so"'
-    substituteInPlace extern/hipew/src/hipew.c --replace-fail '"opt/rocm/hip/bin"' '"${rocmPackages.clr}/bin"'
+    substituteInPlace extern/hipew/src/hipew.c \
+      --replace-fail '"libamdhip64.so"' '"${rocmPackages.clr}/lib/libamdhip64.so"' \
+      --replace-fail '"opt/rocm/hip/bin"' '"${rocmPackages.clr}/bin"'
   '')
   + (lib.optionalString oneapiSupport ''
     substituteInPlace intern/cycles/kernel/device/oneapi/CMakeLists.txt \
@@ -213,6 +224,9 @@ stdenv'.mkDerivation (finalAttrs: {
     # Blender supplies its own FindAlembic.cmake (incompatible with the Alembic-supplied config file)
     (lib.cmakeFeature "ALEMBIC_INCLUDE_DIR" "${lib.getDev alembic}/include")
     (lib.cmakeFeature "ALEMBIC_LIBRARY" "${lib.getLib alembic}/lib/libAlembic${stdenv.hostPlatform.extensions.sharedLibrary}")
+
+    # FIXME: work around cmake 4.5 weirdness
+    (lib.cmakeBool "WITH_DOC_MANPAGE" false)
   ]
   ++ lib.optionals cudaSupport [
     (lib.cmakeFeature "CYCLES_CUDA_BINARIES_ARCH" (lib.concatStringsSep ";" cudaArches))
@@ -220,11 +234,11 @@ stdenv'.mkDerivation (finalAttrs: {
     (lib.cmakeBool "WITH_CYCLES_CUDA_BINARIES" true)
   ]
   ++ lib.optionals oneapiSupport [
-    (lib.cmakeFeature "SYCL_ROOT_DIR" "${intel-llvm}")
+    (lib.cmakeFeature "IGC_INSTALL_DIR" "${intel-graphics-compiler}")
     (lib.cmakeFeature "LEVEL_ZERO_ROOT_DIR" "${level-zero}")
     (lib.cmakeFeature "OCLOC_INSTALL_DIR" "${intel-compute-runtime}")
-    (lib.cmakeFeature "IGC_INSTALL_DIR" "${intel-graphics-compiler}")
     (lib.cmakeFeature "SYCL_CPP_FLAGS" "--verbose")
+    (lib.cmakeFeature "SYCL_ROOT_DIR" "${intel-llvm}")
   ]
   ++ lib.optionals rocmSupport [
     (lib.cmakeBool "WITH_CYCLES_DEVICE_HIPRT" false)
@@ -419,35 +433,91 @@ stdenv'.mkDerivation (finalAttrs: {
       };
 
     tests = {
-      render = runCommand "${finalAttrs.pname}-test" { nativeBuildInputs = [ mesa.llvmpipeHook ]; } ''
-        set -euo pipefail
-        cat <<'PYTHON' > scene-config.py
-        import bpy
-        bpy.context.scene.eevee.taa_render_samples = 32
-        bpy.context.scene.cycles.samples = 32
-        if ${if (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) then "True" else "False"}:
-            bpy.context.scene.cycles.use_denoising = False
-        bpy.context.scene.render.resolution_x = 100
-        bpy.context.scene.render.resolution_y = 100
-        bpy.context.scene.render.threads_mode = 'FIXED'
-        bpy.context.scene.render.threads = 1
-        PYTHON
+      basicRender =
+        runCommand "${finalAttrs.pname}-test" { nativeBuildInputs = [ mesa.llvmpipeHook ]; }
+          ''
+            set -euo pipefail
+            cat <<'PYTHON' > scene-config.py
+            import bpy
+            bpy.context.scene.eevee.taa_render_samples = 32
+            bpy.context.scene.cycles.samples = 32
+            if ${if (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) then "True" else "False"}:
+                bpy.context.scene.cycles.use_denoising = False
+            bpy.context.scene.render.resolution_x = 100
+            bpy.context.scene.render.resolution_y = 100
+            bpy.context.scene.render.threads_mode = 'FIXED'
+            bpy.context.scene.render.threads = 1
+            PYTHON
 
-        mkdir $out
-        for engine in BLENDER_EEVEE_NEXT CYCLES; do
-          echo "Rendering with $engine..."
-          # Beware that argument order matters
-          ${lib.getExe finalAttrs.finalPackage} \
-            --background \
-            -noaudio \
-            --factory-startup \
-            --python-exit-code 1 \
-            --python scene-config.py \
-            --engine "$engine" \
-            --render-output "$out/$engine" \
-            --render-frame 1
-        done
-      '';
+            mkdir $out
+            for engine in BLENDER_EEVEE_NEXT CYCLES; do
+              echo "Rendering with $engine..."
+              # Beware that argument order matters
+              ${lib.getExe finalAttrs.finalPackage} \
+                --background \
+                -noaudio \
+                --factory-startup \
+                --python-exit-code 1 \
+                --python scene-config.py \
+                --engine "$engine" \
+                --render-output "$out/$engine" \
+                --render-frame 1
+            done
+          '';
+
+      blenderTests = blender.overrideAttrs (old: {
+        pname = "blender-tests";
+
+        nativeBuildInputs = old.nativeBuildInputs ++ [
+          python3Packages.docutils
+        ];
+
+        cmakeFlags = old.cmakeFlags ++ [
+          (lib.cmakeFeature "CMAKE_INSTALL_PREFIX" "${lib.getBin blender}/bin") # Test against already-built blender
+          (lib.cmakeBool "WITH_INSTALL_PORTABLE" true)
+        ];
+
+        postPatch =
+          old.postPatch
+          # alembic_root is the dev output, but this needs the exe
+          + ''
+            substituteInPlace tests/python/alembic_export_tests.py \
+              --replace-fail \
+                'cls.alembic_root = pathlib.Path(args.alembic_root)' \
+                'cls.alembic_root = pathlib.Path("${alembic}")'
+          ''
+          # disable failing tests (but make them complain if they start passing)
+          + ''
+            cat <<'EOF' >> tests/python/CMakeLists.txt
+              set_tests_properties(cycles_pointcloud_cpu PROPERTIES WILL_FAIL TRUE)
+              set_tests_properties(geo_node_mesh_uv_unwrap PROPERTIES WILL_FAIL TRUE)
+              set_tests_properties(imbuf_save PROPERTIES WILL_FAIL TRUE)
+              set_tests_properties(io_usd_export PROPERTIES WILL_FAIL TRUE)
+              set_tests_properties(script_bundled_modules PROPERTIES WILL_FAIL TRUE)
+            EOF
+          '';
+
+        dontBuild = true;
+        installPhase = ''
+          runHook preInstall
+          touch $out
+          runHook postInstall
+        '';
+        postInstall = "";
+        dontFixup = true;
+
+        doInstallCheck = true;
+        nativeInstallCheckInputs = [
+          weston
+          writableTmpDirAsHomeHook
+        ];
+        installCheckPhase = ''
+          runHook preInstallCheck
+          TBB_ENABLE_SANITIZERS=1 ctest --test-dir . --output-on-failure
+          runHook postInstallCheck
+        '';
+      });
+
       tester-cudaAvailable = cudaPackages.writeGpuTestPython { } ''
         import subprocess
         subprocess.run([${

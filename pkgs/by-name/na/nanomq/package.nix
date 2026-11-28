@@ -50,13 +50,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "nanomq";
-  version = "0.25.6";
+  version = "0.25.7";
 
   src = fetchFromGitHub {
     owner = "nanomq";
     repo = "nanomq";
     tag = finalAttrs.version;
-    hash = "sha256-Ym57iLZFnmR7NErX8qE8I9ApNPC08Z437b3tWTeqcIw=";
+    hash = "sha256-TBzeXZYEkBwvL6A9IqOlFHnNixrJofrcLErIWMB0X+4=";
     fetchSubmodules = true;
   };
 
@@ -97,6 +97,8 @@ stdenv.mkDerivation (finalAttrs: {
         jinja2
         requests
         paho-mqtt
+        legacy-cgi
+        websockets
       ]
     ))
   ];
@@ -109,11 +111,9 @@ stdenv.mkDerivation (finalAttrs: {
       # effectively distable this test because it is slow
       echo > .github/scripts/fuzzy_test.txt
 
-      # even with the correct paho-mqtt version these tests fail, suggesting
-      # websocket support is indeed broken
-      substituteInPlace .github/scripts/test.py \
-        --replace 'ws_test()' '#ws_test()' \
-        --replace 'ws_v5_test()' '#ws_v5_test()'
+      # ImportError: cannot import name 'T' from 're'
+      substituteInPlace .github/scripts/tls_v5_test.py \
+        --replace-fail "from re import S, T" ""
 
       PATH="$PATH:$out/bin" python .github/scripts/test.py
     )

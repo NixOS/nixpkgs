@@ -16,8 +16,6 @@ buildPythonPackage (finalAttrs: {
   version = "1.2.2-unstable-2026-06-30";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "tinyfish-io";
     repo = "tf-playwright-stealth";

@@ -1,24 +1,22 @@
 {
   lib,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   fetchpatch,
   nixosTests,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "dnscrypt-proxy";
-  version = "2.1.18";
+  version = "2.1.20";
 
   vendorHash = null;
-
-  doCheck = false;
 
   src = fetchFromGitHub {
     owner = "DNSCrypt";
     repo = "dnscrypt-proxy";
     rev = finalAttrs.version;
-    hash = "sha256-Ol1S2dNVLvXjRbKFf+rlTHtbvybu8fO6DcMoJIgUArY=";
+    hash = "sha256-mNOtMC5GXIE/SSPNyuEBbXQvYj4vvVAc83cQ2jeT978=";
   };
 
   patches = [
@@ -42,6 +40,7 @@ buildGoModule (finalAttrs: {
     homepage = "https://dnscrypt.info/";
     maintainers = with lib.maintainers; [
       atemu
+      magicquark
       waynr
     ];
     mainProgram = "dnscrypt-proxy";

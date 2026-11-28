@@ -21,7 +21,7 @@
               __structuredAttrs = true;
             }
             ''
-              json2yaml${lib.optionalString tags " --yaml-tags"} ${
+              json2yaml --width inf${lib.optionalString tags " --yaml-tags"} ${
                 # attributes with null values are omitted from the JSON with structured attrs
                 # yaml_1_2Null test keeps this in check
                 if value == null then ''<(echo "null")'' else ''--unwrap value "$NIX_ATTRS_JSON_FILE"''

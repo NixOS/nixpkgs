@@ -23,14 +23,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyrainbird";
-  version = "6.6.0";
+  version = "6.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "allenporter";
     repo = "pyrainbird";
     tag = finalAttrs.version;
-    hash = "sha256-f3mIM4kEJiR12jvi65P/Mx0yKV1GJ9GxWNWXFNK9IuY=";
+    hash = "sha256-yJ1Sg3gTu/0ACBLd0sAYVfbMR8vNv1a5QzWiSGFoS6c=";
   };
 
   build-system = [ setuptools ];

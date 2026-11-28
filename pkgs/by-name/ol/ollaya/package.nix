@@ -3,6 +3,8 @@
   rustPlatform,
   fetchFromGitHub,
   cacert,
+  pkg-config,
+  aws-lc,
   onnxruntime,
   llama-cpp,
   versionCheckHook,
@@ -11,18 +13,23 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ollaya";
-  version = "0.12.1";
+  version = "0.18.0";
 
   src = fetchFromGitHub {
     owner = "ollaya-dev";
     repo = "ollaya";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NDESJkL+VAETrKi4PNYKuFQJtaV0Eta7gaqOWdBNmAQ=";
+    hash = "sha256-6Prp7V8I4QSipmTDufawUQeWg98Gy3MWfYfX+X0OhJU=";
   };
 
-  cargoHash = "sha256-Xkwj8ATewNtIV7QbMaIYs+fb0xWgrjxCEiGTjPNAo/M=";
+  cargoHash = "sha256-6NMXfwsWg3mo8TH+9fgEhgKbu22/3QbaGjiMBQYZlxE=";
 
-  buildInputs = [ onnxruntime ];
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [
+    aws-lc
+    onnxruntime
+  ];
 
   __structuredAttrs = true;
 

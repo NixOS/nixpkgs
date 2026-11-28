@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ rps ];
+    maintainers = [ ];
     mainProgram = "statserial";
   };
 })

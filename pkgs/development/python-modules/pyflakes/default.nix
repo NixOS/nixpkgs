@@ -7,16 +7,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyflakes";
-  version = "3.4.0";
+  version = "4.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PyCQA";
     repo = "pyflakes";
-    tag = version;
-    hash = "sha256-4UEJjn9Eey1vHeaG468x/nMlbfGu3ohZX1R7RR2R5ik=";
+    tag = finalAttrs.version;
+    hash = "sha256-Z8m4IaTr0+3C15O05G24LT2iNhvWebKhfoaaK0DfWWI=";
   };
 
   build-system = [ setuptools ];
@@ -35,10 +35,10 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://github.com/PyCQA/pyflakes";
-    changelog = "https://github.com/PyCQA/pyflakes/blob/${src.tag}/NEWS.rst";
+    changelog = "https://github.com/PyCQA/pyflakes/blob/${finalAttrs.src.tag}/NEWS.rst";
     description = "Simple program which checks Python source files for errors";
     mainProgram = "pyflakes";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

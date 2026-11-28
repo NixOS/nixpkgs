@@ -1,11 +1,11 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
-  pkgsCross,
+  rustPlatform,
+  pkgsStatic,
+  rust-jemalloc-sys,
 }:
-let
-  inherit (pkgsCross.musl64) rustPlatform;
-in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nnd";
   version = "0.80";
@@ -18,6 +18,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-p3BbXKrTo3ggNGXorVwhANcm6NRzik69jHwn7cM5S1s=";
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isStatic [
+    rust-jemalloc-sys
+  ];
+
+  passthru.tests.static = pkgsStatic.nnd;
 
   meta = {
     description = "Debugger for Linux";

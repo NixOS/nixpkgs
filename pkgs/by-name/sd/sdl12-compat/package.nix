@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     pkg-config
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     autoSignDarwinBinariesHook
   ];
 

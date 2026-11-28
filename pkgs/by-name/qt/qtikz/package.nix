@@ -70,5 +70,10 @@ stdenv.mkDerivation rec {
     "QCOLLECTIONGENERATORCOMMAND=qhelpgenerator"
   ];
 
-  qtWrapperArgs = [ ''--prefix PATH : "${gnuplot}/bin"'' ];
+  qtWrapperArgs = [
+    "--prefix"
+    "PATH"
+    ":"
+    "${gnuplot}/bin"
+  ];
 }

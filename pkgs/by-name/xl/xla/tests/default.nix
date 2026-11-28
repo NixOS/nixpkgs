@@ -157,7 +157,7 @@ let
       pkgs.glibc.bin
     ];
     text = ''
-      exec python3 ${./install-check.py} ${installConfig} "$@"
+      exec python3 -P ${./install-check.py} ${installConfig} "$@"
     '';
   };
 
@@ -256,7 +256,7 @@ in
           expectSelectedOutput = true;
         };
       configureChecker = pkgs.runCommand "xla-cuda-configure-checker" { } ''
-        ${lib.getExe pkgs.python3} ${./cuda-configure-check-test.py} ${./cuda-configure-check.py} -v \
+        ${lib.getExe pkgs.python3} -P ${./cuda-configure-check-test.py} ${./cuda-configure-check.py} -v \
           > "$out" 2>&1
 
         mkdir -p driver-valid/lib driver-copied-stub/lib driver-linked-stub/lib

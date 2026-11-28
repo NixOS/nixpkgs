@@ -2,29 +2,37 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   cmake,
   boost,
-  python3,
   fmt,
+  python3,
+  snappy,
+  zlib,
+  zstd,
   versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "avro-c++";
-  version = "1.12.0";
+  version = "1.12.2";
 
+  # Use the archive tarball as the share/test/data/schemas/*/ dirs need to be writable
   src = fetchurl {
-    url = "mirror://apache/avro/avro-${finalAttrs.version}/cpp/avro-cpp-${finalAttrs.version}.tar.gz";
-    hash = "sha256-8u33cSanWw7BrRZncr4Fg1HOo9dESL5+LO8gBQwPmKs=";
+    url = "mirror://apache/avro/avro-${finalAttrs.version}/avro-src-${finalAttrs.version}.tar.gz";
+    hash = "sha256-RJcixELslRTY5pM/nHzPLgVEy3XJUcJbgE6h2Oc9Ers=";
   };
 
-  # TODO: remove fmt formatter patches when updating to next version
-  # Patches exist upstream but don't apply cleanly.
+  sourceRoot = "avro-src-${finalAttrs.version}/lang/c++";
+
   patches = [
-    ./0001-get-rid-of-fmt-fetchcontent.patch
-    ./0002-fix-fmt-name-formatter.patch
-    ./0003-fix-fmt-type-formatter.patch
-    ./0004-remove-boost-system-component.patch
+    # Remove in next release
+    (fetchpatch {
+      name = "remove-boost-system-component.patch";
+      url = "https://github.com/apache/avro/commit/2b11dba4fb28c7bb6ff08b40509a6a71fcaf4c21.patch";
+      hash = "sha256-jqLB4EvFyAMbb/oRQEoVCXMdWEsqNuxV4KqbCMehXpU=";
+      stripLen = 2;
+    })
   ];
 
   nativeBuildInputs = [
@@ -35,6 +43,9 @@ stdenv.mkDerivation (finalAttrs: {
   propagatedBuildInputs = [
     boost
     fmt
+    snappy
+    zlib
+    zstd
   ];
 
   doCheck = true;
@@ -43,14 +54,19 @@ stdenv.mkDerivation (finalAttrs: {
     versionCheckHook
   ];
   doInstallCheck = true;
-  versionCheckProgram = "${placeholder "out"}/bin/avrogencpp";
+
+  postPatch = ''
+    # Replace wrong include dir that makes clients fail (fmt::format is not in core)
+    # Remove in next release as they have switched to std::format
+    substituteInPlace include/avro/Exception.hh --replace-fail '<fmt/core.h>' '<fmt/format.h>'
+  '';
 
   meta = {
     description = "C++ library which implements parts of the Avro Specification";
     mainProgram = "avrogencpp";
     homepage = "https://avro.apache.org/";
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ smancill ];
     platforms = lib.platforms.all;
   };
 })

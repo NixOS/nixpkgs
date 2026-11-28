@@ -1,19 +1,23 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   python3,
+  writableTmpDirAsHomeHook,
 }:
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "circup";
-  version = "3.1.0";
+  version = "3.2.1";
   pyproject = true;
+
+  __darwinAllowLocalNetworking = true;
 
   src = fetchFromGitHub {
     owner = "adafruit";
     repo = "circup";
     tag = finalAttrs.version;
-    hash = "sha256-+/1lL5mVeVPFFLitLYIGzSxmnoizNxjb6+MYWreSijw=";
+    hash = "sha256-oe5I6Lgwjux5vzVWY4REuphDcZuVUCnOA/5wD08lesI=";
   };
 
   pythonRelaxDeps = [ "semver" ];
@@ -33,9 +37,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
   nativeCheckInputs = with python3.pkgs; [ pytestCheckHook ];
 
-  postBuild = ''
-    export HOME=$(mktemp -d);
-  '';
+  nativeBuildInputs = [ writableTmpDirAsHomeHook ];
 
   pythonImportsCheck = [ "circup" ];
 
@@ -43,6 +45,9 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     # Test requires network access
     "test_libraries_from_imports_bad"
     "test_install_auto_file_bad"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "test_show_command"
   ];
 
   meta = {

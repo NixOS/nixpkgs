@@ -8,12 +8,12 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "generic";
-  version = "1.1.7";
+  version = "1.1.8";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-0U2uZihULrCEQ0WI01B1bIjy8wx+I0itX8+gH723zu0=";
+    hash = "sha256-CX2W0sre89jimW8+8/WK0wS1+w3GwVM4wxdWH/C7pJM=";
   };
 
   build-system = [ poetry-core ];

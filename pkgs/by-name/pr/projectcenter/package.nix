@@ -37,10 +37,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     homepage = "https://gnustep.github.io/";
     license = lib.licenses.lgpl2Plus;
     mainProgram = "ProjectCenter";
-    maintainers = with lib.maintainers; [
-      ashalkhakov
-      dblsaiko
-    ];
+    maintainers = with lib.maintainers; [ dblsaiko ];
     platforms = lib.platforms.linux;
   };
 })

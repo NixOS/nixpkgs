@@ -1,0 +1,31 @@
+    Updating crates.io index
+     Locking 2 packages to latest Rust 1.96.1 compatible versions
+    Updating rustls-webpki v0.103.15 -> v0.103.16
+    Updating webpki-roots v1.0.9 -> v1.0.10
+note: pass `--verbose` to see 298 unchanged dependencies behind latest
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -8247,9 +8247,9 @@
+ 
+ [[package]]
+ name = "rustls-webpki"
+-version = "0.103.15"
++version = "0.103.16"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "f3c3cf1d8b1e7d4927e2d154c3fcb02979afb9939629c62cd9048d4f07b60ac2"
++checksum = "4443b1b6d39d7c663139942cc4558262562d2c84123bb6282ef177009ca8b281"
+ dependencies = [
+  "aws-lc-rs",
+  "ring",
+@@ -10489,9 +10489,9 @@
+ 
+ [[package]]
+ name = "webpki-roots"
+-version = "1.0.9"
++version = "1.0.10"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "7dcd9d09a39985f5344844e66b0c530a33843579125f23e21e9f0f220850f22a"
++checksum = "1c1c8e20c8a38fc7d65abfe74eb7280e4aa667e8eec8bc84996d2874810748d9"
+ dependencies = [
+  "rustls-pki-types",
+ ]

@@ -23,7 +23,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "DCSBL";
+    owner = "homewizard";
     repo = "python-homewizard-energy";
     tag = "v${finalAttrs.version}";
     hash = "sha256-d81Jjm/ykmqzFR67xaiwFAWuixrNIwm7jNMpA2rg90s=";

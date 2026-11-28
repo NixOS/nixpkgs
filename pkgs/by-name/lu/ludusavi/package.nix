@@ -3,32 +3,26 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
+  desktopToDarwinBundle,
   installShellFiles,
   cmake,
   pkg-config,
   makeWrapper,
   wrapGAppsHook3,
   bzip2,
-  fontconfig,
-  freetype,
   libGL,
   libx11,
-  libxcursor,
-  libxrandr,
-  libxi,
   libxkbcommon,
+  libxcursor,
+  libxi,
+  libxcb,
   vulkan-loader,
   wayland,
-  zenity,
-  kdePackages,
-  cairo,
-  pango,
-  atkmm,
-  gdk-pixbuf,
-  dbus-glib,
   gtk3,
   glib,
   rclone,
+  sqlite,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -51,32 +45,33 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installShellFiles
     pkg-config
     makeWrapper
-    wrapGAppsHook3
-  ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ wrapGAppsHook3 ];
 
   buildInputs = [
-    fontconfig
-    freetype
-    libx11
-    libxcursor
-    libxrandr
-    libxi
-    cairo
-    pango
-    atkmm
-    gdk-pixbuf
+    bzip2
+    sqlite
+    zstd
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     gtk3
+    glib
   ];
 
   postInstall = ''
     install -Dm644 assets/linux/com.mtkennerly.ludusavi.metainfo.xml -t \
       "$out/share/metainfo/"
+  ''
+  # desktopToDarwinBundle upscales any PNG it finds instead of rasterizing the SVG
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
     install -Dm644 assets/icon.png \
       "$out/share/icons/hicolor/64x64/apps/com.mtkennerly.ludusavi.png"
+  ''
+  + ''
     install -Dm644 assets/icon.svg \
       "$out/share/icons/hicolor/scalable/apps/com.mtkennerly.ludusavi.svg"
     install -Dm644 "assets/linux/com.mtkennerly.ludusavi.desktop" -t "$out/share/applications/"
-    install -Dm644 assets/MaterialIcons-Regular.ttf -t "$out/share/fonts/TTF/"
     install -Dm644 LICENSE -t "$out/share/licenses/ludusavi/"
   ''
   + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
@@ -90,31 +85,20 @@ rustPlatform.buildRustPackage (finalAttrs: {
     let
       libPath = lib.makeLibraryPath [
         libGL
-        bzip2
-        fontconfig
-        freetype
-        libx11
-        libxcursor
-        libxrandr
-        libxi
-        libxkbcommon
         vulkan-loader
+        libx11
+        libxkbcommon
         wayland
-        gtk3
-        dbus-glib
-        glib
+        libxcursor
+        libxi
+        libxcb
       ];
     in
+    lib.optionalString stdenv.hostPlatform.isLinux ''
+      patchelf --add-rpath "${libPath}" "$out/bin/ludusavi"
     ''
-      patchelf --set-rpath "${libPath}" "$out/bin/ludusavi"
-      wrapProgram $out/bin/ludusavi --prefix PATH : ${
-        lib.makeBinPath [
-          rclone
-          zenity
-          kdePackages.kdialog
-        ]
-      } \
-        "''${gappsWrapperArgs[@]}"
+    + ''
+      wrapProgram $out/bin/ludusavi --prefix PATH : ${lib.makeBinPath [ rclone ]} "''${gappsWrapperArgs[@]}"
     '';
 
   meta = {
@@ -127,5 +111,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       megheaiulian
     ];
     mainProgram = "ludusavi";
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })

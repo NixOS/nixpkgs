@@ -5,6 +5,7 @@
 
   bison,
   flex,
+  re2c,
   cmake, # for resolving toml11 dep
 
   nix-util,
@@ -45,7 +46,7 @@ mkMesonLibrary (finalAttrs: {
 
   nativeBuildInputs = [
     bison
-    flex
+    (if lib.versionAtLeast version "2.37pre" then re2c else flex)
     cmake
   ];
 

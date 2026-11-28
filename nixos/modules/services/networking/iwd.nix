@@ -83,6 +83,8 @@ in
       linkConfig.NamePolicy = "keep kernel";
     };
 
+    boot.kernelModules = [ "pkcs8_key_parser" ];
+
     systemd.services.iwd = {
       path = [ config.networking.resolvconf.package ];
       wantedBy = [ "multi-user.target" ];

@@ -14,7 +14,7 @@ buildDunePackage {
   src = fetchFromGitHub {
     owner = "arlencox";
     repo = "mlbdd";
-    rev = "v0.7.3";
+    tag = "v0.7.3";
     hash = "sha256-TUdgx+B5341VJsnP7iTHID7hNC+5G/I2xNM5F3mdb/A=";
   };
 

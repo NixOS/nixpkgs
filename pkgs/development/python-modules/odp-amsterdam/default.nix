@@ -15,19 +15,19 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "odp-amsterdam";
-  version = "7.2.0";
+  version = "7.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "klaasnicolaas";
     repo = "python-odp-amsterdam";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-aK6BGOkkHdKkiojg56qxkyZklpdstQWNzaTLM1s8//s=";
+    hash = "sha256-ZhmfmdH4orby2QH1HQoEKZk6ocTPnBDbDV6vChHa0q8=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "uv_build>=0.12.13,<0.13" "uv_build"
+      --replace-fail "uv_build>=0.13,<0.14" "uv_build"
   '';
 
   build-system = [ uv-build ];

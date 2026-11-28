@@ -1,18 +1,18 @@
 {
-  "version": "2026.2.4",
-  "buildNumber": "262.10968.211",
+  "version": "2026.3.1.1",
+  "buildNumber": "263.7307.349",
   "urls": {
     "x86_64-linux": {
-      "url": "https://download.jetbrains.com/rustrover/RustRover-2026.2.4.tar.gz",
-      "hash": "sha256-QDagbxj9A9qICcsRtW1H/6EOYq0SqQGGggEPUDxVE/Y="
+      "url": "https://download.jetbrains.com/rustrover/RustRover-2026.3.1.1.tar.gz",
+      "hash": "sha256-/cR5QSkrzaVv9uHxZa4fi6tws+NIA9Og6asUShUhatY="
     },
     "aarch64-linux": {
-      "url": "https://download.jetbrains.com/rustrover/RustRover-2026.2.4-aarch64.tar.gz",
-      "hash": "sha256-ygRhqpgmpc/2gqXVtGU4pfygPh/rbxKzPP9wi8IgvMw="
+      "url": "https://download.jetbrains.com/rustrover/RustRover-2026.3.1.1-aarch64.tar.gz",
+      "hash": "sha256-eth6wlpKyfQebSqzTgjUCWvWmtUSXV7NBeZyKQYOD9w="
     },
     "aarch64-darwin": {
-      "url": "https://download.jetbrains.com/rustrover/RustRover-2026.2.4-aarch64.dmg",
-      "hash": "sha256-zEvL8UiNF4s/ScF3UtV2NI8jGyixXeA9zd5Q+3W4doA="
+      "url": "https://download.jetbrains.com/rustrover/RustRover-2026.3.1.1-aarch64.dmg",
+      "hash": "sha256-vg3RgmTycelPfyyNXKJi+2+Hxw21PrQIKFLLUD/SzqM="
     }
   }
 }

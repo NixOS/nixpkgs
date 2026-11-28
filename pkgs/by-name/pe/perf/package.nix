@@ -33,6 +33,8 @@
   withLibcap ? true,
   libcap,
   withPython ? true,
+  withBpf ? true,
+  linuxHeaders,
   buildPackages,
 }:
 let
@@ -59,7 +61,10 @@ stdenv.mkDerivation {
 
   strictDeps = true;
 
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  depsBuildBuild = [
+    buildPackages.stdenv.cc
+  ]
+  ++ lib.optional withBpf buildPackages.llvmPackages.clang-unwrapped;
 
   postPatch = ''
     # Linux scripts
@@ -131,12 +136,17 @@ stdenv.mkDerivation {
     python3.pkgs.setuptools
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString [
-    "-Wno-error=cpp"
-    "-Wno-error=bool-compare"
-    "-Wno-error=deprecated-declarations"
-    "-Wno-error=stringop-truncation"
-  ];
+  env = {
+    NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error=cpp"
+      "-Wno-error=bool-compare"
+      "-Wno-error=deprecated-declarations"
+      "-Wno-error=stringop-truncation"
+    ];
+  }
+  // lib.optionalAttrs withBpf {
+    EXTRA_BPF_FLAGS = "-I${linuxHeaders}/include";
+  };
 
   doCheck = false; # requires "sparse"
 

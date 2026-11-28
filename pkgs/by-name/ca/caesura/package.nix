@@ -7,6 +7,8 @@
   lame,
   makeBinaryWrapper,
   sox_ng,
+  pkg-config,
+  aws-lc,
 }:
 let
   runtimeDeps = [
@@ -17,19 +19,21 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "caesura";
-  version = "0.32.0";
+  version = "0.33.1";
 
   src = fetchFromGitHub {
     owner = "RogueOneEcho";
     repo = "caesura";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7PRYjKwnLiHLQ0+egzwf3YAmyu6+/2ysHfMmyv/VUZY=";
+    hash = "sha256-0YhYEHMwLgWb/QWwHz47ybxZ6VHNckUA921gdREuhwc=";
   };
 
-  cargoHash = "sha256-0+vZma8AC44XqVHzmJT/roV7sy8w6DYhujRK9N91J5c=";
+  cargoHash = "sha256-/l4A1uI71aJsFwhST4xr/vrY3K2wmZHGeICk5Kq9C5g=";
 
+  buildInputs = [ aws-lc ];
   nativeBuildInputs = [
     makeBinaryWrapper
+    pkg-config
   ];
   nativeCheckInputs = [
     writableTmpDirAsHomeHook

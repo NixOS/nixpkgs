@@ -51,7 +51,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   propagatedBuildInputs = [ openbabel ];
 
-  qtWrapperArgs = [ "--prefix PATH : ${lib.getBin openbabel}/bin" ];
+  qtWrapperArgs = [
+    "--prefix"
+    "PATH"
+    ":"
+    "${lib.getBin openbabel}/bin"
+  ];
 
   meta = {
     description = "Molecule editor and visualizer";

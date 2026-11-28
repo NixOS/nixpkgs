@@ -6,6 +6,8 @@
   pkg-config,
   openssl,
   rdkafka,
+  rust-jemalloc-sys,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -39,6 +41,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     openssl
     rdkafka
+    rust-jemalloc-sys
+    zstd
   ];
 
   passthru.updateScript = nix-update-script { };

@@ -23,13 +23,6 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    assertions = [
-      {
-        assertion = config.boot.initrd.systemd.enable;
-        message = "boot.plymouth.tpm2-totp is only supported with boot.initrd.systemd.";
-      }
-    ];
-
     environment.systemPackages = [
       cfg.package
     ];

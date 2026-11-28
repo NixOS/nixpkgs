@@ -7,16 +7,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "lprobe";
-  version = "0.2.1";
+  version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "fivexl";
     repo = "lprobe";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-325Y9PSvnzFUpSOeZTp7DiltLLaGNmUuB//sHR7Gdf4=";
+    hash = "sha256-Opa2AkUA5/iogg4bJy7o3ZCOZmAqKgW6KqG/Kn4eS9o=";
   };
 
-  vendorHash = "sha256-6Ip9d9laS6wr/Qu3wWTlW5vI7QzmRX0Y6xhtIQ4J3ps=";
+  vendorHash = "sha256-H/el8zj3uUIkSXKHPD0RqAaaGPTH++NXd5dKpzUSHFQ=";
 
   buildInputs = [
     libpcap

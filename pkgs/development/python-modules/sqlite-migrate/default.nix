@@ -12,7 +12,6 @@ buildPythonPackage (finalAttrs: {
   pname = "sqlite-migrate";
   version = "0.2";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "simonw";

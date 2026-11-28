@@ -4,7 +4,7 @@
   os-service-types,
   oslotest,
   requests-mock,
-  stestr,
+  stestrCheckHook,
   testscenarios,
 }:
 
@@ -27,11 +27,7 @@ buildPythonPackage {
     keystoneauth1
     oslotest
     requests-mock
-    stestr
+    stestrCheckHook
     testscenarios
   ];
-
-  checkPhase = ''
-    stestr run
-  '';
 }

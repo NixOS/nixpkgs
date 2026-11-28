@@ -76,5 +76,7 @@
       for ext in ["json", "opcache", "pdo_mysql", "pdo_pgsql", "pdo_sqlite", "apcu"]:
           assert ext in response, f"Missing {ext} extension"
           machine.succeed(f'test -n "$(php -m | grep -i {ext})"')
+
+      machine.log(machine.execute("systemd-analyze security phpfpm-foobar.service | grep -v ✓")[1])
     '';
 }

@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "http://www.catb.org/~esr/cvs-fast-export/cvs-fast-export-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-YZF2QebWbvn/N9pLpccudZsFHzocJp/3M0Gx9p7fQ5Y=";
+    hash = "sha256-YZF2QebWbvn/N9pLpccudZsFHzocJp/3M0Gx9p7fQ5Y=";
   };
 
   strictDeps = true;
@@ -35,13 +35,11 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs .
   '';
 
-  preBuild = ''
-    makeFlagsArray=(
-      XML_CATALOG_FILES="${docbook_xml_dtd_45}/xml/dtd/docbook/catalog.xml ${docbook_xsl}/xml/xsl/docbook/catalog.xml"
-      LIBS=""
-      prefix="$out"
-    )
-  '';
+  makeFlags = [
+    "XML_CATALOG_FILES=${docbook_xml_dtd_45}/xml/dtd/docbook/catalog.xml ${docbook_xsl}/xml/xsl/docbook/catalog.xml"
+    "LIBS="
+    "prefix=$(out)"
+  ];
 
   env = lib.optionalAttrs stdenv.cc.isClang {
     NIX_CFLAGS_COMPILE = "-Wno-implicit-function-declaration";
@@ -59,6 +57,8 @@ stdenv.mkDerivation (finalAttrs: {
       ]
     }
   '';
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Export an RCS or CVS history as a fast-import stream";

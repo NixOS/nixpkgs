@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dddvb";
-  version = "0.9.40a";
+  version = "0.9.42";
 
   src = fetchFromGitHub {
     owner = "DigitalDevices";
     repo = "dddvb";
     tag = finalAttrs.version;
-    hash = "sha256-HsTkOYNKxlJ0NaMO/o0irVDBWP8i7Z5Rm1FBflGbRCo=";
+    hash = "sha256-8S0oEvkNVYIwAKkBZNR/rJ8A+1PG20zautj+JH/sVts=";
   };
 
   postPatch = ''
@@ -38,6 +38,5 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Only;
     maintainers = [ ];
     platforms = lib.platforms.linux;
-    broken = lib.versionAtLeast kernel.version "6.15";
   };
 })

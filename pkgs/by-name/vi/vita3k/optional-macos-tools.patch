@@ -1,0 +1,87 @@
+From 6ec2d518ed5ae6f3dae3872d6a118d26a9d39a68 Mon Sep 17 00:00:00 2001
+From: Rafael Ieda <git@ieda.me>
+Date: Mon, 23 Nov 2026 17:38:32 -0300
+Subject: [PATCH 2/2] cmake: Skip the macOS icon and signing when the tools are
+ missing
+
+---
+ vita3k/CMakeLists.txt | 26 +++++++++++++++++---------
+ 1 file changed, 17 insertions(+), 9 deletions(-)
+
+diff --git a/vita3k/CMakeLists.txt b/vita3k/CMakeLists.txt
+index a364b3c1..5d0134d7 100644
+--- a/vita3k/CMakeLists.txt
++++ b/vita3k/CMakeLists.txt
+@@ -212,6 +212,9 @@ if(APPLE)
+ 		endif()
+ 	endif()
+ 
++	find_program(SIPS_EXECUTABLE sips)
++	find_program(ICONUTIL_EXECUTABLE iconutil)
++
+ 	if(XCODE_VERSION VERSION_GREATER_EQUAL "26.0")
+ 		if(CMAKE_GENERATOR STREQUAL "Xcode")
+ 			# If Xcode generator AND have Xcode 26 or greater, have Xcode compile the icon
+@@ -252,7 +255,7 @@ if(APPLE)
+ 				COMMENT "Setting CFBundleIconName for Assets.car icon"
+ 				VERBATIM)
+ 		endif()
+-	else()
++	elseif(SIPS_EXECUTABLE AND ICONUTIL_EXECUTABLE)
+ 		# Otherwise if Xcode tools are less than 26, generate an .icns from the svg so at least there's something
+ 		set(VITA3K_ICONSET "${MAC_ICON_OUT}/Vita3K.iconset")
+ 		set(VITA3K_ICON_1024 "${MAC_ICON_OUT}/icon_1024.png")
+@@ -262,9 +265,9 @@ if(APPLE)
+ 		foreach(size 16 32 128 256 512)
+ 			math(EXPR size2x "${size} * 2")
+ 			list(APPEND VITA3K_ICON_CMDS	# builds a command list
+-				COMMAND sips -z ${size} ${size} "${VITA3K_ICON_1024}"
++				COMMAND "${SIPS_EXECUTABLE}" -z ${size} ${size} "${VITA3K_ICON_1024}"
+ 					--out "${VITA3K_ICONSET}/icon_${size}x${size}.png"
+-				COMMAND sips -z ${size2x} ${size2x} "${VITA3K_ICON_1024}"
++				COMMAND "${SIPS_EXECUTABLE}" -z ${size2x} ${size2x} "${VITA3K_ICON_1024}"
+ 					--out "${VITA3K_ICONSET}/icon_${size}x${size}@2x.png")
+ 		endforeach()
+ 
+@@ -272,9 +275,9 @@ if(APPLE)
+ 			OUTPUT "${VITA3K_ICNS}"
+ 			COMMAND ${CMAKE_COMMAND} -E make_directory "${VITA3K_ICONSET}"
+ 			# sips can only convert from svg on macos 13+ which is our minimum version target anyhow
+-			COMMAND sips -s format png -z 1024 1024 "${VITA3K_ICON_SVG}" --out "${VITA3K_ICON_1024}"
++			COMMAND "${SIPS_EXECUTABLE}" -s format png -z 1024 1024 "${VITA3K_ICON_SVG}" --out "${VITA3K_ICON_1024}"
+ 			${VITA3K_ICON_CMDS}	# executes commands list
+-			COMMAND iconutil -c icns -o "${VITA3K_ICNS}" "${VITA3K_ICONSET}"
++			COMMAND "${ICONUTIL_EXECUTABLE}" -c icns -o "${VITA3K_ICNS}" "${VITA3K_ICONSET}"
+ 			DEPENDS "${VITA3K_ICON_SVG}"
+ 			COMMENT "Manually building ${VITA3K_APP_ID}.svg into Vita3K.icns"
+ 			VERBATIM)
+@@ -282,6 +285,8 @@ if(APPLE)
+ 			GENERATED TRUE MACOSX_PACKAGE_LOCATION "Resources")
+ 		target_sources(vita3k PRIVATE "${VITA3K_ICNS}")
+ 		set(MACOSX_BUNDLE_ICON_FILE "Vita3K")
++	else()
++		message(WARNING "sips or iconutil not found, the app bundle will have no icon")
+ 	endif()
+ 
+ 	add_custom_command(
+@@ -318,10 +323,13 @@ if(APPLE)
+ 			COMMAND "${MACDEPLOYQT_EXECUTABLE}" "$<TARGET_FILE_DIR:vita3k>/../.." "$<$<CONFIG:Debug,RelWithDebInfo>:-no-strip>")
+ 	endif()
+ 
+-	add_custom_command(
+-		TARGET vita3k
+-		POST_BUILD
+-		COMMAND codesign --force --deep --preserve-metadata=entitlements,requirements,flags,runtime --sign - "$<TARGET_FILE_DIR:vita3k>/../..")
++	find_program(CODESIGN_EXECUTABLE codesign)
++	if(CODESIGN_EXECUTABLE)
++		add_custom_command(
++			TARGET vita3k
++			POST_BUILD
++			COMMAND "${CODESIGN_EXECUTABLE}" --force --deep --preserve-metadata=entitlements,requirements,flags,runtime --sign - "$<TARGET_FILE_DIR:vita3k>/../..")
++	endif()
+ elseif(LINUX)
+ 	include("${CMAKE_SOURCE_DIR}/cmake/generate_metainfo.cmake")
+ 	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-rpath='$ORIGIN'")
+-- 
+2.56.0
+

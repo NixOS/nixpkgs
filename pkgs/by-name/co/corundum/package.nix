@@ -1,7 +1,6 @@
 {
   lib,
   bundlerApp,
-  bundlerUpdateScript,
 }:
 
 bundlerApp {
@@ -9,7 +8,8 @@ bundlerApp {
   gemdir = ./.;
   exes = [ "corundum-skel" ];
 
-  passthru.updateScript = bundlerUpdateScript "corundum";
+  # Last release was in 2019 and it requires bundler ~> 1.10, so bundlerUpdateScript fails
+  passthru.updateScript = null;
 
   meta = {
     description = "Tool and libraries for maintaining Ruby gems";

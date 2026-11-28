@@ -32,8 +32,6 @@ buildPythonPackage (finalAttrs: {
 
   doCheck = false; # sdist missing test artifact
 
-  __structuredAttrs = true;
-
   meta = {
     description = "Python package to easily resize images";
     homepage = "https://pypi.org/project/python-resize-image";

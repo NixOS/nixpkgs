@@ -7,6 +7,7 @@
   makeBinaryWrapper,
   versionCheckHook,
   nixosTests,
+  fuse3,
   openssh,
   rclone,
   python3,
@@ -14,21 +15,18 @@
 
 buildGoModule (finalAttrs: {
   pname = "restic";
-  version = "0.19.1";
+  version = "0.20.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "restic";
     repo = "restic";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-lj2+SZFvZl/WcC4aV7yZMEYVOyDNMFeHJbUWS53usqg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-gw6lxLeuD33KGpUurYERK4AgntBHe38lmG6coQlFIR0=";
   };
 
-  patches = [
-    # The TestRestoreWithPermissionFailure test fails in Nix’s build sandbox
-    ./0001-Skip-testing-restore-with-permission-failure.patch
-  ];
-
-  vendorHash = "sha256-6r97M0XHuddbpSZ9yTtfIPUDkHkHP2PIDLWQTf/294E=";
+  vendorHash = "sha256-0X3DE/thqkDe0dKLboz9YrN5xTMwroovEbmjq2PNyek=";
 
   subPackages = [ "cmd/restic" ];
 
@@ -38,6 +36,11 @@ buildGoModule (finalAttrs: {
   ];
 
   nativeCheckInputs = [ python3 ];
+
+  checkFlags = [
+    # test fails in sandboxed builds
+    "-skip=TestRestoreWithPermissionFailure"
+  ];
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
@@ -60,7 +63,11 @@ buildGoModule (finalAttrs: {
         ]
       }"
   ''
-  + lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    wrapProgram $out/bin/restic \
+      --suffix PATH : "${lib.makeBinPath [ fuse3 ]}"
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     $out/bin/restic generate \
       --bash-completion restic.bash \
       --fish-completion restic.fish \

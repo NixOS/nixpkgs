@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "mastodon-archive";
-  version = "1.4.8";
+  version = "1.4.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kensanata";
     repo = "mastodon-archive";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-yz17ddcA0U9fq1aDlPmD3OkNL6Epzdp9C7L+31yNLBc=";
+    hash = "sha256-dfJzS3p3JZVASrqH+OMdXJsXKGaK9Uoinbum9XZF8as=";
   };
 
   build-system = with python3.pkgs; [

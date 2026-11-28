@@ -4,14 +4,12 @@
   fetchFromGitHub,
   setuptools,
   unittestCheckHook,
-  unstableGitUpdater,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "bahttext";
   version = "1.0.2-unstable-2020-05-31";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "sekz";
@@ -26,7 +24,8 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "bahttext" ];
 
-  passthru.updateScript = unstableGitUpdater { };
+  # Upstream has no tags and no commits since 2020, so there is nothing to update to
+  passthru.updateScript = null;
 
   meta = {
     description = "Convert currency numbers to Thai Baht text";

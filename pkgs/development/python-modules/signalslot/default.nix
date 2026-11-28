@@ -16,8 +16,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.2.0";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     pname = "signalslot";
     inherit (finalAttrs) version;

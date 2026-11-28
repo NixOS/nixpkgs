@@ -15,16 +15,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qmapshack";
-  version = "1.21.1";
+  version = "1.22.0";
 
   src = fetchFromGitHub {
     owner = "Maproom";
     repo = "qmapshack";
     tag = "V_${finalAttrs.version}";
-    hash = "sha256-mayPiVV9F6yxDnRyNLrZSiDSPsIRILsaF53Qm7SISg0=";
+    hash = "sha256-BRLnGX/ri+mCvXHM/TVvzI2/1fBMT+jcHtJT1lXYLSQ=";
   };
 
-  patches = [ ./dont_fetch_dependencies.patch ];
+  patches = [
+    ./dont_fetch_dependencies.patch
+    # calls `app.setDesktopFileName` - distros that don't wrap the binary apparently don't need this.
+    ./desktop-filename.patch
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -50,12 +54,13 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   qtWrapperArgs = [
-    "--suffix PATH : ${
-      lib.makeBinPath [
-        gdal
-        routino
-      ]
-    }"
+    "--suffix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [
+      gdal
+      routino
+    ])
   ];
 
   meta = {

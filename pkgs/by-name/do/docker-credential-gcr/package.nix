@@ -9,20 +9,20 @@
 
 buildGoModule (finalAttrs: {
   pname = "docker-credential-gcr";
-  version = "2.2.1";
+  version = "2.2.2";
 
   src = fetchFromGitHub {
     owner = "GoogleCloudPlatform";
     repo = "docker-credential-gcr";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6jvNF0L3vXyumfiNSLRwRqZeui8rgnO4h/rTmY7qVDA=";
+    hash = "sha256-o8A5RTcUJ4TBVNxu6QFb+y6dnMTv3mWzSQypAywvito=";
   };
 
   postPatch = ''
     rm -rf ./test
   '';
 
-  vendorHash = "sha256-gghmzq1eBMh+d5m5Ez6t3jxAc58NbLHr9F8vcYdOYSk=";
+  vendorHash = "sha256-CGSVmyne/yIiRqEky5UjiA6hq+fn96wvnLcEu7u14rs=";
 
   env.CGO_ENABLED = 0;
 

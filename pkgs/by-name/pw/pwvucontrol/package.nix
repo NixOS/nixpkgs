@@ -30,12 +30,12 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "saivert";
     repo = "pwvucontrol";
     tag = finalAttrs.version;
-    hash = "sha256-Y5O/KkYYNDysZ3H0vk0qj2DOkmx/Z4vJELr9oydxpt8=";
+    hash = "sha256-azIFZx4CVQWuVjSP13WojFqNCQNMBTXTcvlla9NHjU8=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-pw7UrD4EFd04mxy8Cz3tif+lzlnemIjFkB7VVOnAA1E=";
+    hash = "sha256-IDUEz1/EyV9JYY+bj+ksFpv15QPQ9pSSf9XgXVCaSGs=";
   };
 
   postPatch = ''

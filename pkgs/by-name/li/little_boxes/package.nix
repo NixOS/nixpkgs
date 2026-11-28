@@ -1,14 +1,15 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
   versionCheckHook,
+  nix-update-script,
 }:
-
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "little_boxes";
-  version = "1.12.1";
+  version = "1.14.0";
 
   __structuredAttrs = true;
 
@@ -16,25 +17,27 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "giodamelio";
     repo = "little_boxes";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ejFo+BYoXf889G/iLuKITwY3ephkEMS6nLtfi3PozHQ=";
+    hash = "sha256-JQrCKXN0yf9hQIbrdqmDFJs2f7tkxEWHqfqEisOinEc=";
   };
 
   cargoVendorDir = "vendor";
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = ''
-    extrasPath=$(ls -d $releaseDir/build/little_boxes-*/out/)
-
-    installManPage $extrasPath/little_boxes.1
-    installShellCompletion --bash $extrasPath/little_boxes.bash
-    installShellCompletion --fish $extrasPath/little_boxes.fish
-    installShellCompletion --zsh $extrasPath/_little_boxes
-    installShellCompletion --nushell $extrasPath/little_boxes.nu
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    $out/bin/little_boxes man > little_boxes.1
+    installManPage little_boxes.1
+    installShellCompletion --cmd little_boxes \
+      --bash <($out/bin/little_boxes completions bash) \
+      --fish <($out/bin/little_boxes completions fish) \
+      --zsh <($out/bin/little_boxes completions zsh) \
+      --nushell <($out/bin/little_boxes completions nushell)
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Add boxes are input text";

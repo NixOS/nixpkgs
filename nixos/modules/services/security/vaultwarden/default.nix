@@ -81,8 +81,9 @@ in
         "sqlite"
         "mysql"
         "postgresql"
+        "sqlite_system"
       ];
-      default = "sqlite";
+      default = "sqlite_system";
       description = ''
         Which database backend vaultwarden will be using.
       '';
@@ -209,7 +210,8 @@ in
   config = lib.mkIf cfg.enable {
     assertions = [
       {
-        assertion = cfg.backupDir != null -> cfg.dbBackend == "sqlite";
+        assertion =
+          cfg.backupDir != null -> (cfg.dbBackend == "sqlite" || cfg.dbBackend == "sqlite_system");
         message = "Backups for database backends other than sqlite will need customization";
       }
       {

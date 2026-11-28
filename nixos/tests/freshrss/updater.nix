@@ -14,7 +14,7 @@ in
       services.freshrss = {
         enable = true;
         baseUrl = "http://localhost";
-        passwordFile = pkgs.writeText "password" "secret";
+        passwordFile = pkgs.writeText "password" "secret123";
         internalHostAllowlist = [ "127.0.0.1:${toString feedPort}" ];
       };
 
@@ -66,6 +66,7 @@ in
     ''
       machine.wait_for_unit("multi-user.target")
       machine.wait_for_unit("freshrss-config.service")
+      machine.succeed("systemctl restart freshrss-config.service")
       machine.wait_for_open_port(${toString feedPort})
 
       machine.succeed(

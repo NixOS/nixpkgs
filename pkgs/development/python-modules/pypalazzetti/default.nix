@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "pypalazzetti";
-  version = "0.1.20";
+  version = "0.1.22";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dotvav";
     repo = "py-palazzetti-api";
     tag = "v${version}";
-    hash = "sha256-jDsDa/5QFi4HUSagFHG73+Aj5BPOC8UNO+k7XxLZawk=";
+    hash = "sha256-0Hnk3jr9bgp65fzlfwLZMaR1bs1frozUz9Zniik/NcA=";
   };
 
   build-system = [ setuptools ];

@@ -23,8 +23,6 @@ buildPythonPackage (finalAttrs: {
   version = "2.12.1";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     pname = "tern";
     inherit (finalAttrs) version;

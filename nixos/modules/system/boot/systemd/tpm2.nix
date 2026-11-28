@@ -60,6 +60,10 @@
         # NixOS.
         systemd.services."systemd-pcrlogin@".unitConfig.ConditionPathExists =
           "/run/systemd/nvpcr/login.auth";
+
+        systemd.sockets."systemd-pcrextend" = {
+          wantedBy = [ "sockets.target" ];
+        };
       }
     )
     (
@@ -81,7 +85,7 @@
       let
         cfg = config.boot.initrd.systemd;
       in
-      lib.mkIf (cfg.enable && cfg.tpm2.enable) {
+      lib.mkIf (config.boot.initrd.enable && cfg.tpm2.enable) {
         boot.initrd.systemd.additionalUpstreamUnits = [
           "tpm2.target"
           "systemd-tpm2-setup-early.service"
@@ -101,13 +105,17 @@
           "${cfg.package}/lib/systemd/system-generators/systemd-tpm2-generator"
           "${cfg.package}/lib/systemd/systemd-pcrextend"
         ];
+
+        boot.initrd.systemd.sockets."systemd-pcrextend" = {
+          wantedBy = [ "sockets.target" ];
+        };
       }
     )
     (
       let
         cfg = config.boot.initrd.systemd;
       in
-      lib.mkIf (cfg.enable && cfg.tpm2.enable && cfg.tpm2.pcrphases.enable) {
+      lib.mkIf (config.boot.initrd.enable && cfg.tpm2.enable && cfg.tpm2.pcrphases.enable) {
         boot.initrd.systemd.additionalUpstreamUnits = [
           "systemd-pcrphase-initrd.service"
         ];
@@ -119,7 +127,7 @@
       let
         cfg = config.boot.initrd.systemd;
       in
-      lib.mkIf (cfg.enable && cfg.tpm2.enable && cfg.tpm2.pcrosseparator.enable) {
+      lib.mkIf (config.boot.initrd.enable && cfg.tpm2.enable && cfg.tpm2.pcrosseparator.enable) {
         boot.initrd.systemd.additionalUpstreamUnits = [
           "systemd-pcrosseparator.service"
         ];

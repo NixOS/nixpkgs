@@ -8,13 +8,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "ptcpdump";
-  version = "0.37.0";
+  version = "0.37.2";
 
   src = fetchFromGitHub {
     owner = "mozillazg";
     repo = "ptcpdump";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ouH7VFWSCOElbmbSWAkmM4dtNVp545mC/FnoNAFtaEw=";
+    hash = "sha256-Q7uUEOfC4P/7KtHl2d8YI7GLZyCkI7ogTXuIj3i46WM=";
   };
 
   vendorHash = null;

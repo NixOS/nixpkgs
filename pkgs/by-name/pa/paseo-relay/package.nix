@@ -13,13 +13,13 @@ let
 in
 beamPackages.mixRelease (finalAttrs: {
   pname = "paseo-relay";
-  version = "0-unstable-2026-08-22";
+  version = "staging-20261028";
 
   src = fetchFromGitHub {
     owner = "getpaseo";
     repo = "paseo-relay";
-    rev = "3fc41c96c8c63f3a7109e832899cc57d473c4531";
-    hash = "sha256-53r3Mz1GCv5Vozbg02YfiGABn8HTvoao5R+4CxTKj3w=";
+    tag = finalAttrs.version;
+    hash = "sha256-F4PQg5vU9sI3d9XWukbINdBmhbfcehBzeUVxPKZ06Jg=";
   };
 
   mixFodDeps = beamPackages.fetchMixDeps {
@@ -32,7 +32,7 @@ beamPackages.mixRelease (finalAttrs: {
     mv $out/bin/paseo_relay $out/bin/paseo-relay
   '';
 
-  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "A distributed, protocol-compatible relay for Paseo";

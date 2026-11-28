@@ -30,7 +30,7 @@ maven.buildMavenPackage (finalAttrs: {
 
   patches = [ ./fix-maven-plugin-versions.patch ];
 
-  mvnHash = "sha256-KfIcc1MWGs7vZHPjfNgy3NBCAyTMtyvRTZfcN4LQVv8=";
+  mvnHash = "sha256-Mhp9/i80NlaQYcEOOxkOyXUGEsGDnQISyaXg9kfW+Sc=";
 
   buildOffline = true;
   doCheck = false;

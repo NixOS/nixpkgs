@@ -48,7 +48,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "to-html";
     homepage = "https://github.com/Aloso/to-html";
     changelog = "https://github.com/Aloso/to-html/blob/${finalAttrs.src.rev}/CHANGELOG.md";
-    license = lib.licenses.mit;
+    license = lib.licenses.OR [
+      lib.licenses.mit
+      lib.licenses.asl20
+    ];
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ icewind1991 ];
   };

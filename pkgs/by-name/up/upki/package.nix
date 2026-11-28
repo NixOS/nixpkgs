@@ -9,6 +9,7 @@
   rustc,
   cacert,
   pkg-config,
+  aws-lc,
   openssl,
   cargo-c,
   validatePkgConfig,
@@ -17,17 +18,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "upki";
-  version = "1.0.0-beta.3";
+  version = "1.0.4";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "rustls";
     repo = "upki";
-    tag = "upki-${finalAttrs.version}";
-    hash = "sha256-GZkXxidIjG76yIzAcMRsRorMVYpImFN5Q2pe2YgiEUs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-pFrk/TcJ6AjqZ8NbyIdF5e+wesl8TXEUPsNCigKPJ3M=";
   };
 
-  cargoHash = "sha256-/z11KuGP3A3fh/Jk2Kx26x7okh6brHs+t/XC7BuPgcA=";
+  cargoHash = "sha256-vCiZTh5Xd/0EXhOlPn+CeqxX7flt4IehPL1NqUmWCyY=";
 
   cargoBuildFlags = [
     "--package=upki-cli"
@@ -38,13 +39,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--package=upki-cli"
   ];
 
+  nativeCheckInputs = [ cacert ];
+
   nativeBuildInputs = [
     cargo-c
     pkg-config
   ];
-  buildInputs = [ openssl ];
-
-  env.SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+  buildInputs = [
+    aws-lc
+    openssl
+  ];
 
   postBuild = ''
     ${buildPackages.rust.envVars.setEnv} cargo cbuild --release --frozen \
@@ -56,6 +60,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --prefix=$out \
       --target=${stdenv.hostPlatform.rust.rustcTarget}
   '';
+
+  # These upstream packaging tests require systemd tools and we aren't
+  # using the checked systemd units at this time.
+  checkFlags = [
+    "--skip=systemd_units_verify"
+    "--skip=sysusers_configuration_verifies"
+  ];
 
   postInstall = ''
     ${buildPackages.rust.envVars.setEnv} cargo cinstall --release --frozen \
@@ -91,7 +102,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
       lib.licenses.mit
       lib.licenses.asl20
     ];
-    maintainers = [ lib.maintainers.skyesoss ];
+    maintainers = [
+      lib.maintainers.skyesoss
+      lib.maintainers.cpu
+    ];
     mainProgram = "upki";
     pkgConfigModules = [
       "upki"

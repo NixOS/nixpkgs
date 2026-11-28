@@ -12,7 +12,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "wpilibsuite";
+    owner = "sphinx-doc";
     repo = "sphinxext-rediraffe";
     tag = "v${version}";
     hash = "sha256-OW+MNQbPfJa8+jcpWZxTKD+EAv1gyo5tmcYAGba4u3c=";
@@ -33,8 +33,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "Sphinx extension to redirect files";
-    homepage = "https://github.com/wpilibsuite/sphinxext-rediraffe";
-    changelog = "https://github.com/wpilibsuite/sphinxext-rediraffe/releases/tag/${src.tag}";
+    homepage = "https://github.com/sphinx-doc/sphinxext-rediraffe";
+    changelog = "https://github.com/sphinx-doc/sphinxext-rediraffe/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.newam ];
   };

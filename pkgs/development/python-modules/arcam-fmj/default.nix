@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "arcam-fmj";
-  version = "3.0.1.post1";
+  version = "3.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "elupus";
     repo = "arcam_fmj";
     tag = version;
-    hash = "sha256-hq1+RRF7ZQndsFNw+A6gLpLS2OCuMmjnCoYopSk6XiM=";
+    hash = "sha256-W03wTlUa/lf825nbrZjz9ykFWkAxhcW6RI/a/QOkNcw=";
   };
 
   build-system = [

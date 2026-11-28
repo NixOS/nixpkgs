@@ -10,6 +10,7 @@
   util-linux,
   libgbm,
   pipewire,
+  zstd,
   gst_all_1,
   cosmic-wallpapers,
   nix-update-script,
@@ -19,17 +20,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "xdg-desktop-portal-cosmic";
-  version = "1.10.0";
+  version = "1.11.0";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "xdg-desktop-portal-cosmic";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-GuaSy/N0DsH+J636DwJj6hyjUi58oJzNz1UvYSWAVf4=";
+    hash = "sha256-UVrfUbUJ7wog8EkTrROKQaVeJkkhqLmKy8CT1NW+g/M=";
   };
 
-  cargoHash = "sha256-BjQbC8nEouu8MI4pf+4LNQ/JR3BsHpt4WppkOkE6BrI=";
+  cargoHash = "sha256-/ftXuX3N1wwmhSCmpJd2Ei/quH5AucOKsTbGGI4NQx8=";
 
   separateDebugInfo = true;
 
@@ -47,6 +48,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     glib
     libgbm
     pipewire
+    zstd
   ];
 
   checkInputs = [ gst_all_1.gstreamer ];

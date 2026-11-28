@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "swift-collections";
-  version = "1.6.0";
+  version = "1.7.6";
 
   outputs = [
     "out"
@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "apple";
     repo = "swift-collections";
     tag = finalAttrs.version;
-    hash = "sha256-oLYfOxB4CGH5tTkNOi0IX3iHTO64YBoaFyu+/1I5HNE=";
+    hash = "sha256-uqToq9UXZn9no3JaWuF3/ouClG1r0f02mFnayWdqk0Y=";
   };
 
   postPatch = ''
@@ -32,6 +32,12 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   strictDeps = true;
+
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    # Avoid the following error when running `install_name_tool`:
+    #    changing install names or rpaths can't be redone for: <some exe> (for architecture arm64) because larger updated load commands do not fit
+    NIX_LDFLAGS = "-headerpad_max_install_names";
+  };
 
   cmakeFlags = [
     # Defaults to not building shared libs on Linux.

@@ -4,21 +4,22 @@
   fetchFromGitHub,
   boost,
   cmake,
-  pkg-config,
   curl,
   html-tidy,
   jsoncpp,
   ninja,
   nix-update-script,
+  pkg-config,
   rhash,
   tinyxml-2,
   versionCheckHook,
+  writableTmpDirAsHomeHook,
   zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lgogdownloader";
-  version = "3.19";
+  version = "3.20";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -27,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Sude-";
     repo = "lgogdownloader";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4JHV2m5zSekWYpO0j3weH5hiG/kmciDF4Jby46ykxCI=";
+    hash = "sha256-4sok6SXGOLYe/2c/POb84fJ/D7X//TCnXj+1tOidIq0=";
   };
 
   nativeBuildInputs = [
@@ -47,18 +48,19 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doInstallCheck = true;
-  nativeInstallCheckInputs = [ versionCheckHook ];
-  preVersionCheck = ''
-    export HOME=$TMPDIR
-  '';
-  versionCheckKeepEnvironment = [ "HOME" ];
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
+
+  versionCheckKeepEnvironment = [ "HOME" ];
   passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Unofficial GOG.com downloader";
     homepage = "https://sites.google.com/site/gogdownloader/";
-    changelog = "https://github.com/Sude-/lgogdownloader/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/Sude-/lgogdownloader/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.wtfpl;
     maintainers = with lib.maintainers; [
       _0x4A6F

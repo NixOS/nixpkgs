@@ -8,23 +8,17 @@
 
 stdenv.mkDerivation rec {
   pname = "obs-retro-effects";
-  version = "1.0.2";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "FiniteSingularity";
     repo = "obs-retro-effects";
     rev = "${version}";
-    hash = "sha256-oQGXBd/KGPGTK+CoomMjjgrnxTqVIefEKqKH11SPHSY=";
+    hash = "sha256-bqkviTA8ZjXU5d83/xxp6TNmiM/YuYImRTSneDo3SJ4=";
   };
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ obs-studio ];
-
-  postFixup = ''
-    mv $out/data/obs-plugins/${pname}/shaders $out/share/obs/obs-plugins/${pname}/
-    rm -rf $out/obs-plugins
-    rm -rf $out/data
-  '';
 
   meta = {
     description = "Collection of OBS filters to give your stream that retro feel";

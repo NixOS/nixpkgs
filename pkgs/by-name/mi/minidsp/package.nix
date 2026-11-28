@@ -10,6 +10,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "minidsp";
   version = "0.1.12";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "mrene";
     repo = "minidsp-rs";
@@ -19,7 +21,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-JIm0XcgqXGPXlkQ1rhG5D38bQkQT9K44F71ZaCT2g8o=";
 
-  cargoBuildFlags = [ "-p minidsp -p minidsp-daemon" ];
+  cargoBuildFlags = [
+    "--package=minidsp"
+    "--package=minidsp-daemon"
+  ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ libusb1 ];
 

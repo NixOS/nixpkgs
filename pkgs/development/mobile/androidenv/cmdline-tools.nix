@@ -39,10 +39,25 @@ deployAndroidPackage {
       fi
     done
 
-    # Wrap sdkmanager script
-    wrapProgram "$ANDROID_HOME/${package.path}/bin/sdkmanager" \
-      --prefix PATH : ${lib.makeBinPath [ pkgs.jdk17 ]} \
-      --add-flags "--sdk_root=$ANDROID_HOME"
+    cmdlineTools="$ANDROID_HOME/${package.path}"
+    if [ -f "$cmdlineTools/lib/sdkmanager-classpath.jar" ]; then
+      # Wrap sdkmanager script
+      wrapProgram "$cmdlineTools/bin/sdkmanager" \
+        --prefix PATH : ${lib.makeBinPath [ pkgs.jdk17 ]} \
+        --add-flags "--sdk_root=$ANDROID_HOME"
+    else
+      # Since cmdline-tools 23.0, sdkmanager is a shim around the `android` launcher,
+      # which downloads an unpinned Android CLI into ~/.android at runtime.
+      # The Java SdkManagerCli is still shipped, so invoke it directly instead.
+      rm "$cmdlineTools/bin/sdkmanager"
+      makeWrapper ${pkgs.jdk17}/bin/java "$cmdlineTools/bin/sdkmanager" \
+        --prefix PATH : ${lib.makeBinPath [ pkgs.jdk17 ]} \
+        --add-flags "-Dcom.android.sdkmanager.toolsdir=$cmdlineTools" \
+        --add-flags '$JAVA_OPTS $SDKMANAGER_OPTS' \
+        --add-flags "-classpath $cmdlineTools/lib/sdklib/tools.sdklib.jar:$cmdlineTools/lib/avdmanager-classpath.jar" \
+        --add-flags "com.android.sdklib.tool.sdkmanager.SdkManagerCli" \
+        --add-flags "--sdk_root=$ANDROID_HOME"
+    fi
 
     # Patch all script shebangs
     patchShebangs "$ANDROID_HOME/${package.path}/bin"

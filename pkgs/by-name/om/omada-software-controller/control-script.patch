@@ -34,6 +34,13 @@
 -
  # JSVC - for running java apps as services
  JSVC=$(command -v jsvc)
+@@ -236,5 +232,5 @@
+  -pidfile ${PID_FILE} \
+  -home ${JRE_HOME} \
+- -cp /usr/share/java/commons-daemon.jar:${OMADA_HOME}/lib/*:${OMADA_HOME}/properties \
++ -cp ${OMADA_HOME}/lib/*:${OMADA_HOME}/properties \
+  -outfile ${LOG_DIR}/startup.log \
+  -errfile ${LOG_DIR}/startup.log \
 @@ -251,4 +247,9 @@
      fi
 
@@ -44,3 +51,11 @@
 +
      # Check if there are any cross version issues with MongoDB during startup compared to the previous startup
      judge_mongo_version
+@@ -381,5 +382,6 @@
+                 echo -n "."
+                 if [ $kil_process_count -gt 30 ]; then
+-                    echo "The process has been successfully killed."
++                    echo "Still running, sending SIGKILL."
++                    pkill -9 -f ${MAIN_CLASS}
+                     break
+                 fi

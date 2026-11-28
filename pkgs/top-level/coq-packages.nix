@@ -27,13 +27,10 @@ let
   mkCoqPackages' =
     self: coq:
     let
-      callPackage = self.callPackage;
-      rocqPackages = self // {
-        recurseForDerivations = false;
-      };
+      callPackage = self.newScope { rocqPackages = self; };
     in
     {
-      inherit rocqPackages lib;
+      inherit lib;
 
       metaFetch = import ../build-support/rocq/meta-fetch/default.nix {
         inherit
@@ -76,6 +73,7 @@ let
       atbr = callPackage ../development/rocq-modules/atbr { };
       autosubst = callPackage ../development/rocq-modules/autosubst { };
       autosubst-ocaml = callPackage ../development/rocq-modules/autosubst-ocaml { };
+      base64 = callPackage ../development/rocq-modules/base64 { };
       bbv = callPackage ../development/rocq-modules/bbv { };
       bignums = callPackage ../development/rocq-modules/bignums { };
       CakeMLExtraction = callPackage ../development/rocq-modules/CakeMLExtraction { };
@@ -202,7 +200,7 @@ let
       metarocq = callPackage ../development/rocq-modules/metarocq { };
       metarocq-utils = self.metarocq.utils;
       metarocq-common = self.metarocq.common;
-      metarocq-template-rocq = self.metarocq.template-rocq;
+      metarocq-template = self.metarocq.template;
       metarocq-pcuic = self.metarocq.pcuic;
       metarocq-safechecker = self.metarocq.safechecker;
       metarocq-template-pcuic = self.metarocq.template-pcuic;
@@ -286,6 +284,7 @@ let
           };
         })
       );
+      vst-ora = callPackage ../development/rocq-modules/vst-ora { };
       wasmcert = callPackage ../development/rocq-modules/wasmcert { };
       waterproof = callPackage ../development/rocq-modules/waterproof { };
       zorns-lemma = callPackage ../development/rocq-modules/zorns-lemma { };

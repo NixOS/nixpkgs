@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "opentype-feature-freezer";
-  version = "1.32.3";
+  version = "1.32.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "twardoch";
     repo = "fonttools-opentype-feature-freezer";
     tag = "v${version}";
-    hash = "sha256-uwU9lsTK6XlKwar46DLTzjwtD/zQDJnC+Kq/sVNCNE0=";
+    hash = "sha256-KfNHi4LPKSvRWivBcyP5JZWbn6bAB+ccmmvIf05bAUc=";
   };
 
   build-system = [

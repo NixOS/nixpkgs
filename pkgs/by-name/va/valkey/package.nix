@@ -10,8 +10,8 @@
   ps,
   getconf,
   python3Packages,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  systemd,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
+  systemdLibs,
   # dependency ordering is broken at the moment when building with openssl
   tlsSupport ? !stdenv.hostPlatform.isStatic,
   openssl,
@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "valkey";
-  version = "9.1.2";
+  version = "9.1.3";
 
   src = fetchFromGitHub {
     owner = "valkey-io";
     repo = "valkey";
     rev = finalAttrs.version;
-    hash = "sha256-Lq5AqrLKILnsaOdAgWeeukPNF7KerB17R1mUOZjOsUg=";
+    hash = "sha256-hRmxA/TV9P2OXMD515HlH5MFwQKZVVgNmmxyeDDXUJI=";
   };
 
   patches = lib.optional useSystemJemalloc ./use_system_jemalloc.patch;
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs =
     lib.optional useSystemJemalloc jemalloc
-    ++ lib.optional withSystemd systemd
+    ++ lib.optional withSystemd systemdLibs
     ++ lib.optional tlsSupport openssl;
 
   strictDeps = true;

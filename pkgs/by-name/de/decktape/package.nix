@@ -6,16 +6,16 @@
 }:
 buildNpmPackage rec {
   pname = "decktape";
-  version = "3.16.1";
+  version = "3.17.0";
 
   src = fetchFromGitHub {
     owner = "astefanutti";
     repo = "decktape";
     rev = "v${version}";
-    hash = "sha256-ZsNSQlkzIlawQ9FWG9kjz3bDJAx3X5YHv7LESI0tmpc=";
+    hash = "sha256-BA6irs2qksuaIW1b/N/zF2kdyOAM5mY8/YcxlDi0bXE=";
   };
 
-  npmDepsHash = "sha256-B84p4VBaQMZlhwiwXdF9Ijwpn3MisMlOXWc0E+5R5l8=";
+  npmDepsHash = "sha256-EuioTVb4yueju6XlOgQUgqF8Z4ZXC6qqzW/2+fi8DeA=";
   npmPackFlags = [ "--ignore-scripts" ];
 
   dontNpmBuild = true;

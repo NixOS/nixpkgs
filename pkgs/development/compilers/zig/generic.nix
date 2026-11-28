@@ -7,6 +7,7 @@
   xcbuild,
   libxml2,
   ninja,
+  removeReferencesTo,
   zlib,
   coreutils,
   callPackage,
@@ -35,6 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     (lib.getDev llvmPackages.llvm.dev)
     ninja
+    removeReferencesTo
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # provides xcode-select, which is required for SDK detection
@@ -82,42 +84,39 @@ stdenv.mkDerivation (finalAttrs: {
     export ZIG_GLOBAL_CACHE_DIR="$TMPDIR/zig-cache";
   '';
 
-  postPatch =
-    # Zig's build looks at /usr/bin/env to find dynamic linking info. This doesn't
-    # work in Nix's sandbox. Use env from our coreutils instead.
-    ''
-      substituteInPlace lib/std/zig/system.zig \
-        --replace-fail "/usr/bin/env" "${lib.getExe' coreutils "env"}"
-    ''
-    # Zig tries to access xcrun and xcode-select at the absolute system path to query the macOS SDK
-    # location, which does not work in the darwin sandbox.
-    # Upstream issue: https://github.com/ziglang/zig/issues/22600
-    # Note that while this fix is already merged upstream and will be included in 0.14+,
-    # we can't fetchpatch the upstream commit as it won't cleanly apply on older versions,
-    # so we substitute the paths instead.
-    + lib.optionalString (stdenv.hostPlatform.isDarwin && lib.versionOlder finalAttrs.version "0.14") ''
-      substituteInPlace lib/std/zig/system/darwin.zig \
-        --replace-fail /usr/bin/xcrun xcrun \
-        --replace-fail /usr/bin/xcode-select xcode-select
-    '';
+  # Zig's build looks at /usr/bin/env to find dynamic linking info. This doesn't
+  # work in Nix's sandbox. Use env from our coreutils instead.
+  postPatch = ''
+    substituteInPlace lib/std/zig/system.zig \
+      --replace-fail "/usr/bin/env" "${lib.getExe' coreutils "env"}"
+  '';
 
   postBuild =
     if lib.versionAtLeast finalAttrs.version "0.17" then
       ''
         ZIG_LIB_DIR=$(pwd)/stage3/lib/zig stage3/bin/zig build langref -Dversion-string=${finalAttrs.version}
       ''
-    else if lib.versionAtLeast finalAttrs.version "0.14" then
-      ''
-        stage3/bin/zig build langref --zig-lib-dir $(pwd)/stage3/lib/zig
-      ''
     else
       ''
-        stage3/bin/zig build langref
+        stage3/bin/zig build langref --zig-lib-dir $(pwd)/stage3/lib/zig
       '';
 
   postInstall = ''
     install -Dm444 ../zig-out/doc/langref.html -t $doc/share/doc/zig-${finalAttrs.version}/html
   '';
+
+  # Drop unused LLVM/Clang paths left by static linking.
+  postFixup = ''
+    remove-references-to \
+      -t ${lib.getLib llvmPackages.llvm} \
+      -t ${lib.getLib llvmPackages.libclang} \
+      $out/bin/zig
+  '';
+
+  disallowedReferences = [
+    (lib.getLib llvmPackages.llvm)
+    (lib.getLib llvmPackages.libclang)
+  ];
 
   doInstallCheck = true;
   installCheckPhase = ''

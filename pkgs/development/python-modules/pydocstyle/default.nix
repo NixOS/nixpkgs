@@ -53,6 +53,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/PyCQA/pydocstyle";
     changelog = "https://github.com/PyCQA/pydocstyle/blob/${version}/docs/release_notes.rst";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ dzabraev ];
+    maintainers = [ ];
   };
 }

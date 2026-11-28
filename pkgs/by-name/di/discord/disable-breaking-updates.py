@@ -14,6 +14,7 @@ This will dramatically improve the experience :
 
 import json
 import os
+import stat
 import sys
 from pathlib import Path
 
@@ -44,9 +45,8 @@ if os.path.exists(settings_path):
 else:
     settings = {}
 
-required_settings = {"SKIP_HOST_UPDATE": True}
-if "@skipModuleUpdate@" == "true":
-    required_settings["SKIP_MODULE_UPDATE"] = True
+# The module directory is pinned in the Nix store and cannot accept updates
+required_settings = {"SKIP_HOST_UPDATE": True, "SKIP_MODULE_UPDATE": True}
 
 missing_settings = {
     key: value for key, value in required_settings.items() if settings.get(key) != value
@@ -58,6 +58,8 @@ if missing_settings:
     os.makedirs(os.path.dirname(settings_path), exist_ok=True)
 
     with settings_path_temp.open("w", encoding="utf-8") as settings_file_temp:
+        if settings_path.exists():
+            os.fchmod(settings_file_temp.fileno(), stat.S_IMODE(settings_path.stat().st_mode))
         json.dump(settings, settings_file_temp, indent=2)
 
     settings_path_temp.rename(settings_path)

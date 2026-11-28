@@ -6,40 +6,33 @@
   cmake,
   chromaprint,
   gettext,
+  glib,
   gst_all_1,
-  qt5,
-  libsForQt5,
-  taglib_1,
+  libxml2,
+  qt6,
+  taglib,
   fftw,
-  glew,
+  libGLU,
   sqlite,
+  zlib,
   libgpod,
   libplist,
   usbmuxd,
   libmtp,
   libpulseaudio,
-  gvfs,
   libcdio,
-  projectm_3,
   protobuf,
   pkg-config,
   sparsehash,
   config,
-  util-linuxMinimal,
-  libunwind,
-  libselinux,
-  elfutils,
-  libsepol,
-  orc,
   alsa-lib,
+
+  withIpod ? config.clementine.ipod or false,
+  withMTP ? config.clementine.mtp or true,
+  withCD ? config.clementine.cd or true,
+  withCloud ? config.clementine.cloud or true,
 }:
-
 let
-  withIpod = config.clementine.ipod or false;
-  withMTP = config.clementine.mtp or true;
-  withCD = config.clementine.cd or true;
-  withCloud = config.clementine.cloud or true;
-
   gst_plugins = with gst_all_1; [
     gst-plugins-base
     gst-plugins-good
@@ -49,49 +42,48 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "clementine";
-  version = "1.4.1-60-g1a3e8b56f";
+  version = "1.4.7";
 
   src = fetchFromGitHub {
     owner = "clementine-player";
     repo = "Clementine";
     tag = finalAttrs.version;
-    hash = "sha256-FRgTi1Qxzp0vJASNpyANqh4rJX4caxEr0CZOnTHA3Kw=";
+    hash = "sha256-TanOSCpc18MY8zNuj2XFv+r8X+DOKjExqgeZZA0la8I=";
   };
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   nativeBuildInputs = [
     cmake
+    gettext
     pkg-config
-    qt5.wrapQtAppsHook
-    util-linuxMinimal
-    libunwind
-    libselinux
-    elfutils
-    libsepol
-    orc
+    protobuf
+    qt6.qttools
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
+    alsa-lib
     boost
     chromaprint
     fftw
     gettext
-    glew
+    glib
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-bad
     gst_all_1.gstreamer
-    gvfs
-    libsForQt5.liblastfm
+    libGLU
     libpulseaudio
-    projectm_3
+    libxml2
     protobuf
-    libsForQt5.qca-qt5
-    libsForQt5.qjson
-    qt5.qtbase
-    qt5.qtx11extras
-    qt5.qttools
+    qt6.qtbase
+    qt6.qt5compat
+    qt6.qtsvg
+    qt6.qtwayland
     sqlite
-    taglib_1
-    alsa-lib
+    taglib
+    zlib
   ]
   # gst_plugins needed for setup-hooks
   ++ gst_plugins
@@ -105,52 +97,33 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals withCloud [ sparsehash ];
 
   postPatch = ''
-    sed -i src/CMakeLists.txt \
-      -e 's,-Werror,,g' \
-      -e 's,-Wno-unknown-warning-option,,g' \
-      -e 's,-Wno-unused-private-field,,g'
-    sed -i CMakeLists.txt \
-      -e 's,libprotobuf.a,protobuf,g'
-
-    # CMake 3.0.0 is deprecated and no longer supported by CMake > 4
-    # https://github.com/NixOS/nixpkgs/issues/445447
-    substituteInPlace 3rdparty/{qsqlite,qtsingleapplication,qtiocompressor,qxt}/CMakeLists.txt \
-      cmake/{ParseArguments.cmake,Translations.cmake}                                          \
-      tests/CMakeLists.txt gst/moodbar/CMakeLists.txt                                          \
-      --replace-fail                                                                           \
-        "cmake_minimum_required(VERSION 3.0.0)" \
-        "cmake_minimum_required(VERSION 3.10)"
-    substituteInPlace 3rdparty/libmygpo-qt5/CMakeLists.txt --replace-fail \
-      "cmake_minimum_required( VERSION 3.0.0 FATAL_ERROR )" \
-      "cmake_minimum_required(VERSION 3.10)"
-    substituteInPlace CMakeLists.txt --replace-fail \
-        "cmake_policy(SET CMP0053 OLD)" \
-        ""
-  '';
-
-  preConfigure = ''
-    rm -rf ext/{,lib}clementine-spotifyblob
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'libprotobuf.a' 'protobuf'
   '';
 
   cmakeFlags = [
-    (lib.cmakeFeature "FORCE_GIT_REVISION" "1.3.1")
-    (lib.cmakeBool "USE_SYSTEM_PROJECTM" true)
-    (lib.cmakeBool "SPOTIFY_BLOB" false)
+    # Required to match Version.cmake regex: ^(.+)-([0-9]+)-(g[a-f0-9]+)$
+    (lib.cmakeFeature "FORCE_GIT_REVISION" "${finalAttrs.version}-0-g0000000")
+    (lib.cmakeBool "BUILD_WERROR" false)
+    # TODO: use pkgs.libprojectm once projectM 4.2 is released.
+    # Requires projectm_opengl_render_frame_fbo (https://github.com/projectM-visualizer/projectm/pull/815)
+    (lib.cmakeBool "USE_SYSTEM_PROJECTM" false)
   ];
 
-  dontWrapQtApps = true;
-
-  postInstall = ''
-    wrapQtApp $out/bin/clementine \
+  preFixup = ''
+    qtWrapperArgs+=(
       --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0"
+    )
   '';
 
   meta = {
-    homepage = "https://www.clementine-player.org";
+    changelog = "https://github.com/clementine-player/Clementine/releases/tag/${finalAttrs.src.tag}";
+    downloadPage = "https://github.com/clementine-player/Clementine";
     description = "Multiplatform music player";
+    homepage = "https://www.clementine-player.org";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     mainProgram = "clementine";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ phanirithvij ];
   };
 })

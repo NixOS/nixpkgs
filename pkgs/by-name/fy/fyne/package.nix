@@ -15,13 +15,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "fyne";
-  version = "1.7.3";
+  version = "1.7.4";
 
   src = fetchFromGitHub {
     owner = "fyne-io";
     repo = "tools";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2N59UDuXDIIfxMX3m+MYCmBC/Zr5UmqvZkUAwe7oapU=";
+    hash = "sha256-NY0YfqvM1JMtlYnO/yzQK4CsNPnmPigTMdNJ7bA4QWI=";
   };
 
   vendorHash = "sha256-brLtfcKdsUg/X39ARPwbk/5QJQyOBUL2a7W2mvD9dtw=";

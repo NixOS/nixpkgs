@@ -6,16 +6,16 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "zcc-helper";
-  version = "3.8";
+  version = "3.8.1";
   pyproject = true;
 
   src = fetchFromBitbucket {
     owner = "mark_hannon";
     repo = "zcc";
-    rev = "release_${version}";
-    hash = "sha256-8jbDhlYIgmC0U6w9UY6PGvCnSDFiC/uBib08fikeabk=";
+    tag = "release_${finalAttrs.version}";
+    hash = "sha256-2CuzM8QjT0oMpxyd8XFx67Q0Ms0VbcnZSpgaCQr0Tn4=";
   };
 
   build-system = [ setuptools ];
@@ -27,10 +27,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://bitbucket.org/mark_hannon/zcc/src/${src.rev}/CHANGELOG.md";
+    changelog = "https://bitbucket.org/mark_hannon/zcc/src/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "ZIMI ZCC helper module";
     homepage = "https://bitbucket.org/mark_hannon/zcc";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

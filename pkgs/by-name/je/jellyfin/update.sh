@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -I nixpkgs=./. -i bash -p curl jq common-updater-scripts gnused nix coreutils
+#!nix-shell -I nixpkgs=./. -i bash -p curl jq common-updater-scripts nix-update gnused nix coreutils
 
 set -euo pipefail
 
@@ -12,5 +12,10 @@ if [[ "$currentVersion" == "$latestVersion" ]]; then
 fi
 
 update-source-version jellyfin "$latestVersion"
+
+# jellyfin-web asserts its version matches jellyfin's, so bump it manually
+# and only let nix-update refresh the hashes
+sed -i "s|version = \"$currentVersion\";|version = \"$latestVersion\";|" pkgs/by-name/je/jellyfin-web/package.nix
+nix-update jellyfin-web --version=skip
 
 $(nix-build . -A jellyfin.fetch-deps --no-out-link)

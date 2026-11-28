@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pywizlight";
-  version = "0.6.6";
+  version = "0.6.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sbidy";
     repo = "pywizlight";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rfrmsfotCHqwKUiqC0NO7kvv/oKODwxZi4AjvJQCXlM=";
+    hash = "sha256-rCoWdqvFLSLNBAHeFJ6f9kZpIg4WyE8VJLpmsYl+gJM=";
   };
 
   build-system = [ setuptools ];
@@ -41,6 +41,13 @@ buildPythonPackage (finalAttrs: {
   ];
 
   pythonImportsCheck = [ "pywizlight" ];
+
+  passthru = {
+    # 0.6.4 made `wizlight.state` a list (multi-zone bulbs), which the wiz
+    # component of Home Assistant, the only user, can't handle yet; update
+    # once its manifest requires >= 0.6.4 (home-assistant/core#177502)
+    skipBulkUpdate = true; # nixpkgs-update: no auto update
+  };
 
   meta = {
     description = "Python connector for WiZ light bulbs";

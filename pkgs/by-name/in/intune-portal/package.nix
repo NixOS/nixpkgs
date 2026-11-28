@@ -24,11 +24,11 @@
 }:
 stdenv.mkDerivation rec {
   pname = "intune-portal";
-  version = "1.2609.5-resolute";
+  version = "1.2610.8-resolute";
 
   src = fetchurl {
     url = "https://packages.microsoft.com/ubuntu/26.04/prod/pool/main/i/intune-portal/intune-portal_${version}_amd64.deb";
-    hash = "sha256-dFAX1MR8t17NQxR+sOpl1lYIxwnaTimnA8ZoHBrzq3Y=";
+    hash = "sha256-CHTZXZsyrhDM5MzeNr9R3GjvRJ/t+hBDEdhoeiksM7Y=";
   };
 
   nativeBuildInputs = [ dpkg ];

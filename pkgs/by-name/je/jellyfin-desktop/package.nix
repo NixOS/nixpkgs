@@ -15,13 +15,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "jellyfin-desktop";
-  version = "2.0.0";
+  version = "2.1.0-pre1-unstable-2026-11-07";
 
   src = fetchFromGitHub {
     owner = "jellyfin";
     repo = "jellyfin-desktop";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-ITlYOrMS6COx9kDRSBi4wM6mzL/Q2G5X9GbABwDIOe4=";
+    rev = "3fa72e5df57ab52c907b65bb42f2a05b7ae25cd6";
+    hash = "sha256-vxWqt9Xa/cggdfZMqzHhbQ0TTXfKaZ6jlHx8Lcg2rQQ=";
     fetchSubmodules = true;
   };
   patches = [
@@ -61,8 +61,13 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional (!stdenv.hostPlatform.isDarwin) "-DUSE_STATIC_MPVQT=OFF";
 
   qtWrapperArgs = [
-    "--set QT_STYLE_OVERRIDE Fusion"
-    "--set NIX_SSL_CERT_FILE ${cacert}/etc/ssl/certs/ca-bundle.crt"
+    "--set"
+    "QT_STYLE_OVERRIDE"
+    "Fusion"
+
+    "--set"
+    "NIX_SSL_CERT_FILE"
+    "${cacert}/etc/ssl/certs/ca-bundle.crt"
   ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -71,7 +76,12 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s "$out/Applications/Jellyfin Desktop.app/Contents/MacOS/Jellyfin Desktop" $out/bin/jellyfin-desktop
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version"
+      "branch"
+    ];
+  };
 
   meta = {
     homepage = "https://github.com/jellyfin/jellyfin-desktop";
@@ -88,6 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       jojosch
       paumr
+      irgolic
     ];
     mainProgram = "jellyfin-desktop";
   };

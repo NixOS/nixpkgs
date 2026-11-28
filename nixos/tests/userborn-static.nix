@@ -8,7 +8,6 @@ let
       enable = true;
       static = true;
     };
-    boot.initrd.systemd.enable = true;
     networking.useNetworkd = true;
     system.etc.overlay = {
       enable = true;

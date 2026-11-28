@@ -36,13 +36,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "renderdoc";
-  version = "1.46";
+  version = "1.47";
 
   src = fetchFromGitHub {
     owner = "baldurk";
     repo = "renderdoc";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-NW0gqSTKL5X6PWda/l/+qjdENySwh9dmD4k5CBr2kG0=";
+    hash = "sha256-87ltsDdrZ0GDLmPgIDbfHBQCcWeQ6oS1sohgKcpRbvc=";
   };
 
   outputs = [
@@ -54,8 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
   # https://github.com/baldurk/renderdoc/issues/2945
   # https://github.com/baldurk/renderdoc/issues/3902
   patches = [
-    # custom revert of
-    # https://github.com/baldurk/renderdoc/commit/adf8acbccd642c8bc62256fb5580795320364895
+    # trick the build to think PCRE is present, we use PCRE2 instead through fedora patches
     ./remove-pcre.patch
   ];
   swig_patches = [

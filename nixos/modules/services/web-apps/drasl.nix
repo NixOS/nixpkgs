@@ -74,6 +74,30 @@ in
     };
   };
   config = lib.mkIf cfg.enable {
+    warnings =
+      let
+        s = cfg.settings;
+        oidcDepNames = map (e: e.Name or "<unnamed>") (
+          lib.filter (e: e ? RequireInvite) (s.RegistrationOIDC or [ ])
+        );
+      in
+      lib.optional (s ? ForwardSkins)
+        "services.drasl.settings.ForwardSkins is deprecated: set ForwardSkins on individual FallbackAPIServers instead."
+      ++
+        lib.optional (s ? AllowAddingDeletingPlayers)
+          "services.drasl.settings.AllowAddingDeletingPlayers is deprecated: now controlled by CreateNewPlayer.Allow and the presence of ImportExistingPlayer."
+      ++
+        lib.optional (s ? RegistrationNewPlayer)
+          "services.drasl.settings.RegistrationNewPlayer is deprecated: use RegistrationUsernamePassword.CreateNewPlayer and RegistrationOIDC.CreateNewPlayer."
+      ++
+        lib.optional (s ? RegistrationExistingPlayer)
+          "services.drasl.settings.RegistrationExistingPlayer is deprecated: use RegistrationUsernamePassword.ImportExistingPlayer and RegistrationOIDC.ImportExistingPlayer."
+      ++
+        lib.optional (s ? ImportExistingPlayer && !(lib.isList s.ImportExistingPlayer))
+          "services.drasl.settings.ImportExistingPlayer is using the deprecated single-table [ImportExistingPlayer] form. Use [[ImportExistingPlayer]] with FallbackAPIServerNickname, and define the API server in [[FallbackAPIServers]]."
+      ++
+        lib.optional (oidcDepNames != [ ])
+          "services.drasl.settings.RegistrationOIDC[].RequireInvite is deprecated for entries: ${lib.concatStringsSep ", " oidcDepNames}. Use RegistrationOIDC.CreateNewPlayer.RequireInvite and RegistrationOIDC.ImportExistingPlayer.RequireInvite.";
     assertions = [
       {
         assertion = lib.allUnique cfg.settings.RegistrationOIDC;

@@ -8,15 +8,15 @@
   gprbuild-boot,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xmlada";
   version = "25.0.0";
 
   src = fetchFromGitHub {
-    name = "xmlada-${version}-src";
+    name = "xmlada-${finalAttrs.version}-src";
     owner = "AdaCore";
     repo = "xmlada";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-UMJiXSHMS8+X5gyV1nmC29gF71BFnz7LNPQnwUMD3Yg=";
   };
 
@@ -32,4 +32,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.all;
   };
-}
+})

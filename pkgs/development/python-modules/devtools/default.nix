@@ -3,36 +3,28 @@
   asttokens,
   buildPythonPackage,
   executing,
-  hatchling,
   fetchFromGitHub,
   pygments,
   pytest-mock,
   pytestCheckHook,
+  uv-build,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "devtools";
-  version = "0.12.2";
+  version = "0.13.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "samuelcolvin";
-    repo = "python-${pname}";
-    tag = "v${version}";
-    hash = "sha256-1HFbNswdKa/9cQX0Gf6lLW1V5Kt/N4X6/5kQDdzp1Wo=";
+    repo = "python-devtools";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-uy8DIP0szpo1gCm88GR32QOHZqtIQSpuxK63UNMFsn8=";
   };
 
-  patches = [
-    # https://github.com/samuelcolvin/python-devtools/pull/166
-    ./fix-test-ast-expr.patch
-  ];
+  pythonRelaxDeps = [ "asttokens" ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail 'asttokens>=2.0.0,<3.0.0' 'asttokens>=2.0.0'
-  '';
-
-  build-system = [ hatchling ];
+  build-system = [ uv-build ];
 
   dependencies = [
     asttokens
@@ -55,18 +47,13 @@ buildPythonPackage rec {
     "test_expr_render"
   ];
 
-  disabledTestPaths = [
-    # pytester_pretty is not available in Nixpkgs
-    "tests/test_insert_assert.py"
-  ];
-
   pythonImportsCheck = [ "devtools" ];
 
   meta = {
     description = "Python's missing debug print command and other development tools";
     homepage = "https://python-devtools.helpmanual.io/";
-    changelog = "https://github.com/samuelcolvin/python-devtools/releases/tag/${src.tag}";
+    changelog = "https://github.com/samuelcolvin/python-devtools/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jdahm ];
   };
-}
+})

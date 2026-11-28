@@ -16,7 +16,7 @@ buildDunePackage (finalAttrs: {
 
   src = fetchurl {
     url = "https://github.com/ocaml-ppx/ppx_deriving_protobuf/releases/download/v${finalAttrs.version}/ppx_deriving_protobuf-v${finalAttrs.version}.tbz";
-    sha256 = "1dc1vxnkd0cnrgac5v3zbaj2lq1d2w8118mp1cmsdxylp06yz1sj";
+    hash = "sha256-UofvDbjU96YrC7eiEBAXLWAqpFp/7MLUy5aBNm3fgbU=";
   };
 
   nativeBuildInputs = [ cppo ];

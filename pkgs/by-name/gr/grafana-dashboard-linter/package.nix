@@ -9,17 +9,17 @@
 
 buildGoModule (finalAttrs: {
   pname = "grafana-dashboard-linter";
-  version = "0.3.0";
+  version = "0.5.2";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "dashboard-linter";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vKdfjlDZokVOd3tUlhMMRd9VXOrI5wBmxo1sjKcElZY=";
+    hash = "sha256-Bh/fbhfrZ0sLkOLXuywFxd5yLPMoFGiHaGw3tH2UgaQ=";
   };
 
-  vendorHash = "sha256-rWJqlsmGoCVhEbt0ersZP5RFaKcG0xq5jHy4Tm7SoU0=";
+  vendorHash = "sha256-BBICQVSZuCQ4O5m0rv0Vtka3vSJpzsHnghErhDTrZB4=";
 
   ldflags = [ "-s" ];
 

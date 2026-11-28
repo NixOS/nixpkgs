@@ -84,9 +84,8 @@ let
   # The OCI Image specification recommends that configurations use values listed
   # in the Go Language document for GOARCH.
   # Reference: https://github.com/opencontainers/image-spec/blob/master/config.md#properties
-  # For the mapping from Nixpkgs system parameters to GOARCH, we can reuse the
-  # mapping from the go package.
-  defaultArchitecture = go.GOARCH;
+  # We reuse the mapping from Nixpkgs system parameters to GOARCH for that purpose.
+  defaultArchitecture = stdenv.hostPlatform.go.GOARCH;
 
   compressors = {
     none = {
@@ -114,16 +113,9 @@ let
     compressors.${compressor}
       or (throw "in docker image ${imageName}: compressor must be one of: [${toString (builtins.attrNames compressors)}]");
 
-in
-rec {
   examples = callPackage ./examples.nix {
     inherit
-      buildImage
-      buildLayeredImage
-      pullImage
-      shadowSetup
-      buildImageWithNixDb
-      streamNixShellImage
+      dockerTools
       ;
   };
 
@@ -1449,4 +1441,41 @@ rec {
       passthru = { inherit (stream) imageTag; };
       nativeBuildInputs = compress.nativeInputs;
     } "${stream} | ${compress.compress} > $out";
-}
+
+  /**
+    The returned dockerTools attrset.
+    Can be used for self-references, e.g. makes `.examples` after `.override`
+    coherent.
+  */
+  dockerTools = {
+    inherit
+      binSh
+      buildImage
+      buildImageWithNixDb
+      buildLayeredImage
+      buildLayeredImageWithNixDb
+      buildNixShellImage
+      caCertificates
+      examples
+      exportImage
+      fakeNss
+      mergeDrvs
+      mergeImages
+      # `mkPureLayer` was grandfathered in. Might be ok to deprecate as public interface?
+      mkPureLayer
+      # `mkRootLayer` was grandfathered in. Might be ok to deprecate as public interface?
+      mkRootLayer
+      pullImage
+      # `runWithOverlay` was grandfathered in. Might be ok to deprecate as public interface?
+      runWithOverlay
+      shadowSetup
+      shellScript
+      streamLayeredImage
+      streamNixShellImage
+      tarsum
+      tests
+      usrBinEnv
+      ;
+  };
+in
+dockerTools

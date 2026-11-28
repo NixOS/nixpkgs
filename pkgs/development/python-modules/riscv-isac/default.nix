@@ -19,7 +19,7 @@ buildPythonPackage rec {
   format = "setuptools";
 
   src = fetchFromGitHub {
-    owner = "riscv-software-src";
+    owner = "riscvarchive";
     repo = "riscv-isac";
     tag = version;
     hash = "sha256-7CWUyYwzynFq/Qk5SzQB+ljsVVI98kPPDT63Emhqihw=";
@@ -50,7 +50,7 @@ buildPythonPackage rec {
     description = "ISA coverage extraction tool";
     mainProgram = "riscv_isac";
     homepage = "https://github.com/riscv/riscv-isac";
-    changelog = "https://github.com/riscv-software-src/riscv-isac/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/riscvarchive/riscv-isac/blob/${version}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };

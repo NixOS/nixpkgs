@@ -6,7 +6,7 @@
   fetchurl,
   fixDarwinDylibNames,
   libbutl,
-  libpkgconf,
+  libpkg-config,
   buildPackages,
   enableShared ? !stdenv.hostPlatform.isStatic,
   enableStatic ? !enableShared,
@@ -45,11 +45,10 @@ stdenv.mkDerivation (finalAttrs: {
   disallowedReferences = [
     build2-bootstrap
     libbutl.dev
-    libpkgconf.dev
   ];
   buildInputs = [
     libbutl
-    libpkgconf
+    libpkg-config
   ];
 
   # Build2 uses @rpath on darwin
@@ -71,8 +70,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   build2ConfigureFlags = [
     "config.bin.lib=${configSharedStatic enableShared enableStatic}"
-    "config.cc.poptions+=-I${lib.getDev libpkgconf}/include/pkgconf"
-    "config.build2.libpkgconf=true"
   ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''

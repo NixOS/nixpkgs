@@ -6,24 +6,27 @@
   libbsd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kcgi";
   version = "0.10.8";
-  underscoreVersion = lib.replaceStrings [ "." ] [ "_" ] version;
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "kristapsdz";
     repo = "kcgi";
-    rev = "VERSION_${underscoreVersion}";
-    sha256 = "0ha6r7bcgf6pcn5gbd2sl7835givhda1jql49c232f1iair1yqyp";
+    tag = "VERSION_${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
+    hash = "sha256-12MfclQxODEES4RiGVSDO74y0KFatPWKZde4x9bJRkE=";
   };
-  patchPhase = ''
+
+  postPatch = ''
     substituteInPlace configure \
-      --replace /usr/local /
+      --replace-fail /usr/local /
   '';
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ ] ++ lib.optionals stdenv.hostPlatform.isLinux [ libbsd ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ libbsd ];
 
   dontAddPrefix = true;
 
@@ -32,9 +35,10 @@ stdenv.mkDerivation rec {
   meta = {
     broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
     homepage = "https://kristaps.bsd.lv/kcgi";
+    changelog = "https://kristaps.bsd.lv/kcgi/archive.html";
     description = "Minimal CGI and FastCGI library for C/C++";
     license = lib.licenses.isc;
     platforms = lib.platforms.all;
     mainProgram = "kfcgi";
   };
-}
+})

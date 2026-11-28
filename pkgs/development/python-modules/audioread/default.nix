@@ -15,7 +15,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "sampsyo";
+    owner = "beetbox";
     repo = "audioread";
     tag = "v${finalAttrs.version}";
     hash = "sha256-QvgwjUGuzeHH69YAdZdImjMT+9t4YxAukbuZKk0lBro=";
@@ -35,7 +35,7 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Cross-platform audio decoding";
-    homepage = "https://github.com/sampsyo/audioread";
+    homepage = "https://github.com/beetbox/audioread";
     license = lib.licenses.mit;
   };
 })

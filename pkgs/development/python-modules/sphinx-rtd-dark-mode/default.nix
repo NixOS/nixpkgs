@@ -14,7 +14,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "MrDogeBro";
+    owner = "aedanbricker";
     repo = "sphinx_rtd_dark_mode";
     tag = "v${version}";
     hash = "sha256-N5KG2Wqn9wfGNY3VH4FnBce1aZUbnvVmwD10Loe0Qn4=";
@@ -35,8 +35,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "Adds a toggleable dark mode to the Read the Docs theme for Sphinx";
-    homepage = "https://github.com/MrDogeBro/sphinx_rtd_dark_mode";
-    changelog = "https://github.com/MrDogeBro/sphinx_rtd_dark_mode/releases/tag/v${version}";
+    homepage = "https://github.com/aedanbricker/sphinx_rtd_dark_mode";
+    changelog = "https://github.com/aedanbricker/sphinx_rtd_dark_mode/releases/tag/v${version}";
     maintainers = with lib.maintainers; [ wolfgangwalther ];
     license = lib.licenses.mit;
   };

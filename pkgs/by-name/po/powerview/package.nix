@@ -1,10 +1,18 @@
 {
   lib,
-  python3,
+  python3Packages,
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication (finalAttrs: {
+let
+  pythonPackages = python3Packages.overrideScope (
+    final: prev: {
+      # Necessary until fastmcp works with mcp 2.x
+      mcp = final.mcp_1;
+    }
+  );
+in
+pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "powerview";
   version = "2026.2.1";
   pyproject = true;
@@ -24,9 +32,9 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
   pythonRelaxDeps = [ "chardet" ];
 
-  build-system = with python3.pkgs; [ setuptools ];
+  build-system = with pythonPackages; [ setuptools ];
 
-  dependencies = with python3.pkgs; [
+  dependencies = with pythonPackages; [
     chardet
     dnspython
     dsinternals
@@ -43,7 +51,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     validators
   ];
 
-  optional-dependencies = with python3.pkgs; {
+  optional-dependencies = with pythonPackages; {
     mcp = [
       mcp
     ];

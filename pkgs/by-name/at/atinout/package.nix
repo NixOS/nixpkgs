@@ -28,6 +28,12 @@ stdenv.mkDerivation {
     sha256 = "0bninv2bklz7ly140cxx8iyaqjlq809jjx6xqpimn34ghwsaxbpv";
   };
 
+  postPatch = ''
+    # it writes through the pointer, and glibc's C23 strchr keeps the const
+    substituteInPlace atinout.c \
+      --replace-fail "tr_lf_cr(const char *s)" "tr_lf_cr(char *s)"
+  '';
+
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   installPhase = ''

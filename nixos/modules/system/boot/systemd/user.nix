@@ -38,9 +38,40 @@ let
     "smartcard.target"
     "sockets.target"
     "sound.target"
+    "systemd-ask-password@.service"
+    "systemd-ask-password.socket"
     "systemd-exit.service"
+    "systemd-journalctl@.service"
+    "systemd-journalctl.socket"
     "timers.target"
     "xdg-desktop-autostart.target"
+  ]
+  ++ lib.optionals systemd.withImportd [
+    "dbus-org.freedesktop.import1.service"
+    "systemd-importd.service"
+    "systemd-importd.socket"
+  ]
+  ++ lib.optionals systemd.withMachined [
+    "machine.slice"
+    "machines.target"
+    "dbus-org.freedesktop.machine1.service"
+    "systemd-machined.service"
+    "systemd-machined.socket"
+  ]
+  ++ lib.optionals systemd.withNspawn [
+    "systemd-nspawn@.service"
+  ]
+  ++ lib.optionals systemd.withPortabled [
+    "dbus-org.freedesktop.portable1.service"
+    "portable"
+    "systemd-portabled.service"
+  ]
+  ++ lib.optionals systemd.withStorage [
+    "systemd-storage-fs@.service"
+    "systemd-storage-fs.socket"
+  ]
+  ++ lib.optionals systemd.withVmspawn [
+    "systemd-vmspawn@.service"
   ]
   ++ config.systemd.additionalUpstreamUserUnits;
 
@@ -209,7 +240,7 @@ in
         type = "user";
         inherit (cfg) units;
         upstreamUnits = upstreamUserUnits;
-        upstreamWants = [ ];
+        upstreamWants = [ "sockets.target.wants" ];
       };
 
       "systemd/user.conf".text = utils.systemdUtils.lib.settingsToSections cfg.settings;

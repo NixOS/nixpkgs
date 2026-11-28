@@ -24,7 +24,6 @@ buildPythonPackage {
   pname = "baselines";
   version = "0.1.6"; # remember to manually adjust the rev
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "openai";

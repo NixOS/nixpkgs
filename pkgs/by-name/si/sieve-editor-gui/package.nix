@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  nodejs_22,
   buildNpmPackage,
   fetchFromGitHub,
   electron,
@@ -9,6 +8,7 @@
   copyDesktopItems,
   runCommand,
   zip,
+  nix-update-script,
 }:
 
 let
@@ -25,25 +25,27 @@ let
         chmod -R u+w electron-dist
 
         cd electron-dist
-        zip -0Xqr $out/electron-v${electron.version}-darwin-${electronArch}.zip .
+        zip -0Xqry $out/electron-v${electron.version}-darwin-${electronArch}.zip .
       '';
 in
 
 buildNpmPackage {
   pname = "sieve-editor-gui";
-  version = "0.6.1-unstable-2025-03-12";
-
-  # npm dependency install fails with nodejs_24: https://github.com/NixOS/nixpkgs/issues/474535
-  nodejs = nodejs_22;
+  version = "0.6.1-unstable-2026-04-21";
 
   src = fetchFromGitHub {
     owner = "thsmi";
     repo = "sieve";
-    rev = "4bcefba15314177521a45a833e53969b50f4351e";
-    hash = "sha256-jR3+YaVQ+Yd2Xm40SzQNvwWMPe0mJ6bhT96hlUz3/qU=";
+    rev = "f08b3172ca6c1f5b016426305cbbc845d2374fb0";
+    hash = "sha256-u6mR8nAOP3Ee0j9tNcmq9oBe6/3x5xYl06KoTS7Tfbo=";
   };
 
-  npmDepsHash = "sha256-w2i7XsTx3hlsh/JbvShaxvDyFGcBpL66lMy7KL2tnzM=";
+  patches = [
+    # fsevents is missing, blocking npm clean-install on newer versions
+    ./package-lock.patch
+  ];
+
+  npmDepsHash = "sha256-eBc3l/9th329DU/Geg3tOYp/+i7kxb9qzmOSqcdMKdk=";
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ copyDesktopItems ];
 
@@ -94,6 +96,10 @@ buildNpmPackage {
       comment = "Tool to Manage Sieve Message Filters";
     })
   ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch" ];
+  };
 
   meta = {
     description = "Activate, edit, delete and add Sieve scripts with a convenient interface";

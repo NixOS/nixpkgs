@@ -5,7 +5,7 @@
   cudaSupport ? opencv.cudaSupport or false,
 
   # build
-  addDriverRunpath,
+  autoAddDriverRunpath,
   autoPatchelfHook,
   cmake,
   git,
@@ -40,7 +40,11 @@ let
     ps: with ps; [
       cython
       distutils
-      pybind11
+      # pybind11 3.1.0 runs precall hooks before argument conversion, so OpenVINO's
+      # conditional_keep_alive fires for rejected overloads and breaks the ov.Tensor
+      # bindings. Remove this pin as soon as
+      # https://github.com/pybind/pybind11/pull/6183 is released.
+      pybind11_3_0
       setuptools
       sphinx
       wheel
@@ -71,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     # order matters here: autoAddDriverRunpath must run after autoPatchelfHook, otherwise the RUNPATH will end up being wrong
     autoPatchelfHook
-    addDriverRunpath
+    autoAddDriverRunpath
 
     cmake
     git
@@ -161,6 +165,9 @@ stdenv.mkDerivation (finalAttrs: {
     cudaPackages.cuda_cudart
   ];
 
+  # OpenVINO's shared libraries dlopen Level Zero; preserve its lookup path.
+  appendRunpaths = lib.optionals stdenv.hostPlatform.isLinux [ "${getLib level-zero}/lib" ];
+
   enableParallelBuilding = true;
 
   postInstall = ''
@@ -190,6 +197,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://docs.openvinotoolkit.org/";
     license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.ryan4yin ];
     platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isDarwin; # Cannot find macos sdk
   };

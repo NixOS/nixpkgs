@@ -9,6 +9,12 @@
   cargo,
   rustc,
 
+  # nativeBuildInputs
+  pkg-config,
+
+  # buildInputs
+  zstd,
+
   # dependencies
   arro3-core,
   arviz,
@@ -37,7 +43,6 @@ buildPythonPackage (finalAttrs: {
   pname = "nutpie";
   version = "0.16.11";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pymc-devs";
@@ -57,6 +62,14 @@ buildPythonPackage (finalAttrs: {
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
     rustc
+  ];
+
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
+  buildInputs = [
+    zstd
   ];
 
   dependencies = [

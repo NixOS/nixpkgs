@@ -20,6 +20,14 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
+    # CVE-2026-116740: NULL pointer dereference in media query parser
+    # remove on next release
+    (fetchpatch {
+      name = "fix-null-pointer-dereference.patch";
+      url = "https://github.com/netsurf-browser/libcss/commit/006ffc4096040da13690abc380e5f828ec08284d.patch";
+      hash = "sha256-/e2lPBwATfgHx59CsT29XcDLGVPUGX/jalpbKquNnME=";
+    })
+
     # select: computed: Squash -Wcalloc-transposed-args (gcc-14)
     # remove on next release
     ./fix-calloc-transposed-args-computed.patch

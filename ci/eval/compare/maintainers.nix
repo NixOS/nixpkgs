@@ -114,10 +114,21 @@ let
     ++ lib.concatMap (teamPings { inherit attrPath; }) (package.meta.teams or [ ])
   ) attrPathsToGetMaintainersFor;
 
+  # Imports of directories have the effect of importing default.nix in that directory.
+  # The `maintainers` argument, may (or may not) be represented by just the directory path;
+  # in the `file` argument, it will be represented by the full path to default.nix.
+  # If `file` ends with "/default.nix", we need to match against both.
+  maintainersForFile =
+    fileToMaintainerMap: file:
+    (fileToMaintainerMap.${file} or [ ])
+    ++ lib.optionals (lib.hasSuffix "/default.nix" file) (
+      fileToMaintainerMap.${lib.removeSuffix "/default.nix" file} or [ ]
+    );
+
   changedFileEntities = lib.concatMap (
     file:
-    userPings { inherit file; } (fileUsers.${file} or [ ])
-    ++ lib.concatMap (teamPings { inherit file; }) (fileTeams.${file} or [ ])
+    userPings { inherit file; } (maintainersForFile fileUsers file)
+    ++ lib.concatMap (teamPings { inherit file; }) (maintainersForFile fileTeams file)
   ) changedFiles;
 
   userPings =

@@ -19,8 +19,6 @@ buildPythonApplication (finalAttrs: {
   version = "1.1.1";
   format = "other"; # Only has a requirements.txt
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "aws";
     repo = "porting-advisor-for-graviton";

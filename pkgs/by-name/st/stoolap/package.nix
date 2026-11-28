@@ -18,10 +18,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-ZZa+F0yQKBNkxZgPsMi6imjfojn2oUIrGKmMfjY4tD8=";
 
+  # `panic = "abort"` in the release profile makes the tests rebuild the lib
+  # with unwind into the same files: https://github.com/rust-lang/cargo/issues/6313
+  checkType = "debug";
+
   # On aarch64-darwin, dev target needs to set panic strategy to abort
   # However this must be set while the flag `-Zpanic_abort_tests` is also set,
   # which could only be done in Rust nightly toolchain.
-  doCheck = !(with stdenv.hostPlatform; isDarwin && isAarch64);
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = {
     description = "Modern Embedded SQL Database written in Rust";

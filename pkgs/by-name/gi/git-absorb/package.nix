@@ -28,6 +28,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     asciidoc
     installShellFiles
+    pkg-config
     which # used by Documentation/Makefile
   ];
 
@@ -40,7 +41,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeCheckInputs = [
     gitMinimal
-    pkg-config
   ];
 
   buildInputs = [

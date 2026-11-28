@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "llhttp";
-  version = "9.4.3";
+  version = "9.4.4";
 
   src = fetchFromGitHub {
     owner = "nodejs";
     repo = "llhttp";
     tag = "release/v${finalAttrs.version}";
-    hash = "sha256-wz87FgdZn0vtdlTWOZL5/Ujhs/uzSwFMHzQ6D9S7dH8=";
+    hash = "sha256-ZJVC37wbsZ7DbqtiaQqe1EVYTsR7tNxXUQT5L8rbACo=";
   };
 
   outputs = [
@@ -29,6 +29,8 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     validatePkgConfig
   ];
+
+  strictDeps = true;
 
   cmakeFlags = [
     (lib.cmakeBool "LLHTTP_BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
@@ -45,6 +47,8 @@ stdenv.mkDerivation (finalAttrs: {
       package = finalAttrs.finalPackage;
     };
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Port of http_parser to llparse";

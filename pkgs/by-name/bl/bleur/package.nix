@@ -2,6 +2,7 @@
   lib,
   pkg-config,
   openssl,
+  zstd,
   rustPlatform,
   fetchFromCodeberg,
   libgit2,
@@ -26,6 +27,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     openssl
     libgit2
+    zstd
   ];
 
   meta = {

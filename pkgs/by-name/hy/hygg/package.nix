@@ -6,6 +6,8 @@
   nix-update-script,
   versionCheckHook,
   writableTmpDirAsHomeHook,
+  pkg-config,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -24,6 +26,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     writableTmpDirAsHomeHook
   ];
+
+  nativeCheckInputs = [ pkg-config ];
+
+  checkInputs = [ zstd ];
+
   checkFlags = [
     # e2e test fails since it cant find the input pdf file
     "--skip=tests::test_end_to_end"

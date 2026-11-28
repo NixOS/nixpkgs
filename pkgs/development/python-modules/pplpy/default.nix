@@ -2,11 +2,14 @@
   lib,
   fetchPypi,
   buildPythonPackage,
+  python,
+  pkg-config,
   gmp,
   mpfr,
   libmpc,
   ppl,
   cython,
+  meson-python,
   cysignals,
   gmpy2,
   sphinx,
@@ -18,12 +21,19 @@
 buildPythonPackage rec {
   pname = "pplpy";
   version = "0.9.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-gonFDWgM4/nqysZmy0zbvYpxGVnnzHzwb3/bQDXQzF0=";
   };
+
+  postPatch = ''
+    # gmpy2 < 2.3 truncates instead of rounding when converting mpq to float.
+    # Remove once gmpy2 >= 2.3.
+    substituteInPlace ppl/mip_problem.pyx \
+      --replace-fail "3.3333333333333335" "3.33333333333333..."
+  '';
 
   buildInputs = [
     gmp
@@ -32,12 +42,18 @@ buildPythonPackage rec {
     ppl
   ];
 
+  build-system = [
+    cython
+    meson-python
+  ];
+
   nativeBuildInputs = [
+    pkg-config
+    ppl # ppl-config, used by meson to locate ppl
     sphinx # docbuild, called by make
   ];
 
-  propagatedBuildInputs = [
-    cython
+  dependencies = [
     cysignals
     gmpy2
   ];
@@ -47,18 +63,23 @@ buildPythonPackage rec {
     "doc"
   ];
 
-  postBuild = ''
-    # Find the build result in order to put it into PYTHONPATH. The doc
-    # build needs to import pplpy.
-    build_result="$PWD/$( find build/ -type d -name 'lib.*' | head -n1 )"
-
-    echo "Building documentation"
-    PYTHONPATH="$build_result:$PYTHONPATH" make -C docs html
-  '';
-
   postInstall = ''
+    # The doc build needs to import pplpy.
+    echo "Building documentation"
+    PYTHONPATH="$out/${python.sitePackages}:$PYTHONPATH" make -C docs html
+
     mkdir -p "$doc/share/doc"
     mv docs/build/html "$doc/share/doc/pplpy"
+  '';
+
+  pythonImportsCheck = [ "ppl" ];
+
+  checkPhase = ''
+    runHook preCheck
+
+    PYTHONPATH="$out/${python.sitePackages}:$PYTHONPATH" ${python.interpreter} tests/runtests.py
+
+    runHook postCheck
   '';
 
   passthru.tests = {

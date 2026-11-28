@@ -26,6 +26,10 @@ buildPythonPackage (finalAttrs: {
 
   build-system = [ setuptools-scm ];
 
+  # dtc's Meson build installs libfdt without Python distribution metadata.
+  # The module is provided by libfdt below, but cannot be detected as pylibfdt.
+  pythonRemoveDeps = [ "pylibfdt" ];
+
   dependencies = [
     jsonschema
     rfc3987
@@ -33,7 +37,10 @@ buildPythonPackage (finalAttrs: {
     libfdt
   ];
 
-  pythonImportsCheck = [ "dtschema" ];
+  pythonImportsCheck = [
+    "dtschema"
+    "libfdt"
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -46,10 +53,12 @@ buildPythonPackage (finalAttrs: {
     description = "Tooling for devicetree validation using YAML and jsonschema";
     homepage = "https://github.com/devicetree-org/dt-schema/";
     changelog = "https://github.com/devicetree-org/dt-schema/releases/tag/v${finalAttrs.version}";
-    license = with lib.licenses; [
-      bsd2 # or
-      gpl2Only
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        bsd2
+        gpl2Only
+      ];
     maintainers = with lib.maintainers; [ sorki ];
 
     # Library not loaded: @rpath/libfdt.1.dylib

@@ -91,7 +91,8 @@ EOF
         mkdir -m 700 -p $GNUPGHOME
         trap 'gpgconf --kill all' EXIT
         gpg --no-autostart --batch --import release-key-2023.asc
-        gpg --no-autostart --batch --verify release.sig "$tarball"
+        # TODO: enable when signatures are fixed (https://github.com/dotnet/source-build/issues/5679)
+        # gpg --no-autostart --batch --verify release.sig "$tarball"
       )
     fi
 

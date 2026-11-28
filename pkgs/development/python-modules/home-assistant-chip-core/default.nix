@@ -55,6 +55,9 @@ buildPythonPackage rec {
 
   doCheck = false; # no tests
 
+  # The src and version come from home-assistant-chip-wheels
+  passthru.updateScript = null;
+
   meta = {
     description = "Python-base APIs and tools for CHIP";
     homepage = "https://github.com/home-assistant-libs/chip-wheels";

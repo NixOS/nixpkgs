@@ -10,6 +10,7 @@
   rustc,
 
   # buildInputs
+  oniguruma,
   openssl,
 
   # build-system
@@ -66,6 +67,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    oniguruma
     openssl
   ];
 

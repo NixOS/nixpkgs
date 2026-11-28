@@ -15,7 +15,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.20.0";
   pyproject = true;
 
-  __structuredAttrs = true;
   pname = "azure-mgmt-common";
 
   src = fetchPypi {
@@ -46,9 +45,6 @@ buildPythonPackage (finalAttrs: {
     description = "This is the Microsoft Azure Resource Management common code";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      olcai
-      maxwilson
-    ];
+    maintainers = with lib.maintainers; [ maxwilson ];
   };
 })

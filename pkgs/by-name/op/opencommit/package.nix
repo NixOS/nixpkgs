@@ -6,32 +6,40 @@
   npm-lockfile-fix,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
+  __structuredAttrs = true;
+
   pname = "opencommit";
-  version = "3.3.10";
+  version = "3.3.12";
 
   src = fetchFromGitHub {
     owner = "di-sukharev";
     repo = "opencommit";
-    rev = "v${version}";
-    hash = "sha256-V4xPIQo4XDdrNGBxTwvdT9ZDvWNjSw3Llw4BuE1bxsA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-5mI7D+KUXkLLuRi18IqI+xOiW49YKNbvG6MkAzbfl6I=";
     postFetch = ''
-      cd $out
       # Fix lockfile issues with bundled dependencies
-      ${lib.getExe npm-lockfile-fix} package-lock.json
+      ${lib.getExe npm-lockfile-fix} $out/package-lock.json
     '';
   };
 
-  npmDepsHash = "sha256-9oJ4hE633IOVWXNKvRFsXaYh1zNAxbu0la92Gia/MBY=";
+  npmDepsHash = "sha256-m4TtvXOffgJV6ZlhGLslnllOdRTl4Q5EriE6r24QYVI=";
+
+  doCheck = true;
+
+  checkPhase = ''
+    runHook preCheck
+    npm run test:unit
+    runHook postCheck
+  '';
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "AI-powered commit message generator";
-    homepage = "https://www.npmjs.com/package/opencommit";
+    description = "Generate git commit messages with an LLM";
+    homepage = "https://github.com/di-sukharev/opencommit";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.matteopacini ];
+    maintainers = with lib.maintainers; [ iamanaws ];
     mainProgram = "oco";
   };
-
-}
+})

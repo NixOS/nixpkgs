@@ -16,18 +16,18 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "devcontainer";
-  version = "0.89.0";
+  version = "0.91.0";
 
   src = fetchFromGitHub {
     owner = "devcontainers";
     repo = "cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Ql/SniQxTioe5emRRg2+67KXhcWzFIu+cV/laP5MQCo=";
+    hash = "sha256-QarNe2+122909q4io0WfMRqg2ppD3f6Q+NzTSkFVGzc=";
   };
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-ZizvdWh9YD5siJ/IxWg6Nn17wClVVrENZi7t93pQL0s=";
+    hash = "sha256-uShY5UJXgV+07jMulTmngJ5U4cVm7exKtS/79YIhe7A=";
   };
 
   nativeBuildInputs = [
@@ -54,6 +54,11 @@ stdenv.mkDerivation (finalAttrs: {
     yarn --offline --frozen-lockfile compile-prod
 
     runHook postBuild
+  '';
+
+  # Prune non-production deps before install to save space
+  preInstall = ''
+    yarn install --ignore-scripts --frozen-lockfile --offline --production=true
   '';
 
   installPhase = ''

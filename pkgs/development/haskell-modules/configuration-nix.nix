@@ -53,6 +53,17 @@ builtins.intersectAttrs super {
   # Apply NixOS-specific patches.
   ghc-paths = appendPatch ./patches/ghc-paths-nix.patch super.ghc-paths;
 
+  freetype2 = overrideCabal (drv: {
+    librarySystemDepends = (drv.librarySystemDepends or [ ]) ++ [ pkgs.zlib ];
+    postPatch = (drv.postPatch or "") + ''
+      # Cabal's include-dirs must not select the bundled zlib header.
+      rm freetype2/src/gzip/zlib.h
+      substituteInPlace freetype2.cabal \
+        --replace-fail '  cc-options:' \
+          $'  extra-libraries: z\n  cc-options: -DFT_CONFIG_OPTION_SYSTEM_ZLIB'
+    '';
+  }) super.freetype2;
+
   #######################################
   ### HASKELL-LANGUAGE-SERVER SECTION ###
   #######################################
@@ -129,6 +140,10 @@ builtins.intersectAttrs super {
 
   # Tests access homeless-shelter.
   hie-bios = dontCheck super.hie-bios;
+
+  # The test suite depends on an impure cabal-install installation in
+  # $HOME, which we don't have in our build sandbox.
+  cabal-install-parsers = dontCheck super.cabal-install-parsers;
 
   ###########################################
   ### END HASKELL-LANGUAGE-SERVER SECTION ###
@@ -221,12 +236,19 @@ builtins.intersectAttrs super {
   # CUDA needs help finding the SDK headers and libraries.
   cuda = overrideCabal (drv: {
     extraLibraries = (drv.extraLibraries or [ ]) ++ [ pkgs.linuxPackages.nvidia_x11 ];
-    configureFlags = (drv.configureFlags or [ ]) ++ [
-      "--extra-lib-dirs=${pkgs.cudaPackages.cudatoolkit.lib}/lib"
-      "--extra-include-dirs=${pkgs.cudaPackages.cudatoolkit}/include"
-    ];
+    configureFlags =
+      (drv.configureFlags or [ ])
+      ++ [
+        "--extra-lib-dirs=${pkgs.cudaPackages.cuda_cudart}/lib/stubs"
+        "--extra-include-dirs=${pkgs.cudaPackages.cuda_cudart}/include"
+        "--extra-include-dirs=${pkgs.cudaPackages.cuda_nvcc}/include"
+        "--extra-include-dirs=${pkgs.cudaPackages.cuda_profiler_api.include}/include"
+      ]
+      ++ lib.optionals (pkgs.cudaPackages.cudaAtLeast "13.0") [
+        "--extra-include-dirs=${pkgs.cudaPackages.cuda_crt}/include"
+      ];
     preConfigure = ''
-      export CUDA_PATH=${pkgs.cudaPackages.cudatoolkit}
+      export CUDA_PATH=${pkgs.cudaPackages.cuda_cudart}
     '';
   }) super.cuda;
 
@@ -384,6 +406,10 @@ builtins.intersectAttrs super {
   # Foreign dependency name clashes with another Haskell package.
   libarchive-conduit = super.libarchive-conduit.override { archive = pkgs.libarchive; };
 
+  # 2026-10-26: `lua` is an alias, which hackage2nix does not see, so
+  # cabal2nix's substitution of lua5_4 for it does not apply.
+  lua = super.lua.override { lua = pkgs.lua5_4; };
+
   # Heist's test suite requires system pandoc
   heist = addTestToolDepend pkgs.pandoc super.heist;
 
@@ -431,15 +457,10 @@ builtins.intersectAttrs super {
     addPkgconfigDepend pkgs.glib (addBuildTool self.buildHaskellPackages.gtk2hs-buildtools super.glib)
   );
   gtk3 = disableHardening [ "fortify" ] (super.gtk3.override { inherit (pkgs) gtk3; });
-  gtk = lib.pipe super.gtk (
-    [
-      (disableHardening [ "fortify" ])
-      (addBuildTool self.buildHaskellPackages.gtk2hs-buildtools)
-    ]
-    ++ (
-      if pkgs.stdenv.hostPlatform.isDarwin then [ (appendConfigureFlag "-fhave-quartz-gtk") ] else [ ]
-    )
-  );
+  gtk = lib.pipe super.gtk [
+    (disableHardening [ "fortify" ])
+    (addBuildTool self.buildHaskellPackages.gtk2hs-buildtools)
+  ];
   gtksourceview2 = addPkgconfigDepend pkgs.gtk2 super.gtksourceview2;
   gtk-traymanager = addPkgconfigDepend pkgs.gtk3 super.gtk-traymanager;
 
@@ -624,17 +645,6 @@ builtins.intersectAttrs super {
     '';
   }) super.cryptol;
 
-  # Some test cases require network access
-  hpack_0_39_1 = doDistribute (
-    overrideCabal (drv: {
-      testFlags = drv.testFlags or [ ] ++ [
-        "--skip=/EndToEnd/hpack/defaults/fails if defaults don't exist/"
-        "--skip=/Hpack.Defaults/ensureFile/downloads file if missing/"
-        "--skip=/Hpack.Defaults/ensureFile/with 404/does not create any files/"
-      ];
-    }) super.hpack_0_39_1
-  );
-
   # Tries accessing the GitHub API
   github-app-token = dontCheck super.github-app-token;
 
@@ -780,9 +790,13 @@ builtins.intersectAttrs super {
   # Wants to check against a real DB, Needs freetds
   odbc = dontCheck (addExtraLibraries [ pkgs.freetds ] super.odbc);
 
-  # Tests attempt to use npm to install from the network into
-  # /homeless-shelter. Disabled.
-  purescript = dontCheck super.purescript;
+  purescript = lib.pipe super.purescript [
+    # Tests attempt to use npm to install from the network into
+    # /homeless-shelter. Disabled.
+    dontCheck
+    # Generate shell completions
+    (self.generateOptparseApplicativeCompletions [ "purs" ])
+  ];
 
   # Hardcoded include path
   poppler = overrideCabal (drv: {
@@ -1015,6 +1029,11 @@ builtins.intersectAttrs super {
   # https://github.com/plow-technologies/servant-streaming/issues/12
   servant-streaming-server = dontCheck super.servant-streaming-server;
 
+  # testsuite (namely Tasty tests) uses built package as a GHC plugin
+  # which does not work on Nix
+  # since the path hasn't been established yet
+  ghc-typelits-extra = dontCheck super.ghc-typelits-extra;
+
   reanimate = overrideCabal (drv: {
     buildTools = (drv.buildTools or [ ]) ++ [
       # needed for testsuite
@@ -1083,6 +1102,9 @@ builtins.intersectAttrs super {
   # Break dependency cycle between hedgehog, tasty-hedgehog and lifted-async
   lifted-async = dontCheck super.lifted-async;
 
+  # Break infinite recursion yesod-test → yesod-form → yesod-test
+  yesod-test = dontCheck super.yesod-test;
+
   # loc and loc-test depend on each other for testing. Break that infinite cycle:
   loc-test = super.loc-test.override { loc = dontCheck self.loc; };
 
@@ -1135,13 +1157,6 @@ builtins.intersectAttrs super {
     ];
   }) super.lsp-test;
 
-  lsp_2_8_0_0 = doDistribute (
-    super.lsp_2_8_0_0.override {
-      lsp-types = self.lsp-types_2_4_0_0;
-    }
-  );
-  lsp-types_2_4_0_0 = doDistribute super.lsp-types_2_4_0_0;
-
   # the test suite attempts to run the binaries built in this package
   # through $PATH but they aren't in $PATH
   dhall-lsp-server = dontCheck super.dhall-lsp-server;
@@ -1170,13 +1185,13 @@ builtins.intersectAttrs super {
     postPatch = ''
       sed -i -e 's|"abc"|"${pkgs.abc-verifier}/bin/abc"|' Data/SBV/Provers/ABC.hs
       sed -i -e 's|"bitwuzla"|"${pkgs.bitwuzla}/bin/bitwuzla"|' Data/SBV/Provers/Bitwuzla.hs
-      sed -i -e 's|"boolector"|"${pkgs.boolector}/bin/boolector"|' Data/SBV/Provers/Boolector.hs
       sed -i -e 's|"cvc4"|"${pkgs.cvc4}/bin/cvc4"|' Data/SBV/Provers/CVC4.hs
       sed -i -e 's|"cvc5"|"${pkgs.cvc5}/bin/cvc5"|' Data/SBV/Provers/CVC5.hs
       sed -i -e 's|"yices-smt2"|"${pkgs.yices}/bin/yices-smt2"|' Data/SBV/Provers/Yices.hs
       sed -i -e 's|"z3"|"${pkgs.z3}/bin/z3"|' Data/SBV/Provers/Z3.hs
 
       # Solvers we don't provide are removed from tests
+      sed -i -e 's|, boolector||' SBVTestSuite/SBVConnectionTest.hs
       sed -i -e 's|, mathSAT||' SBVTestSuite/SBVConnectionTest.hs
       sed -i -e 's|, dReal||' SBVTestSuite/SBVConnectionTest.hs
     '';
@@ -1244,6 +1259,7 @@ builtins.intersectAttrs super {
         pkgs.git
         pkgs.gnupg
         pkgs.lsof
+        pkgs.magic-wormhole # p2p pairing
         pkgs.openssh
         pkgs.perl
         pkgs.rsync
@@ -1281,6 +1297,8 @@ builtins.intersectAttrs super {
           ln -sf git-annex git-remote-annex
           ln -sf git-annex git-remote-tor-annex
           PATH+=":$PWD"
+
+          checkFlagsArray+=("-J$NIX_BUILD_CORES")
 
           echo checkFlags: $checkFlags ''${checkFlagsArray:+"''${checkFlagsArray[@]}"}
 
@@ -1338,6 +1356,7 @@ builtins.intersectAttrs super {
           dbus = if pkgs.stdenv.hostPlatform.isLinux then self.dbus else null;
           fdo-notify = if pkgs.stdenv.hostPlatform.isLinux then self.fdo-notify else null;
           hinotify = if pkgs.stdenv.hostPlatform.isLinux then self.hinotify else self.fsnotify;
+          blake3 = if pkgs.stdenv.hostPlatform.isx86 then self.blake3 else null;
         }
       );
 
@@ -1457,7 +1476,7 @@ builtins.intersectAttrs super {
     let
       path = pkgs.lib.makeBinPath [
         pkgs.ffmpeg
-        pkgs.youtube-dl
+        pkgs.yt-dlp
       ];
     in
     overrideCabal (_drv: {
@@ -1667,6 +1686,15 @@ builtins.intersectAttrs super {
     (disableCabalFlag "icu")
   ];
 
+  # Tests spawn ghc with -fplugin and need this package's in-place package db.
+  # The trailing colon keeps GHC's default package db in the package path.
+  # https://hydra.nixos.org/build/329190094
+  ghc-typelits-natnormalise = overrideCabal (drv: {
+    preCheck = (drv.preCheck or "") + ''
+      export NIX_GHC_PACKAGE_PATH_FOR_TEST=$PWD/dist/package.conf.inplace/:$packageConfDir:
+    '';
+  }) super.ghc-typelits-natnormalise;
+
   # based on https://github.com/gibiansky/IHaskell/blob/aafeabef786154d81ab7d9d1882bbcd06fc8c6c4/release.nix
   ihaskell = overrideCabal (drv: {
     # ihaskell's cabal file forces building a shared executable, which we need
@@ -1804,7 +1832,7 @@ builtins.intersectAttrs super {
         ''
         # Prevent erroneous references to other libraries that use Paths_ modules
         # on aarch64-darwin. Note that references to the data outputs are not removed.
-        + lib.optionalString (with pkgs.stdenv; hostPlatform.isDarwin && hostPlatform.isAarch64) ''
+        + lib.optionalString pkgs.stdenv.hostPlatform.isDarwin ''
           remove-references-to -t "${self.shake.out}" "$out/bin/.nvfetcher-wrapped"
           remove-references-to -t "${self.js-jquery.out}" "$out/bin/.nvfetcher-wrapped"
           remove-references-to -t "${self.js-flot.out}" "$out/bin/.nvfetcher-wrapped"
@@ -1847,9 +1875,11 @@ builtins.intersectAttrs super {
     enableSeparateBinOutput super.cachix
   );
 
-  hercules-ci-agent = super.hercules-ci-agent.override {
-    nix = self.hercules-ci-cnix-store.passthru.nixPackage;
-  };
+  hercules-ci-agent = self.generateOptparseApplicativeCompletions [ "hercules-ci-agent" ] (
+    super.hercules-ci-agent.override {
+      nix = self.hercules-ci-cnix-store.passthru.nixPackage;
+    }
+  );
   hercules-ci-cnix-expr = addTestToolDepend pkgs.git (
     super.hercules-ci-cnix-expr.override { nix = self.hercules-ci-cnix-store.passthru.nixPackage; }
   );
@@ -1980,9 +2010,6 @@ builtins.intersectAttrs super {
       builtins.mapAttrs (_: fourmoluTestFix) super
     )
     fourmolu
-    fourmolu_0_14_0_0
-    fourmolu_0_16_0_0
-    fourmolu_0_18_0_0
     ;
 
   # Test suite needs to execute 'disco' binary
@@ -2300,7 +2327,6 @@ builtins.intersectAttrs super {
       })
     ) super)
     hpack
-    hpack_0_38_1
     ;
 
   doctest = overrideCabal (drv: {
@@ -2358,6 +2384,31 @@ builtins.intersectAttrs super {
 
   # Workaround for flaky test: https://github.com/basvandijk/threads/issues/10
   threads = appendPatch ./patches/threads-flaky-test.patch super.threads;
+
+  idris = (self.generateOptparseApplicativeCompletions [ "idris" ]) super.idris;
+
+  # Generate cli completions for dhall.
+  dhall = self.generateOptparseApplicativeCompletions [ "dhall" ] super.dhall;
+  dhall-json = self.generateOptparseApplicativeCompletions [
+    "dhall-to-json"
+    "dhall-to-yaml"
+  ] super.dhall-json;
+  dhall-nix = self.generateOptparseApplicativeCompletions [ "dhall-to-nix" ] super.dhall-nix;
+  dhall-nixpkgs = self.generateOptparseApplicativeCompletions [
+    "dhall-to-nixpkgs"
+  ] super.dhall-nixpkgs;
+  dhall-yaml = self.generateOptparseApplicativeCompletions [
+    "dhall-to-yaml-ng"
+    "yaml-to-dhall"
+  ] super.dhall-yaml;
+
+  update-nix-fetchgit = self.generateOptparseApplicativeCompletions [
+    "update-nix-fetchgit"
+  ] super.update-nix-fetchgit;
+
+  hinit = self.generateOptparseApplicativeCompletions [ "hi" ] super.hinit;
+
+  hercules-ci-cli = self.generateOptparseApplicativeCompletions [ "hci" ] super.hercules-ci-cli;
 }
 
 // lib.optionalAttrs pkgs.config.allowAliases (

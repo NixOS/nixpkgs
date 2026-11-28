@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://ygrek.org/p/release/ocaml-extlib/extlib-${version}.tar.gz";
-    sha256 = "1sxmzc1mx3kg62j8kbk0dxkx8mkf1rn70h542cjzrziflznap0s1";
+    hash = "sha256-QYOr7Kcu/vwlE6RAcGwOblbUZ29gromkMG+OXgP7tes=";
   };
 
   nativeBuildInputs = [

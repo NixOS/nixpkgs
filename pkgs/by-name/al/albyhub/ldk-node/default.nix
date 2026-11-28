@@ -4,6 +4,7 @@
   fetchFromGitHub,
   cmake,
   llvmPackages,
+  sqlite,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -29,6 +30,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     llvmPackages.clang
     rustPlatform.bindgenHook
   ];
+
+  buildInputs = [ sqlite ];
 
   # Add CFLAGS to suppress the stringop-overflow error during aws-lc-sys compilation.
   NIX_CFLAGS_COMPILE = "-Wno-error=stringop-overflow";

@@ -62,7 +62,7 @@ in
               STEAM_EXTRA_COMPAT_TOOLS_PATHS = extraCompatPaths;
             })
             // (lib.optionalAttrs cfg.extest.enable {
-              LD_PRELOAD = "${pkgs.pkgsi686Linux.extest}/lib/libextest.so";
+              LD_PRELOAD = "${pkgs.extest}/lib/libextest.so";
             })
             // (prev.extraEnv or { });
           extraLibraries =

@@ -6,21 +6,17 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "octosuite";
-  version = "3.1.1";
+  version = "5.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bellingcat";
     repo = "octosuite";
     tag = finalAttrs.version;
-    hash = "sha256-bgTAGIJbxOa8q8lMsWa8dHwNZ/jXiWGQOp921sd2Vdo=";
+    hash = "sha256-Fliy9DR7K9gpGmGtl5r9AL+SmX8UpXisUc19T03dPHA=";
   };
 
-  postPatch = ''
-    # pyreadline3 is Windows-only
-    substituteInPlace pyproject.toml \
-      --replace-fail '"pyreadline3",' ""
-  '';
+  pythonRelaxDeps = [ "update-checker" ];
 
   build-system = with python3.pkgs; [
     setuptools
@@ -28,24 +24,24 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   ];
 
   dependencies = with python3.pkgs; [
-    psutil
-    requests
+    certifi
+    pyfiglet
+    questionary
     rich
+    update-checker
   ];
 
-  pythonImportsCheck = [
-    "octosuite"
-  ];
+  pythonImportsCheck = [ "octosuite" ];
 
   # Project has no tests
   doCheck = false;
 
   meta = {
     description = "Advanced GitHub OSINT framework";
-    mainProgram = "octosuite";
     homepage = "https://github.com/bellingcat/octosuite";
     changelog = "https://github.com/bellingcat/octosuite/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "octosuite";
   };
 })

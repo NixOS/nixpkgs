@@ -62,28 +62,10 @@ let
         version = "0.13.0";
         inherit (pkgs.libsForQt5) qtbase;
       };
-      libqtxdg_3_12 = callPackage ./libqtxdg {
-        version = "3.12.0";
-        lxqt-build-tools = lxqt-build-tools_0_13;
-        inherit (pkgs.libsForQt5) qtbase qtsvg;
-      };
-      libfm-qt_1_4 = callPackage ./libfm-qt {
-        version = "1.4.0";
-        lxqt-build-tools = lxqt-build-tools_0_13;
-        inherit (pkgs.libsForQt5) qttools qtx11extras;
-      };
-      qtermwidget_1_4 = callPackage ./qtermwidget {
-        version = "1.4.0";
-        lxqt-build-tools = lxqt-build-tools_0_13;
-        inherit (pkgs.libsForQt5) qtbase qttools;
-      };
 
       preRequisitePackages = [
         kdePackages.kwindowsystem # provides some QT plugins needed by lxqt-panel
         kdePackages.libkscreen # provides plugins for screen management software
-        pkgs.libfm
-        pkgs.libfm-extra
-        pkgs.menu-cache
         pkgs.openbox # default window manager
         kdePackages.qtsvg # provides QT plugins for svg icons
       ];

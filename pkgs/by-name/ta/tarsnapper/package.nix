@@ -48,7 +48,12 @@ python3Packages.buildPythonApplication rec {
   # Remove standard module argparse from requirements
   pythonRemoveDeps = [ "argparse" ];
 
-  makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ tarsnap ]}" ];
+  makeWrapperArgs = [
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [ tarsnap ])
+  ];
 
   pythonImportsCheck = [ "tarsnapper" ];
 

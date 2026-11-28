@@ -13,8 +13,10 @@
   python3,
   xcbuild,
 
+  # propagatedBuildInputs
+  apple-sdk_26,
+
   # buildInputs
-  apple-sdk_15,
   darwin,
 }:
 let
@@ -29,16 +31,16 @@ in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "cronet-go";
   # NOTE: https://github.com/SagerNet/sing-box/blob/stable/.github/CRONET_GO_VERSION
-  version = "150.0.7871.63-3";
+  version = "154.0.8037.49-2";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "SagerNet";
     repo = "cronet-go";
     # NOTE: keep rev for easier overriding
-    rev = "049f2909701ca088c9569f6b303bba5376a2b2ff";
+    rev = "e265295f7be0bc2209ec36078028667e6b9c217e";
     fetchSubmodules = true;
-    hash = "sha256-705cctVHseRSJuEPFxlTRJJUWsNgZ4y5ZQ9nwhyTqFY=";
+    hash = "sha256-3rxR8bRsh0EJQJ6fqVOS/7E+OO001b9BvQM1Q7QdIyM=";
   };
 
   patches = [
@@ -52,6 +54,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   postPatch = ''
     patchShebangs --build naiveproxy/src/build/toolchain/apple/linker_driver.py
+
+    sslDir="naiveproxy/src/net/data/ssl/chrome_root_store"
+    # Check existence
+    grep -Fq '# CN=emSign ECC Root CA - G3,' "$sslDir/root_store.textproto"
+    grep -Fxq '# 86a1ecba089c4a8d3bbe2734c612ba341d813e043cf9e8a862cd5c57a36bbe6b' "$sslDir/root_store.certs"
+    # Remove emSign ECC Root CA - G3 from root store, which is compromised.
+    sed -i '/^# CN=emSign ECC Root CA - G3,/,/^}/d' "$sslDir/root_store.textproto"
+    sed -i \
+      '/^# 86a1ecba089c4a8d3bbe2734c612ba341d813e043cf9e8a862cd5c57a36bbe6b$/,/^-----END CERTIFICATE-----$/d' \
+      "$sslDir/root_store.certs"
   '';
 
   nativeBuildInputs = [
@@ -61,7 +73,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   ]
   ++ lib.optional stdenvNoCC.hostPlatform.isDarwin xcbuild;
 
-  buildInputs = lib.optional stdenvNoCC.hostPlatform.isDarwin apple-sdk_15;
+  # for statically linking to libcronet.a
+  propagatedBuildInputs = lib.optional stdenvNoCC.hostPlatform.isDarwin apple-sdk_26;
 
   buildPhase = ''
     runHook preBuild

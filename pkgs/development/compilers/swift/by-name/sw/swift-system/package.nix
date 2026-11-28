@@ -2,15 +2,23 @@
   lib,
   cmake,
   fetchFromGitHub,
+  fixUnhelpfulCmakeRpathsHook,
   gitUpdater,
   ninja,
   stdenv,
   swift,
 }:
 
+let
+  swift' = swift.override {
+    enableRepl = false;
+    enableSourceKitLSP = false;
+  };
+in
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "swift-system";
-  version = "1.8.1";
+  version = "1.9.0";
 
   outputs = [
     "out"
@@ -21,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "apple";
     repo = "swift-system";
     tag = finalAttrs.version;
-    hash = "sha256-mnQcCHYW0oCadmIE9ayjs3aZiCVQRuliQ0qWpQ22OFQ=";
+    hash = "sha256-ms3jDtQ0fYT1LQ/1KIx78wmn/FsnW7QviVlfltzlzj0=";
   };
 
   patches = [ ./patches/0001-gnu-install-dirs.patch ];
@@ -36,7 +44,10 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     ninja
-    swift
+    swift'
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isElf [
+    fixUnhelpfulCmakeRpathsHook
   ];
 
   postInstall = ''

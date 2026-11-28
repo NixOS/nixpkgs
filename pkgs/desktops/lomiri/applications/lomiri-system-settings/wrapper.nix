@@ -18,6 +18,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   dontConfigure = true;
   dontBuild = true;
 
+  __structuredAttrs = true;
   strictDeps = true;
 
   nativeBuildInputs = [
@@ -65,6 +66,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   passthru.tests = {
     inherit (lomiri-system-settings-unwrapped.passthru.tests) pkg-config;
     standalone = nixosTests.lomiri-system-settings;
+    integration = nixosTests.lomiri.desktop-appinteractions;
   };
 
   meta = lomiri-system-settings-unwrapped.meta // {

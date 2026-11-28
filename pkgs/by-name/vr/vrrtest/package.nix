@@ -41,7 +41,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/Nixola/VRRTest";
     license = lib.licenses.zlib;
     mainProgram = "vrrtest";
-    maintainers = with lib.maintainers; [ justinlime ];
+    maintainers = with lib.maintainers; [
+      justinlime
+      nivalux
+    ];
     inherit (love.meta) platforms;
   };
 })

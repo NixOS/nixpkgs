@@ -60,9 +60,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeBool "WITH_STATIC" false)
-    (lib.cmakeBool "-DCMAKE_BUILD_WITH_INSTALL_NAME_DIR" true)
+    (lib.cmakeBool "CMAKE_BUILD_WITH_INSTALL_NAME_DIR" true)
     # RPATH of binary /nix/store/.../bin/... contains a forbidden reference to /build/
-    (lib.cmakeBool "-DCMAKE_SKIP_BUILD_RPATH" true)
+    (lib.cmakeBool "CMAKE_SKIP_BUILD_RPATH" true)
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isStatic [
+    # Targets are explicitly marked SHARED which we can override like this
+    (lib.cmakeFeature "CMAKE_PROJECT_INCLUDE" "${builtins.toFile "disable-shared-libs.cmake" ''
+      set_property(GLOBAL PROPERTY TARGET_SUPPORTS_SHARED_LIBS FALSE)
+    ''}")
   ];
 
   postPatch = ''

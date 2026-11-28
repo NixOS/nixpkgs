@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   src = fetchFromGitLab {
-    domain = "gitlab.postmarketos.org";
+    domain = "gitlab.nura.eco";
     owner = "modem";
     repo = "81voltd";
     tag = "v${finalAttrs.version}";
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Server-side implementation of the QMI IMS Data service";
-    homepage = "https://gitlab.postmarketos.org/modem/81voltd";
+    homepage = "https://gitlab.nura.eco/modem/81voltd";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ matthewcroughan ];
     mainProgram = "81voltd";

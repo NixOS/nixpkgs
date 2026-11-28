@@ -59,16 +59,6 @@
     };
     version = "3.5.1";
   };
-  ed25519 = {
-    groups = [ "default" ];
-    platforms = [ ];
-    source = {
-      remotes = [ "https://rubygems.org" ];
-      sha256 = "01n5rbyws1ijwc5dw7s88xx3zzacxx9k97qn8x11b6k8k18pzs8n";
-      type = "gem";
-    };
-    version = "1.4.0";
-  };
   emk-sinatra-url-for = {
     dependencies = [ "sinatra" ];
     groups = [ "default" ];
@@ -186,20 +176,24 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "0p8s7l4pr6hkn0l6rxflsc11alwi1kfg5ysgvsq61lz5l690p6x9";
+      sha256 = "18im3nigwlmwzbs6i2f297x5ijjyd005s2g0fwz5mzmidx9zl9mg";
       type = "gem";
     };
-    version = "4.1.0";
+    version = "4.2.2";
   };
   net-ssh = {
+    dependencies = [
+      "logger"
+      "openssl"
+    ];
     groups = [ "default" ];
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "1m1d6rs40rjvdb6df34fi3za1c2ajdiydv4jzpjj03iq7hhrw0k5";
+      sha256 = "13kp4bp2plxsayya3xpycah0p7imgxd36sr2nvdbidbhp9d29kkq";
       type = "gem";
     };
-    version = "7.3.2";
+    version = "8.1.2";
   };
   net-telnet = {
     groups = [ "default" ];
@@ -221,11 +215,20 @@
     };
     version = "2.7.5";
   };
+  openssl = {
+    groups = [ "default" ];
+    platforms = [ ];
+    source = {
+      remotes = [ "https://rubygems.org" ];
+      sha256 = "1hj7wwp4r3jhvnyd8ik85wbs25cq1w61r28pv6ddyn5fd0lasdqh";
+      type = "gem";
+    };
+    version = "4.0.2";
+  };
   oxidized = {
     dependencies = [
       "asetus"
       "bcrypt_pbkdf"
-      "ed25519"
       "net-ftp"
       "net-http-digest_auth"
       "net-ssh"
@@ -241,10 +244,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "0apg5psqdkc0h71qpgiq52qnifr41g57agvgyxiq10335gh6c2v0";
+      sha256 = "1qh0lgbcfc006i1qnzxydi440vsx9x1dd8w6866n95n0yxg5ph1b";
       type = "gem";
     };
-    version = "0.37.0";
+    version = "0.38.0";
   };
   oxidized-script = {
     dependencies = [

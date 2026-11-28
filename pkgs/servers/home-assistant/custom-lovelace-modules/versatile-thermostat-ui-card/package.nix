@@ -6,13 +6,13 @@
 
 buildNpmPackage rec {
   pname = "versatile-thermostat-ui-card";
-  version = "3.4.0";
+  version = "3.5.1";
 
   src = fetchFromGitHub {
     owner = "jmcollin78";
     repo = "versatile-thermostat-ui-card";
     rev = "${version}";
-    hash = "sha256-N3v5VD0XdvKlMyMvyJ4gXB2yRt3qfJpngbzLdTGy5Ec=";
+    hash = "sha256-NpuDBj0HHq1XG6xZr8HiFdr7VZK/oA2QknXKzUfq4Ds=";
   };
 
   npmFlags = [ "--legacy-peer-deps" ];

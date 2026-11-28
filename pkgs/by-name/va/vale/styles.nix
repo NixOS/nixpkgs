@@ -62,12 +62,12 @@ in
 
   google = buildStyle rec {
     name = "Google";
-    version = "0.7.1";
+    version = "0.7.2";
     src = fetchFromGitHub {
       owner = "errata-ai";
       repo = "Google";
       rev = "v${version}";
-      hash = "sha256-fGhbLgi3HQF8iKnUBgxPFlctQr8ebZfmYEksxyv0reQ=";
+      hash = "sha256-KYnVm9LthNrcPBRUYzIAptyBPP4FXbeAIYiajdBUB6Y=";
     };
     meta = {
       description = "Vale-compatible implementation of the Google Developer Documentation Style Guide";
@@ -94,12 +94,12 @@ in
 
   microsoft = buildStyle rec {
     name = "Microsoft";
-    version = "0.15.1";
+    version = "0.15.2";
     src = fetchFromGitHub {
       owner = "errata-ai";
       repo = "Microsoft";
       rev = "v${version}";
-      hash = "sha256-MycWukXoeTZzGAcoNODzt592VHWgjnMXZdNPoQWDC18=";
+      hash = "sha256-BrdGsj+8oh/3tuJeH2ZSyG+Xe05rorq/YxwgQCRttDE=";
     };
     meta = {
       description = "Vale-compatible implementation of the Microsoft Writing Style Guide";
@@ -110,12 +110,12 @@ in
 
   proselint = buildStyle rec {
     name = "proselint";
-    version = "0.3.4";
+    version = "0.4.0";
     src = fetchFromGitHub {
       owner = "errata-ai";
       repo = "proselint";
       rev = "v${version}";
-      hash = "sha256-ryKJDX1JrvDWVKLC5qQGctweDf74yuwEXxl/IqumM4s=";
+      hash = "sha256-3wndoHh7FqOjbLpji80lf91y8Na6ZKNf1JidxFMrJ+I=";
     };
     meta = {
       description = "Vale-compatible implementation of Python's proselint linter";
@@ -142,12 +142,12 @@ in
 
   redhat = buildStyle rec {
     name = "RedHat";
-    version = "680";
+    version = "683";
     src = fetchFromGitHub {
       owner = "redhat-documentation";
       repo = "vale-at-red-hat";
       rev = "v${version}";
-      hash = "sha256-1n/hKmNRxSpKFNBSnXdtcgxzu4A+ZF4cIP+6qCVewYo=";
+      hash = "sha256-eIcqytLoU9iCsn7PAtf/Y44Ut2gdQVgDcMePThYPLDE=";
     };
     stylePath = ".vale/styles/RedHat";
     meta = {
@@ -159,12 +159,12 @@ in
 
   write-good = buildStyle rec {
     name = "write-good";
-    version = "0.4.1";
+    version = "0.5.0";
     src = fetchFromGitHub {
       owner = "errata-ai";
       repo = "write-good";
       rev = "v${version}";
-      hash = "sha256-W/eHlXklAVlAnY8nLPi/SIKsg8UUnH8UkH99BDo5yKk=";
+      hash = "sha256-8Tz8F94ZrL8gGWkhWiUiWWNrPSmJghE6jBwguijskHk=";
     };
     meta = {
       description = "Vale-compatible implementation of the write-good linter";

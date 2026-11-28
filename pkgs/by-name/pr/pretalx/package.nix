@@ -36,8 +36,6 @@ python.pkgs.buildPythonApplication (finalAttrs: {
   version = "2026.2.1";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "pretalx";
     repo = "pretalx";

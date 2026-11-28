@@ -16,14 +16,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "bloodyad";
-  version = "2.5.4";
+  version = "2.5.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "CravateRouge";
     repo = "bloodyAD";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6ZSJTupjVhvyU9G/eePJiXk16w9HwpsOFwdwTSLb7tU=";
+    hash = "sha256-Z/yvjraALxhodCFQtLPmyXEz0qT3BBC7Nq5Qlv2OM2s=";
   };
 
   pythonRelaxDeps = [ "cryptography" ];
@@ -70,12 +70,14 @@ buildPythonPackage (finalAttrs: {
     "test_06AddRemoveGetDnsRecord"
     "test_certificate_authentications"
     "test_04ComputerRbcdRestoreGetSetAttribute"
+    # AssertionError
+    "test_applyFormatters_with_trustDirection_single_item_list"
+    "test_applyFormatters_with_userAccountControl_single_value"
   ];
 
   disabledTestPaths = [
-    # TypeError: applyFormatters() takes 1 positional argument but 2 were given
-    # https://github.com/CravateRouge/bloodyAD/issues/98
-    "tests/test_formatters.py"
+    # Missing file
+    "tests/test_functional.py"
   ];
 
   meta = {

@@ -17,14 +17,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "vizaio";
-  version = "0.7.0";
+  version = "0.7.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "raman325";
     repo = "vizaio";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sExJiGM6gdeDE8qYJXsQ1Mnzx+/Iw6Iav2lSoctGlHE=";
+    hash = "sha256-HTOryRtI8vch8uoa7rX2/HcmQCWcmkFjKr17vaWEeGw=";
   };
 
   nativeBuildInputs = [ pyprojectVersionPatchHook ];

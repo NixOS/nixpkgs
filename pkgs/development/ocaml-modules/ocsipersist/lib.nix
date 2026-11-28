@@ -3,13 +3,12 @@
   buildDunePackage,
   fetchFromGitHub,
   js_of_ocaml,
-  lwt_ppx,
   lwt,
 }:
 
 buildDunePackage (finalAttrs: {
   pname = "ocsipersist-lib";
-  version = "2.1.0";
+  version = "3.1.2";
 
   minimalOCamlVersion = "4.13";
 
@@ -17,10 +16,9 @@ buildDunePackage (finalAttrs: {
     owner = "ocsigen";
     repo = "ocsipersist";
     tag = finalAttrs.version;
-    hash = "sha256-YJzfgeyNXgBXAK607ROUXUmSpMKYx63ofZaBB8dnsq4=";
+    hash = "sha256-/d1xl1Di12TFTU7mvIVfqZk8k9X77amp1vU5K8aM47s=";
   };
 
-  buildInputs = [ lwt_ppx ];
   propagatedBuildInputs = [
     js_of_ocaml
     lwt

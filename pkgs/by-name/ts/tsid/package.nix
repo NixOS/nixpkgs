@@ -3,6 +3,8 @@
   fetchFromGitHub,
   jrl-cmakemodules,
   lib,
+  daqp,
+  llvmPackages,
   osqp-eigen,
   pinocchio,
   proxsuite,
@@ -22,6 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = jrl-cmakemodules.docsCmakeFlags ++ [
     (lib.cmakeBool "BUILD_PYTHON_INTERFACE" false)
+    (lib.cmakeBool "BUILD_WITH_DAQP" true)
     (lib.cmakeBool "BUILD_WITH_OSQP" true)
     (lib.cmakeBool "BUILD_WITH_PROXQP" true)
     (lib.cmakeBool "INSTALL_DOCUMENTATION" true)
@@ -36,9 +39,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     jrl-cmakemodules
-  ];
+  ]
+  ++ lib.optional stdenv.cc.isClang llvmPackages.openmp;
 
   propagatedBuildInputs = [
+    daqp
     eiquadprog
     osqp-eigen
     pinocchio

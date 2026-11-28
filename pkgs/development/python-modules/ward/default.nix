@@ -6,6 +6,7 @@
   click-default-group,
   cucumber-tag-expressions,
   fetchFromGitHub,
+  gitUpdater,
   pluggy,
   poetry-core,
   pprintpp,
@@ -42,6 +43,8 @@ buildPythonPackage rec {
   doCheck = false;
 
   pythonImportsCheck = [ "ward" ];
+
+  passthru.updateScript = gitUpdater { rev-prefix = "release/"; };
 
   meta = {
     description = "Test framework for Python";

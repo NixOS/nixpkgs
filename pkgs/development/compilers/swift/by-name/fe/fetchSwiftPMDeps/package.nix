@@ -7,6 +7,7 @@
   prefetch-swiftpm-deps,
   runCommand,
   stdenvNoCC,
+  swift,
 }:
 
 {
@@ -38,6 +39,8 @@ let
         jq
         prefetch-swiftpm-deps
       ]
+      # prefetch-swiftpm-deps runs `swift package dump-package`, which needs the SDK on Darwin
+      ++ lib.optional stdenvNoCC.hostPlatform.isDarwin swift
       ++ nativeBuildInputs;
 
       buildPhase = ''
@@ -73,21 +76,27 @@ runCommand "${name}-vendor"
   ''
     mkdir -p "$out"
 
+    artifacts='[ ]'
+    if [ -d "$vendorStaging/artifacts" ]; then
+      artifacts=$(jq --slurp . < "$vendorStaging/artifacts.jsonl")
+      ln -s "$vendorStaging/artifacts" "$out/artifacts"
+    fi
+
     # SwiftPM uses workspace-state.json to determine whether it needs to fetch dependencies.
     # Generate it to prevent that from happening.
-    jq --compact-output --sort-keys '
+    jq --compact-output --sort-keys --argjson artifacts "$artifacts" '
         {
             "object": {
-                "artifacts": [ ],
+                "artifacts": $artifacts,
                 "dependencies": [ .pins[] |
                     {
                         "basedOn": {
                             "basedOn": null,
                             "packageRef": {
-                                "identity": .identity,
+                                "identity": .location | sub("\\.git$"; "") | split("/")[-1],
                                 "kind": .kind,
                                 "location": .location,
-                                "name": .location | sub("\\.git$"; "") | split("/")[-1]
+                                "name": .identity
                             },
                             "state": {
                                 "checkoutState": .state,
@@ -96,10 +105,10 @@ runCommand "${name}-vendor"
                             "subpath": .location | sub("\\.git$"; "") | split("/")[-1]
                         },
                         "packageRef": {
-                            "identity": .identity,
+                            "identity": .location | sub("\\.git$"; "") | split("/")[-1],
                             "kind": .kind,
                             "location": .location,
-                            "name": .location | sub("\\.git$"; "") | split("/")[-1]
+                            "name": .identity
                         },
                         "state": {
                             "name": "edited",

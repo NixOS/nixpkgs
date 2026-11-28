@@ -11,15 +11,15 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "aws-sso-cli";
-  version = "2.3.2";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "synfinatic";
     repo = "aws-sso-cli";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-u9fgfLhsdpEQ9T1T8jbGWl87vu61bWX9SzELktihBg8=";
+    hash = "sha256-7v6vKYnELwdjL7kwnSsqvyIMaiiIOMdH9HpcY9T1PrY=";
   };
-  vendorHash = "sha256-lpp3Fji/EChMukRpypN98h9c5iN5z2S9RyrghFpxLbk=";
+  vendorHash = "sha256-GjXakkr4B9ZCoxAEMBQKm8j4Bs7y6x5Ln9YEaiU6/OA=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -43,9 +43,9 @@ buildGoModule (finalAttrs: {
   '';
 
   nativeCheckInputs = [
-    getent
     writableTmpDirAsHomeHook
-  ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ getent ];
 
   preCheck = ''
     mkdir -p "$HOME/.config/aws-sso"

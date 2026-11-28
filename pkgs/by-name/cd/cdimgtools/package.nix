@@ -10,7 +10,7 @@
   perlPackages,
   asciidoc,
   xmlto,
-  sourceHighlight,
+  source-highlight,
   docbook_xsl,
   docbook_xml_dtd_45,
 }:
@@ -31,7 +31,7 @@ stdenv.mkDerivation {
     asciidoc
     perlPackages.PodPerldoc
     xmlto
-    sourceHighlight
+    source-highlight
     docbook_xsl
     docbook_xml_dtd_45
   ];

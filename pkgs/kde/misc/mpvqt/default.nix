@@ -9,14 +9,14 @@
 
 mkKdeDerivation rec {
   pname = "mpvqt";
-  version = "1.1.1";
+  version = "1.2.1";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "libraries";
     repo = "mpvqt";
     tag = "v${version}";
-    hash = "sha256-qscubUiej/OqQI+V9gxQb7eVa3L2FJ5koqgXFoBw8tU=";
+    hash = "sha256-R9EkJPAiYwq206TJRDLpx/RcfeI0tDSXk1/KrRoASLU=";
   };
 
   extraBuildInputs = [ qtdeclarative ];

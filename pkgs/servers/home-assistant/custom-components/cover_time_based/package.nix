@@ -1,25 +1,27 @@
 {
   buildHomeAssistantComponent,
   fetchFromGitHub,
+  home-assistant,
   lib,
-  pytest-homeassistant-custom-component,
+  pytest-homeassistant,
   pytestCheckHook,
 }:
 
 buildHomeAssistantComponent (finalAttrs: {
   owner = "Sese-Schneider";
   domain = "cover_time_based";
-  version = "4.14.1";
+  version = "4.15.0";
 
   src = fetchFromGitHub {
     inherit (finalAttrs) owner;
     repo = "ha-cover-time-based";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-v0vfVUNkyjMJfVLRv7uTFwXlvDR56vclCbBs7YWW2/Y=";
+    hash = "sha256-F9iAQDhDTLPU1XZXCQGELdGsmvdfpI/Va4cFrE48GHM=";
   };
 
   nativeCheckInputs = [
-    pytest-homeassistant-custom-component
+    home-assistant
+    pytest-homeassistant
     pytestCheckHook
   ];
 

@@ -153,6 +153,14 @@ buildPythonPackage rec {
   pytestFlags = [
     "--hypothesis-profile=ci"
   ];
+  disabledTests = [
+    # Depends on the build date: Asserts that the IERS-B table bundled in
+    # `astropy-iers-data` covers `Time.now() - 300 days`, so it fails for any
+    # build more than 300 days after the end of that table.
+    # Tests run by nixpkgs should not be time-dependent for reproducibility.
+    # See https://github.com/astropy/astropy/issues/20725
+    "test_iers_b_out_of_range_handling"
+  ];
   postCheck = ''
     rm conftest.py
   '';

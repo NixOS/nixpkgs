@@ -56,8 +56,6 @@ let
       ];
     });
 
-    __structuredAttrs = true;
-
     meta = {
       description = "Fake file system that mocks the Python file system modules";
       homepage = "https://pytest-pyfakefs.readthedocs.io";

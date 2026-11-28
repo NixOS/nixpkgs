@@ -18,14 +18,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "ical";
-  version = "14.3.0";
+  version = "14.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "allenporter";
     repo = "ical";
     tag = finalAttrs.version;
-    hash = "sha256-u7LaDj+ZcV3AUNInTTDHHfQmPjwBilyCZR/dXitreQs=";
+    hash = "sha256-PqFeb+dPKC3BhHHREjME9PRVz6fU4W3EFok90Z8ETWU=";
   };
 
   build-system = [ setuptools ];
@@ -52,11 +52,6 @@ buildPythonPackage (finalAttrs: {
   ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   pytestFlags = [ "--benchmark-disable" ];
-
-  disabledTests = [
-    # snapshot mismatch
-    "test_from_ics"
-  ];
 
   __darwinAllowLocalNetworking = true;
 

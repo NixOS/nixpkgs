@@ -14,7 +14,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "NextThought";
+    owner = "OpenNTI";
     repo = "sphinxcontrib-programoutput";
     tag = finalAttrs.version;
     hash = "sha256-1nWEVE4Ie6QRtm8IvSIrxYCjNtyp831teBskv63YETI=";
@@ -39,8 +39,8 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Sphinx extension to include program output";
-    homepage = "https://github.com/NextThought/sphinxcontrib-programoutput";
-    changelog = "https://github.com/NextThought/sphinxcontrib-programoutput/releases/tag/v${finalAttrs.src.tag}";
+    homepage = "https://github.com/OpenNTI/sphinxcontrib-programoutput";
+    changelog = "https://github.com/OpenNTI/sphinxcontrib-programoutput/releases/tag/v${finalAttrs.src.tag}";
     license = lib.licenses.bsd2;
     maintainers = [ ];
   };

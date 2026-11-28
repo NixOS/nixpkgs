@@ -16,14 +16,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "django-phonenumber-field";
-  version = "8.5.0";
+  version = "9.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "django-phonenumber-field";
     repo = "django-phonenumber-field";
     tag = finalAttrs.version;
-    hash = "sha256-hTrW7QeZPBsln9iHh9sV7JMQxdJ9cFcAq4ETyhxFGv0=";
+    hash = "sha256-7ZDTTAzfMhsTHB714mv/wA6WpAFToUgGftz0yfvVclQ=";
   };
 
   nativeBuildInputs = [ gettext ];

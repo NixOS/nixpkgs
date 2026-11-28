@@ -16,8 +16,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.5.2";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     pname = "click-completion";
     inherit (finalAttrs) version;
@@ -42,6 +40,6 @@ buildPythonPackage (finalAttrs: {
     description = "Add or enhance bash, fish, zsh and powershell completion in Click";
     homepage = "https://github.com/click-contrib/click-completion";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ mbode ];
+    maintainers = [ ];
   };
 })

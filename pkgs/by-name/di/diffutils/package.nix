@@ -46,8 +46,6 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
   enableParallelBuilding = true;
 
-  # Disable stack-related gnulib tests on x86_64-darwin because they have problems running under
-  # Rosetta 2: test-c-stack hangs, test-sigsegv-catch-stackoverflow and test-sigaction fail.
   # Disable all gnulib tests when building on Darwin due to test-nl_langinfo-mt failure
   # known by upstream https://www.mail-archive.com/bug-gnulib@gnu.org/msg50806.html
   postPatch =
@@ -55,9 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
       ''
         sed -i 's:gnulib-tests::g' Makefile.in
       ''
-    else if
-      ((stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) || (stdenv.hostPlatform.isAarch32))
-    then
+    else if stdenv.hostPlatform.isAarch32 then
       ''
         sed -i -E 's:[[:space:]]test-c-stack2?\.sh::g' gnulib-tests/Makefile.in
         sed -i -E 's:[[:space:]]test-sigsegv-catch-stackoverflow[12]\$\(EXEEXT\)::g' gnulib-tests/Makefile.in
@@ -79,6 +75,12 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
       "gl_cv_func_strcasecmp_works=yes"
+    ]
+    # gnulib only detects static linking via `-static` in LDFLAGS, but our
+    # wrapper injects it through NIX_CFLAGS_LINK. Weak pthread references then
+    # resolve to NULL, breaking the multithreaded gnulib tests.
+    ++ lib.optionals stdenv.hostPlatform.isStatic [
+      "gl_cv_have_weak=no"
     ];
 
   # Test failure on QEMU only (#300550)

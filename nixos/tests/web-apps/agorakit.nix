@@ -36,8 +36,6 @@
     agorakit.wait_for_unit("agorakit-setup.service")
 
     # Login page should now contain the configured site name
-
-    agorakit.succeed("curl http://localhost/login | grep Agorakit")
-
+    agorakit.wait_until_succeeds("curl http://localhost/login | grep Agorakit", timeout=120)
   '';
 }

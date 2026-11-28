@@ -45,7 +45,7 @@ buildPythonPackage (finalAttrs: {
     '';
     homepage = "https://github.com/Julius2342/pyvlx";
     changelog = "https://github.com/Julius2342/pyvlx/releases/tag/${finalAttrs.src.tag}";
-    license = lib.licenses.lgpl2Only;
+    license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ fab ];
   };
 })

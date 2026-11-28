@@ -10,6 +10,8 @@ buildGoModule {
   pname = "go-toml";
   inherit version;
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "pelletier";
     repo = "go-toml";

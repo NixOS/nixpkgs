@@ -1,9 +1,15 @@
 {
   lib,
+  aws-lc,
+  bash,
+  cacert,
   fetchFromGitHub,
   libgit2,
+  nodejs,
   openssl,
   pkg-config,
+  procps,
+  python3,
   rustPlatform,
   versionCheckHook,
   writableTmpDirAsHomeHook,
@@ -13,29 +19,49 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cert-x-gen";
-  version = "1.1.1";
+  version = "1.9.2";
+
+  __darwinAllowLocalNetworking = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Bugb-Technologies";
     repo = "cert-x-gen";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-J3VPPOvBKitgtCi5h8LcXkcfFNciMKX0q8cQ/ytXncg=";
+    hash = "sha256-a08Im1jCtFExi0MsiwKmQhi4LolWFMx5hAqpG3kMaHI=";
   };
 
-  __structuredAttrs = true;
+  postPatch = ''
+    substituteInPlace src/engine/shell/mod.rs \
+      --replace-fail /bin/bash ${lib.getExe bash}
+    patchShebangs tests/fixtures
+  '';
 
-  cargoHash = "sha256-ze5wLwwp2XdWQNEY+n+M6ZTYfw+QQZUR6V9/mgb32RI=";
+  cargoHash = "sha256-TEDyiRwkoIt3reMfN6ZZE8/+KT0/Z4aRtGPjdPisDos=";
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
+    aws-lc
     libgit2
     openssl
     zlib
     zstd
   ];
 
-  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
+  nativeCheckInputs = [
+    cacert
+    nodejs
+    procps
+    python3
+    writableTmpDirAsHomeHook
+  ];
+
+  preCheck = ''
+    export SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
+    # an empty RUST_LOG from the build hooks disables the verbosity flags
+    unset RUST_LOG
+  '';
 
   nativeInstallCheckInputs = [
     versionCheckHook

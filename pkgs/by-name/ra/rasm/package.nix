@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rasm";
-  version = "3.3.1";
+  version = "3.3.4";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "EdouardBERGE";
     repo = "rasm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yfpQU+5ptEMNmC/LiwcuuSgkwSg3PA4RbnF5/kTMUNo=";
+    hash = "sha256-4wxdusSPDGUvA9e7LDBy5WaR4+UqEOmwogcL4IXW/Ew=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -34,6 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "http://rasm.wikidot.com/english-index:home";
+    changelog = "https://github.com/EdouardBERGE/rasm/releases/v${finalAttrs.version}";
     description = "Z80 assembler";
     mainProgram = "rasm";
     # use -n option to display all licenses

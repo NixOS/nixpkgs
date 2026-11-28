@@ -8,15 +8,13 @@
 # https://github.com/Ericsson/codechecker/issues/4773
 python313Packages.buildPythonApplication (finalAttrs: {
   pname = "codechecker-unwrapped";
-  version = "6.29.1";
+  version = "6.29.3";
   pyproject = true;
-
-  __structuredAttrs = true;
 
   src = fetchPypi {
     inherit (finalAttrs) version;
     pname = "codechecker";
-    hash = "sha256-0D8eO+UumjZXh/t00IUcBLtUUwXJINbFaUG+svkOScQ=";
+    hash = "sha256-E6Af1yUOvxB6+cPzOHRWVMXv4DIMPbnl+HRNTbBRCwI=";
   };
 
   build-system = with python313Packages; [

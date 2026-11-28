@@ -91,7 +91,7 @@ let
     blas = self.callPackage blas.override { };
     lapack = self.callPackage lapack.override { };
     hdf5 = self.callPackage hdf5.override {
-      fortran = gfortran;
+      inherit gfortran;
       cppSupport = !mpiSupport;
     };
     metis = self.callPackage metis.override { };
@@ -229,7 +229,8 @@ stdenv.mkDerivation (finalAttrs: {
   # -lpetsc, which is not available in the checkPhase, which is executed before
   # the installPhase. The installCheckPhase comes after the installPhase, so
   # the library is installed and available.
-  doInstallCheck = true;
+  # Sandbox has no GPU
+  doInstallCheck = !(mpiSupport && (mpi.rocmSupport or false));
   installCheckTarget = "check_install";
   # check_install is defined in PETSc's top-level makefile. Select it directly
   # instead of the default GNUmakefile wrapper, then check the installed prefix
@@ -250,9 +251,8 @@ stdenv.mkDerivation (finalAttrs: {
     python3Packages.unittestCheckHook
   ];
 
-  unittestFlagsArray = [
-    "-s"
-    "src/binding/petsc4py/test"
+  unittestFlags = [
+    "--start-directory=src/binding/petsc4py/test"
     "-v"
   ];
 
@@ -286,6 +286,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   setupHook = ./setup-hook.sh;
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Portable Extensible Toolkit for Scientific computation";

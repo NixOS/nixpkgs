@@ -10,7 +10,7 @@
   python3 ? null,
   python3Packages ? null,
   fts,
-  nix-update-script,
+  gitUpdater,
 }:
 
 assert enablePython -> swig != null && python3 != null && !stdenv.hostPlatform.isStatic;
@@ -38,6 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3
   ]
   ++ lib.optionals enablePython [
+    python3Packages.build
     python3Packages.pip
     python3Packages.setuptools
     python3Packages.wheel
@@ -117,11 +118,10 @@ stdenv.mkDerivation (finalAttrs: {
     popd
   '';
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "^([0-9\\.]+)$"
-    ];
+  passthru.updateScript = gitUpdater {
+    url = "https://github.com/SELinuxProject/selinux";
+    # Skips release candidates and the date tags of old releases
+    allowedVersions = "^[0-9]+\\.[0-9]+(\\.[0-9]+)?$";
   };
 
   meta = removeAttrs libsepol.meta [ "outputsToInstall" ] // {

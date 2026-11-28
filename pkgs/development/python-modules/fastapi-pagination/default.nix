@@ -14,15 +14,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "fastapi-pagination";
-  version = "0.15.16";
+  version = "0.16.3";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "uriyyo";
     repo = "fastapi-pagination";
     tag = finalAttrs.version;
-    hash = "sha256-hsJbtR11Ej7lh8rqndnp47XdM67IypyT6cheMfskmio=";
+    hash = "sha256-7fVJ0qk4Gwr4PvJu8irOisn9FtobWNsQpzChJ3FybAE=";
   };
 
   build-system = [

@@ -1,5 +1,7 @@
 {
   lib,
+  stdenv,
+  autoAddDriverRunpath,
   buildGo127Module,
   fetchFromGitHub,
 }:
@@ -8,7 +10,7 @@ buildGo127Module (finalAttrs: {
   pname = "prometheus-nvidia-gpu-exporter";
   version = "1.15.1";
 
-  env.CGO_ENABLED = 0;
+  env.CGO_ENABLED = if stdenv.hostPlatform.isLinux then "1" else "0";
 
   src = fetchFromGitHub {
     owner = "utkuozdemir";
@@ -19,18 +21,23 @@ buildGo127Module (finalAttrs: {
 
   vendorHash = "sha256-9CPuhBDi8PnYyFYmW5XbutpRrA7ukPDiXCH4+94b9/o=";
 
+  nativeBuildInputs = lib.optional stdenv.hostPlatform.isLinux autoAddDriverRunpath;
+
+  # go-nvml loads the driver at runtime and guards optional symbols before use.
+  hardeningDisable = lib.optional stdenv.hostPlatform.isLinux "bindnow";
+
   ldflags = [
     "-s"
     "-w"
     "-X=github.com/prometheus/common/version.Version=${finalAttrs.version}"
     "-X=github.com/prometheus/common/version.Revision=${finalAttrs.src.rev}"
     "-X=github.com/prometheus/common/version.Branch=${finalAttrs.src.rev}"
-    "-X=github.com/prometheus/common/version.BuildUser=goreleaser"
+    "-X=github.com/prometheus/common/version.BuildUser=nixbld@nixpkgs"
     "-X=github.com/prometheus/common/version.BuildDate=1970-01-01T00:00:00Z"
   ];
 
   meta = {
-    description = "Nvidia GPU exporter for prometheus using nvidia-smi binary";
+    description = "Nvidia GPU exporter for prometheus using nvidia-smi binary or NVML";
     homepage = "https://github.com/utkuozdemir/nvidia_gpu_exporter";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ck3d ];

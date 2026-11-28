@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "pylru";
-  version = "1.3.1";
+  version = "1.3.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jlhutch";
     repo = "pylru";
     rev = "v${version}";
-    hash = "sha256-3qycUYmnLGiuNsrBOCL/QiRkrPVikaRqVBmQFURDGKs=";
+    hash = "sha256-khnS2ZkKu6o4MOmR8tHIdRf/RW3FJpH1N/2AaMTTNUc=";
   };
 
   build-system = [ setuptools ];

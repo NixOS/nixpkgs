@@ -56,55 +56,34 @@ self: super:
   # Doctests fail on aarch64 due to a GHCi linking bug
   # https://gitlab.haskell.org/ghc/ghc/-/issues/15275#note_295437
   # TODO: figure out if needed on aarch32 as well
-  BNFC = dontCheck super.BNFC;
   C-structs = dontCheck super.C-structs;
-  Chart-tests = dontCheck super.Chart-tests;
   Jikka = dontCheck super.Jikka;
-  accelerate = dontCheck super.accelerate;
   ad = dontCheck super.ad;
   autoapply = dontCheck super.autoapply;
   construct = dontCheck super.construct;
-  exact-real = dontCheck super.exact-real;
   flight-kml = dontCheck super.flight-kml;
-  focuslist = dontCheck super.focuslist;
   grammatical-parsers = dontCheck super.grammatical-parsers;
-  greskell = dontCheck super.greskell;
   groupBy = dontCheck super.groupBy;
-  haskell-time-range = dontCheck super.haskell-time-range;
-  headroom = dontCheck super.headroom;
   hgeometry = dontCheck super.hgeometry;
   hhp = dontCheck super.hhp;
   hsakamai = dontCheck super.hsakamai;
-  hsemail-ns = dontCheck super.hsemail-ns;
-  html-validator-cli = dontCheck super.html-validator-cli;
   hw-fingertree-strict = dontCheck super.hw-fingertree-strict;
   hw-packed-vector = dontCheck super.hw-packed-vector;
   hw-prim = dontCheck super.hw-prim;
   hw-xml = dontCheck super.hw-xml;
-  language-nix = dontCheck super.language-nix;
-  lens-regex = dontCheck super.lens-regex;
   meep = dontCheck super.meep;
-  openapi3 = dontCheck super.openapi3;
   orbits = dontCheck super.orbits;
   ranged-list = dontCheck super.ranged-list;
   rank2classes = dontCheck super.rank2classes;
-  schedule = dontCheck super.schedule;
   static = dontCheck super.static;
   strict-writer = dontCheck super.strict-writer;
   termonad = dontCheck super.termonad;
-  trifecta = dontCheck super.trifecta;
   twiml = dontCheck super.twiml;
   twitter-conduit = dontCheck super.twitter-conduit;
   validationt = dontCheck super.validationt;
   vgrep = dontCheck super.vgrep;
-  vinyl = dontCheck super.vinyl;
   vulkan-utils = dontCheck super.vulkan-utils;
-  xml-html-qq = dontCheck super.xml-html-qq;
   yaml-combinators = dontCheck super.yaml-combinators;
-  yesod-paginator = dontCheck super.yesod-paginator;
-
-  # https://github.com/ekmett/half/issues/35
-  half = dontCheck super.half;
 
   # We disable profiling on aarch64, so tests naturally fail
   ghc-prof = dontCheck super.ghc-prof;
@@ -123,20 +102,4 @@ self: super:
 // lib.optionalAttrs (with pkgs.stdenv.hostPlatform; isAarch && isAndroid) {
   # android is not currently allowed as 'supported-platforms' by hackage2nix
   android-activity = unmarkBroken super.android-activity;
-}
-// lib.optionalAttrs (with pkgs.stdenv.hostPlatform; !isDarwin) {
-  # 2026-01-09: RNG tests that need rng-instruction support fail on NixOS's
-  #             aarch64-linux build infrastructure
-  botan-low = overrideCabal (drv: {
-    testFlags =
-      drv.testFlags or [ ]
-      ++ (lib.concatMap (x: [ "--skip" ] ++ [ x ]) [
-        # botan-low-rng-tests
-        "/rdrand/rngInit/"
-        "/rdrand/rngGet/"
-        "/rdrand/rngReseed/"
-        "/rdrand/rngReseedFromRNGCtx/"
-        "/rdrand/rngAddEntropy/"
-      ]);
-  }) super.botan-low;
 }

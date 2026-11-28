@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hblock";
-  version = "3.5.1";
+  version = "3.5.2";
 
   src = fetchFromGitHub {
     owner = "hectorm";
     repo = "hblock";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-cke3MppQm8p8B9+5IcvCplw6CtyRbgq46wHqli7U77I=";
+    hash = "sha256-IfLyP6lHTSCH7mRNO+6QcOm2yIJmW9v/g6dEgjPwvEg=";
   };
 
   buildInputs = [

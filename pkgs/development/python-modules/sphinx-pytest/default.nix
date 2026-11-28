@@ -15,7 +15,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "chrisjsewell";
+    owner = "sphinx-extensions2";
     repo = "sphinx-pytest";
     tag = "v${version}";
     hash = "sha256-z71IrUr3e2oAPeZMjUBwMwy2SkoAA3oxtK4+iR9vLEc=";
@@ -42,7 +42,7 @@ buildPythonPackage rec {
   meta = {
     changelog = "https://github.com/sphinx-extensions2/sphinx-pytest/releases/tag/${src.tag}";
     description = "Helpful pytest fixtures for Sphinx extensions";
-    homepage = "https://github.com/chrisjsewell/sphinx-pytest";
+    homepage = "https://github.com/sphinx-extensions2/sphinx-pytest";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ loicreynier ];
   };

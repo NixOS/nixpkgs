@@ -70,6 +70,8 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-WXAZCk0aRmKb1UU1ud95mZFHAMC9U+gDRd9w7TZTVSA=";
   };
 
+  patches = [ ./0001-remove-add_hookspecs-call-incompatible-with-pluggy-1.4.patch ];
+
   dontConfigure = true;
 
   build-system = [ setuptools ];

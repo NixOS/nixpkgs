@@ -1,8 +1,8 @@
 import ./generic.nix {
-  version = "16.0.6";
-  hash = "sha256-629cbLUh+okT3SFHwHFQDPiOoao0hrTxOzdOKxYEd6Q=";
-  npmDepsHash = "sha256-C/ht4Z3ivtm6nBNHUkNmKpLsnmnrpzW6rBq153LuITc=";
-  vendorHash = "sha256-wOAbZ6eEwlavMIcTOmqPpdgLNcgylCX4MwxuI/35YZw=";
+  version = "17.0.2";
+  hash = "sha256-IKC/Pw4LyKC5xXlcaGuCMMsnojMIpQXvXX75bbLpVPI=";
+  npmDepsHash = "sha256-AkDV0GPdoqjnvrDkMHn6VJVYVGIwvuPk5dv/HxUHD8Q=";
+  vendorHash = "sha256-clgLfIfTLdy61casS11MifItA7o+Sp24Bq7093Fw4xY=";
   lts = false;
   nixUpdateExtraArgs = [
     "--override-filename"

@@ -7,7 +7,7 @@
   boilerpy3,
   cdxj-indexer,
   frictionless,
-  pytest-cov,
+  pytest-cov-stub,
   pyyaml,
   shortuuid,
   pytestCheckHook,
@@ -60,7 +60,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    pytest-cov
+    pytest-cov-stub
   ];
 
   disabledTests = [

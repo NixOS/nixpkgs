@@ -1,18 +1,18 @@
 {
-  "version": "2026.2",
-  "buildNumber": "262.8665.308",
+  "version": "2026.3.0.1",
+  "buildNumber": "263.7307.350",
   "urls": {
     "x86_64-linux": {
-      "url": "https://download.jetbrains.com/ruby/RubyMine-2026.2.tar.gz",
-      "hash": "sha256-k+T5QDCIcuqHWrjhoCGcym/Q9v4YBviacg9rnNFBIRM="
+      "url": "https://download.jetbrains.com/ruby/RubyMine-2026.3.0.1.tar.gz",
+      "hash": "sha256-z9tPoJxL5rpktKz6amGiWgtwq5htxynbuJ7vjXoGVCE="
     },
     "aarch64-linux": {
-      "url": "https://download.jetbrains.com/ruby/RubyMine-2026.2-aarch64.tar.gz",
-      "hash": "sha256-2T6thTMYAlfb6yJKbpuIyVtj7Af/P3AjQAVl16H35nM="
+      "url": "https://download.jetbrains.com/ruby/RubyMine-2026.3.0.1-aarch64.tar.gz",
+      "hash": "sha256-CjkSKybH5Euzpzp2U5UiO1yiyhmNgJZztQtV7IK81Bw="
     },
     "aarch64-darwin": {
-      "url": "https://download.jetbrains.com/ruby/RubyMine-2026.2-aarch64.dmg",
-      "hash": "sha256-rgskPMKLtgPpdSbbENJcE4g75VzqeWPLzxoXqzln67k="
+      "url": "https://download.jetbrains.com/ruby/RubyMine-2026.3.0.1-aarch64.dmg",
+      "hash": "sha256-tAJXiN2esP4idETVZZDIBmFFbxj7SnkEeh3/7w3Kn1M="
     }
   }
 }

@@ -16,14 +16,14 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "tt-metal";
-  version = "0.79.0";
+  version = "0.80.0";
 
   src = fetchFromGitHub {
     owner = "tenstorrent";
     repo = "tt-metal";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-sA9ryiVDBF9yJUfQ2cQDvphEC0nVQx6X2F91s2BA8Qo=";
+    hash = "sha256-2TEobD5Y0K2mJ7YRlbDOcp3EgjqB5YoBJ3vxaZgoFzw=";
   };
 
   cpm = fetchurl {
@@ -32,11 +32,6 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   sfpi = callPackage ./sfpi.nix { };
-
-  patches = [
-    # Remove in next release 0.80.0
-    ./spsc-marker-decode-simde.patch
-  ];
 
   postUnpack = ''
     mkdir -p "$sourceRoot/runtime"

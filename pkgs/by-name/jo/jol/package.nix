@@ -2,6 +2,7 @@
   maven,
   lib,
   fetchFromGitHub,
+  jdk,
   jre_minimal,
   makeWrapper,
   nix-update-script,
@@ -17,7 +18,10 @@ maven.buildMavenPackage (finalAttrs: {
     hash = "sha256-ZJFuY2QYB8eUS3y3VRMGGwklCS93HHVkNe/dhyIx0SY=";
   };
 
-  mvnHash = "sha256-VXYY7XWRuSjju9mgQ6cvHlJwOK2BklE9j/uj0yczjcI=";
+  mvnHash = "sha256-kcur8Va+krmZ99RJ8UJWl7/1YiiitaXvjwyDq5II7Wc=";
+
+  # GraphLayoutImageTests need AWT, missing from maven's default jdk_headless
+  mvnJdk = jdk;
 
   nativeBuildInputs = [ makeWrapper ];
 

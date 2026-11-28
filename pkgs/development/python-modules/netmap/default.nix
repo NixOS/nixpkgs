@@ -13,8 +13,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.7.0.2";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "python-nmap";

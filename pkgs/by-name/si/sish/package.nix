@@ -2,22 +2,21 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  testers,
-  sish,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "sish";
-  version = "2.23.0";
+  version = "4.1.1";
 
   src = fetchFromGitHub {
     owner = "antoniomika";
     repo = "sish";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8C4Xh9OX5pmaQ12Guu3y/jw8nIfy6DV0nduAH6hlImM=";
+    hash = "sha256-wT3mjV5k4cQjXq2UWVdxZpqAvs42RgsRxN4rn+pH01E=";
   };
 
-  vendorHash = "sha256-U+gMlfDTEt9//SRLJA5yx/VZhwFGuMpTCnCfw9Nck+0=";
+  vendorHash = "sha256-iEm9nYsXVLkEJWtGBQ5B909T/X1h2+0ySuS82m/of38=";
 
   ldflags = [
     "-s"
@@ -27,11 +26,9 @@ buildGoModule (finalAttrs: {
     "-X=github.com/antoniomika/sish/cmd.Version=${finalAttrs.version}"
   ];
 
-  passthru.tests = {
-    version = testers.testVersion {
-      package = sish;
-    };
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  doInstallCheck = true;
 
   meta = {
     description = "HTTP(S)/WS(S)/TCP Tunnels to localhost";

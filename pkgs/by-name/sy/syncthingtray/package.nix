@@ -108,7 +108,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   qtWrapperArgs = [
-    "--prefix PATH : ${lib.makeBinPath [ xdg-utils ]}"
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [ xdg-utils ])
   ];
 
   meta = {

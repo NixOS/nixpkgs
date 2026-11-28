@@ -135,6 +135,18 @@ backendStdenv.mkDerivation (finalAttrs: {
         tag = "v11.3";
         hash = "sha256-U52/Pyd+94taV+yhfxseUdyY5lLwOcxBPIwDatjr6gs=";
       };
+      "11.4.0" = {
+        tag = "v11.4";
+        hash = "sha256-zSV5taL+LmPWNkY4ZKX2wQvJi+Ogo0lrElLTN48BDxc=";
+      };
+      "11.4.1" = {
+        tag = "v11.4";
+        hash = "sha256-zSV5taL+LmPWNkY4ZKX2wQvJi+Ogo0lrElLTN48BDxc=";
+      };
+      "11.5.0" = {
+        tag = "v11.5";
+        hash = "sha256-VqdX3Ibn4AMhxDJzkkeJUolYYKU+47dDfUVnD3SUckI=";
+      };
     }
   );
 

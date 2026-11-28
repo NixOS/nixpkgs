@@ -20,6 +20,11 @@ buildPythonPackage rec {
     hash = "sha256-OgRPcyx+NJnbtETMakUT0p8Pb0Qfzgj+qvWtmJksnT8=";
   };
 
+  postPatch = ''
+    substituteInPlace Registry/__init__.py \
+      --replace-fail '1.3.1' '${version}'
+  '';
+
   pythonRemoveDeps = [ "enum-compat" ];
 
   build-system = [ setuptools ];
@@ -40,6 +45,8 @@ buildPythonPackage rec {
     homepage = "https://github.com/williballenthin/python-registry";
     changelog = "https://github.com/williballenthin/python-registry/releases/tag/${version}";
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      debtquity
+    ];
   };
 }

@@ -1,38 +1,37 @@
 {
+  lib,
   buildPythonPackage,
   fetchFromGitHub,
-  lib,
-  simplejson,
-  six,
+  pytestCheckHook,
+  setuptools,
   typechecks,
 }:
 
-buildPythonPackage {
+buildPythonPackage (finalAttrs: {
   pname = "serializable";
-  version = "1.1.0";
-  format = "setuptools";
+  version = "1.8.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "iskandr";
+    owner = "openvax";
     repo = "serializable";
-    # See https://github.com/iskandr/serializable/issues/7. As of 2023-07-13,
-    # they do no have version tags.
-    rev = "ed309a6f8f2590b525fc0f93c00549223c8c944f";
-    hash = "sha256-AXlgIc1B7bkR+joXn6ZSxk/t848CWlgVZp8WIsSZFKQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-KZBx1Jmq+Y0nRf6miNOIQRTkbTdXMduchTx8bckt3Dc=";
   };
 
-  propagatedBuildInputs = [
-    simplejson
-    six
-    typechecks
-  ];
+  build-system = [ setuptools ];
+
+  dependencies = [ typechecks ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "serializable" ];
 
   meta = {
     description = "Base class with serialization methods for user-defined Python objects";
-    homepage = "https://github.com/iskandr/serializable";
+    homepage = "https://github.com/openvax/serializable";
+    changelog = "https://github.com/openvax/serializable/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ samuela ];
   };
-}
+})

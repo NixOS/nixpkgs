@@ -2,6 +2,7 @@
   meta,
   nodejs,
   npmDeps,
+  npmDepsFetcherVersion,
   src,
   version,
 
@@ -27,6 +28,7 @@ buildNpmPackage {
     src
     nodejs
     npmDeps
+    npmDepsFetcherVersion
     ;
 
   __structuredAttrs = true;
@@ -63,6 +65,8 @@ buildNpmPackage {
 
   buildPhase = ''
     runHook preBuild
+
+    npm run postinstall
 
     npm_config_build_from_source=true npm_config_nodedir=${nodejs} \
       npm rebuild node-pty --workspace @getpaseo/server

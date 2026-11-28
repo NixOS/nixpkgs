@@ -4,6 +4,7 @@
   python3Packages,
   sphinxHook,
   nix-update-script,
+  writableTmpDirAsHomeHook,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -36,9 +37,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   doCheck = true;
 
-  preCheck = ''
-    export HOME="$(mktemp -d)"
-  '';
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
   passthru.updateScript = nix-update-script { };
 

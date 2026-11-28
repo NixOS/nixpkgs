@@ -19,6 +19,14 @@ let
 
       let
         format = lib.lists.last (lib.strings.splitString "." file);
+        burgerMenuCategory = lib.lists.head (lib.strings.splitString "/" file);
+        burgerMenuYCoord =
+          {
+            "Pictures" = "180";
+            "Videos" = "220";
+          }
+          .${burgerMenuCategory}
+            or (throw "nixosTests.lomiri-gallery-app.format-${format}: don't know at what Y coordinate the '${burgerMenuCategory} category is");
       in
 
       {
@@ -99,6 +107,8 @@ let
         enableOCR = true;
 
         testScript = ''
+          import datetime
+
           machine.wait_for_x()
 
           machine.succeed("mkdir /root/${dirOf file}")
@@ -134,22 +144,22 @@ let
 
           with subtest("lomiri gallery finds files"):
               machine.succeed("lomiri-gallery-app >&2 &")
-              machine.wait_for_console_text("qq= AlbumsOverview") # logged when album page actually gets loaded
-              machine.sleep(10)
+              machine.wait_for_console_text("media files loaded")
+              machine.sleep(datetime.timedelta(seconds=10))
               machine.send_key("alt-f10")
-              machine.sleep(5)
+              machine.sleep(datetime.timedelta(seconds=5))
               machine.wait_for_text(r"(Albums|Events|Photos|${imageLabel})")
 
               machine.succeed("xdotool mousemove 30 40 click 1") # burger menu for categories
-              machine.sleep(2)
-              machine.succeed("xdotool mousemove 30 180 click 1") # photos
-              machine.sleep(2)
+              machine.sleep(datetime.timedelta(seconds=2))
+              machine.succeed("xdotool mousemove 30 ${burgerMenuYCoord} click 1") # category for file
+              machine.sleep(datetime.timedelta(seconds=2))
               machine.screenshot("lomiri-gallery_photos")
 
           machine.succeed("xdotool mousemove 80 140 click 1") # select first one
-          machine.sleep(2)
+          machine.sleep(datetime.timedelta(seconds=2))
           machine.succeed("xdotool mousemove 80 140 click 1") # enable top-bar
-          machine.sleep(2)
+          machine.sleep(datetime.timedelta(seconds=2))
 
         ''
         + (
@@ -161,10 +171,10 @@ let
                   machine.succeed("xdotool mousemove ${
                     if buttonIsOffset then "900" else "940"
                   } 50 click 1") # open media information
-                  machine.sleep(2)
+                  machine.sleep(datetime.timedelta(seconds=2))
                   machine.screenshot("lomiri-gallery_${format}_info")
                   machine.send_key("esc")
-                  machine.sleep(2)
+                  machine.sleep(datetime.timedelta(seconds=2))
                   machine.wait_for_text("${imageLabel}") # make sure media shows fine
             ''
         );
@@ -236,14 +246,16 @@ in
       enableOCR = true;
 
       testScript = ''
+        import datetime
+
         machine.wait_for_x()
 
         with subtest("lomiri gallery launches"):
             machine.succeed("lomiri-gallery-app >&2 &")
-            machine.wait_for_console_text("qq= AlbumsOverview") # logged when album page actually gets loaded
-            machine.sleep(10)
+            machine.wait_for_console_text("media files loaded")
+            machine.sleep(datetime.timedelta(seconds=10))
             machine.send_key("alt-f10")
-            machine.sleep(5)
+            machine.sleep(datetime.timedelta(seconds=5))
             machine.wait_for_text(r"(Albums|Events|Photos)")
             machine.screenshot("lomiri-gallery_open")
 
@@ -254,10 +266,10 @@ in
 
         with subtest("lomiri gallery localisation works"):
             machine.succeed("env LANG=de_DE.UTF-8 lomiri-gallery-app >&2 &")
-            machine.wait_for_console_text("qq= AlbumsOverview") # logged when album page actually gets loaded
-            machine.sleep(10)
+            machine.wait_for_console_text("media files loaded")
+            machine.sleep(datetime.timedelta(seconds=10))
             machine.send_key("alt-f10")
-            machine.sleep(5)
+            machine.sleep(datetime.timedelta(seconds=5))
             machine.wait_for_text(r"(Alben|Ereignisse|Fotos)")
             machine.screenshot("lomiri-gallery_localised")
       '';
@@ -272,17 +284,17 @@ in
     customTest = ''
       with subtest("lomiri gallery handles mp4"):
           machine.succeed("xdotool mousemove 935 40 click 1") # open media information
-          machine.sleep(2)
+          machine.sleep(datetime.timedelta(seconds=2))
           machine.screenshot("lomiri-gallery_mp4_info")
           machine.send_key("esc")
-          machine.sleep(2)
+          machine.sleep(datetime.timedelta(seconds=2))
 
           machine.wait_for_text("${imageLabel}") # make sure thumbnail processing worked
           machine.screenshot("lomiri-gallery_mp4_thumbnail")
 
           machine.succeed("xdotool mousemove 510 380 click 1") # dispatch to system's video handler
           machine.wait_until_succeeds("pgrep -u root -f mpv") # wait for video to start
-          machine.sleep(10)
+          machine.sleep(datetime.timedelta(seconds=10))
           machine.succeed("pgrep -u root -f mpv") # should still be playing
           machine.screenshot("lomiri-gallery_mp4_dispatch")
     '';

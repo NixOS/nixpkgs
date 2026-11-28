@@ -4,6 +4,8 @@
   fetchFromGitHub,
   installShellFiles,
   stdenv,
+  pkg-config,
+  zstd,
   nix-update-script,
   versionCheckHook,
   vscode-extensions,
@@ -11,17 +13,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "harper";
-  version = "2.13.0";
+  version = "3.3.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Automattic";
     repo = "harper";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-PuwvFuIdKjA8CanRmPzv5EOLWNeNwYRgNBFJe3rIjpE=";
+    hash = "sha256-K8vtXq3Zf7PKsFZoErXA6zs5yIhqlzFk1E9W0dLrcC0=";
   };
 
-  cargoHash = "sha256-oiLlRwrxehYVDLPkp03cOTlo2YkIff7JAALFTLj+Aow=";
+  cargoHash = "sha256-xL6O9bWa4YjepFD9moXqQveF8QqQzYzHqc/Z36S1Fag=";
 
   cargoBuildFlags = [
     "--package=harper-cli"
@@ -33,7 +35,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--package=harper-ls"
   ];
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+  ];
+  buildInputs = [ zstd ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd harper-cli \

@@ -115,6 +115,7 @@ in
         StateDirectoryMode = "750";
         DynamicUser = true;
         ExecStart = "${cfg.package}/bin/kener-server";
+        EnvironmentFile = cfg.environmentFile;
         Restart = "on-failure";
         AmbientCapabilities = "";
         CapabilityBoundingSet = "";

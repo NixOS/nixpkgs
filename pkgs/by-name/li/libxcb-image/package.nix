@@ -51,6 +51,8 @@ stdenv.mkDerivation (finalAttrs: {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "XCB port of Xlib's XImage and XShmImage functions.";
     homepage = "https://gitlab.freedesktop.org/xorg/lib/libxcb-image";

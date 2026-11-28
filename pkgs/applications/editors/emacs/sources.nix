@@ -126,6 +126,16 @@ in
         url = "https://cgit.git.savannah.gnu.org/cgit/emacs.git/patch/?id=abc802ee2eb0b1663349ddf22a461f8e54a383fb";
         hash = "sha256-ViRD4E27WDs7lLO6YPNroMo3Zq5/ASqMlmNtVI1V/Lo=";
       })
+      (fetchpatch {
+        name = "fix-arbitrary-code-execution-in-dot-dir-locals-dot-el-handling.patch";
+        url = "https://cgit.git.savannah.gnu.org/cgit/emacs.git/patch/?id=205ae0b0583dbfe09e258164adbc49e130645221";
+        hash = "sha256-rayjdQz0gCLAXP6Rkm+bzWrTM7lVvIPc66iPMPMyauc=";
+      })
+      (fetchpatch {
+        name = "fix-regression-after--fix-arbitrary-code-execution-in-dot-dir-locals-dot-el-handling.patch";
+        url = "https://cgit.git.savannah.gnu.org/cgit/emacs.git/patch/?id=5bf385dad6e5a2c2a9584252b99484cdbfeae66b";
+        hash = "sha256-ucrwZ+r6mKdw/fmJIyFxOjFSnA0CI8nVsDQutJloGSU=";
+      })
     ];
   });
 

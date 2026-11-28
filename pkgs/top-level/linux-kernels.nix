@@ -76,14 +76,6 @@ in
           ];
         };
 
-        linux_7_2 = callPackage ../os-specific/linux/kernel/mainline.nix {
-          branch = "7.2";
-          kernelPatches = [
-            kernelPatches.bridge_stp_helper
-            kernelPatches.request_key_helper
-          ];
-        };
-
         linux_7_3 = callPackage ../os-specific/linux/kernel/mainline.nix {
           branch = "7.3";
           kernelPatches = [
@@ -163,6 +155,7 @@ in
         linux_6_19 = throw "linux 6.19 was removed because it has reached its end of life upstream";
         linux_7_0 = throw "linux 7.0 was removed because it has reached its end of life upstream";
         linux_7_1 = throw "linux 7.1 was removed because it has reached its end of life upstream";
+        linux_7_2 = throw "linux 7.2 was removed because it has reached its end of life upstream";
 
         linux_5_10_hardened = throw "linux_hardened on nixpkgs only contains latest stable and latest LTS";
         linux_5_15_hardened = throw "linux_hardened on nixpkgs only contains latest stable and latest LTS";
@@ -239,6 +232,10 @@ in
         inherit (kernel) kernelOlder kernelAtLeast;
         kernelModuleMakeFlags = self.kernel.commonMakeFlags ++ [
           "KBUILD_OUTPUT=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+          "DEPMOD=true"
+          "INSTALL_MOD_STRIP=1"
+          # Remove kernel.dev references added by rustc from out-of-tree modules
+          "KRUSTFLAGS=--remap-path-prefix=${kernel.dev}/=/kernel/"
         ];
         # Obsolete aliases (these packages do not depend on the kernel).
         inherit (pkgs) odp-dpdk pktgen; # added 2018-05
@@ -300,6 +297,8 @@ in
           inherit kernel;
         };
 
+        efa = callPackage ../os-specific/linux/efa { };
+
         ethercat = callPackage pkgs.ethercat.kernelModule { };
 
         evdi = callPackage ../os-specific/linux/evdi { };
@@ -312,7 +311,13 @@ in
 
         gcadapter-oc-kmod = callPackage ../os-specific/linux/gcadapter-oc-kmod { };
 
+        gpu-unlock = callPackage ../os-specific/linux/gpu-unlock { };
+
         gtp5g = callPackage ../os-specific/linux/gtp5g { };
+
+        hailo1x = callPackage ../os-specific/linux/hailo1x { };
+
+        hailo8 = callPackage ../os-specific/linux/hailo8 { };
 
         hyperv-daemons = callPackage ../os-specific/linux/hyperv-daemons { };
 
@@ -360,8 +365,6 @@ in
 
         tbs = callPackage ../os-specific/linux/tbs { };
 
-        mbp2018-bridge-drv = callPackage ../os-specific/linux/mbp-modules/mbp2018-bridge-drv { };
-
         nct6687d = callPackage ../os-specific/linux/nct6687d { };
 
         hid-fanatecff = callPackage ../os-specific/linux/hid-fanatecff { };
@@ -383,6 +386,7 @@ in
         nvidia_x11_legacy390 = nvidiaPackages.legacy_390;
         nvidia_x11_legacy470 = nvidiaPackages.legacy_470;
         nvidia_x11_legacy535 = nvidiaPackages.legacy_535;
+        nvidia_x11_legacy580 = nvidiaPackages.legacy_580;
         nvidia_x11_production = nvidiaPackages.production;
         nvidia_x11_vulkan_beta = nvidiaPackages.vulkan_beta;
         nvidia_dc = nvidiaPackages.dc;
@@ -523,13 +527,9 @@ in
 
         virtio_vmmci = callPackage ../os-specific/linux/virtio_vmmci { };
 
-        virtualbox = callPackage ../os-specific/linux/virtualbox {
-          virtualbox = pkgs.virtualboxHardened;
-        };
+        virtualbox = callPackage ../os-specific/linux/virtualbox { };
 
-        virtualboxGuestAdditions =
-          callPackage ../applications/virtualization/virtualbox/guest-additions
-            { };
+        virtualboxGuestAdditions = callPackage ../by-name/vi/virtualbox/guest-additions { };
 
         mm-tools = callPackage ../os-specific/linux/mm-tools { };
 
@@ -595,6 +595,7 @@ in
         deepin-anything-module = throw "the Deepin desktop environment and associated tools have been removed from nixpkgs due to lack of maintenance";
         exfat-nofuse = throw "exfat-nofuse has been removed, all kernels > 5.8 come with built-in exfat support"; # added 2025-10-07
         hid-nintendo = throw "hid-nintendo was added in mainline kernel version 5.16"; # Added 2023-07-30
+        mbp2018-bridge-drv = throw "linuxPackages.mbp2018-bridge-drv was removed because it had been broken for years."; # Added 2026-11-26
         sch_cake = throw "sch_cake was added in mainline kernel version 4.19"; # Added 2023-06-14
         rtl8723bs = throw "rtl8723bs was added in mainline kernel version 4.12"; # Added 2023-06-14
         rtl8821ce = throw "rtl8821ce has been removed due to lack of maintenance"; # Added 2026-07-22
@@ -622,7 +623,6 @@ in
     linux_6_6 = recurseIntoAttrs (packagesFor kernels.linux_6_6);
     linux_6_12 = recurseIntoAttrs (packagesFor kernels.linux_6_12);
     linux_6_18 = recurseIntoAttrs (packagesFor kernels.linux_6_18);
-    linux_7_2 = recurseIntoAttrs (packagesFor kernels.linux_7_2);
     linux_7_3 = recurseIntoAttrs (packagesFor kernels.linux_7_3);
   }
   // lib.optionalAttrs config.allowAliases {
@@ -641,6 +641,7 @@ in
     linux_6_19 = throw "linux 6.19 was removed because it reached its end of life upstream"; # Added 2026-04-23
     linux_7_0 = throw "linux 7.0 was removed because it has reached its end of life upstream"; # Added 2026-06-27
     linux_7_1 = throw "linux 7.1 was removed because it has reached its end of life upstream"; # Added 2026-09-02
+    linux_7_2 = throw "linux 7.2 was removed because it has reached its end of life upstream";
   };
 
   packages = recurseIntoAttrs (

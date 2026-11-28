@@ -14,11 +14,13 @@
   rust-jemalloc-sys,
   versionCheckHook,
   makeBinaryWrapper,
+  mullvad-vpn,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mullvad";
-  version = "2026.5";
+  version = "2026.6";
 
   __structuredAttrs = true;
 
@@ -27,7 +29,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     repo = "mullvadvpn-app";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-ZhXOzoAPIftwvdMskwC0kbwfjPTK3b+0pP9ZI/rNn4E=";
+    hash = "sha256-bnyzuYfD4G55BSVGbNYI6NrJK24L2t2pG6p7nLqfonc=";
   };
 
   cargoHash = "sha256-qOBCfswWGwP7pWvd0ZAKTX7kYSJTMeJ5z1jHYjHyWZs=";
@@ -109,7 +111,20 @@ rustPlatform.buildRustPackage (finalAttrs: {
     versionCheckHook
   ];
 
-  passthru.hasMullvadDaemon = true;
+  passthru = {
+    hasMullvadDaemon = true;
+    gui = mullvad-vpn;
+    updateScript = nix-update-script {
+      attrPath = "mullvad";
+      extraArgs = [
+        "--subpackage"
+        "gui"
+        # Skip beta and android/* tags.
+        "--version-regex"
+        "^(\\d{4}\\.\\d+)$"
+      ];
+    };
+  };
 
   meta = {
     description = "Mullvad VPN daemon and command-line interface";

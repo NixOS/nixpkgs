@@ -45,22 +45,21 @@
   enablePlugin ? _systemInfo.buildIsHost, # Whether to support user-supplied plug-ins
   name ? "gcc",
   libcCross ? null,
-  threadsCross ? { }, # for MinGW
+  threadsCross ? null, # for MinGW
   withoutTargetLibc ? stdenv.targetPlatform.libc == null,
   flex,
   gnused ? null,
   buildPackages,
   pkgsBuildTarget,
   libxcrypt,
-  disableGdbPlugin ?
-    !enablePlugin
-    || (stdenv.targetPlatform.isAvr && stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64),
+  disableGdbPlugin ? !enablePlugin || (stdenv.targetPlatform.isAvr && stdenv.hostPlatform.isDarwin),
   nukeReferences,
   callPackage,
   majorMinorVersion,
   apple-sdk_14,
   apple-sdk_15,
   darwin,
+  dejagnu,
 }:
 
 let
@@ -138,6 +137,7 @@ let
       cargo
       withoutTargetLibc
       darwin
+      dejagnu
       disableBootstrap
       disableGdbPlugin
       enableDefaultPie
@@ -199,7 +199,7 @@ assert langGo -> langCC;
 assert langAda -> gnat-bootstrap != null;
 
 # threadsCross is just for MinGW
-assert threadsCross != { } -> stdenv.targetPlatform.isWindows;
+assert threadsCross != null -> stdenv.targetPlatform.isWindows;
 
 # profiledCompiler builds inject non-determinism in one of the compilation stages.
 # If turned on, we can't provide reproducible builds anymore
@@ -264,7 +264,7 @@ pipe
       # insert into default search paths.
       + optionalString hostPlatform.isDarwin ''
         substituteInPlace gcc/config/darwin-c.cc \
-          --replace 'if (stdinc)' 'if (0)'
+          --replace-fail 'if (stdinc)' 'if (0)'
 
         substituteInPlace libgcc/config/t-slibgcc-darwin \
           --replace "-install_name @shlib_slibdir@/\$(SHLIB_INSTALL_NAME)" "-install_name ''${!outputLib}/lib/\$(SHLIB_INSTALL_NAME)"

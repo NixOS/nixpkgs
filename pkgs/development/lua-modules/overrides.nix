@@ -49,6 +49,8 @@
   pkg-config,
   readline,
   ripgrep,
+  rust-analyzer,
+  rustc,
   rustPlatform,
   sqlite,
   tree-sitter,
@@ -57,6 +59,7 @@
   util-linux,
   versionCheckHook,
   vimPlugins,
+  vscode-extensions,
   yajl,
   zip,
   zlib,
@@ -542,15 +545,33 @@ in
     '';
   };
 
-  lua-resty-jwt = prev.lua-resty-jwt.overrideAttrs {
-    src = fetchFromGitHub {
-      owner = "cdbattags";
-      repo = "lua-resty-jwt";
-      rev = "v0.3.2";
-      hash = "sha256-VCi5ge2jAldJQgecFeMZJkq5PqRQdUs+K8NsXWmK7IQ=";
+  lua-resty-http = prev.lua-resty-http.overrideAttrs (old: {
+    # https://github.com/ledgetech/lua-resty-http/issues/352
+    propagatedBuildInputs = old.propagatedBuildInputs ++ [
+      final.lua-resty-string
+    ];
+  });
+
+  lua-resty-jwt = prev.lua-resty-jwt.overrideAttrs (old: {
+    src = old.src.override {
       fetchSubmodules = true;
+      hash = "sha256-71Y88ZvmvysgTmY19eogLO1xNaY0WMjhZ//r18dFPdw=";
     };
-  };
+  });
+
+  lua-resty-openidc = prev.lua-resty-openidc.overrideAttrs (old: {
+    postConfigure = (old.postConfigure or "") + ''
+      substituteInPlace "$rockspecFilename" \
+        --replace-fail 'lua-resty-session == 4.2.0-1' 'lua-resty-session >= 4.2.0, < 5.0'
+    '';
+  });
+
+  lua-resty-session = prev.lua-resty-session.overrideAttrs (old: {
+    postConfigure = (old.postConfigure or "") + ''
+      substituteInPlace "$rockspecFilename" \
+        --replace-fail '"lua-resty-lrucache >= 0.09",' ""
+    '';
+  });
 
   lua-rtoml = prev.lua-rtoml.overrideAttrs (old: {
     strictDeps = false;
@@ -1143,6 +1164,11 @@ in
   };
 
   rocks-nvim = prev.rocks-nvim.overrideAttrs (oa: {
+    # Inserting keys during pairs() traversal can omit the WARN log level.
+    postPatch = (oa.postPatch or "") + ''
+      substituteInPlace lua/rocks/log.lua \
+        --replace-fail 'pairs(log_levels)' 'pairs(vim.log.levels)'
+    '';
 
     nativeCheckInputs = [
       final.nlua
@@ -1168,12 +1194,26 @@ in
   };
 
   rustaceanvim = prev.rustaceanvim.overrideAttrs {
+    patches = [
+      (fetchpatch {
+        name = "rustaceanvim-macos-tests.patch";
+        url = "https://github.com/mrcjkb/rustaceanvim/commit/1d19d8112db57f376e70b24780fb7d15612f4669.patch";
+        hash = "sha256-7Gw4QgVBm7dIMiznGDejQ+aNq+DQEdsxkJ35T5A/EN4=";
+      })
+    ];
     doCheck = lua.luaversion == "5.1";
     nativeCheckInputs = [
       final.nlua
       final.bustedCheckHook
       writableTmpDirAsHomeHook
+      rust-analyzer
+      cargo
+      rustc
+      vscode-extensions.vadimcn.vscode-lldb.adapter
     ];
+    preCheck = ''
+      LUA_PATH="${vimPlugins.nvim-dap}/lua/?.lua;${vimPlugins.nvim-dap}/lua/?/init.lua;$LUA_PATH"
+    '';
   };
 
   sofa = prev.sofa.overrideAttrs (old: {
@@ -1210,20 +1250,6 @@ in
         -u test/minimal_init.vim --cmd "set rtp+=${vimPlugins.plenary-nvim}" \
         -c "PlenaryBustedDirectory test/auto/ { sequential = true, minimal_init = './test/minimal_init.vim' }"
       runHook postCheck
-    '';
-  };
-
-  std-_debug = prev.std-_debug.overrideAttrs {
-    # run make to generate lib/std/_debug/version.lua
-    preConfigure = ''
-      make all
-    '';
-  };
-
-  std-normalize = prev.std-normalize.overrideAttrs {
-    # run make to generate lib/std/_debug/version.lua
-    preConfigure = ''
-      make all
     '';
   };
 

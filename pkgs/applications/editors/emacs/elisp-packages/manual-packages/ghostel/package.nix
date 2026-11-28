@@ -4,7 +4,7 @@
   melpaBuild,
   nix-update-script,
   stdenv,
-  zig_0_16,
+  zig_0_17,
   emacs,
   xcbuild,
 }:
@@ -58,21 +58,21 @@ in
 melpaBuild (finalAttrs: {
   pname = "ghostel";
 
-  version = "0.57.0";
+  version = "0.67.0";
 
   src = fetchFromGitHub {
     owner = "dakra";
     repo = "ghostel";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vPegePT5n11cI+eq9VWl0u068b2o50A4Wo8qcdYwJ34=";
+    hash = "sha256-GjS6SYoCwmRrP2P7SOFTtStHDPtuy6Uq52Sug8eYfYE=";
   };
 
   # these can be put into mkModule, but we put them here to ease user overrideAttrs
-  zig = zig_0_16;
+  zig = zig_0_17;
   zigDeps = finalAttrs.zig.fetchDeps {
     inherit (finalAttrs) src pname version;
     fetchAll = true;
-    hash = "sha256-87q0nSOkZaIHW8Ztgf5pR13sHNw7eQKJhu12QjRMTvA=";
+    hash = "sha256-3pDE8/KCzHR08VqAHJR6rdMOGARCyH0tc5UTOeCvs14=";
   };
 
   files = ''
@@ -102,6 +102,7 @@ melpaBuild (finalAttrs: {
     homepage = "https://github.com/dakra/ghostel";
     description = "Terminal emulator powered by libghostty";
     maintainers = with lib.maintainers; [
+      deejayem
       rohan-datar
       vonfry
     ];

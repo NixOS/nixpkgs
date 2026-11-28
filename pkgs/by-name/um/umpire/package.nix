@@ -26,7 +26,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "umpire";
-  version = "2025.12.0";
+  version = "2026.07.2";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "LLNL";
     repo = "umpire";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9lGI5SKpDIIzZvsG/yKopfXS1PuHOQB9bwSuML2Xh/8=";
+    hash = "sha256-ZYF0/O+TkeqWhxSNvJFSAav778zSLml8rANcgadNNx8=";
     fetchSubmodules = true;
   };
 
@@ -61,6 +61,9 @@ stdenv.mkDerivation (finalAttrs: {
     lib.optionals cudaSupport [
       "-DENABLE_CUDA=ON"
       (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaPackages.flags.cmakeCudaArchitecturesString)
+      # The bundled camp test resource_aware_pool_tests.cpp uses brace-
+      # initialization syntax that nvcc cannot compile.
+      "-DENABLE_TESTS=OFF"
     ]
     ++ lib.optionals rocmSupport [
       "-DENABLE_HIP=ON"

@@ -1,20 +1,22 @@
 {
-  stdenvNoCC,
   lib,
   protobuf,
   rustPlatform,
   fetchFromGitHub,
   pkgsBuildHost,
+  aws-lc,
   openssl,
   pkg-config,
   writableTmpDirAsHomeHook,
   versionCheckHook,
   nix-update-script,
+  sqlite,
+  sqlcipher,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gurk-rs";
-  version = "0.10.2";
+  version = "0.11.0";
 
   __structuredAttrs = true;
 
@@ -22,26 +24,28 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "boxdot";
     repo = "gurk-rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qJOmuwctXDm6kSQOfx4j6Vu/nfcJg7vX+zPr1RgtidE=";
+    hash = "sha256-RuDzSlFoNllCfi2GzGq/OmWhGGLL2w5yhCMe8BhZfII=";
   };
 
   postPatch = ''
     rm .cargo/config.toml
   '';
 
-  cargoHash = "sha256-HbqFWiRMx21OA5gLUjHDav01Kbd6lCD6ODd22hNZpDw=";
+  cargoHash = "sha256-DD8VS79jZ+YPQY1iVqDIbBh3/gtsuhA5Wj6H4CwegKQ=";
 
   nativeBuildInputs = [
     protobuf
     pkg-config
   ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [
+    aws-lc
+    openssl
+    sqlite
+    sqlcipher
+  ];
 
   env = {
-    NIX_LDFLAGS = lib.optionalString (
-      with stdenvNoCC.hostPlatform; (isDarwin && isx86_64)
-    ) "-framework AppKit";
     OPENSSL_NO_VENDOR = true;
     PROTOC = "${lib.getExe pkgsBuildHost.protobuf}";
   };

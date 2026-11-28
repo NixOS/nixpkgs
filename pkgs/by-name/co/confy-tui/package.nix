@@ -2,11 +2,13 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  openssl,
+  pkg-config,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "confy-tui";
-  version = "3.1.1";
+  version = "4.0.0";
 
   __structuredAttrs = true;
 
@@ -14,10 +16,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "phluxjr";
     repo = "confy";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-SFcRMJn8AfNdLnBHEDQ9MVUiTo/8wmtEWwCKMgLTo74=";
+    hash = "sha256-7pyQphd+/wN7Y0+v0+lbCA9lwXTD97D/pzV+QVfKN6A=";
   };
 
-  cargoHash = "sha256-E4AK2WLwr7GEexM8JncfHoSBQxQ1OuCkro9jEq+9I4s=";
+  cargoHash = "sha256-/jkwIpkv0OMeBQQqJWkR1vJN3p9WgrD6yI2g4t7J8O4=";
+
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ openssl ];
 
   postInstall = ''
     install -Dm644 confy.1 $out/share/man/man1/confy.1

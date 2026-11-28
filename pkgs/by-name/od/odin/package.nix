@@ -12,25 +12,25 @@
 
 let
   inherit (llvmPackages) stdenv;
-  box2dVersion = "3.1.1";
+  box2dVersion = "3.2.0";
   box2dTarball =
     if enableBox2d then
       fetchurl {
         url = "https://github.com/erincatto/box2d/archive/refs/tags/v${box2dVersion}.tar.gz";
-        hash = "sha256-+275FLUPQxLX2SGmAOq8EjGLs8VaC4wLkGCPpEiO8uQ=";
+        hash = "sha256-/+x0eyeiJnAW+NAkDWWMgtGH+yJx+g9p/L5T+8BnGA0=";
       }
     else
       null;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "odin";
-  version = "dev-2026-10";
+  version = "dev-2026-11a";
 
   src = fetchFromGitHub {
     owner = "odin-lang";
     repo = "Odin";
     tag = finalAttrs.version;
-    hash = "sha256-Y8Em52W3ntWXgnRiRAyhWv5Y6+3b/4bj2+TTIvtniYU=";
+    hash = "sha256-LzvPcA6CA0p9DZi1cuFUizDPkVODMZ0OC9/y+NAO0Kc=";
   };
 
   patches = [

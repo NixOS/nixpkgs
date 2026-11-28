@@ -10,6 +10,8 @@ rustPlatform.buildRustPackage {
   pname = "formatjson5";
   version = "0.2.6";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "google";
     repo = "json5format";
@@ -38,7 +40,7 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-1CSt9dPVHdOqfQXio7/eXiDLWt+iOe6Qj+VtWblwSDE=";
 
-  cargoBuildFlags = [ "--example formatjson5" ];
+  cargoBuildFlags = [ "--example=formatjson5" ];
 
   postInstall =
     let

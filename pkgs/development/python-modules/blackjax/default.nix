@@ -30,7 +30,6 @@ buildPythonPackage (finalAttrs: {
   pname = "blackjax";
   version = "1.7.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "blackjax-devs";

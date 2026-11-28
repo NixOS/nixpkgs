@@ -1,0 +1,114 @@
+commit 06c467827da0e50922be6de87440eee0540140ed
+Author:     Jeremy Fleischman <jeremyfleischman@gmail.com>
+AuthorDate: Sun Nov 23 13:20:10 2025 -0800
+Commit:     Jeremy Fleischman <jeremyfleischman@gmail.com>
+CommitDate: Sun Nov 23 13:25:59 2025 -0800
+
+    Fix a few bugs with config parsing
+    
+    All these `AttributeError`s weren't actually working, I get `KeyError`
+    instead:
+    
+    ```
+    Python 3.12.11 (main, Jun  3 2025, 15:41:47) [GCC 14.3.0] on linux
+    Type "help", "copyright", "credits" or "license" for more information.
+    >>> import configparser
+    >>> conf = configparser.ConfigParser()
+    >>> conf['tv']
+    Traceback (most recent call last):
+      File "<stdin>", line 1, in <module>
+      File "/nix/store/qlz1jypzdb320jp0ci0igxg2ghf0974d-python3-3.12.11/lib/python3.12/configparser.py", line 941, in __getitem__
+        raise KeyError(key)
+    KeyError: 'tv'
+    ```
+    
+    Perhaps this changed in some version of Python? I opted to write
+    explicit `if 'tv' in conf:` style guards instead. I would have used `conf.get('tv',
+    None)`, but the `ConfigParser` api unfortunately is not exactly like
+    python dicts.
+    
+    I also fixed a confusing error that would happen if the given config
+    file did not exist. We'd initialize `conf` to `None`, and then go on to
+    crash trying to read attributes of the now-`None` `conf`. Now we log a
+    warning and carry on.
+
+diff --git a/cecdaemon/cecdaemon.py b/cecdaemon/cecdaemon.py
+index f7665ef..88a39a7 100644
+--- a/cecdaemon/cecdaemon.py
++++ b/cecdaemon/cecdaemon.py
+@@ -29,48 +29,46 @@ def __init__(self):
+         cec_init()
+         logging.info('CEC Initialized')
+ 
++        conf = ConfigParser()
+         if os.path.isfile(self.args.conffile):
+-            conf = ConfigParser()
+             logging.info('Using config file %s', self.args.conffile)
+             conf.read(self.args.conffile)
+         else:
+-            logging.warning('Config file not found')
+-            conf = None
+-
+-        try:
+-            tvconf = conf._sections['tv']
+-            television = Tv(cec, tvconf)
+-        except AttributeError:
+-            television = Tv(cec, None)
+-
+-        try:
+-            triggerconf = conf._sections['triggers']
+-            trigger = Trigger(cec, triggerconf)
+-        except AttributeError:
++            logging.warning('Config file not found: %s', self.args.conffile)
++
++        if 'tv' in conf:
++            tvconf = conf['tv']
++            Tv(cec, tvconf)
++        else:
++            Tv(cec, None)
++
++        if 'triggers' in conf:
++            triggerconf = conf['triggers']
++            Trigger(cec, triggerconf)
++        else:
+             logging.warning(
+                 'No triggers section found in config, triggers disabled')
+ 
+-        try:
+-            keymap = conf._sections['keymap']
++        if 'keymap' in conf:
++            keymap = conf['keymap']
+             remote = Remote(cec, keymap)
+-        except AttributeError:
++        else:
+             remote = Remote(cec, None)
+ 
+-        if conf is not None:
+-            for name in [x for x in conf.sections() if x[:4] == 'cmd_']:
+-                logging.debug('Creating callback for %s', name)
++        for name in [x for x in conf.sections() if x[:4] == 'cmd_']:
++            logging.debug('Creating callback for %s', name)
+ 
+-                try:
+-                    cmd = conf[name]['command']
+-                    htime = conf[name]['holdtime']
+-                    key = conf[name]['key']
++            try:
++                cmd = conf[name]['command']
++                htime = conf[name]['holdtime']
++                key = conf[name]['key']
+ 
+-                    callback = (CustomCommand(cmd, htime))
+-                    remote.add_callback(callback.run_command, int(key))
++                callback = (CustomCommand(cmd, htime))
++                remote.add_callback(callback.run_command, int(key))
+ 
+-                except AttributeError:
+-                    logging.warning(
+-                        'Callback for %s not created, check format', name)
++            except AttributeError:
++                logging.warning(
++                    'Callback for %s not created, check format', name)
+ 
+     def _setup_logging(self):
+         """ Configure logging

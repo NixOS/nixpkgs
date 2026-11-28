@@ -88,7 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
   ''
   + lib.optionalString withWindowsGuestSupport ''
     ln -s "${virtio-win}" $out/share/virtio-win
-    ln -s "${pkgsCross.mingwW64.rhsrvany}/bin/" $out/share/virt-tools
+    ln -s "${pkgsCross.mingw-msvcrt-x86_64.rhsrvany}/bin/" $out/share/virt-tools
   '';
 
   env.PKG_CONFIG_BASH_COMPLETION_COMPLETIONSDIR = "${placeholder "out"}/share/bash-completion/completions";

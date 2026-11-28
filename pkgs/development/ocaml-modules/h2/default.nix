@@ -17,7 +17,7 @@ let
     owner = "http2jp";
     repo = "http2-frame-test-case";
     rev = "5c67db0d4d68e1fb7d3a241d6e01fc04d981f465";
-    sha256 = "16yyb37f8mk9saw7ndjs5is67yq7qa6b6y7k0c75ibxi4n9aw1r3";
+    hash = "sha256-IweukiWxr1gOA/N4s4zCB/tjdCxaNnu40mlW5M5Y3ps=";
   };
 in
 

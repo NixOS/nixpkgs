@@ -62,6 +62,8 @@ in
       after = [ "network-online.target" ];
       wants = [ "network-online.target" ];
 
+      path = [ pkgs.iputils ];
+
       serviceConfig =
         let
           bluetoothCaps = [
@@ -87,8 +89,8 @@ in
           DynamicUser = true;
 
           # Required for interaction with hci devices and bluetooth sockets
-          AmbientCapabilities = lib.optionals cfg.bluetoothSupport bluetoothCaps;
-          CapabilityBoundingSet = lib.optionals cfg.bluetoothSupport bluetoothCaps;
+          AmbientCapabilities = if cfg.bluetoothSupport then bluetoothCaps else [ "" ];
+          CapabilityBoundingSet = if cfg.bluetoothSupport then bluetoothCaps else [ "" ];
           LockPersonality = true;
           NoNewPrivileges = true;
           PrivateTmp = true;
@@ -117,6 +119,10 @@ in
           SystemCallFilter = [
             "@system-service"
             "~@privileged"
+
+            # ping from iputils (used for pinging nodes) needs this to drop privileges
+            "capset"
+            "setuid"
           ];
           UMask = "0077";
         };

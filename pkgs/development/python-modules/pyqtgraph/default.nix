@@ -30,7 +30,6 @@ buildPythonPackage (finalAttrs: {
   pname = "pyqtgraph";
   version = "0.14.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pyqtgraph";

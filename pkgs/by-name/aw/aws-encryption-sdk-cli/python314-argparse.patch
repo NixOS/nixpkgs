@@ -1,0 +1,21 @@
+diff --git a/src/aws_encryption_sdk_cli/internal/arg_parsing.py b/src/aws_encryption_sdk_cli/internal/arg_parsing.py
+index 8926458..b013d77 100644
+--- a/src/aws_encryption_sdk_cli/internal/arg_parsing.py
++++ b/src/aws_encryption_sdk_cli/internal/arg_parsing.py
+@@ -176,14 +176,11 @@ def _build_parser():
+ 
+     # For each argument added to this group, a dummy redirect argument must
+     # be added to the parent parser for each long form option string.
+-    version_or_action = parser.add_mutually_exclusive_group(required=True)
++    operating_action = parser.add_mutually_exclusive_group(required=True)
+ 
+-    version_or_action.add_argument("--version", action="version", version=_version_report())
++    operating_action.add_argument("--version", action="version", version=_version_report())
+     parser.add_dummy_redirect_argument("--version")
+ 
+-    # For each argument added to this group, a dummy redirect argument must
+-    # be added to the parent parser for each long form option string.
+-    operating_action = version_or_action.add_mutually_exclusive_group()
+     operating_action.add_argument(
+         "-e", "--encrypt", dest="action", action="store_const", const="encrypt", help="Encrypt data"
+     )

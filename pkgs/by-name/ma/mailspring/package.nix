@@ -19,13 +19,13 @@
   commandLineArgs ? "",
 }:
 let
-  version = "1.26.0";
+  version = "1.26.2";
 
   src = fetchFromGitHub {
     owner = "Foundry376";
     repo = "Mailspring";
     tag = version;
-    hash = "sha256-kyiHxhhsQFXggjeiHq6f/PAyOd+l/Kk+tkLY4/aC7GM=";
+    hash = "sha256-juSvarPaDtFU8CElFzFvgqck64CB1l/W+IC41bU3AtY=";
     fetchSubmodules = true;
   };
 
@@ -41,7 +41,7 @@ let
     pname = "mailspring-app";
     inherit version src patches;
     postPatch = "cd app"; # we don't use sourceRoot so that we don't have to make the patch relative to it
-    npmDepsHash = "sha256-Bj41bbICX8mHw0DqzGekjDnain0HGJ3Y5B3aADPV8+0=";
+    npmDepsHash = "sha256-HxV91J+m5i47OhaqLbvQ/5YAGTCLcLIxTR4Zv0hyAks=";
     dontNpmBuild = true;
     env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
@@ -67,7 +67,7 @@ buildNpmPackage (finalAttrs: {
   pname = "mailspring";
   inherit version src patches;
 
-  npmDepsHash = "sha256-EWXLOGKWPvE42PvpzJL47i0FojoZeVcMkUctuf3/Hnw=";
+  npmDepsHash = "sha256-XRyhz1hdiohotxHDDXtmLmUgGpdKqE8JQ1drZRKrtrQ=";
 
   nativeBuildInputs = [
     makeBinaryWrapper

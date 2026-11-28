@@ -37,7 +37,7 @@ buildPythonPackage {
     unittestCheckHook
   ];
 
-  unittestFlagsArray = [ "june" ];
+  unittestFlags = [ "--start-directory=june" ];
 
   pythonImportsCheck = [ "june" ];
 

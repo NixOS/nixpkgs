@@ -15,7 +15,7 @@ buildDunePackage (finalAttrs: {
     owner = "hhugo";
     repo = "odate";
     rev = finalAttrs.version;
-    sha256 = "sha256-C11HpftrYOCVyWT31wrqo8FVZuP7mRUkRv5IDeAZ+To=";
+    hash = "sha256-C11HpftrYOCVyWT31wrqo8FVZuP7mRUkRv5IDeAZ+To=";
   };
 
   nativeBuildInputs = [ menhir ];

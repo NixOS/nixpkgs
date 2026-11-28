@@ -1,21 +1,22 @@
 {
-  pname,
-  version,
-  src,
-  meta,
-  passthru ? { },
   stdenvNoCC,
+  fetchurl,
   _7zz,
+
+  passthru,
+  pname,
+  meta,
+  ...
 }:
 
-stdenvNoCC.mkDerivation {
-  inherit
-    pname
-    version
-    src
-    meta
-    passthru
-    ;
+stdenvNoCC.mkDerivation (finalAttrs: {
+  inherit pname;
+
+  inherit (finalAttrs.passthru.source) version;
+  src = fetchurl finalAttrs.passthru.source.src;
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   # dmg is APFS formatted
   nativeBuildInputs = [ _7zz ];
@@ -30,4 +31,8 @@ stdenvNoCC.mkDerivation {
 
     runHook postInstall
   '';
-}
+
+  passthru = passthru finalAttrs;
+
+  meta = meta finalAttrs;
+})

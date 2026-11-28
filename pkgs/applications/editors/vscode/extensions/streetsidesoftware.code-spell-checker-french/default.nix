@@ -4,8 +4,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "code-spell-checker-french";
     publisher = "streetsidesoftware";
-    version = "1.0.0";
-    hash = "sha256-6/OJSRyOzcS9vubY59JWmfX2iC9frS51NC4ivvsvfik=";
+    version = "1.0.2";
+    hash = "sha256-Lmfs67krcFrNHXsrdBlOP5pyE2a4yKE570tv39of1PQ=";
   };
   meta = {
     changelog = "https://marketplace.visualstudio.com/items/streetsidesoftware.code-spell-checker-french/changelog";

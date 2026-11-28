@@ -12,9 +12,12 @@ if [[ "$UPDATE_NIX_OLD_VERSION" == "$latestVersion" ]]; then
     exit 0
 fi
 
-nix-update "$UPDATE_NIX_PNAME" --version "$latestVersion"
+# Update version and src.hash
+nix-update "$UPDATE_NIX_PNAME" --version "$latestVersion" --src-only
 
+# Update missing-hashes.json
 src=$(nix-build --no-link "$PWD" -A "$UPDATE_NIX_PNAME.src")
 yarn-berry-fetcher missing-hashes "$src/yarn.lock" >"$ROOT/missing-hashes.json"
 
+# Update offlineCache
 nix-update "$UPDATE_NIX_PNAME" --version skip

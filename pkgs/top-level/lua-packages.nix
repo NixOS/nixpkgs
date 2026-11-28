@@ -186,6 +186,28 @@ rec {
     }
   ) { };
 
+  lua-resty-string = callPackage (
+    { fetchFromGitHub }:
+    buildLuaPackage rec {
+      pname = "lua-resty-string";
+      version = "0.19";
+
+      src = fetchFromGitHub {
+        owner = "openresty";
+        repo = "lua-resty-string";
+        rev = "v${version}";
+        hash = "sha256-AMZo93bf8OJlOyqoCl6htzj67xP94oIru9ec+l5SVEo=";
+      };
+
+      meta = {
+        description = "String utilities and common hash functions for ngx_lua and LuaJIT";
+        homepage = "https://github.com/openresty/lua-resty-string";
+        license = lib.licenses.bsd2;
+        maintainers = [ lib.maintainers.leona ];
+      };
+    }
+  ) { };
+
   lua-resty-lrucache = callPackage (
     { fetchFromGitHub }:
     buildLuaPackage rec {

@@ -4,6 +4,10 @@
   rustPlatform,
   fetchFromGitHub,
   makeWrapper,
+  pkg-config,
+  aws-lc,
+  sqlite,
+  zstd,
   bento4,
   protobuf,
   ffmpeg,
@@ -44,7 +48,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     makeWrapper
+    pkg-config
     protobuf
+  ];
+
+  buildInputs = [
+    aws-lc
+    sqlite
+    zstd
   ];
 
   # The tests depend on network access.

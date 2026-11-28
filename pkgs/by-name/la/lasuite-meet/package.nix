@@ -6,13 +6,13 @@
   python3,
 }:
 let
-  version = "1.35.0";
+  version = "1.38.0";
 
   src = fetchFromGitHub {
     owner = "suitenumerique";
     repo = "meet";
     tag = "v${version}";
-    hash = "sha256-kH6A5tyrUuraJ+Ckn8U0k6UvSSE5kBULMWIPlOwiIs4=";
+    hash = "sha256-jap7cbNRW8zK6WpyNfk2Rf+U8sLhK1ObYCya9qayA/0=";
   };
 
   meta = {
@@ -29,7 +29,12 @@ let
 
   python = python3.override {
     self = python3;
-    packageOverrides = (self: super: { django = super.django_5; });
+    packageOverrides = (
+      self: super: {
+        django = self.django_5;
+        mcp = self.mcp_1;
+      }
+    );
   };
 in
 python.pkgs.buildPythonApplication (finalAttrs: {
@@ -46,7 +51,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "uv_build>=0.12.6,<0.13.0" "uv_build"
+      --replace-fail "uv_build>=0.13.5,<0.14.0" "uv_build"
   '';
 
   build-system = with python.pkgs; [ uv-build ];
@@ -83,6 +88,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
       june-analytics-python
       livekit-api
       markdown
+      menshen-client
       mozilla-django-oidc
       nested-multipart-parser
       phonenumbers

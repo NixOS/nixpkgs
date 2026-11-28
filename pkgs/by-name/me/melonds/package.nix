@@ -28,13 +28,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "melonds";
-  version = "1.1-unstable-2026-08-24";
+  version = "1.1-unstable-2026-11-22";
 
   src = fetchFromGitHub {
     owner = "melonDS-emu";
     repo = "melonDS";
-    rev = "906e9ebb27da8c6a715cd7abab4abfe8a8d29427";
-    hash = "sha256-hJFzH7qPk2NIXl9OQQyqSId6uofJ//FoslmbyX5ZjUk=";
+    rev = "ff972523f8a70e877dd054439876c3c8c6b79197";
+    hash = "sha256-H71BbYQl2IMI8/Us11Gi8FvBSkI9E9QBBCgGk/1KP7I=";
   };
 
   nativeBuildInputs = [
@@ -67,15 +67,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   qtWrapperArgs =
     lib.optionals stdenv.hostPlatform.isLinux [
-      "--prefix LD_LIBRARY_PATH : ${
-        lib.makeLibraryPath [
-          libpcap
-          wayland
-        ]
-      }"
+      "--prefix"
+      "LD_LIBRARY_PATH"
+      ":"
+      (lib.makeLibraryPath [
+        libpcap
+        wayland
+      ])
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "--prefix DYLD_LIBRARY_PATH : ${lib.makeLibraryPath [ libpcap ]}"
+      "--prefix"
+      "DYLD_LIBRARY_PATH"
+      ":"
+      (lib.makeLibraryPath [ libpcap ])
     ];
 
   passthru = {

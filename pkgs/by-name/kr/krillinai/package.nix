@@ -20,7 +20,7 @@ buildGoModule (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "krillinai";
-    repo = "KrillinAI";
+    repo = "OpenCreator";
     tag = "v${finalAttrs.version}";
     hash = "sha256-k1p9v3MQklycW2FsDCyEWNwjLFSymxx1qVg5qhC8xgI=";
   };
@@ -51,8 +51,8 @@ buildGoModule (finalAttrs: {
 
   meta = {
     description = "Video translation and dubbing tool";
-    homepage = "https://github.com/krillinai/KrillinAI";
-    changelog = "https://github.com/krillinai/KrillinAI/releases/tag/v${finalAttrs.version}";
+    homepage = "https://github.com/krillinai/OpenCreator";
+    changelog = "https://github.com/krillinai/OpenCreator/releases/tag/v${finalAttrs.version}";
     mainProgram = "krillinai-desktop";
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];

@@ -21,9 +21,16 @@
 }:
 
 let
-  version = "1.5.0";
+  pythonPackages = python3Packages.overrideScope (
+    final: prev: {
+      # Necessary until newelle works with mcp 2.x
+      mcp = final.mcp_1;
+    }
+  );
+
+  version = "1.6.1";
 in
-python3Packages.buildPythonApplication {
+pythonPackages.buildPythonApplication {
   pname = "newelle";
   inherit version;
   pyproject = false; # uses meson
@@ -32,12 +39,12 @@ python3Packages.buildPythonApplication {
     owner = "qwersyk";
     repo = "Newelle";
     tag = version;
-    hash = "sha256-P+bwcqrF9BTKFb47vVBO1GzFaqb6zMpaeYlI2g9rhX4=";
+    hash = "sha256-myVEdqIcAKx+RAoy3h4rmhW+vYAlBwnXTa8uiwvLfiY=";
   };
 
   postPatch = ''
     substituteInPlace src/utility/pip.py \
-      --replace-fail "# Manage pip path locking" "return None"
+      --replace-fail "global PIP_INSTALLED" "return None"
   '';
 
   nativeBuildInputs = [
@@ -58,7 +65,7 @@ python3Packages.buildPythonApplication {
     glib-networking
   ];
 
-  dependencies = with python3Packages; [
+  dependencies = with pythonPackages; [
     pygobject3
     libxml2
     cssselect
@@ -74,11 +81,16 @@ python3Packages.buildPythonApplication {
     tiktoken
     openai
     ollama
+    faiss-cpu
     llama-index-core
     llama-index-readers-file
+    llama-index-vector-stores-faiss
     google-genai
     anthropic
     mcp
+    ddgs
+    markdownify
+    huggingface-hub
   ];
 
   postInstallCheck = ''
@@ -87,15 +99,19 @@ python3Packages.buildPythonApplication {
 
   dontWrapGApps = true;
 
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   makeWrapperArgs = [
-    "\${gappsWrapperArgs[@]}"
-    "--prefix PATH : ${
-      lib.makeBinPath [
-        lsb-release
-        bash
-        ffmpeg
-      ]
-    }"
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [
+      lsb-release
+      bash
+      ffmpeg
+    ])
   ];
 
   passthru.updateScript = nix-update-script { };

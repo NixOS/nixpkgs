@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  fetchpatch,
   qlementine,
   cmake,
   ninja,
@@ -22,6 +23,17 @@ stdenv.mkDerivation (finalAttrs: {
   inherit (solarus) version;
 
   src = solarus.src + "/editor";
+
+  patches = [
+    # Fix build with Qt 6.12, remove with the next release
+    # https://gitlab.com/solarus-games/solarus/-/merge_requests/1758
+    (fetchpatch {
+      url = "https://gitlab.com/solarus-games/solarus/-/commit/e0eca6af65f7a96951d23fb3108489d08aed5825.patch";
+      relative = "editor";
+      excludes = [ "changelog.md" ];
+      hash = "sha256-fQqTTbieccS0CgSfq3Vh8j8JwDN9zaWC9YjmxcyE3AY=";
+    })
+  ];
 
   strictDeps = true;
   nativeBuildInputs = [

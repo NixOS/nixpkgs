@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxslt
     makeWrapper
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     autoreconfHook
     gtk-doc
   ];
@@ -61,7 +61,5 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl21Only;
     maintainers = [ ];
     platforms = lib.platforms.unix;
-    # The last successful Darwin Hydra build was in 2024
-    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
   };
 })

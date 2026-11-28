@@ -9,13 +9,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "obs-color-monitor";
-  version = "0.9.6";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "norihiro";
     repo = "obs-color-monitor";
     tag = finalAttrs.version;
-    hash = "sha256-2TjkPsudGwB2TNdfVnRqMiUQquAnCdBEmG9N9JLfewo=";
+    fetchSubmodules = true;
+    hash = "sha256-QXhFYZLo5TFReI6xsOwB0Ty+Jf9KaefWcCnjMiHJyno=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -24,12 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qtbase
   ];
 
-  postInstall = ''
-    mkdir $out/lib $out/share
-    mv $out/obs-plugins/64bit $out/lib/obs-plugins
-    mv $out/data $out/share/obs
-    rm -rf $out/obs-plugins
-  '';
+  cmakeFlags = [ (lib.cmakeFeature "QT_VERSION" "6") ];
 
   dontWrapQtApps = true;
 

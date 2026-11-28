@@ -1,18 +1,18 @@
 {
-  "version": "2026.1",
-  "buildNumber": "261.25134.779",
+  "version": "2026.2",
+  "buildNumber": "262.11879.701",
   "urls": {
     "x86_64-linux": {
-      "url": "https://download.jetbrains.com/mps/2026.1/MPS-2026.1.tar.gz",
-      "hash": "sha256-NbURKu1jTPoJQvV8FpMacBa+FehF7XfF6xZmIhFlb2A="
+      "url": "https://download.jetbrains.com/mps/2026.2/MPS-2026.2.tar.gz",
+      "hash": "sha256-zgzyDheO/FoBS5Bm6ysvzlNKFkE4vz0a5eXRFyK/TPg="
     },
     "aarch64-linux": {
-      "url": "https://download.jetbrains.com/mps/2026.1/MPS-2026.1.tar.gz",
-      "hash": "sha256-NbURKu1jTPoJQvV8FpMacBa+FehF7XfF6xZmIhFlb2A="
+      "url": "https://download.jetbrains.com/mps/2026.2/MPS-2026.2.tar.gz",
+      "hash": "sha256-zgzyDheO/FoBS5Bm6ysvzlNKFkE4vz0a5eXRFyK/TPg="
     },
     "aarch64-darwin": {
-      "url": "https://download.jetbrains.com/mps/2026.1/MPS-2026.1-macos-aarch64.dmg",
-      "hash": "sha256-5VtPS26/vCKa+mfDAQKgd9x5A+Cqv39Kz+2EKkgul+I="
+      "url": "https://download.jetbrains.com/mps/2026.2/MPS-2026.2-macos-aarch64.dmg",
+      "hash": "sha256-O9Aa33zwTFHms0eKfxNwr331EQEu17h5AnVa0OKAbMU="
     }
   }
 }

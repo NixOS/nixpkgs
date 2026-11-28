@@ -72,7 +72,6 @@ let
 
   inherit (lib.modules)
     mergeDefinitions
-    fixupOptionType
     mergeOptionDecls
     defaultOrderPriority
     defaultOverridePriority
@@ -850,7 +849,9 @@ rec {
     name = "attrs";
     description = "attribute set";
     check = isAttrs;
-    merge = loc: foldl' (res: def: res // def.value) { };
+    merge =
+      loc: defs:
+      if length defs == 1 then (head defs).value else foldl' (res: def: res // def.value) { } defs;
     emptyValue = {
       value = { };
     };
@@ -1040,16 +1041,17 @@ rec {
             evals = filter (x: x.optionalValue ? value) (
               concatLists (
                 imap1 (
-                  n: def:
+                  n:
+                  { file, value, ... }:
                   imap1 (
                     m: def':
                     (mergeDefinitions (loc ++ [ "[definition ${toString n}-entry ${toString m}]" ]) elemType [
                       {
-                        inherit (def) file;
+                        inherit file;
                         value = def';
                       }
                     ])
-                  ) def.value
+                  ) value
                 ) defs
               )
             );
@@ -1304,35 +1306,24 @@ rec {
   /**
     `types.attrsOf` *`t`*
 
-    An attribute set of where all the values are of *`t`* type. Multiple
-    definitions result in the joined attribute set.
+    _Shorthand for `types.attrsWith { lazy = false; elemType = t; }`._
 
-    ::: {.note}
-    This type is *strict* in its values, which in turn means attributes
-    cannot depend on other attributes. See `
-           types.lazyAttrsOf` for a lazy version.
-    :::
+    An attribute set where all the values are of *`t`* type.
+
+    This type is *strict* in its values, which in turn means attributes cannot depend on other attributes.
+    See [`lazy` in `attrsWith`](#sec-option-types-composed-attrsWith-lazy).
   */
   attrsOf = elemType: attrsWith { inherit elemType; };
 
   /**
     `types.lazyAttrsOf` *`t`*
 
-    An attribute set of where all the values are of *`t`* type. Multiple
-    definitions result in the joined attribute set. This is the lazy
-    version of `types.attrsOf
-          `, allowing attributes to depend on each other.
+    _Shorthand for `types.attrsWith { lazy = true; elemType = t; }`._
 
-    ::: {.warning}
-    This version does not fully support conditional definitions! With an
-    option `foo` of this type and a definition
-    `foo.attr = lib.mkIf false 10`, evaluating `foo ? attr` will return
-    `true` even though it should be false. Accessing the value will then
-    throw an error. For types *`t`* that have an `emptyValue` defined,
-    that value will be returned instead of throwing an error. So if the
-    type of `foo.attr` was `lazyAttrsOf (nullOr int)`, `null` would be
-    returned instead for the same `mkIf false` definition.
-    :::
+    An attribute set where all the values are of *`t`* type.
+
+    This is the lazy version of `types.attrsOf`, allowing attributes to depend on each other, at the cost of potentially containing more attributes than desirable.
+    See [`lazy` in `attrsWith`](#sec-option-types-composed-attrsWith-lazy).
   */
   lazyAttrsOf =
     elemType:
@@ -1344,15 +1335,85 @@ rec {
   /**
     `types.attrsWith` { *`elemType`*, *`lazy`* ? false, *`placeholder`* ? "name" }
 
-    An attribute set of where all the values are of *`elemType`* type.
+    An attribute set where all the values are of *`elemType`* type.
+
+    Multiple definitions will be merged in the resulting attribute set.
 
     **Parameters**
 
     `elemType` (Required)
     : Specifies the type of the values contained in the attribute set.
 
-    `lazy`
-    : Determines whether the attribute set is lazily evaluated. See: `types.lazyAttrsOf`
+    [`lazy`]{#sec-option-types-composed-attrsWith-lazy}
+    : Determines whether the set of attribute names is evaluated before or after evaluating any attribute values.
+
+      `lazy = true` is a preferable choice in principle, but requires extra effort if the option value is used as a whole (e.g. `attrNames` or `toJSON`).
+
+      When `lazy` is `true`, the attribute names are determined by looking at the definitions without evaluating them.
+
+      ::: {.warning}
+      With `lazy = true`, an attribute whose definitions are all `mkIf false` still counts as present, so `foo ? attr` is `true`.
+      Accessing `foo.attr` then throws an error, unless the element type defines `emptyValue` (e.g. `nullOr`), in which case that value is returned.
+      :::
+
+      When `lazy` is `false`, the attribute names are determined by evaluating the definitions to see if they are `mkIf` false, but this also causes the evaluation of regular non-`mkIf` definitions.
+      Evaluating too much causes multiple problems:
+        - infinite recursion if an attribute definition depends on a sibling attribute
+        - irrelevant errors are triggered, despite an attribute not really being used
+        - performance is worse, if any of the values are expensive to evaluate
+
+      Maintainers of this code recommend:
+      - If the attribute set is used _in aggregate_ (e.g. `attrNames`, `toJSON`), use the default `lazy = false;`, so that `mkIf` conditions are evaluated *before* the attribute names are returned.
+      - If attributes are accessed _in isolation_ (e.g. `config.foo`), use `lazy = true;` so that `mkIf` conditions are evaluated *after* the attribute names are returned.
+        This will be more robust and efficient, as the attribute values are not computed until they are needed.
+
+      It is possible to combine both behaviors using `submodule` with `freeformType = attrsWith { lazy = false; ... }` instead of `attrsWith`, in which case the declared options are allowed to refer to each other, but *only* through the submodule's module arguments. See the following example.
+
+      ::: {#ex-freeform-attrsWith-recursive .example}
+      Free-form submodule with recursion
+      ---
+
+      This module demonstrates use of a free-form submodule with recursion:
+
+      ```nix
+      { lib, ... }:
+      let
+        inherit (lib) mkOption types;
+      in
+      {
+        options.foo.settings = mkOption {
+          type = types.submodule ({ config, ... }: {
+            freeformType = types.attrsWith {
+              lazy = false;
+              elemType = types.str;
+            };
+            options = {
+              name = mkOption { type = types.str; };
+              displayName = mkOption { type = types.str; };
+            };
+          });
+        };
+        config.foo.settings = { config, ... }: {
+          name = "foo";
+          displayName = config.name;
+          extra = "bar";
+          ghost = lib.mkIf false "this disappears";
+        };
+      }
+      ```
+
+      It evaluates to the following configuration:
+
+      ```nix
+      {
+        foo.settings = {
+          name = "foo";
+          displayName = "foo";
+          extra = "bar";
+        };
+      }
+      ```
+      :::
 
     `placeholder` (`String`, default: `name` )
     : Placeholder string in documentation for the attribute names.
@@ -1370,11 +1431,11 @@ rec {
     let
       # Push down position info.
       pushPositions = map (
-        def:
+        { file, value, ... }:
         mapAttrs (n: v: {
-          inherit (def) file;
+          inherit file;
           value = v;
-        }) def.value
+        }) value
       );
       binOp =
         lhs: rhs:
@@ -1422,22 +1483,21 @@ rec {
           let
             evals =
               if lazy then
-                zipAttrsWith (name: defs: mergeDefinitions (loc ++ [ name ]) elemType defs) (pushPositions defs)
+                zipAttrsWith (name: mergeDefinitions (loc ++ [ name ]) elemType) (pushPositions defs)
               else
                 # Filtering makes the merge function more strict
                 # Meaning it is less lazy
                 filterAttrs (n: v: v.optionalValue ? value) (
-                  zipAttrsWith (name: defs: mergeDefinitions (loc ++ [ name ]) elemType defs) (pushPositions defs)
+                  zipAttrsWith (name: mergeDefinitions (loc ++ [ name ]) elemType) (pushPositions defs)
                 );
           in
           {
             headError = checkDefsForError check loc defs;
             value = mapAttrs (
-              n: v:
               if lazy then
-                v.optionalValue.value or elemType.emptyValue.value or v.mergedValue
+                n: v: v.optionalValue.value or elemType.emptyValue.value or v.mergedValue
               else
-                v.optionalValue.value
+                n: v: v.optionalValue.value
             ) evals;
             valueMeta.attrs = mapAttrs (n: v: v.checkedAndMerged.valueMeta) evals;
           };
@@ -2072,7 +2132,7 @@ rec {
           ) defs;
           # Merges all the types into a single one, including submodule merging.
           # This also propagates file information to all submodules
-          mergedOption = fixupOptionType loc (mergeOptionDecls loc optionModules);
+          mergedOption = mergeOptionDecls loc optionModules;
         in
         mergedOption.type;
   };
@@ -2119,6 +2179,36 @@ rec {
         `the-submodule = { ... }: { options = { ... }; }`.
   */
   submoduleWith =
+    let
+      inherit (lib.modules) evalModules;
+
+      defaultModules = [
+        {
+          # This is a work-around for the fact that some sub-modules,
+          # such as the one included in an attribute set, expects an "args"
+          # attribute to be given to the sub-module. As the option
+          # evaluation does not have any specific attribute name yet, we
+          # provide a default for the documentation and the freeform type.
+          #
+          # This is necessary as some option declaration might use the
+          # "name" attribute given as argument of the submodule and use it
+          # as the default of option declarations.
+          #
+          # We use lookalike unicode single angle quotation marks because
+          # of the docbook transformation the options receive. In all uses
+          # &gt; and &lt; wouldn't be encoded correctly so the encoded values
+          # would be used, and use of `<` and `>` would break the XML document.
+          # It shouldn't cause an issue since this is cosmetic for the manual.
+          _module.args.name = lib.mkOptionDefault "‹name›";
+        }
+      ];
+
+      name = "submodule";
+      check = {
+        __functor = _self: x: isAttrs x || isFunction x || path.check x;
+        isV2MergeCoherent = true;
+      };
+    in
     {
       modules,
       specialArgs ? { },
@@ -2127,57 +2217,26 @@ rec {
       class ? null,
     }@attrs:
     let
-      inherit (lib.modules) evalModules;
-
-      allModules =
-        defs:
-        map (
-          { value, file }:
-          if isAttrs value && shorthandOnlyDefinesConfig then
-            {
-              _file = file;
-              config = value;
-            }
-          else
-            {
-              _file = file;
-              imports = [ value ];
-            }
-        ) defs;
+      allModules = map (
+        { value, file }:
+        if shorthandOnlyDefinesConfig && isAttrs value then
+          {
+            _file = file;
+            config = value;
+          }
+        else
+          {
+            _file = file;
+            imports = [ value ];
+          }
+      );
 
       base = evalModules {
         inherit class specialArgs;
-        modules = [
-          {
-            # This is a work-around for the fact that some sub-modules,
-            # such as the one included in an attribute set, expects an "args"
-            # attribute to be given to the sub-module. As the option
-            # evaluation does not have any specific attribute name yet, we
-            # provide a default for the documentation and the freeform type.
-            #
-            # This is necessary as some option declaration might use the
-            # "name" attribute given as argument of the submodule and use it
-            # as the default of option declarations.
-            #
-            # We use lookalike unicode single angle quotation marks because
-            # of the docbook transformation the options receive. In all uses
-            # &gt; and &lt; wouldn't be encoded correctly so the encoded values
-            # would be used, and use of `<` and `>` would break the XML document.
-            # It shouldn't cause an issue since this is cosmetic for the manual.
-            _module.args.name = lib.mkOptionDefault "‹name›";
-          }
-        ]
-        ++ modules;
+        modules = defaultModules ++ modules;
       };
 
       freeformType = base._module.freeformType;
-
-      name = "submodule";
-
-      check = {
-        __functor = _self: x: isAttrs x || isFunction x || path.check x;
-        isV2MergeCoherent = true;
-      };
     in
     mkOptionType {
       inherit name;

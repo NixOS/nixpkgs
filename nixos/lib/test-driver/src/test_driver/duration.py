@@ -14,6 +14,22 @@ def as_timedelta(duration: Duration) -> dt.timedelta:
     Bare numbers are interpreted as seconds. This keeps existing test scripts
     that pass plain integers working while `datetime.timedelta` becomes the preferred
     way to express durations.
+
+    >>> as_timedelta(dt.timedelta(minutes=1))
+    datetime.timedelta(seconds=60)
+    >>> as_timedelta(90)
+    datetime.timedelta(seconds=90)
+    >>> as_timedelta(1.5)
+    datetime.timedelta(seconds=1, microseconds=500000)
+
+    A `bool` is an `int` in Python, but it is never a valid duration:
+
+    >>> as_timedelta(True)
+    Traceback (most recent call last):
+    TypeError: expected a duration, got bool: True
+    >>> as_timedelta("1")
+    Traceback (most recent call last):
+    TypeError: expected a timedelta, int, or float duration, got str
     """
     if isinstance(duration, dt.timedelta):
         return duration
@@ -27,7 +43,13 @@ def as_timedelta(duration: Duration) -> dt.timedelta:
 
 
 def as_seconds(duration: Duration) -> float:
-    """Coerce a `Duration` into a floating-point number of seconds."""
+    """Coerce a `Duration` into a floating-point number of seconds.
+
+    >>> as_seconds(90)
+    90.0
+    >>> as_seconds(dt.timedelta(minutes=1, milliseconds=500))
+    60.5
+    """
     return as_timedelta(duration).total_seconds()
 
 

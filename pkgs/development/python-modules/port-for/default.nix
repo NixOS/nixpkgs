@@ -12,7 +12,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "kmike";
+    owner = "fizyk";
     repo = "port-for";
     tag = "v${version}";
     hash = "sha256-vv2xjXyUh6g7T0zGDAlOs3K+YM18wSE8rEvgSP1ZBL4=";
@@ -25,10 +25,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "port_for" ];
 
   meta = {
-    homepage = "https://github.com/kmike/port-for";
+    homepage = "https://github.com/fizyk/port-for";
     description = "Command-line utility and library that helps with TCP port management";
     mainProgram = "port-for";
-    changelog = "https://github.com/kmike/port-for/blob/v${version}/CHANGES.rst";
+    changelog = "https://github.com/fizyk/port-for/blob/v${version}/CHANGES.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };

@@ -17,8 +17,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.0.7";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "JPEWdev";
     repo = "spdx3-validate";

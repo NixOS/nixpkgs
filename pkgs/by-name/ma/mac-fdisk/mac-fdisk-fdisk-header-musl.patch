@@ -1,0 +1,10 @@
+--- a/fdisk.c   2016-01-24 03:39:51.647734970 -0600
++++ b/fdisk.c   2016-01-26 00:55:18.478415913 -0600
+@@ -70,6 +70,7 @@
+ #include <endian.h>
+ 
+ #include <sys/ioctl.h>
++#include <sys/types.h>
+ 
+ #include "kernel-defs.h"
+

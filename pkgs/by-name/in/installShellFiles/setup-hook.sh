@@ -100,14 +100,14 @@ installManPage() {
     done
 }
 
-# installShellCompletion [--cmd <name>] ([--bash|--fish|--zsh] [--name <name>] <path>)...
+# installShellCompletion [--cmd <name>] ([--bash|--fish|--nushell|--powershell|--zsh] [--name <name>] <path>)...
 #
 # Each path is installed into the appropriate directory for shell completions for the given shell.
-# If one of `--bash`, `--fish`, `--zsh`, or `--nushell` is given the path is assumed to belong to
-# that shell. Otherwise the file extension will be examined to pick a shell. If the shell is
-# unknown a warning will be logged and the command will return a non-zero status code after
-# processing any remaining paths. Any of the shell flags will affect all subsequent paths (unless
-# another shell flag is given).
+# If one of `--bash`, `--fish`, `--nushell`, `--powershell`, or `--zsh` is given, the path is
+# assumed to belong to that shell. Otherwise the file extension will be examined to pick a shell. If
+# the shell is unknown, a warning will be logged and the command will return a non-zero status code
+# after processing any remaining paths. Any of the shell flags will affect all subsequent paths
+# (unless another shell flag is given).
 #
 # If the shell completion needs to be renamed before installing the optional `--name <name>` flag
 # may be given. Any name provided with this flag only applies to the next path.
@@ -137,6 +137,7 @@ installManPage() {
 #   installShellCompletion --bash --name foobar.bash share/completions.bash
 #   installShellCompletion --fish --name foobar.fish share/completions.fish
 #   installShellCompletion --nushell --name foobar share/completions.nu
+#   installShellCompletion --powershell --name foobar.Completion.ps1 share/completions.ps1
 #   installShellCompletion --zsh --name _foobar share/completions.zsh
 #
 # Or to use shell newline escaping to split a single invocation across multiple lines:
@@ -144,7 +145,8 @@ installManPage() {
 #   installShellCompletion --cmd foobar \
 #     --bash <($out/bin/foobar --bash-completion) \
 #     --fish <($out/bin/foobar --fish-completion) \
-#     --nushell <($out/bin/foobar --nushell-completion)
+#     --nushell <($out/bin/foobar --nushell-completion) \
+#     --powershell <($out/bin/foobar --powershell-completion) \
 #     --zsh <($out/bin/foobar --zsh-completion)
 #
 # If any argument is `--` the remaining arguments will be treated as paths.
@@ -154,7 +156,7 @@ installShellCompletion() {
         # Parse arguments
         if (( parseArgs )); then
             case "$arg" in
-            --bash|--fish|--zsh|--nushell)
+            --bash|--fish|--powershell|--zsh|--nushell)
                 shell=${arg#--}
                 continue;;
             --name)
@@ -200,7 +202,7 @@ installShellCompletion() {
         elif [[ -p "$arg" ]]; then
             # this is a named fd or fifo
             if [[ -z "$curShell" ]]; then
-                nixErrorLog "${FUNCNAME[0]}: named pipe requires one of --bash, --fish, --zsh, or --nushell"
+                nixErrorLog "${FUNCNAME[0]}: named pipe requires one of --bash, --fish, --powershell, --zsh, or --nushell"
                 return 1
             elif [[ -z "$name" && -z "$cmdname" ]]; then
                 nixErrorLog "${FUNCNAME[0]}: named pipe requires one of --cmd or --name"
@@ -216,6 +218,7 @@ installShellCompletion() {
                 ?*.bash) curShell=bash;;
                 ?*.fish) curShell=fish;;
                 ?*.nu) curShell=nushell;;
+                ?*.ps1) curShell=powershell;;
                 ?*.zsh) curShell=zsh;;
                 *)
                     if [[ "$argbase" = _* && "$argbase" != *.* ]]; then
@@ -238,6 +241,7 @@ installShellCompletion() {
             case "$curShell" in
             bash|fish) outName=$cmdname.$curShell;;
             nushell) outName=$cmdname.nu;;
+            powershell) outName=$cmdname.Completion.ps1;;
             zsh) outName=_$cmdname;;
             *)
                 # Our list of shells is out of sync with the flags we accept or extensions we detect.
@@ -250,6 +254,13 @@ installShellCompletion() {
         bash) sharePath=bash-completion/completions;;
         fish) sharePath=fish/vendor_completions.d;;
         nushell) sharePath=nushell/vendor/autoload;;
+        powershell)
+            sharePath=powershell
+            # only apply automatic renaming if we didn't have a manual rename
+            if [[ -z "$name" && -z "$cmdname" ]]; then
+                # convert a name like `foo.ps1` into `foo.Completion.ps1`
+                outName=${outName%.ps1}.Completion.ps1
+            fi;;
         zsh)
             sharePath=zsh/site-functions
             # only apply automatic renaming if we didn't have a manual rename

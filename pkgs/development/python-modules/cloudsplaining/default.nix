@@ -4,33 +4,39 @@
   botocore,
   buildPythonPackage,
   cached-property,
-  click,
   click-option-group,
+  click,
   fetchFromGitHub,
   jinja2,
   markdown,
+  moto,
   policy-sentry,
   pytestCheckHook,
   pyyaml,
   schema,
-  setuptools,
+  uv-build,
 }:
 
 buildPythonPackage rec {
   pname = "cloudsplaining";
-  version = "0.8.2";
+  version = "0.9.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "salesforce";
     repo = "cloudsplaining";
     tag = version;
-    hash = "sha256-Abp/uvH1IYO/rb2o+7uI0Ef6q7K6T0kN1mo+Qit438E=";
+    hash = "sha256-10iUNeSn71o6B4DRrCt6Yw7b/2bwCd0ZFyf9LwMAM6U=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build~=0.11.0" "uv_build"
+  '';
 
   pythonRelaxDeps = true;
 
-  build-system = [ setuptools ];
+  build-system = [ uv-build ];
 
   dependencies = [
     boto3
@@ -45,7 +51,10 @@ buildPythonPackage rec {
     schema
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    moto
+    pytestCheckHook
+  ];
 
   disabledTests = [
     "test_policy_expansion"

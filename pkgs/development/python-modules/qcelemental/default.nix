@@ -17,12 +17,12 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "qcelemental";
-  version = "0.51.2";
+  version = "0.51.4";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-hVjzBN8IzkAJWOaubWMuQ+9hzMpGPJ6N9PJltKYZXnk=";
+    hash = "sha256-RQlGuV1k2IeWF6RI7t/drqkYOroghtNCTjE0UvXdlmg=";
   };
 
   build-system = [

@@ -7,6 +7,8 @@
     inherit system;
   },
   nixVersions ? import ../../tests/nix-for-tests.nix { inherit pkgs; },
+  # Useful override for ../../tests/test-with-nix.nix
+  nix ? nixVersions.stable,
   libpath ? ../..,
   # Random seed
   seed ? null,
@@ -15,7 +17,7 @@
 pkgs.runCommand "lib-path-tests"
   {
     nativeBuildInputs = [
-      nixVersions.stable
+      nix
     ]
     ++ (with pkgs; [
       jq
@@ -25,7 +27,6 @@ pkgs.runCommand "lib-path-tests"
   ''
     # Needed to make Nix evaluation work
     export TEST_ROOT=$(pwd)/test-tmp
-    export NIX_BUILD_HOOK=
     export NIX_CONF_DIR=$TEST_ROOT/etc
     export NIX_LOCALSTATE_DIR=$TEST_ROOT/var
     export NIX_LOG_DIR=$TEST_ROOT/var/log/nix

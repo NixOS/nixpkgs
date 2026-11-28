@@ -50,6 +50,9 @@ stdenv.mkDerivation (finalAttrs: {
     # https://bugs.debian.org/1122408
     ./objcopy-output-target.patch
   ]
+  ++ lib.optionals stdenv.hostPlatform.isRiscV64 [
+    ./riscv64.patch
+  ]
   ++ lib.optionals isCross [
     # Use builder's efitools to create sig lists for host
     ./cross.patch

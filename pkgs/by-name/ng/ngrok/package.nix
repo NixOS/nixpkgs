@@ -6,23 +6,23 @@
 }:
 
 let
-  version = "3.39.10";
+  version = "3.39.13";
   sources = {
     i686-linux = fetchurl {
-      url = "https://bin.ngrok.com/a/3fcY7AHuPyf/ngrok-v3-3.39.10-linux-386";
-      hash = "sha256-D7YyL4y/mQM32Ibb705phAAPd3+ePdzobpdaijNGmOw=";
+      url = "https://bin.ngrok.com/a/bXbZMkw2tQW/ngrok-v3-3.39.13-linux-386";
+      hash = "sha256-Wu0jSajA4ruVGDMFRznKb+R+agfDutVBrK0/mMBFMxs=";
     };
     x86_64-linux = fetchurl {
-      url = "https://bin.ngrok.com/a/jhBAuesrzKn/ngrok-v3-3.39.10-linux-amd64";
-      hash = "sha256-tHXDG0Ce00Jgkb3ni2D64n7e5HDCMgyzBldDwVm5sns=";
+      url = "https://bin.ngrok.com/a/2u8ZAPuZnnL/ngrok-v3-3.39.13-linux-amd64";
+      hash = "sha256-Q5k4S/TWpa1lE2dwqTFTbbnpeRH1JobjQZ3ENKdN918=";
     };
     aarch64-linux = fetchurl {
-      url = "https://bin.ngrok.com/a/55PuHLixvyF/ngrok-v3-3.39.10-linux-arm64";
-      hash = "sha256-otHU2Nrrza4FQVO+26lvD6vHhZ8En20WbvJSbvZiCr4=";
+      url = "https://bin.ngrok.com/a/gNfeve1VDdJ/ngrok-v3-3.39.13-linux-arm64";
+      hash = "sha256-uVEr2+z8FJUQ9fC80Y16BtAz1+KjcfdrN81VtE8D5bU=";
     };
     aarch64-darwin = fetchurl {
-      url = "https://bin.ngrok.com/a/aQGG8qqiJvo/ngrok-v3-3.39.10-darwin-arm64";
-      hash = "sha256-0zWkegTd5yaJei51MYfp9I+/QGFsSL4yZpVMe5F1oJ4=";
+      url = "https://bin.ngrok.com/a/aRfC2Kft1Jc/ngrok-v3-3.39.13-darwin-arm64";
+      hash = "sha256-aGwy8dav+GTrLyId7clzAtexz4Y8a3HlfrgBDWUoQyE=";
     };
   };
 in

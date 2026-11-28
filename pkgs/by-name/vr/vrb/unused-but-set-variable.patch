@@ -1,6 +1,14 @@
---- a/vrb/src/bin/vbuf.c1	2011-06-13 22:14:24.000000000 +0200
-+++ b/vrb/src/bin/vbuf.c	2011-06-13 22:14:43.000000000 +0200
-@@ -426,7 +426,6 @@
+--- a/vrb/src/bin/vbuf.c
++++ b/vrb/src/bin/vbuf.c
+@@ -397,7 +397,6 @@ main (
+     double		max_smoothing		;
+ 
+     uint64_t		write_count		;
+-    uint64_t		read_count		;
+     uint64_t		old_write_count		;
+ 
+     int64_t		display_time		;
+@@ -426,7 +425,6 @@ main (
      int			opt_progress		;
      int			output_fd		;
      int			poll_time		;
@@ -8,7 +16,23 @@
      int			poll_write		;
      int			poll_read		;
  
-@@ -861,7 +860,7 @@
+@@ -453,7 +451,6 @@ main (
+ 
+     write_count		= 0;
+     old_write_count	= 0;
+-    read_count		= 0;
+     error_count		= 0;
+ 
+     opt_help		= 0;
+@@ -824,7 +821,6 @@ main (
+ 		//-- Handle normal returns.
+ 		else {
+ 		    vrb_give( io_buf, len );
+-		    read_count += len;
+ 		    continue;
+ 		}
+ 	    }
+@@ -861,7 +857,7 @@ main (
  	    poll_time = display_time - get_time_ms();
  	    if ( poll_time < 0 ) poll_time = 0;
  	}

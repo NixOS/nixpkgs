@@ -3,25 +3,19 @@
   lib,
   fetchurl,
 }:
-let
+appimageTools.wrapType2 (finalAttrs: {
   pname = "everdo";
   version = "1.11.9";
-
   src = fetchurl {
-    url = "https://downloads.everdo.net/electron/Everdo-${version}.AppImage";
+    url = "https://downloads.everdo.net/electron/Everdo-${finalAttrs.version}.AppImage";
     hash = "sha256-67b0gSoVcCIfkFRUL3afgB6eYj5YEuvDTtQgTIwV9S0=";
   };
 
-  appimageContents = appimageTools.extract { inherit pname version src; };
-in
-appimageTools.wrapType2 {
-  inherit pname version src;
-
   extraInstallCommands = ''
-    install -Dm444 ${appimageContents}/everdo.desktop -t $out/share/applications
+    install -Dm444 ${finalAttrs.contents}/everdo.desktop -t $out/share/applications
     substituteInPlace $out/share/applications/everdo.desktop \
       --replace-fail 'Exec=AppRun --no-sandbox %U' 'Exec=everdo %u'
-    cp -r ${appimageContents}/usr/share/icons $out/share
+    cp -r ${finalAttrs.contents}/usr/share/icons $out/share
   '';
 
   meta = {
@@ -32,4 +26,4 @@ appimageTools.wrapType2 {
     mainProgram = "everdo";
     platforms = [ "x86_64-linux" ];
   };
-}
+})

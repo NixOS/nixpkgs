@@ -16,7 +16,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "briis";
+    owner = "natekspencer";
     repo = "pyweatherflowudp";
     tag = finalAttrs.version;
     hash = "sha256-YkFrbzpeQkN6bIPiff8wBFtWvyfQpJuV3sCRWw/jYAs=";
@@ -53,8 +53,8 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Library to receive UDP Packets from Weatherflow Weatherstations";
-    homepage = "https://github.com/briis/pyweatherflowudp";
-    changelog = "https://github.com/briis/pyweatherflowudp/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    homepage = "https://github.com/natekspencer/pyweatherflowudp";
+    changelog = "https://github.com/natekspencer/pyweatherflowudp/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };

@@ -22,6 +22,8 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-47jvbbgCtsJC8q7rZVLyZNL77/fcwyQzBup9HVUNY8g=";
   };
 
+  pythonRelaxDeps = [ "pysigma" ];
+
   build-system = [ poetry-core ];
 
   dependencies = [ pysigma ];
@@ -33,10 +35,10 @@ buildPythonPackage (finalAttrs: {
     writableTmpDirAsHomeHook
   ];
 
-  # Starting with 2.0.0 all tests require network access
+  # All tests require network access
   doCheck = false;
 
-  #pythonImportsCheck = [ "sigma.backends.elasticsearch" ];
+  pythonImportsCheck = [ "sigma.backends.elasticsearch" ];
 
   meta = {
     description = "Library to support Elasticsearch for pySigma";

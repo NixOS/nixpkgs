@@ -10,13 +10,13 @@
 }:
 buildLua (finalAttrs: {
   pname = "videoclip";
-  version = "26.7.30.0";
+  version = "26.11.3.0";
 
   src = fetchFromGitHub {
     owner = "Ajatt-Tools";
     repo = "videoclip";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4ptnF3/L3U0CDucYcd8/O5EN1mUtnor+iXLRXbiC7os=";
+    hash = "sha256-dbFe+pnEJzyeK4eoFwELAFEIyaPmcGQIX7q19DFoQ24=";
   };
 
   postPatch = ''

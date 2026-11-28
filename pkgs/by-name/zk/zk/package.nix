@@ -7,13 +7,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "zk";
-  version = "0.15.6";
+  version = "0.15.7";
 
   src = fetchFromGitHub {
     owner = "zk-org";
     repo = "zk";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-owHbrQwoQS+SbfZ6EQO/ii10zX73MmUpohuIIltlnw8=";
+    sha256 = "sha256-Nik9qJ3Pe1h99zSSBbv6Va7Rg99CeX3fZSU8UVl4YKo=";
   };
 
   vendorHash = "sha256-Y5KI3o4HYWyqQl/RnOetyIKOI+CbYWSgrbkGkpAKsX4=";

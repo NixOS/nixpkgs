@@ -1,4 +1,5 @@
 {
+  aws-lc,
   fetchFromGitHub,
   git,
   lib,
@@ -11,20 +12,23 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "knope";
-  version = "0.23.0";
+  version = "0.24.0";
 
   src = fetchFromGitHub {
     owner = "knope-dev";
     repo = "knope";
     tag = "knope/v${finalAttrs.version}";
-    hash = "sha256-Brr/MnJwgyGRjBrY6H2uUnVXFYWdUAHzLolFBgszkp0=";
+    hash = "sha256-ja3B6hYPbliFEqP1k/BCZ3SO6RgptINR4zVwgW4mja8=";
   };
 
-  cargoHash = "sha256-vjjwoBHgmjzMVDyscfde/fRwm7QWFTuD9EX1+OowUm8=";
+  cargoHash = "sha256-q7390YKsEQ5TgOTpiq45czFtpCDyh+H3y8kfOTnKEFI=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ libgit2 ];
+  buildInputs = [
+    aws-lc
+    libgit2
+  ];
 
   env.LIBGIT2_NO_VENDOR = 1;
 

@@ -32,7 +32,7 @@
 
 let
   pymoo_data = fetchFromGitHub {
-    owner = "anyoptimization";
+    owner = "the-dual-space";
     repo = "pymoo-data";
     rev = "8dae7d02078def161ee109184399adc3db25265b";
     hash = "sha256-dpuRIMqDQ+oKrvK1VAQxPG6vijZMxT6MB8xOswPwv5o=";
@@ -44,7 +44,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "anyoptimization";
+    owner = "the-dual-space";
     repo = "pymoo";
     tag = version;
     hash = "sha256-tLkXH0Ig/yWZbaFwzsdIdmbnlNd9UAruVSziaL3iW4U=";
@@ -134,8 +134,8 @@ buildPythonPackage rec {
   meta = {
     description = "Multi-objective Optimization in Python";
     homepage = "https://pymoo.org/";
-    downloadPage = "https://github.com/anyoptimization/pymoo";
-    changelog = "https://github.com/anyoptimization/pymoo/releases/tag/${src.tag}";
+    downloadPage = "https://github.com/the-dual-space/pymoo";
+    changelog = "https://github.com/the-dual-space/pymoo/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ veprbl ];
   };

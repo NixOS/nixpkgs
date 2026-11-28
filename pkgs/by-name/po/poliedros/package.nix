@@ -14,7 +14,7 @@
   nix-update-script,
 }:
 let
-  version = "1.5.3";
+  version = "2.0.0";
 in
 python3Packages.buildPythonApplication {
   pname = "poliedros";
@@ -25,7 +25,7 @@ python3Packages.buildPythonApplication {
     owner = "kriptolix";
     repo = "Poliedros";
     tag = "v${version}";
-    hash = "sha256-PZKmxy9Pc0bPCXUmSZL2ETuJbmN3pebMwak3fRuj9AU=";
+    hash = "sha256-3Q/IrYQjBOSLHgsdYzgbCMxS6MzX32Csx6DVDjvXy+c=";
   };
 
   nativeBuildInputs = [

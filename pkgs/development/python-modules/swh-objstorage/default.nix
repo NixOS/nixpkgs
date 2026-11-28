@@ -7,15 +7,18 @@
   util-linux,
 
   # build-system
-  setuptools,
-  setuptools-scm,
+  hatchling,
+  hatch-vcs,
+  hatch-requirements-txt,
 
   # dependencies
+  aiohttp,
   backports-entry-points-selectable,
   cassandra-driver,
   click,
   deprecated,
   flask,
+  humanize,
   iso8601,
   msgpack,
   mypy-extensions,
@@ -23,17 +26,21 @@
   redis,
   swh-core,
   swh-model,
+  swh-mosaic,
   swh-shard,
   tenacity,
 
   # tests
-  aiohttp,
   azure-core,
   azure-storage-blob,
+  boto3,
   fixtures,
+  flask-cors,
   libcloud,
+  moto,
   postgresql,
   postgresqlTestHook,
+  pytest-aioresponses,
   pytest-mock,
   pytest-postgresql,
   pytestCheckHook,
@@ -47,7 +54,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "swh-objstorage";
-  version = "5.1.0";
+  version = "8.0.0";
   pyproject = true;
 
   src = fetchFromGitLab {
@@ -56,7 +63,7 @@ buildPythonPackage (finalAttrs: {
     owner = "devel";
     repo = "swh-objstorage";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NnNT9Lt/LGDIJpUmfkfPn6JnF3k8Usf2UVa88zHPKlg=";
+    hash = "sha256-LGKTH+hWEWUDI6zeE7MJz/SVOe1ns7JHyUfpTS9fGMw=";
   };
 
   postPatch = ''
@@ -67,16 +74,19 @@ buildPythonPackage (finalAttrs: {
   '';
 
   build-system = [
-    setuptools
-    setuptools-scm
+    hatchling
+    hatch-vcs
+    hatch-requirements-txt
   ];
 
   dependencies = [
+    aiohttp
     backports-entry-points-selectable
     cassandra-driver
     click
     deprecated
     flask
+    humanize
     iso8601
     msgpack
     mypy-extensions
@@ -85,6 +95,7 @@ buildPythonPackage (finalAttrs: {
     swh-core
     swh-model
     swh-shard
+    swh-mosaic
     tenacity
   ];
 
@@ -96,13 +107,16 @@ buildPythonPackage (finalAttrs: {
   enabledTestPaths = [ "swh/objstorage/tests" ];
 
   nativeCheckInputs = [
-    aiohttp
     azure-core
     azure-storage-blob
+    boto3
     fixtures
+    flask-cors
     libcloud
+    moto
     postgresql
     postgresqlTestHook
+    pytest-aioresponses
     pytest-mock
     pytest-postgresql
     pytestCheckHook

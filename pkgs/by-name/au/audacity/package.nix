@@ -60,7 +60,12 @@ stdenv.mkDerivation (finalAttrs: {
     ./macdeployqt-extra-options.patch
   ];
 
-  postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
+  postPatch = ''
+    # Unity builds cause a name clash with Qt 6.12's generated QML code.
+    substituteInPlace muse/framework/extensions/qml/Muse/Extensions/CMakeLists.txt \
+      --replace-fail 'ALIAS muse::extensions_qml' 'NO_UNITY ALIAS muse::extensions_qml'
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace au3/libraries/au3-files/FileNames.cpp \
       --replace-fail /usr/include/linux/magic.h ${linuxHeaders}/include/linux/magic.h
   '';
@@ -127,7 +132,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   preConfigure = ''
-    cmakeFlagsArray+=("-DEXTDEPS_CACHE=$PWD/offline-deps")
+    cmakeFlags+=("-DEXTDEPS_CACHE=$PWD/offline-deps")
   '';
 
   preInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''

@@ -41,13 +41,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "pocl";
-  version = "7.1";
+  version = "7.2";
 
   src = fetchFromGitHub {
     owner = "pocl";
     repo = "pocl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bS6vTIjLO7YLs7qYLKW0cYYbEJ/hRS/+IjjAKbkj8ac=";
+    hash = "sha256-aAqg8AgiAny6FgYa+90Czeff3b6CPYBBIQshR7J2p64=";
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -67,8 +67,28 @@ stdenv.mkDerivation (finalAttrs: {
       "ENABLE_REMOTE_SERVER" = true;
     })
     ++ (lib.mapAttrsToList lib.cmakeFeature {
-      "CLANG" = "${clangWrapped}/bin/clang";
-      "CLANGXX" = "${clangWrapped}/bin/clang++";
+      # Since 7.2, pocl's cmake prefers find_package(LLVM CONFIG) and then
+      # assumes Clang's cmake config lives as a sibling dir under the same
+      # prefix as LLVM's, which doesn't hold with nixpkgs' split llvm/clang
+      # outputs. Forcing WITH_LLVM_CONFIG keeps it on the llvm-config path.
+      "WITH_LLVM_CONFIG" = "${lib.getDev llvmPackages.llvm}/bin/llvm-config";
+      # On that path it then searches for host clang/LLVM tool binaries next
+      # to llvm-config, which also doesn't hold here (nixpkgs' llvm-config
+      # lives in a separate "dev" output from opt/llc/etc, and clang is a
+      # wholly separate package). Pre-set every HOST_* cache var so
+      # find_program()/find_llvm_program_or_die() short-circuit instead of
+      # searching. The old CLANG/CLANGXX cache vars this replaces aren't
+      # read by pocl's cmake at all anymore.
+      "HOST_CLANG" = "${clangWrapped}/bin/clang";
+      "HOST_CLANGXX" = "${clangWrapped}/bin/clang++";
+      "HOST_LLVM_OPT" = "${lib.getBin llvmPackages.llvm}/bin/opt";
+      "HOST_LLVM_LLC" = "${lib.getBin llvmPackages.llvm}/bin/llc";
+      "HOST_LLVM_AS" = "${lib.getBin llvmPackages.llvm}/bin/llvm-as";
+      "HOST_LLVM_DIS" = "${lib.getBin llvmPackages.llvm}/bin/llvm-dis";
+      "HOST_LLVM_LINK" = "${lib.getBin llvmPackages.llvm}/bin/llvm-link";
+      "HOST_LLVM_SPIRV" = "${spirv-llvm-translator}/bin/llvm-spirv";
+      "HOST_SPIRV_LINK" = "${spirv-tools}/bin/spirv-link";
+      "HOST_LLVM_FILECHECK" = "${lib.getBin llvmPackages.llvm}/bin/FileCheck";
     })
     # Only x86_64 supports "distro" which allows runtime detection of SSE/AVX
     ++ lib.optionals stdenv.hostPlatform.isx86_64 [

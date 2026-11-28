@@ -86,5 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = llvm_meta // {
     homepage = "https://flang.llvm.org";
     description = "LLVM Fortran Runtime";
+    # flang-rt/ only exists in the monorepo since LLVM 21
+    broken = lib.versionOlder version "21";
   };
 })

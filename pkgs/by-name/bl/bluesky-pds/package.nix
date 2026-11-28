@@ -8,7 +8,7 @@
   fetchPnpmDeps,
   pnpmConfigHook,
   fetchFromGitHub,
-  nodejs_22, # TODO: move back to 24
+  nodejs_24,
   vips,
   pkg-config,
   nixosTests,
@@ -19,7 +19,7 @@
 
 let
   # upstream bluesky-social/pds uses nodejs 22+ (aims for LTS)
-  nodejs = nodejs_22;
+  nodejs = nodejs_24;
   nodeSources = srcOnly nodejs;
   pythonEnv = python3.withPackages (p: [ p.setuptools ]);
   pnpm = pnpm_10;
@@ -27,13 +27,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pds";
-  version = "0.4.5037";
+  version = "0.4.5051";
 
   src = fetchFromGitHub {
     owner = "bluesky-social";
     repo = "pds";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4llWhrtPZ6ZsA2CIDquNdR7WAdl4aKeG6WP0Q1sTyjs=";
+    hash = "sha256-vcDCtoCO3Gyw5yO5iixZJXQERYElH7JZaDDk7bNR3xI=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/service";
@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     inherit pnpm;
     fetcherVersion = 4;
-    hash = "sha256-Tfhv/PWnkPK/CuPzQ/vxS3UIO/TBjWBsshFRatjbcX4=";
+    hash = "sha256-aAv3EmoKTKv7fyCJT7/rRQBr4yBR5OsGuDU5MSIsRzY=";
   };
 
   buildPhase = ''

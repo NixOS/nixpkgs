@@ -6,6 +6,7 @@
   curl,
   doxygen,
   fetchFromGitHub,
+  file,
   git,
   glib,
   gnutls,
@@ -31,17 +32,16 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openvas-scanner";
-  version = "23.28.0";
+  version = "23.52.12";
 
   src = fetchFromGitHub {
     owner = "greenbone";
     repo = "openvas-scanner";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ggmex/BmAVgdE1JNM3kybEmr/uKqrIl8JdSoBnsg+40=";
+    hash = "sha256-7rbzJdE1Jjc2qB9mtOnjUbyEiBtZsDkJIOEUxsT+3Qk=";
   };
 
-  # fix build w/ glibc-2.44
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=discarded-qualifiers";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=discarded-qualifiers -Wno-error=sign-compare";
 
   nativeBuildInputs = [
     cmake
@@ -54,6 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     bison
     curl
+    file
     glib
     gnutls
     gpgme

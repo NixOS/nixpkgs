@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  rust-jemalloc-sys,
 }:
 
 rustPlatform.buildRustPackage {
@@ -16,6 +17,8 @@ rustPlatform.buildRustPackage {
   };
 
   cargoHash = "sha256-LTgAaTQXW0XEbe+WS47pqSb+eU7FqjdTSO2++C3J5aM=";
+
+  buildInputs = [ rust-jemalloc-sys ];
 
   meta = {
     homepage = "https://github.com/evmar/n2";

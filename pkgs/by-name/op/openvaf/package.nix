@@ -8,14 +8,14 @@
 
 rustPlatform.buildRustPackage.override { inherit (llvmPackages) stdenv; } (finalAttrs: {
   pname = "openvaf";
-  version = "24.0.1";
+  version = "24.0.2";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "OpenVAF";
     repo = "OpenVAF-Reloaded";
     rev = "v${finalAttrs.version}mob";
-    hash = "sha256-wZMZpg4X7yRVssGv8U6dupawTtzs7CLbYhaMBlxxBKo=";
+    hash = "sha256-XTfi2hxPLT3tWdudrKOJ5VnvyUTfACirMgItmxJ9yjo=";
   };
 
   cargoHash = "sha256-+jvaiBCmjd3RrlES+Sc1SskEMOtO1ykOdInMTH/Gazo=";
@@ -44,7 +44,12 @@ rustPlatform.buildRustPackage.override { inherit (llvmPackages) stdenv; } (final
     "zerocallusedregs"
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^v([0-9.]+)mob$"
+    ];
+  };
 
   meta = {
     description = "Verilog-A compiler";

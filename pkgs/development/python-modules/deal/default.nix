@@ -30,6 +30,11 @@ buildPythonPackage rec {
     hash = "sha256-nLZ06Xfa9Q+Saf8qPXG1Xo6y6oO6kifhfK/gryZ6q90=";
   };
 
+  patches = [
+    # docstring-parser 0.18 no longer ships its tests, which this test reads.
+    ./skip-missing-docstring-parser-tests.patch
+  ];
+
   build-system = [ flit-core ];
 
   dependencies = [

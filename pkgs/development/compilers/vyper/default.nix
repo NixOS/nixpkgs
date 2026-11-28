@@ -54,6 +54,7 @@ buildPythonPackage rec {
   pythonRelaxDeps = [
     "asttokens"
     "packaging"
+    "cbor2"
   ];
 
   propagatedBuildInputs = [

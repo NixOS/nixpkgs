@@ -10,10 +10,12 @@
   rustc,
   cargo,
   installShellFiles,
+  pkg-config,
 
   # buildInputs
   corrosion,
   libuuid,
+  sqlite,
 
   # passthru.tests
   nixosTests,
@@ -26,26 +28,18 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "taskwarrior";
-  version = "3.5.0";
+  version = "3.6.0";
   src = fetchFromGitHub {
     owner = "GothenburgBitFactory";
     repo = "taskwarrior";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ckVYO7Z5nF2xvPU4K/dktx/ht4gKTASlzZNkDjXXKyg=";
+    hash = "sha256-X2h87zC0LK+qxqF8jcXix2o5qRTNkL6HnXyc6Gy9JxE=";
     fetchSubmodules = true;
   };
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-vNi/gVzIzTXuuPkWNimDwPJG7COWJATzGaT6J4UrrTk=";
+    hash = "sha256-wPiXV0V6Yyoqm9oveDFd9qS3tdtxQiPOjRaC+sCPbeI=";
   };
-  patches = [
-    # Installs properly Bash scripts, just like fish. See:
-    # https://github.com/GothenburgBitFactory/taskwarrior/pull/4173
-    (fetchpatch {
-      url = "https://github.com/GothenburgBitFactory/taskwarrior/commit/c1958786deb9be8b245b4fc4c3efd0258cd70782.patch";
-      hash = "sha256-i/9m/ipF+yc2iMNoNWH4i2myUOilyKNqP2A5zWkCJaQ=";
-    })
-  ];
 
   # The CMakeLists files used by upstream issue a `cargo install` command to
   # install a rust tool (cxxbridge-cmd) that is supposed to be included in the Cargo.toml's and
@@ -83,11 +77,13 @@ stdenv.mkDerivation (finalAttrs: {
     rustc
     cargo
     installShellFiles
+    pkg-config
   ];
 
   buildInputs = [
     corrosion
     libuuid
+    sqlite
   ];
 
   # The test suite is run as an installCheck instead of a check: since
@@ -130,6 +126,7 @@ stdenv.mkDerivation (finalAttrs: {
       mlaradji
       doronbehar
       Necior
+      me-and
     ];
     mainProgram = "task";
     platforms = lib.platforms.unix;

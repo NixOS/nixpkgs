@@ -3,7 +3,6 @@
   ocsipersist,
   logs,
   pgocaml,
-  xml-light,
 }:
 
 buildDunePackage {

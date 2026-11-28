@@ -19,6 +19,7 @@
   glib-networking,
   libayatana-appindicator,
   openssl,
+  sqlite,
   webkitgtk_4_1,
 }:
 
@@ -61,6 +62,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     openssl
+    sqlite
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     glib-networking

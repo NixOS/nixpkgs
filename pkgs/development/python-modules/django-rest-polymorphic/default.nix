@@ -17,7 +17,7 @@ buildPythonPackage {
   format = "setuptools";
 
   src = fetchFromGitHub {
-    owner = "apirobot";
+    owner = "denisorehovsky";
     repo = "django-rest-polymorphic";
     # https://github.com/denisorehovsky/django-rest-polymorphic/issues/42
     rev = "9d920eb91ef13144094426f9ebc0ca80247c0fe3";
@@ -41,7 +41,7 @@ buildPythonPackage {
 
   meta = {
     description = "Polymorphic serializers for Django REST Framework";
-    homepage = "https://github.com/apirobot/django-rest-polymorphic";
+    homepage = "https://github.com/denisorehovsky/django-rest-polymorphic";
     license = lib.licenses.mit;
     maintainers = [ ];
   };

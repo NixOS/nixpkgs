@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "obs-bilibili-stream";
-  version = "2.1.5";
+  version = "2.1.6";
 
   src = fetchFromGitHub {
     owner = "Zarosmm";
     repo = "obs-bilibili-stream";
     tag = finalAttrs.version;
-    hash = "sha256-cFIPbOHhafsH1YLV8wqnRZF+df3K/cEWP6h6KuZsqNc=";
+    hash = "sha256-WcoAqlBq45y3M4krx5hFeuNCxI88GsP287RBHmzEp5E=";
   };
 
   strictDeps = true;
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qtbase
   ];
 
-  # https://github.com/Zarosmm/obs-bilibili-stream/blob/2.1.5/CMakePresets.json#L12-L15
+  # https://github.com/Zarosmm/obs-bilibili-stream/blob/2.1.6/CMakePresets.json#L12-L15
   cmakeFlags = [
     (lib.cmakeBool "ENABLE_FRONTEND_API" true)
     (lib.cmakeBool "ENABLE_QT" true)

@@ -157,9 +157,43 @@
     "https://ftp.postgresql.org/pub/"
   ];
 
-  # Qt
+  # QT Mirrors (https://download.qt.io/static/mirrorlist/)
   qt = [
     "https://download.qt.io/"
+
+    # Europe
+    "https://www.mirrorservice.org/sites/download.qt-project.org/"
+    "https://qt-mirror.dannhauer.de/"
+    "https://ftp.fau.de/qtproject/"
+    "https://mirror.netcologne.de/qtproject/"
+    "https://mirrors.dotsrc.org/qtproject/"
+    "https://www.nic.funet.fi/pub/mirrors/download.qt-project.org/"
+    "https://mirrors.20i.com/pub/qt.io/"
+    "https://mirrors.ukfast.co.uk/sites/qt.io/"
+    "https://ftp.nluug.nl/languages/qt/"
+    "https://ftp.icm.edu.pl/packages/qt/"
+    "https://mirror.accum.se/mirror/qt.io/qtproject/"
+
+    # North America
+    "https://qt.mirror.constant.com/"
+    "https://mirrors.ocf.berkeley.edu/qt/"
+
+    # Asia
+    "https://mirror.bjtu.edu.cn/qt/"
+    "https://mirror.nyist.edu.cn/qt/"
+    "https://mirrors.sjtug.sjtu.edu.cn/qt/"
+    "https://mirrors.sau.edu.cn/qt/"
+    "https://mirrors.ustc.edu.cn/qtproject/"
+    "https://ftp.jaist.ac.jp/pub/qtproject/"
+    "https://ftp.yz.yamagata-u.ac.jp/pub/qtproject/"
+    "https://mirror.maeen.sa/qtproject/"
+    "https://mirror.ossplanet.net/qtproject/"
+
+    # Oceania
+    "https://mirror.aarnet.edu.au/pub/qtproject/"
+
+    # Africa
+    "https://qtproject.mirror.liquidtelecom.com/"
   ];
 
   # Sage mirrors (https://www.sagemath.org/mirrors.html)

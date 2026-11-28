@@ -4,6 +4,7 @@
   fetchFromSourcehut,
   sqlite,
   stdenv,
+  writableTmpDirAsHomeHook,
 }:
 
 buildGoModule (finalAttrs: {
@@ -24,9 +25,7 @@ buildGoModule (finalAttrs: {
     "sqlite_math_functions"
   ];
 
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
   postInstall = ''
     mv $out/bin/{cli,mobroute}

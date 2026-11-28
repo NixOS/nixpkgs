@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sopwith";
-  version = "2.8.0";
+  version = "2.9.0";
 
   src = fetchFromGitHub {
     owner = "fragglet";
     repo = "sdl-sopwith";
     tag = "sdl-sopwith-${finalAttrs.version}";
-    hash = "sha256-s7npLid3GYZArQmctSwOu8zeC+mSfTiiiOaOEa9dcrg=";
+    hash = "sha256-pSxNW1WVe3Zq8m+cRJr1zeDx+8SUuav+lvM4PTYpRxo=";
   };
 
   nativeBuildInputs = [
@@ -30,6 +30,9 @@ stdenv.mkDerivation (finalAttrs: {
     SDL2
     libGL
   ];
+
+  # Keep high scores per-user instead of installing a system-wide file into /var/games
+  configureFlags = [ "--with-hiscores-path=" ];
 
   meta = {
     homepage = "https://github.com/fragglet/sdl-sopwith";

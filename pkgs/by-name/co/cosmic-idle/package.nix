@@ -16,21 +16,21 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-idle";
-  version = "1.10.0";
+  version = "1.11.0";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-idle";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-+UgxU3jlNJa6Io6p5dDlslI8xIrRExwkjMzAm0tRqMc=";
+    hash = "sha256-j1SkYPmePDs4M8aEuRSujCk5L56BT7KD53axn/0AFTI=";
   };
 
   postPatch = ''
     substituteInPlace src/main.rs --replace-fail '"/bin/sh"' '"${lib.getExe' bash "sh"}"'
   '';
 
-  cargoHash = "sha256-2Lvp6HMk+bfOCT2Uo0NjW83S3lKmNApA104Pk6hIeNU=";
+  cargoHash = "sha256-jWTVQDwID/GkPTBL1SFDta/22j/7FM0uPK0/JVe3BvA=";
 
   separateDebugInfo = true;
   __structuredAttrs = true;

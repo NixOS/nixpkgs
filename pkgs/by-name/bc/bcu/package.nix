@@ -26,7 +26,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace create_version_h.sh \
-      --replace-fail "version=\`git describe --tags --long\`" "version=${finalAttrs.src.tag}"
+      --replace-fail "version=\`git describe --tags --long\`" "version=${finalAttrs.src.tag}" \
+      --replace-fail "echo creating" "#!/bin/sh"$'\n'"echo creating"
   '';
 
   enableParallelBuilding = true;

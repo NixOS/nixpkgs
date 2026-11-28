@@ -1,0 +1,34 @@
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -181,9 +181,7 @@
+ xorriso_make_xorriso_1_SOURCES = xorriso/make_xorriso_1.c
+ 
+ # A Proof-of-concept for frontends, and xorriso-dd-target if on Linux kernel
+-bin_SCRIPTS = \
+-	frontend/xorriso-tcltk \
+-	$(XORRISO_DD_TARGET)
++bin_SCRIPTS =
+ 
+ EXTRA_SCRIPTS = xorriso-dd-target/xorriso-dd-target
+ 
+@@ -244,18 +242,14 @@
+ man_MANS = \
+ 	xorriso/xorriso.1 \
+ 	xorriso/xorrisofs.1 \
+-	xorriso/xorrecord.1 \
+-	xorriso/xorriso-tcltk.1 \
+-	$(XORRISO_DD_TARGET_MAN)
++	xorriso/xorrecord.1
+ 
+ EXTRA_MANS = xorriso-dd-target/xorriso-dd-target.1
+ 
+ info_TEXINFOS = \
+ 	xorriso/xorriso.texi \
+ 	xorriso/xorrisofs.texi \
+-	xorriso/xorrecord.texi \
+-	xorriso/xorriso-tcltk.texi \
+-	xorriso-dd-target/xorriso-dd-target.texi
++	xorriso/xorrecord.texi
+ 
+ # xorriso-dd-target.texi is hardcoded for now because of
+ #   Makefile.am: error: texinfo file '@XORRISO_DD_TARGET_TEXI@' has

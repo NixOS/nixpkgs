@@ -1,0 +1,62 @@
+From e94fdc4e13a4b7608cb212671a6e7e1f38e5e7a1 Mon Sep 17 00:00:00 2001
+From: Rafael Ieda <git@ieda.me>
+Date: Mon, 23 Nov 2026 17:37:48 -0300
+Subject: [PATCH 1/2] cmake: Allow using the system FFmpeg
+
+---
+ CMakeLists.txt          |  6 ++++++
+ external/CMakeLists.txt | 20 +++++++++++++++++---
+ 2 files changed, 23 insertions(+), 3 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 5a3611f5..6ba69a9a 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -141,6 +141,12 @@ if(APPLE)
+ 	option(VITA3K_USE_SYSTEM_MOLTENVK "Use the MoltenVK version in the system instead of downloading the prebuilt one" OFF)
+ endif()
+ 
++############################
++########## FFmpeg ##########
++############################
++
++option(VITA3K_USE_SYSTEM_FFMPEG "Use the FFmpeg version in the system instead of downloading the prebuilt one" OFF)
++
+ if(WIN32)
+ 	add_compile_definitions("_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS" "_CRT_SECURE_NO_WARNINGS" "NOMINMAX")
+ endif()
+diff --git a/external/CMakeLists.txt b/external/CMakeLists.txt
+index 290be42e..cf97dcd9 100644
+--- a/external/CMakeLists.txt
++++ b/external/CMakeLists.txt
+@@ -277,10 +277,24 @@ target_include_directories(vma INTERFACE
+ 	"${CMAKE_CURRENT_SOURCE_DIR}/VulkanMemoryAllocator-Hpp/include"
+ 	"${CMAKE_CURRENT_SOURCE_DIR}/VulkanMemoryAllocator-Hpp/VulkanMemoryAllocator/include")
+ 
+-if(ANDROID)
+-	set(USE_STATIC_ANDROID_FFMPEG ON)
++if(VITA3K_USE_SYSTEM_FFMPEG)
++	find_package(PkgConfig REQUIRED)
++	pkg_check_modules(FFMPEG REQUIRED IMPORTED_TARGET
++		libavformat libavcodec libswscale libavutil libavfilter libswresample)
++	# The AAC decoder uses libavcodec internals (codec_internal.h), which are not installed,
++	# so the headers that come with the prebuilts are used and the versions must match
++	if(NOT FFMPEG_libavcodec_VERSION MATCHES "^61\\.19\\.")
++		message(FATAL_ERROR "The system FFmpeg must be FFmpeg 7.1 (libavcodec 61.19), found libavcodec ${FFMPEG_libavcodec_VERSION}")
++	endif()
++	add_library(ffmpeg INTERFACE)
++	target_include_directories(ffmpeg INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}/ffmpeg/include")
++	target_link_libraries(ffmpeg INTERFACE PkgConfig::FFMPEG)
++else()
++	if(ANDROID)
++		set(USE_STATIC_ANDROID_FFMPEG ON)
++	endif()
++	add_subdirectory(ffmpeg)
+ endif()
+-add_subdirectory(ffmpeg)
+ if(MINGW)
+ 	# libavutil needs bcrypt; Boost.Filesystem used to pull it in
+ 	target_link_libraries(ffmpeg INTERFACE bcrypt)
+-- 
+2.56.0
+

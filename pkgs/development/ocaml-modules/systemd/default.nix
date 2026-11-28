@@ -10,7 +10,7 @@ buildDunePackage {
   src = fetchFromGitHub {
     owner = "juergenhoetzel";
     repo = "ocaml-systemd";
-    rev = "1.3";
+    tag = "1.3";
     hash = "sha256-/FV+mFhuB3mEZv34XZrA4gO6+QIYssXqurnvkNBTJ2o=";
   };
   minimalOCamlVersion = "4.06";

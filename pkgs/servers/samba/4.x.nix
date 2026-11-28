@@ -81,11 +81,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "samba";
-  version = "4.23.10";
+  version = "4.25.1";
 
   src = fetchurl {
     url = "https://download.samba.org/pub/samba/stable/samba-${finalAttrs.version}.tar.gz";
-    hash = "sha256-50s/SV1+SOZxC1Aas4HIDd88uZxmBHMtNgQCZdnK9FI=";
+    hash = "sha256-fzZ1Rbymmqlol2KPgvDwTUtms7yzbLl4ubuVLEtMQo0=";
   };
 
   outputs = [

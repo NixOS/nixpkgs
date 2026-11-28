@@ -19,6 +19,9 @@ buildGoModule (finalAttrs: {
 
   subPackages = [ "." ];
 
+  # Tests exist under internal/rtree, but not in the selected subPackages
+  doCheck = false;
+
   postInstall = ''
     ln -s $out/bin/gofu $out/bin/rtree
     ln -s $out/bin/gofu $out/bin/prettyprompt

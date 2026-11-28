@@ -97,10 +97,7 @@ stdenv.mkDerivation rec {
     description = "Official monitoring plugins for Nagios/Icinga/Sensu and others";
     homepage = "https://www.monitoring-plugins.org";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [
-      thoughtpolice
-      relrod
-    ];
+    maintainers = with lib.maintainers; [ thoughtpolice ];
     platforms = lib.platforms.linux;
   };
 }

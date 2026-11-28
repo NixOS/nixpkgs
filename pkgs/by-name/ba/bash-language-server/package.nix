@@ -57,8 +57,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   preInstall = ''
-    # remove unnecessary files
-    rm node_modules/.modules.yaml
     # `pnpm prune` doesn't support monorepos, and with pnpm 12 it also tries
     # to verify the lockfile against supply-chain policies over the network.
     # Reinstall production dependencies only instead, as `pnpm prune --help`
@@ -74,9 +72,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     find -type f \( -name "*.ts" -o -name "*.map" \) -exec rm -rf {} +
     # https://github.com/pnpm/pnpm/issues/3645
     find node_modules server/node_modules -xtype l -delete
-
-    # remove non-deterministic files
-    rm node_modules/.modules.yaml
   '';
 
   installPhase = ''

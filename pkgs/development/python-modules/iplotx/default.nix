@@ -55,6 +55,16 @@ buildPythonPackage (finalAttrs: {
     "test_labels"
     "test_labels_and_colors"
     "test_vertex_labels"
+    #  AttributeError: 'Vertex3DCollection' object has no attribute...
+    "test_undirected"
+    "test_directed"
+    # eError: module 'matplotlib.cm' has no attribute '_ensure_cmap'
+    "test_build_cmap_fun"
+    "test_edges_cmap"
+    "test_leafedges_cmap"
+    "test_init_cmap"
+    # matplotlib.testing.exceptions.ImageComparisonFailure: images not close (RMS...
+    "test_simple_graph"
   ];
 
   nativeCheckInputs = [

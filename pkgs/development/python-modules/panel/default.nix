@@ -2,71 +2,82 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  bleach,
+
+  # dependencies
   bokeh,
   linkify-it-py,
-  markdown,
   markdown-it-py,
+  markdown,
   mdit-py-plugins,
   narwhals,
+  nh3,
+  packaging,
   pandas,
+  panel-material-ui,
   param,
   pyviz-comms,
-  pyct,
   requests,
-  setuptools,
   tqdm,
   typing-extensions,
+
+  withMaterialUi ? true,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "panel";
-  version = "1.9.4";
-
+  version = "1.10.0";
   format = "wheel";
 
-  # We fetch a wheel because while we can fetch the node
-  # artifacts using npm, the bundling invoked in setup.py
-  # tries to fetch even more artifacts
+  # We fetch a wheel because it contains ~75 pre-built javascript dependencies
+  # pinned to specific versions (and included in their filenames).
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     format = "wheel";
-    hash = "sha256-yJxMHnKCl9rwYo6lBw+w2orXd4HioxQtMCR5U3wd5qQ=";
+    hash = "sha256-Fcnyu1hWep42oiOWyzh3bfd+sMxSzZqZzrt4QksDY8A=";
     dist = "py3";
     python = "py3";
   };
 
   pythonRelaxDeps = [ "bokeh" ];
 
-  propagatedBuildInputs = [
-    bleach
+  pythonRemoveDeps = lib.optionals (!withMaterialUi) [ "panel-material-ui" ];
+
+  dependencies = [
     bokeh
     linkify-it-py
     markdown
     markdown-it-py
     mdit-py-plugins
     narwhals
+    nh3
+    packaging
     pandas
     param
-    pyct
     pyviz-comms
     requests
-    setuptools
     tqdm
     typing-extensions
-  ];
+  ]
+  ++ lib.optionals withMaterialUi [ panel-material-ui ];
 
   pythonImportsCheck = [ "panel" ];
 
-  # infinite recursion in test dependencies (hvplot)
+  # No tests in wheel
   doCheck = false;
 
   meta = {
     description = "High level dashboarding library for python visualization libraries";
     mainProgram = "panel";
     homepage = "https://github.com/holoviz/panel";
-    changelog = "https://github.com/holoviz/panel/releases/tag/v${version}";
+    changelog = "https://github.com/holoviz/panel/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ locnide ];
+    sourceProvenance = with lib.sourceTypes; [
+      binaryBytecode # built python files
+      fromSource # bundled javascript dependencies
+    ];
+    maintainers = with lib.maintainers; [
+      locnide
+      sarahec
+    ];
   };
-}
+})

@@ -1,0 +1,30 @@
+{
+  "release_date": "2026-10-19",
+  "release_label": "615.71.10",
+  "release_product": "nvidia-driver",
+  "cuda_compat": {
+    "name": "CUDA Forward Compatability",
+    "license": "NVIDIA Driver",
+    "license_path": "cuda_compat/LICENSE.txt",
+    "version": "615.71.10",
+    "linux-x86_64": {
+      "cuda13.4": {
+        "relative_path": "cuda_compat/linux-x86_64/cuda_compat-linux-x86_64-615.71.10_cuda13.4-archive.tar.xz",
+        "sha256": "05c32b72f6e5955f20f78d6014977fd6bca2e26e53f316ed9f63460b158cf663",
+        "md5": "3179b5d0fdaf037086aa6f86d72b9033",
+        "size": "103954308"
+      }
+    },
+    "cuda_variant": [
+      "13.4"
+    ],
+    "linux-sbsa": {
+      "cuda13.4": {
+        "relative_path": "cuda_compat/linux-sbsa/cuda_compat-linux-sbsa-615.71.10_cuda13.4-archive.tar.xz",
+        "sha256": "9009407b5735cc8f3d4aeef8b53f4081205171791c34958bd3addeb911e26d0f",
+        "md5": "c08022810f09d2a1399e7bdf24f45291",
+        "size": "94635132"
+      }
+    }
+  }
+}

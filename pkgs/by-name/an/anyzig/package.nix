@@ -1,18 +1,19 @@
 {
   lib,
-  stdenvNoCC,
+  stdenv,
   fetchFromGitHub,
-  zig_0_14,
+  zig_0_17,
   nix-update-script,
+  anyzigExe ? "zig", # "zig" or "zls"
 }:
 
 let
-  zig = zig_0_14;
+  zig = zig_0_17;
 in
 
-stdenvNoCC.mkDerivation (finalAttrs: {
-  pname = "anyzig";
-  version = "2026_03_26";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "any${anyzigExe}";
+  version = "2026_11_12";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -21,34 +22,55 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     owner = "marler8997";
     repo = "anyzig";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MQWFKVXsJdv/kV9Kn0GexiSLNDJdd9IGN9rQa2lhF6k=";
+    hash = "sha256-THFys3LpRGtp4Al6nWj+JgIC19mMeQ1Ug9oJDJ0oKE4=";
   };
-
-  postPatch = ''
-    substituteInPlace build.zig.zon --replace-fail \
-      '12201a08d7eff7619c8eb8284691a3ff959861b4bdd87216f180ed136672fb4ea26f' \
-      'zipcmdline-0.0.0-AAAAAKBaAAAaCNfv92GcjrgoRpGj_5WYYbS92HIW8YDt'
-  '';
 
   nativeBuildInputs = [ zig ];
 
   zigDeps = zig.fetchDeps {
-    inherit (finalAttrs) pname version src;
-    hash = "sha256-BeCa4IrFbb/bsz+ZuhKRUb9wV8a+JV/11FOBt8JJOKA=";
+    inherit (finalAttrs) version src;
+    pname = "anyzig";
+    fetchAll = true;
+    hash = "sha256-PXCto7lmw3BgMC1E5GiQqQN1aa98z0xgqkku1UivdSM=";
   };
 
   postConfigure = ''
     ln -s ${finalAttrs.zigDeps} "$ZIG_GLOBAL_CACHE_DIR/p"
+
+    # anyzig's build.zig needs to patch the standard library, so we point
+    # ZIG_LIB_DIR to a writable copy taken from the zig package
+    export ZIG_LIB_DIR="$NIX_BUILD_TOP/zig-lib"
+    cp -r ${zig}/lib/zig "$ZIG_LIB_DIR"
+    chmod -R +w "$ZIG_LIB_DIR"
+  '';
+
+  zigBuildFlags = [
+    "-Dforce-version=v${finalAttrs.version}"
+  ]
+  ++ lib.optionals (anyzigExe != "zig") [ "install-${anyzigExe}" ];
+
+  installPhase = ''
+    runHook preInstall
+    install -Dt $out/bin zig-out/bin/${anyzigExe}
+    runHook postInstall
+  '';
+
+  # versionCheckHook doesn't support multiple arguments
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+    $out/bin/${anyzigExe} any version | grep -F 'v${finalAttrs.version}'
+    runHook postInstallCheck
   '';
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "Universal zig executable that lets you run any version of zig";
+    description = "Universal ${anyzigExe} executable that lets you run any version of ${anyzigExe}";
     homepage = "https://github.com/marler8997/anyzig";
-    changelog = "https://github.com/marler8997/anyzig/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/marler8997/anyzig/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ defelo ];
-    mainProgram = "zig";
+    mainProgram = anyzigExe;
   };
 })

@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
           hash,
         }:
         fetchurl {
-          url = "https://download.dyalog.com/download.php?file=${finalAttrs.shortVersion}/${prefix}_${finalAttrs.version}_${suffix}";
+          url = "https://dyalog.com/uploads/php/download.dyalog.com/download.php?file=${finalAttrs.shortVersion}/${prefix}_${finalAttrs.version}_${suffix}";
           inherit hash;
         };
     in

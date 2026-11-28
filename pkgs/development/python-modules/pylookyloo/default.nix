@@ -5,26 +5,23 @@
   lookyloo-models,
   poetry-core,
   pydantic,
-  pyprojectVersionPatchHook,
   requests,
   urllib3,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "pylookyloo";
-  version = "1.41.2";
+  version = "1.43.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Lookyloo";
     repo = "PyLookyloo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-37vABO+LWuvzHB6DiE68R24kLfVxyRYkmWmRE5ByYLk=";
+    hash = "sha256-Nrdo9QW/ewigVtudhmud2XUgiHqsoz7VqTGU6jQ+AJQ=";
   };
 
   build-system = [ poetry-core ];
-
-  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   dependencies = [
     lookyloo-models

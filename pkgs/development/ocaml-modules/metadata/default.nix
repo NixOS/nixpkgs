@@ -12,7 +12,7 @@ buildDunePackage (finalAttrs: {
     owner = "savonet";
     repo = "ocaml-metadata";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-g76R1ziRv3VDl0IEJOm626m/ywDz+qgHtQg0uPb0MCU=";
+    hash = "sha256-g76R1ziRv3VDl0IEJOm626m/ywDz+qgHtQg0uPb0MCU=";
   };
 
   minimalOCamlVersion = "4.14";

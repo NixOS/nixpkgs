@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  apipkg,
   marshmallow,
   requests,
   requests-toolbelt,
@@ -28,6 +29,7 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   dependencies = [
+    apipkg
     marshmallow
     requests
     requests-toolbelt

@@ -6,28 +6,28 @@
   fetchPypi,
   h2,
   httpcore,
-  httpx,
+  httpx2,
   idna,
-  hatchling,
+  uv-build,
   pytestCheckHook,
   trio,
 }:
 
 buildPythonPackage rec {
   pname = "dnspython";
-  version = "2.8.0";
+  version = "2.9.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-GB08aZZFLLEYnEBGxhWZuEpahuCZVi/9530mmE/ybQ8=";
+    hash = "sha256-tE3GsY8HqLHFZnahn7/bUglBWwRqnOzihrqvqH/z9/E=";
   };
 
-  build-system = [ hatchling ];
+  build-system = [ uv-build ];
 
   optional-dependencies = {
     doh = [
-      httpx
+      httpx2
       h2
       httpcore
     ];
@@ -37,12 +37,20 @@ buildPythonPackage rec {
     doq = [ aioquic ];
   };
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    idna
+  ];
 
   disabledTests = [
     # dns.exception.SyntaxError: protocol not found
     "test_misc_good_WKS_text"
   ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'uv_build>=0.9.21,<0.13.0' "uv_build"
+  '';
 
   # disable network on all builds (including darwin)
   # see https://github.com/NixOS/nixpkgs/issues/356803

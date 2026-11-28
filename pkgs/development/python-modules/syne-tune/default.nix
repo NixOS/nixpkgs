@@ -32,7 +32,6 @@ buildPythonPackage (finalAttrs: {
   pname = "syne-tune";
   version = "0.16.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "syne-tune";

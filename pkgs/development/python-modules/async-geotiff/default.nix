@@ -31,6 +31,10 @@ buildPythonPackage (finalAttrs: {
     fetchSubmodules = true;
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml --replace-fail "uv_build>=0.8.8,<0.12.0" "uv_build>=0.8.8"
+  '';
+
   build-system = [ uv-build ];
 
   dependencies = [

@@ -6,6 +6,7 @@
   pkg-config,
   openssl,
   mpv,
+  sqlite,
   nix-update-script,
   writableTmpDirAsHomeHook,
   versionCheckHook,
@@ -13,21 +14,22 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jellyfin-tui";
-  version = "1.6.0";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "dhonus";
     repo = "jellyfin-tui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+ACqw95a761H6ye8dwZDhKIUQbAy80n+43wLysYgr8k=";
+    hash = "sha256-EHlK2K22xXyNDOKKFdZ/yuACq0ozsNGBAs69/DkINWo=";
   };
 
-  cargoHash = "sha256-ZY/wBrziKoYkY+uGdxK/JTWpQmvT3xORf9U4Fhx1Jwo=";
+  cargoHash = "sha256-uuQhEOQs5FIKF8c4EAkEHN95/xjRwUR+F7o4FFgmVq0=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     openssl
     mpv
+    sqlite
   ];
 
   nativeInstallCheckInputs = [

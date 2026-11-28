@@ -62,6 +62,9 @@ buildPythonPackage (finalAttrs: {
     # E       assert datetime.timedelta(seconds=17, microseconds=28239) <= datetime.timedelta(seconds=15)
     "test_task_options"
 
+    # Expects the RNG to be seeded by the test environment
+    "test_evaluate_less_or_equal_to_approx"
+
     # Flaky / timing sensitive
     "test_expired_cookie_with_tolerance"
     "test_expired_token_with_tolerance"

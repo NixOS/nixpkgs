@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mt-st";
-  version = "1.8";
+  version = "1.9";
 
   src = fetchFromGitHub {
     owner = "iustin";
     repo = "mt-st";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Sl+/v+ko3K4npY/M49H1YDxqOMy923qcAkTohi5Xg70=";
+    hash = "sha256-AptSSnCKpQOF7kRkGbKyHgwMDVn3c4kgNBOF2g++06Y=";
   };
 
   installFlags = [

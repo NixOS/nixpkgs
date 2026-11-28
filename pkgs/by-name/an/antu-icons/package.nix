@@ -6,6 +6,9 @@
 }:
 
 stdenvNoCC.mkDerivation {
+  __structuredAttrs = true;
+  strictDeps = true;
+
   pname = "antu-icons";
   version = "2.0"; # https://www.opendesktop.org/p/1188266/
 
@@ -13,7 +16,7 @@ stdenvNoCC.mkDerivation {
     owner = "froodo_alexis";
     repo = "Antu-icons";
     rev = "a12a9e559b59c8ded47531e299a5516718ef9a28";
-    hash = "sha256-CLcr+X/b0moVEBV0O/dzCDq4w5G2+KRLUBdqKm0eAKA=";
+    hash = "sha256-8NPov4mBLXcrPWgImVgBhpNv9BstydA3uCvL+/0t81E=";
   };
 
   propagatedBuildInputs = [ hicolor-icon-theme ];

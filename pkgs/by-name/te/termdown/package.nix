@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "termdown";
-  version = "2.0.0";
+  version = "2.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "trehn";
     repo = "termdown";
     tag = finalAttrs.version;
-    hash = "sha256-G2YOAC+b++oQUicZcY28qVDy2XqW2SuzhXcVqeSQkh8=";
+    hash = "sha256-PYYoKSjVyBrNAcYSdb+KTeyaum5ZRLu6q8C3r5twm5U=";
   };
 
   build-system = with python3Packages; [

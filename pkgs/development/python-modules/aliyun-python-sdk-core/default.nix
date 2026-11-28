@@ -1,9 +1,11 @@
 {
   lib,
   buildPythonPackage,
+  cacert,
   cryptography,
   fetchPypi,
   jmespath,
+  python,
   setuptools,
 }:
 
@@ -28,6 +30,11 @@ buildPythonPackage (finalAttrs: {
 
   # All components are stored in a mono repo
   doCheck = false;
+
+  postFixup = ''
+    rm $out/${python.sitePackages}/aliyunsdkcore/vendored/requests/packages/certifi/cacert.pem
+    ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $out/${python.sitePackages}/aliyunsdkcore/vendored/requests/packages/certifi/cacert.pem
+  '';
 
   pythonImportsCheck = [ "aliyunsdkcore" ];
 

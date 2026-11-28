@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vulkanscenegraph";
-  version = "1.1.16";
+  version = "1.1.17";
 
   src = fetchFromGitHub {
     owner = "vsg-dev";
     repo = "VulkanSceneGraph";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rNnSLRbFi7gWu6ZQ+7xxeF4F8xD4Bdh9fojj+7Ta1A0=";
+    hash = "sha256-irEWIyk0MMh0BE7FmWdkzdzn2QCO0ASYzYUbouPJcKs=";
   };
 
   nativeBuildInputs = [

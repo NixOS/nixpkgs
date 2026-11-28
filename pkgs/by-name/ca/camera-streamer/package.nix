@@ -7,7 +7,7 @@
   pkg-config,
   which,
   xxd,
-  ffmpeg,
+  ffmpeg-headless,
   libcamera,
   live555,
   openssl,
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    ffmpeg
+    ffmpeg-headless
     libcamera
     live555
     openssl

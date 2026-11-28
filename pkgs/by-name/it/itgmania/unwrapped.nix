@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  cacert,
   cmake,
   nasm,
   pkg-config,
@@ -63,6 +64,8 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     mkdir -p $out/share/icons/hicolor/scalable/apps/
     ln -s $out/itgmania/Data/logo.svg $out/share/icons/hicolor/scalable/apps/itgmania.svg
+    rm $out/itgmania/Data/ca-bundle.crt
+    ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $out/itgmania/Data/ca-bundle.crt
   '';
 
   desktopItems = [

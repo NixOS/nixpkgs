@@ -10,8 +10,6 @@ buildPythonPackage (finalAttrs: {
   version = "3.5.1.1";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     pname = "XStatic-jQuery";
     inherit (finalAttrs) version;

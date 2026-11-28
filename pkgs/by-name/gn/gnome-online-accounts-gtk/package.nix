@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-online-accounts-gtk";
-  version = "3.50.11";
+  version = "3.50.13";
 
   src = fetchFromGitHub {
     owner = "xapp-project";
     repo = "gnome-online-accounts-gtk";
     rev = finalAttrs.version;
-    hash = "sha256-cPZJgXhWQ5pdKB3hHG7x3vYon3J8HzHDVicP6CODUQ4=";
+    hash = "sha256-Kiwe/3ST5hhC2guy3GOD0Zzuohb8j3DqUzS0124fmNo=";
   };
 
   nativeBuildInputs = [

@@ -47,6 +47,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/justinmayer/django-autoslug";
     changelog = "https://github.com/justinmayer/django-autoslug/blob/v${version}/CHANGELOG.rst";
     license = lib.licenses.lgpl3Only;
-    maintainers = with lib.maintainers; [ defelo ];
+    maintainers = [ ];
   };
 }

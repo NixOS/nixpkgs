@@ -6,6 +6,7 @@
   curl,
   installShellFiles,
   pkg-config,
+  aws-lc,
   bzip2,
   libgit2,
   openssl,
@@ -27,16 +28,16 @@ in
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nix-init";
-  version = "0.3.6";
+  version = "0.3.7";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nix-init";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9UEGGtNm5XpcBA/80v03XEunWshgM0M35TrJ79PQNG8=";
+    hash = "sha256-qmICSRSOSDgvJxVBOrquQM9zytxDb8hL5wJY8Ea4sCk=";
   };
 
-  cargoHash = "sha256-cRnyTuUIRUFPWUle7/bcqcZ9LjvhRuK2tF++hoMl+xs=";
+  cargoHash = "sha256-ZOw+cGVOSLEm+A+1WFf7sYz1qal5jZpU1CMHvKm1fH4=";
 
   nativeBuildInputs = [
     curl
@@ -45,6 +46,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
     bzip2
     curl
     libgit2
@@ -80,11 +82,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   env = {
     GEN_ARTIFACTS = "artifacts";
-    LIBGIT2_NO_VENDOR = true;
-    LIBSQLITE3_SYS_USE_PKG_CONFIG = true;
     NIX = lib.getExe nix;
     NURL = lib.getExe nurl;
-    ZSTD_SYS_USE_PKG_CONFIG = true;
   };
 
   nativeInstallCheckInputs = [ versionCheckHook ];

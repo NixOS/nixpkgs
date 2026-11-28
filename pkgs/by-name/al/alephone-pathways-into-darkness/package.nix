@@ -3,11 +3,11 @@
 alephone.makeWrapper {
   pname = "pathways-into-darkness";
   desktopName = "Pathways-Into-Darkness";
-  version = "1.1.1";
+  version = "1.4";
 
   zip = fetchurl {
-    url = "http://simplici7y.com/version/file/1185/AOPID_v1.1.1.zip";
-    hash = "sha256-j/x1Mp2snZAwttaffuaTU8II/zcrm4+4PrrYwpnsA3U=";
+    url = "https://simplici7y.s3.amazonaws.com/static/versions/item-7101/06de0635-0375-49c8-9cc2-bba1ebe26259/AOPID_v1.4.zip";
+    hash = "sha256-mLsVZtO9OOJDg3bFErIZjrgUevq+gqXiSc9tE+liL2k=";
   };
 
   meta = {

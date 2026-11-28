@@ -2,7 +2,7 @@
   lib,
   stdenv,
   nodejs_24,
-  electron_42,
+  electron_44,
   makeWrapper,
   fetchFromGitHub,
   buildNpmPackage,
@@ -13,24 +13,24 @@
 }:
 let
   node = nodejs_24;
-  electron = electron_42;
+  electron = electron_44;
   dotnet = dotnetCorePackages.dotnet_10;
 in
 buildNpmPackage (finalAttrs: {
   pname = "vrcx";
-  version = "2026.09.16";
+  version = "2026.11.14";
 
   src = fetchFromGitHub {
     repo = "VRCX";
     owner = "vrcx-team";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CNO3Ur8xp77QN+HCexCpGX+QdAKM76YOSWOG3ZHT1g0=";
+    hash = "sha256-/SPc0VAE50yHsYNEfeEuf3BfexgEKOvAUOLcrK7yQW8=";
   };
 
   nodejs = node;
   makeCacheWritable = true;
   npmFlags = [ "--ignore-scripts" ];
-  npmDepsHash = "sha256-fFuqtISueODEFzuqWWL3aG4DWbrq2G4dHsXi3RWByjY=";
+  npmDepsHash = "sha256-VEB+BS54jMhMi3GXmF9tNH/1ahTZn7FSy27zOAhaVqU=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -54,7 +54,6 @@ buildNpmPackage (finalAttrs: {
       --dir \
       -c.electronDist=${electron.dist} \
       -c.electronVersion=${electron.version}
-    node ./build-scripts/patch-node-api-dotnet.js
 
     runHook postBuild
   '';
@@ -102,6 +101,14 @@ buildNpmPackage (finalAttrs: {
 
       dotnet-sdk = dotnet.sdk;
       dotnet-runtime = dotnet.runtime;
+      dotnetFlags =
+        let
+          platformName = if stdenv.hostPlatform.isx86_64 then "x64" else "ARM64";
+        in
+        [
+          "-p:RuntimeIdentifier=${dotnetCorePackages.systemToDotnetRid stdenv.hostPlatform.system}"
+          "-p:Platform=${platformName}"
+        ];
       projectFile = "Dotnet/VRCX-Electron.csproj";
 
       nugetDeps = ./deps.json;
@@ -130,7 +137,10 @@ buildNpmPackage (finalAttrs: {
       ShyAssassin
       ImSapphire
     ];
-    platforms = lib.platforms.linux;
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
     broken = !stdenv.hostPlatform.isx86_64;
   };
 })

@@ -40,6 +40,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/greatscottgadgets/libgreat/";
     changelog = "https://github.com/greatscottgadgets/libgreat/releases/tag/${src.tag}";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ carlossless ];
+    maintainers = with lib.maintainers; [ karstx ];
   };
 }

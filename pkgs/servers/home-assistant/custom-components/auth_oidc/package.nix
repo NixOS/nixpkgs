@@ -32,6 +32,10 @@ buildHomeAssistantComponent rec {
       substituteInPlace "$f" \
         --replace-fail "from auth_oidc" "from custom_components.auth_oidc"
     done
+
+    # Home Assistant 2026.11 stores person data in PersonData dataclass instead of tuple
+    substituteInPlace tests/test_hass_auth_provider.py \
+      --replace-fail "hass.data[PERSON_DOMAIN][1]" "hass.data[PERSON_DOMAIN].storage_collection"
   '';
 
   env.npmDeps = fetchNpmDeps {

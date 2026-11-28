@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "faraday-cli";
-  version = "2.2.2";
+  version = "2.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "infobyte";
     repo = "faraday-cli";
     tag = finalAttrs.version;
-    hash = "sha256-OQhwohRtBLwVWEJhyGBs/ktOL5SH+jM9A9/HnyheJYE=";
+    hash = "sha256-6yVKWVzLaWlD4ZrYBhjjimp4xgkaVzzLFC51IHhvBzU=";
   };
 
   pythonRelaxDeps = [

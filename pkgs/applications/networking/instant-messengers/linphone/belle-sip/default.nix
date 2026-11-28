@@ -7,6 +7,7 @@
   zlib,
   python3,
   mkLinphoneDerivation,
+  httplib,
 }:
 mkLinphoneDerivation {
   pname = "belle-sip";
@@ -27,6 +28,27 @@ mkLinphoneDerivation {
       "-Wno-error=use-after-free"
     ]
   );
+
+  # Upstream uses a vendored fork of `cpp-httplib`, which we don't,
+  # so to allow downstream dependencies to find ours, we need to ensure
+  # they actually look for it.
+  postPatch = ''
+    substituteInPlace cmake/BelleSIPConfig.cmake.in \
+      --replace-fail \
+        'include("''${CMAKE_CURRENT_LIST_DIR}/BelleSIPTargets.cmake")' \
+        'include(CMakeFindDependencyMacro)
+        if(@ENABLE_UNIT_TESTS@)
+        find_dependency(httplib)
+        endif()
+        include("''${CMAKE_CURRENT_LIST_DIR}/BelleSIPTargets.cmake")'
+  '';
+
+  preConfigure = ''
+    rm -rf ./tester/cpp-httplib
+    ln -s ${httplib.src} ./tester/cpp-httplib
+  '';
+
+  buildInputs = [ httplib ];
 
   propagatedBuildInputs = [
     libantlr3c

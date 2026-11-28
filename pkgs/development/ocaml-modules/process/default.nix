@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "dsheets";
     repo = "ocaml-process";
     rev = version;
-    sha256 = "0m1ldah5r9gcq09d9jh8lhvr77910dygx5m309k1jm60ah9mdcab";
+    hash = "sha256-S7FWE1TAVBlmAqOW/nwDIZ2TN6QIytQSwOylXKBqNFQ=";
   };
 
   nativeBuildInputs = [

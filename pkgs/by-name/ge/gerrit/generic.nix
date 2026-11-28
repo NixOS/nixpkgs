@@ -6,6 +6,7 @@
   nixosTests,
   stdenvNoCC,
   version,
+  isEOL ? false,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -67,5 +68,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       felixsinger
     ];
     platforms = lib.platforms.unix;
+    knownVulnerabilities = (lib.optional isEOL "Gerrit version ${finalAttrs.version} is EOL");
   };
 })

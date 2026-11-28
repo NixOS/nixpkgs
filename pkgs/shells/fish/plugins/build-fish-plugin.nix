@@ -28,6 +28,9 @@ lib.extendMkDerivation {
       checkPhase ? "",
       doCheck ? checkPhase != "",
 
+      strictDeps ? true,
+      __structuredAttrs ? true,
+
       ...
     }:
     {
@@ -72,5 +75,7 @@ lib.extendMkDerivation {
       checkPhase = ''
         fish "${writeScript "${finalAttrs.name}-test" checkPhase}"
       '';
+
+      inherit strictDeps __structuredAttrs;
     };
 }

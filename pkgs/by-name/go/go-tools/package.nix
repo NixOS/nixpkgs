@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "go-tools";
-  version = "2026.2.1";
+  version = "2026.2.2";
 
   src = fetchFromGitHub {
     owner = "dominikh";
     repo = "go-tools";
     tag = finalAttrs.version;
-    sha256 = "sha256-wellofnfLW4lQy68UQyFJfvrKCfrZ/EllLODX1g9taY=";
+    sha256 = "sha256-nmcXIQf9Mws4CMQDKQ1NUYHLYkm+ggSnh5sDiuvdnK4=";
   };
 
-  vendorHash = "sha256-3no4wPqFG0RfSsWB0z8EYxeoZ30t+Zf7ZayzFCLEm2A=";
+  vendorHash = "sha256-YC+DQZ3xjLGzhUXq/KBYhi1PGE63hBFaFor+XUZE1Ng=";
 
   excludedPackages = [ "website" ];
 

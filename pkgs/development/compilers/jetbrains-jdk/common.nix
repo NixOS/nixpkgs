@@ -3,6 +3,8 @@
   stdenv,
   fetchFromGitHub,
   jdk,
+  cacert,
+  jre-generate-cacerts,
   git,
   autoconf,
   unzip,
@@ -114,6 +116,14 @@ jdk.overrideAttrs (oldAttrs: {
     done
 
     ${lib.concatMapStringsSep "\n" (flag: ''realConfigureFlags+=("${flag}")'') extraConfigureFlags}
+
+    # dontConfigure skips openjdk's preConfigure, so generate cacerts from cacert here
+    mkdir "$NIX_BUILD_TOP/cacerts-gen"
+    pushd "$NIX_BUILD_TOP/cacerts-gen"
+    JAVA_TOOL_OPTIONS="-Dkeystore.pkcs12.certProtectionAlgorithm=NONE -Dkeystore.pkcs12.macAlgorithm=NONE" \
+      ${jre-generate-cacerts} ${jdk.home}/bin/keytool ${cacert}/etc/ssl/certs/ca-bundle.crt
+    popd
+    realConfigureFlags+=("--with-cacerts-file=$NIX_BUILD_TOP/cacerts-gen/cacerts")
 
     echo "computed configure flags: ''${realConfigureFlags[*]}"
     substituteInPlace jb/project/tools/linux/scripts/mkimages_${arch}.sh --replace-fail "STATIC_CONF_ARGS" "STATIC_CONF_ARGS ''${realConfigureFlags[*]}"

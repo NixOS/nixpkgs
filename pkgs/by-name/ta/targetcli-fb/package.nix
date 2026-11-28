@@ -2,7 +2,6 @@
   lib,
   python3Packages,
   fetchFromGitHub,
-  nixosTests,
   wrapGAppsNoGuiHook,
   gobject-introspection,
   glib,
@@ -41,10 +40,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     install -D targetcli.8 -t $out/share/man/man8/
     install -D targetclid.8 -t $out/share/man/man8/
   '';
-
-  passthru.tests = {
-    inherit (nixosTests) iscsi-root;
-  };
 
   meta = {
     description = "Command shell for managing the Linux LIO kernel target";

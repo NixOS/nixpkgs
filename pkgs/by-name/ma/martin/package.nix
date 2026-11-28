@@ -2,49 +2,21 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchurl,
   buildNpmPackage,
   rustPlatform,
   pkg-config,
-  curl,
-  libuv,
-  libz,
+
+  aws-lc,
+  maplibre-native,
   openssl,
+  sqlite,
+  zstd,
+
   postgresql,
   postgresqlTestHook,
   nix-update-script,
 }:
 
-let
-  # check package.metadata.mln in https://github.com/maplibre/maplibre-native-rs/blob/main/Cargo.toml
-  mlnRelease = "core-fa8a9c8e3261ce64940127aecc1d52f540c21c57";
-  mlnHeaders = fetchurl {
-    url = "https://github.com/maplibre/maplibre-native/releases/download/${mlnRelease}/maplibre-native-headers.tar.gz";
-    hash = "sha256-SqZaqePNbqBZoUgMJIsZf0zqKc8EAwInYNRciv/jX1A=";
-  };
-  mlnLibrary = fetchurl (
-    let
-      sources = {
-        aarch64-linux = {
-          url = "https://github.com/maplibre/maplibre-native/releases/download/${mlnRelease}/libmaplibre-native-core-amalgam-linux-arm64-vulkan.a";
-          hash = "sha256-iug/ZEIoM0LUczPkVbzVelILoc1uzsM519V2em7Va4U=";
-        };
-        x86_64-linux = {
-          url = "https://github.com/maplibre/maplibre-native/releases/download/${mlnRelease}/libmaplibre-native-core-amalgam-linux-x64-vulkan.a";
-          hash = "sha256-FoUFDoUw+eM/aaXMfO7iuoUrv8gUGVdBW1tiqxjYCbI=";
-        };
-      };
-    in
-    sources.${stdenv.hostPlatform.system}
-    // {
-      downloadToTemp = true;
-      recursiveHash = true;
-      postFetch = ''
-        install -Dm644 $downloadedFile $out/libmbgl-core-amalgam.a
-      '';
-    }
-  );
-in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "martin";
   version = "1.16.1";
@@ -58,7 +30,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   patches = [ ./dont-build-webui.patch ];
 
-  cargoHash = "sha256-p5sAkmMTirMdmXnVb2aqGKhPYpX/uluvzq0uw4W1Bt8=";
+  cargoPatches = [ ./fix-build-gcc15.patch ];
+
+  cargoHash = "sha256-yZFVK6BaaGutxDWu0WFa6HZtdoIhgSADYclz+ULAy0s=";
 
   webui = buildNpmPackage {
     pname = "martin-ui";
@@ -91,6 +65,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
   };
 
+  # Fill in the missing implementation of the maplibre_native crate's
+  # `MLN_SYSTEM` (see env below), with pkg-config. To be replaced by the
+  # upstream version:
+  # https://github.com/maplibre/maplibre-native-rs/pull/310
+  postPatch = ''
+    patch -p1 -d "$cargoDepsCopy"/source-registry-0/maplibre_native-* < ${./maplibre-native-system.patch}
+  '';
+
   preBuild = ''
     rm -rf martin/martin-ui/dist
     cp -r ${finalAttrs.webui} martin/martin-ui/dist
@@ -99,10 +81,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
-    curl
-    libuv
-    libz
+    aws-lc
+    maplibre-native
     openssl
+    sqlite
+    zstd
   ];
 
   nativeCheckInputs = [
@@ -125,9 +108,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   env = {
-    MLN_PRECOMPILE = 1;
-    MLN_CORE_LIBRARY_PATH = "${mlnLibrary}/libmbgl-core-amalgam.a";
-    MLN_CORE_LIBRARY_HEADERS_PATH = "${mlnHeaders}";
+    MLN_SYSTEM = 1;
   };
 
   passthru.updateScript = nix-update-script {
@@ -140,18 +121,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Blazing fast and lightweight PostGIS vector tiles server";
     homepage = "https://martin.maplibre.org/";
-    license = with lib.licenses; [
-      mit # or
-      asl20
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        mit
+        asl20
+      ];
     teams = [ lib.teams.geospatial ];
-    sourceProvenance = with lib.sourceTypes; [
-      binaryNativeCode # maplibre-native
-      fromSource
-    ];
-    platforms = [
-      "aarch64-linux"
-      "x86_64-linux"
-    ];
+    platforms = lib.platforms.unix;
   };
 })

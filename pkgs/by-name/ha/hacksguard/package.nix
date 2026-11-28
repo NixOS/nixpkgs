@@ -3,7 +3,9 @@
   fetchFromGitHub,
   nix-update-script,
   pkg-config,
+  rust-jemalloc-sys,
   rustPlatform,
+  stdenv,
   versionCheckHook,
 }:
 
@@ -23,6 +25,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-LLAPbXz8QAEUGs+37ZIFVNW1WfCVQbROfI7wQFaiy3E=";
 
   nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ rust-jemalloc-sys ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 

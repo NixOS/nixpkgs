@@ -11,8 +11,6 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
   pname = "applicationinsights";
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     inherit (finalAttrs) pname version;
     hash = "sha256-C3YfPvBoCs9HMZBt/BgH+qbypXFornRZLbAISmCZ97M=";

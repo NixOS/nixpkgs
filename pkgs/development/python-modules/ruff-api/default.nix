@@ -7,6 +7,7 @@
   libiconv,
   rustc,
   rustPlatform,
+  rust-jemalloc-sys,
 }:
 
 buildPythonPackage rec {
@@ -33,7 +34,10 @@ buildPythonPackage rec {
     rustc
   ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+  buildInputs = [
+    rust-jemalloc-sys
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
   ];
 

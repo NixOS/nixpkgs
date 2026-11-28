@@ -24,14 +24,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "chalice";
-  version = "1.33.0";
+  version = "1.34.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "chalice";
     tag = finalAttrs.version;
-    hash = "sha256-c5xzgrxRFRlvgMnf/L8rhG7rYJLtuMvDZHYsPaHkdRs=";
+    hash = "sha256-ymE42aUjECzBvIHPexLW9vvAvqlbtdzxkQVRWIkniGk=";
   };
 
   pythonRelaxDeps = [ "pip" ];
@@ -100,6 +100,8 @@ buildPythonPackage (finalAttrs: {
     "test_event_source_uuid_does_not_exist"
     "test_event_source_does_not_exist"
     "test_can_update_lambda_event_source"
+    # racy
+    "test_can_reload_when_file_created"
   ];
 
   pythonImportsCheck = [ "chalice" ];

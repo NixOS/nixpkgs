@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mithril";
-  version = "0.3.0";
+  version = "0.4.0";
   __structuredAttrs = true;
   strictDeps = true;
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "nmatt0";
     repo = "mithril";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jiEOuJ3r+PHzRs70pG6DGai5AbRRQio/yT/nsciEcmU=";
+    hash = "sha256-leEvMGh/9lxN0P82ONfhzqs3r9T9SXYB0pddBdnPZKY=";
   };
 
   nativeBuildInputs = [ cmake ];

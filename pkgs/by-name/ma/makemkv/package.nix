@@ -69,7 +69,12 @@ stdenv.mkDerivation (
       let
         binPath = lib.makeBinPath [ jre_headless ];
       in
-      lib.optionals withJava [ "--prefix PATH : ${binPath}" ];
+      lib.optionals withJava [
+        "--prefix"
+        "PATH"
+        ":"
+        binPath
+      ];
 
     installPhase = ''
       runHook preInstall

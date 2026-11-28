@@ -6,6 +6,7 @@
   pkg-config,
   openssl,
   libiconv,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -24,9 +25,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     if stdenv.hostPlatform.isDarwin then
       [
         libiconv
+        zstd
       ]
     else
-      [ openssl ];
+      [
+        openssl
+        zstd
+      ];
 
   # requires network
   checkFlags = [ "--skip=tools::tests::download_and_install_binaries" ];

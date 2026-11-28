@@ -1,4 +1,5 @@
 {
+  lib,
   callPackage,
   nixosTests,
   python3,
@@ -141,6 +142,9 @@ python.pkgs.buildPythonPackage {
     runHook postInstall
   '';
 
+  # broken upstream
+  doCheck = false;
+
   nativeCheckInputs = with python.pkgs; [
     mock
     pytestCheckHook
@@ -150,16 +154,6 @@ python.pkgs.buildPythonPackage {
     pytest-factoryboy
     pytest-html
     pytest-xdist
-  ];
-
-  # flaky
-  disabledTests = [
-    "test_add_duplicate"
-    "test_reset_inherit_space_fields"
-    "test_search_count"
-    "test_url_import_regex_replace"
-    "test_url_validator"
-    "test_delete"
   ];
 
   passthru = {

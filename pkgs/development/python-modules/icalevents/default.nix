@@ -17,11 +17,21 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "jazzband";
+    owner = "eigenmannmartin";
     repo = "icalevents";
     tag = version;
     hash = "sha256-QDqmcZY/UANVKRjk1ZFEFHgrjtD+hXE4qd3tX64sE7c=";
   };
+
+  postPatch = ''
+    # icalendar 7.3 stores unrecognized X- properties as vUnknown, which no
+    # longer subclasses vText. The property value is unchanged.
+    # https://github.com/collective/icalendar/blob/v7.3.0/src/icalendar/prop/unknown.py
+    substituteInPlace test/test_icalevents.py \
+      --replace-fail "from icalendar.prop import vText" "from icalendar.prop import vUnknown" \
+      --replace-fail 'assertIsInstance(event.component["X-MICROSOFT-CDO-BUSYSTATUS"], vText)' \
+      'assertIsInstance(event.component["X-MICROSOFT-CDO-BUSYSTATUS"], vUnknown)'
+  '';
 
   build-system = [
     poetry-core
@@ -48,9 +58,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "icalevents" ];
 
   meta = {
-    changelog = "https://github.com/jazzband/icalevents/releases/tag/${src.tag}";
+    changelog = "https://github.com/eigenmannmartin/icalevents/releases/tag/${src.tag}";
     description = "Python module for iCal URL/file parsing and querying";
-    homepage = "https://github.com/jazzband/icalevents";
+    homepage = "https://github.com/eigenmannmartin/icalevents";
     maintainers = with lib.maintainers; [ jamiemagee ];
     license = lib.licenses.mit;
   };

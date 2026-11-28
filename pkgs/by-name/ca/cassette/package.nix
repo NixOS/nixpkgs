@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cassette";
-  version = "0.2.4";
+  version = "0.2.5";
 
   src = fetchFromGitHub {
     owner = "Rirusha";
     repo = "Cassette";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ceXEWcSBQMbG9cuhWjtwI0z/gTzI1t5+9qvFcUeKyrQ=";
+    hash = "sha256-khPigEzhTHPjbXyl6Rye6Vg8JnVEXhOrJ2lAok40K8g=";
   };
 
   nativeBuildInputs = [

@@ -1,0 +1,62 @@
+{
+  lib,
+  fetchFromGitHub,
+  fetchSwiftPMDeps,
+  jq,
+  stdenv,
+  swift,
+  swiftpm,
+}:
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "open-apple-macros";
+  version = "1.4.1";
+
+  src = fetchFromGitHub {
+    owner = "xtool-org";
+    repo = "OpenAppleMacros";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-dfBuRYhfGhQw49OTSC5r3fGM+kdp37+fVfH1kkaDzfg=";
+  };
+
+  strictDeps = true;
+
+  swiftpmDeps = fetchSwiftPMDeps {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-rjwdYAYV5j7yYXtyLFhaXkqyl0sKj50FA1XoHcgm9qo=";
+  };
+
+  nativeBuildInputs = [
+    jq
+    swift
+    swiftpm
+  ];
+
+  postInstall =
+    # Put the plugin server at the expected location.
+    ''
+      # Install the plugin manifest included in upstream's release tarballs
+      make build-info
+      install -Dm644 tmp/info/info.json "$out/share/open-apple-macros/info.json"
+
+      mkdir -p "$out/libexec/swift"
+      mv "$out/bin" "$out/libexec/swift/plugins"
+
+      # Use stub libraries so that users need only specify the plugin path and plugin server.
+      mkdir -p "$out/lib/swift/host/plugins"
+      for plugin in $(jq -r '.plugins[]' tmp/info/info.json); do
+        touch "$out/lib/swift/host/plugins/lib''${plugin}${stdenv.hostPlatform.extensions.sharedLibrary}"
+      done
+    '';
+
+  __structuredAttrs = true;
+
+  meta = {
+    homepage = "https://github.com/xtool-org/OpenAppleMacros";
+    changelog = "https://github.com/xtool-org/OpenAppleMacros/releases/tag/${finalAttrs.src.tag}";
+    description = "Open source reimplementation of Xcode-only Swift macros";
+    platforms = lib.platforms.darwin ++ lib.platforms.linux;
+    license = lib.licenses.mit;
+    teams = [ lib.teams.swift ];
+  };
+})

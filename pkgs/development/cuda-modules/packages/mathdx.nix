@@ -73,8 +73,14 @@ buildRedist (finalAttrs: {
 
   # cuFFTDx's example Makefiles expect a CUDA Toolkit in /usr/local/cuda; the examples also build with CMake, as in the
   # gpuCheck.
+  # cuBLASDx's performance guide helper is not executable, so patchShebangs leaves its /usr/bin/env shebang, which the
+  # FHS reference check rejects; its usage is `python3 suggest_tile.py`, so drop the shebang.
   postPatch = ''
     find example -name Makefile -print -delete
+  ''
+  + lib.optionalString (lib.versionAtLeast finalAttrs.version "26.10") ''
+    substituteInPlace example/cublasdx/performance_guide/suggest_tile.py \
+      --replace-fail '#!/usr/bin/env python3' ""
   '';
 
   # Don't strip the x86_64 static libraries.

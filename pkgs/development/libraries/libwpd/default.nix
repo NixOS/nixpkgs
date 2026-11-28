@@ -11,12 +11,12 @@
   boost,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libwpd";
   version = "0.10.3";
 
   src = fetchurl {
-    url = "mirror://sourceforge/libwpd/libwpd-${version}.tar.xz";
+    url = "mirror://sourceforge/libwpd/libwpd-${finalAttrs.version}.tar.xz";
     hash = "sha256-JGWwtmL9xdTjvrzcmnkCdxP7Ypyiv/BKPJJR/exC3Qk=";
   };
 
@@ -39,4 +39,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl21;
     platforms = lib.platforms.unix;
   };
-}
+})

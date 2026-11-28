@@ -8,22 +8,14 @@
 
 stdenv.mkDerivation {
   pname = "vendor-reset";
-  version = "unstable-2024-04-16-${kernel.version}";
+  version = "unstable-2026-06-29-${kernel.version}";
 
   src = fetchFromGitHub {
     owner = "gnif";
     repo = "vendor-reset";
-    rev = "084881c6e9e11bdadaf05798e669568848e698a3";
-    hash = "sha256-Klu2uysbF5tH7SqVl815DwR7W+Vx6PyVDDLwoMZiqBI=";
+    rev = "cbb4dd50926337e0f9fe1dd1e8a74aa5cb3448a7";
+    hash = "sha256-oOiMXIARMSDWm/PChfPV/hJEHe1258Infu4NXC6okn8=";
   };
-
-  patches = [
-    # This is a temporary, vendored version of this upstream PR:
-    # https://github.com/gnif/vendor-reset/pull/86
-    # As soon as it is merged, we should be able to update this
-    # module and remove the patch.
-    ./fix-linux-6.12-build.patch
-  ];
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 

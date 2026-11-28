@@ -27,14 +27,14 @@
 
 stdenv.mkDerivation {
   pname = "unifi-endpoint";
-  version = "1.0.4-20";
+  version = "1.1.7-28";
 
   strictDeps = true;
   __structuredAttrs = true;
 
   src = fetchurl {
-    url = "https://fw-download.ubnt.com/data/unifi-endpoint-desktop-app-deb/bed2-linux-1.0.4-20-ff164d14-a211-419d-9a04-43192d56a952.deb";
-    hash = "sha256-5UNCzJxRTllGllfgYBSdRvc3G3/bLZ//HrNENIBDEfo=";
+    url = "https://fw-download.ubnt.com/data/unifi-endpoint-desktop-app-deb/55c2-linux-1.1.7-28-54b0e439-ddb5-41be-9e6f-56739775cdd9.deb";
+    hash = "sha256-mWzVcMMNw+yVID7vC8he92g7mZrePlXK3D3b7XWuWa0=";
   };
 
   nativeBuildInputs = [

@@ -27,6 +27,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "tab";
-    broken = (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64); # Added 2023-11-13
+    broken = stdenv.hostPlatform.isDarwin; # Added 2023-11-13
   };
 })

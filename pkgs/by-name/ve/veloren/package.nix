@@ -4,6 +4,8 @@
   fetchFromGitLab,
   pkg-config,
   stdenv,
+  zstd,
+  sqlite,
 
   # Linux-only
   vulkan-loader,
@@ -84,6 +86,8 @@ rustPlatform.buildRustPackage {
 
   buildInputs = [
     shaderc
+    zstd
+    sqlite
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib

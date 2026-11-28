@@ -49,13 +49,13 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "nezha";
-  version = "2.3.18";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "nezhahq";
     repo = "nezha";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tv9JDy6dI23tGZF9hEnA6tbXz0/SQlHUFKpQ6VEhtXk=";
+    hash = "sha256-8rN4wf8bvDCQ6GsEW2QSPw1OKcDbvfp4E3BYjJCJjjI=";
   };
 
   proxyVendor = true;
@@ -124,7 +124,7 @@ buildGoModule (finalAttrs: {
     description = "Self-hosted, lightweight server and website monitoring and O&M tool";
     homepage = "https://github.com/nezhahq/nezha";
     changelog = "https://github.com/nezhahq/nezha/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.asl20;
+    license = lib.licenses.wtfpl;
     maintainers = with lib.maintainers; [ moraxyc ];
     mainProgram = "nezha";
   };

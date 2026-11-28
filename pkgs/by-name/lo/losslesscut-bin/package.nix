@@ -9,7 +9,7 @@ let
   version = "3.69.0";
   metaCommon = {
     description = "Swiss army knife of lossless video/audio editing";
-    homepage = "https://mifi.no/losslesscut/";
+    homepage = "https://losslesscut.app/";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [
       ShamrockLee

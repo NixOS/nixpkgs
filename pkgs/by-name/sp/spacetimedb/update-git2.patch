@@ -1,0 +1,76 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index f2bf0a291..3edce5d57 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -2992,17 +2992,14 @@ dependencies = [
+ 
+ [[package]]
+ name = "git2"
+-version = "0.19.0"
++version = "0.21.0"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "b903b73e45dc0c6c596f2d37eccece7c1c8bb6e4407b001096387c63d0d93724"
++checksum = "ddddbf932745a6be37109b6112d3ee09696106f848449069d3a57bba937ab82e"
+ dependencies = [
+  "bitflags 2.10.0",
+  "libc",
+  "libgit2-sys",
+  "log",
+- "openssl-probe",
+- "openssl-sys",
+- "url",
+ ]
+ 
+ [[package]]
+@@ -4141,15 +4138,13 @@ checksum = "ce5d3ddc6d3fa000eb1536d85e147bfe31aacaba692ed6a876f95cb7c855be78"
+ 
+ [[package]]
+ name = "libgit2-sys"
+-version = "0.17.0+1.8.1"
++version = "0.18.8+1.9.7"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "10472326a8a6477c3c20a64547b0059e4b0d086869eee31e6d7da728a8eb7224"
++checksum = "7f7c568b25d7489bc3fb2988ed69ab111d2944d2f5fec3d5c987fe545ea97b50"
+ dependencies = [
+  "cc",
+  "libc",
+- "libssh2-sys",
+  "libz-sys",
+- "openssl-sys",
+  "pkg-config",
+ ]
+ 
+@@ -4201,20 +4196,6 @@ dependencies = [
+  "vcpkg",
+ ]
+ 
+-[[package]]
+-name = "libssh2-sys"
+-version = "0.3.1"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "220e4f05ad4a218192533b300327f5150e809b54c4ec83b5a1d91833601811b9"
+-dependencies = [
+- "cc",
+- "libc",
+- "libz-sys",
+- "openssl-sys",
+- "pkg-config",
+- "vcpkg",
+-]
+-
+ [[package]]
+ name = "libz-rs-sys"
+ version = "0.5.5"
+diff --git a/Cargo.toml b/Cargo.toml
+index 0e69d3e58..307f50301 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -247,7 +247,7 @@ futures = "0.3"
+ futures-channel = "0.3"
+ futures-util = "0.3"
+ getrandom02 = { package = "getrandom", version = "0.2" }
+-git2 = "0.19"
++git2 = "0.21"
+ glob = "0.3.1"
+ hashbrown = { version = "0.16.1", default-features = false, features = ["equivalent", "inline-more", "rayon", "serde"] }
+ headers = "0.4"

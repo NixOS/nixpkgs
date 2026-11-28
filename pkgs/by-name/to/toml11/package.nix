@@ -6,6 +6,7 @@
   doctest,
   fetchpatch,
   nlohmann_json,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -48,7 +49,14 @@ stdenv.mkDerivation (finalAttrs: {
     doctest
     nlohmann_json
   ];
+  strictDeps = true;
+  __structuredAttrs = true;
+
   doCheck = true;
+
+  passthru.tests.cmake-config = testers.hasCmakeConfigModules {
+    package = finalAttrs.finalPackage;
+  };
 
   meta = {
     changelog = "https://github.com/ToruNiina/toml11/blob/${finalAttrs.src.tag}/docs/content.en/docs/changelog/_index.md";
@@ -72,5 +80,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.cobalt ];
     platforms = lib.platforms.unix ++ lib.platforms.windows;
+    cmakeConfigModules = [ "toml11" ];
   };
 })

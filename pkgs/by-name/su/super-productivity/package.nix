@@ -1,34 +1,31 @@
 {
   buildNpmPackage,
   copyDesktopItems,
-  electron_43,
+  electron_44,
   fetchFromGitHub,
+  gitMinimal,
   lib,
   makeDesktopItem,
   nix-update-script,
   prefetch-npm-deps,
   rsync,
   stdenv,
-  nodejs_22,
   rustPlatform,
   cacert,
   cargo,
 }:
 let
-  electron = electron_43;
-  nodejs = nodejs_22;
+  electron = electron_44;
 in
 buildNpmPackage (finalAttrs: {
   pname = "super-productivity";
-  version = "19.1.0";
-
-  inherit nodejs;
+  version = "20.1.0";
 
   src = fetchFromGitHub {
     owner = "super-productivity";
     repo = "super-productivity";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-iWiWVUGr3qGcfYqCJg9hkXSTM1eWarYZgWspj3+Bn0Q=";
+    hash = "sha256-w6vPWekIHow9if1pULoqEezTK7tvp5xGQ3XGLzBVCmU=";
   };
 
   # Use custom fetcher for deps because super-productivity uses multiple
@@ -60,10 +57,11 @@ buildNpmPackage (finalAttrs: {
       buildPhase = ''
         mkdir -p $out
         find -name package-lock.json | sort | while read -r lockfile; do
-          prefetch-npm-deps $lockfile /tmp/cache
+          cacheDir=$(mktemp -d)
+          prefetch-npm-deps "$lockfile" "$cacheDir"
           # Merge output
-          rsync -a /tmp/cache/ $out
-          rm -rf /tmp/cache
+          rsync -a "$cacheDir/" "$out"
+          rm -rf "$cacheDir"
         done
         # Ensure that the root package-lock.json is placed in the output.
         # This means only the root lockfile is checked for consistancy,
@@ -74,7 +72,7 @@ buildNpmPackage (finalAttrs: {
       dontInstall = true;
 
       outputHashMode = "recursive";
-      hash = "sha256-vP3wVozl/7KKnJ4CcOzXsljCdQ3Z83Rm0zYEyg1Ce0c=";
+      hash = "sha256-0W7LWxsyQQ/qtmD6pPgL7K27ayTR2xFWltqG0mN3bDQ=";
     }
   );
 
@@ -95,9 +93,15 @@ buildNpmPackage (finalAttrs: {
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
     CHROMEDRIVER_SKIP_DOWNLOAD = "true";
+    # Use JavaScript Sass implementation instead bundled Dart executable.
+    NG_BUILD_SASS_EMBEDDED = "false";
   };
 
-  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+  nativeBuildInputs = [
+    # Required by the build-time tests.
+    gitMinimal
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     cargo
     copyDesktopItems
     rustPlatform.cargoSetupHook
@@ -208,6 +212,7 @@ buildNpmPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       pineapplehunter
       tebriel
+      yzx9
     ];
     mainProgram = "superproductivity";
   };

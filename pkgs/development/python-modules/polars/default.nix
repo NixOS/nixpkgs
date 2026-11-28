@@ -20,8 +20,7 @@
   mimalloc,
   jemalloc,
   rust-jemalloc-sys,
-  # Another alternative is to try `mimalloc`
-  polarsMemoryAllocator ? mimalloc, # polarsJemalloc,
+  polarsMemoryAllocator ? polarsJemalloc, # mimalloc (see meta.problems),
   polarsJemalloc ?
     let
       jemalloc' = rust-jemalloc-sys.override {
@@ -82,6 +81,9 @@ buildPythonPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    # The mimalloc work-around doesn't seem to work.
+    # runtime paths do not list mimalloc, and jemalloc is
+    # compiled & used regardless.
     polarsMemoryAllocator
     (pkgs.__splicedPackages.zstd or pkgs.zstd)
   ];
@@ -194,7 +196,6 @@ buildPythonPackage (finalAttrs: {
         ps.hypothesis
         ps.jax
         ps.jaxlib
-        (ps.kuzu or null)
         ps.matplotlib
         ps.moto
         ps.nest-asyncio
@@ -226,7 +227,7 @@ buildPythonPackage (finalAttrs: {
       "--dist=loadgroup"
     ];
     disabledTests = [
-      "test_read_kuzu_graph_database" # kuzu
+      "test_read_kuzu_graph_database" # kuzu was dropped from nixpkgs
       "test_read_database_cx_credentials" # connectorx
 
       # adbc_driver_.*
@@ -297,5 +298,8 @@ buildPythonPackage (finalAttrs: {
     ];
     mainProgram = "polars";
     platforms = lib.platforms.all;
+  }
+  // lib.optionalAttrs (polarsMemoryAllocator.pname == "mimalloc") {
+    problems.brokenMimalloc = "mimalloc polarsMemoryAllocator does not actually link mimalloc.";
   };
 })

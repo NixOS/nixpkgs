@@ -16,7 +16,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "jbasko";
+    owner = "pytest-dev";
     repo = "pytest-random-order";
     tag = "v${version}";
     hash = "sha256-c282PrdXxG7WChnkpLWe059OmtTOl1Mn6yWgMRfCjBA=";
@@ -38,9 +38,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "random_order" ];
 
   meta = {
-    homepage = "https://github.com/jbasko/pytest-random-order";
+    homepage = "https://github.com/pytest-dev/pytest-random-order";
     description = "Randomise the order of tests with some control over the randomness";
-    changelog = "https://github.com/jbasko/pytest-random-order/releases/tag/v${version}";
+    changelog = "https://github.com/pytest-dev/pytest-random-order/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ prusnak ];
   };

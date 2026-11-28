@@ -34,6 +34,13 @@ let
 
           # Account for divergences with the main `tokenizers` derivation:
           postPatch = "";
+          # datasets>=5 is incompatible with huggingface-hub_0
+          nativeCheckInputs = builtins.filter (p: p.pname or "" != "datasets") oldAttrs.nativeCheckInputs;
+          disabledTestPaths = [
+            # ModuleNotFoundError: No module named 'datasets'
+            "benches/test_tiktoken.py"
+            "tests/documentation/test_tutorial_train_from_iterators.py"
+          ];
           disabledTests = [
             # PermissionError: [Errno 13] Permission denied: 'tests/data/small.txt'
             "TestUnigram"
@@ -66,7 +73,7 @@ let
 in
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "frigate";
-  version = "0.18.2";
+  version = "0.18.3";
   pyproject = false;
 
   src = fetchFromGitHub {
@@ -74,7 +81,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "blakeblackshear";
     repo = "frigate";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-uu+TCH5QW6OZhPyA/QiORnqIsVxT+h3FDocv1K/cDNk=";
+    hash = "sha256-HhxfY3tg15lK2AEisqLJzJtENa2ijKMBuqgArRzZ7f8=";
   };
 
   patches = [
@@ -258,6 +265,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "test_restricted_role_can_access_allowed_camera"
     "test_stream_alias_allowed_for_owning_camera"
     "test_unconfigured_role_can_access_any_stream"
+    # Side-effect of patching ffmpeg lookup
+    "test_resolve_falls_back_for_unsafe_path"
   ];
 
   passthru = {

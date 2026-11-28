@@ -10,16 +10,16 @@
   recurring-ical-events,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "icalendar-searcher";
-  version = "1.1.0";
+  version = "1.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "python-caldav";
+    owner = "PyCalendar";
     repo = "icalendar-searcher";
-    tag = "v${version}";
-    hash = "sha256-doYeDgOdobCf2z2mPmeb23z8Akzy8bCEd2LgM6NSkYg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-FNrc+SQar8vftn2zGtMtQW5Tb9KwELSozt8oO4ogxn0=";
   };
 
   build-system = [
@@ -41,13 +41,14 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   meta = {
-    changelog = "https://github.com/python-caldav/icalendar-searcher/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/PyCalendar/icalendar-searcher/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Search, filter and sort iCalendar components";
-    homepage = "https://github.com/python-caldav/icalendar-searcher";
+    homepage = "https://github.com/PyCalendar/icalendar-searcher";
     license = lib.licenses.agpl3Only;
     maintainers = [ lib.maintainers.dotlambda ];
+    teams = [ lib.teams.ngi ];
   };
-}
+})

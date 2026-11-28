@@ -22,7 +22,6 @@ buildPythonPackage (finalAttrs: {
   pname = "radio-beam";
   version = "0.3.10";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "radio-astro-tools";

@@ -49,7 +49,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "outlines-dev";
+    owner = "dottxt-ai";
     repo = "outlines";
     tag = finalAttrs.version;
     hash = "sha256-DPxtvaEbPv3go2WD9lqXB6AfTSmIA+MsqZwxXVcpyXk=";
@@ -250,7 +250,7 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Structured text generation";
-    homepage = "https://github.com/outlines-dev/outlines";
+    homepage = "https://github.com/dottxt-ai/outlines";
     changelog = "https://github.com/dottxt-ai/outlines/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ lach ];

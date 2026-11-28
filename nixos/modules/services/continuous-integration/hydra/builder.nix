@@ -10,12 +10,24 @@ let
   user = "hydra-builder";
 
   format = pkgs.formats.toml { };
+
+  otel = import ./otel.nix { inherit lib; };
 in
 {
   options.services.hydra-builder = {
     enable = lib.mkEnableOption "the Hydra build agent, which connects to the queue runner over gRPC and executes builds";
 
-    package = lib.mkPackageOption pkgs "hydra-builder" { };
+    package = otel.mkPackageOption {
+      inherit pkgs;
+      name = "hydra-builder";
+      otelCfg = cfg.otel;
+      otelPath = "services.hydra-builder.otel";
+    };
+
+    otel = otel.mkOtelOption {
+      component = "the builder";
+      binary = "hydra-builder";
+    };
 
     queueRunnerAddr = lib.mkOption {
       type = lib.types.singleLineStr;
@@ -195,6 +207,8 @@ in
 
   config = lib.mkIf cfg.enable {
     systemd.services.hydra-builder = {
+      # Hydra names every program it runs by its own variable, never by `PATH`.
+      enableDefaultPath = false;
       description = "Hydra build agent";
       requires = [ "nix-daemon.socket" ];
       after = [ "network.target" ];
@@ -206,9 +220,10 @@ in
         RUST_BACKTRACE = "1";
         # nix-store wants $HOME for its cache dir.
         HOME = "/run/hydra-builder";
-      };
-
-      path = [ config.nix.package ];
+        # Hydra finds the programs it runs through these variables, not `PATH`.
+        HYDRA_PROGRAM_NIX = lib.getExe' config.nix.package "nix";
+      }
+      // otel.otelEnv cfg.otel;
 
       serviceConfig = {
         Type = "notify";

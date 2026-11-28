@@ -172,18 +172,6 @@ in
           # Provide kbd with additional packages.
           environment.etc.kbd.source = "${consoleEnv pkgs.kbd}/share";
 
-          boot.initrd.preLVMCommands = lib.mkIf (!config.boot.initrd.systemd.enable) (
-            lib.mkBefore ''
-              kbd_mode ${if isUnicode then "-u" else "-a"} -C /dev/console
-              printf "\033%%${if isUnicode then "G" else "@"}" >> /dev/console
-              loadkmap < ${optimizedKeymap}
-
-              ${lib.optionalString (cfg.earlySetup && cfg.font != null) ''
-                setfont -C /dev/console $extraUtils/share/consolefonts/font.psf
-              ''}
-            ''
-          );
-
           boot.initrd.systemd.contents = {
             "/etc/vconsole.conf".source = vconsoleConf cfg.earlySetup;
             # Add everything if we want full console setup...
@@ -245,27 +233,6 @@ in
             "vt.default_grn=${makeColor 1 cfg.colors}"
             "vt.default_blu=${makeColor 2 cfg.colors}"
           ];
-        })
-
-        (lib.mkIf (cfg.earlySetup && cfg.font != null && !config.boot.initrd.systemd.enable) {
-          boot.initrd.extraUtilsCommands = ''
-            mkdir -p $out/share/consolefonts
-            ${
-              if lib.substring 0 1 cfg.font == "/" then
-                ''
-                  font="${cfg.font}"
-                ''
-              else
-                ''
-                  font="$(echo ${consoleEnv pkgs.kbd}/share/consolefonts/${cfg.font}.*)"
-                ''
-            }
-            if [[ $font == *.gz ]]; then
-              gzip -cd $font > $out/share/consolefonts/font.psf
-            else
-              cp -L $font $out/share/consolefonts/font.psf
-            fi
-          '';
         })
       ]
     ))

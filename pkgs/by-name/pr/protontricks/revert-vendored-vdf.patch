@@ -1,5 +1,5 @@
 diff --git a/src/protontricks/steam.py b/src/protontricks/steam.py
-index 9cff490..4e6f069 100644
+index 986b878..db34fe8 100644
 --- a/src/protontricks/steam.py
 +++ b/src/protontricks/steam.py
 @@ -11,7 +11,6 @@ from pathlib import Path
@@ -10,26 +10,23 @@ index 9cff490..4e6f069 100644
  from .util import is_arm64, is_steam_deck, is_steam_frame, lower_dict
  
  __all__ = (
-@@ -651,19 +650,9 @@ def iter_appinfo_sections(path):
- 
-             i += section_size
- 
--            try:
--                vdf_d = vdf.binary_loads(
--                    data[i:i+vdf_section_size], key_table=key_table
--                )
--            except TypeError:
--                # System 'vdf' is too old and does not support 'key_table',
--                # use the bundled one instead. This is cursed, but it's
--                # so far the only reasonable option without a proper maintained
--                # release on PyPI.
--                vdf_d = vendored_binary_loads(
--                    data[i:i+vdf_section_size], key_table=key_table
--                )
+@@ -597,18 +596,8 @@ def _appinfo_vdf_binary_loads(data, key_table):
+     """
+     Load binary VDF segment extracted from an appinfo.vdf file
+     using a key table.
 -
-+            vdf_d = vdf.binary_loads(
-+                data[i:i+vdf_section_size], key_table=key_table
-+            )
-             vdf_d = lower_dict(vdf_d)
-             yield vdf_d
+-    Not all distros provide a VDF library that support the new `key_table`
+-    parameter, so use a vendored copy of vdf as a fallback.
+     """
+-    try:
+-        return vdf.binary_loads(data, key_table=key_table)
+-    except TypeError:
+-        # System 'vdf' is too old and does not support 'key_table',
+-        # use the bundled one instead. This is cursed, but it's
+-        # so far the only reasonable option without a proper maintained
+-        # release on PyPI.
+-        return vendored_binary_loads(data, key_table=key_table)
++    return vdf.binary_loads(data, key_table=key_table)
  
+ 
+ def _iter_v40_appinfo(data, start):

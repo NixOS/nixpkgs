@@ -2,6 +2,7 @@
   stdenv,
   lib,
   desktop-file-utils,
+  fetchpatch,
   fetchurl,
   flatpak,
   glib,
@@ -27,6 +28,15 @@ stdenv.mkDerivation (finalAttrs: {
     url = "mirror://gnome/sources/manuals/${lib.versions.major finalAttrs.version}/manuals-${finalAttrs.version}.tar.xz";
     hash = "sha256-foRBdV0N5xdCjIAORa4GyF7JZK9GrFO53GW0G8OjLHQ=";
   };
+
+  patches = [
+    # Fix immediate crash at startup due to missing libdex initialization
+    (fetchpatch {
+      name = "libdex-init.patch";
+      url = "https://gitlab.gnome.org/GNOME/manuals/-/commit/e516710da9e9d586a0b3fa08cf82d7f2e02afb78.patch";
+      hash = "sha256-YZXs09s2GTI7x3+N4jWq8KyMq3X5O+IWvka/s/NokeE=";
+    })
+  ];
 
   nativeBuildInputs = [
     desktop-file-utils

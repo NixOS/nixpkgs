@@ -2,7 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  nodejs-slim_22,
+  nodejs-slim_26,
   gitMinimal,
   gitSetupHook,
   pnpm_11,
@@ -13,7 +13,7 @@
   runCommand,
 }:
 let
-  pnpm' = pnpm_11.override { nodejs-slim = nodejs-slim_22; };
+  pnpm' = pnpm_11.override { nodejs-slim = nodejs-slim_26; };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vtsls";
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
-    nodejs-slim_22
+    nodejs-slim_26
     # patches are applied with git during build
     gitMinimal
     gitSetupHook
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     pnpm'
   ];
 
-  buildInputs = [ nodejs-slim_22 ];
+  buildInputs = [ nodejs-slim_26 ];
 
   pnpmWorkspaces = [
     "@vtsls/language-server"
@@ -82,6 +82,13 @@ stdenv.mkDerivation (finalAttrs: {
     rm -rf packages/service/src/typescript-language-features/.git
 
     runHook postBuild
+  '';
+
+  preInstall = ''
+    CI=true pnpm prune --prod --ignore-scripts
+    # Clean up broken symlinks left behind by `pnpm prune`
+    # https://github.com/pnpm/pnpm/issues/3645
+    find node_modules -xtype l -delete
   '';
 
   installPhase = ''

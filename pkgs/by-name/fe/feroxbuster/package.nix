@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  aws-lc,
   fetchFromGitHub,
   openssl,
   pkg-config,
@@ -11,16 +12,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "feroxbuster";
-  version = "2.13.1";
+  version = "2.14.0";
 
   src = fetchFromGitHub {
     owner = "epi052";
     repo = "feroxbuster";
     tag = "v${version}";
-    hash = "sha256-x0oNgDEuRIHDUUSAiIgcjmm6NadyBFuvz/hOcqquM3g=";
+    hash = "sha256-sDEp7Qz10FA7iGtgiDKEIljiYjGUvvI7mcCZfB2mfzw=";
   };
 
-  cargoHash = "sha256-kWRODW1BsnifEqGZj8jK5tUK/5zK1AIRSq3JSo6YmkI=";
+  cargoHash = "sha256-shR6GMpSpSGSVUIXdMWEFfBMFwPSAvJ+4O7kBcmg0KQ=";
 
   env.OPENSSL_NO_VENDOR = true;
 
@@ -29,7 +30,10 @@ rustPlatform.buildRustPackage rec {
     versionCheckHook
   ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [
+    aws-lc
+    openssl
+  ];
 
   # Tests require network access
   doCheck = false;

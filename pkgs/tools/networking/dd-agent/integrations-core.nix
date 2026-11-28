@@ -57,8 +57,9 @@ let
     python3Packages.buildPythonPackage (
       args
       // {
-        inherit src version;
-        name = "datadog-integration-${pname}-${version}";
+        inherit src;
+        version = args.version or version;
+        name = "datadog-integration-${pname}-${args.version or version}";
         pyproject = true;
 
         sourceRoot = "${src.name}/${args.sourceRoot or pname}";
@@ -72,7 +73,8 @@ let
 
   # Base package depended on by all other integrations.
   datadog_checks_base = buildIntegration {
-    pname = "checks-base";
+    pname = "datadog-checks-base";
+    version = "37.18.1";
     sourceRoot = "datadog_checks_base";
 
     dependencies = with python3Packages; [
@@ -105,17 +107,35 @@ let
   # Default integrations that should be built:
   defaultIntegrations = {
     disk = (ps: [ ps.psutil ]);
-    mongo = (ps: [ ps.pymongo ]);
+    mongo = (
+      ps: [
+        ps.mmh3
+        ps.packaging
+        ps.pymongo
+      ]
+    );
     network = (ps: [ ps.psutil ]);
     nginx = (ps: [ ]);
     postgres = (
       ps: with ps; [
-        pg8000
-        psycopg2
+        azure-identity
+        boto3
+        mmh3
+        psycopg
+        psycopg-pool
         semver
       ]
     );
     process = (ps: [ ps.psutil ]);
+  };
+
+  defaultIntegrationVersions = {
+    disk = "7.1.0";
+    mongo = "10.3.0";
+    network = "5.3.0";
+    nginx = "9.0.1";
+    postgres = "22.18.0";
+    process = "5.1.0";
   };
 
   # All integrations (default + extra):
@@ -123,7 +143,9 @@ let
   builtIntegrations = mapAttrs (
     pname: fdeps:
     buildIntegration {
-      inherit pname;
+      pname = "datadog-${pname}";
+      version = defaultIntegrationVersions.${pname} or version;
+      sourceRoot = pname;
       propagatedBuildInputs = (fdeps python3Packages) ++ [ datadog_checks_base ];
     }
   ) integrations;

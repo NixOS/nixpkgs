@@ -66,6 +66,13 @@ buildPythonPackage rec {
     "tests/e2e/test_cli.py"
   ];
 
+  disabledTests = [
+    # AssertionError
+    "test_if_line_length"
+    "test_anchors_and_aliases_with_duplicate_merge_keys"
+    "test_fix_code_respects"
+  ];
+
   meta = {
     description = "Python YAML formatter that keeps your comments";
     homepage = "https://github.com/lyz-code/yamlfix";

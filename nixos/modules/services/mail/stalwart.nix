@@ -97,7 +97,7 @@ in
         the macros such as
         `%{file:/run/credentials/stalwart.service/VAR_NAME}%`.
       '';
-      type = lib.types.attrsOf lib.types.str;
+      type = lib.types.attrsOf lib.types.path;
       default = { };
       example = {
         user_admin_password = "/run/keys/stalwart_admin_password";

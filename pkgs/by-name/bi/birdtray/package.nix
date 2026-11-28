@@ -40,7 +40,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Wayland support is broken.
   # https://github.com/gyunaev/birdtray/issues/113#issuecomment-621742315
-  qtWrapperArgs = [ "--set QT_QPA_PLATFORM xcb" ];
+  qtWrapperArgs = [
+    "--set"
+    "QT_QPA_PLATFORM"
+    "xcb"
+  ];
 
   passthru.updateScript = nix-update-script { };
 

@@ -5,16 +5,20 @@
   writableTmpDirAsHomeHook,
   macaulay2,
 }:
-vimUtils.buildVimPlugin {
-  pname = "macaulay2";
-  inherit (macaulay2) version;
+let
+  version = "1.26.06";
 
   # we don't need the whole (rather large) repo
   src = fetchFromGitHub {
-    inherit (macaulay2.src) repo owner tag;
+    inherit (macaulay2.src) repo owner;
+    tag = "release-${version}";
     rootDir = "M2/Macaulay2/editors/vim";
     hash = "sha256-F/Vo8tOA/ZRczZJiUHY0Sr3ibRXHBLtqqSYIamqjk18=";
   };
+in
+vimUtils.buildVimPlugin {
+  pname = "macaulay2";
+  inherit version src;
 
   postPatch = ''
     substituteInPlace "ftplugin/m2.vim" \
@@ -36,7 +40,7 @@ vimUtils.buildVimPlugin {
   meta = {
     inherit (macaulay2.meta) maintainers platforms;
     description = "Syntax highlighting and key mappings to send code to a running Macaulay2 session.";
-    homepage = "https://github.com/Macaulay2/M2/tree/stable/M2/Macaulay2/editors/vim";
+    homepage = "https://github.com/Macaulay2/M2/tree/${src.rev}/M2/Macaulay2/editors/vim";
     license =
       with lib.licenses;
       OR [

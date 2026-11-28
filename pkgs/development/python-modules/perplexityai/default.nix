@@ -4,56 +4,44 @@
   fetchFromGitHub,
 
   # build-system
-  hatch-fancy-pypi-readme,
-  hatchling,
+  setuptools,
 
   # dependencies (incl. optional)
+  aiohttp,
   anyio,
   distro,
+  httpx-aiohttp,
   httpx,
   pydantic,
   sniffio,
   typing-extensions,
-  aiohttp,
-  httpx-aiohttp,
 
   # tests
-  pyright,
-  mypy,
-  respx,
-  pytest,
-  pytest-asyncio,
-  ruff,
-  time-machine,
-  nox,
   dirty-equals,
-  importlib-metadata,
-  rich,
-  pytest-xdist,
+  pytest-asyncio,
+  pytestCheckHook,
+  respx,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "perplexityai";
-  version = "0.42.0";
+  version = "0.46.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "perplexityai";
     repo = "perplexity-py";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/JXcWvKTspVSoRrnHYoyhjZQsOaMZE/Xj1lVI3JKyTQ=";
+    hash = "sha256-+lX9vG2/a7OMzSyePMXDCm3ymf5DIdGhrMDHBynfAi0=";
   };
 
-  # Can't use relaxPythonDeps as this is a version lock in the build system
+  # The license classifier conflicts with the SPDX license expression
   postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail '"hatchling==1.26.3"' '"hatchling"'
+    sed -i '/License :: OSI Approved/d' pyproject.toml
   '';
 
   build-system = [
-    hatch-fancy-pypi-readme
-    hatchling
+    setuptools
   ];
 
   dependencies = [
@@ -73,18 +61,10 @@ buildPythonPackage (finalAttrs: {
   };
 
   nativeCheckInputs = [
-    pyright
-    mypy
-    respx
-    pytest
-    pytest-asyncio
-    ruff
-    time-machine
-    nox
     dirty-equals
-    importlib-metadata
-    rich
-    pytest-xdist
+    pytest-asyncio
+    pytestCheckHook
+    respx
   ]
   ++ finalAttrs.passthru.optional-dependencies.aiohttp;
 

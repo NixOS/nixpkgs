@@ -6,11 +6,11 @@
 
 buildDunePackage (finalAttrs: {
   minimalOCamlVersion = "4.07";
-  version = "0.3.0";
+  version = "0.3.1";
   pname = "optint";
   src = fetchurl {
     url = "https://github.com/mirage/optint/releases/download/v${finalAttrs.version}/optint-${finalAttrs.version}.tbz";
-    sha256 = "sha256-KVz/LBNLA4WxO6gdUAXZ+EG6QNSlAq7RDJl/I57xFHs=";
+    hash = "sha256-4M2YHcSzUYEpvuRgy13FLGFCzwS5w3MD0pJWCBrprVo=";
   };
 
   meta = {

@@ -26,7 +26,7 @@ let
   # Removes erroneous references from dead code that GHC can't eliminate
   aarch64DarwinFix = overrideCabal (
     drv:
-    lib.optionalAttrs (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) {
+    lib.optionalAttrs stdenv.hostPlatform.isDarwin {
       postInstall = ''
         ${drv.postInstall or ""}
         remove-references-to -t ${haskellPackages.HTTP} "$out/bin/gitit"

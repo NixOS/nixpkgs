@@ -3,7 +3,7 @@
   buildPythonPackage,
   callPackage,
   debtcollector,
-  fetchPypi,
+  fetchFromGitHub,
   keystoneauth1,
   openstackdocstheme,
   osc-lib,
@@ -19,16 +19,25 @@
   sphinxcontrib-programoutput,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-manilaclient";
   version = "6.3.0";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "python_manilaclient";
-    inherit version;
-    hash = "sha256-ktc2Z6GsIKsINYjokStZdpvgcG8g+26YRewG09cnI9Q=";
+  src = fetchFromGitHub {
+    owner = "openstack";
+    repo = "python-manilaclient";
+    tag = finalAttrs.version;
+    hash = "sha256-UmH8nl6wrpQdfZOzef9bwbQ3sxIcvUL7H1juOsy4iQs=";
   };
+
+  # Manually set version since pbr wants to get it from git (not in a tarball)
+  env.PBR_VERSION = finalAttrs.version;
+
+  postPatch = ''
+    # pbr needs git to ship subpackages and package data
+    echo "recursive-include manilaclient *" > MANIFEST.in
+  '';
 
   build-system = [
     openstackdocstheme
@@ -59,7 +68,10 @@ buildPythonPackage rec {
     tests = callPackage ./tests.nix { };
   };
 
-  pythonImportsCheck = [ "manilaclient" ];
+  pythonImportsCheck = [
+    "manilaclient"
+    "manilaclient.common"
+  ];
 
   meta = {
     description = "Client library for OpenStack Manila API";
@@ -68,4 +80,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     teams = [ lib.teams.openstack ];
   };
-}
+})

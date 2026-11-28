@@ -10,6 +10,7 @@
   gettext,
   libxml2,
   libxslt,
+  docutils,
   gobject-introspection,
   wrapGAppsHook4,
   wrapGAppsNoGuiHook,
@@ -29,7 +30,7 @@
   libmediaart,
   pipewire,
   sqlite,
-  systemd,
+  systemdLibs,
   tinysparql,
   shared-mime-info,
   gnome,
@@ -38,7 +39,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rygel";
-  version = "45.2";
+  version = "46.1";
 
   # TODO: split out lib
   outputs = [
@@ -48,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/rygel/${lib.versions.major finalAttrs.version}/rygel-${finalAttrs.version}.tar.xz";
-    hash = "sha256-IOV7cLFahl133Dj594arxSxksRH+X5OKYsKNcS3xMx0=";
+    hash = "sha256-bivY1Oi9BH+e62kJFx3j5sIWHw1uKXWlddCf0UZl3oY=";
   };
 
   patches = [
@@ -64,9 +65,12 @@ stdenv.mkDerivation (finalAttrs: {
     gettext
     libxml2
     libxslt # for xsltproc
+    docutils # for rst2man
     gobject-introspection
     (if withGtk then wrapGAppsHook4 else wrapGAppsNoGuiHook)
-    python3
+    (python3.withPackages (ps: [
+      ps.pyyaml
+    ]))
   ];
 
   buildInputs = [
@@ -85,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
     # https://gitlab.gnome.org/GNOME/rygel/-/merge_requests/27
     libx11
     sqlite
-    systemd
+    systemdLibs
     tinysparql
     shared-mime-info
   ]
@@ -102,6 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
   mesonFlags = [
     "-Dsystemd-user-units-dir=${placeholder "out"}/lib/systemd/user"
     "-Dapi-docs=false"
+    (lib.mesonBool "examples" false)
     "--sysconfdir=/etc"
     "-Dsysconfdir_install=${placeholder "out"}/etc"
     (lib.mesonEnable "gtk" withGtk)
@@ -116,7 +121,6 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "rygel";
-      versionPolicy = "odd-unstable";
     };
     noGtk = rygel.override { withGtk = false; };
   };

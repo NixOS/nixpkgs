@@ -16,41 +16,33 @@
 
   alsa-lib,
   openssl,
+  sqlite,
   webkitgtk_4_1,
+  zstd,
 
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "lrcget";
-  version = "2.2.0";
+  version = "2.2.2";
 
   src = fetchFromGitHub {
     owner = "tranxuanthang";
     repo = "lrcget";
     tag = version;
-    hash = "sha256-sp31o62rwWONd7ajo8prvkEVbU3lPPLFkXsxAT9oRzY=";
+    hash = "sha256-JYWeV0iXpoYu5yUIjLA6nNBvzTS6YDieXWE689+ZVXs=";
   };
 
   patches = [
     # needed to not attempt codesigning on darwin
     ./remove-signing-identity.patch
-
-    # Make npm ci pass by adding missing packages to package-lock.json
-    # Upstream PR: https://github.com/tranxuanthang/lrcget/pull/408
-    ./sync-package-lock.patch
-  ];
-
-  cargoPatches = [
-    # Update charabia crate to v0.10.0 to allow caching of Lindera dictionaries
-    # Upstream PR: https://github.com/tranxuanthang/lrcget/pull/407
-    ./update-to-charabia-0.10.0.patch
   ];
 
   cargoRoot = "src-tauri";
   buildAndTestSubdir = "src-tauri";
 
-  cargoHash = "sha256-qyIvUbEBImJfVaxILtLN88KREgUk45zRdxbdZ1A6vc0=";
+  cargoHash = "sha256-n+yuDE5HNXiup2X8dyM7qEJudhe4kj/e7gY7BGsNTxI=";
 
   # FIXME: This is a workaround, because we have a git dependency node_modules/lrc-kit contains install scripts
   # but has no lockfile, which is something that will probably break.
@@ -59,7 +51,7 @@ rustPlatform.buildRustPackage rec {
   npmDeps = fetchNpmDeps {
     name = "lrcget-${version}-npm-deps";
     inherit src forceGitDeps patches;
-    hash = "sha256-PyKnh2AjdhWurTQmoCuOnLDdDIcZT51xwpPImkc3nBc=";
+    hash = "sha256-vC0pyORU85fT/AqtUSWZ521OE4w8ams790Hv7HYYCTw=";
   };
 
   preConfigure =
@@ -131,16 +123,20 @@ rustPlatform.buildRustPackage rec {
     nodejs
     npmHooks.npmConfigHook
     rustPlatform.bindgenHook
+    pkg-config
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-    pkg-config
     wrapGAppsHook3
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     makeBinaryWrapper
   ];
 
-  buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
+  buildInputs = [
+    sqlite
+    zstd
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     alsa-lib
     openssl
     webkitgtk_4_1
@@ -153,9 +149,21 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   # make the binary also runnable from the shell
-  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    makeWrapper "$out/Applications/LRCGET.app/Contents/MacOS/LRCGET" "$out/bin/LRCGET"
-  '';
+  postInstall =
+    lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+      install -Dm644 packaging/linux/lrcget.desktop \
+        $out/share/applications/lrcget.desktop
+
+      install -Dm644 src-tauri/icons/icon.png \
+        $out/share/pixmaps/lrcget.png
+
+      install -Dm644 packaging/linux/lrcget.metainfo.xml \
+        $out/share/metainfo/lrcget.metainfo.xml
+    ''
+    # make the binary also runnable from the shell
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      makeWrapper "$out/Applications/lrcget.app/Contents/MacOS/lrcget" "$out/bin/lrcget"
+    '';
 
   preFixup = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     gappsWrapperArgs+=(
@@ -181,7 +189,7 @@ rustPlatform.buildRustPackage rec {
       anas
       Scrumplex
     ];
-    mainProgram = "LRCGET";
+    mainProgram = "lrcget";
     platforms = with lib.platforms; unix ++ windows;
   };
 }

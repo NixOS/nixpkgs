@@ -16,6 +16,14 @@ stdenv.mkDerivation {
 
   src = bcachefs-tools.dkms;
 
+  patches = [
+    ./compat-6.18.64.patch
+  ]
+  ++ lib.optionals (lib.versionAtLeast kernel.version "7.3.6") [
+    # needs a version gate because the new API doesn't exist in older versions
+    ./compat-7.3.6.patch
+  ];
+
   postPatch = ''
     substituteInPlace src/fs/bcachefs/Makefile \
       --replace-fail '$(objtree)/vmlinux' '${kernel.dev}/vmlinux'
@@ -30,6 +38,12 @@ stdenv.mkDerivation {
     "INSTALL_MOD_PATH=${placeholder "out"}"
     "RUST_LIB_SRC=${rustPlatform.rustLibSrc}"
   ];
+
+  # Modules are installed compressed, so the generic strip hooks skip them.
+  # Strip before compression, like ZFS kernel module does.
+  postBuild = ''
+    find . -name '*.ko' -print0 | xargs -0 -P$NIX_BUILD_CORES ${stdenv.cc.targetPrefix}strip --strip-debug
+  '';
 
   installPhase = ''
     runHook preInstall

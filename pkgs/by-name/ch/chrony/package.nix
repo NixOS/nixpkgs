@@ -64,6 +64,8 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (nixosTests) chrony chrony-ptp;
   };
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     description = "Sets your computer's clock from time servers on the Net";
     homepage = "https://chrony-project.org/";
@@ -77,7 +79,6 @@ stdenv.mkDerivation (finalAttrs: {
         darwin
         illumos
       ];
-    broken = stdenv.hostPlatform.isDarwin;
     maintainers = with lib.maintainers; [
       thoughtpolice
       vifino

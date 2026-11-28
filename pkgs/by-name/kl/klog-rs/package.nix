@@ -38,6 +38,5 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.mit;
     mainProgram = "klog";
     maintainers = with lib.maintainers; [ tobifroe ];
-    broken = stdenv.hostPlatform.isDarwin;
   };
 })

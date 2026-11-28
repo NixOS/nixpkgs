@@ -2,9 +2,10 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  jq,
+  buildPackages,
   fetchYarnDeps,
 
+  yarn,
   yarnConfigHook,
   yarnBuildHook,
   npmHooks,
@@ -29,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
       sed -i 's|\./|./server/|' $out/server/package.json
 
       # combine both package.json files
-      ${lib.getExe jq} -s '.[0] * .[1]' \
+      ${lib.getExe buildPackages.jq} -s '.[0] * .[1]' \
         $out/server/package.json \
         $out/package.json \
         > package.json
@@ -47,9 +48,15 @@ stdenv.mkDerivation (finalAttrs: {
     yarnBuildHook
     npmHooks.npmInstallHook
     nodejs
+    yarn
   ];
 
   yarnBuildScript = "build:server";
+
+  # Prune deps before install to save space
+  preInstall = ''
+    yarn install --offline --frozen-lockfile --force --production=true --ignore-scripts
+  '';
   dontNpmPrune = true;
 
   meta = {

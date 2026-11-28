@@ -22,5 +22,13 @@
 
     # Ensure healthcheck endpoint succeeds
     machine.succeed("curl http://localhost:3000/health")
+
+    # Convert a document through LibreOffice.
+    machine.succeed("echo hello > /tmp/test.txt")
+    machine.succeed(
+        "curl -sf -F files=@/tmp/test.txt"
+        " -o /tmp/test.pdf http://localhost:3000/forms/libreoffice/convert"
+    )
+    machine.succeed("head -c 4 /tmp/test.pdf | grep -q '%PDF'")
   '';
 }

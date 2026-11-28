@@ -4,7 +4,6 @@
   setuptools,
   stdenv,
   fetchFromGitHub,
-  pythonAtLeast,
   installShellFiles,
   git,
   versioneer,
@@ -20,6 +19,7 @@
   annexremote,
   looseversion,
   git-annex,
+  giturlparse,
   # downloaders
   boto3,
   keyrings-alt,
@@ -48,15 +48,21 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "datalad";
-  version = "1.3.4";
+  version = "1.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "datalad";
     repo = "datalad";
     tag = finalAttrs.version;
-    hash = "sha256-5PAHHN+dgMAxqUZn3vXWsoesw3lQMy6Q8nUJYa4SofM=";
+    hash = "sha256-oQV+6bc8FVbd2HlOKErf4eoCnDZc8KFqWB3AqHdXkQU=";
   };
+
+  # Hash variance between Darwin and Linux
+  postFetch = ''
+    rm -rf docs
+    rm CLAUDE.md
+  '';
 
   postPatch = ''
     # Remove vendorized versioneer.py
@@ -79,6 +85,7 @@ buildPythonPackage (finalAttrs: {
     ++ finalAttrs.passthru.optional-dependencies.publish;
 
   optional-dependencies = {
+    # order matches upstream pyproject.toml
     core = [
       platformdirs
       chardet
@@ -91,6 +98,7 @@ buildPythonPackage (finalAttrs: {
       tqdm
       annexremote
       looseversion
+      giturlparse
     ]
     ++ lib.optionals stdenv.hostPlatform.isWindows [ colorama ];
     downloaders = [
@@ -143,12 +151,15 @@ buildPythonPackage (finalAttrs: {
     # Times out
     "test_rerun_unrelated_nonrun_left_run_right"
 
-    # Top five slowest (2/3 of total runtime)
+    # Top eight slowest in descending order
     "test_files_split"
     "test_gitannex_local"
     "test_save_hierarchy"
     "test_recurse_existing"
     "test_source_candidate_subdataset"
+    "test_get_subdatasets"
+    "test_gitrepo_save_all"
+    "test_ria_postclonecfg"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # pbcopy not found

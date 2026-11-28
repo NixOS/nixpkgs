@@ -140,10 +140,24 @@ freecad-utils.makeCustomizable (
         ];
       in
       [
-        "--set COIN_GL_NO_CURRENT_CONTEXT_CHECK 1"
-        "--prefix PATH : ${binPath}"
-        "--prefix PYTHONPATH : ${python3Packages.makePythonPath pythonDeps}"
-        "--prefix XDG_DATA_DIRS : ${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}"
+        "--set"
+        "COIN_GL_NO_CURRENT_CONTEXT_CHECK"
+        "1"
+
+        "--prefix"
+        "PATH"
+        ":"
+        binPath
+
+        "--prefix"
+        "PYTHONPATH"
+        ":"
+        (python3Packages.makePythonPath pythonDeps)
+
+        "--prefix"
+        "XDG_DATA_DIRS"
+        ":"
+        "${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}"
       ];
 
     postFixup = ''
@@ -207,7 +221,7 @@ freecad-utils.makeCustomizable (
         programmer, an experienced CAD user, a student or a teacher, you will feel
         right at home with FreeCAD.
       '';
-      license = lib.licenses.lgpl2Plus;
+      license = lib.licenses.lgpl21Plus;
       maintainers = with lib.maintainers; [
         srounce
         grimmauld

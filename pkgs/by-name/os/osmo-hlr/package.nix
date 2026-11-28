@@ -11,18 +11,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "osmo-hlr";
-  version = "1.9.4";
+  version = "1.9.5";
 
   src = fetchFromGitHub {
     owner = "osmocom";
     repo = "osmo-hlr";
     rev = finalAttrs.version;
-    hash = "sha256-04RtspubktD4qAXVuimxyJNQcpogPjj1RPx8vIB0Auk=";
+    hash = "sha256-rpQE/UqUvZU2HztGxTEYSKSGq8jyYyQz1kHK0Yj0EzA=";
   };
 
   postPatch = ''
     echo "${finalAttrs.version}" > .tarball-version
   '';
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
     autoreconfHook

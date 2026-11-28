@@ -1,25 +1,16 @@
-diff --git a/build.rs b/build.rs
-index aa2bec5..d512a42 100644
---- a/build.rs
-+++ b/build.rs
-@@ -26,7 +26,7 @@ fn setup_po() -> Result<()> {
-             && extension == "po"
-             && let Some(po_lang) = path.file_stem()
-         {
--            let mo_dir = po_dir.join(po_lang).join("LC_MESSAGES");
-+            let mo_dir = Path::new("@out@/share/locale").join(po_lang).join("LC_MESSAGES");
- 
-             fs::create_dir_all(&mo_dir)?;
- 
-@@ -46,7 +46,7 @@ fn setup_po() -> Result<()> {
- fn setup_schemas(filename: &str) -> Result<()> {
-     println!("cargo:rerun-if-changed={DATA_DIR}");
- 
--    let out_dir = dirs::data_dir().expect("Failed to get data dir");
-+    let out_dir = Path::new("@out@/share");
-     let out_dir = out_dir.join("glib-2.0/schemas");
- 
-     fs::create_dir_all(&out_dir)?;
+diff --git a/.cargo/config.toml b/.cargo/config.toml
+index 9d595e5..28d39ff 100644
+--- a/.cargo/config.toml
++++ b/.cargo/config.toml
+@@ -1,5 +1,5 @@
+ [env]
+ SERVER_PATH = "data/server.js"
+ ANV_DEBUG = "video-decode,video-encode" # Video acceleration with Vulkan for Intel
+-GSETTINGS_SCHEMA_DIR = "target/schemas"
+-GETTEXT_DIR = "target/locale"
+\ No newline at end of file
++GSETTINGS_SCHEMA_DIR = "@out@/share/glib-2.0/schemas"
++GETTEXT_DIR = "@out@/share/locale"
 diff --git a/data/com.stremio.Stremio.service b/data/com.stremio.Stremio.service
 index 7cfb139..7491969 100644
 --- a/data/com.stremio.Stremio.service
@@ -30,11 +21,11 @@ index 7cfb139..7491969 100644
 -Exec=/app/bin/stremio --gapplication-service
 +Exec=@out@/bin/stremio --gapplication-service
 diff --git a/data/stremio.sh b/data/stremio.sh
-index 161bada..37373b0 100644
+index 8fa5689..d034ad9 100644
 --- a/data/stremio.sh
 +++ b/data/stremio.sh
-@@ -5,4 +5,4 @@ if ls /dev/nvidia0 &>/dev/null 2>&1; then
-     export GSK_RENDERER=opengl
+@@ -10,4 +10,4 @@ if [ -f /app/etc/fonts/stremio.conf ]; then
+     export FONTCONFIG_FILE=/app/etc/fonts/stremio.conf
  fi
  
 -exec /app/libexec/stremio/stremio "$@"

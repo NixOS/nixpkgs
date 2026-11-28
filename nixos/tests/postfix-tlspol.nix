@@ -39,7 +39,6 @@
     with subtest("Metrics listener"):
       machine.log(machine.succeed("curl --silent --fail http://localhost:8642/metrics | grep --quiet postfix_tlspol_queries_total"))
 
-
     with subtest("Hardening"):
       machine.log(machine.execute("systemd-analyze security postfix-tlspol.service | grep -v ✓")[1])
   '';

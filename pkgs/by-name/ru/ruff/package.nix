@@ -8,6 +8,8 @@
   rust-jemalloc-sys,
   buildPackages,
   versionCheckHook,
+  pkg-config,
+  zstd,
 
   # passthru
   nixosTests,
@@ -16,7 +18,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ruff";
-  version = "0.17.1";
+  version = "0.17.4";
 
   __structuredAttrs = true;
 
@@ -24,17 +26,21 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "astral-sh";
     repo = "ruff";
     tag = finalAttrs.version;
-    hash = "sha256-jpdEdVpp5PWIxn64End1duumm6YJ9EaesBKEBgWoU7Q=";
+    hash = "sha256-63UsA1N75qOBkStpaZN7TjPZiZx0LuiL4fzjgVYS3Ek=";
   };
 
   cargoBuildFlags = [ "--package=ruff" ];
 
-  cargoHash = "sha256-JrkjRbZ5z0DoUdAWtns6xfKiQLxEhRQSuzYmEngMCBI=";
+  cargoHash = "sha256-N+xOMGpz1NIS7ZX/YwmJLCeK3/LEhXPGdUN2bZ7ZFR0=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+  ];
 
   buildInputs = [
     rust-jemalloc-sys
+    zstd
   ];
 
   postInstall = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
@@ -81,7 +87,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru = {
     tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
+      # ensure that an update doesn't break run-virtiofsd-qemu or the test-driver.
       nixos-test-driver-busybox = nixosTests.nixos-test-driver.busybox;
+      # ensure that an update doesn't break run-nspawn.
+      nixos-test-simple-container = nixosTests.simple-container;
     };
     # Updating `ruff` needs to be done on staging due to NixOS tests. Disabling r-ryantm update bot:
     # nixpkgs-update: no auto update

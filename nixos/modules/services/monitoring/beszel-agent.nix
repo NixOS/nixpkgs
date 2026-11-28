@@ -30,7 +30,7 @@ let
       deviceAllow = [ "char-nvidia* rw" ];
     };
     "nvtop" = {
-      package = lib.getBin pkgs.nvtopPackages.full;
+      package = lib.getBin pkgs.nvtop;
       deviceAllow = [
         "char-nvidia* rw"
         "char-drm rw"
@@ -128,6 +128,15 @@ in
             description = ''
               Whether to disable systemd service monitoring.
               Enabling this option will skip systemd tracking and its setup in NixOS.
+            '';
+          };
+          SKIP_SYSTEMD_LOGS = lib.mkOption {
+            type = lib.types.bool;
+            default = false;
+            description = ''
+              Whether to disable systemd service logs.
+              Enabling this option stops the agent from reading the system journal
+              and drops its membership in the `systemd-journal` group.
             '';
           };
           SKIP_GPU = lib.mkOption {
@@ -269,7 +278,10 @@ in
           ++ lib.optionals (
             config.virtualisation.podman.enable && config.virtualisation.podman.dockerSocket.enable
           ) [ "podman" ]
-          ++ lib.optionals cfg.smartmon.enable [ "disk" ];
+          ++ lib.optionals cfg.smartmon.enable [ "disk" ]
+          ++ lib.optionals (!cfg.environment.SKIP_SYSTEMD && !cfg.environment.SKIP_SYSTEMD_LOGS) [
+            "systemd-journal"
+          ];
 
         DynamicUser = true;
         User = "beszel-agent";

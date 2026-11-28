@@ -8,29 +8,14 @@
   certifi,
   diff-match-patch,
   fetchFromGitHub,
-  flake8,
   importlib-metadata,
-  livereload,
-  mypy,
-  networkx,
   ordered-set,
   pillow,
   pixelmatch,
   poetry-core,
-  pre-commit,
-  pydocstyle,
   pyee,
-  pylint,
-  pytest,
-  pytest-cov-stub,
-  pytest-timeout,
-  pytest-xdist,
   pytestCheckHook,
-  readme-renderer,
-  sphinx,
-  sphinxcontrib-asyncio,
   syncer,
-  tox,
   tqdm,
   typing-extensions,
   typing-inspect,
@@ -85,23 +70,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     aiohttp
     diff-match-patch
-    flake8
-    livereload
-    mypy
-    networkx
     pixelmatch
-    pre-commit
-    pydocstyle
-    pylint
-    pytest
-    pytest-cov-stub
-    pytest-timeout
-    pytest-xdist
-    readme-renderer
-    sphinx
-    sphinxcontrib-asyncio
     syncer
-    tox
     pytestCheckHook
   ];
 

@@ -8,29 +8,30 @@
 }:
 
 buildGoModule (finalAttrs: {
+  __structuredAttrs = true;
+
   pname = "mongodb-cli";
-  version = "2.0.9";
+  version = "2.0.11";
 
   src = fetchFromGitHub {
     owner = "mongodb";
     repo = "mongodb-cli";
-    tag = "mongocli/v${finalAttrs.version}";
-    hash = "sha256-0d4sWiq7/fPxuaiNyPmbmCsbSkAUyxM9rbcncCReSfg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ECR2o4CafGnpAzMvLcYjBBEvMkU3xrbdFIa3hRyjzH4=";
   };
 
-  vendorHash = "sha256-F+WP6/QCQTb19b8LX1CnOJuPSJMmbY3HIgyPQfjVrKE=";
+  vendorHash = "sha256-0bZ/JfNtFr26UvMnXPMSf36I7TBA53nzPig7MUzOOEI=";
 
   subPackages = [ "cmd/mongocli" ];
 
   nativeBuildInputs = [ installShellFiles ];
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    installShellCompletion --cmd mongocli \
-      --bash <($out/bin/mongocli completion bash) \
-      --fish <($out/bin/mongocli completion fish) \
-      --zsh <($out/bin/mongocli completion zsh)
+    for shell in bash fish zsh; do
+      installShellCompletion --cmd mongocli "--$shell" <("$out/bin/mongocli" completion "$shell")
+    done
   '';
 
-  passthru.updateScript = nix-update-script { extraArgs = [ "--version-regex=mongocli/v(.+)" ]; };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Manage your MongoDB via ops manager and cloud manager";

@@ -7,13 +7,13 @@
 
 postgresqlBuildExtension (finalAttrs: {
   pname = "pgmq";
-  version = "1.13.0";
+  version = "1.13.2";
 
   src = fetchFromGitHub {
     owner = "pgmq";
     repo = "pgmq";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0/L/ic6WZ64Uc6JDNnKGVFVpQa2a+3OGIeyQwPFTJ5U=";
+    hash = "sha256-z0wCnpo9FcY/C+KhfhnlCyOPNGu/M/tbry2L62NgRns=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/pgmq-extension";

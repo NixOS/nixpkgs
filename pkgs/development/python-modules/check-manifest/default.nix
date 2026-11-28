@@ -45,6 +45,14 @@ buildPythonPackage (finalAttrs: {
   disabledTests = [
     # Test wants to setup a venv
     "test_build_sdist_pep517_isolated"
+
+    # Tests wants to read/write in a restricted area
+    "test_get_ignore_from_manifest"
+    "test_read_"
+
+    # Tests wants to write in argv
+    "test_extra_ignore_args"
+    "test_ignore_bad_ideas_args"
   ];
 
   pythonImportsCheck = [ "check_manifest" ];

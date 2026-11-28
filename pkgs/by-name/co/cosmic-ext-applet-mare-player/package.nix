@@ -6,6 +6,7 @@
   libcosmicAppHook,
   just,
   pkg-config,
+  aws-lc,
   dbus,
   glib,
   glib-networking,
@@ -47,6 +48,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
     dbus
     glib
     glib-networking

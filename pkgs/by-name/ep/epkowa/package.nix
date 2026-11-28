@@ -8,7 +8,6 @@
   symlinkJoin,
   pkg-config,
   libtool,
-  gtk2,
   libxml2,
   libxslt,
   libusb-compat-0_1,
@@ -70,7 +69,6 @@ stdenv.mkDerivation rec {
     makeWrapper
   ];
   buildInputs = [
-    gtk2
     libxml2
     libusb-compat-0_1
     sane-backends
@@ -95,9 +93,21 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--enable-dependency-reduction"
     "--disable-frontend"
+    "--disable-gimp"
     # fix build with gcc 15
     "CFLAGS=-std=gnu17"
   ];
+
+  preConfigure = ''
+    mkdir pkg-config
+    cat > pkg-config/gtk+-2.0.pc << EOF
+    Name: GTK+
+    Version: 2.24.thisisfake
+    Description: gtk is only needed for the frontend, which we do not build, but the configure script really insists on having gtk
+    EOF
+    export PKG_CONFIG_PATH="$PKG_CONFIG_PATH:$(readlink -f pkg-config)"
+    $PKG_CONFIG --cflags gtk+-2.0 --debug
+  '';
 
   postConfigure = ''
     echo '#define NIX_ESCI_PREFIX "'${fwdir}'"' >> config.h
@@ -106,7 +116,6 @@ stdenv.mkDerivation rec {
   postInstall = ''
     mkdir -p $out/etc/sane.d
     cp backend/epkowa.conf $out/etc/sane.d
-    echo "epkowa" > $out/etc/sane.d/dll.conf
     ln -s ${iscan-data}/share/iscan-data $out/share/iscan-data
     mkdir -p $out/lib/iscan
   ''
@@ -125,7 +134,10 @@ stdenv.mkDerivation rec {
     '') plugins'
   );
 
-  passthru.plugins = callPackages ./plugins.nix { inherit common_meta; };
+  passthru = {
+    plugins = callPackages ./plugins.nix { inherit common_meta; };
+    saneBackendNames = [ "epkowa" ];
+  };
 
   meta = common_meta // {
     description = "sane-epkowa backend for some epson scanners";

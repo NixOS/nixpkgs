@@ -63,7 +63,7 @@ in
         default = false;
         description = ''
           Use the Wayland input method frontend.
-          This doesn't set `GTK_IM_MODULE` and `QT_IM_MODULE` environment variables.
+          This doesn't set `QT_IM_MODULE` environment variable.
           See [Using Fcitx 5 on Wayland](https://fcitx-im.org/wiki/Using_Fcitx_5_on_Wayland#GTK_IM_MODULE).
         '';
       };
@@ -90,7 +90,6 @@ in
       XMODIFIERS = "@im=ibus";
     }
     // lib.optionalAttrs (!cfg.waylandFrontend) {
-      GTK_IM_MODULE = "ibus";
       QT_IM_MODULE = "ibus";
     };
 

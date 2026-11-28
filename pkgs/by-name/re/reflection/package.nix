@@ -26,18 +26,18 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "reflection";
-  version = "0.4";
+  version = "0.5";
 
   src = fetchFromGitHub {
     owner = "p2panda";
     repo = "reflection";
     tag = finalAttrs.version;
-    hash = "sha256-VPfYbMAyKv+2lWJ/TcQ7Em6kbutnJQIgbBTEqOnEDcc=";
+    hash = "sha256-ZkOTF9i3N49QhU3oLrJUEcRL/RhZ8tguPxsoGPFckfk=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-3RR/YfJsq0eaRhaVVnocV5R1fbQ6YKsQ3QVZ1dc5HsI=";
+    hash = "sha256-7ZWpeZ3r9ITcI/IQwPEeNvM9OWlJJGBLx9gZ1KvyWgY=";
   };
 
   env = {

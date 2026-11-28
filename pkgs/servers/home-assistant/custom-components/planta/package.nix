@@ -8,13 +8,13 @@
 buildHomeAssistantComponent (finalAttrs: {
   owner = "natekspencer";
   domain = "planta";
-  version = "1.3.1";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     inherit (finalAttrs) owner;
     repo = "ha-planta";
     tag = finalAttrs.version;
-    hash = "sha256-LqRBWeman+ZwkIwfSWGuAW2aCwgmLXIME0U6uz+IDVE=";
+    hash = "sha256-bU+ezWBda4IfGMIFTiW72RlVCI0X3OHr7W0qtz1Srd8=";
   };
 
   postPatch = ''

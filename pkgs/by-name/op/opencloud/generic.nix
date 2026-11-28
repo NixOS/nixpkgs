@@ -210,6 +210,12 @@ buildGoModule (finalAttrs: {
     rm -f services/search/pkg/{opensearch,parity}/*_test.go
   '';
 
+  # skip test that asserts on pixel-exact font rendering
+  checkFlags = [
+    "-skip"
+    "TestService_PreviewFont"
+  ];
+
   # The activitylog tests start a local NATS server.
   __darwinAllowLocalNetworking = true;
 

@@ -21,6 +21,10 @@ buildNpmPackage rec {
 
   npmDepsHash = "sha256-UFdWHEdi6VQYLBQ7gmwxcLNRfoHLKwx4l0ANe5lZnZc=";
 
+  # prebuild fails to rerun on its read-only copy since Node 24.22
+  # https://github.com/nodejs/node/commit/d659dd8cd81f6abce2c9b3fd2cd81ea91d2bf07d
+  npmPackFlags = [ "--ignore-scripts" ];
+
   meta = {
     description = "Cross-platform UI framework CLI by Snapchat";
     homepage = "https://github.com/Snapchat/Valdi";

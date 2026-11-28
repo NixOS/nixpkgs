@@ -13,14 +13,14 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "jack-client";
-  version = "0.5.5";
+  version = "0.5.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "spatialaudio";
     repo = "jackclient-python";
     tag = finalAttrs.version;
-    hash = "sha256-SqDHFUlAtGbT/UJALykPvdP7+5KUlZkMpwYDjq+rU98=";
+    hash = "sha256-zAeLNfQ71g/XTVmh2zwWjJ9nW+b7iVllj/BBi+q1df4=";
   };
 
   patches = [

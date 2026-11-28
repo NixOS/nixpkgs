@@ -30,8 +30,6 @@ buildPythonPackage rec {
   version = "1.26.6";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "dashscope";
     repo = "dashscope-sdk-python";

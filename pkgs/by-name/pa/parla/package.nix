@@ -6,6 +6,8 @@
   json-glib,
   lib,
   libadwaita,
+  libseccomp,
+  libzip,
   meson,
   ninja,
   nix-update-script,
@@ -19,7 +21,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "parla";
-  version = "0.10.0";
+  version = "0.10.10";
   __structuredAttrs = true;
   strictDeps = true;
 
@@ -27,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "trufae";
     repo = "parla";
     tag = finalAttrs.version;
-    hash = "sha256-J6/Woq2Ch8ksahNUqrdQST6Iz887RLJzk3/Hm40jj+k=";
+    hash = "sha256-+7NWucxV00bcdDMAsiOUM74ALYyICFD+7dArDdmhdxc=";
   };
 
   nativeBuildInputs = [
@@ -47,6 +49,8 @@ stdenv.mkDerivation (finalAttrs: {
     gtk4
     json-glib
     libadwaita
+    libseccomp
+    libzip
     webkitgtk_6_0
   ]
   ++ (with gst_all_1; [

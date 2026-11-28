@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "4ti2";
-  version = "1.6.15";
+  version = "1.6.16";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "4ti2";
     repo = "4ti2";
     tag = "Release_${builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
-    hash = "sha256-6X8zNp68KlKxplg1rdcotmXyIZE27POJs9/3n2BZLZE=";
+    hash = "sha256-faZdU/4QSTuKFDI3TQWF1LtYGQZAiSEPkg+ahvq+gts=";
   };
 
   postPatch = ''

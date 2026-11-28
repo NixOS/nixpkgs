@@ -42,7 +42,7 @@ let
   pname = "infer";
   version = "1.3.0";
   src = fetchFromGitHub {
-    owner = "facebook";
+    owner = "meta";
     repo = pname;
     tag = "v${version}";
     hash = "sha256-Kq7sJVBqe4ei1HbZz8R+P4V6yxisxEmPVHjyVlpL1aw=";

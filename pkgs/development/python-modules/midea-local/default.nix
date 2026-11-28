@@ -13,20 +13,26 @@
   platformdirs,
   typing-extensions,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "midea-local";
-  version = "12.2.0";
+  version = "15.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "midea-lan";
     repo = "midea-local";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zaEVje2/whWj8PtKNO1WnpKkTdfwG+wor2raNrlAc4w=";
+    hash = "sha256-rgryUG5uvmGw5j0fZY0dr+4jHLj2qDAbj8CkI+FA7OM=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools>=84.2.1" "setuptools"
+  '';
 
   build-system = [ setuptools ];
 
@@ -42,8 +48,14 @@ buildPythonPackage (finalAttrs: {
     typing-extensions
   ];
 
+  pythonRelaxDeps = [
+    "pycryptodome"
+    "platformdirs"
+  ];
+
   nativeCheckInputs = [
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
   ];
 

@@ -16,14 +16,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "napari-console";
-  version = "0.1.4";
+  version = "0.1.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "napari";
     repo = "napari-console";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-z1pyG31g+fvTNLbWc2W56zDf33HCx8PvPKwIIc/x2VA=";
+    hash = "sha256-2Cbjm/SB2/ULrHkO0zS5VLgc+4T1lc/cx+mdABMpEG4=";
   };
 
   build-system = [

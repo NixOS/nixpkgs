@@ -22,10 +22,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.10.5";
   pyproject = true;
 
-  # This project uses pydantic.v1 which doesn't support Python 3.14 or later:
-  # https://pydantic.dev/articles/pydantic-v2-12-release#support-for-python-314
-  disabled = pythonAtLeast "3.14";
-
   src = fetchFromGitHub {
     owner = "dbt-labs";
     repo = "dbt-semantic-interfaces";
@@ -34,6 +30,7 @@ buildPythonPackage (finalAttrs: {
   };
 
   pythonRelaxDeps = [
+    "click"
     "importlib-metadata"
     "more-itertools"
   ];

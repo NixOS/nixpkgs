@@ -4,13 +4,15 @@
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
+  pkg-config,
+  sqlite,
   nix-update-script,
   versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "qownnotes-tui";
-  version = "1.3.0";
+  version = "1.3.4";
 
   __structuredAttrs = true;
 
@@ -18,12 +20,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "qownnotes";
     repo = "qownnotes-tui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gTSyUDVqmCJUXgaY61ILW37wrW/jCK9tDVVIn8vHvRY=";
+    hash = "sha256-87qIvN/LqAfwRAt12FFKgm7PjlGnO7tYX0YdN2yMPrs=";
   };
 
-  cargoHash = "sha256-NJIyuBq+PCH7qbQedYB9J+80vw5UEcAh8zQJbtycrH0=";
+  cargoHash = "sha256-MxZTHeE/1uAnf1Luzzyy1YQk85dVWjjdHPgdieMjv2s=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+  ];
+
+  buildInputs = [ sqlite ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd qownnotes-tui \

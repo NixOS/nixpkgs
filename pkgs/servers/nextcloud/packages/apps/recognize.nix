@@ -2,7 +2,7 @@
   stdenv,
   fetchurl,
   lib,
-  nodejs_22,
+  nodejs_26,
   node-pre-gyp,
   node-gyp,
   python3,
@@ -15,7 +15,7 @@
   ncVersion,
 }:
 let
-  nodejs = nodejs_22;
+  nodejs = nodejs_26;
   latestVersionForNc = {
     "32" = {
       version = "10.0.7";
@@ -28,9 +28,14 @@ let
       modelHash = "sha256-Yx/NJwtD4ltETpkzlcadZsFKqEmMneoZaXiHVSB1WoE=";
     };
     "34" = {
-      version = "12.0.0";
-      appHash = "sha256-1TpfDRMmJ7d5MPp0iTr/RpZHAG7LDsXof9u35O3+5Mg=";
-      modelHash = "sha256-+ec7kRPyWPVTk2wgRKMOP5mdmSnpv9mZmiRicEDKD6A=";
+      version = "12.0.3";
+      appHash = "sha256-9T/MP1jPjlkvTyO8pm4yW9aA70CAht/RYtjTragxs3A=";
+      modelHash = "sha256-Owp6OBVDZyClp8nlVXNWncz4ZBFDZ7Gv38noUhBOW74=";
+    };
+    "35" = {
+      version = "13.2.0";
+      appHash = "sha256-xe/cizixT2W8bEwZ6oQBNo1x0T7C7DLdJRyWx+U6wKU=";
+      modelHash = "sha256-utc6hCdqb9J68r5/E216S7Ho2Sb6pEIzIHSYocy/WSY=";
     };
   };
   currentVersionInfo =
@@ -73,16 +78,22 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # Make it clear we are not reading the node in settings
     sed -i "/'node_binary'/s:'""':'Nix Controlled':" recognize/lib/Service/SettingsService.php
+    sed -i "/'ffmpeg_binary'/s:'""':'Nix Controlled':" recognize/lib/Service/SettingsService.php
 
-    # Replace all occurrences of node (and check that we actually removed them all)
+    # Replace all occurrences of node and ffmpeg (and check that we actually removed them all)
     test "$(grep "get[a-zA-Z]*('node_binary'" recognize/lib/**/*.php | wc -l)" -gt 0
+    test "$(grep "get[a-zA-Z]*('ffmpeg_binary'" recognize/lib/**/*.php | wc -l)" -gt 0
     substituteInPlace recognize/lib/**/*.php \
       --replace-quiet "\$this->settingsService->getSetting('node_binary')" "'${lib.getExe nodejs}'" \
       --replace-quiet "\$this->config->getAppValueString('node_binary', '""')" "'${lib.getExe nodejs}'" \
       --replace-quiet "\$this->config->getAppValueString('node_binary')" "'${lib.getExe nodejs}'" \
       --replace-quiet "\$this->config->getAppValueString('node_binary', ''', lazy: true)" "'${lib.getExe nodejs}'" \
-      --replace-quiet "\$this->config->getAppValueString('node_binary', lazy: true)" "'${lib.getExe nodejs}'"
+      --replace-quiet "\$this->config->getAppValueString('node_binary', lazy: true)" "'${lib.getExe nodejs}'" \
+      --replace-quiet "\$this->settingsService->getSetting('ffmpeg_binary')" "'${lib.getExe ffmpeg-headless}'" \
+      --replace-quiet "\$this->config->getAppValueString('ffmpeg_binary', ''', lazy: true)" "'${lib.getExe ffmpeg-headless}'" \
+      --replace-quiet "\$this->config->getAppValueString('ffmpeg_binary', lazy: true)" "'${lib.getExe ffmpeg-headless}'"
     test "$(grep "get[a-zA-Z]*('node_binary'" recognize/lib/**/*.php | wc -l)" -eq 0
+    test "$(grep "get[a-zA-Z]*('ffmpeg_binary'" recognize/lib/**/*.php | wc -l)" -eq 0
 
     # Skip trying to install it... (less warnings in the log)
     sed  -i '/public function run/areturn ; //skip' recognize/lib/Migration/InstallDeps.php

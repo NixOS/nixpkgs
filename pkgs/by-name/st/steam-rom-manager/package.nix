@@ -4,25 +4,21 @@
   fetchurl,
 }:
 
-appimageTools.wrapType2 rec {
+appimageTools.wrapType2 (finalAttrs: {
   pname = "steam-rom-manager";
-  version = "2.5.44";
+  version = "2.6.3";
 
   src = fetchurl {
-    url = "https://github.com/SteamGridDB/steam-rom-manager/releases/download/v${version}/Steam-ROM-Manager-${version}.AppImage";
-    sha256 = "sha256-/Lc23aKts1qu2Sgs5xoEX7Nx9O0i53xY8woQoyItZME=";
+    url = "https://github.com/SteamGridDB/steam-rom-manager/releases/download/v${finalAttrs.version}/Steam-ROM-Manager-${finalAttrs.version}.AppImage";
+    hash = "sha256-MUuP5q+0rX3NBsZrZVDCdx33/OdFk7+vSM5rGCnGegg=";
   };
 
-  extraInstallCommands =
-    let
-      appimageContents = appimageTools.extract { inherit pname version src; };
-    in
-    ''
-      install -m 444 -D ${appimageContents}/steam-rom-manager.desktop -t $out/share/applications
-      substituteInPlace $out/share/applications/steam-rom-manager.desktop \
-        --replace 'Exec=AppRun' 'Exec=steam-rom-manager'
-      cp -r ${appimageContents}/usr/share/icons $out/share
-    '';
+  extraInstallCommands = ''
+    install -m 444 -D ${finalAttrs.contents}/steam-rom-manager.desktop -t $out/share/applications
+    substituteInPlace $out/share/applications/steam-rom-manager.desktop \
+      --replace 'Exec=AppRun' 'Exec=steam-rom-manager'
+    cp -r ${finalAttrs.contents}/usr/share/icons $out/share
+  '';
 
   meta = {
     description = "App for managing ROMs in Steam";
@@ -32,4 +28,4 @@ appimageTools.wrapType2 rec {
     platforms = [ "x86_64-linux" ];
     mainProgram = "steam-rom-manager";
   };
-}
+})

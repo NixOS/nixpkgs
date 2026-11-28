@@ -1,10 +1,11 @@
 {
   lib,
   fetchFromGitHub,
-  python3,
+  fetchpatch2,
+  python3Packages,
 }:
 
-python3.pkgs.buildPythonApplication (finalAttrs: {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mqtt-exporter";
   version = "1.12.1";
   pyproject = true;
@@ -16,16 +17,26 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     hash = "sha256-cCVbvO1+69zIxbGGW7p3YTbDQgSU41uVR7M3jOHaqO8=";
   };
 
-  build-system = with python3.pkgs; [ setuptools ];
+  patches = [
+    # https://github.com/kpetremann/mqtt-exporter/pull/135
+    # Updates the paho-mqtt dependency to the latest version (which matches the
+    # version in nixpkgs).
+    (fetchpatch2 {
+      url = "https://github.com/kpetremann/mqtt-exporter/commit/3b92d1b1bc20c468dbfa7522987acd1216a9fc62.patch";
+      hash = "sha256-hNCiSXPfHmDbtBuPXs0BjB8mztRIdBVJbj1Yz28Khm8=";
+    })
+  ];
 
-  dependencies = with python3.pkgs; [
+  build-system = with python3Packages; [ setuptools ];
+
+  dependencies = with python3Packages; [
     paho-mqtt
     prometheus-client
   ];
 
   pythonRelaxDeps = [ "prometheus-client" ];
 
-  nativeCheckInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3Packages; [
     pytest-mock
     pytestCheckHook
   ];

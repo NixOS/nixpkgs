@@ -13,8 +13,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.9.8";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     pname = "streamdeck";
     inherit (finalAttrs) version;

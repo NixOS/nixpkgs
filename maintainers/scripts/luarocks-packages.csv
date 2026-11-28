@@ -101,6 +101,7 @@ luaposix,,,,,,lblasc
 luaprompt,,,,,,Freed-Wu
 luarepl,,,,,,
 luarocks,,,,,,mrcjkb teto
+luarocks-build-luke,,,,,,
 luarocks-build-rust-mlua,,,,,,mrcjkb
 luarocks-build-tree-sitter-cli,,,,,,
 luarocks-build-treesitter-parser,,,,,,mrcjkb

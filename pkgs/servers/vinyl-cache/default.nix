@@ -24,6 +24,7 @@ let
   # a) do not want a configurable option here, as most of the handling depends
   # on the version and the compile time options.
   # b) Vinyl Cache prefers RAM backed stateDirs due to shared memory usage.
+  # https://vinyl-cache.org/docs/trunk/installation/platformnotes.html#on-linux-use-tmpfs-for-the-workdir
   # /var/run (RAM backed) is a very good fit as long as it is *not* mounted as
   # `noexec`, which is currently not the case in NixOS but in other distros.
   # https://code.vinyl-cache.org/vinyl-cache/vinyl-cache/issues/4477
@@ -144,9 +145,9 @@ let
     });
 in
 {
-  # EOL 2027-03-16
+  # EOL date not announced yet
   vinyl-cache_9 = generic {
-    version = "9.0.1";
-    hash = "sha256-Lo7GfNIT6mhkx2OTnWSRICVVc0L60qX/2mx8W1m96xc=";
+    version = "9.1.0";
+    hash = "sha256-OECgbdDNIS/R477riwhtvXw1yjHP4ZYv4lhjY6Y0EKo=";
   };
 }

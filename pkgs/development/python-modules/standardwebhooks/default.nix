@@ -13,12 +13,12 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "standardwebhooks";
-  version = "1.1.0";
+  version = "1.3.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-5ctm4hpjVuu5N1rrV/E0hYMyMBWAjUdafBuqpLcYBoo=";
+    hash = "sha256-7gcdRU8dNJgCZ41JkP3r1sLWKb4RvilPVhNDttsgBgg=";
   };
 
   build-system = [ hatchling ];

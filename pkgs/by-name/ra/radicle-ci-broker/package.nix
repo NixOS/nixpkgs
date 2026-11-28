@@ -2,6 +2,8 @@
   lib,
   rustPlatform,
   fetchFromRadicle,
+  pkg-config,
+  libgit2,
   stdenv,
   jq,
   gitMinimal,
@@ -10,6 +12,7 @@
   writableTmpDirAsHomeHook,
   versionCheckHook,
   nixosTests,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -40,6 +43,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail '"PATH": "/bin"' ""
   '';
 
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ libgit2 ];
+
   preCheck = ''
     export SUBPLOT_DIR="$PWD/target/${stdenv.hostPlatform.rust.rustcTarget}/$cargoBuildType"
 
@@ -61,7 +68,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru = {
     tests = { inherit (nixosTests) radicle-ci-broker; };
-    updateScript = ./update.sh;
+    updateScript = nix-update-script { };
   };
 
   meta = {

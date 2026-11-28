@@ -8,17 +8,19 @@
   mypy,
   setuptools,
   setuptools-scm,
+  pytestCheckHook,
+  pytest-xdist,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "pytest-mypy";
-  version = "1.0.1";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "pytest_mypy";
     inherit (finalAttrs) version;
-    hash = "sha256-P1/K/3XIDczGtoz17MKOG75x6VMJRp63oov0CM5VwHQ=";
+    hash = "sha256-ufQjfAMR7sUHxImG3eLXdvOZyY/bktrlyT+WwZvK4OQ=";
   };
 
   nativeBuildInputs = [
@@ -28,19 +30,24 @@ buildPythonPackage (finalAttrs: {
 
   buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     attrs
     mypy
     filelock
   ];
 
-  # does not contain tests
-  doCheck = false;
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-xdist
+    mypy
+  ];
+
   pythonImportsCheck = [ "pytest_mypy" ];
 
   meta = {
     description = "Mypy static type checker plugin for Pytest";
     homepage = "https://github.com/dbader/pytest-mypy";
+    changelog = "https://github.com/realpython/pytest-mypy/releases/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sigmanificient ];
   };

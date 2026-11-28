@@ -30,7 +30,6 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   pname = "flash-mla";
   version = "0-unstable-2026-04-29";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "deepseek-ai";

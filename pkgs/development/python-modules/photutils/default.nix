@@ -21,14 +21,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "photutils";
-  version = "3.1.0";
+  version = "3.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "astropy";
     repo = "photutils";
     tag = finalAttrs.version;
-    hash = "sha256-yLWa5qp0vcLeHQ6/bMZQMgmlUfT3IRzlJHbyMlonaII=";
+    hash = "sha256-+du91hxC9/bI2Qkgw9G+dwxl5orBX109H01mvm2fQ/s=";
   };
 
   build-system = [

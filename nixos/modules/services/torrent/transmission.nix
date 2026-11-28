@@ -608,6 +608,7 @@ in
       ${config.systemd.services.transmission.environment.CURL_CA_BUNDLE} r,
 
       owner ${cfg.home}/${settingsDir}/** rw,
+      owner ${cfg.home}/${settingsDir}/lock rwk,
       ${cfg.settings.download-dir}/** rw,
       ${optionalString cfg.settings.incomplete-dir-enabled ''
         ${cfg.settings.incomplete-dir}/** rw,

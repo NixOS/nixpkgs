@@ -11,14 +11,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "flightradarapi";
-  version = "1.6.3";
+  version = "1.7.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "JeanExtreme002";
     repo = "FlightRadarAPI";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-u3Ow30B8aUaYe+9wHzm3lV3esc4eE2FHarC72SLxYro=";
+    hash = "sha256-iNRZVZWnNSbgdK/lVeL/rtZmeL4CmIKTq5kdhk8/hBs=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/python";

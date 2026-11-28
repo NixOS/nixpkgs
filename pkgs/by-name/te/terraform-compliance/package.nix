@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "terraform-compliance";
-  version = "1.15.1";
+  version = "1.16.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "terraform-compliance";
     repo = "cli";
     tag = finalAttrs.version;
-    hash = "sha256-saDpAek0QJy0YxGUPw8A5hLa0fmH5uX0FezcfEKkikI=";
+    hash = "sha256-QpRWRQ2BsJEwdQ+8i1NyvpGF8zx/PrzVdGV+ZWR50pU=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];
@@ -40,6 +40,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
   nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
+    ddt
   ];
 
   disabledTests = [

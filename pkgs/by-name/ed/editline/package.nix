@@ -4,6 +4,7 @@
   fetchFromGitHub,
   autoreconfHook,
   nix-update-script,
+  testers,
   ncurses ? null,
 
   # Enable `termcap` (`ncurses`) support.
@@ -21,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "troglobit";
     repo = "editline";
     rev = "f735e4d1d566cac3caa4a5e248179d07f0babefd";
-    sha256 = "sha256-MUXxSmhpQd8CZdGGC6Ln9eci85E+GBhlNk28VHUvjaU=";
+    hash = "sha256-MUXxSmhpQd8CZdGGC6Ln9eci85E+GBhlNk28VHUvjaU=";
   };
 
   configureFlags = [
@@ -37,6 +38,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   propagatedBuildInputs = lib.optional enableTermcap ncurses;
 
+  strictDeps = true;
+
   makeFlags = lib.optionals stdenv.hostPlatform.isPE [
     "LDFLAGS=-no-undefined"
   ];
@@ -48,7 +51,15 @@ stdenv.mkDerivation (finalAttrs: {
     "doc"
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+      version = "1.17.2-pre";
+    };
+  };
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://troglobit.com/projects/editline/";
@@ -56,5 +67,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsdOriginal;
     maintainers = with lib.maintainers; [ oxalica ];
     platforms = lib.platforms.all;
+    pkgConfigModules = [ "libeditline" ];
   };
 })

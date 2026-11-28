@@ -24,7 +24,6 @@ let
 
         "M=$(PWD)"
         "INSTALL_MOD_PATH=${placeholder "out"}"
-        "DEPMOD=true"
       ]
       ++ kernelModuleMakeFlags;
 

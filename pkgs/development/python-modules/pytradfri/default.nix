@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pytradfri";
-  version = "14.0.0";
+  version = "15.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "pytradfri";
     tag = version;
-    hash = "sha256-oYYi1P0Zu9PLsacUW//BlJlLmeOVvHgb/lR52KwZ7N8=";
+    hash = "sha256-CibNk0cpIGRlIg9O8yLpyTEct1vBHixma/Ty6iA4/Rg=";
   };
 
   build-system = [ setuptools ];

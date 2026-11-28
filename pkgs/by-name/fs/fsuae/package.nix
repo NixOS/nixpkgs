@@ -59,6 +59,10 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ];
 
+  # GCC 16 defaults to C++20, where std::numbers clashes with the
+  # `numbers` array in src/statusline.cpp. Build with C++17 like older GCC.
+  env.NIX_CFLAGS_COMPILE = "-std=gnu++17";
+
   strictDeps = true;
 
   # Make sure that the build timestamp is not included in the archive
@@ -66,7 +70,10 @@ stdenv.mkDerivation (finalAttrs: {
     strip-nondeterminism --type zip $out/share/fs-uae/fs-uae.dat
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    # Upstream also tags development versions, only follow releases
+    extraArgs = [ "--use-github-releases" ];
+  };
 
   meta = {
     homepage = "https://fs-uae.net";

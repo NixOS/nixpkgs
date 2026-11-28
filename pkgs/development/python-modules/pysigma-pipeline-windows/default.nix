@@ -9,14 +9,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pysigma-pipeline-windows";
-  version = "2.0.1";
+  version = "3.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SigmaHQ";
     repo = "pySigma-pipeline-windows";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Hd4Gk8b5IAHaOdBVNLNYGXhuuT8oXVC/r/VyuH8vD2U=";
+    hash = "sha256-9NM4wgTm4jGXCmHZk9yUzg+OXJyHU4etzz0oiAjvYeQ=";
   };
 
   build-system = [ poetry-core ];

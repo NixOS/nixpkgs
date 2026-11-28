@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "npiet";
-  version = "1.3f";
+  version = "1.3h";
 
   src = fetchurl {
     url = "https://www.bertnase.de/npiet/npiet-${finalAttrs.version}.tar.gz";
-    hash = "sha256-Le2FYGKr1zWZ6F4edozmvGC6LbItx9aptidj3KBLhVo=";
+    hash = "sha256-dC/+4tLjC4TnwSIIBq5aIznCCtLCg3fGYJYc9ETNj1k=";
   };
 
   buildInputs = [
@@ -36,9 +36,6 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace npietedit \
       --replace-fail 'exec wish' 'exec ${tk}/bin/wish'
   '';
-
-  # K&R-style decls clash with GCC 15's default of -std=gnu23.
-  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
 
   strictDeps = true;
 

@@ -29,6 +29,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ autoreconfHook ];
   propagatedBuildInputs = [ libmd ];
 
+  strictDeps = true;
+
   patches = [
     # `strtonum(3)` is not available on our default SDK version.
     # https://gitlab.freedesktop.org/libbsd/libbsd/-/issues/30
@@ -44,6 +46,8 @@ stdenv.mkDerivation (finalAttrs: {
   configureFlags = lib.optionals (
     stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17"
   ) [ "LDFLAGS=-Wl,--undefined-version" ];
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Common functions found on BSD systems";

@@ -10,9 +10,16 @@
   swift-crypto,
 }:
 
+let
+  swift' = swift.override {
+    enableRepl = false;
+    enableSourceKitLSP = false;
+  };
+in
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "swift-certificates";
-  version = "1.19.4";
+  version = "1.21.1";
 
   outputs = [
     "out"
@@ -23,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "apple";
     repo = "swift-certificates";
     tag = finalAttrs.version;
-    hash = "sha256-8I7/JAcGYrk22DymtlM2aiFXlQc3OijBAGL3DtoJWTE=";
+    hash = "sha256-kDZ0YWvQHT0WaEvcGhPj7dXUgxgWHGu5d5vOGZ89Psg=";
   };
 
   postPatch = ''
@@ -44,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     ninja
-    swift
+    swift'
   ];
 
   buildInputs = [

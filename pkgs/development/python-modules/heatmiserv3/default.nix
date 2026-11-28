@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "heatmiserv3";
-  version = "2.0.6";
+  version = "3.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "andylockran";
     repo = "heatmiserV3";
     tag = version;
-    hash = "sha256-mwzW52g3Uz7zxL9R5zePDyxMSramEiaiVm6VPlNyNts=";
+    hash = "sha256-crpiSlRSEZBmzsQabEuuJqPpFr/+FTykcZcbSVI2n1M=";
   };
 
   build-system = [ hatchling ];

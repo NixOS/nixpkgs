@@ -1,7 +1,10 @@
 diff --git a/base/utils/fs.go b/base/utils/fs.go
 --- a/base/utils/fs.go
 +++ b/base/utils/fs.go
-@@ -26,0 +27,7 @@ func EnsureDirectory(path string, perm FSPermission) error {
+@@ -24,6 +24,13 @@ func EnsureDirectory(path string, perm FSPermission) error {
+ 		// file exists
+ 		if f.IsDir() {
+ 			// directory exists, check permissions
 +			//
 +			// Public read-only directories are valid executable artifact
 +			// directories. In particular, --bin-dir is documented to support
@@ -9,3 +12,6 @@ diff --git a/base/utils/fs.go b/base/utils/fs.go
 +			if perm == PublicReadExecPermission && f.Mode().Perm() == 0o555 {
 +				return nil
 +			}
+ 			if isWindows {
+ 				// Ignore windows permission error. For none admin users it will always fail.
+ 				_ = SetFilePermission(path, perm)

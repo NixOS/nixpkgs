@@ -11,7 +11,6 @@
   aiosqlite,
   appdirs,
   cel-python,
-  chromadb,
   click,
   crewai-cli,
   crewai-core,
@@ -34,12 +33,14 @@
   pyjwt,
   python-dotenv,
   pyyaml,
+  qdrant-client,
   regex,
   tokenizers,
   tomli,
   tomli-w,
 
   # optional-dependencies
+  chromadb,
   litellm,
 
   # tests
@@ -52,16 +53,14 @@
   pytest-recording,
   pytest-xdist,
   pytestCheckHook,
-  qdrant-client,
   vcrpy,
   writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "crewai";
-  version = "1.15.18";
+  version = "1.15.45";
   pyproject = true;
-  __structuredAttrs = true;
 
   inherit (crewai-core) src;
 
@@ -71,6 +70,12 @@ buildPythonPackage (finalAttrs: {
     ''
       substituteInPlace pyproject.toml \
         --replace-fail 'crewai = "crewai_cli.cli:crewai"' ""
+    ''
+    # InitFrom was removed from qdrant-client
+    + ''
+      substituteInPlace src/crewai/rag/qdrant/types.py \
+        --replace-fail "    InitFrom," "" \
+        --replace-fail "init_from: InitFrom | str" "init_from: str"
     '';
 
   sourceRoot = "${finalAttrs.src.name}/lib/crewai";
@@ -79,26 +84,25 @@ buildPythonPackage (finalAttrs: {
 
   pythonRelaxDeps = [
     "aiofiles"
-    "chromadb"
-    "click"
+    "aiosqlite"
     "json-repair"
     "json5"
-    "lancedb"
     "mcp"
     "openai"
     "opentelemetry-api"
     "opentelemetry-exporter-otlp-proto-http"
     "opentelemetry-sdk"
-    "pdfplumber"
     "portalocker"
     "pydantic"
-    "pydantic-settings"
-    "pyjwt"
-    "python-dotenv"
+    "qdrant-client"
     "regex"
-    "tokenizers"
     "tomli"
     "tomli-w"
+  ];
+
+  pythonRemoveDeps = [
+    # Unused, only a security pin
+    "oauthlib"
   ];
 
   dependencies = [
@@ -106,7 +110,6 @@ buildPythonPackage (finalAttrs: {
     aiosqlite
     appdirs
     cel-python
-    chromadb
     click
     crewai-cli
     crewai-core
@@ -129,6 +132,7 @@ buildPythonPackage (finalAttrs: {
     pyjwt
     python-dotenv
     pyyaml
+    qdrant-client
     regex
     tokenizers
     tomli
@@ -136,6 +140,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   optional-dependencies = {
+    chromadb = [ chromadb ];
     litellm = [ litellm ];
   };
 
@@ -147,10 +152,17 @@ buildPythonPackage (finalAttrs: {
     "tests/rag/chromadb/test_client.py" # issue with chromadb
     "tests/telemetry/test_telemetry.py" # telemetry need network access
 
-    # ImportError: cannot import name 'InitFrom' from 'qdrant_client.models'
-    "tests/rag/qdrant/test_client.py"
+    # Spawns `python -I`, which ignores PYTHONPATH
+    "tests/rag/config/test_chromadb_optional.py"
+
+    # Incompatible with a2a-sdk 1.x
+    "tests/a2a"
+    "tests/agents/test_a2a_trust_completion_status.py"
+    "tests/agents/test_agent_a2a_wrapping.py"
 
     # Tests requiring optional dependencies
+    "tests/llms/test_missing_api_key.py"
+    "tests/memory/test_qdrant_search_categories.py"
     "tests/llms/anthropic"
     "tests/llms/azure"
     "tests/llms/bedrock"
@@ -475,8 +487,51 @@ buildPythonPackage (finalAttrs: {
     "test_adelete_collection"
 
     # Tests requiring crewai-tools
+    "test_a_platform_ref_amp_cannot_resolve_names_the_app"
+    "test_agent_kickoff_async_stops_on_apps_amp_cannot_resolve"
+    "test_agent_kickoff_stops_on_apps_amp_cannot_resolve"
+    "test_crew_kickoff_async_stops_on_apps_amp_cannot_resolve"
+    "test_crew_kickoff_stops_on_apps_amp_cannot_resolve"
+    "test_crew_prepare_tools_warns_on_empty_apps"
+    "test_get_platform_tools_names_no_app_for_another_failure"
+    "test_get_platform_tools_quiet_when_tools_resolve"
+    "test_get_platform_tools_raises_for_the_apps_amp_cannot_resolve"
+    "test_get_platform_tools_supports_legacy_platform_integration_token"
+    "test_get_platform_tools_warning_has_no_cause_without_an_error"
+    "test_get_platform_tools_warning_includes_the_resolution_error"
+    "test_get_platform_tools_warns_when_apps_resolve_to_zero_tools"
+    "test_get_platform_tools_warns_when_no_action_matches_a_selector"
+    "test_get_platform_tools_warns_when_token_is_missing"
     "test_non_ok_response_becomes_a_tool_failure"
     "test_ok_response_still_returns_json"
+    "test_platform_tool_discovery_errors_are_json_project_errors"
+    "test_platform_tool_refs_materialize_multiple_application_tools"
+    "test_the_unresolved_apps_warning_names_a_yaml_folded_role_without_the_newline"
+    "test_unresolved_apps_still_raise_where_user_warnings_are_errors"
+
+    # Tests requiring crewai-files
+    "test_declarative_agent_reads_artifacts_as_input_files"
+    "test_declarative_artifact_input_that_is_missing_fails_the_step"
+
+    # Incompatible with a2a-sdk 1.x
+    "test_a2a_agent_kickoff_async_accepts_artifact"
+    "test_a2a_delegation_saves_artifact_once_on_final_output"
+
+    # Incompatible with mcp 2.x
+    "test_connect_cancelled_during_initialize_recovers_auth_on_transport_unwind"
+    "test_every_text_block_reaches_the_agent"
+    "test_http_transport_connect_cancelled_on_enter_recovers_auth_on_exit"
+    "test_http_transport_connect_classifies_mixed_exception_group"
+    "test_http_transport_connect_raises_authentication_error_for_401"
+    "test_http_transport_connect_raises_authentication_error_for_403"
+    "test_http_transport_connect_raises_http_error_for_non_auth_status"
+    "test_http_transport_connect_timeout_recovers_auth_on_exit"
+    "test_non_text_blocks_become_placeholders"
+    "test_remaining_block_types"
+
+    # uv fails in the sandbox
+    "test_json_runner_imports_with_older_project_env_crewai_core"
+    "test_the_crew_crewai_eval_runs_pins_the_machines_proxy_not_the_project_envs"
 
     # Tests requiring network
     "test_agent_events_have_event_ids"
@@ -526,9 +581,18 @@ buildPythonPackage (finalAttrs: {
     "test_azure_agent_with_native_tool_calling"
     "test_azure_agent_kickoff_with_tools_mocked"
     "test_azure_streaming_emits_tool_call_events"
+    "test_catalog_models_keep_their_window_without_a_warning and azure"
+    "test_explicit_context_window_size_is_honored_by_every_provider and azure"
+
+    # Incompatible with qdrant-client 1.20
+    "test_client_works_from_another_thread_when_sqlite_checks_threads"
 
     # Tests time dependent
     "test_older_than"
+
+    # Flaky (event order)
+    "test_conversational_turn_emits_message_and_route_events"
+    "test_same_identifier_creates_new_versions_and_emits_events"
   ];
 
   nativeCheckInputs = [
@@ -536,6 +600,7 @@ buildPythonPackage (finalAttrs: {
     aiocache
     anthropic
     boto3
+    chromadb
     google-genai
     # litellm is an optional dependency upstream, but the test suite requires it
     litellm
@@ -543,7 +608,6 @@ buildPythonPackage (finalAttrs: {
     pytest-recording
     pytest-xdist
     pytestCheckHook
-    qdrant-client
     vcrpy
     writableTmpDirAsHomeHook
   ];

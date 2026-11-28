@@ -24,7 +24,7 @@
 }:
 
 let
-  i686Linux = stdenv.buildPlatform.system == "i686-linux";
+  coursierAvailable = lib.meta.availableOn stdenv.buildPlatform coursier;
 
   # The source-built SDK patches codesign paths for the Darwin sandbox.
   dotnet-sdk = dotnetCorePackages.sdk_8_0-source;
@@ -74,13 +74,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     pytest-xdist
     re-assert
   ])
-  ++ lib.optionals (!i686Linux) [
-    # coursier can be moved back to the main nativeCheckInputs list once we’re able to bootstrap a
-    # JRE on i686-linux: <https://github.com/NixOS/nixpkgs/issues/314873>. When coursier gets
-    # moved back to the main nativeCheckInputs list, don’t forget to re-enable the
-    # coursier-related test that is currently disabled on i686-linux.
-    coursier
-  ]
+  ++ lib.optional coursierAvailable coursier
   ++ lib.optional dotnetAvailable dotnet-sdk;
 
   nativeInstallCheckInputs = [ versionCheckHook ];
@@ -194,7 +188,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "test_docker_image_"
   ]
   ++ lib.optional (!dotnetAvailable) "test_dotnet_"
-  ++ lib.optionals i686Linux [
+  ++ lib.optionals (!coursierAvailable) [
     # From coursier_test.py:
     "test_error_if_no_deps_or_channel"
   ];

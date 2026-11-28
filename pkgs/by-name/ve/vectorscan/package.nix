@@ -8,19 +8,28 @@
   util-linux,
   python3,
   boost,
-  sqlite,
+  simde,
   enableShared ? !stdenv.hostPlatform.isStatic,
+  enableSimde ? lib.meta.availableOn stdenv.hostPlatform simde,
 }:
-
+let
+  inherit (stdenv.hostPlatform)
+    isx86
+    isAarch64
+    isLinux
+    avx512Support
+    avx2Support
+    ;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vectorscan";
-  version = "5.4.12";
+  version = "5.4.13";
 
   src = fetchFromGitHub {
     owner = "VectorCamp";
     repo = "vectorscan";
     rev = "vectorscan/${finalAttrs.version}";
-    hash = "sha256-P/3qmgVZ9OLfJGfxsKJ6CIuaKuuhs1nJt4Vjf1joQDc=";
+    hash = "sha256-dUrtyMXBhsgJj8w7qXLZK8BYjlRUL1JWyUz7yVREcew=";
   };
 
   postPatch = ''
@@ -30,10 +39,10 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "includedir=@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_INCLUDEDIR@" "includedir=@CMAKE_INSTALL_INCLUDEDIR@"
     substituteInPlace cmake/cflags-generic.cmake \
       --replace-fail "-Werror" ""
-    substituteInPlace cmake/build_wrapper.sh \
-      --replace-fail 'nm' '${stdenv.cc.targetPrefix}nm' \
-      --replace-fail 'objcopy' '${stdenv.cc.targetPrefix}objcopy'
   '';
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
     cmake
@@ -45,8 +54,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     boost
-    sqlite
-  ];
+  ]
+  ++ lib.optionals enableSimde [ simde ];
 
   # FAT_RUNTIME bundles optimized implementations for different CPU extensions and uses CPUID to
   # transparently select the fastest for the current hardware.
@@ -57,38 +66,31 @@ stdenv.mkDerivation (finalAttrs: {
   #
   # For generic builds (e.g. x86_64) this can mean using an implementation not optimized for the
   # potentially available more modern hardware extensions (e.g. x86_64 with AVX512).
-  cmakeFlags = [
-    "-DBUILD_BENCHMARKS=OFF"
-    (if enableShared then "-DBUILD_SHARED_LIBS=ON" else "BUILD_STATIC_LIBS=ON")
-  ]
-  ++ (
-    if
-      lib.elem stdenv.hostPlatform.system [
-        "x86_64-linux"
-        "i686-linux"
-      ]
-    then
-      [
-        "-DBUILD_AVX2=ON"
-        "-DBUILD_AVX512=ON"
-        "-DBUILD_AVX512VBMI=ON"
-        "-DFAT_RUNTIME=ON"
-      ]
-    else
-      (
-        if (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) then
-          [
-            "-DBUILD_SVE=ON"
-            "-DBUILD_SVE2=ON"
-            "-DBUILD_SVE2_BITPERM=ON"
-            "-DFAT_RUNTIME=ON"
-          ]
-        else
-          [ "-DFAT_RUNTIME=OFF" ]
-          ++ lib.optional stdenv.hostPlatform.avx2Support "-DBUILD_AVX2=ON"
-          ++ lib.optional stdenv.hostPlatform.avx512Support "-DBUILD_AVX512=ON"
-      )
-  );
+  cmakeFlags =
+    let
+      isx86Linux = isLinux && isx86;
+      isArmLinux = isLinux && isAarch64;
+    in
+    [
+      # Whenever avaliable enable SIMDE since there's no overheard, and will generally increase performance across
+      # platforms.
+      (lib.cmakeBool "SIMDE_BACKEND" enableSimde)
+      # Nixpkgs doesn't care about benches
+      (lib.cmakeBool "BUILD_BENCHMARKS" false)
+      (lib.cmakeBool "BUILD_SHARED_LIBS" enableShared)
+      (lib.cmakeBool "BUILD_STATIC_LIBS" (!enableShared))
+      # On linux we will always build avx2 into the fat runtime.
+      (lib.cmakeBool "BUILD_AVX2" (avx2Support || isx86Linux))
+      (lib.cmakeBool "BUILD_AVX512" (avx512Support || isx86Linux))
+      (lib.cmakeBool "BUILD_AVX512VBMI" (avx512Support || isx86Linux))
+      # SIMD-everywhere supports SVE (mostly), but not SVE2
+      # SVE is not natively supported on Apple silicon.
+      (lib.cmakeBool "BUILD_SVE" isArmLinux)
+      (lib.cmakeBool "BUILD_SVE2" isArmLinux)
+      (lib.cmakeBool "BUILD_SVE2_BITPERM" isArmLinux)
+      # Not supported on Apple silicon.
+      (lib.cmakeBool "FAT_RUNTIME" (isArmLinux || isx86Linux))
+    ];
 
   doCheck = true;
   checkPhase = ''

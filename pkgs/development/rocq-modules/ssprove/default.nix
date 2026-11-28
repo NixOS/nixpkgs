@@ -31,6 +31,7 @@
     lib.switch
       [ coq.coq-version mathcomp-boot.version ]
       [
+        (case (range "9.0" "9.2") (range "2.4.0" "2.6.0") "0.3.2")
         (case (range "8.20" "9.1") (range "2.3.0" "2.5.0") "0.3.1")
         (case (range "8.18" "8.20") (range "2.3.0" "2.3.0") "0.2.3")
         (case (range "8.18" "8.20") (range "2.1.0" "2.2.0") "0.2.2")
@@ -47,6 +48,7 @@
 
   releaseRev = v: "v${v}";
 
+  release."0.3.2".hash = "sha256-i1X3d+xFV41UK6UZWEyc6YChZZYpzI2mMLfLAozTU6k=";
   release."0.3.1".hash = "sha256-KB8cwlU3pnxPMQZ+RSyB2EJINhw7iN3vwF6iY4U4+oc=";
   release."0.3.0".hash = "sha256-ioPqavLOc8ZEzroalLR4dpqDbnOyzzOmWSF9+J1yPdQ=";
   release."0.2.4".hash = "sha256-uglr47aDgSkKi2JyVyN+2BrokZISZUAE8OUylGjy7ds=";

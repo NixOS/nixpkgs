@@ -3,6 +3,9 @@
   fetchFromGitHub,
   lib,
   makeWrapper,
+  pkg-config,
+  sqlite,
+  zstd,
   nixosTests,
   rustPlatform,
   rustc,
@@ -43,7 +46,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "lldap_set_password"
   ];
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+    pkg-config
+  ];
+
+  buildInputs = [
+    sqlite
+    zstd
+  ];
+
   postInstall = ''
     wrapProgram $out/bin/lldap \
       --set LLDAP_ASSETS_PATH ${finalAttrs.finalPackage.frontend}

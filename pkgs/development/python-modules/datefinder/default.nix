@@ -14,8 +14,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.7.3";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "akoumjian";
     repo = "datefinder";

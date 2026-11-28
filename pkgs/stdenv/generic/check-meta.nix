@@ -473,7 +473,7 @@ let
       teamsPosition = unsafeGetAttrPos "teams" (attrs.meta or { });
 
       problems = completeMetaProblems' attrs;
-      problemsGroupedByKind = groupBy (p: p.name) (
+      problemsGroupedByKind = groupBy (p: p.problem.kind) (
         mapAttrsToList (name: problem: {
           inherit name;
           inherit problem;

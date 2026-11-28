@@ -44,13 +44,13 @@ stdenv.mkDerivation (finalAttrs: {
     ;
 
   pname = "swayfx-unwrapped";
-  version = "0.6";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "wlrfx";
     repo = "swayfx";
     tag = finalAttrs.version;
-    hash = "sha256-yvVqwgKEZt/JbT4cxyRA95oK1t/KcZ2AvI5/o7gYa0M=";
+    hash = "sha256-gIbvWM8e37wHbX/ZCqJbPhR2BRdBb02PPEMYa81WT6w=";
   };
 
   separateDebugInfo = true;

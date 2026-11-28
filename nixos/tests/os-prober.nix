@@ -2,7 +2,7 @@ import ./make-test-python.nix (
   { pkgs, lib, ... }:
   let
     # A filesystem image with a (presumably) bootable debian
-    debianImage = pkgs.vmTools.diskImageFuns.debian11i386 {
+    debianImage = pkgs.vmTools.diskImageFuns.debian12i386 {
       # os-prober cannot detect systems installed on disks without a partition table
       # so we create the disk ourselves
       createRootFS = with pkgs; ''

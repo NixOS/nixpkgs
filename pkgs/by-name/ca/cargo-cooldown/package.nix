@@ -2,6 +2,8 @@
   lib,
   rustPlatform,
   fetchCrate,
+  pkg-config,
+  aws-lc,
   nix-update-script,
 }:
 
@@ -16,6 +18,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-8NzNpnYRxnTDo7AUxEK7zBAoZcktMxM/8EqeiFpfBds=";
+
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
+  buildInputs = [
+    aws-lc
+  ];
 
   # Integration tests and some unit tests require network access (crates.io registry) which breaks
   # in the Nix sandbox.

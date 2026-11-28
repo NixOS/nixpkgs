@@ -27,7 +27,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "jazzband";
+    owner = "django-oauth";
     repo = "django-oauth-toolkit";
     tag = finalAttrs.version;
     hash = "sha256-UsnfGOyVk5w0grG6cTgMmfo+HyrZtsER338YobLyk08=";
@@ -47,7 +47,6 @@ buildPythonPackage (finalAttrs: {
     export DJANGO_SETTINGS_MODULE=tests.settings
     # See below about xdist
     substituteInPlace pyproject.toml \
-      --replace-fail '    "-n", "auto",' "" \
       --replace-fail '    "--dist", "loadfile",' ""
   '';
 
@@ -70,8 +69,8 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "OAuth2 goodies for the Djangonauts";
-    homepage = "https://github.com/jazzband/django-oauth-toolkit";
-    changelog = "https://github.com/jazzband/django-oauth-toolkit/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    homepage = "https://github.com/django-oauth/django-oauth-toolkit";
+    changelog = "https://github.com/django-oauth/django-oauth-toolkit/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd2;
     maintainers = [ ];
   };

@@ -77,8 +77,6 @@ let
 
       virtualisation.virtualbox.guest.enable = true;
 
-      boot.initrd.systemd.enable = false;
-
       boot.initrd.kernelModules = [
         "af_packet"
         "vboxsf"
@@ -462,6 +460,7 @@ let
 
       meta = with pkgs.lib.maintainers; {
         maintainers = [ aszlig ];
+        broken = builtins.trace "This test depends on the removed scripted stage 1." true;
       };
     };
 

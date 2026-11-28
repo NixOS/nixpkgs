@@ -12,11 +12,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "shottr";
-  version = "1.9.3b";
+  version = "1.10.0b";
 
   src = fetchurl {
     url = "https://shottr.cc/dl/Shottr-${finalAttrs.version}.dmg";
-    hash = "sha256-nevrubkanf4sST3B9d3HiirSWtXrus/KYLeYXcFYIN4=";
+    hash = "sha256-IpS+k2koCW8yj64vglg8dlz1NSwotpQuq67Ry/YTabQ=";
   };
 
   nativeBuildInputs = [ undmg ];

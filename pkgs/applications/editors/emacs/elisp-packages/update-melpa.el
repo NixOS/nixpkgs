@@ -372,14 +372,14 @@ return Promise to resolve in that process."
          (lambda (repo)
            (promise-then
             (promise-then
-             (list-recipes repo "origin/master")
+             (list-recipes repo "origin/main")
              (lambda (recipe-names)
                (promise:make-thread #'index-recipe-commits
                                     ;; The indexer runs on a local git repository,
                                     ;; so it is CPU bound.
                                     ;; Adjust for core count + 2
                                     (semaphore-create 6 "local-indexer")
-                                    repo "origin/master"
+                                    repo "origin/main"
                                     ;; (seq-take recipe-names 20)
                                     recipe-names)))
             (lambda (res)

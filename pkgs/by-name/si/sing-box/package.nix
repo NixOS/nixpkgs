@@ -5,7 +5,7 @@
   coreutils,
   cronet-go,
   fetchFromGitHub,
-  go,
+  stdenv,
   installShellFiles,
   nixosTests,
   stdenvNoCC,
@@ -19,7 +19,7 @@ assert lib.assertMsg (
 buildGoModule (finalAttrs: {
   pname = "sing-box";
   # NOTE: also update cronet-go
-  version = "1.14.3";
+  version = "1.14.5";
 
   __structuredAttrs = true;
 
@@ -28,10 +28,21 @@ buildGoModule (finalAttrs: {
     owner = "SagerNet";
     repo = "sing-box";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Cy95gViVKmMYSXTKDbOxCOna7nBJ2b7/b8min1hZ2mM=";
+    hash = "sha256-BID9YMyyqkx4itqzzBU48DFp3ndXU/J5x5kEss3GK4k=";
   };
 
-  vendorHash = "sha256-wWe4aUpiCD+wgsj7YPJYVER7PxfgUbVTAhjarEzLtTc=";
+  # Remove distrusted CA certificates from the embedded root stores.
+  # TODO: Remove once upstream updates its bundled CA certificates.
+  postPatch = ''
+    grep -Fxq "// AAA Certificate Services" common/certificate/mozilla.go
+    grep -Fq '// CN=emSign ECC Root CA - G3;' common/certificate/chrome.go
+
+    sed -i -E \
+      '/^\/\/ (CN=)?(AAA Certificate Services|emSign ECC Root CA - G3)(;|$)/,/^-----END CERTIFICATE-----$/d' \
+      common/certificate/{mozilla,chrome}.go
+  '';
+
+  vendorHash = "sha256-oq5JCK4Y6p1YeRDAtPrSC/KcsaN6ioKoYk9k2W5ehNQ=";
 
   tags = [
     "with_gvisor"
@@ -64,6 +75,7 @@ buildGoModule (finalAttrs: {
   // lib.optionalAttrs (withNaiveOutbound && withStaticCronet) {
     CGO_ENABLED = 1;
     CGO_LDFLAGS = "-fuse-ld=lld";
+    CGO_LDFLAGS_ALLOW = "-l:libcronet\\.a";
   };
 
   nativeBuildInputs = [
@@ -82,7 +94,7 @@ buildGoModule (finalAttrs: {
   postConfigure = lib.optionalString withNaiveOutbound ''
     pushd vendor/github.com/sagernet/cronet-go
     chmod -R u+w .
-    cp -r ${cronet-go}/ .
+    cp -r ${cronet-go}/. .
     # for !withStaticCronet
     patch -p1 < ${./cronet-go.patch}
     substituteInPlace internal/cronet/loader_unix.go \
@@ -105,7 +117,7 @@ buildGoModule (finalAttrs: {
     install -Dm444 release/config/sing-box-split-dns.xml $out/share/dbus-1/system.d/sing-box-split-dns.conf
   ''
   + lib.optionalString (withNaiveOutbound && !withStaticCronet) ''
-    ln -s "${cronet-go}/lib/${go.GOOS}_${go.GOARCH}/libcronet.so" "$out/lib/"
+    ln -s "${cronet-go}/lib/${stdenv.hostPlatform.go.GOOS}_${stdenv.hostPlatform.go.GOARCH}/libcronet.so" "$out/lib/"
   '';
 
   passthru = {

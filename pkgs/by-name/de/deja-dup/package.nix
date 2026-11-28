@@ -28,14 +28,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "deja-dup";
-  version = "50.1";
+  version = "50.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "deja-dup";
     tag = finalAttrs.version;
-    hash = "sha256-c4Myy1nV6CupGG53Iqm0Z82yVx/Llgot4IZCrnubacE=";
+    hash = "sha256-dXu5uN1yMAXSdZQniDCYV6VcLbFw/XXpkkvWrPN0dB4=";
   };
 
   nativeBuildInputs = [

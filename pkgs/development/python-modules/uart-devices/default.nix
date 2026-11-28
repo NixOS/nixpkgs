@@ -14,7 +14,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "bdraco";
+    owner = "Bluetooth-Devices";
     repo = "uart-devices";
     tag = "v${version}";
     hash = "sha256-vBwQXeXw9y7eETtlC4dcqGytIgrAm7iomnvoaxhl6JI=";
@@ -32,8 +32,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "UART Devices for Linux";
-    homepage = "https://github.com/bdraco/uart-devices";
-    changelog = "https://github.com/bdraco/uart-devices/blob/${src.tag}/CHANGELOG.md";
+    homepage = "https://github.com/Bluetooth-Devices/uart-devices";
+    changelog = "https://github.com/Bluetooth-Devices/uart-devices/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     platforms = lib.platforms.linux;

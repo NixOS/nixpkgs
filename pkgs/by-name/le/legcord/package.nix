@@ -6,7 +6,7 @@
   pnpmConfigHook,
   pnpm_10,
   nodejs,
-  electron_43,
+  electron_44,
   makeWrapper,
   copyDesktopItems,
   makeDesktopItem,
@@ -17,17 +17,17 @@
   nix-update-script,
 }:
 let
-  electron = electron_43;
+  electron = electron_44;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "legcord";
-  version = "1.3.0";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "Legcord";
     repo = "Legcord";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Mjub2OFb5RN4yBwdUk8v6uo/dUeYZ5nELmpPzEFmx2c=";
+    hash = "sha256-6G/x4k6HYmjWyFo11iqAG7MWminaesIODjgjqgs0VpU=";
   };
 
   nativeBuildInputs = [
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_10;
     fetcherVersion = 4;
-    hash = "sha256-xBW7D/3Nz/h7VqLqTiVL9dTjXLdNOqfdIlj66iYwuhM=";
+    hash = "sha256-o5Ycy2QHY7GefXDBxvg1J1h4if6yp2+DdGNa5yX4EQQ=";
   };
 
   preBuild = ''

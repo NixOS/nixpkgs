@@ -3,6 +3,7 @@
   buildGoModule,
   fetchFromGitHub,
   tantivy-go,
+  zstd,
   versionCheckHook,
   nix-update-script,
 }:
@@ -24,6 +25,9 @@ buildGoModule (finalAttrs: {
 
   env.CGO_ENABLED = 1;
   env.CGO_LDFLAGS = "-L${tantivy-go}/lib";
+
+  buildInputs = [ zstd ];
+  env.NIX_LDFLAGS = "-lzstd";
 
   ldflags = [
     "-s"

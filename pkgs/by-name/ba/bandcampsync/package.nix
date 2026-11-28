@@ -9,8 +9,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   version = "0.8.0";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "meeb";
     repo = "bandcampsync";

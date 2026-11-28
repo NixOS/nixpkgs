@@ -18,15 +18,6 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    assertions = [
-      {
-        assertion = config.boot.initrd.systemd.enable;
-        message = ''
-          'boot.initrd.systemd.dmVerity.enable' requires 'boot.initrd.systemd.enable' to be enabled.
-        '';
-      }
-    ];
-
     boot.initrd = {
       availableKernelModules = [
         "dm_mod"

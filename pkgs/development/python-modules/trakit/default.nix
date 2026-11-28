@@ -18,14 +18,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "trakit";
-  version = "0.4.0";
+  version = "0.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ratoaq2";
     repo = "trakit";
     tag = finalAttrs.version;
-    hash = "sha256-71Y9VLMgIhonJtX4vtj6eXj+2HW0J6fWCAcJZK75GQs=";
+    hash = "sha256-SNnsUJdqHy5YiOxzAFEfvGbVAfwGikw3XQT9v/j6uYw=";
   };
 
   build-system = [ hatchling ];

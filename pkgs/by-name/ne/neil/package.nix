@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "neil";
-  version = "0.3.70";
+  version = "0.3.71";
 
   src = fetchFromGitHub {
     owner = "babashka";
     repo = "neil";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fuVZrv85PZQBM6mb7EWvvIfY3uoPY3VicY2QE8T9I3U=";
+    hash = "sha256-1m/C2aaaV9ewL8WZOCXQD47cDY2Kd607ihjsnYfdnVs=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

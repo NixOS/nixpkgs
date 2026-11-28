@@ -35,6 +35,7 @@ let
             swift-foundation = null;
             swift-testing = null;
             enableRepl = false;
+            enableSourceKitLSP = false;
           }
           # Swift Driver is required when building the compiler’s Swift Syntax in the final toolchain.
           # Otherwise, symbols are stripped from it that are needed to build Swift Testing.
@@ -61,8 +62,11 @@ in
   generateSplicesForMkScope,
   llvmPackages,
   makeScopeWithSplicing',
+  makeSetupHook,
+  nix,
   stdenvNoCC,
   swiftPackages,
+  writeShellScript,
   otherSplices ? generateSplicesForMkScope "swiftPackages",
 }:
 
@@ -116,6 +120,68 @@ makeScopeWithSplicing' {
           ln -s ${lib.getExe' llvmPackages.llvm "llvm-libtool-darwin"} "$out/bin/libtool"
         '';
       };
+
+      llvm_readtapi = stdenvNoCC.mkDerivation {
+        pname = "llvm-readtapi";
+        version = lib.getVersion llvmPackages.llvm;
+
+        buildCommand = ''
+          mkdir -p "$out/bin"
+          ln -s ${lib.getExe' llvmPackages.llvm "llvm-readtapi"} "$out/bin/llvm-readtapi"
+        '';
+      };
+
+      createToolchainStubsHook =
+        makeSetupHook
+          {
+            name = "create-toolchain-stubs-hook";
+            substitutions = {
+              swiftPlatform = stdenvNoCC.hostPlatform.swift.platform;
+            };
+          }
+          (
+            # The Swift toolchain expects shared libraries to be found in `lib/swift/<platform>`, but we want them in
+            # just `lib`. Trying to patch them out is difficult, so we create text-based stubs on Darwin and symlink
+            # the libraries into the expected place on ELF platforms.
+            writeShellScript "create-toolchain-stubs-hook" ''
+              function createToolchainStubsHook() {
+                local dylib
+                for dylib in "''${!outputLib}/lib"/*; do
+                  if isMachO "$dylib"; then
+                    echo "generating text-based stubs for $dylib"
+                    ${lib.getExe' llvm_readtapi "llvm-readtapi"} --filetype=tbd-v4 \
+                      "$dylib" -o "''${!outputDev}/lib/swift/@swiftPlatform@/$(basename "$dylib" .dylib).tbd"
+                  elif isELF "$dylib"; then
+                    echo "symlinking $dylib into the standard location"
+                    ln -s "$dylib" "''${!outputDev}/lib/swift/@swiftPlatform@/$(basename "$dylib")"
+                  fi
+                done
+              }
+
+              postInstallHooks+=(createToolchainStubsHook)
+            ''
+          );
+
+      fixUnhelpfulCmakeRpathsHook = makeSetupHook { name = "fix-unhelpful-cmake-rpaths-hook"; } (
+        # Swift disables environmental rpaths and tries to set `$ORIGIN`. The latter is probably fine, but the former
+        # messes with the tooling in Nixpkgs. This hook removes both of them just to be safe.
+        writeShellScript "fix-unhelpful-cmake-rpaths-hook" ''
+          function fixUnhelpfulCmakeRpaths() {
+            local f
+            while IFS= read -d "" f; do
+              if [[ "$(basename "$f")" = CMakeLists.txt || "''${f##*.}" = cmake ]]; then
+                echo "removing unhelpful rpath settings from '$f'"
+                # CMake allows non-zero numbers (including floating point numbers) to be truthy values, but assume that
+                # Swift isn’t doing something odd like using 3.141592653589793 as a truth value.
+                sed -E -i "$f" \
+                  -e 's/(^|\s|CMAKE_)INSTALL_RPATH "[^"]*"/\1INSTALL_RPATH ""/' \
+                  -e 's/(^|\s|CMAKE_)INSTALL_REMOVE_ENVIRONMENT_RPATH (1|ON|TRUE|Y|YES)/\1INSTALL_REMOVE_ENVIRONMENT_RPATH OFF/'
+              fi
+            done < <(grep -rlZ RPATH)
+          }
+          postPatchHooks+=(fixUnhelpfulCmakeRpaths)
+        ''
+      );
 
       /**
         Provides a list of patches for the specified major.minor version.
@@ -174,7 +240,14 @@ makeScopeWithSplicing' {
 
       buildSwiftPackages = bootstrapStage1SwiftPackages;
 
-      inherit llvm_libtool patchesForVersion swift_sources;
+      inherit
+        llvm_libtool
+        patchesForVersion
+        swift_sources
+        # Hooks to make it easier to deal with Swift packaging
+        createToolchainStubsHook
+        fixUnhelpfulCmakeRpathsHook
+        ;
 
       llvmPackages_upstream = llvmPackages;
 
@@ -184,13 +257,78 @@ makeScopeWithSplicing' {
         swift-foundation = null;
         swift-testing = null;
         enableRepl = false;
+        enableSourceKitLSP = false;
       };
     };
   f = lib.extends autoCalledPackages (
     self:
+    let
+      # Can’t be defined in `by-name` because it’s a function.
+      swiftpmDepsUpdater =
+        let
+          updateScript = writeShellScript "swiftpm-deps-updater.sh" ''
+            set -o errexit
+
+            resolve_swift_package=$1
+            source_root=$2
+
+            [[ -n "$version" ]] || version="$UPDATE_NIX_OLD_VERSION"
+            [[ -n "$attr_path" ]] || attr_path="$UPDATE_NIX_ATTR_PATH"
+
+            # The SwiftPM deps updater assumes some other updater has run and updated the version attribute.
+            new_version=$(
+              ${lib.getExe' nix "nix-instantiate"} --eval --raw --expr "with import ./. {}; lib.getVersion $attr_path"
+            )
+
+            if [ "$version" = "$new_version" ]; then
+              exit 0
+            fi
+
+            export PATH=${lib.getBin self.swift}/bin:${lib.getBin self.swiftpm}/bin:$PATH
+
+            src=$(${lib.getExe' nix "nix-instantiate"} --eval --raw -A $attr_path.src)
+            package_file=$(${lib.getExe' nix "nix-instantiate"} --eval --raw -A $attr_path.meta.position | cut -d: -f1)
+
+            if [ -n "$resolve_swift_package" ]; then
+              resolved_file=$(dirname "$package_file")/Package.resolved
+
+              scratch_dir=$(mktemp -d)
+              trap 'rm -rf -- "$scratch_dir"' EXIT
+
+              cp -r "$src/" "$scratch_dir/source/"
+              chmod -R u+w "$scratch_dir/source"
+
+              pushd "$scratch_dir/$source_root" > /dev/null
+              swift package resolve &> /dev/null
+              cp Package.resolved "$resolved_file"
+              popd > /dev/null
+              echo "done resolving" >&2
+            else
+              resolved_file=$src/Package.resolved
+            fi
+
+            deps_hash=$(${lib.getExe self.prefetch-swiftpm-deps} "$resolved_file")
+            sed -e "s|$(${lib.getExe' nix "nix-instantiate"} --eval --raw -A $attr_path.swiftpmDeps.vendorStaging.outputHash)|$deps_hash|" --in-place "$package_file"
+          '';
+        in
+        {
+          sourceRoot ? "source",
+          # Some packages do not provide `Package.resolved`. If true, one will be generated and saved next to the package.
+          resolveSwiftPackage ? false,
+        }:
+        {
+          name = "swiftpm-deps-updater";
+          command = [
+            updateScript
+            resolveSwiftPackage
+            sourceRoot
+          ];
+          supportedFeatures = [ "silent" ];
+        };
+    in
     {
       stdenv = clangStdenv;
-      inherit swift_release;
+      inherit swiftpmDepsUpdater swift_release;
     }
     // lib.optionalAttrs config.allowAliases {
       # Compatibility aliases for the old Swift packaging.

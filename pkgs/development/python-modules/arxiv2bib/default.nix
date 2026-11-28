@@ -12,8 +12,6 @@ buildPythonPackage (finalAttrs: {
   version = "1.0.8";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   # Missing tests on Pypi
   src = fetchFromGitHub {
     owner = "nathangrigg";
@@ -28,9 +26,8 @@ buildPythonPackage (finalAttrs: {
     unittestCheckHook
     mock
   ];
-  unittestFlagsArray = [
-    "-s"
-    "tests"
+  unittestFlags = [
+    "--start-directory=tests"
   ];
 
   pythonImportsCheck = [ "arxiv2bib" ];

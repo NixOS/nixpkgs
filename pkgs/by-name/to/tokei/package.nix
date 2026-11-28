@@ -24,6 +24,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
+  # Does not effect the final build output.
+  preCheck = ''
+    LIBGIT2_NO_VENDOR=0
+  '';
   checkInputs = lib.optionals stdenv.hostPlatform.isDarwin [ zlib ];
 
   # enable all output formats
@@ -41,10 +45,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
     homepage = "https://github.com/XAMPPRocky/tokei";
     changelog = "https://github.com/XAMPPRocky/tokei/blob/v${finalAttrs.version}/CHANGELOG.md";
-    license = with lib.licenses; [
-      asl20 # or
-      mit
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
     maintainers = with lib.maintainers; [ defelo ];
     mainProgram = "tokei";
   };

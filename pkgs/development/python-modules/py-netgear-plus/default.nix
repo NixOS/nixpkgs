@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "py-netgear-plus";
-  version = "0.6.4";
+  version = "0.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "foxey";
     repo = "py-netgear-plus";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-UDy5kMfSrKXLsGTRLcYWqi7Mv1dtYSaIx+sy8PHipKE=";
+    hash = "sha256-7kDX1YaHYb/JAzIAhGzziFyDfcbUwp3j86iiJSxq3oM=";
   };
 
   build-system = [ hatchling ];

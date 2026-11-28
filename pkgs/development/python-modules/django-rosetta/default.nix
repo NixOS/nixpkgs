@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "django-rosetta";
-  version = "0.10.3";
+  version = "0.10.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mbi";
     repo = "django-rosetta";
     tag = "v${version}";
-    hash = "sha256-VnKbtzLY2+3RTk4gNZASuVSDGzfgoyr06RUNB2r0eDw=";
+    hash = "sha256-kR3nwrNYOTbQmyemYU3GMYNBYuqPaJ3ZyxdNo8I8fOM=";
   };
 
   build-system = [ setuptools ];

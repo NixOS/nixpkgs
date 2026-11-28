@@ -2,22 +2,44 @@
   lib,
   stdenv,
   fetchurl,
-  ncurses5,
+  fetchpatch,
+  ncurses,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rogue";
-  version = "5.4.4";
+  # nixpkgs-update: no auto update
+  # rogueforge.net, the upstream, is gone and 5.4.5 was its last release
+  version = "5.4.5";
 
   src = fetchurl {
     urls = [
-      "https://src.fedoraproject.org/repo/pkgs/rogue/rogue${finalAttrs.version}-src.tar.gz/033288f46444b06814c81ea69d96e075/rogue${finalAttrs.version}-src.tar.gz"
-      "http://ftp.vim.org/ftp/pub/ftp/os/Linux/distr/slitaz/sources/packages-cooking/r/rogue${finalAttrs.version}-src.tar.gz"
+      "https://src.fedoraproject.org/repo/pkgs/rogue/rogue${finalAttrs.version}a-src.tar.gz/6c1470dab0bdc987d459ae1f0f59e622/rogue${finalAttrs.version}a-src.tar.gz"
+      "https://web.archive.org/web/20230819173224/http://rogue.rogueforge.net/files/rogue5.4/rogue${finalAttrs.version}a-src.tar.gz"
     ];
-    sha256 = "18g81274d0f7sr04p7h7irz0d53j6kd9j1y3zbka1gcqq0gscdvx";
+    hash = "sha256-bTjjj5WikeeFQWIifn0t4otR372nYXB6GQwtf2Kc9KY=";
   };
 
-  buildInputs = [ ncurses5 ];
+  patches = [
+    # Restoring a saved game crashes: the writers append a stray -1 after the string index
+    (fetchpatch {
+      url = "https://src.fedoraproject.org/rpms/rogue/raw/8451c1f42fcd33c391f60464a2d37fb39bb458a3/f/rogue-5.4.5-writesave.patch";
+      extraPrefix = "";
+      hash = "sha256-MdajbUSAnuDaE8xvkPkdKG07jk3bupc1fWXszeUxuKQ=";
+    })
+    # Make Backspace erase in prompts
+    (fetchpatch {
+      url = "https://src.fedoraproject.org/rpms/rogue/raw/8451c1f42fcd33c391f60464a2d37fb39bb458a3/f/rogue-5.4.5-backspace.patch";
+      hash = "sha256-eicpUh15iT5Fpcokm0Rer7ahR9T+Y2hQc1Jp4Xm2DTg=";
+    })
+    # Build with ncurses 6, whose structures are opaque
+    (fetchpatch {
+      url = "https://src.fedoraproject.org/rpms/rogue/raw/8451c1f42fcd33c391f60464a2d37fb39bb458a3/f/rogue-5.4.5-ncurses.patch";
+      hash = "sha256-wZARWJhZ2iW3H7LJYD2GGROaEgC8rLA0HZwVKGsDm7M=";
+    })
+  ];
+
+  buildInputs = [ ncurses ];
 
   env.NIX_CFLAGS_COMPILE = "-std=gnu17";
 
@@ -26,6 +48,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "rogue";
     platforms = lib.platforms.all;
     license = lib.licenses.bsd3;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ iedame ];
   };
 })

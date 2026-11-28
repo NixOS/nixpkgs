@@ -18,14 +18,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aiomealie";
-  version = "2.1.2";
+  version = "2.1.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "joostlek";
     repo = "python-mealie";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-F9gl+OdTQe6VxZPvFyo8r5GRxO3Ug4juvqje86djFNw=";
+    hash = "sha256-yf/16+Yi7Wvafl9mH5ah6SYbMtrhIXsn/4ajyjidR+M=";
   };
 
   build-system = [ hatchling ];

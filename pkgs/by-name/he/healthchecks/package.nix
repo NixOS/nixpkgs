@@ -15,14 +15,14 @@ let
 in
 py.pkgs.buildPythonApplication rec {
   pname = "healthchecks";
-  version = "4.4";
+  version = "5.0.3";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "healthchecks";
     repo = "healthchecks";
     tag = "v${version}";
-    sha256 = "sha256-4TG6K52sY2Cqu8K+9Gg2Zh1lL0tWQY9B+jKdDf1Vg+0=";
+    sha256 = "sha256-usTbAmxHr+B6pRKxtOsNobVyJr72sGvWq9kB7vbFRdA=";
   };
 
   propagatedBuildInputs = with py.pkgs; [
@@ -45,36 +45,10 @@ py.pkgs.buildPythonApplication rec {
     whitenoise
   ];
 
-  secrets = [
-    "DB_PASSWORD"
-    "DISCORD_CLIENT_SECRET"
-    "EMAIL_HOST_PASSWORD"
-    "LINENOTIFY_CLIENT_SECRET"
-    "MATRIX_ACCESS_TOKEN"
-    "PD_APP_ID"
-    "PUSHBULLET_CLIENT_SECRET"
-    "PUSHOVER_API_TOKEN"
-    "S3_SECRET_KEY"
-    "SECRET_KEY"
-    "SLACK_CLIENT_SECRET"
-    "TELEGRAM_TOKEN"
-    "TRELLO_APP_KEY"
-    "TWILIO_AUTH"
-  ];
-
   localSettings = writeText "local_settings.py" ''
     import os
 
     STATIC_ROOT = os.getenv("STATIC_ROOT")
-
-    ${lib.concatLines (
-      map (secret: ''
-        ${secret}_FILE = os.getenv("${secret}_FILE")
-        if ${secret}_FILE:
-            with open(${secret}_FILE, "r") as file:
-                ${secret} = file.readline()
-      '') secrets
-    )}
   '';
 
   installPhase = ''
@@ -97,6 +71,8 @@ py.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/healthchecks/healthchecks";
     description = "Cron monitoring tool written in Python & Django";
     license = lib.licenses.bsd3;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      debtquity
+    ];
   };
 }

@@ -12,14 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "sebaubuntu-libs";
-  version = "2.0.0";
+  version = "2.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sebaubuntu-python";
     repo = "sebaubuntu_libs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LV7Me+GmgOvDh0XGoLaftCKtP/fnB5xVqb8nArOMIys=";
+    hash = "sha256-XttPNkvGNOamLv6pEpYco9/8ORRzsX7c/s1KdVXljik=";
   };
 
   build-system = [

@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
@@ -11,8 +12,8 @@ buildGoModule (finalAttrs: {
   src = fetchFromGitHub {
     owner = "fullstorydev";
     repo = "grpcurl";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-Id3F5EEO5qf5kUKKeULX8u7aDIZEw5c1MkP4JMrwc6I=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Id3F5EEO5qf5kUKKeULX8u7aDIZEw5c1MkP4JMrwc6I=";
   };
 
   subPackages = [ "cmd/grpcurl" ];
@@ -24,6 +25,9 @@ buildGoModule (finalAttrs: {
     "-w"
     "-X main.version=${finalAttrs.version}"
   ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "Like cURL, but for gRPC: Command-line tool for interacting with gRPC servers";

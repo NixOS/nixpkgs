@@ -13,8 +13,6 @@ buildPythonPackage (finalAttrs: {
   version = "4.10.2";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "cloudtools";
     repo = "troposphere";

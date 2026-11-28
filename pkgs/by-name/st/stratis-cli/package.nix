@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "stratis-cli";
-  version = "3.9.1";
+  version = "3.9.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "stratis-storage";
     repo = "stratis-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XrzTFkr/VHP4eJts6wu6RhKaaMaqHWVQWHesbDSjx6A=";
+    hash = "sha256-OxqzJO8iNdqx3IP00DIO40WmTsg8CV4kRemDoT4IIJA=";
   };
 
   build-system = with python3Packages; [
@@ -27,7 +27,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     justbytes
     packaging
     psutil
-    python-dateutil
     wcwidth
   ];
 

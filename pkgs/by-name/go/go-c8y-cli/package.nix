@@ -11,14 +11,14 @@
 
 buildGoModule (finalAttrs: {
   pname = "go-c8y-cli";
-  version = "2.56.0";
+  version = "2.56.1";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "reubenmiller";
     repo = "go-c8y-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-IQjPN5vkl+JK0XMpX9ILjHg8Crf5vq+caJHXMJP8UKA=";
+    hash = "sha256-dmR+1wTRTzrgrl1vAwDIQvcbTbKuYqL9klnjhSMES+w=";
   };
 
   vendorHash = "sha256-k9TWPmrt7dFLjuOtUMXXzEMztQo5kLjgd2RdjPPlmKM=";

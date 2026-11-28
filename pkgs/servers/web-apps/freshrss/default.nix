@@ -3,19 +3,20 @@
   lib,
   fetchFromGitHub,
   nixosTests,
+  nix-update-script,
   php,
   writeText,
 }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "FreshRSS";
-  version = "1.30.1";
+  version = "1.31.0";
 
   src = fetchFromGitHub {
     owner = "FreshRSS";
     repo = "FreshRSS";
     rev = version;
-    hash = "sha256-aP4qQcWSsvEE/pmoYUYUGjbp8x4pl/4YnyaAFV20JkI=";
+    hash = "sha256-JBiARQlPQ3m1mHELQGMCcJCurDFehEfk9qPf91dYfpo=";
   };
 
   postPatch = ''
@@ -44,13 +45,17 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru.tests = {
-    inherit (nixosTests) freshrss;
+  passthru = {
+    tests = {
+      inherit (nixosTests) freshrss;
+    };
+    updateScript = nix-update-script { };
   };
 
   meta = {
     description = "FreshRSS is a free, self-hostable RSS aggregator";
     homepage = "https://www.freshrss.org/";
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "freshrss" version;
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [
       stunkymonkey

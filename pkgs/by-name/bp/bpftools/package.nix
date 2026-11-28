@@ -27,6 +27,11 @@ stdenv.mkDerivation (finalAttrs: {
     # fix unknown type name '__vector128' on powerpc64*
     # https://www.spinics.net/lists/bpf/msg28613.html
     ./include-asm-types-for-powerpc64.patch
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+    # Fix unknown type name `__u128` on aarch64, analogous to
+    # https://github.com/libbpf/libbpf/commit/f90a9c487d7542d91fa584b83b6a624a4fbeb341
+    ./add-128-bit-integer-types-for-aarch64.patch
   ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];

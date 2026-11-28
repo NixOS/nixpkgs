@@ -6,7 +6,7 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "readium";
-  version = "0.10.1";
+  version = "0.11.0";
   __structuredAttrs = true;
   __darwinAllowLocalNetworking = true;
 
@@ -14,10 +14,10 @@ buildGoModule (finalAttrs: {
     owner = "readium";
     repo = "cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1MavPoM84W2mA5wKpxJkfoHLAsiTXapc1aRZ+jnnXvs=";
+    hash = "sha256-1SBc/1lHZWOoudr43U+WIqqjKBHhBN5jm3zqF5wCNE8=";
   };
 
-  vendorHash = "sha256-7hWl7OPqFuEhnIn1oBI8kMcXwkhqTLkOV/NBQUoqqSQ=";
+  vendorHash = "sha256-0DaRZAk38fGHmPskNt/ocCerNEJ0UXB6rWQ4SH3ukVk=";
 
   ldflags = [ "-X=github.com/readium/cli/internal/version.Version=v${finalAttrs.version}" ];
 

@@ -15,23 +15,25 @@
   wrapGAppsHook4,
 
   blueprint-compiler,
+  glycin-loaders,
   gtk4,
   json-glib,
   libadwaita,
   libbacktrace,
+  libglycin-gtk4,
   libsoup_3,
   libxml2,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-extension-manager";
-  version = "0.6.5";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "mjakeman";
     repo = "extension-manager";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AlhY+jrHU09IhivJlU4A5v9w8NX//Z9ZIBjfz7gsvrM=";
+    hash = "sha256-af0Ml6JULE0+jBSeB7CSrv+8/1XasSv+fbUYqDoe4/4=";
   };
 
   nativeBuildInputs = [
@@ -49,10 +51,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     blueprint-compiler
+    glycin-loaders
     gtk4
     json-glib
     libadwaita
     libbacktrace
+    libglycin-gtk4
     libsoup_3
     libxml2
   ];

@@ -5,19 +5,21 @@
   rustPlatform,
   pkg-config,
   alsa-lib,
+  libgit2,
+  oniguruma,
   openssl,
   withTTS ? false,
   speechd-minimal,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "blightmud";
-  version = "5.7.0";
+  version = "5.7.1";
 
   src = fetchFromGitHub {
     owner = "blightmud";
     repo = "blightmud";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-M+tbV8zuwnwwv335ljKIq0UIsSkb4SQnJnOtOhL25N8=";
+    hash = "sha256-8NVxCu/QgZyiZC6toi6DUMY2ugb20pUvzHievWFVgzw=";
   };
 
   cargoHash = "sha256-EWI+k+q8JdyZDw+k2pM1mRkfBDQH0IsuzgrTECLrHt0=";
@@ -34,6 +36,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    libgit2
+    oniguruma
     openssl
   ]
   ++ lib.optionals (withTTS && stdenv.hostPlatform.isLinux) [ speechd-minimal ]

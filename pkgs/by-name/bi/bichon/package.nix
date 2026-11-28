@@ -6,7 +6,9 @@
   pnpm_11,
   pnpmConfigHook,
   nodejs,
+  aws-lc,
   openssl,
+  zstd,
   pkg-config,
   versionCheckHook,
   nix-update-script,
@@ -16,17 +18,17 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bichon";
-  version = "2.1.1";
+  version = "2.4.4";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "rustmailer";
     repo = "bichon";
     tag = finalAttrs.version;
-    hash = "sha256-e0fuRpO4Pc2fZFab5p4Nj0Wgq/db2gj56CgwWcpBi9c=";
+    hash = "sha256-Wv7EBl6Wa0/v5dphHg9ba6uEtjWnf6YRwJdGGnGycl8=";
   };
 
-  cargoHash = "sha256-f+n38ffIIebd0puhyWaDsWfreMs3sWAi1osqEz9BHYg=";
+  cargoHash = "sha256-YrF9EFOYZh8dBqMZNn5s8zCtq8iRI9+2AM0N8lMsnJ4=";
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
@@ -45,7 +47,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
     openssl
+    zstd
   ];
 
   env.GIT_HASH = finalAttrs.src.rev;

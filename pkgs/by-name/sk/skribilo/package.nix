@@ -20,7 +20,6 @@
   enableTex ? true,
   texliveSmall,
 }:
-
 let
   inherit (lib) optional;
 in
@@ -74,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
       conventions used in emails, Usenet and text.
     '';
     license = lib.licenses.gpl3Plus;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ l0r3v ];
     platforms = lib.platforms.unix;
   };
 })

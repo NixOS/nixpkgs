@@ -11,8 +11,6 @@ buildPythonPackage (finalAttrs: {
   version = "2.6.1";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     inherit (finalAttrs) version;
     pname = "sv_ttk";

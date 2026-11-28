@@ -27,7 +27,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "bdraco";
+    owner = "Yale-Libs";
     repo = "yalexs";
     tag = "v${finalAttrs.version}";
     hash = "sha256-KJgXxefAkFI6AmIkd6B2O7Iw017UPd/SV7AxV+JOkwM=";
@@ -75,8 +75,8 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Python API for Yale Access (formerly August) Smart Lock and Doorbell";
-    homepage = "https://github.com/bdraco/yalexs";
-    changelog = "https://github.com/bdraco/yalexs/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    homepage = "https://github.com/Yale-Libs/yalexs";
+    changelog = "https://github.com/Yale-Libs/yalexs/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };

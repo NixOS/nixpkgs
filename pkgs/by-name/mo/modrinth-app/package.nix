@@ -20,10 +20,13 @@
   libGL,
   libjack2,
   libpulseaudio,
+  libxkbcommon,
   modrinth-app-unwrapped,
   pipewire,
   symlinkJoin,
   udev,
+  vulkan-loader,
+  wayland,
   wrapGAppsHook3,
   libxxf86vm,
   libxrandr,
@@ -63,8 +66,13 @@ symlinkJoin {
       libxrandr
       libxxf86vm
 
+      # sdl3 (Minecraft 26.x)
+      libxkbcommon
+      wayland
+
       # lwjgl
       (lib.getLib stdenv.cc.cc)
+      vulkan-loader # Minecraft 26.x Vulkan backend
 
       # narrator support
       flite

@@ -4,6 +4,7 @@
   rustPlatform,
   openssl,
   pkg-config,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -19,7 +20,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-2czLiNj/GeD8M0hAlAVeoWh4m7vDG9GoLqber9hvwfE=";
 
-  buildInputs = [ openssl ];
+  buildInputs = [
+    openssl
+    zstd
+  ];
   nativeBuildInputs = [ pkg-config ];
 
   env.OPENSSL_NO_VENDOR = true;

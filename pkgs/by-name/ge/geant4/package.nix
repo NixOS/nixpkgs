@@ -38,12 +38,12 @@ let
 in
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "11.4.2";
+  version = "11.4.3";
   pname = "geant4";
 
   src = fetchurl {
     url = "https://cern.ch/geant4-data/releases/geant4-v${finalAttrs.version}.tar.gz";
-    hash = "sha256-VyDyu6aSECfiBq1PCgb5vMNIras2JA6LJ3EPIM4+lxo=";
+    hash = "sha256-8ZK9WApuOk9gYADoHD99cIlkTeKQakIjPZ8iO3S0qUQ=";
   };
 
   # Fix broken paths in a .pc

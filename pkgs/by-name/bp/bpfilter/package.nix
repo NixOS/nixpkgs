@@ -23,7 +23,7 @@ clangStdenv.mkDerivation (finalAttrs: {
   version = "0.7.0";
 
   src = fetchFromGitHub {
-    owner = "facebook";
+    owner = "meta";
     repo = "bpfilter";
     tag = "v${finalAttrs.version}";
     hash = "sha256-7WEPyfaB7WRlSrlgqbt/T/2H62mN+o/5Fm80Z0C0ztk=";
@@ -74,7 +74,7 @@ clangStdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "BPF-based packet filtering framework";
     homepage = "https://bpfilter.io";
-    changelog = "https://github.com/facebook/bpfilter/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/meta/bpfilter/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl2Only;
     maintainers = [ lib.maintainers.jmbaur ];
     mainProgram = "bpfilter";

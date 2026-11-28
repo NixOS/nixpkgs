@@ -1,12 +1,87 @@
+diff --git a/cmds/cmdbase/update.go b/cmds/cmdbase/update.go
+--- a/cmds/cmdbase/update.go
++++ b/cmds/cmdbase/update.go
+@@ -34,33 +34,22 @@ func update(cmd *cobra.Command, args []string) error {
+ 
+ 	// Create updaters.
+ 	instance := &updateDummyInstance{}
+-	binaryUpdateConfig, intelUpdateConfig, err := service.MakeUpdateConfigs(SvcConfig)
++	_, intelUpdateConfig, err := service.MakeUpdateConfigs(SvcConfig)
+ 	if err != nil {
+ 		return fmt.Errorf("init updater config: %w", err)
+ 	}
+-	binaryUpdates, err := updates.New(instance, "Binary Updater", *binaryUpdateConfig)
+-	if err != nil {
+-		return fmt.Errorf("configure binary updates: %w", err)
+-	}
+ 	intelUpdates, err := updates.New(instance, "Intel Updater", *intelUpdateConfig)
+ 	if err != nil {
+ 		return fmt.Errorf("configure intel updates: %w", err)
+ 	}
+ 
+-	// Force update all.
+-	binErr := binaryUpdates.ForceUpdate()
+-	if binErr != nil {
+-		slog.Error("binary update failed", "err", binErr)
+-	}
++	// Force update intel data. Nix manages the binaries.
+ 	intelErr := intelUpdates.ForceUpdate()
+ 	if intelErr != nil {
+ 		slog.Error("intel update failed", "err", intelErr)
+ 	}
+ 
+ 	// Return error.
+-	if binErr != nil {
+-		return fmt.Errorf("binary update failed: %w", binErr)
+-	}
+ 	if intelErr != nil {
+ 		return fmt.Errorf("intel update failed: %w", intelErr)
+ 	}
+diff --git a/service/core/api.go b/service/core/api.go
+--- a/service/core/api.go
++++ b/service/core/api.go
+@@ -128,7 +128,6 @@ func registerAPIEndpoints() error {
+ 		WriteMethod: "POST",
+ 		Write:       api.PermitUser,
+ 		ActionFunc: func(ar *api.Request) (string, error) {
+-			module.instance.BinaryUpdates().TriggerUpdateCheck()
+ 			module.instance.IntelUpdates().TriggerUpdateCheck()
+ 			return "update check triggered", nil
+ 		},
+@@ -142,7 +141,6 @@ func registerAPIEndpoints() error {
+ 		WriteMethod: "POST",
+ 		Write:       api.PermitUser,
+ 		ActionFunc: func(ar *api.Request) (string, error) {
+-			module.instance.BinaryUpdates().TriggerApplyUpdates()
+ 			module.instance.IntelUpdates().TriggerApplyUpdates()
+ 			return "upgrade triggered", nil
+ 		},
 diff --git a/service/core/update_config.go b/service/core/update_config.go
 --- a/service/core/update_config.go
 +++ b/service/core/update_config.go
-@@ -86 +86 @@ func registerUpdateConfig() error {
+@@ -83,7 +83,7 @@ func registerUpdateConfig() error {
+ 		ExpertiseLevel:  config.ExpertiseLevelExpert,
+ 		ReleaseLevel:    config.ReleaseLevelStable,
+ 		RequiresRestart: false,
 -		DefaultValue:    true,
 +		DefaultValue:    false,
-@@ -119 +119 @@ func initUpdateConfig() {
+ 		Annotations: config.Annotations{
+ 			config.DisplayOrderAnnotation: -12,
+ 			config.CategoryAnnotation:     "Updates",
+@@ -116,7 +116,7 @@ func registerUpdateConfig() error {
+ 
+ func initUpdateConfig() {
+ 	releaseChannel = config.Concurrent.GetAsString(ReleaseChannelKey, ReleaseChannelStable)
 -	enableSoftwareUpdates = config.Concurrent.GetAsBool(enableSoftwareUpdatesKey, true)
 +	enableSoftwareUpdates = config.Concurrent.GetAsBool(enableSoftwareUpdatesKey, false)
-@@ -132 +132 @@ func configureUpdates() {
+ 	enableIntelUpdates = config.Concurrent.GetAsBool(enableIntelUpdatesKey, true)
+ 
+ 	initialReleaseChannel = releaseChannel()
+@@ -129,6 +129,6 @@ func initUpdateConfig() {
+ }
+ 
+ func configureUpdates() {
 -	module.instance.BinaryUpdates().Configure(enableSoftwareUpdates(), configure.GetBinaryUpdateURLs(releaseChannel()))
 +	module.instance.BinaryUpdates().Configure(false, configure.GetBinaryUpdateURLs(releaseChannel()))
+ 	module.instance.IntelUpdates().Configure(enableIntelUpdates(), configure.DefaultIntelIndexURLs)
+ }

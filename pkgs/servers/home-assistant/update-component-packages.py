@@ -23,7 +23,7 @@ import subprocess
 import sys
 import tarfile
 import tempfile
-from functools import reduce
+from functools import cache, reduce
 from io import BytesIO
 from typing import Any
 from urllib.request import urlopen
@@ -111,7 +111,7 @@ def parse_components(version: str = "master"):
                 components_with_tests.append(entry.name)
 
         sys.path.append(core_path)
-        from script.hassfest.model import Config, Integration  # type: ignore
+        from packages.hassfest.hassfest.model import Config, Integration  # type: ignore
 
         config = Config(
             root=pathlib.Path(core_path),
@@ -149,6 +149,7 @@ def repository_root() -> str:
 
 
 # For a package attribute and an extra, check if the package exposes it via passthru.optional-dependencies
+@cache
 def has_extra(package: str, extra: str):
     cmd = [
         "nix-instantiate",
@@ -346,5 +347,4 @@ def main() -> None:
 if __name__ == "__main__":
     run_sync(["pyright", __file__])
     run_sync(["ruff", "check", "--ignore=E501,EXE", __file__])
-    run_sync(["isort", __file__])
     main()

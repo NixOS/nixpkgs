@@ -19,8 +19,6 @@ buildPythonPackage {
     cd bindings/python
   '';
 
-  __structuredAttrs = true;
-
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (ironcalc) src;
     hash = ironcalc.cargoHash;

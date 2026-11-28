@@ -12,7 +12,7 @@ buildPythonPackage {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "cournape";
+    owner = "itziakos";
     repo = "zipfile2";
     #tag = "v${version}";
     rev = "8823f7253772e5c5811343306a591c00c764c6d0";
@@ -32,7 +32,7 @@ buildPythonPackage {
 
   meta = {
     description = "Backwards-compatible improved zipfile class";
-    homepage = "https://github.com/cournape/zipfile2";
+    homepage = "https://github.com/itziakos/zipfile2";
     license = lib.licenses.psfl;
     maintainers = [ ];
   };

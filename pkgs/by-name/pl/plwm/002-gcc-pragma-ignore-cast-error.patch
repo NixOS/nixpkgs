@@ -1,0 +1,21 @@
+diff --git a/src/plx.c b/src/plx.c
+index 05ebc8f..25d9379 100644
+--- a/src/plx.c
++++ b/src/plx.c
+@@ -113,6 +113,8 @@ static int xerrordummy(const Display *dpy, const XErrorEvent *ee); /* copied fro
+
+ static int rr_event_base = -1;
+
++#pragma GCC diagnostic ignored "-Wpedantic" /* ISO C forbids initialization between function pointer and 'void *' */
++#pragma GCC diagnostic push                 /* but pl_function_t is void* which we must use to pass our callbacks */
+ static PL_extension predicates[] = {
+ 	/* functor name               arity C-callback                 flags   remarks */
+ 	{ "x_open_display"            ,  2, x_open_display             , 0 }, /* pass "" for XOpenDisplay(NULL) */
+@@ -181,6 +183,7 @@ static PL_extension predicates[] = {
+ 	{ "c_free"                    ,  1, c_free                     , 0 },
+ 	{ NULL                        ,  0, NULL                       , 0 }
+ };
++#pragma GCC diagnostic pop
+
+ install_t
+ // cppcheck-suppress unusedFunction

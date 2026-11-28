@@ -2,6 +2,8 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
+  cacert,
   gitUpdater,
   unstableGitUpdater,
   cctools,
@@ -46,29 +48,62 @@ let
       rev = "v${version}";
       hash = "sha256-L4GKXCFsKVxWXZJJeiAegXJySoS9+/V+/cuzEJEse+I=";
     };
+    patches = [
+      (fetchpatch2 {
+        name = "CVE-2026-103227.patch";
+        url = "https://github.com/gpac/gpac/commit/24e52d0a6001671ab61310105a24e2874e289a24.patch?full_index=1";
+        hash = "sha256-vh7Sb81W3lFHz8SJBfDTaMZyI6bpBLpB8oP39EpBp3o=";
+      })
+      (fetchpatch2 {
+        name = "CVE-2026-124030.patch";
+        url = "https://github.com/gpac/gpac/commit/1359c4da9329cedceeb8fcfeab6d97e0927236e1.patch?full_index=1";
+        hash = "sha256-3W4jIehmw5WNavGJzYkulo8Oq8zna6uBc/k+1TrbuF8=";
+      })
+      (fetchpatch2 {
+        name = "CVE-2026-124031.patch";
+        url = "https://github.com/gpac/gpac/commit/43a8329a90ae2907716b593cc3746458516c7c39.patch?full_index=1";
+        hash = "sha256-ZUzxhLe/vqCT1xuliJLXMF4q5hedYMmQQCppmy1ilAk=";
+      })
+      (fetchpatch2 {
+        name = "CVE-2026-108538.patch";
+        url = "https://github.com/gpac/gpac/commit/563859e5f9f1640893267a7d4e0e185e81654734.patch?full_index=1";
+        hash = "sha256-L2WCfX0Ieue0+WY7Pu83wtM0REJa4mSxG8iQffQ/aIc=";
+      })
+      (fetchpatch2 {
+        name = "CVE-2026-128239.patch";
+        url = "https://github.com/gpac/gpac/commit/6ef6bc65dd2b9d4c2e78806b9c122c549f82298a.patch?full_index=1";
+        hash = "sha256-PKBaD9IojN3PFAY6Ccqd9BGFKRPiv+I7RffcJYvywcE=";
+      })
+      (fetchpatch2 {
+        name = "CVE-2026-128240.patch";
+        url = "https://github.com/gpac/gpac/commit/83585cafbb1292b075e3f59dcb4083706d724f35.patch?full_index=1";
+        hash = "sha256-osvBvF+DzRqx3mT32EXyVSd+mKS2pdszAeN9QcajtcQ=";
+      })
+    ];
     updateScript = gitUpdater {
       rev-prefix = "v";
       ignoredVersions = "^(abi|test)";
     };
   };
   unstable = {
-    version = "26.07.0-unstable-2026-08-04";
+    version = "26.07.0-unstable-2026-11-18";
     src = fetchFromGitHub {
       owner = "gpac";
       repo = "gpac";
-      rev = "014bb6de5136e9466f6339486901db4d46570784";
-      hash = "sha256-Uj3+CH2xkw504A2LUmruQ5vdQXhGqKY7Lx1Yp5263J0=";
+      rev = "f1991b1b0437182b66e710a4da22d8f081c76c95";
+      hash = "sha256-BTM7RAXFZtiGEIVqLZnYckhMYkglf2yr1DhsIWyjdMg=";
     };
     updateScript = unstableGitUpdater {
       tagFormat = "v*";
       tagPrefix = "v";
     };
+    patches = [ ];
   };
   channelToUse = if releaseChannel == "unstable" then unstable else stable;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gpac";
-  inherit (channelToUse) version src;
+  inherit (channelToUse) version src patches;
 
   nativeBuildInputs = [
     pkg-config
@@ -111,6 +146,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   enableParallelBuilding = true;
+
+  postInstall = ''
+    rm $out/share/gpac/res/ca-bundle.crt
+    ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $out/share/gpac/res/ca-bundle.crt
+  '';
 
   passthru.updateScript = channelToUse.updateScript;
 

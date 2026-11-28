@@ -14,16 +14,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "knx-telegram-store";
-  version = "0.15.1";
+  version = "0.16.0";
   pyproject = true;
-
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "XKNX";
     repo = "knx-telegram-store";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dxghfUDTCVr46K+G+2wzX+RMxcMej3bZNoRVfUibp1E=";
+    hash = "sha256-Bit4VbFGtGiCSF1ow598xultIl6WVwQLRltiHz/JPFA=";
   };
 
   patches = [

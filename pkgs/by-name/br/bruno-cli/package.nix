@@ -3,10 +3,11 @@
   stdenv,
   clang_20,
   buildNpmPackage,
-  nodejs_22,
   bruno,
   pkg-config,
   pango,
+  jq,
+  moreutils,
   testers,
   bruno-cli,
 }:
@@ -20,10 +21,12 @@ buildNpmPackage {
   # since they only make releases and git tags for bruno,
   # we lie about bruno-cli's version and say it's the same as bruno's
   # to keep them in sync with easier maintenance
-  inherit (bruno) version src npmDepsHash;
-
-  # npm dependency install fails with nodejs_24: https://github.com/NixOS/nixpkgs/issues/474535
-  nodejs = nodejs_22;
+  inherit (bruno)
+    version
+    src
+    npmDepsHash
+    npmDepsFetcherVersion
+    ;
 
   npmWorkspace = "packages/bruno-cli";
   npmFlags = [ "--legacy-peer-deps" ];
@@ -37,23 +40,19 @@ buildNpmPackage {
     pango
   ];
 
+  postPatch = ''
+    # prevent 'prepare' from invoking tsx before patchShebangs fixes the interpreter
+    ${jq}/bin/jq 'del(.scripts.prepare)' packages/bruno-sqlite/package.json | ${moreutils}/bin/sponge packages/bruno-sqlite/package.json
+  '';
+
   postConfigure = ''
-    # sh: line 1: /build/source/packages/bruno-converters/node_modules/.bin/rimraf: cannot execute: required file not found
-    patchShebangs packages/*/node_modules
+    # patch shebangs for node_modules binaries (rollup, tsx) to prevent bad interpreter errors
+    patchShebangs node_modules packages/*/node_modules
   '';
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
 
-  # remove giflib dependency
   npmRebuildFlags = [ "--ignore-scripts" ];
-  preBuild = ''
-    # upstream keeps removing and adding back canvas, only patch it when it is present
-    if [[ -e node_modules/canvas/binding.gyp ]]; then
-      substituteInPlace node_modules/canvas/binding.gyp \
-        --replace-fail "'with_gif%': '<!(node ./util/has_lib.js gif)'" "'with_gif%': 'false'"
-      npm rebuild
-    fi
-  '';
 
   buildPhase = ''
     runHook preBuild
@@ -127,6 +126,7 @@ buildNpmPackage {
       kashw2
       mattpolzin
       water-sucks
+      samirbgno
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };

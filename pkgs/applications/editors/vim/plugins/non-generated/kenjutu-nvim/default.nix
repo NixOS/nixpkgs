@@ -4,6 +4,7 @@
   lib,
   makeBinaryWrapper,
   nix-update-script,
+  libgit2,
   openssl,
   pkg-config,
   rustPlatform,
@@ -38,7 +39,10 @@ let
       "kenjutu-nvim"
     ];
 
-    buildInputs = [ openssl ];
+    buildInputs = [
+      libgit2
+      openssl
+    ];
     nativeBuildInputs = [
       makeBinaryWrapper
       pkg-config

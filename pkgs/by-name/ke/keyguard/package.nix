@@ -101,7 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/AChep/keyguard-app";
     mainProgram = "Keyguard";
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ ilkecan ];
+    maintainers = [ ];
     sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode

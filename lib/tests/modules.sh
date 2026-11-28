@@ -172,8 +172,11 @@ checkConfigError() {
 checkConfigOutput '^"one two"$' config.result ./shorthand-meta.nix
 
 checkConfigError "In module .*test-push-down-non-attrs.nix., you're trying to define a value of type \`bool'\n\s*rather than an attribute set for the option" config ./test-push-down-non-attrs.nix
+checkConfigError "In module .*test-push-down-non-attrs-nested.nix., you're trying to define a value of type \`bool'\n\s*rather than an attribute set for the option\n\s*\`a\.b'!" config.a.b.c ./test-push-down-non-attrs-nested.nix
+checkConfigOutput '^1$' config.a.b.x ./options-lazy-in-unmatched-defns.nix
 
 checkConfigOutput '^true$' config.result ./test-mergeAttrDefinitionsWithPrio.nix
+checkConfigOutput '^true$' config.result ./test-fixupOptionType-idempotent.nix
 
 # Check that a module argument is passed, also when a default is available
 # (but not needed)
@@ -278,6 +281,10 @@ checkConfigError 'The option .* does not exist. Definition values:\n\s*- In .*: 
 checkConfigError 'The option .* does not exist. Definition values:\n\s*- In .*' config.enable ./define-enable-throw.nix
 checkConfigError 'while evaluating a definition from `.*/define-enable-abort.nix' config.enable ./define-enable-abort.nix
 checkConfigError 'while evaluating the error message for definitions for .enable., which is an option that does not exist' config.enable ./define-enable-abort.nix
+
+# Check that context is printed when mkIf/mkMerge throw
+checkConfigError 'while evaluating definitions from `.*/define-enable-mkIf-throw.nix' config.enable ./declare-enable.nix ./define-enable-mkIf-throw.nix
+checkConfigError 'while evaluating definitions from `.*/define-enable-mkMerge-throw.nix' config.enable ./declare-enable.nix ./define-enable-mkMerge-throw.nix
 
 # Check boolByOr type.
 checkConfigOutput '^false$' config.value.falseFalse ./boolByOr.nix

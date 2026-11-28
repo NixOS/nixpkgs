@@ -8,17 +8,19 @@
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
+  __structuredAttrs = true;
+
   pname = "cargo-typify";
-  version = "0.8.0";
+  version = "0.10.2";
 
   src = fetchFromGitHub {
     owner = "oxidecomputer";
     repo = "typify";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FqTl2eTp2IgL+ADiHvn9SYEVksvSQ6xO4tHzvfDrNWY=";
+    hash = "sha256-9acXyFXlTktL1BfrpqKvtw3DbwFjCh62HdniWff+ssU=";
   };
 
-  cargoHash = "sha256-PWi8o+hgE/TKAsVqwbhurfsFdc2BOWD8C4VcjKeCCZY=";
+  cargoHash = "sha256-fIF3bbw7TOUAroTzhA/3qH4hfgiiPdW9Mk1Bucm/M3o=";
 
   nativeBuildInputs = [
     rustfmt

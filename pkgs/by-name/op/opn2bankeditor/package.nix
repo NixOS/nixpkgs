@@ -12,14 +12,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "opn2bankeditor";
-  version = "1.3-unstable-2026-09-28";
+  version = "1.3-unstable-2026-10-22";
 
   src = fetchFromGitHub {
     owner = "Wohlstand";
     repo = "opn2bankeditor";
-    rev = "7775c5ff686d6bbd1e54fbb10c2128aa22404c27";
+    rev = "f0c649c86b91317929def0c2a2b2d4e150bf4bd6";
     fetchSubmodules = true;
-    hash = "sha256-I+WgNvyFLJgHCdTDAzaW/7M6BRb/plhhrlpGA41a06E=";
+    hash = "sha256-bj9iIUa5sh+AhIk3VvDbgx6BVQQNYQJfMorOvAvFUus=";
   };
 
   nativeBuildInputs = [

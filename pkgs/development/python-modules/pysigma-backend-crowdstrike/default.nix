@@ -19,6 +19,8 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-c7+4/55rrVVVdw2Yy8emoiWkyKlCgP4PKdAa1XW+aYM=";
   };
 
+  pythonRelaxDeps = [ "pysigma" ];
+
   build-system = [ poetry-core ];
 
   dependencies = [ pysigma ];

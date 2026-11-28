@@ -73,6 +73,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
   nativeCheckInputs = with python3.pkgs; [
     dbus
+    docutils
     freezegun
     pytest-cov-stub
     pytest-datadir
@@ -80,6 +81,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     pytest-mock
     pytestCheckHook
     python-dbusmock
+    sphinx
   ];
 
   # Disable tests that need root

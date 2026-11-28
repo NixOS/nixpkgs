@@ -3,25 +3,28 @@
   buildDunePackage,
   fetchFromGitHub,
   calendar,
-  cmdliner,
   eliom,
   js_of_ocaml-ppx_deriving_json,
   ocsigen-ppx-rpc,
+  ocsigen-dune-rules,
 }:
 
 buildDunePackage (finalAttrs: {
   pname = "ocsigen-toolkit";
-  version = "4.3.0";
+  version = "4.3.0+git-2026-11-01";
 
   src = fetchFromGitHub {
     owner = "ocsigen";
     repo = "ocsigen-toolkit";
-    tag = finalAttrs.version;
-    hash = "sha256-q6e8pacQ/F2vJeI4IqgyWI68J8qKq1vk3yRpI09BjLU=";
+    rev = "3866538e5b23e40cb4bcfb4ca180bc27e4194ce1";
+    hash = "sha256-+wSpkNputuWwOS/RKvzqNRNlByxqqWZ+2G4o+CpSvtk=";
   };
 
+  nativeBuildInputs = [
+    ocsigen-dune-rules
+  ];
+
   buildInputs = [
-    cmdliner
     js_of_ocaml-ppx_deriving_json
     ocsigen-ppx-rpc
   ];

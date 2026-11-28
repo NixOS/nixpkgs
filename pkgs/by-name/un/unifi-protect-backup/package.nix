@@ -29,6 +29,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   pythonRelaxDeps = [
     "aiorun"
     "aiosqlite"
+    "apprise"
     "click"
     "uiprotect"
   ];

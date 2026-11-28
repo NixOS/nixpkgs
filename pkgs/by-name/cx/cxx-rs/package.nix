@@ -10,6 +10,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cxx-rs";
   version = "1.0.194";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "dtolnay";
     repo = "cxx";

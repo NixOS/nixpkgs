@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   rustPlatform,
+  rust-jemalloc-sys,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -26,6 +27,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # only the ladspa plugin part has been packaged so far...
 
   buildAndTestSubdir = "ladspa";
+
+  buildInputs = [
+    rust-jemalloc-sys
+  ];
 
   postInstall = ''
     mkdir $out/lib/ladspa

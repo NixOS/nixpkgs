@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "exfatprogs";
-  version = "1.4.3";
+  version = "1.4.5";
 
   src = fetchFromGitHub {
     owner = "exfatprogs";
     repo = "exfatprogs";
     tag = finalAttrs.version;
-    hash = "sha256-twzHX8Uee0Uf8w1OsXWjecOl+Qs51jdJXK1sqdt6+4k=";
+    hash = "sha256-cS4yOt8tazRp2+gAGKh9dk3FxkuelQnkeZZWWrDDGhs=";
   };
 
   nativeBuildInputs = [

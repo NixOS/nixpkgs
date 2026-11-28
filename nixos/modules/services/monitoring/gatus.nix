@@ -117,9 +117,10 @@ in
         StateDirectory = "gatus";
         SyslogIdentifier = "gatus";
         EnvironmentFile = lib.optional (cfg.environmentFile != null) cfg.environmentFile;
-        # see https://github.com/prometheus-community/pro-bing#linux
-        AmbientCapabilities = "CAP_NET_RAW";
-        CapabilityBoundingSet = "CAP_NET_RAW";
+        # As a non-root user, Gatus pings through unprivileged ICMP sockets,
+        # which need no CAP_NET_RAW. net.ipv4.ping_group_range allows them.
+        # See https://github.com/prometheus-community/pro-bing#linux
+        CapabilityBoundingSet = "";
         NoNewPrivileges = true;
       };
 

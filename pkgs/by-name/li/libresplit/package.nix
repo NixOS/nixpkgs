@@ -2,43 +2,52 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  gtk3,
+  glib-networking,
+  gtk4,
+  gvfs,
   jansson,
-  luajit,
+  lua5_4,
   meson,
   ninja,
   openssl,
   pkg-config,
-  unstableGitUpdater,
-  wrapGAppsHook3,
+  wrapGAppsHook4,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libresplit";
-  version = "0-unstable-2026-08-14";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "LibreSplit";
     repo = "LibreSplit";
-    rev = "2c7f6610519cb98c3a1529ab2383ae0cd50d5dea";
-    hash = "sha256-fU0ghAMXOeygKWZYPtwriw2qxGh+5pnF392+rxrIGqg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-OgEWqVD/uXIKIM/OH63EyWIn1lJvPhr2xEgJNOBvGRc=";
   };
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
-    wrapGAppsHook3
+    wrapGAppsHook4
   ];
 
   buildInputs = [
-    gtk3
+    gtk4
     jansson
-    luajit
+    lua5_4
     openssl
+    # Optional deps for web split icons
+    glib-networking
+    gvfs
   ];
 
-  passthru.updateScript = unstableGitUpdater { };
+  # False positive:
+  #     char dot_subsecs[8];
+  #     sprintf(dot_subsecs, ".%06lld", time % 1000000LL);
+  # GCC thinks it might be 9 bytes because it doesn't detect
+  # the negative time check just above.
+  hardeningDisable = [ "strictoverflow" ];
 
   meta = {
     homepage = "https://github.com/LibreSplitDev/LibreSplit";
@@ -48,4 +57,4 @@ stdenv.mkDerivation {
     mainProgram = "libresplit";
     platforms = lib.platforms.linux;
   };
-}
+})

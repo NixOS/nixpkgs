@@ -12,13 +12,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "openlist";
-  version = "4.2.7";
+  version = "4.2.10";
 
   src = fetchFromGitHub {
     owner = "OpenListTeam";
     repo = "OpenList";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4MNrUiMzf+2I2AG752Is7ffh63vaiA3AKQhSwugKMgg=";
+    hash = "sha256-8eh9bE+W746uTOWKby5dhwxe7PvxUcTsW4i+TU0UzPA=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -34,7 +34,7 @@ buildGoModule (finalAttrs: {
   frontend = callPackage ./frontend.nix { };
 
   proxyVendor = true;
-  vendorHash = "sha256-SbM8FHcZbqmoDcXd71GzhCxqjIofetrbH9+wQlrXs70=";
+  vendorHash = "sha256-mpbNdsTPDRnx1pmPFF9TdsedsEaVqhV3gPzUApwMfuY=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -77,12 +77,6 @@ buildGoModule (finalAttrs: {
         "TestWebsocketAll"
         "TestWebsocketCaller"
         "TestDownloadOrder"
-      ]
-      ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-        # --- FAIL: TestTask_Cancel (0.01s)
-        # task_test.go:48: task is running
-        # task_test.go:61: task status not canceled: canceling
-        "TestTask_Cancel"
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];

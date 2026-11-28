@@ -216,19 +216,6 @@ let
     [ baseIsolinuxCfg ] ++ lib.optional config.boot.loader.grub.memtest86.enable isolinuxMemtest86Entry
   );
 
-  refindBinary =
-    if targetArch == "x64" || targetArch == "aa64" then "refind_${targetArch}.efi" else null;
-
-  # Setup instructions for rEFInd.
-  refind =
-    if refindBinary != null then
-      ''
-        # Adds rEFInd to the ISO.
-        cp -v ${pkgs.refind}/share/refind/${refindBinary} $out/EFI/BOOT/
-      ''
-    else
-      "# No refind for ${targetArch}";
-
   grubPkgs = if config.boot.loader.grub.forcei686 then pkgs.pkgsi686Linux else pkgs;
 
   grubMenuCfg = ''
@@ -447,17 +434,6 @@ let
           ) optionsSubMenus}
         }
 
-        ${lib.optionalString (refindBinary != null) ''
-          # GRUB apparently cannot do "chainloader" operations on "CD".
-          if [ "\$root" != "cd0" ]; then
-            menuentry 'rEFInd' --class refind {
-              # Force root to be the FAT partition
-              # Otherwise it breaks rEFInd's boot
-              search --set=root --no-floppy --fs-uuid 1234-5678
-              chainloader (\$root)/EFI/BOOT/${refindBinary}
-            }
-          fi
-        ''}
         ${lib.optionalString config.boot.loader.grub.memtest86.enable ''
           menuentry 'Memtest86+' --class debug {
             linux (\$root)/boot/memtest.bin ${toString config.boot.loader.grub.memtest86.params}
@@ -476,8 +452,6 @@ let
         EOF
 
         grub-script-check $out/EFI/BOOT/grub.cfg
-
-        ${refind}
       '';
 
   efiImg =
@@ -791,11 +765,7 @@ in
     # root device specified on the kernel command line, created by the
     # stage 1 init script.
     "/iso" = lib.mkImageMediaOverride {
-      device =
-        if config.boot.initrd.systemd.enable then
-          "/dev/disk/by-label/${config.isoImage.volumeID}"
-        else
-          "/dev/root";
+      device = "/dev/disk/by-label/${config.isoImage.volumeID}";
       fsType = "iso9660";
       neededForBoot = true;
       noCheck = true;
@@ -805,7 +775,7 @@ in
     # image) to make this a live CD.
     "/nix/.ro-store" = lib.mkImageMediaOverride {
       fsType = "squashfs";
-      device = "${lib.optionalString config.boot.initrd.systemd.enable "/sysroot"}/iso/nix-store.squashfs";
+      device = "/sysroot/iso/nix-store.squashfs";
       options = [
         "loop"
       ]
@@ -878,19 +848,6 @@ in
     ++ lib.optional (config.isoImage.makeBiosBootable) pkgs.syslinux;
     system.extraDependencies = [ grubPkgs.grub2_efi ];
 
-    # In stage 1 of the boot, mount the CD as the root FS by label so
-    # that we don't need to know its device.  We pass the label of the
-    # root filesystem on the kernel command line, rather than in
-    # `fileSystems' below.  This allows CD-to-USB converters such as
-    # UNetbootin to rewrite the kernel command line to pass the label or
-    # UUID of the USB stick.  It would be nicer to write
-    # `root=/dev/disk/by-label/...' here, but UNetbootin doesn't
-    # recognise that.
-    boot.kernelParams = lib.optionals (!config.boot.initrd.systemd.enable) [
-      "boot.shell_on_fail"
-      "root=LABEL=${config.isoImage.volumeID}"
-    ];
-
     fileSystems = config.lib.isoFileSystems;
 
     boot.initrd.availableKernelModules = [
@@ -905,7 +862,7 @@ in
       "overlay"
     ];
 
-    boot.initrd.systemd = lib.mkIf config.boot.initrd.systemd.enable {
+    boot.initrd.systemd = {
       emergencyAccess = true;
 
       # Most of util-linux is not included by default.
@@ -1003,14 +960,6 @@ in
         {
           source = config.isoImage.efiSplashImage;
           target = "/EFI/BOOT/efi-background.png";
-        }
-      ]
-      ++ lib.optionals (config.isoImage.makeEfiBootable && !config.boot.initrd.systemd.enable) [
-        # http://www.supergrubdisk.org/wiki/Loopback.cfg
-        # This feature will be removed, and thus is not supported by systemd initrd
-        {
-          source = (pkgs.writeTextDir "grub/loopback.cfg" "source /EFI/BOOT/grub.cfg") + "/grub";
-          target = "/boot/grub";
         }
       ]
       ++ lib.optionals (config.boot.loader.grub.memtest86.enable && config.isoImage.makeBiosBootable) [

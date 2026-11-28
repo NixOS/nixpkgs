@@ -35,14 +35,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "python-novaclient";
-  version = "18.12.0";
+  version = "18.13.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "python-novaclient";
     tag = finalAttrs.version;
-    hash = "sha256-ZVJXGGceY7tnD/rkMkZjn5zifATeLYRGEVI2iLKERJ8=";
+    hash = "sha256-ZrhXLiQTd+rMTHlbqdCOtALSRq2nnpYJmGd6zb5pKNY=";
   };
 
   patches = [

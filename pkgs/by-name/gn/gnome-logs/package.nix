@@ -18,7 +18,7 @@
   libxslt,
   docbook-xsl-nons,
   docbook_xml_dtd_43,
-  systemd,
+  systemdLibs,
   gsettings-desktop-schemas,
 }:
 
@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     gtk4
     libadwaita
-    systemd
+    systemdLibs
     gsettings-desktop-schemas
   ];
 

@@ -1,0 +1,67 @@
+--- mac-fdisk-0.1.orig/fdisklabel.h.old	1997-01-14 20:34:13.000000000 +0000
++++ mac-fdisk-0.1.orig/fdisklabel.h	2018-06-01 06:13:09.065722112 +0000
+@@ -35,27 +35,23 @@
+ #define	BSD_MAXPARTITIONS 8
+ #define BSD_LINUX_BOOTDIR "/usr/ucb/mdec"
+ 
+-#if defined (i386)
++/* Thanks, util-linux! */
++#if defined (i386) || defined (__sparc__) || defined (__arm__) || defined (__mips__) || defined (__s390__) || defined (__sh__) || defined(__x86_64__)
+ #define BSD_LABELSECTOR   1
+ #define BSD_LABELOFFSET   0
+-#define	BSD_BBSIZE        8192		/* size of boot area, with label */
+-#define	BSD_SBSIZE        8192		/* max size of fs superblock */
+-#elif defined (__alpha__)
+-#error LABELSECTOR, LABELOFFSET, BBSIZE & SBSIZE are undefined for __alpha__
+-#define BSD_LABELSECTOR   0
+-#define BSD_LABELOFFSET   0
+-#define	BSD_BBSIZE        0
+-#define	BSD_SBSIZE        0
+-#elif defined (__powerpc__)
+-/* LABELSECTOR, LABELOFFSET, BBSIZE & SBSIZE are undefined for __powerpc__ */
++#elif defined (__alpha__) || defined (__powerpc__) || defined (__ia64__) || defined (__hppa__)
+ #define BSD_LABELSECTOR   0
++#define BSD_LABELOFFSET   64
++#elif defined (__s390__) || defined (__s390x__)
++#define BSD_LABELSECTOR   1
+ #define BSD_LABELOFFSET   0
+-#define	BSD_BBSIZE        0
+-#define	BSD_SBSIZE        0
+ #else
+ #error unknown architecture
+ #endif
+ 
++#define	BSD_BBSIZE        8192		/* size of boot area, with label */
++#define	BSD_SBSIZE        8192		/* max size of fs superblock */
++
+ struct disklabel {
+ 	u_long	d_magic;		/* the magic number */
+ 	short	d_type;			/* drive type */
+--- mac-fdisk-0.1.orig/fdisklabel.c.old	2018-06-01 06:19:35.113347714 +0000
++++ mac-fdisk-0.1.orig/fdisklabel.c	2018-06-01 06:20:36.734576024 +0000
+@@ -82,10 +82,8 @@
+
+ static struct disklabel bsd_dlabel;
+ static char buffer[BSD_BBSIZE];
+-#if defined (i386)
+ static struct partition *bsd_part;
+ static int bsd_part_index;
+-#endif
+
+ void
+ bmenu (void)
+@@ -373,10 +371,11 @@
+   while (1)
+     if ((c = tolower (read_char ("Do you want to create a disklabel? (y/n) "))) == 'y')
+     {
+-#if defined (i386)
+-      if (bsd_initlabel (bsd_part, &bsd_dlabel, bsd_part_index) == 1)
+-#elif defined (__alpha__) || defined (__powerpc__) || defined (__mc68000__)
++#if defined (__alpha__) || defined (__powerpc__) || defined (__hppa__) || \
++    defined (__s390__) || defined (__s390x__) || defined(__mc68000__)
+       if (bsd_initlabel (NULL, &bsd_dlabel, 0) == 1)
++#else
++      if (bsd_initlabel (bsd_part, &bsd_dlabel, bsd_part_index) == 1)
+ #endif
+       {
+         bsd_print_disklabel (1);

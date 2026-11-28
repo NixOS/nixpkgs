@@ -28,6 +28,11 @@ let
         src = old.src.override {
           hash = "sha256-eRQzAFUvSgoDiP7LW/+hMrNxHuXVxY+wc/E3VU/zeXo=";
         };
+
+        # 3.3.0 has no "--dist loadfile" in pyproject.toml to remove
+        preCheck = ''
+          export DJANGO_SETTINGS_MODULE=tests.settings
+        '';
       });
 
       # custom python module part of froide

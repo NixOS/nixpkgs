@@ -18,12 +18,12 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mwprocapture";
-  subVersion = "1.3.4418";
+  subVersion = "1.3.4458";
   version = "${subVersion}-${kernel.version}";
 
   src = fetchurl {
     url = "https://www.magewell.com/files/drivers/ProCaptureForLinux_${subVersion}.tar.gz";
-    sha256 = "sha256-ZUqJkARhaMo9aZOtUMEdiHEbEq10lJO6MkGjEDnfx1g=";
+    sha256 = "sha256-qdE4+ziaf8BZnJxoEQKYS2PFaCXcjv9923ayB/bDm3w=";
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
@@ -71,6 +71,5 @@ stdenv.mkDerivation rec {
     license = lib.licenses.unfreeRedistributable;
     maintainers = with lib.maintainers; [ flexiondotorg ];
     platforms = lib.platforms.linux;
-    broken = lib.versionAtLeast kernel.version "6.15";
   };
 }

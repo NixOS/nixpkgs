@@ -9,26 +9,23 @@
 
 buildDotnetModule (finalAttrs: {
   pname = "fsautocomplete";
-  version = "0.83.0";
+  version = "0.87.0";
 
   src = fetchFromGitHub {
     owner = "ionide";
     repo = "FsAutoComplete";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1WK6vb/UfqnF5KlwrjmGTPeAnEgwPswcYweeotB6j00=";
+    hash = "sha256-X6gynmUDqQqOc9rJMf7OMxjB5ASWHPxtXp45VjW19HU=";
   };
 
   nugetDeps = ./deps.json;
 
   postPatch = ''
     rm global.json
-
-    substituteInPlace src/FsAutoComplete/FsAutoComplete.fsproj \
-      --replace-fail TargetFrameworks TargetFramework
   '';
 
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
-  dotnet-runtime = dotnetCorePackages.sdk_8_0;
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
+  dotnet-runtime = dotnetCorePackages.sdk_10_0;
 
   projectFile = "src/FsAutoComplete/FsAutoComplete.fsproj";
   executables = [ "fsautocomplete" ];

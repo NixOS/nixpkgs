@@ -31,7 +31,6 @@ buildPythonPackage (finalAttrs: {
   pname = "lifelines";
   version = "0.30.3";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "CamDavidsonPilon";
@@ -74,7 +73,11 @@ buildPythonPackage (finalAttrs: {
     sybil
   ];
 
-  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+  disabledTests = [
+    # Flaky: fits an unseeded random sample and checks that the 95% CI covers the true value
+    "test_weibull_data_inference"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # AssertionError: Not equal to tolerance rtol=0.01, atol=0
     "test_score_method_returns_same_value_for_unpenalized_models"
     "test_that_adding_strata_will_change_c_index"

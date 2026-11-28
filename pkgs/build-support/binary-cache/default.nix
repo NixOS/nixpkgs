@@ -48,10 +48,11 @@ stdenv.mkDerivation {
   buildCommand = ''
     mkdir -p $out/nar
 
-    python ${./make-binary-cache.py} --compression "${compression}"
+    python -P ${./make-binary-cache.py} --compression "${compression}"
 
     # These directories must exist, or Nix might try to create them in LocalBinaryCacheStore::init(),
     # which fails if mounted read-only
+    mkdir $out/build-trace-v2 # For Nix >= 2.35
     mkdir $out/realisations
     mkdir $out/debuginfo
     mkdir $out/log

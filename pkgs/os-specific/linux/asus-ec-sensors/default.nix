@@ -6,6 +6,9 @@
   kernelModuleMakeFlags,
 }:
 
+let
+  KDIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}";
+in
 stdenv.mkDerivation rec {
   name = "${pname}-${version}-${kernel.version}";
   pname = "asus-ec-sensors";
@@ -23,13 +26,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
   makeFlags = kernelModuleMakeFlags ++ [
-    "KERNELRELEASE=${kernel.modDirVersion}"
-    "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}"
+    "KVER=${kernel.modDirVersion}"
+    "KDIR=${KDIR}"
+    "INSTALL_MOD_PATH=${placeholder "out"}"
+    "MOD_SUBDIR=kernel/drivers/hwmon"
   ];
 
-  installPhase = ''
-    install asus-ec-sensors.ko -Dm444 -t ${placeholder "out"}/lib/modules/${kernel.modDirVersion}/kernel/drivers/hwmon
-  '';
+  installTargets = [ "modules_install" ];
 
   meta = {
     description = "Linux HWMON sensors driver for ASUS motherboards to read sensor data from the embedded controller";

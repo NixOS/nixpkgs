@@ -47,6 +47,10 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "CMAKE_MINIMUM_REQUIRED(VERSION 3.1 FATAL_ERROR)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
+  # GCC 16 warns on code from its own speculative devirtualization; marian builds with -Werror
+  # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=122197
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=array-bounds";
+
   # https://github.com/XapaJIaMnu/translateLocally/blob/81ed8b9/.github/workflows/build.yml#L330
   postConfigure = lib.optionalString stdenv.hostPlatform.isAarch64 ''
     bash ../cmake/fix_ruy_build.sh .. .

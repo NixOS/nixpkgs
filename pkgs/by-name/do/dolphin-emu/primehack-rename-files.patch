@@ -1,0 +1,105 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 2711a22..a24ece6 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -849,16 +849,16 @@ endif()
+ if(CMAKE_SYSTEM_NAME MATCHES "Linux|FreeBSD|OpenBSD")
+   # Install the application icon and menu item
+   install(FILES Data/dolphin-emu.svg
+-          DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/scalable/apps)
++          DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/scalable/apps RENAME dolphin-emu-primehack.svg)
+   install(FILES Data/dolphin-emu.png
+-          DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/256x256/apps)
++          DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/256x256/apps RENAME dolphin-emu-primehack.png)
+   install(FILES Data/dolphin-emu.desktop
+-          DESTINATION ${CMAKE_INSTALL_PREFIX}/share/applications)
++          DESTINATION ${CMAKE_INSTALL_PREFIX}/share/applications RENAME dolphin-emu-primehack.desktop)
+   # Install manpages
+   install(FILES Data/dolphin-emu.6
+-          DESTINATION ${CMAKE_INSTALL_MANDIR}/man6)
++          DESTINATION ${CMAKE_INSTALL_MANDIR}/man6 RENAME dolphin-emu-primehack.6)
+   install(FILES Data/dolphin-emu-nogui.6
+-          DESTINATION ${CMAKE_INSTALL_MANDIR}/man6)
++          DESTINATION ${CMAKE_INSTALL_MANDIR}/man6 RENAME dolphin-emu-primehack-nogui.6)
+ endif()
+ 
+ # packaging information
+diff --git a/Data/dolphin-emu.desktop b/Data/dolphin-emu.desktop
+index f44fe20..f073cbd 100644
+--- a/Data/dolphin-emu.desktop
++++ b/Data/dolphin-emu.desktop
+@@ -1,10 +1,10 @@
+ [Desktop Entry]
+ Version=1.0
+-Icon=dolphin-emu
+-Exec=dolphin-emu
++Icon=dolphin-emu-primehack
++Exec=dolphin-emu-primehack
+ Terminal=false
+ Type=Application
+ Categories=Game;Emulator;
+-Name=Dolphin Emulator
++Name=PrimeHack
+ GenericName=Wii/GameCube Emulator
+ Comment=A Wii/GameCube Emulator
+diff --git a/Source/Core/CMakeLists.txt b/Source/Core/CMakeLists.txt
+index b1c5a3a..f014c07 100644
+--- a/Source/Core/CMakeLists.txt
++++ b/Source/Core/CMakeLists.txt
+@@ -32,7 +32,7 @@ if (WIN32 AND ENABLE_AUTOUPDATE)
+ endif()
+ 
+ if (APPLE AND ENABLE_QT)
+-  set(DOLPHIN_MAC_BUNDLE "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Dolphin.app")
++  set(DOLPHIN_MAC_BUNDLE "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/PrimeHack.app")
+ 
+   add_custom_target(build_final_bundle ALL
+     COMMAND ${CMAKE_COMMAND} -E remove_directory
+@@ -46,10 +46,10 @@ if (APPLE AND ENABLE_QT)
+     # so don't use the new executable name, and instead continue to use "Dolphin".
+     COMMAND ${CMAKE_COMMAND} -E rename
+     ${DOLPHIN_MAC_BUNDLE}/Contents/MacOS/DolphinQt
+-    ${DOLPHIN_MAC_BUNDLE}/Contents/MacOS/Dolphin
++    ${DOLPHIN_MAC_BUNDLE}/Contents/MacOS/PrimeHack
+ 
+     COMMAND plutil
+-    -replace CFBundleExecutable -string Dolphin
++    -replace CFBundleExecutable -string PrimeHack
+     ${DOLPHIN_MAC_BUNDLE}/Contents/Info.plist
+     
+     DEPENDS dolphin-emu)
+diff --git a/Source/Core/DolphinNoGUI/CMakeLists.txt b/Source/Core/DolphinNoGUI/CMakeLists.txt
+index 9dad1b5..3216578 100644
+--- a/Source/Core/DolphinNoGUI/CMakeLists.txt
++++ b/Source/Core/DolphinNoGUI/CMakeLists.txt
+@@ -31,7 +31,7 @@ if (WIN32)
+     OUTPUT_NAME      DolphinNoGUI
+   )
+ else()
+-  set_target_properties(dolphin-nogui PROPERTIES OUTPUT_NAME dolphin-emu-nogui)
++  set_target_properties(dolphin-nogui PROPERTIES OUTPUT_NAME dolphin-emu-primehack-nogui)
+ endif()
+ 
+ target_link_libraries(dolphin-nogui
+diff --git a/Source/Core/DolphinQt/CMakeLists.txt b/Source/Core/DolphinQt/CMakeLists.txt
+index e8581f2..7a11911 100644
+--- a/Source/Core/DolphinQt/CMakeLists.txt
++++ b/Source/Core/DolphinQt/CMakeLists.txt
+@@ -714,6 +714,7 @@ if(APPLE)
+     )
+   endif()
+ else()
++  set_target_properties(dolphin-emu PROPERTIES OUTPUT_NAME dolphin-emu-primehack)
+   install(TARGETS dolphin-emu RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+ endif()
+ 
+diff --git a/Source/Core/DolphinTool/CMakeLists.txt b/Source/Core/DolphinTool/CMakeLists.txt
+index 562ba1d..8ec69f5 100644
+--- a/Source/Core/DolphinTool/CMakeLists.txt
++++ b/Source/Core/DolphinTool/CMakeLists.txt
+@@ -34,4 +34,5 @@ if(MSVC)
+ endif()
+ 
+ set(CPACK_PACKAGE_EXECUTABLES ${CPACK_PACKAGE_EXECUTABLES} dolphin-tool)
++set_target_properties(dolphin-tool PROPERTIES OUTPUT_NAME dolphin-tool-primehack)
+ install(TARGETS dolphin-tool RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})

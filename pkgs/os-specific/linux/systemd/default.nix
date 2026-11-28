@@ -131,6 +131,7 @@
   withLocaled ? true,
   withLogind ? true,
   withMachined ? true,
+  withMan ? !buildLibsOnly,
   withNetworkd ? true,
   withNspawn ? !buildLibsOnly,
   withNss ? !stdenv.hostPlatform.isMusl,
@@ -145,6 +146,7 @@
   withRemote ? true,
   withResolved ? true,
   withShellCompletions ? true,
+  withStorage ? true,
   withSysinstall ? true,
   withSysusers ? true,
   withSysupdate ? true,
@@ -198,6 +200,7 @@ assert withImportd -> withOpenSSL;
 assert withUkify -> (withEfi && withBootloader);
 assert withRepart -> withCryptsetup;
 assert withBootloader -> withEfi;
+assert withStorage; # installed by default in 262, meson option in 263
 
 let
   wantCurl = withRemote || withImportd || withImds;
@@ -207,17 +210,17 @@ let
   # command:
   #  $ curl -s https://api.github.com/repos/systemd/systemd/releases/latest | \
   #     jq '.created_at|strptime("%Y-%m-%dT%H:%M:%SZ")|mktime'
-  releaseTimestamp = "1773777352";
+  releaseTimestamp = "1793885120";
 in
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;
-  version = "262";
+  version = "262.2";
 
   src = fetchFromGitHub {
     owner = "systemd";
     repo = "systemd";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-oGzFW2dD8abLXBwDczr1hvl712s03CHTUqOz6uPfhmQ=";
+    hash = "sha256-BNL7ah1mtw4G94Sbuj9RL7/XDliI3lZFi0XBeQcMtqg=";
   };
 
   # PATCH POLICY
@@ -244,8 +247,9 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     ./0001-Don-t-try-to-unmount-nix-or-nix-store.patch
     ./0002-Change-usr-share-zoneinfo-to-etc-zoneinfo.patch
-    ./0003-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
-    ./0004-core-don-t-taint-on-unmerged-usr.patch
+    ./0003-add-rootprefix-to-lookup-dir-paths.patch
+    ./0004-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
+    ./0005-core-don-t-taint-on-unmerged-usr.patch
   ];
 
   postPatch = ''
@@ -276,7 +280,7 @@ stdenv.mkDerivation (finalAttrs: {
     "out"
     "dev"
   ]
-  ++ (lib.optional (!buildLibsOnly) "man");
+  ++ (lib.optional withMan "man");
   separateDebugInfo = true;
   __structuredAttrs = true;
 
@@ -301,21 +305,23 @@ stdenv.mkDerivation (finalAttrs: {
     intltool
     gettext
 
-    libxslt
-    docbook_xsl
-    docbook_xml_dtd_42
-    docbook_xml_dtd_45
     bash
     (buildPackages.python3Packages.python.withPackages (
       ps:
       with ps;
       [
-        lxml
         jinja2
       ]
+      ++ lib.optional withMan ps.lxml
       ++ lib.optional withEfi ps.pyelftools
       ++ lib.optional (withUkify && finalAttrs.finalPackage.doCheck) ps.pefile
     ))
+  ]
+  ++ lib.optionals withMan [
+    libxslt
+    docbook_xsl
+    docbook_xml_dtd_42
+    docbook_xml_dtd_45
   ]
   ++ lib.optionals withLibBPF [
     bpftools
@@ -478,7 +484,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # NSS
     (lib.mesonEnable "nss-mymachines" (withNss && withMachined))
-    (lib.mesonEnable "nss-resolve" withNss)
+    (lib.mesonEnable "nss-resolve" (withNss && withResolved))
     (lib.mesonBool "nss-myhostname" withNss)
     (lib.mesonBool "nss-systemd" withNss)
 
@@ -527,7 +533,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "xenctrl" false)
     (lib.mesonEnable "gnutls" false)
     (lib.mesonEnable "xkbcommon" false)
-    (lib.mesonEnable "man" true)
+    (lib.mesonEnable "man" withMan)
     (lib.mesonEnable "nspawn" withNspawn)
 
     (lib.mesonBool "vconsole" withVConsole)
@@ -542,6 +548,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonBool "hwdb" withHwdb)
     (lib.mesonBool "timedated" withTimedated)
     (lib.mesonBool "timesyncd" withTimesyncd)
+    (lib.mesonBool "nsresourced" withNsresourced)
+    (lib.mesonBool "mountfsd" withMountfsd)
     (lib.mesonBool "userdb" withUserDb)
     (lib.mesonBool "coredump" withCoredump)
     (lib.mesonBool "firstboot" withFirstboot)
@@ -558,12 +566,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonBool "create-log-dirs" false)
     (lib.mesonBool "smack" true)
     (lib.mesonBool "b_pie" true)
-  ]
-  ++ lib.optionals withNsresourced [
-    (lib.mesonBool "nsresourced" withNsresourced)
-  ]
-  ++ lib.optionals withMountfsd [
-    (lib.mesonBool "mountfsd" withMountfsd)
   ]
   ++ lib.optionals (withLibBPF && vmlinux-btf != null) [
     (lib.mesonOption "vmlinux-h" "provided")
@@ -725,10 +727,12 @@ stdenv.mkDerivation (finalAttrs: {
       withNspawn
       withRepart
       withPortabled
+      withStorage
       withSysupdate
       withTimedated
       withTpm2Tss
       withUtmp
+      withVmspawn
       util-linux
       kmod
       kbd
@@ -807,8 +811,8 @@ stdenv.mkDerivation (finalAttrs: {
       // {
         inherit (nixosTests)
           simple-vm
-          fsck-systemd-stage-1
-          hibernate-systemd-stage-1
+          fsck
+          hibernate
           switchTest
           switchTest-basics
           switchTest-units
@@ -825,16 +829,15 @@ stdenv.mkDerivation (finalAttrs: {
           systemd-initrd-btrfs-raid
           systemd-initrd-luks-fido2
           systemd-initrd-luks-keyfile
-          systemd-initrd-luks-empty-passphrase
+          initrd-luks-empty-passphrase
           systemd-initrd-luks-password
           systemd-initrd-luks-tpm2
           systemd-initrd-modprobe
-          systemd-initrd-shutdown
           systemd-initrd-simple
           systemd-initrd-swraid
           # systemd-initrd-vconsole # broken on master
           systemd-initrd-networkd-ssh
-          systemd-initrd-networkd-openvpn
+          initrd-network-openvpn
           systemd-initrd-vlan
           systemd-journal
           systemd-journal-gateway
@@ -847,7 +850,6 @@ stdenv.mkDerivation (finalAttrs: {
           systemd-networkd-vrf
           systemd-no-tainted
           systemd-nspawn
-          systemd-nspawn-configfile
           systemd-oomd
           systemd-portabled
           systemd-pstore

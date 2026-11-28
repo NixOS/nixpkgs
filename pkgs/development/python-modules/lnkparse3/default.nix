@@ -11,7 +11,6 @@ buildPythonPackage rec {
   pname = "lnkparse3";
   version = "1.6.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Matmaus";

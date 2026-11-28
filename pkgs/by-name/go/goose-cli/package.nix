@@ -1,22 +1,22 @@
 {
   lib,
   stdenv,
-  callPackage,
   fetchFromGitHub,
   rustPlatform,
+  aws-lc,
   cmake,
   dbus,
   libxcb,
+  oniguruma,
   pkg-config,
   protobuf,
   openssl,
+  sqlite,
+  zstd,
   versionCheckHook,
   nix-update-script,
   llvmPackages,
   makeWrapper,
-  librusty_v8 ? callPackage ./librusty_v8.nix {
-    inherit (callPackage ./fetchers.nix { }) fetchLibrustyV8;
-  },
 
   # Extension(s) Dependencies
   python3,
@@ -33,16 +33,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "goose-cli";
-  version = "1.55.0";
+  version = "1.60.2";
 
   src = fetchFromGitHub {
     owner = "aaif-goose";
     repo = "goose";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2OoRbVAzo7oVWFbdtRvHAoPCLjPXen89di7dewADXTI=";
+    hash = "sha256-gXk9tnTp9vfL1/9BEJ7TYBZdemAnoc039pMzabRqxhU=";
   };
 
-  cargoHash = "sha256-BYmBp4Pb5t331Tu0HGAtIGtl3fheS/s5lcmlZcY71HM=";
+  cargoHash = "sha256-vqKRl4qxlHDEqe652BPtfnWvsee/X0rwaFcuY9AoA7Q=";
 
   cargoBuildFlags = [
     "--bin"
@@ -58,15 +58,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
     dbus
+    oniguruma
     openssl
+    sqlite
+    zstd
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ libxcb ];
 
-  env = {
-    LIBCLANG_PATH = "${lib.getLib llvmPackages.libclang}/lib";
-    RUSTY_V8_ARCHIVE = librusty_v8;
-  };
+  env.LIBCLANG_PATH = "${lib.getLib llvmPackages.libclang}/lib";
 
   postFixup = ''
     wrapProgram $out/bin/goose \

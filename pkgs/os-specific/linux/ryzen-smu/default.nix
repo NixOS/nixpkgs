@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   kernel,
+  kernelModuleMakeFlags,
 }:
 let
   version = "0.1.7-unstable-2026-08-15";
@@ -44,20 +45,26 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  makeFlags = [
+  makeFlags = kernelModuleMakeFlags ++ [
     "TARGET=${kernel.modDirVersion}"
     "KERNEL_BUILD=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     "CC=${stdenv.cc.targetPrefix}cc"
+    "INSTALL_MOD_PATH=${placeholder "out"}"
+    "INSTALL_MOD_DIR=kernel/drivers/ryzen_smu"
+    "DEPMOD=true"
   ];
 
-  installPhase = ''
-    runHook preInstall
-
-    install ryzen_smu.ko -Dm444 -t $out/lib/modules/${kernel.modDirVersion}/kernel/drivers/ryzen_smu
+  postInstall = ''
     install ${monitor-cpu}/bin/monitor_cpu -Dm755 -t $out/bin
-
-    runHook postInstall
   '';
+
+  installTargets = [ "modules_install" ];
+
+  installFlags = [
+    "-C"
+    "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+    "M=$(PWD)"
+  ];
 
   meta = {
     description = "Linux kernel driver that exposes access to the SMU (System Management Unit) for certain AMD Ryzen Processors";

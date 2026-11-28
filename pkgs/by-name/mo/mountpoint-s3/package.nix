@@ -1,10 +1,13 @@
 {
   lib,
+  aws-lc,
   fetchFromGitHub,
   rustPlatform,
   cmake,
   fuse3,
+  libgit2,
   pkg-config,
+  rust-jemalloc-sys,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -30,7 +33,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pkg-config
     rustPlatform.bindgenHook
   ];
-  buildInputs = [ fuse3 ];
+  buildInputs = [
+    fuse3
+    libgit2
+    rust-jemalloc-sys
+  ];
+
+  # aws-lc-sys is only pulled in by test dependencies
+  checkInputs = [ aws-lc ];
+
+  postInstall = ''
+    mkdir -p $out/sbin
+    ln -sf $out/bin/mount-s3 $out/sbin/mount.mount-s3
+  '';
 
   # The S3CrtClient doctest in mountpoint-s3-client constructs a real client,
   # which requires a TLS trust store unavailable in the sandbox.

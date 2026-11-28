@@ -1,23 +1,23 @@
 {
   lib,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   installShellFiles,
   makeBinaryWrapper,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "crowdsec";
-  version = "1.8.1";
+  version = "1.8.2";
 
   src = fetchFromGitHub {
     owner = "crowdsecurity";
     repo = "crowdsec";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gyKqMUnAjfg3eAb7Z27qv6AgSxNo8Z7zIhXTUpkD5i4=";
+    hash = "sha256-KFwsU2JVqdsEUUamjaTg0gCeAIgLwZBxACoMM4624Dg=";
   };
 
-  vendorHash = "sha256-899kCO6wbiNe1NHmtew3ksQXI51LjdlLo5XAplsHUQQ=";
+  vendorHash = "sha256-XAPB2KZAyAv7PGBtMxEbVaRzmDrjc9mwe9lpQV4Cem4=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -71,6 +71,8 @@ buildGoModule (finalAttrs: {
         exit 1
     fi
   '';
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     mainProgram = "crowdsec";

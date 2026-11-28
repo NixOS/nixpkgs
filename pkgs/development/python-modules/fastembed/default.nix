@@ -53,6 +53,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "fastembed" ];
 
   pythonRelaxDeps = [
+    "huggingface-hub"
     "mmh3"
     "onnxruntime"
     "pillow"

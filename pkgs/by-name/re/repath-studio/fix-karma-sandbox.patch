@@ -1,22 +1,40 @@
 --- a/karma.conf.js
 +++ b/karma.conf.js
-@@ -7,7 +7,7 @@
+@@ -3,19 +3,24 @@ module.exports = function (config) {
+   var junitOutputDir = 'junit'
+ 
+   config.set({
+-    browserDisconnectTimeout: 10000,
++    browserDisconnectTimeout: 300000,
      customLaunchers: {
        ChromeHeadlessNoSandbox: {
          base: 'ChromeHeadless',
--        flags: ['--no-sandbox']
-+        flags: ['--no-sandbox', '--disable-dev-shm-usage']
+         flags: [
+           '--disable-gpu',
+-          '--no-sandbox'
++          '--no-sandbox',
++          '--disable-dev-shm-usage'
+         ]
        },
        CustomElectron: {
          base: 'Electron',
-@@ -42,6 +42,10 @@
+         require: __dirname + '/test/electron/test-main.js',
+-        flags: ['--no-sandbox'],
++        flags: [
++          '--no-sandbox',
++          '--disable-gpu',
++          '--disable-dev-shm-usage'
++        ],
+         browserWindowOptions: {
+           webPreferences: {
+             preload: __dirname + '/resources/preload.js',
+@@ -46,6 +51,9 @@ module.exports = function (config) {
        outputDir: junitOutputDir + '/karma', // results will be saved as outputDir/browserName.xml
        outputFile: undefined, // if included, results will be saved as outputDir/browserName/outputFile
        suite: '' // suite will become the package name attribute in xml testsuite element
 -    }
 +    },
 +
-+    browserDisconnectTimeout: 300000,
 +    browserNoActivityTimeout: 300000,
 +    pingTimeout: 300000
    })

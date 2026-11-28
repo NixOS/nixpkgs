@@ -10,17 +10,19 @@
 }:
 
 buildGoModule (finalAttrs: {
+  __structuredAttrs = true;
+
   pname = "mongodb-atlas-cli";
-  version = "1.59.1";
+  version = "1.60.1";
 
   src = fetchFromGitHub {
     owner = "mongodb";
     repo = "mongodb-atlas-cli";
-    tag = "atlascli/v${finalAttrs.version}";
-    hash = "sha256-q7bXQWkpOLZxDCzYTd71YAvi4F1OrPi0M/Wz0Rr1Uq0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-lZxZODgkjcPrtI0HnO5JDsVPDqSPIsi4oqWXO6jbvyM=";
   };
 
-  vendorHash = "sha256-Vzx0uwKLpn0nXIHDrftNs2hu4FkpjmvdfUHriaShJaQ=";
+  vendorHash = "sha256-Z52ECOdbTmnyvahaAPJundd2eJy6hIfWxaTgfIl9tMc=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -34,16 +36,13 @@ buildGoModule (finalAttrs: {
   subPackages = [ "cmd/atlas" ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    installShellCompletion --cmd atlas \
-      --bash <($out/bin/atlas completion bash) \
-      --fish <($out/bin/atlas completion fish) \
-      --zsh <($out/bin/atlas completion zsh)
+    for shell in bash fish zsh; do
+      installShellCompletion --cmd atlas "--$shell" <("$out/bin/atlas" completion "$shell")
+    done
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      extraArgs = [ "--version-regex=atlascli/v(.+)" ];
-    };
+    updateScript = nix-update-script { };
     tests.version = testers.testVersion {
       package = mongodb-atlas-cli;
       version = "v${finalAttrs.version}";

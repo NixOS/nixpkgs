@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "aeidon";
-  version = "2.0";
+  version = "2.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "otsaloma";
     repo = "gaupol";
     tag = version;
-    hash = "sha256-vMmDG9oQ6u9J4f972EdbsI5Z3faGumlkUzXVmqtd+O4=";
+    hash = "sha256-qGoVCknjz2rLvS7TZrXvbCtYrtmtQA3e2Tnd5Wb9Dh4=";
   };
 
   build-system = [ hatchling ];

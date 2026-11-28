@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "scientific-python";
-    repo = "lazy_loader";
+    repo = "lazy-loader";
     tag = "v${version}";
     hash = "sha256-4Kid6yhm9C2liPoW+NlCsOiBZvv6iYt7hDunARc4PRY=";
   };
@@ -26,8 +26,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "Populate library namespace without incurring immediate import costs";
-    homepage = "https://github.com/scientific-python/lazy_loader";
-    changelog = "https://github.com/scientific-python/lazy_loader/releases/tag/v${version}";
+    homepage = "https://github.com/scientific-python/lazy-loader";
+    changelog = "https://github.com/scientific-python/lazy-loader/releases/tag/v${version}";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };

@@ -1,24 +1,33 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   openssl,
   pkg-config,
+  aws-lc,
+  zstd,
+  sqlite,
   rustPlatform,
   versionCheckHook,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "versatiles";
-  version = "5.1.0";
+  version = "5.7.0";
 
   src = fetchFromGitHub {
     owner = "versatiles-org";
     repo = "versatiles-rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-M7HGsrmE6sg4wTjl97+7lRE8/jf45svfvdSc1WMC1yI=";
+    hash = "sha256-DycA1qDcFvJHgw35NWrS6b/RSToxShf4RjQoF/pv+cQ=";
   };
 
-  cargoHash = "sha256-gwY8cgc+conuYElgSlGj7Rcdi8MBWcVPuzlSOPT5ByI=";
+  cargoHash =
+    if stdenv.hostPlatform.isDarwin then
+      "sha256-NyK2UcROa2GaFLVfZuNkwtjOuiXpjNvmA/7sUidTVAA="
+    else
+      "sha256-rcJIyU9GhUi/T2c6UkwCBurLRFare4miGZAunmBnffQ=";
 
   nativeBuildInputs = [
     pkg-config
@@ -26,6 +35,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     openssl
+    aws-lc
+    zstd
+    sqlite
   ];
 
   # Needed to get openssl-sys to use pkg-config.
@@ -50,6 +62,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=utils::io::data_reader_http::tests::read_range_googleapis"
     "--skip=io::data_reader_http::tests::read_range_git"
     "--skip=io::data_reader_http::tests::read_range_googleapis"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Skip tests that require `sysctl` (unavailable on macOS)
+    "--skip=tools::mosaic_tools::assemble::cli::tests::test_parse_buffer_size"
+    "--skip=tools::mosaic_tools::assemble::cli::tests::test_parse_buffer_size_boundary_percentage"
   ];
 
   nativeInstallCheckInputs = [
@@ -57,6 +74,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
   versionCheckProgramArg = "--version";
   doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Toolbox for converting, checking and serving map tiles in various formats";

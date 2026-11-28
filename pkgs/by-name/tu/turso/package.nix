@@ -4,6 +4,8 @@
   fetchFromGitHub,
   versionCheckHook,
   nix-update-script,
+  pkg-config,
+  zstd,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "turso";
@@ -26,6 +28,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   cargoTestFlags = finalAttrs.cargoBuildFlags;
+
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
+  buildInputs = [
+    zstd
+  ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;

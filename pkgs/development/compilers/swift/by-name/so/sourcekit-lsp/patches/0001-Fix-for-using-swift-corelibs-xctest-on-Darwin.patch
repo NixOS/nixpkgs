@@ -10,10 +10,10 @@ logic as other platforms to define the base class for performance tests.
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/Sources/SKTestSupport/PerfTestCase.swift b/Sources/SKTestSupport/PerfTestCase.swift
-index ba716c49..5b5cfccc 100644
+index ad08c346..256dea1b 100644
 --- a/Sources/SKTestSupport/PerfTestCase.swift
 +++ b/Sources/SKTestSupport/PerfTestCase.swift
-@@ -23,7 +23,7 @@ open class PerfTestCase: XCTestCase {
+@@ -23,7 +23,7 @@ open class PerfTestCase: SourceKitLSPTestCase {
  
    #if !ENABLE_PERF_TESTS
  

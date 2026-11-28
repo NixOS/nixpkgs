@@ -19,14 +19,14 @@
 # wrapped to be able to find aioconsole and any other packages.
 buildPythonPackage (finalAttrs: {
   pname = "aioconsole";
-  version = "0.8.2";
+  version = "0.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "vxgmichel";
     repo = "aioconsole";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-j4nzt8mvn+AYObh1lvgxS8wWK662KN+OxjJ2b5ZNAcQ=";
+    hash = "sha256-p1LGuD73S1oCxRZC7a/MqQCa1LQzu7iEsalRYat+mqQ=";
   };
 
   postPatch = ''

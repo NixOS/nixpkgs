@@ -18,6 +18,6 @@ vscode-utils.buildVscodeMarketplaceExtension {
     homepage = "https://augmentcode.com/";
     license = lib.licenses.unfree;
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
-    maintainers = [ lib.maintainers.matteopacini ];
+    maintainers = [ ];
   };
 }

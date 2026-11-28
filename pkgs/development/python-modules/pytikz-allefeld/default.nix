@@ -31,6 +31,9 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "tikz" ];
 
+  # https://github.com/allefeld/pytikz/issues/12
+  dontCheckPythonMetadata = true;
+
   nativeCheckInputs = [ texliveSmall ];
   checkPhase = ''
     runHook preCheck

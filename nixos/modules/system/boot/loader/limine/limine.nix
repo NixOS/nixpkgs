@@ -254,6 +254,40 @@ in
         };
       };
 
+      signAdditionalFiles = {
+        enable = lib.mkEnableOption null // {
+          default = cfg.secureBoot.enable;
+          defaultText = lib.literalExpression "boot.loader.limine.secureBoot.enable";
+          description = ''
+            Whether to sign the files listed in
+            {option}`boot.loader.limine.additionalFiles` with
+            {command}`sbctl` `sign` while installing the bootloader.
+
+            Files referenced by {option}`boot.loader.limine.extraEntries` are
+            executed by Limine itself and therefore have to be signed for
+            Secure Boot to allow booting them.
+
+            Only PE/COFF images can be signed. Files which are not detected as
+            such, e.g. firmware modules or other data files, are left untouched
+            automatically and do not need to be listed in
+            {option}`boot.loader.limine.secureBoot.signAdditionalFiles.skip`.
+          '';
+        };
+
+        skip = lib.mkOption {
+          default = [ ];
+          example = lib.literalExpression ''[ "efi/memtest86/memtest86.efi" ]'';
+          type = lib.types.listOf lib.types.str;
+          description = ''
+            Destination paths, relative to {file}`/boot`, of files listed in
+            {option}`boot.loader.limine.additionalFiles` which must not be
+            signed, even if they are signable PE/COFF images. This is meant for
+            files which are already signed by their vendor and should keep
+            their original signature.
+          '';
+        };
+      };
+
       sbctl = lib.mkPackageOption pkgs "sbctl" { };
     };
 
@@ -338,6 +372,14 @@ in
         };
       };
       graphicalTerminal = {
+        enable = lib.mkEnableOption null // {
+          default = true;
+          example = false;
+          description = ''
+            Whether to enable the graphical terminal. Set it to false to force text mode.
+          '';
+        };
+
         font = {
           scale = lib.mkOption {
             default = null;
@@ -490,6 +532,15 @@ in
         {
           assertion = !cfg.enableEditor;
           message = "Editor is unconditionally disabled by Limine.";
+        }
+        {
+          assertion = lib.all (
+            path: builtins.hasAttr path cfg.additionalFiles
+          ) cfg.secureBoot.signAdditionalFiles.skip;
+          message = ''
+            Every entry in boot.loader.limine.secureBoot.signAdditionalFiles.skip
+            must be a key of boot.loader.limine.additionalFiles.
+          '';
         }
       ];
 

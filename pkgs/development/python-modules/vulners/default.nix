@@ -24,24 +24,23 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "vulners";
-  version = "4.3.0";
+  version = "4.5.0";
   pyproject = true;
-
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "vulnersCom";
     repo = "api";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SoU1I+3ERHCKrsb4ej+X5JIoaoWtGyJCXw1rnQ6MeNk=";
+    hash = "sha256-QA7kcSytvcifF2Tyor4BfcAPGqizP4Fq0s9XDhzYr8k=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "uv_build>=0.11.29,<0.12" "uv_build"
+      --replace-fail "uv_build>=0.13.1,<0.14" "uv_build"
   '';
 
   pythonRelaxDeps = [
+    "brotli"
     "h2"
     "typing-inspection"
   ];

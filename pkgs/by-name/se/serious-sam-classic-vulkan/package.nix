@@ -1,4 +1,5 @@
 {
+  libx11,
   libxcb,
   serious-sam-classic,
   vulkan-headers,
@@ -12,10 +13,10 @@ serious-sam-classic.overrideAttrs (oldAttrs: {
     hash = "sha256-fnWJOmgaW4/PfrmXiN7qodHEXc96/AZCbUo3dwelY6s=";
   };
 
-  nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [
+  buildInputs = oldAttrs.buildInputs ++ [
     libxcb
     vulkan-headers
+    vulkan-loader
+    libx11.dev
   ];
-
-  buildInputs = oldAttrs.buildInputs ++ [ vulkan-loader ];
 })

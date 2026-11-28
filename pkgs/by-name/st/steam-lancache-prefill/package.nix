@@ -5,18 +5,19 @@
   fetchFromGitHub,
   curl,
   jq,
+  nix-update-script,
   unzip,
 }:
 
 buildDotnetModule (finalAttrs: {
   pname = "steam-lancache-prefill";
-  version = "3.6.1";
+  version = "3.7.2";
 
   src = fetchFromGitHub {
     owner = "tpill90";
     repo = "steam-lancache-prefill";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2U0DIjdihlaqaIuzt0cUk0cc3CWL7ccvWoIdHWN5ilY=";
+    hash = "sha256-469AQCuqjjkWElRPea/78CHi1ZBYF7y7O7QxlJb/I48=";
     fetchSubmodules = true;
   };
 
@@ -39,6 +40,8 @@ buildDotnetModule (finalAttrs: {
   postInstall = ''
     rm -rf $out/lib/steam-lancache-prefill/update.sh
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Automatically fills a Lancache with games from Steam";

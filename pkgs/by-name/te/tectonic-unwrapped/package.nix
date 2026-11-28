@@ -17,6 +17,7 @@
   installShellFiles,
 
   # buildInputs
+  aws-lc,
   fontconfig,
   harfbuzzFull,
   openssl,
@@ -47,6 +48,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildFeatures = [ "external-harfbuzz" ];
 
   buildInputs = [
+    aws-lc
     icu
     fontconfig
     harfbuzzFull

@@ -19,7 +19,7 @@ let
   # All of kiro-cli's user-facing commands run inside one minimal FHS sandbox.
   # The sandbox provides a standard /lib64/ld-linux-x86-64.so.2 plus libgcc_s/
   # libstdc++ (via stdenv.cc.cc.lib), so the generic-glibc `bun` that
-  # kiro-cli-chat extracts at runtime just works — no binary patching of the
+  # kiro-cli extracts at runtime just works — no binary patching of the
   # extracted asset, and no build-time execution of the tool.
   #
   # buildFHSEnv provides a single entry point per environment, so instead of
@@ -56,7 +56,7 @@ let
       mkdir -p $out/libexec/kiro-cli
       mv $out/bin/kiro-cli $out/libexec/kiro-cli/kiro-cli-wrapper
 
-      for command in kiro-cli kiro-cli-chat kiro-cli-term; do
+      for command in kiro-cli; do
         makeWrapper "$out/libexec/kiro-cli/kiro-cli-wrapper" "$out/bin/$command" \
           --add-flags "$command"
       done
@@ -78,7 +78,7 @@ let
     };
   };
 in
-# Darwin ships a normal .app bundle with no embedded-bun problem, so it needs
+# Darwin has no embedded-bun/glibc problem, so it needs
 # no FHS sandbox; hand back the unwrapped derivation under the public name.
 if stdenv.hostPlatform.isLinux then
   fhsenv

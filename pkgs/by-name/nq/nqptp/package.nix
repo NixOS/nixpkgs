@@ -8,14 +8,14 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.2.8";
+  version = "1.2.9";
   pname = "nqptp";
 
   src = fetchFromGitHub {
     owner = "mikebrady";
     repo = "nqptp";
     tag = finalAttrs.version;
-    hash = "sha256-f8k1MKNVMqt8Nym1+CWLC5bAKUkmPaBZYTer+EoPAgk=";
+    hash = "sha256-qqDqUFtqJjODxSX7eEE6DObXIE6X0LjxnneVlg6uJaw=";
   };
 
   nativeBuildInputs = [

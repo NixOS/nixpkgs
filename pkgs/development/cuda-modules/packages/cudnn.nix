@@ -5,7 +5,7 @@
   lib,
   libcublas,
   cuda_nvrtc,
-  patchelf,
+  buildPackages,
   zlib,
 }:
 buildRedist (
@@ -39,8 +39,8 @@ buildRedist (
     # exist in CuDNN 8.
     # NOTE: Versions from CUDNN releases have four components.
     postFixup = lib.optionalString (cudnnAtLeast "8" && cudnnOlder "9") ''
-      ${lib.getExe patchelf} ''${!outputLib:?}/lib/libcudnn.so --add-needed libcudnn_cnn_infer.so
-      ${lib.getExe patchelf} ''${!outputLib:?}/lib/libcudnn_ops_infer.so --add-needed libcublas.so --add-needed libcublasLt.so
+      ${lib.getExe buildPackages.patchelf} ''${!outputLib:?}/lib/libcudnn.so --add-needed libcudnn_cnn_infer.so
+      ${lib.getExe buildPackages.patchelf} ''${!outputLib:?}/lib/libcudnn_ops_infer.so --add-needed libcublas.so --add-needed libcublasLt.so
     '';
 
     # From 9.27.0, libcudnn_engines_runtime_compiled links directly against the driver library, which is provided at
@@ -75,7 +75,7 @@ buildRedist (
     #   to do static linking against some odd combination of CUDA 11 and cuDNN, that's on them.
     #
     #   From 9.23.0, the forward compatibility promise covers only the dynamic build: the static build supports linking
-    #   only against the CUDA release it was built with (12.9 and 13.4.1 for 9.27.0).
+    #   only against the CUDA release it was built with (12.9 and 13.5 for 9.28.1).
     #
     # NOTE:
     #

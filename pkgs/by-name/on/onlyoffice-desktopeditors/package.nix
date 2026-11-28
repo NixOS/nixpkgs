@@ -8,28 +8,16 @@
   extraFontPackages ? [ ],
   # Alphabetic ordering below
   alsa-lib,
-  at-spi2-atk,
-  atk,
   autoPatchelfHook,
-  cairo,
   curl,
-  dbus,
-  dconf,
   dpkg,
-  fontconfig,
   gcc-unwrapped,
-  gdk-pixbuf,
-  glib,
   glibc,
-  gsettings-desktop-schemas,
   gst_all_1,
-  gtk2,
-  gtk3,
   libGL,
   libnotify,
   libpulseaudio,
   libudev0-shim,
-  libdrm,
   makeWrapper,
   libgbm,
   noto-fonts-cjk-sans,
@@ -39,18 +27,7 @@
   qt5,
   wrapGAppsHook3,
   xkeyboard_config,
-  libxtst,
-  libxscrnsaver,
-  libxrender,
-  libxrandr,
-  libxi,
-  libxfixes,
-  libxext,
-  libxdamage,
-  libxcursor,
-  libxcomposite,
   libx11,
-  libxcb,
 }:
 let
 
@@ -95,11 +72,11 @@ let
 
   derivation = stdenv.mkDerivation rec {
     pname = "onlyoffice-desktopeditors";
-    version = "9.4.0";
+    version = "10.0.0";
     minor = null;
     src = fetchurl {
       url = "https://github.com/ONLYOFFICE/DesktopEditors/releases/download/v${version}/onlyoffice-desktopeditors_amd64.deb";
-      hash = "sha256-QnFDToG+QrFVn9mJ0kv21BNILyeNxqXjKCAqT8Ghhkk=";
+      hash = "sha256-IZDttAIqKsL27uD3iBVSDw5Ozh6KEJfGRab5siXItZw=";
     };
 
     nativeBuildInputs = [
@@ -111,41 +88,15 @@ let
 
     buildInputs = [
       alsa-lib
-      at-spi2-atk
-      atk
-      cairo
-      dbus
-      dconf
-      fontconfig
-      gdk-pixbuf
-      glib
-      gsettings-desktop-schemas
       gst_all_1.gst-plugins-base
       gst_all_1.gstreamer
-      gtk2
-      gtk3
       libnotify
       libpulseaudio
-      libdrm
       nspr
       nss
       libgbm
       qt5.qtbase
       qt5.qtdeclarative
-      qt5.qtsvg
-      qt5.qtwayland
-      libx11
-      libxcb
-      libxcomposite
-      libxcursor
-      libxdamage
-      libxext
-      libxfixes
-      libxi
-      libxrandr
-      libxrender
-      libxscrnsaver
-      libxtst
     ];
 
     dontWrapQtApps = true;

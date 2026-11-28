@@ -45,18 +45,19 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   qtWrapperArgs = [
-    "--prefix GST_PLUGIN_PATH : ${
-      (
-        with gst_all_1;
-        lib.makeSearchPathOutput "lib" "lib/gstreamer-1.0" [
-          gst-plugins-bad
-          gst-plugins-good
-          gst-plugins-base
-          gst-libav
-          gstreamer
-        ]
-      )
-    }"
+    "--prefix"
+    "GST_PLUGIN_PATH"
+    ":"
+    (lib.makeSearchPathOutput "lib" "lib/gstreamer-1.0" (
+      with gst_all_1;
+      [
+        gst-plugins-bad
+        gst-plugins-good
+        gst-plugins-base
+        gst-libav
+        gstreamer
+      ]
+    ))
   ];
 
   nativeBuildInputs = [

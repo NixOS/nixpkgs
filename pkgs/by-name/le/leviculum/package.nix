@@ -4,6 +4,7 @@
   fetchFromCodeberg,
   pkg-config,
   udev,
+  sqlite,
   versionCheckHook,
   nix-update-script,
 }:
@@ -29,6 +30,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     udev
+    sqlite
   ];
 
   # Most of the tests are failing, I couldn't figure out how to fix them, so I disable them for now.

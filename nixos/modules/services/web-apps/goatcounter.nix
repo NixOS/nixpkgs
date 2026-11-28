@@ -76,5 +76,5 @@ in
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ bhankas ];
+  meta.maintainers = [ ];
 }

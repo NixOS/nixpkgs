@@ -744,25 +744,6 @@ in
             };
           };
 
-        systemd.timers.netbox-housekeeping = {
-          description = "Run NetBox housekeeping job";
-          documentation = [ "https://netboxlabs.com/docs/netbox/" ];
-
-          wantedBy = [ "multi-user.target" ];
-
-          after = [
-            "network-online.target"
-            "netbox.service"
-          ];
-          wants = [ "network-online.target" ];
-
-          timerConfig = {
-            OnCalendar = "daily";
-            AccuracySec = "1h";
-            Persistent = true;
-          };
-        };
-
         users.users.netbox = {
           home = "${cfg.dataDir}";
           isSystemUser = true;

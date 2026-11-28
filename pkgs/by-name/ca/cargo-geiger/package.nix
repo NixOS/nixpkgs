@@ -11,44 +11,41 @@
   # testing
   testers,
   cargo-geiger,
+  writableTmpDirAsHomeHook,
+  libgit2,
+  sqlite,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-geiger";
-  version = "0.13.0";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "geiger-rs";
     repo = "cargo-geiger";
-    tag = "cargo-geiger-${finalAttrs.version}";
-    hash = "sha256-dZ71WbTKsR6g5UhWuJNfNAAqNNxbTgwL5fsgkm50BaM=";
+    tag = "geiger-${finalAttrs.version}";
+    hash = "sha256-u2WAwGiiZF0qu97QIlsbUO+zFGAjrSQOtMvPsItEpRk=";
   };
 
-  cargoHash = "sha256-GgCmUNOwvyTB82Y/ddgJIAb1SpO4mRPjECqCagJ8GmE=";
+  cargoHash = "sha256-MAa268ey/fufKLzrjW8rJmS6GF4hy5NJVsu3pRAKcac=";
 
-  postPatch = ''
-    # https://github.com/geiger-rs/cargo-geiger/pull/562
-    # Fix unused import warning which is treated as an error
-    substituteInPlace cargo-geiger/tests/integration_tests.rs \
-      --replace-fail "use std::env;" ""
-  '';
-
-  buildInputs = [
-    openssl
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    libiconv
-    curl
-  ];
   nativeBuildInputs = [
     pkg-config
   ]
   # curl-sys wants to run curl-config on darwin
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ curl.dev ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
+  buildInputs = [
+    openssl
+    libgit2
+    sqlite
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+    curl
+  ];
+
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
   # skip tests with networking or other failures
   checkFlags = [
@@ -85,10 +82,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/geiger-rs/cargo-geiger";
     changelog = "https://github.com/geiger-rs/cargo-geiger/blob/cargo-geiger-${finalAttrs.version}/CHANGELOG.md";
     mainProgram = "cargo-geiger";
-    license = with lib.licenses; [
-      asl20 # or
-      mit
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
     maintainers = with lib.maintainers; [
       evanjs
       gepbird

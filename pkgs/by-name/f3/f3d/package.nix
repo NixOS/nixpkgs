@@ -2,19 +2,20 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
-  cmake,
-  help2man,
-  gzip,
-  libxt,
-  openusd,
-  onetbb,
-  vtk,
-  autoPatchelfHook,
-  python3Packages,
-  opencascade-occt,
   assimp,
+  autoPatchelfHook,
+  cmake,
   fontconfig,
+  gzip,
+  help2man,
+  libxcb,
+  libxt,
+  makeWrapper,
+  onetbb,
+  opencascade-occt,
+  openusd,
+  python3Packages,
+  vtk,
   withManual ? !stdenv.hostPlatform.isDarwin,
   withPythonBinding ? false,
   withUsd ? openusd.meta.available,
@@ -22,7 +23,7 @@
 
 stdenv.mkDerivation rec {
   pname = "f3d";
-  version = "3.5.0";
+  version = "4.0.1";
 
   outputs = [ "out" ] ++ lib.optionals withManual [ "man" ];
 
@@ -30,7 +31,7 @@ stdenv.mkDerivation rec {
     owner = "f3d-app";
     repo = "f3d";
     tag = "v${version}";
-    hash = "sha256-j8OSG3MNWAlCIZcjhWCMeskbcv+4pTn4ktRZXKYmBkc=";
+    hash = "sha256-W1AMS4B+If9Q8qJf5UHPJy8lrrxkHzgLKp2j51Xct+E=";
     fetchLFS = true;
   };
 
@@ -39,19 +40,21 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals withManual [
     # manpage
-    help2man
     gzip
+    help2man
   ]
   ++ lib.optionals stdenv.hostPlatform.isElf [
     # https://github.com/f3d-app/f3d/pull/1217
     autoPatchelfHook
-  ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ makeWrapper ];
 
   buildInputs = [
-    vtk
-    opencascade-occt
     assimp
     fontconfig
+    libxcb
+    opencascade-occt
+    vtk
   ]
   ++ lib.optionals withPythonBinding [
     python3Packages.python
@@ -60,8 +63,8 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals withUsd [
     libxt
-    openusd
     onetbb
+    openusd
   ];
 
   cmakeFlags = [
@@ -84,13 +87,17 @@ stdenv.mkDerivation rec {
     "-DF3D_PLUGIN_BUILD_USD=ON"
   ];
 
-  postInstall = ''
-    for thumbnailer in $out/share/thumbnailers/f3d-plugin-*.thumbnailer; do
-      substituteInPlace $thumbnailer \
+  postInstall =
+    lib.optionalString stdenv.hostPlatform.isDarwin ''
+      mkdir -p $out/Applications $out/bin
+      mv $out/f3d.app $out/Applications/
+      makeWrapper $out/Applications/f3d.app/Contents/MacOS/f3d $out/bin/f3d
+    ''
+    + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+      substituteInPlace $out/share/thumbnailers/f3d-plugin-*.thumbnailer \
         --replace-fail "TryExec=f3d" "TryExec=$out/bin/f3d" \
         --replace-fail "Exec=f3d" "Exec=$out/bin/f3d"
-    done
-  '';
+    '';
 
   meta = {
     description = "Fast and minimalist 3D viewer using VTK";

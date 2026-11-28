@@ -13,6 +13,7 @@
   config = lib.mkIf config.services.ipp-usb.enable {
     systemd.services.ipp-usb = {
       description = "Daemon for IPP over USB printer support";
+      partOf = [ "cups.service" ];
       after = [
         "cups.service"
         "avahi-daemon.service"
@@ -61,9 +62,10 @@
     services.udev.packages = [ pkgs.ipp-usb ];
     services.avahi = {
       enable = true;
-      publish = {
-        enable = true;
-        userServices = true;
+      settings.publish = {
+        disable-publishing = false;
+        disable-user-service-publishing = false;
+        publish-addresses = true;
       };
     };
     # enable printing and scanning by default, but not required.

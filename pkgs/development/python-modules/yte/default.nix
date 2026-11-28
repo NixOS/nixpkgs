@@ -16,7 +16,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "koesterlab";
+    owner = "yte-template-engine";
     repo = "yte";
     tag = "v${version}";
     hash = "sha256-TpY13HYBZ4qL2W6sPdoM+bpHcEOi0rwubCbFa4zm2I0=";
@@ -44,7 +44,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "YAML template engine with Python expressions";
-    homepage = "https://github.com/koesterlab/yte";
+    homepage = "https://github.com/yte-template-engine/yte";
     changelog = "https://github.com/yte-template-engine/yte/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];

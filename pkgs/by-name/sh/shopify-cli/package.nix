@@ -6,7 +6,7 @@
   pnpmConfigHook,
   pnpm_10,
   faketty,
-  nodejs-slim_22,
+  nodejs-slim_26,
   versionCheckHook,
   makeBinaryWrapper,
   nix-update-script,
@@ -14,25 +14,25 @@
 let
   pnpm = pnpm_10;
 
-  nodejs-slim = nodejs-slim_22;
+  nodejs-slim = nodejs-slim_26;
   pnpm' = pnpm.override { inherit nodejs-slim; };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "shopify";
-  version = "4.8.3";
+  version = "5.0.1";
 
   src = fetchFromGitHub {
     owner = "shopify";
     repo = "cli";
     tag = finalAttrs.version;
-    hash = "sha256-y3HAuoXHmC9tX+PK7JMS0c4PpwhRVvxFnTIgobInTfE=";
+    hash = "sha256-Rsj/Dd9ybvOG6KyfhRVt+5VxLhg6SDZTeJHRC5nvPV4=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
     fetcherVersion = 3;
-    hash = "sha256-YGC4oHoWhmQ9snEGV7pjjLm3aICpx1+NBBNRevNQry8=";
+    hash = "sha256-F1xFVJtJM+UltOJO/6GT2bn4DUquEBTyjMc3flkxgc8=";
   };
 
   nativeBuildInputs = [

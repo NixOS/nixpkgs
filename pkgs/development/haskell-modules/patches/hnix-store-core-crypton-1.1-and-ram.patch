@@ -1,0 +1,18 @@
+crypton >= 1.1 uses ram, not memory. Both expose Data.ByteArray, so keeping
+memory yields a ByteArrayAccess class distinct from the one Ed25519.Signature
+has an instance for.
+
+---
+
+diff --git a/hnix-store-core.cabal b/hnix-store-core.cabal
+--- a/hnix-store-core.cabal
++++ b/hnix-store-core.cabal
+@@ -87,7 +87,7 @@
+     , filepath
+     , hashable
+     -- Required for crypton low-level type convertion
+-    , memory
++    , ram                   >= 0.20.1 && < 0.23
+     , nix-derivation >= 1.1.1 && <2
+     , some > 1.0.5 && < 2
+     , time

@@ -13,13 +13,13 @@ stdenv.mkDerivation {
     hash = "sha256-r4FlMbfsGH50V502EfqzRwAqVv4vpdyH3zFlZW2kCBQ=";
   };
 
-  preBuild = ''
-    makeFlagsArray+=(
-      CC="${stdenv.cc.targetPrefix}cc"
-      LINK="${stdenv.cc.targetPrefix}cc"
-      CFLAGS="-O2 -Wno-implicit-function-declaration"
-    )
-  '';
+  strictDeps = true;
+
+  makeFlags = [
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "LINK=${stdenv.cc.targetPrefix}cc"
+    "CFLAGS=-O2 -Wno-implicit-function-declaration"
+  ];
 
   hardeningDisable = [ "format" ];
 
@@ -30,6 +30,8 @@ stdenv.mkDerivation {
     mv *.a *.m $out/share/dlx/examples/
     mv README.txt MANUAL.TXT $out/share/dlx/doc/
   '';
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://www.davidviner.com/dlx.html?name=DLX+Simulator";

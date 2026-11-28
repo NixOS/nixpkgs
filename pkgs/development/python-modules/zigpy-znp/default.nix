@@ -27,6 +27,11 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-+rTos8iSyS1b6iAHYbEbStwNH00XQP7SdCwAQBVNnYM=";
   };
 
+  patches = [
+    # https://github.com/zigpy/zigpy-znp/pull/291
+    ./zigpy-2.4.1.patch
+  ];
+
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail "timeout = 20" "timeout = 300" \
@@ -53,12 +58,6 @@ buildPythonPackage (finalAttrs: {
   ];
 
   pytestFlags = [ "--reruns=3" ];
-
-  disabledTests = [
-    # broken by https://github.com/zigpy/zigpy/pull/1635
-    "test_concurrency_auto_config"
-    "test_request_concurrency"
-  ];
 
   pythonImportsCheck = [ "zigpy_znp" ];
 

@@ -9,7 +9,7 @@
   libpng,
   libjpeg,
   curl,
-  SDL2,
+  sdl3,
   openal-soft,
   libGL,
   fmt,
@@ -32,7 +32,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "q2repro";
-  version = "0-unstable-2026-09-27";
+  version = "0-unstable-2026-11-18";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -40,14 +40,14 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Paril";
     repo = "q2repro";
-    rev = "e6b9273672a1d6ea65038ce9033979b25f1b94be";
+    rev = "d9b759715e798cdba37200998607152480231850";
     fetchSubmodules = true;
-    hash = "sha256-PeA2EuA7XBH9fhorkPtMD6UvHgajYwMtf8MRBXnCr28=";
+    hash = "sha256-mE1N25XITm/N6d8nAaaIJ0ZaOeqFZjmaVR6df9GtzLI=";
   };
 
   # build date and rev number is displayed in the game's console
-  revCount = "4613"; # git rev-list --count ${src.rev}
-  env.SOURCE_DATE_EPOCH = "1790475158"; # git show -s --format=%ct ${src.rev}
+  revCount = "4627"; # git rev-list --count ${src.rev}
+  env.SOURCE_DATE_EPOCH = "1795036704"; # git show -s --format=%ct ${src.rev}
 
   nativeBuildInputs = [
     meson
@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     libpng
     libjpeg
     curl
-    SDL2
+    sdl3
     libGL
     ffmpeg
     openal-soft
@@ -160,7 +160,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Fork of Q2PRO designed to be a drop-in replacement of the Kex Quake II re-release engine";
     homepage = "https://github.com/Paril/q2repro";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ carlossless ];
+    maintainers = with lib.maintainers; [ karstx ];
     platforms = lib.platforms.unix;
     mainProgram = "q2repro";
   };

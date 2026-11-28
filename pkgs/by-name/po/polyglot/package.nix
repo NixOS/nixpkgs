@@ -33,8 +33,8 @@ maven.buildMavenPackage rec {
 
   mvnHash =
     {
-      aarch64-linux = "sha256-o5dFk1pghCOaaxAto7e5kXn2mrVEGAtb9kTwQQN2N8o=";
-      x86_64-linux = "sha256-KYgeVBhqBjP6dqwpSzoqH8dfsL4WpJcSiHEMfgk0CNE=";
+      aarch64-linux = "sha256-dqPZ8rl8pThORywkOS8iWyPJJgwT7RdKcxeQEg94xk8=";
+      x86_64-linux = "sha256-gIN2NqyttMlkJnTyxnVjwza0injEhWA9HtvkMBhlESI=";
     }
     .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   mvnFetchExtraArgs.env = {

@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "guile-hoot";
-  version = "0.9.0";
+  version = "0.10.0";
 
   src = fetchFromCodeberg {
     owner = "spritely";
     repo = "hoot";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZzWGdLKiJF9lBKrlX7jCKnPlmWRi1dDB4zrfkIOMpQU=";
+    hash = "sha256-pTf1CzGAPSOrMKIaDcEHaJb7SDw/HNYODgkl/ULDuxM=";
   };
 
   nativeBuildInputs = [

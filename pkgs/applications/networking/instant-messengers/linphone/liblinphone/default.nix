@@ -3,6 +3,7 @@
   bc-soci,
   belcard,
   belle-sip,
+  cacert,
   doxygen,
   jsoncpp,
   libxml2,
@@ -73,6 +74,8 @@ mkLinphoneDerivation {
   postInstall = ''
     mkdir -p $out/share/belr/grammars
     ln -s ${belcard}/share/belr/grammars/* $out/share/belr/grammars/
+    rm $out/share/linphone/rootca.pem
+    ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $out/share/linphone/rootca.pem
   '';
 
   meta = {

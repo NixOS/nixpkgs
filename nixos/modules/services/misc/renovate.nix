@@ -24,12 +24,13 @@ let
             jq
             cfg.package
           ];
+          strictDeps = true;
           value = builtins.toJSON value;
-          passAsFile = [ "value" ];
           preferLocalBuild = true;
+          __structuredAttrs = true;
         }
         ''
-          jq . "$valuePath"> $out
+          printf "%s" "$value" | jq . > $out
           renovate-config-validator $out
         ''
     ) { };

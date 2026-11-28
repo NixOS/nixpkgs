@@ -122,3 +122,20 @@ pnpmConfigHook() {
 if [ -z "${dontPnpmConfigure-}" ]; then
   postConfigureHooks+=(pnpmConfigHook)
 fi
+
+# Does not replace deleting .modules.yaml before a later pnpm command.
+pnpmStripInstallState() {
+    local output prefixes=()
+    for output in $(getAllOutputNames); do
+        [ ! -e "${!output}" ] && continue
+        prefixes+=("${!output}")
+    done
+    # Impure files; see doc/languages-frameworks/javascript.section.md.
+    find "${prefixes[@]}" \
+        \( -name .modules.yaml -o -name .pnpm-workspace-state-v1.json \) \
+        -delete
+}
+
+if [ -z "${dontPnpmConfigure-}" ] && [ -z "${dontPnpmStripInstallState-}" ]; then
+  postFixupHooks+=(pnpmStripInstallState)
+fi

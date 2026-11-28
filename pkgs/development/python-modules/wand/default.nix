@@ -8,16 +8,16 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "wand";
-  version = "0.7.2";
+  version = "0.7.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "emcconville";
     repo = "wand";
-    tag = version;
-    hash = "sha256-1ZkvJxlv47rQ2BOBnEWPczcjIM2muywemrxwY2ZN2UA=";
+    tag = finalAttrs.version;
+    hash = "sha256-Ckoa1d9Nh5tSQVmrcCkI/Xn/dEYaj/6gyMPnmO/Joao=";
   };
 
   postPatch = ''
@@ -40,10 +40,10 @@ buildPythonPackage rec {
   passthru.imagemagick = imagemagickBig;
 
   meta = {
-    changelog = "https://docs.wand-py.org/en/${version}/changes.html";
+    changelog = "https://docs.wand-py.org/en/${finalAttrs.version}/changes.html";
     description = "Ctypes-based simple MagickWand API binding for Python";
     homepage = "http://wand-py.org/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

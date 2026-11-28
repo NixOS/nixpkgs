@@ -42,7 +42,7 @@ buildPythonPackage (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "dbt-labs";
-    repo = "dbt-core";
+    repo = "dbt";
     tag = "v${finalAttrs.version}";
     hash = "sha256-+7q332Te3R6g8HvT1Gwa7vHo8OBmT0/E/CzunBYIvZk=";
   };
@@ -120,8 +120,8 @@ buildPythonPackage (finalAttrs: {
           adapters.dbt-postgres
         ])
     '';
-    homepage = "https://github.com/dbt-labs/dbt-core";
-    changelog = "https://github.com/dbt-labs/dbt-core/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    homepage = "https://github.com/dbt-labs/dbt";
+    changelog = "https://github.com/dbt-labs/dbt/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       mausch

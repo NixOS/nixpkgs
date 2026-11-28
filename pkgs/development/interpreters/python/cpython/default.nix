@@ -30,6 +30,7 @@
   withSqlite ? !withMinimalDeps,
   sqlite,
   xz,
+  withZlib ? !withMinimalDeps,
   zlib,
   withZstd ? !withMinimalDeps,
   zstd,
@@ -217,6 +218,7 @@ let
       executable = "python${pythonVersion}${abiFlags}";
       sitePackages = "lib/${libPrefix}/site-packages";
       inherit hasDistutilsCxxPatch pythonAttr;
+      isFreeThreaded = !enableGIL;
       inherit (splices)
         pythonOnBuildForBuild
         pythonOnBuildForHost
@@ -274,7 +276,6 @@ let
       libuuid
       ncurses
       xz
-      zlib
     ]
     ++ optionals withLibxcrypt [
       libxcrypt
@@ -290,6 +291,9 @@ let
     ]
     ++ optionals withExpat [
       expat
+    ]
+    ++ optionals withZlib [
+      zlib
     ]
     ++ optionals (withZstd && passthru.pythonAtLeast "3.14") [
       zstd
@@ -395,9 +399,12 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals (pythonAtLeast "3.13") [
     ./3.13/virtualenv-permissions.patch
   ]
-  ++ optionals mimetypesSupport [
+  ++ optionals (mimetypesSupport && pythonAtLeast "3.16") [
     # Make the mimetypes module refer to the right file
     ./mimetypes.patch
+  ]
+  ++ optionals (mimetypesSupport && pythonOlder "3.16") [
+    ./3.14/mimetypes.patch
   ]
   ++ optionals (hasDistutilsCxxPatch && pythonOlder "3.12") [
     # Fix for http://bugs.python.org/issue1222585

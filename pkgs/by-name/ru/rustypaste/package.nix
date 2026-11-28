@@ -2,20 +2,26 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  pkg-config,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rustypaste";
-  version = "0.18.1";
+  version = "0.18.2";
 
   src = fetchFromGitHub {
     owner = "orhun";
     repo = "rustypaste";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-K8hFpIPk53N4yrA7Q5HvRmEtUw03Z7syhtmJ17epaQM=";
+    hash = "sha256-0rS7JGJeyC6smmR4BHHx/s0Pl8YY3vJy10X+0MYPdV8=";
   };
 
-  cargoHash = "sha256-PsjQ6or7ID74U60E56g+wOLWy04e28lXiS1Q/mbaSZM=";
+  cargoHash = "sha256-8o6SsGyi0O15lGOaBHe8ggdJnRAKJNLmc4as2R57FaQ=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ zstd ];
 
   dontUseCargoParallelTests = true;
 

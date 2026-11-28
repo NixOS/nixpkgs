@@ -10,7 +10,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "1.2.27";
 
   src = fetchFromGitHub {
-    owner = "lvillis";
+    owner = "oksyd";
     repo = "tcping-rs";
     tag = finalAttrs.version;
     hash = "sha256-7VbuSGT1EGHvKoccLfd8Y5TBaPIMKzZ9eaCVrZPNz34=";
@@ -27,8 +27,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "TCP Ping (tcping) Utility for Port Reachability";
-    homepage = "https://github.com/lvillis/tcping-rs";
-    changelog = "https://github.com/lvillis/tcping-rs/releases/tag/${finalAttrs.src.tag}";
+    homepage = "https://github.com/oksyd/tcping-rs";
+    changelog = "https://github.com/oksyd/tcping-rs/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     mainProgram = "tcping";
     maintainers = with lib.maintainers; [ heitorPB ];

@@ -6,13 +6,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "bazel-remote";
-  version = "2.6.3";
+  version = "2.6.4";
 
   src = fetchFromGitHub {
     owner = "buchgr";
     repo = "bazel-remote";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-mlPxPtIhRQb59gb7M5F1p9Qkx1sNvuykNMXCCQeN65U=";
+    hash = "sha256-NOdYWrQgJeen8Vi7LPAga49rFyY4nNTwIQg8K/PLmrE=";
   };
 
   vendorHash = "sha256-PDDD46nYNMv8+sam/jOTHTHDjjrR0z2ckiXKlmoQpSU=";

@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aio-pika";
-  version = "10.0.1";
+  version = "10.2.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mosquito";
     repo = "aio-pika";
     tag = finalAttrs.version;
-    hash = "sha256-IVFZyYogfwEGyu4oysh5XGxVBEzoMT4lKoJKtphm3kE=";
+    hash = "sha256-UGYyx6Uu1eLBWEIAzwsS3DvPpcJ5DHWaHKlNpr+qq+Q=";
   };
 
   postPatch = ''

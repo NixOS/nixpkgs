@@ -2,7 +2,8 @@
   bcunit,
   bc-decaf,
   mkLinphoneDerivation,
-  bc-mbedtls,
+  openssl,
+  stdenv,
   lib,
 
   # tests
@@ -14,14 +15,14 @@ mkLinphoneDerivation (finalAttrs: {
   propagatedBuildInputs = [
     bcunit
     bc-decaf
-    bc-mbedtls
+    openssl
   ];
 
   cmakeFlags = [
     "-DENABLE_STRICT=NO"
 
-    "-DENABLE_MBEDTLS=YES"
-    "-DENABLE_OPENSSL=NO"
+    "-DENABLE_MBEDTLS=NO"
+    "-DENABLE_OPENSSL=YES"
   ];
 
   strictDeps = true;
@@ -33,11 +34,20 @@ mkLinphoneDerivation (finalAttrs: {
         "BCToolbox"
       ];
     };
+
+    crypto = testers.runCommand {
+      name = "${finalAttrs.pname}-crypto-test";
+      nativeBuildInputs = [ finalAttrs.finalPackage ];
+      script = ''
+        bctoolbox-tester --suite Crypto --suite 'Encrypted vfs'
+        touch $out
+      '';
+    };
   };
 
   meta = {
     description = "Utilities library for Linphone";
-    mainProgram = "bctoolbox_tester";
+    mainProgram = "bctoolbox-tester";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [

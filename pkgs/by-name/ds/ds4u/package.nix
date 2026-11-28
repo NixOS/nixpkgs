@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   fetchFromGitea,
   rustPlatform,
   pkg-config,
@@ -22,7 +23,7 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ds4u";
-  version = "0.1.1";
+  version = "0.1.4";
   __structuredAttrs = true;
 
   src = fetchFromGitea {
@@ -30,10 +31,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "deadYokai";
     repo = "ds4u";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-q8NbpFbrYMtE56CnnjScbMewHCTxaxMih8/I9dspb+o=";
+    hash = "sha256-UzRhZarFNLQpRZOHpoqqwaoLCcCC25jYtCi0A+47Hec=";
   };
 
-  cargoHash = "sha256-KjNHX3S+XFUsngX8Od3HtI0IvpAyMp5TB6TVkCkl8Gc=";
+  cargoHash = "sha256-ebkf1LLI/3Dzq1hV6CQ/VFbdkX1zJt4KyKDS2oOYUmk=";
 
   nativeBuildInputs = [
     pkg-config
@@ -52,6 +53,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     openssl
     systemd
     hidapi
+    # libgcc_s.so.1
+    (lib.getLib stdenv.cc.cc)
   ];
 
   # autoPatchelfHook doesnt find these automatically using dlopen

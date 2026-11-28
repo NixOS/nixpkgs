@@ -1,6 +1,7 @@
 {
-  cmake,
+  aws-lc,
   lib,
+  pkg-config,
   rustPlatform,
   fetchFromGitHub,
   nix-update-script,
@@ -21,9 +22,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-kuoYEGn419LtJRGoWzlvgclkjW0zh94XX6OvCsa5Hfc=";
 
   nativeBuildInputs = [
-    cmake
-    rustPlatform.bindgenHook
+    pkg-config
   ];
+
+  buildInputs = [ aws-lc ];
 
   env.RUSTC_BOOTSTRAP = 1;
 

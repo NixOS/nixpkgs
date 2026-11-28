@@ -40,8 +40,8 @@ self: super:
 
     # gtk/gtk3 needs to be told on Darwin to use the Quartz
     # rather than X11 backend (see eg https://github.com/gtk2hs/gtk2hs/issues/249).
-    gtk3 = appendConfigureFlag "-f have-quartz-gtk" super.gtk3;
-    gtk = appendConfigureFlag "-f have-quartz-gtk" super.gtk;
+    gtk3 = enableCabalFlag "have-quartz-gtk" super.gtk3;
+    gtk = enableCabalFlag "have-quartz-gtk" super.gtk;
 
     # issues finding libcharset.h without libiconv in buildInputs on darwin.
     with-utf8 = addExtraLibrary pkgs.libiconv super.with-utf8;
@@ -125,16 +125,6 @@ self: super:
     hidapi = super.hidapi.override { systemd = null; };
 
     # Ensure the necessary frameworks are propagatedBuildInputs on darwin
-    OpenGLRaw = overrideCabal (drv: {
-      librarySystemDepends = [ ];
-      libraryHaskellDepends = drv.libraryHaskellDepends;
-      preConfigure = ''
-        frameworkPaths=($(for i in $nativeBuildInputs; do if [ -d "$i"/Library/Frameworks ]; then echo "-F$i/Library/Frameworks"; fi done))
-        frameworkPaths=$(IFS=, ; echo "''${frameworkPaths[@]}")
-        configureFlags+=$(if [ -n "$frameworkPaths" ]; then echo -n "--ghc-options=-optl=$frameworkPaths"; fi)
-      ''
-      + (drv.preConfigure or "");
-    }) super.OpenGLRaw;
     bindings-GLFW = overrideCabal (drv: {
       librarySystemDepends = [ ];
     }) super.bindings-GLFW;
@@ -465,24 +455,5 @@ self: super:
     rivet-adaptor-postgresql = dontCheck super.rivet-adaptor-postgresql;
     tmp-proc-postgres = dontCheck super.tmp-proc-postgres;
 
-  }
-  // lib.optionalAttrs pkgs.stdenv.hostPlatform.isx86_64 {
-    # x86_64-darwin
-
-    # tests appear to be failing to link or something:
-    # https://hydra.nixos.org/build/174540882/nixlog/9
-    regex-rure = dontCheck super.regex-rure;
-    # same
-    # https://hydra.nixos.org/build/174540882/nixlog/9
-    jacinda = dontCheck super.jacinda;
-
-    # Greater floating point error on x86_64-darwin (!) for some reason
-    # https://github.com/ekmett/ad/issues/113
-    ad = overrideCabal (drv: {
-      testFlags = drv.testFlags or [ ] ++ [
-        "-p"
-        "!/issue-108/"
-      ];
-    }) super.ad;
   }
 )

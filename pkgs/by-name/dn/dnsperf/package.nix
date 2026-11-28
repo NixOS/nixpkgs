@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Tools for DNS benchmaring";
     homepage = "https://www.dns-oarc.net/tools/dnsperf";
     changelog = "https://github.com/DNS-OARC/dnsperf/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.isc;
+    license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
     mainProgram = "dnsperf";
     maintainers = with lib.maintainers; [

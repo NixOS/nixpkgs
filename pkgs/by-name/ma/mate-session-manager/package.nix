@@ -1,9 +1,13 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
+  autoconf-archive,
+  autoreconfHook,
   pkg-config,
   gettext,
+  docbook-xsl-nons,
+  libxslt,
   xtrans,
   dbus-glib,
   systemdLibs,
@@ -14,6 +18,7 @@
   libepoxy,
   polkit,
   hicolor-icon-theme,
+  mate-common,
   mate-desktop,
   mate-screensaver,
   wrapGAppsHook3,
@@ -23,11 +28,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mate-session-manager";
-  version = "1.28.0";
+  version = "1.28.2";
 
-  src = fetchurl {
-    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor finalAttrs.version}/mate-session-manager-${finalAttrs.version}.tar.xz";
-    sha256 = "0yzkWVuh2mUpB3cgPyvIK9lzshSjoECAoe9caJkKLXs=";
+  src = fetchFromGitHub {
+    owner = "mate-desktop";
+    repo = "mate-session-manager";
+    tag = "v${finalAttrs.version}";
+    fetchSubmodules = true;
+    hash = "sha256-KoZ6HGw37JQ++QsFSJfYm5IwcYd5egUjKNGNpqX7N+4=";
   };
 
   patches = [
@@ -39,9 +47,14 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
+    autoconf-archive
+    autoreconfHook
     pkg-config
     gettext
+    docbook-xsl-nons
+    libxslt # xsltproc
     xtrans
+    mate-common # mate-common.m4 macros
     wrapGAppsHook3
   ];
 
@@ -70,7 +83,6 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.providedSessions = [ "mate" ];
 
   passthru.updateScript = gitUpdater {
-    url = "https://git.mate-desktop.org/mate-session-manager";
     odd-unstable = true;
     rev-prefix = "v";
   };

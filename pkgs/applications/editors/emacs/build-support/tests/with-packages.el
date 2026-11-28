@@ -276,15 +276,16 @@ This is a regression test for URL `https://github.com/NixOS/nixpkgs/pull/538964'
                    (file-exists-p (file-name-parent-directory eln-dir)))))))
 
 (defun with-packages-fonts-of-requested-packages-are-available ()
-  (let ((font "Hack"))
-    (append
-     (let ((graphical-frame (make-frame-on-display (getenv "DISPLAY"))))
-       (unwind-protect
-           (list (display-graphic-p graphical-frame)
-                 (member font (font-family-list graphical-frame)))
-         (delete-frame graphical-frame)))
-     ;; Subprocess does not see wrapper-added fonts.
-     (list (equal 1 (call-process "fc-list" nil nil nil "--quiet" font))))))
+  (cl-loop
+   for font in '("Hack"                 ; Directly added by the wrapper.
+                 "all-the-icons")       ; Indirectly added by the wrapper.
+   append (let ((graphical-frame (make-frame-on-display (getenv "DISPLAY"))))
+            (unwind-protect
+                (list (display-graphic-p graphical-frame)
+                      (member font (font-family-list graphical-frame)))
+              (delete-frame graphical-frame)))
+   ;; Subprocess does not see wrapper-added fonts.
+   collect (equal 1 (call-process "fc-list" nil nil nil "--quiet" font))))
 
 (define-with-packages-non-batch-ert-tests
   with-packages-early-default-is-loaded

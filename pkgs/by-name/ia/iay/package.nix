@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   rustPlatform,
+  libgit2,
   openssl,
   pkg-config,
   gitMinimal,
@@ -24,6 +25,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
+    libgit2
     openssl
   ];
 

@@ -1,12 +1,11 @@
 {
   swig,
-  pcre,
   fetchFromGitHub,
 }:
 
 ## for updating to SWIG 4, see
 ## https://github.com/GeraldWodni/swig/pull/6
-(swig.overrideAttrs (old: {
+swig.overrideAttrs (old: {
   version = "3.0.9-forth";
 
   src = fetchFromGitHub {
@@ -16,8 +15,9 @@
     sha256 = "sha256-ell63rIfnmFsUhyQl7OzP3kiVYUfPCDhrTFaw2KIEPQ=";
   };
 
-  configureFlags = old.configureFlags ++ [ "--with-forth=yes" ];
-
-  env.PCRE_CONFIG = "${pcre.dev}/bin/pcre-config";
-})).override
-  { pcre2 = pcre; }
+  configureFlags = old.configureFlags ++ [
+    "--with-forth=yes"
+    # SWIG 3 needs the removed pcre (not pcre2); it is only used for regex %rename, which gforth doesn't use
+    "--without-pcre"
+  ];
+})

@@ -105,12 +105,6 @@ buildRedist (
       ]
       ++ optionals (tensorrtAtLeast "10.13.3") [
         "libcuda.so.1"
-      ]
-      # Some linux-sbsa releases of TensorRT 11 (e.g., 11.3.0, but not 11.1.0) ship libnvdla_compiler.so, which links
-      # against the L4T driver library libnvos.so. No other library in the release has a DT_NEEDED on it, and TensorRT
-      # 10.7 was the last release to support DLA.
-      ++ optionals (hostRedistSystem == "linux-sbsa" && tensorrtAtLeast "11.0.0") [
-        "libnvos.so"
       ];
 
     # Create a symlink for the Onnx header files in include/onnx
@@ -171,7 +165,7 @@ buildRedist (
       mv --verbose "''${!outputDev:?}/cmake" "''${!outputDev:?}/lib/cmake/TensorRT-Enterprise"
 
       nixLog "patching CMake package configuration files to use absolute paths to outputs"
-      for cmakeFile in "''${!outputDev:?}"/lib/cmake/TensorRT-Enterprise/TensorRT-EnterpriseTargets*.cmake; do
+      for cmakeFile in "''${!outputDev:?}"/lib/cmake/TensorRT-Enterprise/TensorRT-Enterprise*Targets*.cmake; do
         substituteInPlace "$cmakeFile" \
           --replace-quiet '${"$"}{_IMPORT_PREFIX}/bin' "''${!outputBin:?}/bin" \
           --replace-quiet '${"$"}{_IMPORT_PREFIX}/include' "''${!outputInclude:?}/include" \
@@ -183,16 +177,21 @@ buildRedist (
       done
       unset -v cmakeFile
     ''
-    # We remove the Windows libraries in postInstall; drop the checks CMake performs to ensure they exist.
-    + optionalString (tensorrtAtLeast "11.2.1") ''
+    # In 11.5, the Windows libraries have their own optional component. Remove its targets along with the libraries.
+    + optionalString (tensorrtAtLeast "11.5") ''
+      nixLog "removing CMake targets for Windows libraries"
+      rm --force --verbose "''${!outputDev:?}"/lib/cmake/TensorRT-Enterprise/TensorRT-Enterprise-WinBuilderResourceTargets*.cmake
+    ''
+    # Earlier versions put the Windows libraries in the main export. Drop its checks for the removed files.
+    + optionalString (tensorrtAtLeast "11.2.1" && tensorrtOlder "11.5") ''
       nixLog "removing CMake import checks for Windows libraries"
       sed -i '/_cmake_import_check_.*TRT::[A-Za-z_]*_win_/d' \
         "''${!outputDev:?}"/lib/cmake/TensorRT-Enterprise/TensorRT-EnterpriseTargets-*.cmake
     '';
 
     # NOTE: Like cuDNN, NVIDIA offers forward compatibility within a major releases of CUDA.
-    # NOTE: The support matrix lists only CUDA 13.4 for the linux-sbsa release of 11.3.0 (built with CUDA 13.4), while
-    # stating that it is compatible with CUDA 13.x; we have tested it with CUDA 13.0 and 13.4.
+    # TensorRT 11.4.1 supports Jetson Orin and Thor with JetPack 7.2.2 or newer, using the Linux SBSA CUDA 13.4 build.
+    # https://docs.nvidia.com/deeplearning/tensorrt/latest/getting-started/release-notes-11/11.4.1.html
     # NOTE: The support matrix lists only CUDA 13.2 Update 1 for the linux-sbsa and JetPack release of 10.16.1, which
     # supports Jetson Orin (8.7) and Thor (11.0).
     # NOTE: The support matrix lists CUDA 13.3 for the linux-sbsa release of 11.1.0 (built with CUDA 13.3) and CUDA 13.2
@@ -226,10 +225,10 @@ buildRedist (
         assertion = tensorrtAtLeast105 -> allCCNewerThan75;
       }
       {
-        message =
-          "tensorrt releases since 11.2.1 (found ${finalAttrs.version})"
-          + " do not support Jetson devices (found ${cudaCapabilitiesJSON})";
-        assertion = tensorrtAtLeast "11.2.1" -> !hasJetsonCudaCapability;
+        message = "TensorRT ${finalAttrs.version} does not support Jetson devices (found ${cudaCapabilitiesJSON})";
+        assertion =
+          tensorrtAtLeast "11.2.1" && _cuda.lib.majorMinorPatch finalAttrs.version != "11.4.1"
+          -> !hasJetsonCudaCapability;
       }
     ];
 

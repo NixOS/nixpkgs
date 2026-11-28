@@ -11,6 +11,7 @@
   net-tools,
   openssh,
   procps,
+  sshpass,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -52,6 +53,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
             coreutils
             openssh
             procps
+            sshpass
           ]
           ++ lib.optionals stdenv.hostPlatform.isLinux [
             iptables

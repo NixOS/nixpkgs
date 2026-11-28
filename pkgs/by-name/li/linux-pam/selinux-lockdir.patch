@@ -1,0 +1,22 @@
+--- a/modules/module-meson.build
++++ b/modules/module-meson.build
+@@ -73,7 +73,7 @@
+     subdir_done()
+   endif
+   pam_module_deps += [libselinux]
+-  sepermit_lockdir = localstatedir / 'run' / 'sepermit'
++  sepermit_lockdir = '/run/sepermit'
+   pam_module_c_args += ['-DSEPERMIT_LOCKDIR="@0@"'.format(sepermit_lockdir)]
+ endif
+ if module == 'pam_setquota'
+@@ -397,10 +397,6 @@
+     install_dir: vendor_sconfigdir,
+     install_tag: 'config',
+   )
+-  install_emptydir(
+-    sepermit_lockdir,
+-    install_tag: 'config',
+-  )
+ endif
+ if module == 'pam_time'
+   install_data(

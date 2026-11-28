@@ -277,6 +277,12 @@
       with subtest("Wait for tayga"):
         router.wait_for_unit("tayga.service")
 
+      with subtest("The tun device is owned by the tayga-tun group"):
+        # Linux >= 7.3.3 requires CAP_NET_ADMIN to attach to an ownerless
+        # tun device, which tayga does not have.
+        out = router.succeed("ip -details link show nat64")
+        assert "group tayga-tun" in out, out
+
       with subtest("Test ICMP server -> client"):
         server.wait_until_succeeds("ping -c 3 192.0.2.42 >&2")
 

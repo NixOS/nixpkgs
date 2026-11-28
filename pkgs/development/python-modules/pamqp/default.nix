@@ -7,7 +7,7 @@
 }:
 
 buildPythonPackage (finalAttrs: {
-  version = "4.0.1";
+  version = "6.0.0";
   pname = "pamqp";
 
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage (finalAttrs: {
     owner = "gmr";
     repo = "pamqp";
     tag = finalAttrs.version;
-    hash = "sha256-WKkiwisCfGRkNbw8WtXqNe4OqUiRgVfVL7o0oMdeFJw=";
+    hash = "sha256-A9WZIToWdc/iZzEtIh0wpI9bZOr7OSupyCjF5P4hhW8=";
   };
 
   build-system = [ hatchling ];

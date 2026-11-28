@@ -31,6 +31,9 @@ makeScopeWithSplicing' {
         if stdenv.hostPlatform.useLLVM or false then
           buildPackages.llvmPackages.clangNoLibcxx
         else if stdenv.hostPlatform.useGccNG or false then
+          # This stage of the `gccNGPackages` bootstrap chain has a real libc
+          # and a bootstrap single-threaded libgcc. The threading library
+          # built with this is what the threaded `libgcc-libc` then links.
           buildPackages.gccNGPackages.gccWithLibcAndBasicLibgcc
         else
           buildPackages.gccWithoutTargetLibc.override (old: {

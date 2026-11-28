@@ -6,7 +6,7 @@
 
 python3.pkgs.buildPythonPackage rec {
   pname = "md-tangle";
-  version = "2.1.2";
+  version = "2.2.0";
   pyproject = true;
 
   # By some strange reason, fetchPypi fails miserably
@@ -14,7 +14,7 @@ python3.pkgs.buildPythonPackage rec {
     owner = "joakimmj";
     repo = "md-tangle";
     tag = "v${version}";
-    hash = "sha256-3lHPYfIXfS/iilY2ZW/EOKiI1hkRWaDoqbxSmntsZNo=";
+    hash = "sha256-fkDr2dyDiZkufqIfmli7OmoZ7ZoYcdmOy1juftEBL7A=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];

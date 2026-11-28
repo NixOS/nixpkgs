@@ -27,13 +27,14 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "trytond";
   version = "7.8.15";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "trytond";
+    inherit (finalAttrs) version;
     hash = "sha256-YuuefJfB5pF0W2BO48w1uvD4wcXxK8BjdUmp1BCzJpg=";
   };
 
@@ -78,9 +79,8 @@ buildPythonPackage rec {
     export DB_NAME=":memory:";
   '';
 
-  unittestFlagsArray = [
-    "-s"
-    "trytond.tests"
+  unittestFlags = [
+    "--start-directory=trytond.tests"
   ];
 
   meta = {
@@ -94,7 +94,7 @@ buildPythonPackage rec {
       modularity, scalability and security.
     '';
     homepage = "http://www.tryton.org/";
-    changelog = "https://foss.heptapod.net/tryton/tryton/-/blob/trytond-${version}/trytond/CHANGELOG?ref_type=tags";
+    changelog = "https://foss.heptapod.net/tryton/tryton/-/blob/trytond-${finalAttrs.version}/trytond/CHANGELOG?ref_type=tags";
     license = lib.licenses.gpl3Plus;
     broken = stdenv.hostPlatform.isDarwin;
     maintainers = with lib.maintainers; [
@@ -102,4 +102,4 @@ buildPythonPackage rec {
       johbo
     ];
   };
-}
+})

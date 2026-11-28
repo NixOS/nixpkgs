@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "amaranth-boards";
-  version = "0-unstable-2025-08-28";
+  version = "0-unstable-2026-08-13";
   pyproject = true;
   # from `pdm show`
   realVersion =
@@ -22,10 +22,10 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "amaranth-lang";
     repo = "amaranth-boards";
-    rev = "7e24efe2f6e95afddd0c1b56f1a9423c48caa472";
+    rev = "f270d210e36b0787d62db77176c7b0e8032178d3";
     # these files change depending on git branch status
     postFetch = "rm -f $out/.git_archival.txt $out/.gitattributes";
-    hash = "sha256-NkeSFmbiu5XtUEv/IfaY0P72SVH82HmERfPAHqIY+z8=";
+    hash = "sha256-AeHydgyEm0kl6Z12Hvc8b2kwSKp5dNbZlDwZXLN78v4=";
   };
 
   build-system = [ pdm-backend ];
@@ -38,7 +38,7 @@ buildPythonPackage rec {
   # no tests
   doCheck = false;
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
 
   meta = {
     description = "Board definitions for Amaranth HDL";

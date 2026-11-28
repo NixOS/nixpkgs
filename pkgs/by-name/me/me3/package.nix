@@ -55,7 +55,7 @@ let
     '';
   });
 
-  me3-windows = pkgsCross.mingwW64.rustPlatform.buildRustPackage (final: {
+  me3-windows = pkgsCross.mingw-msvcrt-x86_64.rustPlatform.buildRustPackage (final: {
     inherit cargoHash version src;
     pname = "me3-windows";
 

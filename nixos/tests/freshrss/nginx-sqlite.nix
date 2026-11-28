@@ -11,7 +11,7 @@
       services.freshrss = {
         enable = true;
         baseUrl = "http://localhost";
-        passwordFile = pkgs.writeText "password" "secret";
+        passwordFile = pkgs.writeText "password" "secret123";
         dataDir = "/srv/freshrss";
       };
     };

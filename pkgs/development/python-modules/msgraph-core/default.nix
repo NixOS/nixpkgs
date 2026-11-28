@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "msgraph-core";
-  version = "1.5.2";
+  version = "1.5.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "microsoftgraph";
     repo = "msgraph-sdk-python-core";
     tag = "v${version}";
-    hash = "sha256-0aTdmRAddiJy6z0+guG9e36qJ3cBdt5tD4B20oOhASE=";
+    hash = "sha256-B7fdvw0sd8xl2BZWYKlJCrqYk0wz0+88iJNXrUtZcEg=";
   };
 
   build-system = [ setuptools ];

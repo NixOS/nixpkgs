@@ -16,11 +16,9 @@ buildPythonPackage {
   version = "0.6.1";
   pyproject = true;
 
-  __structuredAttrs = true;
-
-  # move to fetchPyPi when https://github.com/capless/warrant/issues/97 is fixed
+  # move to fetchPyPi when https://github.com/qwigo/warrant/issues/97 is fixed
   src = fetchFromGitHub {
-    owner = "capless";
+    owner = "qwigo";
     repo = "warrant";
     rev = "ff2e4793d8479e770f2461ef7cbc0c15ee784395";
     hash = "sha256-EZIzAEZqrp4ahegRH/fRr9FVOoAcaFnm6D9cYl5mgz8=";
@@ -29,7 +27,7 @@ buildPythonPackage {
   patches = [
     (fetchpatch {
       name = "fix-pip10-compat.patch";
-      url = "https://github.com/capless/warrant/commit/ae17d17d9888b9218a8facf6f6ad0bf4adae9a12.patch";
+      url = "https://github.com/qwigo/warrant/commit/ae17d17d9888b9218a8facf6f6ad0bf4adae9a12.patch";
       hash = "sha256-7IRvDoqQXUKlUHSmb/f28Y5m+2FULFXAb30O5bCIeNM=";
     })
   ];
@@ -58,7 +56,7 @@ buildPythonPackage {
 
   meta = {
     description = "Python library for using AWS Cognito with support for SRP";
-    homepage = "https://github.com/capless/warrant";
+    homepage = "https://github.com/qwigo/warrant";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ peterhoeg ];
   };

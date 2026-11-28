@@ -51,6 +51,9 @@ stdenv.mkDerivation (finalAttrs: {
   # contains snippets like `main(){return(0);}` that modern compilers dislike.
   nativeBuildInputs = [ autoreconfHook ];
 
+  # clang rejects old-style function definitions in C23
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
   makeFlags = [ "AR:=$(AR)" ];
 
   passthru.tests.version = testers.testVersion {

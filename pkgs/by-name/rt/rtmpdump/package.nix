@@ -90,6 +90,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "rtmpdump";
     pkgConfigModules = [ "librtmp" ];
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ tmarkus ];
+    maintainers = with lib.maintainers; [ AAAAAASomeThingsFailToEvaluate ];
   };
 })

@@ -50,9 +50,6 @@ stdenv.mkDerivation (finalAttrs: {
   configureFlags = [
     "--with-lispdir=${lispDir}"
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-    "--build=x86_64-apple-darwin"
-  ]
   ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     # Tries to run ./engine/gforth-ll
     "--without-check"

@@ -16,7 +16,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "nexB";
+    owner = "aboutcode-org";
     repo = "container-inspector";
     tag = "v${finalAttrs.version}";
     hash = "sha256-uwfqPh4e5zNO0K5rKZ2pxgOkX/KF9pzCsKdYbQuw9MA=";
@@ -39,8 +39,8 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Suite of analysis utilities and command line tools for container images";
-    homepage = "https://github.com/nexB/container-inspector";
-    changelog = "https://github.com/nexB/container-inspector/releases/tag/${finalAttrs.src.tag}";
+    homepage = "https://github.com/aboutcode-org/container-inspector";
+    changelog = "https://github.com/aboutcode-org/container-inspector/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };

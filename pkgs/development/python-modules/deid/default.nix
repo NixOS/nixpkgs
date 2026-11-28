@@ -37,7 +37,7 @@ let
 in
 buildPythonPackage rec {
   pname = "deid";
-  version = "0.4.6";
+  version = "0.4.13";
   pyproject = true;
 
   # Pypi version has no tests
@@ -45,8 +45,8 @@ buildPythonPackage rec {
     owner = "pydicom";
     repo = "deid";
     # the github repo does not contain Pypi version tags:
-    rev = "f2e125e5a13ae1c3ccfeb55d9431d3a627a4d0db";
-    hash = "sha256-Vk6MD3MNf1JejqACxjjHkFniK7YDgmdH7k1iQi+enEY=";
+    rev = "c95ea77f40be8ccfacda3d757f383a4539c49996";
+    hash = "sha256-MIxOEqIuxP5A+fwvlgv2ubI3Z06np0J2s1/7feeBnr8=";
   };
 
   build-system = [ setuptools ];
@@ -64,6 +64,10 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "deid" ];
+
+  disabledTests = [
+    "TestRemoveAction" # tries to modify store file belonging to deid-data package
+  ];
 
   meta = {
     description = "Best-effort anonymization for medical images";

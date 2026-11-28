@@ -19,7 +19,9 @@
   libayatana-appindicator,
   libsoup_3,
   openssl,
+  sqlite,
   webkitgtk_4_1,
+  zstd,
 
   nix-update-script,
 }:
@@ -74,18 +76,22 @@ rustPlatform.buildRustPackage (finalAttrs: {
     jq
     moreutils
     nodejs
+    pkg-config
     pnpmConfigHook
     pnpm_10
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    pkg-config
     wrapGAppsHook3
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     makeBinaryWrapper
   ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+  buildInputs = [
+    sqlite
+    zstd
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     glib-networking
     libayatana-appindicator
     libsoup_3
@@ -104,10 +110,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # the previous cargo-only packaging already shipped this combination.
   tauriBuildFlags = [ "--ignore-version-mismatches" ];
 
-  # Proxy startup test binds to a local address, which the darwin sandbox blocks.
-  checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
-    "--skip=services::provider::tests::update_current_claude_provider_syncs_live_when_proxy_takeover_detected_without_backup"
-  ];
+  # Proxy tests bind to local addresses
+  __darwinAllowLocalNetworking = true;
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p "$out/bin"

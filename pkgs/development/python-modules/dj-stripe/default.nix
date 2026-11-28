@@ -117,6 +117,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/dj-stripe/dj-stripe";
     changelog = "https://github.com/dj-stripe/dj-stripe/releases/tag/${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ defelo ];
+    maintainers = [ ];
   };
 }

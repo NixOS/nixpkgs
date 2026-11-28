@@ -37,7 +37,7 @@ maven.buildMavenPackage rec {
     ./make-deterministic.patch
   ];
 
-  mvnHash = "sha256-NmSme8Jea2VGE0HvdqfhAs+CI1ZD+5jqD06pFSfSr1o=";
+  mvnHash = "sha256-+WiBXQXHEj64RqMoH6pp8c5dHQYx61W3/BbJdWl+CFI=";
 
   mvnParameters = "-Dproject.build.outputTimestamp=1980-01-01T00:00:02Z";
 

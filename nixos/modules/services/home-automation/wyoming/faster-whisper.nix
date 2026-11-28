@@ -70,6 +70,7 @@ in
                 type = enum [
                   "auto"
                   "faster-whisper"
+                  "funasr"
                   "onnx-asr"
                   "qwen3-asr"
                   "sherpa"

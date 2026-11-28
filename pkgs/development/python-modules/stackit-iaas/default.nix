@@ -12,15 +12,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "stackit-iaas";
-  version = "1.6.0";
+  version = "1.9.1";
   pyproject = true;
-
-  __structuredAttrs = true;
 
   src = fetchPypi {
     pname = "stackit_iaas";
     inherit (finalAttrs) version;
-    hash = "sha256-E3qmdQnVagEGHwKJYt1ViAWp4SO81a6tc4qXiqE0uXU=";
+    hash = "sha256-jLjdcQljmkt1IqhCBVSX80zhyfRuS9oSlF69dFeFbvY=";
   };
 
   build-system = [ hatchling ];

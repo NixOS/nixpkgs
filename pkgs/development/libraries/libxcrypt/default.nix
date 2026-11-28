@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
       inherit (nixosTests) login shadow;
 
       passthruMatches = runCommand "libxcrypt-test-passthru-matches" { } ''
-        ${python3.interpreter} "${./check_passthru_matches.py}" ${
+        ${python3.interpreter} -P "${./check_passthru_matches.py}" ${
           lib.escapeShellArgs (
             [
               finalAttrs.src

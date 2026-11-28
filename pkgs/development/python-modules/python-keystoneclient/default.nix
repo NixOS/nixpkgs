@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   keystoneauth1,
   openssl,
   oslo-config,
@@ -9,21 +9,25 @@
   pbr,
   requests-mock,
   setuptools,
-  stestr,
+  stestrCheckHook,
   testresources,
   testscenarios,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-keystoneclient";
   version = "6.0.0";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "python_keystoneclient";
-    inherit version;
-    hash = "sha256-1qw6Ca3yMZqqxXKOO/fL6vlSwpW9eDHx35pXOyX7z4I=";
+  src = fetchFromGitHub {
+    owner = "openstack";
+    repo = "python-keystoneclient";
+    tag = finalAttrs.version;
+    hash = "sha256-sUul9gleUEO+0uRdogti9QgmrZY4W6w/BUkIiAr1uK4=";
   };
+
+  # Manually set version since pbr wants to get it from git (not in a tarball)
+  env.PBR_VERSION = finalAttrs.version;
 
   build-system = [ setuptools ];
 
@@ -37,16 +41,10 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     openssl
     requests-mock
-    stestr
+    stestrCheckHook
     testresources
     testscenarios
   ];
-
-  checkPhase = ''
-    runHook preCheck
-    stestr run
-    runHook postCheck
-  '';
 
   pythonImportsCheck = [ "keystoneclient" ];
 
@@ -56,4 +54,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     teams = [ lib.teams.openstack ];
   };
-}
+})

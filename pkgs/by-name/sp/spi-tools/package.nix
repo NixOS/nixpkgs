@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "spi-tools";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "cpb-";
     repo = "spi-tools";
     tag = finalAttrs.version;
-    hash = "sha256-mlOpgzJ8YFX+2y8+V3A2WjsnOzzj+fF8lJHqzoEP30s=";
+    hash = "sha256-fhY5uXH3u/mVK1fp/dukzwr3Msp/Prv7CD9SZBw+qrw=";
   };
 
   nativeBuildInputs = [

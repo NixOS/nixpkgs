@@ -12,14 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "egauge-async";
-  version = "0.5.0";
+  version = "0.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "neggert";
     repo = "egauge-async";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MbOjyHxCZpJDZIRyWShk2+X1Di8zX4JjyEpLUnHfdzE=";
+    hash = "sha256-Yl3W3KIoV9Yoq1rMFLGKO7LWrjDYBoWlNpcczaAKn+M=";
   };
 
   build-system = [

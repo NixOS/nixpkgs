@@ -37,6 +37,11 @@ python3Packages.buildPythonApplication (finalAttrs: {
     pysocks
   ];
 
+  pythonRelaxDeps = [
+    # relax urwid~=3.0
+    "urwid"
+  ];
+
   checkPhase = ''
     runHook preCheck
     py.test

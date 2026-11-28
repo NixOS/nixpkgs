@@ -473,6 +473,13 @@ lib.makeScope pkgs.newScope (
             {
               name = "filter";
               buildInputs = [ pcre2 ];
+              postConfigure = ''
+                substituteInPlace \
+                  tests/oom_filter_input.phpt \
+                  tests/oom_filter_input_array.phpt \
+                  tests/oom_filter_default_encoded.phpt \
+                  --replace-fail "'-n'," "'-n', '-d', 'extension=$PWD/modules/filter.so',"
+              '';
             }
             {
               name = "ftp";

@@ -8,7 +8,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "reticulum-group-chat";
-  version = "1.15.0";
+  version = "1.19.1";
   __structuredAttrs = true;
   __darwinAllowLocalNetworking = true;
 
@@ -16,10 +16,10 @@ buildGoModule (finalAttrs: {
     owner = "thatSFguy";
     repo = "reticulum-group-chat";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Oc7QidFYgeE3YDH0y6mSfEfCkIx/uzxauqO47s/IU0I=";
+    hash = "sha256-KgMEpUPF1d+0dyVi9HDDGcZ05PiJsFWQxEgGLONO6jo=";
   };
 
-  vendorHash = "sha256-qMmEi7OYv2xzYOoeBWQ0omeIrcTyhxylw2qvv9kd9dk=";
+  vendorHash = "sha256-qn3HGidwaUDPNhEVu2RE2Bax14LPJOuU2pAYF5sP+Z0=";
 
   ldflags = [ "-s" ];
 

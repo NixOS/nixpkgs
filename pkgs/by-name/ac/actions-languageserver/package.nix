@@ -8,14 +8,14 @@
 }:
 buildNpmPackage (finalAttrs: {
   pname = "actions-languageserver";
-  version = "0.3.61";
+  version = "0.3.62";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "actions";
     repo = "languageservices";
     tag = "release-v${finalAttrs.version}";
-    hash = "sha256-hNb4QcgBYfoiaa/X4BZeahiHsF11UwdNa4d+nh8sb3M=";
+    hash = "sha256-FF8DhHxMaYG3dQmTn4fO45hJqf1ALBkrslBRcN5m+yE=";
     postFetch = ''
       ${lib.getExe npm-lockfile-fix} $out/package-lock.json
       ${lib.getExe jq} 'del(.packages[].devDependencies.["rest-api-description"])' $out/package-lock.json | ${moreutils}/bin/sponge $out/package-lock.json
@@ -25,7 +25,7 @@ buildNpmPackage (finalAttrs: {
 
   npmWorkspace = "languageserver";
 
-  npmDepsHash = "sha256-OozKfgupmOYX4LnKnPFw14sWD/yjRPk7a63hoJ4LD/Y=";
+  npmDepsHash = "sha256-4i6z4SmgVpxj+LFBUptcubiuGGYeQtzN66LP4xJpgV0=";
 
   preBuild = ''
     patchShebangs .

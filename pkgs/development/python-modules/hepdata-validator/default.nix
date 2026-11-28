@@ -9,7 +9,7 @@
   pyyaml,
   requests,
   pytestCheckHook,
-  pytest-cov,
+  pytest-cov-stub,
   mock,
 }:
 
@@ -17,7 +17,6 @@ buildPythonPackage (finalAttrs: {
   pname = "hepdata-validator";
   version = "0.3.6";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "HEPData";
@@ -38,7 +37,7 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     mock
-    pytest-cov
+    pytest-cov-stub
     pytestCheckHook
   ];
 

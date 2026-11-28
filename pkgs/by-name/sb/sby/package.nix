@@ -20,13 +20,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sby";
-  version = "0.69";
+  version = "0.71";
 
   src = fetchFromGitHub {
     owner = "YosysHQ";
     repo = "sby";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BNxSMDtfnNrIOrXYxXD7XAHNJUGifEFRYrYpyteAMHQ=";
+    hash = "sha256-cWkqWYZfW+TEv796GsJvQ3P/TGswltFFEmHpA0IIcjE=";
   };
 
   postPatch = ''
@@ -94,7 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [
       thoughtpolice
-      carlossless
+      karstx
     ];
     mainProgram = "sby";
     platforms = lib.platforms.all;

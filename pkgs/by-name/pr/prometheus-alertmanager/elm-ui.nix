@@ -26,7 +26,7 @@ buildNpmPackage (finalAttrs: {
     }
   );
 
-  npmDepsHash = "sha256-2flvNJXsOhE0k10Eu8kWo3p3aAABFB/f3yeYNrIztpw=";
+  npmDepsHash = "sha256-lQaBuiw0IHTLHwqOAwiC4LeNGrzAQFWScMzedKoGQbE=";
 
   nativeBuildInputs = [
     elmPackages.elm

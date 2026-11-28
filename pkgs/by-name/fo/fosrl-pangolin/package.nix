@@ -9,7 +9,7 @@
   edition ? "oss",
   environmentVariables ? { },
   nixosTests,
-  nodejs_22,
+  nodejs_24,
   nix-update-script,
 }:
 
@@ -37,8 +37,7 @@ in
 
 buildNpmPackage (finalAttrs: {
   pname = "pangolin";
-  version = "1.24.0";
-
+  version = "1.27.1";
   __structuredAttrs = true;
   enableParallelBuilding = true;
 
@@ -46,12 +45,12 @@ buildNpmPackage (finalAttrs: {
     owner = "fosrl";
     repo = "pangolin";
     tag = finalAttrs.version;
-    hash = "sha256-EYyqT7yDz1KpkCyb1niOZcSNxkRMJ6LXjuAcXPhemgM=";
+    hash = "sha256-2D9f2sb93c4eTPIH5k/7h6a5uewnha/8N2i2cH7vDiQ=";
   };
 
-  nodejs = nodejs_22;
+  nodejs = nodejs_24;
   npmDepsFetcherVersion = 2;
-  npmDepsHash = "sha256-nWlIy+1m6IJuGaXV3U1ampTL9Xvxj7jONuJ0ecGAU3g=";
+  npmDepsHash = "sha256-seCi8vqvY/uYD3iVQx5FNxd9AsN6rLNl4ROZ3rbdT0U=";
   npmFlags = [ "--legacy-peer-deps" ];
 
   nativeBuildInputs = [
@@ -134,7 +133,9 @@ buildNpmPackage (finalAttrs: {
                dir:
                "test -f ${dir}/.nix_skip_setup || { rm -${lib.optionalString (dir == ".next") "r"}f ${dir} && ${
                  if (dir == ".next") then "cp -rd" else "ln -s"
-               } ${placeholder "out"}/share/pangolin/${dir} .; }"
+               } ${placeholder "out"}/share/pangolin/${dir} .${
+                 lib.optionalString (dir == ".next") " && chmod -R u+w ${dir}"
+               }; }"
              )
              [
                ".next"

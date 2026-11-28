@@ -7,17 +7,17 @@
 
 buildGoModule (finalAttrs: {
   pname = "rkmon";
-  version = "0.3.1";
+  version = "0.4.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "isac322";
     repo = "rkmon";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LFvv/CvZxtulGQdFVU7XVDitzgQwkOIFF9mfZBAUe1Y=";
+    hash = "sha256-JDAJfXll8tNyGRQ4e9GmeW9QHWGPgxabH3hGq6kO0dM=";
   };
 
-  vendorHash = "sha256-f9+5iVGvkLuFHqDdeSvx4Vu6paVsRS0EZxKB9a3sr/I=";
+  vendorHash = "sha256-x3i0/v/3o2DXdrARDi0gAPxc4pOtYKwngn1IkBIJ9A4=";
 
   ldflags = [
     "-s"

@@ -1,10 +1,10 @@
 diff --git a/Package.swift b/Package.swift
-index 52dbba0e47..e3a1fe9c2c 100644
+index 310ead4c32..6fca3ae3de 100644
 --- a/Package.swift
 +++ b/Package.swift
-@@ -146,16 +146,16 @@
+@@ -161,16 +161,16 @@
              exclude: ["CMakeLists.txt"],
-             swiftSettings: [.swiftLanguageMode(.v6)]
+             swiftSettings: swiftSettings(.v6)
          ),
 -        .testTarget(
 -            name: "DocCHTMLTests",
@@ -14,7 +14,7 @@ index 52dbba0e47..e3a1fe9c2c 100644
 -                .product(name: "Markdown", package: "swift-markdown"),
 -                .target(name: "DocCTestUtilities"),
 -            ],
--            swiftSettings: [.swiftLanguageMode(.v6)]
+-            swiftSettings: swiftSettings(.v6)
 -        ),
 +        // .testTarget(
 +        //     name: "DocCHTMLTests",
@@ -24,7 +24,7 @@ index 52dbba0e47..e3a1fe9c2c 100644
 +        //         .product(name: "Markdown", package: "swift-markdown"),
 +        //         .target(name: "DocCTestUtilities"),
 +        //     ],
-+        //     swiftSettings: [.swiftLanguageMode(.v6)]
++        //     swiftSettings: swiftSettings(.v6)
 +        // ),
  
          // Test app for DocCCommandLine

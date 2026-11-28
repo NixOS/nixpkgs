@@ -2,6 +2,8 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
+  pkg-config,
+  sqlite,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -16,6 +18,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-QE7NdnZXCEa2n1yI/ir/Lw8fFV9B6xU7EmrGhTXkOKY=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ sqlite ];
 
   postInstall = ''
     cp -r assets $out/

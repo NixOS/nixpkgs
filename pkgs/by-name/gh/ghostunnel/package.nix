@@ -1,22 +1,22 @@
 {
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   lib,
   nixosTests,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "ghostunnel";
-  version = "1.11.2";
+  version = "1.11.5";
 
   src = fetchFromGitHub {
     owner = "ghostunnel";
     repo = "ghostunnel";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FZwWyX4sfsbzjAOCf69WDsCbgqOgLfaSWpxK+1BUoMU=";
+    hash = "sha256-nGnFuTZDCMAx4x0QPptYhv/UTO+opw97HIvaxqgQHPA=";
   };
 
-  vendorHash = "sha256-POmVaRIKO11R0xbLIkxy4S+nCJZ1sHtAaRNlw54aeBg=";
+  vendorHash = null;
 
   deleteVendor = true;
 

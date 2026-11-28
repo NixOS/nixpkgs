@@ -11,7 +11,7 @@
   unibilium,
   utf8proc,
   tree-sitter,
-  wasmtime_36,
+  wasmtime_48,
   fetchurl,
   buildPackages,
   treesitter-parsers ? import ./treesitter-parsers.nix { inherit fetchurl; },
@@ -164,7 +164,7 @@ stdenv.mkDerivation (
       utf8proc
     ]
     ++ lib.optionals wasmSupport [
-      wasmtime_36
+      wasmtime_48
     ]
     ++ lib.optionals (stdenv.hostPlatform.libc != "glibc") [
       # Provide libintl for non-glibc platforms
@@ -198,7 +198,7 @@ stdenv.mkDerivation (
       lib.optionalString wasmSupport ''
         substituteInPlace src/nvim/CMakeLists.txt \
           --replace-fail \
-            'find_package(Wasmtime 36.0.6 EXACT REQUIRED)' \
+            'find_package(Wasmtime 36.0 EXACT REQUIRED)' \
             'find_package(Wasmtime REQUIRED)'
       ''
       # nvim --version output retains compilation flags and references to build tools
@@ -231,8 +231,8 @@ stdenv.mkDerivation (
     ++ lib.optionals wasmSupport [
       # FindWasmtime has no pkg-config fallback.
       (lib.cmakeBool "ENABLE_WASMTIME" true)
-      (lib.cmakeFeature "WASMTIME_INCLUDE_DIR" "${lib.getDev wasmtime_36}/include")
-      (lib.cmakeFeature "WASMTIME_LIBRARY" "${lib.getLib wasmtime_36}/lib/libwasmtime${stdenv.hostPlatform.extensions.sharedLibrary}")
+      (lib.cmakeFeature "WASMTIME_INCLUDE_DIR" "${lib.getDev wasmtime_48}/include")
+      (lib.cmakeFeature "WASMTIME_LIBRARY" "${lib.getLib wasmtime_48}/lib/libwasmtime${stdenv.hostPlatform.extensions.sharedLibrary}")
     ]
     ++ (
       if lua.pkgs.isLuaJIT then

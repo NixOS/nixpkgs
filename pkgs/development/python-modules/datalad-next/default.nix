@@ -124,5 +124,8 @@ buildPythonPackage {
     homepage = "https://github.com/datalad/datalad-next";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ gador ];
+    # fails with 'flaky' not found in `markers` configuration option
+    # while applying internal patches
+    broken = true;
   };
 }

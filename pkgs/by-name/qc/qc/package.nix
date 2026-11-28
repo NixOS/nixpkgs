@@ -8,13 +8,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "qc";
-  version = "0.6.3";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "qownnotes";
     repo = "qc";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Z96wEb9jTf3zeIxgHJMBl7OQHeEIrP/uIcJncXggA/g=";
+    hash = "sha256-UaJ6ujKY9os5N8RhyUbj/speRrrJRIbemRQeFtkiijg=";
   };
 
   vendorHash = "sha256-/nRPv6SlvWV8mHlQstV19BLou9iwGt/VvJbrpVwiTCU=";

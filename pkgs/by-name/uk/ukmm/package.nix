@@ -6,9 +6,11 @@
   cmake,
   pkg-config,
   wrapGAppsHook3,
+  aws-lc,
   libglvnd,
   libxkbcommon,
   openssl,
+  zstd,
   makeDesktopItem,
   copyDesktopItems,
   nix-update-script,
@@ -16,28 +18,31 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ukmm";
-  version = "0.17.1";
+  version = "0.17.3";
 
   src = fetchFromGitHub {
     owner = "NiceneNerd";
     repo = "ukmm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1qhBBa6Mzo8XqvzwiHKnP0W9Oo26nvMiwZTzRAnLtfs=";
+    hash = "sha256-6oScJDuxEfYNfrWL2kakTs3wKNju8mcGb7SozR9berc=";
   };
 
-  cargoHash = "sha256-I39SPTBH4JUx5z65eD2w2ntWKfjWSxweSco6QE9V5sM=";
+  cargoHash = "sha256-L55bxQLoeaPELhDhxyYSQBtNs4IYlNPebryhy6SgH6E=";
 
   nativeBuildInputs = [
     cmake
     pkg-config
+    rustPlatform.bindgenHook
     wrapGAppsHook3
     copyDesktopItems
   ];
 
   buildInputs = [
+    aws-lc
     libglvnd
     libxkbcommon
     openssl
+    zstd
   ];
 
   # Force linking to libEGL, which is always dlopen()ed, and to
@@ -51,6 +56,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "-lxkbcommon"
     "--pop-state"
   ];
+
+  # Force zarchive to dynamically link zstd
+  postPatch = ''
+    substituteInPlace ../ukmm-*-vendor/*/zarchive-*/build.rs \
+      --replace-fail cargo:rustc-link-lib=static=zstd cargo:rustc-link-lib=zstd
+  '';
 
   cargoTestFlags = [
     "--all"

@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lethe";
-  version = "0.8.2";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "kostassoid";
     repo = "lethe";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-y2D/80pnpYpTl+q9COTQkvtj9lzBlOWuMcnn5WFnX8E=";
+    sha256 = "sha256-nhiilGNWsWBFZV32TqVdKCQJCPN2WLYeXCVRBK7uTQY=";
   };
 
-  cargoHash = "sha256-Ky39RpLoYks4xDiheSsrUj3l/ZrGcY+y5IuDZ28pH/c=";
+  cargoHash = "sha256-MazZz6N+NKlgDrGs9sTiblYDUg9l3ItXFbB1NRk1LTw=";
 
   meta = {
     description = "Tool to wipe drives in a secure way";

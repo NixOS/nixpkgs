@@ -14,6 +14,7 @@
       ];
 
       image.repart = {
+        enable = true;
         name = "nix-store";
         partitions = {
           "nix-store" = {
@@ -41,10 +42,7 @@
       };
 
       boot.initrd = {
-        systemd = {
-          enable = true;
-          dmVerity.enable = true;
-        };
+        systemd.dmVerity.enable = true;
         nix-store-veritysetup.enable = true;
       };
 

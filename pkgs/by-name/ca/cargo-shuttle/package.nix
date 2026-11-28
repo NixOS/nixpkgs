@@ -3,8 +3,10 @@
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
+  libgit2,
   openssl,
   zlib,
+  zstd,
   versionCheckHook,
   nix-update-script,
 }:
@@ -25,8 +27,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
+    libgit2
     openssl
     zlib
+    zstd
   ];
 
   cargoBuildFlags = [

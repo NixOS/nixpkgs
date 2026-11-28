@@ -12,7 +12,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gitlogue";
-  version = "0.12.0";
+  version = "0.12.2";
 
   __structuredAttrs = true;
 
@@ -20,10 +20,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "unhappychoice";
     repo = "gitlogue";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CqaZFng7TTWIGaQbhTYCl+wRdOs0TN4f+thkV8K9Bf8=";
+    hash = "sha256-HQ6508OuAWYaP786keoNIyBsA7kiAgI0f3Ly3KkXEH8=";
   };
 
-  cargoHash = "sha256-upeILLWszjVa2HhMP05b5C1HrLE5EknV2OXXxizVz/c=";
+  cargoHash = "sha256-J0Z0MrrthLOwD7mj9aaj3jyF3o/ZYynYqbi1bwmyodU=";
 
   nativeBuildInputs = [ pkg-config ];
 

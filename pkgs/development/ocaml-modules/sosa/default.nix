@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "hammerlab";
     repo = "sosa";
-    rev = "sosa.${version}";
-    sha256 = "053hdv6ww0q4mivajj4iyp7krfvgq8zajq9d8x4mia4lid7j0dyk";
+    tag = "sosa.${version}";
+    hash = "sha256-0zcgT4uUqFhJRy1hqT7Cb7s8z/WRSKl2rAQDzs1ucBQ=";
   };
 
   postPatch = lib.optionalString (lib.versionAtLeast ocaml.version "4.07") ''

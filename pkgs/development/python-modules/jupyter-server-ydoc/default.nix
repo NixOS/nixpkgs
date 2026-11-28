@@ -21,7 +21,6 @@ buildPythonPackage (finalAttrs: {
   pname = "jupyter-server-ydoc";
   version = "3.0.4";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchPypi {
     pname = "jupyter_server_ydoc";

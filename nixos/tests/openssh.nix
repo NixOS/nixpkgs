@@ -501,6 +501,8 @@ in
         )
         server_no_sshd_with_key.succeed("test -e /etc/ssh/ssh_host_ed25519_key")
         server_no_sshd_with_key.succeed("test -e /etc/ssh/ssh_host_ed25519_key.pub")
+        server_no_sshd_with_key.succeed("test -e /etc/ssh/ssh_host_mldsa44_ed25519_key")
+        server_no_sshd_with_key.succeed("test -e /etc/ssh/ssh_host_mldsa44_ed25519_key.pub")
         server_no_sshd_with_key.fail("pgrep sshd")
 
         # Validate the above check for sshd using pgrep does pass on a server

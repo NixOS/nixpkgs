@@ -18,7 +18,6 @@ buildPythonPackage (finalAttrs: {
   pname = "opt-einsum-fx";
   version = "0.1.4";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Linux-cpp-lisp";

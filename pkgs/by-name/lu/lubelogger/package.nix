@@ -8,13 +8,13 @@
 
 buildDotnetModule rec {
   pname = "lubelogger";
-  version = "1.7.3";
+  version = "1.7.5";
 
   src = fetchFromGitHub {
     owner = "hargata";
     repo = "lubelog";
     rev = "v${version}";
-    hash = "sha256-hLmIdTyLyP6TZjgpRS+49IblR5ygwI7rMQem2ZgiuWE=";
+    hash = "sha256-oCaPyx4obn6M3+tbuaz4nwsguFRRK3cvZt1KbHpjFA4=";
   };
 
   projectFile = "CarCareTracker.sln";
@@ -24,7 +24,9 @@ buildDotnetModule rec {
   dotnet-runtime = dotnetCorePackages.aspnetcore_10_0;
 
   makeWrapperArgs = [
-    "--set DOTNET_WEBROOT ${placeholder "out"}/lib/lubelogger/wwwroot"
+    "--set"
+    "DOTNET_WEBROOT"
+    "${placeholder "out"}/lib/lubelogger/wwwroot"
   ];
 
   executables = [ "CarCareTracker" ]; # This wraps "$out/lib/$pname/foo" to `$out/bin/foo`.

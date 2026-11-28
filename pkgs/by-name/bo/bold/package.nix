@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchFromCodeberg,
   callPackage,
   zig_0_14,
   versionCheckHook,
@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "bold";
   version = "0.2.0";
 
-  src = fetchFromGitHub {
+  src = fetchFromCodeberg {
     owner = "kubkon";
     repo = "bold";
     tag = "v${finalAttrs.version}";
@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # Correct version
     (fetchpatch {
-      url = "https://github.com/kubkon/bold/commit/e8a3245b1f03ea8ba7136d76807400610c068bac.patch";
+      url = "https://codeberg.org/kubkon/bold/commit/e8a3245b1f03ea8ba7136d76807400610c068bac.patch";
       hash = "sha256-UdicLUoH7ApnKxoI91hDcuO/NSINLkxb2h9sA9NShfw=";
     })
   ];
@@ -49,8 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Drop-in replacement for Apple system linker ld";
-    homepage = "https://github.com/kubkon/bold";
-    changelog = "https://github.com/kubkon/bold/releases/tag/v${finalAttrs.version}";
+    homepage = "https://codeberg.org/kubkon/bold";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ DimitarNestorov ];
     platforms = lib.platforms.darwin;

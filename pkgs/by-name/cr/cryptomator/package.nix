@@ -3,7 +3,7 @@
   fetchFromGitHub,
   fuse3,
   glib,
-  zulu25,
+  zulu27,
   lib,
   libayatana-appindicator,
   makeShellWrapper,
@@ -14,27 +14,22 @@
 }:
 
 let
-  jdk = zulu25.override { enableJavaFX = true; };
+  jdk = zulu27.override { enableJavaFX = true; };
 in
 maven.buildMavenPackage rec {
   pname = "cryptomator";
-  version = "1.19.2";
+  version = "1.19.7";
 
   src = fetchFromGitHub {
     owner = "cryptomator";
     repo = "cryptomator";
     tag = version;
-    hash = "sha256-9JWZaTsL2sfnGQAZI56T2iQnTNhERsFNFFCeLMB7WC0=";
+    hash = "sha256-l2A/C1FuxOs6SvW7j7uHM89cZb9ljNpcEO9DvBKr21s=";
   };
-
-  patches = [
-    # fix for "java.lang.IllegalStateException: No fuse library found at expected path"
-    ./downgrade-fuse.patch
-  ];
 
   mvnJdk = jdk;
   mvnParameters = "-Dmaven.test.skip=true -Plinux";
-  mvnHash = "sha256-IVOcDFW5YKgUHJKX3ZXYVnOevwmOwN5yEU8jfPtCY1I=";
+  mvnHash = "sha256-Q+ZAQnIMcp5RAIhQqJGnFLluoe5B3RZbT4YLIuzqOe8=";
   mvnFetchExtraArgs.env = {
     inherit (env) SOURCE_DATE_EPOCH;
   };
@@ -73,6 +68,7 @@ maven.buildMavenPackage rec {
       --add-flags "-Dcryptomator.appVersion='${version}'" \
       --add-flags "-Djava.net.useSystemProxies=true" \
       --add-flags "-Xss20m" \
+      --add-flags "-XX:-UseBASE64Intrinsics" \
       --add-flags "-Xmx512m" \
       --add-flags "-Dcryptomator.disableUpdateCheck=true" \
       --add-flags "-Dcryptomator.integrationsLinux.trayIconsDir='$out/share/icons/hicolor/symbolic/apps'" \

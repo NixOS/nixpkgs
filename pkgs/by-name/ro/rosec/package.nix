@@ -7,8 +7,10 @@
   symlinkJoin,
   pam,
   dbus,
+  pkg-config,
   wayland,
   libxkbcommon,
+  zstd,
   nixosTests,
   nix-update-script,
   provider ? [ ],
@@ -53,6 +55,7 @@ symlinkJoin (
       nativeBuildInputs = [
         autoPatchelfHook
         dbus
+        pkg-config
       ];
 
       runtimeDependencies = [
@@ -62,6 +65,7 @@ symlinkJoin (
 
       buildInputs = [
         stdenv.cc.cc.lib
+        zstd
       ];
 
       preCheck = ''

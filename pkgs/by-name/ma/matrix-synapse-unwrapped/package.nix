@@ -14,14 +14,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "matrix-synapse";
-  version = "1.163.0";
+  version = "1.165.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "synapse";
     rev = "v${version}";
-    hash = "sha256-SYqI8FYQOzDmdrSrdYJmkqFWTepNvpBPNncJOXDpXdY=";
+    hash = "sha256-9ued/q+FbdXyf/P41Mx/JkKNrpyPSAvmGLydOn8F2ig=";
   };
 
   patches = [
@@ -30,9 +30,19 @@ python3Packages.buildPythonApplication rec {
     ./authlib.patch
   ];
 
+  postPatch = ''
+    # the timeout for some tests is too tight, causing the build to fail
+    # if the builder is too contested. the earliest example of these
+    # intermittend failures i could find was
+    # https://hydra.nixos.org/build/349689621/step/1/log/tail
+    # See: https://github.com/element-hq/synapse/pull/20517
+    substituteInPlace tests/server.py tests/unittest.py \
+      --replace-fail "loop_count > 100" "loop_count > 5000"
+  '';
+
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-0pQAseSE9cbQsGzZ1vLrHGt4+FKvqTr0bR3JhQuKPtc=";
+    hash = "sha256-zs6nvOvCh45GDyEIsqMn9PwqibjEx2f91sXqqmQVZRQ=";
   };
 
   build-system =

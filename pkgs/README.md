@@ -129,7 +129,7 @@ To add a package to Nixpkgs:
    - Pan, a GTK-based newsreader: [`pkgs/by-name/pa/pan/package.nix`](./by-name/pa/pan/package.nix).
      Has an optional dependency on `gspell`, which is only built if `spellCheck` is `true`.
 
-   - Apache HTTPD: [`pkgs/servers/http/apache-httpd/2.4.nix`](servers/http/apache-httpd/2.4.nix).
+   - Apache HTTPD: [`pkgs/by-name/ap/apacheHttpd_2_4/package.nix`](./by-name/ap/apacheHttpd_2_4/package.nix).
      A bunch of optional features, variable substitutions in the configure flags, a post-install hook, and miscellaneous hackery.
 
    - buildMozillaMach: [`pkgs/build-support/build-mozilla-mach/default.nix`](./build-support/build-mozilla-mach/default.nix).
@@ -706,7 +706,7 @@ We use jbidwatcher as an example for a discontinued project here.
 
     ```nix
     {
-      jbidwatcher = throw "jbidwatcher was discontinued in march 2021"; # added 2021-03-15
+      jbidwatcher = throw "'jbidwatcher' was discontinued in march 2021"; # added 2021-03-15
     }
     ```
 
@@ -1170,10 +1170,8 @@ Reviewing process:
 - Ensure that the commit text [fits the guidelines](../CONTRIBUTING.md#commit-conventions).
 - Ensure that the package maintainers are notified.
   - The continuous integration system will make GitHub notify users based on the submitted changes, but it can happen that it misses some of the package maintainers.
-- Ensure that the meta field information [fits the guidelines](#meta-attributes) and is correct:
+- Ensure that the meta field information [fits the guidelines](#meta-attributes) and is correct.
   - License can change with version updates, so it should be checked to match the upstream license.
-  - If the package has no maintainer, a maintainer must be set.
-    This can be the update submitter or a community member that accepts to take maintainership of the package.
 - Verify any change of upstream.
   - If switching from e.g. PyPi to GitHub, verify that the repo is the official one.
   - If switching to a fork, check with external sources like other package repositories for community consensus.

@@ -68,6 +68,9 @@ buildPythonPackage (finalAttrs: {
 
     substituteInPlace pyproject.toml \
       --replace-fail 'version = "${finalAttrs.version}"' 'version = "${lib.versions.pad 3 finalAttrs.version}"'
+
+    substituteInPlace qpy/QtCore/qpycore_qrangemodel.h \
+      --replace-fail '#include <qglobal.h>' '#include <QtCore/qglobal.h>'
   '';
 
   enableParallelBuilding = true;

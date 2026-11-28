@@ -2,6 +2,8 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
+  pkg-config,
+  libgit2,
   bc,
   util-linux,
   makeWrapper,
@@ -32,7 +34,10 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     makeWrapper
     installShellFiles
+    pkg-config
   ];
+
+  buildInputs = [ libgit2 ];
 
   nativeCheckInputs = [
     bash

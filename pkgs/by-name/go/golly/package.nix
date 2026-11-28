@@ -13,10 +13,10 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "golly";
-  version = "5.0";
+  version = "5.1";
 
   src = fetchurl {
-    hash = "sha256-WDXN5CgVP5uEC6lKQ1nlyybrMC56wBoJfNf1pcgwNhE=";
+    hash = "sha256-E953LHTJmKvzdLx0Vf2WbkYnCg5y17q38KjLMz0dnD8=";
     url = "mirror://sourceforge/project/golly/golly/golly-${finalAttrs.version}/golly-${finalAttrs.version}-src.tar.gz";
   };
 

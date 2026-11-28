@@ -212,6 +212,15 @@ in
       galeneStreamSrtPort = 9710;
       galeneStreamFeedImage = "galene-stream-feed.png";
       galeneStreamFeedLabel = "Example";
+
+      # Firefox obfuscates ICE host candidates as mDNS .local names.
+      # Galene's Pion server disables mDNS, so it cannot resolve them and the
+      # WebRTC transport never completes (the stream stays black).
+      firefoxWithWebrtc = pkgs.firefox.override {
+        extraPrefs = ''
+          defaultPref("media.peerconnection.ice.obfuscate_host_addresses", false);
+        '';
+      };
     in
     {
       name = "galene-stream-works";
@@ -255,7 +264,7 @@ in
 
             systemPackages = with pkgs; [
               ffmpeg
-              firefox
+              firefoxWithWebrtc
               galene-stream
             ];
           };
@@ -319,6 +328,11 @@ in
             machine.wait_for_text(r"(Galène|Username|Password|Connect)")
             machine.screenshot("galene-group-test-join")
 
+            # Reload the page, else the stream feed label doesn't show up
+            # TODO: figure out why
+            machine.send_key("f5")
+            machine.sleep(5)
+
             # Log in as anon
             machine.send_key("ret")
             machine.sleep(5)
@@ -329,6 +343,176 @@ in
             # Look for stream
             machine.wait_for_text("${galeneStreamFeedLabel}")
             machine.screenshot("galene-stream-group-test-streams")
+      '';
+    }
+  );
+
+  stt = runTest (
+    { pkgs, lib, ... }:
+    let
+      whisperModel = pkgs.galene-stt.passthru.testModel;
+      audioSample =
+        pkgs.runCommand "test-speech.wav"
+          {
+            nativeBuildInputs = [ pkgs.flite ];
+          }
+          ''
+            flite -t "Hello world, this is a test." -o "$out"
+          '';
+      galeneTestGroupBotName = "speech-to-text";
+      galeneTestGroupBotPassword = "1234";
+      galeneStreamerName = "streamer";
+      galeneStreamerPassword = "1234";
+      galeneStreamSrtPort = 9710;
+
+      firefoxWithWebrtc = pkgs.firefox.override {
+        extraPrefs = ''
+          defaultPref("media.peerconnection.ice.obfuscate_host_addresses", false);
+        '';
+      };
+    in
+    {
+      name = "galene-stt-works";
+      meta = {
+        inherit (pkgs.galene-stt.meta) teams maintainers;
+        platforms = lib.platforms.linux;
+      };
+
+      nodes.machine =
+        { config, pkgs, ... }:
+        {
+          imports = [ ./common/x11.nix ];
+
+          services.xserver.enable = true;
+
+          services.galene = {
+            enable = true;
+            insecure = true;
+            httpPort = galenePort;
+            groupsDir = galeneTestGroupsDir;
+          };
+
+          services.galene-stt = {
+            enable = true;
+            insecure = true;
+            debug = true;
+            caption = true;
+            chat = true;
+            model = whisperModel;
+            username = galeneTestGroupBotName;
+            passwordFile = "/etc/stt-password";
+            groupUrl = "http://localhost:${toString galenePort}/group/test/";
+          };
+
+          environment = {
+            # https://galene.org/INSTALL.html
+            etc."stt-password".text = galeneTestGroupBotPassword;
+            etc.${galeneTestGroupFile}.source = (pkgs.formats.json { }).generate galeneTestGroupFile {
+              op = [
+                {
+                  username = galeneTestGroupAdminName;
+                  password = galeneTestGroupAdminPassword;
+                }
+                {
+                  username = galeneTestGroupBotName;
+                  password = galeneTestGroupBotPassword;
+                }
+              ];
+              presenter = [
+                {
+                  username = galeneStreamerName;
+                  password = galeneStreamerPassword;
+                }
+              ];
+              other = [ { } ];
+            };
+
+            systemPackages = with pkgs; [
+              ffmpeg
+              firefoxWithWebrtc
+              galene-stream
+            ];
+          };
+        };
+
+      enableOCR = true;
+
+      testScript = ''
+        machine.wait_for_x()
+
+        with subtest("galene starts"):
+            # Starts?
+            machine.wait_for_unit("galene")
+            machine.wait_for_open_port(${toString galenePort})
+
+            # Reponds fine?
+            machine.succeed("curl -s -D - -o /dev/null 'http://localhost:${toString galenePort}' >&2")
+
+        machine.succeed("cp -v /etc/${galeneTestGroupFile} ${galeneTestGroupsDir}/test.json >&2")
+        machine.wait_until_succeeds("curl -s -D - -o /dev/null 'http://localhost:${toString galenePort}/group/test/' >&2")
+
+        with subtest("galene can join group"):
+            # Open site
+            machine.succeed("firefox --new-window 'http://localhost:${toString galenePort}/group/test/' >&2 &")
+            # Note: Firefox doesn't use a regular "-" in the window title, but "—" (Hex: 0xe2 0x80 0x94)
+            machine.wait_for_window("Test — Mozilla Firefox")
+            machine.send_key("ctrl-minus")
+            machine.send_key("ctrl-minus")
+            machine.send_key("alt-f10")
+            machine.wait_for_text(r"(Galène|Username|Password|Connect)")
+            machine.screenshot("galene-group-test-join")
+
+            # Log in as admin
+            machine.send_chars("${galeneTestGroupAdminName}")
+            machine.send_key("tab")
+            machine.send_chars("${galeneTestGroupAdminPassword}")
+            machine.send_key("ret")
+            machine.sleep(5)
+            # Close "Remember credentials?" FF prompt
+            machine.send_key("esc")
+            machine.sleep(5)
+            machine.wait_for_text(r"(Enable|Share|Screen)")
+            machine.screenshot("galene-group-test-logged-in")
+
+        with subtest("galene-stream publishes speech audio"):
+            machine.succeed(
+                "galene-stream "
+                + "--input 'srt://localhost:${toString galeneStreamSrtPort}?mode=listener' "
+                + "--insecure --output 'http://localhost:${toString galenePort}/group/test/' "
+                + "--username '${galeneStreamerName}' --password '${galeneStreamerPassword}' "
+                + " > /tmp/galene-stream.log 2>&1 &"
+            )
+            machine.wait_until_succeeds("grep -q 'Waiting for incoming stream' /tmp/galene-stream.log", timeout=30)
+
+            # Stream speech audio loop
+            machine.succeed(
+                "ffmpeg "
+                + "-re -stream_loop -1 -i '${audioSample}' "
+                + "-f lavfi -i testsrc=size=160x120:rate=10 "
+                + "-map 0:a -map 1:v "
+                + "-c:a mp2 "
+                + "-c:v libx264 -pix_fmt yuv420p "
+                + "-f mpegts "
+                + "'srt://localhost:${toString galeneStreamSrtPort}' "
+                + " > /tmp/ffmpeg.log 2>&1 &"
+            )
+
+        with subtest("galene-stt starts and connects"):
+            # Restart service to ensure clean connection now that group and stream are publishing
+            machine.systemctl("restart galene-stt")
+            machine.wait_for_unit("galene-stt.service")
+
+            # Wait for galene-stt to connect, load the whisper model, and initialize backends without aborting
+            machine.wait_until_succeeds("journalctl -u galene-stt | grep -q 'whisper_backend_init:'", timeout=60)
+            machine.succeed("systemctl is-active galene-stt")
+
+        with subtest("galene-stt transcribes and displays captions in web UI"):
+            # Wait for galene-stt to process audio
+            machine.wait_until_succeeds("journalctl -u galene-stt | grep -q 'Processed '", timeout=60)
+
+            # Wait for caption or chat text to appear on screen in Firefox Web UI
+            machine.wait_for_text(r"(this is a test|world|test)")
+            machine.screenshot("galene-stt-web-ui")
       '';
     }
   );

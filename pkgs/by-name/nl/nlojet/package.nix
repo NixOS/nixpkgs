@@ -1,31 +1,25 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitLab,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: rec {
   pname = "nlojet++";
   version = "4.1.3";
 
-  src = fetchurl {
-    url = "https://desy.de/~znagy/hep-programs/nlojet++/nlojet++-${finalAttrs.version}.tar.gz";
-    sha256 = "18qfn5kjzvnyh29x40zm2maqzfmrnay9r58n8pfpq5lcphdhhv8p";
+  src = fetchFromGitLab {
+    owner = "NLO";
+    repo = "nlojetxx";
+    rev = version;
+    domain = "gitlab.desy.de";
+    hash = "sha256-tVWjCX+O1ZtefxtyzKU7hfBodIeFDBRyqAcwLama9YE=";
   };
-
-  patches = [
-    ./nlojet_clang_fix.patch
-  ];
 
   env.CXXFLAGS = "-std=c++11";
 
-  # error: no member named 'finite' in the global namespace; did you mean simply 'finite'?
-  env.NIX_CFLAGS_COMPILE = lib.optionalString (
-    stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64
-  ) "-Dfinite=isfinite";
-
   meta = {
-    homepage = "http://www.desy.de/~znagy/Site/NLOJet++.html";
+    homepage = "https://gitlab.desy.de/nlo/nlojetxx";
     license = lib.licenses.gpl2;
     description = "Implementation of calculation of the hadron jet cross sections";
     platforms = lib.platforms.unix;

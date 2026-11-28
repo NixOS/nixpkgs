@@ -19,7 +19,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   build-system = [ python3Packages.setuptools ];
 
   dependencies = with python3Packages; [
-    mcp_2
+    mcp
     python-dotenv
     requests
   ];

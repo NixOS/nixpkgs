@@ -1,8 +1,13 @@
 {
   lib,
   fetchFromGitHub,
+  libgit2,
   nix-update-script,
+  pkg-config,
+  rust-jemalloc-sys,
   rustPlatform,
+  zlib,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -19,7 +24,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-WDe75Sg7y4GfH3dSfY48aXrIBe89skj1VW0NcgtLEVU=";
 
   nativeBuildInputs = [
+    pkg-config
     rustPlatform.bindgenHook
+  ];
+
+  buildInputs = [
+    libgit2
+    rust-jemalloc-sys
+    zlib
+    zstd
   ];
 
   # Some tests fail due to I/O that is unfriendly with nix sandbox.

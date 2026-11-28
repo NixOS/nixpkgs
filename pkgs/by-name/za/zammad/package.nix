@@ -18,12 +18,13 @@
   pnpmConfigHook,
   cacert,
   valkey,
+  bash,
   dataDir ? "/var/lib/zammad",
 }:
 
 let
   pname = "zammad";
-  version = "7.2.2";
+  version = "7.2.3";
 
   src = applyPatches {
     src = fetchFromGitHub (lib.importJSON ./source.json);
@@ -78,6 +79,7 @@ stdenvNoCC.mkDerivation {
     nodejs
     procps
     cacert
+    bash
   ];
 
   env.RAILS_ENV = "production";
@@ -87,10 +89,12 @@ stdenvNoCC.mkDerivation {
     pnpm = pnpm_11;
 
     fetcherVersion = 4;
-    hash = "sha256-fLC1bcqVDPUb84SN3J9BKMNL0idK0mXQqwr+o52kRLI=";
+    hash = "sha256-ZIDcpzfVpb6rh2DVNamk2OEt/bpRQa3FPK5I+mWQ/Js=";
   };
 
   buildPhase = ''
+    runHook preBuild
+
     mkdir redis-work
     pushd redis-work
     redis-server &
@@ -108,9 +112,14 @@ stdenvNoCC.mkDerivation {
     kill $REDIS_PID
     pg_ctl stop -D postgres-work -m immediate
     rm -r redis-work postgres-work
+    bash ./script/build/cleanup.sh
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     cp -R . $out
     rm -rf $out/config/database.yml $out/config/secrets.yml $out/tmp $out/log
     # dataDir will be set in the module, and the package gets overridden there
@@ -119,6 +128,8 @@ stdenvNoCC.mkDerivation {
     ln -s ${dataDir}/log $out/log
     ln -s ${dataDir}/storage $out/storage
     ln -s ${dataDir}/tmp $out/tmp
+
+    runHook postInstall
   '';
 
   passthru = {

@@ -13,8 +13,6 @@ buildPythonPackage (finalAttrs: {
   version = "2.0";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "waveform80";
     repo = "colorzero";

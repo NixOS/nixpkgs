@@ -17,7 +17,7 @@ buildPythonPackage (finalAttrs: {
   pname = "pyvex";
   # Keep angr-management, angr, archinfo, cle, and pyvex in sync.
   # nixpkgs-update: no auto update
-  version = "10.0.4";
+  version = "10.0.7";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -26,7 +26,7 @@ buildPythonPackage (finalAttrs: {
     owner = "angr";
     repo = "pyvex";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3w7A9xYSYHh/o1JXpUllR4aUrW2MdUVdDR1ua7/gpCU=";
+    hash = "sha256-uBorm371eTLDbjN+wS8+C4SNiy09q5dYLuJLUqW5+rw=";
     fetchSubmodules = true;
   };
 

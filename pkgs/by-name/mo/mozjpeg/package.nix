@@ -22,10 +22,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     # Fix the build with CMake 4
-    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
-    "-DENABLE_STATIC=NO"
-    "-DPNG_SUPPORTED=TRUE"
-  ]; # See https://github.com/mozilla/mozjpeg/issues/351
+    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.5")
+    (lib.cmakeBool "ENABLE_SHARED" (!stdenv.hostPlatform.isStatic))
+    (lib.cmakeBool "ENABLE_STATIC" stdenv.hostPlatform.isStatic)
+    # See https://github.com/mozilla/mozjpeg/issues/351
+    (lib.cmakeBool "PNG_SUPPORTED" true)
+  ];
 
   nativeBuildInputs = [
     cmake

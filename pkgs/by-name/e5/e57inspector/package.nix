@@ -33,6 +33,13 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/nh2/e57inspector/commit/a5a899ee58952ffc2971d18b3734ea405e0020f3.patch";
       hash = "sha256-QRUv0CvX+OdH88CzI/6XjPXnAVIsf6N/Ix/qqCsSaRw=";
     })
+    # support newer gcc
+    # Remove with next release (see https://github.com/sisakat/e57inspector/pull/9)
+    (fetchpatch {
+      name = "e57inspector-support-gcc-15.patch";
+      url = "https://github.com/sisakat/e57inspector/commit/87a13fa08cd07bb91f2ee1e224f5bd4c58b27d04.patch";
+      hash = "sha256-ITGMt0ATnsIdh02DUkQXGA1XkxLtubjJTegK72ADFrE=";
+    })
   ];
 
   postPatch = ''

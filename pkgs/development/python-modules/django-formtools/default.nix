@@ -15,7 +15,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "jazzband";
+    owner = "django-commons";
     repo = "django-formtools";
     tag = finalAttrs.version;
     hash = "sha256-/985+Q2o3BoxxicyDFTYl4m4++d/4Vc+y5qQFpUc9RM=";
@@ -42,7 +42,7 @@ buildPythonPackage (finalAttrs: {
     "TestStorage"
   ]
   ++ lib.optionals (lib.versionAtLeast django.version "6.1") [
-    # https://github.com/jazzband/django-formtools/issues/303
+    # https://github.com/django-commons/django-formtools/issues/303
     "test_manipulated_cookie"
   ];
 
@@ -50,8 +50,8 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "High-level abstractions for Django forms";
-    homepage = "https://github.com/jazzband/django-formtools";
-    changelog = "https://github.com/jazzband/django-formtools/blob/${finalAttrs.src.tag}/docs/changelog.rst";
+    homepage = "https://github.com/django-commons/django-formtools";
+    changelog = "https://github.com/django-commons/django-formtools/blob/${finalAttrs.src.tag}/docs/changelog.rst";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };

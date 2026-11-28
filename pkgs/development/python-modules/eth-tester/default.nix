@@ -23,7 +23,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "ethereum";
+    owner = "ApeWorX";
     repo = "eth-tester";
     tag = "v${version}";
     hash = "sha256-ssPtsEQAyaJde/empEpGU1bf3s4yxwlEXqpacN5GWDw=";
@@ -55,8 +55,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "Tool suite for testing ethereum applications";
-    homepage = "https://github.com/ethereum/eth-tester";
-    changelog = "https://github.com/ethereum/eth-tester/blob/v${version}/CHANGELOG.rst";
+    homepage = "https://github.com/ApeWorX/eth-tester";
+    changelog = "https://github.com/ApeWorX/eth-tester/blob/v${version}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hellwolf ];
   };

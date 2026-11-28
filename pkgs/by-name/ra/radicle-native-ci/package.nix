@@ -2,10 +2,13 @@
   lib,
   rustPlatform,
   fetchFromRadicle,
+  pkg-config,
+  libgit2,
   radicle-node,
   gitMinimal,
   writableTmpDirAsHomeHook,
   versionCheckHook,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -22,6 +25,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-6Hkyf9siagH/GPVxOePpkV2BMloXEamrJSJCnEfIeSo=";
 
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ libgit2 ];
+
   preCheck = ''
     git config --global user.name nixbld
     git config --global user.email nixbld@example.com
@@ -36,7 +43,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
 
-  passthru.updateScript = ./update.sh;
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Radicle CI adapter for native CI";

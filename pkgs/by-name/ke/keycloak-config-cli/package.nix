@@ -18,7 +18,12 @@ maven.buildMavenPackage (finalAttrs: {
     hash = "sha256-dSeLn9YaT0k6Mg8cxmoDoEtvjrzkyETvI4dt+q/Wj3A=";
   };
 
-  mvnHash = "sha256-Ff9ra9ruPJ8PA0bmC8uU8PiNqjtJoR4U04veZAqZ3sM=";
+  mvnHash = "sha256-8ZRh4cLYOD3V5ccv+Iv9ND7ctMhniGK4bAVeRriOqb8=";
+
+  # The pom.xml declares org.yaml:snakeyaml twice: once with a version and
+  # once without. Maven >= 3.10 rejects duplicate dependencies as a model
+  # validation error, so remove the version-less duplicate.
+  patches = [ ./remove-duplicate-snakeyaml-dependency.patch ];
 
   # JavaScriptEvaluatorTest needs GraalVM's Truffle engine, which fails to
   # initialize on the sandbox JDK (org.graalvm.polyglot.Engine$ImplHolder).

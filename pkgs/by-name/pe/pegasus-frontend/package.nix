@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pegasus-frontend";
-  version = "0-unstable-2026-10-02";
+  version = "0-unstable-2026-11-11";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -19,8 +19,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "mmatyas";
     repo = "pegasus-frontend";
-    rev = "5d58223e58f84afb31d5d14a67438841b981a6fa";
-    hash = "sha256-KfwDt8XhMRF+rnoVClHBIIXE7qG4+ItumlAI73poHLo=";
+    rev = "3702598cf973c9573645b0ea732abad004427dc3";
+    hash = "sha256-3hxnNSu8a6H/yPWjNh7b2RUyTZmf+qCaDkLWoxlatgM=";
     fetchSubmodules = true;
   };
 

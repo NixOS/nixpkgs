@@ -7,19 +7,19 @@
 
 stdenvNoCC.mkDerivation {
   pname = "mozcdic-ut-edict2";
-  version = "0-unstable-2024-10-12";
+  version = "0-unstable-2026-07-08";
 
   src = fetchFromGitHub {
     owner = "utuhiro78";
     repo = "mozcdic-ut-edict2";
-    rev = "f68299b7113080d5e1981c97db490b3075874445";
-    hash = "sha256-PdHGVudApWgQaxvAsdVui1XQR+4JHjGkhGHfcwL3wjc=";
+    rev = "8fe8f7918baf513c3d7e243807dfcda2d5c30139";
+    hash = "sha256-YCxAmNmHVfGS1VxExK5FWQOA/SXBNuamU9yIWmfN9VU=";
   };
 
   installPhase = ''
     runHook preInstall
 
-    install -Dt $out mozcdic-ut-edict2.txt.tar.bz2
+    install -Dt $out mozcdic-ut-edict2.txt.bz2
 
     runHook postInstall
   '';
@@ -40,8 +40,5 @@ stdenvNoCC.mkDerivation {
     ];
     maintainers = with lib.maintainers; [ pineapplehunter ];
     platforms = lib.platforms.all;
-    # this does not need to be separately built
-    # it only provides some zip files
-    hydraPlatforms = [ ];
   };
 }

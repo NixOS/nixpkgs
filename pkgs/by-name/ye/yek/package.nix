@@ -8,7 +8,7 @@
   versionCheckHook,
 }:
 let
-  version = "0.25.5";
+  version = "0.26.0";
 in
 rustPlatform.buildRustPackage {
   pname = "yek";
@@ -18,15 +18,20 @@ rustPlatform.buildRustPackage {
     owner = "mohsen1";
     repo = "yek";
     tag = "v${version}";
-    hash = "sha256-CuTIBAZjlAnacrCEUf8zwclyNQHNUPhjc+9Uk2QQ5HY=";
+    hash = "sha256-lNPao/jqdRcxj9tVGwmJC5GDxV+HOsq/hACLxQy/YTU=";
   };
 
-  cargoHash = "sha256-FHniPaUfdbjSRsBccOfe1ea6WbhfQyBIxWqpNiCEkcA=";
+  cargoHash = "sha256-O36Hyl8vggeXKjNp/pM6prpNIboL/Kjepk/+xwsFShU=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ];
 
   env.OPENSSL_NO_VENDOR = 1;
+
+  # libgit2-sys 0.16 needs libgit2 1.7, nixpkgs has 1.9: use the bundled copy
+  preBuild = ''
+    export LIBGIT2_NO_VENDOR=0
+  '';
 
   # Tests using git fail
   # Skipping individual checks causes failure as `--skip` flags

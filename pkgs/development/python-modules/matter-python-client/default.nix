@@ -19,14 +19,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "matter-python-client";
-  version = "1.4.0";
+  version = "1.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "matter-js";
     repo = "matterjs-server";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eJSDTg00H/G2pPdVC23HiLLjPA8n1vCpqpAZgtUXl78=";
+    hash = "sha256-bvSJLJr4LwHRH/F+NUSZ19z0JR65hb3jJ/8Nn8yP0fo=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/python_client";

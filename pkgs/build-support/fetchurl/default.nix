@@ -55,6 +55,9 @@ let
   # takes advantage of partial application for performance reasons
   hasAlgoPrefix = lib.genAttrs [ "sha256" "sha1" "sha512" ] hasPrefix;
 
+  matchColonInfix = match ".*:.*";
+  splitOnColon = match "([^:]+)[:](.*)";
+
   /**
     Resolve a URL against the available mirrors.
 
@@ -78,9 +81,12 @@ let
     A list of resolved URLs.
   */
   resolveUrl =
+    let
+      matchMirror = match "mirror://([[:alpha:]]+)/(.+)";
+    in
     url:
     let
-      mirrorSplit = match "mirror://([[:alpha:]]+)/(.+)" url;
+      mirrorSplit = matchMirror url;
       mirrorName = head mirrorSplit;
       mirrorList = mirrors."${mirrorName}" or (throw "unknown mirror:// site ${mirrorName}");
     in
@@ -220,7 +226,7 @@ lib.extendMkDerivation {
     }@args:
 
     let
-      preRewriteUrls =
+      urls_ = rewriteAllUrls (
         if urls == [ ] && url != "" then
           (
             if isString url then [ url ] else throw "`url` is not a string: ${lib.generators.toPretty { } urls}"
@@ -228,50 +234,47 @@ lib.extendMkDerivation {
         else if urls != [ ] && url == "" then
           (if isList urls then urls else throw "`urls` is not a list: ${lib.generators.toPretty { } urls}")
         else
-          throw "fetchurl requires either `url` or `urls` to be set: ${lib.generators.toPretty { } args}";
+          throw "fetchurl requires either `url` or `urls` to be set: ${lib.generators.toPretty { } args}"
+      );
 
-      urls_ = rewriteAllUrls preRewriteUrls;
-
+      # If any hash is set, ensure all the others aren't set. Make sure that each
+      # condition includes all 5 hash types!
       hash_ =
-        if
-          length (
-            filter (s: s != "") [
-              hash
-              outputHash
-              sha1
-              sha256
-              sha512
-            ]
-          ) > 1
-        then
-          throw "multiple hashes passed to fetchurl: ${lib.generators.toPretty { } urls_}"
-        else
-
-        if hash != "" then
+        if hash != "" && (outputHash == "" && sha1 == "" && sha256 == "" && sha512 == "") then
           {
             outputHashAlgo = null;
             outputHash = hash;
           }
-        else if outputHash != "" then
-          if outputHashAlgo != "" then
-            { inherit outputHashAlgo outputHash; }
-          else
-            throw "fetchurl was passed outputHash without outputHashAlgo: ${lib.generators.toPretty { } urls_}"
-        else if sha512 != "" then
-          {
-            outputHashAlgo = "sha512";
-            outputHash = sha512;
-          }
-        else if sha256 != "" then
+        else if sha256 != "" && (hash == "" && outputHash == "" && sha1 == "" && sha512 == "") then
           {
             outputHashAlgo = "sha256";
             outputHash = sha256;
           }
-        else if sha1 != "" then
+        else if outputHash != "" && (hash == "" && sha1 == "" && sha256 == "" && sha512 == "") then
+          if outputHashAlgo != "" then
+            { inherit outputHashAlgo outputHash; }
+          else
+            throw "fetchurl was passed outputHash without outputHashAlgo: ${lib.generators.toPretty { } urls_}"
+        else if sha512 != "" && (hash == "" && outputHash == "" && sha1 == "" && sha256 == "") then
+          {
+            outputHashAlgo = "sha512";
+            outputHash = sha512;
+          }
+        else if sha1 != "" && (hash == "" && outputHash == "" && sha256 == "" && sha512 == "") then
           {
             outputHashAlgo = "sha1";
             outputHash = sha1;
           }
+        else if
+          filter (s: s != "") [
+            hash
+            outputHash
+            sha1
+            sha256
+            sha512
+          ] != [ ]
+        then
+          throw "multiple hashes passed to fetchurl: ${lib.generators.toPretty { } urls_}"
         else if cacert != null then
           {
             outputHashAlgo = null;
@@ -280,8 +283,8 @@ lib.extendMkDerivation {
         else
           throw "fetchurl requires a hash for fixed-output derivation: ${lib.generators.toPretty { } urls_}";
 
-      finalHashHasColon = match ".*:.*" finalAttrs.hash != null;
-      finalHashColonMatch = match "([^:]+)[:](.*)" finalAttrs.hash;
+      finalHashHasColon = matchColonInfix finalAttrs.hash != null;
+      finalHashColonMatch = splitOnColon finalAttrs.hash;
     in
 
     derivationArgs

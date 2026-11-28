@@ -16,8 +16,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   version = "2.1.3";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "ohaswin";
     repo = "pyscan";

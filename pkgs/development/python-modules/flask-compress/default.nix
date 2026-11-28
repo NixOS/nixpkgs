@@ -15,7 +15,7 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.25";
+  version = "1.26";
   pname = "flask-compress";
   pyproject = true;
 
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "colour-science";
     repo = "flask-compress";
     tag = "v${version}";
-    hash = "sha256-bzzXq6Lyckr2KfnyK2ZXe8BMWQtHkgtol+z0ek5Jdh8=";
+    hash = "sha256-Mr5TrF5CF7RI96qfAYjVdmJweoif8Ho//7Q9BUZmhOA=";
   };
 
   build-system = [

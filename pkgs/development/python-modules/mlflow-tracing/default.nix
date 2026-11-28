@@ -21,13 +21,12 @@ buildPythonPackage (finalAttrs: {
   pname = "mlflow-tracing";
   inherit (mlflow) version;
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "mlflow";
     repo = "mlflow";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-myWmiBc6TuoVuS10TLqWZoCmPJdzynDJS7ImwkHP5Lk=";
+    hash = "sha256-GSgyzG8V84Z103WjBqQV3hTxhkdkMpZLJ5yL2yDyvsc=";
   };
 
   postPatch = ''

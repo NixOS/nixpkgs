@@ -14,8 +14,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
-    owner = "NVlabs";
-    repo = "cuda-oxide";
+    owner = "NVIDIA";
+    repo = "cuda-rust";
     tag = "v${finalAttrs.version}";
     hash = "sha256-dOa/ScWgEQre0f9MgxFVLRtuNcqr2JC61XP7FsHAP2A=";
   };
@@ -51,8 +51,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Experimental Rust-to-CUDA compiler that lets you write (SIMT) GPU kernels in safe(ish), idiomatic Rust";
-    homepage = "https://github.com/NVlabs/cuda-oxide";
-    changelog = "https://github.com/NVlabs/cuda-oxide/releases/tag/${finalAttrs.src.tag}";
+    homepage = "https://github.com/NVIDIA/cuda-rust";
+    changelog = "https://github.com/NVIDIA/cuda-rust/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       GaetanLepage

@@ -32,10 +32,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Recursively visit and download a website's content to your disk";
     homepage = "https://github.com/skallwar/suckit";
-    license = with lib.licenses; [
-      asl20 # or
-      mit
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
     maintainers = [ ];
     mainProgram = "suckit";
   };

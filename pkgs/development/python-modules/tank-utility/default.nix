@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "tank-utility";
-  version = "1.5.1";
+  version = "1.5.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "krismolendyke";
     repo = "tank-utility";
     tag = version;
-    hash = "sha256-koLdumixS11J1Ia9aCihQU7XXu0dziNzMkqEQ2LH9o4=";
+    hash = "sha256-W30gkik7eigHM5hB3wIr4pSZEkmjbKbuVq2yMW8Xkfg=";
   };
 
   build-system = [ setuptools_80 ];

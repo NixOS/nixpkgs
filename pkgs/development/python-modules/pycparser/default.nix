@@ -8,16 +8,16 @@
   unittestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pycparser";
-  version = "3.00";
+  version = "3.12";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "eliben";
     repo = "pycparser";
-    tag = "release_v${version}";
-    hash = "sha256-6eKc+p3xLyRPo3oCWP/dbMpHlkBXLy8XiGR0gTEHI2E=";
+    tag = "release_v${finalAttrs.version}";
+    hash = "sha256-4FV6EYWFisA0nQaLDJVXLuPG5ttmP37lKACL+aWPtlM=";
   };
 
   build-system = [ setuptools ];
@@ -30,9 +30,8 @@ buildPythonPackage rec {
     substituteInPlace examples/using_gcc_E_libc.py \
       --replace-fail "'gcc'" "'${stdenv.cc.targetPrefix}cc'"
   '';
-  unittestFlagsArray = [
-    "-s"
-    "tests"
+  unittestFlags = [
+    "--start-directory=tests"
   ];
 
   passthru.updateScript = gitUpdater {
@@ -40,10 +39,10 @@ buildPythonPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/eliben/pycparser/releases/tag/${src.tag}";
+    changelog = "https://github.com/eliben/pycparser/releases/tag/${finalAttrs.src.tag}";
     description = "C parser in Python";
     homepage = "https://github.com/eliben/pycparser";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.dotlambda ];
   };
-}
+})

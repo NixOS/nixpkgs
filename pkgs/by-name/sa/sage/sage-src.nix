@@ -55,15 +55,19 @@ stdenv.mkDerivation (finalAttrs: {
     # Silence some warnings during docbuild. Imported from Arch.
     ./patches/sagedoc-silence-formatting-warnings.patch
 
-    # Workaround for https://github.com/cython/cython/pull/6755, adapted from Void. Can be removed after next Cython release.
-    ./patches/workaround-cython-relpaths.patch
-
     # Revert https://github.com/sagemath/sage/pull/40520. It causes
     # "undefined symbol: cblas_ctrmv" errors.
     ./patches/revert-blas-mesonification.patch
 
     # https://github.com/sagemath/sage/pull/42587
     ./patches/link-ntl-directly-for-ntl-cython-extensions.patch
+
+    # OutputBuffer.from_file chmods the bundled rich output example files,
+    # which live in the (possibly read-only mounted) Nix store. Only
+    # PermissionError was tolerated, so builders that mount store paths
+    # read-only fail ~49 doctests with EROFS.
+    # https://github.com/sagemath/sage/pull/43035
+    ./patches/rich-output-read-only-store.patch
 
     # https://github.com/sagemath/sage/pull/41637 causes problems when
     # docbuilding.
@@ -167,9 +171,14 @@ stdenv.mkDerivation (finalAttrs: {
       hash = "sha256-msXUEbeO2rbP5m+EV8WmX6i8oQIfRLWEDGbIdz//lek=";
     })
 
-    # work around https://github.com/ipython/ipython/issues/15207, which
-    # will likely be properly fixed in IPython 9.16.
-    ./patches/ipython-9_15-workaround.patch
+    # https://github.com/sagemath/sage/pull/42742, landed in 10.10.rc0
+    (fetchpatch2 {
+      name = "cython-3.3-update.patch";
+      url = "https://github.com/sagemath/sage/commit/0c6f9825c5347cd8b455928950a1336fe7f630f2.patch?full_index=1";
+      # only reverts a cython version constraint that 10.9 does not have
+      excludes = [ "pyproject.toml" ];
+      hash = "sha256-br8WpGWNsYTrZ1lSkaKqnDNusBQ1SDCStBNSiXrptME=";
+    })
 
     # work around https://github.com/scipy/scipy/issues/25471, which is
     # fixed as part of SciPy 1.18.1.

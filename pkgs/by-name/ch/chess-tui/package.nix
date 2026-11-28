@@ -3,6 +3,7 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
+  aws-lc,
   openssl,
   pkg-config,
   alsa-lib,
@@ -11,16 +12,18 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "chess-tui";
-  version = "2.7.1";
+  version = "2.9.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "thomas-mauran";
     repo = "chess-tui";
     tag = finalAttrs.version;
-    hash = "sha256-B6CpUha5e2W82HnWOxV2arHAiqJCyL5bwkhELYQPxMg=";
+    hash = "sha256-/D6eujVIxjEakmpj9IKfNFUxQ3p0ZBC27o9gQaj7h1M=";
   };
 
-  cargoHash = "sha256-Vik4FceQSYnziDpAqz7r7gpabUp2JL5u40iT0r8fnAw=";
+  cargoHash = "sha256-2iPeVskEaW1G7m1OAHc0ow3qPyjvI7s9JGc9gBibmDA=";
 
   checkFlags = [
     # assertion failed: result.is_ok()
@@ -28,6 +31,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
     openssl
   ]
   # alsa-lib is required for the alsa-sys. alsa-lib does not compile on darwin
@@ -37,15 +41,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config ];
 
-  env.PKG_CONFIG_PATH = "${openssl.dev}/lib/pkgconfig";
-
   passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Chess TUI implementation in rust";
     homepage = "https://github.com/thomas-mauran/chess-tui";
-    maintainers = with lib.maintainers; [ ByteSudoer ];
-    license = lib.licenses.mit;
+    changelog = "https://github.com/thomas-mauran/chess-tui/releases/tag/${finalAttrs.src.tag}";
+    maintainers = with lib.maintainers; [
+      ByteSudoer
+      kybe236
+    ];
+    license = lib.licenses.gpl3Plus;
     mainProgram = "chess-tui";
   };
 })

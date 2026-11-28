@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  memcached,
   psutil,
   pylibmc,
   pytest,
@@ -9,20 +10,20 @@
   requests,
   setuptools-scm,
   toml,
-  mysqlclient,
+  xvfb,
   zc-lockfile,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-services";
-  version = "2.2.2";
+  version = "2.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytest-dev";
     repo = "pytest-services";
-    tag = "v${version}";
-    hash = "sha256-kWgqb7+3/hZKUz7B3PnfxHZq6yU3JUeJ+mruqrMD/NE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-6FyyotxVkGijtxt9//6iivWfdcU0xOMmbuyTlbgflgo=";
   };
 
   build-system = [
@@ -38,19 +39,22 @@ buildPythonPackage rec {
     zc-lockfile
   ];
 
+  optional-dependencies = {
+    memcached = [ pylibmc ];
+  };
+
   nativeCheckInputs = [
-    mysqlclient
-    pylibmc
+    memcached
     pytestCheckHook
-  ];
+    xvfb
+  ]
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   pythonImportsCheck = [ "pytest_services" ];
 
   disabledTests = [
     # Tests require binaries and additional parts
-    "test_memcached"
     "test_mysql"
-    "test_xvfb"
   ];
 
   # Tests use sockets
@@ -59,8 +63,8 @@ buildPythonPackage rec {
   meta = {
     description = "Services plugin for pytest testing framework";
     homepage = "https://github.com/pytest-dev/pytest-services";
-    changelog = "https://github.com/pytest-dev/pytest-services/blob/${src.tag}/CHANGES.rst";
+    changelog = "https://github.com/pytest-dev/pytest-services/blob/${finalAttrs.src.tag}/CHANGES.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

@@ -14,16 +14,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "spotatui";
-  version = "0.45.0";
+  version = "0.49.0";
 
   src = fetchFromGitHub {
     owner = "LargeModGames";
     repo = "spotatui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-q2xPwHPmyimwI33KTAaIv/pJQcepa3zooPZVr8AXIsQ=";
+    hash = "sha256-9E16LTkV4i1ltmyJHd4mWpGaqNVS0fNDnzW7dEWeCj4=";
   };
 
-  cargoHash = "sha256-hv8G5RaHnXqLabFkEjsCckElyPRkv6Lkn21S+vF1VPw=";
+  cargoHash = "sha256-9piwsgn1w2VPkW3MxzQIS1k3OI8yrpvYSMozgA7xLAk=";
 
   nativeBuildInputs = [ pkg-config ] ++ lib.optional withPipewireVisualizer rustPlatform.bindgenHook;
 
@@ -53,6 +53,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doCheck = !withAiDj;
 
   passthru.updateScript = nix-update-script { };
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   meta = {
     description = "Fully standalone Spotify client for the terminal";

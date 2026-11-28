@@ -6,6 +6,7 @@
   fetchurl,
   nixosTests,
   writeScript,
+  cacert,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -34,6 +35,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p $out/share/wordpress
     cp -r . $out/share/wordpress
+
+    rm $out/share/wordpress/wp-includes/certificates/ca-bundle.crt
+    ln -s ${cacert}/etc/ssl/certs/ca-no-trust-rules-bundle.crt $out/share/wordpress/wp-includes/certificates/ca-bundle.crt
 
     runHook postInstall
   '';

@@ -1,0 +1,33 @@
+---
+ galene_stream/cli.py | 3 ++-
+ tests/test_webrtc.py | 3 ++-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/galene_stream/cli.py b/galene_stream/cli.py
+index 29480ea..f8a2d61 100644
+--- a/galene_stream/cli.py
++++ b/galene_stream/cli.py
+@@ -29,7 +29,8 @@ def start(opt: argparse.Namespace):
+     )
+ 
+     # Connect and run main even loop
+-    event_loop = asyncio.get_event_loop()
++    event_loop = asyncio.new_event_loop()
++    asyncio.set_event_loop(event_loop)
+     event_loop.run_until_complete(client.connect())
+     try:
+         event_loop.run_until_complete(client.loop(event_loop))
+diff --git a/tests/test_webrtc.py b/tests/test_webrtc.py
+index c1ac879..6489aea 100644
+--- a/tests/test_webrtc.py
++++ b/tests/test_webrtc.py
+@@ -12,7 +12,8 @@ from galene_stream.webrtc import WebRTCClient
+ 
+ def test_init_webrtc():
+     """Test WebRTC initialization."""
+-    event_loop = asyncio.get_event_loop()
++    event_loop = asyncio.new_event_loop()
++    asyncio.set_event_loop(event_loop)
+     client = WebRTCClient("rtmp://localhost:1935/live/test", 1048576, None, None)
+     client.start_pipeline(event_loop, [])
+     client.close_pipeline()

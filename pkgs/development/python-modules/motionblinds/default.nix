@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "motionblinds";
-  version = "0.6.30";
+  version = "0.6.31";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "starkillerOG";
     repo = "motion-blinds";
     tag = version;
-    hash = "sha256-xV9od7xTKBBE4f4Mqg57Mp0MXO8/lG+bBKzG+jv6gf4=";
+    hash = "sha256-gYyPHdOFGWMlXsB0+vBYnAqmEzeHRSKcVtNpedmo0xE=";
   };
 
   build-system = [ setuptools ];

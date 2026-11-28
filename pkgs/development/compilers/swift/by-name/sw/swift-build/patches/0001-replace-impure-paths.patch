@@ -1,7 +1,7 @@
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Randy Eckenrode <randy@largeandhighquality.com>
 Date: Tue, 9 Dec 2025 20:57:45 -0500
-Subject: [PATCH 1/3] replace-impure-paths
+Subject: [PATCH 1/6] replace-impure-paths
 
 ---
  Plugins/run-xcodebuild/run-xcodebuild.swift          |  2 +-
@@ -11,17 +11,20 @@ Subject: [PATCH 1/3] replace-impure-paths
  .../SpecImplementations/CommandLineToolSpec.swift    |  2 +-
  .../SWBCore/SpecImplementations/Tools/CodeSign.swift |  2 +-
  .../SpecImplementations/Tools/MkdirTool.swift        |  2 +-
+ .../SpecImplementations/Tools/SwiftStdLibTool.swift  |  2 +-
  .../SpecImplementations/Tools/SymlinkTool.swift      |  2 +-
+ .../SpecImplementations/Tools/TAPITools.swift        |  2 +-
  .../SpecImplementations/Tools/TouchTool.swift        |  2 +-
  Sources/SWBCore/Specs/CoreBuildSystem.xcspec         |  2 +-
  Sources/SWBCore/Specs/NativeBuildSystem.xcspec       | 12 ++++++------
  Sources/SWBGenericUnixPlatform/Plugin.swift          |  2 +-
  Sources/SWBProjectModel/PIFGenerationModel.swift     |  4 ++--
  .../ShellScriptTaskProducer.swift                    |  2 +-
+ .../GeneratedFilesTaskProducer.swift                 |  2 +-
  Sources/SWBTaskExecution/BuildDescription.swift      |  4 ++--
  .../TaskActions/CopyTiffTaskAction.swift             |  2 +-
  .../TaskActions/EmbedSwiftStdLibTaskAction.swift     |  2 +-
- Sources/SWBTestSupport/CoreBasedTests.swift          |  6 +++---
+ Sources/SWBTestSupport/CoreBasedTests.swift          | 10 ++++++----
  Sources/SWBTestSupport/FSUtilities.swift             |  4 ++--
  Sources/SWBTestSupport/LibraryGeneration.swift       |  8 ++++----
  Sources/SWBTestSupport/TestWorkspaces.swift          |  4 ++--
@@ -29,8 +32,8 @@ Subject: [PATCH 1/3] replace-impure-paths
  Sources/SWBUniversalPlatform/Specs/CodeSign.xcspec   |  2 +-
  Sources/SWBUtil/PbxCp.swift                          | 12 ++++++------
  Sources/SWBUtil/Signatures.swift                     |  2 +-
- .../CoreQualificationTester.swift                    |  2 +-
- 26 files changed, 45 insertions(+), 45 deletions(-)
+ .../CoreQualificationTester.swift                    |  4 ++--
+ 29 files changed, 52 insertions(+), 50 deletions(-)
 
 diff --git a/Plugins/run-xcodebuild/run-xcodebuild.swift b/Plugins/run-xcodebuild/run-xcodebuild.swift
 index 710a84a2..c83982de 100644
@@ -46,10 +49,10 @@ index 710a84a2..c83982de 100644
          process.environment = ProcessInfo.processInfo.environment.merging(["XCBBUILDSERVICE_PATH": buildServiceURL.path()]) { _, new in new }
          try await process.run()
 diff --git a/Sources/SWBBuildService/Messages.swift b/Sources/SWBBuildService/Messages.swift
-index 4f2e6ad2..4861cd88 100644
+index 95e12252..2dc30804 100644
 --- a/Sources/SWBBuildService/Messages.swift
 +++ b/Sources/SWBBuildService/Messages.swift
-@@ -190,7 +190,7 @@ extension SetSessionWorkspaceContainerPathRequest: PIFProvidingRequest {
+@@ -209,7 +209,7 @@ extension SetSessionWorkspaceContainerPathRequest: PIFProvidingRequest {
              try fs.createDirectory(dir, recursive: true)
              let pifPath = dir.join(Foundation.UUID().description + ".json")
              let argument = isProject ? "-project" : "-workspace"
@@ -59,7 +62,7 @@ index 4f2e6ad2..4861cd88 100644
                  throw StubError.error("Could not dump PIF for '\(path.str)': \(String(decoding: result.stderr, as: UTF8.self))")
              }
 diff --git a/Sources/SWBCore/BuildRuleSet.swift b/Sources/SWBCore/BuildRuleSet.swift
-index a9aef7c2..329f5c5f 100644
+index a9aef7c2..aaccb69f 100644
 --- a/Sources/SWBCore/BuildRuleSet.swift
 +++ b/Sources/SWBCore/BuildRuleSet.swift
 @@ -160,7 +160,7 @@ extension Core {
@@ -72,23 +75,23 @@ index a9aef7c2..329f5c5f 100644
          let condition: any BuildRuleCondition
          switch inputSpecifier {
 diff --git a/Sources/SWBCore/SDKRegistry.swift b/Sources/SWBCore/SDKRegistry.swift
-index 5fb5a318..2abebfbe 100644
+index 8cdff643..b4c7688a 100644
 --- a/Sources/SWBCore/SDKRegistry.swift
 +++ b/Sources/SWBCore/SDKRegistry.swift
-@@ -1099,7 +1099,7 @@ public final class SDKRegistry: SDKRegistryLookup, CustomStringConvertible, Send
-                 "GENERATE_TEXT_BASED_STUBS": "NO",
-                 "GENERATE_INTERMEDIATE_TEXT_BASED_STUBS": "NO",
+@@ -1108,7 +1108,7 @@ public final class SDKRegistry: SDKRegistryLookup, CustomStringConvertible, Send
+             "GENERATE_TEXT_BASED_STUBS": "NO",
+             "GENERATE_INTERMEDIATE_TEXT_BASED_STUBS": "NO",
  
--                "CHOWN": "/usr/bin/chown",
-+                "CHOWN": "@coreutils@/bin/chown",
+-            "CHOWN": "/usr/bin/chown",
++            "CHOWN": "@coreutils@/bin/chown",
  
-                 // TODO are these going to be appropriate for all kinds of SDK's?
-                 // SwiftSDK _could_ have tool entries for these, so use them if they are available
+             // TODO are these going to be appropriate for all kinds of SDK's?
+             // SwiftSDK _could_ have tool entries for these, so use them if they are available
 diff --git a/Sources/SWBCore/SpecImplementations/CommandLineToolSpec.swift b/Sources/SWBCore/SpecImplementations/CommandLineToolSpec.swift
-index cee454e4..23050d4e 100644
+index e0a588af..21c35be7 100644
 --- a/Sources/SWBCore/SpecImplementations/CommandLineToolSpec.swift
 +++ b/Sources/SWBCore/SpecImplementations/CommandLineToolSpec.swift
-@@ -246,7 +246,7 @@ extension DiscoveredCommandLineToolSpecInfo {
+@@ -253,7 +253,7 @@ extension DiscoveredCommandLineToolSpecInfo {
          if !toolPath.isAbsolute {
              throw StubError.error("\(toolPath.str) is not absolute")
          }
@@ -96,7 +99,7 @@ index cee454e4..23050d4e 100644
 +        return try await producer.discoveredCommandLineToolSpecInfo(delegate, toolPath.basename, ["@what@/bin/what", "-q", toolPath.str]) { executionResult in
              let outputString = String(decoding: executionResult.stdout, as: UTF8.self).trimmingCharacters(in: .whitespacesAndNewlines)
              let lines = Set(outputString.split(separator: "\n").map(String.init)) // version info is printed once per architecture slice, but we never expect them to differ
-             return try construct(AppleGenericVersionInfo(string: lines.only ?? outputString))
+             let versionInfo: AppleGenericVersionInfo
 diff --git a/Sources/SWBCore/SpecImplementations/Tools/CodeSign.swift b/Sources/SWBCore/SpecImplementations/Tools/CodeSign.swift
 index 8f0dd409..c80d1899 100644
 --- a/Sources/SWBCore/SpecImplementations/Tools/CodeSign.swift
@@ -123,6 +126,19 @@ index 78feb6d3..8f4a1914 100644
              environment: EnvironmentBindings(),
              workingDirectory: cbc.producer.defaultWorkingDirectory,
              inputs: [], outputs: outputs, action: nil,
+diff --git a/Sources/SWBCore/SpecImplementations/Tools/SwiftStdLibTool.swift b/Sources/SWBCore/SpecImplementations/Tools/SwiftStdLibTool.swift
+index 985a6988..f6e674a8 100644
+--- a/Sources/SWBCore/SpecImplementations/Tools/SwiftStdLibTool.swift
++++ b/Sources/SWBCore/SpecImplementations/Tools/SwiftStdLibTool.swift
+@@ -54,7 +54,7 @@ public final class SwiftStdLibToolSpec : GenericCommandLineToolSpec, SpecIdentif
+ 
+         // Bitcode is no longer supported, but some old libraries may contain bitcode, so we continue to strip it when directed.
+         if commandLine.contains("--strip-bitcode") {
+-            if let bitcodeStripToolPath = cbc.producer.toolchains.lazy.compactMap({ $0.executableSearchPaths.lookup(Path("bitcode_strip")) }).first {
++            if let bitcodeStripToolPath = cbc.producer.toolchains.lazy.compactMap({ $0.executableSearchPaths.lookup(Path("@llvm@/bin/llvm-bitcode-strip")) }).first {
+                 commandLine.append(contentsOf: ["--strip-bitcode-tool", bitcodeStripToolPath.str])
+             }
+         }
 diff --git a/Sources/SWBCore/SpecImplementations/Tools/SymlinkTool.swift b/Sources/SWBCore/SpecImplementations/Tools/SymlinkTool.swift
 index 0d889a54..47c0e4cb 100644
 --- a/Sources/SWBCore/SpecImplementations/Tools/SymlinkTool.swift
@@ -136,6 +152,18 @@ index 0d889a54..47c0e4cb 100644
          delegate.createTask(
              type: self, ruleInfo: ["SymLink", outputPath.str, toPath],
              commandLine: commandLine, environment: environmentFromSpec(cbc, delegate),
+diff --git a/Sources/SWBCore/SpecImplementations/Tools/TAPITools.swift b/Sources/SWBCore/SpecImplementations/Tools/TAPITools.swift
+index 2dfab03f..cbf1635d 100644
+--- a/Sources/SWBCore/SpecImplementations/Tools/TAPITools.swift
++++ b/Sources/SWBCore/SpecImplementations/Tools/TAPITools.swift
+@@ -214,6 +214,6 @@ public func discoveredTAPIToolInfo(_ producer: any CommandProducer, _ delegate:
+ 
+ extension MacroEvaluationScope {
+     func tapiExecutablePath(lookup: ((MacroDeclaration) -> MacroExpression?)? = nil) -> String {
+-        return evaluate(BuiltinMacros.TAPI_EXEC, lookup: lookup, default: "tapi").str
++        return evaluate(BuiltinMacros.TAPI_EXEC, lookup: lookup, default: "@tapi@/bin/tapi").str
+     }
+ }
 diff --git a/Sources/SWBCore/SpecImplementations/Tools/TouchTool.swift b/Sources/SWBCore/SpecImplementations/Tools/TouchTool.swift
 index 57ab5f1a..892cb46c 100644
 --- a/Sources/SWBCore/SpecImplementations/Tools/TouchTool.swift
@@ -150,10 +178,10 @@ index 57ab5f1a..892cb46c 100644
  
          delegate.createTask(type: self, ruleInfo: ["Touch", input.absolutePath.str], commandLine: commandLine, environment: EnvironmentBindings(), workingDirectory: cbc.producer.defaultWorkingDirectory, inputs: [delegate.createNode(input.absolutePath)], outputs: outputs, mustPrecede: [], action: delegate.taskActionCreationDelegate.createDeferredExecutionTaskActionIfRequested(userPreferences: cbc.producer.userPreferences), execDescription: resolveExecutionDescription(cbc, delegate, lookup: outputFileOverride), enableSandboxing: enableSandboxing)
 diff --git a/Sources/SWBCore/Specs/CoreBuildSystem.xcspec b/Sources/SWBCore/Specs/CoreBuildSystem.xcspec
-index 7593180b..4fe24daf 100644
+index 0c7824b4..4871f2f7 100644
 --- a/Sources/SWBCore/Specs/CoreBuildSystem.xcspec
 +++ b/Sources/SWBCore/Specs/CoreBuildSystem.xcspec
-@@ -3215,7 +3215,7 @@ For more information on mergeable libraries, see [Configuring your project to us
+@@ -3234,7 +3234,7 @@ For more information on mergeable libraries, see [Configuring your project to us
              {
                  Name = "JAVA_COMPILER";
                  Type = Path;
@@ -163,7 +191,7 @@ index 7593180b..4fe24daf 100644
              {
                  Name = "JAVA_ARCHIVE_CLASSES";
 diff --git a/Sources/SWBCore/Specs/NativeBuildSystem.xcspec b/Sources/SWBCore/Specs/NativeBuildSystem.xcspec
-index 65e3918c..e0bda4ba 100644
+index ad364b06..dab88e2d 100644
 --- a/Sources/SWBCore/Specs/NativeBuildSystem.xcspec
 +++ b/Sources/SWBCore/Specs/NativeBuildSystem.xcspec
 @@ -819,27 +819,27 @@ When `GENERATE_INFOPLIST_FILE` is enabled, sets the value of the [CFBundleExecut
@@ -201,20 +229,20 @@ index 65e3918c..e0bda4ba 100644
  
              // Utility settings
 diff --git a/Sources/SWBGenericUnixPlatform/Plugin.swift b/Sources/SWBGenericUnixPlatform/Plugin.swift
-index 971b24d1..9c3b1a4d 100644
+index 2658c810..48ebd3db 100644
 --- a/Sources/SWBGenericUnixPlatform/Plugin.swift
 +++ b/Sources/SWBGenericUnixPlatform/Plugin.swift
-@@ -130,7 +130,7 @@ struct GenericUnixSDKRegistryExtension: SDKRegistryExtension {
+@@ -193,7 +193,7 @@ struct GenericUnixSDKRegistryExtension: SDKRegistryExtension {
                      "GENERATE_TEXT_BASED_STUBS": "NO",
                      "GENERATE_INTERMEDIATE_TEXT_BASED_STUBS": "NO",
  
 -                    "AR": "llvm-ar",
 +                    "AR": "@llvm@/bin/llvm-ar",
                  ]
-             default:
-                 defaultProperties = [:]
+             case .openbsd:
+                 defaultProperties = [
 diff --git a/Sources/SWBProjectModel/PIFGenerationModel.swift b/Sources/SWBProjectModel/PIFGenerationModel.swift
-index 00e96dc0..426cc089 100644
+index d278669c..440e31f7 100644
 --- a/Sources/SWBProjectModel/PIFGenerationModel.swift
 +++ b/Sources/SWBProjectModel/PIFGenerationModel.swift
 @@ -356,7 +356,7 @@ public enum PIF {
@@ -236,7 +264,7 @@ index 00e96dc0..426cc089 100644
              inputPaths: [String],
              outputPaths: [String],
 diff --git a/Sources/SWBTaskConstruction/TaskProducers/BuildPhaseTaskProducers/ShellScriptTaskProducer.swift b/Sources/SWBTaskConstruction/TaskProducers/BuildPhaseTaskProducers/ShellScriptTaskProducer.swift
-index fedc42f6..df7a9f72 100644
+index fedc42f6..81bb8734 100644
 --- a/Sources/SWBTaskConstruction/TaskProducers/BuildPhaseTaskProducers/ShellScriptTaskProducer.swift
 +++ b/Sources/SWBTaskConstruction/TaskProducers/BuildPhaseTaskProducers/ShellScriptTaskProducer.swift
 @@ -201,7 +201,7 @@ final class ShellScriptTaskProducer: PhasedTaskProducer, TaskProducer, ShellBase
@@ -248,11 +276,24 @@ index fedc42f6..df7a9f72 100644
  
          let isSandboxingEnabled: Bool
  
+diff --git a/Sources/SWBTaskConstruction/TaskProducers/OtherTaskProducers/GeneratedFilesTaskProducer.swift b/Sources/SWBTaskConstruction/TaskProducers/OtherTaskProducers/GeneratedFilesTaskProducer.swift
+index 17f0d1e0..93e3b1d4 100644
+--- a/Sources/SWBTaskConstruction/TaskProducers/OtherTaskProducers/GeneratedFilesTaskProducer.swift
++++ b/Sources/SWBTaskConstruction/TaskProducers/OtherTaskProducers/GeneratedFilesTaskProducer.swift
+@@ -62,7 +62,7 @@ final class GeneratedFilesTaskProducer: PhasedTaskProducer, TaskProducer {
+             await appendGeneratedTasks(&tasks) { delegate in
+                 await context.productPackagingSpec.constructProductEntitlementsTasks(CommandBuildContext(producer: context, scope: scope, inputs: [FileToBuild(context: context, absolutePath: input)], output: entitlements.output), delegate, entitlementsVariant, fs: context.workspaceContext.fs)
+ 
+-                delegate.createTask(type: context.productPackagingSpec, ruleInfo: ["ProcessProductPackagingDER", entitlements.output.str, entitlements.outputDer.str], commandLine: ["/usr/bin/derq", "query", "-f", "xml", "-i", entitlements.output.str, "-o", entitlements.outputDer.str, "--raw"], environment: EnvironmentBindings([:]), workingDirectory: context.defaultWorkingDirectory, inputs: [delegate.createNode(entitlements.output)], outputs: [delegate.createNode(entitlements.outputDer)], action: delegate.taskActionCreationDelegate.createDeferredExecutionTaskActionIfRequested(userPreferences: context.userPreferences), execDescription: "Generate DER entitlements", enableSandboxing: context.productPackagingSpec.enableSandboxing)
++                delegate.createTask(type: context.productPackagingSpec, ruleInfo: ["ProcessProductPackagingDER", entitlements.output.str, entitlements.outputDer.str], commandLine: ["@re-derq@/bin/derq", "query", "-f", "xml", "-i", entitlements.output.str, "-o", entitlements.outputDer.str, "--raw"], environment: EnvironmentBindings([:]), workingDirectory: context.defaultWorkingDirectory, inputs: [delegate.createNode(entitlements.output)], outputs: [delegate.createNode(entitlements.outputDer)], action: delegate.taskActionCreationDelegate.createDeferredExecutionTaskActionIfRequested(userPreferences: context.userPreferences), execDescription: "Generate DER entitlements", enableSandboxing: context.productPackagingSpec.enableSandboxing)
+             }
+         }
+ 
 diff --git a/Sources/SWBTaskExecution/BuildDescription.swift b/Sources/SWBTaskExecution/BuildDescription.swift
-index f2279da3..ed26f903 100644
+index 081a0acd..55ccc539 100644
 --- a/Sources/SWBTaskExecution/BuildDescription.swift
 +++ b/Sources/SWBTaskExecution/BuildDescription.swift
-@@ -893,7 +893,7 @@ package final class BuildDescriptionBuilder {
+@@ -910,7 +910,7 @@ package final class BuildDescriptionBuilder {
  
          var commandLine = commandLine
          if bypassActualTasks {
@@ -261,7 +302,7 @@ index f2279da3..ed26f903 100644
          }
  
          // Add the command definition.
-@@ -973,7 +973,7 @@ package final class BuildDescriptionBuilder {
+@@ -990,7 +990,7 @@ package final class BuildDescriptionBuilder {
      func addCustomCommand(_ task: any PlannedTask, tool: String, inputs: [any PlannedNode], outputs: [any PlannedNode], deps: DependencyDataStyle? = nil, allowMissingInputs: Bool, alwaysOutOfDate: Bool, description: [String]) throws {
          // Honor `bypassActualTasks`.
          if bypassActualTasks {
@@ -284,10 +325,10 @@ index df1675af..9e4b37c2 100644
                  let processDelegate = TaskProcessDelegate(outputDelegate: outputDelegate)
                  do {
 diff --git a/Sources/SWBTaskExecution/TaskActions/EmbedSwiftStdLibTaskAction.swift b/Sources/SWBTaskExecution/TaskActions/EmbedSwiftStdLibTaskAction.swift
-index 38501d22..01b80870 100644
+index d73c8d8e..65bcf1af 100644
 --- a/Sources/SWBTaskExecution/TaskActions/EmbedSwiftStdLibTaskAction.swift
 +++ b/Sources/SWBTaskExecution/TaskActions/EmbedSwiftStdLibTaskAction.swift
-@@ -839,7 +839,7 @@ public final class EmbedSwiftStdLibTaskAction: TaskAction {
+@@ -873,7 +873,7 @@ public final class EmbedSwiftStdLibTaskAction: TaskAction {
              // Codesign the Swift libraries in $build_dir/$frameworks
              // but not the libraries in $build_dir/$unsigned_frameworks.
              if codeSignIdentity != nil && !swiftLibs.isEmpty {
@@ -297,10 +338,21 @@ index 38501d22..01b80870 100644
                  // Swift libraries that are up-to-date get codesigned anyway
                  // (in case options changed or a previous build was incomplete).
 diff --git a/Sources/SWBTestSupport/CoreBasedTests.swift b/Sources/SWBTestSupport/CoreBasedTests.swift
-index 6beda66f..58a3ec8e 100644
+index 635394d2..2dc96959 100644
 --- a/Sources/SWBTestSupport/CoreBasedTests.swift
 +++ b/Sources/SWBTestSupport/CoreBasedTests.swift
-@@ -241,8 +241,8 @@ extension CoreBasedTests {
+@@ -190,7 +190,9 @@ extension CoreBasedTests {
+     package var tapiToolPath: Path {
+         get async throws {
+             let (core, defaultToolchain) = try await coreAndToolchain()
+-            return try #require(defaultToolchain.executableSearchPaths.findExecutable(operatingSystem: core.hostOperatingSystem, basename: "tapi"), "couldn't find tapi in default toolchain")
++            let fallbacktapi = Path("@tapi@/bin/tapi")
++            return try #require(defaultToolchain.executableSearchPaths.findExecutable(operatingSystem: core.hostOperatingSystem, basename: "tapi")
++                                ?? (localFS.exists(fallbacktapi) ? fallbacktapi : nil), "couldn't find tapi in default toolchain")
+         }
+     }
+ 
+@@ -246,8 +248,8 @@ extension CoreBasedTests {
      package var libtoolPath: Path {
          get async throws {
              let (core, defaultToolchain) = try await coreAndToolchain()
@@ -311,7 +363,7 @@ index 6beda66f..58a3ec8e 100644
                                  ?? defaultToolchain.executableSearchPaths.findExecutable(operatingSystem: core.hostOperatingSystem, basename: "llvm-ar")
                                  ?? (localFS.exists(fallbacklibtool) ? fallbacklibtool : nil), "couldn't find libtool in default toolchain")
          }
-@@ -252,7 +252,7 @@ extension CoreBasedTests {
+@@ -257,7 +259,7 @@ extension CoreBasedTests {
      package var llvmlibPath: Path {
          get async throws {
              let (core, defaultToolchain) = try await coreAndToolchain()
@@ -337,7 +389,7 @@ index 75c193c9..b1a3dc42 100644
              try await writeFileContents(contents.join("_CodeSignature/CodeSignature")) { $0 <<< "signature" }
          }
 diff --git a/Sources/SWBTestSupport/LibraryGeneration.swift b/Sources/SWBTestSupport/LibraryGeneration.swift
-index 1a238077..13bf27ad 100644
+index df048a63..673ec1d9 100644
 --- a/Sources/SWBTestSupport/LibraryGeneration.swift
 +++ b/Sources/SWBTestSupport/LibraryGeneration.swift
 @@ -87,7 +87,7 @@ extension InstalledXcode {
@@ -376,10 +428,10 @@ index 1a238077..13bf27ad 100644
      }
  
 diff --git a/Sources/SWBTestSupport/TestWorkspaces.swift b/Sources/SWBTestSupport/TestWorkspaces.swift
-index 9d550ea4..1ecc026e 100644
+index dded7e58..78a2d6df 100644
 --- a/Sources/SWBTestSupport/TestWorkspaces.swift
 +++ b/Sources/SWBTestSupport/TestWorkspaces.swift
-@@ -690,7 +690,7 @@ package final class TestShellScriptBuildPhase: TestInternalBuildPhase {
+@@ -691,7 +691,7 @@ package final class TestShellScriptBuildPhase: TestInternalBuildPhase {
          return overriddenGuid ?? "\(Self.guidCode)\(guidIdentifier)"
      }
  
@@ -388,7 +440,7 @@ index 9d550ea4..1ecc026e 100644
          self.name = name
          self.overriddenGuid = guid
          self.shellPath = shellPath
-@@ -1194,7 +1194,7 @@ package final class TestExternalTarget: TestInternalTarget {
+@@ -1203,7 +1203,7 @@ package final class TestExternalTarget: TestInternalTarget {
      private let dependencies: [String]
      private let passBuildSettingsInEnvironment: Bool?
  
@@ -424,7 +476,7 @@ index 02ec3dd5..51629c96 100644
          IsUnsafeToInterrupt = YES;
          CommandOutputParser = (
 diff --git a/Sources/SWBUtil/PbxCp.swift b/Sources/SWBUtil/PbxCp.swift
-index 2d3bedd0..4d37790a 100644
+index 5b083519..8774b88d 100644
 --- a/Sources/SWBUtil/PbxCp.swift
 +++ b/Sources/SWBUtil/PbxCp.swift
 @@ -106,12 +106,12 @@ fileprivate func stripFile(_ srcPath: Path, _ dstPath: Path, _ strip_tool_path:
@@ -442,7 +494,7 @@ index 2d3bedd0..4d37790a 100644
      // Note that srcPath and dstPath could be the same, in which case the file gets stripped in-place.
      let args = [srcPath.str, bitcode_strip_flag, "-o", dstPath.str]
      try await spawnTaskAndWait(toolPath, args, nil, nil, dryRun, stream)
-@@ -511,11 +511,11 @@ struct CopyOptions: AsyncParsableCommand {
+@@ -522,11 +522,11 @@ struct CopyOptions: AsyncParsableCommand {
      @Flag(name: .customLong("strip-unsigned-binaries", withSingleDash: true), help: "strips debug symbols from any executables")
      var stripUnsignedBinaries: Bool = false
  
@@ -472,10 +524,10 @@ index eb3c1e27..180dcc62 100644
          let stderrContent = String(data: executionResult.stderr, encoding: .utf8)?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
  
 diff --git a/Sources/SwiftBuildTestSupport/CoreQualificationTester.swift b/Sources/SwiftBuildTestSupport/CoreQualificationTester.swift
-index 8495d9ff..1e4dd60e 100644
+index e6166507..8597e5aa 100644
 --- a/Sources/SwiftBuildTestSupport/CoreQualificationTester.swift
 +++ b/Sources/SwiftBuildTestSupport/CoreQualificationTester.swift
-@@ -326,7 +326,7 @@ extension FileContentsCheckingResult {
+@@ -324,7 +324,7 @@ extension FileContentsCheckingResult {
              let plist: PropertyListItem?
              switch destination {
              case .signed:
@@ -484,6 +536,15 @@ index 8495d9ff..1e4dd60e 100644
                  plist = try !bytes.isEmpty ? PropertyList.fromBytes(bytes) : nil
              case .simulated:
                  // xcrun otool-classic [-arch arch] -X -s __TEXT __entitlements <path>
+@@ -350,7 +350,7 @@ extension FileContentsCheckingResult {
+ 
+                         let derPlist: PropertyListItem = try await withTemporaryDirectory { path in
+                             try localFS.write(path.join("in.der"), contents: ByteString(bytes))
+-                            try await runProcess(["/usr/bin/derq", "query", "-i", path.join("in.der").str, "-o", path.join("out.xml").str, "--xml"])
++                            try await runProcess(["@re-derq@/bin/derq", "query", "-i", path.join("in.der").str, "-o", path.join("out.xml").str, "--xml"])
+                             return try PropertyList.fromPath(path.join("out.xml"), fs: localFS)
+                         }
+                         #expect(plist == derPlist, "Expected both DER and plist entitlements to be equivalent")
 -- 
 2.54.0
 

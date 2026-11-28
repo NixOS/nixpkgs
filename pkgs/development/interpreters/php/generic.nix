@@ -38,6 +38,7 @@ let
       version,
       phpSrc ? null,
       hash ? null,
+      knownVulnerabilities ? [ ],
       extraPatches ? [ ],
       packageOverrides ? (final: prev: { }),
       phpAttrsOverrides ? (final: prev: { }),
@@ -427,6 +428,7 @@ let
 
           meta = {
             description = "HTML-embedded scripting language";
+            inherit knownVulnerabilities;
             homepage = "https://www.php.net/";
             license = lib.licenses.php301;
             mainProgram = "php";

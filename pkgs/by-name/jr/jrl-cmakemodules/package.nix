@@ -36,7 +36,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jrl-cmakemodules";
-  version = "2.3.0";
+  version = "2.4.0";
 
   __structuredAttrs = true;
   srictDeps = true;
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "jrl-umi3218";
     repo = "jrl-cmakemodules";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PjEE/JIb6gegW5fqKiFgN0th8Fi58Pe0u5qrdIz2Rm8=";
+    hash = "sha256-PX4umhwIXEJqFbvhYZM1WqiPqZ8RJgvFvtroxGDg9mU=";
   };
 
   nativeBuildInputs = [ cmake ];

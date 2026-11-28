@@ -1,22 +1,24 @@
 {
   lib,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   nix-update-script,
   versionCheckHook,
 }:
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
+  __structuredAttrs = true;
+
   pname = "gitsnip";
-  version = "0.1.1";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "dagimg-dot";
     repo = "gitsnip";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-90lM9MPX45W513EQ5qH+s86nIWjTpQw6OIAzvTLU+4w=";
+    hash = "sha256-SJQo8IXKjM28q7HqpB29UExeDB1BpeaVpA+Bv8XN4bI=";
   };
 
-  vendorHash = "sha256-m5mBubfbXXqXKsygF5j7cHEY+bXhAMcXUts5KBKoLzM=";
+  vendorHash = "sha256-9eQJkUmVhIjlTSG0YXQ+SLeGAYtPgQsVbjxiwYCYogE=";
 
   ldflags = [
     "-s -w"
@@ -25,11 +27,17 @@ buildGoModule (finalAttrs: {
     "-X github.com/dagimg-dot/gitsnip/internal/cli.builtBy=nixpkgs"
   ];
 
-  passthru.updateScript = nix-update-script { };
+  # TestVersion expects the "upstream dev" build string. The version is already checked by the versionCheckHook.
+  checkFlags = [ "-skip=^TestVersion$" ];
+
+  # httptest.NewServer binds loopback, but the Darwin sandbox denies access by default.
+  __darwinAllowLocalNetworking = true;
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "version";
   doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "CLI tool to download specific folders from a git repository";

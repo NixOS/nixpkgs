@@ -11,6 +11,7 @@
   zstd,
   sqlite,
   pkg-config,
+  python3,
   rustPlatform,
   stdenv,
   writableTmpDirAsHomeHook,
@@ -19,16 +20,25 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "atuin";
-  version = "18.23.0";
+  version = "18.24.8";
 
   src = fetchFromGitHub {
     owner = "atuinsh";
     repo = "atuin";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NBn7C9ssLSXYrHWv5qWM5dZ2E8URbRJZOOCvHaNgxW4=";
+    hash = "sha256-JOJ/My4/IaAzSX6NJpFfcf9bAEutuRpbjWx7zS/uzRw=";
   };
 
-  cargoHash = "sha256-rkDDs8gviBpoLR4mrrKRu2eTlmlpvjICVRFu22AeOaU=";
+  cargoHash = "sha256-+ov43XTWhHJj+/c2XTu3GCXExdg3q+PC4AEqOf2Nun4=";
+
+  # crates/atuin-common/src/secrets.rs sets a `REDACT_BUDGET` of 250ms for release builds
+  # and 5s (which we increase to 30s here) for debug builds.
+  # 5s (let alone 250ms) is too short for the tests to pass sometimes, but increasing
+  # the timeout by patching it for release mode would make some things slower at runtime.
+  postPatch = ''
+    substituteInPlace crates/atuin-common/src/secrets.rs \
+      --replace-fail 'Duration::from_secs(5)' 'Duration::from_secs(30)'
+  '';
 
   # atuin's default features include 'check-updates', which do not make sense
   # for distribution builds. List all other default features.
@@ -56,10 +66,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   # e2e_pty tests drive an interactive bash (needs readline), run `clear`,
   # and create git repositories for workspace filtering
+  # e2e_ai_sessions tests run a fake hermes that imports sessions with a python3 script.
   nativeCheckInputs = [
     bashInteractive
     gitMinimal
     ncurses
+    python3
     writableTmpDirAsHomeHook
   ];
 
@@ -70,6 +82,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --zsh <($out/bin/atuin gen-completions -s zsh)
   '';
 
+  # Due to the REDACT_BUDGET issue mentioned above, we need to build the tests in debug mode.
+  checkType = "debug";
+
+  # Many tests are timing-sensitive on Darwin.
+  doCheck = !stdenv.hostPlatform.isDarwin;
+
   checkFlags = [
     # tries to make a network access
     "--skip=registration"
@@ -79,6 +97,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # PermissionDenied (Operation not permitted)
     "--skip=change_password"
     "--skip=multi_user_test"
+    # needs a running Postgres server
+    "--skip=postgres_authenticates_with_the_password_file"
+    "--skip=deleting_an_account_needs_its_password"
+    "--skip=operator_creates_resets_and_deletes_a_user"
+    # timing-dependent: fails when the index reload is too fast to measure
+    "--skip=end_history_is_not_starved_by_an_index_reload"
   ];
 
   # The e2e tests start an interactive bash, which sources the host's
@@ -99,7 +123,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru = {
     tests = {
-      inherit (nixosTests) atuin atuin-programs;
+      inherit (nixosTests) atuin atuin-programs atuin-default-settings;
     };
     updateScript = nix-update-script { };
   };

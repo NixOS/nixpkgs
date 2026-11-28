@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  argp-standalone,
   fetchFromGitLab,
   autoreconfHook,
   libarchive,
@@ -11,14 +10,22 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "unrar-free";
-  version = "0.3.4";
+  version = "0.7.0";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitLab {
     owner = "bgermann";
     repo = "unrar-free";
     tag = finalAttrs.version;
-    hash = "sha256-Eg5yGDtmaJLmUHWY5jdvhFtyPxMWWuWBrKR8noZqZw8=";
+    hash = "sha256-XCBIkpejWcJCQssuwnsQqGa6hylMG81VUGtuEcFdiHI=";
   };
+
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -27,12 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libarchive
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    argp-standalone
   ];
-
-  env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-largp";
 
   setupHook = ./setup-hook.sh;
 
@@ -45,12 +47,13 @@ stdenv.mkDerivation (finalAttrs: {
       unrar-free is a free software version of the non-free unrar utility.
 
       This program is a simple command-line front-end to libarchive, and can list
-      and extract RAR archives but also other formats supported by libarchive.
+      and extract RAR archives.
 
       It does not rival the non-free unrar in terms of features, but
       special care has been taken to ensure it meets most user's needs.
     '';
     homepage = "https://gitlab.com/bgermann/unrar-free";
+    changelog = "https://gitlab.com/bgermann/unrar-free/-/blob/${finalAttrs.version}/ChangeLog";
     license = lib.licenses.gpl2Plus;
     mainProgram = "unrar-free";
     maintainers = with lib.maintainers; [

@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  godot_4_5,
+  godot_4_7,
   nix-update-script,
 }:
 
@@ -16,17 +16,17 @@ let
     presets.${stdenv.hostPlatform.system}
       or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
-  godot = godot_4_5;
+  godot = godot_4_7;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "pixelorama";
-  version = "1.1.8";
+  version = "1.2.3";
 
   src = fetchFromGitHub {
     owner = "Orama-Interactive";
     repo = "Pixelorama";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-21DNwr5D8Bl2fkMnOtyB3tZrYS/1yZAxo9OkCqV+SYs=";
+    hash = "sha256-StYW7eDcUP7eY/6DMbCxWwznTndwB7qBNFnxKIcdsHM=";
   };
 
   strictDeps = true;

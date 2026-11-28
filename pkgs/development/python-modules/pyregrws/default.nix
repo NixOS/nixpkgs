@@ -24,7 +24,6 @@ buildPythonPackage (finalAttrs: {
   pname = "pyregrws";
   version = "1.0.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "jsenecal";

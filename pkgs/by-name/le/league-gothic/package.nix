@@ -2,6 +2,7 @@
   lib,
   fetchzip,
   stdenvNoCC,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -13,14 +14,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-emkXKyQw4R0Zgg02oJsvBkqV0jmczP0tF0K2IKqJHMA=";
   };
 
-  installPhase = ''
-    runHook preInstall
+  nativeBuildInputs = [ installFonts ];
 
-    install -D -m444 -t $out/share/fonts/truetype $src/static/TTF/*.ttf
-    install -D -m444 -t $out/share/fonts/opentype $src/static/OTF/*.otf
-
-    runHook postInstall
-  '';
+  dontInstallWebfonts = true;
 
   meta = {
     description = "Revival of an old classic, Alternate Gothic #1";

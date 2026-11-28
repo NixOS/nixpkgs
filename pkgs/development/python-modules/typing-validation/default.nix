@@ -2,34 +2,39 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonOlder,
 
   pytestCheckHook,
 
-  setuptools,
-  setuptools-scm,
-  wheel,
+  hatchling,
 
   numpy,
+  mypy,
 
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "typing-validation";
-  version = "1.2.12";
+  version = "2.2.1";
   pyproject = true;
+
+  disabled = pythonOlder "3.14";
 
   src = fetchFromGitHub {
     owner = "hashberg-io";
     repo = "typing-validation";
     tag = "v${version}";
-    hash = "sha256-N0VAxlxB96NA01c/y4xtoLKoiqAxfhJJV0y/3w6H9ek=";
+    hash = "sha256-zOVMSutuRh3+7hNB36NGBqHToxYD3QohTAMPWQcSjD8=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "hatchling ==" "hatchling >="
+  '';
+
   build-system = [
-    setuptools
-    setuptools-scm
-    wheel
+    hatchling
   ];
 
   dependencies = [ typing-extensions ];
@@ -37,6 +42,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     numpy
+    mypy
   ];
 
   pythonImportsCheck = [ "typing_validation" ];

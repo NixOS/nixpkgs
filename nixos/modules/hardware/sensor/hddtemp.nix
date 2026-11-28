@@ -14,8 +14,9 @@ let
 
     file=/var/lib/hddtemp/hddtemp.db
 
-    declare -a raw_drives
-    raw_drives=( ${lib.escapeShellArgs cfg.drives} )
+    # Intentionally unquoted to allow shell expansion and evaluation.
+    # shellcheck disable=SC2207
+    raw_drives=( ${lib.concatStringsSep " " cfg.drives} )
     declare -a drives
     for i in "''${raw_drives[@]}"; do
       drives+=( "$(realpath "$i")" )
@@ -51,7 +52,11 @@ in
       };
 
       drives = mkOption {
-        description = "List of drives to monitor. If you pass /dev/disk/by-path/* entries the symlinks will be resolved as hddtemp doesn't like names with colons.";
+        description = ''
+          List of drives or shell expressions that expand to drives to monitor.
+          Expressions are evaluated when the service starts, so shell wildcards
+          and command substitutions can be used.
+        '';
         type = types.listOf types.str;
       };
 

@@ -18,7 +18,6 @@
   vulkan-loader,
   envsubst,
   nix-update-script,
-  cargo-about,
   versionCheckHook,
   cargo-bundle,
   git,
@@ -31,7 +30,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gram";
-  version = "3.3.0";
+  version = "3.5.2";
 
   outputs = [
     "out"
@@ -47,22 +46,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "GramEditor";
     repo = "gram";
     tag = finalAttrs.version;
-    hash = "sha256-9HtHVx40XCydGMXeiJIJViNAI/tItk5ccmMeglaVT3A=";
+    hash = "sha256-OGjHn8F0jdRwGadB/Rnza4uQEKBF4GOsfmUOCIc4xzM=";
   };
 
-  postPatch = ''
-    # The generate-licenses script wants a specific version of cargo-about eventhough
-    # newer versions work just as well.
-    substituteInPlace script/generate-licenses \
-      --replace-fail '$CARGO_ABOUT_VERSION' '${cargo-about.version}'
-  '';
-
-  cargoHash = "sha256-dAHpDdEchTaqiWtsa6u8O9qbNwTjt4ldYADzXQHgqzU=";
+  cargoHash = "sha256-5894jBL/oDkcfnrRyM8s/NZlhWCtrSuAxvad1711uHk=";
 
   __structuredAttrs = true;
 
   nativeBuildInputs = [
-    cargo-about
     cmake
     pkg-config
     protobuf
@@ -107,10 +98,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     RELEASE_VERSION = finalAttrs.version;
     GRAM_UPDATE_EXPLANATION = "Updates are handled by nixpkgs";
   };
-
-  preBuild = ''
-    bash script/generate-licenses
-  '';
 
   nativeCheckInputs = [
     writableTmpDirAsHomeHook
@@ -209,6 +196,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       niklaskorz
+      backspace-phill
     ];
     mainProgram = "gram";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;

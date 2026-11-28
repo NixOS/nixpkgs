@@ -17,9 +17,6 @@
   udevCheckHook,
 }:
 
-let
-  isFuse3 = lib.hasPrefix "3" version;
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fuse";
   inherit version;
@@ -34,52 +31,27 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
   __structuredAttrs = true;
 
-  patches =
-    lib.optional (!isFuse3 && (stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isLoongArch64))
-      (fetchpatch {
-        url = "https://github.com/libfuse/libfuse/commit/914871b20a901e3e1e981c92bc42b1c93b7ab81b.patch";
-        hash = "sha256-6hqu5npSUN8I7XLZRiCl+b60Sweb1n2ZZz5LroIzkvA=";
-      })
-    ++ (
-      if isFuse3 then
-        [
-          ./fuse3-install.patch
-          ./fuse3-Do-not-set-FUSERMOUNT_DIR.patch
-        ]
-      else
-        [
-          ./fuse2-Do-not-set-FUSERMOUNT_DIR.patch
-          (fetchpatch {
-            url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/sys-fs/fuse/files/fuse-2.9.9-closefrom-glibc-2-34.patch?id=8a970396fca7aca2d5a761b8e7a8242f1eef14c9";
-            hash = "sha256-ELYBW/wxRcSMssv7ejCObrpsJHtOPJcGq33B9yHQII4=";
-          })
-          ./fuse2-gettext-0.25.patch
-        ]
-    );
+  patches = [
+    ./fuse3-install.patch
+    ./fuse3-Do-not-set-FUSERMOUNT_DIR.patch
+  ];
 
-  nativeBuildInputs =
-    if isFuse3 then
-      [
-        meson
-        ninja
-        pkg-config
-      ]
-      ++ lib.optionals (!stdenv.hostPlatform.isMusl) [ udevCheckHook ] # inf rec on musl, so skip
-    else
-      [
-        autoreconfHook
-        gettext
-      ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isMusl) [ udevCheckHook ]; # inf rec on musl, so skip
 
   outputs = [
     "bin"
     "out"
     "dev"
     "man"
-  ]
-  ++ lib.optional isFuse3 "udev";
+    "udev"
+  ];
 
-  mesonFlags = lib.optionals isFuse3 [
+  mesonFlags = [
     "-Dudevrulesdir=/udev/rules.d"
     "-Duseroot=false"
     "-Dinitscriptdir="
@@ -97,18 +69,6 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "/bin/umount" "${lib.getBin util-linux}/bin/umount"
     substituteInPlace util/mount.fuse.c \
       --replace-fail "/bin/sh" "${runtimeShell}"
-  ''
-  + lib.optionalString (!isFuse3) ''
-    export MOUNT_FUSE_PATH=$bin/bin
-
-    # Do not install these files for fuse2 which are not useful for NixOS.
-    export INIT_D_PATH=$TMPDIR/etc/init.d
-    export UDEV_RULES_PATH=$TMPDIR/etc/udev/rules.d
-
-    # This is for `setuid=`, and needs root permission anyway.
-    # No need to use the SUID wrapper.
-    substituteInPlace util/mount.fuse.c \
-      --replace-fail '"su"' '"${lib.getBin shadow.su}/bin/su"'
   '';
 
   # v2: no tests, v3: all tests get skipped in a sandbox
@@ -117,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Drop `/etc/fuse.conf` because it is a no-op config and
   # would conflict with our fuse module.
-  postInstall = lib.optionalString isFuse3 ''
+  postInstall = ''
     rm $out/etc/fuse.conf
     mkdir $udev
     mv $out/etc $udev

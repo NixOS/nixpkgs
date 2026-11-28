@@ -6,6 +6,7 @@
   git,
   pkg-config,
   qt6,
+  wrapGAppsHook3,
   libusb1,
   udev,
 }:
@@ -40,7 +41,14 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qmake
     qt6.qtsvg
     qt6.wrapQtAppsHook
-  ];
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux wrapGAppsHook3;
+
+  dontWrapGApps = true;
+
+  preFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
   buildInputs = [
     qt6.qtbase

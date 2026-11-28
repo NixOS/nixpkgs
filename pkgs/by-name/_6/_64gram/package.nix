@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   telegram-desktop,
   withWebkit ? true,
@@ -10,15 +11,19 @@ telegram-desktop.override {
   inherit withWebkit;
   unwrapped = telegram-desktop.unwrapped.overrideAttrs (old: rec {
     pname = "64gram-unwrapped";
-    version = "1.2.10";
+    version = "1.2.13";
 
     src = fetchFromGitHub {
       owner = "TDesktop-x64";
       repo = "tdesktop";
       tag = "v${version}";
-      hash = "sha256-EOXEkXuLJ2p9Y4BBekK7sz5/zkXS570r1npIX6o+o4E=";
+      hash = "sha256-hY3WBLNnmb5s4BtVBaQ+A6jNTEqN3k50EFxmpiZlkWQ=";
       fetchSubmodules = true;
     };
+
+    # Find the Swift SDK overlays needed by the translation provider.
+    # Remove after next release
+    env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-L/usr/lib/swift";
 
     meta = {
       description = "Unofficial Telegram Desktop providing Windows 64bit build and extra features";

@@ -7,7 +7,7 @@
   zope-interface,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "zope-i18nmessageid";
   version = "8.2";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zopefoundation";
     repo = "zope.i18nmessageid";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-JDCbk7zh+9Ic5T3Pt1apQDN1Q59cLUdk5KCAIu5mlC4=";
   };
 
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     unittestCheckHook
   ];
 
-  unittestFlagsArray = [ "src/zope/i18nmessageid" ];
+  unittestFlags = [ "--start-directory=src/zope/i18nmessageid" ];
 
   pythonImportsCheck = [ "zope.i18nmessageid" ];
 
@@ -38,8 +38,8 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://github.com/zopefoundation/zope.i18nmessageid";
     description = "Message Identifiers for internationalization";
-    changelog = "https://github.com/zopefoundation/zope.i18nmessageid/blob/${src.tag}/CHANGES.rst";
+    changelog = "https://github.com/zopefoundation/zope.i18nmessageid/blob/${finalAttrs.src.tag}/CHANGES.rst";
     license = lib.licenses.zpl21;
     maintainers = [ ];
   };
-}
+})

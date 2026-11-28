@@ -24,7 +24,7 @@ buildDunePackage (finalAttrs: {
     owner = "pveber";
     repo = "bistro";
     rev = "d44c44b52148e58ca3842c3efedf3115e376d800";
-    sha256 = "sha256-naoCEVBfydqSeGGbXYBXfg0PP+Fzk05jFoul7XAz/tM=";
+    hash = "sha256-naoCEVBfydqSeGGbXYBXfg0PP+Fzk05jFoul7XAz/tM=";
   };
 
   propagatedBuildInputs = [

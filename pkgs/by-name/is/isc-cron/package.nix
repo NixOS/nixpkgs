@@ -6,6 +6,7 @@
   replaceVars,
   vim,
   sendmailPath ? "/usr/sbin/sendmail",
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -62,6 +63,8 @@ stdenv.mkDerivation (finalAttrs: {
   preInstall = ''
     mkdir -p $out/{{,s}bin,share/man/man{1,5,8}}
   '';
+
+  passthru.tests.nixos = nixosTests.cron;
 
   meta = {
     homepage = "https://ftp.isc.org/isc/cron/";

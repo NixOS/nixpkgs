@@ -15,6 +15,8 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-WdpWbezOunwqeXCkoDtI2ZBfEmL/lEEKZJIk4z0kQrw=";
   };
 
+  strictDeps = true;
+
   passthru = {
     updateScript = writeScript "update-${finalAttrs.pname}" ''
       #!/usr/bin/env nix-shell
@@ -28,6 +30,8 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Provides a pkg-config file `pthread-stubs.pc` containing the Cflags/Libs flags applicable to programs/libraries that use only lightweight pthread API";

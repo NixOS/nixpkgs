@@ -7,13 +7,13 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "claude-powerline";
-  version = "1.32.3";
+  version = "1.32.6";
 
   src = fetchFromGitHub {
     owner = "Owloops";
     repo = "claude-powerline";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-f1+jwO/OBd0jzm0dflt8U1WfjSo0SOE+BgpvLm+792g=";
+    hash = "sha256-Ap9v1RUYUppLY2H7A/C7mPS+KxpBnaz/xesojxWCRgU=";
   };
 
   npmDepsHash = "sha256-D3Z5tb4phZUMPQaXvfYiIWuwaX5YGI8ubgyV7sSJqQk=";

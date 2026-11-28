@@ -5,14 +5,13 @@
   defusedxml,
   fetchFromGitHub,
   httpretty,
-  lxml,
   oauthlib,
   pyjwt,
+  python3-openid,
   pytest-cov-stub,
   pytest-xdist,
   pytestCheckHook,
-  python-jose,
-  python3-openid,
+  google-auth,
   python3-saml,
   requests,
   requests-oauthlib,
@@ -25,7 +24,6 @@ buildPythonPackage (finalAttrs: {
   pname = "social-auth-core";
   version = "5.2.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "python-social-auth";
@@ -44,15 +42,15 @@ buildPythonPackage (finalAttrs: {
     python3-openid
     requests
     requests-oauthlib
-  ];
+  ]
+  ++ pyjwt.optional-dependencies.crypto;
 
   optional-dependencies = {
-    openidconnect = [ python-jose ];
+    google-onetap = [ google-auth ];
     saml = [
-      lxml
       python3-saml
     ];
-    azuread = [ cryptography ];
+    # shopify = [ shopifyapi];
   };
 
   nativeCheckInputs = [
@@ -66,13 +64,6 @@ buildPythonPackage (finalAttrs: {
   ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   disabledTestPaths = [
-    # missing google-auth-stubs
-    "social_core/tests/backends/test_google.py"
-
-    # network access
-    "social_core/tests/backends/test_steam.py::SteamOpenIdMissingSteamIdTest::test_login"
-    "social_core/tests/backends/test_steam.py::SteamOpenIdMissingSteamIdTest::test_partial_pipeline"
-
     # shopify is not packaged
     "social_core/tests/backends/test_shopify.py"
   ];

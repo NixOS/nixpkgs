@@ -28,7 +28,6 @@ buildPythonPackage (finalAttrs: {
   pname = "sqlfmt";
   version = "0.32.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "tconbeer";

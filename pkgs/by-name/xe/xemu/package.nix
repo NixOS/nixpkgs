@@ -106,13 +106,12 @@ stdenv.mkDerivation (finalAttrs: {
     "--disable-strip"
     "--target-list=i386-softmmu"
     "--disable-werror"
+    "--extra-cflags=-DXBOX=1 -Wno-error=redundant-decls"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # As seen in the official build script ($src/build.sh)
     "--disable-cocoa"
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-    "--enable-hvf"
+    "-Wno-implicit-function-declaration"
   ];
 
   buildFlags = [ "qemu-system-i386" ];
@@ -137,12 +136,6 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   preConfigure = ''
-    configureFlagsArray+=("--extra-cflags=-DXBOX=1 -Wno-error=redundant-decls")
-  ''
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    configureFlagsArray+=("-Wno-implicit-function-declaration")
-  ''
-  + ''
     # When the data below can't be obtained through git, the build process tries
     # to run `XEMU_COMMIT=$(cat XEMU_COMMIT)` (and similar)
     echo '${finalAttrs.version}' > XEMU_VERSION
@@ -150,17 +143,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   preBuild = ''
     cd build
-    substituteInPlace ./build.ninja --replace /usr/bin/env $(which env)
   '';
 
-  postBuild =
-    lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) ''
-      # Needed for HVF acceleration
-      codesign --entitlements $src/accel/hvf/entitlements.plist -f -s - qemu-system-i386-unsigned
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      mv qemu-system-i386-unsigned qemu-system-i386
-    '';
+  postBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mv qemu-system-i386-unsigned qemu-system-i386
+  '';
 
   installPhase = ''
     runHook preInstall
@@ -191,7 +178,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "xemu";
     maintainers = with lib.maintainers; [
       marcin-serwin
-      matteopacini
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };

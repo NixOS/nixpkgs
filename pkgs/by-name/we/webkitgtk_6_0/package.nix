@@ -56,6 +56,8 @@
   freetype,
   openssl,
   openxr-loader,
+  vulkan-headers,
+  vulkan-volk,
   sqlite,
   gst_all_1,
   bubblewrap,
@@ -72,6 +74,7 @@
   withLibsecret ? true,
   systemdSupport ? lib.meta.availableOn clangStdenv.hostPlatform systemdLibs,
   testers,
+  webkitgtk_6_0,
   directoryListingUpdater,
   fetchpatch,
 }:
@@ -83,7 +86,7 @@ in
 # https://webkitgtk.org/2024/10/04/webkitgtk-2.46.html recommends building with clang.
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "webkitgtk";
-  version = "2.54.1";
+  version = "2.54.3";
   name = "webkitgtk-${finalAttrs.version}+abi=${abiVersion}";
 
   outputs = [
@@ -98,13 +101,19 @@ clangStdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://webkitgtk.org/releases/webkitgtk-${finalAttrs.version}.tar.xz";
-    hash = "sha256-6gu7AtvbxZaHSk5601tmZFs+CiMr0OQIHeXtkusKOX0=";
+    hash = "sha256-J3nBtG+Idi6EAGUCcboURS3E4ws3BZmBVS2LVit9CGI=";
   };
 
   patches = lib.optionals clangStdenv.hostPlatform.isLinux [
     (replaceVars ./fix-bubblewrap-paths.patch {
       inherit (builtins) storeDir;
       inherit (addDriverRunpath) driverLink;
+    })
+
+    # WebKit uses `dlopen` instead of linking against flite
+    # See: https://commits.webkit.org/324648@main
+    (replaceVars ./fix-flite-dlopen-paths.patch {
+      fliteLib = "${lib.getLib flite}/lib";
     })
 
     # Workaround to fix cross-compilation for RiscV
@@ -197,6 +206,10 @@ clangStdenv.mkDerivation (finalAttrs: {
     librice
     # For ENABLE_WEBXR
     openxr-loader
+    # For USE_VULKAN
+    vulkan-volk
+    # https://bugs.webkit.org/show_bug.cgi?id=327027
+    vulkan-headers
   ]
   ++ lib.optionals withLibsecret [
     libsecret
@@ -254,7 +267,13 @@ clangStdenv.mkDerivation (finalAttrs: {
   requiredSystemFeatures = [ "big-parallel" ];
 
   passthru = {
-    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    tests = {
+      experimental = webkitgtk_6_0.override {
+        enableExperimental = true;
+        inherit gtk4;
+      };
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    };
     updateScript = directoryListingUpdater { };
   };
 
@@ -263,6 +282,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     mainProgram = "WebKitWebDriver";
     homepage = "https://webkitgtk.org/";
     license = lib.licenses.bsd2;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "webkitgtk" finalAttrs.version;
     pkgConfigModules =
       if lib.versionAtLeast abiVersion "6.0" then
         [

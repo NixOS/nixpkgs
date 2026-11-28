@@ -121,7 +121,7 @@ let
       (lib.getDev cuda_cupti) # cupti.h
       (lib.getDev cuda_nvcc) # See https://github.com/google/jax/issues/19811
       (lib.getDev cuda_nvml_dev) # nvml.h
-      (lib.getDev cuda_nvtx) # nvToolsExt.h
+      (lib.getDev nvtx) # nvToolsExt.h
       (lib.getDev libcublas) # cublas_api.h
       (lib.getDev libcufft) # cufft.h
       (lib.getDev libcurand) # curand.h
@@ -426,8 +426,6 @@ let
   platformTag =
     if effectiveStdenv.hostPlatform.isLinux then
       "manylinux2014_${arch}"
-    else if effectiveStdenv.system == "x86_64-darwin" then
-      "macosx_10_9_${arch}"
     else if effectiveStdenv.system == "aarch64-darwin" then
       "macosx_11_0_${arch}"
     else

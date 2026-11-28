@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   SDL2,
   SDL2_mixer,
   cmake,
@@ -27,6 +28,11 @@ stdenv.mkDerivation (finalAttrs: {
     # This fixes the darwin bundle generation, sets min. deployment version
     # and patches SDL2_mixer include
     ./darwin-fixes.patch
+    # CMake 4.5 rejects the extra arguments to install(CODE)
+    (fetchpatch {
+      url = "https://github.com/bvschaik/julius/commit/9867661f37dda264b24abcc6309e3cab736c63de.patch";
+      hash = "sha256-fyr4ePPDMQFtSnrDD1FDUYnKwoz85GcQfMx5YytlbmU=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -58,7 +64,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
       Thra11
-      matteopacini
     ];
     platforms = lib.platforms.all;
   };

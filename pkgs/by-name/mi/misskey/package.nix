@@ -5,7 +5,7 @@
   fetchFromGitHub,
   nix-update-script,
   nodejs,
-  pnpm_11,
+  pnpm_12,
   fetchPnpmDeps,
   pnpmConfigHook,
   makeWrapper,
@@ -18,32 +18,36 @@
   writeShellScript,
 }:
 let
-  pnpm = pnpm_11;
+  pnpm = pnpm_12;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "misskey";
-  version = "2026.10.0";
+  version = "2026.10.1";
 
   src = fetchFromGitHub {
     owner = "misskey-dev";
     repo = "misskey";
     tag = finalAttrs.version;
-    hash = "sha256-GRJcqCItqQJToxnJGxlTOnBSiaIq8uxQNAFLEW1KJy0=";
+    hash = "sha256-6N2YUs/iw4KCBM8ltjjwxTMJTstNXxNbXWQeZQPUXG0=";
     fetchSubmodules = true;
   };
 
-  # Misskey converts its YAML config to JSON at runtime, which doesn't work
-  # because it tries to write it to the Nix store. As a workaround, hardcode
-  # this to a path which the service can write to until a better solution is
-  # supported, upstream.
-  # https://github.com/misskey-dev/misskey/issues/17075
   postPatch = ''
+    # Misskey converts its YAML config to JSON at runtime, which doesn't work
+    # because it tries to write it to the Nix store. As a workaround, hardcode
+    # this to a path which the service can write to until a better solution is
+    # supported, upstream.
+    # https://github.com/misskey-dev/misskey/issues/17075
     substituteInPlace packages/backend/src/config.ts \
       --replace-fail \
         "resolve(projectBuiltDir, '.config.json')" \
         "resolve('/run/misskey/default.json')"
     substituteInPlace {.,packages/backend}/package.json \
       --replace-fail "pnpm compile-config && " ""
+
+    # Misskey complains about nodejs version being too old https://github.com/misskey-dev/misskey/blob/14554ff2b49d9b1a26d9a1444e783f08eaa29444/packages/backend/package.json#L7
+    substituteInPlace pnpm-workspace.yaml \
+      --replace-fail 'engineStrict: true' 'engineStrict: false'
   '';
 
   nativeBuildInputs = [
@@ -61,11 +65,19 @@ stdenv.mkDerivation (finalAttrs: {
       pname
       version
       src
+      postPatch
       ;
     inherit pnpm;
-    fetcherVersion = 4;
-    hash = "sha256-l19dCv7vid/6rbNLU0fjMAewMgo12JOdqGfN4IVh5DY=";
+    fetcherVersion = 5;
+    hash = "sha256-mZ4fnibh35jpUfR9w+yP6Zg7LQTmDxDqCNQzOXz7Ph0=";
   };
+
+  preBuild = ''
+    # In darwin sandboxed build, scripts will try to call preinstalled sed outside of the sandbox
+    patchShebangs packages/*/node_modules/.bin
+    patchShebangs packages/*/*/node_modules/.bin
+    patchShebangs packages-private/*/node_modules/.bin
+  '';
 
   buildPhase = ''
     runHook preBuild

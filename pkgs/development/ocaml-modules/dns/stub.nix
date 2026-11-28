@@ -6,8 +6,6 @@
   dns-resolver,
   dns-tsig,
   dns-server,
-  duration,
-  randomconv,
   lwt,
   mirage-ptime,
   mirage-crypto-rng,
@@ -27,8 +25,6 @@ buildDunePackage {
     dns-resolver
     dns-tsig
     dns-server
-    duration
-    randomconv
     lwt
     mirage-ptime
     mirage-crypto-rng

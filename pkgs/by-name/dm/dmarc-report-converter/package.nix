@@ -10,6 +10,8 @@ buildGoModule (finalAttrs: {
   pname = "dmarc-report-converter";
   version = "0.8.1";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "tierpod";
     repo = "dmarc-report-converter";
@@ -19,7 +21,11 @@ buildGoModule (finalAttrs: {
 
   vendorHash = null;
 
-  checkFlags = [ "-mod=vendor ./cmd/... ./pkg/..." ];
+  checkFlags = [
+    "-mod=vendor"
+    "./cmd/..."
+    "./pkg/..."
+  ];
 
   ldflags = [
     "-s"

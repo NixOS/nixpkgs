@@ -1,6 +1,6 @@
 {
   buildDotnetModule,
-  dotnet-sdk,
+  dotnet-sdk_10,
   fetchFromGitHub,
   fetchNpmDeps,
   lib,
@@ -12,18 +12,19 @@
 
 buildDotnetModule (finalAttrs: {
   pname = "immichframe";
-  version = "1.0.37.0";
+  version = "1.0.40.0";
 
   src = fetchFromGitHub {
     owner = "immichFrame";
     repo = "immichFrame";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZS6lkfDdMSq1cffIIeXqG3/eIaQFGSZcRYPXiDCHA/U=";
+    hash = "sha256-vPMRAa0ZcxR4jOT0zCTJHB6+PDpFnS6ngpyX5jz5Ce0=";
   };
 
   projectFile = "ImmichFrame.WebApi/ImmichFrame.WebApi.csproj";
   nugetDeps = ./deps.json;
-  dotnet-runtime = dotnet-sdk.aspnetcore;
+  dotnet-sdk = dotnet-sdk_10;
+  dotnet-runtime = dotnet-sdk_10.aspnetcore;
 
   nativeBuildInputs = [
     npmHooks.npmConfigHook
@@ -34,7 +35,7 @@ buildDotnetModule (finalAttrs: {
 
   npmDeps = fetchNpmDeps {
     src = "${finalAttrs.src}/${finalAttrs.npmRoot}";
-    hash = "sha256-RyMY5ooC6Q+W+Y24ILv+WCcWLMDToZ52yefFuoAYubY=";
+    hash = "sha256-tKX9adAfkdZ5aFD5tUoNUW+nyStYc+TBz0su2EC1uLA=";
   };
 
   preBuild = ''
@@ -48,7 +49,8 @@ buildDotnetModule (finalAttrs: {
   '';
 
   makeWrapperArgs = [
-    "--chdir ${placeholder "out"}/lib/immichframe"
+    "--chdir"
+    "${placeholder "out"}/lib/immichframe"
   ];
 
   passthru = {

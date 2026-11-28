@@ -1,5 +1,4 @@
 {
-  systemdStage1,
   lib,
   pkgs,
   ...
@@ -29,10 +28,7 @@ in
       };
 
       boot.loader.systemd-boot.enable = true;
-      boot.initrd.systemd = {
-        enable = systemdStage1;
-        emergencyAccess = lib.mkIf systemdStage1 true;
-      };
+      boot.initrd.systemd.emergencyAccess = true;
       environment.systemPackages = with pkgs; [ cryptsetup ];
 
       specialisation.boot-luks-wrong-keyfile.configuration = {
@@ -41,7 +37,6 @@ in
             device = "/dev/vdb";
             keyFile = "/etc/cryptroot.key";
             tryEmptyPassphrase = true;
-            fallbackToPassword = !systemdStage1;
           };
         };
         virtualisation.rootDevice = "/dev/mapper/cryptroot";
@@ -54,7 +49,6 @@ in
             device = "/dev/vdb";
             keyFile = "/etc/cryptroot.key";
             tryEmptyPassphrase = true;
-            fallbackToPassword = !systemdStage1;
           };
         };
         virtualisation.rootDevice = "/dev/mapper/cryptroot";

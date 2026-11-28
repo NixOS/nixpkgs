@@ -7,16 +7,16 @@
 
 buildGoModule {
   pname = "golink";
-  version = "1.0.0-unstable-2026-07-03";
+  version = "1.0.0-unstable-2026-10-27";
 
   src = fetchFromGitHub {
     owner = "tailscale";
     repo = "golink";
-    rev = "30223ca66c2dad29356b6266254e1bf4af921f28";
-    hash = "sha256-hp886p94NHA8u3021horHFf6tGa8x8gWdeNA1XnQZ6E=";
+    rev = "d02fb073fd1cb92f034aee40f1d3c6c846fecff1";
+    hash = "sha256-C0lov54z1bhkylLn/PnGV7kA/wq2c0cb+F4x2ZAJdgI=";
   };
 
-  vendorHash = "sha256-7Ykb2YPrHwwBrWuufFwGTT9mQFzIRkiBiNlLvqpr+wo=";
+  vendorHash = "sha256-eOQSpWazd6OoGxIKRfdzt/BG8LfnOPBoj2nTQD+FhOk=";
 
   overrideModAttrs = old: {
     # netdb.go allows /etc/protocols and /etc/services to not exist and happily proceeds, but it panic()s if they exist but return permission denied.

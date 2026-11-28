@@ -16,13 +16,15 @@ let
   tlsCfg = optionalString (
     cfg.tlsCertificate != null
   ) "tls ${cfg.tlsCertificate} ${cfg.tlsCertificateKey}";
-  logCfg = optionalString cfg.enableMessageLogging "message-store fs ${stateDir}/logs";
+
+  messageStoreCfg =
+    if cfg.messageStoreDriver == "fs" then "fs ${stateDir}/logs" else cfg.messageStoreDriver;
 
   configFile = pkgs.writeText "soju.conf" ''
     ${listenCfg}
     hostname ${cfg.hostName}
     ${tlsCfg}
-    ${logCfg}
+    message-store ${messageStoreCfg}
     http-origin ${concatStringsSep " " cfg.httpOrigins}
     accept-proxy-ip ${concatStringsSep " " cfg.acceptProxyIP}
 
@@ -34,6 +36,14 @@ let
   '';
 in
 {
+  imports = [
+    (lib.mkChangedOptionModule
+      [ "services" "soju" "enableMessageLogging" ]
+      [ "services" "soju" "messageStoreDriver" ]
+      (config: if config.services.soju.enableMessageLogging then "fs" else "memory")
+    )
+  ];
+
   ###### interface
 
   options.services.soju = {
@@ -72,10 +82,14 @@ in
       description = "Path to server TLS certificate key.";
     };
 
-    enableMessageLogging = mkOption {
-      type = types.bool;
-      default = true;
-      description = "Whether to enable message logging.";
+    messageStoreDriver = mkOption {
+      type = types.enum [
+        "db"
+        "fs"
+        "memory"
+      ];
+      default = "fs";
+      description = "Set the storage backend for IRC messages.";
     };
 
     adminSocket.enable = mkOption {

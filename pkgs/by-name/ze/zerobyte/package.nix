@@ -109,6 +109,13 @@ stdenv.mkDerivation (finalAttrs: {
     chmod -R u+w ./node_modules ./packages
     patchShebangs --build ./node_modules
 
+    # Nitro embeds build and asset timestamps, and collects assets in parallel.
+    # Use a stable timestamp and sort the completed asset map before serializing.
+    substituteInPlace node_modules/nitro/dist/_build/common.mjs \
+      --replace-fail 'new Date()).toJSON()' 'new Date(Number(process.env.SOURCE_DATE_EPOCH) * 1000)).toJSON()' \
+      --replace-fail 'stat.mtime.toJSON()' 'new Date(Number(process.env.SOURCE_DATE_EPOCH) * 1000).toJSON()' \
+      --replace-fail 'JSON.stringify(assets, null, 2)' 'JSON.stringify(Object.fromEntries(Object.keys(assets).sort().map((id) => [id, assets[id]])), null, 2)'
+
     runHook postConfigure
   '';
 
