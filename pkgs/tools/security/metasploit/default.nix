@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   makeWrapper,
   ruby,
   bundlerEnv,
@@ -26,6 +27,14 @@ stdenv.mkDerivation (finalAttrs: {
     tag = finalAttrs.version;
     hash = "sha256-7u03A8H5vLQXekVLQ6oQtLwC6SW0JLqk37GUyjgtiZU=";
   };
+
+  patches = [
+    # Fix CVE-2026-130336: Eval injection in HWBridge custom method names
+    (fetchpatch {
+      url = "https://github.com/rapid7/metasploit-framework/commit/e714a271cec0715050b556f28af4463e71293d2e.patch";
+      hash = "sha256-mp4eOS8wl5amrlW2LYftR3ZqDkmcpXivsLKx8XmBcok=";
+    })
+  ];
 
   nativeBuildInputs = [
     makeWrapper
