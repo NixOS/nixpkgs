@@ -12240,6 +12240,8 @@ self: super: with self; {
 
   netapp-ontap = callPackage ../development/python-modules/netapp-ontap { };
 
+  netbox-sdk = callPackage ../development/python-modules/netbox-sdk { };
+
   netcdf4 = callPackage ../development/python-modules/netcdf4 { };
 
   netdata = callPackage ../development/python-modules/netdata { };
@@ -14420,6 +14422,10 @@ self: super: with self; {
   prowlpy = callPackage ../development/python-modules/prowlpy { };
 
   prox-tv = callPackage ../development/python-modules/prox-tv { };
+
+  proxbox-api = callPackage ../development/python-modules/proxbox-api { };
+
+  proxmox-sdk = callPackage ../development/python-modules/proxmox-sdk { };
 
   proxmoxer = callPackage ../development/python-modules/proxmoxer { };
 
