@@ -1,22 +1,17 @@
 {
   lib,
-  stdenv,
   rustPlatform,
   fetchCrate,
-  cargo-hack,
-  rustc,
-  zlib,
-  libxml2,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "btfdump";
   version = "0.0.4";
 
   __structuredAttrs = true;
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-iLYGFXB4goiY7eJXXBhX9Y1TOltsW40ogeBhvTV2NvU=";
   };
 
@@ -29,4 +24,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.bsd2;
     maintainers = [ ];
   };
-}
+})
