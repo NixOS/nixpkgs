@@ -69,6 +69,48 @@ let
         Restart = "on-failure";
         Type = "dbus";
         BusName = "com.system76.PowerDaemon";
+
+        ProtectHome = true;
+        PrivateTmp = true;
+        NoNewPrivileges = true;
+        RestrictAddressFamilies = [
+          "AF_UNIX"
+          "AF_NETLINK"
+        ];
+        IPAddressDeny = "any";
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        LockPersonality = true;
+        SystemCallArchitectures = "native";
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectControlGroups = true;
+        CapabilityBoundingSet = [
+          "~CAP_AUDIT_CONTROL"
+          "~CAP_AUDIT_READ"
+          "~CAP_AUDIT_WRITE"
+          "~CAP_BLOCK_SUSPEND"
+          "~CAP_KILL"
+          "~CAP_LEASE"
+          "~CAP_LINUX_IMMUTABLE"
+          "~CAP_MAC_ADMIN"
+          "~CAP_MAC_OVERRIDE"
+          "~CAP_MKNOD"
+          "~CAP_NET_BIND_SERVICE"
+          "~CAP_NET_BROADCAST"
+          "~CAP_NET_RAW"
+          "~CAP_SETGID"
+          "~CAP_SETPCAP"
+          "~CAP_SETUID"
+          "~CAP_SYS_BOOT"
+          "~CAP_SYS_CHROOT"
+          "~CAP_SYS_PACCT"
+          "~CAP_SYS_PTRACE"
+          "~CAP_SYS_TIME"
+          "~CAP_SYS_TTY_CONFIG"
+          "~CAP_WAKE_ALARM"
+        ];
       };
       wantedBy = [ "multi-user.target" ];
     };
