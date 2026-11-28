@@ -20,14 +20,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "cma";
-  version = "4.5.0";
+  version = "4.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "CMA-ES";
     repo = "pycma";
     tag = "r${finalAttrs.version}";
-    hash = "sha256-54atJuPFTczLN4piSLh84+W0GKJ1u/LgurZZpRrQZe4=";
+    hash = "sha256-qpPtqFHmAzAdNdDenPXGoFMeEv+MUi5WeRjkWE4UBik=";
   };
 
   build-system = [ setuptools ];
