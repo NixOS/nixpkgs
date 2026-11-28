@@ -36,7 +36,7 @@ self: super: {
   binary = markBroken self.binary_0_8_9_3;
   Cabal = doDistribute self.Cabal_3_16_1_0;
   Cabal-syntax = doDistribute self.Cabal-syntax_3_16_1_0;
-  containers = doDistribute self.containers_0_8;
+  containers = doDistribute self.containers_0_8_1;
   exceptions = doDistribute self.exceptions_0_10_12;
   file-io = markBroken self.file-io_0_2_0;
   filepath = doDistribute self.filepath_1_5_5_0;

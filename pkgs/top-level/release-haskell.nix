@@ -286,6 +286,7 @@ let
         hscolour
         hugs
         icepeak
+        idris
         ihaskell
         jacinda
         jl
@@ -531,7 +532,7 @@ let
         compilerNames.ghc9142
       ] released;
       Cabal_3_16_1_0 = released;
-      Cabal_3_18_1_0 = released;
+      Cabal_3_18_2_0 = released;
       cabal2nix = released;
       cabal2nix-unstable = released;
       funcmp = released;
