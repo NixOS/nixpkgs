@@ -3,6 +3,7 @@
   stdenv,
   cmake,
   ninja,
+  pkg-config,
   fetchFromGitHub,
   python3,
   opencv,
@@ -75,6 +76,7 @@ stdenv'.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals rocmSupport [
     rocmPackages.clr
+    pkg-config
   ]
   ++ lib.optionals cudaSupport [
     cudaPackages.cuda_nvcc
@@ -101,7 +103,6 @@ stdenv'.mkDerivation (finalAttrs: {
     rocmPackages.hipsolver
     rocmPackages.hipblaslt
     rocmPackages.rocblas
-    rocmPackages.rocsolver
     rocmPackages.rocsolver
     rocmPackages.miopen
   ]
