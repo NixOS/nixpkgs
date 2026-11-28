@@ -5834,22 +5834,22 @@ with pkgs;
 
   opencv = opencv4;
 
-  openstackclient = with python313Packages; toPythonApplication python-openstackclient;
+  openstackclient = with python3Packages; toPythonApplication python-openstackclient;
   openstackclient-full = openstackclient.overridePythonAttrs (oldAttrs: {
     dependencies = oldAttrs.dependencies ++ oldAttrs.optional-dependencies.cli-plugins;
   });
-  barbicanclient = with python313Packages; toPythonApplication python-barbicanclient;
-  glanceclient = with python313Packages; toPythonApplication python-glanceclient;
-  heatclient = with python313Packages; toPythonApplication python-heatclient;
-  ironicclient = with python313Packages; toPythonApplication python-ironicclient;
-  magnumclient = with python313Packages; toPythonApplication python-magnumclient;
-  manilaclient = with python313Packages; toPythonApplication python-manilaclient;
-  mistralclient = with python313Packages; toPythonApplication python-mistralclient;
-  neutronclient = with python313Packages; toPythonApplication python-neutronclient;
-  swiftclient = with python313Packages; toPythonApplication python-swiftclient;
-  troveclient = with python313Packages; toPythonApplication python-troveclient;
-  watcherclient = with python313Packages; toPythonApplication python-watcherclient;
-  zunclient = with python313Packages; toPythonApplication python-zunclient;
+  barbicanclient = with python3Packages; toPythonApplication python-barbicanclient;
+  glanceclient = with python3Packages; toPythonApplication python-glanceclient;
+  heatclient = with python3Packages; toPythonApplication python-heatclient;
+  ironicclient = with python3Packages; toPythonApplication python-ironicclient;
+  magnumclient = with python3Packages; toPythonApplication python-magnumclient;
+  manilaclient = with python3Packages; toPythonApplication python-manilaclient;
+  mistralclient = with python3Packages; toPythonApplication python-mistralclient;
+  neutronclient = with python3Packages; toPythonApplication python-neutronclient;
+  swiftclient = with python3Packages; toPythonApplication python-swiftclient;
+  troveclient = with python3Packages; toPythonApplication python-troveclient;
+  watcherclient = with python3Packages; toPythonApplication python-watcherclient;
+  zunclient = with python3Packages; toPythonApplication python-zunclient;
 
   inherit (callPackages ../by-name/li/libressl { })
     # When you remove a version here, add a notice in aliases.nix.
