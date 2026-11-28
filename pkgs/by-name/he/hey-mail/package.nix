@@ -175,7 +175,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Desktop client for HEY email";
     license = lib.licenses.unfree;
     mainProgram = "hey-mail";
-    maintainers = [ lib.maintainers.peret ];
+    maintainers = [ ];
     platforms = [ "x86_64-linux" ];
   };
 })
