@@ -246,6 +246,37 @@ in
         default = null;
       };
 
+      requestHeaderClientCaFile = lib.mkOption {
+        description = "Kubernetes aggregator CA file.";
+        default = top.caFile;
+        defaultText = lib.literalExpression "config.${otop.caFile}";
+        type = nullOr path;
+      };
+
+      requestHeaderAllowedNames = lib.mkOption {
+        description = "Defines which client cert CNs are trusted to act as proxies.";
+        default = [ "front-proxy-client" ];
+        type = listOf str;
+      };
+
+      requestHeaderExtraHeadersPrefix = lib.mkOption {
+        description = "Kubernetes aggregator extra headers prefix.";
+        default = "X-Remote-Extra-";
+        type = nullOr str;
+      };
+
+      requestHeaderGroupHeaders = lib.mkOption {
+        description = "Kubernetes aggregator group headers.";
+        default = "X-Remote-Group";
+        type = nullOr str;
+      };
+
+      requestHeaderUsernameHeaders = lib.mkOption {
+        description = "Kubernetes aggregator username headers.";
+        default = "X-Remote-User";
+        type = nullOr str;
+      };
+
       proxyClientCertFile = lib.mkOption {
         description = "Client certificate to use for connections to proxy.";
         default = null;
@@ -424,6 +455,31 @@ in
               lib.optionalString (
                 cfg.preferredAddressTypes != null
               ) "--kubelet-preferred-address-types=${cfg.preferredAddressTypes}"
+            } \
+            ${
+              lib.optionalString (
+                cfg.requestHeaderClientCaFile != null
+              ) "--requestheader-client-ca-file=${cfg.requestHeaderClientCaFile}"
+            } \
+            ${
+              lib.optionalString (
+                cfg.requestHeaderAllowedNames != [ ]
+              ) "--requestheader-allowed-names=${lib.concatStringsSep "," cfg.requestHeaderAllowedNames}"
+            } \
+            ${
+              lib.optionalString (
+                cfg.requestHeaderExtraHeadersPrefix != null
+              ) "--requestheader-extra-headers-prefix=${cfg.requestHeaderExtraHeadersPrefix}"
+            } \
+            ${
+              lib.optionalString (
+                cfg.requestHeaderGroupHeaders != null
+              ) "--requestheader-group-headers=${cfg.requestHeaderGroupHeaders}"
+            } \
+            ${
+              lib.optionalString (
+                cfg.requestHeaderUsernameHeaders != null
+              ) "--requestheader-username-headers=${cfg.requestHeaderUsernameHeaders}"
             } \
             ${
               lib.optionalString (
