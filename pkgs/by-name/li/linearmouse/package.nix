@@ -41,6 +41,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     downloadPage = "https://github.com/linearmouse/linearmouse/releases";
     homepage = "https://github.com/linearmouse/linearmouse";
     license = lib.licenses.mit;
+    mainDarwinApp = "LinearMouse.app";
     platforms = lib.platforms.darwin;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with lib.maintainers; [ paige ];
