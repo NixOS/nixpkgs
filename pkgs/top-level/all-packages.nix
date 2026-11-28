@@ -1909,6 +1909,7 @@ with pkgs;
   gnupg1 = gnupg1compat; # use config.packageOverrides if you prefer original gnupg1
 
   inherit (callPackage ../development/tools/godot { })
+    buildGodotModule
     godot3
     godot3-export-templates
     godot3-headless

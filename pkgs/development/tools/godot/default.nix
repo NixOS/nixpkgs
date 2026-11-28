@@ -46,6 +46,8 @@ let
     };
 in
 rec {
+  buildGodotModule = callPackage ./build-godot-module.nix { };
+
   godot3 = callPackage ./3 { };
   godot3-export-templates = callPackage ./3/export-templates.nix { };
   godot3-headless = callPackage ./3/headless.nix { };
