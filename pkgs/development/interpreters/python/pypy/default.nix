@@ -44,8 +44,7 @@ assert zlibSupport -> zlib != null;
 
 let
   isPy3k = (lib.versions.major pythonVersion) == "3";
-  isPy38OrNewer = lib.versionAtLeast pythonVersion "3.8";
-  isPy39OrNewer = lib.versionAtLeast pythonVersion "3.9";
+  isPy311 = pythonVersion == "3.11";
   passthru = passthruFun rec {
     inherit
       self
@@ -55,10 +54,8 @@ let
       ;
     implementation = "pypy";
     libPrefix = "pypy${pythonVersion}";
-    executable = "pypy${
-      if isPy39OrNewer then lib.versions.majorMinor pythonVersion else lib.optionalString isPy3k "3"
-    }";
-    sitePackages = "${lib.optionalString isPy38OrNewer "lib/${libPrefix}/"}site-packages";
+    executable = "pypy${lib.optionalString isPy3k (lib.versions.majorMinor pythonVersion)}";
+    sitePackages = "${lib.optionalString isPy3k "lib/${libPrefix}/"}site-packages";
     hasDistutilsCxxPatch = false;
     inherit pythonAttr;
 
@@ -82,8 +79,11 @@ with passthru;
 stdenv.mkDerivation rec {
   inherit pname version;
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   src = fetchurl {
-    url = "https://downloads.python.org/pypy/pypy${pythonVersion}-v${version}-src.tar.bz2";
+    url = "https://downloads.python.org/pypy/pypy${pythonVersion}-v${version}-src.tar.gz";
     inherit hash;
   };
 
@@ -144,7 +144,7 @@ stdenv.mkDerivation rec {
     };
 
   patches = [
-    ./dont_fetch_vendored_deps.patch
+    (if isPy3k then ./dont_fetch_vendored_deps_3.patch else ./dont_fetch_vendored_deps.patch)
 
     (replaceVars ./tk_tcl_paths.patch {
       inherit tk tcl;
@@ -207,7 +207,7 @@ stdenv.mkDerivation rec {
     cp -R {include,lib_pypy,lib-python} $out
     install -Dm755 lib${executable}-c${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/
     install -Dm755 ${executable}-c $out/bin/${executable}
-    ${lib.optionalString isPy39OrNewer "ln -s $out/bin/${executable} $out/bin/pypy3"}
+    ${lib.optionalString isPy3k "ln -s $out/bin/${executable} $out/bin/pypy3"}
 
     # other packages expect to find stuff according to libPrefix
     ln -s $out/include $out/include/${libPrefix}
@@ -216,7 +216,7 @@ stdenv.mkDerivation rec {
 
     # Include a sitecustomize.py file
     cp ${../sitecustomize.py} $out/${
-      if isPy38OrNewer then sitePackages else "lib/${libPrefix}/${sitePackages}"
+      if isPy3k then sitePackages else "lib/${libPrefix}/${sitePackages}"
     }/sitecustomize.py
 
     runHook postInstall
@@ -248,7 +248,7 @@ stdenv.mkDerivation rec {
 
   setupHook = python-setup-hook sitePackages;
 
-  # TODO: Investigate why so many tests are failing.
+  doCheck = true;
   checkPhase =
     let
       disabledTests = [
@@ -279,80 +279,39 @@ stdenv.mkDerivation rec {
         # warning-to-error test policy
         "test___all__"
         # fail for multiple reasons, TODO: investigate
-        "test__opcode"
-        "test_ast"
-        "test_audit"
-        "test_builtin"
-        "test_c_locale_coercion"
-        "test_call"
-        "test_class"
-        "test_cmd_line"
-        "test_cmd_line_script"
-        "test_code"
         "test_code_module"
-        "test_codeop"
         "test_compile"
+        "test_complex"
         "test_coroutines"
         "test_cprofile"
         "test_ctypes"
-        "test_embed"
-        "test_exceptions"
-        "test_extcall"
+        "test_eof"
+        "test_exception_group"
+        "test_fractions"
         "test_frame"
         "test_generators"
-        "test_grammar"
-        "test_idle"
-        "test_iter"
-        "test_itertools"
-        "test_list"
-        "test_marshal"
-        "test_memoryio"
-        "test_memoryview"
-        "test_metaclass"
-        "test_mmap"
-        "test_multibytecodec"
-        "test_opcache"
-        "test_pdb"
+        "test_genericalias"
+        "test_int"
+        "test_lzma"
+        "test_module"
         "test_peepholer"
-        "test_positional_only_arg"
-        "test_print"
-        "test_property"
-        "test_pyclbr"
-        "test_range"
-        "test_re"
-        "test_readline"
-        "test_regrtest"
-        "test_repl"
-        "test_rlcompleter"
-        "test_signal"
-        "test_sort"
-        "test_source_encoding"
-        "test_ssl"
-        "test_string_literals"
-        "test_structseq"
-        "test_subprocess"
-        "test_super"
-        "test_support"
-        "test_syntax"
-        "test_sys"
-        "test_sys_settrace"
-        "test_tcl"
-        "test_termios"
-        "test_threading"
-        "test_trace"
-        "test_tty"
-        "test_unpack_ex"
-        "test_utf8_mode"
-        "test_weakref"
-        "test_capi"
-        "test_concurrent_futures"
-        "test_dataclasses"
-        "test_doctest"
-        "test_future_stmt"
-        "test_importlib"
-        "test_inspect"
+        "test_pickletools"
+        "test_posix"
         "test_pydoc"
+        "test_range"
+        "test_readline"
+        "test_reprlib"
+        "test_ssl"
+        "test_subprocess"
+        "test_sys_setprofile"
+        "test_tokenize"
+        "test_trace"
+        "test_type_cache"
+        "test_type_comments"
+        "test_unicodedata"
         "test_warnings"
+        "test_with"
+        "test_importlib"
       ];
     in
     ''
@@ -360,6 +319,8 @@ stdenv.mkDerivation rec {
       export TERM="xterm";
       export HOME="$TMPDIR";
 
+      # Some test setup code fails on first run => run one small test first
+      ${pythonForPypy.interpreter} ./pypy/test_all.py --pypy=./${executable}-c -k 'test_abc' lib-python || true
       ${pythonForPypy.interpreter} ./pypy/test_all.py --pypy=./${executable}-c -k 'not (${lib.concatStringsSep " or " disabledTests})' lib-python
     '';
 
