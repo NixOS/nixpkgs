@@ -9,17 +9,21 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "0.9.14";
+  version = "0.9.15";
   pname = "flamerobin";
 
   src = fetchFromGitHub {
     owner = "mariuz";
     repo = "flamerobin";
     tag = finalAttrs.version;
-    hash = "sha256-IwJEFF3vP0BC9PoMoY+XPLT+ygXnFXP/TWaqjdQWs8s=";
+    hash = "sha256-s11bX8rYlkxf0vhcq36V/w9wJXaC/JymAtiAvEJ6pxA=";
   };
 
   enableParallelBuilding = true;
+
+  postPatch = ''
+    patchShebangs --build update-revision-info.sh
+  '';
 
   nativeBuildInputs = [ cmake ];
 
