@@ -340,7 +340,14 @@ let
         lib.concatStringsSep " " (
           lib.mapAttrsToList (
             tag: share:
-            "${tag}:${share.source}:${share.cache}:${if share.writable then "writeback" else "readonly"}"
+            "${tag}:${share.source}:${share.cache}:${
+              if !share.writable then
+                "readonly"
+              else if share.writeback then
+                "writeback"
+              else
+                "readwrite"
+            }"
           ) cfg.sharedDirectories
         )
       } \
@@ -594,6 +601,17 @@ in
           options.writable = lib.mkEnableOption "" // {
             description = "Whether the directory is writable on the host and guest.";
           };
+          options.writeback = lib.mkEnableOption "" // {
+            description = ''
+              Whether to enable writeback caching for a writable directory.
+
+              This speeds up writes from the guest, but makes the guest trust its own cached file size and modification time over the host's.
+              Changes made on the host may then appear truncated or stale in the guest, and appends from the guest may overwrite them.
+              Only enable it if the guest is the only one writing to the directory.
+
+              Effective on Linux hosts only.
+            '';
+          };
           options.cache = mkOption {
             type = types.enum [
               "auto"
@@ -608,7 +626,6 @@ in
               For details refer to the [virtiofsd documentation](https://virtio-fs.gitlab.io/virtiofsd/doc/virtiofsd/passthrough/enum.CachePolicy.html).
 
               Effective on Linux hosts only.
-              Ignored when using VirtFS (9P) (the default on non-Linux hosts).
             '';
           };
         }
