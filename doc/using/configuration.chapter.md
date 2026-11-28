@@ -286,7 +286,7 @@ source: ../config-options.json
 
 ### Build an environment {#sec-building-environment}
 
-Using `packageOverrides`, it is possible to manage packages declaratively. This means that we can list all of our desired packages within a declarative Nix expression. For example, to have `aspell`, `bc`, `ffmpeg`, `coreutils`, `gdb`, `nix`, `emscripten`, `jq`, `nox`, and `silver-searcher`, we could use the following in `~/.config/nixpkgs/config.nix`:
+Using `packageOverrides`, it is possible to manage packages declaratively. This means that we can list all of our desired packages within a declarative Nix expression. For example, to have `aspell`, `bc`, `ffmpeg`, `coreutils`, `gdb`, `nix`, `emscripten`, `jq`, `nox`, and `ugrep`, we could use the following in `~/.config/nixpkgs/config.nix`:
 
 ```nix
 {
@@ -304,7 +304,7 @@ Using `packageOverrides`, it is possible to manage packages declaratively. This 
           emscripten
           jq
           nox
-          silver-searcher
+          ugrep
         ];
       };
     };
@@ -329,7 +329,7 @@ To install it into our environment, you can just run `nix-env -iA nixpkgs.myPack
           emscripten
           jq
           nox
-          silver-searcher
+          ugrep
         ];
         pathsToLink = [
           "/share"
@@ -361,7 +361,7 @@ After building that new environment, look through `~/.nix-profile` to make sure 
           emscripten
           jq
           nox
-          silver-searcher
+          ugrep
         ];
         pathsToLink = [
           "/share/man"
@@ -402,7 +402,7 @@ This provides us with some useful documentation for using our packages.  However
         emscripten
         jq
         nox
-        silver-searcher
+        ugrep
       ];
       pathsToLink = [
         "/share/man"
@@ -462,7 +462,7 @@ Configuring GNU info is a little bit trickier than man pages. To work correctly,
         emscripten
         jq
         nox
-        silver-searcher
+        ugrep
         texinfoInteractive
       ];
       pathsToLink = [
