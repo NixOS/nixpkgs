@@ -117,5 +117,6 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     mainProgram = "pharo";
     platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ samirbgno ];
   };
 })
