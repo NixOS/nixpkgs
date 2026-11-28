@@ -1,0 +1,79 @@
+Subject: [PATCH] Split bags by serialized message size at frame boundaries
+
+Both save and save_raw consult the filesystem at each frame boundary.
+A ROS1 writer can still have the first frame in memory, so --split 0
+produces two or three bags for the same three-frame input depending on
+the file buffer size. For ROS2 the output path is a directory.
+
+Count each serialized packet and metadata record after the writer
+accepts it, and reset the count when opening the next bag. For the
+three-frame fixture, both commands must produce three bags at 0 MB and
+two at 1 MB. Both tests read all three frames back.
+
+---
+diff --git a/python/src/ouster/cli/plugins/source_bag.py b/python/src/ouster/cli/plugins/source_bag.py
+index a833a3d..5bbf6c5 100644
+--- a/python/src/ouster/cli/plugins/source_bag.py
++++ b/python/src/ouster/cli/plugins/source_bag.py
+@@ -111,5 +111,8 @@ def _source_to_bag_iter(source: Union[Iterable[FrameSet], PacketSource],
+     PacketMsg = my_typestore.types[packet_type]
+
++    bag_bytes = 0
++
+     def bag_save_metadata(writer, metadata, timestamp):
++        nonlocal bag_bytes
+         for i, m in enumerate(metadata):
+             topic = f"/ouster{i}/metadata" if len(metadata) > 1 else "/ouster/metadata"
+@@ -118,4 +121,5 @@ def _source_to_bag_iter(source: Union[Iterable[FrameSet], PacketSource],
+             serialized = fn_serialize(msg, "std_msgs/msg/String")
+             writer.write(conn, timestamp, serialized)
++            bag_bytes += len(serialized)
+
+     def create_connections(writer, metadata):
+@@ -132,4 +136,5 @@ def _source_to_bag_iter(source: Union[Iterable[FrameSet], PacketSource],
+
+     def bag_save_packet(writer, conns, packet):
++        nonlocal bag_bytes
+         msg = PacketMsg(packet.buf)
+         data = fn_serialize(msg, packet_type)
+@@ -140,14 +145,15 @@ def _source_to_bag_iter(source: Union[Iterable[FrameSet], PacketSource],
+         elif isinstance(packet, ZonePacket):
+             writer.write(conns[2], packet.host_timestamp, data)
++        else:
++            return
++        bag_bytes += len(data)
+
+     def check_split():
+-        if split is not None:
+-            if os.path.getsize(filename) / 1000000 > split:
+-                return True
+-        return False
++        return split is not None and bag_bytes > split * 1_000_000
+
+     def do_split(writer, conns):
+-        nonlocal filename, file_number
++        nonlocal filename, file_number, bag_bytes
+         writer.close()
++        bag_bytes = 0
+         filename = original_filename.replace(".bag", "") + f"-{file_number}.bag"
+         file_number += 1
+diff --git a/python/tests/test_cli.py b/python/tests/test_cli.py
+index 5d60901..f0ee88c 100644
+--- a/python/tests/test_cli.py
++++ b/python/tests/test_cli.py
+@@ -536,5 +536,6 @@ def get_stats(monkeypatch, runner, filename, args = []):
+
+ @pytest.mark.parametrize('args', [('.osf', 10, 1, 1), ('.bag', 10, 1, 1), ('.pcap', 10, 2, 2),
+-                                  ('.osf', 0, 3, 3), ('.bag', 0, 3, 2), ('.pcap', 0, 4, 4)])
++                                  ('.osf', 0, 3, 3), ('.bag', 0, 3, 3), ('.pcap', 0, 4, 4),
++                                  ('.bag', 1, 2, 2)])
+ def test_source_split_save(test_pcap_file2, runner, tmp_path, args, monkeypatch):
+     """Make sure we save the expected number of files with the expected number of frames."""
+@@ -560,5 +561,6 @@ def test_source_split_save(test_pcap_file2, runner, tmp_path, args, monkeypatch)
+
+ @pytest.mark.parametrize('args', [('.bag', 10, 1, 1), ('.pcap', 10, 2, 2),
+-                                  ('.bag', 0, 3, 2), ('.pcap', 0, 4, 4)])
++                                  ('.bag', 0, 3, 3), ('.pcap', 0, 4, 4),
++                                  ('.bag', 1, 2, 2)])
+ def test_source_split_save_raw(test_pcap_file2, runner, tmp_path, args, monkeypatch):
+     """Make sure we save the expected number of files with the expected number of frames."""

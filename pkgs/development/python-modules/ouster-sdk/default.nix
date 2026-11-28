@@ -15,7 +15,6 @@
   laspy,
   more-itertools,
   packaging,
-  pillow,
   prettytable,
   psutil,
   requests,
@@ -41,12 +40,13 @@ buildPythonPackage (finalAttrs: {
   inherit (ouster-sdk) pname version src;
   pyproject = true;
 
-  # The SDK monkey-patches rosbags' private MCAP reader and connection types.
-  # Use native MCAP support and the current writer API so we can share nixpkgs'
-  # rosbags; a private runtime version causes collisions in Python environments.
-  patches = [
+  # The Python bindings compile the SDK from this source too.
+  patches = ouster-sdk.patches ++ [
     ./nix-compat.patch
-    ./rosbags-compat.patch
+    ./rosbags-ros2-directories.patch
+    ./rosbags-native-mcap.patch
+    ./rosbags-write-version-8.patch
+    ./deterministic-bag-splits.patch
   ];
 
   postPatch = ''
@@ -55,7 +55,10 @@ buildPythonPackage (finalAttrs: {
 
   dontUseCmakeConfigure = true;
 
-  inherit (ouster-sdk) nativeBuildInputs;
+  # GNU arch rejects the -arch flag that setup.py uses to launch CMake on Darwin.
+  nativeBuildInputs =
+    lib.optional stdenv.buildPlatform.isDarwin buildPackages.darwin.system_cmds
+    ++ ouster-sdk.nativeBuildInputs;
 
   buildInputs = ouster-sdk.propagatedBuildInputs;
 
@@ -73,7 +76,6 @@ buildPythonPackage (finalAttrs: {
     more-itertools
     numpy
     packaging
-    pillow
     prettytable
     psutil
     requests
@@ -91,11 +93,8 @@ buildPythonPackage (finalAttrs: {
     "rosbags"
   ];
 
-  # These are used to build bindings and run tests, respectively.
-  pythonRemoveDeps = [
-    "nanobind"
-    "pytest-asyncio"
-  ];
+  # Nanobind is needed only to build the bindings.
+  pythonRemoveDeps = [ "nanobind" ];
 
   env = {
     VCPKG_MANIFEST_MODE = "OFF";
@@ -123,6 +122,15 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-asyncio
+  ];
+
+  # Sensor tests bind loopback UDP sockets in the Darwin sandbox.
+  __darwinAllowLocalNetworking = true;
+
+  # Concurrent Darwin builds can contend for the mDNS port (UDP 5353).
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+    "tests/documentation/test_cli_commands.py::test_discover"
+    "tests/test_discover.py::test_fleetsw_5814"
   ];
 
   pythonImportsCheck = [

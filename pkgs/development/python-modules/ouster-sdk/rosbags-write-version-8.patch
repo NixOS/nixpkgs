@@ -1,0 +1,36 @@
+Subject: [PATCH] Write ROS2 metadata version 8 for older readers
+
+The writer in nixpkgs' shared rosbags requires an explicit format
+version. Ouster pins rosbags 0.9.23, whose reader supports versions
+through 8.
+
+Write version 8 and check metadata.yaml in the existing conversion test.
+Reading the output with a newer reader alone would also accept version 9.
+
+---
+diff --git a/python/src/ouster/cli/plugins/source_bag.py b/python/src/ouster/cli/plugins/source_bag.py
+--- a/python/src/ouster/cli/plugins/source_bag.py
++++ b/python/src/ouster/cli/plugins/source_bag.py
+@@ -94,7 +94,8 @@
+         my_typestore = get_typestore(Stores.ROS2_FOXY)
+         fn_serialize = my_typestore.serialize_cdr
+         MyWriter = Writer2
+-        writer_params = {}  # type: ignore
++        # Preserve compatibility with upstream's pinned rosbags 0.9.23 reader.
++        writer_params = {"version": 8}  # type: ignore
+     else:
+         packet_type = "ouster_ros/msg/PacketMsg"
+         my_typestore = get_typestore(Stores.ROS1_NOETIC)
+diff --git a/python/tests/test_bag.py b/python/tests/test_bag.py
+--- a/python/tests/test_bag.py
++++ b/python/tests/test_bag.py
+@@ -62,6 +62,9 @@
+         # there's at most one OSF file in output dir
+         files = os.listdir(tmp_path)
+         assert len(files) == 1
++        from ruamel.yaml import YAML
++        metadata = YAML(typ="safe").load(Path("test.bag/metadata.yaml").read_text())
++        assert metadata["rosbag2_bagfile_information"]["version"] == 8
+
+         # now verify it has all messages
+         src = BagFrameSetSource("test.bag")
