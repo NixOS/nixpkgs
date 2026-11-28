@@ -95,6 +95,11 @@ gem 'jekyll-favicon'
 gem 'jekyll-spaceship'
 gem 'jekyll-webmention_io'
 gem 'jmespath'
+# Without it, json-schema would regress to 5.1.0 due to
+#  the conflict with another unspecified gem bigdecimal.
+# And because dip depends on json-schema ~> 5,
+#  json-schema 6.0 cannot be used.
+gem 'json-schema', '~> 5.2'
 gem 'jwt'
 gem 'kramdown-rfc2629'
 gem 'libxml-ruby'
@@ -165,7 +170,12 @@ gem 'seccomp-tools'
 gem 'semian'
 gem 'sequel'
 gem 'sequel_pg'
-gem 'solargraph'
+# Because solargraph >= 0.60 depends on sord ~> 7.0
+#  and sord >= 7.0 depends on commander ~> 5.0
+#  and commander >= 5.0 depends on highline ~> 3.0.0
+# So higher version solargraph would trigger
+#  highline version regression from 3.1.2 to 3.0.1
+gem 'solargraph', '~> 0.59.2'
 gem 'simplecov'
 gem 'sinatra'
 gem 'slop'
