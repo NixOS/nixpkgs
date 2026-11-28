@@ -65,7 +65,10 @@ jobs:
                     // are encouraged to manually dismiss if they're not relevant.
                     // When a CI-generated review is dismissed, this job automatically minimizes
                     // it, preventing it from cluttering the PR.
-                    if (review.user?.login == 'github-actions[bot]' && review.state == 'DISMISSED')
+                    if (
+                      ['github-actions[bot]', 'nixpkgs-commit-check[bot]'].includes(review.user?.login) &&
+                      review.state == 'DISMISSED'
+                    )
                       return github.graphql(`
                         mutation($node_id:ID!) {
                           minimizeComment(input: {
