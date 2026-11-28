@@ -23,7 +23,7 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://github.com/erezsh/plyplus";
     description = "General-purpose parser built on top of PLY";
-    maintainers = with lib.maintainers; [ twey ];
+    maintainers = [ ];
     license = lib.licenses.mit;
   };
 }

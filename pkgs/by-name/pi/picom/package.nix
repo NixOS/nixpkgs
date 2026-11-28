@@ -133,7 +133,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       gepbird
       thiagokokada
-      twey
     ];
     platforms = lib.platforms.linux;
   };

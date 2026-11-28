@@ -110,10 +110,7 @@ buildGoModule (finalAttrs: {
     homepage = "https://git-lfs.github.com/";
     changelog = "https://github.com/git-lfs/git-lfs/raw/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      twey
-      savtrip
-    ];
+    maintainers = with lib.maintainers; [ savtrip ];
     mainProgram = "git-lfs";
   };
 })

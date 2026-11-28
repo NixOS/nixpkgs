@@ -39,6 +39,6 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/mahmoud/face";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ twey ];
+    maintainers = [ ];
   };
 }

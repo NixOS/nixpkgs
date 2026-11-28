@@ -49,7 +49,6 @@
   meta.maintainers = with lib.maintainers; [
     florianjacob
     mmilata
-    twey
     boozedog
     leona
     osnyx

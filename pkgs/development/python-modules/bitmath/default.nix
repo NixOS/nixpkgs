@@ -29,7 +29,7 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/timlnx/bitmath";
     changelog = "https://github.com/timlnx/bitmath/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ twey ];
+    maintainers = [ ];
     mainProgram = "bitmath";
   };
 })
