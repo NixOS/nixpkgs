@@ -110,6 +110,13 @@ in
                       "_"
                     ];
                   };
+                  disable_local_logout = mkOption {
+                    description = ''
+                      Disables "log out from Warpgate" functionality when the provider supports single logout.
+                    '';
+                    default = false;
+                    type = bool;
+                  };
                 };
               });
               example = literalExpression ''
@@ -130,6 +137,28 @@ in
                   }
                 ]
               '';
+            };
+            recordings = mkOption {
+              description = ''
+                Settings for session recordings.
+                Deprecated in settings file, moved to in-app settings.
+              '';
+              default = null;
+              type = nullOr (submodule {
+                freeformType = yaml.type;
+                options = {
+                  enable = mkOption {
+                    description = "Whether to enable session recording.";
+                    default = true;
+                    type = bool;
+                  };
+                  path = mkOption {
+                    description = "Path to store session recordings.";
+                    default = "/var/lib/warpgate/recordings";
+                    type = str;
+                  };
+                };
+              });
             };
             external_host = mkOption {
               description = ''
@@ -177,7 +206,7 @@ in
               keys = mkOption {
                 description = "Path to store SSH host & client keys.";
                 default = "/var/lib/warpgate/ssh-keys";
-                type = str;
+                type = nullOr str;
               };
               host_key_verification = mkOption {
                 description = "Specify host key verification action when connecting to a SSH target with unknown/differing host key.";
@@ -197,6 +226,14 @@ in
                 description = "If nothing is received from the client for this amount of time, server will send a keepalive message.";
                 default = null;
                 type = nullOr str;
+              };
+              target_handshake_timeout = mkOption {
+                description = ''
+                  How long Warpgate wait for a target to accept the connection and complete key exchange.
+                  Covers the TCP connect (or the direct-tcpip hop through a jump host) and the SSH handshake, but not authentication. Set to `0s` to wait forever.
+                '';
+                default = "30s";
+                type = str;
               };
             };
             http = {
@@ -590,11 +627,17 @@ in
           assertion = !(lib.hasAttr "config_provider" cfg.settings);
           message = "`services.warpgate.settings.config_provider` is a legacy option that has been removed since 0.14.0. Please do not set this option.";
         }
-        {
-          assertion = !(lib.hasAttr "recordings" cfg.settings);
-          message = "`services.warpgate.settings.recordings` has been deprecated by S3 recording storage support in 0.27.0. Please remove this section from your config and set it from admin UI.";
-        }
       ];
+
+      warnings =
+        optional (cfg.settings.ssh.keys != null) ''
+          Warpgate's SSH keys has been deprecated in favor of being stored in database in 0.29.0.
+          Please remove `services.warpgate.ssh.keys` after upgrading and first start of service so that it migrates existing keys into database.
+        ''
+        ++ optional (cfg.settings.recordings != null) ''
+          `services.warpgate.settings.recordings` has been deprecated by S3 recording storage support in 0.27.0.
+          Please remove this section from your config and set it from admin UI.
+        '';
 
       environment.systemPackages = [ cfg.package ];
 
