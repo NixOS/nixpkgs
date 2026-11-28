@@ -1036,6 +1036,9 @@ with pkgs;
 
   waydroid-nftables = waydroid.override { withNftables = true; };
 
+  wal-g = wal-g-pg;
+  wal-g-mysql = wal-g-pg.override { variant = "mysql"; };
+
   winbox = winbox4;
 
   bump2version = with python3Packages; toPythonApplication bump2version;
@@ -10048,10 +10051,4 @@ with pkgs;
   };
 
   feishin-web = feishin.override { webVersion = true; };
-
-  # Main wal-g package (PostgreSQL) - aliased to wal-g-pg
-  wal-g = callPackage ../by-name/wa/wal-g-pg/package.nix { };
-
-  # MySQL variant
-  wal-g-mysql = callPackage ../by-name/wa/wal-g-pg/package.nix { mysql = true; };
 }
