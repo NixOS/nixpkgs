@@ -76,6 +76,10 @@ lib.makeOverridable (
     # optionally be compressed with gzip or bzip2.
     kernelPatches ? [ ],
     ignoreConfigErrors ? !(stdenv.hostPlatform.isx86 || stdenv.hostPlatform.isAarch64),
+    # When enabled, do not error on configured 'n' options that are absent from
+    # the generated .config because their Kconfig dependencies are unmet (such
+    # options are effectively disabled already).
+    ignoreMissingN ? false,
     extraMeta ? { },
     extraPassthru ? { },
 
@@ -176,7 +180,7 @@ lib.makeOverridable (
 
       env = {
         RUST_LIB_SRC = lib.optionalString withRust rustPlatform.rustLibSrc;
-        inherit ignoreConfigErrors;
+        inherit ignoreConfigErrors ignoreMissingN;
       };
 
       makeFlags = import ./common-flags.nix {
