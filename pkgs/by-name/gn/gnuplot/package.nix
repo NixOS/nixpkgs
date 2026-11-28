@@ -86,6 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
     (if withX then "--with-x" else "--without-x")
     (if withQt then "--with-qt=qt5" else "--without-qt")
     (if aquaterm then "--with-aquaterm" else "--without-aquaterm")
+    "--with-bitmap-terminals"
   ]
   ++ lib.optional withCaca "--with-caca"
   ++ lib.optional withTeXLive "--with-texdir=${placeholder "out"}/share/texmf/tex/latex/gnuplot";
