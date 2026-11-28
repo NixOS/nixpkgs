@@ -19871,6 +19871,14 @@
     githubId = 24192522;
     name = "MithicSpirit";
   };
+  mitya57 = {
+    name = "Dmitry Shachnev";
+    email = "mitya57@gmail.com";
+    github = "mitya57";
+    githubId = 1381584;
+    matrix = "@mitya57:ubuntu.com";
+    keys = [ { fingerprint = "F242 99FF 1BBC 9018 B906  A4CB 6026 936D 2F1C 8AE0"; } ];
+  };
   miyu = {
     email = "miyu@allthingslinux.org";
     github = "fndov";

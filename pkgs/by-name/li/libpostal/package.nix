@@ -27,13 +27,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "libpostal";
-  version = "1.1";
+  version = "1.1.4";
 
   src = fetchFromGitHub {
     owner = "openvenues";
     repo = "libpostal";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7G/CjYdVzsrvUFXGODoXgXoRp8txkl5SddcPtgltrjY=";
+    hash = "sha256-L7t/z5mBrV7RxRrkYDRyKhjQRS1p5EOE01f2eEOUxfI=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
@@ -61,7 +61,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "C library for parsing/normalizing street addresses around the world. Powered by statistical NLP and open geo data";
     homepage = "https://github.com/openvenues/libpostal";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.Thra11 ];
+    maintainers = with lib.maintainers; [
+      Thra11
+      mitya57
+    ];
     mainProgram = "libpostal_data";
     platforms = lib.platforms.unix;
   };
