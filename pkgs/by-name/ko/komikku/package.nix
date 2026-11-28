@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromCodeberg,
+  appstream,
   blueprint-compiler,
   desktop-file-utils,
   gettext,
@@ -15,27 +16,28 @@
   librsvg,
   meson,
   ninja,
+  nix-update-script,
   pkg-config,
   python3,
   webkitgtk_6_0,
   webp-pixbuf-loader,
   wrapGAppsHook4,
-  nix-update-script,
 }:
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "komikku";
-  version = "51.4.0";
+  version = "51.5.0";
   pyproject = false;
 
   src = fetchFromCodeberg {
     owner = "valos";
     repo = "Komikku";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mvEuw/13ahIqxggZkFWQ05EOl3zDGVnMznrr3ORTQ5k=";
+    hash = "sha256-eivAkMSalFGP7OpQUblG/0CT4bUszYcvwMwuz5PCF60=";
   };
 
   nativeBuildInputs = [
+    appstream
     blueprint-compiler
     desktop-file-utils
     gettext
