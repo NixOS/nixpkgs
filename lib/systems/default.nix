@@ -3,6 +3,7 @@
 let
   inherit (lib)
     any
+    elem
     foldl'
     hasInfix
     hasPrefix
@@ -80,6 +81,53 @@ let
   # attrset.
   systemToAttrs =
     systemOrArgs: if isAttrs systemOrArgs then systemOrArgs else { system = systemOrArgs; };
+
+  # Matches ARCH/SUBARCH in musl's configure script.
+  # https://git.musl-libc.org/cgit/musl/tree/configure
+  muslArchFor =
+    p:
+    let
+      float = p.gcc.float or p.gcc.float-abi or p.parsed.abi.float or null;
+      sf = optionalString (float == "soft") "-sf";
+      el = optionalString p.isLittleEndian "el";
+    in
+    if p.isx86_32 then
+      "i386"
+    else if p.isx86_64 then
+      "x86_64"
+    else if p.isAarch64 then
+      "aarch64${optionalString p.isBigEndian "_be"}"
+    else if p.isAarch32 then
+      "arm${optionalString p.isBigEndian "eb"}${optionalString (float == "hard") "hf"}"
+    else if p.isPower64 then
+      "powerpc64${optionalString p.isLittleEndian "le"}"
+    else if p.isPower then
+      "powerpc${sf}"
+    else if p.isMips then
+      let
+        base =
+          if p.isMips64n32 then
+            "mipsn32"
+          else if p.isMips64 then
+            "mips64"
+          else
+            "mips";
+        rev = optionalString (elem (p.gcc.arch or "") [
+          "mips32r6"
+          "mips64r6"
+        ]) "r6";
+      in
+      "${base}${rev}${el}${sf}"
+    else if p.isRiscV then
+      "riscv${if p.is64bit then "64" else "32"}${sf}"
+    else if p.isSh4 then
+      "sh${optionalString p.isBigEndian "eb"}"
+    else if p.isLoongArch64 || p.isM68k then
+      "${p.parsed.cpu.name}${sf}"
+    else if p.isMicroBlaze || p.isS390x || p.isOr1k then
+      p.parsed.cpu.name
+    else
+      null;
 
   # Elaborate a `localSystem` or `crossSystem` so that it contains everything
   # necessary.
@@ -231,7 +279,12 @@ let
         # for this platform normally assume.
         libDir =
           if final.isLinux then
-            if final.isx86_64 || final.isMips64 || final.isPower64 then "lib64" else "lib"
+            if final.isMusl then
+              "lib"
+            else if final.isx86_64 || final.isMips64 || final.isPower64 then
+              "lib64"
+            else
+              "lib"
           else
             null;
         extensions = {
@@ -402,6 +455,8 @@ let
             final.parsed.cpu.name;
 
         darwinArch = parse.darwinArch final.parsed.cpu;
+
+        muslArch = muslArchFor final;
 
         darwinPlatform =
           if final.isMacOS then

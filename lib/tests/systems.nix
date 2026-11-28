@@ -185,6 +185,37 @@ lib.runTests (
         );
       expected = false;
     };
+
+    test_musl_loader_path = {
+      expr = lib.genAttrs [
+        "x86_64-unknown-linux-musl"
+        "powerpc64le-unknown-linux-musl"
+        "mips64el-unknown-linux-muslabi64"
+      ] (config: with lib.systems.elaborate config; "/${libDir}/ld-musl-${muslArch}.so.1");
+      expected = {
+        "x86_64-unknown-linux-musl" = "/lib/ld-musl-x86_64.so.1";
+        "powerpc64le-unknown-linux-musl" = "/lib/ld-musl-powerpc64le.so.1";
+        "mips64el-unknown-linux-muslabi64" = "/lib/ld-musl-mips64el.so.1";
+      };
+    };
+
+    test_muslArch =
+      let
+        expected = {
+          "i686-unknown-linux-musl" = "i386";
+          "aarch64_be-unknown-linux-musl" = "aarch64_be";
+          "armv6l-unknown-linux-musleabihf" = "armhf";
+          "armv5tel-unknown-linux-musleabi" = "arm";
+          "powerpc64le-unknown-linux-musl" = "powerpc64le";
+          "mipsel-unknown-linux-musl" = "mipsel";
+          "mips64el-unknown-linux-muslabin32" = "mipsn32el";
+          "sh4-unknown-linux-musl" = "sh";
+        };
+      in
+      {
+        expr = lib.mapAttrs (config: _: (lib.systems.elaborate config).muslArch) expected;
+        inherit expected;
+      };
   }
   // {
     # equals.functionNames must list exactly the function-valued attrs of an

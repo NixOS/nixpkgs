@@ -114,6 +114,8 @@ let
   dynamicLinker =
     if sharedLibraryLoader == null then
       ""
+    else if targetPlatform.libc == "musl" && targetPlatform.muslArch != null then
+      "${sharedLibraryLoader}/lib/ld-musl-${targetPlatform.muslArch}.so.1"
     else if targetPlatform.libc == "musl" then
       "${sharedLibraryLoader}/lib/ld-musl-*"
     else if targetPlatform.libc == "uclibc" then
