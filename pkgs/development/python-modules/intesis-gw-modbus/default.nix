@@ -12,14 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "intesis-gw-modbus";
-  version = "0.3.1";
+  version = "0.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "TimoPtr";
     repo = "intesis-gw-modbus";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VtxH3YezAUjFdxrrpRlgCnVATeZDb37xg7b228jhC/c=";
+    hash = "sha256-HaNop9NDsEn0FjpT+Skff7KzOaw3ZtSyJBN8pCURMY0=";
   };
 
   postPatch = ''
