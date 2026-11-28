@@ -6,17 +6,17 @@
 
 buildGoModule (finalAttrs: {
   pname = "neo-cowsay";
-  version = "2.0.4";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "Code-Hex";
     repo = "Neo-cowsay";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-DmIjqBTIzwkQ8aJ6xCgIwjDtczlTH5AKbPKFUGx3qQ8=";
+    hash = "sha256-MROWbxZ16MIgQGrlQSR8ZX6egoJmIWcyqeRS744JsKQ=";
   };
 
   __structuredAttrs = true;
-  vendorHash = "sha256-gBURmodXkod4fukw6LWEY+MBxPcf4vn/f6K78UR77n0=";
+  vendorHash = "sha256-A8He1Xw100ogRwRQbtWhD9nEy8UPIWnfP4IqOs5i/yc=";
 
   modRoot = "./cmd";
 
