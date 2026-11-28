@@ -30,17 +30,24 @@ let
   # instead of trying to download them (which fails in the sandbox).
   cache = [
     {
-      name = "espeak-ng-ed530aa113046142eb5115cf2fc9157854d0ffe1.zip";
+      name = "kaldi-native-fbank-1.23.1.tar.gz";
       src = fetchurl {
-        url = "https://github.com/csukuangfj/espeak-ng/archive/ed530aa113046142eb5115cf2fc9157854d0ffe1.zip";
-        hash = "sha256-5OJiy+NPf+IfkfG6M5fyco4fMOr7rnhT8rdTqe0T8N0=";
+        url = "https://github.com/csukuangfj/kaldi-native-fbank/archive/refs/tags/v1.23.1.tar.gz";
+        hash = "sha256-yXItVb95HVkbr295yNuMZrfurPO+xZpKw3hk6s8ujzc=";
       };
     }
     {
-      name = "kaldi-native-fbank-1.22.3.tar.gz";
+      name = "kaldi-hmm-gmm-1.2.1.tar.gz";
       src = fetchurl {
-        url = "https://github.com/csukuangfj/kaldi-native-fbank/archive/refs/tags/v1.22.3.tar.gz";
-        hash = "sha256-kXbMZvx84e34XPNVsG4yDFfbYpffdCd/V1GDRoiTz2E=";
+        url = "https://github.com/csukuangfj/kaldi-hmm-gmm/archive/refs/tags/v1.2.1.tar.gz";
+        hash = "sha256-g0RoHvRkNzurVNVIh3/6HMgsFgl+Twl1zntJfC5bbjM=";
+      };
+    }
+    {
+      name = "kaldi_native_io-1.23.2.tar.gz";
+      src = fetchurl {
+        url = "https://github.com/csukuangfj/kaldi_native_io/archive/refs/tags/v1.23.2.tar.gz";
+        hash = "sha256-jA6t06otnK/mLoLC4wdaV7xBysfoP5VTZxQT8HsHBCY=";
       };
     }
     {
@@ -51,31 +58,24 @@ let
       };
     }
     {
-      name = "kaldifst-1.8.0.tar.gz";
+      name = "kaldifst-1.9.0.tar.gz";
       src = fetchurl {
-        url = "https://github.com/k2-fsa/kaldifst/archive/refs/tags/v1.8.0.tar.gz";
-        hash = "sha256-PyR7flokCQcSAvXivGIABg9mcowKNEPAOSOtJyPgQLM=";
+        url = "https://github.com/k2-fsa/kaldifst/archive/refs/tags/v1.9.0.tar.gz";
+        hash = "sha256-Il2Dd9HSYuOu2rI1WP6tEGtMvINGL7KfHF59njsMFN0=";
       };
     }
     {
-      name = "kaldi-decoder-0.3.0.tar.gz";
+      name = "kaldi-decoder-0.4.0.tar.gz";
       src = fetchurl {
-        url = "https://github.com/k2-fsa/kaldi-decoder/archive/refs/tags/v0.3.0.tar.gz";
-        hash = "sha256-ufNM+0/TsTRBAO6tee9NN6oVliJ0ueMFbeNFAh92obA=";
+        url = "https://github.com/k2-fsa/kaldi-decoder/archive/refs/tags/v0.4.0.tar.gz";
+        hash = "sha256-B48uu5knwZRFCWVJ+IC0rG2xS37rJjBi9QaXhzkByVU=";
       };
     }
     {
-      name = "cargs-1.0.3.tar.gz";
+      name = "utf8proc-2.12.0.tar.gz";
       src = fetchurl {
-        url = "https://github.com/likle/cargs/archive/refs/tags/v1.0.3.tar.gz";
-        hash = "sha256-3bolvTXpxsdbxwbBJgAbjOjghNQO83BQ5qppY+g264s=";
-      };
-    }
-    {
-      name = "piper-phonemize-f3ff95afc03640bc1399e113e83361192a2fafb4.zip";
-      src = fetchurl {
-        url = "https://github.com/csukuangfj/piper-phonemize/archive/f3ff95afc03640bc1399e113e83361192a2fafb4.zip";
-        hash = "sha256-2cyk4r3H1t2N/7lqRmgoPb0/d6nBlKPlMMHo66lAal0=";
+        url = "https://github.com/JuliaStrings/utf8proc/archive/refs/tags/v2.12.0.tar.gz";
+        hash = "sha256-9WQBHTiyiI1YPVELCOaf+hWqEXFV2xubSe8d/h+iURE=";
       };
     }
     {
@@ -112,7 +112,7 @@ let
 
   # Use the same yesno TDNN model and audio sample as upstream's offline CTC test,
   # pinned to a Hugging Face repository commit:
-  # https://github.com/k2-fsa/sherpa-onnx/blob/v1.13.8/.github/scripts/test-offline-ctc.sh
+  # https://github.com/k2-fsa/sherpa-onnx/blob/v2.0.3/.github/scripts/test-offline-ctc.sh
   yesnoModelRev = "93a6f1d8f477397fc607a6cb151bff7a68c28589";
   yesnoModelUrl = "https://huggingface.co/csukuangfj/sherpa-onnx-tdnn-yesno/resolve/${yesnoModelRev}";
   yesnoModel = fetchurl {
@@ -130,22 +130,18 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "sherpa-onnx";
-  version = "1.13.8";
+  version = "2.0.3";
 
   src = fetchFromGitHub {
     owner = "k2-fsa";
     repo = "sherpa-onnx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yAkjeRJXSiGW7Pr6cmHKUeYiWZyd88raEMdaJvYhQLM=";
+    hash = "sha256-KLiV4ea8jQbHGCPRKswseSOXTkOwlY1G5/YlhXqzs7M=";
   };
 
   outputs = [ "out" ] ++ lib.optionals pythonSupport [ "python" ];
 
   separateDebugInfo = true;
-
-  patches = [
-    ./espeak.patch
-  ];
 
   nativeBuildInputs = [
     cmake
