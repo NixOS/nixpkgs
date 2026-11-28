@@ -46,5 +46,8 @@ buildRedist {
   meta = {
     description = "Library to leverage GDS technology";
     homepage = "https://docs.nvidia.com/gpudirect-storage/api-reference-guide";
+    pkgConfigModules = [
+      "cufile"
+    ];
   };
 }
