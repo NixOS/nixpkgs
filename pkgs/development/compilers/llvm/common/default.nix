@@ -488,16 +488,13 @@ makeScopeWithSplicing' {
         # are only needed up to LLVM 21 because upstream merged equivalent
         # behaviour into LLVM 22.
         flangDriverPatches =
-          lib.optionals (lib.versionAtLeast metadata.release_version "20") [
-            (metadata.getVersionFile "flang/use-xflang-in-diagnostics.patch")
-          ]
-          ++
-            lib.optionals
-              (lib.versionAtLeast metadata.release_version "20" && lib.versionOlder metadata.release_version "22")
-              [
-                (metadata.getVersionFile "flang/warn-on-fbuiltin-and-fno-builtin.patch")
-                (metadata.getVersionFile "flang/accept-and-ignore-some-gfortran-optimization-flags.patch")
-              ];
+          lib.optionals
+            (lib.versionAtLeast metadata.release_version "20" && lib.versionOlder metadata.release_version "22")
+            [
+              (metadata.getVersionFile "flang/warn-on-fbuiltin-and-fno-builtin.patch")
+              (metadata.getVersionFile "flang/accept-and-ignore-some-gfortran-optimization-flags.patch")
+              (metadata.getVersionFile "flang/use-xflang-in-diagnostics.patch")
+            ];
         flangLibclang =
           if flangDriverPatches == [ ] then
             self.libclang
