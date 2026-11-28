@@ -3,47 +3,46 @@
   stdenvNoCC,
   fetchFromGitHub,
   fetchzip,
-  clickgen,
+  xcursorgen,
+  librsvg,
+  python3,
+  customThemes ? null,
+  writeText,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "bibata-cursors";
-  version = "2.0.7";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
-    owner = "ful1e5";
-    repo = "Bibata_Cursor";
-    rev = "v${version}";
-    hash = "sha256-kIKidw1vditpuxO1gVuZeUPdWBzkiksO/q2R/+DUdEc=";
-  };
-
-  bitmaps = fetchzip {
-    url = "https://github.com/ful1e5/Bibata_Cursor/releases/download/v${version}/bitmaps.zip";
-    hash = "sha256-4VjyNWry0NPnt5+s0od/p18gry2O0ZrknYZh+PAPM8Q=";
+    owner = "rtgiskard";
+    repo = "bibata_cursor";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-Ro/upo5PVzw/fDdEbbKINWyyI+tf/7vdLj/RuS2Q060=";
   };
 
   nativeBuildInputs = [
-    clickgen
+    xcursorgen
+    librsvg
+    python3
   ];
 
   buildPhase = ''
     runHook preBuild
 
-    ctgen configs/normal/x.build.toml -p x11 -d $bitmaps/Bibata-Modern-Amber -n 'Bibata-Modern-Amber' -c 'Yellowish and rounded edge Bibata XCursors'
-    ctgen configs/normal/x.build.toml -p x11 -d $bitmaps/Bibata-Modern-Classic -n 'Bibata-Modern-Classic' -c 'Black and rounded edge Bibata XCursors'
-    ctgen configs/normal/x.build.toml -p x11 -d $bitmaps/Bibata-Modern-Ice -n 'Bibata-Modern-Ice' -c 'White and rounded edge Bibata XCursors'
+    ${
+      if builtins.isAttrs customThemes then
+        let
+          json = builtins.toJSON customThemes;
+        in
+        "cp ${writeText "bibata-cursors-custom-themes.json" json} config/render.json"
+      else if builtins.isNull customThemes then
+        ""
+      else
+        "cp ${customThemes} config/render.json"
+    }
 
-    ctgen configs/right/x.build.toml -p x11 -d $bitmaps/Bibata-Modern-Amber-Right -n 'Bibata-Modern-Amber-Right' -c 'Yellowish and rounded edge right-hand Bibata XCursors'
-    ctgen configs/right/x.build.toml -p x11 -d $bitmaps/Bibata-Modern-Classic-Right -n 'Bibata-Modern-Classic-Right' -c 'Black and rounded edge right-hand Bibata XCursors'
-    ctgen configs/right/x.build.toml -p x11 -d $bitmaps/Bibata-Modern-Ice-Right -n 'Bibata-Modern-Ice-Right' -c 'White and rounded edge right-hand Bibata XCursors'
-
-    ctgen configs/normal/x.build.toml -p x11 -d $bitmaps/Bibata-Original-Amber -n 'Bibata-Original-Amber' -c 'Yellowish and sharp edge Bibata XCursors'
-    ctgen configs/normal/x.build.toml -p x11 -d $bitmaps/Bibata-Original-Classic -n 'Bibata-Original-Classic' -c 'Black and sharp edge Bibata XCursors'
-    ctgen configs/normal/x.build.toml -p x11 -d $bitmaps/Bibata-Original-Ice -n 'Bibata-Original-Ice' -c 'White and sharp edge Bibata XCursors'
-
-    ctgen configs/right/x.build.toml -p x11 -d $bitmaps/Bibata-Original-Amber-Right -n 'Bibata-Original-Amber-Right' -c 'Yellowish and sharp edge right-hand Bibata XCursors'
-    ctgen configs/right/x.build.toml -p x11 -d $bitmaps/Bibata-Original-Classic-Right -n 'Bibata-Original-Classic-Right' -c 'Black and sharp edge right-hand Bibata XCursors'
-    ctgen configs/right/x.build.toml -p x11 -d $bitmaps/Bibata-Original-Ice-Right -n 'Bibata-Original-Ice-Right' -c 'White and sharp edge right-hand Bibata XCursors'
+    python3 src/cursor_utils.py --svg --hypr --x11 --out-dir ./out
 
     runHook postBuild
   '';
@@ -51,19 +50,19 @@ stdenvNoCC.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    install -dm 0755 $out/share/icons
-    cp -rf themes/* $out/share/icons/
+    mkdir -p $out/share/icons
+    cp -r ./out/Bibata-* $out/share/icons/
 
     runHook postInstall
   '';
 
   meta = {
-    description = "Material Based Cursor Theme";
-    homepage = "https://github.com/ful1e5/Bibata_Cursor";
+    description = "Bibata Cursor, with support for hyprcursor, Xcursor and scalable_cursor.";
+    homepage = "https://github.com/rtgiskard/bibata_cursor";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
       rawkode
     ];
   };
-}
+})
