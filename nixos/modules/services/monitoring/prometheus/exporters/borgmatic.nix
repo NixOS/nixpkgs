@@ -10,12 +10,15 @@ let
 in
 {
   port = 9996;
-  extraOpts.configFile = lib.mkOption {
-    type = lib.types.path;
-    default = "/etc/borgmatic/config.yaml";
-    description = ''
-      The path to the borgmatic config file
-    '';
+  extraOpts = {
+    package = lib.mkPackageOption pkgs "prometheus-borgmatic-exporter" { };
+    configFile = lib.mkOption {
+      type = lib.types.path;
+      default = "/etc/borgmatic/config.yaml";
+      description = ''
+        The path to the borgmatic config file
+      '';
+    };
   };
 
   serviceOpts = {
@@ -24,7 +27,7 @@ in
       ProtectSystem = false;
       ProtectHome = lib.mkForce false;
       ExecStart = ''
-        ${pkgs.prometheus-borgmatic-exporter}/bin/borgmatic-exporter run \
+        ${lib.getExe cfg.package} run \
           --host ${cfg.listenAddress} \
           --port ${toString cfg.port} \
           --config ${toString cfg.configFile} \
