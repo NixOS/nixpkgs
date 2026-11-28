@@ -23,6 +23,7 @@
   shaderc,
   vulkan-headers,
   vulkan-loader,
+  spirv-headers,
   spirv-tools,
 
   metalSupport ? stdenv.hostPlatform.isDarwin,
@@ -42,6 +43,9 @@ in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "stable-diffusion-cpp";
   version = "master-1104-5dcfa79";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   outputs = [
     "out"
@@ -64,6 +68,9 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   ++ optionals cudaSupport [
     (cudaPackages.cuda_nvcc)
     autoAddDriverRunpath
+  ]
+  ++ optionals vulkanSupport [
+    shaderc
   ];
 
   buildInputs =
@@ -84,7 +91,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
       ]
     ))
     ++ (optionals vulkanSupport [
-      shaderc
+      spirv-headers
       vulkan-headers
       vulkan-loader
       spirv-tools
@@ -111,12 +118,14 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     (cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaPackages.flags.cmakeCudaArchitecturesString)
   ]
   ++ optionals rocmSupport [
+    (cmakeFeature "CMAKE_HIP_COMPILER" "${rocmPackages.clr.hipClangPath}/clang++")
     (cmakeFeature "CMAKE_HIP_ARCHITECTURES" (builtins.concatStringsSep ";" rocmGpuTargets))
   ];
 
   meta = {
     description = "Stable Diffusion inference in pure C/C++";
     homepage = "https://github.com/leejet/stable-diffusion.cpp";
+    changelog = "https://github.com/leejet/stable-diffusion.cpp/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     mainProgram = "sd";
     maintainers = with lib.maintainers; [
