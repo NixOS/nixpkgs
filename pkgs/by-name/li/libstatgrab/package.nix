@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libstatgrab";
-  version = "0.92.1";
+  version = "0.92.2";
 
   src = fetchurl {
     url = "https://ftp.i-scream.org/pub/i-scream/libstatgrab/libstatgrab-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-VoiqSmhVR9cXSoo3PqnY7pJ+dm48wwK97jRSPCxdbBE=";
+    sha256 = "sha256-/1WfzU2nWkAjr5hsAsUq1R1LaK6D/AyMRhAmEmqOvvo=";
   };
 
   buildInputs = lib.optional withSaidar ncurses;
