@@ -9,16 +9,16 @@
 
 let
   pname = "tutanota-desktop";
-  version = "361.261006.0";
+  version = "371.261123.0";
 
   linuxSrc = fetchurl {
     url = "https://github.com/tutao/tutanota/releases/download/tutanota-desktop-release-${version}/tutanota-desktop-linux.AppImage";
-    hash = "sha256-QkBFjoX9Dcc1Gr6UAmMX4GmM0HMNwW9kK5y+xyOqFGg=";
+    hash = "sha256-amk1qmbgkv9QebEwxtDpW7ploFF+ldvr2YXsXyrViWI=";
   };
 
   darwinSrc = fetchurl {
     url = "https://github.com/tutao/tutanota/releases/download/tutanota-desktop-release-${version}/tutanota-desktop-mac.dmg";
-    hash = "sha256-Mejw445xMxG+5Y+AFizy2JwGFdkxrKsPCchcB1Rrb74=";
+    hash = "sha256-gFXs01HKMHh7njWT2FeB0JuIUZLEPam9mYKqRSWEKO0=";
   };
 
   passthru.updateScript = ./update.sh;
@@ -29,7 +29,10 @@ let
     changelog = "https://github.com/tutao/tutanota/releases/tag/tutanota-desktop-release-${version}";
     license = lib.licenses.gpl3Only;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with lib.maintainers; [ s0ssh ];
+    maintainers = with lib.maintainers; [
+      s0ssh
+      Plarpoon
+    ];
     mainProgram = "tutanota-desktop";
     platforms = lib.platforms.darwin ++ [ "x86_64-linux" ];
   };
