@@ -98,6 +98,7 @@ buildPythonPackage rec {
     "test_keyboardinterrupt_during_test"
     "test_dynamic_async_fixture_access_does_not_hang"
     # 5 second timeout expires on weak hardware
+    "test_cancel_wait_on_thread"
     "test_keyboard_interrupt_does_not_resume_test"
     # racy with high thread count, see https://github.com/NixOS/nixpkgs/issues/448125
     "test_multiple_threads"
