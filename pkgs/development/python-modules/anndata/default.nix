@@ -40,14 +40,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "anndata";
-  version = "0.13.3.post0";
+  version = "0.13.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scverse";
     repo = "anndata";
     tag = finalAttrs.version;
-    hash = "sha256-ApwWoSVfeYqIP10HbIBl/3WJTcQjiZEVKgPSiEVOiv4=";
+    hash = "sha256-jGC6W2BtMC20Egpd3lM4iAv+MT4xovNfel5BHAvadFk=";
   };
 
   build-system = [
