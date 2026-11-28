@@ -31,7 +31,7 @@ let
   httplib-src = fetchFromGitHub {
     owner = "yhirose";
     repo = "cpp-httplib";
-    rev = "v0.13.3";
+    tag = "v0.13.3";
     hash = "sha256-ESaH0+n7ycpOKM+Mnv/UgT16UEx86eFMQDHB3RVmgBw=";
   };
 in
@@ -39,10 +39,13 @@ stdenv.mkDerivation rec {
   pname = "advanced-scene-switcher";
   version = "1.36.1";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "WarmUpTill";
     repo = "SceneSwitcher";
-    rev = version;
+    tag = version;
     hash = "sha256-padrHEGUtgXV0ee5mgIHSLHjh+6npL/vZAEJ8nARML0=";
   };
 
