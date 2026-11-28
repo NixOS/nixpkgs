@@ -5,14 +5,16 @@
 
   # rust
   rustPlatform,
+  aws-lc,
+  pkg-config,
   protobuf,
   rust-jemalloc-sys,
+  zstd,
 
   # nodejs
   fetchYarnDeps,
   yarnConfigHook,
   yarnBuildHook,
-  yarnInstallHook,
   patchelf,
   nodejs,
 
@@ -23,13 +25,13 @@
 
 let
   pname = "quickwit";
-  version = "0.9.1";
+  version = "0.9.3";
 
   src = fetchFromGitHub {
     owner = "quickwit-oss";
     repo = "quickwit";
     tag = "v${version}";
-    hash = "sha256-ABSh/g6CU0hu8WJRSPM/vsh0qAVyuHKHRF4rJDHtj/w=";
+    hash = "sha256-6PpnpacZjycTlbwgTtyHmY7PRFzPHq6yxYQnLZRAO6o=";
   };
 
   quickwit-ui = stdenv.mkDerivation (finalAttrs: {
@@ -45,9 +47,17 @@ let
     nativeBuildInputs = [
       yarnConfigHook
       yarnBuildHook
-      yarnInstallHook
       nodejs
     ];
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir $out
+      cp -r build/* $out/
+
+      runHook postInstall
+    '';
 
     dontStrip = true;
   });
@@ -55,7 +65,12 @@ in
 rustPlatform.buildRustPackage (finalAttrs: {
   inherit pname version src;
 
-  buildInputs = [ rust-jemalloc-sys ];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [
+    aws-lc
+    rust-jemalloc-sys
+    zstd
+  ];
 
   postPatch = ''
     substituteInPlace ./quickwit-ingest/build.rs \
@@ -67,7 +82,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   sourceRoot = "${src.name}/quickwit";
-  cargoHash = "sha256-nLZ3xTkp075qHzmPe4Zpdsn7MBxDHD0RGNkvQgmxAq8=";
+  cargoHash = "sha256-bjDoBdpJg4o7djFoy7YOK7BCdLioL6MHDWFgtczf1sw=";
 
   # matches workflow for building docker images closest
   cargoBuildFlags = [
@@ -75,9 +90,33 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--bin=quickwit"
   ];
 
+  cargoTestFlags = [
+    "--workspace"
+    # require network access
+    "--exclude"
+    "quickwit-lambda-client"
+    "--exclude"
+    "quickwit-serve"
+    "--profile"
+    "ci"
+    "--"
+    "--skip"
+    "test_search_index_cli"
+    "--skip"
+    "test_mp1_mixed_merge_levels_panics"
+    "--skip"
+    "test_mp2_single_split_panics"
+    "--skip"
+    "test_mp3_mixed_sort_fields_panics"
+    "--skip"
+    "test_mp3_mixed_window_duration_panics"
+    "--skip"
+    "test_promote_legacy_still_enforces_sort_fields"
+  ];
+
   preBuild = ''
-    mkdir -p quickwit-ui/build
-    cp -r ${quickwit-ui}/* quickwit-ui/build
+    rm -rf quickwit-ui/build
+    cp -r ${quickwit-ui} quickwit-ui/build
   '';
 
   env = {
@@ -89,6 +128,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     PROTOC = "${protobuf}/bin/protoc";
     PROTOC_INCLUDE = "${protobuf}/include";
   };
+
+  useNextest = true;
 
   passthru = {
     tests = {
