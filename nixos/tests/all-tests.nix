@@ -468,6 +468,7 @@ in
   consul-template = runTest ./consul-template.nix;
   containers-bridge = runTest ./containers-bridge.nix;
   containers-custom-pkgs = runTest ./containers-custom-pkgs.nix;
+  containers-dns = runTest ./containers-dns.nix;
   containers-ephemeral = runTest ./containers-ephemeral.nix;
   containers-eval = import ./containers-eval.nix { inherit pkgs; };
   containers-extra_veth = runTest ./containers-extra_veth.nix;

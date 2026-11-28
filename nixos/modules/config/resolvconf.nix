@@ -200,10 +200,16 @@ in
           ${lib.getExe cfg.package} -u
           chgrp resolvconf ${lib.escapeShellArgs cfg.subscriberFiles}
           chmod g=u ${lib.escapeShellArgs cfg.subscriberFiles}
-          ${lib.getExe' pkgs.acl "setfacl"} -R \
-            -m group:resolvconf:rwx \
-            -m default:group:resolvconf:rwx \
-            /run/resolvconf
+
+          # check if POSIX ACLs supported
+          if ${lib.getExe' pkgs.acl "setfacl"} -R -m group:resolvconf:rwx /run/resolvconf 2>/dev/null; then
+            ${lib.getExe' pkgs.acl "setfacl"} -R \
+              -m group:resolvconf:rwx \
+              -m default:group:resolvconf:rwx \
+              /run/resolvconf
+          else
+            chmod 775 /run/resolvconf
+          fi
         '';
       };
 
