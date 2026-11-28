@@ -67,10 +67,6 @@
 assert disableDocs -> !downloadDocs;
 let
   generateDocs = !(disableDocs || downloadDocs);
-
-  palpCustom = palp.override {
-    allDimensions = true;
-  };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "macaulay2";
@@ -146,7 +142,7 @@ stdenv.mkDerivation (finalAttrs: {
     msolve
     nauty
     normaliz
-    palpCustom
+    palp
     topcom
   ]
   ++ lib.optionals generateDocs [
@@ -236,7 +232,7 @@ stdenv.mkDerivation (finalAttrs: {
           nauty
           normaliz
           openssl
-          palpCustom
+          palp
           R
           topcom
         ]

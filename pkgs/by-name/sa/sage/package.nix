@@ -78,7 +78,6 @@ let
     inherit
       python3
       singular
-      palp
       flint
       pythonEnv
       maxima
@@ -169,30 +168,6 @@ let
   # blas when it is available. Alternative would be to override flint to use
   # openblasCompat.
   flint = pkgs.flint.override { withBlas = false; };
-
-  # Multiple palp dimensions need to be available and sage expects them all to be
-  # in the same folder.
-  palp = symlinkJoin {
-    name = "palp-${pkgs.palp.version}";
-    paths = [
-      (pkgs.palp.override {
-        dimensions = 4;
-        doSymlink = false;
-      })
-      (pkgs.palp.override {
-        dimensions = 5;
-        doSymlink = false;
-      })
-      (pkgs.palp.override {
-        dimensions = 6;
-        doSymlink = true;
-      })
-      (pkgs.palp.override {
-        dimensions = 11;
-        doSymlink = false;
-      })
-    ];
-  };
 
   # Sage expects those in the same directory.
   pari_data = symlinkJoin {
