@@ -20,6 +20,13 @@ let
 
   mainCfg = config.services.ghostunnel;
 
+  landlockArguments = rec {
+    # Many paths in /etc are symlinks into the store.
+    best-effort = [ "--landlock-allow-read=${builtins.storeDir}" ];
+    required = best-effort ++ [ "--require-landlock" ];
+    disabled = [ "--disable-landlock" ];
+  };
+
   module =
     { config, name, ... }:
     {
@@ -143,6 +150,34 @@ let
           default = false;
         };
 
+        landlock = mkOption {
+          description = ''
+            Whether ghostunnel runs in its landlock sandbox, which limits the
+            files and network ports that the process can use.
+
+            - `"required"`: ghostunnel exits if it cannot set up the sandbox.
+            - `"best-effort"`: if ghostunnel cannot set up the sandbox, it logs
+              a warning and runs without it. Ghostunnel does this by default.
+            - `"disabled"`: ghostunnel runs without the sandbox.
+
+            On a kernel with an older landlock version, the sandbox lacks some
+            restrictions. Ghostunnel then logs a warning and runs, also with
+            `"required"`. With PKCS#11, ghostunnel runs without the sandbox, so
+            `"required"` does not work with it.
+
+            The sandbox can read the Nix store, because many paths in `/etc`
+            are symlinks into it. To allow another directory, add
+            `--landlock-allow-read=DIR` to
+            [](#opt-services.ghostunnel.servers._name_.extraArguments).
+          '';
+          type = types.enum [
+            "required"
+            "best-effort"
+            "disabled"
+          ];
+          default = "required";
+        };
+
         # Definitions to apply at the root of the NixOS configuration.
         atRoot = mkOption {
           internal = true;
@@ -192,12 +227,8 @@ let
               ++ optional (config.cacert != null) "cacert:${config.cacert}";
           };
           script = concatStringsSep " " (
-            [
-              "${mainCfg.package}/bin/ghostunnel"
-              # ghostunnel's landlock rules don't like reading the CA certs from /etc
-              # because they are links to /nix/store, which isn't part of its rules
-              "--disable-landlock"
-            ]
+            [ "${mainCfg.package}/bin/ghostunnel" ]
+            ++ landlockArguments.${config.landlock}
             ++ optional (config.keystore != null) "--keystore=$CREDENTIALS_DIRECTORY/keystore"
             ++ optional (config.cert != null) "--cert=$CREDENTIALS_DIRECTORY/cert"
             ++ optional (config.key != null) "--key=$CREDENTIALS_DIRECTORY/key"

@@ -20,6 +20,13 @@ let
     ;
   cfg = config.ghostunnel;
 
+  landlockArguments = rec {
+    # Many paths in /etc are symlinks into the store.
+    best-effort = [ "--landlock-allow-read=${builtins.storeDir}" ];
+    required = best-effort ++ [ "--require-landlock" ];
+    disabled = [ "--disable-landlock" ];
+  };
+
 in
 {
   # https://nixos.org/manual/nixos/unstable/#modular-services
@@ -149,6 +156,33 @@ in
         type = types.bool;
         default = false;
       };
+
+      landlock = mkOption {
+        description = ''
+          Whether ghostunnel runs in its landlock sandbox, which limits the
+          files and network ports that the process can use.
+
+          - `"required"`: ghostunnel exits if it cannot set up the sandbox.
+          - `"best-effort"`: if ghostunnel cannot set up the sandbox, it logs
+            a warning and runs without it. Ghostunnel does this by default.
+          - `"disabled"`: ghostunnel runs without the sandbox.
+
+          On a kernel with an older landlock version, the sandbox lacks some
+          restrictions. Ghostunnel then logs a warning and runs, also with
+          `"required"`. With PKCS#11, ghostunnel runs without the sandbox, so
+          `"required"` does not work with it.
+
+          The sandbox can read the Nix store, because many paths in `/etc`
+          are symlinks into it. To allow another directory, add
+          `--landlock-allow-read=DIR` to {option}`${options.ghostunnel.extraArguments}`.
+        '';
+        type = types.enum [
+          "required"
+          "best-effort"
+          "disabled"
+        ];
+        default = "required";
+      };
     };
   };
 
@@ -187,9 +221,9 @@ in
     process = {
       argv = [
         (getExe cfg.package)
-        # ghostunnel's landlock rules don't like reading the CA certs from /etc
-        # because they are links to /nix/store, which isn't part of its rules
-        "--disable-landlock"
+      ]
+      ++ landlockArguments.${cfg.landlock}
+      ++ [
         "server"
         "--listen"
         cfg.listen

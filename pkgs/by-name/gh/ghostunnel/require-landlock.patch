@@ -1,0 +1,82 @@
+diff --git a/landlock_linux.go b/landlock_linux.go
+index 9191986..03c024b 100644
+--- a/landlock_linux.go
++++ b/landlock_linux.go
+@@ -233,6 +233,30 @@ func setupLandlock() error {
+ 		logger.Printf("note: kernel does not support landlock net rules, sandboxing will be limited")
+ 	}
+ 
++	// A kernel without landlock gives no sandbox at all.
++	if err != nil {
++		if *requireLandlock {
++			return fmt.Errorf("kernel does not support landlock: %w", err)
++		}
++		logger.Printf("warning: kernel does not support landlock, running without the sandbox: %v", err)
++		abiVersion = 0
++	}
++
++	// go-landlock uses ABI 5 on a kernel with ABI 6 or later that lacks the
++	// fix for the signal scoping bug, so the warning below uses it too.
++	if abiVersion >= 6 {
++		errata, errataErr := llsys.LandlockGetErrata()
++		if errataErr != nil || errata&0x2 == 0 {
++			abiVersion = 5
++		}
++	}
++
++	// Below ABI 6, the sandbox lacks some restrictions but still limits the
++	// process, so this is a warning, also with --require-landlock.
++	if abiVersion >= 1 && abiVersion < 6 {
++		logger.Printf("warning: the landlock sandbox is incomplete, because the kernel provides ABI %d; ABI 6 or later provides all restrictions that ghostunnel requests", abiVersion)
++	}
++
+ 	// Enable best-effort mode: If the kernel doesn't support ABI v8, then go-landlock
+ 	// will enforce as much as possible given the ABI version that *is* available. Note
+ 	// that normally no error will be returned in best-effort mode, but we capture and
+diff --git a/main.go b/main.go
+index b46bbf3..5e8059b 100644
+--- a/main.go
++++ b/main.go
+@@ -70,6 +70,8 @@ var (
+ 
+ var landlockAllowRead *[]string //nolint:unused
+ 
++var requireLandlock *bool //nolint:unused
++
+ // Main flags (always supported)
+ var (
+ 	app = kingpin.New("ghostunnel", "A simple TLS proxy with mutual authentication for securing non-TLS services.")
+@@ -193,6 +195,8 @@ func init() {
+ 		disableLandlock = app.Flag("disable-landlock", "Disable the best-effort landlock sandboxing.").Bool()
+ 
+ 		landlockAllowRead = app.Flag("landlock-allow-read", "Allow the landlock sandbox to read files and list directories in the given directory and below it (can be repeated).").PlaceHolder("DIR").Strings()
++
++		requireLandlock = app.Flag("require-landlock", "Exit if the landlock sandbox cannot be set up, instead of running without it.").Bool()
+ 	}
+ 
+ 	// Aliases for flags that were renamed to be backwards-compatible
+@@ -686,7 +690,14 @@ func run(args []string) error {
+ 	// Landlock
+ 	pkcs11Enabled := pkcs11Module != nil && *pkcs11Module != ""
+ 	hasLandlock := runtime.GOOS == "linux" && !*disableLandlock
++	landlockRequired := runtime.GOOS == "linux" && *requireLandlock
+ 
++	if landlockRequired && !hasLandlock {
++		return errors.New("--require-landlock conflicts with --disable-landlock")
++	}
++	if landlockRequired && pkcs11Enabled {
++		return errors.New("--require-landlock conflicts with pkcs11, which skips landlock")
++	}
+ 	if pkcs11Enabled && hasLandlock {
+ 		logger.Printf("note: using pkcs11, skipping landlock setup (landlock is not compatible with pkcs11)")
+ 	}
+@@ -698,6 +709,9 @@ func run(args []string) error {
+ 		// We may change this in a future version of Ghostunnel as we get more
+ 		// comfortable with Landlock.
+ 		err := setupLandlock()
++		if err != nil && landlockRequired {
++			return fmt.Errorf("unable to set up landlock: %w", err)
++		}
+ 		if err != nil {
+ 			logger.Printf("warning: unable to set up landlock: %v", err)
+ 		}
