@@ -30424,6 +30424,12 @@
     githubId = 2027925;
     name = "Thomas Gebert";
   };
+  tomeraberbach = {
+    email = "tomer@aberba.ch";
+    github = "TomerAberbach";
+    githubId = 23299544;
+    name = "Tomer Aberbach";
+  };
   tomfitzhenry = {
     email = "tom@tom-fitzhenry.me.uk";
     github = "tomfitzhenry";
