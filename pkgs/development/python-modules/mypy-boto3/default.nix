@@ -255,8 +255,8 @@ in
       "sha256-1RNAeYb7FCFWUvoqEFtvUISy82n8WlR0jbINBmfpoyY=";
 
   mypy-boto3-cloudwatch =
-    buildMypyBoto3Package "cloudwatch" "1.44.2"
-      "sha256-B1bVh1W8fVq3/MvUjv0I+3cxtoG9MO56COTgZdIl0HE=";
+    buildMypyBoto3Package "cloudwatch" "1.44.13"
+      "sha256-pjunMf+YG68gZG+2imYOKUsWnnzdz45TU8GYZKX2z1U=";
 
   mypy-boto3-codeartifact =
     buildMypyBoto3Package "codeartifact" "1.44.0"
@@ -511,8 +511,8 @@ in
       "sha256-q3GVLGdqADJYU+AnzerX2JFrILqe4uTlxBMubr7OJ9M=";
 
   mypy-boto3-es =
-    buildMypyBoto3Package "es" "1.44.0"
-      "sha256-F8Y5qtAVUw9va8MH7B/+r9lS5uxxA5cuzPJBj2iTsLo=";
+    buildMypyBoto3Package "es" "1.44.13"
+      "sha256-W3SIA/S5ktIN7vVXnhf4sY2ng8+HTyTWPgFQPCH+460=";
 
   mypy-boto3-events =
     buildMypyBoto3Package "events" "1.44.0"
@@ -966,8 +966,8 @@ in
       "sha256-aayMSJLVM6nYM56RpFTPjPf1A6b9eBV3Eo++jXevBn8=";
 
   mypy-boto3-opensearch =
-    buildMypyBoto3Package "opensearch" "1.44.0"
-      "sha256-1uFCXVFQsRWvR/RxRAdcFTnpY7UteriX8LzrDjrowes=";
+    buildMypyBoto3Package "opensearch" "1.44.13"
+      "sha256-FI2gjU1yY5/9avDso7Ist13RabFZYr4dnf+nw02zdv4=";
 
   mypy-boto3-opensearchserverless =
     buildMypyBoto3Package "opensearchserverless" "1.44.0"
@@ -1082,8 +1082,8 @@ in
       "sha256-yAT9fUuhMoLJCmdK+7dsOcSwSwhgxiGsMhRNL+SqL7Q=";
 
   mypy-boto3-rds =
-    buildMypyBoto3Package "rds" "1.44.7"
-      "sha256-W0tVyanXOhtQUA0Z/ORROGQ1WYibIdJgMl6hQdgDMyk=";
+    buildMypyBoto3Package "rds" "1.44.13"
+      "sha256-iBhx9UR577ENC4WbCsu6sWdh+PLKf1XUqx6xlv+QDK0=";
 
   mypy-boto3-rds-data =
     buildMypyBoto3Package "rds-data" "1.44.0"
