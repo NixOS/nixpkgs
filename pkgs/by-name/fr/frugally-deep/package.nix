@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
       {
         frugally-deep = finalAttrs.finalPackage;
       };
-  passthru.updateScript = gitUpdater;
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = {
     description = "Header-only library for using Keras (TensorFlow) models in C++";

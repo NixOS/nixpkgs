@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    updateScript = gitUpdater { };
+    updateScript = gitUpdater { rev-prefix = "xkeyboard-config-"; };
   };
 
   __structuredAttrs = true;

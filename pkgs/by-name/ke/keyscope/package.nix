@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # Test require network access
   doCheck = false;
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = {
     description = "Key and secret workflow (validation, invalidation, etc.) tool";

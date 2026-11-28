@@ -79,7 +79,10 @@ backendStdenv.mkDerivation (finalAttrs: {
       enableParallelChecking = false; # 500+ tests
     };
 
-    updateScript = unstableGitUpdater { branch = "dev"; };
+    updateScript = unstableGitUpdater {
+      hardcodeZeroVersion = true;
+      branch = "dev";
+    };
     platformAssertions = [
       {
         message = "cuCollections requires CCCL 3.4.3, first shipped with CUDA 13.4 (found ${cudaMajorMinorVersion})";

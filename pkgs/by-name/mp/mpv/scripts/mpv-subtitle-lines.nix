@@ -16,7 +16,7 @@ buildLua {
     hash = "sha256-m9LHIz/hAOEq0DzHY3Jd1LM1cfxZng6Iaqrug1PfnAE=";
   };
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = unstableGitUpdater { tagPrefix = "v"; };
 
   meta = {
     description = "List and search subtitle lines of the selected subtitle track";

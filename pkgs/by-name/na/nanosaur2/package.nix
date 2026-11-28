@@ -42,7 +42,7 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = unstableGitUpdater { tagPrefix = "v"; };
 
   meta = {
     description = "Port of Nanosaur2, a 2004 Macintosh game by Pangea Software, for modern operating systems";
