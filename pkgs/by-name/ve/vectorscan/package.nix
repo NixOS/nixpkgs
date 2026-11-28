@@ -23,13 +23,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vectorscan";
-  version = "5.4.13";
+  version = "5.4.14";
 
   src = fetchFromGitHub {
     owner = "VectorCamp";
     repo = "vectorscan";
     rev = "vectorscan/${finalAttrs.version}";
-    hash = "sha256-dUrtyMXBhsgJj8w7qXLZK8BYjlRUL1JWyUz7yVREcew=";
+    hash = "sha256-v4i8SkcSwqj19Po6TL4093vrhe94pchad/GMw11rSMw=";
   };
 
   postPatch = ''
