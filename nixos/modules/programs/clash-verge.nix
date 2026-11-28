@@ -36,7 +36,8 @@
       example = "wheel";
       default = "users";
       description = ''
-        The group to grant access to clash-verge-rev's service socket.
+        The group to grant access to clash-verge-rev's service socket
+        and shared core execution lock.
 
         For better security, you should set a group that only contains
         users who need to access clash-verge-rev's service socket.
@@ -83,7 +84,14 @@
 
       networking.firewall.checkReversePath = lib.mkIf cfg.tunMode (lib.mkDefault "loose");
 
-      systemd.services.clash-verge = lib.mkIf cfg.serviceMode {
+      # The execution lock must also exist while only a Sidecar is running.
+      systemd.tmpfiles.rules = [
+        "d /run/clash-verge-service 0755 root root -"
+        "f /run/clash-verge-service/core-execution.lock 0660 root ${cfg.group} -"
+      ];
+
+      # The client checks for the upstream clash-verge-service.service unit by name.
+      systemd.services.clash-verge-service = lib.mkIf cfg.serviceMode {
         enable = true;
         description = "Clash Verge Service Mode";
         serviceConfig = {
@@ -91,6 +99,8 @@
           Restart = "on-failure";
           Group = cfg.group;
           ProtectSystem = "strict";
+          # tmpfiles keeps the shared lock available independently of this service.
+          ReadWritePaths = [ "/run/clash-verge-service" ];
           NoNewPrivileges = true;
           ProtectHostname = true;
           ProtectProc = "invisible";
@@ -104,7 +114,6 @@
           ProtectControlGroups = true;
           LockPersonality = true;
           RestrictRealtime = true;
-          RuntimeDirectory = "clash-verge-rev";
           StateDirectory = "clash-verge-service";
           ProtectClock = true;
           MemoryDenyWriteExecute = true;
@@ -114,10 +123,13 @@
             "AF_INET AF_INET6 AF_NETLINK AF_PACKET AF_UNIX"
           ];
           CapabilityBoundingSet = [
-            "CAP_NET_ADMIN CAP_NET_RAW CAP_SYS_ADMIN CAP_DAC_OVERRIDE CAP_SETUID CAP_SETGID CAP_CHOWN CAP_MKNOD"
+            "CAP_NET_ADMIN CAP_NET_RAW CAP_SYS_ADMIN CAP_DAC_OVERRIDE CAP_FOWNER CAP_SETUID CAP_SETGID CAP_CHOWN CAP_MKNOD"
           ];
           SystemCallFilter = [
-            "~@aio @chown @clock @cpu-emulation @debug @keyring @memlock @module @mount @obsolete @pkey @privileged @raw-io @reboot @sandbox @setuid @swap @timer"
+            # @privileged includes @chown; the service needs fchown/lchown to
+            # hand per-user IPC sockets over to their owners.
+            "~@aio @clock @cpu-emulation @debug @keyring @memlock @module @mount @obsolete @pkey @privileged @raw-io @reboot @sandbox @setuid @swap @timer"
+            "@chown"
           ];
           SystemCallErrorNumber = "EPERM";
         };

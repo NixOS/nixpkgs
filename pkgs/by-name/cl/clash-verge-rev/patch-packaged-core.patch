@@ -1,0 +1,106 @@
+diff --git a/src/core/installation.rs b/src/core/installation.rs
+index 9362e89..072a949 100644
+--- a/src/core/installation.rs
++++ b/src/core/installation.rs
+@@ -61,3 +60,0 @@ fn inspect_core(directory: &Path, required: &CoreRequirement) -> CoreAvailabilit
+-    if matches!(std::fs::symlink_metadata(&requested), Err(error) if error.kind() == std::io::ErrorKind::NotFound) {
+-        return CoreAvailability::Missing;
+-    }
+@@ -65 +62 @@ fn inspect_core(directory: &Path, required: &CoreRequirement) -> CoreAvailabilit
+-        let approved = approved_core_copy(directory, &requested)?;
++        let approved = crate::core::runtime_generation::packaged_core(&requested)?;
+diff --git a/src/core/runtime_generation/assets.rs b/src/core/runtime_generation/assets.rs
+index 4b879b4..8d7d1e3 100644
+--- a/src/core/runtime_generation/assets.rs
++++ b/src/core/runtime_generation/assets.rs
+@@ -405,3 +404,0 @@ pub(crate) fn validate_core_path(core_path: &str) -> Result<ResolvedCore, Servic
+-    let source = std::fs::canonicalize(client_path)
+-        .map_err(|error| invalid_asset(format!("failed to canonicalize core: {error}")))?;
+-    let requested = canonical_regular_file(&source, "core")?;
+@@ -409,0 +407,3 @@ pub(crate) fn validate_core_path(core_path: &str) -> Result<ResolvedCore, Servic
++        let source = std::fs::canonicalize(client_path)
++            .map_err(|error| invalid_asset(format!("failed to canonicalize core: {error}")))?;
++        let requested = canonical_regular_file(&source, "core")?;
+@@ -415,7 +415 @@ pub(crate) fn validate_core_path(core_path: &str) -> Result<ResolvedCore, Servic
+-    let executable = approved_core_copy(
+-        &crate::core::paths::service_paths()
+-            .map_err(|error| untrusted(error.to_string()))?
+-            .core_dir(),
+-        // The installer stages symlinked cores under the original name, not the target name.
+-        client_path,
+-    )?;
++    let executable = packaged_core(client_path)?;
+@@ -424 +418,20 @@ pub(crate) fn validate_core_path(core_path: &str) -> Result<ResolvedCore, Servic
+-    Ok(ResolvedCore { requested, executable })
++    Ok(ResolvedCore {
++        requested: executable.clone(),
++        executable,
++    })
++}
++
++/// Resolves the supported core name to the immutable executable selected by the packager.
++pub(crate) fn packaged_core(requested: &Path) -> Result<PathBuf, ServiceError> {
++    // The manager validates the approved executable again before spawning it.
++    if requested == Path::new("@mihomo@") {
++        return canonical_regular_file(requested, "packaged core");
++    }
++    let Some(name) = requested.file_name() else {
++        return Err(untrusted("core path has no file name"));
++    };
++    // Saved paths can name an older store entry, including one already collected by Nix.
++    if name != std::ffi::OsStr::new("verge-mihomo") && name != std::ffi::OsStr::new("mihomo") {
++        return Err(untrusted(format!("unsupported core name {name:?}")));
++    }
++    canonical_regular_file(Path::new("@mihomo@"), "packaged core")
+diff --git a/src/core/runtime_generation/mod.rs b/src/core/runtime_generation/mod.rs
+index 1b35df7..445f298 100644
+--- a/src/core/runtime_generation/mod.rs
++++ b/src/core/runtime_generation/mod.rs
+@@ -9 +9 @@ mod staging;
+-pub(crate) use assets::{PreparedRuntime, approved_core_copy, prepare_runtime, validate_core_path};
++pub(crate) use assets::{PreparedRuntime, approved_core_copy, packaged_core, prepare_runtime, validate_core_path};
+diff --git a/src/core/trusted_core_location.rs b/src/core/trusted_core_location.rs
+index 1b2b52f..c3a0c42 100644
+--- a/src/core/trusted_core_location.rs
++++ b/src/core/trusted_core_location.rs
+@@ -93 +93,6 @@ fn require_root_owned_chain(canonical: &Path, stop_after: Option<&Path>) -> Resu
+-        if metadata.mode() & 0o022 != 0 {
++        // Nix permits builders to add store entries, but the sticky bit prevents
++        // them from replacing the root-owned entry containing the packaged core.
++        let protected_nix_store = component == Path::new("/nix/store")
++            && metadata.mode() & 0o1000 != 0
++            && metadata.mode() & 0o002 == 0;
++        if metadata.mode() & 0o022 != 0 && !protected_nix_store {
+diff --git a/tests/test_owner_lifecycle.rs b/tests/test_owner_lifecycle.rs
+index ff1646b..624129e 100644
+--- a/tests/test_owner_lifecycle.rs
++++ b/tests/test_owner_lifecycle.rs
+@@ -122,15 +122,7 @@ async fn installation_query_reports_global_occupancy_and_guards_handoff() -> Res
+-    let name = format!("verge-mihomo-alpha{}", std::env::consts::EXE_SUFFIX);
+-    let directory = clash_verge_service_ipc::service_paths()?.core_dir();
+-    std::fs::create_dir_all(&directory)?;
+-    let core = directory.join(&name);
+-    let previous = std::fs::read(&core).ok();
+-    if core.exists() {
+-        std::fs::remove_file(&core)?;
+-    }
+-    let mut requirement = CoreRequirement { name, sha256: None };
+-    assert_eq!(
+-        inspect_installation(&[requirement.clone()]).await?.cores[0].availability,
+-        CoreAvailability::Missing
+-    );
+-    std::fs::write(&core, b"abc")?;
+-    requirement.sha256 = Some("ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad".into());
++    let name = format!("verge-mihomo{}", std::env::consts::EXE_SUFFIX);
++    let mut requirement = CoreRequirement {
++        name,
++        sha256: Some(clash_verge_service_ipc::management::sha256_file(std::path::Path::new(
++            "@mihomo@",
++        ))?),
++    };
+@@ -144,5 +135,0 @@ async fn installation_query_reports_global_occupancy_and_guards_handoff() -> Res
+-    if let Some(previous) = previous {
+-        std::fs::write(&core, previous)?;
+-    } else {
+-        std::fs::remove_file(&core)?;
+-    }
