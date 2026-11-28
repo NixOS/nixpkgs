@@ -15,30 +15,21 @@
   libxcb,
   nix-update-script,
   pkg-config,
-  python3,
   qt6,
   udev,
+  wayland-scanner,
   xvfb-run,
 }:
 
-let
-  pythonEnv = python3.withPackages (
-    ps: with ps; [
-      dbus-python
-      pyqt6
-      qtpy
-    ]
-  );
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fcitx5-lotus";
-  version = "6.1.1";
+  version = "7.0.2";
 
   src = fetchFromGitHub {
     owner = "LotusInputMethod";
     repo = "fcitx5-lotus";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bV1KtqE03bOPly8IvT/oSNnBFnIwp3uimmBuwSb6fW0=";
+    hash = "sha256-52eh3ZRk71Fd1qREd+ytSGUp0a26KhdVdgYIPzyjnQY=";
   };
 
   passthru = {
@@ -52,6 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     kdePackages.extra-cmake-modules
     pkg-config
     qt6.wrapQtAppsHook
+    wayland-scanner
   ];
 
   nativeCheckInputs = [
@@ -68,8 +60,8 @@ stdenv.mkDerivation (finalAttrs: {
     libinput
     libnotify
     libxcb
-    pythonEnv
     qt6.qtbase
+    qt6.qtdeclarative
     qt6.qtsvg
     udev
   ];
@@ -82,6 +74,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
+  preCheck = ''
+    export NIXPKGS_QT6_QML_IMPORT_PATH=${qt6.qtdeclarative}/${qt6.qtbase.qtQmlPrefix}
+  '';
+
   cmakeFlags = [
     "-DLOTUS_ALT_EXECUTABLE_PREFIX=/nix/store/"
     "-DLOTUS_SETFACL_EXECUTABLE=${acl}/bin/setfacl"
@@ -89,7 +85,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postFixup = ''
-    patchShebangs $out/share/fcitx5-lotus/settings-gui
     wrapQtApp $out/bin/fcitx5-lotus-settings \
       --prefix XDG_DATA_DIRS : "${hicolor-icon-theme}/share"
   '';
