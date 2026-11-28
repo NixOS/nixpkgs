@@ -6,18 +6,18 @@
 
 buildGoModule (finalAttrs: {
   pname = "expr";
-  version = "1.17.8";
+  version = "1.18.0";
 
   src = fetchFromGitHub {
     owner = "expr-lang";
     repo = "expr";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MJM7ezZtSdDaUewNGACOKvWc+ZOPVScTuW+d6n1K5jo=";
+    hash = "sha256-RSaCGzP3rSaaABXKwKgKRQBPkMtZWYN3ORiPX55ErNk=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/repl";
 
-  vendorHash = "sha256-GH7rn0q/YuGBx0rrfHa2EMCsynQ3Pgtz1yDsD/NIKsU=";
+  vendorHash = "sha256-EBbNxPzumNWhiKl1a3sdQbd8Qou+sx2qRec3Jtbzc4k=";
 
   ldflags = [
     "-s"
