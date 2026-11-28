@@ -1,6 +1,5 @@
 {
   # keep-sorted start
-  dotnetCorePackages,
   expat,
   fetchurl,
   fsnotifier,
@@ -21,7 +20,7 @@ let
   inherit (stdenv.hostPlatform) system;
   versionInfo = lib.importJSON ./version.json;
 in
-(jetbrains.mkJetBrainsProduct {
+jetbrains.mkJetBrainsProduct {
   inherit jetbrains-libdbm fsnotifier;
   inherit (versionInfo) version buildNumber;
 
@@ -39,7 +38,17 @@ in
     else
       null;
 
-  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ jetbrains.sharedLibsHook ];
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    jetbrains.dotnetBackendHook
+    jetbrains.sharedLibsHook
+  ];
+
+  env = lib.optionalAttrs stdenv.hostPlatform.isLinux {
+    jetbrainsDotnetBackend = "plugins/clion-radler/DotFiles";
+  };
+
+  # The debugger agent runs on Android, where liblog.so is provided by the OS.
+  autoPatchelfIgnoreMissingDeps = lib.optionals stdenv.hostPlatform.isLinux [ "liblog.so" ];
 
   buildInputs =
     lib.optionals stdenv.hostPlatform.isLinux [
@@ -61,6 +70,7 @@ in
     description = "C/C++ IDE from JetBrains";
     longDescription = "Enhancing productivity for every C and C++ developer on Linux, macOS and Windows.";
     maintainers = with lib.maintainers; [
+      flaviut
       mic92
       tymscar
     ];
@@ -71,21 +81,5 @@ in
         [ lib.sourceTypes.binaryNativeCode ]
       else
         [ lib.sourceTypes.binaryBytecode ];
-    knownVulnerabilities = [
-      # Fixed in 2026.3.0.1
-      "CVE-2026-111497; see https://github.com/NixOS/nixpkgs/issues/590447"
-      # Fixed in 2026.3.0.2
-      "CVE-2026-114938; see https://github.com/NixOS/nixpkgs/issues/590447"
-    ];
   };
-}).overrideAttrs
-  (attrs: {
-    postInstall =
-      (attrs.postInstall or "")
-      + lib.optionalString stdenv.hostPlatform.isLinux ''
-        for dir in $out/clion/plugins/clion-radler/DotFiles/linux-*; do
-          rm -rf $dir/dotnet
-          ln -s ${dotnetCorePackages.sdk_10_0-source}/share/dotnet $dir/dotnet
-        done
-      '';
-  })
+}

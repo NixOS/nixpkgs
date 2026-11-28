@@ -9794,6 +9794,11 @@
     matrix = "@flashonfire:lithium.ovh";
     name = "Guillaume Calderon";
   };
+  flaviut = {
+    github = "flaviut";
+    githubId = 5213469;
+    name = "Flaviu Tamas";
+  };
   fleaz = {
     email = "mail@felixbreidenstein.de";
     matrix = "@fleaz:rainbownerds.de";

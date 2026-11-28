@@ -33,6 +33,7 @@
 
   # Hooks
   cythonDebugSpeedupsHook = callPackage ./hooks/cython-debug-speedups.nix { };
+  dotnetBackendHook = callPackage ./hooks/dotnet-backend.nix { };
   sharedLibsHook = callPackage ./hooks/shared-libs.nix { };
 
   # Plugins

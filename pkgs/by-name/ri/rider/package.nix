@@ -1,6 +1,5 @@
 {
   # keep-sorted start
-  dotnetCorePackages,
   expat,
   fetchurl,
   fsnotifier,
@@ -24,7 +23,7 @@ let
   inherit (stdenv.hostPlatform) system;
   versionInfo = lib.importJSON ./version.json;
 in
-(jetbrains.mkJetBrainsProduct {
+jetbrains.mkJetBrainsProduct {
   inherit jetbrains-libdbm fsnotifier;
   inherit (versionInfo) version buildNumber;
 
@@ -42,7 +41,17 @@ in
     else
       null;
 
-  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ jetbrains.sharedLibsHook ];
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    jetbrains.dotnetBackendHook
+    jetbrains.sharedLibsHook
+  ];
+
+  env = lib.optionalAttrs stdenv.hostPlatform.isLinux {
+    jetbrainsDotnetBackend = "lib/ReSharperHost";
+  };
+
+  # The debugger agent runs on Android, where liblog.so is provided by the OS.
+  autoPatchelfIgnoreMissingDeps = lib.optionals stdenv.hostPlatform.isLinux [ "liblog.so" ];
 
   # TODO: Some of these dependencies should probably also be added on Darwin - however it seems that JetBrains bundles them all? Unclear.
   #       Somebody with a Darwin machine should investigate this.
@@ -81,7 +90,10 @@ in
       Rider supports .NET Core, .NET Framework and Mono based projects.
       This lets you develop a wide array of applications including .NET desktop apps, services and libraries, Unity games, ASP.NET and ASP.NET Core web applications.
     '';
-    maintainers = with lib.maintainers; [ raphaelr ];
+    maintainers = with lib.maintainers; [
+      flaviut
+      raphaelr
+    ];
     teams = [ lib.teams.jetbrains ];
     license = lib.licenses.unfree;
     sourceProvenance =
@@ -89,22 +101,5 @@ in
         [ lib.sourceTypes.binaryNativeCode ]
       else
         [ lib.sourceTypes.binaryBytecode ];
-    knownVulnerabilities = [
-      # Fixed in 2026.3.0.1
-      "CVE-2026-111497; see https://github.com/NixOS/nixpkgs/issues/590447"
-      # Fixed in 2026.3.0.2
-      "CVE-2026-114938; see https://github.com/NixOS/nixpkgs/issues/590447"
-    ];
   };
-}).overrideAttrs
-  (attrs: {
-    # TODO: It is not correct to bundle the .NET in nixpkgs as-is, see https://github.com/NixOS/nixpkgs/issues/489048
-    postInstall =
-      (attrs.postInstall or "")
-      + lib.optionalString stdenv.hostPlatform.isLinux ''
-        for dir in $out/rider/lib/ReSharperHost/linux-*; do
-          rm -rf $dir/dotnet
-          ln -s ${dotnetCorePackages.sdk_10_0-source}/share/dotnet $dir/dotnet
-        done
-      '';
-  })
+}
