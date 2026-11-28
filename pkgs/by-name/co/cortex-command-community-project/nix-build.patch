@@ -1,0 +1,75 @@
+diff --git a/external/include/meson.build b/external/include/meson.build
+index 32d57f889..08cbfbff1 100644
+--- a/external/include/meson.build
++++ b/external/include/meson.build
+@@ -1,5 +1,4 @@
+ external_inc_dirs = [include_directories('boost_1_75',
+-                                         'fmod-2.2.13',
+                                          'fmod-2.2.13',
+                                          'glad-2.0.0-beta',
+                                          'glm-0.9.9.8',
+diff --git a/external/sources/LuaJIT-2.1/src/meson.build b/external/sources/LuaJIT-2.1/src/meson.build
+index 2a6b9060d..2c0f33082 100644
+--- a/external/sources/LuaJIT-2.1/src/meson.build
++++ b/external/sources/LuaJIT-2.1/src/meson.build
+@@ -49,10 +49,10 @@ if host_machine.system() == 'darwin'
+     lj_defines += '-DLUAJIT_UNWIND_EXTERNAL'
+ elif host_machine.system() != 'windows'
+     if 'NO_UNWIND' not in dasm_args
+-        test_unwind = run_command('test-unwind.sh', ' '.join(cc.cmd_array()), check : false)
+-        if test_unwind.stdout().strip() == 'E'
+-            lj_defines += '-DLUAJIT_UNWIND_EXTERNAL'
+-        endif
++        # test_unwind = run_command('test-unwind.sh', ' '.join(cc.cmd_array()), check : false)
++        # if test_unwind.stdout().strip() == 'E'
++        lj_defines += '-DLUAJIT_UNWIND_EXTERNAL'
++        # endif
+     endif
+ endif
+ 
+diff --git a/meson.build b/meson.build
+index 62b313c7a..763c3afc6 100644
+--- a/meson.build
++++ b/meson.build
+@@ -192,8 +192,8 @@ endif
+ #### Platform Common External Libraries ####
+ if host_machine.system() in ['linux','darwin']
+   deps += [
+-    #dependency(['sdl3']),
+-    #dependency('SDL3_image'),
++    dependency('sdl3'),
++    dependency('sdl3-image'),
+     dependency('flac'),
+     dependency('minizip'),
+     dependency('threads'),
+@@ -227,20 +227,6 @@ external_objects = []
+ external_libs = []
+ subdir('external')
+ 
+-sdl3_opt = cmake.subproject_options()
+-sdl3_opt.add_cmake_defines({'CMAKE_POSITION_INDEPENDENT_CODE': get_option('b_staticpic'), 'BUILD_SHARED_LIBS':false, 'BUILD_STATIC_LIBS': true})
+-sdl3_opt.append_compile_args('c','-DUSE_XINPUT2_KEYBOARD')
+-if host_machine.system() == 'darwin'
+-  sdl3_dep = dependency('sdl3')
+-else
+-  sdl3_proj = cmake.subproject('SDL3-3.2.10', options: sdl3_opt)
+-  sdl3_dep = sdl3_proj.dependency('SDL3-static')
+-  meson.override_dependency('sdl3', sdl3_dep)
+-endif
+-
+-sdl3_image_proj = subproject('SDL3_image-3.2.4')
+-sdl3_image_dep = sdl3_image_proj.get_variable('sdl3_image_dep')
+-
+ boost_dep = declare_dependency(include_directories: include_directories('external/include/boost_1_75'))
+ meson.override_dependency('boost-175', boost_dep)
+ install_rpath = prefix/get_option('fmod_dir')
+@@ -254,7 +240,8 @@ luabind_proj = subproject('luabind-0.7.1')
+ luabind_dep = dependency('luabind')
+ raknet_proj = subproject('RakNet')
+ raknet_dep = dependency('RakNet')
+-tracy_proj = subproject('tracy')
++sdl3_dep = dependency('sdl3')
++sdl3_image_dep = dependency('sdl3-image')
+ tracy_dep = dependency('tracy')
+ deps += [sdl3_dep, sdl3_image_dep, allegro_dep, luajit_dep, loadpng_dep, raknet_dep, boost_dep, tracy_dep]
+ 
