@@ -74,6 +74,10 @@ buildFHSEnv {
     [
       lutris-unwrapped
 
+      # XKB data for Qt/Wayland
+      # PCSX2's AppImage expects /usr/share/X11/xkb
+      xkeyboard-config
+
       # Appimages
       fuse
 
@@ -248,8 +252,6 @@ buildFHSEnv {
       p11-kit
       libbsd
       harfbuzz
-
-      # PCSX2 // TODO: "libgobject-2.0.so.0: wrong ELF class: ELFCLASS64"
 
       # WINE
       cups
