@@ -673,6 +673,7 @@
   ./services/display-managers/sddm.nix
   ./services/editors/emacs.nix
   ./services/editors/infinoted.nix
+  ./services/finance/freqtrade.nix
   ./services/finance/libeufin/bank.nix
   ./services/finance/libeufin/module.nix
   ./services/finance/libeufin/nexus.nix

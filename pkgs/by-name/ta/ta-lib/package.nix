@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ta-lib";
-  version = "0.7.1";
+  version = "0.8.3";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -16,16 +16,16 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "TA-Lib";
     repo = "ta-lib";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tme5YuTWdf4lCsWXF97kSeka7Vmqte0vTjwtaUNN+kA=";
+    hash = "sha256-mctOWXfnrZT7G6BJhCNVy8KwwsjEkRyohZL0rnvoFIE=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
 
   meta = {
-    description = "Add technical analysis to your own financial market trading applications";
+    description = "Technical analysis library: indicators and candlestick patterns, batch and streaming, native in C, Rust, Java, C#... and more";
     mainProgram = "ta-lib-config";
-    homepage = "https://ta-lib.org/";
-    changelog = "https://github.com/TA-Lib/ta-lib-python/blob/${finalAttrs.src.rev}/CHANGELOG";
+    homepage = "https://ta-lib.org";
+    changelog = "https://github.com/TA-Lib/ta-lib/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ rafael ];

@@ -1461,6 +1461,8 @@ self: super: with self; {
 
   asserts = callPackage ../development/python-modules/asserts { };
 
+  ast-comments = callPackage ../development/python-modules/ast-comments { };
+
   ast-grep-cli = callPackage ../development/python-modules/ast-grep-cli { };
 
   ast-grep-py = callPackage ../development/python-modules/ast-grep-py { };
@@ -3030,6 +3032,8 @@ self: super: with self; {
 
   cccolutils = callPackage ../development/python-modules/cccolutils { krb5-c = pkgs.krb5; };
 
+  ccxt = callPackage ../development/python-modules/ccxt { };
+
   cdcs = callPackage ../development/python-modules/cdcs { };
 
   cddlparser = callPackage ../development/python-modules/cddlparser { };
@@ -4211,6 +4215,8 @@ self: super: with self; {
   datasette-template-sql = callPackage ../development/python-modules/datasette-template-sql { };
 
   datashader = callPackage ../development/python-modules/datashader { };
+
+  datasieve = callPackage ../development/python-modules/datasieve { };
 
   datasketch = callPackage ../development/python-modules/datasketch { };
 
@@ -14978,6 +14984,8 @@ self: super: with self; {
 
   pycoin = callPackage ../development/python-modules/pycoin { };
 
+  pycoingecko = callPackage ../development/python-modules/pycoingecko { };
+
   pycollada = callPackage ../development/python-modules/pycollada { };
 
   pycolorecho = callPackage ../development/python-modules/pycolorecho { };
@@ -20327,6 +20335,8 @@ self: super: with self; {
 
   stable-baselines3 = callPackage ../development/python-modules/stable-baselines3 { };
 
+  stable-baselines3-contrib = callPackage ../development/python-modules/stable-baselines3-contrib { };
+
   stac-valid = callPackage ../development/python-modules/stac-valid { };
 
   stack-data = callPackage ../development/python-modules/stack-data { };
@@ -20778,6 +20788,8 @@ self: super: with self; {
   sysv-ipc = callPackage ../development/python-modules/sysv-ipc { };
 
   t61codec = callPackage ../development/python-modules/t61codec { };
+
+  ta-lib = callPackage ../development/python-modules/ta-lib { inherit (pkgs) ta-lib; };
 
   tabcmd = callPackage ../development/python-modules/tabcmd { };
 
