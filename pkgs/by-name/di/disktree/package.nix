@@ -51,6 +51,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoBuildFlags = [ "--package=disktree-app" ];
   cargoTestFlags = [ "--package=disktree-core" ];
+  checkFlags = [
+    # Reads the file's allocation before ZFS commits it, so Hydra's ZFS builders see 512 bytes.
+    # upstream: tobi/disktree#109
+    "--skip=scan::tests::disk_usage_is_whole_allocation_units"
+  ];
 
   postInstall = ''
     install -Dm644 assets/disktree.svg \
