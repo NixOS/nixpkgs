@@ -1,0 +1,13 @@
+[Desktop Entry]
+Name=P4V
+Version=@version@
+Name[en_GB]=P4V
+GenericName=Perforce Visual Client
+GenericName[en_GB]=Perforce Visual Client
+Comment=Interact with Perforce repositories
+Type=Application
+Exec=@out@/bin/p4v %U
+TryExec=@out@/bin/p4v
+Icon=@out@/share/icons/p4v.png
+Terminal=false
+Categories=Development;RevisionControl;Qt;
