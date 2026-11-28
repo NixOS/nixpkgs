@@ -2190,8 +2190,6 @@ with pkgs;
 
   licensee = callPackage ../tools/package-management/licensee { };
 
-  linux-gpib = callPackage ../applications/science/electronics/linux-gpib/user.nix { };
-
   liquidctl = with python3Packages; toPythonApplication liquidctl;
 
   madlang = haskell.lib.compose.justStaticExecutables haskellPackages.madlang;
