@@ -22,21 +22,24 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "maa-assistant-arknights" + lib.optionalString isBeta "-beta";
   version = if isBeta then sources.beta.version else sources.stable.version;
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "MaaAssistantArknights";
     repo = "MaaAssistantArknights";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = if isBeta then sources.beta.hash else sources.stable.hash;
   };
 
   nativeBuildInputs = [
-    asio
     cmake
     fastdeploy.cmake
   ]
   ++ lib.optionals cudaSupport [ cudaPackages.cuda_nvcc ];
 
   buildInputs = [
+    asio
     fastdeploy
     libcpr
     onnxruntime
@@ -80,6 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Arknights assistant";
     homepage = "https://github.com/MaaAssistantArknights/MaaAssistantArknights";
+    changelog = "https://github.com/MaaAssistantArknights/MaaAssistantArknights/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ Cryolitia ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;

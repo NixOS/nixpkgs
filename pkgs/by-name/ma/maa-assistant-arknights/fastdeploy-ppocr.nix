@@ -18,6 +18,9 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "fastdeploy-ppocr";
   version = "0-unstable-2023-10-09";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "MaaAssistantArknights";
     repo = "FastDeploy";
@@ -33,11 +36,11 @@ effectiveStdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    eigen
   ]
   ++ lib.optionals cudaSupport [ cudaPackages.cuda_nvcc ];
 
   buildInputs = [
+    eigen
     onnxruntime
     opencv
   ]
