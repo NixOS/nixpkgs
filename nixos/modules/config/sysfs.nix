@@ -215,6 +215,12 @@ in
       services."nixos-sysfs@" = {
         description = "/%I attribute setter";
 
+        # Apply definition changes with an atomic restart: when a setter is
+        # stopped during a switch, the level-triggered PathExistsGlob watcher
+        # immediately restarts it with the old definition, rewriting the old
+        # value, so changes would otherwise not take effect until reboot.
+        stopIfChanged = false;
+
         unitConfig = {
           DefaultDependencies = false;
           AssertPathIsMountPoint = "/sys";
