@@ -3,34 +3,35 @@
   fetchFromGitHub,
   bpftools,
   lib,
-  nspr,
   libpcap,
   clang,
   fd,
   go-bindata,
   glibc,
-  gnutls,
-  bashInteractive,
-  postgresql,
-  mariadb,
   openssl,
+  gnutls,
+  nspr,
   bash,
-  zsh,
   nix-update-script,
   llvmPackages,
   withNonBTF ? false,
   kernel ? null,
 }:
-
-buildGoModule rec {
+let
+  version = "2.11.0";
+  newlibpcap = libpcap.overrideAttrs (previousAttrs: {
+    configureFlags = previousAttrs.configureFlags ++ [ "--without-libnl" ];
+  });
+in
+buildGoModule {
   pname = "ecapture";
-  version = "1.5.2";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "gojue";
     repo = "ecapture";
     tag = "v${version}";
-    hash = "sha256-GWz+zlaP+kNF0G3hZJ2GJXusihGgEpxVdOlgAiHIH4s=";
+    hash = "sha256-kpF2ECFTBnCrxNsD5jALDl5mE8FM+o2h8Qv6XIEKeTc=";
     fetchSubmodules = true;
   };
 
@@ -42,14 +43,17 @@ buildGoModule rec {
     go-bindata
   ];
 
-  newlibpcap = libpcap.overrideAttrs (previousAttrs: {
-    configureFlags = previousAttrs.configureFlags ++ [ "--without-libnl" ];
-  });
-
   buildInputs = [
     newlibpcap
     glibc.static
     glibc
+  ];
+
+  subPackages = [ "." ];
+  # Use same tags as upstream.
+  tags = [
+    "ebpfassets"
+    "netgo"
   ];
 
   env.CGO_LDFLAGS = toString [
@@ -67,46 +71,29 @@ buildGoModule rec {
     "zerocallusedregs"
   ];
 
+  # Uprobes only fire in processes that run the hooked file. Only
+  # set the default location for the libraries in the same Nixpkgs revision link.
+  # Leave the mysqld default empty to allow detection with --pid.
   postPatch = ''
-    substituteInPlace user/config/config_gnutls_linux.go \
-      --replace-fail 'return errors.New("cant found Gnutls so load path")' 'gc.Gnutls = "${lib.getLib gnutls}/lib/libgnutls.so.30"' \
-      --replace-fail '"errors"' ' '
-
-    substituteInPlace user/module/probe_bash.go \
-      --replace-fail '/bin/bash' '${lib.getExe bashInteractive}'
-
-    substituteInPlace user/config/config_bash.go \
-      --replace-fail '/bin/bash' '${lib.getExe bashInteractive}'
-
-    substituteInPlace user/config/config_nspr_linux.go \
-      --replace-fail '/usr/lib/firefox/libnspr4.so' '${lib.getLib nspr}/lib/libnspr4.so'
-
-    substituteInPlace user/config/config_zsh.go \
-      --replace-fail '/bin/zsh' '${lib.getExe zsh}'
-
-    substituteInPlace user/module/probe_zsh.go \
-      --replace-fail '/bin/zsh' '${lib.getExe zsh}'
-
-    substituteInPlace cli/cmd/postgres.go \
-      --replace-fail '/usr/bin/postgres' '${postgresql}/bin/postgres'
+    substituteInPlace cli/cmd/tls.go \
+      --replace-fail '"libssl", ""' '"libssl", "${lib.getLib openssl}/lib/libssl.so.3"'
+    substituteInPlace cli/cmd/gnutls.go \
+      --replace-fail '"gnutls", ""' '"gnutls", "${lib.getLib gnutls}/lib/libgnutls.so.30"'
+    substituteInPlace cli/cmd/nss.go \
+      --replace-fail '"nspr", ""' '"nspr", "${lib.getLib nspr}/lib/libnspr4.so"'
 
     substituteInPlace cli/cmd/mysqld.go \
-      --replace-fail '/usr/sbin/mariadbd' '${mariadb}/bin/mariadbd'
+      --replace-fail '"/usr/sbin/mariadbd"' '""'
+    substituteInPlace cli/cmd/postgres.go \
+      --replace-fail '"/usr/bin/postgres"' '""'
 
-    substituteInPlace user/module/probe_mysqld.go \
-      --replace-fail '/usr/sbin/mariadbd' '${mariadb}/bin/mariadbd'
-
-    substituteInPlace user/config/config_openssl_linux.go \
-      --replace-fail 'return errors.New("cant found openssl so load path")' 'oc.Openssl = "${lib.getLib openssl}/lib/libssl.so.3"' \
-      --replace-fail '"errors"' ' '
+    patchShebangs .
   '';
 
   postConfigure = ''
-    sed -i '/git/d' Makefile
-    sed -i '/git/d' variables.mk
-
     substituteInPlace Makefile \
-      --replace-fail '/bin/bash' '${lib.getExe bash}'
+          --replace-fail '$(CMD_GO) run github.com/shuLhan/go-bindata/cmd/go-bindata' go-bindata \
+          --replace-fail '/bin/bash' '${lib.getExe bash}'
   ''
   + lib.optionalString withNonBTF ''
     substituteInPlace variables.mk \
@@ -114,19 +101,40 @@ buildGoModule rec {
     KERN_BUILD_PATH=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build KERN_SRC_PATH=${kernel.dev}/lib/modules/${kernel.modDirVersion}/source make ebpf_noncore
   ''
   + ''
-    make ebpf
-    go-bindata -pkg assets -o "assets/ebpf_probe.go" $(find user/bytecode -name "*.o" -printf "./%p ")
+    make assets_core
   '';
 
   checkFlags =
     let
       skippedTests = [
         "TestCheckLatest"
+        # expects the non-CO-RE bytecode, but only assets_core is embedded
+        "TestEmbeddedProbeAssetContracts"
+        # require /sys/class/net, which is missing in the sandbox
+        "TestConfigTextRaw"
+        "TestConfig_ValidateCaptureMode_Text"
+        "TestConfig_ValidateCaptureMode_Pcap"
+        "TestConfigDecryptOptions"
+        "TestConfigDefaultTextSource"
+        "TestProbe_PcapngTextDefaultStdout"
+        # require /usr/sbin/mysqld
+        "TestConfig_Validate"
+        "TestProbe_Initialize"
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
-  vendorHash = "sha256-esBALagv8J4UPYAzV2x3joF0MUxco4OHDFlL32yXe6E=";
+  # The default checkPhase only tests subPackages. Test all packages of the
+  # main module instead.
+  checkPhase = ''
+    runHook preCheck
+    # No trim path, cause test files find themself relative.
+    export GOFLAGS=''${GOFLAGS//-trimpath/}
+    buildGoDir test ./...
+    runHook postCheck
+  '';
+
+  vendorHash = "sha256-qM5RS9oCA0I+6xPYmgzkH6IXZXnvZAiWuJqn/chj030=";
 
   passthru.updateScript = nix-update-script { };
 
