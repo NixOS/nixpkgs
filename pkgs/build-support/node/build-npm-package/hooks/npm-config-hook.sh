@@ -28,6 +28,8 @@ npmConfigHook() {
         exit 1
     fi
 
+    export npmDeps
+
     if [[ -e "$npmDeps/.fetcher-version" ]]; then
       local -r fetcherVersion=$(cat "$npmDeps/.fetcher-version")
     else
