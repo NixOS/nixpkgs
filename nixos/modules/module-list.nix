@@ -896,7 +896,6 @@
   ./services/misc/confd.nix
   ./services/misc/conman.nix
   ./services/misc/cpuminer-cryptonight.nix
-  ./services/misc/db-rest.nix
   ./services/misc/devmon.nix
   ./services/misc/devpi-server.nix
   ./services/misc/dictd.nix
