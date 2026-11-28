@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pyytlounge";
-  version = "3.4.0";
+  version = "3.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "FabioGNR";
     repo = "pyytlounge";
     tag = "v${version}";
-    hash = "sha256-61RHCpkn5HLV3P5ZWQBXQOIsC3CdL33wHW1ga7WM4FI=";
+    hash = "sha256-3svUxE3WK07VZww5T5R8DLjY6/LYlIpL2NPNN7lgDbI=";
   };
 
   build-system = [ hatchling ];
@@ -31,6 +31,10 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-mock
     pytest-asyncio
+  ];
+
+  pytestFlags = [
+    "tests/"
   ];
 
   meta = {
