@@ -6028,6 +6028,8 @@ self: super: with self; {
 
   farama-notifications = callPackage ../development/python-modules/farama-notifications { };
 
+  fasm = callPackage ../development/python-modules/fasm { };
+
   fast-array-utils = callPackage ../development/python-modules/fast-array-utils { };
 
   fast-colorthief = callPackage ../development/python-modules/fast-colorthief { };
