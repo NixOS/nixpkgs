@@ -8,14 +8,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "css-parser";
-  version = "1.1.1";
+  version = "1.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ebook-utils";
     repo = "css-parser";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RD2ORq/4Sj1Pv53YDiv3XUu0hpJqrIFQpeKkDFR5JBQ=";
+    hash = "sha256-86RDKvItKGaytPyLbbZIu1Qf9IEzRMJ/a0ROI4VCRUY=";
   };
 
   build-system = [ setuptools ];
