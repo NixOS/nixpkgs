@@ -3638,6 +3638,7 @@ with pkgs;
     ocamlformat # latest version
     ocamlformat_0_28_1
     ocamlformat_0_29_0
+    ocamlformat_0_30_0
     ;
 
   inherit (ocamlPackages) odig;
