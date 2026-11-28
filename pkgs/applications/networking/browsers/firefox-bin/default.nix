@@ -183,5 +183,6 @@ stdenv.mkDerivation {
       lovesegfault
     ];
     mainProgram = binaryName;
+    mainDarwinApp = "${applicationName}.app";
   };
 }
