@@ -18,14 +18,14 @@
   zsh,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "amber-lang";
   version = "0.6.0-alpha";
 
   src = fetchFromGitHub {
     owner = "amber-lang";
     repo = "amber";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-pyMsxb9XPtseroH2MORhMOg9+iaLyoxmgpUTCej+i+Y=";
   };
 
@@ -109,4 +109,4 @@ rustPlatform.buildRustPackage rec {
       ilai-deutel
     ];
   };
-}
+})
