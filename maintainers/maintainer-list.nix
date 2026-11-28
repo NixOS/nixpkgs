@@ -15766,6 +15766,12 @@
     githubId = 1173376;
     name = "Martin Kleinberger";
   };
+  kleindotc = {
+    email = "kleindotc@proton.me";
+    name = "klein.c";
+    github = "kleindotc";
+    githubId = 288778621;
+  };
   kleiner3 = {
     name = "kleiner3";
     email = "nixos@dasriley.de";
