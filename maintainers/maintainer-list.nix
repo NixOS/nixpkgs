@@ -6442,6 +6442,12 @@
     github = "dadada";
     githubId = 7216772;
   };
+  dagenix = {
+    name = "Palmer Cox";
+    email = "p@lmercox.com";
+    github = "dagenix";
+    githubId = 2101211;
+  };
   daimond113 = {
     name = "daimond113";
     github = "daimond113";
