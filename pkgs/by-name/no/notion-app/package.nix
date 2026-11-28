@@ -30,6 +30,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "App to write, plan, collaborate, and get organised";
     homepage = "https://www.notion.so/";
     license = lib.licenses.unfree;
+    mainDarwinApp = "Notion.app";
     maintainers = with lib.maintainers; [
       xiaoxiangmoe
       pradyuman
