@@ -7,7 +7,7 @@
   ninja,
   wayland-scanner,
   libdrm,
-  minimal ? false,
+  minimal ? true,
   libx11,
   libxcb,
   libxext,

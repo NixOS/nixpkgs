@@ -5628,7 +5628,6 @@ with pkgs;
     }
   );
 
-  libva-minimal = callPackage ../development/libraries/libva { minimal = true; };
   libva = libva-minimal.override { minimal = false; };
   libwpd = callPackage ../development/libraries/libwpd { };
 
