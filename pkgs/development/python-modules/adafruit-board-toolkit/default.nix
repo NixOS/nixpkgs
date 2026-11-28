@@ -10,7 +10,7 @@
   pyserial,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "adafruit-board-toolkit";
   version = "1.1.2";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "adafruit";
     repo = "Adafruit_Board_Toolkit";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-xpz4+dGFcO/R/aBHub00N0oFS4w0prJl304PnbUKvAI=";
   };
 
@@ -38,8 +38,8 @@ buildPythonPackage rec {
   meta = {
     description = "CircuitPython board identification and information";
     homepage = "https://github.com/adafruit/Adafruit_Board_Toolkit";
-    changelog = "https://github.com/adafruit/Adafruit_Board_Toolkit/releases/tag/${version}";
+    changelog = "https://github.com/adafruit/Adafruit_Board_Toolkit/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ talhaHavadar ];
   };
-}
+})
