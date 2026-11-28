@@ -6,16 +6,16 @@
 
 buildNpmPackage rec {
   pname = "glob";
-  version = "10.3.3";
+  version = "14.0.6";
 
   src = fetchFromGitHub {
     owner = "isaacs";
     repo = "node-glob";
     rev = "v${version}";
-    hash = "sha256-oLlNhQOnu/hlKjNWa5vjqslz1EarZJOpUEXUB+vGQvc=";
+    hash = "sha256-L16vkXE504rT3mvxjN4Fby0YySyseE3EmhPw+YFuYpE=";
   };
 
-  npmDepsHash = "sha256-78oODw+CBCk5JRJbDqLqVmzTVImP7Z7o6jRIimDxZDQ=";
+  npmDepsHash = "sha256-CUWSyg+w8XeXEg0ED55X1YK3UCF46SO58qjPsuC+9Ns=";
 
   dontNpmBuild = true;
 
