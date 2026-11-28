@@ -770,6 +770,7 @@ in
   gnome = runTest ./gnome.nix;
   gnome-extensions = runTest ./gnome-extensions.nix;
   gnome-flashback = runTest ./gnome-flashback.nix;
+  gnome-initial-setup = runTest ./gnome-initial-setup.nix;
   gns3-server = runTest ./gns3-server.nix;
   gnupg = runTest ./gnupg.nix;
   go-camo = runTest ./go-camo.nix;
