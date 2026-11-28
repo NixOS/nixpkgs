@@ -25029,7 +25029,7 @@
     name = "Connor Glosser";
   };
   raylas = {
-    email = "r@raymond.sh";
+    email = "ray@rmdd.net";
     github = "raylas";
     githubId = 8099415;
     name = "Raymond Douglas";
