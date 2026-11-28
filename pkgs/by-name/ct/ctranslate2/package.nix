@@ -54,7 +54,7 @@ stdenv'.mkDerivation (finalAttrs: {
   pname = "ctranslate2";
   version = "4.8.5";
 
-  __strutcturedAttrs = true;
+  __structuredAttrs = true;
   strictDeps = true;
 
   src = fetchFromGitHub {
