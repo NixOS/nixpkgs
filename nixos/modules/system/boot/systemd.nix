@@ -629,6 +629,11 @@ in
           (mkAfter [ "systemd" ])
         ]
       );
+      gshadow = (
+        mkMerge [
+          (mkAfter [ "systemd" ])
+        ]
+      );
     };
 
     environment.systemPackages = [ cfg.package ];
