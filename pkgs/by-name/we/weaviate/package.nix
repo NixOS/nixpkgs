@@ -7,16 +7,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "weaviate";
-  version = "1.39.2";
+  version = "1.41.0";
 
   src = fetchFromGitHub {
     owner = "weaviate";
     repo = "weaviate";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3xCCmLQdVPegdJ45MAwkKm98F6IRCCoSJk7jCdwr890=";
+    hash = "sha256-lEInQfp9h5ndWvXJVj4BSmlDRvTf2/Li/bY2JU/nX8E=";
   };
 
-  vendorHash = "sha256-Ndl9EAPsbOmx/LoU6SPLfxvHnR3ziUjDLc5UFvd9Ex0=";
+  vendorHash = "sha256-jfEiEkMu+v+cWxUwqfTpxtqEQB4kzLhrSh1DVny58rY=";
 
   subPackages = [ "cmd/weaviate-server" ];
 
@@ -35,7 +35,9 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "ML-first vector search engine";
     homepage = "https://github.com/weaviate/weaviate";
+    changelog = "https://github.com/weaviate/weaviate/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ kamadorueda ];
+    mainProgram = "weaviate";
   };
 })
