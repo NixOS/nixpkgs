@@ -1,8 +1,10 @@
 {
   lib,
+  stdenv,
   stdenvNoCC,
   fetchurl,
   autoPatchelfHook,
+  patchelf,
   installShellFiles,
   zlib,
   testers,
@@ -14,7 +16,7 @@
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
-  version = "0.3.12";
+  version = "0.5.0";
   pname = "incus-spawn";
 
   src =
@@ -31,9 +33,25 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     installShellFiles
   ]
-  ++ lib.optional stdenvNoCC.hostPlatform.isLinux autoPatchelfHook;
+  ++ lib.optionals stdenvNoCC.hostPlatform.isLinux [
+    # FIXME: drop patchelf override after patchelf 0.19.3 lands in stdenv.
+    # patchelf 0.19.2 corrupts GraalVM native images by splitting LOAD
+    # segments when expanding the INTERP section.
+    # https://github.com/NixOS/nixpkgs/issues/577387
+    (patchelf.overrideAttrs (
+      finalAttrs: _: {
+        version = "0.15.2";
+        src = fetchurl {
+          url = "https://github.com/NixOS/patchelf/releases/download/${finalAttrs.version}/patchelf-${finalAttrs.version}.tar.bz2";
+          hash = "sha256-F3RfVkFZyOIo/EEtplogSLhGxLa0Igt3y/IkFuAvLXw=";
+        };
+      }
+    ))
+    autoPatchelfHook
+  ];
 
   buildInputs = lib.optionals stdenvNoCC.hostPlatform.isLinux [
+    stdenv.cc.cc.lib
     zlib
   ];
 
@@ -42,6 +60,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     install -Dm755 $src $out/bin/isx
     install -Dm755 ${finalAttrs.passthru.git-remote-isx} $out/bin/git-remote-isx
+    install -Dm755 ${finalAttrs.passthru.isx-proxy.${stdenvNoCC.hostPlatform.system}} $out/bin/isx-proxy
 
     runHook postInstall
   '';
@@ -66,21 +85,36 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     sources = {
       "x86_64-linux" = fetchurl {
         url = "https://github.com/Sanne/incus-spawn/releases/download/v${finalAttrs.version}/incus-spawn-linux-amd64";
-        hash = "sha256-2gJnH6cfQzL1BVDD80yHtWBiJ5p95SjcVshbEF1mIPo=";
+        hash = "sha256-MSnZmVI4eOR731OToeSoro5XT137ZYNN3CiPyE6UqxE=";
       };
       "aarch64-linux" = fetchurl {
         url = "https://github.com/Sanne/incus-spawn/releases/download/v${finalAttrs.version}/incus-spawn-linux-aarch64";
-        hash = "sha256-Iwg71OUhJNdZc7/z1lVa87CMSKzvVisaat7W1Poxl2c=";
+        hash = "sha256-dpM/2QYDhyPKcDdlKV27/umNNzYQQK5I/Sq56Vc6tXI=";
       };
       "aarch64-darwin" = fetchurl {
         url = "https://github.com/Sanne/incus-spawn/releases/download/v${finalAttrs.version}/incus-spawn-macos-aarch64";
-        hash = "sha256-sfEY1AQYJKTEFBOX91QTpQtCgCrd/++eXWLZIgtXE/s=";
+        hash = "sha256-8x01Td6S0Vukqstqva1Tuym1+b4XU+0mAuqRwXSTTyA=";
       };
     };
 
     git-remote-isx = fetchurl {
       url = "https://github.com/Sanne/incus-spawn/releases/download/v${finalAttrs.version}/git-remote-isx";
-      hash = "sha256-I9zmdLzO7VcfLHdgFD2Lvwiq4fkDw885j1JWsL8c+hA=";
+      hash = "sha256-Og1xfxjG01/CcmbikeO5H3Jc3Beyctt7KZWr5Lcs9LY=";
+    };
+
+    isx-proxy = {
+      "x86_64-linux" = fetchurl {
+        url = "https://github.com/Sanne/incus-spawn/releases/download/v${finalAttrs.version}/isx-proxy-linux-amd64";
+        hash = "sha256-dMD1AfPBi1knXCnk/Fhix1VvBJcFnhI4mY2raYxfp7Q=";
+      };
+      "aarch64-linux" = fetchurl {
+        url = "https://github.com/Sanne/incus-spawn/releases/download/v${finalAttrs.version}/isx-proxy-linux-aarch64";
+        hash = "sha256-4dDo4sG/YnERMnNnQS1N3zlRZ1CLEAMUT0uwbM62LW4=";
+      };
+      "aarch64-darwin" = fetchurl {
+        url = "https://github.com/Sanne/incus-spawn/releases/download/v${finalAttrs.version}/isx-proxy-macos-aarch64";
+        hash = "sha256-8Apmou6nOsvzMrH4EOdK3/NUzMlFCDWuYT4c8CtwO7E=";
+      };
     };
 
     tests.version = testers.testVersion {
@@ -105,6 +139,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       update-source-version incus-spawn "$NEW_VERSION" --source-key="git-remote-isx" --ignore-same-hash
       for platform in ${lib.escapeShellArgs finalAttrs.meta.platforms}; do
         update-source-version incus-spawn "$NEW_VERSION" --ignore-same-version --source-key="sources.$platform"
+        update-source-version incus-spawn "$NEW_VERSION" --ignore-same-version --source-key="isx-proxy.$platform"
       done
     '';
   };
