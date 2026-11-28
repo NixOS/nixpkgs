@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation {
   pname = "weechat-go";
-  version = "2.7";
+  version = "3.1.1";
 
   src = fetchurl {
-    url = "https://github.com/weechat/scripts/raw/414cff3ee605ba204b607742430a21443c035b08/python/go.py";
-    hash = "sha256-lbMy+yru5od+NRV4sCYlhCImVeEqwBkX/548HOR1yy4=";
+    url = "https://github.com/weechat/scripts/raw/1e3caac903e0d7873ca76ae7d2451ba5493661de/python/go.py";
+    hash = "sha256-dAq5Lb+CNa//QfOry0NVPBUahu8o1jX1EfsTIMhYffo=";
   };
 
   dontUnpack = true;
