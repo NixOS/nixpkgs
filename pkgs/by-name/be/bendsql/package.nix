@@ -14,14 +14,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "bendsql";
-  version = "0.34.2";
+  version = "0.34.3";
 
   src = fetchCrate {
     inherit (finalAttrs) pname version;
-    hash = "sha256-TSHUts54DfgWMTHuCUzjRdDVx6QXpOm+5Lhli6rlnqQ=";
+    hash = "sha256-AGApCnVfUcoK4md/6PyD6W9jK0j3HTdQJB7b51g/HhM=";
   };
 
-  cargoHash = "sha256-ST2ybXxXMd5MRFaITEoFRw0/yx+dOkff6vVm3mW87A4=";
+  cargoHash = "sha256-n0U7PE7ixX+3WPWzbYgwkZb65T0BS31N9JQffdgHOJY=";
 
   nativeBuildInputs = [ pkg-config ];
 
