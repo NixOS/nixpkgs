@@ -141,3 +141,5 @@ failure. To prevent this, guard the completion generation commands.
   '';
 }
 ```
+
+To generate the completions without writing this guard, use [`generateShellCompletions`](#generateshellcompletions), which runs the program only when the build platform can execute it.
