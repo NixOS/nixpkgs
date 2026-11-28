@@ -14,11 +14,17 @@ let
       enableWebService
       enableKvm
       ;
-    extensionPack = if cfg.enableExtensionPack then pkgs.virtualboxExtpack else null;
+    extensionPack =
+      if cfg.enableExtensionPack then
+        pkgs.virtualboxExtpack.override {
+          virtualboxHardened = cfg.package;
+        }
+      else
+        null;
   };
 
   kernelModules = config.boot.kernelPackages.virtualbox.override {
-    inherit virtualbox;
+    virtualboxHardened = virtualbox;
   };
 
 in
