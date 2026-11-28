@@ -74,6 +74,9 @@ buildPythonPackage rec {
     # Fails randomly on hydra
     # https://github.com/MagicStack/uvloop/issues/709
     "tests/test_process.py::TestAsyncio_AIO_Process::test_cancel_post_init"
+    # Fails randomly
+    # https://github.com/NixOS/nixpkgs/issues/572977
+    "tests/test_process.py::Test_UV_Process_Delayed::test_process_delayed_stdio__not_paused__no_stdin"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Segmentation fault
@@ -112,6 +115,6 @@ buildPythonPackage rec {
     description = "Fast implementation of asyncio event loop on top of libuv";
     homepage = "https://github.com/MagicStack/uvloop";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ highghlow ];
   };
 }
