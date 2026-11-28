@@ -9,7 +9,7 @@
   rsync,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "fcast-receiver";
   version = "2.2.4";
 
@@ -17,11 +17,11 @@ buildNpmPackage rec {
     domain = "gitlab.futo.org";
     owner = "videostreaming";
     repo = "fcast";
-    tag = "electron-v${version}";
+    tag = "electron-v${finalAttrs.version}";
     hash = "sha256-pbptK8LvdN2b/3SpRyTXKmMX9bN4mOmOiUsys67Syew=";
   };
 
-  sourceRoot = "${src.name}/receivers/electron";
+  sourceRoot = "${finalAttrs.src.name}/receivers/electron";
 
   makeCacheWritable = true;
 
@@ -55,7 +55,7 @@ buildNpmPackage rec {
   '';
 
   meta = {
-    description = "FCast Receiver, an open-source media streaming receiver";
+    description = "Open-source media streaming receiver";
     longDescription = ''
       FCast Receiver is a receiver for an open-source media streaming protocol, FCast, an alternative to Chromecast and AirPlay.
     '';
@@ -65,4 +65,4 @@ buildNpmPackage rec {
     mainProgram = "fcast-receiver";
     platforms = lib.platforms.linux;
   };
-}
+})
