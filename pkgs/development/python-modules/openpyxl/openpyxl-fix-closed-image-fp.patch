@@ -1,0 +1,102 @@
+Description: Fix crash when saving workbook multiple times with images
+ Prevent reuse of closed file handles by reloading image source
+
+Author: Josenilson Ferreira da Silva
+Bug-Debian: https://bugs.debian.org/1132566
+Forwarded: no
+Last-Update: 2026-05-01
+Index: openpyxl/openpyxl/drawing/image.py
+===================================================================
+--- openpyxl.orig/openpyxl/drawing/image.py
++++ openpyxl/openpyxl/drawing/image.py
+@@ -10,56 +10,71 @@ except ImportError:
+ 
+ def _import_image(img):
+     if not PILImage:
+-        raise ImportError('You must install Pillow to fetch image objects')
+-
++        raise ImportError("You must install Pillow to fetch image objects")
+     if not isinstance(img, PILImage.Image):
+         img = PILImage.open(img)
+-
+     return img
+ 
+ 
+ class Image:
+     """Image in a spreadsheet"""
+-
+     _id = 1
+     _path = "/xl/media/image{0}.{1}"
+     anchor = "A1"
+ 
+     def __init__(self, img):
+-
+         self.ref = img
+         mark_to_close = isinstance(img, str)
+         image = _import_image(img)
+         self.width, self.height = image.size
+-
+         try:
+             self.format = image.format.lower()
+         except AttributeError:
+             self.format = "png"
++        if hasattr(img, "read"):
++            img.seek(0)
++            self._cached_data = img.read()
+         if mark_to_close:
+-            # PIL instances created for metadata should be closed.
+             image.close()
+ 
+-
+     def _data(self):
+-        """
+-        Return image data, convert to supported types if necessary
+-        """
+-        img = _import_image(self.ref)
+-        # don't convert these file formats
+-        if self.format in ['gif', 'jpeg', 'png']:
+-            img.fp.seek(0)
+-            fp = img.fp
++        if hasattr(self, "_cached_data"):
++            return self._cached_data
++
++        ref = self.ref
++        if isinstance(ref, str):
++            img = _import_image(ref)
++        elif hasattr(ref, "filename") and ref.filename:
++            img = _import_image(ref.filename)
++        elif hasattr(ref, "read"):
++            if getattr(ref, "closed", False):
++                raise ValueError("Image file handle is closed and no cache available.")
++            else:
++                ref.seek(0)
++                ref = BytesIO(ref.read())
++            img = _import_image(ref)
++        else:
++            img = _import_image(ref)
++        if self.format in ["gif", "jpeg", "png"]:
++            if getattr(img, "fp", None) and not img.fp.closed:
++                img.fp.seek(0)
++                fp = img.fp
++            else:
++                tmp = BytesIO()
++                img.save(tmp, format=self.format)
++                tmp.seek(0)
++                fp = tmp
+         else:
+             fp = BytesIO()
+             img.save(fp, format="png")
+             fp.seek(0)
+-
+         data = fp.read()
+-        fp.close()
++        try:
++            fp.close()
++        except OSError:
++            pass
+         return data
+ 
+-
+     @property
+     def path(self):
+         return self._path.format(self._id, self.format)
