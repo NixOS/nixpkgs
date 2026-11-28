@@ -30823,6 +30823,27 @@ with self;
     };
   };
 
+  SemVer = buildPerlModule {
+    pname = "SemVer";
+    version = "0.10.0";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DW/DWHEELER/SemVer-v0.10.0.tar.gz";
+      hash = "sha256-jAriCFuniobqefYl5+UcotGs4SfPiM28UkPRudFTEBY=";
+    };
+    buildInputs = [
+      TestPod
+      TestPodCoverage
+    ];
+    meta = {
+      description = "Use semantic version numbers";
+      homepage = "https://metacpan.org/dist/SemVer";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
   SerealDecoder = buildPerlPackage {
     pname = "Sereal-Decoder";
     version = "5.006";
