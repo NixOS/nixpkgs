@@ -34,6 +34,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
+  preConfigure = ''
+    autoreconf -i
+  '';
+
   # Debian has outputs like these too
   # (https://packages.debian.org/source/bullseye/pkgconf), so it is safe to
   # remove those references
