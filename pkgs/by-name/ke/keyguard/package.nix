@@ -39,18 +39,21 @@ let
   };
 
   # the helpers are built by gradle, so their crates are vendored
-  # (util/crypto has its own lockfile)
+  # (util/crypto has its own lockfile). update.sh refreshes these hashes.
+  rootCargoHash = "sha256-isaQJqmn5uVwTWamrxLPmaf7QEPrjYZMuAvr2RbLOWc=";
+  cryptoCargoHash = "sha256-Xq8sPC9WL5RfLCTnvfdbr5JmqmBEB0tnal+Mfcpu7VA=";
+
   rootCargoVendor = rustPlatform.fetchCargoVendor {
     pname = "keyguard-cargo-deps";
     inherit src version;
-    hash = "sha256-isaQJqmn5uVwTWamrxLPmaf7QEPrjYZMuAvr2RbLOWc=";
+    hash = rootCargoHash;
   };
 
   cryptoCargoVendor = rustPlatform.fetchCargoVendor {
     pname = "keyguard-crypto-cargo-deps";
     inherit src version;
     cargoRoot = "util/crypto/rust";
-    hash = "sha256-Xq8sPC9WL5RfLCTnvfdbr5JmqmBEB0tnal+Mfcpu7VA=";
+    hash = cryptoCargoHash;
   };
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -175,7 +178,11 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = ./update.sh;
+  passthru = {
+    # used by update.sh to refresh the hashes above
+    inherit rootCargoVendor cryptoCargoVendor;
+    updateScript = ./update.sh;
+  };
 
   meta = {
     description = "Third-party client for the Bitwarden platform and KeePass databases";
