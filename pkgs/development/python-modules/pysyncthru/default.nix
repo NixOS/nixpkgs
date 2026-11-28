@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pysyncthru";
-  version = "0.10.1";
+  version = "release-0.10.1";
 
   pyproject = true;
 
