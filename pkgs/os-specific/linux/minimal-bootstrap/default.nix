@@ -176,7 +176,6 @@ lib.makeScope
           gnumake = gnumake-musl;
           gnutar = gnutar-latest;
           libc-headers = musl;
-          libc = musl;
           targetPlatform = hostPlatform;
         };
         gcc-latest = callPackage ./gcc/wrapper.nix {
@@ -541,7 +540,6 @@ lib.makeScope
           gcc-buildbuild = gcc-latest;
           gnumake = gnumake-musl;
           gnutar = gnutar-latest;
-          libc = glibc;
           libc-headers = glibc;
           targetPlatform = hostPlatform;
         };

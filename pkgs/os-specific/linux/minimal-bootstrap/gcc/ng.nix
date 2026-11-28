@@ -1,6 +1,5 @@
 {
   lib,
-  libc,
   buildPlatform,
   hostPlatform,
   targetPlatform,
@@ -104,7 +103,6 @@ bash.runCommand "${pname}-${common.version}"
 
       export CFLAGS="-O1"
       export CXXFLAGS="-O1"
-      export LDFLAGS="-Wl,-rpath,${libmpc}/lib,-rpath,${libmpfr}/lib,-rpath,${libgmp}/lib,-rpath-link,${libc}/lib"
       bash ${common.monorepoSrc}/configure \
         --prefix=$out \
         --build=${buildPlatform.config} \
