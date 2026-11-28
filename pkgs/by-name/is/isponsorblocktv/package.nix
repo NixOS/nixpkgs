@@ -23,6 +23,11 @@ python3Packages.buildPythonApplication (finalAttrs: {
       url = "https://github.com/lukegb/iSponsorBlockTV/commit/110ce5de788ccb262a323f743543e37af914f7fa.patch";
       hash = "sha256-AW9VwFBMDKo3pJCNc/r5b8vrqpcL1bV8jUl/z85x+jE=";
     })
+    # Use unique device_id for iSponsorBlockTV with pyytlounge 3.6.0
+    (fetchpatch {
+      url = "https://github.com/dmunozv04/iSponsorBlockTV/commit/76626e0e3a6603040542f2584cdb7b067d51cb4a.patch";
+      hash = "sha256-fWLlHsP3oYRWTRmt1UFBenmJNwfJR4GwTawUDdssT3g=";
+    })
   ];
 
   build-system = with python3Packages; [
