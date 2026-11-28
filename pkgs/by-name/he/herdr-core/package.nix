@@ -23,7 +23,7 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "herdr-core";
-  version = "0.1.20";
+  version = "0.1.22";
 
   __structuredAttrs = true;
 
@@ -32,10 +32,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     repo = "herdr-core";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-YzKVuMPt8CPns3q+1gnD6AcoDhuuqeh5zNMOq79aZ0o=";
+    hash = "sha256-di4jTvmZrMnXCMBli18HCAAKmC23VaydWL1to87y2Ms=";
   };
 
-  cargoHash = "sha256-v+0gGNHJX1tWTBBg4F5kUeu7QHHG9A+0ZagvpiIeQeE=";
+  cargoHash = "sha256-TeKSnj/87ABBPpiiU52p1XCTzkq0KueGSS4UJzdDbmY=";
 
   # zig.fetchDeps fails in the Darwin sandbox with CertificateBundleLoadFailure:
   # Zig reads its root certificates from the system keychains, which the
@@ -123,7 +123,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
         --replace-fail 'let bin = if there == here && (' 'let bin = if false && ('
 
       # The tests use /var/tmp, which the sandbox lacks.
-      for f in crates/herdr-core/{src/platform/systemd.rs,src/remote/tests.rs,src/runtime/tests.rs,src/viewers/tests.rs,tests/common/mod.rs,tests/m1.rs,tests/macos_distribution.rs}; do
+      for f in crates/herdr-core/{src/lib.rs,src/platform/systemd.rs,src/remote/tests.rs,tests/common/mod.rs,tests/m1.rs}; do
         substituteInPlace "$f" --replace-fail /var/tmp "$TMPDIR"
       done
 
@@ -138,11 +138,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       substituteInPlace crates/herdr-core/tests/distribution.rs \
         --replace-fail '.env("PATH", "/usr/bin:/bin")' '.env("PATH", "${installerBin}")' \
         --replace-fail '"{}:/usr/bin:/bin"' '"{}:${installerBin}"'
-
-      # The agent script in this test starts with #!/bin/bash, which the sandbox
-      # lacks; drop this once https://github.com/herdrdev/herdr-core/pull/229 is released.
-      substituteInPlace crates/herdr-core/tests/foreground.rs \
-        --replace-fail 'run(&s, &[&agent])' 'run(&s, &["bash", &agent])'
 
       # tests/distribution.rs runs this python3 script.
       patchShebangs scripts/manifest
