@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "msgpack-cxx";
-  version = "8.0.0";
+  version = "9.0.0";
 
   src = fetchFromGitHub {
     owner = "msgpack";
     repo = "msgpack-c";
     tag = "cpp-${finalAttrs.version}";
-    hash = "sha256-11eRM63rjmbIi0glwY5dEuKG9wnVOLx8VXb7CXqCbJE=";
+    hash = "sha256-wT2zgv09RoVtkBVmm0NyRVoWSjqmIu/l36VeNMqdZOA=";
   };
 
   strictDeps = true;
