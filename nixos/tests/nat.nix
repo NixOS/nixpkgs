@@ -22,6 +22,8 @@ import ./make-test-python.nix (
   let
     unit = if nftables then "nftables" else (if withFirewall then "firewall" else "nat");
 
+    testInterfaceWildcard = nftables && withFirewall;
+
     routerAlternativeExternalIp = "192.168.2.234";
 
     makeNginxConfig = hostname: {
@@ -134,6 +136,7 @@ import ./make-test-python.nix (
             networking.firewall = {
               enable = withFirewall;
               filterForward = nftables;
+              trustedInterfaces = lib.optional testInterfaceWildcard "eth1+";
               allowedTCPPorts = [
                 21
                 80
@@ -155,8 +158,11 @@ import ./make-test-python.nix (
               in
               {
                 enable = true;
-                internalIPs = [ "${clientIp}/24" ];
-                # internalInterfaces = [ "eth1" ];
+                internalIPs = lib.optional (!testInterfaceWildcard) "${clientIp}/24";
+                internalInterfaces = lib.optionals testInterfaceWildcard [
+                  "eth1+"
+                  "eth0"
+                ];
                 externalInterface = "eth2";
                 externalIP = serverIp;
 
@@ -178,12 +184,18 @@ import ./make-test-python.nix (
               }
             ];
 
-            services.nginx.virtualHosts.router.listen = lib.mkOrder (-1) [
-              {
-                addr = routerAlternativeExternalIp;
-                port = 8080;
+            services.nginx.virtualHosts.router.listen = lib.mkOrder (-1) (
+              [
+                {
+                  addr = routerAlternativeExternalIp;
+                  port = 8080;
+                }
+              ]
+              ++ lib.optional testInterfaceWildcard {
+                addr = "0.0.0.0";
+                port = 8081;
               }
-            ];
+            );
 
             specialisation.no-nat.configuration = {
               networking.nat.enable = lib.mkForce false;
@@ -210,6 +222,7 @@ import ./make-test-python.nix (
       let
         clientIp = (pkgs.lib.head nodes.client.networking.interfaces.eth1.ipv4.addresses).address;
         serverIp = (pkgs.lib.head nodes.server.networking.interfaces.eth1.ipv4.addresses).address;
+        routerLanIp = (pkgs.lib.head nodes.router.networking.interfaces.eth1.ipv4.addresses).address;
         routerIp = (pkgs.lib.head nodes.router.networking.interfaces.eth2.ipv4.addresses).address;
       in
       ''
@@ -236,6 +249,12 @@ import ./make-test-python.nix (
         router.succeed("check-connection ${serverIp} server expect-success")
         ## The server should have direct access to the router
         server.succeed("check-connection ${routerIp} router expect-success")
+
+        ${lib.optionalString testInterfaceWildcard ''
+          # Port 8081 is reachable only from the trusted LAN interface.
+          client.succeed('[[ `timeout 3 curl http://${routerLanIp}:8081` == "router" ]]')
+          server.fail("timeout 3 curl --fail http://${routerIp}:8081")
+        ''}
 
         # The client should be also able to connect via the NAT router...
         client.succeed("check-connection ${serverIp} server expect-success")
