@@ -6,14 +6,14 @@
 
 mkNginxPlugin (finalAttrs: {
   pname = "echo";
-  version = "0.65";
+  version = "0.66";
 
   src = fetchFromGitHub {
     name = "echo";
     owner = "openresty";
     repo = "echo-nginx-module";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DiukXNS1ZoKVMnDD/65DZxxQSS/lAKZ5b0Pp0Hs6MTc=";
+    hash = "sha256-QcOClxZ/7GczSEJo831Zk/+E4seoha+Axiiamkp3A/8=";
   };
 
   meta = {
