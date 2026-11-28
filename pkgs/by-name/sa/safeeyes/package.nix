@@ -19,12 +19,12 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "safeeyes";
-  version = "3.5.0";
+  version = "3.6.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-XO+i+JTZHqXPQGkqAPB9ekESZovCfsDs7wMUxKTbdsQ=";
+    hash = "sha256-uU7tbZjq9XFWNPw5BFXAc7DpwI3fdMDotFQDBFXXCIE=";
   };
 
   nativeBuildInputs = [
@@ -94,5 +94,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     mainProgram = "safeeyes";
+    maintainers = with lib.maintainers; [ lykos153 ];
   };
 })
