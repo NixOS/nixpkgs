@@ -8,7 +8,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libodb";
-  version = "2.5.0";
+  version = "2.6.0";
 
   outputs = [
     "out"
@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://pkg.cppget.org/1/stable/odb/libodb-${finalAttrs.version}.tar.gz";
-    hash = "sha256-cAA4pzxsvq0BESmxUDC3zdP3NRC2h/LEUEgI30IwRBs=";
+    hash = "sha256-2+v3LVCzvCO22vt7JEIlLZ939Lq1Tic91JIgeASOfBo=";
   };
 
   nativeBuildInputs = [ build2 ];
