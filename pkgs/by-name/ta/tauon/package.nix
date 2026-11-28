@@ -2,8 +2,11 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  cmake,
+  gettext,
   kissfft,
   miniaudio,
+  ninja,
   pkg-config,
   python3Packages,
   gobject-introspection,
@@ -22,6 +25,7 @@
   opusfile,
   pango,
   pipewire,
+  sdl3,
   wavpack,
   ffmpeg,
   pulseaudio,
@@ -29,12 +33,12 @@
   withDiscordRPC ? true,
 }:
 let
-  version = "13.0.0";
+  version = "14.0.0";
   src = fetchFromGitHub {
     owner = "Taiko2k";
     repo = "Tauon";
     tag = "v${version}";
-    hash = "sha256-Mr+MLr8wFW0OSP3wmuPer5cQFJSVHvb/QMUdCyd1UiA=";
+    hash = "sha256-IKPNXKVI1hDrl3uJEBqYu2HU4YewaP1L0tJ6bup3YG8=";
   };
 
   lrclib-solver = rustPlatform.buildRustPackage {
@@ -67,31 +71,28 @@ python3Packages.buildPythonApplication {
     ln -s ${miniaudio.src} source/src/phazor/miniaudio
   '';
 
-  postPatch = ''
-    substituteInPlace src/tauon/t_modules/t_phazor.py \
-      --replace-fail 'base_path = Path(pctl.install_directory).parent.parent / "build"' 'base_path = Path("${placeholder "out"}/${python3Packages.python.sitePackages}")'
-
-    substituteInPlace pyproject.toml \
-      --replace-fail '/usr/include/pipewire-0.3' '${pipewire.dev}/include/pipewire-0.3' \
-      --replace-fail '/usr/include/spa-0.2' '${pipewire.dev}/include/spa-0.2'
-  '';
-
   pythonRemoveDeps = [
-    "opencc"
-    "tekore"
     # Not present when withDiscordRPC is disabled.
     "pypresence"
   ];
 
+  # scikit-build-core owns the CMake configure/build lifecycle for the wheel.
+  dontUseCmakeConfigure = true;
+
+  # tauon is a C++ binary embedding Python, so wrapPythonPrograms ignores it.
+  dontWrapPythonPrograms = true;
+
   nativeBuildInputs = [
+    cmake
+    gettext
+    ninja
     pkg-config
     python3Packages.wrapPython
     gobject-introspection
   ];
 
   build-system = with python3Packages; [
-    setuptools
-    setuptools-scm
+    scikit-build-core
   ];
 
   buildInputs = [
@@ -106,38 +107,38 @@ python3Packages.buildPythonApplication {
     mpg123
     opusfile
     pango
-    pipewire
-    python3Packages.pyopengl
+    sdl3
     wavpack
-  ];
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux pipewire;
 
   pythonPath =
     with python3Packages;
     [
       beautifulsoup4
       colored-traceback
-      dbus-python
-      unidecode
       jxlpy
       musicbrainzngs
       mutagen
       natsort
+      opencc
       pillow
       plexapi
       pycairo
       pychromecast
-      pylast
       pygobject3
+      pylast
       pyopengl
-      pysdl3
       rapidfuzz
       requests
       send2trash
       setproctitle
       tidalapi
+      unidecode
+      zeroconf
     ]
     ++ lib.optional withDiscordRPC pypresence
-    ++ lib.optional stdenv.hostPlatform.isLinux pulsectl;
+    ++ lib.optional stdenv.hostPlatform.isLinux dbus-python;
 
   makeWrapperArgs = [
     "--prefix"
@@ -151,25 +152,27 @@ python3Packages.buildPythonApplication {
       [
         chromaprint
         game-music-emu
-        libayatana-appindicator
         libopenmpt
         pulseaudio
       ]
-      ++ lib.optional stdenv.hostPlatform.isLinux libxcursor
+      ++ lib.optionals stdenv.hostPlatform.isLinux [
+        libayatana-appindicator
+        libxcursor
+      ]
     ))
-    "--prefix"
-    "PYTHONPATH"
-    ":"
-    "${placeholder "out"}/share/tauon"
   ];
 
-  preFixup = ''
-    makeWrapperArgs+=(--set GI_TYPELIB_PATH "$GI_TYPELIB_PATH")
+  postFixup = ''
+    buildPythonPath "$out ''${pythonPath[*]}"
+    wrapProgram $out/bin/tauon \
+      --prefix PATH : "$program_PATH" \
+      --prefix PYTHONPATH : "$program_PYTHONPATH" \
+      --set PYTHONNOUSERSITE "true" \
+      --set GI_TYPELIB_PATH "$GI_TYPELIB_PATH" \
+      ''${makeWrapperArgs[@]}
   '';
 
   postInstall = ''
-    mv $out/bin/tauonmb $out/bin/tauon
-
     mkdir -p $out/share/applications
     install -Dm755 extra/tauonmb.desktop $out/share/applications/tauonmb.desktop
 
