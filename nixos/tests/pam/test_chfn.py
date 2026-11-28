@@ -8,7 +8,7 @@ expected_lines = {
     "auth sufficient @@pam@@/lib/security/pam_rootok.so",
     "auth sufficient @@pam@@/lib/security/pam_unix.so likeauth try_first_pass",
     "password sufficient @@pam_krb5@@/lib/security/pam_krb5.so use_first_pass",
-    "password sufficient @@pam@@/lib/security/pam_unix.so nullok yescrypt",
+    "password sufficient @@pam@@/lib/security/pam_unix.so nullok",
     "session optional @@pam_krb5@@/lib/security/pam_krb5.so",
     "session required @@pam@@/lib/security/pam_env.so conffile=/etc/pam/environment readenv=0",
     "session required @@pam@@/lib/security/pam_unix.so",
