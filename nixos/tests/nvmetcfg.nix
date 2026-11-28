@@ -35,11 +35,13 @@
         server.succeed("nvmet namespace add ${subsystem} 1 /dev/vdb")
 
       with subtest("Bind subsystem to port"):
+        server.systemctl("start network-online.target")
         server.wait_for_unit("network-online.target")
         server.succeed("nvmet port add 1 tcp [::]:4420")
         server.succeed("nvmet port add-subsystem 1 ${subsystem}")
 
       with subtest("Discover and connect to available subsystems"):
+        client.systemctl("start network-online.target")
         client.wait_for_unit("network-online.target")
         assert "subnqn:  ${subsystem}" in client.succeed("nvme discover --transport=tcp --traddr=server --trsvcid=4420")
         client.succeed("nvme connect-all --transport=tcp --traddr=server --trsvcid=4420")
