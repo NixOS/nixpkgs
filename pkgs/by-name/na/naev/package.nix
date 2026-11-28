@@ -13,7 +13,7 @@
   glpk,
   intltool,
   libpng,
-  libunibreak,
+  libunibreak_7,
   libvorbis,
   libwebp,
   libxml2,
@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     freetype
     glpk
     libpng
-    libunibreak
+    libunibreak_7
     libvorbis
     libwebp
     libxml2

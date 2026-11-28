@@ -3,11 +3,15 @@
   stdenv,
   fetchFromGitHub,
   autoreconfHook,
+  version ? "8.0.1",
+  hash ? "sha256-CjwdIuh2X4dLgSdGrMtnqZPPzOj59We+TI/WJ3bntrY=",
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libunibreak";
-  version = "7.0";
+  inherit version;
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src =
     let
@@ -17,10 +21,12 @@ stdenv.mkDerivation (finalAttrs: {
       owner = "adah1972";
       repo = "libunibreak";
       tag = "libunibreak_${rev_version}";
-      hash = "sha256-J+/L5pFudppf0l0Gk/6/Rwz5I59p9Aw11cUEPRPGP/8=";
+      inherit hash;
     };
 
   nativeBuildInputs = [ autoreconfHook ];
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
     homepage = "https://github.com/adah1972/libunibreak";
@@ -28,6 +34,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Implementation of line breaking and word breaking algorithms as in the Unicode standard";
     license = lib.licenses.zlib;
     platforms = lib.platforms.unix;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ gaelj ];
   };
 })
