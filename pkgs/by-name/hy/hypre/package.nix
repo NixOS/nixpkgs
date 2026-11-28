@@ -13,10 +13,16 @@
   mpiCheckPhaseHook,
   isILP64 ? false,
   mpiSupport ? true,
+  scalarType ? "real",
   precision ? "double",
   testers,
   hypre,
 }:
+
+assert lib.elem scalarType [
+  "real"
+  "complex"
+];
 
 assert lib.elem precision [
   "single"
@@ -26,13 +32,13 @@ assert lib.elem precision [
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hypre";
-  version = "3.0.0";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "hypre-space";
     repo = "hypre";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zu9YWfBT2WJxPg6JHrXjZWRM9Ai1p28EpvAx6xfdPsY=";
+    hash = "sha256-U+6PUlrTY4ewS6vOSusRerqh9Jw6TX5A+Y08pfcIvZU=";
   };
 
   outputs = [
@@ -75,6 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "HYPRE_ENABLE_HYPRE_LAPACK" false)
     (lib.cmakeBool "HYPRE_ENABLE_FORTRAN" true)
     (lib.cmakeBool "HYPRE_ENABLE_BIGINT" isILP64)
+    (lib.cmakeBool "HYPRE_ENABLE_COMPLEX" (scalarType == "complex"))
     (lib.cmakeBool "HYPRE_ENABLE_SINGLE" (precision == "single"))
     (lib.cmakeBool "HYPRE_ENABLE_LONG_DOUBLE" (precision == "long-double"))
     (lib.cmakeBool "HYPRE_ENABLE_OPENMP" true)
