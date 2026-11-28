@@ -13,14 +13,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "servestatic";
-  version = "4.3.4";
+  version = "4.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Archmonger";
     repo = "ServeStatic";
     tag = "${finalAttrs.version}";
-    hash = "sha256-zm6wR+LZkmdooB9lXY8EVAhatd2eRMmBtHpV6Z7+Ey0=";
+    hash = "sha256-KQJXMDpCv+UVDaqiF7PM/Gly5iHhDPhRhuBe8t9XqnM=";
   };
 
   build-system = [ hatchling ];
