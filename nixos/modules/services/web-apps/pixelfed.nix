@@ -514,7 +514,7 @@ in
             fastcgi_pass unix:${config.services.phpfpm.pools.pixelfed.socket};
             fastcgi_index index.php;
           '';
-          locations."~ /\\.(?!well-known).*".extraConfig = ''
+          locations."~ /\\.(?!well-known).*$".extraConfig = ''
             deny all;
           '';
           extraConfig = ''

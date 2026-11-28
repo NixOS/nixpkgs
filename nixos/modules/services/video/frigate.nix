@@ -297,6 +297,11 @@ in
   config = mkIf cfg.enable {
     services.nginx = {
       enable = true;
+      checkConfig.skips = [
+        # all headers are redefined in full, no option to define inherit
+        # behavior for proxy_set_header exists
+        "proxy_set_header_redefinition"
+      ];
       additionalModules = with pkgs.nginxModules; [
         develkit
         rtmp
@@ -467,12 +472,12 @@ in
             '';
           };
           "/ws" = {
-            proxyPass = "http://frigate-mqtt-ws/";
+            proxyPass = "http://frigate-mqtt-ws";
             recommendedProxySettings = true;
             proxyWebsockets = true;
             extraConfig = nginxAuthRequest + nginxProxySettings;
           };
-          "/live/jsmpeg" = {
+          "/live/jsmpeg/" = {
             proxyPass = "http://frigate-jsmpeg/";
             recommendedProxySettings = true;
             proxyWebsockets = true;
@@ -571,6 +576,7 @@ in
                     ${nginxAuthRequest}
                     proxy_pass http://frigate-api/vod/;
                     proxy_cache off;
+                    add_header_inherit off;
                     add_header Cache-Control "no-store";
                     ${nginxProxySettings}
                 }
@@ -603,6 +609,7 @@ in
                     ${nginxAuthRequest}
                     access_log off;
                     rewrite ^/api(/.*)$ $1 break;
+                    add_header_inherit off;
                     add_header Cache-Control "no-store";
                     proxy_pass http://frigate-api;
                     ${nginxProxySettings}
@@ -612,6 +619,7 @@ in
                     ${nginxAuthRequest}
                     access_log off;
                     rewrite ^/api(/.*)$ $1 break;
+                    add_header_inherit off;
                     add_header Cache-Control "no-store";
                     proxy_pass http://frigate-api;
                     ${nginxProxySettings}

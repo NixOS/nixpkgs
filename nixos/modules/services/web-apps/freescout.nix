@@ -470,7 +470,7 @@ in
               add_header Cache-Control "public, must-revalidate";
             '';
 
-            "~ /\\.".extraConfig = ''
+            "~ ^/\\.".extraConfig = ''
               deny all;
             '';
             "^~ /(css|js)/builds/".root = "${cachedir}/public/";

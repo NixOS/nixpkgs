@@ -1724,7 +1724,7 @@ in
                 return 404;
               '';
             };
-            "~ \\.php(?:$|/)" = {
+            "~ ^/.*\\.php(?:$|/)" = {
               priority = 500;
               extraConfig = ''
                 # legacy support (i.e. static files and directories in cfg.package)
