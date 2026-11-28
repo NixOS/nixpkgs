@@ -36,6 +36,14 @@ stdenv.mkDerivation (finalAttrs: {
     gettext
   ];
 
+  # WASI has no `getdtablesize`. The gnulib replacement uses `getrlimit`, which WASI also does not have.
+  # Hello does not call `getdtablesize`, thus tell `configure` that it exists to not compile the replacement.
+  configureFlags = lib.optionals stdenv.hostPlatform.isWasi [
+    "ac_cv_func_getdtablesize=yes"
+    "ac_cv_have_decl_getdtablesize=yes"
+    "gl_cv_func_getdtablesize_works=yes"
+  ];
+
   doCheck = true;
 
   doInstallCheck = true;
