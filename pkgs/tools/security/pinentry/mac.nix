@@ -17,13 +17,13 @@ stdenv.mkDerivation rec {
 
   # NOTE: Don't update manually. Use passthru.updateScript on a Mac with XCode
   # installed.
-  version = "1.1.1.1";
+  version = "1.3.1.1";
 
   src = fetchFromGitHub {
     owner = "GPGTools";
     repo = "pinentry";
     rev = "v${version}";
-    sha256 = "sha256-QnDuqFrI/U7aZ5WcOCp5vLE+w59LVvDGOFNQy9fSy70=";
+    sha256 = "sha256-iVd8Gy8XhQOHCSY7caP2QCgs/MufA+p9RN2pNilrJ9E=";
   };
 
   patches = [
@@ -35,8 +35,6 @@ stdenv.mkDerivation rec {
     cp -r ${./mac/Main.nib} macosx/Main.nib
     cp -r ${./mac/Pinentry.nib} macosx/Pinentry.nib
     chmod -R u+w macosx/*.nib
-    # pinentry_mac requires updated macros to correctly detect v2 API support in libassuan 3.x.
-    cp '${lib.getDev libassuan}/share/aclocal/libassuan.m4' m4/libassuan.m4
     substituteInPlace macosx/copyInfoPlist.sh \
       --replace-fail "/usr/libexec/PlistBuddy" "PlistBuddy"
   '';
@@ -56,6 +54,9 @@ stdenv.mkDerivation rec {
     "--with-libassuan-prefix=${libassuan.dev}"
   ];
 
+  # Silence incompatible pointer types errors building KeychainSupport.m.
+  env.OBJCFLAGS = "-Wno-error=incompatible-pointer-types";
+
   installPhase = ''
     mkdir -p $out/Applications $out/bin
     mv macosx/pinentry-mac.app $out/Applications
@@ -71,13 +72,21 @@ stdenv.mkDerivation rec {
     updateScript = writers.writeBash "update-pinentry-mac" ''
       set -euxo pipefail
 
+      # Avoid using the SDK from Nixpkgs
+      unset DEVELOPER_DIR
+      unset SRCROOT
+
       main() {
+        macNix=$(nix-instantiate --eval --strict -A "pinentry_mac.meta.position" | sed -re 's/^"(.*):[0-9]+"$/\1/')
+        pinentry_macDir=$(dirname "$macNix")
+
         tag="$(queryLatestTag)"
         ver="$(expr "$tag" : 'v\(.*\)')"
 
         ${common-updater-scripts}/bin/update-source-version pinentry_mac "$ver"
 
-        cd ${lib.escapeShellArg ./.}
+        pushd "$pinentry_macDir"
+
         rm -rf mac
         mkdir mac
 
@@ -86,6 +95,8 @@ stdenv.mkDerivation rec {
           filename="''${path##*/}"
           /usr/bin/ibtool --compile "mac/''${filename%.*}.nib" "$path"
         done
+
+        popd
       }
 
       queryLatestTag() {
