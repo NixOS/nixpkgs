@@ -20,6 +20,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "doc"
   ];
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "jj-vcs";
     repo = "jj";
