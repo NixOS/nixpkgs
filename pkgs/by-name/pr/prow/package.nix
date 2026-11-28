@@ -11,6 +11,8 @@ buildGoModule rec {
   version = "0-unstable-2026-08-08";
   rev = "d06078952878afaf40df8696be3199ecc85e4837";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     inherit rev;
 
