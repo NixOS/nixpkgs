@@ -18,12 +18,21 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "gpufetch";
   version = "0.25";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "Dr-Noob";
     repo = "gpufetch";
     tag = "v${finalAttrs.version}";
     hash = "sha256-1j23h3TDxa2xu03o37fXfRL3XFYyhMWFGupAlkrYpBY=";
   };
+
+  patches = [
+    # CUDA 13 removed `cudaDeviceProp.clockRate` and `memoryClockRate`
+    # https://github.com/Dr-Noob/gpufetch/issues/66
+    ./cuda-13.patch
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -64,6 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Simple yet fancy GPU architecture fetching tool";
     homepage = "https://github.com/Dr-Noob/gpufetch";
+    changelog = "https://github.com/Dr-Noob/gpufetch/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl2Only;
     mainProgram = "gpufetch";
     maintainers = with lib.maintainers; [ bot-wxt1221 ];
