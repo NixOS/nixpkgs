@@ -16,7 +16,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "onefetch";
-  version = "3.2.0";
+  version = "3.3.0";
   # Use the system zstd library.
   env.ZSTD_SYS_USE_PKG_CONFIG = "1";
 
@@ -24,10 +24,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "o2sh";
     repo = "onefetch";
     tag = finalAttrs.version;
-    hash = "sha256-deGpYwdqCSYPGtM2GaecwCXCCE3wixTbdot6YwjfImk=";
+    hash = "sha256-U4tbRxX4dW9dSqlQrUH3wAYYMqy4apsoGukgeJGmtww=";
   };
 
-  cargoHash = "sha256-omR/5jKnjDWta1gj7e0Zha5B9IlzBdm16YJf8fOTDdk=";
+  cargoHash = "sha256-ucPXlCnvD/5vW9DQvSFUG72/3LQu8F+WKPgunbKa0/4=";
 
   nativeBuildInputs = [
     cmake
