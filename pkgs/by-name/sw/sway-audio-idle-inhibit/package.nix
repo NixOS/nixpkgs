@@ -7,7 +7,7 @@
   nix-update-script,
   pkg-config,
   stdenv,
-  systemdMinimal,
+  systemdLibs,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libpulseaudio
-    systemdMinimal
+    systemdLibs
   ];
 
   passthru.updateScript = nix-update-script { };
