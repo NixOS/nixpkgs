@@ -55,6 +55,7 @@
   zlib,
   zstdSupport ? false,
   zstd,
+  applesectrustSupport ? false,
 
   # for passthru.tests
   coeurl,
@@ -227,6 +228,9 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (gnutlsSupport && !stdenv.hostPlatform.isDarwin) [
     "--with-ca-path=/etc/ssl/certs"
+  ]
+  ++ lib.optionals (applesectrustSupport && stdenv.hostPlatform.isDarwin) [
+    "--with-apple-sectrust"
   ];
 
   # takes 14 minutes on a 24 core and because many other packages depend on curl
