@@ -10050,6 +10050,8 @@ self: super: with self; {
 
   liccheck = callPackage ../development/python-modules/liccheck { };
 
+  license = callPackage ../development/python-modules/license { };
+
   license-expression = callPackage ../development/python-modules/license-expression { };
 
   licomp = callPackage ../development/python-modules/licomp { };
