@@ -198,5 +198,12 @@ in
         text = builtins.toJSON cfg.extraOptsRecommended;
       };
     };
+
+    # Keep Chromium singleton around, it's needed to be able to reliably
+    # open new pages in existing instances, especially after switches.
+    systemd.tmpfiles.rules = lib.mkIf cfg.enable [
+      "x /tmp/org.chromium.Chromium.??????"
+      "x /tmp/com.google.Chrome.??????"
+    ];
   };
 }
