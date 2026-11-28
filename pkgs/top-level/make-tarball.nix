@@ -86,7 +86,7 @@ pkgs.releaseTools.sourceTarball {
 
     tar \
       --create \
-      --use-compress-program="zstd -19 -T0" \
+      --use-compress-program="zstd --ultra -22 -T0" \
       --file=$out/tarballs/$releaseName.tar.zst \
       --absolute-names \
       --transform="s|^$src|$releaseName|g" \
