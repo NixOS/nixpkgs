@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mpdscribble";
-  version = "0.26";
+  version = "0.27";
 
   __structuredAttrs = true;
 
   src = fetchurl {
     url = "https://www.musicpd.org/download/mpdscribble/${finalAttrs.version}/mpdscribble-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-udWCm4nEZXByVsFAAA4aBLHZ06/lDbRqhDz17lS/Ywk=";
+    sha256 = "sha256-+Hr/lyDIozztQ2mVu+BVQ7VMl9K40+CFlNOaBpOTbXo=";
   };
 
   mesonFlags = [
