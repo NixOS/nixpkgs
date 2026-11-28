@@ -2,6 +2,7 @@
   lib,
   stdenv,
   rustPlatform,
+  jemalloc,
   fetchFromGitHub,
   nix-update-script,
 }:
@@ -38,6 +39,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoTestFlags = [
     "--lib"
   ];
+
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    # jemalloc-sys 0.3.2 expects unprefixed symbols when JEMALLOC_OVERRIDE is set,
+    # so use jemalloc (unprefixed on darwin) instead of the _rjem_-prefixed rust-jemalloc-sys
+    JEMALLOC_OVERRIDE = "${lib.getLib jemalloc}/lib/libjemalloc${stdenv.hostPlatform.extensions.sharedLibrary}";
+  };
 
   passthru.updateScript = nix-update-script { };
 

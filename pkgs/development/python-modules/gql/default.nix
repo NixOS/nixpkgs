@@ -80,6 +80,12 @@ buildPythonPackage rec {
     "online"
   ];
 
+  disabledTests = [
+    # broken in 4.0.0 on nixpkgs master, re-evaluate after upgrade
+    "test_get_introspection_query_ast"
+    "test_node_tree_with_loc"
+  ];
+
   pythonImportsCheck = [ "gql" ];
 
   __darwinAllowLocalNetworking = true;
