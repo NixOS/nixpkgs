@@ -7,13 +7,13 @@
 
 buildGo127Module (finalAttrs: {
   pname = "nhost-cli";
-  version = "1.52.0";
+  version = "1.53.0";
 
   src = fetchFromGitHub {
     owner = "nhost";
     repo = "nhost";
     tag = "cli@${finalAttrs.version}";
-    hash = "sha256-QcUvPtByLlMbxoR6HqxsEmyETXnlyiAg7ukyya4IdAA=";
+    hash = "sha256-S0TtbtnpmAYo6GmJFP1Ox6e926W0/D3a5XYk6NJvLmY=";
   };
 
   subPackages = [ "cli" ];
