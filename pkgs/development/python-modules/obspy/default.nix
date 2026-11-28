@@ -29,14 +29,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "obspy";
-  version = "1.5.1";
+  version = "1.5.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "obspy";
     repo = "obspy";
     tag = finalAttrs.version;
-    hash = "sha256-bR1+0ohf6kS5nOTC8INuFesFRc+fsnjYZFEzZpuV2i4=";
+    hash = "sha256-qloUNgseQfHEYeRorYwigbSh5s6I4ZAuvS7sN4+wPII=";
   };
 
   postPatch =
