@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "litehtml";
-  version = "0.9";
+  version = "0.10";
 
   src = fetchFromGitHub {
     owner = "litehtml";
     repo = "litehtml";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ZE/HKzo3ejKpW/ih3sJwn2hzCtsBhAXeJWGezYd6Yc4";
+    hash = "sha256-OPyluMC7dSVvS4/tFNzeogOT6elA7paW3duTR+8/VuE=";
   };
 
   # Don't search for non-existent gumbo cmake config
