@@ -11,17 +11,18 @@
   which,
   versionCheckHook,
   nix-update-script,
+  runCommand,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "copybara";
-  version = "20261026";
+  version = "20261116";
 
   strictDeps = true;
   __structuredAttrs = true;
 
   src = fetchurl {
     url = "https://github.com/google/copybara/releases/download/v${finalAttrs.version}/copybara_deploy.jar";
-    hash = "sha256-GWnzQXqnUyJrU4EnBbGrKj+VZOS5ZMCw97a3HHVIiSM=";
+    hash = "sha256-UMOwFXdw866OaGvovu5ZrsitUlLSWc0nfW0rjhjRsGY=";
   };
 
   nativeBuildInputs = [
@@ -52,11 +53,43 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  doInstallCheck = !stdenv.hostPlatform.isDarwin;
+  doInstallCheck = true;
+  # java takes user.home from passwd (/var/empty in the darwin sandbox), not $HOME
+  preInstallCheck = ''
+    export HOME=$TMPDIR
+    export JAVA_TOOL_OPTIONS="-Duser.home=$HOME"
+  '';
+  versionCheckKeepEnvironment = [
+    "HOME"
+    "JAVA_TOOL_OPTIONS"
+  ];
   versionCheckProgramArg = "version";
   nativeInstallCheckInputs = [ versionCheckHook ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.folder-migration =
+      runCommand "copybara-test-folder-migration" { nativeBuildInputs = [ finalAttrs.finalPackage ]; }
+        ''
+          export HOME=$TMPDIR
+          # java takes user.home from passwd, not $HOME
+          export JAVA_TOOL_OPTIONS="-Duser.home=$HOME"
+          mkdir origin
+          echo "hello foo" > origin/file.txt
+          cat > copy.bara.sky <<'SKY'
+          core.workflow(
+              name = "default",
+              origin = folder.origin(),
+              destination = folder.destination(),
+              authoring = authoring.overwrite("Test <test@example.com>"),
+              transformations = [core.replace(before = "foo", after = "bar")],
+          )
+          SKY
+          copybara migrate copy.bara.sky default "$PWD/origin" --folder-dir dest
+          grep -qx "hello bar" dest/file.txt
+          touch $out
+        '';
+  };
 
   meta = {
     description = "Tool for transforming and moving code between repositories";
