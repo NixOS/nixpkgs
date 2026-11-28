@@ -1,0 +1,20 @@
+Idle the control head's LCD subprocess when no screen is driven.
+
+With the HAT's SPI display disabled (pypilot_hat started with driver "none",
+because the generic SD image has no working device-tree for SPI — see
+doc/probleme-hat-lcd.md), lcd.poll() returns immediately and the subprocess
+busy-loops a CPU core forever. Sleep when there is no screen so the control
+head stays light while keypad/IR/RF keep working.
+
+--- a/hat/hat.py
++++ b/hat/hat.py
+@@ -316,6 +316,9 @@
+                 glutMainLoop()
+             else:
+                 while True:
+                     self.lcd.poll()
++                    if self.lcd.screen is None:
++                        # headless: no LCD to drive, idle (avoid busy-loop)
++                        time.sleep(1)
+
+         super().create(process)
