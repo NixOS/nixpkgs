@@ -15,14 +15,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mistral-vibe";
-  version = "3.1.4";
+  version = "3.1.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mistralai";
     repo = "mistral-vibe";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+mwC5GLZIAlKM5Ar6AtbXFAeTGeyLLbjDmza04tFJn8=";
+    hash = "sha256-yGJHCg4R9zOiY+tfxyOSCUOtqr7dBna59zcGSwp0WkI=";
   };
 
   patches = [
@@ -44,7 +44,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
     sourceRoot = "${finalAttrs.src.name}/${finalAttrs.cargoRoot}";
-    hash = "sha256-AzZBYZrusBynp0HFJZyAgcRXjPXey+d8gMFR/4/3IO4=";
+    hash = "sha256-HGYTsDY9XOprkaJfPM7ECzyeugBGiGCwyYXr1UFvVxc=";
   };
 
   nativeBuildInputs = [
