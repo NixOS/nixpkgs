@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "tocpdf";
-  version = "0.3.9";
+  version = ".0.3.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kszenes";
     repo = "tocPDF";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-RaNMhEgJ2pSL9BvK1d2Z8AsUPhARaRtEiCnt/2E2uNs=";
+    hash = "sha256-XcmULtGKXO+G+9BaQBxrHXNDpL7TnUJ0ar+bygtWK48=";
   };
 
   build-system = with python3Packages; [
