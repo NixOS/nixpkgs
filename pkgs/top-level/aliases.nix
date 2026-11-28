@@ -1200,6 +1200,7 @@ mapAliases {
   gruvbox-material-gtk-theme = throw "'gruvbox-material-gtk-theme' has been removed because it depended on 'gtk-engine-murrine', which was removed because it was unmaintained upstream and depended on GTK 2."; # Added 2026-07-22
   gscan2pdf = throw "'gscan2pdf' has been removed, as it was superseded upstream by its rewrite 'scantpaper'"; # Added 2026-11-20
   gscrabble = throw "'gscrabble' has been removed, as it is unmaintained upstream, and broken in nixpkgs"; # Added 2026-01-03
+  gsd = opengsd; # Added 2026-11-01
   gsettings-qt = lomiri.gsettings-qt; # Added 2025-12-06
   gshogi = throw "'gshogi' has been removed as it is no longer developed upstream."; # Added 2026-09-04
   gssdp = throw "'gssdp' (version 1.4) has been removed as it was unmaintained upstream and depended on libsoup 2.4. Consider using `gssdp_1_6` instead"; # Added 2026-06-07
