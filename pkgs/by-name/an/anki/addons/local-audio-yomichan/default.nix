@@ -7,21 +7,22 @@
 }:
 anki-utils.buildAnkiAddon (finalAttrs: {
   pname = "local-audio-yomichan";
-  version = "0-unstable-2025-12-10";
+  version = "0-unstable-2026-09-09";
   src = fetchFromGitHub {
     owner = "yomidevs";
     repo = "local-audio-yomichan";
-    rev = "2cbabbc75b4195b75033adf059d2a5ff037f60a6";
+    rev = "649fb927751a76078348cf90b22e5382cb8bc24e";
     sparseCheckout = [ "plugin" ];
-    hash = "sha256-bsvxossIkZb8SuaNUzQX/xll3yb173TigXnrg5GA390=";
+    hash = "sha256-sTOVQTAycy+6r69EnA5JhiXEK45tXKdzCUS6tlSekvk=";
   };
   sourceRoot = "${finalAttrs.src.name}/plugin";
   processUserFiles = ''
     # Addon will try to load extra stuff unless Python package name is "plugin".
     temp=$(mktemp -d)
     ln -s $PWD $temp/plugin
-    # Addoon expects `user_files` dir at `$XDG_DATA_HOME/local-audio-yomichan`
-    ln -s $PWD/user_files $temp/local-audio-yomichan
+
+    mkdir $temp/local-audio-yomichan
+    ln -s $PWD/user_files $temp/local-audio-yomichan/user_files
 
     PYTHONPATH=$temp \
     WO_ANKI=1 \
