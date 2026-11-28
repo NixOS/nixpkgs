@@ -88,11 +88,12 @@ buildDotnetModule (finalAttrs: {
     (makeDesktopItem {
       desktopName = "Lumafly";
       name = "lumafly";
-      exec = "Lumafly";
+      exec = "Lumafly %U";
       icon = "lumafly";
       comment = "Cross platform mod manager for Hollow Knight written in Avalonia";
       type = "Application";
       categories = [ "Game" ];
+      mimeTypes = [ "x-scheme-handler/scarab" ];
     })
   ];
 
