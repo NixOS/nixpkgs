@@ -11,11 +11,13 @@ let
     in
     if res.success then res.value else def;
   homeDir = builtins.getEnv "HOME";
+  xdgConfigHomeVar = builtins.getEnv "XDG_CONFIG_HOME";
+  xdgConfigHome = if xdgConfigHomeVar != "" then xdgConfigHomeVar else homeDir + "/.config";
 
   isDir = path: builtins.pathExists (path + "/.");
   pathOverlays = try (toString <nixpkgs-overlays>) "";
-  homeOverlaysFile = homeDir + "/.config/nixpkgs/overlays.nix";
-  homeOverlaysDir = homeDir + "/.config/nixpkgs/overlays";
+  homeOverlaysFile = xdgConfigHome + "/nixpkgs/overlays.nix";
+  homeOverlaysDir = xdgConfigHome + "/nixpkgs/overlays";
   overlays =
     path:
     # check if the path is a directory or a file
