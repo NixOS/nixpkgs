@@ -11,6 +11,7 @@
   opentelemetry-cpp,
   protobuf,
   tango-cpp,
+  nixosTests,
 }:
 
 # NOTE: You need to manually set up the database structure to run Tango successfully.
@@ -56,6 +57,10 @@ stdenv.mkDerivation (finalAttrs: {
   postFixup = ''
     patchelf --add-rpath ${mariadb-connector-c}/lib/mariadb $out/bin/Databaseds
   '';
+
+  passthru.tests = {
+    vm-test = nixosTests.tango-database;
+  };
 
   meta = {
     description = "Tango distributed control system - database server";
