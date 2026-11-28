@@ -33,14 +33,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "nibabel";
-  version = "5.4.2";
+  version = "5.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nipy";
     repo = "nibabel";
     tag = finalAttrs.version;
-    hash = "sha256-QzkmSI0JGdIXLc3XSPZrGrBYSq98tLFrozNNopR/ytg=";
+    hash = "sha256-GxlsgEz7Wohn4y5I4HbZBzg65pUB028G7CxJbMGAYR8=";
   };
 
   build-system = [
