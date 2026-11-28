@@ -50,7 +50,9 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dman-pages"
     "--system"
     "${finalAttrs.deps}"
-  ];
+  ]
+  # self-hosted backend hangs on aarch64
+  ++ lib.optionals stdenv.hostPlatform.isAarch64 [ "-Dllvm" ];
 
   preBuild = ''
     substituteInPlace pam.d/waylock --replace-fail "system-auth" "login"
