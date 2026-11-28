@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "trinity";
     homepage = "https://github.com/kernelslacker/trinity";
     license = lib.licenses.gpl2Only;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.jm5905938 ];
     platforms = lib.platforms.linux;
   };
 })

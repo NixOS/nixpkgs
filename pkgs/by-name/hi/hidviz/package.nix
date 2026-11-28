@@ -48,6 +48,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "GUI application for in-depth analysis of USB HID class devices";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.jm5905938 ];
   };
 })
