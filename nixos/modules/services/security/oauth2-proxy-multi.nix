@@ -8,6 +8,197 @@
 let
   cfg = config.services.oauth2-proxy-multi;
   toml = pkgs.formats.toml { };
+
+  clients = { name, config, ... }: {
+    options = {
+
+      domain = lib.mkOption {
+        type = lib.types.str;
+        description = "The domain this oauth2-proxy runs under. Used e.g. for the `redirect-url` and to setup the correct nginx/caddy virtual host if `configureNginx = true` or `configureCaddy = true`.";
+      };
+
+      configureNginx = lib.mkOption {
+        default = cfg.common.configureNginx;
+        defaultText = "`services.oauth2-proxy-multi.common.configureNginx`";
+        type = lib.types.bool;
+        description = ''
+          Automatic configuration of `services.nginx.virtualHosts.$${services.oauth2-proxy-multi.clients.<name>.domain}` to reverse-proxy this oauth2-proxy instance.
+
+          Also sets `reverse-proxy` in oauth2-proxy settings.
+        '';
+      };
+
+      configureCaddy = lib.mkOption {
+        default = cfg.common.configureCaddy;
+        defaultText = "`services.oauth2-proxy-multi.common.configureCaddy`";
+        type = lib.types.bool;
+        description = ''
+          Automatic configuration of `services.caddy.virtualHosts.$${services.oauth2-proxy-multi.clients.<name>.domain}` to reverse-proxy this oauth2-proxy instance.
+
+          Also sets `reverse-proxy` in oauth2-proxy settings.
+        '';
+      };
+
+      nginxExtraConfig = lib.mkOption {
+        default = cfg.common.nginxExtraConfig;
+        defaultText = "`services.oauth2-proxy-multi.common.nginxExtraConfig`";
+        description = ''
+          Text that is appended to the Nginx configuration for this client.
+        '';
+        type = lib.types.str;
+      };
+
+      caddyExtraConfig = lib.mkOption {
+        default = cfg.common.caddyExtraConfig;
+        defaultText = "`services.oauth2-proxy-multi.common.caddyExtraConfig`";
+        description = ''
+          Text that is prepended to the Caddyfile configuration for this client.
+        '';
+        type = lib.types.str;
+      };
+
+      user = lib.mkOption {
+        default = "oauth2-proxy-${name}";
+        type = lib.types.str;
+        description = "The unix user this oauth2-proxy instance runs as.";
+      };
+
+      group = lib.mkOption {
+        default = "oauth2-proxy-${name}";
+        type = lib.types.str;
+        description = "The unix group this oauth2-proxy instance runs as.";
+      };
+
+      environmentFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
+        default = null;
+        description = ''
+          Environment file as defined in {manpage}`systemd.exec(5)`.
+
+          The environment variables defined therein are passed to the oauth2-proxy instance protecting this client.
+          You can use environment variables to pass secrets to the service without adding
+          them to the world-redable nix store.
+        '';
+      };
+
+      settings = lib.mkOption {
+        default = { };
+        description = "Free-form settings written to the `config.toml` of this client's oauth2-proxy instance.";
+        type = lib.types.submodule {
+          freeformType = toml.type;
+          options = {
+
+            client_id = lib.mkOption {
+              type = lib.types.str;
+              default = name;
+              description = ''
+                The OAuth Client ID, e.g. \"123456.apps.googleusercontent.com\".
+
+                If left empty, this is set to the attribute name in `services.oauth2-proxy-multi.clients`.
+              '';
+            };
+
+            http_address = lib.mkOption {
+              type = lib.types.str;
+              default = "unix:///run/oauth2-proxy-${name}/oauth2-proxy-${name}.sock,mode=0666";
+              description = ''
+                The http address this oauth2-proxy instance listens on.
+
+                [http://]<addr>:<port> or unix://<path> or fd:<int> (case insensitive) to listen on for HTTP clients. Unix sockets are created with default system umask mode, which can be overridden, e.g. unix://my-socket,mode=0777. Square brackets are required for ipv6 address, e.g. http://[::1]:4180.
+
+                If left empty, this is set to `unix:///run/oauth2-proxy-''${settings.client_id}/oauth2-proxy-''${settings.client_id}.sock`.
+              '';
+            };
+
+            upstreams = lib.mkOption {
+              type = lib.types.listOf lib.types.str;
+              description = "The http url(s) of the upstream endpoint, file:// paths for static files or static://<status_code> for static response. Routing is based on the path.";
+            };
+
+            oidc_issuer_url = lib.mkOption {
+              type = lib.types.str;
+              defaultText = ''
+                if cfg.kanidmDomain != null then `https://$${services.oauth2-proxy-multi.kanidmDomain}/oauth2/openid/<name>` else `services.oauth2-proxy-multi.common.settings.oidc_issuer_url`;
+              '';
+              default =
+                if cfg.kanidmDomain != null then
+                  "https://${cfg.kanidmDomain}/oauth2/openid/${name}"
+                else
+                  cfg.common.settings.oidc_issuer_url;
+              description = ''
+                The OAuth issuer URL.
+
+                If `kanidmDomain` is set, this is automatically set to the corresponding issuer URL for every client defined in `services.oauth2-proxy-multi.clients`
+              '';
+              example = "https://login.microsoftonline.com/{TENANT_ID}/v2.0";
+            };
+
+            redirect_url = lib.mkOption {
+              type = lib.types.str;
+              default = "https://${config.domain}/oauth2/callback";
+              description = ''
+                The OAuth Redirect URL, e.g. "https://internalapp.yourcompany.com/oauth2/callback".
+
+                If left empty, this is set to `https://''${domain}/oauth2/callback`.
+              '';
+            };
+
+            client_secret_file = lib.mkOption {
+              type = lib.types.nullOr lib.types.path;
+              default = null;
+              description = "The path to a file containing the OAuth Client Secret.";
+              example = "/run/keys/oauth2-client-secret";
+            };
+
+            cookie_domains = lib.mkOption {
+              type = lib.types.str;
+              default = config.domain;
+              description = ''
+                Optional cookie domains to force cookies to (ie: `.yourcompany.com`).
+                The longest domain matching the request's host will be used (or the shortest
+                cookie domain if there is no match).
+
+                If left empty, this is set to `''${domain}`.
+              '';
+              example = ".yourcompany.com";
+            };
+
+            cookie_secret_file = lib.mkOption {
+              type = lib.types.nullOr lib.types.path;
+              default = null;
+              description = "The path to a file containing the seed string for secure cookies.";
+              example = "/run/keys/oauth2-cookie-secret";
+            };
+
+            cookie_secure = lib.mkOption {
+              type = lib.types.bool;
+              default = true;
+              description = ''
+                Set secure (HTTPS) cookie flag.
+
+                Will be set to `false`, if `configureNginx = true` or `configureCaddy = true`.
+              '';
+            };
+
+            reverse_proxy = lib.mkOption {
+              type = lib.types.bool;
+              default = if config.configureNginx || config.configureCaddy then true else false;
+              defaultText = "if `configureNginx` or `configureCaddy` then `true` else `false`";
+              description = ''
+                In case when running behind a reverse proxy, controls whether headers
+                like `X-Real-Ip` are accepted. Usage behind a reverse
+                proxy will require this flag to be set to avoid logging the reverse
+                proxy IP address.
+
+                Will be set to `true`, if `configureNginx = true` or `configureCaddy = true`.
+              '';
+            };
+
+          };
+        };
+      };
+    };
+  };
 in
 
 {
@@ -16,28 +207,6 @@ in
     enable = lib.mkEnableOption "oauth2-proxy-multi";
 
     package = lib.mkPackageOption pkgs "oauth2-proxy" { };
-
-    configureNginx = lib.mkOption {
-      default = config.services.nginx.enable;
-      defaultText = "services.nginx.enable";
-      type = lib.types.bool;
-      description = ''
-        Automatic configuration of `services.nginx.virtualHosts.$${services.oauth2-proxy-multi.clients.<name>.domain}` to use oauth2-proxy, for every client defined in `services.oauth2-proxy-multi.clients`.
-
-        Also sets `reverse-proxy` in oauth2-proxy settings.
-      '';
-    };
-
-    configureCaddy = lib.mkOption {
-      default = config.services.caddy.enable;
-      defaultText = "services.caddy.enable";
-      type = lib.types.bool;
-      description = ''
-        Automatic configuration of `services.caddy.virtualHosts.$${services.oauth2-proxy-multi.clients.<name>.domain}` to use oauth2-proxy, for every client defined in `services.oauth2-proxy-multi.clients`.
-
-        Also sets `reverse-proxy` in oauth2-proxy settings.
-      '';
-    };
 
     kanidmDomain = lib.mkOption {
       default = null;
@@ -51,6 +220,52 @@ in
       description = "Settings globally applied to all oauth2-proxy clients. Overridden by per-client settings.";
       type = lib.types.submodule {
         options = {
+
+          configureNginx = lib.mkOption {
+            default = config.services.nginx.enable;
+            defaultText = "`services.nginx.enable`";
+            type = lib.types.bool;
+            description = ''
+              Automatic configuration of `services.nginx.virtualHosts.$${services.oauth2-proxy-multi.clients.<name>.domain}` to reverse-proxy all oauth2-proxy instances for clients defined in `services.oauth2-proxy-multi.clients`.
+
+              Overridden by per-client configurations.
+
+              Also sets `reverse-proxy` in oauth2-proxy settings.
+            '';
+          };
+
+          configureCaddy = lib.mkOption {
+            default = config.services.caddy.enable;
+            defaultText = "`services.caddy.enable`";
+            type = lib.types.bool;
+            description = ''
+              Automatic configuration of `services.caddy.virtualHosts.$${services.oauth2-proxy-multi.clients.<name>.domain}` to reverse-proxy all oauth2-proxy instances for clients defined in `services.oauth2-proxy-multi.clients`.
+
+              Overridden by per-client configurations.
+
+              Also sets `reverse-proxy` in oauth2-proxy settings.
+            '';
+          };
+
+          nginxExtraConfig = lib.mkOption {
+            default = "";
+            description = ''
+              Text that is appended to the Nginx configuration for this client.
+
+              Overridden by per-client configurations.
+            '';
+            type = lib.types.str;
+          };
+
+          caddyExtraConfig = lib.mkOption {
+            default = "";
+            description = ''
+              Text that is prepended to the Caddyfile configuration for all clients.
+
+              Overridden by per-client configurations.
+            '';
+            type = lib.types.str;
+          };
 
           settings = lib.mkOption {
             default = { };
@@ -94,13 +309,6 @@ in
                   description = "Authenticate emails with the specified domains. Use `*` to authenticate any email.";
                 };
 
-                oidc_issuer_url = lib.mkOption {
-                  type = lib.types.str;
-                  default = "";
-                  description = "The OAuth issuer URL.";
-                  example = "https://login.microsoftonline.com/{TENANT_ID}/v2.0";
-                };
-
                 trusted_proxy_ips = lib.mkOption {
                   type = lib.types.listOf lib.types.str;
                   default = [
@@ -134,6 +342,7 @@ in
                   default = "openid email";
                   description = "OAuth scope specification.";
                 };
+
               };
             };
           };
@@ -143,152 +352,22 @@ in
 
     clients = lib.mkOption {
       default = { };
-      description = "Set of oauth2 clients. An oauth2-proxy systemd unit with the name of the client will be run for every client in this set, with the provided settings overriding the common defaults.";
-      type = lib.types.attrsOf (
-        lib.types.submodule {
-          options = {
-
-            domain = lib.mkOption {
-              type = lib.types.str;
-              description = "The domain this oauth2-proxy runs under. Used e.g. for the `redirect-url` and to setup the correct nginx/caddy virtual host if `configureNginx = true` or `configureCaddy = true`.";
-            };
-
-            environmentFile = lib.mkOption {
-              type = lib.types.nullOr lib.types.str;
-              default = null;
-              description = ''
-                Environment file as defined in {manpage}`systemd.exec(5)`.
-
-                The environment variables defined therein are passed to the oauth2-proxy instance protecting this client.
-                You can use environment variables to pass secrets to the service without adding
-                them to the world-redable nix store.
-              '';
-            };
-
-            user = lib.mkOption {
-              default = "oauth2-proxy";
-              type = lib.types.str;
-              description = "The unix user this oauth2-proxy instance runs as.";
-            };
-
-            group = lib.mkOption {
-              default = "oauth2-proxy";
-              type = lib.types.str;
-              description = "The unix group this oauth2-proxy instance runs as.";
-            };
-
-            settings = lib.mkOption {
-              default = { };
-              description = "Free-form settings written to the `config.toml` of this client's oauth2-proxy instance.";
-              type = lib.types.submodule {
-                freeformType = toml.type;
-                options = {
-
-                  client_id = lib.mkOption {
-                    type = lib.types.str;
-                    default = "";
-                    description = ''
-                      The OAuth Client ID, e.g. \"123456.apps.googleusercontent.com\".
-
-                      If left empty, this is set to the attribute name in `services.oauth2-proxy-multi.clients`.
-                    '';
-                  };
-
-                  http_address = lib.mkOption {
-                    type = lib.types.str;
-                    default = "";
-                    description = ''
-                      The http address this oauth2-proxy instance listens on.
-
-                      [http://]<addr>:<port> or unix://<path> or fd:<int> (case insensitive) to listen on for HTTP clients. Unix sockets are created with default system umask mode, which can be overridden, e.g. unix://my-socket,mode=0777. Square brackets are required for ipv6 address, e.g. http://[::1]:4180.
-
-                      If left empty, this is set to `unix:///run/oauth2-proxy-''${settings.client_id}/oauth2-proxy-''${settings.client_id}.sock`.
-                    '';
-                  };
-
-                  upstreams = lib.mkOption {
-                    type = lib.types.str;
-                    description = "The http url(s) of the upstream endpoint, file:// paths for static files or static://<status_code> for static response. Routing is based on the path.";
-                  };
-
-                  redirect_url = lib.mkOption {
-                    type = lib.types.str;
-                    default = "";
-                    description = ''
-                      The OAuth Redirect URL, e.g. "https://internalapp.yourcompany.com/oauth2/callback".
-
-                      If left empty, this is set to `https://''${domain}/oauth2/callback`.
-                    '';
-                  };
-
-                  client_secret_file = lib.mkOption {
-                    type = lib.types.nullOr lib.types.path;
-                    default = null;
-                    description = "The path to a file containing the OAuth Client Secret.";
-                    example = "/run/keys/oauth2-client-secret";
-                  };
-
-                  cookie_domains = lib.mkOption {
-                    type = lib.types.str;
-                    default = "";
-                    description = ''
-                      Optional cookie domains to force cookies to (ie: `.yourcompany.com`).
-                      The longest domain matching the request's host will be used (or the shortest
-                      cookie domain if there is no match).
-
-                      If left empty, this is set to `''${domain}`.
-                    '';
-                    example = ".yourcompany.com";
-                  };
-
-                  cookie_secret_file = lib.mkOption {
-                    type = lib.types.nullOr lib.types.path;
-                    default = null;
-                    description = "The path to a file containing the seed string for secure cookies.";
-                    example = "/run/keys/oauth2-cookie-secret";
-                  };
-
-                  cookie_secure = lib.mkOption {
-                    type = lib.types.bool;
-                    default = true;
-                    description = ''
-                      Set secure (HTTPS) cookie flag.
-
-                      Will be set to `false`, if `configureNginx = true` or `configureCaddy = true`.
-                    '';
-                  };
-
-                  reverse_proxy = lib.mkOption {
-                    type = lib.types.bool;
-                    default = false;
-                    description = ''
-                      In case when running behind a reverse proxy, controls whether headers
-                      like `X-Real-Ip` are accepted. Usage behind a reverse
-                      proxy will require this flag to be set to avoid logging the reverse
-                      proxy IP address.
-
-                      Will be set to `true`, if `configureNginx = true` or `configureCaddy = true`.
-                    '';
-                  };
-
-                };
-              };
-            };
-          };
-        }
-      );
+      description = ''
+        Set of oauth2 clients. An oauth2-proxy systemd unit with the name of the client will be run for every client in this set, with the provided settings overriding the common defaults.
+      '';
+      type = lib.types.attrsOf (lib.types.submodule clients);
     };
 
   };
 
   config = lib.mkIf cfg.enable {
 
-    systemd.services = lib.mapAttrs' (client: clientConfig: {
-      name = "oauth2-proxy-${client}";
-      value = {
+    systemd.services = lib.mapAttrs' (
+      client: clientConfig:
+      lib.nameValuePair "oauth2-proxy-${client}" {
         description = "OAuth2 Proxy";
         path = [ cfg.package ];
-        wantedBy = [ "default.target" ];
+        wantedBy = [ "multi-user.target" ];
         wants = [ "network-online.target" ];
         after = [ "network-online.target" ];
         serviceConfig = {
@@ -312,42 +391,12 @@ in
                 client_secret_file = "/run/credentials/oauth2-proxy-${client}.service/client_secret_file";
                 cookie_secret_file = "/run/credentials/oauth2-proxy-${client}.service/cookie_secret_file";
               }
-              // {
-                reverse_proxy =
-                  if cfg.configureNginx or cfg.configureCaddy then true else clientConfig.settings.reverse_proxy;
-                cookie_secure =
-                  if cfg.configureNginx or cfg.configureCaddy then true else clientConfig.settings.cookie_secure;
-                oidc_issuer_url =
-                  if cfg.kanidmDomain != null then
-                    "https://${cfg.kanidmDomain}/oauth2/openid/${client}"
-                  else
-                    clientConfig.settings.oidc_issuer_url;
-                client_id =
-                  if clientConfig.settings.client_id == "" then "${client}" else clientConfig.settings.client_id;
-                http_address =
-                  if clientConfig.settings.http_address == "" then
-                    "unix:///run/oauth2-proxy-${client}/oauth2-proxy-${client}.sock,mode=0666"
-                  else
-                    clientConfig.settings.http_address;
-                redirect_url =
-                  if clientConfig.settings.redirect_url == "" then
-                    "https://${clientConfig.domain}/oauth2/callback"
-                  else
-                    clientConfig.settings.redirect_url;
-                cookie_domains =
-                  if clientConfig.settings.cookie_domains == "" then
-                    clientConfig.domain
-                  else
-                    clientConfig.settings.cookie_domains;
-              }
             )
           }";
           Restart = "always";
           RestartSec = 5;
           StartLimitBurst = 3;
-          StateDirectory = "oauth2-proxy-${client}";
           RuntimeDirectory = "oauth2-proxy-${client}";
-          WorkingDirectory = "/var/lib/oauth2-proxy-${client}";
 
           DevicePolicy = "closed";
           LockPersonality = true;
@@ -383,35 +432,44 @@ in
           ];
           SystemCallErrorNumber = "EPERM";
         };
-      };
-    }) cfg.clients;
+      }
+    ) cfg.clients;
 
-    services.nginx.virtualHosts = lib.mkIf cfg.configureNginx (
-      lib.mapAttrs' (client: clientConfig: {
-        name = clientConfig.domain;
-        value = {
-          locations."/".proxyPass = lib.mkForce (
-            if clientConfig.settings.http_address != "" then
-              "http://${clientConfig.settings.http_address}"
-            else
+    services.nginx.virtualHosts = lib.mapAttrs' (
+      client: clientConfig:
+      lib.nameValuePair clientConfig.domain {
+        locations."/" = {
+          proxyPass = lib.mkForce (
+            if
+              clientConfig.settings.http_address
+              == "unix:///run/oauth2-proxy-${client}/oauth2-proxy-${client}.sock,mode=0666"
+            then
               "http://unix:/run/oauth2-proxy-${client}/oauth2-proxy-${client}.sock"
-          );
-        };
-      }) cfg.clients
-    );
-
-    services.caddy.virtualHosts = lib.mkIf cfg.configureCaddy (
-      lib.mapAttrs' (client: clientConfig: {
-        name = clientConfig.domain;
-        value = {
-          extraConfig = lib.mkDefault (
-            if clientConfig.settings.http_address != "" then
-              "reverse_proxy ${clientConfig.settings.http_address}"
             else
-              "reverse_proxy unix/run/oauth2-proxy-${client}/oauth2-proxy-${client}.sock"
+              "http://${clientConfig.settings.http_address}"
           );
         };
-      }) cfg.clients
-    );
+        extraConfig = clientConfig.nginxExtraConfig;
+      }
+    ) (lib.filterAttrs (_: clientConfig: clientConfig.configureNginx == true) cfg.clients);
+
+    services.caddy.virtualHosts = lib.mapAttrs' (
+      client: clientConfig:
+      lib.nameValuePair clientConfig.domain {
+        extraConfig = lib.concatLines [
+          clientConfig.caddyExtraConfig
+          (
+            if
+              clientConfig.settings.http_address
+              == "unix:///run/oauth2-proxy-${client}/oauth2-proxy-${client}.sock,mode=0666"
+            then
+              "reverse_proxy unix//run/oauth2-proxy-${client}/oauth2-proxy-${client}.sock"
+            else
+              "reverse_proxy ${clientConfig.settings.http_address}"
+          )
+        ];
+      }
+    ) (lib.filterAttrs (_: clientConfig: clientConfig.configureCaddy == true) cfg.clients);
   };
 }
+
