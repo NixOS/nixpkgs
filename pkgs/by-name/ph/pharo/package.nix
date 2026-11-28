@@ -5,6 +5,7 @@
   cmake,
   fetchzip,
   freetype,
+  git,
   libffi,
   libgit2,
   libpng,
@@ -13,17 +14,25 @@
   openssl,
   pixman,
   SDL2,
+  common-updater-scripts,
+  versionCheckHook,
+  writeShellScript,
 }:
+
+let
+  # Short commit of the release tag, upstream puts it in the source file name.
+  commit = "b3d41c1";
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pharo";
-  version = "10.3.4+3.884643b";
+  version = "10.3.13";
 
   src = fetchzip {
     # It is necessary to download from there instead of from the repository because that archive
     # also contains artifacts necessary for the bootstrapping.
-    url = "https://files.pharo.org/vm/pharo-spur64-headless/Linux-x86_64/source/PharoVM-v${finalAttrs.version}-Linux-x86_64-c-src.zip";
-    hash = "sha256-JBN0gPVMIUFzrdLqrCnCvf4cbZMfpluO2/jCxk3U+M8=";
+    url = "https://files.pharo.org/vm/pharo-spur64-headless/Linux-x86_64/source/PharoVM-v${finalAttrs.version}+0.${commit}-Linux-x86_64-c-src.zip";
+    hash = "sha256-maScANPHH84hfQCFesKaYAQsjmmy5WxA0zuZ38o+wWs=";
   };
 
   strictDeps = true;
@@ -55,15 +64,8 @@ stdenv.mkDerivation (finalAttrs: {
     "-DBUILD_BUNDLE=OFF"
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString [
-    "-Wno-incompatible-pointer-types"
-  ];
-
-  # Fix missing version.info
-  preBuild = ''
-    mkdir -p /build/source/build/
-    echo "${finalAttrs.version}" > /build/source/build/version.info
-  '';
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   installPhase = ''
     runHook preInstall
@@ -93,10 +95,19 @@ stdenv.mkDerivation (finalAttrs: {
       wrapProgram "$out/bin/pharo" --argv0 $out/bin/pharo --prefix LD_LIBRARY_PATH ":" "${libPath}"
     '';
 
+  passthru.updateScript = writeShellScript "update-pharo" ''
+    set -euo pipefail
+    file=pkgs/by-name/ph/pharo/package.nix
+    read -r sha ref < <(${lib.getExe git} ls-remote --tags --refs https://github.com/pharo-project/pharo-vm 'v10.3.*' | sort -V -k2 | tail -n 1)
+    version=''${ref##*/v}
+    sed -i "s/commit = \".*\";/commit = \"''${sha:0:7}\";/" "$file"
+    ${lib.getExe' common-updater-scripts "update-source-version"} pharo "$version" --ignore-same-version
+  '';
+
   meta = {
     description = "Clean and innovative Smalltalk-inspired environment";
     homepage = "https://pharo.org";
-    changelog = "https://github.com/pharo-project/pharo/releases/";
+    changelog = "https://github.com/pharo-project/pharo-vm/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     longDescription = ''
       Pharo's goal is to deliver a clean, innovative, free open-source
@@ -106,5 +117,6 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     mainProgram = "pharo";
     platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ samirbgno ];
   };
 })
