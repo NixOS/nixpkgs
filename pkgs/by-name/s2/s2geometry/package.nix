@@ -1,7 +1,9 @@
 {
-  abseil-cpp_202407,
+  abseil-cpp_202508,
   cmake,
   fetchFromGitHub,
+  gbenchmark,
+  gtest,
   stdenv,
   lib,
   pkg-config,
@@ -13,13 +15,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "s2geometry";
-  version = "0.12.0";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "s2geometry";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-stH1iO4AEL+VZizntUzhvADNOKX333o3QSOz+WOBZ5Q=";
+    sha256 = "sha256-mdwxHgpnyyBX/hYiK43b8Qae5ffEZQZ9fVQlerX43VA=";
   };
 
   nativeBuildInputs = [
@@ -29,17 +31,30 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeFeature "CMAKE_CXX_STANDARD" cxxStandard)
-    # incompatible with our version of gtest
-    (lib.cmakeBool "BUILD_TESTS" false)
+    (lib.cmakeBool "BUILD_TESTS" finalAttrs.finalPackage.doCheck)
+    # The test suite downloads googletest and benchmark with FetchContent;
+    # point it at the sources from nixpkgs instead.
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_GOOGLETEST" "${gtest.src}")
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_BENCHMARK" "${gbenchmark.src}")
+    (lib.cmakeBool "INSTALL_GTEST" false)
   ];
 
-  buildInputs = [
+  # OpenSSL is only used by the bignum test since 0.14.0.
+  buildInputs = lib.optionals finalAttrs.finalPackage.doCheck [
     openssl
   ];
 
   propagatedBuildInputs = [
-    (abseil-cpp_202407.override { inherit cxxStandard; })
+    # 0.13.0 and later require abseil-cpp LTS 20250814.
+    (abseil-cpp_202508.override { inherit cxxStandard; })
   ];
+
+  doCheck = true;
+
+  # Only installed when tests are built; keep the output independent of doCheck.
+  postInstall = lib.optionalString finalAttrs.finalPackage.doCheck ''
+    rm $out/lib/libs2testing.a
+  '';
 
   meta = {
     changelog = "https://github.com/google/s2geometry/releases/tag/v${finalAttrs.version}";
