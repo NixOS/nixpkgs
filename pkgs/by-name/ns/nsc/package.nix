@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "nsc";
-  version = "2.15.0";
+  version = "2.15.1";
 
   src = fetchFromGitHub {
     owner = "nats-io";
     repo = "nsc";
     rev = "v${version}";
-    hash = "sha256-eGu0vuJAvTWTjalq1YRA8QP9TjArQuCcEdsHzFqAM2c=";
+    hash = "sha256-12tvRLI9Qor5QjkbN4Aad8KMZ4A5GCRbH7NE+Oaf2FQ=";
   };
 
   ldflags = [
@@ -24,7 +24,7 @@ buildGoModule rec {
     "-X main.builtBy=nixpkgs"
   ];
 
-  vendorHash = "sha256-zjEFz3FdAWhLRQogKCuzmr8yBINQdglKeCIoXTzhpV0=";
+  vendorHash = "sha256-Bno1BIEPDg272uVWaAKDkbJrt+7o7x7JpPfZPnvPk5o=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -47,7 +47,7 @@ buildGoModule rec {
   # the test strips table formatting from the command output in a naive way
   # that removes all the table characters, including '-'.
   # The nix build directory looks something like:
-  # /private/tmp/nix-build-nsc-2.15.0.drv-0/nsc_test2000598938/keys
+  # /private/tmp/nix-build-nsc-2.15.1.drv-0/nsc_test2000598938/keys
   # Then the `-` are removed from the path unintentionally and the test fails.
   # This should be fixed upstream to avoid mangling the path when
   # removing the table decorations from the command output.
