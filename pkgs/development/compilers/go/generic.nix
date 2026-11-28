@@ -6,7 +6,6 @@
   iana-etc,
   mailcap,
   buildPackages,
-  targetPackages,
   # for testing
   callPackage,
 }:
@@ -42,8 +41,6 @@ lib.extendMkDerivation {
         [ ]
         ++ lib.optionals stdenv.hostPlatform.isLinux [ stdenv.cc.libc.out ]
         ++ lib.optionals (stdenv.hostPlatform.libc == "glibc") [ stdenv.cc.libc.static ];
-
-      depsTargetTarget = lib.optional stdenv.targetPlatform.isMinGW targetPackages.threads;
 
       postPatch = ''
         patchShebangs .
@@ -102,20 +99,6 @@ lib.extendMkDerivation {
         # building the toolchain for hostPlatform (passed as GOOS/GOARCH above)
         CC_FOR_TARGET = "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc";
         CXX_FOR_TARGET = "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}c++";
-      }
-      // lib.optionalAttrs (!lib.systems.equals stdenv.buildPlatform stdenv.targetPlatform) {
-        # Prefer external linker for cross when CGO is supported, since
-        # we haven't taught go's internal linker to pick the correct ELF
-        # interpreter for cross
-        # When CGO is not supported we rely on static binaries being built
-        # since they don't need an ELF interpreter
-
-        # Without an equivalent, pkgsStatic builds fail. See for some extra context
-        # https://github.com/NixOS/nixpkgs/issues/582185
-
-        # TODO: Clean this up. Out-of-tree users should almost never be hitting this case,
-        # except through buildGoModule, so we have relative freedom in doing so.
-        GO_EXTLINK_ENABLED = finalAttrs.env.CGO_ENABLED;
       };
 
       buildPhase = ''
@@ -159,8 +142,9 @@ lib.extendMkDerivation {
         in
         # When we're cross-compiling to another OS or architecture, Go puts our architecture's binaries as bin/go{,fmt},
         # and their binaries as bin/$goos_$goarch/go{,fmt}. We only want the host binaries, so when build/host GOOS/GOARCH differ,
-        # move the host binaries over the build binaries. Also remove other stuff just for the build platform.
+        # remove the build binaries and move over the host binaries. Also remove other stuff just for the build platform.
         lib.optionalString isCrossGo ''
+          find bin -maxdepth 1 -type f -delete
           mv bin/*_*/* bin
           rmdir bin/*_*
           rm -rf pkg/${GOHOSTOS}_${GOHOSTARCH} pkg/tool/${GOHOSTOS}_${GOHOSTARCH}
@@ -200,7 +184,11 @@ lib.extendMkDerivation {
         license = lib.licenses.bsd3;
         teams = [ lib.teams.golang ];
         platforms =
-          lib.platforms.darwin ++ lib.platforms.linux ++ lib.platforms.wasi ++ lib.platforms.freebsd;
+          lib.platforms.darwin
+          ++ lib.platforms.linux
+          ++ lib.platforms.wasi
+          ++ lib.platforms.freebsd
+          ++ lib.platforms.windows;
         badPlatforms = [
           # Support for big-endian POWER < 8 was dropped in 1.9, but POWER8 users have less of a reason to run in big-endian mode than pre-POWER8 ones
           # So non-LE ppc64 is effectively unsupported, and Go SIGILLs on affordable ppc64 hardware
