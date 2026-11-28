@@ -13,13 +13,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "smithy-cli";
-  version = "1.75.0";
+  version = "1.75.1";
 
   src = fetchFromGitHub {
     owner = "smithy-lang";
     repo = "smithy";
     tag = finalAttrs.version;
-    hash = "sha256-o7hGzMiLqu1qKUyUV81egrS1LDv4lIjfwG1xK7mBzVg=";
+    hash = "sha256-UcfkYWutJEIlC+h02F+I/qoNzti9jv+RdjHlGIpnQXQ=";
   };
 
   strictDeps = true;
