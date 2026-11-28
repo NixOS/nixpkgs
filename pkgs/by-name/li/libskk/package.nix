@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libskk";
-  version = "1.1.0";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "ueno";
     repo = "libskk";
     tag = finalAttrs.version;
-    hash = "sha256-Dciz5VeflaX2eYt1B90NpgLKNtCHY/CDabuCx+T/SS0=";
+    hash = "sha256-GMMPh0GHYVW/aLTVEX8Z2TNk5Tq1Nh8EirGw5TvXTnQ=";
   };
 
   env = {
