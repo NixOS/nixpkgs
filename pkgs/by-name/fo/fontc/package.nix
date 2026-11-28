@@ -7,14 +7,14 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fontc";
-  version = "0.6.0";
+  version = "2.0.1";
 
   src = fetchCrate {
     inherit (finalAttrs) pname version;
-    hash = "sha256-TjbhVkhoIoyp6A33v/QVaNLoHxB5whT/gOlehQTUKxM=";
+    hash = "sha256-3iOuzQ3zzWYlsliyQmS6C3wD2lSaedzBbFRybvVC91M=";
   };
 
-  cargoHash = "sha256-FLvEgIFgLE++59j5LeCRC4ptgRhAiDF7hani4Yh8kn0=";
+  cargoHash = "sha256-6MIz4W+o0EU2ZMyu7DLQPB09+2g/brN1pmij12HKn+E=";
 
   # skip `cargo test` because source code from crates.io doesn't include necessary resources for testing
   doCheck = false;
