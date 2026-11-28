@@ -6,6 +6,7 @@
   gtest,
   fetchFromGitHub,
   fetchpatch,
+  replaceVars,
   testers,
   nix-update-script,
 }:
@@ -30,6 +31,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./move-contrib-to-its-own-output.patch
+
+    # EMU128 still seems busted w/ GCC16 on at least powerpc64-linux
+    # https://github.com/google/highway/pull/3024
+    # https://github.com/google/highway/pull/3027
+    # Having it as the fallback w/ GCC16 causes >140 failures in libjxl test suite, all goes away with SCALAR
+    (replaceVars ./extend-broken-emu128-check.patch {
+      gccMajorVersionWithBorkedEmu128 =
+        if (stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isBigEndian) then "17" else "16";
+    })
 
     # backport GCC 16/aarch64 fix
     (fetchpatch {
