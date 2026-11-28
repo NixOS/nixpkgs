@@ -25,6 +25,7 @@
   ceres-solver,
   octomap,
   freenect,
+  freenect2,
   libdc1394,
   libGL,
   libGLU,
@@ -101,6 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
     libpointmatcher
     octomap
     freenect
+    freenect2
     libdc1394
     librealsense
     qt6.qtbase
