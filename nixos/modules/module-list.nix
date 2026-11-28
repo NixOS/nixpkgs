@@ -1689,6 +1689,7 @@
   ./services/wayland/cage.nix
   ./services/wayland/hypridle.nix
   ./services/wayland/vellum.nix
+  ./services/wayland/virtinput-portal.nix
   ./services/web-apps/actual.nix
   ./services/web-apps/agorakit.nix
   ./services/web-apps/akkoma.nix
