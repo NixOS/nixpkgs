@@ -70,6 +70,12 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs --build build-aux/meson/postinstall.py
   '';
 
+  mesonFlags = [
+    # The GL uploader can pass empty caps to GStreamer 1.26+ and abort playback.
+    # https://github.com/Rafostar/clapper/issues/560
+    "-Dgluploader=disabled"
+  ];
+
   preFixup = ''
     mkdir -p $out/share/gsettings-schemas
     # alias clapper-unwrapped schemas to also provide clapper schemas.
