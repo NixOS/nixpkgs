@@ -1,32 +1,40 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+  pythonOlder,
   pytestCheckHook,
   click,
-  setuptools-scm,
+  hatch-vcs,
+  hatchling,
+  typing-extensions,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "cloup";
-  version = "3.1.0";
+  version = "4.0.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit (finalAttrs) pname version;
-    hash = "sha256-Y3weYo/pjz8gpeRNpZGnK0K/VNfUUnGQvzntX2SvdYU=";
+  src = fetchFromGitHub {
+    owner = "janluke";
+    repo = "cloup";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-sXJvGVw6TZoZ/tnalRDPyX9WN9GJg6PdiRYYRJYVMOE=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace-fail "setuptools_scm<10" setuptools_scm
-  '';
+  build-system = [
+    hatch-vcs
+    hatchling
+  ];
 
-  build-system = [ setuptools-scm ];
+  dependencies = [ click ] ++ lib.optionals (pythonOlder "3.12") [ typing-extensions ];
 
-  dependencies = [ click ];
-
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    # tests/test_styling.py and tests/test_typing.py import it on every Python
+    # version, not only below the 3.12 the package needs it for.
+    typing-extensions
+  ];
 
   pythonImportsCheck = [ "cloup" ];
 
