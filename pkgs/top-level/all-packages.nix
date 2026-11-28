@@ -5817,6 +5817,25 @@ with pkgs;
     };
   };
 
+  opencascade-occt_8 = opencascade-occt.overrideAttrs (old: {
+    version = "8.0.1";
+    src = fetchFromGitHub {
+      owner = "Open-Cascade-SAS";
+      repo = "OCCT";
+      tag = "V8_0_1";
+      hash = "sha256-QgSfrWc6qxbiHBapyGa9+ixRi/dOXqMox8U2f+tCH8o=";
+    };
+    patches = old.patches ++ [
+      # Fix cone faces left untriangulated when the seam pcurve is tilted (regression since 7.7.0)
+      # https://github.com/Open-Cascade-SAS/OCCT/pull/1605
+      (fetchpatch {
+        url = "https://github.com/Open-Cascade-SAS/OCCT/commit/660d4edbefec92fb5a0a801d507384c37e28573f.patch";
+        includes = [ "src/ModelingAlgorithms/TKMesh/BRepMesh/*" ];
+        hash = "sha256-rEuM5p5rQUIjovXlVIBeVPjv91SQU+N0y367AgIUjcw=";
+      })
+    ];
+  });
+
   opencv4 = callPackage ../development/libraries/opencv/4.x.nix {
     pythonPackages = python3Packages;
     # TODO: LTO does not work.

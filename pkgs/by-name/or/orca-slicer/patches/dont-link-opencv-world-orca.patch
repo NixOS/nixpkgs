@@ -1,8 +1,8 @@
 diff --git a/src/libslic3r/CMakeLists.txt b/src/libslic3r/CMakeLists.txt
-index 5f959145..95d250a7 100644
+index 034f8b577..329c8c950 100644
 --- a/src/libslic3r/CMakeLists.txt
 +++ b/src/libslic3r/CMakeLists.txt
-@@ -579,7 +579,9 @@ target_link_libraries(libslic3r
+@@ -763,7 +763,9 @@ target_link_libraries(libslic3r
          libigl
          libnest2d
          miniz
@@ -10,6 +10,6 @@ index 5f959145..95d250a7 100644
 +        opencv_core
 +        opencv_imgproc
 +        opencv_imgcodecs
+         assimp::assimp
      PRIVATE
          ${CMAKE_DL_LIBS}
-         ${EXPAT_LIBRARIES}
