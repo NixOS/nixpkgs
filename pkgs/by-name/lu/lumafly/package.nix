@@ -16,30 +16,27 @@
 }:
 buildDotnetModule rec {
   pname = "lumafly";
-  version = "3.3.0.0";
+  version = "3.3.0.0-unstable-2026-10-15";
 
   src = fetchFromGitHub {
     owner = "TheMulhima";
     repo = "lumafly";
-    tag = "v${version}";
-    hash = "sha256-GVPMAwxbq9XlKjMKd9G5yUol42f+6lSyHukN7NMCVDA=";
+    rev = "9765dd7b70b5e49136e60f817f00a45a08d337a8";
+    hash = "sha256-9PD0/mV7sJoN224QOE08Jzf0eEfZ/Tavh01B5UAEHCo=";
   };
 
   patches = [ ./no_timestamp_check.patch ];
-
-  # Use .NET 9.0 since 7.0 is EOL
-  dotnetFlags = [ "-p:TargetFramework=net9.0" ];
 
   projectFile = "Lumafly/Lumafly.csproj";
 
   nugetDeps = ./deps.json;
 
-  dotnet-sdk = dotnetCorePackages.sdk_9_0;
-  dotnet-runtime = dotnetCorePackages.sdk_9_0;
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
+  dotnet-runtime = dotnetCorePackages.sdk_10_0;
 
   selfContainedBuild = true;
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
   runtimeDeps = [
     zlib
