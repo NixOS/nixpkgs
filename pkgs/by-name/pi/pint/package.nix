@@ -14,7 +14,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "pint";
-  version = "0.87.0";
+  version = "0.90.0";
 
   __structuredAttrs = true;
   # required for tests
@@ -24,7 +24,7 @@ buildGoModule (finalAttrs: {
     owner = "cloudflare";
     repo = "pint";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JPUEseo2J8JcsQ8BqYCh+jtw1p5gt5Av9z041M26rIs=";
+    hash = "sha256-MCB0H9j+m1x+stT2L1o28MkADYdyP+kXoXAdSPAv9EA=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -37,7 +37,7 @@ buildGoModule (finalAttrs: {
     '';
   };
 
-  vendorHash = "sha256-BjFX0RWvNQq6BCR24FpIWT2CTJkRK5mkg3kCEInGE2E=";
+  vendorHash = "sha256-gRx8DrbqNaO/KlNY2nq8Bmu6L2c42iOia7dy595Awe4=";
 
   ldflags = [
     "-s"
