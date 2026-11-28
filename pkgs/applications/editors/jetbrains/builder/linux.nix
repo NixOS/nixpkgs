@@ -91,6 +91,20 @@ lib.extendMkDerivation {
 
       vmoptsIDE = if hiName == "WEBSTORM" then "WEBIDE" else hiName;
       vmoptsFile = lib.optionalString (vmopts != null) (writeText vmoptsName vmopts);
+
+      # JetBrains IDEs's core platform uses FFM instead of JNA.
+      # So these libs are injected as both LD_LIBRARY_PATH (for FFM) as well as the
+      # JNA library path (which plugins use; for compatibility).
+      platformLibs = [
+        # keep-sorted start
+        e2fsprogs
+        libnotify
+        libsecret
+        udev
+        # keep-sorted end
+      ];
+      jnaLibraryPath = lib.makeLibraryPath platformLibs;
+      ldLibraryPath = lib.makeLibraryPath (platformLibs ++ extraLdPath);
     in
     {
       inherit desktopItem vmoptsIDE vmoptsFile;
@@ -162,14 +176,7 @@ lib.extendMkDerivation {
             exit 1
           fi
         fi
-        echo -Djna.library.path=${
-          lib.makeLibraryPath [
-            e2fsprogs
-            libnotify
-            libsecret
-            udev
-          ]
-        } >> $vmopts_file
+        echo -Djna.library.path=${jnaLibraryPath} >> $vmopts_file
       ''
       + postPatch;
 
@@ -208,7 +215,7 @@ lib.extendMkDerivation {
               ]
             }" \
             --suffix PATH : "${lib.makeBinPath [ python3 ]}" \
-            --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath extraLdPath}" \
+            --prefix LD_LIBRARY_PATH : "${ldLibraryPath}" \
             ${lib.concatStringsSep " " extraWrapperArgs} \
             --set-default JDK_HOME "$jdk" \
             --set-default ANDROID_JAVA_HOME "$jdk" \
