@@ -21,20 +21,16 @@
 
   # dependencies
   # coremltools, (unpackaged)
-  expecttest,
   flatbuffers,
   hydra-core,
-  hypothesis,
-  kgb,
   mpmath,
   numpy,
   omegaconf,
   pandas,
-  parameterized,
   py-cpuinfo,
   pytorch-tokenizers,
+  requests,
   ruamel-yaml,
-  scikit-learn,
   sympy,
   tabulate,
   torch,
@@ -42,6 +38,12 @@
   typing-extensions,
 
   # tests
+  expecttest,
+  gguf,
+  hypothesis,
+  kgb,
+  matplotlib,
+  parameterized,
   perl,
   pillow,
   pytest-json-report,
@@ -57,17 +59,17 @@
 }:
 let
   # The Cortex-M backend fetches CMSIS-NN through `FetchContent` at configure time.
-  # Revision taken from `CMSIS_NN_VERSION` in `backends/cortex_m/CMakeLists.txt`.
+  # Tag taken from `CMSIS_NN_VERSION` in `backends/cortex_m/CMakeLists.txt`.
   cmsis-nn-src = fetchFromGitHub {
     owner = "ARM-software";
     repo = "CMSIS-NN";
-    rev = "dbf45dbfcc515421dd6099037d3e2637b90748c8";
-    hash = "sha256-FOr7DevJxroGAOmnqKK9/suXjOeaZYQFlFIrYmU19WQ=";
+    tag = "v8.0.0";
+    hash = "sha256-sbKHsY5o6EQp9PizYkvEZTFY+jdAvSmyJH5iZB+QzVM=";
   };
 in
 buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   pname = "executorch";
-  version = "1.5.1";
+  version = "1.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -80,7 +82,7 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     name = "executorch";
 
     fetchSubmodules = true;
-    hash = "sha256-+veDPlKEi4vEUjgjDSq751NFfSiGtAbkubNShEF25to=";
+    hash = "sha256-ypN2/wHsL6wNcw7ra/bq10sraR1CVkXGljUk3XIcs8M=";
   };
 
   postPatch =
@@ -165,6 +167,8 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   pythonRemoveDeps = [
     # unpackaged
     "coremltools"
+    # Only required by coremltools
+    "scikit-learn"
 
     # Test dependencies that should not be listed in runtime dependencies
     "pytest"
@@ -174,29 +178,21 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   ];
   pythonRelaxDeps = [
     "mpmath"
-    "scikit-learn"
-    # Upstream requires a torch nightly (>=2.13.0a0), but builds fine against the released 2.12
-    "torch"
-    "torchao"
   ];
   dependencies = [
     # coremltools (unpackaged)
-    expecttest
     flatbuffers
     hydra-core
-    hypothesis
-    kgb
     mpmath
     numpy
     omegaconf
     packaging
     pandas
-    parameterized
     py-cpuinfo
     pytorch-tokenizers
     pyyaml
+    requests
     ruamel-yaml
-    scikit-learn
     sympy
     tabulate
     torch
@@ -207,6 +203,12 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   pythonImportsCheck = [ "executorch" ];
 
   nativeCheckInputs = [
+    expecttest
+    gguf
+    hypothesis
+    kgb
+    matplotlib
+    parameterized
     # Used by the `scripts/lint_*.sh` scripts exercised in `.ci/scripts/tests`
     perl
     pillow
@@ -227,7 +229,12 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     # Try to download models from HuggingFace hub
     "extension/llm/tokenizers/test/test_hf_tokenizer.py"
 
+    # Compares the vendored tokenizers version to the installed pytorch-tokenizers
+    # AssertionError: '1.5.0' != '1.4.0'
+    "extension/llm/tokenizers/test/test_python_bindings.py::TestPythonBindings::test_version"
+
     # Required unmaintained and removed `torchtune`
+    "examples/models/llama/tests/test_convert_weights.py"
     "examples/models/llama3_2_vision/preprocess/test_preprocess.py"
     "examples/models/llama3_2_vision/text_decoder/test/test_text_decoder.py"
     "examples/models/llama3_2_vision/vision_encoder/test/test_vision_encoder.py"
@@ -245,6 +252,8 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     "test_compatibility_in_runtime_edge_program_manager"
     "test_emit_lowered_backend_module_end_to_end"
     "test_multi_method_end_to_end"
+    "test_runtime_rejects_a_shared_delegate_with_scratch"
+    "test_shared_delegate_matches_separate_calls_at_runtime"
 
     # AssertionError (Numerical comparison fails)
     "test_sdpa_with_cache_seq_len_13"
@@ -264,8 +273,22 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     "test_resnet50_export_to_executorch"
     "test_vit_export_to_executorch"
 
-    # RuntimeError: Failed to compile /build/tmplb6i266d/data.json to /build/tmplb6i266d/data.pte
-    "test_flatbuffer_paths_match"
+    # subprocess.CalledProcessError: Command '['git', 'rev-parse', 'HEAD:third-party/ao']'
+    "test_cu134_keeps_explicit_torchao_source_build"
+
+    # Generated fake cmake script: /bin/bash: bad interpreter: No such file or directory
+    "test_build_enables_smoke_and_propagates_failures"
+
+    # ModuleNotFoundError: No module named 'torchtune'
+    "test_download_and_convert_cli_exposes_converter_callback"
+
+    # AssertionError: assert [{'repo_id': ...oken': False}] == [{'repo_id': ...oken': False}]
+    # huggingface-hub now retries on HTTP 429 by itself
+    "test_hf_snapshot_retries_rate_limited_repo_tree"
+
+    # Flaky:
+    #   AssertionError: Output 0 does not match reference output.
+    "test_qs8_conv_transpose_2d_quantize_per_channel_multi_axis"
   ]
   ++ lib.optionals (pythonAtLeast "3.14") [
     # ValueError: badly formed help string
