@@ -92,7 +92,16 @@ let
       # global settings
       ${lib.concatStringsSep "\n" (
         lib.flatten (
-          lib.mapAttrsToList cgitrcEntry ({ virtual-root = cfg.nginx.location; } // cfg.settings)
+          lib.mapAttrsToList cgitrcEntry (
+            {
+              virtual-root = cfg.nginx.location;
+              css = "${stripLocation cfg}/cgit.css";
+              js = "${stripLocation cfg}/cgit.js";
+              logo = "${stripLocation cfg}/cgit.png";
+              favicon = "${stripLocation cfg}/favicon.ico";
+            }
+            // cfg.settings
+          )
         )
       )}
       ${lib.optionalString (cfg.scanPath != null) (cgitrcLine "scan-path" cfg.scanPath)}
