@@ -6,7 +6,7 @@
   nixosTests,
   yarn-berry_4,
   callPackage,
-  ruby_3_4,
+  ruby_4_0,
   writeShellScript,
   brotli,
   python3,
@@ -23,7 +23,7 @@
 }:
 let
   nodejs-slim = nodejs-slim_24;
-  ruby = ruby_3_4;
+  ruby = ruby_4_0;
   yarn-berry = yarn-berry_4.override { nodejs = nodejs-slim; };
 in
 
@@ -39,6 +39,7 @@ stdenv.mkDerivation rec {
     name = "${pname}-gems-${version}";
     inherit version gemset ruby;
     gemdir = src;
+    extraConfigPaths = [ "${src}/.ruby-version" ];
   };
 
   mastodonModules = stdenv.mkDerivation (finalAttrs: {
