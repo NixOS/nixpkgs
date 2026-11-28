@@ -1,0 +1,10 @@
+Use the rendered fragment, as in CPython 3.13, for Sphinx 9 compatibility.
+https://github.com/python/cpython/blob/3.13/Doc/tools/extensions/glossary_search.py
+
+--- a/Doc/tools/extensions/glossary_search.py
++++ b/Doc/tools/extensions/glossary_search.py
+@@ -40,3 +40,3 @@
+                 'title': term,
+-                'body': rendered['html_body'],
++                'body': rendered['fragment'],
+             }
