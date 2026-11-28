@@ -75,7 +75,12 @@ mesonCheckPhase() {
         buildCores="$NIX_BUILD_CORES"
     fi
 
-    TERM=dumb ninja -j"$buildCores" $ninjaFlags "${ninjaFlagsArray[@]}" meson-test-prereq
+    # -j will disable jobserver mode, so do not pass it if we are in a jobserver mode.
+    if inJobserver; then
+      TERM=dumb ninja $ninjaFlags "${ninjaFlagsArray[@]}" meson-test-prereq
+    else
+      TERM=dumb ninja -j"$buildCores" $ninjaFlags "${ninjaFlagsArray[@]}" meson-test-prereq
+    fi
 
     # Parallel checking is enabled by default.
     local testCores=1
