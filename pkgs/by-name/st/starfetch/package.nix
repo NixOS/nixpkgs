@@ -6,31 +6,23 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "starfetch";
-  version = "0.0.4";
+  version = "0.0.5";
 
   src = fetchFromGitHub {
     owner = "Haruno19";
     repo = "starfetch";
     rev = finalAttrs.version;
-    sha256 = "sha256-I2M/FlLRkGtD2+GcK1l5+vFsb5tCb4T3UJTPxRx68Ww=";
+    sha256 = "sha256-Wv8rkNvBs1lkAYFI1fzP9ZEE9lkX0OCFazFNO+COMxY=";
   };
 
-  postPatch = ''
-    substituteInPlace src/starfetch.cpp --replace-fail /usr/local/ $out/
-  ''
-  + lib.optionalString stdenv.cc.isClang ''
+  postPatch = lib.optionalString stdenv.cc.isClang ''
     substituteInPlace makefile --replace-warn g++ clang++
   '';
 
-  installPhase = ''
-    runHook preInstall
+  makeFlags = [ "PREFIX=$(out)" ];
 
-    mkdir -p $out/bin
-    mkdir -p $out/share/starfetch
-    cp starfetch $out/bin/
-    cp -r res/* $out/share/starfetch/
-
-    runHook postInstall
+  preFixup = ''
+    mv $out/share/starfetch/starfetch $out/bin/starfetch
   '';
 
   meta = {
