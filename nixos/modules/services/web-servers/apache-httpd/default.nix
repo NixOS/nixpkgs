@@ -123,7 +123,7 @@ let
       cfg.logFormat == "custom"
     ) "LogFormat ${lib.strings.escapeNixString cfg.customLogFormat} custom"}
 
-    CustomLog ${cfg.logDir}/access.log ${cfg.logFormat}
+    ${optionalString (cfg.logFormat != "none") "CustomLog ${cfg.logDir}/access.log ${cfg.logFormat}"}
   '';
 
   browserHacks = ''
@@ -282,7 +282,7 @@ let
         );
     in
     ''
-      ${optionalString cfg.logPerVirtualHost ''
+      ${optionalString (cfg.logPerVirtualHost && cfg.logFormat != "none") ''
         ErrorLog ${cfg.logDir}/error-${escapeFileName hostOpts.hostName}.log
         CustomLog ${cfg.logDir}/access-${escapeFileName hostOpts.hostName}.log ${hostOpts.logFormat}
       ''}
