@@ -417,6 +417,7 @@ mapAliases {
   line_profiler = throw "'line_profiler' has been renamed to/replaced by 'line-profiler'"; # Converted to throw 2025-10-29
   linear-garage-door = throw "'linear-garage-door' has been superseded by 'nice-go'"; # Added 2025-11-16
   linear_operator = throw "'linear_operator' has been renamed to/replaced by 'linear-operator'"; # Converted to throw 2025-10-29
+  linode-api = linode-api4; # added 2026-11-22
   llama-cloud-services = throw "'llama-cloud-services' has been removed as it was deprecated upstream in favor of 'llama-cloud'"; # Added 2026-03-25
   llama-index-embeddings-gemini = throw "'llama-index-embeddings-gemini' has been removed as it was deprecated upstream in favor of 'llama-index-embeddings-google-genai'"; # Added 2026-03-25
   llama-index-embeddings-google = throw "'llama-index-embeddings-google' has been removed as it was deprecated upstream in favor of 'llama-index-embeddings-google-genai'"; # Added 2026-03-25
