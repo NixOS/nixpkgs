@@ -17,6 +17,7 @@
 
   # tests
   accelerate,
+  datasets,
   nbconvert,
   nbformat,
   pytestCheckHook,
@@ -25,15 +26,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "compressed-tensors";
-  version = "0.18.0";
+  version = "0.20.1";
   pyproject = true;
 
   # Release on PyPI is missing the `utils` directory, which `setup.py` wants to import
   src = fetchFromGitHub {
-    owner = "neuralmagic";
+    owner = "vllm-project";
     repo = "compressed-tensors";
     tag = finalAttrs.version;
-    hash = "sha256-cbHP2YZgG0UY+rrcOKKwtgwga2pEZaEEMoJqq57pFb0=";
+    hash = "sha256-4ZpqAqXk6nn4IkGeXnzWheP2MBJxVqRBtjVbRSqpl9g=";
   };
 
   postPatch = ''
@@ -58,6 +59,7 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     accelerate
+    datasets
     nbconvert
     nbformat
     pytestCheckHook
@@ -78,28 +80,8 @@ buildPythonPackage (finalAttrs: {
     "test_save_compressed_model"
     "test_target_prioritization"
     "test_expand_targets_with_llama_stories"
-
-    # AssertionError: Torch not compiled with CUDA enabled
-    "test_register_parameter"
-    "test_register_parameter_invalidates"
-    "test_set_item"
-    "test_set_item_buffers"
-    "test_update_offload_parameter_with_grad"
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
-    # aarch64-linux fails cpuinfo test, because /sys/devices/system/cpu/ does not exist in the sandbox:
-    # RuntimeError: Failed to initialize cpuinfo!
-    "test_mxfp4_scales_e2e"
-    "test_mxfp8_scales_e2e"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # AssertionError: Numerical precision error
-    "test_quantization_enabled_disabled"
-
-    # torch._inductor.exc.InductorError: ImportError: dlopen(/nix/var/nix/builds/nix-25002-542173852/torchinductor__nixbld1/xo/cxovsevcfanmw7lgoddbnyhoxes3nzlu7ecugxedaq2zr4f6b2qh.main.so, 0x0002):
-    # symbol not found in flat namespace '___kmpc_barrier'
-    "test_compress_decompress_module"
-
+  ++ lib.optionals (!torch.cudaSupport) [
     # AssertionError: Torch not compiled with CUDA enabled
     "test_all_functions_with_regex"
     "test_apply_config_detects_deepseekv3_attention_and_hooks"
@@ -109,7 +91,6 @@ buildPythonPackage (finalAttrs: {
     "test_custom_mtp_prefix"
     "test_index_updated"
     "test_initialize_module_for_quantization_offloaded"
-    "test_match_quantizable_tensors"
     "test_match_quantizable_tensors"
     "test_memory_sharing"
     "test_missing_dest_files_raises"
@@ -124,11 +105,34 @@ buildPythonPackage (finalAttrs: {
     "test_pack_fp4_non_contiguous"
     "test_pack_fp4_to_uint8"
     "test_parameter_and_module_consistency"
+    "test_quantize_and_pack_fused"
+    "test_quantize_backends_match"
     "test_random_matrix_device_handling"
+    "test_register_parameter"
+    "test_register_parameter_invalidates"
+    "test_serialization"
+    "test_set_item"
+    "test_set_item_buffers"
     "test_single_shard_dest_creates_index"
+    "test_update_offload_parameter_with_grad"
+
     # Float8_e4m3fn errors
     "test_compressed_model_inference_with_hook"
     "test_quantize_dequantize_matches_sequential"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # aarch64-linux fails cpuinfo test, because /sys/devices/system/cpu/ does not exist in the sandbox:
+    # RuntimeError: Failed to initialize cpuinfo!
+    "test_mxfp4_scales_e2e"
+    "test_mxfp8_scales_e2e"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # AssertionError: Numerical precision error
+    "test_quantization_enabled_disabled"
+
+    # torch._inductor.exc.InductorError: ImportError: dlopen(/nix/var/nix/builds/nix-25002-542173852/torchinductor__nixbld1/xo/cxovsevcfanmw7lgoddbnyhoxes3nzlu7ecugxedaq2zr4f6b2qh.main.so, 0x0002):
+    # symbol not found in flat namespace '___kmpc_barrier'
+    "test_compress_decompress_module"
   ];
 
   disabledTestPaths = [
@@ -136,43 +140,30 @@ buildPythonPackage (finalAttrs: {
     "tests/test_quantization/lifecycle/test_apply.py"
     "tests/test_quantization/test_quant_config.py::test_map_to_checkpoint_names"
 
-    # RuntimeError: The weights trying to be saved contained shared tensors
-    "tests/test_transform/factory/test_serialization.py::test_serialization[True-hadamard]"
-    "tests/test_transform/factory/test_serialization.py::test_serialization[True-random-hadamard]"
-    "tests/test_transform/factory/test_serialization.py::test_serialization[False-hadamard]"
-    "tests/test_transform/factory/test_serialization.py::test_serialization[False-random-hadamard]"
-    "tests/test_transform/factory/test_serialization.py::test_serialization[False-True-hadamard]"
-    "tests/test_transform/factory/test_serialization.py::test_serialization[False-True-random-hadamard]"
-    "tests/test_transform/factory/test_serialization.py::test_serialization[False-False-hadamard]"
-    "tests/test_transform/factory/test_serialization.py::test_serialization[False-False-random-hadamard]"
-
-    # AssertionError: Torch not compiled with CUDA enabled
-    "tests/test_transform/factory/test_serialization.py::test_serialization[True-True-hadamard]"
-    "tests/test_transform/factory/test_serialization.py::test_serialization[True-True-random-hadamard]"
-    "tests/test_transform/factory/test_serialization.py::test_serialization[True-False-hadamard]"
-    "tests/test_transform/factory/test_serialization.py::test_serialization[True-False-random-hadamard]"
-
     # AttributeError: 'NoneType' object has no attribute 'type'
     "tests/test_compressors/distributed/test_distributed_compression.py"
     "tests/test_compressors/distributed/test_module_parallel.py"
     "tests/test_compressors/model_compressors/test_model_compressor_distributed.py"
     "tests/test_offload"
-    # https://github.com/vllm-project/compressed-tensors/issues/885
-    "tests/test_compressors/model_compressors/test_model_compressor.py"
-
-    # Tests require CUDA
+  ]
+  ++ lib.optionals (!torch.cudaSupport) [
+    # AssertionError: Torch not compiled with CUDA enabled
     "tests/test_compressors/test_compress_decompress_module.py"
+    "tests/test_transform/utils/test_hadamard.py"
+    "tests/test_utils/test_match.py"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # AssertionError: Torch not compiled with CUDA enabled
-    "tests/test_transform/utils/test_hadamard.py"
-    "tests/test_utils/test_match.py"
+    "tests/test_quantization"
+
+    # UnboundLocalError: cannot access local variable 'a'...
+    "tests/test_entrypoints/convert/test_convert_memory.py"
   ];
 
   meta = {
     description = "Safetensors extension to efficiently store sparse quantized tensors on disk";
-    homepage = "https://github.com/neuralmagic/compressed-tensors";
-    changelog = "https://github.com/neuralmagic/compressed-tensors/releases/tag/${finalAttrs.src.tag}";
+    homepage = "https://github.com/vllm-project/compressed-tensors";
+    changelog = "https://github.com/vllm-project/compressed-tensors/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ sarahec ];
   };
