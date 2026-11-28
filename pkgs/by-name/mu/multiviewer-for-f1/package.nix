@@ -29,23 +29,27 @@
   libx11,
   libxcb,
   writeScript,
+  libGL,
+  libva,
 }:
-let
-  id = "518116281";
-in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "multiviewer-for-f1";
-  version = "2.8.4";
+  version = "2.16.1";
 
   src = fetchurl {
-    url = "https://releases.multiviewer.app/download/${id}/multiviewer_${finalAttrs.version}_amd64.deb";
-    hash = "sha256-CTaFtxoV8XEBhD9b8dPLPqHloc1MoHKuEBYt7EJy9U0=";
+    url = "https://releases.multiviewer.app/v/2.16.1/1/lFlUvRVZ-9vBGAVOVI_zQctDOEkAQjYC/multiviewer_2.16.1_amd64.deb";
+    hash = "sha256-XzGK/buBvZ0YhEIa8WMbw8cB9CENekPMhcIxfaT1rO4=";
   };
 
   nativeBuildInputs = [
     dpkg
     makeWrapper
     autoPatchelfHook
+  ];
+
+  runtimeDependencies = map lib.getLib [
+    libGL
+    libva
   ];
 
   buildInputs = [
@@ -93,7 +97,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     makeWrapper "$out/share/multiviewer/multiviewer" $out/bin/multiviewer \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libudev0-shim ]}:\"$out/share/multiviewer\""
+      --prefix LD_LIBRARY_PATH : "${
+        lib.makeLibraryPath [
+          libudev0-shim
+          libGL
+          libva
+        ]
+      }:\"$out/share/multiviewer\""
 
     runHook postInstall
   '';
@@ -104,11 +114,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     set -eu -o pipefail
 
     # Get latest API for packages, store so we only make one request
-    latest=$(curl -s "https://api.multiviewer.app/api/v1/releases/latest/")
+    latest=$(curl -s "https://api.multiviewer.app/api/v1/releases/latest?channel=stable")
 
     # From the downloaded JSON extract the url, version and id
     link=$(echo $latest | jq -r '.downloads[] | select(.platform=="linux_deb").url')
-    id=$(echo $latest | jq -r '.downloads[] | select(.platform=="linux_deb").id')
     version=$(echo $latest | jq -r '.version')
 
     if [ "$version" != "${finalAttrs.version}" ]
@@ -116,9 +125,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       # Pre-calculate package hash
       hash=$(nix-hash --type sha256 --to-sri $(nix-prefetch-url --type sha256 $link))
 
-      # Update ID and version in source
-      sed -i "s/id = \"[0-9]*\"/id = \"$id\"/" ${__curPos.file}
-      update-source-version ${finalAttrs.pname} "$version" "$hash" --system=x86_64-linux
+      # Update URL and version in source
+      update-source-version ${finalAttrs.pname} "$version" "$hash" "$link" --system=x86_64-linux
     fi
   '';
 
@@ -127,7 +135,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://multiviewer.app";
     downloadPage = "https://multiviewer.app/download";
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ babeuh ];
+    maintainers = with lib.maintainers; [
+      babeuh
+      eprovst
+    ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "multiviewer";
   };
