@@ -20,13 +20,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "wrangler";
-  version = "4.156.0";
+  version = "4.168.0";
 
   src = fetchFromGitHub {
     owner = "cloudflare";
     repo = "workers-sdk";
     rev = "wrangler@${finalAttrs.version}";
-    hash = "sha256-3OtDhmqUQi2JZmhI9vYPrfUJyNRCBr09JHX4XDjD6p4=";
+    hash = "sha256-h3HJ28PebJda8L1iYyfB4y32HT5Wjq+9gWOD2Low95g=";
   };
 
   pnpmDeps = fetchPnpmDeps {
@@ -38,11 +38,14 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     pnpm = pnpm_10;
     fetcherVersion = 3;
-    hash = "sha256-AjBctwxvV00aCKXU5B7nEPkQjI+J3lWTXKbDA//Tx1U=";
+    hash = "sha256-y9vVWvFR/K0LUnpDb4V3sip1LKZC7oroTeclJYAODLE=";
   };
   # pnpm packageManager version in workers-sdk root package.json may not match nixpkgs
   postPatch = ''
     jq 'del(.packageManager)' package.json | sponge package.json
+    # Wrangler doesn't use kerberos
+    substituteInPlace pnpm-workspace.yaml \
+      --replace-fail "kerberos: true" "kerberos: false"
   '';
 
   passthru.updateScript = nix-update-script {
