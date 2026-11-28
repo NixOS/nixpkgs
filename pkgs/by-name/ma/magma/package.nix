@@ -118,6 +118,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "magma";
   version = "2.9.0";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "icl-utk-edu";
     repo = "magma";
@@ -181,6 +184,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     ninja
     perl # for make generate
+    python3 # for make generate
     gfortran
   ]
   ++ lists.optionals cudaSupport [
