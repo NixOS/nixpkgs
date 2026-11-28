@@ -16,14 +16,14 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "2.0.78";
+  version = "2.0.79";
   pname = "munin";
 
   src = fetchFromGitHub {
     owner = "munin-monitoring";
     repo = "munin";
     rev = finalAttrs.version;
-    sha256 = "sha256-Ydp5A0mBkyNBIqVpRUt15e0TINXw9xChkPWzQ0AcfqA=";
+    sha256 = "sha256-44092VWR2NLqmStC7sPd9OhMLuhmr2w+oeICnhZXQRc=";
   };
 
   nativeBuildInputs = [
