@@ -16,14 +16,14 @@
   zstd,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "spade";
   version = "0.21.0";
 
   src = fetchFromCodeberg {
     owner = "spade-lang";
     repo = "spade";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-NzPF0AtqylQTgFVDtipHZt06rGRPXkHfR708UoxOpHE=";
     # only needed for vatch, which contains test data
     fetchSubmodules = true;
@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage rec {
     # rust + gitlab + fetchgit is a rare combo
     (writeScript "update-spade" ''
       VERSION="$(
-        ${lib.getExe git} ls-remote --tags --sort -version:refname ${lib.escapeShellArg src.gitRepoUrl} \
+        ${lib.getExe git} ls-remote --tags --sort -version:refname ${lib.escapeShellArg finalAttrs.src.gitRepoUrl} \
           | cut -f2 | grep ^refs/tags/v | cut -d/ -f3- | cut -c2- \
           | sort --version-sort --reverse | head -n1
       )"
@@ -90,4 +90,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ pbsds ];
     mainProgram = "spade";
   };
-}
+})
