@@ -4,9 +4,13 @@
   stdenvNoCC,
   unzip,
 }:
+
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "spacewalk";
   version = "0.1.2";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchurl {
     url = "https://github.com/InsaneArts/Spacewalk/releases/download/v${finalAttrs.version}/Spacewalk-v${finalAttrs.version}.zip";
