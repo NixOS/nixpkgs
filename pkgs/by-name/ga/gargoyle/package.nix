@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   fetchDebianPatch,
   cmake,
   pkg-config,
@@ -38,7 +39,10 @@ stdenv.mkDerivation (finalAttrs: {
     })
     # Let the Qt interface find its fonts and themes on darwin
     # https://github.com/garglk/garglk/pull/1047
-    ./macos-qt-datadir.patch
+    (fetchpatch {
+      url = "https://github.com/garglk/garglk/commit/c47fed652273b4bf24a8443639883855bbc8a97d.patch";
+      hash = "sha256-F1JRCcCY+ZZUBBDwhxobTlFzeRjX+AeL3oxkwQYWzGQ=";
+    })
     # Backport of the fixes for CVE-2026-131873 and CVE-2026-131874 in the Plus interpreter,
     # which upstream fixed with a rewrite in https://github.com/garglk/garglk/pull/1041
     ./plus-cve-2026-131873-131874.patch
