@@ -25,6 +25,7 @@ buildPythonPackage (finalAttrs: {
     substituteInPlace pyproject.toml \
       --replace-fail "setuptools == 84.0.0" "setuptools" \
       --replace-fail 'dynamic = ["version"]' 'version = "${finalAttrs.version}"'
+    sed -i 's/^version = .*/version = "'${finalAttrs.version}'"/g' "src/neo4j/_meta.py"
   '';
 
   build-system = [ setuptools ];
