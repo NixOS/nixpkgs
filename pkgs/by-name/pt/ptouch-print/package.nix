@@ -11,6 +11,7 @@
   libusb1,
   pkg-config,
   stdenv,
+  unstableGitUpdater,
   zlib,
 }:
 
@@ -50,6 +51,11 @@ stdenv.mkDerivation {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = unstableGitUpdater {
+    tagPrefix = "v";
+    shallowClone = false;
+  };
 
   meta = {
     description = "Command line tool to print labels on Brother P-Touch printers on Linux";

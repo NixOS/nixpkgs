@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation {
@@ -19,6 +20,10 @@ stdenv.mkDerivation {
   };
 
   makeFlags = [ "PREFIX=$(out)" ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch" ];
+  };
 
   meta = {
     homepage = "https://github.com/dmsc/emu2/";

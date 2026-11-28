@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation {
@@ -25,6 +26,10 @@ stdenv.mkDerivation {
     install -Dm755 hdl_dump -t $out/bin
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch" ];
+  };
 
   meta = {
     homepage = "https://github.com/ps2homebrew/hdl-dump";

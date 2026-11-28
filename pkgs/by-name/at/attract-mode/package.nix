@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  nix-update-script,
   pkg-config,
   expat,
   ffmpeg,
@@ -56,6 +57,10 @@ stdenv.mkDerivation {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ "USE_FONTCONFIG=0" ];
 
   enableParallelBuilding = true;
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch" ];
+  };
 
   meta = {
     description = "Frontend for arcade cabinets and media PCs";

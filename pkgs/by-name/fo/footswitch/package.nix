@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  nix-update-script,
   pkg-config,
   hidapi,
   udevCheckHook,
@@ -39,6 +40,10 @@ stdenv.mkDerivation {
   '';
 
   doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch" ];
+  };
 
   meta = {
     description = "Command line utilities for programming PCsensor and Scythe foot switches";

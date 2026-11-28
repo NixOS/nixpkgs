@@ -5,6 +5,7 @@
   zlib,
   zstd,
   fetchFromGitHub,
+  nix-update-script,
   re2,
   abseil-cpp,
   protobuf,
@@ -80,6 +81,10 @@ stdenv.mkDerivation {
   installPhase = ''
     install -Dm755 {.,$out/bin}/bloaty
   '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch" ];
+  };
 
   meta = {
     description = "Size profiler for binaries";

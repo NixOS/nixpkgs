@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage {
@@ -16,6 +17,10 @@ rustPlatform.buildRustPackage {
   };
 
   cargoHash = "sha256-iIqN25t9GxQ4jC5NtpOuDztdS+mCnEh7oDJXm9PivOo=";
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch" ];
+  };
 
   meta = {
     description = "Yet another SIP003 plugin based on IETF-QUIC";
