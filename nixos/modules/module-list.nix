@@ -141,6 +141,7 @@
   ./i18n/input-method/ibus.nix
   ./i18n/input-method/kime.nix
   ./i18n/input-method/nabi.nix
+  ./i18n/input-method/qingjian.nix
   ./i18n/input-method/uim.nix
   ./image/images.nix
   ./installer/tools/tools.nix
