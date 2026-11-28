@@ -408,6 +408,7 @@ stdenvNoCC.mkDerivation {
     ###
     + optionalString (targetPlatform.isDarwin && !(bintools.isGNU or false)) ''
       echo "export ZERO_AR_DATE=1" >> $out/nix-support/setup-hook
+      echo "export NIX_STRIP_STATIC_ARCHIVE_RANLIB_CMD='ar -s'" >> $out/nix-support/setup-hook
     ''
 
     + ''
