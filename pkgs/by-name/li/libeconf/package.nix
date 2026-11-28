@@ -19,8 +19,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-FyEy65moNWG3djq5Tp4ZCZDqlwQH5yY9jQEJGEEe8bo=";
   };
 
+  postPatch = ''
+    patchShebangs tests/*.sh
+  ''
   # unsupported flags that we can just remove
-  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace meson.build \
       --replace-fail "'-ffat-lto-objects'," "" \
       --replace-fail "version_flag = ['-Wl,--version-script,@0@/@1@'.format(meson.current_source_dir(), mapfile)]" "version_flag = []"
@@ -33,6 +36,8 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
   ];
+
+  doCheck = stdenv.hostPlatform.isLinux; # various checks expect linux
 
   passthru = {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
