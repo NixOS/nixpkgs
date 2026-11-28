@@ -3,6 +3,7 @@
   buildNimPackage,
   fetchFromGitHub,
   nixosTests,
+  pcre2,
   replaceVars,
   unstableGitUpdater,
 }:
@@ -27,6 +28,7 @@ buildNimPackage (
         inherit (finalAttrs.src) rev;
         url = builtins.replaceStrings [ "archive" ".tar.gz" ] [ "commit" "" ] finalAttrs.src.url;
       })
+      ./nitter-nitely-regex.patch
     ];
 
     postBuild = ''
