@@ -376,6 +376,7 @@ stdenv.mkDerivation (finalAttrs: {
       teutat3s
     ];
     mainProgram = "signal-desktop";
+    mainDarwinApp = "Signal.app";
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
