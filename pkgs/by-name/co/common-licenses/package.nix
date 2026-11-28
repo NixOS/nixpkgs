@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "common-licenses";
-  version = "13";
+  version = "13.8+deb13u6";
 
   src = fetchurl {
     url = "http://deb.debian.org/debian/pool/main/b/base-files/base-files_${finalAttrs.version}.tar.xz";
-    hash = "sha256-Q5FTvfKWSBE1ywuAH+RnZdyD+LmRSgJ11qFiM53hL1Y=";
+    hash = "sha256-DYwBjVYiE6onSoIQBCu8PEyphaQ6deACHeS/pNlyLjQ=";
   };
 
   installPhase = ''
