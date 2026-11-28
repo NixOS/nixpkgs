@@ -6,11 +6,11 @@
 
 buildDotnetGlobalTool {
   pname = "dotnet-ef";
-  version = "10.0.9";
+  version = "11.0.0";
 
   dotnet-sdk = dotnetCorePackages.sdk_10_0;
 
-  nugetHash = "sha256-RqYc9rMfGI88Xo/kNMYbqzbfv4iyTFTk/I/RFLIJ3XM=";
+  nugetHash = "sha256-ACGTUBZNqrRtk6oa64UoKzhCs3P0MxXdQdqKcSNAp2Q=";
 
   meta = {
     description = "Tools to help with design-time development tasks";
