@@ -312,6 +312,13 @@ in
       '';
     };
 
+    env = lib.mkOption {
+      type = lib.types.attrs;
+      default = { };
+      description = ''
+        env attribute to pass to the repart-image.nix builder
+      '';
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -391,6 +398,7 @@ in
             mkfsEnv = mkfsOptionsToEnv cfg.mkfsOptions;
             val = pkgs.callPackage ./repart-image.nix {
               systemd = cfg.package;
+              env = lib.recursiveUpdate cfg.env mkfsEnv;
               inherit (config.image) baseName;
               inherit (cfg)
                 name
@@ -402,7 +410,7 @@ in
                 sectorSize
                 finalPartitions
                 ;
-              inherit fileSystems definitionsDirectory mkfsEnv;
+              inherit fileSystems definitionsDirectory;
             };
           in
           lib.asserts.checkAssertWarn cfg.assertions cfg.warnings val;
