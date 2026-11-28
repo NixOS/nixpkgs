@@ -61,7 +61,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "C library for parsing/normalizing street addresses around the world. Powered by statistical NLP and open geo data";
     homepage = "https://github.com/openvenues/libpostal";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.Thra11 ];
+    maintainers = with lib.maintainers; [
+      Thra11
+      mitya57
+    ];
     mainProgram = "libpostal_data";
     platforms = lib.platforms.unix;
   };
