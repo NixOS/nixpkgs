@@ -1,20 +1,85 @@
 diff --git a/src/dist/component/package.rs b/src/dist/component/package.rs
-index 28e22f8635..568097ccf0 100644
+index 28e22f8..ec02054 100644
 --- a/src/dist/component/package.rs
 +++ b/src/dist/component/package.rs
-@@ -132,6 +132,7 @@
+@@ -116,6 +116,8 @@ impl<P: Deref<Target = Path>> DirectoryPackage<P> {
+         let root = self.path.join(actual_name);
+ 
+         let manifest = utils::read_file("package manifest", &root.join("manifest.in"))?;
++        let prefix = target.prefix().path().to_owned();
++        nix_update_links(&prefix, true)?;
+         let mut builder = target.add(name, tx);
+ 
+         for l in manifest.lines() {
+@@ -132,6 +134,7 @@ impl<P: Deref<Target = Path>> DirectoryPackage<P> {
                      } else {
                          builder.move_file(path.clone(), &src_path)?
                      }
-+                    nix_patchelf_if_needed(&target.prefix().path().join(path.clone()))
++                    nix_patchelf_if_needed(&prefix, &prefix.join(path.clone()))
                  }
                  ComponentPartKind::Dir => {
                      if self.copy {
-@@ -154,6 +155,176 @@
+@@ -154,6 +157,230 @@ impl<P: Deref<Target = Path>> DirectoryPackage<P> {
      }
  }
  
-+fn nix_wrap_lld(dest_lld_path: &Path) -> Result<()> {
++/// Directory, relative to a toolchain, of symlinks to the Nix store paths that
++/// the toolchain's files are patched to use.  Going through these symlinks
++/// lets any later build of rustup retarget them to its own store paths, so
++/// the toolchain survives garbage collection of the rustup that installed it.
++const NIX_LINKS_DIR: &str = "lib/rustlib/nix-support";
++
++/// The symlinks in `NIX_LINKS_DIR` and their targets for this build of rustup.
++/// `@libPath@` is a single directory, so it can be linked to.
++fn nix_links() -> Result<[(&'static str, PathBuf); 3]> {
++    let ld_wrapper = std::env::current_exe()
++        .context("failed to locate rustup")?
++        .parent()
++        .context("failed to get parent directory")?
++        .with_file_name("nix-support")
++        .join("ld-wrapper.sh");
++    Ok([
++        ("ld.so", PathBuf::from("@dynamicLinker@")),
++        ("lib", PathBuf::from("@libPath@")),
++        ("ld-wrapper.sh", ld_wrapper),
++    ])
++}
++
++fn nix_link_path(toolchain_dir: &Path, name: &str) -> PathBuf {
++    toolchain_dir.join(NIX_LINKS_DIR).join(name)
++}
++
++/// Point a toolchain's Nix symlinks at this build of rustup's store paths.
++/// Unless `create` is set, toolchains without the symlinks (installed before
++/// they were introduced) are left alone.
++pub(crate) fn nix_update_links(toolchain_dir: &Path, create: bool) -> Result<()> {
++    use std::fs;
++    use tracing::debug;
++
++    let dir = toolchain_dir.join(NIX_LINKS_DIR);
++    if create {
++        fs::create_dir_all(&dir).with_context(|| format!("failed to create {dir:?}"))?;
++    } else if !fs::exists(&dir).with_context(|| format!("failed to check {dir:?}"))? {
++        // The toolchain was installed before these symlinks were introduced, so
++        // its files refer to store paths directly and wouldn't use them.
++        return Ok(());
++    }
++    for (name, target) in nix_links()? {
++        let link = dir.join(name);
++        if fs::read_link(&link).is_ok_and(|old| old == target) {
++            continue;
++        }
++        debug!("pointing {link:?} at {target:?}");
++        // Replace the symlink atomically, as other processes may be using it.
++        tempfile::Builder::new()
++            .make_in(&dir, |tmp| std::os::unix::fs::symlink(&target, tmp))
++            .and_then(|tmp| Ok(tmp.persist(&link)?))
++            .with_context(|| format!("failed to update {link:?}"))?;
++    }
++    Ok(())
++}
++
++fn nix_wrap_lld(toolchain_dir: &Path, dest_lld_path: &Path) -> Result<()> {
 +    use std::fs;
 +    use std::io::Write;
 +    use std::os::unix::fs::PermissionsExt;
@@ -27,12 +92,8 @@ index 28e22f8635..568097ccf0 100644
 +    let mut unwrapped_lld = unwrapped_dir;
 +    unwrapped_lld.push(dest_lld_path.file_name().unwrap());
 +    fs::rename(dest_lld_path, &unwrapped_lld).context("failed to move file")?;
-+    let mut ld_wrapper_path = std::env::current_exe()?
-+        .parent()
-+        .ok_or(anyhow!("failed to get parent directory"))?
-+        .with_file_name("nix-support");
++    let ld_wrapper_path = nix_link_path(toolchain_dir, "ld-wrapper.sh");
 +    let mut file = fs::File::create(dest_lld_path)?;
-+    ld_wrapper_path.push("ld-wrapper.sh");
 +
 +    let wrapped_script = format!(
 +        "#!/usr/bin/env bash
@@ -50,7 +111,7 @@ index 28e22f8635..568097ccf0 100644
 +    Ok(())
 +}
 +
-+fn nix_patchelf_if_needed(dest_path: &Path) {
++fn nix_patchelf_if_needed(toolchain_dir: &Path, dest_path: &Path) {
 +    use std::fs::File;
 +    use std::os::unix::fs::FileExt;
 +    use tracing::{debug, warn};
@@ -166,10 +227,12 @@ index 28e22f8635..568097ccf0 100644
 +    if elf.has_interp() {
 +        patch_command
 +            .arg("--set-interpreter")
-+            .arg("@dynamicLinker@");
++            .arg(nix_link_path(toolchain_dir, "ld.so"));
 +    }
 +    if Some(std::ffi::OsStr::new("rust-lld")) == dest_path.file_name() || !elf.has_interp() {
-+        patch_command.arg("--add-rpath").arg("@libPath@");
++        patch_command
++            .arg("--add-rpath")
++            .arg(nix_link_path(toolchain_dir, "lib"));
 +    }
 +
 +    debug!("patching {dest_path:?} using patchelf");
@@ -178,7 +241,7 @@ index 28e22f8635..568097ccf0 100644
 +    }
 +
 +    if Some(std::ffi::OsStr::new("ld.lld")) == dest_path.file_name() {
-+        if let Err(err) = nix_wrap_lld(dest_path) {
++        if let Err(err) = nix_wrap_lld(toolchain_dir, dest_path) {
 +            warn!("failed to wrap `ld.lld`: {err:?}");
 +        }
 +    }
@@ -187,3 +250,31 @@ index 28e22f8635..568097ccf0 100644
  /// Handle the async result of io operations
  /// Replaces op.result with Ok(())
  fn filter_result(op: &mut CompletedIo) -> io::Result<()> {
+diff --git a/src/toolchain.rs b/src/toolchain.rs
+index 57ed54a..5c45a7a 100644
+--- a/src/toolchain.rs
++++ b/src/toolchain.rs
+@@ -434,6 +434,10 @@ impl<'a> Toolchain<'a> {
+ 
+     #[cfg_attr(feature="otel", tracing::instrument(err, fields(binary, recursion = self.cfg.process.var("RUST_RECURSION_COUNT").ok())))]
+     fn create_command<T: AsRef<OsStr> + Debug>(&self, binary: T) -> Result<Command, anyhow::Error> {
++        if let LocalToolchainName::Named(ToolchainName::Official(_)) = &self.name {
++            crate::dist::component::nix_update_links(&self.path, false)?;
++        }
++
+         // Create the path to this binary within the current toolchain sysroot
+         let binary = if let Some(binary_str) = binary.as_ref().to_str() {
+             if binary_str.to_lowercase().ends_with(EXE_SUFFIX) {
+diff --git a/src/toolchain/distributable.rs b/src/toolchain/distributable.rs
+index aa06931..c10a564 100644
+--- a/src/toolchain/distributable.rs
++++ b/src/toolchain/distributable.rs
+@@ -205,6 +205,8 @@ impl<'a> DistributableToolchain<'a> {
+         let binary = binary.as_ref();
+         assert!(binary == "cargo" || binary == "cargo.exe");
+ 
++        crate::dist::component::nix_update_links(self.toolchain.path(), false)?;
++
+         let src_file = self
+             .toolchain
+             .path()
