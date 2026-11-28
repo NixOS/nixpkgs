@@ -23,7 +23,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libxmlb";
-  version = "0.3.27";
+  version = "0.3.30";
 
   outputs = [
     "out"
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "hughsie";
     repo = "libxmlb";
     rev = finalAttrs.version;
-    hash = "sha256-5RP794gBA67DcrjzqvguDYu/Sf+1X5kfRi9yvLx9b+c=";
+    hash = "sha256-vcLDpDGwOCYP8V2x3d3HMBJUDMN0kPn/GfTdJZNLctQ=";
   };
 
   patches = [
