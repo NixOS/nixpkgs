@@ -3,12 +3,15 @@
   dev ? false,
   aarch64sha256,
   x64sha256,
+  macSha256,
 }:
 
 {
   config,
   fetchurl,
   stdenv,
+  stdenvNoCC,
+  unzip,
   lib,
   libxtst,
   libx11,
@@ -44,9 +47,74 @@ let
   ];
   crashHandlerBinary = "crash_handler";
   downloadUrl =
-    arch: "https://download.sublimetext.com/sublime_text_build_${buildVersion}_${arch}.tar.xz";
+    arch: extension:
+    "https://download.sublimetext.com/sublime_text_build_${buildVersion}_${arch}.${extension}";
   versionUrl = "https://download.sublimetext.com/latest/${if dev then "dev" else "stable"}";
   versionFile = toString ./packages.nix;
+
+  sources = {
+    "aarch64-linux" = fetchurl {
+      url = downloadUrl "arm64" "tar.xz";
+      sha256 = aarch64sha256;
+    };
+    "x86_64-linux" = fetchurl {
+      url = downloadUrl "x64" "tar.xz";
+      sha256 = x64sha256;
+    };
+    "aarch64-darwin" = fetchurl {
+      url = downloadUrl "mac" "zip";
+      sha256 = macSha256;
+    };
+  };
+
+  updateScript =
+    sourceAttribute:
+    let
+      script = writeShellScript "${packageAttribute}-update-script" ''
+        set -o errexit
+        PATH=${
+          lib.makeBinPath [
+            common-updater-scripts
+            curl
+          ]
+        }
+
+        versionFile=$1
+        latestVersion=$(curl -s "${versionUrl}")
+
+        if [[ "${buildVersion}" = "$latestVersion" ]]; then
+            echo "The new version same as the old version."
+            exit 0
+        fi
+
+        for platform in ${lib.escapeShellArgs (builtins.attrNames sources)}; do
+            update-source-version "${sourceAttribute}" "$latestVersion" --ignore-same-version --file="$versionFile" --version-key=buildVersion --source-key="sources.$platform"
+        done
+      '';
+    in
+    [
+      script
+      versionFile
+    ];
+
+  meta = {
+    description = "Sophisticated text editor for code, markup and prose";
+    homepage = "https://www.sublimetext.com/";
+    maintainers = with lib.maintainers; [
+      jtojnar
+      wmertens
+      demin-dmitriy
+      zimbatm
+    ];
+    mainProgram = "subl";
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    platforms = [
+      "aarch64-linux"
+      "x86_64-linux"
+      "aarch64-darwin"
+    ];
+  };
 
   neededLibraries = [
     libx11
@@ -127,99 +195,81 @@ let
     '';
 
     passthru = {
-      sources = {
-        "aarch64-linux" = fetchurl {
-          url = downloadUrl "arm64";
-          sha256 = aarch64sha256;
-        };
-        "x86_64-linux" = fetchurl {
-          url = downloadUrl "x64";
-          sha256 = x64sha256;
-        };
-      };
+      inherit sources;
     };
   });
 in
-stdenv.mkDerivation (finalAttrs: {
-  pname = pnameBase;
-  version = buildVersion;
+if stdenv.hostPlatform.isDarwin then
+  stdenvNoCC.mkDerivation {
+    pname = pnameBase;
+    version = buildVersion;
 
-  dontUnpack = true;
+    src = sources.${stdenv.hostPlatform.system};
 
-  nativeBuildInputs = [
-    makeWrapper
-  ];
+    nativeBuildInputs = [ unzip ];
 
-  installPhase = ''
-    mkdir -p "$out/bin"
-    makeWrapper "${binaryPackage}/${primaryBinary}" "$out/bin/${primaryBinary}"
-  ''
-  + builtins.concatStringsSep "" (
-    map (binaryAlias: "ln -s $out/bin/${primaryBinary} $out/bin/${binaryAlias}\n") primaryBinaryAliases
-  )
-  + ''
-    mkdir -p "$out/share/applications"
+    dontUnpack = true;
+    # Keep the upstream Mach-O binaries unchanged.
+    dontFixup = true;
 
-    substitute \
-      "${binaryPackage}/${primaryBinary}.desktop" \
-      "$out/share/applications/${primaryBinary}.desktop" \
-      --replace-fail "/opt/${primaryBinary}/${primaryBinary}" "${primaryBinary}"
+    installPhase = ''
+      runHook preInstall
 
-    for directory in ${binaryPackage}/Icon/*; do
-      size=$(basename $directory)
-      mkdir -p "$out/share/icons/hicolor/$size/apps"
-      ln -s ${binaryPackage}/Icon/$size/* $out/share/icons/hicolor/$size/apps
-    done
-  '';
+      mkdir -p "$out/Applications" "$out/bin"
+      unzip -q "$src" -d "$out/Applications" -x '*/._*' '__MACOSX/*'
 
-  passthru = {
-    unwrapped = binaryPackage;
+      ln -s "$out/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl" "$out/bin/subl"
 
-    updateScript =
-      let
-        script = writeShellScript "${packageAttribute}-update-script" ''
-          set -o errexit
-          PATH=${
-            lib.makeBinPath [
-              common-updater-scripts
-              curl
-            ]
-          }
+      runHook postInstall
+    '';
 
-          versionFile=$1
-          latestVersion=$(curl -s "${versionUrl}")
+    passthru = {
+      inherit sources;
+      updateScript = updateScript packageAttribute;
+    };
 
-          if [[ "${buildVersion}" = "$latestVersion" ]]; then
-              echo "The new version same as the old version."
-              exit 0
-          fi
+    meta = meta // {
+      mainDarwinApp = "Sublime Text.app";
+    };
+  }
+else
+  stdenv.mkDerivation (finalAttrs: {
+    pname = pnameBase;
+    version = buildVersion;
 
-          for platform in ${lib.escapeShellArgs finalAttrs.meta.platforms}; do
-              update-source-version "${packageAttribute}".unwrapped "$latestVersion" --ignore-same-version --file="$versionFile" --version-key=buildVersion --source-key="sources.$platform"
-          done
-        '';
-      in
-      [
-        script
-        versionFile
-      ];
-  };
+    dontUnpack = true;
 
-  meta = {
-    description = "Sophisticated text editor for code, markup and prose";
-    homepage = "https://www.sublimetext.com/";
-    maintainers = with lib.maintainers; [
-      jtojnar
-      wmertens
-      demin-dmitriy
-      zimbatm
+    nativeBuildInputs = [
+      makeWrapper
     ];
-    mainProgram = "subl";
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    license = lib.licenses.unfree;
-    platforms = [
-      "aarch64-linux"
-      "x86_64-linux"
-    ];
-  };
-})
+
+    installPhase = ''
+      mkdir -p "$out/bin"
+      makeWrapper "${binaryPackage}/${primaryBinary}" "$out/bin/${primaryBinary}"
+    ''
+    + builtins.concatStringsSep "" (
+      map (binaryAlias: "ln -s $out/bin/${primaryBinary} $out/bin/${binaryAlias}\n") primaryBinaryAliases
+    )
+    + ''
+      mkdir -p "$out/share/applications"
+
+      substitute \
+        "${binaryPackage}/${primaryBinary}.desktop" \
+        "$out/share/applications/${primaryBinary}.desktop" \
+        --replace-fail "/opt/${primaryBinary}/${primaryBinary}" "${primaryBinary}"
+
+      for directory in ${binaryPackage}/Icon/*; do
+        size=$(basename $directory)
+        mkdir -p "$out/share/icons/hicolor/$size/apps"
+        ln -s ${binaryPackage}/Icon/$size/* $out/share/icons/hicolor/$size/apps
+      done
+    '';
+
+    passthru = {
+      unwrapped = binaryPackage;
+
+      updateScript = updateScript "${packageAttribute}.unwrapped";
+    };
+
+    inherit meta;
+  })
