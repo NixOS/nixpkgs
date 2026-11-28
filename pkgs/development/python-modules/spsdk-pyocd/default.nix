@@ -39,6 +39,9 @@ buildPythonPackage rec {
     "pyocd"
   ];
 
+  # Prevent circular dependency: spsdk depends on spsdk-pyocd
+  pythonRemoveDeps = [ "spsdk" ];
+
   dependencies = [
     pyocd
   ];
