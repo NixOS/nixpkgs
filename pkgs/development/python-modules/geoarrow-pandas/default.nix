@@ -11,13 +11,13 @@
 }:
 buildPythonPackage rec {
   pname = "geoarrow-pandas";
-  version = "0.3.0";
+  version = "0.1.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     repo = "geoarrow-python";
     owner = "geoarrow";
-    tag = "geoarrow-types-${version}";
+    tag = "geoarrow-pandas-${version}";
     hash = "sha256-ciElwh94ukFyFdOBuQWyOUVpn4jBM1RKfxiBCcM+nmE=";
   };
 
