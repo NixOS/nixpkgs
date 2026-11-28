@@ -28886,6 +28886,11 @@
     githubId = 36031171;
     name = "Supa";
   };
+  Supermarcel10 = {
+    github = "Supermarcel10";
+    githubId = 47798787;
+    name = "Marcel";
+  };
   supermarin = {
     email = "git+nixpkgs@mar.in";
     name = "marin";
