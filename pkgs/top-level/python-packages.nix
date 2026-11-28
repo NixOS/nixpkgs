@@ -21138,6 +21138,8 @@ self: super: with self; {
 
   tiktoken = callPackage ../development/python-modules/tiktoken { };
 
+  tile-ble = callPackage ../development/python-modules/tile-ble { };
+
   tiledb = callPackage ../development/python-modules/tiledb { inherit (pkgs) tiledb; };
 
   tilelang = callPackage ../development/python-modules/tilelang { };
