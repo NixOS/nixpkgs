@@ -1,10 +1,12 @@
 {
   lib,
   aiohttp,
+  aiointercept,
   aioresponses,
   buildPythonPackage,
   fetchFromGitHub,
-  poetry-core,
+  hatchling,
+  mashumaro,
   pyprojectVersionPatchHook,
   pytest-asyncio,
   pytest-cov-stub,
@@ -13,30 +15,32 @@
   yarl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiowithings";
-  version = "3.1.6";
+  version = "4.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "joostlek";
     repo = "python-withings";
-    tag = "v${version}";
-    hash = "sha256-YC1rUyPXWbJ/xfUus5a7vw44gw7PIAdwhrUstXB/+nI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-sBLrabScM8ccWbJLDETeU2ExdttWPLJI9z19Go+l4U8=";
   };
 
-  nativeBuildInputs = [
-    pyprojectVersionPatchHook
-  ];
+  pythonRelaxDeps = [ "mashumaro" ];
 
-  build-system = [ poetry-core ];
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
+
+  build-system = [ hatchling ];
 
   dependencies = [
     aiohttp
+    mashumaro
     yarl
   ];
 
   nativeCheckInputs = [
+    aiointercept
     aioresponses
     pytest-asyncio
     pytest-cov-stub
@@ -72,8 +76,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module to interact with Withings";
     homepage = "https://github.com/joostlek/python-withings";
-    changelog = "https://github.com/joostlek/python-withings/releases/tag/v${version}";
+    changelog = "https://github.com/joostlek/python-withings/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
