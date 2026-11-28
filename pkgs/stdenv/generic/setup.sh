@@ -42,6 +42,9 @@ else
     : "${outputs:=out}"
 fi
 
+# Get all outputs created by the derivation.
+#
+# Documented in: `../../../doc/stdenv/stdenv.chapter.md`, see `fun-getAllOutputNames`
 getAllOutputNames() {
     if [ -n "$__structuredAttrs" ]; then
         echo "${!outputs[*]}"
@@ -195,10 +198,9 @@ _logHook() {
 ######################################################################
 # Hook handling.
 
-# Run all hooks with the specified name in the order in which they
-# were added, stopping if any fails (returns a non-zero exit
-# code). The hooks for <hookName> are the shell function or variable
-# <hookName>, and the values of the shell array ‘<hookName>Hooks’.
+# Execute `hook` and the values in the array associated with it.
+#
+# Documented in: `../../../doc/stdenv/stdenv.chapter.md`, see `fun-runHook`
 runHook() {
     local hookName="$1"
     shift
@@ -216,8 +218,9 @@ runHook() {
 }
 
 
-# Run all hooks with the specified name, until one succeeds (returns a
-# zero exit code). If none succeed, return a non-zero exit code.
+# Run all hooks that `runHook` would, but exit after the first successful hook.
+#
+# Documented in: `../../../doc/stdenv/stdenv.chapter.md`, see `fun-runOneHook`
 runOneHook() {
     local hookName="$1"
     shift
@@ -278,10 +281,9 @@ _eval() {
 ######################################################################
 # Logging.
 
-# Prints a command such that all word splits are unambiguous. We need
-# to split the command in three parts because the middle format string
-# will be, and must be, repeated for each argument. The first argument
-# goes before the ':' and is just for convenience.
+# Print a command without running it and mark word splits.
+#
+# Documented in: `../../../doc/stdenv/stdenv.chapter.md`, see `fun-echoCmd`
 echoCmd() {
     printf "%s:" "$1"
     shift
@@ -333,7 +335,9 @@ trap "exitHandler" EXIT
 ######################################################################
 # Helper functions.
 
-
+# Add an existing directory to a search-path-like variable using a custom delimiter.
+#
+# Documented in: `../../../doc/stdenv/stdenv.chapter.md`, see `fun-addToSearchPathWithCustomDelimiter`
 addToSearchPathWithCustomDelimiter() {
     local delimiter="$1"
     local varName="$2"
@@ -344,18 +348,16 @@ addToSearchPathWithCustomDelimiter() {
     fi
 }
 
+# Add an existing directory to a search-path-like variable.
+#
+# Documented in: `../../../doc/stdenv/stdenv.chapter.md`, see `fun-addToSearchPath`
 addToSearchPath() {
     addToSearchPathWithCustomDelimiter ":" "$@"
 }
 
-# Prepend elements to variable "$1", which may come from an attr.
+# Prepend elements to a variable.
 #
-# This is useful in generic setup code, which must (for now) support
-# both derivations with and without __structuredAttrs true, so the
-# variable may be an array or a space-separated string.
-#
-# Expressions for individual packages should simply switch to array
-# syntax when they switch to setting __structuredAttrs = true.
+# Documented in: `../../../doc/stdenv/stdenv.chapter.md`, see `fun-prependToVar`
 prependToVar() {
     local -n nameref="$1"
     local useArray type
@@ -388,7 +390,9 @@ prependToVar() {
     fi
 }
 
-# Same as above
+# Append elements to a variable.
+#
+# Documented in: `../../../doc/stdenv/stdenv.chapter.md`, see `fun-appendToVar`
 appendToVar() {
     local -n nameref="$1"
     local useArray type
@@ -423,8 +427,7 @@ appendToVar() {
 
 # Accumulate flags from the named variables $2+ into the indexed array $1.
 #
-# Arrays are simply concatenated, strings are split on whitespace.
-# Default values can be passed via name=default.
+# Documented in: `../../../doc/stdenv/stdenv.chapter.md`, see `fun-concatTo`
 concatTo() {
     local -
     set -o noglob
@@ -458,21 +461,8 @@ concatTo() {
 }
 
 # Concatenate a list of strings ($2) with a separator ($1) between each element.
-# The list can be an indexed array of strings or a single string. A single string
-# is split on spaces and then concatenated with the separator.
 #
-# $ flags="lorem ipsum dolor sit amet"
-# $ concatStringsSep ";" flags
-# lorem;ipsum;dolor;sit;amet
-#
-# $ flags=("lorem ipsum" "dolor" "sit amet")
-# $ concatStringsSep ";" flags
-# lorem ipsum;dolor;sit amet
-#
-# Also supports multi-character separators;
-# $ flags=("lorem ipsum" "dolor" "sit amet")
-# $ concatStringsSep " and " flags
-# lorem ipsum and dolor and sit amet
+# Documented in: `../../../doc/stdenv/stdenv.chapter.md`, see `fun-concatStringsSep`
 concatStringsSep() {
     local sep="$1"
     local name="$2"
@@ -508,6 +498,8 @@ _addRpathPrefix() {
 }
 
 # Return success if the specified file is an ELF object.
+#
+# Documented in: `../../../doc/stdenv/stdenv.chapter.md`, see `fun-isELF`
 isELF() {
     local fn="$1"
     local fd
@@ -519,6 +511,8 @@ isELF() {
 }
 
 # Return success if the specified file is a Mach-O object.
+#
+# Documented in: `../../../doc/stdenv/stdenv.chapter.md`, see `fun-isMachO`
 isMachO() {
     local fn="$1"
     local fd
@@ -546,8 +540,9 @@ isMachO() {
     fi
 }
 
-# Return success if the specified file is a script (i.e. starts with
-# "#!").
+# Return success if the specified file is a script (i.e. starts with "#!").
+#
+# Documented in: `../../../doc/stdenv/stdenv.chapter.md`, see `fun-isScript`
 isScript() {
     local fn="$1"
     local fd
@@ -558,12 +553,17 @@ isScript() {
     if [[ "$magic" =~ \#! ]]; then return 0; else return 1; fi
 }
 
-# printf unfortunately will print a trailing newline regardless
+# Print each argument on a separate line.
+#
+# Documented in: `../../../doc/stdenv/stdenv.chapter.md`, see `fun-printLines`
 printLines() {
     (( "$#" > 0 )) || return 0
     printf '%s\n' "$@"
 }
 
+# Print each argument separated by a space character.
+#
+# Documented in: `../../../doc/stdenv/stdenv.chapter.md`, see `fun-printWords`
 printWords() {
     (( "$#" > 0 )) || return 0
     printf '%s ' "$@"
