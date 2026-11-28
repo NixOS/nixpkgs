@@ -1,0 +1,107 @@
+--- a/torch/_inductor/codegen/cuda/compile_utils.py
++++ b/torch/_inductor/codegen/cuda/compile_utils.py
+@@ -88,7 +88,10 @@
+         candidate := os.path.join(cuda_home, "bin/nvcc")
+     ):
+         return os.path.realpath(candidate)
+-    return "nvcc"
++    # Nixpkgs: fall back to the nvcc torch was built with
++    from torch.utils import cpp_extension
++
++    return os.path.join(cpp_extension.CUDA_HOME or "@cudaHome@", "bin", "nvcc")
+ 
+ 
+ @functools.lru_cache(None)
+@@ -400,6 +403,11 @@
+         dst_file = os.path.basename(dst_file)
+     else:
+         include_paths = _cutlass_include_paths()
++        # Nixpkgs: nvcc only knows its own headers and CCCL; add the other CUDA packages' headers
++        from torch.utils import cpp_extension
++
++        if cpp_extension.CUDA_HOME == cpp_extension._NIX_CUDA_HOME:
++            include_paths += cpp_extension._NIX_CUDA_INCLUDE_DIRS
+     cuda_lib_options = _cuda_lib_options()
+     nvcc_host_compiler_options = _nvcc_host_compiler_options()
+     nvcc_compiler_options = _nvcc_compiler_options()
+--- a/torch/_inductor/config.py
++++ b/torch/_inductor/config.py
+@@ -2816,10 +2816,8 @@
+     cutlass_dir = os.path.realpath(
+         os.environ.get(
+             "TORCHINDUCTOR_CUTLASS_DIR",
+-            os.path.join(
+-                os.path.dirname(torch.__file__),
+-                "../third_party/cutlass/",
+-            ),
++            # Nixpkgs: the CUTLASS torch was built with
++            "@cutlassDir@",
+         )
+     )
+ 
+--- a/torch/utils/cpp_extension.py
++++ b/torch/utils/cpp_extension.py
+@@ -157,28 +157,19 @@
+         return []
+     return [f'"{arg}"' if ' ' in arg else arg for arg in args]
+ 
++# Nixpkgs: each CUDA package has its own prefix. _NIX_CUDA_HOME has bin/nvcc; when CUDA_HOME is that default, the other
++# packages' include and library directories are added.
++_NIX_CUDA_HOME = "@cudaHome@"
++_NIX_CUDA_INCLUDE_DIRS = "@cudaIncludeDirs@".split(":")
++_NIX_CUDA_LIBRARY_DIRS = "@cudaLibraryDirs@".split(":")
++
+ def _find_cuda_home() -> str | None:
+     """Find the CUDA install path."""
+     # Guess #1
+     cuda_home = os.environ.get('CUDA_HOME') or os.environ.get('CUDA_PATH')
+     if cuda_home is None:
+-        # Guess #2
+-        nvcc_path = shutil.which("nvcc")
+-        if nvcc_path is not None:
+-            cuda_home = os.path.dirname(os.path.dirname(nvcc_path))
+-        else:
+-            # Guess #3
+-            if IS_WINDOWS:
+-                cuda_homes = glob.glob(
+-                    'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v*.*')
+-                if len(cuda_homes) == 0:
+-                    cuda_home = ''
+-                else:
+-                    cuda_home = cuda_homes[0]
+-            else:
+-                cuda_home = '/usr/local/cuda'
+-            if not os.path.exists(cuda_home):
+-                cuda_home = None
++        # Nixpkgs: the nvcc torch was built with, not whatever is on PATH
++        cuda_home = _NIX_CUDA_HOME
+     if cuda_home and not torch.cuda.is_available():
+         logger.warning("No CUDA runtime is found, using CUDA_HOME='%s'", cuda_home)
+     return cuda_home
+@@ -1806,6 +1797,8 @@
+         # but gcc doesn't like having /usr/include passed explicitly
+         if cuda_home_include != '/usr/include':
+             paths.append(cuda_home_include)
++        if CUDA_HOME == _NIX_CUDA_HOME:
++            paths.extend(_NIX_CUDA_INCLUDE_DIRS)
+ 
+         # Support CUDA_INC_PATH env variable supported by CMake files
+         if (cuda_inc_path := os.environ.get("CUDA_INC_PATH", None)) and \
+@@ -1861,6 +1854,8 @@
+                     lib_dir = 'lib'
+ 
+             paths.append(_join_cuda_home(lib_dir))
++            if CUDA_HOME == _NIX_CUDA_HOME:
++                paths.extend(_NIX_CUDA_LIBRARY_DIRS)
+             if CUDNN_HOME is not None:
+                 paths.append(os.path.join(CUDNN_HOME, lib_dir))
+     elif device_type == "xpu":
+@@ -2697,6 +2692,8 @@
+                 # Note that it's also possible both don't exist (see _find_cuda_home) - in that case we stay with "lib64"
+                 extra_lib_dir = "lib"
+             extra_ldflags.append(f'-L{_join_cuda_home(extra_lib_dir)}')
++            if CUDA_HOME == _NIX_CUDA_HOME:
++                extra_ldflags.extend(f'-L{path}' for path in _NIX_CUDA_LIBRARY_DIRS)
+             extra_ldflags.append('-lcudart')
+             if CUDNN_HOME is not None:
+                 extra_ldflags.append(f'-L{os.path.join(CUDNN_HOME, "lib64")}')

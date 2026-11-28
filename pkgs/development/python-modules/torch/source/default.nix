@@ -7,6 +7,7 @@
   git-unroll,
   buildPythonPackage,
   python,
+  replaceVars,
   runCommand,
   writeShellScript,
   config,
@@ -34,6 +35,10 @@
   withTensorboard ? false,
   MPISupport ? false,
   mpi,
+  # c10d's UCC process group (ProcessGroupUCC)
+  uccSupport ? false,
+  ucc,
+  ucx,
   buildDocs ? false,
   targetPackages,
 
@@ -97,6 +102,8 @@
   # virtual pkg that consistently instantiates blas across nixpkgs
   # See https://github.com/NixOS/nixpkgs/pull/83888
   blas,
+  # Use the NVIDIA Performance Libraries for BLAS and LAPACK instead of `blas`.
+  nvplSupport ? false,
 
   # dependencies for torch.utils.tensorboard
   pillow,
@@ -126,6 +133,36 @@ let
   triton = throw "python3Packages.torch: use _tritonEffective instead of triton to avoid divergence";
 
   setBool = v: if v then "1" else "0";
+
+  blasProvider = if nvplSupport then cudaPackages.nvpl_blas else blas.provider;
+
+  # Libraries that JIT-compiled CUDA code (torch.utils.cpp_extension, Inductor's CUDA/CUTLASS backends) may link.
+  # Each CUDA package has its own prefix, so nix-cuda-paths.patch passes their directories to nvcc.
+  cudaJitLibraryPackages =
+    with cudaPackages;
+    [
+      cuda_cudart
+      cuda_cupti
+      cuda_nvrtc
+      nvtx
+      libcublas
+      libcufft
+      libcurand
+      libcusolver
+      libcusparse
+    ]
+    ++ lib.optionals withCufile [ libcufile ]
+    ++ lib.optionals withCusparselt [ libcusparse_lt ]
+    ++ lib.optionals (cudaPackages ? cudnn) [ cudnn ];
+  # ... and the headers it may include: theirs, and those of header-only packages
+  cudaJitHeaderPackages =
+    cudaJitLibraryPackages
+    ++ (with cudaPackages; [
+      cccl
+      cuda_nvml_dev
+      cuda_profiler_api
+    ])
+    ++ lib.optionals cudaPackages.cuda_crt.meta.available [ cudaPackages.cuda_crt ];
 
   # Compiler and build tool used at runtime by torch.compile and torch.utils.cpp_extension
   cxx = lib.getExe' targetPackages.stdenv.cc "${targetPackages.stdenv.cc.targetPrefix}c++";
@@ -258,6 +295,10 @@ let
   brokenConditions = attrsets.filterAttrs (_: cond: cond) {
     "CUDA and ROCm are mutually exclusive" = cudaSupport && rocmSupport;
     "CUDA is not targeting Linux" = cudaSupport && !stdenv.hostPlatform.isLinux;
+    "NVPL is not available on the host platform" =
+      nvplSupport && !lib.meta.availableOn stdenv.hostPlatform cudaPackages.nvpl_blas;
+    "UCC is not available on the host platform" =
+      uccSupport && !lib.meta.availableOn stdenv.hostPlatform ucc;
     "Unsupported CUDA version" =
       cudaSupport
       && !(builtins.elem cudaPackages.cudaMajorVersion [
@@ -324,6 +365,16 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
 
   patches = [
     ./clang19-template-warning.patch
+
+    # Inductor's loop merging can substitute an integer into an index holding `Identity(p)` (cat wraps its inputs'
+    # offsets in Identity), leaving e.g. `-1 + Identity(-1)`, which SymPy can't compare, so Min/Max raise
+    # "The argument ... is not comparable": https://github.com/pytorch/pytorch/issues/200379
+    # https://github.com/pytorch/pytorch/pull/202487 (unmerged)
+    (fetchpatch {
+      name = "inductor-identity-integer.patch";
+      url = "https://github.com/pytorch/pytorch/commit/2e2fae835f1c0b67085c9765bc6c6b888fc0c27b.patch";
+      hash = "sha256-TVBhRKfhymXWV5+AZGrDw21s0jr+N3sIAMx71wxSHds=";
+    })
   ]
   ++ lib.optionals cudaSupport [
     ./fix-cmake-cuda-toolkit.patch
@@ -334,6 +385,12 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
 
     ./nvtx3-hpp-path-fix.patch
 
+    # JIT compilation of CUDA code without a single-prefix CUDA toolkit: default CUDA_HOME and nvcc to the
+    # cuda_nvcc torch was built with instead of searching PATH and /usr/local/cuda, add the other CUDA packages'
+    # include and library directories when that default is used, and default Inductor's cutlass_dir to the
+    # CUTLASS torch was built with.
+    (replaceVars ./nix-cuda-paths.patch finalAttrs.passthru.cudaJitPaths)
+
     # Don't emit both `sm_103` and `sm_103f` gencode flags, which nvcc rejects:
     # https://github.com/pytorch/pytorch/pull/187006
     (fetchpatch {
@@ -342,7 +399,7 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
       hash = "sha256-PFj8RihqeKTAogoCt59ikTbQ8wwpPJvUXGFlpBs8gE0=";
     })
   ]
-  ++ lib.optionals (lib.getName blas.provider == "mkl") [
+  ++ lib.optionals (lib.getName blasProvider == "mkl") [
     # The CMake install tries to add some hardcoded rpaths, incompatible
     # with the Nix store, which fails. Simply remove this step to get
     # rpaths that point to the Nix store.
@@ -543,6 +600,10 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
     # CMake defaults USE_MPI to ON and silently disables it when MPI isn't found; make the choice explicit.
     USE_MPI = setBool MPISupport;
 
+    # CMake defaults USE_LLVM_BOLT to ON for aarch64-linux CUDA builds whenever an llvm-bolt >= 21 is on PATH, and then
+    # BOLTs the libraries with the profiles in cmake/bolt_profiles; keep it off rather than dependent on PATH.
+    USE_LLVM_BOLT = setBool false;
+
     # Set the correct Python library path, broken since
     # https://github.com/pytorch/pytorch/commit/3d617333e
     PYTHON_LIB_REL_PATH = "${placeholder "out"}/${python.sitePackages}";
@@ -570,6 +631,16 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
   }
   // lib.optionalAttrs vulkanSupport {
     VULKAN_SDK = shaderc.bin;
+  }
+  // lib.optionalAttrs uccSupport {
+    # cmake/External/ucc.cmake only supports a system UCC.
+    USE_UCC = setBool true;
+    USE_SYSTEM_UCC = setBool true;
+  }
+  // lib.optionalAttrs nvplSupport {
+    # cmake/Dependencies.cmake links nvpl::blas_lp64_omp from find_package(NVPL_BLAS);
+    # cmake/Modules/FindLAPACK.cmake then uses nvpl::lapack_lp64_omp from find_package(NVPL_LAPACK).
+    BLAS = "NVPL";
   }
   // lib.optionalAttrs rocmSupport {
     AOTRITON_INSTALLED_PREFIX = "${rocmPackages.aotriton}";
@@ -645,8 +716,8 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
   ++ lib.optionals rocmSupport [ rocmtoolkit_joined ];
 
   buildInputs = [
-    blas
-    blas.provider
+    (if nvplSupport then cudaPackages.nvpl_blas else blas)
+    (if nvplSupport then cudaPackages.nvpl_lapack else blas.provider)
   ]
   # Including openmp leads to two copies being used on ARM, which segfaults.
   # https://github.com/pytorch/pytorch/issues/149201#issuecomment-2776842320
@@ -689,6 +760,10 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_26 ]
   ++ lib.optionals tritonSupport [ _tritonEffective ]
   ++ lib.optionals MPISupport [ mpi ]
+  ++ lib.optionals uccSupport [
+    ucc
+    ucx
+  ]
   ++ lib.optionals rocmSupport [
     rocmtoolkit_joined
     rocmPackages.clr # Added separately so setup hook applies
@@ -719,7 +794,13 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
   ];
 
   propagatedCxxBuildInputs =
-    [ ] ++ lib.optionals MPISupport [ mpi ] ++ lib.optionals rocmSupport [ rocmtoolkit_joined ];
+    [ ]
+    ++ lib.optionals MPISupport [ mpi ]
+    ++ lib.optionals uccSupport [
+      ucc
+      ucx
+    ]
+    ++ lib.optionals rocmSupport [ rocmtoolkit_joined ];
 
   # Tests take a long time and may be flaky, so just sanity-check imports
   doCheck = false;
@@ -845,8 +926,29 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
       withCufile
       ;
     cudaCapabilities = if cudaSupport then supportedCudaCapabilities else [ ];
+    # What nix-cuda-paths.patch substitutes: CUDA_HOME's default (cudaHome), the other CUDA packages' include and
+    # library directories (cudaIncludeDirs, cudaLibraryDirs) and Inductor's cutlass_dir (cutlassDir, from
+    # finalAttrs.src). For builds that carry their own version of the patch, e.g. on another torch commit.
+    cudaJitPaths = {
+      cudaHome = lib.getBin cudaPackages.cuda_nvcc;
+      cudaIncludeDirs = lib.makeSearchPathOutput "include" "include" cudaJitHeaderPackages;
+      cudaLibraryDirs = lib.concatStringsSep ":" [
+        (lib.makeLibraryPath cudaJitLibraryPackages)
+        # libcuda.so for -lcuda when the driver's libcuda.so.1 isn't found; the driver provides it at run time
+        (lib.makeSearchPathOutput "stubs" "lib/stubs" [ cudaPackages.cuda_cudart ])
+      ];
+      # Only what Inductor uses (torch/_inductor/codegen/cuda/compile_utils.py, codegen/cutlass/utils.py)
+      cutlassDir = runCommand "torch-${finalAttrs.version}-cutlass" { } ''
+        cutlass=${finalAttrs.src}/third_party/cutlass
+        mkdir -p "$out/tools/library" "$out/tools/util" "$out/python"
+        cp -r "$cutlass/include" "$cutlass/LICENSE.txt" "$out/"
+        cp -r "$cutlass/tools/library/include" "$cutlass/tools/library/src" "$out/tools/library/"
+        cp -r "$cutlass/tools/util/include" "$out/tools/util/"
+        cp -r "$cutlass/python/cutlass_library" "$cutlass/python/cutlass_cppgen" "$cutlass/python/pycute" "$out/python/"
+      '';
+    };
     # At least for 1.10.2 `torch.fft` is unavailable unless BLAS provider is MKL. This attribute allows for easy detection of its availability.
-    blasProvider = blas.provider;
+    inherit blasProvider;
     triton = _tritonEffective;
     # To help debug when a package is broken due to CUDA support
     inherit brokenConditions;
