@@ -1,18 +1,18 @@
 {
-  "version": "2026.2.4",
-  "buildNumber": "262.11879.110",
+  "version": "2026.2.4.1",
+  "buildNumber": "262.11879.119",
   "urls": {
     "x86_64-linux": {
-      "url": "https://download.jetbrains.com/rider/JetBrains.Rider-2026.2.4.tar.gz",
-      "hash": "sha256-blrHI4pblfkFuaFATELrTXvFVm2VB1CwB48gvXij9Zk="
+      "url": "https://download.jetbrains.com/rider/JetBrains.Rider-2026.2.4.1.tar.gz",
+      "hash": "sha256-kQ8nUDtAP5Ki+pq4bOMCbB8LqS43ygNYq6++Ht/fIa4="
     },
     "aarch64-linux": {
-      "url": "https://download.jetbrains.com/rider/JetBrains.Rider-2026.2.4-aarch64.tar.gz",
-      "hash": "sha256-raqtxC2/4u+o46qW5Ie6e36jOFi2vBqtisUCQgVVXs0="
+      "url": "https://download.jetbrains.com/rider/JetBrains.Rider-2026.2.4.1-aarch64.tar.gz",
+      "hash": "sha256-7xEXVhqKXGDmMVl1uiCxPCPaZcMif++AkfpU5L5TxvA="
     },
     "aarch64-darwin": {
-      "url": "https://download.jetbrains.com/rider/JetBrains.Rider-2026.2.4-aarch64.dmg",
-      "hash": "sha256-St/VQmkd7mlOgmNqWD2/aBYn1YK4/EGrns74gYG1Mew="
+      "url": "https://download.jetbrains.com/rider/JetBrains.Rider-2026.2.4.1-aarch64.dmg",
+      "hash": "sha256-Emd888W3Jl/ya+nh7clz3rJijgR5PldZuMnqVd6AIOI="
     }
   }
 }
