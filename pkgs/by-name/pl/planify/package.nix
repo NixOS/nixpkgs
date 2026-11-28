@@ -15,7 +15,6 @@
   gst_all_1,
   gtk4,
   gtksourceview5,
-  gxml,
   json-glib,
   libadwaita,
   libgee,
@@ -30,13 +29,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "planify";
-  version = "4.20.0";
+  version = "4.21.0";
 
   src = fetchFromGitHub {
     owner = "alainm23";
     repo = "planify";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0d5EzbPs2MIdnIjLGBY6JRmXJ/NFjO4DPom0WY989mQ=";
+    hash = "sha256-Lhlm6p3c5Gi20aHMWAZ0oOJDlJzGH8pI454cDRwIWIg=";
     fetchSubmodules = true;
   };
 
@@ -64,7 +63,6 @@ stdenv.mkDerivation (finalAttrs: {
     gst_all_1.gst-plugins-good
     gtk4
     gtksourceview5
-    gxml
     json-glib
     libadwaita
     libgee

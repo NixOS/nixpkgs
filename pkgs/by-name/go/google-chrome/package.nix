@@ -368,6 +368,7 @@ let
     ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     mainProgram = "google-chrome-stable";
+    mainDarwinApp = "Google Chrome.app";
   };
 in
 if stdenvNoCC.hostPlatform.isDarwin then

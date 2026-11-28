@@ -29,7 +29,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "ifcopenshell";
-  version = "0.9.0";
+  version = "0.9.0post1";
   pyproject = false;
 
   src = fetchFromGitHub {
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Be careful when using this derivation to build other tools from ifcopenshell org ;-)
     tag = "ifcconvert-${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-7mFALSXX5Cgf3+tmQd5nYpS4u4zd6z2A2/L7LTXo1iM=";
+    hash = "sha256-cm7Duje0bxl8CLe59c7g8quNxpSFUaPrf7ljrRznuMY=";
   };
 
   strictDeps = true;

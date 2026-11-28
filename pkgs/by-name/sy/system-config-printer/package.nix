@@ -9,7 +9,7 @@
   wrapGAppsHook3,
   docbook_xml_dtd_412,
   docbook_xsl,
-  libxml2Python,
+  libxml2,
   desktop-file-utils,
   libusb1,
   cups,
@@ -29,10 +29,6 @@
   bash,
   fetchpatch,
 }:
-
-let
-  libxml2 = libxml2Python;
-in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "system-config-printer";

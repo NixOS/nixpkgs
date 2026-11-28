@@ -7,7 +7,7 @@
   libconfuse,
   libjpeg,
   sane-backends,
-  systemd,
+  systemdLibs,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     libconfuse
     libjpeg
     sane-backends
-    systemd
+    systemdLibs
   ];
 
   configureFlags = [

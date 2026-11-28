@@ -48,7 +48,7 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "ifcopenshell";
-  version = "0.9.0";
+  version = "0.9.0post1";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -56,7 +56,7 @@ buildPythonPackage (finalAttrs: {
     repo = "IfcOpenShell";
     tag = "ifcopenshell-python-${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-7mFALSXX5Cgf3+tmQd5nYpS4u4zd6z2A2/L7LTXo1iM=";
+    hash = "sha256-cm7Duje0bxl8CLe59c7g8quNxpSFUaPrf7ljrRznuMY=";
   };
 
   build-system = [

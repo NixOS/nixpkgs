@@ -4320,10 +4320,6 @@ with pkgs;
 
   ansible = python3Packages.toPythonApplication python3Packages.ansible-core;
 
-  ansible-language-server =
-    callPackage ../development/tools/language-servers/ansible-language-server
-      { };
-
   ansible-builder = with python3Packages; toPythonApplication ansible-builder;
 
   ### DEVELOPMENT / TOOLS / LANGUAGE-SERVERS
