@@ -24,12 +24,12 @@ let
       };
     };
     mainline = {
-      version = "2.29.1";
+      version = "2.29.30";
       hash = {
-        x86_64-linux = "sha256-LxYADRdkiIsvHBaMy+MtJuUo8p5MLDKDL6pMtHaqokw=";
-        x86_64-darwin = "sha256-OwZpCTjEVzTu4M9jf0vOuTuiyn66qRc/pEO/DLD8pvg=";
-        aarch64-linux = "sha256-hNPimwzopC2Hj8i0I6KJAtvKXANACpmcN+onGvAaMvc=";
-        aarch64-darwin = "sha256-AuNFtvnG40Toll/hmEXeGuV6ZcxfuVuUTFqdtTLXRn8=";
+        x86_64-linux = "sha256-dEV5CMw0LYNKC6QfEOrbzOIeMSHSTdoaMekTXAhIzEE=";
+        x86_64-darwin = "sha256-iXvAycXpiMkdDgTJu4nLEoKWSro4XrD5rBQcqvT4h9E=";
+        aarch64-linux = "sha256-f01pi47SgnLhQd3Seupg5PU5I5Ht0jtxKD1oV4NKaBU=";
+        aarch64-darwin = "sha256-m8S9KL9B4KtyYsinXxsO8FYQaF43oEz3jxIHo8xs50c=";
       };
     };
   };
@@ -104,6 +104,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       ghuntley
       kylecarbs
+    ];
+    knownVulnerabilities = lib.optionals (lib.versionOlder finalAttrs.version "2.29.27") [
+      "CVE-2026-137547: database password exposure via API errors"
     ];
   };
 
