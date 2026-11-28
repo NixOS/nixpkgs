@@ -13,14 +13,14 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "gaphor";
-  version = "3.3.2";
+  version = "3.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gaphor";
     repo = "gaphor";
     tag = finalAttrs.version;
-    hash = "sha256-oSPdWQcdt00SSdvlnAtPrsACBCiA4NlCE9Fwt4G9bjk=";
+    hash = "sha256-JQaDZjVyBf36YGlbk3JLPMzvlm5/pPltTt+V7eH+MWQ=";
   };
 
   pythonRelaxDeps = [
@@ -28,6 +28,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "pygobject"
     "dulwich"
     "jedi"
+    "pycairo"
   ];
 
   nativeBuildInputs = [
