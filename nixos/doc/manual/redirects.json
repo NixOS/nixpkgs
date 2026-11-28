@@ -1966,9 +1966,6 @@
   "module-security-acme-regenerate": [
     "index.html#module-security-acme-regenerate"
   ],
-  "module-security-acme-fix-jws": [
-    "index.html#module-security-acme-fix-jws"
-  ],
   "module-security-acme-reload-dependencies": [
     "index.html#module-security-acme-reload-dependencies"
   ],
