@@ -1,4 +1,8 @@
-{ pkgs, ... }:
+{
+  testName,
+  pkgs,
+  ...
+}:
 
 let
   inherit (import ./ssh-keys.nix pkgs)
@@ -9,7 +13,7 @@ let
     ;
 in
 {
-  name = "openssh";
+  name = testName;
   meta = with pkgs.lib.maintainers; {
     maintainers = [ aszlig ];
   };

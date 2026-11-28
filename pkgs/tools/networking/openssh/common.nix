@@ -80,6 +80,13 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/openssh/openssh-portable/commit/102bee7f3a873b39784c909ba238c90b0b4c395f.patch";
       hash = "sha256-78EBwPsR5NREMGQYvfFLBeW6p4AyrnMs8rEGwdiTt0g=";
     })
+
+    # Allow sshd to work with alternative memory allocators.
+    (fetchpatch {
+      name = "Allow-MAP_NORESERVE-in-sandbox-seccomp-filter-maps.patch";
+      url = "https://marc.info/?l=openssh-unix-dev&m=170267462311675&q=raw";
+      hash = "sha256-f9r4kRik7Vi/a/vSBb6OoQjwjP3TTiwnzdY1PZ0bJzo=";
+    })
   ]
   ++ extraPatches;
 
@@ -277,6 +284,7 @@ stdenv.mkDerivation (finalAttrs: {
       {
         borgbackup-integration = withThisSsh nixosTests.borgbackup;
         nixosTest = withThisSsh nixosTests.openssh;
+        nixosTest-jemalloc = withThisSsh nixosTests.openssh-jemalloc;
         initrd-network-openssh = withThisSsh nixosTests.systemd-initrd-networkd-ssh;
         openssh = finalAttrs.finalPackage.overrideAttrs (previousAttrs: {
           pname = previousAttrs.pname + "-test";
