@@ -2,6 +2,7 @@
   lib,
   aws-lc,
   callPackage,
+  e2fsprogs,
   fetchFromGitHub,
   gitMinimal,
   libgit2,
@@ -10,6 +11,7 @@
   pkg-config,
   postgresql_18,
   postgresqlTestHook,
+  protobuf,
   rustPlatform,
   sqlite,
   xz,
@@ -18,28 +20,27 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gradient";
-  version = "2.0.1";
+  version = "2.1.0-rc.1";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "wavelens";
     repo = "gradient";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hgvTiyB9lqI3FNy6x++YbZhKpYFfHVEpHJQHRGlBiOA=";
+    hash = "sha256-633auKZiXMMKuHqYcJemKSeMJrCF2sryWFbGLfuo+Zc=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/backend";
 
-  cargoHash = "sha256-3ZVd3dvj3mhPpt2/AGRvk9hs8pjgRn0K2v5F6jGKz2g=";
+  patches = [
+    ./graph-writer-boxed-handler.patch
+  ];
 
-  # https://github.com/wavelens/gradient/pull/865
-  postPatch = ''
-    substituteInPlace gradient-proto/src/lib.rs \
-      --replace-fail "pub mod handler;" $'#![recursion_limit = "256"]\n\npub mod handler;'
-  '';
+  cargoHash = "sha256-i5+JYjx9STAHvQpOZi8UkkQe1zHaN5yVdcPmPYCDdkw=";
 
   nativeBuildInputs = [
     pkg-config
+    protobuf
     rustPlatform.bindgenHook
   ];
 
@@ -62,9 +63,30 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ZSTD_SYS_USE_PKG_CONFIG = true;
   };
 
+  outputs = [
+    "out"
+    "gate"
+    "daemon"
+    "guest"
+  ];
+
+  buildFeatures = [
+    "sql-gate"
+    "api-spec"
+    "gradient-daemon/mock"
+  ];
+
+  postInstall = ''
+    moveToOutput bin/gradient-sql-gate "$gate"
+    moveToOutput bin/gradient-api-spec "$gate"
+    moveToOutput bin/gradient-daemon "$daemon"
+    moveToOutput bin/gradient-guest-agent "$guest"
+  '';
+
   useNextest = true;
   checkFeatures = [ "gradient-daemon/mock" ];
   nativeCheckInputs = [
+    e2fsprogs
     gitMinimal
     postgresql_18
     postgresqlTestHook
@@ -76,7 +98,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     max_connections = 500
   '';
 
-  # These tests need additional setup
+  # These tests need the test-store fixture. The last test is a randomized property test.
+  # In that test, the check for scheduler consistency can fail after an admin aborted a build.
   cargoTestFlags = [
     "--filterset"
     "not (${
@@ -92,6 +115,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
         "a_root_is_walked_while_discovery_still_runs"
         "the_evaluators_are_released_once_discovery_ends"
         "attributes_on_a_derivation_yield_entry_points"
+        "only_the_root_carries_its_licenses"
+        "test_random_action_sequences_on_random_derivation_graphs_preserve_scheduler_invariants_and_finish_evaluation"
       ]
     })"
   ];

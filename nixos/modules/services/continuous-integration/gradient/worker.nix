@@ -106,7 +106,6 @@ in
         GRADIENT_WORKER_GCROOTS_DIR = "/nix/var/nix/gcroots/gradient";
         GRADIENT_WORKER_LISTEN_ADDR = "127.0.0.1";
         GRADIENT_WORKER_PORT = 3100;
-        GRADIENT_WORKER_NIX_BIN = lib.getExe' cfg.packages.nix "nix";
         GRADIENT_WORKER_SSH_BIN = lib.getExe' cfg.packages.ssh "ssh";
         GRADIENT_WORKER_CAPABILITIES_FETCH = true;
         GRADIENT_WORKER_CAPABILITIES_EVAL = true;
