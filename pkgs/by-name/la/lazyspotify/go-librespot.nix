@@ -55,6 +55,6 @@ buildGoModule (finalAttrs: {
     description = "Librespot daemon tailored for lazyspotify";
     mainProgram = "lazyspotify-librespot";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ eConnah ];
+    maintainers = with lib.maintainers; [ notaclementine ];
   };
 })
