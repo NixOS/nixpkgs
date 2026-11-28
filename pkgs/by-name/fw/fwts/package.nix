@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fwts";
-  version = "26.07.00";
+  version = "26.11.00";
 
   src = fetchFromGitHub {
     owner = "fwts";
     repo = "fwts";
     rev = "V${finalAttrs.version}";
-    hash = "sha256-82rk3yOvQCBfq833xiD82QParDJi8voszMGp47UR0qk=";
+    hash = "sha256-akaPkzf9hPDdYERbcuBNTofXQ/vJ+aPbJ6c5x4A3ejc=";
   };
 
   nativeBuildInputs = [
@@ -63,6 +63,9 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Firmware Test Suite";
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ tadfisher ];
+    maintainers = with lib.maintainers; [
+      mBornand
+      tadfisher
+    ];
   };
 })
