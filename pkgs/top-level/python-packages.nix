@@ -14742,6 +14742,13 @@ self: super: with self; {
 
   pyaftership = callPackage ../development/python-modules/pyaftership { };
 
+  pyagrum = toPythonModule (
+    pkgs.agrum.override {
+      python3Packages = self;
+      pythonSupport = true;
+    }
+  );
+
   pyahocorasick = callPackage ../development/python-modules/pyahocorasick { };
 
   pyairnow = callPackage ../development/python-modules/pyairnow { };
