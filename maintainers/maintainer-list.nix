@@ -30017,7 +30017,7 @@
     email = "thomas@nodecode.ai";
     github = "ThomShark";
     githubId = 134332456;
-    name = "Thomas de Vos";
+    name = "Foresight Labs";
   };
   thornoar = {
     email = "r.a.maksimovich@gmail.com";
