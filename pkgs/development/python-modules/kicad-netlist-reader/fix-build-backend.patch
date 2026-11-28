@@ -1,0 +1,8 @@
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -2,4 +2,4 @@
+ # File edits may be overwritten!
+ [build-system]
+ requires = ["setuptools"]
+-build-backed = "setuptools.build_meta"
++build-backend = "setuptools.build_meta"
