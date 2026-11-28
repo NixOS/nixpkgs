@@ -79,5 +79,10 @@ buildPythonPackage (finalAttrs: {
     description = "Web APIs for Django, made easy";
     homepage = "https://www.django-rest-framework.org/";
     license = lib.licenses.bsd2;
+    knownVulnerabilities = [
+      "CVE-2026-114138"
+      "CVE-2026-114136"
+      "CVE-2026-114137"
+    ];
   };
 })
