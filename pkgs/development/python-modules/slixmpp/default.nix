@@ -9,8 +9,6 @@
   emoji,
   fetchFromCodeberg,
   gnupg,
-  pyasn1,
-  pyasn1-modules,
   pytestCheckHook,
   replaceVars,
   rustc,
@@ -22,14 +20,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "slixmpp";
-  version = "1.17.0";
+  version = "1.18.0";
   pyproject = true;
 
   src = fetchFromCodeberg {
     owner = "poezio";
     repo = "slixmpp";
     tag = "slix-${finalAttrs.version}";
-    hash = "sha256-1jCKaUwWuIxTQGA0WkQMpB3xWW8XEAfAlyrqoTFIhVY=";
+    hash = "sha256-/o0l7JqR+mXXjF4MaHE+1H0CQG2Sd2bpVOGtquZZzlc=";
   };
 
   patches = [
@@ -37,10 +35,6 @@ buildPythonPackage (finalAttrs: {
       inherit gnupg;
     })
   ];
-
-  postPatch = ''
-    ln -s ${./Cargo.lock} Cargo.lock
-  '';
 
   build-system = [
     setuptools
@@ -54,14 +48,13 @@ buildPythonPackage (finalAttrs: {
     rustPlatform.cargoSetupHook
   ];
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) src;
+    hash = "sha256-E9KwkT6LVeRDSL8BuvGcjHPRhO+Uz6Vz75MlFWYnSpQ=";
   };
 
   dependencies = [
     aiodns
-    pyasn1
-    pyasn1-modules
   ];
 
   optional-dependencies = {
@@ -90,6 +83,7 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://slixmpp.readthedocs.io/";
     changelog = "https://codeberg.org/poezio/slixmpp/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "slixmpp_project" finalAttrs.version;
     maintainers = with lib.maintainers; [
       fab
       haansn08
