@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "django-compressor";
-  version = "4.6";
+  version = "4.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "django-compressor";
     repo = "django-compressor";
     tag = version;
-    hash = "sha256-ymht/nl3UUFXLc54aqDADXArVG6jUNQppBJCNKp2P68=";
+    hash = "sha256-x8M4GfxUzRE/qkfngf8Mtj4ZTsuS4KAsA5iEeW7j6RM=";
   };
 
   build-system = [
