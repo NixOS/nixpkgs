@@ -16,20 +16,20 @@ let
   # Keep this in sync with upstream locked version (likely a stable release, but not always latest)
   matrix-js-sdk = stdenv.mkDerivation (finalAttrs: {
     pname = "matrix-js-sdk";
-    version = "44.0.0-unstable-2026-10-14";
+    version = "45.2.0";
 
     src = fetchFromGitHub {
       owner = "matrix-org";
       repo = "matrix-js-sdk";
-      rev = "3f05dc4d104a3dfc753c5e3549a18c74fab4b076";
-      hash = "sha256-r2NcIeG+/6mQUXWWiMBZya6XiBfzu5RaXvkCy8mh/8U=";
+      tag = "v${finalAttrs.version}";
+      hash = "sha256-xnUMEgnm+8Z5/bBCR/jXJ5J7sTbqJhm+OMCohN17+sk=";
     };
 
     pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs) pname version src;
       inherit pnpm;
       fetcherVersion = 5;
-      hash = "sha256-1KyZI4Eif4fLtkMkf67dj/qavMIUMRXMz3GACn99I3g=";
+      hash = "sha256-pYdxVbNemr+hiNhvCwxagFUjnJnddrO9R4p0fCMBvEM=";
     };
 
     nativeBuildInputs = [
@@ -58,20 +58,20 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "element-call";
-  version = "0.28.2";
+  version = "0.29.0";
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "element-call";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jK2THcjZa+9sKD1PNruUO5pCyn72LkwSLnrFOHqbEMg=";
+    hash = "sha256-KSc9N36Jm50ac0sRyjBa2fg31dutSV7AnG4YobyBeZc=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
     fetcherVersion = 5;
-    hash = "sha256-AGsaLrtGxr23fLsRwKIPf90R5oZDx6Y0EiJOo02R8Ls=";
+    hash = "sha256-nPv/cxhAyRRNlkxvDQn1w/LmSzWTBjhGZUcD2A2K64g=";
   };
 
   inherit matrix-js-sdk;
