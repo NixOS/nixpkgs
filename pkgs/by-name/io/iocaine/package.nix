@@ -7,6 +7,7 @@
   pkg-config,
   rustPlatform,
 }:
+
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "iocaine";
   version = "3.6.0";
@@ -42,6 +43,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://iocaine.madhouse-project.org/";
     changelog = "https://git.madhouse-project.org/iocaine/iocaine/src/tag/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ defelo ];
     platforms = lib.platforms.linux;
     mainProgram = "iocaine";
   };
