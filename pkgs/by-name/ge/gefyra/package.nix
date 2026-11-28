@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gefyra";
-  version = "2.5.7";
+  version = "2.5.10";
 
   src = fetchzip {
     url = "https://github.com/gefyrahq/gefyra/releases/download/${finalAttrs.version}/gefyra-${finalAttrs.version}-linux-amd64.zip";
-    hash = "sha256-viyeu1pAOkKdwMJ7gwfycW/EXbmFXlnV0QYban0Y1/A=";
+    hash = "sha256-Q2/JNjiolyb2CLgRd5jYjvbYEurEQ5uQcxxhoRfcFwM=";
     stripRoot = false;
   };
 
