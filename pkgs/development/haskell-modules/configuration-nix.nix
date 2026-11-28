@@ -235,7 +235,7 @@ builtins.intersectAttrs super {
 
   # CUDA needs help finding the SDK headers and libraries.
   cuda = overrideCabal (drv: {
-    extraLibraries = (drv.extraLibraries or [ ]) ++ [ pkgs.linuxPackages.nvidia_x11 ];
+    extraLibraries = (drv.extraLibraries or [ ]) ++ [ pkgs.nvidiaPackages.stable.driver ];
     configureFlags =
       (drv.configureFlags or [ ])
       ++ [
