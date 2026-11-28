@@ -544,7 +544,6 @@ in
   dashy = runTest ./web-apps/dashy.nix;
   davis = runTest ./davis.nix;
   dawarich = runTest ./web-apps/dawarich.nix;
-  db-rest = runTest ./db-rest.nix;
   dconf = runTest ./dconf.nix;
   ddns-updater = runTest ./ddns-updater.nix;
   deconz = runTest ./deconz.nix;

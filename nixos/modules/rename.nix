@@ -205,6 +205,10 @@ in
     )
     (mkRemovedOptionModule [
       "services"
+      "db-rest"
+    ] "The corresponding package was removed from nixpkgs.") # Added 2026-11-28
+    (mkRemovedOptionModule [
+      "services"
       "dd-agent"
     ] "dd-agent was removed from nixpkgs in favor of the newer datadog-agent.")
     (mkRemovedOptionModule [
