@@ -26,12 +26,12 @@ diff --git a/CMakeLists.txt b/CMakeLists.txt
 index 096d31389e..c6e4aabdeb 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -212,26 +212,6 @@
-   message(STATUS "==> Python Virtual Environment detected : ${PYTHON_VENV_PATH}"  "  ==>  "  "Using python command: ${Python3_EXECUTABLE}" )
+@@ -221,25 +221,6 @@
+   message(STATUS "==> Python Virtual Environment detected : ${OMIM_ROOT}/.venv"  "  ==>  "  "Using python command: ${Python3_EXECUTABLE}" )
  endif()
  
 -execute_process(
--    COMMAND ${Python3_EXECUTABLE} -c "import google.protobuf; 
+-    COMMAND ${Python3_EXECUTABLE} -c "import google.protobuf;
 -print(google.protobuf.__version__)"
 -    RESULT_VARIABLE PROTOBUF_CHECK
 -    OUTPUT_VARIABLE PROTOBUF_VERSION
@@ -49,7 +49,6 @@ index 096d31389e..c6e4aabdeb 100644
 -    message(FATAL_ERROR "Python protobuf not found. Run ./configure.sh to provision a local .venv with the correct version (>=3.20, <4.0), or set SKIP_PYTHON_VENV=1 to manage protobuf via your system Python.")
 -endif()
 -
--
- add_subdirectory(libs)
+ find_package(Doxygen OPTIONAL_COMPONENTS dot)
  
- if (PLATFORM_DESKTOP)
+ if(DOXYGEN_FOUND)

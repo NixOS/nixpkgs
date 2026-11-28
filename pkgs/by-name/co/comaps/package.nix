@@ -37,19 +37,19 @@ let
   };
 
   # Update mapRev based on v field and mapSeries near the top in https://codeberg.org/comaps/comaps/src/branch/main/data/countries.txt
-  mapSeries = "2026.06.28";
-  mapRev = 260830;
+  mapSeries = "2026.10.27";
+  mapRev = 261105;
 
   worldMap = fetchurl {
     name = "World-${mapSeries}-${toString mapRev}.mwm";
     url = "https://mapgen-fi-1.comaps.app/maps/${mapSeries}/${toString mapRev}/World.mwm";
-    hash = "sha256-TcaGJK8xAkceA7wFsCrYt6euOnts0w7LZCKLFPnU3wM=";
+    hash = "sha256-vzw5XtJZuXF/8p+Umv5vQB7J0zsxtEtBi3LGrrRqkNs=";
   };
 
   worldCoasts = fetchurl {
     name = "WorldCoasts-${mapSeries}-${toString mapRev}.mwm";
     url = "https://mapgen-fi-1.comaps.app/maps/${mapSeries}/${toString mapRev}/WorldCoasts.mwm";
-    hash = "sha256-pNb0cLGRN6YkliraL+DZyAPh+JJSM6vTzoejeKvi/oc=";
+    hash = "sha256-cjDWCVmIC4ayIEc5cRfQZrdzGQcjinzvSs2qCRebfIo=";
   };
 
   pythonEnv = python3.withPackages (
@@ -60,7 +60,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "comaps";
-  version = "2026.08.31-14";
+  version = "2026.11.07-16";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "comaps";
     repo = "comaps";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mnLvDuXCi7guw0vU3TnqmvvgB1l7mN/AKwtF/79LGd4=";
+    hash = "sha256-wKpbcWdhu+GPrs+9yt62cnmCGRP5L3SxrbUed13gK7w=";
     fetchSubmodules = true;
   };
 
