@@ -7,13 +7,13 @@
 
 buildPecl (finalAttrs: {
   pname = "maxminddb";
-  version = "1.14.0";
+  version = "1.15.0";
 
   src = fetchFromGitHub {
     owner = "maxmind";
     repo = "MaxMind-DB-Reader-php";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2ooq36ylpS+RchgyLc1N+q20ona+j8Rsg27vGSRni5I=";
+    hash = "sha256-JkdtBKpxxaynAlQ9g0/unQ4w1RbLFuR8c6qQyOZV2Rg=";
   };
 
   prePatch = ''
