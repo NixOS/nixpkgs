@@ -10,7 +10,7 @@
 # Note: Removed jaspr_cli from arguments because we use finalAttrs.finalPackage for tests
 buildDartApplication (finalAttrs: {
   pname = "jaspr_cli";
-  version = "0.23.0";
+  version = "0.23.5";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -20,7 +20,7 @@ buildDartApplication (finalAttrs: {
     owner = "schultek";
     repo = "jaspr";
     tag = "jaspr_cli-v${finalAttrs.version}";
-    hash = "sha256-V+cmnO4I4hZEdxzjnycPCTQbWpBmjESJSG9cIoMIwjo=";
+    hash = "sha256-r+BjH4fhgD8bi3qS1hbL3Ck4QtDbOR7CbBRcVSls794=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/packages/jaspr_cli";
@@ -38,6 +38,15 @@ buildDartApplication (finalAttrs: {
   ];
 
   doInstallCheck = true;
+
+  # `buildDartApplication` symlinks `$pubspecLockFilePath` to `pubspec.lock`,
+  # but that variable comes from `passAsFile`, whose value is inlined into the
+  # attribute instead of being written to a file when `__structuredAttrs` is
+  # enabled. Point it at the lockfile imported above, which is the same data
+  # the builder would have serialised.
+  preConfigure = ''
+    export pubspecLockFilePath=${./pubspec.lock.json}
+  '';
 
   # Remove the resolution: workspace section.
   # Workspace dependencies break the Nix build which expects
