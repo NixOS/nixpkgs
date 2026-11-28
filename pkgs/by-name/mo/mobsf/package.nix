@@ -25,7 +25,6 @@ let
     shelljob
     asn1crypto
     distro
-    pdfkit
     google-play-scraper
     frida-python
     tldextract
@@ -98,7 +97,6 @@ buildPythonApplication (finalAttrs: {
     shelljob
     asn1crypto
     distro
-    pdfkit
     google-play-scraper
     frida-python
     tldextract

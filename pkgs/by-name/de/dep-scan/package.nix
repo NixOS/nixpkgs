@@ -41,7 +41,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     jinja2
     oras
     packageurl-python
-    pdfkit
     pygithub
     pyyaml
     quart
