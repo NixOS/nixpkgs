@@ -40,11 +40,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "googleearth-pro";
-  version = "7.3.7.1155";
+  version = "7.3.7.1327";
 
   src = fetchurl {
     url = "https://dl.google.com/linux/earth/deb/pool/main/g/google-earth-pro-stable/google-earth-pro-stable_${version}-r0_${arch}.deb";
-    sha256 = "sha256-lWFGpO4fCywxK/najHzFQoftfCEFiYX/31nloJSzCyM=";
+    sha256 = "sha256-ynVnHveF5hPQwkvu+RRCnAR+rEhkG3x5+8EbQv77C3o=";
   };
 
   nativeBuildInputs = [
@@ -109,7 +109,13 @@ stdenv.mkDerivation rec {
     # Add desktop config file and icons
     mkdir -p $out/share/{applications,icons/hicolor/{16x16,22x22,24x24,32x32,48x48,64x64,128x128,256x256}/apps,pixmaps}
     ln -s $out/opt/google/earth/pro/google-earth-pro.desktop $out/share/applications/google-earth-pro.desktop
-    sed -i -e "s|Exec=.*|Exec=$out/bin/googleearth-pro|g" $out/opt/google/earth/pro/google-earth-pro.desktop
+    sed -i -e "s|Exec=.*|Exec=$out/bin/googleearth-pro|g" -e "/^MultipleArgs=/d" $out/opt/google/earth/pro/google-earth-pro.desktop
+    substituteInPlace $out/opt/google/earth/pro/google-earth-pro.desktop \
+      --replace-fail "Name=Google Earth" "Name=Google Earth Pro" \
+      --replace-fail "Categories=Application;Network" "Categories=Education;Geography;" \
+      --replace-fail "Comment=Explore, search and discover the planet" \
+        "Comment=Explore, search and discover the planet
+    Keywords=google;earth;pro;globe;maps;map;satellite;planet;"
     for size in 16 22 24 32 48 64 128 256; do
       ln -s $out/opt/google/earth/pro/product_logo_"$size".png $out/share/icons/hicolor/"$size"x"$size"/apps/google-earth-pro.png
     done
