@@ -6,20 +6,19 @@
   ip2location-c,
   openssl,
   perl,
-  fetchpatch,
   libmaxminddb ? null,
   geolite-legacy ? null,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ipv6calc";
-  version = "4.4.0";
+  version = "4.4.1";
 
   src = fetchFromGitHub {
     owner = "pbiering";
     repo = "ipv6calc";
-    rev = finalAttrs.version;
-    sha256 = "sha256-+u+7XdW0bS3nE5djdy7I1/NHZdXU9QKukZAvTkWsCK0=";
+    tag = finalAttrs.version;
+    hash = "sha256-RN97lL+WY9jGyw/jvFnsB/7QqezW/O54hSO9WDLAPa8=";
   };
 
   buildInputs = [
@@ -29,14 +28,6 @@ stdenv.mkDerivation (finalAttrs: {
     ip2location-c
     openssl
     perl
-  ];
-
-  patches = [
-    # fix build w/ glibc-2.44
-    (fetchpatch {
-      url = "https://github.com/pbiering/ipv6calc/commit/9b6aebd3690d93b6c2f9efa9346ec72540b1a718.patch";
-      hash = "sha256-Y/XBMWdG2/Pfr/vZ2+RGYGj2JS3mWJwQGkXnKvXHArg=";
-    })
   ];
 
   postPatch = ''
@@ -78,8 +69,10 @@ stdenv.mkDerivation (finalAttrs: {
       Now only one utility is needed to do a lot.
     '';
     homepage = "http://www.deepspace6.net/projects/ipv6calc.html";
+    changelog = "https://github.com/pbiering/ipv6calc/blob/${finalAttrs.src.tag}/ChangeLog";
     license = lib.licenses.gpl2Only;
-    maintainers = [ ];
+    mainProgram = "ipv6calc";
+    maintainers = with lib.maintainers; [ kamadorueda ];
     platforms = lib.platforms.linux;
   };
 })
