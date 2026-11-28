@@ -30,7 +30,12 @@ buildDotnetModule rec {
     })
   ];
 
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  postPatch = ''
+    substituteInPlace Scarab/Scarab.csproj Scarab.Tests/Scarab.Tests.csproj \
+      --replace-fail '<TargetFramework>net8.0</' '<TargetFramework>net10.0</'
+  '';
+
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
   nugetDeps = ./deps.json;
   projectFile = "Scarab/Scarab.csproj";
   testProjectFile = "Scarab.Tests/Scarab.Tests.csproj";
