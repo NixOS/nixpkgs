@@ -31,6 +31,13 @@ let
     enabledList: lib.genAttrs enabledList (_attrName: true)
   ) (types.attrsOf types.bool);
 
+  overlayType = lib.mkOptionType {
+    name = "kernelPackages-overlay";
+    description = "kernelPackages overlay";
+    check = lib.isFunction;
+    merge = lib.mergeOneOption;
+  };
+
 in
 
 {
@@ -71,7 +78,7 @@ in
       type = types.raw;
       apply =
         kernelPackages:
-        kernelPackages.extend (
+        (kernelPackages.extend (lib.composeManyExtensions config.boot.kernelPackagesExtensions)).extend (
           self: super: {
             kernel = super.kernel.override (originalArgs: {
               inherit randstructSeed;
@@ -153,6 +160,26 @@ in
 
         There's a small set of existing kernel patches in Nixpkgs, available as `pkgs.kernelPatches`,
         that follow this format and can be used directly.
+      '';
+    };
+
+    boot.kernelPackagesExtensions = mkOption {
+      default = [ ];
+      example = literalExpression ''
+        [
+          (self: super: {
+            zfs_2_3 = super.zfs_2_3.overrideAttrs (old: {
+              patches = (old.patches or [ ]) ++ [ ./zfs-fix.patch ];
+            });
+          })
+        ]
+      '';
+      type = types.listOf overlayType;
+      description = ''
+        List of overlays to apply to boot.kernelPackages.
+        This option allows for modifying boot.kernelPackages without using nixpkgs.overlay.
+        Overlays are applied before applying boot.{kernelPatches,features,randstructSeed}.
+        This is useful when setting nixpkgs.overlays is not desirable, such as when using a read-only nixpkgs package set.
       '';
     };
 
