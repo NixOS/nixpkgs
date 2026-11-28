@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rapids-logger";
-  version = "0.2.3";
+  version = "0.3.0";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "rapidsai";
     repo = "rapids-logger";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yRvO/+SCJThzYvYrt0ZudJojFUfO21OlEIy5G4HjtJ0=";
+    hash = "sha256-YRGq5KtVvpi8liLMjrYSsG1PvBxUDD394Kz7LTaLWH0=";
   };
 
   nativeBuildInputs = [
