@@ -111,11 +111,20 @@ cmakeConfigurePhase() {
     fi
     if [[ "$enableParallelBuilding" -ne 0 ]]; then
         export CMAKE_BUILD_PARALLEL_LEVEL=$NIX_BUILD_CORES
-    fi
 
-    if ! [[ -v enableParallelInstalling ]]; then
-        enableParallelInstalling=1
-        echo "cmake: enabled parallel installing"
+        # mkDerivation only defaults these when the package sets
+        # enableParallelBuilding, not when this hook does.
+        if ! [[ -v enableParallelChecking ]]; then
+            enableParallelChecking=1
+            echo "cmake: enabled parallel checking"
+        fi
+        if ! [[ -v enableParallelInstalling ]]; then
+            enableParallelInstalling=1
+            echo "cmake: enabled parallel installing"
+        fi
+    elif ! [[ -v enableParallelInstalling ]]; then
+        # ninjaInstallPhase treats unset as enabled.
+        enableParallelInstalling=
     fi
 
     runHook postConfigure
