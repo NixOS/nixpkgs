@@ -478,20 +478,18 @@ in
 
     environment.etc."ssh/ssh_known_hosts".text = knownHostsText;
 
-    # FIXME: this should really be socket-activated for über-awesomeness.
     systemd.user.services.ssh-agent = lib.mkIf cfg.startAgent {
       description = "SSH Agent";
-      wantedBy = [ "default.target" ];
+      requires = [ "ssh-agent.socket" ];
+      after = [ "ssh-agent.socket" ];
       unitConfig.ConditionUser = "!@system";
       serviceConfig = {
-        ExecStartPre = "${pkgs.coreutils}/bin/rm -f %t/ssh-agent";
         ExecStart =
-          "${cfg.package}/bin/ssh-agent "
+          "${cfg.package}/bin/ssh-agent -D "
           + lib.optionalString (cfg.agentTimeout != null) "-t ${cfg.agentTimeout} "
-          + lib.optionalString (cfg.agentPKCS11Whitelist != null) "-P ${cfg.agentPKCS11Whitelist} "
-          + "-a %t/ssh-agent";
+          + lib.optionalString (cfg.agentPKCS11Whitelist != null) "-P ${cfg.agentPKCS11Whitelist}";
         StandardOutput = "null";
-        Type = "forking";
+        Type = "simple";
         Restart = "on-failure";
         SuccessExitStatus = "0 2";
       };
@@ -500,6 +498,19 @@ in
       # import-environment’).
       environment.SSH_ASKPASS = lib.optionalString cfg.enableAskPassword askPasswordWrapper;
       environment.DISPLAY = "fake"; # required to make ssh-agent start $SSH_ASKPASS
+    };
+
+    systemd.user.sockets.ssh-agent = lib.mkIf cfg.startAgent {
+      description = "SSH Agent socket";
+      wantedBy = [ "sockets.target" ];
+      unitConfig.ConditionUser = "!@system";
+      socketConfig = {
+        ListenStream = "%t/ssh-agent";
+        SocketMode = "0600";
+        DirectoryMode = "0700";
+        Priority = 6;
+        Backlog = 5;
+      };
     };
 
     environment.extraInit = lib.optionalString cfg.startAgent ''
