@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gmm";
-  version = "5.4.4";
+  version = "5.6";
 
   src = fetchurl {
     url = "mirror://savannah/getfem/stable/gmm-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-FesZQwEbkmZaqzsC7PPO3hz4nqFakAb4HyuizWYqoCs=";
+    sha256 = "sha256-k5f8HF3E1Su72vamu3jmPmcq190kGUB0nDxXON44Yas=";
   };
 
   meta = {
