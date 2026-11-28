@@ -9,12 +9,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "adminer";
-  version = "6.3.0";
+  version = "6.3.1";
 
   # not using fetchFromGitHub as the git repo relies on submodules that are included in the tar file
   src = fetchurl {
     url = "https://github.com/vrana/adminer/releases/download/v${finalAttrs.version}/adminer-${finalAttrs.version}.zip";
-    hash = "sha256-EebiRCrhqKsalcYy7/WCc65BKch72CJM4o3R7uAc3U8=";
+    hash = "sha256-QR/oifyH5JOmyZrs0O0OWkgr1yt87GFLQLZqBlz2OWo=";
   };
 
   nativeBuildInputs = [
