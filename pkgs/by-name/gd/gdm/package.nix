@@ -131,6 +131,18 @@ stdenv.mkDerivation (finalAttrs: {
     # Set up the environment properly when launching sessions
     # https://github.com/NixOS/nixpkgs/issues/48255
     ./reset-environment.patch
+
+    # Required for gdm to build with the CVE-2026-133445 patch
+    (fetchpatch {
+      name = "session-worker-free-pam-environment-after-use.patch";
+      url = "https://gitlab.gnome.org/GNOME/gdm/-/commit/86510127d737975850b0d0fabe4fdf9d4fb3aafb.patch";
+      hash = "sha256-AGAdTzCmTyTEplzQxcW8hlvFOhds72YwtgaakHyL3GA=";
+    })
+    (fetchpatch {
+      name = "CVE-2026-133445.patch";
+      url = "https://gitlab.gnome.org/GNOME/gdm/-/commit/1bfd9c5b175fec97d0fde5714d32c42726f694ec.patch";
+      hash = "sha256-JTihQ/NarldbUaHfZ0SE5epymfUESxBSJM2vTxSqjuY=";
+    })
   ];
 
   postPatch = ''
