@@ -7,17 +7,18 @@
 
 pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "mopidy-local";
-  version = "3.3.0";
+  version = "4.0.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) version;
     pname = "mopidy_local";
-    hash = "sha256-y6btbGk5UiVan178x7d9jq5OTnKMbuliHv0aRxuZK3o=";
+    hash = "sha256-C+zGi81jfzmo6J9izaSJ/rdjVCeQZcNnPR+/agvrVwg=";
   };
 
   build-system = [
     pythonPackages.setuptools
+    pythonPackages.setuptools-scm
   ];
 
   dependencies = [

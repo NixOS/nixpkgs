@@ -41,6 +41,8 @@ python.pkgs.buildPythonApplication (finalAttrs: {
   doCheck = false;
 
   meta = {
+    # No Mopidy 4-compatible release yet; see upstream PR #8.
+    broken = true;
     changelog = "https://github.com/jmcdo29/mopidy-ytmusic/releases/tag/${finalAttrs.src.rev}";
     description = "Mopidy extension for playing music from YouTube Music";
     homepage = "https://github.com/jmcdo29/mopidy-ytmusic";

@@ -24,6 +24,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
   dependencies = [
     mopidy
     pythonPackages.py-sonic
+    pythonPackages.pkg-resources-backport
   ];
 
   nativeCheckInputs = [

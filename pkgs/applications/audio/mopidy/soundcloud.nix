@@ -7,23 +7,25 @@
 
 pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "mopidy-soundcloud";
-  version = "3.0.2";
+  version = "4.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mopidy";
     repo = "mopidy-soundcloud";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-1Qqbfw6NZ+2K1w+abMBfWo0RAmIRbNyIErEmalmWJ0s=";
+    sha256 = "sha256-3t04O9jtFe4VNl9im1sC/FY4/tTD+yQIfd+vh02VD3E=";
   };
 
   build-system = [
     pythonPackages.setuptools
+    pythonPackages.setuptools-scm
   ];
 
   dependencies = [
     mopidy
     pythonPackages.beautifulsoup4
+    pythonPackages.requests
   ];
 
   doCheck = false;

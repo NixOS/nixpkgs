@@ -23,6 +23,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
   dependencies = [
     mopidy
     pythonPackages.pykka
+    pythonPackages.pkg-resources-backport
   ];
 
   pythonImportsCheck = [ "mopidy_muse" ];
