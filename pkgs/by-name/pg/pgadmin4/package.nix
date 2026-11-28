@@ -27,7 +27,11 @@ let
 
   # keep the scope, as it is used throughout the derivation and tests
   # this also makes potential future overrides easier
-  pythonPackages = python3.pkgs.overrideScope (final: prev: { });
+  pythonPackages = python3.pkgs.overrideScope (
+    final: prev: {
+      wtforms = prev.wtforms_3_2;
+    }
+  );
 
   # don't bother to test kerberos authentication
   # skip tests on macOS which fail due to an error in keyring, see https://github.com/NixOS/nixpkgs/issues/281214

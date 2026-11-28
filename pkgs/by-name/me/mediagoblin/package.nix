@@ -13,6 +13,7 @@ let
   pythonPackages = python3Packages.overrideScope (
     final: prev: {
       paste = prev.paste.override { setuptools = prev.setuptools_80; };
+      wtforms = prev.wtforms_3_2;
     }
   );
 
