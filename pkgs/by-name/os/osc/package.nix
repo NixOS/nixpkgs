@@ -1,7 +1,9 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
+  installShellFiles,
 }:
 
 buildGoModule (finalAttrs: {
@@ -16,6 +18,15 @@ buildGoModule (finalAttrs: {
   };
 
   vendorHash = "sha256-k+4m9y7oAZqTr8S0zldJk5FeI3+/nN9RggKIfiyxzDI=";
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd osc \
+      --bash <($out/bin/osc completion bash) \
+      --fish <($out/bin/osc completion fish) \
+      --zsh <($out/bin/osc completion zsh)
+  '';
 
   meta = {
     description = "Command line tool to access the system clipboard from anywhere using the ANSI OSC52 sequence";
