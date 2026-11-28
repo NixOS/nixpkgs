@@ -1,0 +1,23 @@
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 221d91210f..be1f047e31 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -531,8 +531,16 @@ if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
+ endif()
+ 
+ if(CADICAL_LIB)
+-  string(APPEND TOOLCHAIN_STATIC_LINKER_FLAGS " -lcadical")
+-  string(APPEND TOOLCHAIN_SHARED_LINKER_FLAGS " -lcadical")
++  if(CMAKE_SYSTEM_NAME MATCHES "Linux")
++    string(APPEND TOOLCHAIN_STATIC_LINKER_FLAGS " -lcadical")
++    string(APPEND TOOLCHAIN_SHARED_LINKER_FLAGS " -lcadical -Wl,--exclude-libs,libcadical.a")
++  elseif(CMAKE_SYSTEM_NAME MATCHES "Darwin")
++    string(APPEND TOOLCHAIN_STATIC_LINKER_FLAGS " -lcadical")
++    string(APPEND TOOLCHAIN_SHARED_LINKER_FLAGS " -Wl,-hidden-lcadical")
++  else()
++    string(APPEND TOOLCHAIN_STATIC_LINKER_FLAGS " -lcadical")
++    string(APPEND TOOLCHAIN_SHARED_LINKER_FLAGS " -lcadical")
++  endif()
+ endif()
+ 
+ string(APPEND TOOLCHAIN_STATIC_LINKER_FLAGS " ${LEAN_CXX_STDLIB}")
