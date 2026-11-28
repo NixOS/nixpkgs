@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "fugashi";
-  version = "1.5.1";
+  version = "1.5.2dev0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "polm";
     repo = "fugashi";
     tag = "v${version}";
-    hash = "sha256-rkQskRz7lgVBrqBeyj9kWO2/7POrZ0TaM+Z7mhpZLvM=";
+    hash = "sha256-Uhu1CyexlXyoKHp07mjF5V64RTP53bDof5STRbaIp30=";
   };
 
   postPatch = ''
