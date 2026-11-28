@@ -4,7 +4,7 @@
   lib,
   nix-update-script,
   pkg-config,
-  systemd,
+  systemdLibs,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "runapp";
@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ systemd ];
+  buildInputs = [ systemdLibs ];
 
   postPatch = ''
     substituteInPlace Makefile --replace-fail "-march=native" ""

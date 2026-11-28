@@ -9,7 +9,7 @@
   wayland,
   wayland-protocols,
   sdbus-cpp_2,
-  systemd,
+  systemdLibs,
   pipewire,
   libdrm,
   libgbm,
@@ -56,7 +56,7 @@ stdenv.mkDerivation {
     wayland
     wayland-protocols
     sdbus-cpp_2
-    systemd
+    systemdLibs
     pipewire
     libdrm
     libgbm

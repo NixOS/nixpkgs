@@ -23,7 +23,7 @@
   gettext,
   makeWrapper,
   nix-update-script,
-  systemd,
+  systemdLibs,
   xtrans,
   libepoxy,
   bash,
@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
     adwaita-icon-theme
     gnome-settings-daemon
     gsettings-desktop-schemas
-    systemd
+    systemdLibs
     libepoxy
   ];
 

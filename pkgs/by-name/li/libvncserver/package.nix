@@ -8,8 +8,8 @@
   openssl,
   zlib,
   libpng,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  systemd,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
+  systemdLibs,
 
   enableShared ? !stdenv.hostPlatform.isStatic,
   buildExamples ? false,
@@ -91,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
     libpng
   ]
   ++ lib.optionals withSystemd [
-    systemd
+    systemdLibs
   ];
 
   propagatedBuildInputs = [
