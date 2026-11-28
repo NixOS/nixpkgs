@@ -6,7 +6,7 @@
 
 mkNginxPlugin (finalAttrs: {
   pname = "limit-speed";
-  version = "0.1-unstable-2014-03-21";
+  version = "0.1";
 
   src = fetchFromGitHub {
     owner = "yaoweibin";
