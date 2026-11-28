@@ -1,24 +1,24 @@
 {
   lib,
-  buildGo127Module,
+  buildGoModule,
   fetchFromGitHub,
   nix-update-script,
   versionCheckHook,
 }:
-# Temporary until buildGoModule updates to 1.27
-buildGo127Module (finalAttrs: {
+
+buildGoModule (finalAttrs: {
   pname = "gopodder";
-  version = "1.4.3";
+  version = "1.4.4";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "cbrgm";
     repo = "gopodder";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bOxLXvT9vb0aOFHZuBEse2KwSRw03dg2QguTudODDas=";
+    hash = "sha256-Yu9cbUoorRUnerUKH6ShYMw2RAXdluucJk8uyWIx2FA=";
   };
 
-  vendorHash = "sha256-KMDgJHAjvYr2P991jGYx9gNIx2GU3d7eYhO/RlvYGZI=";
+  vendorHash = "sha256-3hhXSwnS+NaonupkVuCy9uVUTnYBEXHpinWnYNF0UxI=";
 
   dontPatchELF = true;
 
