@@ -412,9 +412,9 @@ with pkgs;
   dotnet-aspnetcore_10 = dotnetCorePackages.aspnetcore_10_0;
   dotnet-aspnetcore_11 = dotnetCorePackages.aspnetcore_11_0;
 
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
-  dotnet-runtime = dotnetCorePackages.runtime_8_0;
-  dotnet-aspnetcore = dotnetCorePackages.aspnetcore_8_0;
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
+  dotnet-runtime = dotnetCorePackages.runtime_10_0;
+  dotnet-aspnetcore = dotnetCorePackages.aspnetcore_10_0;
 
   inherit (dotnetCorePackages)
     buildDotnetModule
