@@ -8,11 +8,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "bbedit";
-  version = "16.1";
+  version = "16.1.1";
 
   src = fetchurl {
     url = "https://s3.amazonaws.com/BBSW-download/BBEdit_${finalAttrs.version}.dmg";
-    hash = "sha256-jR3ju3eMcUSdxTs4yOGqtlh5UXXnc5U/GtzknfRxbcQ=";
+    hash = "sha256-rdiS2Bkdo6sTRRKj4ZnJDYLwf0ZeyemCzS9R8iWiqKg=";
   };
 
   sourceRoot = ".";
