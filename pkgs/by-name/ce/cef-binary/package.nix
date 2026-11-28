@@ -15,6 +15,7 @@
   pango,
   cairo,
   alsa-lib,
+  libpulseaudio,
   dbus,
   at-spi2-core,
   cups,
@@ -56,6 +57,7 @@ let
     pango
     cairo
     alsa-lib
+    libpulseaudio
     dbus
     at-spi2-core
     cups
