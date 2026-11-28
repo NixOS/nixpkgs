@@ -15,7 +15,7 @@ let
 in
 buildPythonPackage rec {
   pname = "dendropy";
-  version = "5.1.1";
+  version = "5.1.3";
 
   pyproject = true;
   build-system = [ setuptools ];
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "jeetsukumaran";
     repo = "dendropy";
     tag = "v${version}";
-    hash = "sha256-Kg0we/hi3HgvFHoF93Qq/JuGgxqKS08vkA2ILCzxhZg=";
+    hash = "sha256-9YY8uWamCMePhQxAWs3Q3nVWd8w8ME60Wx5GvjOX7lc=";
   };
 
   postPatch = ''
