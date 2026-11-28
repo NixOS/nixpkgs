@@ -6658,6 +6658,12 @@
     githubId = 39523942;
     name = "Alex Clarke";
   };
+  darkguibrine = {
+    email = "me@darkgui.com.br";
+    github = "DarkGuibrine";
+    githubId = 112888817;
+    name = "Guilherme Hermando";
+  };
   darkonion0 = {
     name = "Alexandre Peruggia";
     email = "darkgenius1@protonmail.com";
