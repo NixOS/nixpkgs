@@ -63,6 +63,7 @@ buildPythonPackage (finalAttrs: {
     "markdown-it-py"
     "mdit-py-plugins"
     "platformdirs"
+    "timg"
     "universal-pathlib"
   ];
   dependencies = [
