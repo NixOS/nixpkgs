@@ -1405,6 +1405,8 @@ self: super: with self; {
 
   arxiv2bib = callPackage ../development/python-modules/arxiv2bib { };
 
+  arsc-writer = callPackage ../development/python-modules/arsc-writer { };
+
   asana = callPackage ../development/python-modules/asana { };
 
   ascii-magic = callPackage ../development/python-modules/ascii-magic { };
@@ -3039,6 +3041,8 @@ self: super: with self; {
   cec = callPackage ../development/python-modules/cec { };
 
   cel-python = callPackage ../development/python-modules/cel-python { };
+
+  cel-expr-python = callPackage ../development/python-modules/cel-expr-python { };
 
   celery = callPackage ../development/python-modules/celery { };
 

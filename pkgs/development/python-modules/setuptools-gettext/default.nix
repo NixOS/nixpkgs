@@ -5,6 +5,7 @@
   gettext,
   pytestCheckHook,
   setuptools,
+  translate-toolkit,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -22,6 +23,8 @@ buildPythonPackage (finalAttrs: {
   build-system = [ setuptools ];
 
   dependencies = [ setuptools ];
+
+  optional-dependencies.translate-toolkit = [ translate-toolkit ];
 
   pythonImportsCheck = [ "setuptools_gettext" ];
 
