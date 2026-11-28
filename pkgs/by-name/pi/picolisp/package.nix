@@ -13,10 +13,10 @@
 
 stdenv.mkDerivation {
   pname = "PicoLisp";
-  version = "24.3.30";
+  version = "26.9.25";
   src = fetchurl {
-    url = "https://www.software-lab.de/picoLisp-24.3.tgz";
-    sha256 = "sha256-FB43DAjHBFgxdysoLzBXLxii52a2CCh1skZP/RTzfdc=";
+    url = "https://software-lab.de/picoLisp-26.9.tgz";
+    sha256 = "sha256-uvfX1xWkBkYPWodTp6fkHPqHnRANqL72pAVPAmS4fro";
   };
 
   nativeBuildInputs = [
