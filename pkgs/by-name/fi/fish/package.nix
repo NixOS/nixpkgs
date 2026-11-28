@@ -394,6 +394,7 @@ stdenv.mkDerivation (finalAttrs: {
       lonerOrz
     ];
     mainProgram = "fish";
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "fishshell" finalAttrs.version;
   };
 
   passthru = {
