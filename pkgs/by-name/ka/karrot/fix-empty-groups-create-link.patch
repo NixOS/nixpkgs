@@ -1,0 +1,23 @@
+diff --git a/src/groupInfo/components/GroupGalleryUI.vue b/src/groupInfo/components/GroupGalleryUI.vue
+index 84e7216..8f9fe29 100644
+--- a/src/groupInfo/components/GroupGalleryUI.vue
++++ b/src/groupInfo/components/GroupGalleryUI.vue
+@@ -122,6 +122,18 @@
+           </template>
+         </i18n-t>
+       </p>
++      <p
++        v-else-if="expanded"
++        class="header"
++        :class="{'has-joined-groups': hasJoinedGroups}"
++      >
++        <router-link
++          :to="{ name: 'groupCreate' }"
++          class="underline"
++        >
++          {{ t('GROUP.CREATE_TITLE') }}
++        </router-link>
++      </p>
+       <div v-if="hasOtherGroupsToShow">
+         <GroupGalleryCards :groups="filteredOtherGroups" />
+       </div>
