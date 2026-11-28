@@ -1,23 +1,10 @@
-diff --git a/.env.production b/.env.production
-index cc5e2b9..29140f8 100644
---- a/.env.production
-+++ b/.env.production
-@@ -4,7 +4,7 @@ VITE_DEFAULT_ENGINE_INFOS=`[
-         "uuid": "074fc39e-678b-4c13-8916-ffca8d505d1d",
-         "name": "VOICEVOX Engine",
-         "executionEnabled": true,
--        "executionFilePath": "vv-engine/run.exe",
-+        "executionFilePath": "@voicevox_engine_path@",
-         "executionArgs": [],
-         "host": "http://127.0.0.1:50021"
-     }
 diff --git a/build/electronBuilderConfig.ts b/build/electronBuilderConfig.ts
-index 83dcc10..114fb9d 100644
+index ceefe90..cfc9139 100644
 --- a/build/electronBuilderConfig.ts
 +++ b/build/electronBuilderConfig.ts
-@@ -45,17 +45,6 @@ const isArm64 = process.arch === "arm64";
+@@ -61,16 +61,6 @@ const isArm64 = process.arch === "arm64";
  // cf: https://k-hyoda.hatenablog.com/entry/2021/10/23/000349#%E8%BF%BD%E5%8A%A0%E5%B1%95%E9%96%8B%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E5%85%88%E3%81%AE%E8%A8%AD%E5%AE%9A
- const extraFilePrefix = isMac ? "MacOS/" : "";
+ const executableDirectory = isMac ? "MacOS/" : "";
  
 -const sevenZipFile = readdirSync(path.join(rootDir, "vendored", "7z")).find(
 -  // Windows: 7za.exe, Linux: 7zzs, macOS: 7zz
@@ -29,30 +16,25 @@ index 83dcc10..114fb9d 100644
 -    "7z binary file not found. Run `node ./tools/download7z.ts` first.",
 -  );
 -}
--
+ 
  const builderOptions: ElectronBuilderConfiguration = {
    beforeBuild: async () => {
-     if (existsSync(path.join(rootDir, "dist_electron"))) {
-@@ -97,14 +86,6 @@ const builderOptions: ElectronBuilderConfiguration = {
+@@ -114,10 +104,6 @@ const builderOptions: ElectronBuilderConfiguration = {
        from: "build/README.txt",
-       to: extraFilePrefix + "README.txt",
+       to: isMac ? "Resources/README.txt" : executableDirectory + "README.txt",
      },
 -    {
--      from: VOICEVOX_ENGINE_DIR,
--      to: path.join(extraFilePrefix, "vv-engine"),
--    },
--    {
 -      from: path.join(rootDir, "vendored", "7z", sevenZipFile),
--      to: extraFilePrefix + sevenZipFile,
+-      to: executableDirectory + sevenZipFile,
 -    },
    ],
    // electron-builder installer
    productName: "VOICEVOX",
 diff --git a/src/backend/electron/vvppFile.ts b/src/backend/electron/vvppFile.ts
-index f649bf8..de2f3fa 100644
+index 0de623f..3633225 100644
 --- a/src/backend/electron/vvppFile.ts
 +++ b/src/backend/electron/vvppFile.ts
-@@ -224,6 +224,7 @@ export class VvppFileExtractor {
+@@ -220,6 +220,7 @@ export class VvppFileExtractor {
    }
  
    private getSevenZipPath(): string {
@@ -61,19 +43,19 @@ index f649bf8..de2f3fa 100644
      if (!sevenZipPath) {
        throw new Error("7z path is not defined");
 diff --git a/vite.config.ts b/vite.config.ts
-index 3c9e029..c253a6a 100644
+index 4fd1b15..7dc5969 100644
 --- a/vite.config.ts
 +++ b/vite.config.ts
-@@ -5,7 +5,6 @@ import { rm } from "node:fs/promises";
- import electronPlugin from "vite-plugin-electron/simple";
- import tsconfigPaths from "vite-tsconfig-paths";
+@@ -4,7 +4,6 @@ import path from "node:path";
+ import { rm } from "node:fs/promises";
+ import electronPlugin, { type ElectronOptions } from "vite-plugin-electron";
  import vue from "@vitejs/plugin-vue";
 -import electronDefaultImport from "electron";
- import checker from "vite-plugin-checker";
- import { BuildOptions, defineConfig, loadEnv, Plugin } from "vite";
+ import { type BuildOptions, defineConfig, loadEnv, type Plugin } from "vite";
  import { quasar } from "@quasar/vite-plugin";
-@@ -17,9 +16,7 @@ import {
-   SourceFile,
+ import { playwright as playwrightProvider } from "@vitest/browser-playwright";
+@@ -16,9 +15,7 @@ import {
+   type SourceFile,
  } from "./tools/checkSuspiciousImports.js";
  
 -// @ts-expect-error electronをelectron環境外からimportするとelectronのファイルパスが得られる。
