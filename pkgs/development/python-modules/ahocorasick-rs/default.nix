@@ -13,19 +13,19 @@
 
 buildPythonPackage rec {
   pname = "ahocorasick-rs";
-  version = "1.0.3";
+  version = "1.0.4";
 
   pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "ahocorasick_rs";
-    hash = "sha256-V503Bwp8Idqc2ZiLn7RxKXJztgy0EmWG1tzZn6r8XKU=";
+    hash = "sha256-g14kMC4UCvVKAHP5qzEx0tHYMMH/1wmzO44VEPSSsdA=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-RfgjO0qffiAZynQ/xChd81L8S0sqTGdWvpHPrz3bKlQ=";
+    hash = "sha256-xh1a1KBXmK5+3PKx1Ez093wa4+TdBnpqes+1mqBqol4=";
   };
 
   nativeBuildInputs = with rustPlatform; [
