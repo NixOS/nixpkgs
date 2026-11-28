@@ -92,6 +92,8 @@ let
     nameValuePair
     optionalDrvAttr
     optionAttrSetToDocList
+    optionToDoc
+    optionToDoc'
     overrideExisting
     packagesFromDirectoryRecursive
     pipe
@@ -3563,6 +3565,537 @@ runTests {
         "bar"
       ]
     ];
+  };
+
+  testOptionToDoc = {
+    expr =
+      let
+        module = {
+          options.boot.enable = lib.mkOption {
+            type = lib.types.bool;
+            default = false;
+            example = true;
+            description = "Enable boot";
+          };
+          options.services.nginx.virtualHosts = lib.mkOption {
+            type = lib.types.attrsOf (
+              lib.types.submodule {
+                options.enableSSL = lib.mkOption {
+                  type = lib.types.bool;
+                  default = false;
+                  description = "Enable SSL";
+                };
+              }
+            );
+            default = { };
+            description = "Virtual hosts";
+          };
+          options.tagTest = lib.mkOption {
+            type = lib.types.attrTag {
+              tagA = lib.mkOption {
+                type = lib.types.bool;
+                default = false;
+                description = "Tag A";
+              };
+            };
+            description = "AttrTag test option";
+          };
+          options.freeformSub = lib.mkOption {
+            type = lib.types.submodule {
+              freeformType = lib.types.attrsOf lib.types.str;
+              options.inner = lib.mkOption {
+                type = lib.types.str;
+              };
+            };
+          };
+          options.freeformOpenSub = lib.mkOption {
+            type = lib.types.submodule {
+              freeformType = lib.types.attrs;
+            };
+          };
+          options.funcTest = lib.mkOption {
+            type = lib.types.functionTo lib.types.int;
+          };
+          options.freeformNullOrSub = lib.mkOption {
+            type = lib.types.submodule {
+              freeformType = lib.types.nullOr (lib.types.attrsOf lib.types.int);
+            };
+          };
+          options.nullStr = lib.mkOption {
+            type = lib.types.nullOr lib.types.str;
+          };
+          options.emptySub = lib.mkOption {
+            type = lib.types.submodule { };
+          };
+        };
+        options = (evalModules { modules = [ module ]; }).options;
+        optionDoc = optionToDoc options;
+        docList = optionAttrSetToDocList options;
+      in
+      {
+        # Top-level container schema
+        hasDefs = optionDoc ? "$defs" && optionDoc."$defs" == { };
+        hasSchema = optionDoc ? "$schema";
+        isObject = optionDoc.type == "object";
+
+        # Intermediate object schema verification
+        intermediateIsObject = optionDoc.properties.boot.type == "object";
+
+        # Standard option schema verification (no loc, no name)
+        bootEnableDescription = optionDoc.properties.boot.properties.enable.description;
+        bootEnableType = optionDoc.properties.boot.properties.enable.type;
+        bootEnableNixType = optionDoc.properties.boot.properties.enable."x-nixType";
+        bootEnableDefault = optionDoc.properties.boot.properties.enable.default;
+        bootEnableDefaultText = optionDoc.properties.boot.properties.enable."x-defaultText".text;
+        bootEnableHasNoLoc = !(optionDoc.properties.boot.properties.enable ? loc);
+        bootEnableHasNoName = !(optionDoc.properties.boot.properties.enable ? name);
+        bootEnableReadOnly = optionDoc.properties.boot.properties.enable.readOnly;
+        bootEnableDeclarations = optionDoc.properties.boot.properties.enable."x-declarations";
+        bootEnableExamples = optionDoc.properties.boot.properties.enable.examples;
+        bootEnableExample = optionDoc.properties.boot.properties.enable."x-example";
+
+        # Submodule nesting via additionalProperties (for attrsOf submodule)
+        vhostDescription =
+          optionDoc.properties.services.properties.nginx.properties.virtualHosts.description;
+        vhostType = optionDoc.properties.services.properties.nginx.properties.virtualHosts.type;
+        vhostNixType = optionDoc.properties.services.properties.nginx.properties.virtualHosts."x-nixType";
+        vhostSubOptionType =
+          optionDoc.properties.services.properties.nginx.properties.virtualHosts.additionalProperties.properties.enableSSL.type;
+
+        # attrTag nesting via oneOf
+        attrTagDescription = optionDoc.properties.tagTest.description;
+        attrTagHasOneOf = optionDoc.properties.tagTest ? oneOf;
+        attrTagSubOptionType = (builtins.head optionDoc.properties.tagTest.oneOf).properties.tagA.type;
+        attrTagRequired = (builtins.head optionDoc.properties.tagTest.oneOf).required;
+        attrTagAdditionalProps = (builtins.head optionDoc.properties.tagTest.oneOf).additionalProperties;
+
+        # Function type handling
+        funcTestHasNoType = !(optionDoc.properties.funcTest ? type);
+
+        # NullOr primitive handling
+        nullStrType = optionDoc.properties.nullStr.type;
+
+        # Freeform submodule additionalProperties & required
+        freeformAdditionalType = optionDoc.properties.freeformSub.additionalProperties.type;
+        freeformInnerType = optionDoc.properties.freeformSub.properties.inner.type;
+        freeformRequired = optionDoc.properties.freeformSub.required;
+        freeformOpenSubType = optionDoc.properties.freeformOpenSub.type;
+        freeformOpenAdditionalProps = optionDoc.properties.freeformOpenSub.additionalProperties;
+        freeformNullOrType = optionDoc.properties.freeformNullOrSub.additionalProperties.type;
+        emptySubType = optionDoc.properties.emptySub.type;
+        emptySubAdditionalProps = optionDoc.properties.emptySub.additionalProperties;
+
+        # Parity check: verify foldOptionSet preserves optionAttrSetToDocList traversal
+        docListCount = length docList;
+      };
+    expected = {
+      hasDefs = true;
+      hasSchema = true;
+      isObject = true;
+      intermediateIsObject = true;
+      bootEnableDescription = "Enable boot";
+      bootEnableType = "boolean";
+      bootEnableNixType = "boolean";
+      bootEnableDefault = false;
+      bootEnableDefaultText = "false";
+      bootEnableHasNoLoc = true;
+      bootEnableHasNoName = true;
+      bootEnableReadOnly = false;
+      bootEnableDeclarations = [ ];
+      bootEnableExamples = [ true ];
+      bootEnableExample = {
+        _type = "literalExpression";
+        text = "true";
+      };
+
+      vhostDescription = "Virtual hosts";
+      vhostType = "object";
+      vhostNixType = "attribute set of (submodule)";
+      vhostSubOptionType = "boolean";
+
+      attrTagDescription = "AttrTag test option";
+      attrTagHasOneOf = true;
+      attrTagSubOptionType = "boolean";
+      attrTagRequired = [ "tagA" ];
+      attrTagAdditionalProps = false;
+
+      funcTestHasNoType = true;
+
+      nullStrType = [
+        "string"
+        "null"
+      ];
+
+      freeformAdditionalType = "string";
+      freeformInnerType = "string";
+      freeformRequired = [ "inner" ];
+      freeformOpenSubType = "object";
+      freeformOpenAdditionalProps = true;
+      freeformNullOrType = "integer";
+      emptySubType = "object";
+      emptySubAdditionalProps = false;
+
+      docListCount = 36;
+    };
+  };
+
+  testOptionToDocComplex = {
+    expr =
+      let
+        eval = evalModules {
+          modules = [
+            {
+              options.nested = lib.mkOption {
+                type = lib.types.submodule {
+                  freeformType = lib.types.attrsOf lib.types.str;
+                  options.foo = lib.mkOption { type = lib.types.str; };
+                };
+              };
+              options.services.server = lib.mkOption {
+                type = lib.types.submodule {
+                  options = {
+                    port = lib.mkOption {
+                      type = lib.types.port;
+                      default = 8080;
+                    };
+                    tls = lib.mkOption {
+                      type = lib.types.nullOr (
+                        lib.types.submodule {
+                          options = {
+                            cert = lib.mkOption { type = lib.types.path; };
+                            key = lib.mkOption { type = lib.types.path; };
+                          };
+                        }
+                      );
+                      default = null;
+                    };
+                  };
+                };
+              };
+              options.coerced = lib.mkOption {
+                type = lib.types.coercedTo lib.types.int toString lib.types.str;
+              };
+              options.backends = lib.mkOption {
+                type = lib.types.listOf (
+                  lib.types.submodule {
+                    options = {
+                      host = lib.mkOption { type = lib.types.str; };
+                      weight = lib.mkOption {
+                        type = lib.types.int;
+                        default = 1;
+                      };
+                    };
+                  }
+                );
+                default = [ ];
+              };
+              options.mode = lib.mkOption {
+                type = lib.types.enum [
+                  "round-robin"
+                  "least-conn"
+                  "ip-hash"
+                ];
+                default = "round-robin";
+              };
+              options.timeout = lib.mkOption {
+                type = lib.types.either lib.types.int lib.types.str;
+                default = 30;
+              };
+              options.tags = lib.mkOption {
+                type = lib.types.unique { message = "must be unique"; } (lib.types.listOf lib.types.str);
+                default = [ "prod" ];
+              };
+              options.plainAttrs = lib.mkOption {
+                type = lib.types.attrs;
+                default = { };
+              };
+              options.noDesc = lib.mkOption {
+                type = lib.types.bool;
+                default = true;
+              };
+              options.multiOption = lib.mkOption {
+                type = lib.types.oneOf [
+                  lib.types.int
+                  lib.types.str
+                  lib.types.bool
+                ];
+              };
+              options.readOnlyOpt = lib.mkOption {
+                type = lib.types.int;
+                default = 42;
+                readOnly = true;
+              };
+              options.packageOption = lib.mkOption {
+                type = lib.types.package;
+                default = {
+                  type = "derivation";
+                  name = "dummy";
+                  outPath = "/nix/store/dummy";
+                };
+              };
+            }
+            {
+              # Options declared in submodule config must not leak into static schema of `nested`:
+              nested = _: {
+                options.bar = lib.mkOption { };
+                config.foo = "foo";
+              };
+              services.server.port = 9000;
+              backends = [ { host = "127.0.0.1"; } ];
+            }
+          ];
+        };
+        doc = optionToDoc eval.options;
+      in
+      {
+        hasSchema = doc ? "$schema";
+        hasDefs = doc ? "$defs";
+        rootRequired = doc.required;
+
+        nestedFooType = doc.properties.nested.properties.foo.type;
+        nestedFooRequired = doc.properties.nested.required;
+        nestedAdditionalType = doc.properties.nested.additionalProperties.type;
+        # Dynamic options declared in config do not appear in the static options schema:
+        nestedHasNoBar = !(doc.properties.nested.properties ? bar);
+
+        serverPortDefault = doc.properties.services.properties.server.properties.port.default;
+        serverPortType = doc.properties.services.properties.server.properties.port.type;
+        serverTlsAnyOfCount = length doc.properties.services.properties.server.properties.tls.anyOf;
+        serverTlsCertType =
+          (lib.last doc.properties.services.properties.server.properties.tls.anyOf).properties.cert.type;
+        serverTlsCertAdditionalProps =
+          (lib.last doc.properties.services.properties.server.properties.tls.anyOf).additionalProperties;
+
+        coercedAnyOfCount = length doc.properties.coerced.anyOf;
+
+        backendsType = doc.properties.backends.type;
+        backendsItemAdditionalProps = doc.properties.backends.items.additionalProperties;
+        backendsItemRequired = doc.properties.backends.items.required;
+
+        modeEnum = doc.properties.mode.enum;
+        modeDefault = doc.properties.mode.default;
+
+        timeoutAnyOfCount = length doc.properties.timeout.anyOf;
+        timeoutDefault = doc.properties.timeout.default;
+
+        tagsType = doc.properties.tags.type;
+        tagsItemType = doc.properties.tags.items.type;
+        tagsDefault = doc.properties.tags.default;
+
+        multiOptionAnyOfCount = length doc.properties.multiOption.anyOf;
+        multiOptionTypes = map (s: s.type) doc.properties.multiOption.anyOf;
+
+        plainAttrsAdditionalProps = doc.properties.plainAttrs.additionalProperties;
+        noDescHasDescription = doc.properties.noDesc ? description;
+        readOnlyOptIsReadOnly = doc.properties.readOnlyOpt.readOnly;
+        packageHasNoDefault = !(doc.properties.packageOption ? default);
+        packageHasDefaultText = doc.properties.packageOption ? "x-defaultText";
+        packageType = doc.properties.packageOption.type;
+      };
+    expected = {
+      hasSchema = true;
+      hasDefs = true;
+      rootRequired = [
+        "coerced"
+        "multiOption"
+        "nested"
+      ];
+
+      nestedFooType = "string";
+      nestedFooRequired = [ "foo" ];
+      nestedAdditionalType = "string";
+      nestedHasNoBar = true;
+
+      serverPortDefault = 8080;
+      serverPortType = "integer";
+      serverTlsAnyOfCount = 2;
+      serverTlsCertType = "string";
+      serverTlsCertAdditionalProps = false;
+
+      coercedAnyOfCount = 2;
+
+      backendsType = "array";
+      backendsItemAdditionalProps = false;
+      backendsItemRequired = [ "host" ];
+
+      modeEnum = [
+        "round-robin"
+        "least-conn"
+        "ip-hash"
+      ];
+      modeDefault = "round-robin";
+
+      timeoutAnyOfCount = 2;
+      timeoutDefault = 30;
+
+      tagsType = "array";
+      tagsItemType = "string";
+      tagsDefault = [ "prod" ];
+
+      multiOptionAnyOfCount = 3;
+      multiOptionTypes = [
+        "integer"
+        "string"
+        "boolean"
+      ];
+
+      plainAttrsAdditionalProps = true;
+      noDescHasDescription = false;
+      readOnlyOptIsReadOnly = true;
+      packageHasNoDefault = true;
+      packageHasDefaultText = true;
+      packageType = "string";
+    };
+  };
+
+  testOptionToDocRecursive = {
+    expr =
+      let
+        recursiveType =
+          let
+            self = lib.mkOptionType {
+              name = "jsonValue";
+              description = "JSON value";
+              check = _: true;
+              nestedTypes.elemType = lib.types.nullOr (lib.types.either lib.types.str (lib.types.listOf self));
+            };
+          in
+          self;
+        slashRecursiveType =
+          let
+            self = lib.mkOptionType {
+              name = "treeNode";
+              description = "tree/node";
+              check = _: true;
+              nestedTypes.elemType = lib.types.listOf self;
+            };
+          in
+          self;
+        eval = evalModules {
+          modules = [
+            {
+              options.tree = lib.mkOption {
+                type = recursiveType;
+                description = "Recursive tree option";
+              };
+              options.slashTree = lib.mkOption {
+                type = slashRecursiveType;
+                description = "Recursive tree option with slash";
+              };
+              options.nullOrUnion = lib.mkOption {
+                type = lib.types.nullOr (lib.types.either lib.types.str lib.types.int);
+              };
+              options.intEnum = lib.mkOption {
+                type = lib.types.enum [
+                  1
+                  2
+                  3
+                ];
+              };
+            }
+          ];
+        };
+        doc = optionToDoc eval.options;
+      in
+      {
+        hasSchema = doc ? "$schema";
+        hasDefs = doc ? "$defs" && doc."$defs" ? "JSON value" && doc."$defs" ? "tree/node";
+        treeRef = doc.properties.tree."$ref";
+        treeNixType = doc.properties.tree."x-nixType";
+        slashTreeRef = doc.properties.slashTree."$ref";
+        slashTreeNixType = doc.properties.slashTree."x-nixType";
+        nullOrUnionLength = length doc.properties.nullOrUnion.anyOf;
+        intEnumType = doc.properties.intEnum.type;
+        intEnumValues = doc.properties.intEnum.enum;
+      };
+    expected = {
+      hasSchema = true;
+      hasDefs = true;
+      treeRef = "#/$defs/JSON%20value";
+      treeNixType = "JSON value";
+      slashTreeRef = "#/$defs/tree~1node";
+      slashTreeNixType = "tree/node";
+      nullOrUnionLength = 3;
+      intEnumType = "integer";
+      intEnumValues = [
+        1
+        2
+        3
+      ];
+    };
+  };
+
+  testOptionToDocMode = {
+    expr =
+      let
+        module = {
+          options = {
+            hasDefault = lib.mkOption {
+              type = lib.types.str;
+              default = "foo";
+            };
+            noDefault = lib.mkOption {
+              type = lib.types.str;
+            };
+            emptyValueOpt = lib.mkOption {
+              type = lib.types.listOf lib.types.str;
+            };
+          };
+        };
+        eval = lib.evalModules { modules = [ module ]; };
+        inputDoc = optionToDoc eval.options;
+        outputDoc = optionToDoc' { mode = "output"; } eval.options;
+      in
+      {
+        inputRequired = inputDoc.required;
+        outputRequired = outputDoc.required;
+      };
+    expected = {
+      inputRequired = [ "noDefault" ];
+      outputRequired = [
+        "emptyValueOpt"
+        "hasDefault"
+        "noDefault"
+      ];
+    };
+  };
+
+  testOptionToDocXExtensions = {
+    expr =
+      let
+        module = {
+          options.test = lib.mkOption {
+            type = lib.types.int;
+            default = 42;
+            description = "Test option";
+          };
+        };
+        eval = evalModules { modules = [ module ]; };
+        docDefault = optionToDoc eval.options;
+        docBare = optionToDoc' { xExtensions = false; } eval.options;
+      in
+      {
+        defaultHasXNixType = docDefault.properties.test ? "x-nixType";
+        defaultHasXDefaultText = docDefault.properties.test ? "x-defaultText";
+        defaultHasXDeclarations = docDefault.properties.test ? "x-declarations";
+        defaultHasBareNixType = docDefault.properties.test ? nixType;
+
+        bareHasBareNixType = docBare.properties.test ? nixType;
+        bareHasBareDefaultText = docBare.properties.test ? defaultText;
+        bareHasBareDeclarations = docBare.properties.test ? declarations;
+        bareHasXNixType = docBare.properties.test ? "x-nixType";
+      };
+    expected = {
+      defaultHasXNixType = true;
+      defaultHasXDefaultText = true;
+      defaultHasXDeclarations = true;
+      defaultHasBareNixType = false;
+
+      bareHasBareNixType = true;
+      bareHasBareDefaultText = true;
+      bareHasBareDeclarations = true;
+      bareHasXNixType = false;
+    };
   };
 
   testFreeformOptions = {
