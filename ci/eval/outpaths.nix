@@ -99,10 +99,14 @@ let
 
   # release-lib leaves recurseForDerivations as empty attrmaps;
   # that would break nix-env and we also need to recurse everywhere.
+  #
+  # upgradeGroup contains a nix function, which cannot be serialized
   tweak = lib.mapAttrs (
     name: val:
     if name == "recurseForDerivations" then
       true
+    else if lib.isDerivation val then
+      val // { meta = lib.removeAttrs val.meta [ "upgradeGroup" ]; }
     else if lib.isAttrs val && val.type or null != "derivation" then
       recurseIntoAttrs (tweak val)
     else

@@ -80,6 +80,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Applies Background for the COSMIC Desktop Environment";
     license = lib.licenses.mpl20;
     teams = [ lib.teams.cosmic ];
+    upgradeGroup = lib.upgradeGroups.cosmic;
     platforms = lib.platforms.linux;
     mainProgram = "cosmic-bg";
   };

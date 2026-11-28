@@ -49,6 +49,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         publicDomain
       ];
     teams = [ lib.teams.cosmic ];
+    upgradeGroup = lib.upgradeGroups.cosmic;
     platforms = lib.platforms.unix;
   };
 })

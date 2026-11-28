@@ -17,11 +17,12 @@ let
               name = lib.showAttrPath path;
               value = {
                 inherit (value)
-                  meta
                   name
                   outputName
                   system
                   ;
+                # upgradeGroup contains a function which can't be serialized to JSON
+                meta = lib.removeAttrs value.meta [ "upgradeGroup" ];
                 ${if value ? "outputs" then "outputs" else null} = lib.listToAttrs (
                   lib.map (x: {
                     name = x;
