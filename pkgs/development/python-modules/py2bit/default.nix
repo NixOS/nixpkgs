@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "py2bit";
-  version = "1.0.1";
+  version = "1.0.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-SXL4XrOETN+6Q+tUqzyDSaBTbgPf19sHyo00Ryha0gw=";
+    hash = "sha256-qeuvc0pFn/Ip1qwQmZoGjUgm7NGK3xppihGLm2knhIQ=";
   };
 
   build-system = [
