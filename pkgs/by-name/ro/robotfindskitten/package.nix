@@ -6,17 +6,18 @@
   ncurses,
   pkg-config,
   texinfo,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "robotfindskitten";
-  version = "2.8284271.702";
+  version = "3.0000000.726";
 
   src = fetchFromGitHub {
     owner = "robotfindskitten";
     repo = "robotfindskitten";
-    rev = finalAttrs.version;
-    hash = "sha256-z6//Yfp3BtJAtUdY05m1eKVrTdH19MvK7LZOwX5S1CM=";
+    tag = finalAttrs.version;
+    hash = "sha256-N5mdO9RNVI+d7OCZzzGcPLVpWVqL43R8g82Hu9QnApU=";
   };
 
   outputs = [
@@ -39,16 +40,17 @@ stdenv.mkDerivation (finalAttrs: {
     "execgamesdir=$(out)/bin"
   ];
 
-  postInstall = ''
-    install -Dm644 nki/vanilla.nki -t $out/share/games/robotfindskitten/
-  '';
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+  versionCheckProgramArg = "-V";
 
   meta = {
     description = "Yet another zen simulation; A simple find-the-kitten game";
     homepage = "http://robotfindskitten.org/";
+    changelog = "https://github.com/robotfindskitten/robotfindskitten/blob/${finalAttrs.version}/NEWS";
     license = lib.licenses.gpl2Plus;
     mainProgram = "robotfindskitten";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ kamadorueda ];
     platforms = lib.platforms.unix;
   };
 })
