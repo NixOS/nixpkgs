@@ -25,6 +25,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildFeatures = lib.optional withOtel "otel";
 
+  # The sqlx-macros proc macro links against sqlite on the build platform.
+  depsBuildBuild = [
+    pkg-config
+    sqlite
+  ];
+
+  # The pkg-config crate uses HOST_PKG_CONFIG for build scripts of crates
+  # compiled for the build platform (proc macros and their dependencies),
+  # instead of PKG_CONFIG, which points to the host pkg-config.
+  env.HOST_PKG_CONFIG = "pkg-config";
+
   nativeBuildInputs = [
     pkg-config
     protobuf
