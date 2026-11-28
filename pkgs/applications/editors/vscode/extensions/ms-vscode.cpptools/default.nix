@@ -100,7 +100,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
     find "${clang-tools}" -mindepth 1 -maxdepth 1 | xargs ln -s -t "./LLVM"
 
     # Patching binaries
-    chmod +x bin/cpptools bin/cpptools-srv bin/cpptools-wordexp debugAdapters/bin/OpenDebugAD7
+    chmod +x bin/cpptools bin/cpptools-srv bin/cpptools-srv2 bin/cpptools-wordexp debugAdapters/bin/OpenDebugAD7
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     patchelf --replace-needed liblttng-ust.so.0 liblttng-ust.so.1 ./debugAdapters/bin/libcoreclrtraceptprovider.so
@@ -120,6 +120,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
       # cpptools* are distributed by the extension and need to be run through the distributed musl interpretter
       patchelf --set-interpreter $out/share/vscode/extensions/ms-vscode.cpptools/bin/libc.so $out/share/vscode/extensions/ms-vscode.cpptools/bin/cpptools
       patchelf --set-interpreter $out/share/vscode/extensions/ms-vscode.cpptools/bin/libc.so $out/share/vscode/extensions/ms-vscode.cpptools/bin/cpptools-srv
+      patchelf --set-interpreter $out/share/vscode/extensions/ms-vscode.cpptools/bin/libc.so $out/share/vscode/extensions/ms-vscode.cpptools/bin/cpptools-srv2
       patchelf --set-interpreter $out/share/vscode/extensions/ms-vscode.cpptools/bin/libc.so $out/share/vscode/extensions/ms-vscode.cpptools/bin/cpptools-wordexp
     ''
     + lib.optionalString gdbUseFixed ''
