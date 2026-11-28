@@ -224,7 +224,18 @@ lib.extendMkDerivation {
 
         GOTOOLCHAIN = "local";
 
-        CGO_ENABLED = args.env.CGO_ENABLED or go.CGO_ENABLED;
+        CGO_ENABLED =
+          let
+            # Use Go's default when not defined, which is 1 by default on CGO-supported platforms
+            value = args.env.CGO_ENABLED or go.CGO_ENABLED;
+          in
+          # Coerce to int for simplicity in checking against
+          if lib.isBool value then
+            if value then 1 else 0
+          else if lib.isString value then
+            lib.toInt value
+          else
+            value;
 
         GOFLAGS = toString (
           GOFLAGS
