@@ -25,6 +25,51 @@ let
   nvlsmSettingsFormat = pkgs.formats.keyValue {
     mkKeyValue = lib.generators.mkKeyValueDefault { } " ";
   };
+
+  persistencedSandbox = {
+    DynamicUser = true;
+    CapabilityBoundingSet = "";
+    DevicePolicy = "closed";
+    DeviceAllow = [
+      "char-nvidia rw"
+      "char-nvidiactl rw"
+      "char-nvidia-modeset rw"
+    ];
+    PrivateNetwork = true;
+    IPAddressDeny = "any";
+    RestrictAddressFamilies = "AF_UNIX";
+    ProtectHome = true;
+    ProtectClock = true;
+    ProtectControlGroups = true;
+    ProtectHostname = true;
+    ProtectKernelLogs = true;
+    ProtectKernelModules = true;
+    ProtectKernelTunables = true;
+    RestrictNamespaces = true;
+    RestrictRealtime = true;
+    LockPersonality = true;
+    MemoryDenyWriteExecute = true;
+    SystemCallArchitectures = "native";
+    SystemCallFilter = [
+      "@system-service"
+      "~@privileged"
+    ];
+  };
+
+  persistencedService = {
+    description = "NVIDIA Persistence Daemon";
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig = {
+      Type = "forking";
+      Restart = "always";
+      PIDFile = "/run/nvidia-persistenced/nvidia-persistenced.pid";
+      RuntimeDirectory = "nvidia-persistenced";
+      ExecStart = "${lib.getExe nvidia_x11.persistenced} --verbose";
+    }
+    # On cache-coherent GPUs such as Grace Hopper, the daemon needs root to bring GPU memory online through /sys/devices/system/memory.
+    # https://github.com/NVIDIA/nvidia-persistenced/blob/main/nvidia-numa.c
+    // lib.optionalAttrs (!cfg.datacenter.enable) persistencedSandbox;
+  };
 in
 {
   options = {
@@ -827,17 +872,7 @@ in
                 };
               })
               (lib.mkIf cfg.nvidiaPersistenced {
-                "nvidia-persistenced" = {
-                  description = "NVIDIA Persistence Daemon";
-                  wantedBy = [ "multi-user.target" ];
-                  serviceConfig = {
-                    Type = "forking";
-                    Restart = "always";
-                    PIDFile = "/var/run/nvidia-persistenced/nvidia-persistenced.pid";
-                    ExecStart = "${lib.getExe nvidia_x11.persistenced} --verbose";
-                    ExecStopPost = "${pkgs.coreutils}/bin/rm -rf /var/run/nvidia-persistenced";
-                  };
-                };
+                "nvidia-persistenced" = persistencedService;
               })
               (lib.mkIf cfg.dynamicBoost.enable {
                 "nvidia-powerd" = {
@@ -993,17 +1028,7 @@ in
                     };
                   }
                   (lib.mkIf cfg.nvidiaPersistenced {
-                    "nvidia-persistenced" = {
-                      description = "NVIDIA Persistence Daemon";
-                      wantedBy = [ "multi-user.target" ];
-                      serviceConfig = {
-                        Type = "forking";
-                        Restart = "always";
-                        PIDFile = "/var/run/nvidia-persistenced/nvidia-persistenced.pid";
-                        ExecStart = "${lib.getExe nvidia_x11.persistenced} --verbose";
-                        ExecStopPost = "${pkgs.coreutils}/bin/rm -rf /var/run/nvidia-persistenced";
-                      };
-                    };
+                    "nvidia-persistenced" = persistencedService;
                   })
                 ];
               };
