@@ -110,6 +110,7 @@
     && lib.versionAtLeast version "7.1"
     && lib.meta.availableOn stdenv.hostPlatform lcevcdec, # LCEVC decoding
   withLcms2 ? withFullDeps, # ICC profile support via lcms2
+  withLv2 ? withFullDeps, # LV2 audio filtering
   withLzma ? withHeadlessDeps, # xz-utils
   withMetal ? false, # Unfree and requires manual downloading of files
   withMfx ? false, # Hardware acceleration via intel-media-sdk/libmfx
@@ -331,6 +332,7 @@
   libxext,
   libxml2,
   libxv,
+  lilv,
   mpeghdec,
   nv-codec-headers,
   nv-codec-headers-12,
@@ -714,6 +716,7 @@ stdenv.mkDerivation (
       (enableFeature withLcms2 "lcms2")
     ]
     ++ [
+      (enableFeature withLv2 "lv2")
       (enableFeature withLzma "lzma")
     ]
     ++ optionals (versionAtLeast version "5.0") [
@@ -964,6 +967,7 @@ stdenv.mkDerivation (
       ++ optionals withLc3 [ liblc3 ]
       ++ optionals withLcevcdec [ lcevcdec ]
       ++ optionals withLcms2 [ lcms2 ]
+      ++ optionals withLv2 [ lilv ]
       ++ optionals withLzma [ xz ]
       ++ optionals withMfx [ intel-media-sdk ]
       ++ optionals withModplug [ libmodplug ]
