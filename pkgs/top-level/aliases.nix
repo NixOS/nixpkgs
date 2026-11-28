@@ -3411,6 +3411,7 @@ mapAliases {
   zig_0_13 = throw "zig 0.13 has been removed, upgrade to a newer version instead"; # Added 2026-11-18
   zigbee2mqtt_1 = throw "Zigbee2MQTT 1.x has been removed, upgrade to the unversioned attribute."; # Added 2025-08-11
   zigbee2mqtt_2 = zigbee2mqtt; # Added 2025-08-11
+  zigdoc = throw "'zigdoc' has been removed, because it had no nixpkgs maintainers."; # Added 2026-11-25
   zinc = throw "'zinc' has been renamed to/replaced by 'zincsearch'"; # Converted to throw 2025-10-27
   zint = throw "'zint' has been renamed to/replaced by 'zint-qt'"; # Converted to throw 2025-10-27
   zkfuse = throw "'zkfuse' has been removed as it was unmaintained"; # Added 2026-07-20
