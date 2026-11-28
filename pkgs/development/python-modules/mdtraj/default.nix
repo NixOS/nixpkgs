@@ -22,19 +22,18 @@
   pytest-xdist,
   pytestCheckHook,
   tables,
-  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
   pname = "mdtraj";
-  version = "1.11.1";
+  version = "1.11.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mdtraj";
     repo = "mdtraj";
     tag = version;
-    hash = "sha256-xSXfV/lrUy33RSOpz3FsX5HP1Wr84rKCYmEKNVVnQao=";
+    hash = "sha256-mB0A9+jh6JWSmKjTUDFwnxaOtrXi070YS2sUZHQ4Hlw=";
   };
 
   patches = [
@@ -98,13 +97,6 @@ buildPythonPackage rec {
     "test_compare_rdf_t_master"
     "test_distances_t"
     "test_precentered_2"
-  ];
-
-  # these files import distutils
-  # remove once https://github.com/mdtraj/mdtraj/pull/1916 is merged
-  disabledTestPaths = lib.optionals (pythonAtLeast "3.12") [
-    "test_mol2.py"
-    "test_netcdf.py"
   ];
 
   pythonImportsCheck = [ "mdtraj" ];
