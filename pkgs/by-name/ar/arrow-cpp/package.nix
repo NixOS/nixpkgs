@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchurl,
-  fetchpatch,
   fetchFromGitHub,
   fixDarwinDylibNames,
   apache-orc,
@@ -43,10 +42,12 @@
   python3,
   rapidjson,
   re2,
+  simdjson,
   snappy,
   sqlite,
   thrift,
   tzdata,
+  uriparser,
   utf8proc,
   which,
   zlib,
@@ -75,19 +76,19 @@ let
     name = "arrow-testing";
     owner = "apache";
     repo = "arrow-testing";
-    rev = "19dda67f485ffb3ffa92f4c6fa083576ef052d58";
-    hash = "sha256-mna6I/a5ZxMLdWN0QfCsgsre6yMeuSv4syX5ePGLhfg=";
+    rev = "5a26d35785ff8761e56d79eebff971f6f737e18c";
+    hash = "sha256-eS1cD7qhrP1K07JbpzBCFrSSwT3Ha2tVRBmSPL3STD8=";
   };
 
   parquet-testing = fetchFromGitHub {
     name = "parquet-testing";
     owner = "apache";
     repo = "parquet-testing";
-    rev = "a3d96a65e11e2bbca7d22a894e8313ede90a33a3";
-    hash = "sha256-Xd6o3RT6Q0tPutV77J0P1x3F6U3RHdCBOKGUKtkQCKk=";
+    rev = "56653c437c8092f704a092d0d1d4e600124cd49f";
+    hash = "sha256-q5hZ/iVGzzOZFFFXHIfVBJW42ZcPn3mOCnrzT4iPgCE=";
   };
 
-  version = "24.0.0";
+  version = "26.0.1";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "arrow-cpp";
@@ -97,20 +98,10 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "apache";
     repo = "arrow";
     rev = "apache-arrow-${version}";
-    hash = "sha256-qTdkzZegANNvtO7nbqXVC8hc7BexvmeFF/0l5VzRb8g=";
+    hash = "sha256-Z/r6L7sVQMJY8jwCgSdQGmFpw70EGs9nYzdm+npu2V8=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/cpp";
-
-  patches = [
-    # Fix flaky test racing on (not) waiting for azurite
-    # https://github.com/apache/arrow/pull/50878
-    (fetchpatch {
-      url = "https://github.com/apache/arrow/commit/e6a89be6c7cc537b04844796bd84ac8240942050.patch";
-      hash = "sha256-hB2ebq6a64FPBZeg7aS+tSZZIzhFs3w9A3n2NK+/ob8=";
-    })
-  ];
-  patchFlags = [ "-p2" ];
 
   # versions are all taken from
   # https://github.com/apache/arrow/blob/apache-arrow-${version}/cpp/thirdparty/versions.txt
@@ -129,15 +120,15 @@ stdenv.mkDerivation (finalAttrs: {
       ARROW_MIMALLOC_URL = fetchFromGitHub {
         owner = "microsoft";
         repo = "mimalloc";
-        tag = "v3.1.5";
-        hash = "sha256-fk6nfyBFS1G0sJwUJVgTC1+aKd0We/JjsIYTO+IOfyg=";
+        tag = "v3.4.1";
+        hash = "sha256-AANtJkYUW3SQvbDVKhvxLi5Fm58IgkGESS0l4kbo8NQ=";
       };
 
       ARROW_XSIMD_URL = fetchFromGitHub {
         owner = "xtensor-stack";
         repo = "xsimd";
-        tag = "14.0.0";
-        hash = "sha256-ijNoHb6xC+OHJbUB4j1PRsoHMzjrnOHVoDRe/nKguDo=";
+        tag = "14.2.0";
+        hash = "sha256-BTiN4B3//wlB3nmOoluM/7bL7J7YIBp5afih9zUP1yw=";
       };
 
       ARROW_SUBSTRAIT_URL = fetchFromGitHub {
@@ -201,8 +192,10 @@ stdenv.mkDerivation (finalAttrs: {
     protobuf # substrait requires protobuf
     rapidjson
     re2
+    simdjson # arrow 26 requires it when ARROW_PARQUET or ARROW_JSON is on
     snappy
     thrift
+    uriparser # required by core Arrow in 26+ (arrow::util::Uri)
     utf8proc
     zlib
     zstd

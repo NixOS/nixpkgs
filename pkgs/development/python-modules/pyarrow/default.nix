@@ -16,7 +16,6 @@
   numpy,
   pandas,
   pytestCheckHook,
-  pytest-lazy-fixture,
   pkg-config,
   scikit-build-core,
   setuptools,
@@ -63,7 +62,6 @@ buildPythonPackage rec {
     hypothesis
     pandas
     pytestCheckHook
-    pytest-lazy-fixture
   ];
 
   env = {
@@ -76,11 +74,11 @@ buildPythonPackage rec {
     PYARROW_WITH_PARQUET_ENCRYPTION = zero_or_one true;
     PYARROW_WITH_S3 = zero_or_one arrow-cpp.enableS3;
     PYARROW_WITH_GCS = zero_or_one arrow-cpp.enableGcs;
-    PYARROW_BUNDLE_ARROW_CPP_HEADERS = zero_or_one false;
 
-    PYARROW_CMAKE_OPTIONS = toString [
-      "-DCMAKE_INSTALL_RPATH=${arrow-cpp}/lib"
-    ];
+    # scikit-build-core build backend; PYARROW_CMAKE_OPTIONS is no longer
+    # supported (deprecated with the 24.0.0 migration to scikit-build-core),
+    # extra CMake arguments go through CMAKE_ARGS instead.
+    CMAKE_ARGS = "-DPYARROW_BUNDLE_ARROW_CPP=OFF -DCMAKE_INSTALL_RPATH=${arrow-cpp}/lib";
 
     ARROW_HOME = arrow-cpp;
     PARQUET_HOME = arrow-cpp;
