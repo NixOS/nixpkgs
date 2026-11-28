@@ -2,12 +2,12 @@
   lib,
   stdenvNoCC,
   callPackages,
-  cacert,
   clangStdenv,
   cmake,
   fetchFromGitHub,
-  buildGoModule,
-  buildNpmPackage,
+  fetchPnpmDeps,
+  aws-lc,
+  buildGo127Module,
   bash,
   chromedriver,
   nodejs_24,
@@ -15,28 +15,29 @@
   makeWrapper,
   openapi-generator-cli,
   perl,
+  pnpm_12,
+  pnpmBuildHook,
+  pnpmConfigHook,
+  pkg-config,
   rustPlatform,
   go,
   typescript_7,
+  zstd,
   makeSetupHook,
   writeShellScript,
 }:
 
 let
   nodejs = nodejs_24;
+  pnpm = pnpm_12;
 
-  version = "2026.5.6";
-
-  cargoPackageFlags = [
-    "--package"
-    "authentik"
-  ];
+  version = "2026.8.5";
 
   src = fetchFromGitHub {
     owner = "goauthentik";
     repo = "authentik";
     tag = "version/${version}";
-    hash = "sha256-/HdXzjjvuSW7zjbCNJKm3Fj8gvIwfrDf8mOYev0yuIg=";
+    hash = "sha256-gdhGKCfsMUrWyFnf5TaaHM2ZQ1WYgTLOgGg4DlCaUHU=";
   };
 
   meta = {
@@ -122,101 +123,68 @@ let
     '';
   };
 
-  website-deps = buildNpmPackage {
+  website-deps = fetchPnpmDeps {
     pname = "authentik-website-deps";
-    inherit src version meta;
+    inherit
+      src
+      version
+      meta
+      pnpm
+      ;
 
     sourceRoot = "${src.name}/website";
+    pnpmRoot = "website";
+    fetcherVersion = 5;
 
-    inherit nodejs;
-    npmDepsHash = "sha256-5zAsS+Jw/hcBOws+MvFGZMMSn+NNKcpUmmkd9NO9fTY=";
-    npmDepsFetcherVersion = 2;
-    makeCacheWritable = true;
-    npmInstallFlags = [ "--legacy-peer-deps" ];
-    npmRebuildFlags = [ "--ignore-scripts" ];
-    dontNpmBuild = true;
-
-    # dependencies of workspace projects are installed into separate node_modules folders with
-    # symlinks between them, so we have to copy all of them
-    installPhase = ''
-      mkdir $out
-      echo "Copying node_modules folders:"
-      find -type d -name node_modules -prune -print -exec mkdir -p $out/{} \; -exec cp -rT {} $out/{} \;
-    '';
-
-    dontCheckForBrokenSymlinks = true;
-    dontPatchShebangs = true;
+    hash = "sha256-jABdo9uLHj01CGxOSmt1kqsL6EZ1fABwXGuhDXBaHbM=";
   };
 
   website = stdenvNoCC.mkDerivation {
     pname = "authentik-website";
     inherit src version meta;
 
-    nativeBuildInputs = [ nodejs ];
+    nativeBuildInputs = [
+      nodejs
+      pnpm
+      pnpmConfigHook
+      pnpmBuildHook
+    ];
 
-    sourceRoot = "${src.name}/website";
+    pnpmBuildScript = "build:api";
+    pnpmRoot = "website";
+    pnpmDeps = website-deps;
 
-    buildPhase = ''
-      runHook preBuild
+    preBuild = ''
+      patchShebangs --build website/node_modules/.bin/docusaurus
 
-      buildRoot=$PWD
-      pushd ${website-deps}
-      find -type d -name node_modules -prune -print -exec cp -rT {} $buildRoot/{} \;
-      popd
-
-      chmod -R +w node_modules
-
-      pushd node_modules/.bin
-      patchShebangs $(readlink docusaurus) $(readlink run-s)
-      popd
-      npm run build:api
-
-      runHook postBuild
+      mkdir packages/docusaurus-config/node_modules
+      ln -s ../../../website/node_modules/deepmerge-ts packages/docusaurus-config/node_modules/deepmerge-ts
+      ln -s ../../../website/node_modules/prism-react-renderer packages/docusaurus-config/node_modules/prism-react-renderer
     '';
 
     installPhase = ''
+      runHook preInstall
+
       mkdir $out
-      cp -r api/build $out/help
+      cp -r website/api/build $out/help
+
+      runHook postInstall
     '';
   };
 
-  # prefetch-npm-deps does not save all dependencies even though the lockfile is fine
-  webui-deps = stdenvNoCC.mkDerivation {
+  webui-deps = fetchPnpmDeps {
     pname = "authentik-webui-deps";
-    inherit src version meta;
+    inherit
+      src
+      version
+      meta
+      pnpm
+      ;
 
     sourceRoot = "${src.name}/web";
+    fetcherVersion = 5;
 
-    outputHash =
-      {
-        "aarch64-linux" = "sha256-ZdfDKrrcVpNImY8cYa9CPEwI7tuaoPn3kM6MXGGio2U=";
-        "x86_64-linux" = "sha256-p6xjAinU2Isl/uYgoJuacqHN7jBnbWam40J6AQudbtQ=";
-      }
-      .${stdenvNoCC.hostPlatform.system} or (throw "authentik-webui-deps: unsupported host platform");
-    outputHashMode = "recursive";
-
-    nativeBuildInputs = [
-      nodejs
-      cacert
-    ];
-
-    buildPhase = ''
-      chmod -R +w . ../packages/client-ts
-      npm ci --cache ./cache --ignore-scripts
-
-      rm -r ./cache node_modules/.package-lock.json
-    '';
-
-    # dependencies of workspace projects are installed into separate node_modules folders with
-    # symlinks between them, so we have to copy all of them
-    installPhase = ''
-      mkdir $out
-      echo "Copying node_modules folders:"
-      find -type d -name node_modules -prune -print -exec mkdir -p $out/{} \; -exec cp -rT {} $out/{} \;
-    '';
-
-    dontCheckForBrokenSymlinks = true;
-    dontPatchShebangs = true;
+    hash = "sha256-b7zWY1iDqjfnlAWtPBefkhJzaZNl4H7eNHReXTauINc=";
   };
 
   webui = stdenvNoCC.mkDerivation {
@@ -227,7 +195,12 @@ let
 
     nativeBuildInputs = [
       nodejs
+      pnpm
+      pnpmConfigHook
+      pnpmBuildHook
     ];
+
+    pnpmDeps = webui-deps;
 
     postPatch = ''
       substituteInPlace packages/core/version/node.js \
@@ -235,30 +208,10 @@ let
         --replace-fail '(PackageJSON.version);' '"${version}";'
     '';
 
-    buildPhase = ''
-      runHook preBuild
-
-      buildRoot=$PWD
-      pushd ${webui-deps}
-      find -type d -name node_modules -prune -print -exec cp -rT {} $buildRoot/{} \;
-      popd
-
-      chmod -R +w node_modules/@goauthentik
-      rm -R node_modules/@goauthentik/api
+    preBuild = ''
+      rm node_modules/@goauthentik/api
       ln -sn ${client-ts} node_modules/@goauthentik/api
-
-      pushd node_modules/.bin
-      patchShebangs $(readlink rollup)
-      patchShebangs $(readlink wireit)
-      patchShebangs $(readlink lit-localize)
-      popd
-
-      npm run build
-
-      runHook postBuild
     '';
-
-    CHROMEDRIVER_FILEPATH = lib.getExe chromedriver;
 
     installPhase = ''
       runHook preInstall
@@ -268,8 +221,10 @@ let
       runHook postInstall
     '';
 
-    NODE_ENV = "production";
-    NODE_OPTIONS = "--openssl-legacy-provider";
+    env = {
+      NODE_ENV = "production";
+      CHROMEDRIVER_FILEPATH = lib.getExe chromedriver;
+    };
 
     npmInstallFlags = [
       "--include=dev"
@@ -440,6 +395,7 @@ let
             ldap3
             lxml
             msgraph-sdk
+            msgspec
             opencontainers
             packaging
             paramiko
@@ -448,6 +404,7 @@ let
             pydantic-scim
             pyjwt
             pyrad
+            pyroscope-io
             python-kadmin-rs
             pyyaml
             requests-oauthlib
@@ -492,22 +449,41 @@ let
     pname = "authentik-worker";
     inherit version src meta;
 
-    cargoHash = "sha256-bpS1cXIG8srVE4tTS1rXL6R+ZBE65BZTlMghSPiAJy4=";
+    cargoHash = "sha256-dRsfsMH36xICg3WimQz3HX/Qgyt0dve/mvG7QERFzpo=";
+
+    postPatch = ''
+      substituteInPlace src/server/mod.rs \
+        --replace-fail './lifecycle' "${authentik-django}/lifecycle"
+    '';
+
+    preBuild = ''
+      ln -s ${webui}/dist web/dist
+    '';
 
     nativeBuildInputs = [
       cmake
       go
       perl
+      pkg-config
     ];
 
-    buildInputs = [ python ];
+    buildInputs = [
+      aws-lc
+      python
+      zstd
+    ];
 
     env = {
       PYO3_PYTHON = lib.getExe python;
       RUSTFLAGS = "--cfg tokio_unstable";
+      GOTOOLCHAIN = "local";
+      AWS_LC_FIPS_SYS_HOST_CC = "${clangStdenv.cc}/bin/${clangStdenv.cc.targetPrefix}cc";
     };
 
-    cargoBuildFlags = cargoPackageFlags;
+    cargoBuildFlags = [
+      "--package"
+      "authentik"
+    ];
 
     # Upstream currently has no Rust tests in this package.
     doCheck = false;
@@ -539,7 +515,7 @@ let
         ''
       );
 
-  proxy = buildGoModule {
+  proxy = buildGo127Module {
     pname = "authentik-proxy";
     inherit version src meta;
 
@@ -559,7 +535,7 @@ let
     # calculate the vendorHash without other dependencies, so it is only based on the `go.sum` file
     overrideModAttrs.postPatch = "";
 
-    vendorHash = "sha256-EVDOZ4USaJoIBDB8mM4ZSBfsSc1d/NOm1Qv/hUJ+8f4=";
+    vendorHash = "sha256-iFcZo1ZeIAKu58/5YTNyN3H47jGdmD+pLcJCqEe50Zo=";
 
     postInstall = ''
       mv $out/bin/server $out/bin/authentik-server
