@@ -1710,6 +1710,7 @@ in
   slimserver = runTest ./slimserver.nix;
   slurm = runTest ./slurm.nix;
   slurm-pam = runTest ./slurm-pam.nix;
+  smartd = import ./smartd.nix { inherit runTest; };
   smokeping = runTest ./smokeping.nix;
   snapcast = runTest ./snapcast.nix;
   snapper = runTest ./snapper.nix;
