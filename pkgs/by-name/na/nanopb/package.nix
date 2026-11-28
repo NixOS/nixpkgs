@@ -61,13 +61,13 @@ stdenvNoCC.mkDerivation (
   in
   {
     pname = "nanopb";
-    version = "0.4.9.1";
+    version = "0.4.9.3";
 
     src = fetchFromGitHub {
       owner = "nanopb";
       repo = "nanopb";
       rev = self.version;
-      hash = "sha256-bMSZZaF8egAegi3enCM+DRyxOrPoWKAKybvWsrKZEDc=";
+      hash = "sha256-4f1aX6czadKxVpPvraXtACoBwAA3y29EX120h3qAnSE=";
     };
 
     dontPatch = true;
