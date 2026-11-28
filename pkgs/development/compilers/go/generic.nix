@@ -124,8 +124,6 @@ lib.extendMkDerivation {
           export GO_LDSO=$(cat $NIX_CC/nix-support/dynamic-linker)
         fi
 
-        export PATH=$(pwd)/bin:$PATH
-
         ${lib.optionalString isCross ''
           # "Command line to run to compile C code for GOHOSTARCH."
           # Go's "host" is our buildPlatform.
@@ -134,7 +132,7 @@ lib.extendMkDerivation {
         ulimit -a
 
         pushd src
-        ./make.bash
+        ./make.bash -no-banner
         popd
         runHook postBuild
       '';
