@@ -72,6 +72,10 @@ let
 
   # Config file adapted from the one that ships with dhcpcd.
   dhcpcdConf = pkgs.writeText "dhcpcd.conf" ''
+    ${lib.optionalString (cfg.readGroup != null) ''
+      # A global option, so it has to come before any interface block.
+      readgroup ${cfg.readGroup}
+    ''}
     # Inform the DHCP server of our hostname for DDNS.
     hostname
 
@@ -127,6 +131,8 @@ let
 in
 
 {
+
+  meta.maintainers = [ lib.maintainers.booxter ];
 
   ###### interface
 
@@ -196,6 +202,21 @@ in
       default = "";
       description = ''
         Literal string to append to the config file generated for dhcpcd.
+      '';
+    };
+
+    networking.dhcpcd.readGroup = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
+      default = null;
+      example = "dhcpcd-read";
+      description = ''
+        Group whose members can read interface and lease data from the dhcpcd
+        control socket, for example with `dhcpcd -U <interface>` or
+        `dhcpcd --dumplease`. By default only root can.
+
+        The group is created if it does not exist and added to the
+        supplementary groups of the dhcpcd service. Users need to log in again
+        after being added to it.
       '';
     };
 
@@ -311,7 +332,8 @@ in
         serviceConfig = {
           Type = "forking";
           PIDFile = "/run/dhcpcd/pid";
-          SupplementaryGroups = lib.optional useResolvConf "resolvconf";
+          SupplementaryGroups =
+            lib.optional useResolvConf "resolvconf" ++ lib.optional (cfg.readGroup != null) cfg.readGroup;
           User = "dhcpcd";
           Group = "dhcpcd";
           StateDirectory = "dhcpcd";
@@ -386,6 +408,7 @@ in
           ++ lib.optionals (!cfg.allowSetuid) [
             "~@privileged"
             "~@resources"
+            "@chown"
           ];
           SystemCallArchitectures = "native";
           UMask = "0027";
@@ -400,7 +423,10 @@ in
       isSystemUser = true;
       group = "dhcpcd";
     };
-    users.groups.dhcpcd = { };
+    users.groups = {
+      dhcpcd = { };
+    }
+    // lib.optionalAttrs (cfg.readGroup != null) { ${cfg.readGroup} = { }; };
 
     environment.systemPackages = [ dhcpcd ];
 

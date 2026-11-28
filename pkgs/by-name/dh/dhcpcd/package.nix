@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dhcpcd";
-  version = "10.3.2";
+  version = "10.5.2";
 
   src = fetchFromGitHub {
     owner = "NetworkConfiguration";
     repo = "dhcpcd";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-tJV533j/nQT/PP5KVPJCgTo0Lu8NNMIGnJBvYUG8ufw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-lrV6SaB/HmTptZigZ1Lf28eUPz0igxyT6omZwXDSuGM=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -68,6 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
       dhcpSimple
       dhcpHostname
       dhcpOneIf
+      dhcpReadGroup
       ;
   };
 
@@ -76,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://roy.marples.name/projects/dhcpcd";
     platforms = lib.platforms.linux ++ lib.platforms.freebsd ++ lib.platforms.openbsd;
     license = lib.licenses.bsd2;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.booxter ];
     mainProgram = "dhcpcd";
   };
 })
