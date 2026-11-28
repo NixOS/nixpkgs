@@ -5,28 +5,24 @@
   hatchling,
   lxml,
   nix-update-script,
-  six,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "citeproc-py-styles";
-  version = "0.1.6";
+  version = "0.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "inveniosoftware";
     repo = "citeproc-py-styles";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-l3oz6iQ6zQbX89FXnYJZcCKdLUSeXPHz3fTDBhcrzd0=";
+    hash = "sha256-4yIU/n/qKDGUVGAjPXY9fzqKnH0fByR6SOrJqmAhoeA=";
     fetchSubmodules = true;
   };
 
   build-system = [ hatchling ];
 
-  dependencies = [
-    lxml
-    six
-  ];
+  dependencies = [ lxml ];
 
   # Tests are additional requirements
   doCheck = false;
