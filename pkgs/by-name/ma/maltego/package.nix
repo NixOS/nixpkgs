@@ -13,11 +13,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "maltego";
-  version = "4.14.0";
+  version = "4.14.1";
 
   src = fetchzip {
     url = "https://downloads.maltego.com/maltego-v4/linux/Maltego.v${finalAttrs.version}.linux.zip";
-    hash = "sha256-Ydc16UaBayKKRW+8eYvLiu04jaVRj3sUKyjJ1zjJFko=";
+    hash = "sha256-QL4YWEV9C1JTP35d1JmOUkkv2vNR+d1RCAtjX3GhfUI=";
   };
 
   postPatch = ''
