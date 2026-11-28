@@ -89,7 +89,10 @@ let
                     "record"
                   ];
                   description = ''
-                    List of roles for this stream
+                    List of roles for this stream.
+
+                    Assigning the role does not enable that feature; it must also
+                    be enabled in the camera configuration.
                   '';
                 };
               };
@@ -286,6 +289,15 @@ in
       default = { };
       description = ''
         Frigate configuration as a nix attribute set.
+
+        The configuration file served to Frigate is generated from this
+        option and copied to {file}`/run/frigate/frigate.yml` every time
+        `frigate.service` starts.
+
+        Making changes in the web UI can still be useful for developing a
+        configuration interactively, such as drawing bounding boxes or masks.
+        However, to persist these, they need to be integrated back into
+        {option}`services.frigate.settings` before restarting Frigate.
 
         See the project documentation for how to configure frigate.
         - [Creating a config file](https://docs.frigate.video/guides/getting_started)
