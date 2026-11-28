@@ -26,6 +26,7 @@
   cuda-core,
   cuda-tile,
   einops,
+  filelock,
   nccl4py,
   numpy,
   nvidia-cudnn-frontend,
@@ -49,7 +50,7 @@
 
 buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   pname = "flashinfer-python";
-  version = "0.7.4";
+  version = "0.7.6";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -57,7 +58,7 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     repo = "flashinfer";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-3yrAWT9Bw0mdHMgagxrbd6QTucFhCIbK9f2TJSC2KJ0=";
+    hash = "sha256-jSTLAuqSwtTjji5QKyG739E2RyPheOfUv/mIrn66VgU=";
   };
 
   patches = [
@@ -108,6 +109,9 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     # Unpackaged. Only provides the optional `nccl.ep` backend of `flashinfer.moe_ep`, which is
     # probed at runtime.
     "nccl-extensions"
+
+    # Only imported on Windows (`_flashinfer_filelock.py`)
+    "portalocker"
   ];
   dependencies = [
     apache-tvm-ffi
@@ -116,6 +120,7 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     cuda-core
     cuda-tile
     einops
+    filelock
     nccl4py
     ninja
     numpy
