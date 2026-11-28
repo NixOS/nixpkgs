@@ -92,13 +92,13 @@ let
 in
 buildNpmPackage (finalAttrs: {
   pname = "tidal-hifi";
-  version = "8.1.3";
+  version = "9.0.1";
 
   src = fetchFromGitHub {
     owner = "Mastermindzh";
     repo = "tidal-hifi";
     tag = finalAttrs.version;
-    hash = "sha256-R30UR5Ikcp50ASOay7418Tdz1mHWv7HSiwdETcZzrPE=";
+    hash = "sha256-kJ6AHR/c8LQssydOQdQGA6dPrWVJenLldK8niJPwz4k=";
   };
 
   nativeBuildInputs = [
@@ -107,7 +107,7 @@ buildNpmPackage (finalAttrs: {
     copyDesktopItems
   ];
 
-  npmDepsHash = "sha256-6qOeWKLBlGy32zY4p0Ar0scToQthbtrpCSi7MyS8igA=";
+  npmDepsHash = "sha256-/8e7ZjQYZQ3uoBTxiPUGSakXIl0bjziTUTLUUQJKLm0=";
   forceGitDeps = true;
   makeCacheWritable = true;
 
@@ -151,17 +151,21 @@ buildNpmPackage (finalAttrs: {
 
   dontWrapGApps = true;
 
-  installPhase = ''
-    runHook preInstall
+  installPhase =
+    let
+      appDir = if stdenv.hostPlatform.isAarch64 then "linux-arm64-unpacked" else "linux-unpacked";
+    in
+    ''
+      runHook preInstall
 
-    for i in 16 22 24 32 48 64 128 256 384; do
-      install -Dm644 "assets/icons/$i"x"$i.png" "$out/share/icons/hicolor/$i"x"$i/apps/tidal-hifi.png"
-    done
+      for i in 16 22 24 32 48 64 128 256 384; do
+        install -Dm644 "assets/icons/$i"x"$i.png" "$out/share/icons/hicolor/$i"x"$i/apps/tidal-hifi.png"
+      done
 
-    mv dist/linux-unpacked "$out/share/tidal-hifi"
+      mv dist/${appDir} "$out/share/tidal-hifi"
 
-    runHook postInstall
-  '';
+      runHook postInstall
+    '';
 
   # see: pkgs/development/tools/electron/binary/generic.nix
   postFixup = ''
@@ -171,16 +175,19 @@ buildNpmPackage (finalAttrs: {
       $out/share/tidal-hifi/tidal-hifi \
       $out/share/tidal-hifi/chrome_crashpad_handler
 
-    # patch libANGLE
-    patchelf \
-      --set-rpath "${
-        lib.makeLibraryPath [
-          libGL
-          pciutils
-          vulkan-loader
-        ]
-      }" \
-      $out/share/tidal-hifi/lib*GL*
+    # patch libANGLE, if present (arm64 doesn't have it)
+    for lib in "$out"/share/tidal-hifi/lib*GL*; do
+      [ -e "$lib" ] || continue
+      patchelf \
+        --set-rpath "${
+          lib.makeLibraryPath [
+            libGL
+            pciutils
+            vulkan-loader
+          ]
+        }" \
+        "$lib"
+    done
 
     # replace bundled vulkan-loader
     ln -sf -t "$out/share/tidal-hifi" "${lib.getLib vulkan-loader}/lib/libvulkan.so.1"
@@ -202,13 +209,22 @@ buildNpmPackage (finalAttrs: {
           common-updater-scripts
         ]
       }:$PATH"
+      export NIXPKGS_ALLOW_UNFREE=1
 
       nix-update 'tidal-hifi'
 
       TIDAL_VERSION="$(nix-instantiate --eval --raw -A 'tidal-hifi.version')"
-      NEW_VERSION="$(curl --silent "https://raw.githubusercontent.com/Mastermindzh/tidal-hifi/refs/tags/$TIDAL_VERSION/build/electron-builder.base.yml" | yq -r '.electronVersion')"
+      OLD_ELECTRON_VERSION="$(nix-instantiate --eval --raw -A 'tidal-hifi.castlabs-electron.version')"
+      NEW_ELECTRON_VERSION="$(curl --silent --fail "https://raw.githubusercontent.com/Mastermindzh/tidal-hifi/refs/tags/$TIDAL_VERSION/build/electron-builder.base.yml" | yq -r '.electronVersion')"
 
-      NIXPKGS_ALLOW_UNFREE=1 update-source-version tidal-hifi.castlabs-electron "$NEW_VERSION"
+      if [[ "$NEW_ELECTRON_VERSION" != "$OLD_ELECTRON_VERSION" ]]; then
+        for system in ${lib.concatStringsSep " " (builtins.attrNames castlabs-electron.sources)}; do
+          update-source-version \
+            tidal-hifi.castlabs-electron "$NEW_ELECTRON_VERSION" \
+            --source-key="sources.$system" \
+            --ignore-same-version
+        done
+      fi
     '';
   };
 
@@ -218,12 +234,14 @@ buildNpmPackage (finalAttrs: {
     homepage = "https://github.com/Mastermindzh/tidal-hifi";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+      alexandru0-dev
       gerg-l
       spikespaz
     ];
-    # `castlabs-electron` doesn't have a distribution for `aarch64-linux`.
-    # See: <https://github.com/castlabs/electron-releases/issues/198>
-    platforms = [ "x86_64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
     mainProgram = "tidal-hifi";
   };
 })
