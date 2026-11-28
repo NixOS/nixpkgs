@@ -16879,6 +16879,13 @@
     github = "levihuayuzhang";
     githubId = 68364307;
   };
+  levilovie = {
+    name = "Leo Abashichev";
+    email = "levi@lovie.dev";
+    keys = [ { fingerprint = "D6FD 8E3C BBA2 E4B2 F293  33AB AE0C 1743 9B98 7BCC"; } ];
+    github = "levilovie";
+    githubId = 107021730;
+  };
   Levizor = {
     email = "levizor@disroot.org";
     github = "Levizor";
