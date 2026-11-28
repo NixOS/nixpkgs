@@ -41,24 +41,21 @@
 
 // lib.optionalAttrs config.allowAliases {
   # These now all live in by-name.
-  # This is managed by the maintainers/scripts/remove-old-aliases.py script, please run it to update these,
-  # but make sure the warning/throw text says "'jetbrains.xyz' has been..." (add the jetbrains prefix).
-  # Also update the names in the old aliases at the bottom then!
-  clion = clion; # Added 2026-08-15
-  datagrip = datagrip; # Added 2026-08-15
-  dataspell = dataspell; # Added 2026-08-15
-  gateway = jetbrains-gateway; # Added 2026-08-15
-  goland = goland; # Added 2026-08-15
-  idea = intellij-idea; # Added 2026-08-15
-  idea-oss = intellij-idea-oss; # Added 2026-08-15
-  mps = jetbrains-mps; # Added 2026-08-15
-  phpstorm = phpstorm; # Added 2026-08-15
-  pycharm = pycharm; # Added 2026-08-15
-  pycharm-oss = pycharm-oss; # Added 2026-08-15
-  rider = rider; # Added 2026-08-15
-  ruby-mine = ruby-mine; # Added 2026-08-15
-  rust-rover = rust-rover; # Added 2026-08-15
-  webstorm = webstorm; # Added 2026-08-15
+  clion = lib.warnOnInstantiate "'jetbrains.clion' has been renamed to/replaced by 'clion'" clion; # converted to warning 2026-11-19
+  datagrip = lib.warnOnInstantiate "'jetbrains.datagrip' has been renamed to/replaced by 'datagrip'" datagrip; # converted to warning 2026-11-19
+  dataspell = lib.warnOnInstantiate "'jetbrains.dataspell' has been renamed to/replaced by 'dataspell'" dataspell; # converted to warning 2026-11-19
+  gateway = lib.warnOnInstantiate "'jetbrains.gateway' has been renamed to/replaced by 'jetbrains-gateway'" jetbrains-gateway; # converted to warning 2026-11-19
+  goland = lib.warnOnInstantiate "'jetbrains.goland' has been renamed to/replaced by 'goland'" goland; # converted to warning 2026-11-19
+  idea = lib.warnOnInstantiate "'jetbrains.idea' has been renamed to/replaced by 'intellij-idea'" intellij-idea; # converted to warning 2026-11-19
+  idea-oss = lib.warnOnInstantiate "'jetbrains.idea-oss' has been renamed to/replaced by 'intellij-idea-oss'" intellij-idea-oss; # converted to warning 2026-11-19
+  mps = lib.warnOnInstantiate "'jetbrains.mps' has been renamed to/replaced by 'jetbrains-mps'" jetbrains-mps; # converted to warning 2026-11-19
+  phpstorm = lib.warnOnInstantiate "'jetbrains.phpstorm' has been renamed to/replaced by 'phpstorm'" phpstorm; # converted to warning 2026-11-19
+  pycharm = lib.warnOnInstantiate "'jetbrains.pycharm' has been renamed to/replaced by 'pycharm'" pycharm; # converted to warning 2026-11-19
+  pycharm-oss = lib.warnOnInstantiate "'jetbrains.pycharm-oss' has been renamed to/replaced by 'pycharm-oss'" pycharm-oss; # converted to warning 2026-11-19
+  rider = lib.warnOnInstantiate "'jetbrains.rider' has been renamed to/replaced by 'rider'" rider; # converted to warning 2026-11-19
+  ruby-mine = lib.warnOnInstantiate "'jetbrains.ruby-mine' has been renamed to/replaced by 'ruby-mine'" ruby-mine; # converted to warning 2026-11-19
+  rust-rover = lib.warnOnInstantiate "'jetbrains.rust-rover' has been renamed to/replaced by 'rust-rover'" rust-rover; # converted to warning 2026-11-19
+  webstorm = lib.warnOnInstantiate "'jetbrains.webstorm' has been renamed to/replaced by 'webstorm'" webstorm; # converted to warning 2026-11-19
 
   # Deprecated products and aliases.
   aqua = throw "jetbrains.aqua: Aqua has been removed as it has been discontinued by JetBrains";
