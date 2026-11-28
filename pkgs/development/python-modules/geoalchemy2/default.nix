@@ -7,21 +7,23 @@
   setuptools-scm,
   shapely,
   sqlalchemy,
-  alembic,
-  pytest-benchmark,
   pytestCheckHook,
+  pytest-benchmark,
+  alembic,
+  mysqlclient,
+  rasterio,
 }:
 
 buildPythonPackage rec {
   pname = "geoalchemy2";
-  version = "0.18.4";
+  version = "0.21.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "geoalchemy";
     repo = "geoalchemy2";
     tag = version;
-    hash = "sha256-kSsKud4/uL5ycPiuS+JPXJ6XH9ZgQ+kHOTC5RtG9C0I=";
+    hash = "sha256-09AYiFLlPalNDXUf1M+wQAulHMALeTsAJ4VEIJRRDXQ=";
   };
 
   build-system = [
@@ -35,34 +37,21 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    alembic
-    pytest-benchmark
     pytestCheckHook
+    pytest-benchmark
+    alembic
+    mysqlclient
+    rasterio
   ]
   ++ optional-dependencies.shapely;
 
   pytestFlags = [ "--benchmark-disable" ];
 
-  disabledTestPaths = [
-    # tests require live databases
-    "tests/gallery/test_decipher_raster.py"
-    "tests/gallery/test_length_at_insert.py"
-    "tests/gallery/test_insert_raster.py"
-    "tests/gallery/test_orm_mapped_v2.py"
-    "tests/gallery/test_specific_compilation.py"
-    "tests/gallery/test_summarystatsagg.py"
-    "tests/gallery/test_type_decorator.py"
-    "tests/test_functional.py"
-    "tests/test_functional_postgresql.py"
-    "tests/test_functional_mysql.py"
-    "tests/test_alembic_migrations.py"
-    "tests/test_pickle.py"
-  ];
-
   pythonImportsCheck = [ "geoalchemy2" ];
 
   optional-dependencies = {
     shapely = [ shapely ];
+    # wkb-wkt-converter = [ wkb-wkt-converter ];
   };
 
   meta = {
