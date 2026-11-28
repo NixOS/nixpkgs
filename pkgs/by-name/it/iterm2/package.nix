@@ -15,13 +15,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "iterm2";
-  version = "3.7.4";
+  version = "3.7.9";
 
   src = fetchzip {
     url = "https://iterm2.com/downloads/stable/iTerm2-${
       lib.replaceStrings [ "." ] [ "_" ] version
     }.zip";
-    hash = "sha256-H+6CTQZmQkuJRuk43DUlDxNox42j6Wj3YWOt28SAEyg=";
+    hash = "sha256-cCeHpz1vvu9mPEpl+blibXh2GhDiHmKMTRkiy0IB3UM=";
   };
 
   dontFixup = true;
