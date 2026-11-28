@@ -96,6 +96,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ Enzime ];
     mainProgram = "ghostty";
+    mainDarwinApp = "Ghostty.app";
     outputsToInstall = [
       "out"
       "man"
