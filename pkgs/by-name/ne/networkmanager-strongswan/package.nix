@@ -15,11 +15,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "NetworkManager-strongswan";
-  version = "1.6.5";
+  version = "1.6.6";
 
   src = fetchurl {
     url = "https://download.strongswan.org/NetworkManager/NetworkManager-strongswan-${finalAttrs.version}.tar.bz2";
-    sha256 = "sha256-OpHK38x8dGFkcLKw+A203BfxAzYrOG7XY0edhQBQG2c=";
+    sha256 = "sha256-b+CVgCYpx0H0T+YkERXcDoa5F8zwXuWccuyEQeZP5Yo=";
   };
 
   nativeBuildInputs = [
