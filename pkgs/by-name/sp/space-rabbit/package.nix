@@ -10,13 +10,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "space-rabbit";
-  version = "2.1.5";
+  version = "2.6.1";
 
   src = fetchFromGitHub {
     owner = "tahul";
     repo = "space-rabbit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RGA0/BiMoDnIqD3gr+jxBthny1+BKlVUC6hs7rrApyY=";
+    hash = "sha256-WvHDR5cg997EyVtXvh/VS+KQFXZWQJY26ttKWnshzIA=";
   };
 
   nativeBuildInputs = [
