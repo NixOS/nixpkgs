@@ -11704,6 +11704,11 @@
     githubId = 36509362;
     name = "Henri Spriet";
   };
+  henryde = {
+    github = "henryde";
+    githubId = 38420038;
+    name = "Henry Dettmer";
+  };
   henrytill = {
     email = "henrytill@gmail.com";
     github = "henrytill";
