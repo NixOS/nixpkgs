@@ -160,6 +160,7 @@ symlinkJoin {
       mainProgram
       platforms
       ;
+    mainDarwinApp = "PrismLauncher.app";
     identifiers = { inherit (prismlauncher'.meta.identifiers) cpeParts; };
   };
 }
