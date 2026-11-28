@@ -23,11 +23,13 @@ let
     types
     ;
 
+  persistPowerState = cfg.powerOnBoot == "auto";
+
   cfgFmt = pkgs.formats.ini { };
 
   defaults = {
     General.ControllerMode = "dual";
-    Policy.AutoEnable = cfg.powerOnBoot;
+    Policy.AutoEnable = if persistPowerState then true else cfg.powerOnBoot;
   };
 
   hasDisabledPlugins = builtins.length cfg.disabledPlugins > 0;
@@ -55,9 +57,14 @@ in
       hsphfpd.enable = mkEnableOption "support for hsphfpd[-prototype] implementation";
 
       powerOnBoot = mkOption {
-        type = types.bool;
+        type = types.either types.bool (types.enum [ "auto" ]);
         default = true;
-        description = "Whether to power up the default Bluetooth controller on boot.";
+        description = ''
+          Whether to power up the default Bluetooth controller on boot.
+
+          When set to `"auto"`, Bluetooth comes up the way it was at the
+          last shutdown: on if it was on, off if it was off.
+        '';
       };
 
       package = mkPackageOption pkgs "bluez" { };
@@ -176,6 +183,33 @@ in
           };
         };
     }
+    // (optionalAttrs persistPowerState {
+      bluetooth-persist-power-state = {
+        description = "Persist Bluetooth power state across reboots";
+        after = [ "bluetooth.service" ];
+        requires = [ "bluetooth.service" ];
+        partOf = [ "bluetooth.service" ];
+        wantedBy = [ "bluetooth.target" ];
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+          StateDirectory = "bluetooth";
+          ExecStart = pkgs.writeShellScript "bluetooth-restore-power-state" ''
+            if [ "$(cat /var/lib/bluetooth/power-state 2>/dev/null)" = "off" ]; then
+              ${pkgs.util-linux}/bin/rfkill block bluetooth
+            fi
+          '';
+          ExecStop = pkgs.writeShellScript "bluetooth-save-power-state" ''
+            if ${pkgs.util-linux}/bin/rfkill list bluetooth | grep -q "Soft blocked: yes" \
+              || ${package}/bin/bluetoothctl show 2>/dev/null | grep -q "Powered: no"; then
+              echo off > /var/lib/bluetooth/power-state
+            else
+              echo on > /var/lib/bluetooth/power-state
+            fi
+          '';
+        };
+      };
+    })
     // (optionalAttrs cfg.hsphfpd.enable {
       hsphfpd = {
         after = [ "bluetooth.service" ];
