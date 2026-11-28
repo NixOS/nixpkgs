@@ -1,5 +1,4 @@
 {
-  stdenvNoCC,
   kmod,
   modules,
   buildEnv,
@@ -17,36 +16,48 @@ buildEnv {
   ];
 
   postBuild = ''
-    source ${stdenvNoCC}/setup
+    (
+      shopt -s nullglob extglob
 
-    if ! test -d "$out/lib/modules"; then
-      echo "No modules found."
-      # To support a kernel without modules
-      exit 0
-    fi
+      kernelVersions=("$out"/lib/modules/*)
+      kernelVersions=("''${kernelVersions[@]#"$out"/lib/modules/}")
 
-    kernelVersion=$(cd $out/lib/modules && ls -d *)
-    if test "$(echo $kernelVersion | wc -w)" != 1; then
-       echo "inconsistent kernel versions: $kernelVersion"
-       exit 1
-    fi
+      if [ ''${#kernelVersions[@]} -eq 0 ]; then
+        echo "No modules found. Skipping depmod and module certificate merging."
+        exit
+      elif [ ''${#kernelVersions[@]} -gt 1 ]; then
+        echo "Failing because lib/modules contains more than one kernel version: $(IFS=', ' && echo "''${kernelVersions[*]}")" >&2
+        exit 1
+      fi
 
-    echo "kernel version is $kernelVersion"
+      kernelVersion="''${kernelVersions[0]}"
 
-    shopt -s extglob
+      echo "Kernel version: $kernelVersion"
 
-    # Regenerate the depmod map files.  Be sure to pass an explicit
-    # kernel version number, otherwise depmod will use `uname -r'.
-    if test -w $out/lib/modules/$kernelVersion; then
-        rm -f $out/lib/modules/$kernelVersion/modules.!(builtin*|order*|cer)
-        ${kmod}/bin/depmod -b $out -C $out/etc/depmod.d -a $kernelVersion
-        cd -- "$out/lib/modules/$kernelVersion"
+      modulesDir="$out/lib/modules/$kernelVersion"
+
+      # When there is one input path that contains a lib/modules/$kernelVersion
+      # directory, $modulesDir is a symlink to that directory and is not
+      # writable. In this case, there is no need to run depmod and to recreate
+      # modules.cer.
+      if [ -w "$modulesDir" ]; then
+        echo "Module directories from multiple input paths were merged. Running depmod and merging module certificates..."
+
+        cd -- "$modulesDir"
+
+        # eval lets bash parse the code with extglob enable.
+        eval 'rm -f modules.!(builtin*|order*|cer)'
+
+        # Regenerate the depmod map files. Be sure to pass an explicit
+        # kernel version number, otherwise depmod will use `uname -r'.
+        ${kmod}/bin/depmod -b "$out" -C "$out/etc/depmod.d" -a "$kernelVersion"
 
         # Merge the single‐module certificates for external modules.
         cp --no-preserve=mode,ownership --remove-destination \
           -- "$(readlink -f modules.cer)" modules.cer
         sed "1,$(wc -l < modules.order)d; s/\.ko.*/.ko.cer/" modules.dep \
             | xargs -d'\n' cat >> modules.cer
-    fi
+      fi
+    )
   '';
 }
