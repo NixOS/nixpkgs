@@ -8,11 +8,15 @@
 let
   inherit (stdenvNoCC.hostPlatform) system;
   sources = import ./sources.nix { inherit fetchurl; };
+  source = sources.${system} or sources.x86_64-linux;
 
   pname = "slack";
 
   passthru = {
     updateScript = ./update.sh;
+  }
+  // lib.optionalAttrs (source ? electronVersion) {
+    inherit (source) electronVersion;
   };
 
   meta = {
@@ -36,5 +40,5 @@ let
 in
 callPackage (if stdenvNoCC.hostPlatform.isDarwin then ./darwin.nix else ./linux.nix) {
   inherit pname passthru meta;
-  inherit (sources.${system} or sources.x86_64-linux) version src;
+  inherit (source) version src;
 }
