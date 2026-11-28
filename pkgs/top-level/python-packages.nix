@@ -10933,6 +10933,8 @@ self: super: with self; {
 
   memory-tempfile = callPackage ../development/python-modules/memory-tempfile { };
 
+  mempalace = callPackage ../development/python-modules/mempalace { };
+
   memray = callPackage ../development/python-modules/memray { };
 
   menshen-client = callPackage ../development/python-modules/menshen-client { };
