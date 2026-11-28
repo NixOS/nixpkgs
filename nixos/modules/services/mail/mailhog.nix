@@ -18,9 +18,17 @@ let
     ++ cfg.extraArgs
   );
 
-  mhsendmail = pkgs.writeShellScriptBin "mailhog-sendmail" ''
-    exec ${lib.getExe pkgs.mailhog} sendmail $@
-  '';
+  mhsendmail =
+    pkgs.runCommand "mailhog-sendmail"
+      {
+        nativeBuildInputs = [ pkgs.makeBinaryWrapper ];
+        meta.mainProgram = "mailhog-sendmail";
+      }
+      ''
+        mkdir -p $out/bin
+        makeBinaryWrapper ${lib.getExe pkgs.mailhog} $out/bin/mailhog-sendmail \
+          --add-flags sendmail
+      '';
 in
 {
   ###### interface
