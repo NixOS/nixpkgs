@@ -47,17 +47,21 @@ stdenv'.mkDerivation rec {
   pname = "katago";
   version = "1.16.5";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "lightvector";
     repo = "katago";
-    rev = "v${version}";
-    sha256 = "sha256-+s4JO6+UMyeSHUqyRFEhJD2kmsdhcydanFWjTqxC1Tc=";
+    tag = "v${version}";
+    hash = "sha256-+s4JO6+UMyeSHUqyRFEhJD2kmsdhcydanFWjTqxC1Tc=";
   };
 
   nativeBuildInputs = [
     cmake
     makeWrapper
-  ];
+  ]
+  ++ lib.optionals (backend == "cuda") [ cudaPackages.cuda_nvcc ];
 
   # Included from release 1.16.2:
   # https://github.com/lightvector/KataGo/commit/9030f72d152da42c1dd03590aa5116993ea842f6
@@ -80,7 +84,6 @@ stdenv'.mkDerivation rec {
     [
       cccl
       cuda_cudart
-      cuda_nvcc
       cudnn
       libcublas
     ]
@@ -136,6 +139,7 @@ stdenv'.mkDerivation rec {
     description = "Go engine modeled after AlphaGo Zero";
     mainProgram = "katago";
     homepage = "https://github.com/lightvector/katago";
+    changelog = "https://github.com/lightvector/KataGo/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.omnipotententity ];
     platforms = [ "x86_64-linux" ];
