@@ -12,6 +12,7 @@
   testers,
   tests,
   writeScript,
+  zstd,
 
   version,
   srcHash,
@@ -42,6 +43,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     aws-lc
     sqlite
+    zstd
   ];
 
   postPatch = ''
