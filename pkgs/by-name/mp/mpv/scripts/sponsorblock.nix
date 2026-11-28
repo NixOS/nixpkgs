@@ -47,6 +47,6 @@ buildLua {
     description = "Script for mpv to skip sponsored segments of YouTube videos";
     homepage = "https://github.com/po5/mpv_sponsorblock";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ euxane ];
+    maintainers = with lib.maintainers; [ colinsane ];
   };
 }
