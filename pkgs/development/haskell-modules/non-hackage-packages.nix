@@ -22,9 +22,13 @@ in
 self: super:
 {
 
-  changelog-d = self.callPackage ../misc/haskell/changelog-d { };
+  changelog-d = haskellLib.overrideCabal (oldAttrs: {
+    maintainers = (oldAttrs.maintainers or [ ]) ++ [ lib.maintainers.roberth ];
+  }) (self.callPackage ../misc/haskell/changelog-d { });
 
-  dconf2nix = self.callPackage ../tools/haskell/dconf2nix/dconf2nix.nix { };
+  dconf2nix = haskellLib.overrideCabal (oldAttrs: {
+    maintainers = (oldAttrs.maintainers or [ ]) ++ [ lib.maintainers.gvolpe ];
+  }) (self.callPackage ../tools/haskell/dconf2nix/dconf2nix.nix { });
 
   # Used by maintainers/scripts/regenerate-hackage-packages.sh, and generated
   # from the latest master instead of the current version on Hackage.
