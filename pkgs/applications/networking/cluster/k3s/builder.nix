@@ -215,6 +215,8 @@ let
       version = k3sCNIVersion;
       vendorHash = null;
 
+      __structuredAttrs = true;
+
       subPackages = [ "." ];
 
       src = fetchFromGitHub {
@@ -300,6 +302,8 @@ let
       pname = "k3s-bin";
       version = k3sVersion;
 
+      __structuredAttrs = true;
+
       src = k3sRepo;
       vendorHash = k3sVendorHash;
 
@@ -360,6 +364,7 @@ let
     (buildGoModule {
       pname = "k3s-containerd";
       version = containerdVersion;
+      __structuredAttrs = true;
       src = fetchFromGitHub {
         owner = "k3s-io";
         repo = "containerd";
