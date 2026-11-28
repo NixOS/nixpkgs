@@ -52,6 +52,18 @@ stdenvNoCC.mkDerivation (
       inherit (lib.evalModules { modules = [ ../../modules/generic/meta-maintainers.nix ]; }) options;
       transformOptions = opt: hide-lib (mapURLs opt);
     };
+
+    docs.generic.command-line = nixosOptionsDoc {
+      inherit
+        (lib.evalModules {
+          modules = [
+            (lib.modules.importApply ../../lib/modules/generic/command-line.nix { prefix = [ "portable" ]; })
+          ];
+        })
+        options
+        ;
+      transformOptions = opt: hide-lib (mapURLs opt);
+    };
   in
   {
     version = lib.trivial.release;
@@ -83,6 +95,7 @@ stdenvNoCC.mkDerivation (
       ln -s ${treefmt.functionsDoc.markdown} ./packages/treefmt-functions.section.md
       ln -s ${treefmt.optionsDoc.optionsJSON}/share/doc/nixos/options.json ./treefmt-options.json
       ln -s ${docs.generic.meta-maintainers.optionsJSON}/share/doc/nixos/options.json ./options-modules-generic-meta-maintainers.json
+      ln -s ${docs.generic.command-line.optionsJSON}/share/doc/nixos/options.json ./options-modules-generic-command-line.json
     '';
 
     buildPhase = ''
