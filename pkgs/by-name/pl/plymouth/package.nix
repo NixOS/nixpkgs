@@ -9,6 +9,7 @@
   pkg-config,
   ninja,
   docbook-xsl-nons,
+  docbook_xml_dtd_42,
   gettext,
   libxslt,
   gtk3,
@@ -59,6 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     ninja
     docbook-xsl-nons
+    docbook_xml_dtd_42
     gettext
     libxslt
   ];
@@ -104,7 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace meson.build \
-      --replace "run_command(['scripts/generate-version.sh'], check: true).stdout().strip()" "'${finalAttrs.version}'"
+      --replace-fail "run_command(['scripts/generate-version.sh'], check: true).stdout().strip()" "'${finalAttrs.version}'"
 
     # prevent installing unused non-$out dirs to DESTDIR
     sed -i '/^install_emptydir/d' src/meson.build
