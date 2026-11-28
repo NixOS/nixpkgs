@@ -5,7 +5,7 @@
   stdenv,
 }:
 
-{
+self: {
 
   ada = {
     version = "0.9.0";
@@ -581,18 +581,7 @@
     meta.license = lib.licenses.agpl3Only;
   };
 
-  dtd = {
-    version = "0.7.0-unstable-2026-01-21";
-    url = "github:tree-sitter-grammars/tree-sitter-xml";
-    rev = "5000ae8f22d11fbe93939b05c1e37cf21117162d";
-    hash = "sha256-QN+jQx1CrTbYpmM9mLUfjWcymGsa0Th7LVgk4thnQXU=";
-    meta = {
-      license = lib.licenses.mit;
-      maintainers = with lib.maintainers; [
-        aciceri
-      ];
-    };
-  };
+  dtd = self.xml;
 
   dune = rec {
     version = "0.1.1";
@@ -1089,18 +1078,8 @@
     };
   };
 
-  go-template-helm = {
-    version = "0-unstable-2026-03-21";
-    url = "github:ngalaiko/tree-sitter-go-template";
-    rev = "aa71f63de226c5592dfbfc1f29949522d7c95fac";
-    hash = "sha256-QSzUyRDGdBH9TaG3YCHnJp12WcR8kdbsZFIk8I+JW1Y=";
+  go-template-helm = self.go-template // {
     location = "dialects/helm";
-    meta = {
-      license = lib.licenses.mit;
-      maintainers = with lib.maintainers; [
-        azahi
-      ];
-    };
   };
 
   godot-resource = {
@@ -1122,16 +1101,9 @@
     };
   };
 
-  gotmpl = {
-    version = "0-unstable-2026-03-21";
-    url = "github:ngalaiko/tree-sitter-go-template";
-    rev = "aa71f63de226c5592dfbfc1f29949522d7c95fac";
-    hash = "sha256-QSzUyRDGdBH9TaG3YCHnJp12WcR8kdbsZFIk8I+JW1Y=";
-    meta = {
-      license = lib.licenses.mit;
-      maintainers = with lib.maintainers; [
-        aciceri
-      ];
+  gotmpl = self.go-template // {
+    meta = self.go-template.meta // {
+      maintainers = with lib.maintainers; [ aciceri ];
     };
   };
 
@@ -1858,15 +1830,9 @@
     };
   };
 
-  markdown-inline = {
+  markdown-inline = self.markdown // {
     language = "markdown_inline";
-    version = "0.5.3";
-    url = "github:tree-sitter-grammars/tree-sitter-markdown";
-    hash = "sha256-WUVN7+lzDI+VC5PuJjhHiS4JpVr1x0Ic30i2tVrI6W8=";
     location = "tree-sitter-markdown-inline";
-    meta = {
-      license = lib.licenses.mit;
-    };
   };
 
   matlab = {
@@ -2063,14 +2029,8 @@
     };
   };
 
-  ocaml-interface = {
+  ocaml-interface = self.ocaml // {
     language = "ocaml_interface";
-    version = "0.24.2";
-    url = "github:tree-sitter/tree-sitter-ocaml";
-    hash = "sha256-fRC7sd/INCESwYCiRsuOJkOnqWnNUpjwrNoEzlaOscA=";
-    meta = {
-      license = lib.licenses.mit;
-    };
   };
 
   ocamllex = {
@@ -2174,12 +2134,9 @@
     };
   };
 
-  org-nvim = {
-    version = "2.0.4";
-    url = "github:nvim-orgmode/tree-sitter-org";
-    hash = "sha256-76ImC8GMW+yAKG++AHryUi+MYTmtJ5ogygC+bgNMErA=";
-    meta = {
-      license = lib.licenses.mit;
+  org-nvim = self.org // {
+    meta = self.org.meta // {
+      maintainers = [ ];
     };
   };
 
@@ -2946,11 +2903,10 @@
     };
   };
 
-  ssh-client-config = rec {
-    version = "2026.8.20";
-    url = "github:metio/tree-sitter-ssh-client-config?ref=${version}";
-    hash = "sha256-uwiDL2Rc2kW7TiRqtjmAocceLJOFT/9yDtR4c1IU7PI=";
-    meta.license = lib.licenses.cc0;
+  ssh-client-config = self.sshclientconfig // {
+    meta = self.sshclientconfig.meta // {
+      maintainers = [ ];
+    };
   };
 
   strace = {
@@ -3254,14 +3210,7 @@
     };
   };
 
-  tsx = {
-    version = "0.23.2";
-    url = "github:tree-sitter/tree-sitter-typescript";
-    hash = "sha256-CU55+YoFJb6zWbJnbd38B7iEGkhukSVpBN7sli6GkGY=";
-    meta = {
-      license = lib.licenses.mit;
-    };
-  };
+  tsx = self.typescript;
 
   turtle = {
     version = "0.1.0-unstable-2024-07-02";
@@ -3490,21 +3439,8 @@
     };
   };
 
-  wat = {
-    version = "0-unstable-2022-05-17";
-    url = "github:wasm-lsp/tree-sitter-wasm";
-    rev = "2ca28a9f9d709847bf7a3de0942a84e912f59088";
-    hash = "sha256-a1l4RsGpRQfUxEjwewyKiV0G7J2DHZW6+y1HnjREYAs=";
+  wat = self.wast // {
     location = "wat";
-    meta = {
-      license = with lib.licenses; [
-        asl20
-        llvm-exception
-      ];
-      maintainers = with lib.maintainers; [
-        aciceri
-      ];
-    };
   };
 
   werk = {
