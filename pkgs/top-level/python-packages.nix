@@ -13006,6 +13006,10 @@ self: super: with self; {
     callPackage ../development/python-modules/opentelemetry-exporter-otlp
       { };
 
+  opentelemetry-exporter-otlp-common =
+    callPackage ../development/python-modules/opentelemetry-exporter-otlp-common
+      { };
+
   opentelemetry-exporter-otlp-proto-common =
     callPackage ../development/python-modules/opentelemetry-exporter-otlp-proto-common
       { };
@@ -13032,10 +13036,6 @@ self: super: with self; {
 
   opentelemetry-instrumentation-asgi =
     callPackage ../development/python-modules/opentelemetry-instrumentation-asgi
-      { };
-
-  opentelemetry-instrumentation-botocore =
-    callPackage ../development/python-modules/opentelemetry-instrumentation-botocore
       { };
 
   opentelemetry-instrumentation-celery =
