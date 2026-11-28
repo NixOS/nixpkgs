@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "transfer-sh";
-  version = "1.6.1";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "dutchcoders";
     repo = "transfer.sh";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-V8E6RwzxKB6KeGPer5074e7y6XHn3ZD24PQMwTxw5lQ=";
+    hash = "sha256-ktvmzIww9qHVnM85EDN/Z8x6zUzA/yfqI4u63y2rToc=";
   };
 
-  vendorHash = "sha256-C8ZfUIGT9HiQQiJ2hk18uwGaQzNCIKp/Jiz6ePZkgDQ=";
+  vendorHash = "sha256-nYvzJbfd48S/pMT8bxC2V1xTw6barllNEwcihmefyBM=";
 
   passthru = {
     tests = {
