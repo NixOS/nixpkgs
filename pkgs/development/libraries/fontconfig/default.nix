@@ -24,6 +24,8 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
     "lib"
     "out"
+    "man"
+    "doc"
   ]; # $out contains all the config
 
   # GitLab repositrory does not include pre-generated man pages.
@@ -69,6 +71,8 @@ stdenv.mkDerivation (finalAttrs: {
     "ac_cv_va_copy=C99"
   ];
 
+  __structuredAttrs = true;
+  strictDeps = true;
   enableParallelBuilding = true;
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
@@ -88,9 +92,6 @@ stdenv.mkDerivation (finalAttrs: {
       ${./make-fonts-conf.xsl} $out/etc/fonts/fonts.conf \
       > fonts.conf.tmp
     mv fonts.conf.tmp $out/etc/fonts/fonts.conf
-    # We don't keep section 3 of the manpages, as they are quite large and
-    # probably not so useful.
-    rm -r $bin/share/man/man3
   '';
 
   nativeInstallCheckInputs = [
@@ -102,8 +103,9 @@ stdenv.mkDerivation (finalAttrs: {
   installCheckPhase = ''
     runHook preInstallCheck
 
-    [ -d "$bin/share/man/man1" ]
-    [ -d "$bin/share/man/man5" ]
+    [ -d "$man/share/man/man1" ]
+    [ -d "$man/share/man/man3" ]
+    [ -d "$man/share/man/man5" ]
     echo "man pages exist"
 
     runHook postInstallCheck
