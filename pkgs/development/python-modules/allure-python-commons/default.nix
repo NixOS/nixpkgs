@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "allure-python-commons";
-  version = "2.16.0";
+  version = "2.16.2";
   pyproject = true;
 
   src = fetchPypi {
     pname = "allure_python_commons";
     inherit version;
-    hash = "sha256-7NySuv6gdLq5a18sTrMQCCU0AYj1rs5giugOztcJs28=";
+    hash = "sha256-LfhxMa5cvZQeZWpWJhAAGJhi68tx5MRDWHnuKnwH2qE=";
   };
 
   postPatch = ''
