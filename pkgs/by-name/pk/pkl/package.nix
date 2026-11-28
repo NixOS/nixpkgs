@@ -18,13 +18,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "pkl";
-  version = "0.32.2";
+  version = "0.33.0";
 
   src = fetchFromGitHub {
     owner = "apple";
     repo = "pkl";
     tag = finalAttrs.version;
-    hash = "sha256-7z2vFfFaZD2APcijl9AWepD4YmJ/YKyDJ6T0KTbPbAk=";
+    hash = "sha256-Es3B39Jccb1fAMaqeA0hzKeIIpHXYpWnC5ynnGJSy1c=";
     leaveDotGit = true;
     postFetch = ''
       pushd $out
@@ -41,6 +41,12 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
+    # Nix's Gradle init script realizes archive tasks before processFiles is
+    # registered. Refer to it by name to avoid passing a null task dependency.
+    substituteInPlace libpkl/libpkl.gradle.kts \
+      --replace-fail 'dependsOn(buildSharedLibrary, buildStaticLibrary, processFiles)' \
+        'dependsOn(buildSharedLibrary, buildStaticLibrary, "processFiles")'
+
     substituteInPlace pkl-core/pkl-core.gradle.kts \
       --replace-fail '#!/usr/bin/env bash' '#!${stdenv.shell}'
   '';
@@ -89,6 +95,9 @@ stdenv.mkDerivation (finalAttrs: {
   preGradleUpdate = ''
     substituteInPlace build-logic/src/main/kotlin/pklAllProjects.gradle.kts \
       --replace-fail 'failOnDynamicVersions()' ""
+
+    # Collect platform-specific tools and skip unused, unavailable artifacts.
+    gradleFlagsArray+=(--init-script ${./update-deps.gradle})
   '';
 
   env.JAVA_TOOL_OPTIONS =

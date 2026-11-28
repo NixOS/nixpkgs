@@ -1,0 +1,24 @@
+import org.gradle.api.artifacts.VersionCatalogsExtension
+
+// Only used by Nix's dependency collector, not by the package build.
+gradle.projectsEvaluated {
+    rootProject.allprojects {
+        // Neither artifact is used by the JVM CLI, and both are unavailable
+        // from the repositories configured by upstream.
+        configurations.matching {
+            it.name in ['muslSourcesTarball', 'shadowR8']
+        }.configureEach {
+            canBeResolved = false
+        }
+    }
+
+    // The protobuf plugin normally resolves protoc only for the update host.
+    // Keep the lockfile usable on all supported Linux and Darwin architectures.
+    def libs = rootProject.extensions.getByType(VersionCatalogsExtension).named('libs')
+    def protoc = libs.findLibrary('protoc').get().get()
+    def protocPlatforms = rootProject.configurations.create('nixProtocPlatforms')
+    ['linux-x86_64', 'linux-aarch_64', 'osx-x86_64', 'osx-aarch_64'].each { classifier ->
+        rootProject.dependencies.add(protocPlatforms.name,
+            "${protoc.module}:${protoc.versionConstraint.requiredVersion}:${classifier}@exe")
+    }
+}
