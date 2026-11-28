@@ -39,7 +39,7 @@ rec {
       accel = accelName: if forceAccel then accelName else "${accelName}:tcg";
 
       linuxHostGuestMatrix = {
-        x86_64-linux = "${qemuPkg}/bin/qemu-system-x86_64 -machine accel=${accel "kvm"} -cpu max";
+        x86_64-linux = "${qemuPkg}/bin/qemu-system-x86_64 -machine accel=${accel "kvm"},hpet=off -cpu max";
         armv7l-linux = "${qemuPkg}/bin/qemu-system-arm -machine virt,accel=${accel "kvm"} -cpu max";
         aarch64-linux = "${qemuPkg}/bin/qemu-system-aarch64 -machine virt,gic-version=max,accel=${accel "kvm"} -cpu max";
         powerpc64le-linux = "${qemuPkg}/bin/qemu-system-ppc64 -machine powernv";
