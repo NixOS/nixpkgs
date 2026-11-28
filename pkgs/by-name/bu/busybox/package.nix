@@ -197,7 +197,7 @@ stdenv'.mkDerivation (finalAttrs: {
   '';
 
   postConfigure = lib.optionalString (useMusl && stdenv.hostPlatform.libc != "musl") ''
-    makeFlagsArray+=("CC=${stdenv'.cc.targetPrefix}cc -isystem ${musl.dev}/include -B${musl}/lib -L${musl}/lib")
+    makeFlags+=("CC=${stdenv'.cc.targetPrefix}cc -isystem ${musl.dev}/include -B${musl}/lib -L${musl}/lib")
   '';
 
   makeFlags = [ "SKIP_STRIP=y" ];
@@ -288,6 +288,8 @@ stdenv'.mkDerivation (finalAttrs: {
       '';
     });
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Tiny versions of common UNIX utilities in a single small executable";
