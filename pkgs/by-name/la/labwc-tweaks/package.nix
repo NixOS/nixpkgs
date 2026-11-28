@@ -7,7 +7,7 @@
   pkg-config,
   qt6,
   xkeyboard_config,
-  unstableGitUpdater,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace bin/gen-layout-list --replace-fail /usr/share/X11/xkb ${xkeyboard_config}/share/X11/xkb
   '';
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = gitUpdater { };
 
   meta = {
     homepage = "https://github.com/labwc/labwc-tweaks";

@@ -104,7 +104,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontStrip = withDebug;
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--url=https://gitlab.com/api/v4/projects/pi-lar%2Fneuropil/repository/archive.tar.gz?sha=HEAD"
+      "--version-regex=^neuropil_(\\d+\\.\\d+\\.\\d+)$"
+    ];
+  };
   passthru.customPython = python3.withPackages (p: [
     p.requests
   ]);

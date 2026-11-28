@@ -70,7 +70,12 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--url=https://gitlab.com/api/v4/projects/accounts-sso%2Flibsignon-glib/repository/archive.tar.gz?sha=HEAD"
+        "--version-regex=^(\\d+\\.\\d+(?:\\.\\d+)?)$"
+      ];
+    };
   };
 
   meta = {
