@@ -5,6 +5,7 @@
   buildDotnetModule,
   dotnetCorePackages,
   zlib,
+  libGL,
   icu,
   openssl,
   icoutils,
@@ -44,6 +45,7 @@ buildDotnetModule (finalAttrs: {
     zlib
     icu
     openssl
+    libGL
   ];
 
   nativeBuildInputs = [
