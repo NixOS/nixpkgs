@@ -12,20 +12,22 @@
   fetchFromGitHub,
   rustPlatform,
   libiconv,
+  versionCheckHook,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "elan";
-  version = "4.3.0";
+  version = "4.4.0";
 
   src = fetchFromGitHub {
     owner = "leanprover";
     repo = "elan";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-orv3zXRxDfm5eY7zZ3btzJy/dAZUrqaujogud4zbtto=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-PvxX6Ob+MLFVZYuDM1cPSDOVKyDXN0mPHJicdu3KhHM=";
   };
 
-  cargoHash = "sha256-lasllf+bLfMRWMh4cnp2EXDm446MJ8G+TT1ZbnrHgfE=";
+  cargoHash = "sha256-n831U4SwgeZqc3GQvpsuHrnPMwIYdDvGg2aR6PclDC8=";
 
   nativeBuildInputs = [
     pkg-config
@@ -81,6 +83,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     $out/bin/elan completions zsh >  "$out/share/zsh/site-functions/_elan"
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Small tool to manage your installations of the Lean theorem prover";
     homepage = "https://github.com/leanprover/elan";
@@ -91,7 +98,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
         asl20
         mit
       ];
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ kamadorueda ];
     mainProgram = "elan";
   };
 })
