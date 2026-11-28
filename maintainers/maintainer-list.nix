@@ -16778,6 +16778,12 @@
     githubId = 31388299;
     name = "Leonardo Eugênio";
   };
+  lemueldls = {
+    name = "Lemuel";
+    email = "noreply@git.lemueldls.dev";
+    github = "lemueldls";
+    githubId = 26912197;
+  };
   lenianiva = {
     name = "Leni Aniva";
     email = "aniva@stanford.edu";
