@@ -10,6 +10,11 @@ with lib;
 let
   cfg = config.services.tailscale;
   isNetworkd = config.networking.useNetworkd;
+  setFlags =
+    cfg.extraSetFlags
+    ++ lib.cli.toCommandLineGNU { } {
+      relay-server-port = cfg.relayServerPort;
+    };
 in
 {
   meta.maintainers = with maintainers; [
@@ -119,6 +124,12 @@ in
     extraUpFlags = mkOption {
       description = ''
         Extra flags to pass to {command}`tailscale up`. Only applied if {option}`services.tailscale.authKeyFile` is specified.
+
+        {command}`tailscale up` refuses to log in while a preference it accepts differs from what these flags set,
+        e.g. one applied by {option}`services.tailscale.extraSetFlags` or by hand.
+        Add `"--reset"` to reset such preferences instead. Preferences from
+        {option}`services.tailscale.extraSetFlags` and {option}`services.tailscale.relayServerPort` are then applied again;
+        any other preference set by hand is lost.
       '';
       type = types.listOf types.str;
       default = [ ];
@@ -234,7 +245,10 @@ in
               case "$state" in
                 NeedsLogin|NeedsMachineAuth|Stopped)
                   echo "Server needs authentication, sending auth key"
+                  # `up` resets the prefs only `set` accepts, and all of them with
+                  # --reset. tailscaled-set may already have run, so apply them again.
                   tailscale up --auth-key "$(cat ${cfg.authKeyFile})${params}" ${escapeShellArgs cfg.extraUpFlags}
+                  ${optionalString (setFlags != [ ]) "tailscale set ${escapeShellArgs setFlags}"}
                   ;;
                 Running)
                   echo "Tailscale is running"
@@ -253,28 +267,20 @@ in
         '';
     };
 
-    systemd.services.tailscaled-set =
-      let
-        setFlags =
-          cfg.extraSetFlags
-          ++ lib.cli.toCommandLineGNU { } {
-            relay-server-port = cfg.relayServerPort;
-          };
-      in
-      mkIf (setFlags != [ ]) {
-        after = [
-          "tailscaled.service"
-          "tailscaled-autoconnect.service"
-        ];
-        wants = [ "tailscaled.service" ];
-        wantedBy = [ "tailscaled.service" ];
-        serviceConfig = {
-          Type = "oneshot";
-        };
-        script = ''
-          ${lib.getExe cfg.package} set ${escapeShellArgs setFlags}
-        '';
+    systemd.services.tailscaled-set = mkIf (setFlags != [ ]) {
+      after = [
+        "tailscaled.service"
+        "tailscaled-autoconnect.service"
+      ];
+      wants = [ "tailscaled.service" ];
+      wantedBy = [ "tailscaled.service" ];
+      serviceConfig = {
+        Type = "oneshot";
       };
+      script = ''
+        ${lib.getExe cfg.package} set ${escapeShellArgs setFlags}
+      '';
+    };
 
     boot.kernel.sysctl = mkIf (cfg.useRoutingFeatures == "server" || cfg.useRoutingFeatures == "both") {
       "net.ipv4.conf.all.forwarding" = mkOverride 97 true;
