@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mt32emu-qt";
-  version = "1.12.3";
+  version = "1.12.4";
 
   src = fetchFromGitHub {
     owner = "munt";
     repo = "munt";
     tag = "mt32emu_qt_${lib.replaceString "." "_" finalAttrs.version}";
-    hash = "sha256-BlRPKVDKo+fYjDiCVw2L1UDBAXs31tg4Tqf02MBbsW4=";
+    hash = "sha256-krPcYq0wKLz1IF++1yLCAS3mPjJ51tAEMmSvNmqfjik=";
   };
 
   postPatch =
