@@ -20,8 +20,12 @@
   sqlite,
   pkg-config,
   glibcLocalesUtf8,
-  boehmgc,
+
   libghostty-vt,
+  zig_0_16,
+  callPackage,
+  runCommand,
+
   zstd,
   llvmPackages,
   nixd,
@@ -61,6 +65,37 @@ let
   buildRustPackage = rustPlatform.buildRustPackage.override {
     stdenv = if stdenv.hostPlatform.isLinux then useMoldLinker stdenv else stdenv;
   };
+
+  # TODO: remove this once https://github.com/Uzaaft/libghostty-rs has a 1.0 release
+  libghostty-vt' =
+    (libghostty-vt.override {
+      zig_0_17 = zig_0_16;
+    }).overrideAttrs
+      (
+        finalAttrs: prevAttrs: {
+          version = "0.1.0-unstable-2026-08-06";
+          src = prevAttrs.src.override {
+            tag = null;
+            rev = "22d13172cde98a0a4dda05d3d6a3fcb0dd8ed018";
+            hash = "sha256-tRtgTg/i3w1nFdRHU2IGekfJN8EyP+HARW4MtoUZyqk=";
+          };
+          deps = callPackage ./libghostty-vt-deps.nix {
+            name = "${finalAttrs.pname}-cache-${finalAttrs.version}";
+            linkFarm =
+              name: entries:
+              runCommand name { } ''
+                mkdir -p $out
+                ${lib.concatMapStringsSep "\n" (e: ''
+                  cp -rL ${e.path} $out/${e.name}
+                '') entries}
+              '';
+          };
+          postFixup = ''
+            substituteInPlace "$dev/share/pkgconfig/libghostty-vt-static.pc" \
+              --replace-fail "$out" "$dev"
+          '';
+        }
+      );
 in
 buildRustPackage {
   pname = "devenv";
@@ -109,7 +144,7 @@ buildRustPackage {
     openssl
     sqlite
     dbus
-    libghostty-vt
+    libghostty-vt'
     llvmPackages.clang-unwrapped
     nix_components.nix-expr-c
     nix_components.nix-store-c
