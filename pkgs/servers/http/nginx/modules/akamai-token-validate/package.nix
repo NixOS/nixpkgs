@@ -7,7 +7,7 @@
 
 mkNginxPlugin (finalAttrs: {
   pname = "akamai-token-validate";
-  version = "0-unstable-2026-06-26";
+  version = "1.1";
 
   src = fetchFromGitHub {
     owner = "kaltura";
