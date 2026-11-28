@@ -60,6 +60,7 @@ in
       inherit (bun-unwrapped.env)
         GIT_SHA
         RUSTC_BOOTSTRAP
+        NIX_RUSTFLAGS
         BUN_BUILD_PREFETCH_DIR
         BUN_NIX_BUILD_ABI
         BUN_TOOLCHAIN_LLVM

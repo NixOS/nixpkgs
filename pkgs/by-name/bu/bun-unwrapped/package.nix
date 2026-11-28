@@ -6,7 +6,6 @@
   callPackage,
   callPackages,
   runCommand,
-  symlinkJoin,
   fetchFromGitHub,
   fetchurl,
   installShellFiles,
@@ -17,20 +16,23 @@
   gitMinimal,
   nasm,
   rustPlatform,
-  llvmPackages,
+  llvmPackages_23,
   icu,
   sqlite,
   cctools,
   darwin,
   rcodesign,
   bun-webkit ? callPackage ./webkit.nix {
-    inherit llvmPackages;
+    llvmPackages = llvmPackages_23;
   },
 }:
 
 let
-  inherit (buildPackages) rustc cargo;
-  rustLibSrc = buildPackages.rustPlatform.rustLibSrc;
+  inherit (buildPackages.rustPackages_1_100) rustc;
+  inherit (buildPackages.rustPackages_1_100.rustPlatform) rustLibSrc;
+  inherit (pkgsBuildBuild.rustPackages_1_100) cargo;
+  llvmPackages = buildPackages.llvmPackages_23;
+  clangPrefix = llvmPackages.clang.targetPrefix;
   sources = lib.importJSON ./sources.json;
   inherit (sources)
     bootstrapAssets
@@ -43,7 +45,7 @@ let
   inherit (hostPlatform) isDarwin isLinux isMusl;
   isCross = buildPlatform != hostPlatform;
   bootstrapPlatformKey = buildPlatform.system + lib.optionalString buildPlatform.isMusl "-musl";
-  buildClang = pkgsBuildBuild.llvmPackages.clang;
+  buildClang = pkgsBuildBuild.llvmPackages_23.clang;
 
   # Bun rebuilds std as part of its Rust dependency graph.
   rustSysroot = buildPackages.symlinkJoin {
@@ -58,13 +60,18 @@ let
 
   # BUN_TOOLCHAIN_LLVM accepts one bin directory and bypasses the version pin.
   # Rust bitcode still requires clang and rustc to use the same LLVM major.
-  llvmToolchain = symlinkJoin {
+  llvmToolchain = buildPackages.symlinkJoin {
     name = "bun-llvm-toolchain";
     paths = [
       llvmPackages.clang
       llvmPackages.llvm
       llvmPackages.lld
     ];
+    # Bun looks up unprefixed Clang tools in this directory.
+    postBuild = lib.optionalString (clangPrefix != "") ''
+      ln -s "${clangPrefix}clang" "$out/bin/clang"
+      ln -s "${clangPrefix}clang++" "$out/bin/clang++"
+    '';
   };
 
   bootstrapAsset =
@@ -233,9 +240,6 @@ stdenv.mkDerivation (finalAttrs: {
     # host tool discovery.
     ./support-nix-build-environment.patch
 
-    # Rust 1.99 lacks type_info::of and Once's Default implementation.
-    ./rust-1.99-compat.patch
-
     # Keep this bridge in sync with build() and provides() in webkit.ts.
     ./use-nix-webkit.patch
   ];
@@ -299,7 +303,7 @@ stdenv.mkDerivation (finalAttrs: {
   env = {
     GIT_SHA = revision;
     NIX_CFLAGS_COMPILE = lib.concatStringsSep " " [
-      # Nix LLVM 21 has no zstd debug compression support.
+      # Use zlib for compressed debug sections.
       "-gz=zlib"
       # WebKit is native code; its lambda types are invisible to ThinLTO.
       "-fno-whole-program-vtables"
@@ -329,6 +333,13 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Upstream uses nightly-only Rust compiler options.
     RUSTC_BOOTSTRAP = 1;
+    # Bun still declares allocator_api, while Rust 1.100's std already declares allocator_ext.
+    NIX_RUSTFLAGS = lib.concatStringsSep " " [
+      "-Zcrate-attr=feature(allocator_ext)"
+      "-A stable-features"
+      "-A unused-features"
+      "-A duplicate-features"
+    ];
     BUN_BUILD_PREFETCH_DIR = buildPrefetch;
     BUN_TOOLCHAIN_LLVM = llvmToolchain;
     BUN_TOOLCHAIN_RUST = rustcWithLibSrc;
@@ -448,7 +459,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    updateScript = ./update.py;
+    updateScript = ./update.mts;
     webkit = bun-webkit;
     tests = lib.optionalAttrs (!isCross) (
       callPackages ./tests.nix {
