@@ -15,6 +15,8 @@
   wayland,
   dbus,
   craft-fonts,
+  xcbuild,
+  rcodesign,
 
   nix-update-script,
 }:
@@ -69,6 +71,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    xcbuild
+    rcodesign
   ];
 
   # Unused egui fork patches break cargo --offline.
@@ -86,9 +92,34 @@ rustPlatform.buildRustPackage (finalAttrs: {
       $out/share/applications/ai.storyteller.lightcraft.desktop
   '';
 
-  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
-    patchelf --add-rpath ${lib.makeLibraryPath runtimeDeps} $out/bin/lightcraft
-  '';
+  postFixup =
+    lib.optionalString stdenv.hostPlatform.isLinux ''
+      patchelf --add-rpath ${lib.makeLibraryPath runtimeDeps} $out/bin/lightcraft
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      APP="$out/Applications/LightCraft.app"
+
+      mkdir -p $APP/Contents/{MacOS,Resources}
+
+      ln -s $out/bin/lightcraft $APP/Contents/MacOS/LightCraft
+
+      cp $NIX_BUILD_TOP/source/assets/app-icon/lightcraft.icns $APP/Contents/Resources/LightCraft.icns
+
+      sed -e "s/@VERSION@/${finalAttrs.version}/g" -e "s/@SHORT_VERSION@/${finalAttrs.version}/g" \
+        -e "s/@BUILD_SHA@/unknown}/g" \
+        "$NIX_BUILD_TOP/source/packaging/macos/Info.plist.in" >"$APP/Contents/Info.plist"
+      plutil -lint "$APP/Contents/Info.plist"
+
+      printf 'APPL????' >"$APP/Contents/PkgInfo"
+      rcodesign sign \
+        --code-signature-flags runtime \
+        --entitlements-xml-file "$NIX_BUILD_TOP/source/packaging/macos/entitlements.plist" \
+        "$APP/Contents/MacOS/LightCraft"
+      rcodesign sign \
+        --code-signature-flags runtime \
+        --entitlements-xml-file "$NIX_BUILD_TOP/source/packaging/macos/entitlements.plist" \
+        "$APP"
+    '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
