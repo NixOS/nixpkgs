@@ -7,7 +7,7 @@
 
 mkProtonBinDerivation (finalAttrs: {
   pname = "proton-wineland-bin";
-  version = "11.0-20261124";
+  version = "11.0-20261127";
 
   steamDisplayName = "Proton-Wineland";
 
@@ -15,7 +15,7 @@ mkProtonBinDerivation (finalAttrs: {
     x86_64-linux = {
       src = fetchzip {
         url = "https://github.com/nanomatters/proton-salkim/releases/download/wineland-${finalAttrs.version}/proton-wineland-${finalAttrs.version}-x86_64.tar.xz";
-        hash = "sha256-NnHowCPZCd32++LyBNuQJuw/82+AQQAyurNt4bl3t9o=";
+        hash = "sha256-oLpz3YhmmZHtEu1QNfBAS87cIqy3/lxJgzUXnXR0R2k=";
       };
 
       toolName = "proton-wineland-${finalAttrs.version}-x86_64";
