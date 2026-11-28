@@ -32,14 +32,16 @@ let
         );
       getSubModules = elemType.getSubModules;
       substSubModules = mod: matrixOf n m (elemType.substSubModules mod);
-      functor = (
-        lib.types.elemTypeFunctor "attrsWith" {
-          inherit
-            elemType
-            name
-            ;
-        }
-      );
+      functor = lib.types.defaultFunctor name // {
+        payload = { inherit elemType; };
+        type = payload: matrixOf n m payload.elemType;
+        binOp =
+          a: b:
+          let
+            merged = a.elemType.typeMerge b.elemType.functor;
+          in
+          if merged == null then null else { elemType = merged; };
+      };
     };
 
   profileModule = lib.types.submodule {
