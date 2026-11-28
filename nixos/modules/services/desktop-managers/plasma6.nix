@@ -136,6 +136,7 @@ in
 
           # misc Plasma extras
           kdeplasma-addons
+          qtwebengine # QML module for the Web Browser and Dictionary applets in kdeplasma-addons
           pkgs.xdg-user-dirs # recommended upstream
 
           # Plasma utilities
