@@ -29,14 +29,18 @@
 
   aksarc = mkAzExtension {
     pname = "aksarc";
-    version = "1.5.62";
-    url = "https://hybridaksstorage.z13.web.core.windows.net/HybridAKS/CLI/aksarc-1.5.62-py3-none-any.whl";
-    hash = "sha256-PCy4SUbB4Vlj+fIwhufGwMJrrRehQr/W+QxAphTPnEk=";
+    version = "1.5.117";
+    url = "https://hybridaksstorage.z13.web.core.windows.net/HybridAKS/CLI/aksarc-1.5.117-py3-none-any.whl";
+    hash = "sha256-vRydbOjvQW1wPgOWwsIa5lPOjOcHdR976edWZyjfEhY=";
     description = "Microsoft Azure Command-Line Tools HybridContainerService Extension";
     propagatedBuildInputs = with python3Packages; [
+      asyncssh
+      certifi
       kubernetes
-      paramiko
+      urllib3
     ];
+    # pinned to asyncssh<2.24.0, but the APIs it uses are unchanged in 2.24
+    pythonRelaxDeps = [ "asyncssh" ];
     meta.maintainers = with lib.maintainers; [ techknowlogick ];
   };
 
