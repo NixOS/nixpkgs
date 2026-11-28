@@ -7,64 +7,93 @@
 }:
 let
   cfg = config.services.geoclue2;
-
-  appConfigModule = lib.types.submodule (
-    { name, ... }:
-    {
-      options = {
-        desktopID = lib.mkOption {
-          type = lib.types.str;
-          description = "Desktop ID of the application.";
-        };
-
-        isAllowed = lib.mkOption {
-          type = lib.types.bool;
-          description = ''
-            Whether the application will be allowed access to location information.
-          '';
-        };
-
-        isSystem = lib.mkOption {
-          type = lib.types.bool;
-          description = ''
-            Whether the application is a system component or not.
-          '';
-        };
-
-        users = lib.mkOption {
-          type = lib.types.listOf lib.types.str;
-          default = [ ];
-          description = ''
-            List of UIDs of all users for which this application is allowed location
-            info access, Defaults to an empty string to allow it for all users.
-          '';
-        };
+  ini = pkgs.formats.ini { listToValue = lib.concatStringsSep ";"; };
+  appConfig' = lib.mapAttrs' (name: x: {
+    name = x.desktopID or name;
+    value =
+      removeAttrs x [
+        "desktopID"
+        "isAllowed"
+        "isSystem"
+      ]
+      // {
+        allowed = if x.allowed != null then x.allowed else x.isAllowed or null;
+        system = if x.system != null then x.system else x.isSystem or null;
       };
-
-      config.desktopID = lib.mkDefault name;
-    }
-  );
-
-  appConfigToINICompatible =
-    _:
-    {
-      desktopID,
-      isAllowed,
-      isSystem,
-      users,
-      ...
-    }:
-    {
-      name = desktopID;
-      value = {
-        allowed = isAllowed;
-        system = isSystem;
-        users = lib.concatStringsSep ";" users;
-      };
-    };
-
+  }) cfg.appConfig;
 in
 {
+
+  imports =
+    let
+      inherit (lib) mkRenamedOptionModule;
+    in
+    [
+      (mkRenamedOptionModule
+        [ "services" "geoclue2" "whitelistedAgents" ]
+        [ "services" "geoclue2" "settings" "agent" "whitelist" ]
+      )
+      (mkRenamedOptionModule
+        [ "services" "geoclue2" "enable3G" ]
+        [ "services" "geoclue2" "settings" "3g" "enable" ]
+      )
+      (mkRenamedOptionModule
+        [ "services" "geoclue2" "enableCDMA" ]
+        [ "services" "geoclue2" "settings" "cdma" "enable" ]
+      )
+      (mkRenamedOptionModule
+        [ "services" "geoclue2" "enableModemGPS" ]
+        [ "services" "geoclue2" "settings" "modem-gps" "enable" ]
+      )
+      (mkRenamedOptionModule
+        [ "services" "geoclue2" "enableNmea" ]
+        [ "services" "geoclue2" "settings" "network-nmea" "enable" ]
+      )
+      (mkRenamedOptionModule
+        [ "services" "geoclue2" "enableWifi" ]
+        [ "services" "geoclue2" "settings" "wifi" "enable" ]
+      )
+      (mkRenamedOptionModule
+        [ "services" "geoclue2" "geoProviderUrl" ]
+        [ "services" "geoclue2" "settings" "wifi" "url" ]
+      )
+      (mkRenamedOptionModule
+        [ "services" "geoclue2" "submitData" ]
+        [ "services" "geoclue2" "settings" "wifi" "submit-data" ]
+      )
+      (mkRenamedOptionModule
+        [ "services" "geoclue2" "submissionUrl" ]
+        [ "services" "geoclue2" "settings" "wifi" "submission-url" ]
+      )
+      (mkRenamedOptionModule
+        [ "services" "geoclue2" "submissionNick" ]
+        [ "services" "geoclue2" "settings" "wifi" "submission-nick" ]
+      )
+      (mkRenamedOptionModule
+        [ "services" "geoclue2" "enableStatic" ]
+        [ "services" "geoclue2" "settings" "static-source" "enable" ]
+      )
+      (mkRenamedOptionModule
+        [ "services" "geoclue2" "staticLatitude" ]
+        [ "services" "geoclue2" "staticLocation" "latitude" ]
+      )
+      (mkRenamedOptionModule
+        [ "services" "geoclue2" "staticLongitude" ]
+        [ "services" "geoclue2" "staticLocation" "longitude" ]
+      )
+      (mkRenamedOptionModule
+        [ "services" "geoclue2" "staticAltitude" ]
+        [ "services" "geoclue2" "staticLocation" "altitude" ]
+      )
+      (mkRenamedOptionModule
+        [ "services" "geoclue2" "staticAccuracy" ]
+        [ "services" "geoclue2" "staticLocation" "accuracy" ]
+      )
+      (mkRenamedOptionModule
+        [ "services" "geoclue2" "enableDemoAgent" ]
+        [ "services" "geoclue2" "demoAgent" "enable" ]
+      )
+    ];
 
   ###### interface
 
@@ -72,177 +101,247 @@ in
 
     services.geoclue2 = {
 
-      enable = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
+      enable = lib.mkEnableOption "GeoClue 2 daemon";
+
+      settings = lib.mkOption {
         description = ''
-          Whether to enable GeoClue 2 daemon, a DBus service
-          that provides location information for accessing.
+          Configuration settings for GeoClue 2.  See {manpage}`geoclue(5)` for
+          details.
         '';
+        type = lib.types.submodule {
+          freeformType = ini.type;
+          options = {
+
+            agent.whitelist = lib.mkOption {
+              type = lib.types.nullOr (lib.types.listOf lib.types.str);
+              default = [
+                "gnome-shell"
+                "io.elementary.desktop.agent-geoclue2"
+              ]
+              ++ lib.optionals cfg.demoAgent.enable [
+                "geoclue-demo-agent"
+              ];
+              defaultText = lib.literalExpression ''
+                [
+                  "gnome-shell"
+                  "io.elementary.desktop.agent-geoclue2"
+                ]
+                ++ lib.optionals config.geoclue2.demoAgent.enable [
+                  "geoclue-demo-agent"
+                ]
+              '';
+              description = ''
+                Desktop IDs (without the .desktop extension) of whitelisted
+                agents.
+              '';
+              apply = lib.unique;
+            };
+            ip = {
+              enable = lib.mkOption {
+                type = lib.types.nullOr lib.types.bool;
+                default = !cfg.settings.static-source.enable;
+                defaultText = lib.literalExpression "!config.services.geoclue2.static-source.enable";
+                description = ''
+                  Enable the GeoIP source.
+                '';
+              };
+              method = lib.mkOption {
+                type = lib.types.nullOr lib.types.str;
+                default = "ichnaea";
+                description = ''
+                  Method (backend) to use for IP location.  See
+                  {manpage}`geoclue(5)` for available methods.
+                '';
+              };
+            };
+            network-nmea.enable = lib.mkOption {
+              type = lib.types.nullOr lib.types.bool;
+              default = !cfg.settings.static-source.enable;
+              defaultText = lib.literalExpression "!config.services.geoclue2.static-source.enable";
+              description = ''
+                Fetch location from NMEA sources on local network.  Sources are
+                automatically discovered using avahi (domain `_nmea-0183._tcp`).
+              '';
+            };
+            "3g".enable = lib.mkOption {
+              type = lib.types.nullOr lib.types.bool;
+              default = !cfg.settings.static-source.enable;
+              defaultText = lib.literalExpression "!config.services.geoclue2.static-source.enable";
+              description = ''
+                Enable 3G source.  The 3G source uses the wireless geolocation
+                service URL defined for WiFi.
+              '';
+            };
+            cdma.enable = lib.mkOption {
+              type = lib.types.nullOr lib.types.bool;
+              default = !cfg.settings.static-source.enable;
+              defaultText = lib.literalExpression "!config.services.geoclue2.static-source.enable";
+              description = ''
+                Enable CDMA source.
+              '';
+            };
+            modem-gps.enable = lib.mkOption {
+              type = lib.types.nullOr lib.types.bool;
+              default = !cfg.settings.static-source.enable;
+              defaultText = lib.literalExpression "!config.services.geoclue2.static-source.enable";
+              description = ''
+                Enable Modem-GPS source.
+              '';
+            };
+            wifi = {
+              enable = lib.mkOption {
+                type = lib.types.nullOr lib.types.bool;
+                default = !cfg.settings.static-source.enable;
+                defaultText = lib.literalExpression "!config.services.geoclue2.static-source.enable";
+                description = ''
+                  Enable WiFi source.
+                '';
+              };
+              submit-data = lib.mkOption {
+                type = lib.types.nullOr lib.types.bool;
+                default = false;
+                description = ''
+                  Submit data to a wireless geolocation service.
+                '';
+              };
+              submission-nick = lib.mkOption {
+                type = lib.types.nullOr lib.types.str;
+                default = "geoclue";
+                description = ''
+                  A nickname to submit network data with.  If set to an empty
+                  string, omitted from the submission.  Otherwise, must be 2 to
+                  32 characters long.
+                '';
+              };
+            };
+            compass.enable = lib.mkOption {
+              type = lib.types.nullOr lib.types.bool;
+              default = !cfg.settings.static-source.enable;
+              defaultText = lib.literalExpression "!config.services.geoclue2.static-source.enable";
+              description = ''
+                Enable Compass.
+              '';
+            };
+            static-source.enable = lib.mkOption {
+              type = lib.types.nullOr lib.types.bool;
+              default = cfg.staticLocation != null;
+              defaultText = lib.literalExpression "config.geoclue2.staticLocation != null";
+              description = ''
+                Enable the static source.  If you make use of this source, you
+                probably should disable other location sources so they won't
+                override the configured static location.
+              '';
+            };
+
+          };
+        };
       };
-      whitelistedAgents = lib.mkOption {
-        type = lib.types.listOf lib.types.str;
-        default = [
-          "gnome-shell"
-          "io.elementary.desktop.agent-geoclue2"
-        ];
+
+      appConfig = lib.mkOption {
         description = ''
-          Desktop IDs (without the .desktop extension) of whitelisted agents.
+          Specify extra settings per application.  Appended to configuration
+          file after settings.
+        '';
+        type = lib.types.attrsOf (
+          lib.types.submodule {
+            freeformType = ini.lib.types.section;
+            options = {
+              allowed = lib.mkOption {
+                type = lib.types.nullOr lib.types.bool;
+                default = null;
+                description = ''
+                  Allowed access to location information.
+                '';
+              };
+              system = lib.mkOption {
+                type = lib.types.nullOr lib.types.bool;
+                default = null;
+                description = ''
+                  Is application a system component.
+                '';
+              };
+              users = lib.mkOption {
+                type = lib.types.nullOr (lib.types.listOf lib.types.str);
+                default = [ ];
+                description = ''
+                  List of UIDs of all users for which this application is allowed
+                  location info access.  Keep empty to allow for all users.
+                '';
+              };
+            };
+          }
+        );
+        defaultText = lib.literalExpression ''
+          {
+            "epiphany" = {
+              allowed = true;
+              system = false;
+            };
+            "firefox" = {
+              allowed = true;
+              system = false;
+            };
+          }
         '';
       };
 
-      enableDemoAgent = lib.mkOption {
+      staticLocation = lib.mkOption {
+        type = lib.types.nullOr (
+          lib.types.submodule {
+            options = {
+              latitude = lib.mkOption {
+                type = lib.types.number;
+                default = config.location.latitude;
+                defaultText = lib.literalExpression "config.location.latitude";
+                description = ''
+                  Latitude to be used by `static-source`.
+                '';
+              };
+              longitude = lib.mkOption {
+                type = lib.types.number;
+                default = config.location.longitude;
+                defaultText = lib.literalExpression "config.location.longitude";
+                description = ''
+                  Longitude to be used by `static-source`.
+                '';
+              };
+              altitude = lib.mkOption {
+                type = lib.types.number;
+                description = ''
+                  Altitude in meters to be used by `static-source`.
+                '';
+              };
+              accuracy = lib.mkOption {
+                type = lib.types.number;
+                description = ''
+                  Accuracy radius in meters to be used by `static-source`.
+                '';
+              };
+            };
+          }
+        );
+        default = null;
+        description = ''
+          Static location to be used to be used by `static-source`.
+        '';
+      };
+
+      demoAgent.enable = lib.mkOption {
         type = lib.types.bool;
         default = true;
         description = ''
-          Whether to use the GeoClue demo agent. This should be
-          overridden by desktop environments that provide their own
-          agent.
+          Whether to use the GeoClue demo agent.  This should be overridden by
+          desktop environments that provide their own agent.
         '';
       };
 
-      enableNmea = lib.mkOption {
-        type = lib.types.bool;
-        default = true;
-        description = ''
-          Whether to fetch location from NMEA sources on local network.
-        '';
-      };
-
-      enable3G = lib.mkOption {
-        type = lib.types.bool;
-        default = true;
-        description = ''
-          Whether to enable 3G source.
-        '';
-      };
-
-      enableCDMA = lib.mkOption {
-        type = lib.types.bool;
-        default = true;
-        description = ''
-          Whether to enable CDMA source.
-        '';
-      };
-
-      enableModemGPS = lib.mkOption {
-        type = lib.types.bool;
-        default = true;
-        description = ''
-          Whether to enable Modem-GPS source.
-        '';
-      };
-
-      enableWifi = lib.mkOption {
-        type = lib.types.bool;
-        default = true;
-        description = ''
-          Whether to enable WiFi source.
-        '';
-      };
-
-      enableStatic = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        description = ''
-          Whether to enable the static source. This source defines a fixed
-          location using the `staticLatitude`, `staticLongitude`,
-          `staticAltitude`, and `staticAccuracy` options.
-
-          Setting `enableStatic` to true will disable all other sources, to
-          prevent conflicts. Use `lib.mkForce true` when enabling other sources
-          if for some reason you want to override this.
-        '';
-      };
-
-      staticLatitude = lib.mkOption {
-        type = lib.types.numbers.between (-90) 90;
-        description = ''
-          Latitude to use for the static source. Defaults to `location.latitude`.
-        '';
-      };
-
-      staticLongitude = lib.mkOption {
-        type = lib.types.numbers.between (-180) 180;
-        description = ''
-          Longitude to use for the static source. Defaults to `location.longitude`.
-        '';
-      };
-
-      staticAltitude = lib.mkOption {
-        type = lib.types.number;
-        description = ''
-          Altitude in meters to use for the static source.
-        '';
-      };
-
-      staticAccuracy = lib.mkOption {
-        type = lib.types.numbers.positive;
-        description = ''
-          Accuracy radius in meters to use for the static source.
-        '';
-      };
-
-      geoProviderUrl = lib.mkOption {
-        type = lib.types.str;
-        default = "https://api.beacondb.net/v1/geolocate";
-        example = "https://www.googleapis.com/geolocation/v1/geolocate?key=YOUR_KEY";
-        description = ''
-          The url to the wifi GeoLocation Service.
-        '';
-      };
-
-      package = lib.mkOption {
-        type = lib.types.package;
-        default = pkgs.geoclue2;
-        defaultText = lib.literalExpression "pkgs.geoclue2";
+      package = lib.mkPackageOption pkgs "geoclue2" { } // {
         apply =
           pkg:
           pkg.override {
             # the demo agent isn't built by default, but we need it here
-            withDemoAgent = cfg.enableDemoAgent;
+            withDemoAgent = cfg.demoAgent.enable;
           };
-        description = "The geoclue2 package to use";
-      };
-
-      submitData = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        description = ''
-          Whether to submit data to a GeoLocation Service.
-        '';
-      };
-
-      submissionUrl = lib.mkOption {
-        type = lib.types.str;
-        default = "https://api.beacondb.net/v2/geosubmit";
-        description = ''
-          The url to submit data to a GeoLocation Service.
-        '';
-      };
-
-      submissionNick = lib.mkOption {
-        type = lib.types.str;
-        default = "geoclue";
-        description = ''
-          A nickname to submit network data with.
-          Must be 2-32 characters long.
-        '';
-      };
-
-      appConfig = lib.mkOption {
-        type = lib.types.attrsOf appConfigModule;
-        default = { };
-        example = lib.literalExpression ''
-          "com.github.app" = {
-            isAllowed = true;
-            isSystem = true;
-            users = [ "300" ];
-          };
-        '';
-        description = ''
-          Specify extra settings per application.
-        '';
       };
 
     };
@@ -251,6 +350,54 @@ in
 
   ###### implementation
   config = lib.mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = lib.intersectAttrs cfg.settings appConfig' == { };
+        message = "Overlap between `services.geoclue2.settings' and `services.geoclue2.appConfig'. Cannot have an application with the same desktop ID as a settings section.";
+      }
+    ];
+
+    warnings = lib.concatMap ({ cond, msg }: lib.optional cond msg) [
+      {
+        cond = lib.any (x: x ? desktopID) (lib.attrValues cfg.appConfig);
+        msg = "Obsolete option `services.geoclue2.appConfig.<name>.desktopID' is used. It is now obtained from the <name> itself.";
+      }
+      {
+        cond = lib.any (x: x ? isAllowed) (lib.attrValues cfg.appConfig);
+        msg = "Obsolete option `services.geoclue2.appConfig.<name>.isAllowed' is used. It was renamed to `services.geoclue2.appConfig.<name>.allowed'.";
+      }
+      {
+        cond = lib.any (x: x ? isSystem) (lib.attrValues cfg.appConfig);
+        msg = "Obsolete option `services.geoclue2.appConfig.<name>.isSystem' is used. It was renamed to `services.geoclue2.appConfig.<name>.system'.";
+      }
+    ];
+
+    services.geoclue2.appConfig = lib.mkDefault {
+      "gnome-datetime-panel" = {
+        allowed = true;
+        system = true;
+      };
+      "gnome-color-panel" = {
+        allowed = true;
+        system = true;
+      };
+      "org.gnome.Shell" = {
+        allowed = true;
+        system = true;
+      };
+      "io.elementary.desktop.agent-geoclue2" = {
+        allowed = true;
+        system = true;
+      };
+      "epiphany" = {
+        allowed = true;
+        system = false;
+      };
+      "firefox" = {
+        allowed = true;
+        system = false;
+      };
+    };
 
     environment.systemPackages = [ cfg.package ];
 
@@ -271,19 +418,9 @@ in
       groups.geoclue = { };
     };
 
-    services.geoclue2 = {
-      enable3G = lib.mkIf cfg.enableStatic false;
-      enableCDMA = lib.mkIf cfg.enableStatic false;
-      enableModemGPS = lib.mkIf cfg.enableStatic false;
-      enableNmea = lib.mkIf cfg.enableStatic false;
-      enableWifi = lib.mkIf cfg.enableStatic false;
-      staticLatitude = lib.mkDefault config.location.latitude;
-      staticLongitude = lib.mkDefault config.location.longitude;
-    };
-
     systemd.services.geoclue = {
-      wants = lib.optionals cfg.enableWifi [ "network-online.target" ];
-      after = lib.optionals cfg.enableWifi [ "network-online.target" ];
+      wants = lib.optionals cfg.settings.wifi.enable [ "network-online.target" ];
+      after = lib.optionals cfg.settings.wifi.enable [ "network-online.target" ];
       # restart geoclue service when the configuration changes
       restartTriggers = [
         config.environment.etc."geoclue/geoclue.conf".source
@@ -293,15 +430,15 @@ in
 
     # this needs to run as a user service, since it's associated with the
     # user who is making the requests
-    systemd.user.services = lib.mkIf cfg.enableDemoAgent {
+    systemd.user.services = lib.mkIf cfg.demoAgent.enable {
       geoclue-agent = {
         description = "Geoclue agent";
         # this should really be `partOf = [ "geoclue.service" ]`, but
         # we can't be part of a system service, and the agent should
         # be okay with the main service coming and going
         wantedBy = [ "default.target" ];
-        wants = lib.optionals cfg.enableWifi [ "network-online.target" ];
-        after = lib.optionals cfg.enableWifi [ "network-online.target" ];
+        wants = lib.optionals cfg.settings.wifi.enable [ "network-online.target" ];
+        after = lib.optionals cfg.settings.wifi.enable [ "network-online.target" ];
         unitConfig.ConditionUser = "!@system";
         serviceConfig = {
           Type = "exec";
@@ -312,63 +449,19 @@ in
       };
     };
 
-    services.geoclue2.appConfig.epiphany = {
-      isAllowed = true;
-      isSystem = false;
-    };
+    environment.etc = {
+      "geoclue/geoclue.conf".source = ini.generate "geoclue.conf" (cfg.settings // appConfig');
 
-    services.geoclue2.appConfig.firefox = {
-      isAllowed = true;
-      isSystem = false;
-    };
-
-    environment.etc."geoclue/geoclue.conf".text = lib.generators.toINI { } (
-      {
-        agent = {
-          whitelist = lib.concatStringsSep ";" (
-            lib.lists.unique (
-              cfg.whitelistedAgents
-              ++ lib.optionals config.services.geoclue2.enableDemoAgent [ "geoclue-demo-agent" ]
-            )
-          );
-        };
-        network-nmea = {
-          enable = cfg.enableNmea;
-        };
-        "3g" = {
-          enable = cfg.enable3G;
-        };
-        cdma = {
-          enable = cfg.enableCDMA;
-        };
-        modem-gps = {
-          enable = cfg.enableModemGPS;
-        };
-        wifi = {
-          enable = cfg.enableWifi;
-        }
-        // lib.optionalAttrs cfg.enableWifi {
-          url = cfg.geoProviderUrl;
-          submit-data = lib.boolToString cfg.submitData;
-          submission-url = cfg.submissionUrl;
-          submission-nick = cfg.submissionNick;
-        };
-        static-source = {
-          enable = cfg.enableStatic;
-        };
-      }
-      // lib.mapAttrs' appConfigToINICompatible cfg.appConfig
-    );
-
-    environment.etc.geolocation = lib.mkIf cfg.enableStatic {
-      mode = "0440";
-      group = "geoclue";
-      text = ''
-        ${toString cfg.staticLatitude}
-        ${toString cfg.staticLongitude}
-        ${toString cfg.staticAltitude}
-        ${toString cfg.staticAccuracy}
-      '';
+      "geolocation" = lib.mkIf (cfg.staticLocation != null) {
+        mode = "0440";
+        group = "geoclue";
+        text = ''
+          ${toString cfg.staticLocation.latitude}
+          ${toString cfg.staticLocation.longitude}
+          ${toString cfg.staticLocation.altitude}
+          ${toString cfg.staticLocation.accuracy}
+        '';
+      };
     };
   };
 

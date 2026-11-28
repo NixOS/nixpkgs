@@ -26,7 +26,7 @@ makeInstalledTest {
     ];
     services.geoclue2 = {
       enable = true;
-      enableDemoAgent = true;
+      demoAgent.enable = true;
     };
     location.provider = "geoclue2";
   };
