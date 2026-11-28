@@ -66,7 +66,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     wayland # For libwayland-client
   ]
   ++ lib.optional (withDbus || withScreencastSupport || withSystemd) dbus
-  ++ lib.optional withScreencastSupport pipewire
+  ++ lib.optional withScreencastSupport pipewire.dev
   ++ lib.optional withSystemd systemdLibs # Includes libudev
   ++ lib.optional (!withSystemd) eudev; # Use an alternative libudev implementation when building w/o systemd
 
@@ -133,7 +133,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Scrollable-tiling Wayland compositor";
     homepage = "https://github.com/niri-wm/niri";
-    changelog = "https://github.com/niri-wm/niri/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/niri-wm/niri/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       sodiboo
