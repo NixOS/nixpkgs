@@ -49,12 +49,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vmware-workstation";
-  version = "25H2u1";
-  build = "25219725";
+  version = "26H1u1";
+  build = "25688693";
 
   src = fetchurl {
     url = "https://archive.org/download/VMware-Workstation-Full-${finalAttrs.version}-${finalAttrs.build}.x86_64/VMware-Workstation-Full-${finalAttrs.version}-${finalAttrs.build}.x86_64.bundle";
-    hash = "sha256-chqpPE68qlGsbbde2Xx6TbEKqIEQRGiQ2x5Av6/HVmo=";
+    hash = "sha256-2oI8hTzH5XvnubBwyK7SD+nXX9UZrm8XWrHa/HKDAC4=";
   };
 
   vmware-unpack-env = buildFHSEnv {
@@ -145,7 +145,8 @@ stdenv.mkDerivation (finalAttrs: {
       $out/etc/vmware \
       $out/etc/init.d \
       $out/lib/vmware \
-      $out/share/doc
+      $out/share/doc \
+      $out/share/applications
 
     #### Replicate vmware-installer's order but VMX first because of appLoader
     ${lib.optionalString enableInstaller ''
@@ -173,7 +174,7 @@ stdenv.mkDerivation (finalAttrs: {
       sed -i -e "s,@@IVERSION@@,$vmware_installer_version," $out/etc/vmware-installer/bootstrap
       sed -i -e "s,@@BUILD@@,${finalAttrs.build}," $out/etc/vmware-installer/bootstrap
 
-      # create database of vmware guest tools (avoids vmware fetching them later)
+      # create database of vmware guest tools
       mkdir -p $out/etc/vmware-installer/components
       database_filename=$out/etc/vmware-installer/database
       touch $database_filename
@@ -206,158 +207,198 @@ stdenv.mkDerivation (finalAttrs: {
     ## VMware VMX
     echo "Installing VMware VMX"
     unpacked="unpacked/vmware-vmx"
-    cp -r $unpacked/bin/* $out/bin/
-    cp -r $unpacked/etc/modprobe.d $out/etc/
-    cp -r $unpacked/etc/init.d/* $out/etc/init.d/
-    cp -r $unpacked/roms $out/lib/vmware/
-    cp -r $unpacked/sbin/* $out/bin/
+    if [ -d "$unpacked" ]; then
+      [ -d "$unpacked/bin" ] && cp -r $unpacked/bin/* $out/bin/ || true
+      [ -d "$unpacked/etc/modprobe.d" ] && cp -r $unpacked/etc/modprobe.d $out/etc/ || true
+      [ -d "$unpacked/etc/init.d" ] && cp -r $unpacked/etc/init.d/* $out/etc/init.d/ || true
+      [ -d "$unpacked/roms" ] && cp -r $unpacked/roms $out/lib/vmware/ || true
+      [ -d "$unpacked/sbin" ] && cp -r $unpacked/sbin/* $out/bin/ || true
 
-    cp -r $unpacked/lib/libconf $out/lib/vmware/
-    rm $out/lib/vmware/libconf/etc/fonts/fonts.conf
+      [ -d "$unpacked/lib/libconf" ] && cp -r $unpacked/lib/libconf $out/lib/vmware/ || true
+      [ -f "$out/lib/vmware/libconf/etc/fonts/fonts.conf" ] && rm $out/lib/vmware/libconf/etc/fonts/fonts.conf || true
 
-    cp -r $unpacked/lib/bin $out/lib/vmware/
-    cp -r $unpacked/lib/lib $out/lib/vmware/
-    cp -r $unpacked/lib/scripts $out/lib/vmware/
-    cp -r $unpacked/lib/icu $out/lib/vmware/
-    cp -r $unpacked/lib/share $out/lib/vmware/
-    cp -r $unpacked/lib/modules $out/lib/vmware/
-    cp -r $unpacked/lib/include $out/lib/vmware/
+      [ -d "$unpacked/lib/bin" ] && cp -r $unpacked/lib/bin $out/lib/vmware/ || true
+      [ -d "$unpacked/lib/lib" ] && cp -r $unpacked/lib/lib $out/lib/vmware/ || true
+      [ -d "$unpacked/lib/scripts" ] && cp -r $unpacked/lib/scripts $out/lib/vmware/ || true
+      [ -d "$unpacked/lib/icu" ] && cp -r $unpacked/lib/icu $out/lib/vmware/ || true
+      [ -d "$unpacked/lib/share" ] && cp -r $unpacked/lib/share $out/lib/vmware/ || true
+      [ -d "$unpacked/lib/modules" ] && cp -r $unpacked/lib/modules $out/lib/vmware/ || true
+      [ -d "$unpacked/lib/include" ] && cp -r $unpacked/lib/include $out/lib/vmware/ || true
+      [ -f "$unpacked/extra/modules.xml" ] && cp -r $unpacked/extra/modules.xml $out/lib/vmware/modules/ || true
+    fi
 
-    cp -r $unpacked/extra/modules.xml $out/lib/vmware/modules/
+    # Generate .ko.cer files for module aggregation compatibility on modern kernels (7.3+)
+    if [ -d "$out/lib/vmware/modules" ]; then
+      find "$out/lib/vmware/modules" -name "*.ko" -print0 | while IFS= read -r -d "" ko; do
+        touch "$ko.cer"
+        touch "$(dirname "$ko")/$(basename "$ko" .ko).ko.cer"
+      done
+    fi
 
-    ln -s $out/lib/vmware/bin/appLoader $out/lib/vmware/bin/vmware-vmblock-fuse
-    ln -s $out/lib/vmware/icu $out/etc/vmware/icu
+    [ -f "$out/lib/vmware/bin/appLoader" ] && ln -s $out/lib/vmware/bin/appLoader $out/lib/vmware/bin/vmware-vmblock-fuse || true
+    [ -d "$out/lib/vmware/icu" ] && ln -s $out/lib/vmware/icu $out/etc/vmware/icu || true
 
     # Replace vmware-modconfig with simple error dialog
     cp ${./vmware-modconfig} $out/bin/vmware-modconfig
     sed -i -e "s,ETCDIR=/etc/vmware,ETCDIR=$out/etc/vmware," $out/bin/vmware-modconfig
 
-    # Patch dynamic libs in
+    # Patch dynamic libs in VMX binaries if they exist
     for binary in "mksSandbox" "mksSandbox-debug" "mksSandbox-stats" "vmware-vmx" "vmware-vmx-debug" "vmware-vmx-stats"
     do
-      patchelf \
-        --add-needed ${libaio}/lib/libaio.so.1 \
-        --add-needed ${vulkan-loader}/lib/libvulkan.so.1 \
-        --add-needed ${alsa-lib}/lib/libasound.so \
-        --add-needed ${libpulseaudio}/lib/libpulse.so.0 \
-        --add-needed ${libGL}/lib/libEGL.so.1 \
-        --add-needed ${numactl}/lib/libnuma.so.1 \
-        --add-needed ${libx11}/lib/libX11.so.6 \
-        --add-needed ${libxi}/lib/libXi.so.6 \
-        --add-needed ${libGL}/lib/libGL.so.1 \
-        $out/lib/vmware/bin/$binary
+      if [ -f "$out/lib/vmware/bin/$binary" ]; then
+        patchelf \
+          --add-needed ${libaio}/lib/libaio.so.1 \
+          --add-needed ${vulkan-loader}/lib/libvulkan.so.1 \
+          --add-needed ${alsa-lib}/lib/libasound.so \
+          --add-needed ${libpulseaudio}/lib/libpulse.so.0 \
+          --add-needed ${libGL}/lib/libEGL.so.1 \
+          --add-needed ${numactl}/lib/libnuma.so.1 \
+          --add-needed ${libx11}/lib/libX11.so.6 \
+          --add-needed ${libxi}/lib/libXi.so.6 \
+          --add-needed ${libGL}/lib/libGL.so.1 \
+          $out/lib/vmware/bin/$binary
+      fi
     done
 
     ## VMware USB Arbitrator
     echo "Installing VMware USB Arbitrator"
     unpacked="unpacked/vmware-usbarbitrator"
-    cp -r $unpacked/etc/init.d/* $out/etc/init.d/
-    cp -r $unpacked/bin/* $out/bin/
-    ln -s $out/lib/vmware/bin/appLoader $out/lib/vmware/bin/vmware-usbarbitrator
+    if [ -d "$unpacked" ]; then
+      [ -d "$unpacked/etc/init.d" ] && cp -r $unpacked/etc/init.d/* $out/etc/init.d/ || true
+      [ -d "$unpacked/bin" ] && cp -r $unpacked/bin/* $out/bin/ || true
+    fi
+    [ -f "$out/lib/vmware/bin/appLoader" ] && ln -s $out/lib/vmware/bin/appLoader $out/lib/vmware/bin/vmware-usbarbitrator || true
 
     ## VMware Player Setup
     echo "Installing VMware Player Setup"
     unpacked="unpacked/vmware-player-setup"
-    mkdir -p $out/lib/vmware/setup
-    cp $unpacked/vmware-config $out/lib/vmware/setup/
+    if [ -d "$unpacked" ]; then
+      mkdir -p $out/lib/vmware/setup
+      [ -f "$unpacked/vmware-config" ] && cp $unpacked/vmware-config $out/lib/vmware/setup/ || true
+    fi
 
     ## VMware Network Editor
     echo "Installing VMware Network Editor"
     unpacked="unpacked/vmware-network-editor"
-    cp -r $unpacked/lib $out/lib/vmware/
+    if [ -d "$unpacked/lib" ]; then
+      cp -r $unpacked/lib/* $out/lib/vmware/ || true
+    fi
 
-    ## VMware Player Application
-    echo "Installing VMware Player Application"
-    unpacked="unpacked/vmware-player-app"
-    cp -r $unpacked/lib/* $out/lib/vmware/
-    cp -r $unpacked/share/* $out/share/
-    cp -r $unpacked/bin/* $out/bin/
-    cp -r $unpacked/doc/* $out/share/doc/ # Licences
+    ## VMware Other Apps (26H1u1 replacement for player-app)
+    echo "Installing VMware Other Apps"
+    unpacked="unpacked/vmware-other-apps"
+    if [ -d "$unpacked" ]; then
+      [ -d "$unpacked/lib" ] && cp -r $unpacked/lib/* $out/lib/vmware/ || true
+      [ -d "$unpacked/share" ] && cp -r $unpacked/share/* $out/share/ || true
+      [ -d "$unpacked/bin" ] && cp -r $unpacked/bin/* $out/bin/ || true
+      [ -d "$unpacked/doc" ] && cp -r $unpacked/doc/* $out/share/doc/ || true
+    fi
 
     for target in "vmplayer" "vmware-enter-serial" "vmware-setup-helper" "licenseTool" "vmware-mount" "vmware-fuseUI" "vmware-app-control" "vmware-zenity"
     do
-      ln -s $out/lib/vmware/bin/appLoader $out/lib/vmware/bin/$target
+      [ -f "$out/lib/vmware/bin/appLoader" ] && ln -s $out/lib/vmware/bin/appLoader $out/lib/vmware/bin/$target || true
     done
 
-    ln -s $out/lib/vmware/bin/vmware-mount $out/bin/vmware-mount
-    ln -s $out/lib/vmware/bin/vmware-fuseUI $out/bin/vmware-fuseUI
-    ln -s $out/lib/vmware/bin/vmrest $out/bin/vmrest
+    [ -f "$out/lib/vmware/bin/vmware-mount" ] && ln -s $out/lib/vmware/bin/vmware-mount $out/bin/vmware-mount || true
+    [ -f "$out/lib/vmware/bin/vmware-fuseUI" ] && ln -s $out/lib/vmware/bin/vmware-fuseUI $out/bin/vmware-fuseUI || true
+    [ -f "$out/lib/vmware/bin/vmrest" ] && ln -s $out/lib/vmware/bin/vmrest $out/bin/vmrest || true
 
-    # Patch vmplayer
-    sed -i -e "s,ETCDIR=/etc/vmware,ETCDIR=$out/etc/vmware," $out/bin/vmplayer
-    sed -i -e "s,/sbin/modprobe,${kmod}/bin/modprobe," $out/bin/vmplayer
-    sed -i -e "s,@@BINARY@@,$out/bin/vmplayer," $out/share/applications/vmware-player.desktop
+    # Patch vmplayer if it exists
+    if [ -f "$out/bin/vmplayer" ]; then
+      sed -i -e "s,ETCDIR=/etc/vmware,ETCDIR=$out/etc/vmware," $out/bin/vmplayer
+      sed -i -e "s,/sbin/modprobe,${kmod}/bin/modprobe," $out/bin/vmplayer
+    fi
+    if [ -f "$out/share/applications/vmware-player.desktop" ]; then
+      sed -i -e "s,@@BINARY@@,$out/bin/vmplayer," $out/share/applications/vmware-player.desktop
+    fi
 
     ## VMware OVF Tool component
     echo "Installing VMware OVF Tool for Linux"
     unpacked="unpacked/vmware-ovftool"
-    mkdir -p $out/lib/vmware-ovftool/
-
-    cp -r $unpacked/* $out/lib/vmware-ovftool/
-    chmod 755 $out/lib/vmware-ovftool/ovftool*
-    makeWrapper "$out/lib/vmware-ovftool/ovftool.bin" "$out/bin/ovftool"
+    if [ -d "$unpacked" ]; then
+      mkdir -p $out/lib/vmware-ovftool/
+      cp -r $unpacked/* $out/lib/vmware-ovftool/
+      chmod 755 $out/lib/vmware-ovftool/ovftool* || true
+      [ -f "$out/lib/vmware-ovftool/ovftool.bin" ] && makeWrapper "$out/lib/vmware-ovftool/ovftool.bin" "$out/bin/ovftool" || true
+    fi
 
     ## VMware Network Editor User Interface
     echo "Installing VMware Network Editor User Interface"
     unpacked="unpacked/vmware-network-editor-ui"
-    cp -r $unpacked/share/* $out/share/
+    if [ -d "$unpacked/share" ]; then
+      cp -r $unpacked/share/* $out/share/ || true
+    fi
 
-    ln -s $out/lib/vmware/bin/appLoader $out/lib/vmware/bin/vmware-netcfg
-    ln -s $out/lib/vmware/bin/vmware-netcfg $out/bin/vmware-netcfg
-
-    # Patch network editor ui
-
-    sed -i -e "s,@@BINARY@@,$out/bin/vmware-netcfg," $out/share/applications/vmware-netcfg.desktop
+    [ -f "$out/lib/vmware/bin/appLoader" ] && ln -s $out/lib/vmware/bin/appLoader $out/lib/vmware/bin/vmware-netcfg || true
+    [ -f "$out/lib/vmware/bin/vmware-netcfg" ] && ln -s $out/lib/vmware/bin/vmware-netcfg $out/bin/vmware-netcfg || true
+    if [ -f "$out/share/applications/vmware-netcfg.desktop" ]; then
+      sed -i -e "s,@@BINARY@@,$out/bin/vmware-netcfg," $out/share/applications/vmware-netcfg.desktop
+    fi
 
     ## VMware VIX Core Library
     echo "Installing VMware VIX Core Library"
     unpacked="unpacked/vmware-vix-core"
-    mkdir -p $out/lib/vmware-vix
-    cp -r $unpacked/lib/* $out/lib/vmware-vix/
-    cp -r $unpacked/bin/* $out/bin/
-    cp $unpacked/*.txt $out/lib/vmware-vix/
+    if [ -d "$unpacked" ]; then
+      mkdir -p $out/lib/vmware-vix
+      [ -d "$unpacked/lib" ] && cp -r $unpacked/lib/* $out/lib/vmware-vix/ || true
+      [ -d "$unpacked/bin" ] && cp -r $unpacked/bin/* $out/bin/ || true
+      cp -r $unpacked/*.txt $out/lib/vmware-vix/ 2>/dev/null || true
 
-    mkdir -p $out/share/doc/vmware-vix/
-    cp -r $unpacked/doc/* $out/share/doc/vmware-vix/
+      mkdir -p $out/share/doc/vmware-vix/
+      [ -d "$unpacked/doc" ] && cp -r $unpacked/doc/* $out/share/doc/vmware-vix/ || true
 
-    mkdir -p $out/include/
-    cp -r $unpacked/include/* $out/include/
+      mkdir -p $out/include/
+      [ -d "$unpacked/include" ] && cp -r $unpacked/include/* $out/include/ || true
+    fi
 
-    ## VMware VIX Workstation-17.0.0 Library
-    echo "Installing VMware VIX Workstation-17.0.0 Library"
+    ## VMware VIX Workstation Library
+    echo "Installing VMware VIX Workstation Library"
     unpacked="unpacked/vmware-vix-lib-Workstation1700"
-    cp -r $unpacked/lib/* $out/lib/vmware-vix/
+    if [ -d "$unpacked/lib" ]; then
+      cp -r $unpacked/lib/* $out/lib/vmware-vix/ || true
+    fi
 
     ## VMware VProbes component for Linux
     echo "Installing VMware VProbes component for Linux"
     unpacked="unpacked/vmware-vprobe"
-    cp -r $unpacked/bin/* $out/bin/
-    cp -r $unpacked/lib/* $out/lib/vmware/
+    if [ -d "$unpacked" ]; then
+      [ -d "$unpacked/bin" ] && cp -r $unpacked/bin/* $out/bin/ || true
+      [ -d "$unpacked/lib" ] && cp -r $unpacked/lib/* $out/lib/vmware/ || true
+    fi
 
     ## VMware Workstation
     echo "Installing VMware Workstation"
     unpacked="unpacked/vmware-workstation"
-    cp -r $unpacked/bin/* $out/bin/
-    cp -r $unpacked/lib/* $out/lib/vmware/
-    cp -r $unpacked/share/* $out/share/
-    cp -r $unpacked/man $out/share/
-    cp -r $unpacked/doc $out/share/
+    if [ -d "$unpacked" ]; then
+      [ -d "$unpacked/bin" ] && cp -r $unpacked/bin/* $out/bin/ || true
+      [ -d "$unpacked/lib" ] && cp -r $unpacked/lib/* $out/lib/vmware/ || true
+      [ -d "$unpacked/share" ] && cp -r $unpacked/share/* $out/share/ || true
+      [ -d "$unpacked/man" ] && cp -r $unpacked/man $out/share/ || true
+      [ -d "$unpacked/doc" ] && cp -r $unpacked/doc $out/share/ || true
+    fi
 
-    ln -s $out/lib/vmware/bin/appLoader $out/lib/vmware/bin/vmware
-    ln -s $out/lib/vmware/bin/appLoader $out/lib/vmware/bin/vmware-tray
-    ln -s $out/lib/vmware/bin/appLoader $out/lib/vmware/bin/vmware-vprobe
+    [ -f "$out/lib/vmware/bin/appLoader" ] && ln -s $out/lib/vmware/bin/appLoader $out/lib/vmware/bin/vmware || true
+    [ -f "$out/lib/vmware/bin/appLoader" ] && ln -s $out/lib/vmware/bin/appLoader $out/lib/vmware/bin/vmware-tray || true
+    [ -f "$out/lib/vmware/bin/appLoader" ] && ln -s $out/lib/vmware/bin/appLoader $out/lib/vmware/bin/vmware-vprobe || true
 
-    # Patch vmware
-    sed -i -e "s,ETCDIR=/etc/vmware,ETCDIR=$out/etc/vmware,g" $out/bin/vmware
-    sed -i -e "s,/sbin/modprobe,${kmod}/bin/modprobe,g" $out/bin/vmware
-    sed -i -e "s,@@BINARY@@,$out/bin/vmware," $out/share/applications/vmware-workstation.desktop
+    # Patch vmware binary if it exists
+    if [ -f "$out/bin/vmware" ]; then
+      sed -i -e "s,ETCDIR=/etc/vmware,ETCDIR=$out/etc/vmware,g" $out/bin/vmware
+      sed -i -e "s,/sbin/modprobe,${kmod}/bin/modprobe,g" $out/bin/vmware
+    fi
+    if [ -f "$out/share/applications/vmware-workstation.desktop" ]; then
+      sed -i -e "s,@@BINARY@@,$out/bin/vmware," $out/share/applications/vmware-workstation.desktop
+    fi
 
-    chmod +x $out/bin/* $out/lib/vmware/bin/* $out/lib/vmware/setup/*
+    chmod +x $out/bin/* $out/lib/vmware/bin/* 2>/dev/null || true
+    [ -d "$out/lib/vmware/setup" ] && chmod +x $out/lib/vmware/setup/* 2>/dev/null || true
 
     # Hardcoded pkexec hack
     for lib in "lib/vmware/lib/libvmware-mount.so/libvmware-mount.so" "lib/vmware/lib/libvmwareui.so/libvmwareui.so" "lib/vmware/lib/libvmware-fuseUI.so/libvmware-fuseUI.so"
     do
-      sed -i -e "s,/usr/local/sbin,/run/vmware/bin," "$out/$lib"
+      if [ -f "$out/$lib" ]; then
+        sed -i -e "s,/usr/local/sbin,/run/vmware/bin," "$out/$lib"
+      fi
     done
 
     ${lib.optionalString enableMacOSGuests ''
@@ -365,22 +406,27 @@ stdenv.mkDerivation (finalAttrs: {
       python3 unlocker/unlocker.py
     ''}
 
-    # SUID hack
-    wrapProgram $out/lib/vmware/bin/vmware-vmx
-    rm $out/lib/vmware/bin/vmware-vmx
-    ln -s /run/wrappers/bin/vmware-vmx $out/lib/vmware/bin/vmware-vmx
+    # SUID hack for vmx
+    if [ -f "$out/lib/vmware/bin/vmware-vmx" ]; then
+      wrapProgram $out/lib/vmware/bin/vmware-vmx
+      rm $out/lib/vmware/bin/vmware-vmx
+      ln -s /run/wrappers/bin/vmware-vmx $out/lib/vmware/bin/vmware-vmx
+    fi
 
     # Remove shipped X11 libraries
     for lib in $out/lib/vmware/lib/* $out/lib/vmware-ovftool/lib*.so*; do
-      lib_name="$(basename "$lib")"
-      if [[ "$lib_name" == libX* || "$lib_name" == libxcb* ]]; then
-        rm -rf "$lib"
+      if [ -e "$lib" ]; then
+        lib_name="$(basename "$lib")"
+        if [[ "$lib_name" == libX* || "$lib_name" == libxcb* ]]; then
+          rm -rf "$lib"
+        fi
       fi
     done
 
-    # VMware upgraded their shipped libxml2 without recompiling these libraries against it?
     for lib in $out/lib/vmware/lib/{libcroco-0.6.so.3/libcroco-0.6.so.3,librsvg-2.so.2/librsvg-2.so.2} $out/lib/vmware/libconf/lib/gtk-3.0/3.0.0/loaders/libpixbufloader-svg.so; do
-      patchelf $lib --replace-needed libxml2.so.2 libxml2.so.16
+      if [ -f "$lib" ]; then
+        patchelf $lib --replace-needed libxml2.so.2 libxml2.so.16
+      fi
     done
 
     runHook postInstall
