@@ -1,0 +1,107 @@
+{
+  "app_version": "2.4.0",
+  "x86_64-linux": {
+    "skiko-awt": {
+      "url": "https://repo1.maven.org/maven2/org/jetbrains/skiko/skiko-awt/0.150.2/skiko-awt-0.150.2.jar",
+      "sha256": "0w811shmwqhf6j0d92zim12yj4wxfsgaw8ipvjpb9x9im7csjdkb"
+    },
+    "jna": {
+      "url": "https://repo1.maven.org/maven2/net/java/dev/jna/jna/5.19.1/jna-5.19.1.jar",
+      "sha256": "1bpcmxm3xsllhx42qzlpz8967g1gc14vr97fzigmic7nivfl3cag"
+    },
+    "jna-platform": {
+      "url": "https://repo1.maven.org/maven2/net/java/dev/jna/jna-platform/5.19.1/jna-platform-5.19.1.jar",
+      "sha256": "10ig0nkcbvy8hj1wvq247xb8dc12nqj1b1hn9g1c7sa9nksn8f1v"
+    },
+    "oshi-core": {
+      "url": "https://repo1.maven.org/maven2/com/github/oshi/oshi-core/7.8.0/oshi-core-7.8.0.jar",
+      "sha256": "1lxy46bl9hgb23lpnbdp9118k7d65iv25izlvp7fkcsgylznf53i"
+    },
+    "oshi-common": {
+      "url": "https://repo1.maven.org/maven2/com/github/oshi/oshi-common/7.8.0/oshi-common-7.8.0.jar",
+      "sha256": "0z9asv7rwqjs664mbll2bjpbd2pbw4np08s9fqrkfgpg1zip1mg3"
+    },
+    "skiko-awt-runtime": {
+      "url": "https://repo1.maven.org/maven2/org/jetbrains/skiko/skiko-awt-runtime-linux-x64/0.150.2/skiko-awt-runtime-linux-x64-0.150.2.jar",
+      "sha256": "1hn5w4fi4xzq178fk78r6qj6wyrh6mmnlj3frayd0ks66zxgkhf6"
+    }
+  },
+  "aarch64-linux": {
+    "skiko-awt": {
+      "url": "https://repo1.maven.org/maven2/org/jetbrains/skiko/skiko-awt/0.150.2/skiko-awt-0.150.2.jar",
+      "sha256": "0w811shmwqhf6j0d92zim12yj4wxfsgaw8ipvjpb9x9im7csjdkb"
+    },
+    "jna": {
+      "url": "https://repo1.maven.org/maven2/net/java/dev/jna/jna/5.19.1/jna-5.19.1.jar",
+      "sha256": "1bpcmxm3xsllhx42qzlpz8967g1gc14vr97fzigmic7nivfl3cag"
+    },
+    "jna-platform": {
+      "url": "https://repo1.maven.org/maven2/net/java/dev/jna/jna-platform/5.19.1/jna-platform-5.19.1.jar",
+      "sha256": "10ig0nkcbvy8hj1wvq247xb8dc12nqj1b1hn9g1c7sa9nksn8f1v"
+    },
+    "oshi-core": {
+      "url": "https://repo1.maven.org/maven2/com/github/oshi/oshi-core/7.8.0/oshi-core-7.8.0.jar",
+      "sha256": "1lxy46bl9hgb23lpnbdp9118k7d65iv25izlvp7fkcsgylznf53i"
+    },
+    "oshi-common": {
+      "url": "https://repo1.maven.org/maven2/com/github/oshi/oshi-common/7.8.0/oshi-common-7.8.0.jar",
+      "sha256": "0z9asv7rwqjs664mbll2bjpbd2pbw4np08s9fqrkfgpg1zip1mg3"
+    },
+    "skiko-awt-runtime": {
+      "url": "https://repo1.maven.org/maven2/org/jetbrains/skiko/skiko-awt-runtime-linux-arm64/0.150.2/skiko-awt-runtime-linux-arm64-0.150.2.jar",
+      "sha256": "0ndsvx8y5jqvfnsv3qv6rn7dghzh95bfid6yw2lxw2z5qrbl04ma"
+    }
+  },
+  "x86_64-darwin": {
+    "skiko-awt": {
+      "url": "https://repo1.maven.org/maven2/org/jetbrains/skiko/skiko-awt/0.150.2/skiko-awt-0.150.2.jar",
+      "sha256": "0w811shmwqhf6j0d92zim12yj4wxfsgaw8ipvjpb9x9im7csjdkb"
+    },
+    "jna": {
+      "url": "https://repo1.maven.org/maven2/net/java/dev/jna/jna/5.19.1/jna-5.19.1.jar",
+      "sha256": "1bpcmxm3xsllhx42qzlpz8967g1gc14vr97fzigmic7nivfl3cag"
+    },
+    "jna-platform": {
+      "url": "https://repo1.maven.org/maven2/net/java/dev/jna/jna-platform/5.19.1/jna-platform-5.19.1.jar",
+      "sha256": "10ig0nkcbvy8hj1wvq247xb8dc12nqj1b1hn9g1c7sa9nksn8f1v"
+    },
+    "oshi-core": {
+      "url": "https://repo1.maven.org/maven2/com/github/oshi/oshi-core/7.8.0/oshi-core-7.8.0.jar",
+      "sha256": "1lxy46bl9hgb23lpnbdp9118k7d65iv25izlvp7fkcsgylznf53i"
+    },
+    "oshi-common": {
+      "url": "https://repo1.maven.org/maven2/com/github/oshi/oshi-common/7.8.0/oshi-common-7.8.0.jar",
+      "sha256": "0z9asv7rwqjs664mbll2bjpbd2pbw4np08s9fqrkfgpg1zip1mg3"
+    },
+    "skiko-awt-runtime": {
+      "url": "https://repo1.maven.org/maven2/org/jetbrains/skiko/skiko-awt-runtime-macos-x64/0.150.2/skiko-awt-runtime-macos-x64-0.150.2.jar",
+      "sha256": "15pzrly9yw4r6v2aq773039m2zb90xwf7037cyiankg9fqx1yyzp"
+    }
+  },
+  "aarch64-darwin": {
+    "skiko-awt": {
+      "url": "https://repo1.maven.org/maven2/org/jetbrains/skiko/skiko-awt/0.150.2/skiko-awt-0.150.2.jar",
+      "sha256": "0w811shmwqhf6j0d92zim12yj4wxfsgaw8ipvjpb9x9im7csjdkb"
+    },
+    "jna": {
+      "url": "https://repo1.maven.org/maven2/net/java/dev/jna/jna/5.19.1/jna-5.19.1.jar",
+      "sha256": "1bpcmxm3xsllhx42qzlpz8967g1gc14vr97fzigmic7nivfl3cag"
+    },
+    "jna-platform": {
+      "url": "https://repo1.maven.org/maven2/net/java/dev/jna/jna-platform/5.19.1/jna-platform-5.19.1.jar",
+      "sha256": "10ig0nkcbvy8hj1wvq247xb8dc12nqj1b1hn9g1c7sa9nksn8f1v"
+    },
+    "oshi-core": {
+      "url": "https://repo1.maven.org/maven2/com/github/oshi/oshi-core/7.8.0/oshi-core-7.8.0.jar",
+      "sha256": "1lxy46bl9hgb23lpnbdp9118k7d65iv25izlvp7fkcsgylznf53i"
+    },
+    "oshi-common": {
+      "url": "https://repo1.maven.org/maven2/com/github/oshi/oshi-common/7.8.0/oshi-common-7.8.0.jar",
+      "sha256": "0z9asv7rwqjs664mbll2bjpbd2pbw4np08s9fqrkfgpg1zip1mg3"
+    },
+    "skiko-awt-runtime": {
+      "url": "https://repo1.maven.org/maven2/org/jetbrains/skiko/skiko-awt-runtime-macos-arm64/0.150.2/skiko-awt-runtime-macos-arm64-0.150.2.jar",
+      "sha256": "1v3vdj0bvxc3ib0cmhrx7crwnljqgamw670129a29xqrlngm3smb"
+    }
+  }
+}
