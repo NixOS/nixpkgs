@@ -10,16 +10,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fastddsgen";
-  version = "4.3.0";
+  version = "4.3.1";
 
   src = fetchFromGitHub {
     owner = "eProsima";
     repo = "Fast-DDS-Gen";
-    # Version 4.3.0 has an extra .0 in the git tag.
-    # TODO Remove .0 for later releases if needed.
-    tag = "v${finalAttrs.version}.0";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-yh92JYJFJVp2/rDpz9eAUlNDhtRoRHgCIRYfrADfA/c=";
+    hash = "sha256-BCih45l6t3DlmNnWNIhCe6ou8cWpVlgkGh4nUmGXq4w=";
   };
 
   nativeBuildInputs = [
