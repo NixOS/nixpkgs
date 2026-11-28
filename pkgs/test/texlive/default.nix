@@ -508,6 +508,7 @@ rec {
         "kpsewhere"
         "latex-git-log"
         "ltxfileinfo"
+        "make-paper-tarball"
         "mendex"
         "pdflatexpicscale"
         "perltex"
@@ -557,6 +558,7 @@ rec {
         "latex2man"
         "latex-git-log"
         "listings-ext.sh"
+        "make-paper-tarball"
         "psbook"
         "psnup"
         "psresize"
@@ -679,6 +681,9 @@ rec {
 
         # show-pdf-tags: require working kpse to find lualatex and lua modules
         "show-pdf-tags"
+
+        # spanish-mathml-intent: requires working kpse to find luatex
+        "spmmli-tool"
 
         # bibexport: requires kpsewhich
         "bibexport"

@@ -1,6 +1,6 @@
 {
   stdenv,
-  fetchpatch2,
+  fetchpatch,
   lib,
   tlpdb,
   bin,
@@ -27,7 +27,6 @@
   zip,
   luajit,
   texinfo,
-  unzip,
 }:
 oldTlpdb:
 let
@@ -479,31 +478,9 @@ lib.recursiveUpdate orig rec {
   '';
 
   # find files in script directory, not in binary directory
-  # fix compatibility with Python 3.14 by loading a patched copy of the latexminted package
-  # (the patch is applied here rather than in postUnpack, since repacking the wheel inside the
-  # fixed-output tex container would make its hash depend on the zip/zlib implementation)
-  minted.extraNativeBuildInputs = [ unzip ];
-  minted.postFixup =
-    let
-      patch = fetchpatch2 {
-        name = "minted-python314-compat.patch";
-        url = "https://github.com/gpoore/minted/commit/2a7b3a48e47b834bbc4a616679a0ef9710896a16.diff";
-        hash = "sha256-JcaQjSDqBQFsWLNRaOSNxCvPNa2HktfuzjsMKAWUPl8=";
-        includes = [ "python/latexminted/cmdline.py" ];
-      };
-    in
-    ''
-      substituteInPlace "$out"/bin/latexminted --replace-fail "__file__" "\"$scriptsFolder/latexminted.py\""
-
-      latexmintedLib="$out"/share/minted/python
-      mkdir -p "$latexmintedLib"
-      unzip -q "$scriptsFolder"/latexminted-0.6.0-py3-none-any.whl 'latexminted/*' -d "$latexmintedLib"
-      sed -i 's/\r$//' "$latexmintedLib"/latexminted/cmdline.py
-      patch -p2 -d "$latexmintedLib" -i "${patch}"
-      substituteInPlace "$out"/bin/latexminted \
-        --replace-fail "from latexminted.cmdline import main" \
-          "sys.path.insert(0, '$latexmintedLib')"$'\n'"from latexminted.cmdline import main"
-    '';
+  minted.postFixup = ''
+    substituteInPlace "$out"/bin/latexminted --replace-fail "__file__" "\"$scriptsFolder/latexminted.py\""
+  '';
 
   # find files in source container, fix incompatibilities with snobol4
   texaccents.postFixup = ''
@@ -571,6 +548,12 @@ lib.recursiveUpdate orig rec {
 
   # Since the packaging change for ConTeXt, context-legacy is missing the xetex dependency
   context-legacy.deps = (orig.context-legacy.deps or [ ]) ++ [ "xetex" ];
+
+  # TeX Live 2026 dropped xetex from the dependencies, but csplain still declares a pdfcsplain format on xetex
+  csplain.deps = orig.csplain.deps ++ [ "xetex" ];
+
+  # TeX Live 2026 no longer declares the hilatex format, but still ships the format link
+  hitex.binfiles = lib.remove "hilatex" orig.hitex.binfiles;
 
   # it seems to need it to transform fonts
   xdvi.deps = (orig.xdvi.deps or [ ]) ++ [ "metafont" ];
