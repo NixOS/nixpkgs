@@ -75,7 +75,7 @@ let
         pathAbsoluteFallback -> ${pathAbsoluteFallback}
       '' throw "${plugin.pname}: does not provide parse-able entry point";
 
-  yarnHash = "sha256-La05mhMuChvjSPFjOXPJqCaXx7BvE6Ixdjc9OHIP6y0=";
+  yarnHash = "sha256-ajQyBhLRBuU53PCbad0bEeVO+kJlg0OpfkPsXX5RtJ8=";
 
   prettier-oxc-wasm-parser = stdenv.mkDerivation (finalAttrs: {
     pname = "binding-wasm32-wasi";
@@ -135,7 +135,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "prettier";
-  version = "3.9.10";
+  version = "3.10.1";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -144,7 +144,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "prettier";
     repo = "prettier";
     tag = finalAttrs.version;
-    hash = "sha256-Pass0h0ghhULy4eMuILfBlRnQsOKIdhBrVrCDPthKek=";
+    hash = "sha256-ZL5qQU7TGGChzHYPSwYbUlhRGu+TTcD/NwHkXuI4mPI=";
   };
 
   missingHashes = ./missing-hashes.json;
@@ -174,10 +174,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     find .tmp/prettier-oxc-wasm-parser -type f -exec chmod u+w {} \;
     find .tmp/prettier-oxc-wasm-parser -type d -exec chmod u+w {} \;
-
-    sed --in-place --expression '/^\s\+const installDirectory = await install(version);$/ {
-      s#await install(version)#new URL("../../../.tmp/prettier-oxc-wasm-parser", import.meta.url)#;
-    }' scripts/build/hacks/build-oxc-wasm-parser.js
 
     yarn build --clean
 
