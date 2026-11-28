@@ -90,7 +90,10 @@ stdenvNoCC.mkDerivation {
       Additional configuration is needed for a working module. See the [upstream documentation](https://3.nam-shub-of-enki.iocaine.madhouse-project.org).
     '';
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ sigmasquadron ];
+    maintainers = with lib.maintainers; [
+      defelo
+      sigmasquadron
+    ];
     inherit (iocaine.meta) platforms;
     homepage = "https://git.madhouse-project.org/iocaine/nam-shub-of-enki";
   };
