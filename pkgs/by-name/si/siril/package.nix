@@ -40,17 +40,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "siril";
-  version = "1.4.4";
+  version = "1.4.5";
 
   src = fetchFromGitLab {
     owner = "free-astro";
     repo = "siril";
     tag = finalAttrs.version;
-    hash = "sha256-UgG/efOMVeQJ1r219YOPkgkPqEdaXJquqXyWZW0oWgI=";
+    hash = "sha256-tPk1Dm545J2aAlAFwGtxLcAq0MsxJGCRBY2VaEh/1js=";
   };
 
   # needed for newer libxisf, can be removed with next version
-  patches = [ ./libxisf-compat.patch ];
+  patches = [  ];
 
   nativeBuildInputs = [
     meson
