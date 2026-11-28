@@ -4,6 +4,7 @@
   bleak,
   buildPythonPackage,
   ecpy,
+  fetchpatch,
   fetchPypi,
   hidapi,
   nfcpy,
@@ -29,6 +30,14 @@ buildPythonPackage (finalAttrs: {
     inherit (finalAttrs) pname version;
     hash = "sha256-EHniiz6h6qoH8srquVaiWIxpTDQaKp9strNtuIpHeTY=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "ledgerblue-no-future.patch";
+      url = "https://github.com/LedgerHQ/blue-loader-python/commit/40a9904933bbf9d9bb50f20b942215725e2f8e2c.patch";
+      hash = "sha256-6FIHeB6ReqvMKX20K33DuKk39E/FPsq59ah2Zf3Nt8I=";
+    })
+  ];
 
   build-system = [
     setuptools
