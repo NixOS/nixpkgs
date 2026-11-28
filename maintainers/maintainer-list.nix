@@ -12900,6 +12900,12 @@
     githubId = 36890802;
     name = "Ivy Fan-Chiang";
   };
+  ivyxu = {
+    email = "ivyxu1337@gmail.com";
+    github = "IvyXu420";
+    githubId = 219543465;
+    name = "Ivy Xu";
+  };
   iwanb = {
     email = "tracnar@gmail.com";
     github = "iwanb";
