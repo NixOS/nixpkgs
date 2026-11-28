@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
 
       for file in opt/brother/scanner/brscan5/*.so.* opt/brother/scanner/brscan5/brscan_[cg]netconfig; do
         if ! test -L $file; then
-          patchelf --set-rpath ${lib.makeLibraryPath buildInputs} $file
+          patchelf --set-rpath ${lib.makeLibraryPath buildInputs}:$out/opt/brother/scanner/brscan5 $file
         fi
       done
 
@@ -131,7 +131,10 @@ stdenv.mkDerivation rec {
 
   dontPatchELF = true;
 
-  passthru.tests = { inherit (nixosTests) brscan5; };
+  passthru = {
+    saneBackendNames = [ "brother5" ];
+    tests = { inherit (nixosTests) brscan5; };
+  };
 
   meta = {
     description = "Brother brscan5 sane backend driver";
