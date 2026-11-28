@@ -51,7 +51,7 @@ buildGoModule (finalAttrs: {
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     wrapProgram $out/bin/vault \
-      --prefix PATH ${
+      --prefix PATH : ${
         lib.makeBinPath [
           gawk
           glibc
