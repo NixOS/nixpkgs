@@ -30,11 +30,14 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "adaptivecpp";
   version = "25.10.0";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "AdaptiveCpp";
     repo = "AdaptiveCpp";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-Z3YuBtR6TVCLQHZCA88oA5N10SnLATVv0/cvb8xwZWs=";
+    hash = "sha256-Z3YuBtR6TVCLQHZCA88oA5N10SnLATVv0/cvb8xwZWs=";
   };
 
   # do not use old FindCUDA cmake module
@@ -163,6 +166,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/AdaptiveCpp/AdaptiveCpp";
+    changelog = "https://github.com/AdaptiveCpp/AdaptiveCpp/releases/tag/${finalAttrs.src.tag}";
     description = "Multi-backend implementation of SYCL for CPUs and GPUs";
     mainProgram = "acpp";
     maintainers = with lib.maintainers; [ yboettcher ];
