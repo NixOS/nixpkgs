@@ -643,8 +643,6 @@ in
     };
 
     systemd.tmpfiles.rules = [
-      "f ${cfg.secretKeyFile} 0600 ${cfg.user} ${cfg.group} -"
-      "f ${cfg.utilsSecretFile} 0600 ${cfg.user} ${cfg.group} -"
       (
         if (cfg.storage.storageType == "s3") then
           "f ${cfg.storage.secretKeyFile} 0600 ${cfg.user} ${cfg.group} -"
@@ -670,6 +668,36 @@ in
       port = 0; # Disable the TCP listener
     };
 
+    systemd.slices.system-outline = {
+      description = "Outline wiki and knowledge base System Slice";
+    };
+
+    systemd.services.outline-generate-secret-key = {
+      description = "Outline secret key generator";
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+        Slice = "system-outline.slice";
+      };
+      unitConfig.ConditionPathExists = "!${cfg.secretKeyFile}";
+      script = ''
+        head -c64 <(tr -dc '[:xdigit:]' < /dev/urandom) > ${lib.escapeShellArg cfg.secretKeyFile}
+      '';
+    };
+
+    systemd.services.outline-generate-utils-secret = {
+      description = "Outline utils secret generator";
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+        Slice = "system-outline.slice";
+      };
+      unitConfig.ConditionPathExists = "!${cfg.secretKeyFile}";
+      script = ''
+        head -c64 <(tr -dc '[:xdigit:]' < /dev/urandom) > ${lib.escapeShellArg cfg.utilsSecretFile}
+      '';
+    };
+
     systemd.services.outline =
       let
         localRedisUrl = "redis+unix:///run/redis-outline/redis.sock";
@@ -680,15 +708,18 @@ in
         wantedBy = [ "multi-user.target" ];
         after = [
           "network.target"
+          "outline-generate-secret-key.service"
+          "outline-generate-utils-secret.service"
         ]
         ++ lib.optional (cfg.databaseUrl == "local") "postgresql.target"
         ++ lib.optional (cfg.redisUrl == "local") "redis-outline.service";
+        wants = [
+          "outline-generate-secret-key.service"
+          "outline-generate-utils-secret.service"
+        ];
         requires =
           lib.optional (cfg.databaseUrl == "local") "postgresql.target"
           ++ lib.optional (cfg.redisUrl == "local") "redis-outline.service";
-        path = [
-          pkgs.openssl # Required by the preStart script
-        ];
 
         environment = lib.mkMerge [
           {
@@ -777,20 +808,10 @@ in
           })
         ];
 
-        preStart = ''
-          if [ ! -s ${lib.escapeShellArg cfg.secretKeyFile} ]; then
-            openssl rand -hex 32 > ${lib.escapeShellArg cfg.secretKeyFile}
-          fi
-          if [ ! -s ${lib.escapeShellArg cfg.utilsSecretFile} ]; then
-            openssl rand -hex 32 > ${lib.escapeShellArg cfg.utilsSecretFile}
-          fi
-
-        '';
-
         script = ''
-          SECRET_KEY="$(head -n1 ${lib.escapeShellArg cfg.secretKeyFile})"
+          SECRET_KEY="$(head -n1 "$CREDENTIALS_DIRECTORY/secretKey")"
           export SECRET_KEY
-          UTILS_SECRET="$(head -n1 ${lib.escapeShellArg cfg.utilsSecretFile})"
+          UTILS_SECRET="$(head -n1 "$CREDENTIALS_DIRECTORY/utilsSecret")"
           export UTILS_SECRET
           ${lib.optionalString (cfg.storage.storageType == "s3") ''
             AWS_SECRET_ACCESS_KEY="$(head -n1 ${lib.escapeShellArg cfg.storage.secretKeyFile})"
@@ -861,6 +882,12 @@ in
           ProtectSystem = "strict";
           PrivateTmp = true;
           UMask = "0007";
+          Slice = "system-outline.slice";
+
+          LoadCredential = [
+            "secretKey:${cfg.secretKeyFile}"
+            "utilsSecret:${cfg.utilsSecretFile}"
+          ];
 
           StateDirectory = "outline";
           StateDirectoryMode = "0750";

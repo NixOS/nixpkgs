@@ -7,7 +7,7 @@
     xanderio
   ];
 
-  containers.outline = {
+  nodes.outline = {
     services.outline = {
       enable = true;
       forceHttps = false;
@@ -18,6 +18,8 @@
   };
 
   testScript = ''
+    outline.wait_for_unit("outline-generate-secret-key.service")
+    outline.wait_for_unit("outline-generate-utils-secret.service")
     outline.wait_for_unit("outline.service")
     outline.wait_for_open_port(3000)
     outline.succeed("curl --fail http://localhost:3000/")
