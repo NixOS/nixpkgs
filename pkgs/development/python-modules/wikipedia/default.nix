@@ -1,21 +1,21 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   setuptools,
   beautifulsoup4,
   requests,
-  unittestCheckHook,
 }:
-
 buildPythonPackage (finalAttrs: {
   pname = "wikipedia";
-  version = "1.4.0";
+  version = "1.5.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit (finalAttrs) pname version;
-    hash = "sha256-2w+tGCn91EGxhSMG6YVjmCBNwHhtKZbdLgyLuOJhM7I=";
+  src = fetchFromGitHub {
+    owner = "goldsmith";
+    repo = "wikipedia";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/Wjg5TOdF9aHMq0QcyKWU0mxj5VlEgSRugYRiEmSByM=";
   };
 
   build-system = [ setuptools ];
@@ -25,12 +25,8 @@ buildPythonPackage (finalAttrs: {
     requests
   ];
 
-  nativeCheckInputs = [ unittestCheckHook ];
-
-  unittestFlags = [
-    "--start-directory=tests"
-    "--pattern=*test.py"
-  ];
+  # It requires Internet
+  doCheck = false;
 
   pythonImportsCheck = [ "wikipedia" ];
 
@@ -39,6 +35,9 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/goldsmith/Wikipedia";
     changelog = "https://github.com/goldsmith/Wikipedia/blob/master/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ natsukium ];
+    maintainers = with lib.maintainers; [
+      natsukium
+      theobori
+    ];
   };
 })
