@@ -12,14 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "django-rest-knox";
-  version = "5.1.0";
+  version = "6.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "django-commons";
     repo = "django-rest-knox";
     tag = finalAttrs.version;
-    hash = "sha256-YK2dD2QAnrgDqWy506afRnEbnla4VT8RFV4Rg0BRjEY=";
+    hash = "sha256-l5ZWm0zBCRagUuZY5IASWpgkcxpn6noPf188E7d1lFI=";
   };
 
   build-system = [ setuptools ];
