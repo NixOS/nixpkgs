@@ -1,0 +1,13 @@
+diff --git a/src/mongo/platform/pause.h b/src/mongo/platform/pause.h
+index 67fe3d94..b3f50efb 100644
+--- a/src/mongo/platform/pause.h
++++ b/src/mongo/platform/pause.h
+@@ -69,7 +69,7 @@
+ 
+ #define MONGO_YIELD_CORE_FOR_SMT() __asm__ volatile("rd %%ccr, %%g0" ::: "memory")
+ 
+-#elif defined(__EMSCRIPTEN__)
++#elif defined(__EMSCRIPTEN__) || defined(__riscv)
+ 
+ // TODO: What should this be?
+ #define MONGO_YIELD_CORE_FOR_SMT()
