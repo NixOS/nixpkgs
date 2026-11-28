@@ -186,6 +186,15 @@ in
     checkNotes result
   '';
 
+  # nvcc runs its own tools rather than those of the same name earlier on the caller's PATH.
+  nvcc-own-tools = mkTest "nvcc-own-tools" ''
+    mkdir fake
+    printf '%s\n' '#!${backendStdenv.shell}' 'exit 42' > fake/cudafe++
+    chmod +x fake/cudafe++
+    PATH="$PWD/fake:$PATH" nvcc -arch="$arch" kernel.cu -o result
+    checkNotes result
+  '';
+
   # nvlink called directly, with each spelling of the output and options files.
   nvlink-output = mkTest "nvlink-output" ''
     nvcc -arch="$arch" -rdc=true -c caller.cu answer.cu
