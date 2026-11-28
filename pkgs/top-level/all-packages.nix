@@ -8071,10 +8071,6 @@ with pkgs;
     ;
   k3s = k3s_1_36;
 
-  kotatogram-desktop =
-    callPackage ../applications/networking/instant-messengers/telegram/kotatogram-desktop
-      { };
-
   kubectl-convert = kubectl.convert;
 
   linkerd = callPackage ../applications/networking/cluster/linkerd { };
@@ -8453,10 +8449,6 @@ with pkgs;
   taffybar = callPackage ../applications/window-managers/taffybar {
     inherit (haskellPackages) ghcWithPackages taffybar;
   };
-
-  telegram-desktop =
-    kdePackages.callPackage ../applications/networking/instant-messengers/telegram/telegram-desktop
-      { };
 
   terminaltexteffects = with python3Packages; toPythonApplication terminaltexteffects;
 

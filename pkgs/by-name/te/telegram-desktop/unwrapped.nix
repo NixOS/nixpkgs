@@ -7,13 +7,9 @@
   cmake,
   ninja,
   python3,
-  qtshadertools,
   tdlib,
   tg_owt ? callPackage ./tg_owt.nix { inherit stdenv; },
-  qtbase,
-  qtsvg,
-  qtwayland,
-  kcoreaddons,
+  kdePackages,
   lz4,
   xxhash,
   ffmpeg,
@@ -71,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     ninja
     python3
-    qtshadertools
+    kdePackages.qtshadertools
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     gobject-introspection
@@ -81,8 +77,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    qtbase
-    qtsvg
+    kdePackages.qtbase
+    kdePackages.qtsvg
     lz4
     xxhash
     ffmpeg
@@ -102,8 +98,8 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     protobuf
-    qtwayland
-    kcoreaddons
+    kdePackages.qtwayland
+    kdePackages.kcoreaddons
     hunspell
     pango
   ]

@@ -4,13 +4,8 @@
   stdenv,
   pname ? "telegram-desktop",
   unwrapped ? callPackage ./unwrapped.nix { inherit stdenv; },
-  qtbase,
-  qtimageformats,
-  qtsvg,
-  qtwayland,
-  kimageformats,
+  kdePackages,
   wrapGAppsHook3,
-  wrapQtAppsHook,
   geoclue2,
   glib-networking,
   webkitgtk_4_1,
@@ -23,20 +18,20 @@ stdenv.mkDerivation (finalAttrs: {
   inherit unwrapped;
 
   nativeBuildInputs = [
-    wrapQtAppsHook
+    kdePackages.wrapQtAppsHook
   ]
   ++ lib.optionals withWebkit [
     wrapGAppsHook3
   ];
 
   buildInputs = [
-    qtbase
-    qtimageformats
-    qtsvg
+    kdePackages.qtbase
+    kdePackages.qtimageformats
+    kdePackages.qtsvg
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    kimageformats
-    qtwayland
+    kdePackages.kimageformats
+    kdePackages.qtwayland
   ]
   ++ lib.optionals withWebkit [
     glib-networking
