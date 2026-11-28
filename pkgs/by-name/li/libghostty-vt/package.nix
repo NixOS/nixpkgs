@@ -8,39 +8,30 @@
   gitMinimal,
   ncurses,
   pkg-config,
-  runCommand,
   xcbuild,
-  zig_0_16,
+  zig_0_17,
+
+  testers,
+  runCommand,
+  nixfmt,
 
   optimize ? "ReleaseFast",
   simd ? true,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libghostty-vt";
-  version = "0.1.0-unstable-2026-08-06";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "ghostty-org";
     repo = "ghostty";
-    rev = "22d13172cde98a0a4dda05d3d6a3fcb0dd8ed018";
-    hash = "sha256-tRtgTg/i3w1nFdRHU2IGekfJN8EyP+HARW4MtoUZyqk=";
+    tag = "vt-${finalAttrs.version}";
+    hash = "sha256-3XBFm8yq25P9eCdjLWwVwZ0tedWCN39U1FbjYD8C+w4=";
   };
 
-  # Zig's build runner computes relative paths from `cwd` to the build directory.
-  # The logic is purely lexical, so if the `cwd` is a symlink that resolves to a
-  # different depth during `chdir`, the computed path becomes incorrect.
-  # See: https://codeberg.org/ziglang/zig/issues/32121
-  # Workaround: override `linkFarm` with a copy-farm so deps are real directories.
+  # ./deps.nix is "${finalAttrs.src}/deps/packages.nix"
   deps = callPackage ./deps.nix {
     name = "${finalAttrs.pname}-cache-${finalAttrs.version}";
-    linkFarm =
-      name: entries:
-      runCommand name { } ''
-        mkdir -p $out
-        ${lib.concatMapStringsSep "\n" (e: ''
-          cp -rL ${e.path} $out/${e.name}
-        '') entries}
-      '';
   };
 
   __structuredAttrs = true;
@@ -50,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     gitMinimal
     ncurses
     pkg-config
-    zig_0_16
+    zig_0_17
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     cctools
@@ -99,9 +90,34 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postFixup = ''
-    substituteInPlace "$dev/share/pkgconfig/libghostty-vt-static.pc" \
+    substituteInPlace "$dev/lib/pkgconfig/libghostty-vt-static.pc" \
       --replace-fail "$out" "$dev"
+    substituteInPlace "$dev/lib/cmake/ghostty-vt/ghostty-vt-config.cmake" \
+      --replace-fail \
+      'set(_ghostty_vt_shared_libdir "''${_ghostty_vt_libdir}")' \
+      'set(_ghostty_vt_shared_libdir "${placeholder "out"}/lib/")'
   '';
+
+  passthru = {
+    tests = {
+      deps = testers.testEqualContents {
+        assertion = "vendored lockfile matches upstream lockfile";
+        actual = ./deps.nix;
+        expected = runCommand "${finalAttrs.pname}-formatted-deps/packages.nix-${finalAttrs.version}" {
+          nativeBuildInputs = [ nixfmt ];
+        } "nixfmt - < ${finalAttrs.src}/deps/packages.nix > $out";
+      };
+      pkg-config = testers.hasPkgConfigModules {
+        package = finalAttrs.finalPackage.dev;
+        versionCheck = true;
+      };
+      cmake-config = testers.hasCmakeConfigModules {
+        package = finalAttrs.finalPackage.dev;
+        moduleNames = [ "ghostty-vt" ];
+        versionCheck = true;
+      };
+    };
+  };
 
   meta = {
     description = "Ghostty's VT (terminal sequence) parsing library";
@@ -112,6 +128,6 @@ stdenv.mkDerivation (finalAttrs: {
       "libghostty-vt-static"
     ];
     maintainers = with lib.maintainers; [ domenkozar ];
-    platforms = zig_0_16.meta.platforms;
+    platforms = zig_0_17.meta.platforms;
   };
 })
