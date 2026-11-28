@@ -4,7 +4,7 @@
   gtksourceview5,
   libspelling,
   fetchFromGitHub,
-  python312Packages,
+  python314Packages,
   mathjax,
   meson,
   ninja,
@@ -15,19 +15,20 @@
   libadwaita,
   webkitgtk_6_0,
   texliveMedium,
+  typst,
   shared-mime-info,
   nix-update-script,
 }:
 
 let
-  version = "3.4";
+  version = "3.5";
 
   src = fetchFromGitLab {
     owner = "World";
     repo = "apostrophe";
     domain = "gitlab.gnome.org";
     tag = "v${version}";
-    hash = "sha256-Sj5Y4QPMYavdXbU+iVv76qOFNhgBjAeX9+/TvQHZzeI=";
+    hash = "sha256-fCAYtKN3O5lOKavhQRWARnGtMScvrsDAazn6NtERhDw=";
   };
 
   reveal-js = fetchFromGitHub {
@@ -36,14 +37,14 @@ let
 
     # keep in sync with upstream shipped version
     # in build-aux/flatpak/org.gnome.gitlab.somas.Apostrophe.json
-    tag = "5.1.0";
-    hash = "sha256-L6KVBw20K67lHT07Ws+ZC2DwdURahqyuyjAaK0kTgN0=";
+    tag = "6.0.2";
+    hash = "sha256-yh9Fwp8PT6fFrbSsih7cD9EzH2wbfd3idjyemOQTqF8=";
   };
 in
 
 # Requires telnetlib, and possibly others
 # Try to remove in subsequent updates
-python312Packages.buildPythonApplication {
+python314Packages.buildPythonApplication {
   inherit version src;
   pname = "apostrophe";
   pyproject = false;
@@ -56,8 +57,13 @@ python312Packages.buildPythonApplication {
   ''
   # Use mathjax from nixpkgs to avoid loading from CDN
   + ''
-    substituteInPlace apostrophe/preview_converter.py \
-      --replace-fail "--mathjax" "--mathjax=file://${mathjax}/lib/node_modules/mathjax/tex-chtml-full.js"
+    substituteInPlace apostrophe/preview_converter.py apostrophe/export_dialog.py \
+      --replace-fail "--math-method=mathjax" "--mathjax=file://${mathjax}/lib/node_modules/mathjax/tex-chtml.js"
+  ''
+  # pandoc's PDF writer needs a writable working directory
+  + ''
+    substituteInPlace apostrophe/main_window.py \
+      --replace-fail 'os.chdir("/")' 'os.chdir("/tmp")'
   '';
 
   # Should be done in postInstall, but meson checks this eagerly before build
@@ -82,7 +88,7 @@ python312Packages.buildPythonApplication {
     webkitgtk_6_0
   ];
 
-  dependencies = with python312Packages; [
+  dependencies = with python314Packages; [
     pygobject3
     pypandoc
     chardet
@@ -95,8 +101,14 @@ python312Packages.buildPythonApplication {
   preFixup = ''
     makeWrapperArgs+=(
       ''${gappsWrapperArgs[@]}
-      --prefix PATH : "${texliveMedium}/bin"
+      --prefix PATH : "${
+        lib.makeBinPath [
+          texliveMedium
+          typst
+        ]
+      }"
       --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
+      --set-default TYPST_ROOT /
     )
   '';
 
