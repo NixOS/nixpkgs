@@ -15100,6 +15100,8 @@ self: super: with self; {
 
   pydeako = callPackage ../development/python-modules/pydeako { };
 
+  pydeako-community = callPackage ../development/python-modules/pydeako-community { };
+
   pydeck = callPackage ../development/python-modules/pydeck { };
 
   pydeconz = callPackage ../development/python-modules/pydeconz { };
