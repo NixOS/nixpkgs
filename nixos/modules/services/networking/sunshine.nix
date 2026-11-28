@@ -149,6 +149,9 @@ in
 
     hardware.uinput.enable = true;
 
+    # needed for emulating non-Xbox gamepads (e.g. DualSense) via /dev/uhid
+    boot.kernelModules = [ "uhid" ];
+
     services.udev.packages = [ cfg.package ];
 
     services.avahi = {
