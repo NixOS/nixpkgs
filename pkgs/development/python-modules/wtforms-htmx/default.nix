@@ -3,16 +3,13 @@
   buildPythonPackage,
   fetchFromGitHub,
   uv-build,
-  wtforms_3_3,
+  wtforms,
   nix-update-script,
   pytestCheckHook,
   pytest-xdist,
   flask,
 }:
 
-let
-  wtforms = wtforms_3_3;
-in
 buildPythonPackage (finalAttrs: {
   pname = "wtforms-htmx";
   version = "0.1.3";
@@ -56,5 +53,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/yaal-coop/wtforms-htmx/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ erictapen ];
+    broken = lib.versionOlder wtforms.version "3.3.0";
   };
 })
