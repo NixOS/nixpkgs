@@ -1,0 +1,145 @@
+From 110b97e524a8b0ce31b1e19f7d4f2c2c37bc2ff2 Mon Sep 17 00:00:00 2001
+From: Julie Jones <jjones@Julies-MacBook-Pro.local>
+Date: Wed, 2 Jul 2025 11:21:20 -0700
+Subject: [PATCH] Issue 270: Replace deprecated tostring with tobytes and fix
+ frombuffer str to bytes
+
+---
+ makehuman/compile_models.py |  8 ++++----
+ makehuman/core/files3d.py   |  7 ++++---
+ makehuman/lib/image_qt.py   |  2 +-
+ makehuman/makehuman.py      |  2 +-
+ makehuman/shared/proxy.py   | 17 ++++++++---------
+ 5 files changed, 18 insertions(+), 18 deletions(-)
+
+diff --git a/makehuman/compile_models.py b/makehuman/compile_models.py
+index 89bbdb55a..e6c2f787a 100755
+--- a/makehuman/compile_models.py
++++ b/makehuman/compile_models.py
+@@ -72,14 +72,14 @@ def compileMesh(path):
+         #print ('Compiling mesh to binary: %s' % npzpath)
+         try:
+             files3d.loadTextMesh(obj, path)
+-        except:
+-            print('Could not load OBJ file %s. Perhaps it mixes tris and quads.' % path)
++        except Exception as ex:
++            print('Could not load OBJ file %s. Perhaps it mixes tris and quads.' % path, ex)
+             #import traceback
+             #traceback.print_exc(file=sys.stdout)
+             return False
+         files3d.saveBinaryMesh(obj, npzpath)
+-    except:
+-        print('Unable to save compiled mesh for file %s' % path)
++    except Exception as ex:
++        print('Unable to save compiled mesh for file %s' % path, ex)
+         #import traceback
+         #traceback.print_exc(file=sys.stdout)
+         return False
+diff --git a/makehuman/core/files3d.py b/makehuman/core/files3d.py
+index 106ef95a4..672bc65a6 100644
+--- a/makehuman/core/files3d.py
++++ b/makehuman/core/files3d.py
+@@ -78,7 +78,8 @@ def packStringList(strings):
+     for string in strings:
+         index.append(len(text))
+         text += string
+-    text = np.fromstring(text, dtype='S1')
++    #text = np.fromstring(text, dtype='S1')
++    text = np.frombuffer(text.encode(),dtype='S1')
+     index = np.array(index, dtype=np.uint32)
+     return text, index
+ 
+@@ -87,11 +88,11 @@ def unpackStringList(text, index):
+     last = None
+     for i in index:
+         if last is not None:
+-            name = str(text[last:i].tostring(), 'utf-8')
++            name = str(text[last:i].tobytes(), 'utf-8')
+             strings.append(name)
+         last = i
+     if last is not None:
+-        name = str(text[last:].tostring(), 'utf8')
++        name = str(text[last:].tobytes(), 'utf8')
+         strings.append(name)
+ 
+     return strings
+diff --git a/makehuman/lib/image_qt.py b/makehuman/lib/image_qt.py
+index 82dce6da7..fd7f0bc20 100644
+--- a/makehuman/lib/image_qt.py
++++ b/makehuman/lib/image_qt.py
+@@ -61,7 +61,7 @@ def load(path):
+ 
+     pixels = im.bits().asstring(h * w * 4)
+ 
+-    pixels = np.fromstring(pixels, dtype=np.uint32).reshape((h, w))
++    pixels = np.frombuffer(pixels, dtype=np.uint32).reshape((h, w))
+     del im
+ 
+     a = (pixels >> 24).astype(np.uint8)
+diff --git a/makehuman/makehuman.py b/makehuman/makehuman.py
+index 7bffd00d0..8991f6967 100755
+--- a/makehuman/makehuman.py
++++ b/makehuman/makehuman.py
+@@ -401,7 +401,7 @@ def _packStringDict(stringDict):
+                 index.append(len(key))
+                 index.append(len(value))
+                 text += key + value
+-            text = np.fromstring(text, dtype='S1')
++            text = np.frombuffer(text.encode('utf-8'), dtype='S1')
+             index = np.array(index, dtype=np.uint32)
+             return np.array([text, index], dtype=object)
+ 
+diff --git a/makehuman/shared/proxy.py b/makehuman/shared/proxy.py
+index ac98a1963..b053be7a6 100644
+--- a/makehuman/shared/proxy.py
++++ b/makehuman/shared/proxy.py
+@@ -555,25 +555,24 @@ def _properPath(path):
+ 
+         folder = os.path.dirname(path)
+ 
+-
+         vars_ = dict(
+             #proxyType = np.fromstring(proxy.type, dtype='S1'),     # TODO store proxy type?
+-            name = np.fromstring(proxy.name, dtype='S1'),
+-            uuid = np.fromstring(proxy.uuid, dtype='S1'),
+-            description = np.fromstring(proxy.description, dtype='S1'),
+-            basemesh = np.fromstring(proxy.basemesh, dtype='S1'),
++            name = np.frombuffer(proxy.name.encode(),dtype='S1'), 
++            uuid = np.frombuffer(proxy.uuid.encode(), dtype='S1'),
++            description = np.frombuffer(proxy.description.encode(), dtype='S1'),
++            basemesh = np.frombuffer(proxy.basemesh.encode(), dtype='S1'),
+             tags_str = tagStr,
+             tags_idx = tagIdx,
+             lic_str = licStr,
+             lic_idx = licIdx,
+             uvLayers_str = uvStr,
+             uvLayers_idx = uvIdx,
+-            obj_file = np.fromstring(_properPath(proxy.obj_file), dtype='S1'),
++            obj_file = np.frombuffer(_properPath(proxy.obj_file).encode(), dtype='S1'),
+             version = np.asarray(proxy.version, dtype=np.int32)
+         )
+ 
+         if proxy.material_file:
+-            vars_["material_file"] = np.fromstring(_properPath(proxy.material_file), dtype='S1')
++            vars_["material_file"] = np.frombuffer(_properPath(proxy.material_file).encode(), dtype='S1')
+ 
+         if np.any(proxy.deleteVerts):
+             vars_["deleteVerts"] = proxy.deleteVerts
+@@ -608,7 +607,7 @@ def _properPath(path):
+         vars_['num_refverts'] = np.asarray(num_refverts, dtype=np.int32)
+ 
+         if proxy.vertexBoneWeights_file:
+-            vars_['vertexBoneWeights_file'] = np.fromstring(_properPath(proxy.vertexBoneWeights_file), dtype='S1')
++            vars_['vertexBoneWeights_file'] = np.frombuffer(_properPath(proxy.vertexBoneWeights_file).encode(), dtype='S1')
+ 
+         np.savez_compressed(fp, **vars_)
+     os.utime(path, None)  # Ensure modification time is updated
+@@ -1043,7 +1042,7 @@ def _packStringList(strings):
+         asbytes = bytearray(text,'utf-8')
+         index.append(len(asbytes))
+         text += string
+-    text = np.fromstring(text, dtype='S1')
++    text = np.frombuffer(text.encode(), dtype='S1')
+     index = np.array(index, dtype=np.uint32)
+     return text, index
+ 
