@@ -21,7 +21,7 @@ buildGo127Module (finalAttrs: {
 
   patches = [
     (fetchpatch {
-      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/dnscrypt-proxy/-/raw/main/0001-Make-configuration-file-hierarchy-compliant.patch";
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/dnscrypt-proxy/-/raw/65e96c292eba732f38d087798a342a4aaeb89ec4/0001-Make-configuration-file-hierarchy-compliant.patch";
       hash = "sha256-DDHDEd812ko7qYgu0zTn4toek9KZRVQEarxZIe1Mrcg=";
     })
   ];
