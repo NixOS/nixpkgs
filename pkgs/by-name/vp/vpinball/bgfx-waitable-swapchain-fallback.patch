@@ -1,0 +1,27 @@
+diff --git a/src/renderer/RenderDevice.cpp b/src/renderer/RenderDevice.cpp
+--- a/src/renderer/RenderDevice.cpp
++++ b/src/renderer/RenderDevice.cpp
+@@ -587,9 +587,14 @@
+    uint32_t lastGpuFrameNum = 0;
+    uint64_t avgGPUFrameLength = 0;
+ 
++#ifdef BGFX_CAPS_WAITABLE_SWAPCHAIN
+    const bool waitableSwapchain = (bgfx::getCaps()->supported & BGFX_CAPS_WAITABLE_SWAPCHAIN) != 0;
+    if (waitableSwapchain)
+       bgfx::waitForSwapchain();
++#else
++   // The pinned bgfx predates waitable swapchains; use VPX's existing frame-pacing fallback.
++   const bool waitableSwapchain = false;
++#endif
+ 
+ #if BX_PLATFORM_WINDOWS
+    // Use highest priority for better timing and lower jitter (as we are doing software pacing)
+@@ -802,7 +807,9 @@
+       {
+          BEGIN_SPAN(tagSpan, "WaitSC")
+          g_pplayer->m_renderProfiler->EnterProfileSection(FrameProfiler::PROFILE_RENDER_WAIT_SC);
++#ifdef BGFX_CAPS_WAITABLE_SWAPCHAIN
+          bgfx::waitForSwapchain();
++#endif
+          g_pplayer->m_renderProfiler->ExitProfileSection();
+          // Evaluate latency as the delay between when we submitted the frame data and when the swapchain has an empty slot (as this denotes that the Present operation has been performed)
