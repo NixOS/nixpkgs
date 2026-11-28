@@ -1,24 +1,8 @@
 diff --git a/src-tauri/Cargo.lock b/src-tauri/Cargo.lock
-index e76bf41..890e65d 100644
+index 7ed81d7..10d8add 100644
 --- a/src-tauri/Cargo.lock
 +++ b/src-tauri/Cargo.lock
-@@ -911,15 +911,6 @@ dependencies = [
-  "error-code",
- ]
- 
--[[package]]
--name = "cmake"
--version = "0.1.58"
--source = "registry+https://github.com/rust-lang/crates.io-index"
--checksum = "c0f78a02292a74a88ac736019ab962ece0bc380e3f977bf72e376c5d78ff0678"
--dependencies = [
-- "cc",
--]
--
- [[package]]
- name = "color_quant"
- version = "1.1.0"
-@@ -4954,12 +4945,6 @@ dependencies = [
+@@ -4992,12 +4992,6 @@ dependencies = [
   "windows-sys 0.52.0",
  ]
  
@@ -31,7 +15,7 @@ index e76bf41..890e65d 100644
  [[package]]
  name = "rust-ini"
  version = "0.21.3"
-@@ -5136,22 +5121,13 @@ version = "1.2.0"
+@@ -5176,22 +5170,13 @@ version = "1.2.0"
  source = "registry+https://github.com/rust-lang/crates.io-index"
  checksum = "94143f37725109f92c262ed2cf5e59bce7498c01bcc1502d7b9afe439a4e9f49"
  
@@ -56,11 +40,11 @@ index e76bf41..890e65d 100644
  
  [[package]]
 diff --git a/src-tauri/Cargo.toml b/src-tauri/Cargo.toml
-index fd59653..b935515 100644
+index 3baf56e..84015b8 100644
 --- a/src-tauri/Cargo.toml
 +++ b/src-tauri/Cargo.toml
-@@ -64,7 +64,7 @@ plist = "1"
- tauri-plugin-deep-link = "2"
+@@ -75,7 +75,7 @@ discord-rich-presence = "1"
+ arboard = { version = "3", default-features = false, features = ["image-data"] }
  # Controllers. SDL 3 is built from source and linked in, with only its joystick and HIDAPI parts:
  # no SDL library to ship, and nothing needed on the player's system.
 -sdl3-sys = { version = "=0.7.2", default-features = false, features = ["build-from-source-static", "no-default-subsystems", "sdl-joystick", "sdl-hidapi", "sdl-unix-console-build"] }
