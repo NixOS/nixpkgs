@@ -11,6 +11,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "mfaktc";
   version = "0.24.1";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "primesearch";
     repo = "mfaktc";
@@ -19,12 +22,16 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-t1YaNHFndgNJ5VnUXI8cDJ62bBL7M6Q+by2XKlUleyc=";
   };
 
-  enableParallelBuilding = true;
-  buildInputs = [
-    cudaPackages.cuda_nvcc
-    cudaPackages.cuda_cudart
+  nativeBuildInputs = [
     autoAddDriverRunpath
+    cudaPackages.cuda_nvcc
   ];
+
+  buildInputs = [
+    cudaPackages.cuda_cudart
+  ];
+
+  enableParallelBuilding = true;
 
   makeFlags = [
     "-C"
@@ -55,6 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://github.com/primesearch/mfaktc";
     downloadPage = "https://github.com/primesearch/mfaktc/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/primesearch/mfaktc/releases/tag/${finalAttrs.src.tag}";
     maintainers = with lib.maintainers; [ dstremur ];
     license = lib.licenses.gpl3Plus;
     platforms = [ "x86_64-linux" ];
