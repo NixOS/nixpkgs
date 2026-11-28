@@ -88,7 +88,7 @@ in
         "fs"
         "memory"
       ];
-      default = "fs";
+      default = if versionAtLeast config.system.stateVersion "26.11" then "db" else "fs";
       description = "Set the storage backend for IRC messages.";
     };
 
