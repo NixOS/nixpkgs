@@ -5,19 +5,11 @@
   gobject-introspection,
   gst_all_1,
   poppler-utils,
-  python3Packages,
+  python3,
   lndir,
 }:
 
 let
-  pythonPackages = python3Packages.overrideScope (
-    final: prev: {
-      paste = prev.paste.override { setuptools = prev.setuptools_80; };
-    }
-  );
-
-  inherit (pythonPackages.python) sitePackages;
-
   version = "0.15.0";
   src = fetchFromSourcehut {
     owner = "~mediagoblin";
@@ -41,7 +33,7 @@ let
     '';
   };
 in
-pythonPackages.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   format = "setuptools";
   pname = "mediagoblin";
   inherit version src;
@@ -59,15 +51,15 @@ pythonPackages.buildPythonApplication rec {
 
   nativeBuildInputs = [
     gobject-introspection
-    pythonPackages.babel
+    python3.pkgs.babel
     lndir
   ];
 
-  build-system = with pythonPackages; [
-    setuptools
+  build-system = with python3.pkgs; [
+    setuptools_80
   ];
 
-  dependencies = with pythonPackages; [
+  dependencies = with python3.pkgs; [
     alembic
     babel
     bcrypt
@@ -88,6 +80,7 @@ pythonPackages.buildPythonApplication rec {
     pyld
     python-dateutil
     requests
+    setuptools_80
     soundfile
     sqlalchemy
     unidecode
@@ -102,7 +95,7 @@ pythonPackages.buildPythonApplication rec {
   ];
 
   optional-dependencies =
-    with pythonPackages;
+    with python3.pkgs;
     let
       # not really documented in python build system
       gst = with gst_all_1; [
@@ -129,16 +122,16 @@ pythonPackages.buildPythonApplication rec {
   '';
 
   postInstall = ''
-    lndir -silent ${extlib}/node_modules $out/${sitePackages}/mediagoblin/static/extlib/
+    lndir -silent ${extlib}/node_modules $out/${python3.sitePackages}/mediagoblin/static/extlib/
 
-    ln -rs $out/${sitePackages}/mediagoblin/static/extlib/jquery/dist/jquery.js $out/${sitePackages}/mediagoblin/static/js/extlib/jquery.js
-    ln -rs $out/${sitePackages}/mediagoblin/static/extlib/leaflet/dist/leaflet.css $out/${sitePackages}/mediagoblin/static/extlib/leaflet/leaflet.css
-    ln -rs $out/${sitePackages}/mediagoblin/static/extlib/leaflet/dist/leaflet.js $out/${sitePackages}/mediagoblin/static/extlib/leaflet/leaflet.js
-    ln -rs $out/${sitePackages}/mediagoblin/static/extlib/leaflet/dist/images/ $out/${sitePackages}/mediagoblin/static/extlib/leaflet/
+    ln -rs $out/${python3.sitePackages}/mediagoblin/static/extlib/jquery/dist/jquery.js $out/${python3.sitePackages}/mediagoblin/static/js/extlib/jquery.js
+    ln -rs $out/${python3.sitePackages}/mediagoblin/static/extlib/leaflet/dist/leaflet.css $out/${python3.sitePackages}/mediagoblin/static/extlib/leaflet/leaflet.css
+    ln -rs $out/${python3.sitePackages}/mediagoblin/static/extlib/leaflet/dist/leaflet.js $out/${python3.sitePackages}/mediagoblin/static/extlib/leaflet/leaflet.js
+    ln -rs $out/${python3.sitePackages}/mediagoblin/static/extlib/leaflet/dist/images/ $out/${python3.sitePackages}/mediagoblin/static/extlib/leaflet/
   '';
 
   nativeCheckInputs =
-    with pythonPackages;
+    with python3.pkgs;
     [
       pytest-forked
       pytest-xdist
@@ -152,7 +145,8 @@ pythonPackages.buildPythonApplication rec {
   pythonImportsCheck = [ "mediagoblin" ];
 
   passthru = {
-    inherit extlib pythonPackages;
+    inherit extlib;
+    python = python3;
   };
 
   meta = {

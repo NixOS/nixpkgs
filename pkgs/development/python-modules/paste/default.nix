@@ -4,19 +4,18 @@
   fetchFromGitHub,
   pytestCheckHook,
   setuptools,
-  six,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "paste";
-  version = "3.10.1";
+  version = "3.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pasteorg";
     repo = "paste";
-    tag = version;
-    hash = "sha256-NY/h6hbpluEu1XAv3o4mqoG+l0LXfM1dw7+G0Rm1E4o=";
+    tag = finalAttrs.version;
+    hash = "sha256-5eQU9pHazxKX9zMEd7oghKCke//uN4BVnmwYMR5lnSE=";
   };
 
   postPatch = ''
@@ -25,11 +24,6 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  dependencies = [
-    setuptools
-    six
-  ];
-
   nativeCheckInputs = [ pytestCheckHook ];
 
   preCheck = ''
@@ -37,19 +31,15 @@ buildPythonPackage rec {
     touch tests/urlparser_data/secured.txt
   '';
 
-  disabledTests = [
-    # pkg_resources deprecation warning
-    "test_form"
-  ];
-
   pythonNamespaces = [ "paste" ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
-    broken = lib.versionAtLeast setuptools.version "82"; # pkg_resources at runtime
     description = "Tools for using a Web Server Gateway Interface stack";
     homepage = "https://pythonpaste.readthedocs.io/";
-    changelog = "https://github.com/pasteorg/paste/blob/${version}/docs/news.txt";
+    changelog = "https://github.com/pasteorg/paste/blob/${finalAttrs.version}/docs/news.txt";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})
