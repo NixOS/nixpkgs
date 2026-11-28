@@ -23,20 +23,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "yalexs";
-  version = "9.2.13";
+  version = "9.2.14";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Yale-Libs";
     repo = "yalexs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KJgXxefAkFI6AmIkd6B2O7Iw017UPd/SV7AxV+JOkwM=";
+    hash = "sha256-qmNTEHki0c0wpsKAr/oKLDluFs6Md18SXbq8WZapMB4=";
   };
-
-  patches = [
-    # remove padding from refresh token fixture
-    ./456.patch
-  ];
 
   build-system = [ poetry-core ];
 
