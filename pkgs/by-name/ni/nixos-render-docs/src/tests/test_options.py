@@ -16,6 +16,16 @@ def test_option_headings() -> None:
         content='', markup='#', info='', meta={}, block=True, hidden=False
     )
 
+def test_option_no_inline_footnotes() -> None:
+    # a bare `^[` closed by a `]` (e.g. a regex anchor written out in
+    # prose) must stay literal text: the footnote plugin would parse it as
+    # an inline footnote, whose missing label crashes footnote id
+    # generation in md.py
+    c = nixos_render_docs.options.CommonMarkConverter({}, 'local')
+    assert c._render_description(
+        {"_type": "mdDoc", "text": "string matching the pattern ^[a-z]+$"}
+    ) == ['string matching the pattern ^\\[a-z]+$']
+
 def test_options_commonmark() -> None:
     c = nixos_render_docs.options.CommonMarkConverter({}, 'local')
     with Path('tests/sample_options_simple.json').open() as f:
