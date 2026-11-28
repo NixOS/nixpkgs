@@ -206,6 +206,17 @@ in
       '';
     };
 
+    environment.createBinSh = lib.mkOption {
+      default = true;
+      type = lib.types.bool;
+      internal = true;
+      description = ''
+        Whether the system manages `/usr/bin/sh` at activation. Modules
+        that provide `/usr/bin` themselves set this to `false`. `/bin` is
+        made a symlink to `usr/bin` either way.
+      '';
+    };
+
     environment.shells = lib.mkOption {
       default = [ ];
       example = lib.literalExpression "[ pkgs.bashInteractive pkgs.zsh ]";
@@ -267,14 +278,30 @@ in
       ''}
     '';
 
-    system.activationScripts.binsh = lib.stringAfter [ "stdio" ] ''
-      # Create the required /bin/sh symlink; otherwise lots of things
-      # (notably the system() function) won't work.
-      mkdir -p /bin
-      chmod 0755 /bin
-      ln -sfn "${cfg.binsh}" /bin/.sh.tmp
-      mv /bin/.sh.tmp /bin/sh # atomically replace /bin/sh
-    '';
+    # /bin/sh is required by e.g. system(). /bin is a symlink to usr/bin to
+    # avoid the unmerged-usr taint.
+    system.activationScripts.binsh = lib.stringAfter [ "stdio" ] (
+      ''
+        # -m only applies to a newly created /usr/bin.
+        mkdir -p -m 0755 /usr/bin
+      ''
+      + lib.optionalString cfg.createBinSh ''
+        ln -sfn "${cfg.binsh}" /usr/bin/.sh.tmp
+        mv /usr/bin/.sh.tmp /usr/bin/sh # atomically replace /usr/bin/sh
+      ''
+      + ''
+        ln -sfn usr/bin /.bin.tmp
+        if [ -d /bin ] && [ ! -L /bin ]; then
+          # Older generations created /bin as a directory that only contains
+          # sh. Exchange it atomically so that /bin/sh never disappears.
+          mv --exchange --no-target-directory /.bin.tmp /bin
+          rm -f /.bin.tmp/sh
+          rmdir /.bin.tmp
+        else
+          mv --no-target-directory /.bin.tmp /bin # atomically replace /bin
+        fi
+      ''
+    );
 
   };
 
