@@ -28,6 +28,8 @@ let
       "<imports = [ pkgs.ktls-utils.services.default ]>" = fakeSubmodule pkgs.ktls-utils.services.default;
       "<imports = [ pkgs.php.services.default ]>" = fakeSubmodule pkgs.php.services.default;
       "<imports = [ pkgs.snid.services.default ]>" = fakeSubmodule pkgs.snid.services.default;
+      "<imports = [ pkgs.stirling-pdf.services.default ]>" =
+        fakeSubmodule pkgs.stirling-pdf.services.default;
       "<imports = [ pkgs.trailbase.services.default ]>" = fakeSubmodule pkgs.trailbase.services.default;
     };
   };

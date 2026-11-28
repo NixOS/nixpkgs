@@ -29,6 +29,8 @@
   isDesktopVariant ? false,
   withAdditionalFeatures ? !isDesktopVariant,
   buildWithFrontend ? !isDesktopVariant,
+
+  callPackage,
 }:
 
 # you may only toggle this when building the server
@@ -265,6 +267,14 @@ stdenv.mkDerivation (finalAttrs: {
     // lib.optionalAttrs (!isDesktopVariant) {
       inherit (nixosTests) stirling-pdf;
     };
+    services.default = {
+      imports = [
+        # do what importApply does without duplicating tons of arguments
+        (lib.setDefaultModuleLocation ./service.nix (callPackage ./service.nix { }))
+      ];
+      stirling-pdf.package = lib.mkDefault finalAttrs.finalPackage;
+    };
+    tests = callPackage ./tests { };
   }
   // lib.optionalAttrs (!isDesktopVariant && withAdditionalFeatures) {
     # this being optional makes the auto-update PRs always put stirling-pdf in the title
