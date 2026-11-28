@@ -9,12 +9,13 @@
   zulu25,
   dpkg,
   writeShellScript,
-  tor,
   zip,
+  unzip,
   gnupg,
   coreutils,
   gnugrep,
   gnused,
+  patchelf,
 
   # Used by the bundled webcam-app
   libv4l,
@@ -22,11 +23,14 @@
   # Used by the testing package bisq2-webcam-app
   callPackage,
   socat,
-  unzip,
+
+  # Dependencies for bundled Tor
+  glibc,
+  libz,
 }:
 
 let
-  version = "2.1.14";
+  version = "2.1.16";
 
   jdk = zulu25.override { enableJavaFX = true; };
 
@@ -39,6 +43,10 @@ let
   bisq-launcher =
     args:
     writeShellScript "bisq-launcher" ''
+      # This is just a comment to convince Nix that this package
+      # needs Tor's dependencies to execute the bundled Tor binary.
+      # ${glibc} ${libz}
+
       rm -fR $HOME/.local/share/Bisq2/tor
 
       exec "${lib.getExe jdk}" @@out@/lib/app.args ${args} bisq.desktop_app_launcher.DesktopAppLauncher "$@"
@@ -61,7 +69,6 @@ let
 
   binPath = lib.makeBinPath [
     coreutils
-    tor
   ];
 
   libraryPath = lib.makeLibraryPath [
@@ -77,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
   # nixpkgs-update: no auto update
   src = fetchurl {
     url = "https://github.com/bisq-network/bisq2/releases/download/v${version}/Bisq-${version}.deb";
-    hash = "sha256-Tp+0+XSnqlG736mpWoXleHi80j7Xq61iJ+unEUuVh0E=";
+    hash = "sha256-SU7eUSesH7AZ2Znt4r8hZpcQJiVhx2vx+RH1tj1faPY=";
 
     # Verify the upstream Debian package prior to extraction.
     # See https://bisq.wiki/Bisq_2#Installation
@@ -102,7 +109,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   signature = fetchurl {
     url = "https://github.com/bisq-network/bisq2/releases/download/v${version}/Bisq-${version}.deb.asc";
-    hash = "sha256-Ia6Ps2ftzmquTQmDSg+Tr26yPdnvUqhRAlUmGOg+lEk=";
+    hash = "sha256-Ht4wO+oZt8mnGfN+S+kVGvo5IoFELBo0t/ERsTwhJsU=";
   };
 
   nativeBuildInputs = [
@@ -111,9 +118,11 @@ stdenv.mkDerivation (finalAttrs: {
     imagemagick
     makeBinaryWrapper
     zip
+    unzip
     gnupg
     gnugrep
     gnused
+    patchelf
   ];
 
   desktopItems = [
@@ -146,14 +155,48 @@ stdenv.mkDerivation (finalAttrs: {
     dpkg -x $src .
   '';
 
-  buildPhase = ''
-    # Replace the Tor binary embedded in tor.jar (which is in the zip archive tor.zip)
-    # with the Tor binary from Nixpkgs.
+  buildPhase =
+    let
+      torJarName = "tor-1.0.1";
+    in
+    ''
+      # Prepare the bundled Tor binary to run on NixOS
+      # within the Bisq Tor sandbox, "sandy".
+      # See https://github.com/bisq-network/sandy
 
-    makeWrapper ${lib.getExe' tor "tor"} ./tor
-    zip tor.zip ./tor
-    zip opt/bisq2/lib/app/tor.jar tor.zip
-  '';
+      mkdir ${torJarName}
+      mkdir tor-zip
+
+      # Unpack the .jar containing Tor.
+      pushd ${torJarName}
+      unzip ../opt/bisq2/lib/app/${torJarName}.jar
+      popd
+
+      # Unpack the .zip containing the Tor binary.
+      pushd tor-zip
+      unzip ../${torJarName}/tor.zip
+
+      # Copy all dependencies the OS is supposed to provide,
+      # except ld, because they won't be accessible
+      # from within the sandbox at their /nix/store locations
+      interpreter="$(< "$NIX_CC/nix-support/dynamic-linker")"
+      patchelf --set-interpreter "$interpreter" tor
+
+      cp -L ${glibc}/lib/libc.so.6 ./
+      cp -L ${glibc}/lib/libdl.so.2 ./
+      cp -L ${glibc}/lib/libpthread.so.0 ./
+      cp -L ${glibc}/lib/libm.so.6 ./
+      cp -L ${libz}/lib/libz.so.1 ./
+
+      # Repack the .zip
+      zip -r ../${torJarName}/tor.zip .
+      popd
+
+      # Repack the .jar
+      pushd ${torJarName}
+      zip -r ../opt/bisq2/lib/app/${torJarName}.jar .
+      popd
+    '';
 
   installPhase = ''
     runHook preInstall
