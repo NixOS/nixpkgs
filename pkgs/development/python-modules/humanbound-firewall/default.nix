@@ -23,14 +23,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "humanbound-firewall";
-  version = "0.3.4";
+  version = "0.3.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "humanbound";
     repo = "humanbound-firewall";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jSqHJA0zxygFNrKqd69DiWWsVMKrvWWT2hmUr0GXbtE=";
+    hash = "sha256-Ss2f2PZb4AFhvOdi/8+adTv1L52sCIPWiOo7NTLZWus=";
   };
 
   build-system = [ setuptools ];
