@@ -128,16 +128,27 @@ stdenv.mkDerivation (finalAttrs: {
   # The vendored pegtl module creates a `pegtl` CMake target, which clashes with the `pegtl` target
   # exported by openusd >= 26.05 when VTK::IOUSD calls find_package(pxr).
   # Rename the module VTK::pegtl -> VTK::vtkpegtl so that its target becomes `vtkpegtl`.
-  postPatch = lib.optionalString (lib.versionAtLeast version "9.6") ''
-    substituteInPlace ThirdParty/pegtl/vtk.module Common/DataModel/vtk.module IO/MotionFX/vtk.module \
-      --replace-fail \
-        "VTK::pegtl" \
-        "VTK::vtkpegtl"
-    substituteInPlace ThirdParty/pegtl/vtkpegtl/CMakeLists.txt \
-      --replace-fail \
-        "target_compile_features(pegtl" \
-        "target_compile_features(vtkpegtl"
-  '';
+  postPatch =
+    lib.optionalString (lib.versionAtLeast version "9.6") ''
+      substituteInPlace ThirdParty/pegtl/vtk.module Common/DataModel/vtk.module IO/MotionFX/vtk.module \
+        --replace-fail \
+          "VTK::pegtl" \
+          "VTK::vtkpegtl"
+      substituteInPlace ThirdParty/pegtl/vtkpegtl/CMakeLists.txt \
+        --replace-fail \
+          "target_compile_features(pegtl" \
+          "target_compile_features(vtkpegtl"
+    ''
+    # The installed header uses std::vector<vtkSmartPointer<...>> with only a
+    # forward declaration of vtkSmartPointer, which libc++ 22 rejects in
+    # consumers such as paraview
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      substituteInPlace IO/Geometry/vtkOpenFOAMReader.h \
+        --replace-fail \
+          "#include <mutex> // For std::mutex" \
+          "#include <mutex> // For std::mutex
+      #include \"vtkSmartPointer.h\" // For std::vector<vtkSmartPointer<...>>"
+    '';
 
   src = fetchurl {
     url = "https://www.vtk.org/files/release/${lib.versions.majorMinor finalAttrs.version}/VTK-${finalAttrs.version}.tar.gz";

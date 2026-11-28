@@ -48,6 +48,10 @@ stdenv.mkDerivation (finalAttrs: {
     # https://gitlab.kitware.com/paraview/paraview/-/commit/930e016d
     substituteInPlace VTKExtensions/Core/vtkPVStringFormatter.cxx \
       --replace-fail "fmt::format(formattableString)" "fmt::format(fmt::runtime(formattableString))"
+
+    # std::vector<vtkStdString> needs the complete type with libc++ 22
+    substituteInPlace Utilities/VisItBridge/databases/readers/OpenFOAM/visit_vtkOpenFOAMReader.h \
+      --replace-fail "class vtkStdString;" "#include <vtkStdString.h>"
   '';
 
   nativeBuildInputs = [
