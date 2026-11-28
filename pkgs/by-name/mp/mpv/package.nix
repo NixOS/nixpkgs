@@ -180,5 +180,6 @@ symlinkJoin {
       license
       ;
     mainProgram = "mpv";
+    mainDarwinApp = "mpv.app";
   };
 }
