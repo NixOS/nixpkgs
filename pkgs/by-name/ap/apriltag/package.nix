@@ -19,6 +19,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "apriltags";
   version = "3.4.5";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "AprilRobotics";
     repo = "apriltag";
