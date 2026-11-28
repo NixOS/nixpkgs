@@ -212,6 +212,10 @@ let
     substituteInPlace configure --replace '`/usr/bin/arch`' '"i386"'
     substituteInPlace Lib/multiprocessing/__init__.py \
       --replace 'os.popen(comm)' 'os.popen("${coreutils}/bin/nproc")'
+
+    # Explicitly set the max version allowed to the SDK version. Otherwise, some
+    # macro-based availability checks will fall back to very old versions.
+    export CFLAGS+=" -DMAC_OS_X_VERSION_MAX_ALLOWED=$NIX_APPLE_SDK_VERSION"
   '';
 
   configureFlags =
