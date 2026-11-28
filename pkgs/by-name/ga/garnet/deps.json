@@ -31,13 +31,13 @@
   },
   {
     "pname": "diskann-garnet",
-    "version": "8.0.0",
-    "hash": "sha256-KliiKj8atdH/71Dgh+hK2odKxZuCqUT4/gjX68aBoUY="
+    "version": "9.0.0",
+    "hash": "sha256-K2vzQ3HOAUG7+WpjIO2eC4qLh3kXysk72Gl4EMhsST0="
   },
   {
     "pname": "KeraLua",
-    "version": "1.4.9",
-    "hash": "sha256-xR8Ram6RX6B2kd+KYpa6URIzOW6SGrKLU33yi1nv5UU="
+    "version": "1.4.11",
+    "hash": "sha256-Y0jwi55yGYzgD5afMrSl8ShKL6rjeWXwjHwTJMLrwdw="
   },
   {
     "pname": "Microsoft.Bcl.AsyncInterfaces",
