@@ -513,6 +513,8 @@ let
         };
       };
 
+      basdp.language-gas-x86 = callPackage ./basdp.language-gas-x86 { };
+
       batisteo.vscode-django = buildVscodeMarketplaceExtension {
         mktplcRef = {
           publisher = "batisteo";
@@ -632,6 +634,8 @@ let
           maintainers = [ lib.maintainers.pandapip1 ];
         };
       };
+
+      bierner.lit-html = callPackage ./bierner.lit-html { };
 
       bierner.markdown-checkbox = buildVscodeMarketplaceExtension {
         mktplcRef = {
@@ -754,6 +758,8 @@ let
       };
 
       bodil.blueprint-gtk = callPackage ./bodil.blueprint-gtk { };
+
+      boyswan.glsl-literal = callPackage ./boyswan.glsl-literal { };
 
       bradgashler.htmltagwrap = buildVscodeMarketplaceExtension {
         mktplcRef = {
@@ -1074,6 +1080,8 @@ let
         };
       };
 
+      colton.inline-html = callPackage ./colton.inline-html { };
+
       congyiwu.vscode-jupytext = callPackage ./congyiwu.vscode-jupytext { };
 
       contextmapper.context-mapper-vscode-extension =
@@ -1304,6 +1312,8 @@ let
 
       detachhead.basedpyright = callPackage ./detachhead.basedpyright { };
 
+      devkir.elixir-syntax-vscode = callPackage ./devkir.elixir-syntax-vscode { };
+
       dhall.dhall-lang = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "dhall-lang";
@@ -1391,6 +1401,8 @@ let
         };
       };
 
+      dmitry-korobchenko.prototxt = callPackage ./dmitry-korobchenko.prototxt { };
+
       docker.docker = callPackage ./docker.docker { };
 
       donjayamanne.githistory = buildVscodeMarketplaceExtension {
@@ -1470,6 +1482,8 @@ let
           license = lib.licenses.mit;
         };
       };
+
+      dtsvet.vscode-wasm = callPackage ./dtsvet.vscode-wasm { };
 
       eamodio.gitlens = callPackage ./eamodio.gitlens { };
 
