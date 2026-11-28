@@ -63,13 +63,13 @@ let
 in
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "lutris-unwrapped";
-  version = "0.5.22";
+  version = "0.5.23";
 
   src = fetchFromGitHub {
     owner = "lutris";
     repo = "lutris";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4mNknvfJQJEPZjQoNdKLQcW4CI93D6BUDPj8LtD940A=";
+    hash = "sha256-3kR7I9vG7bWbuqn5luomn3f6nuJIc+9z90NLXRFolRY=";
   };
 
   pyproject = false;
@@ -116,7 +116,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     pypresence
     pyyaml
     requests
-    protobuf
     moddb
   ];
 
