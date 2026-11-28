@@ -1,0 +1,43 @@
+From 9627f4ef3c9fb7b0c9bf6e26d3964e9f9fcf77c7 Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Sun, 19 Apr 2026 20:11:00 -0500
+Subject: [PATCH 2/10] cmake: discover shell and awk through PATH
+
+The build currently falls back to /bin/bash and /usr/bin/awk. Those
+paths are not reliable in Nix sandboxes and they are not required by
+the tools themselves; any functional shell and awk implementation is
+enough.
+
+When SHELL is not set, look up a shell via PATH, and always discover awk
+the same way. This keeps the upstream behaviour while removing fixed
+filesystem assumptions that break hermetic packaging.
+---
+ cmake/modules/GoVars.cmake | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
+
+diff --git a/cmake/modules/GoVars.cmake b/cmake/modules/GoVars.cmake
+index 5aa2c32b8626..f4502f7fb3ea 100644
+--- a/cmake/modules/GoVars.cmake
++++ b/cmake/modules/GoVars.cmake
+@@ -32,10 +32,10 @@ else()
+ endif()
+ 
+ # We need a working shell. 
+-if(DEFINED ENV{SHELL})
++if(DEFINED ENV{SHELL} AND NOT "$ENV{SHELL}" STREQUAL "")
+   set(shell $ENV{SHELL})
+ else()
+-  set(shell "/bin/bash")
++  find_program(shell NAMES bash sh REQUIRED)
+ endif()
+ execute_process(COMMAND "${shell}" "-c" "echo foo" OUTPUT_VARIABLE echofoo)
+ if(echofoo STREQUAL "")
+@@ -47,5 +47,4 @@ message(FATAL_ERROR "fatal: shell ${shell} missing or not functional")
+ endif()
+ 
+ # FIXME: write cmake to discover awk, test to make sure it works
+-set(awk "/usr/bin/awk")
+-
++find_program(awk NAMES gawk awk REQUIRED)
+-- 
+2.50.1
