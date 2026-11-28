@@ -6,8 +6,11 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "wiki-js";
+  pname = "wiki-js_2";
   version = "2.5.317";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchurl {
     url = "https://github.com/Requarks/wiki-v2/releases/download/v${finalAttrs.version}/wiki-js.tar.gz";
@@ -41,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    homepage = "https://js.wiki/";
+    homepage = "https://docs.requarks.io/";
     description = "Modern and powerful wiki app built on Node.js";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ minosimo ];
