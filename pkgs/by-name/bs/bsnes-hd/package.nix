@@ -17,6 +17,7 @@
   udev,
   unstableGitUpdater,
   wrapGAppsHook3,
+  writeShellScript,
 }:
 
 stdenv.mkDerivation {
@@ -91,7 +92,11 @@ stdenv.mkDerivation {
   '';
 
   passthru = {
-    updateScript = unstableGitUpdater { };
+    updateScript = unstableGitUpdater {
+      tagConverter = writeShellScript "bsnes-hd-tag-converter.sh" ''
+        sed -e 's/^beta_//g' -e 's/_/./g'
+      '';
+    };
   };
 
   meta = {
