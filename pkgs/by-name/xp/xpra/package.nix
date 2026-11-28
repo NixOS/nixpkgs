@@ -2,6 +2,7 @@
   lib,
   fetchFromGitHub,
   nix-update-script,
+  nixosTests,
   pkg-config,
   runCommand,
   writeText,
@@ -131,6 +132,22 @@ effectiveBuildPythonApplication (finalAttrs: {
     NIX_CFLAGS_COMPILE = "-Wno-error=unused-function";
 
     INCLUDE_DIRS = "${pam}/include";
+
+    XPRA_EXTRA_BUILD_ARGS = lib.concatStringsSep " " (
+      [
+        "--with-Xdummy"
+        "--without-Xdummy_wrapper"
+        "--without-strict"
+        "--with-gtk3"
+        # Override these, setup.py checks for headers in /usr/* paths
+        "--with-pam"
+        "--with-vsock"
+      ]
+      ++ lib.optionals withNvenc [
+        "--with-nvenc"
+        "--with-nvjpeg_encoder"
+      ]
+    );
   };
 
   nativeBuildInputs = [
@@ -230,20 +247,6 @@ effectiveBuildPythonApplication (finalAttrs: {
       ]
     );
 
-  setupPyBuildFlags = [
-    "--with-Xdummy"
-    "--without-Xdummy_wrapper"
-    "--without-strict"
-    "--with-gtk3"
-    # Override these, setup.py checks for headers in /usr/* paths
-    "--with-pam"
-    "--with-vsock"
-  ]
-  ++ lib.optionals withNvenc [
-    "--with-nvenc"
-    "--with-nvjpeg_encoder"
-  ];
-
   dontWrapGApps = true;
 
   preFixup = ''
@@ -277,6 +280,12 @@ effectiveBuildPythonApplication (finalAttrs: {
     cat ${xorgModulePaths} >> $out/etc/xpra/xorg.conf
     cat ${xorgModulePaths} >> $out/etc/xpra/xorg-uinput.conf
 
+    # fix for writing the xvfb command while installing into the wheel's
+    # staging directory and Xorg missing on PATH at build time
+    substituteInPlace $out/etc/xpra/conf.d/55_server_x11.conf \
+      --replace-fail "/xpra-${finalAttrs.version}.data/data/etc/" "$out/etc/" \
+      --replace-fail "xvfb = Xorg " "xvfb = ${xorg-server}/bin/Xorg "
+
     # make application icon visible to desktop environemnts
     icon_dir="$out/share/icons/hicolor/64x64/apps"
     mkdir -p "$icon_dir"
@@ -292,6 +301,7 @@ effectiveBuildPythonApplication (finalAttrs: {
 
   passthru = {
     inherit xf86videodummy;
+    tests = { inherit (nixosTests) xpra; };
     updateScript = nix-update-script { };
   };
 
