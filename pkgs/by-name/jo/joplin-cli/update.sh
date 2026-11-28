@@ -21,4 +21,4 @@ yarn-berry-fetcher missing-hashes yarn.lock >"$PACKAGE_DIR/missing-hashes.json"
 popd
 rm -rf "$WORKDIR"
 
-nix-update "$UPDATE_NIX_PNAME" --version skip || true
+nix-update "$UPDATE_NIX_PNAME" --version skip --no-src || true

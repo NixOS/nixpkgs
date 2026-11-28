@@ -1,5 +1,4 @@
 {
-  _experimental-update-script-combinators,
   buildGoModule,
   cargo,
   cmake,
@@ -117,13 +116,12 @@ stdenv.mkDerivation (finalAttrs: {
     cp ../linux/org.mozilla.vpn.rules-others "$out/share/polkit-1/rules.d/org.mozilla.vpn.rules"
   '';
 
-  passthru.updateScript = _experimental-update-script-combinators.sequence [
-    (nix-update-script { })
-    (nix-update-script {
-      attrPath = "mozillavpn.netfilter";
-      extraArgs = [ "--version=skip" ];
-    })
-  ];
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--subpackage"
+      "netfilter"
+    ];
+  };
 
   meta = {
     description = "Client for the Mozilla VPN service";

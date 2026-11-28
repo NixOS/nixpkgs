@@ -62,8 +62,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       text = ''
         set -euo pipefail
 
-        nix-update moonfire-nvr
-        nix-update moonfire-nvr.ui --version=skip
+        nix-update moonfire-nvr --subpackage ui
       '';
     });
   };

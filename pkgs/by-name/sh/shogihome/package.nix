@@ -161,10 +161,11 @@ buildNpmPackage (finalAttrs: {
           update-source-version '${finalAttrs.pname}' "$version"
         '';
       }))
-      # Update src.hash and npmDepsHash
+      # Update npmDepsHash
       (nix-update-script {
         extraArgs = [
           "--version=skip"
+          "--no-src"
         ];
       })
     ];

@@ -8,7 +8,6 @@
   makeWrapper,
   nixosTests,
   unrar-free,
-  _experimental-update-script-combinators,
 }:
 
 let
@@ -110,15 +109,7 @@ stdenv.mkDerivation (finalAttrs: {
       inherit (nixosTests) shelfmark;
     };
 
-    updateScript = _experimental-update-script-combinators.sequence [
-      (nix-update-script { })
-      (nix-update-script {
-        extraArgs = [
-          "--subpackage=frontend"
-          "--version=skip"
-        ];
-      })
-    ];
+    updateScript = nix-update-script { extraArgs = [ "--subpackage=frontend" ]; };
   };
 
   meta = {

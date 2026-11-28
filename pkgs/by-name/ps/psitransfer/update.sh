@@ -4,5 +4,5 @@
 set -euo pipefail
 
 nix-update psitransfer --src-only --version-regex='^v(\d+\.\d+\.\d+)$'
-nix-update psitransfer.app --version=skip
-nix-update psitransfer --version=skip
+nix-update psitransfer.app --version=skip --no-src
+nix-update psitransfer --version=skip --no-src

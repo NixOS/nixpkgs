@@ -8,4 +8,4 @@ new_crate_ver="$(yq '.package.version' "$new_src/Cargo.toml")"
 update-source-version "$UPDATE_NIX_PNAME" "$new_crate_ver" --version-key=crateVersion --ignore-same-version --ignore-same-hash
 
 # Update cargoHash
-nix-update --version=skip "$UPDATE_NIX_PNAME"
+nix-update --version=skip --no-src "$UPDATE_NIX_PNAME"

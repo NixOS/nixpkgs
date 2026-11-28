@@ -20,4 +20,4 @@ src_path=$(nix-build --attr "$UPDATE_NIX_PNAME.src" --no-link)
 yarn-berry-fetcher missing-hashes "$src_path/yarn.lock" >"$package_dir/missing-hashes.json"
 
 # Regenerate the hash of the Yarn offline cache after updating its missing hashes.
-nix-update "$UPDATE_NIX_PNAME" --version skip
+nix-update "$UPDATE_NIX_PNAME" --version skip --no-src

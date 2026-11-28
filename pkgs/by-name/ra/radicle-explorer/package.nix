@@ -66,7 +66,12 @@ buildNpmPackage (finalAttrs: {
 
   passthru.updateScript = _experimental-update-script-combinators.sequence [
     (unstableGitUpdater { hardcodeZeroVersion = true; })
-    (nix-update-script { extraArgs = [ "--version=skip" ]; })
+    (nix-update-script {
+      extraArgs = [
+        "--version=skip"
+        "--no-src"
+      ];
+    })
   ];
 
   meta = {

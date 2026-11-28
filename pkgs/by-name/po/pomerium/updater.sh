@@ -15,5 +15,4 @@ if [[ "$UPDATE_NIX_OLD_VERSION" == "$version" ]]; then
 fi
 
 popd
-nix-update pomerium --version $version
-nix-update pomerium --version=skip --subpackage ui
+nix-update pomerium --version $version --subpackage ui

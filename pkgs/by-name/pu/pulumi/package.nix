@@ -206,15 +206,24 @@ buildGoModule (finalAttrs: {
       })
       (nix-update-script {
         attrPath = "pulumiPackages.pulumi-go";
-        extraArgs = [ "--version=skip" ];
+        extraArgs = [
+          "--version=skip"
+          "--no-src"
+        ];
       })
       (nix-update-script {
         attrPath = "pulumiPackages.pulumi-nodejs";
-        extraArgs = [ "--version=skip" ];
+        extraArgs = [
+          "--version=skip"
+          "--no-src"
+        ];
       })
       (nix-update-script {
         attrPath = "pulumiPackages.pulumi-python";
-        extraArgs = [ "--version=skip" ];
+        extraArgs = [
+          "--version=skip"
+          "--no-src"
+        ];
       })
     ];
     tests = {

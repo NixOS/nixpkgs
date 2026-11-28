@@ -18,4 +18,4 @@ update-source-version ollama "$llama_cpp_version" \
   --source-key=llamaCppSrc \
   --version-key=llamaCppVersion
 
-nix-update ollama --version=skip
+nix-update ollama --version=skip --no-src

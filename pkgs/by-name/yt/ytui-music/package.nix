@@ -75,7 +75,10 @@ rustPlatform.buildRustPackage {
       })
       (nix-update-script {
         # Updating `cargoHash`
-        extraArgs = [ "--version=skip" ];
+        extraArgs = [
+          "--version=skip"
+          "--no-src"
+        ];
       })
     ];
   };
