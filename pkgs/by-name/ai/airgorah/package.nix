@@ -19,16 +19,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "airgorah";
-  version = "0.8.1";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "martin-olivier";
     repo = "airgorah";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gRQ596NhvOmsGscYsl4o+bhPbanx5kFOJnEeXPTVJEY=";
+    hash = "sha256-qsDSdylyRNGWvru59eB9u7ZLCA3m++vtYGpDOcWUz/s=";
   };
 
-  cargoHash = "sha256-y9akyXjNHaqSJIvFOiYbg+AygSV9KTWJ2pBlgGaJFOs=";
+  cargoHash = "sha256-T+VbYhpl81jgGjyoOKO2U/nq/s+hJ6DnGQeFGZpV5wo=";
 
   nativeBuildInputs = [
     pkg-config
