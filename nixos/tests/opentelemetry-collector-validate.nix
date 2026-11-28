@@ -48,6 +48,33 @@ let
     };
   };
 
+  envRef = "\${env:OTEL_TOKEN}";
+
+  # A configuration that reads a secret from the environment. Unlike a missing
+  # file, an unset environment variable resolves to an empty string, so this
+  # validates without any override.
+  envSettings = {
+    receivers.otlp.protocols.http = { };
+    exporters.otlphttp = {
+      endpoint = "http://localhost:4318";
+      headers.authorization = "Bearer ${envRef}";
+    };
+    service.pipelines.logs = {
+      receivers = [ "otlp" ];
+      exporters = [ "otlphttp" ];
+    };
+  };
+
+  # The same, but in a property that the component requires to be non-empty.
+  emptyEnvSettings = {
+    receivers.otlp.protocols.http = { };
+    exporters.otlphttp.endpoint = "\${env:OTEL_ENDPOINT}";
+    service.pipelines.logs = {
+      receivers = [ "otlp" ];
+      exporters = [ "otlphttp" ];
+    };
+  };
+
   # A pipeline that references an exporter nobody configured.
   invalidSettings = {
     receivers.otlp.protocols.http = { };
@@ -70,6 +97,8 @@ let
     validateConfigOverrides = [ "exporters::otlphttp::headers::authorization=stub" ];
   };
   withoutOverrides = evalService { settings = secretSettings; };
+  fromEnv = evalService { settings = envSettings; };
+  fromEmptyEnv = evalService { settings = emptyEnvSettings; };
   invalid = evalService { settings = invalidSettings; };
 in
 # A configuration built from `settings` is always a store path, so it is always
@@ -91,6 +120,10 @@ runCommand "opentelemetry-collector-validate-test"
     validated = confOf withOverrides;
     invalidFailure = testers.testBuildFailure (confOf invalid);
     unresolvableFailure = testers.testBuildFailure (confOf withoutOverrides);
+    # Building `envValidated` passes without an override, because the unset
+    # environment variable resolves to an empty string.
+    envValidated = confOf fromEnv;
+    emptyEnvFailure = testers.testBuildFailure (confOf fromEmptyEnv);
   }
   ''
     # The override applies to validation only: the deployed configuration keeps
@@ -105,6 +138,14 @@ runCommand "opentelemetry-collector-validate-test"
     # Without an override, validation resolves the file provider and fails,
     # because the secret does not exist in the sandbox.
     grep -F /var/lib/secrets/otel-token $unresolvableFailure/testBuildFailure.log
+
+    # An environment variable reference is kept as is in the deployed
+    # configuration.
+    grep -F ${lib.escapeShellArg envRef} $envValidated
+
+    # An unset environment variable only fails validation where the component
+    # rejects the resulting empty value.
+    grep -F otlphttp $emptyEnvFailure/testBuildFailure.log
 
     touch $out
   ''
