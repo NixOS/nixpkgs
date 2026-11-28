@@ -76,5 +76,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       fugi
     ];
+    problems.removal = {
+      message = "Sable 1 is no longer maintained upstream and has been succeeded by Sable 2, packaged as sable-next. Sable 2 does not import Sable 1 sessions, so you will need to sign in again after switching.";
+      urls = [ "https://github.com/SableClient/Sable-Legacy#readme" ];
+    };
   };
 })
