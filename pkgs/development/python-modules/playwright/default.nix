@@ -19,7 +19,6 @@
 
   # dependencies
   greenlet,
-  pyee,
 
   python,
   nixosTests,
@@ -31,14 +30,14 @@ in
 buildPythonPackage (finalAttrs: {
   pname = "playwright";
   # run ./pkgs/development/web/playwright/update.sh to update
-  version = "1.64.0";
+  version = "1.65.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "playwright-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BVgk+YS0CMVTmK1MQr3iEl+TQrGJXuhlYp4EG6Wd6PU=";
+    hash = "sha256-rG23k2iAmbl5jeHSd424ss/AdW502YqocFuQN8u1WGM=";
   };
 
   patches = [
@@ -77,12 +76,8 @@ buildPythonPackage (finalAttrs: {
 
   pythonRelaxDeps = [
     "greenlet"
-    "pyee"
   ];
-  dependencies = [
-    greenlet
-    pyee
-  ];
+  dependencies = [ greenlet ];
 
   postInstall = ''
     ln -s ${driver} $out/${python.sitePackages}/playwright/driver
