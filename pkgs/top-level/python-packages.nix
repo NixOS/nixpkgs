@@ -2846,6 +2846,8 @@ self: super: with self; {
 
   burner-redis = callPackage ../development/python-modules/burner-redis { };
 
+  busylib = callPackage ../development/python-modules/busylib { };
+
   busylight-core = callPackage ../development/python-modules/busylight-core { };
 
   busylight-for-humans = callPackage ../development/python-modules/busylight-for-humans { };
