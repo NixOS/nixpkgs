@@ -20994,6 +20994,10 @@ self: super: with self; {
 
   test-results-parser = callPackage ../development/python-modules/test-results-parser { };
 
+  test-thing = callPackage ../development/python-modules/test-thing {
+    inherit (pkgs) systemd;
+  };
+
   test-tube = callPackage ../development/python-modules/test-tube { };
 
   test2ref = callPackage ../development/python-modules/test2ref { };

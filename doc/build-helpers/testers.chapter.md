@@ -705,6 +705,84 @@ pkgs.testers.runNixOSTest (
 
 :::
 
+## `runImageTest` {#tester-runImageTest}
+
+Boots a virtual machine image and drives it from the outside, for testing
+distributions that cannot be built from Nixpkgs.
+
+The image is started in QEMU and reachable over virtio-vsock, using
+[`test.thing`](https://codeberg.org/lis/test.thing) as the runner: systemd
+credentials are handed over as SMBIOS OEM strings, boot completion arrives as an
+`sd_notify` message, and commands run over SSH through a vsock listener.
+
+Nothing in the guest has to be configured for the test, and no cloud-init or
+guest agent is required.
+
+The guest has to satisfy the [Virtual Machine Image
+API](https://codeberg.org/lis/test.thing/src/branch/main/doc/VirtualMachineAPI.md):
+it must create an sshd listener on vsock port 22 and accept the ephemeral key
+given in a credential.
+
+A distribution image, such as Debian cloud images, that leaves too much to
+cloud-init will not work out of the box.
+
+Arch Linux's `basic` image does and is provided as a maintained image to use.
+
+:::{.note}
+This needs `/dev/kvm` and an x86_64 host.
+:::
+
+:::{.example #ex-runImageTest-arch}
+
+# Boot a stock distribution image
+
+```nix
+pkgs.testers.runImageTest {
+  name = "arch-cloud";
+  machines.machine = {
+    image = pkgs.arch-cloud-image;
+    cpus = 2;
+    memory = "2G";
+  };
+  testScript = ''
+    out = await machine.succeed("grep '^ID=' /etc/os-release")
+    assert "ID=arch" in out, out
+    await machine.succeed("systemctl is-active sshd.service")
+  '';
+}
+```
+
+:::
+
+`testScript` is an async Python script: the top level is
+a coroutine body, so commands are awaited and concurrency uses `asyncio`
+directly. A [`Machine` object](#tester-runImageTest-machine) is bound to each
+machine name, plus `machine` when there is only one.
+
+## Machine objects {#tester-runImageTest-machine}
+
+Every machine in an `runImageTest` test provides:
+
+| Method | Description |
+| --- | --- |
+| `await execute(command)` | Run a shell command, returning `(status, output)`. |
+| `await succeed(command)` | Run a command, raising if its exit status is not zero. |
+| `await fail(command)` | Run a command, raising if its exit status *is* zero. |
+| `await wait_until_succeeds(command, deadline=…)` | Retry a command until it succeeds. |
+| `await wait_for_file(path)` | Wait until a path exists in the guest. |
+| `await copy_from_host(source, target)` | Copy a file into the guest. |
+| `await copy_from_machine(source, target_dir)` | Copy a file out into the test's output. |
+| `await reboot()` | Reboot the guest and wait for it to come back. |
+| `await sleep(duration)` | Sleep in guest time, so a paused VM does not skip the wait. |
+| `machine.subtest(name)` | An `async with` block that groups log output. |
+
+A guest whose init system is systemd additionally provides `wait_for_unit`,
+`require_unit_state`, `systemctl`, `start_job` and `stop_job`.
+
+The tester exposes the machines at `<test>.passthru.driverInteractive`, which
+boots them and opens an IPython prompt instead of running the test. `await`
+works at the prompt.
+
 ## `nixosTest` {#tester-nixosTest}
 
 Run a NixOS VM network test using this evaluation of Nixpkgs.
