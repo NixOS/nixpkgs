@@ -12,7 +12,7 @@
 
 buildGoModule rec {
   pname = "flyctl";
-  version = "0.5.5";
+  version = "0.5.19";
 
   src = fetchFromGitHub {
     owner = "superfly";
@@ -22,11 +22,11 @@ buildGoModule rec {
       cd "$out"
       git rev-parse HEAD > COMMIT
     '';
-    hash = "sha256-8s34PK0GgaxuYpC42XFhjerH5DCxl1ncnwzDUAPGjco=";
+    hash = "sha256-BqlLBFRRZXGuhcANITw9VVPQiqO+DK3/7pO+IkZoqHk=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-uX2Nas7YHa+toWuCdW72XHMF41oSdrIYLm9+OP3Y+s8=";
+  vendorHash = "sha256-hiOtNJHP7h73FCnIYHCahSRppkjmJvyKBnp8wLgkaVA=";
 
   subPackages = [ "." ];
 
@@ -37,6 +37,10 @@ buildGoModule rec {
     "-X github.com/superfly/flyctl/internal/buildinfo.buildVersion=${version}"
   ];
   tags = [ "production" ];
+
+  checkFlags = [
+    "-skip=TestSetupGitHubActionsToken"
+  ];
 
   nativeBuildInputs = [
     installShellFiles
@@ -67,7 +71,7 @@ buildGoModule rec {
     # We do not set trimpath for tests, in case they reference test assets
     export GOFLAGS=''${GOFLAGS//-trimpath/}
 
-    buildGoDir test ./...
+    buildGoDir test ./... "''${checkFlagsArray[@]}"
 
     runHook postCheck
   '';
