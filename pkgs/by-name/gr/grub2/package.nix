@@ -259,7 +259,7 @@ stdenv.mkDerivation rec {
 
     ./bootstrap --no-git --gnulib-srcdir=${gnulib}
 
-    substituteInPlace ./configure --replace-fail '/usr/share/fonts' '${unifont}/share/fonts'
+    substituteInPlace ./configure --replace-fail '/usr/share/fonts' '${buildPackages.unifont}/share/fonts'
   ''
   # build-grub-mkfont is built & run during build, need to find freetype for buildPlatform
   + lib.optionalString (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) ''
@@ -283,6 +283,8 @@ stdenv.mkDerivation rec {
     "TARGET_RANLIB=${stdenv.cc.targetPrefix}ranlib"
     "TARGET_STRIP=${stdenv.cc.targetPrefix}strip"
   ]
+  # gnulib's getopt-cdefs.h includes <sys/cdefs.h>, whose musl compat header emits a #warning
+  ++ lib.optional stdenv.hostPlatform.isMusl "--disable-werror"
   ++ lib.optional zfsSupport "--enable-libzfs"
   ++ lib.optionals efiSupport [
     "--with-platform=efi"
@@ -326,6 +328,9 @@ stdenv.mkDerivation rec {
 
     patchShebangs $out/lib/grub/*/modinfo.sh
     sed -i $out/lib/grub/*/modinfo.sh -e "/grub_target_cppflags=/ s|'.*'|' '|"
+  ''
+  + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+    sed -i "1s|^#!.*|#!${runtimeShell}|" $out/lib/grub/*/modinfo.sh
   '';
 
   passthru.tests =
