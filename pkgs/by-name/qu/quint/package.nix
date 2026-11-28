@@ -18,9 +18,9 @@
 }:
 
 let
-  version = "0.33.1";
+  version = "0.34.0";
   apalacheVersion = "0.62.4";
-  evaluatorVersion = "0.7.1";
+  evaluatorVersion = "0.8.0";
 
   metaCommon = {
     description = "Formal specification language with TLA+ semantics";
@@ -34,7 +34,7 @@ let
     owner = "quint-co";
     repo = "quint";
     tag = "v${version}";
-    hash = "sha256-F0Yj9e+qTOlj6RzspvkEhilXC6pFHvISBRLgvJmon7I=";
+    hash = "sha256-PHuHURIw1J6sDiCwyVOQkkPVHCbD+3DHlXrI1ImD2Ig=";
   };
 
   # Build the Quint CLI from source
@@ -44,7 +44,7 @@ let
 
     sourceRoot = "${src.name}/quint";
 
-    npmDepsHash = "sha256-Bk21CfCh1xsY1cIYnSQfxxcpVkRbBg5EfGbFvJlTcvE=";
+    npmDepsHash = "sha256-XS3pd+eVrzjCrfIVDW7B66CZCBfB2/4pfYauAwJKpc0=";
 
     npmBuildScript = "compile";
 
