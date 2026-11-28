@@ -60,22 +60,19 @@ let
 
   # libvpx darwin targets include darwin version (ie. ARCH-darwinXX-gcc, XX being the darwin version)
   # See all_platforms: https://github.com/webmproject/libvpx/blob/master/configure
-  # Darwin versions: 10.4=8, 10.5=9, 10.6=10, 10.7=11, 10.8=12, 10.9=13, 10.10=14
   darwinVersion =
-    if stdenv.hostPlatform.osxMinVersion == "10.10" then
-      "14"
-    else if stdenv.hostPlatform.osxMinVersion == "10.9" then
-      "13"
-    else if stdenv.hostPlatform.osxMinVersion == "10.8" then
-      "12"
-    else if stdenv.hostPlatform.osxMinVersion == "10.7" then
-      "11"
-    else if stdenv.hostPlatform.osxMinVersion == "10.6" then
-      "10"
-    else if stdenv.hostPlatform.osxMinVersion == "10.5" then
-      "9"
+    if lib.strings.versionAtLeast stdenv.hostPlatform.darwinMinVersion "26" then
+      "25"
+    else if lib.strings.versionAtLeast stdenv.hostPlatform.darwinMinVersion "15" then
+      "24"
+    else if lib.strings.versionAtLeast stdenv.hostPlatform.darwinMinVersion "14" then
+      "23"
+    else if lib.strings.versionAtLeast stdenv.hostPlatform.darwinMinVersion "13" then
+      "22"
+    else if lib.strings.versionAtLeast stdenv.hostPlatform.darwinMinVersion "12" then
+      "21"
     else
-      "8";
+      "20";
 
   cpu =
     if stdenv.hostPlatform.isArmv7 then
