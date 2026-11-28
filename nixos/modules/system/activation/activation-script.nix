@@ -78,6 +78,10 @@ let
       # used as a garbage collection root.
       ln -sfn "$(readlink -f "$systemConfig")" /run/current-system
 
+      # Write a state file for nixos-activation-scripts-status.service.
+      mkdir -p /run/nixos/activation-scripts
+      echo "$_status" >/run/nixos/activation-scripts/exit_status
+
       exit $_status
     '';
 
@@ -316,6 +320,17 @@ in
       }
       source ${config.system.build.earlyMountScript}
     '';
+
+    # A service that propagates the exit code of the activation scripts so that
+    # `systemctl --failed` shows if any of them failed.
+    systemd.services.nixos-activation-scripts-status = lib.mkIf (!config.system.nixos-init.enable) {
+      wantedBy = [ "multi-user.target" ];
+      script = ''
+        exit_status="$(cat /run/nixos/activation-scripts/exit_status)"
+        echo "NixOS activation scripts finished with exit code $exit_status"
+        exit "$exit_status"
+      '';
+    };
 
     systemd.user = lib.mkIf config.system.activatable {
       services.nixos-activation = {
