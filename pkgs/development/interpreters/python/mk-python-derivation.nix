@@ -35,9 +35,9 @@
 let
   inherit (builtins) unsafeGetAttrPos warn;
   inherit (lib)
+    all
     concatMapStrings
     elem
-    extendDerivation
     fixedWidthString
     flip
     getName
@@ -45,14 +45,15 @@ let
     isBool
     max
     optional
-    optionalAttrs
-    optionals
     optionalString
+    optionals
     removePrefix
-    stringLength
-    all
     seq
+    stringLength
     ;
+
+  buildIsHost = lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform;
+  pythonAtLeast33 = python.pythonAtLeast "3.3";
 
   leftPadName =
     name: against:
@@ -66,7 +67,7 @@ let
   isPythonModule =
     drv:
     # all pythonModules have the pythonModule attribute
-    (drv ? "pythonModule")
+    drv ? pythonModule
     # Some pythonModules are turned in to a pythonApplication by setting the field to false
     && (!isBool drv.pythonModule);
 
@@ -105,6 +106,72 @@ let
   bootstrappedRuntimeDepsCheckHook = pythonRuntimeDepsCheckHook.override {
     inherit (python.pythonOnBuildForHost.pkgs.bootstrap) packaging;
   };
+
+  # By creating these lists in a higher scope, we prevent the need to allocate
+  # them for every individual python package
+  defaultNativeBuildInputs = [
+    python
+    wrapPython
+    ensureNewerSourcesForZipFilesHook # move to wheel installer (pip) or builder (setuptools, flit, ...)?
+    pythonRemoveTestsDirHook
+  ];
+  repropagatedPython = [
+    python
+  ];
+  catchConflictHooks = [
+    pythonCatchConflictsHook
+  ];
+  relaxDepsHooks = [
+    pythonRelaxDepsHook
+  ];
+  removeBytecodeHooks = [
+    pythonRemoveBinBytecodeHook
+  ];
+  zipInputs = [
+    unzip
+  ];
+  pyprojectFormatHooks = [
+    pypaBuildHook
+    pythonRuntimeDepsCheckHook
+  ];
+  bootstrappedPyprojectFormatHooks = [
+    bootstrappedPypaBuildHook
+    bootstrappedRuntimeDepsCheckHook
+  ];
+  wheelFormatHooks = [
+    wheelUnpackHook
+    pythonRuntimeDepsCheckHook
+  ];
+  bootstrappedWheelFormatHooks = [
+    wheelUnpackHook
+    bootstrappedRuntimeDepsCheckHook
+  ];
+  setupToolsFormatHooks = [
+    setuptoolsBuildHook
+  ];
+  eggFormatHooks = [
+    eggUnpackHook
+    eggBuildHook
+    eggInstallHook
+  ];
+  pypaFormatHooks = [
+    pypaInstallHook
+  ];
+  bootstrappedPypaFormatHooks = [
+    bootstrappedPypaInstallHook
+  ];
+  importsCheckHooks = [
+    pythonImportsCheckHook
+  ];
+  metadataCheckHooks = [
+    pythonMetadataCheckHook
+  ];
+  namespaceHooks = [
+    pythonNamespacesHook
+  ];
+  withDistHooks = [
+    pythonOutputDistHook
+  ];
 in
 
 lib.extendMkDerivation {
@@ -211,18 +278,20 @@ lib.extendMkDerivation {
 
     let
       getFinalPassthru =
-        let
-          pos = unsafeGetAttrPos "passthru" finalAttrs;
-        in
         attrName:
-        finalAttrs.passthru.${attrName} or (throw (
-          ''
-            ${finalAttrs.name}: passthru.${attrName} missing after overrideAttrs overriding.
-          ''
-          + optionalString (pos != null) ''
-            Last overridden at ${pos.file}:${toString pos.line}
-          ''
-        ));
+        finalAttrs.passthru.${attrName} or (
+          let
+            pos = unsafeGetAttrPos "passthru" finalAttrs;
+          in
+          throw (
+            ''
+              ${finalAttrs.name}: passthru.${attrName} missing after overrideAttrs overriding.
+            ''
+            + optionalString (pos != null) ''
+              Last overridden at ${pos.file}:${toString pos.line}
+            ''
+          )
+        );
 
       format' =
         assert (getFinalPassthru "pyproject" != null) -> (format == null);
@@ -244,7 +313,7 @@ lib.extendMkDerivation {
               theirName = "'${drv.name}'";
               optionalLocation =
                 let
-                  pos = unsafeGetAttrPos (if attrs ? "pname" then "pname" else "name") attrs;
+                  pos = unsafeGetAttrPos (if attrs ? pname then "pname" else "name") attrs;
                 in
                 optionalString (pos != null) " at ${pos.file}:${toString pos.line}:${toString pos.column}";
             in
@@ -289,89 +358,59 @@ lib.extendMkDerivation {
       isSetuptoolsDependency = isSetuptoolsDependency' (finalAttrs.pname or null);
 
       name = namePrefix + attrs.name or "${finalAttrs.pname}-${finalAttrs.version}";
-
-      runtimeDepsCheckHook =
-        if isBootstrapPackage then bootstrappedRuntimeDepsCheckHook else pythonRuntimeDepsCheckHook;
     in
     {
       inherit name;
 
       inherit catchConflicts;
 
-      nativeBuildInputs = [
-        python
-        wrapPython
-        ensureNewerSourcesForZipFilesHook # move to wheel installer (pip) or builder (setuptools, flit, ...)?
-        pythonRemoveTestsDirHook
-      ]
-      ++ optionals (finalAttrs.catchConflicts && !isBootstrapPackage && !isSetuptoolsDependency) [
-        #
-        # 1. When building a package that is also part of the bootstrap chain, we
-        #    must ignore conflicts after installation, because there will be one with
-        #    the package in the bootstrap.
-        #
-        # 2. When a package is a dependency of setuptools, we must ignore conflicts
-        #    because the hook that checks for conflicts uses setuptools.
-        #
-        pythonCatchConflictsHook
-      ]
-      ++
-        optionals (finalAttrs.pythonRelaxDeps or [ ] != [ ] || finalAttrs.pythonRemoveDeps or [ ] != [ ])
-          [
-            pythonRelaxDepsHook
-          ]
-      ++ optionals removeBinBytecode [
-        pythonRemoveBinBytecodeHook
-      ]
-      ++ optionals (attrs ? src.name && hasZipSuffix attrs.src.name) [
-        unzip
-      ]
-      ++ optionals (format' == "setuptools") [
-        setuptoolsBuildHook
-      ]
-      ++ optionals (format' == "pyproject") [
-        (if isBootstrapPackage then bootstrappedPypaBuildHook else pypaBuildHook)
-        runtimeDepsCheckHook
-      ]
-      ++ optionals (format' == "wheel") [
-        wheelUnpackHook
-        runtimeDepsCheckHook
-      ]
-      ++ optionals (format' == "egg") [
-        eggUnpackHook
-        eggBuildHook
-        eggInstallHook
-      ]
-      ++ optionals (format' != "other") [
-        (if isBootstrapInstallPackage then bootstrappedPypaInstallHook else pypaInstallHook)
-      ]
-      ++ optionals (stdenv.buildPlatform == stdenv.hostPlatform) [
+      nativeBuildInputs =
+        defaultNativeBuildInputs
+        ++ optionals (
+          # 1. When building a package that is also part of the bootstrap chain, we
+          #    must ignore conflicts after installation, because there will be one with
+          #    the package in the bootstrap.
+          #
+          # 2. When a package is a dependency of setuptools, we must ignore conflicts
+          #    because the hook that checks for conflicts uses setuptools.
+          finalAttrs.catchConflicts && !isBootstrapPackage && !isSetuptoolsDependency
+        ) catchConflictHooks
+        ++ optionals (
+          finalAttrs.pythonRelaxDeps or [ ] != [ ] || finalAttrs.pythonRemoveDeps or [ ] != [ ]
+        ) relaxDepsHooks
+        ++ optionals removeBinBytecode removeBytecodeHooks
+        ++ optionals (attrs ? src.name && hasZipSuffix attrs.src.name) zipInputs
+        ++ (
+          if format' == "setuptools" then
+            setupToolsFormatHooks
+          else if format' == "pyproject" then
+            (if isBootstrapPackage then bootstrappedPyprojectFormatHooks else pyprojectFormatHooks)
+          else if format' == "wheel" then
+            (if isBootstrapPackage then bootstrappedWheelFormatHooks else wheelFormatHooks)
+          else if format' == "egg" then
+            eggFormatHooks
+          else
+            [ ]
+        )
+        ++ optionals (format' != "other") (
+          if isBootstrapInstallPackage then bootstrappedPypaFormatHooks else pypaFormatHooks
+        )
         # This is a test, however, it should be ran independent of the checkPhase and checkInputs
-        pythonImportsCheckHook
-      ]
-      ++
-        optionals
-          (
-            finalAttrs ? "pname"
-            && finalAttrs ? "version"
-            # We don't care about the METADATA of Python applications.
-            && isPythonModule finalAttrs.passthru
-            # METADATA is unlikely to be correct if pyproject is false or null.
-            && pyproject == true
-            && !isBootstrapPackage
-          )
-          [
-            pythonMetadataCheckHook
-          ]
-      ++ optionals (python.pythonAtLeast "3.3") [
+        ++ optionals buildIsHost importsCheckHooks
+        ++ optionals (
+          finalAttrs ? pname
+          && finalAttrs ? version
+          # We don't care about the METADATA of Python applications.
+          && isPythonModule finalAttrs.passthru
+          # METADATA is unlikely to be correct if pyproject is false or null.
+          && pyproject == true
+          && !isBootstrapPackage
+        ) metadataCheckHooks
         # Optionally enforce PEP420 for python3
-        pythonNamespacesHook
-      ]
-      ++ optionals withDistOutput [
-        pythonOutputDistHook
-      ]
-      ++ nativeBuildInputs
-      ++ getFinalPassthru "build-system";
+        ++ optionals pythonAtLeast33 namespaceHooks
+        ++ optionals withDistOutput withDistHooks
+        ++ nativeBuildInputs
+        ++ getFinalPassthru "build-system";
 
       buildInputs = validatePythonMatches "buildInputs" (buildInputs ++ pythonPath);
 
@@ -379,12 +418,10 @@ lib.extendMkDerivation {
         validatePythonMatches "propagatedBuildInputs" (
           propagatedBuildInputs ++ getFinalPassthru "dependencies"
         )
-        ++ [
-          # we propagate python even for packages transformed with 'toPythonApplication'
-          # this pollutes the PATH but avoids rebuilds
-          # see https://github.com/NixOS/nixpkgs/issues/170887 for more context
-          python
-        ];
+        # we propagate python even for packages transformed with 'toPythonApplication'
+        # this pollutes the PATH but avoids rebuilds
+        # see https://github.com/NixOS/nixpkgs/issues/170887 for more context
+        ++ repropagatedPython;
 
       __structuredAttrs =
         if attrs.__structuredAttrs or false then
@@ -454,7 +491,7 @@ lib.extendMkDerivation {
 
           # Unsupported Python interpreter
           ${if meta ? problems.unsupportedPython then "unsupportedPython" else null} =
-            meta.problems.unsupportedPython or { }
+            meta.problems.unsupportedPython
             // {
               kind = "broken";
               message =

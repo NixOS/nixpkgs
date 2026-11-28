@@ -12278,9 +12278,7 @@ self: super: with self; {
 
   neurokit2 = callPackage ../development/python-modules/neurokit2 { };
 
-  neuron-full = pkgs.neuron-full.override { python3 = python; };
-
-  neuronpy = toPythonModule neuron-full;
+  neuronpy = toPythonModule (pkgs.neuron-full.override { python3 = python; });
 
   nevow = callPackage ../development/python-modules/nevow { };
 

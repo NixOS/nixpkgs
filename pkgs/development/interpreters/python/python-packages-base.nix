@@ -7,9 +7,18 @@
 
 let
   inherit (lib)
+    addErrorContext
+    catAttrs
+    concatLists
+    filter
+    isAttrs
     isFunction
+    makeSearchPath
+    mirrorFunctionArgs
     recursiveUpdate
+    removePrefix
     toExtension
+    unique
     ;
 in
 
@@ -34,7 +43,7 @@ let
       boilerplateDisabledAttrNames = [ "disabled" ];
     in
     f:
-    lib.mirrorFunctionArgs f (
+    mirrorFunctionArgs f (
       origArgs':
       let
         # Transparently transition `disabled` -> `meta.problems.unsupportedPython`
@@ -50,33 +59,34 @@ let
           else
             origArgs';
         result = f origArgs;
-        overrideWith =
-          newArgs:
-          # Only build a fixed-point when origArgs or newArgs are functions
-          # or when we need to handle the `disabled` argument taken by `<pkg>.overridePyhtonAttrs`
-          # to reduce allocation/GC.
-          if isFunction origArgs || isFunction newArgs || newArgs ? disabled then
-            # In-lined `lib.extends` with custom filter logic.
-            finalAttrs:
-            let
-              previousArgs = if isFunction origArgs then origArgs finalAttrs else origArgs;
-              updatingArgs = if isFunction newArgs then toExtension newArgs finalAttrs previousArgs else newArgs;
-            in
-            if updatingArgs ? disabled then
-              # Remove disabled from newArgs
-              # and add `meta.problems.buildPythonPackage-internal-disabled-overridePythonAttrs`.
-              recursiveUpdate (
-                previousArgs // removeAttrs updatingArgs boilerplateDisabledAttrNames
-              ) boilerplateProblems
-            else
-              previousArgs // updatingArgs
-          else
-            origArgs // newArgs;
       in
-      if lib.isAttrs result then
+      if isAttrs result then
         result
         // {
-          overridePythonAttrs = newArgs: makeOverridablePythonPackage f (overrideWith newArgs);
+          overridePythonAttrs =
+            newArgs:
+            makeOverridablePythonPackage f (
+              # Only build a fixed-point when origArgs or newArgs are functions
+              # or when we need to handle the `disabled` argument taken by `<pkg>.overridePyhtonAttrs`
+              # to reduce allocation/GC.
+              if isFunction origArgs || isFunction newArgs || newArgs ? disabled then
+                # In-lined `lib.extends` with custom filter logic.
+                finalAttrs:
+                let
+                  previousArgs = if isFunction origArgs then origArgs finalAttrs else origArgs;
+                  updatingArgs = if isFunction newArgs then toExtension newArgs finalAttrs previousArgs else newArgs;
+                in
+                if updatingArgs ? disabled then
+                  # Remove disabled from newArgs
+                  # and add `meta.problems.buildPythonPackage-internal-disabled-overridePythonAttrs`.
+                  recursiveUpdate (
+                    previousArgs // removeAttrs updatingArgs boilerplateDisabledAttrNames
+                  ) boilerplateProblems
+                else
+                  previousArgs // updatingArgs
+              else
+                origArgs // newArgs
+            );
           overrideAttrs =
             newArgs: makeOverridablePythonPackage (args: (f args).overrideAttrs newArgs) origArgs;
         }
@@ -86,7 +96,7 @@ let
     // {
       # Support overriding `f` itself, e.g. `buildPythonPackage.override { }`.
       # Ensure `makeOverridablePythonPackage` is applied to the result.
-      override = lib.mirrorFunctionArgs f.override (
+      override = mirrorFunctionArgs f.override (
         newArgs: makeOverridablePythonPackage (f.override newArgs)
       );
     };
@@ -146,19 +156,21 @@ let
 
   # Get list of required Python modules given a list of derivations.
   requiredPythonModules =
+    let
+      defaultModules = [ python ];
+      getRequiredModules = catAttrs "requiredPythonModules";
+    in
     drvs:
     let
-      modules = lib.filter hasPythonModule drvs;
+      modules = filter hasPythonModule drvs;
     in
-    lib.unique (
-      [ python ] ++ modules ++ lib.concatLists (lib.catAttrs "requiredPythonModules" modules)
-    );
+    unique (defaultModules ++ modules ++ concatLists (getRequiredModules modules));
 
   # Create a PYTHONPATH from a list of derivations. This function recurses into the items to find derivations
   # providing Python modules.
-  makePythonPath = drvs: lib.makeSearchPath python.sitePackages (requiredPythonModules drvs);
+  makePythonPath = drvs: makeSearchPath python.sitePackages (requiredPythonModules drvs);
 
-  removePythonPrefix = lib.removePrefix namePrefix;
+  removePythonPrefix = removePrefix namePrefix;
 
   mkPythonEditablePackage = callPackage ./editable.nix { };
 
@@ -172,7 +184,7 @@ let
       passthru = (oldAttrs.passthru or { }) // {
         pythonModule = python;
         pythonPath = [ ]; # Deprecated, for compatibility.
-        requiredPythonModules = builtins.addErrorContext "while calculating requiredPythonModules for ${drv.name or drv.pname}:" (
+        requiredPythonModules = addErrorContext "while calculating requiredPythonModules for ${drv.name or drv.pname}:" (
           requiredPythonModules drv.propagatedBuildInputs
         );
       };
