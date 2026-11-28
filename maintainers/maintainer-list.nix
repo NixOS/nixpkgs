@@ -29048,8 +29048,8 @@
     email = "xor@vavakado.xyz";
     github = "vavakado";
     githubId = 80159210;
-    name = "Vladimir Rubin";
-    matrix = "@vavakado:imagisphe.re";
+    name = "Kiran Rubin";
+    matrix = "@vavakado:federated.nexus";
     keys = [ { fingerprint = "A054 0374 CD37 2C71 FE6D  E0CF CAB7 4472 7F36 B524"; } ];
   };
   vbgl = {
