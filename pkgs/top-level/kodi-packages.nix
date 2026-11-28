@@ -11,6 +11,7 @@ let
     catAttrs
     concatLists
     filter
+    makeScope
     optionalAttrs
     unique
     ;
@@ -25,8 +26,6 @@ let
     twenty-fortyeight
     ;
 
-  callPackage = newScope self;
-
   # Check whether a derivation provides a Kodi addon.
   hasKodiAddon = drv: drv ? kodiAddonFor && drv.kodiAddonFor == kodi;
 
@@ -38,13 +37,18 @@ let
     in
     unique (modules ++ concatLists (catAttrs "requiredKodiAddons" modules));
 
-  self = {
+in
+makeScope newScope (
+  self:
+  let
+    inherit (self) callPackage;
+  in
+  {
     addonDir = "/share/kodi/addons";
 
     rel = kodi.kodiReleaseName;
 
     inherit
-      callPackage
       kodi
       hasKodiAddon
       requiredKodiAddons
@@ -260,16 +264,15 @@ let
     trakt-module = callPackage ../applications/video/kodi/addons/trakt-module { };
 
     trakt = callPackage ../applications/video/kodi/addons/trakt { };
-  };
-in
-self
-// optionalAttrs config.allowAliases {
-  # deprecated or renamed packages
+  }
+  // optionalAttrs config.allowAliases {
+    # deprecated or renamed packages
 
-  controllers =
-    throw
-      "kodi.packages.controllers has been replaced with kodi.packages.controller-topology-project - a package which contains a large number of controller profiles."
-      { };
+    controllers =
+      throw
+        "kodi.packages.controllers has been replaced with kodi.packages.controller-topology-project - a package which contains a large number of controller profiles."
+        { };
 
-  svtplay = throw "kodiPackages.svtplay has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-12
-}
+    svtplay = throw "kodiPackages.svtplay has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-12
+  }
+)
