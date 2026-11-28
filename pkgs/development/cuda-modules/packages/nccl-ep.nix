@@ -4,6 +4,7 @@
   cudaAtLeast,
   cudaNamePrefix,
   cudaOlder,
+  fetchFromGitHub,
   lib,
 
   # nativeBuildInputs
@@ -31,8 +32,16 @@ in
 backendStdenv.mkDerivation (finalAttrs: {
   name = "${cudaNamePrefix}-${finalAttrs.pname}-${finalAttrs.version}";
   pname = "nccl-ep";
-  inherit (nccl) src version;
-  sourceRoot = "${finalAttrs.src.name}/contrib/nccl_ep";
+  # NCCL EP is versioned separately from the nccl-extensions release that ships it.
+  version = "0.3.0";
+
+  src = fetchFromGitHub {
+    owner = "NVIDIA";
+    repo = "nccl-extensions";
+    tag = "nccl-extensions-v0.2.0";
+    hash = "sha256-tGfi5pcADth2UAYhf3eoeKj+nspNsFVh5H2WOnsFE7Y=";
+  };
+  sourceRoot = "${finalAttrs.src.name}/nccl_ep";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -59,7 +68,7 @@ backendStdenv.mkDerivation (finalAttrs: {
     "LDFLAGS=-L${lib.getLib cuda_cudart}/lib/stubs"
     "NCCL_INCDIR=${lib.getInclude nccl}/include"
     "NCCL_LIBDIR=${lib.getLib nccl}/lib"
-    "NCCL_EP_BUILDDIR=${placeholder "out"}"
+    "BUILDDIR=${placeholder "out"}"
   ]
   ++ lib.optionals (epFlags.cudaCapabilities != [ ]) [ "NVCC_GENCODE=${epFlags.gencodeString}" ];
   buildFlags = [ "lib" ];
@@ -78,9 +87,13 @@ backendStdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Expert-parallelism (MoE dispatch/combine) extension library for NCCL";
-    homepage = "https://github.com/NVIDIA/nccl/blob/master/contrib/nccl_ep/README.md";
+    homepage = "https://github.com/NVIDIA/nccl-extensions/tree/main/nccl_ep";
+    changelog = "https://github.com/NVIDIA/nccl-extensions/blob/${finalAttrs.src.tag}/nccl_ep/docs/release/RELEASE_NOTES_v${lib.versions.majorMinor finalAttrs.version}.md";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ thefossguy ];
+    maintainers = with lib.maintainers; [
+      _81reap
+      thefossguy
+    ];
     inherit (nccl.meta) platforms badPlatforms;
   };
 })
