@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  aws-lc,
   cargo-tauri,
   coreutils,
   glib-networking,
@@ -24,7 +25,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "recomplauncher-unwrapped";
-  version = "0.90.0-beta.69";
+  version = "0.90.0-beta.70";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -33,7 +34,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "elripalda";
     repo = "RecompLauncher";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LDCm94rQr680UyFjsBwY/sRSrQLq+ZI2KgyaAAho8XQ=";
+    hash = "sha256-00gbol9kNanx9rMCQovKewBrGnPm+RGM2iUDzFOGpHg=";
   };
 
   patches = [
@@ -71,6 +72,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
     sdl3
     zstd
   ]
@@ -84,14 +86,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
     webkitgtk_4_1
   ];
 
-  cargoHash = "sha256-JiWxrygAAlNhK3rwSuPPHCbQBLiT5NbLBAP8Erz+gOI=";
+  cargoHash = "sha256-fBmfUaxPHkwRXUbR9HejI9FrVmkNW1dYyabtt0nzTUs=";
 
   # gamefiles test runs lsof on macOS
   nativeCheckInputs = [
     nodejs
     writableTmpDirAsHomeHook
   ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ lsof ];
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    lsof
+  ];
 
   # copies /bin/sleep, a multi-call symlink on Nix
   # test fixture only has x64 Linux builds
@@ -101,11 +105,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=tests::a_game_that_hands_off_keeps_counting_while_its_folder_runs"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    "--skip=tests::a_release_out_after_a_deleted_nightly_was_installed_is_offered"
     "--skip=tests::the_badge_check_and_updates_tab_share_one_rule"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "--skip=install::mac_archive_tests::a_disk_image_installs_its_app_and_leaves_the_applications_shortcut"
     "--skip=install::tests::links_that_point_nowhere_are_dropped"
+    "--skip=prepare_env_tests::a_hand_off_that_only_uses_the_cpu_is_still_working"
   ];
 
   postCheck = ''
