@@ -1,0 +1,14 @@
+--- ncu-ui.old	2024-04-26 11:25:01.194847519 -0400
++++ ncu-ui	2024-04-26 11:25:22.498934270 -0400
+@@ -4,11 +4,6 @@
+ export NV_AGORA_PATH
+ export LD_LIBRARY_PATH="$NV_AGORA_PATH:$LD_LIBRARY_PATH"
+ 
+-if nm -D /lib64/libk5crypto.so.3 2>/dev/null | grep 'U\s\+EVP_KDF_ctrl' >/dev/null; then
+-  echo "libk5crypto.so.3 requires EVP_KDF_ctrl. Switching to system OpenSSL libraries" >&2
+-  export LD_PRELOAD=/lib64/libcrypto.so.1.1:/lib64/libssl.so.1.1
+-fi
+-
+ AGORA_USE_MESA_FALLBACK=false
+ if ! "$NV_AGORA_PATH/OpenGLVersionChecker" "--minGLVersion=2.0.0"; then
+     AGORA_USE_MESA_FALLBACK=true
