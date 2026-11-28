@@ -2,28 +2,30 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  gitUpdater,
+  makeFontsConf,
+  unstableGitUpdater,
   testers,
   cmake,
+  ctestCheckHook,
   doxygen,
   kdePackages,
   graphviz,
-  libsForQt5,
+  qt6Packages,
   perl,
   pkg-config,
   tzdata,
-  ctestCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mkcal";
-  version = "0.7.33";
+  version = "0.7.33-unstable-2026-05-25";
 
   src = fetchFromGitHub {
     owner = "sailfishos";
     repo = "mkcal";
-    tag = finalAttrs.version;
-    hash = "sha256-ayWzK69iWE2z7hHiEZ7oKLXkDmH+ZFRaaMRJhHVAbl0=";
+    rev = "f53e4ade3debb20e3273df0a6a0b3e4b492ddc29";
+    hash = "sha256-U3lqsQO+b6yci4q6jze+W4tw/LA/g+hr03lzkniL5b4=";
   };
 
   outputs = [
@@ -44,23 +46,28 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    kdePackages.extra-cmake-modules
     doxygen
     graphviz
     perl
     pkg-config
+    writableTmpDirAsHomeHook
   ]
-  ++ (with libsForQt5; [
+  #++ (with kdePackages; [
+  #  kdePackages.extra-cmake-modules
+  #])
+  ++ (with qt6Packages; [
     wrapQtAppsHook
   ]);
 
-  buildInputs = with libsForQt5; [
-    kdePackages.extra-cmake-modules
-    __internalKF5.kcalendarcore
+  buildInputs = (with kdePackages; [
+    extra-cmake-modules
+    kcalendarcore
+  ])
+  ++ (with qt6Packages; [
     qtbase
-    qtpim
+    #qtpim
     timed
-  ];
+  ]);
 
   nativeCheckInputs = [
     tzdata
@@ -68,11 +75,14 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
+    (lib.cmakeBool "BUILD_DOCUMENTATION" true)
     (lib.cmakeBool "BUILD_PLUGINS" false)
     (lib.cmakeBool "BUILD_TESTS" finalAttrs.finalPackage.doCheck)
+    (lib.cmakeBool "ENABLE_QT6" true)
     (lib.cmakeBool "INSTALL_TESTS" false)
-    (lib.cmakeBool "BUILD_DOCUMENTATION" true)
   ];
+
+  env.FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ ]; };
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   disabledTests = [
@@ -90,11 +100,11 @@ stdenv.mkDerivation (finalAttrs: {
   preCheck = ''
     export HOME=$TMP
     export QT_QPA_PLATFORM=minimal
-    export QT_PLUGIN_PATH=${lib.getBin libsForQt5.qtbase}/${libsForQt5.qtbase.qtPluginPrefix}
+    export QT_PLUGIN_PATH=${lib.getBin qt6Packages.qtbase}/${qt6Packages.qtbase.qtPluginPrefix}
   '';
 
   passthru = {
-    updateScript = gitUpdater { };
+    updateScript = unstableGitUpdater { };
     tests.pkg-config = testers.hasPkgConfigModules {
       package = finalAttrs.finalPackage;
       # version field doesn't exactly match current version
@@ -110,7 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
     teams = [ lib.teams.lomiri ];
     platforms = lib.platforms.linux;
     pkgConfigModules = [
-      "libmkcal-qt5"
+      "libmkcal-qt6"
     ];
   };
 })
