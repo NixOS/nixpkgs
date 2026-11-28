@@ -30,6 +30,6 @@ buildFishPlugin (finalAttrs: {
     description = "TAP-based test runner for Fish";
     homepage = "https://github.com/jorgebucaran/fishtape";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ euxane ];
+    maintainers = [ ];
   };
 })
