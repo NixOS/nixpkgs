@@ -10,16 +10,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "assh";
-  version = "2.17.3";
+  version = "2.17.4";
 
   src = fetchFromGitHub {
     repo = "assh";
     owner = "moul";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CH6QM/dy5fKo7Tq2ekrc06iqjJDZl8JHMG7jalho7BI=";
+    hash = "sha256-zX+jHq+xb8Y3lteq0mUm4kkbjq2e3NYW3YC3WOwQJNA=";
   };
 
-  vendorHash = "sha256-ENCJNgMLTZDlKL0DIt48F1G8TYo2blPdsFH6v8dNC8w=";
+  vendorHash = "sha256-DeF1Gb/x8RfQDGEvFkf5w/zOyTypWslKioMAYyMNxx0=";
 
   ldflags = [
     "-s"
