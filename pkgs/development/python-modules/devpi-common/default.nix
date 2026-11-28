@@ -18,14 +18,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "devpi-common";
-  version = "4.1.1";
+  version = "4.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "devpi";
     repo = "devpi";
     tag = "common-${finalAttrs.version}";
-    hash = "sha256-YFY2iLnORzFxnfGYU2kCpJL8CZi+lALIkL1bRpfd4NE=";
+    hash = "sha256-QDs3Ue4F5NzkqvB44R9PXctcMh1+2+CNING1l4yG2MU=";
   };
 
   postPatch = ''

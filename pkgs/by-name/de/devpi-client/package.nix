@@ -11,14 +11,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "devpi-client";
-  version = "7.2.1";
+  version = "7.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "devpi";
     repo = "devpi";
     tag = "client-${finalAttrs.version}";
-    hash = "sha256-rAku3oHcmzFNA/MP/64382gCTgqopwjjy4S4HTEFZiY=";
+    hash = "sha256-7uYHkrACVRaSqhCflbN3TrGtAnw7ifdkiiLnuGd8bnw=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/client";
@@ -77,6 +77,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     changelog = "https://github.com/devpi/devpi/blob/client-${finalAttrs.version}/client/CHANGELOG";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+      confus
       lewo
       makefu
     ];
