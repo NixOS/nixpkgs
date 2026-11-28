@@ -18,6 +18,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "btop";
   version = "1.4.8";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "aristocratos";
     repo = "btop";
