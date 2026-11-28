@@ -42,6 +42,7 @@ let
         -swift-version 5 \
         -emit-library \
         -emit-module \
+        -target ${stdenv.hostPlatform.swift.triple} \
         -module-name Socket \
         -emit-module-path "$buildDir/Socket.swiftmodule" \
         -Xlinker -install_name -Xlinker "$out/lib/libSocket.dylib" \
@@ -126,7 +127,7 @@ stdenv.mkDerivation (finalAttrs: {
       -swift-version 5 \
       -parse-as-library \
       -module-name SwipeAeroSpace \
-      -Xlinker -platform_version -Xlinker macos -Xlinker 13.5 -Xlinker 26.0 \
+      -target ${stdenv.hostPlatform.swift.triple} \
       -framework AppKit \
       -framework Cocoa \
       -framework SwiftUI \
