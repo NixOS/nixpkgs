@@ -27,14 +27,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "scikit-build-core";
-  version = "1.0.2";
+  version = "1.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scikit-build";
     repo = "scikit-build-core";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-skqX3+jS+lT0zfc5E4ssrZfoZkUrel9WD6a70OX1shg=";
+    hash = "sha256-Wk/F73JlZJhbkmfQXSMeoFBk4/4wckWHAzU4zrAPsvM=";
   };
 
   build-system = [
@@ -75,6 +75,8 @@ buildPythonPackage (finalAttrs: {
   disabledTests = [
     # wheel tags generated with wrong system name/version
     "test_wheel_tag"
+    # assumes the Python cmake package is not installed, but it is in nativeCheckInputs
+    "test_cmake_namespace_dir_is_not_a_module"
   ];
 
   disabledTestPaths = [
