@@ -15,7 +15,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "cyclonedds-python";
+  pname = "cyclonedds";
   version = "11.0.1";
   pyproject = true;
 
