@@ -28776,6 +28776,12 @@
     githubId = 77596767;
     name = "Scott Teague";
   };
+  stuckj = {
+    email = "stuckj@gmail.com";
+    github = "stuckj";
+    githubId = 2205578;
+    name = "Jonathan Stucklen";
+  };
   stumoss = {
     email = "samoss@gmail.com";
     github = "stumoss";
