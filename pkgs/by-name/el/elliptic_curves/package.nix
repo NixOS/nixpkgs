@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     export SAGE_SHARE="$out/share"
     export PYTHONPATH=$PWD
 
-    ${python3.interpreter} ${spkg-install}
+    ${python3.interpreter} -P ${spkg-install}
   '';
 
   meta = {
