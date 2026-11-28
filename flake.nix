@@ -94,7 +94,18 @@
               // removeAttrs args [ "modules" ]
             );
         }
-      );
+      ) // {
+        /**
+          This is the Nixpkgs entrypoint library, also known as `nixpkgs.lib.nixpkgs`.
+          Historically, the Nixpkgs package set has only been handled by means of `pkgs`, the conventional name for the return value of the function that produces a configured package set.
+          However, not everything that is specific to Nixpkgs is _relative_ to the _configured_ package set.
+
+          This library is specifically for un-configured things such as the `configure` function, which is used to produce the configured package set.
+          Other functions and values that relate to packages without referring to instantiated packages can be added here too.
+        */
+        # `nixpkgs` isn't part of the standard library `lib`, so it is intentionally not part of `lib.extend`.
+        nixpkgs = import ./pkgs/abs/default.nix;
+      };
 
       checks = forAllSystems (
         system:
