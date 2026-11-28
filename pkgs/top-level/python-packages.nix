@@ -8307,8 +8307,6 @@ self: super: with self; {
 
   hyrule = callPackage ../development/python-modules/hyrule { };
 
-  i-pi = callPackage ../development/python-modules/i-pi { };
-
   i2c-tools = callPackage ../development/python-modules/i2c-tools { inherit (pkgs) i2c-tools; };
 
   i2csense = callPackage ../development/python-modules/i2csense { };
@@ -8657,6 +8655,8 @@ self: super: with self; {
   iperf3 = callPackage ../development/python-modules/iperf3 { };
 
   ipfshttpclient = callPackage ../development/python-modules/ipfshttpclient { };
+
+  ipi = callPackage ../development/python-modules/ipi { };
 
   iplotx = callPackage ../development/python-modules/iplotx { };
 
