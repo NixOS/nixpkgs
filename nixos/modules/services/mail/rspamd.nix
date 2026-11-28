@@ -241,6 +241,10 @@ let
       name = "rspamd.local.lua";
       path = cfg.localLuaRules;
     })
+    ++ (mapAttrsToList (name: file: {
+      name = "lua.local.d/${name}";
+      path = file.source;
+    }) (filterFiles cfg.localsLua))
     ++ [
       {
         name = "rspamd.conf";
@@ -343,6 +347,14 @@ in
         description = ''
           Path of file to link to {file}`/etc/rspamd/rspamd.local.lua` for local
           rules written in Lua
+        '';
+      };
+
+      localsLua = mkOption {
+        type = with types; attrsOf (submodule (configFileModule "localsLua"));
+        default = { };
+        description = ''
+          Local Lua files, written into {file}`/etc/rspamd/lua.local.d/{name}`.
         '';
       };
 
