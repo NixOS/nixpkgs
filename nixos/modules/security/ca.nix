@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  options,
   pkgs,
   ...
 }:
@@ -8,10 +9,11 @@ let
   cfg = config.security.pki;
 
   cacertPackage = pkgs.cacert.override {
-    blacklist = cfg.caCertificateBlacklist ++ [
+    blocklistFailOnNonMatching = cfg.caCertificateBlocklistFailOnNonMatching ++ [
       # CVE-2026-111943
       "Comodo AAA Services root"
     ];
+    blocklistIgnoreNonMatching = cfg.caCertificateBlocklistIgnoreNonMatching;
     extraCertificateFiles = cfg.certificateFiles;
     extraCertificateStrings = cfg.certificates;
   };
@@ -21,6 +23,25 @@ let
 in
 
 {
+
+  imports = [
+    # Deprecated, with a custom warning in `config` that explains why.
+    (lib.doRename {
+      from = [
+        "security"
+        "pki"
+        "caCertificateBlacklist"
+      ];
+      to = [
+        "security"
+        "pki"
+        "caCertificateBlocklistFailOnNonMatching"
+      ];
+      visible = false;
+      warn = false;
+      use = lib.id;
+    })
+  ];
 
   options = {
     security.pki.installCACerts = lib.mkEnableOption "installing CA certificates to the system" // {
@@ -73,7 +94,7 @@ in
       '';
     };
 
-    security.pki.caCertificateBlacklist = lib.mkOption {
+    security.pki.caCertificateBlocklistIgnoreNonMatching = lib.mkOption {
       type = lib.types.listOf lib.types.str;
       default = [ ];
       example = [
@@ -83,10 +104,42 @@ in
         "Certification Authority of WoSign G2"
       ];
       description = ''
-        A list of blacklisted CA certificate names that won't be imported from
-        the Mozilla Trust Store into
+        A list of CA certificate names that won't be trusted from
+        the Mozilla Trust Store in
         {file}`/etc/ssl/certs/ca-certificates.crt`. Use the
         names from that file.
+
+        Names that match no certificate in the Mozilla Trust Store only
+        produce a warning in the build log of the `nss-cacert` package.
+        This is so that your system build doesn't break later when upstream
+        removes a CA you blocklisted (which is common for distrusted CAs).
+        As a consequence, a typo in a name is not detected; check that the
+        blocklisted CAs are marked as not trusted in
+        {file}`/etc/ssl/certs/ca-certificates.crt`, or temporarily use
+        {option}`security.pki.caCertificateBlocklistFailOnNonMatching` and
+        switch back to this option once you've checked that the name is
+        correct.
+      '';
+    };
+
+    security.pki.caCertificateBlocklistFailOnNonMatching = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      default = [ ];
+      example = [ "CFCA EV ROOT" ];
+      description = ''
+        Like {option}`security.pki.caCertificateBlocklistIgnoreNonMatching`,
+        but the system build fails if one of these names matches no
+        certificate in the Mozilla Trust Store.
+
+        This detects typos in names, but it also means that the system build
+        **will break in the future** when upstream removes one of these CAs from
+        the Mozilla Trust Store, which is common for distrusted CAs.
+        Until you remove the name from this list, that stops all updates of the
+        system, including automatic security updates via
+        {option}`system.autoUpgrade`.
+
+        `security.pki.caCertificateBlacklist` is a deprecated alias of this
+        option.
       '';
     };
 
@@ -100,6 +153,9 @@ in
   };
 
   config = lib.mkMerge [
+    {
+      warnings = lib.optional options.security.pki.caCertificateBlacklist.isDefined "The option `security.pki.caCertificateBlacklist` is deprecated. It is an alias of `security.pki.caCertificateBlocklistFailOnNonMatching`, which fails the system build if a name matches no certificate in the Mozilla Trust Store. Upstream commonly removes distrusted CAs from it later, which then breaks the system build, and thus stops all updates, including automatic security updates via `system.autoUpgrade`. You can use `security.pki.caCertificateBlocklistFailOnNonMatching` to check that you got the names right, but use `security.pki.caCertificateBlocklistIgnoreNonMatching` (in particular in configurations you share with others) to not break automatic security updates when upstream CA certificate updates incorporate the removal.";
+    }
     (lib.mkIf cfg.installCACerts {
 
       # NixOS canonical location + Debian/Ubuntu/Arch/Gentoo compatibility.
