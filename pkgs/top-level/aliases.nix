@@ -813,6 +813,9 @@ mapAliases {
   electron-chromedriver_36 = throw "electron-chromedriver_36 has been removed in favor of newer versions"; # Added 2026-02-02
   electron-chromedriver_37 = throw "electron-chromedriver_37 has been removed in favor of newer versions"; # Added 2026-03-20
   electron-chromedriver_38 = throw "electron-chromedriver_38 has been removed in favor of newer versions"; # Added 2026-07-07
+  electron-chromedriver_39 = throw "electron-chromedriver_39 has been removed in favor of newer versions"; # Added 2026-11-25
+  electron-chromedriver_40 = throw "electron-chromedriver_40 has been removed in favor of newer versions"; # Added 2026-11-25
+  electron-chromedriver_42 = throw "electron-chromedriver_42 has been removed in favor of newer versions"; # Added 2026-11-25
   electron_35 = throw "electron_35 has been removed in favor of newer versions"; # Added 2025-11-06
   electron_35-bin = throw "electron_35-bin has been removed in favor of newer versions"; # Added 2025-11-06
   electron_36 = throw "electron_36 has been removed in favor of newer versions"; # Added 2026-02-02
@@ -821,6 +824,12 @@ mapAliases {
   electron_37-bin = throw "electron_37-bin has been removed in favor of newer versions"; # Added 2026-03-20
   electron_38 = throw "electron_38 has been removed in favor of newer versions"; # Added 2026-07-07
   electron_38-bin = throw "electron_38-bin has been removed in favor of newer versions"; # Added 2026-07-07
+  electron_39 = throw "electron_39 has been removed in favor of newer versions"; # Added 2026-11-25
+  electron_39-bin = throw "electron_39-bin has been removed in favor of newer versions"; # Added 2026-11-25
+  electron_40 = throw "electron_40 has been removed in favor of newer versions"; # Added 2026-11-25
+  electron_40-bin = throw "electron_40-bin has been removed in favor of newer versions"; # Added 2026-11-25
+  electron_42 = throw "electron_42 has been removed in favor of newer versions"; # Added 2026-11-25
+  electron_42-bin = throw "electron_42-bin has been removed in favor of newer versions"; # Added 2026-11-25
   elementsd-simplicity = throw "'elementsd-simplicity' has been removed due to lack of maintenance, consider using 'elementsd' instead"; # Added 2025-06-04
   elixir = warnAlias "'elixir' is deprecated in favor of using the beamPackages sets. Use 'beamPackages.elixir' instead." beamPackages.elixir; # added 2026-06-15
   elixir_1_15 = throw "'elixir_1_15' has been removed, due to the removal of erlang_26 as EOL"; # added 2026-04-01
