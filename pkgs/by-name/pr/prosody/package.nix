@@ -96,6 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     communityModules = withCommunityModules;
     tests = { inherit (nixosTests) prosody prosody-mysql; };
+    updateScript = ./update.sh;
   };
 
   meta = {
@@ -107,8 +108,8 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "prosody";
     maintainers = with lib.maintainers; [
       toastal
-      mirror230469
       SuperSandro2000
+      haansn08
     ];
   };
 })
