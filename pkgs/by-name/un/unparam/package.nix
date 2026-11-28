@@ -6,16 +6,16 @@
 
 buildGoModule {
   pname = "unparam";
-  version = "0-unstable-2025-03-01";
+  version = "0-unstable-2026-11-02";
 
   src = fetchFromGitHub {
     owner = "mvdan";
     repo = "unparam";
-    rev = "0df0534333a487d07b143c1b2c2e0046671d2d63";
-    hash = "sha256-k/BgHvjB3fXz4CWTHRFja/EiGlof/c80jhRb91FaINs=";
+    rev = "394cd0a56cd513bd0494ee5c8fca9672653b183d";
+    hash = "sha256-TDDofymP/5kbzTKcSCh8Ez9KSD6Z/LQR88Eq5CmYmeo=";
   };
 
-  vendorHash = "sha256-Q7q0NZgofxChaSpYL5dS4NDadwfrXlLtkG/F7tGJuhA=";
+  vendorHash = "sha256-txYjynxJzaXd6vUgc0rh4kj7+bq1BArqm+dz9b4oKFI=";
 
   subPackages = [ "." ];
 
