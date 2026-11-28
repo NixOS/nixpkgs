@@ -7,16 +7,16 @@
 
 buildNpmPackage rec {
   pname = "npkill";
-  version = "0.12.2-1";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "voidcosmos";
     repo = "npkill";
     rev = "v${version}";
-    hash = "sha256-I0qo8sRkG9GVAA4oLDiTDsHtdrmnkdAk7QOXMWWDKmA=";
+    hash = "sha256-3Zy1hhbGueCl8ST2yR4aWOlQXf6rKtufFqlNSbPHVu0=";
   };
 
-  npmDepsHash = "sha256-scR7LF9UkDvQzAqe5TSKajr6VNrnjM2KZI7k2KLmoCc=";
+  npmDepsHash = "sha256-kIE6eSVqqBpnLzkUEZ8rSKcna39lyzh7jh4GoSKkc4M=";
 
   strictDeps = true;
 
