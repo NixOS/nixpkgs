@@ -15,14 +15,14 @@ let
 in
 pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "adscan";
-  version = "14.0.0";
+  version = "15.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ADScanPro";
     repo = "adscan";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-z0L8AF5dYMoxPKYazXrofeBcBsI+YjkprIqnefJ9fkE=";
+    hash = "sha256-NjPFD/JLkL2O4iXzHxC+jr0YtFPsh611c3phYhuf3N4=";
   };
 
   pythonRelaxDeps = [ "credsweeper" ];

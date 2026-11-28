@@ -269,6 +269,7 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
 
       nativeBuildInputs = [
         (python.withPackages (ps: [
+          ps.cloudpickle
           ps.expecttest
           ps.scipy
           ps.torchWithCuda
@@ -352,6 +353,11 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
         # AssertionError: Tensor-likes are not close!
         "python/test/unit/language/test_core.py::test_scaled_dot[64-128-128-True-False-True-e4m3-fp16-4-16-1]"
       ];
+
+      # import path conflict
+      preCheck = ''
+        rm -r python/triton
+      '';
 
       enabledTestPaths = [
         "python/test/unit"

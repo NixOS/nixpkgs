@@ -11,14 +11,14 @@
   installShellFiles,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sn0int";
   version = "0.26.1";
 
   src = fetchFromGitHub {
     owner = "kpcyrd";
     repo = "sn0int";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-tiJLwlxZ9ndircgkH23ew+3QJeuuqt93JahAtFPcuG8=";
   };
 
@@ -51,7 +51,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Semi-automatic OSINT framework and package manager";
     homepage = "https://github.com/kpcyrd/sn0int";
-    changelog = "https://github.com/kpcyrd/sn0int/releases/tag/v${version}";
+    changelog = "https://github.com/kpcyrd/sn0int/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       fab
@@ -60,4 +60,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "sn0int";
   };
-}
+})

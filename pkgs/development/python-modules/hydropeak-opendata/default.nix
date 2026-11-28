@@ -11,14 +11,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "hydropeak-opendata";
-  version = "0.3.0";
+  version = "0.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Beat-YT";
     repo = "hydropeak-opendata";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-09f8SjY3OEYU3PkOHFjsUmqKNw+hCi/ZY56f7UjZ7w0=";
+    hash = "sha256-ZCzLvkgNttcwI6G6DlJWKfxaJMNrnEQGngfflJlMo4w=";
   };
 
   build-system = [ hatchling ];

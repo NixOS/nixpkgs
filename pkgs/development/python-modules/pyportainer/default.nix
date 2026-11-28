@@ -18,14 +18,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyportainer";
-  version = "1.0.51";
+  version = "1.0.53";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "erwindouna";
     repo = "pyportainer";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TZey9Xyk9fZdmupncL1k+wBhmJTJf6vnMbJijdNTvsY=";
+    hash = "sha256-E7SfK4lGSDGQlmMQEbaAElXRuBrWyF6afN+RMh9tWB0=";
   };
 
   nativeBuildInputs = [ pyprojectVersionPatchHook ];

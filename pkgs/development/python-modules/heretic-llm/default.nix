@@ -16,6 +16,7 @@
   numpy,
   optuna,
   peft,
+  pillow,
   psutil,
   py-cpuinfo,
   pydantic-settings,
@@ -71,6 +72,7 @@ buildPythonPackage (finalAttrs: {
     lm-eval
     optuna
     peft
+    pillow
     psutil
     py-cpuinfo
     pydantic-settings

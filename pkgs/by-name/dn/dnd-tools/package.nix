@@ -3,6 +3,7 @@
   fetchFromGitLab,
   fetchpatch,
   lib,
+  unstableGitUpdater,
 }:
 
 python3.pkgs.buildPythonApplication {
@@ -28,6 +29,9 @@ python3.pkgs.buildPythonApplication {
   build-system = with python3.pkgs; [
     setuptools
   ];
+
+  # Upstream has no tags
+  passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
 
   meta = {
     homepage = "https://gitlab.com/savagezen/dnd-tools";
