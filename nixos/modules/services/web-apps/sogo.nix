@@ -156,8 +156,8 @@ in
         Type = "oneshot";
 
         ExecStart = [
-          "find /var/lib/sogo/spool -type f -user sogo -atime +23 -delete"
-          "find /var/lib/sogo/spool -mindepth 1 -type d -user sogo -empty -delete"
+          "${lib.getExe' pkgs.findutils "find"} /var/lib/sogo/spool -type f -user sogo -atime +23 -delete"
+          "${lib.getExe' pkgs.findutils "find"} /var/lib/sogo/spool -mindepth 1 -type d -user sogo -empty -delete"
         ];
 
         ProtectSystem = "strict";
