@@ -14,6 +14,8 @@ buildGoModule (finalAttrs: {
   pname = "gocryptfs";
   version = "2.7.0";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "rfjakob";
     repo = "gocryptfs";
