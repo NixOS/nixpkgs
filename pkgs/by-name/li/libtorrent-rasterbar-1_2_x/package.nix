@@ -4,6 +4,7 @@
   fetchFromGitHub,
   pkg-config,
   autoreconfHook,
+  cctools,
   zlib,
   boost186,
   openssl,
@@ -14,7 +15,8 @@
 }:
 
 let
-  version = "1.2.19";
+  # nixpkgs-update: no auto update
+  version = "1.2.20";
 
   # Make sure we override python, so the correct version is chosen
   # for the bindings, if overridden
@@ -42,9 +44,15 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "arvidn";
     repo = "libtorrent";
-    rev = "v${version}";
-    hash = "sha256-HkpaOCBL+0Kc7M9DmnW2dUGC+b60a7n5n3i1SyRfkb4=";
+    tag = "v${version}";
+    hash = "sha256-ImiCxOXIBXJ0L2NdPCVUUd73y6/OekwQZcjChVANc1M=";
   };
+
+  # 1.2.20 quotes the version, which setuptools can't parse
+  postPatch = ''
+    substituteInPlace bindings/python/setup.cfg \
+      --replace-fail 'version = "${version}",' 'version = ${version}'
+  '';
 
   enableParallelBuilding = true;
 
@@ -73,6 +81,15 @@ stdenv.mkDerivation {
 
   preConfigure = ''
     configureFlagsArray+=('PYTHON_INSTALL_PARAMS=--prefix=$(DESTDIR)$(prefix) --single-version-externally-managed --record=installed-files.txt')
+  ''
+  # the python bindings build with b2's darwin toolset, which defaults to g++
+  # and to the GNU libtool that autoreconfHook puts on PATH;
+  # boostPython is built untagged, the -mt name is MacPorts'
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace Jamfile \
+      --replace-fail '<name>boost_system-mt' '<name>boost_system'
+    echo "using darwin : : ${stdenv.cc.targetPrefix}c++ : <archiver>${lib.getExe' cctools "libtool"} ;" > "$NIX_BUILD_TOP/user-config.jam"
+    export BOOST_BUILD_USER_CONFIG="$NIX_BUILD_TOP/user-config.jam"
   '';
 
   postInstall = ''
@@ -98,7 +115,6 @@ stdenv.mkDerivation {
     description = "C++ BitTorrent implementation focusing on efficiency and scalability";
     license = lib.licenses.bsd3;
     maintainers = [ ];
-    broken = stdenv.hostPlatform.isDarwin;
     platforms = lib.platforms.unix;
   };
 }
