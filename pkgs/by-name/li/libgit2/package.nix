@@ -88,6 +88,11 @@ stdenv.mkDerivation (finalAttrs: {
     testArgs+=(-xrepo::init::extended_1)
     testArgs+=(-xrepo::template::extended_with_template_and_shared_mode)
 
+    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
+      # macOS 27 returns EINVAL where earlier versions returned ENOTEMPTY.
+      testArgs+=(-xcheckout::icase::overwrites_links_for_folders_when_forced)
+    ''}
+
     (
       set -x
       ./libgit2_tests ''${testArgs[@]}
