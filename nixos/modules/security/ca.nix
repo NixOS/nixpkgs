@@ -111,6 +111,9 @@ in
       # CentOS/Fedora compatibility.
       environment.etc."pki/tls/certs/ca-bundle.crt".source = caBundle;
 
+      # Alpine and `python-build-standalone` compatibility.
+      environment.etc."ssl/cert.pem".source = caBundle;
+
       # P11-Kit trust source.
       environment.etc."ssl/trust-source".source = "${cacertPackage.p11kit}/etc/ssl/trust-source";
     })
