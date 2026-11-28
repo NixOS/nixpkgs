@@ -1,0 +1,22 @@
+[
+  {
+    "pname": "FormatWith",
+    "version": "3.0.1",
+    "hash": "sha256-I/ZJS7+r2Ql1gjBJszYDKo5tT9iepAtyDBhgkiTzah8="
+  },
+  {
+    "pname": "Microsoft.Extensions.FileSystemGlobbing",
+    "version": "10.0.3",
+    "hash": "sha256-rqOx0soU/fJraVEzAr+FMIPqLJZnsJx5JPvycLM55ZY="
+  },
+  {
+    "pname": "SixLabors.ImageSharp",
+    "version": "3.1.12",
+    "hash": "sha256-FR8v74w4P/1AZdW5ARW0y8zgDqLtvhxQmL1CKv68xR0="
+  },
+  {
+    "pname": "System.CommandLine",
+    "version": "2.0.3",
+    "hash": "sha256-68Kc2YjaAY3RvzS3NrgAcKF1HxmpVQUnfortHgSz/Zs="
+  }
+]
