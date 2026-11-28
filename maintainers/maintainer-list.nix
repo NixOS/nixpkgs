@@ -12015,6 +12015,11 @@
     githubId = 1614615;
     name = "Hendrik Schaeidt";
   };
+  hsidhu1332 = {
+    github = "hsidhu1332";
+    githubId = 36557582;
+    name = "Harpaul Sidhu";
+  };
   hsjobeki = {
     email = "hsjobeki@gmail.com";
     github = "hsjobeki";
