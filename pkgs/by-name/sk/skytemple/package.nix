@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  fetchpatch,
   gobject-introspection,
   gtk3,
   gtksourceview4,
@@ -19,6 +20,13 @@ python3Packages.buildPythonApplication (finalAttrs: {
     tag = finalAttrs.version;
     hash = "sha256-jdiZLDQEfYESgpe7F5X/odkgXnvjhvfFArrpt4bpPbo=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/marius851000/skytemple/commit/31fa5972543795beb28bdb41217a29a84b836e3a.patch";
+      hash = "sha256-611pilVI7+y4UAZneB6+Buk97ec3mgBSulHx4hIAriU=";
+    })
+  ];
 
   build-system = with python3Packages; [ setuptools ];
 
