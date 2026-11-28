@@ -62,6 +62,9 @@ stdenv.mkDerivation (
       mkdir -p .generated/third-party-licenses/spdx/v3.28.0
       cp ${spdx-license-list-data.json}/json/details/*.json \
         .generated/third-party-licenses/spdx/v3.28.0
+
+      # The public identifiers are baked into the web client at build time.
+      cp .env.example .env
     '';
 
     nativeBuildInputs = [
@@ -229,6 +232,7 @@ stdenv.mkDerivation (
         icon = "t3code";
         startupWMClass = "t3code";
         categories = [ "Development" ];
+        mimeTypes = [ "x-scheme-handler/t3code" ];
       })
     ];
 

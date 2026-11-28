@@ -4,6 +4,9 @@
   cloudflared,
   symlinkJoin,
   makeBinaryWrapper,
+  stdenv,
+  desktop-file-utils,
+  xdg-utils,
   enableAzureDevOps ? false,
   azure-cli,
   azure-cli-extensions,
@@ -77,6 +80,15 @@ let
       "--set-default"
       "T3CODE_RESOURCE_MONITOR_PATH"
       (lib.getExe t3code-resource-monitor)
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      "--prefix"
+      "PATH"
+      ":"
+      (lib.makeBinPath [
+        desktop-file-utils
+        xdg-utils
+      ])
     ];
 
 in
@@ -92,7 +104,13 @@ symlinkJoin {
 
   postBuild = lib.optionalString (wrapperArgs != [ ]) ''
     for program in "$out/bin"/*; do
-      wrapProgram "$program" ${lib.escapeShellArgs wrapperArgs}
+      args=( ${lib.escapeShellArgs wrapperArgs} )
+      ${lib.optionalString stdenv.hostPlatform.isLinux ''
+        if [[ "$program" == "$out/bin/t3code-desktop" ]]; then
+          args+=( --set-default T3CODE_DESKTOP_LAUNCHER_PATH "$program" )
+        fi
+      ''}
+      wrapProgram "$program" "''${args[@]}"
     done
   '';
 
