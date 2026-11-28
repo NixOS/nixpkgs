@@ -12,6 +12,10 @@
   libicns,
   pipewire,
   libpulseaudio,
+  libx11,
+  libxrandr,
+  libxt,
+  libxtst,
   autoPatchelfHook,
   pnpm_12,
   fetchPnpmDeps,
@@ -30,13 +34,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vesktop";
-  version = "1.6.9";
+  version = "1.7.2";
 
   src = fetchFromGitHub {
     owner = "Vencord";
     repo = "Vesktop";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-UBk3wp1wuMqyY8KMSvc/URAw9awZMFQZrJgQe59PYmA=";
+    hash = "sha256-BvUcoCNUj+O5Qs3V2V4hvZJI6RwcxfmwmPFNYNQXX4U=";
   };
 
   pnpmDeps = fetchPnpmDeps {
@@ -48,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     pnpm = pnpm_12;
     fetcherVersion = 5;
-    hash = "sha256-efgDw/4orFP9kSWjtkyXcfkXsfYLx4LGTVNKfZ5LhdM=";
+    hash = "sha256-sPc/crZsQM2CNmCiwnxWKLDNMk/Vnsaao97NrUnwdow=";
   };
 
   nativeBuildInputs = [
@@ -58,8 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     jq
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    # vesktop uses venmic, which is a shipped as a prebuilt node module
-    # and needs to be patched
+    # Vesktop ships prebuilt native Node modules that need to be patched.
     autoPatchelfHook
     copyDesktopItems
     # we use a script wrapper here for environment variable expansion at runtime
@@ -72,8 +75,14 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    # Required by the bundled venmic module for screen-share audio.
     libpulseaudio
     pipewire
+    # Required by the bundled uiohook-napi module for global keybinds.
+    libx11
+    libxrandr
+    libxt
+    libxtst
     (lib.getLib stdenv.cc.cc)
   ];
 
