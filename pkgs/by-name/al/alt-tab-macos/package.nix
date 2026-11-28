@@ -13,7 +13,6 @@
 let
   toPlist = lib.generators.toPlist { escape = true; };
   deploymentTarget = "14.0";
-  sdkVersion = "26.0";
   shortcutRecorderDir = "vendor/ShortcutRecorder/Sources/ShortcutRecorder";
 
   # Framework descriptors drive both the build (compilation) and the install
@@ -87,14 +86,8 @@ let
     "-swift-version"
     "5"
     "-disable-bridging-pch"
-    "-Xlinker"
-    "-platform_version"
-    "-Xlinker"
-    "macos"
-    "-Xlinker"
-    deploymentTarget
-    "-Xlinker"
-    sdkVersion
+    "-target"
+    stdenv.hostPlatform.swift.triple
   ];
 
   # These are the non-localized files in upstream's PBXResourcesBuildPhase.
@@ -326,7 +319,7 @@ stdenv.mkDerivation (finalAttrs: {
       ${lib.concatMapStringsSep " " (fw: "-l${fw}") allFrameworks} \
       -F /System/Library/PrivateFrameworks \
       -framework SkyLight -framework Carbon -framework AppKit -framework Cocoa \
-      -framework ScreenCaptureKit -framework ApplicationServices \
+      -Xlinker -weak_framework -Xlinker ScreenCaptureKit -framework ApplicationServices \
       -framework CoreGraphics -framework CoreText \
       -Xlinker -rpath -Xlinker "@executable_path/../Frameworks" \
       "$buildDir/AppCenterApplication.o" \
