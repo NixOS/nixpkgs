@@ -18,11 +18,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tevent";
-  version = "0.17.2";
+  version = "0.17.3";
 
   src = fetchurl {
     url = "mirror://samba/tevent/tevent-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-5TsawojQF9Zt3gRxzUKagGFo7PBxedfwGVcten4F8NY=";
+    sha256 = "sha256-jqobG408Ns6N3q5tecmgU2DculkwEVESwHhBW8vg0W0=";
   };
 
   nativeBuildInputs = [
