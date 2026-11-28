@@ -1,0 +1,13 @@
+diff --git a/pyproject.toml b/pyproject.toml
+index f1fa5fb..6122acf 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -18,7 +18,7 @@ classifiers = [
+ ]
+ requires-python = ">=3.8"
+ dependencies = [
+-	'pyobjc; platform_system == "Darwin" and platform_python_implementation != "PyPy"',
++	'pyobjc-framework-Cocoa; platform_system == "Darwin" and platform_python_implementation != "PyPy"',
+ ]
+ dynamic = ["version"]
+ 
