@@ -1,0 +1,180 @@
+From f8962ee331074f959b699b08a118e012e1c8cc43 Mon Sep 17 00:00:00 2001
+From: Doug Nazar <nazard@nazar.ca>
+Date: Tue, 12 May 2026 17:14:38 -0400
+Subject: [PATCH] drivers/main.c: Split backgrounding driver into two stages
+
+This is needed in particular with libusb on linux as it will create
+a thread to handle either netlink or udev messages. If this is created
+before we background, the driver will hang during exit trying to join
+the non-existant thread in the new process. Shows this warning while
+stopping the driver.
+
+Stopping /run/nut/usbhid-ups-xxxx.pid failed, retrying harder: Success
+
+Signed-off-by: Doug Nazar <nazard@nazar.ca>
+---
+ common/common.c  | 46 ++++++++++++++++++++++++++++++----------------
+ drivers/main.c   | 40 ++++++++++++++++++++++++++++++++++++++++
+ include/common.h |  4 ++++
+ 3 files changed, 74 insertions(+), 16 deletions(-)
+
+diff --git a/common/common.c b/common/common.c
+index ef9e68f71e..97f47fef5f 100644
+--- a/common/common.c
++++ b/common/common.c
+@@ -797,30 +797,25 @@ void open_syslog(const char *progname)
+ #endif	/* WIN32 */
+ }
+ 
+-/* close ttys and become a daemon */
+-void background(void)
++int background_fork(void)
+ {
+-	/* Normally we enable SYSLOG and disable STDERR,
+-	 * unless NUT_DEBUG_SYSLOG envvar interferes as
+-	 * interpreted in syslog_is_disabled() method: */
+-	int	syslog_disabled = syslog_is_disabled(),
+-		stderr_disabled = (syslog_disabled == 0 || syslog_disabled == 2);
++	int	pid = 0;
+ 
+ #ifndef WIN32
+-	int	pid;
+-
+ 	if ((pid = fork()) < 0)
+ 		fatal_with_errno(EXIT_FAILURE, "Unable to enter background");
+ #endif	/* !WIN32 */
+ 
+-	if (!syslog_disabled)
+-		/* not disabled: NUT_DEBUG_SYSLOG is unset or invalid */
+-		xbit_set(&upslog_flags, UPSLOG_SYSLOG);
+-	if (stderr_disabled)
+-		/* NUT_DEBUG_SYSLOG="none" or unset/invalid */
+-		xbit_clear(&upslog_flags, UPSLOG_STDERR);
++	return pid;
++}
+ 
++/* close ttys and become a daemon */
++void background(void)
++{
+ #ifndef WIN32
++	int	pid;
++
++	pid = background_fork();
+ 	if (pid != 0) {
+ 		/* parent */
+ 		/* these are typically fds 0-2: */
+@@ -829,9 +824,28 @@ void background(void)
+ 		close(STDERR_FILENO);
+ 		_exit(EXIT_SUCCESS);
+ 	}
++#else	/* WIN32 */
++	NUT_WIN32_INCOMPLETE_MAYBE_NOT_APPLICABLE();
++#endif	/* WIN32 */
++	background_child();
++}
++
++void background_child(void)
++{
++	/* Normally we enable SYSLOG and disable STDERR,
++	 * unless NUT_DEBUG_SYSLOG envvar interferes as
++	 * interpreted in syslog_is_disabled() method: */
++	int	syslog_disabled = syslog_is_disabled(),
++		stderr_disabled = (syslog_disabled == 0 || syslog_disabled == 2);
+ 
+-	/* child */
++	if (!syslog_disabled)
++		/* not disabled: NUT_DEBUG_SYSLOG is unset or invalid */
++		xbit_set(&upslog_flags, UPSLOG_SYSLOG);
++	if (stderr_disabled)
++		/* NUT_DEBUG_SYSLOG="none" or unset/invalid */
++		xbit_clear(&upslog_flags, UPSLOG_STDERR);
+ 
++#ifndef WIN32
+ 	/* make fds 0-2 (typically) point somewhere defined */
+ # ifdef HAVE_DUP2
+ 	/* system can close (if needed) and (re-)open a specific FD number */
+diff --git a/drivers/main.c b/drivers/main.c
+index 6845ab0a8f..048f769f3d 100644
+--- a/drivers/main.c
++++ b/drivers/main.c
+@@ -2188,6 +2188,7 @@ int main(int argc, char **argv)
+ # ifndef WIN32
+ 	int	cmd = 0;
+ 	pid_t	oldpid = -1;
++	int	background_pipefd[2];
+ # else	/* WIN32 */
+ /* FIXME NUT_WIN32_INCOMPLETE : *actually* handle WIN32 builds too */
+ 	const char	* cmd = NULL;
+@@ -2995,6 +2996,33 @@ int main(int argc, char **argv)
+ 	 * when its a pdu! */
+ 	dstate_setinfo("device.type", "ups");
+ 
++#ifndef WIN32
++	if (foreground == 0) {
++		/* start backgrounding */
++		int ret, pid;
++
++		ret = pipe(background_pipefd);
++		if (ret)
++			fatal_with_errno(EXIT_FAILURE, "pipe creation failed");
++
++		pid = background_fork();
++		if (pid > 0) {
++			/* parent: wait for child to send success or exit */
++			char ch;
++
++			close(background_pipefd[1]);
++			// Wait for child
++			ret = read(background_pipefd[0], &ch, 1);
++
++			close(background_pipefd[0]);
++			close(STDIN_FILENO);
++			close(STDOUT_FILENO);
++			close(STDERR_FILENO);
++			_exit(ret == 1 ? EXIT_SUCCESS : EXIT_FAILURE);
++		}
++	}
++#endif
++
+ 	dstate_setinfo("driver.state", "init.device");
+ 	upsdrv_callbacks.upsdrv_initups();
+ 	dstate_setinfo("driver.state", "init.quiet");
+@@ -3192,11 +3220,23 @@ int main(int argc, char **argv)
+ 
+ 	switch (foreground) {
+ 		case 0:
++#ifndef WIN32
++			/* close handles */
++			background_child();
++
++			/* notify parent of success */
++			i = write(background_pipefd[1], "G", 1);
++			if (i < 1)
++				upslogx(LOG_ERR, "Unable to call parent pipe for shutdown");
++			close(background_pipefd[1]);
++#else
+ 			background();
++#endif
+ 			/* We had saved a PID before backgrounding, but
+ 			 * it changes when backgrounding - so save again
+ 			 */
+ 			writepid(pidfn);
++
+ 			break;
+ 
+ 		/* >0: Keep the initial PID; don't care about "!dump_data" here
+diff --git a/include/common.h b/include/common.h
+index d493ac7565..86e2721608 100644
+--- a/include/common.h
++++ b/include/common.h
+@@ -286,6 +286,10 @@ void open_syslog(const char *progname);
+ /* close ttys and become a daemon */
+ void background(void);
+ 
++/* Support functions for backgrounding */
++int background_fork(void);
++void background_child(void);
++
+ /* allow tagging the (forked) process in logs to ease debugging */
+ const char *getproctag(void);
+ /* save a copy of tag, or call with NULL to clean and free the internal buffer;
