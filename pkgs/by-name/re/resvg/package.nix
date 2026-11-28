@@ -2,6 +2,11 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  buildPackages,
+  cargo-c,
+  stdenv,
+  testers,
+  validatePkgConfig,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -23,9 +28,32 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--package=usvg"
   ];
 
+  nativeBuildInputs = [
+    cargo-c
+    validatePkgConfig
+  ];
+
+  postBuild = ''
+    ${buildPackages.rust.envVars.setEnv} cargo cbuild -p resvg-capi \
+      -j $NIX_BUILD_CORES \
+      --frozen \
+      --release \
+      --prefix=$out \
+      --target=${stdenv.hostPlatform.rust.rustcTarget}
+  '';
+
   postInstall = ''
+    ${buildPackages.rust.envVars.setEnv} cargo cinstall -p resvg-capi \
+      -j $NIX_BUILD_CORES \
+      --frozen \
+      --release \
+      --prefix=$out \
+      --target=${stdenv.hostPlatform.rust.rustcTarget}
+
     install -Dm644 -t $out/include crates/c-api/*.h
   '';
+
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
   meta = {
     description = "SVG rendering library";
@@ -39,5 +67,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       ];
     maintainers = [ lib.maintainers.jopejoe1 ];
     mainProgram = "resvg";
+    pkgConfigModules = [ "resvg" ];
   };
 })
