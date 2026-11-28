@@ -1234,6 +1234,8 @@ with pkgs;
 
   arduino = arduino-core.override { withGui = true; };
 
+  aristotle = with python3Packages; toPythonApplication aristotlelib;
+
   arpack-mpi = arpack.override { useMpi = true; };
 
   aurralPlugins = recurseIntoAttrs (callPackage ../by-name/au/aurral/plugins.nix { });
