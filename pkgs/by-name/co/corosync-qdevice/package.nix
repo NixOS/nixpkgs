@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "corosync-qdevice";
-  version = "3.0.4";
+  version = "3.0.5";
 
   src = fetchFromGitHub {
     owner = "corosync";
     repo = "corosync-qdevice";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JJYD1owtTtXW2yTZNhponzd6Sbj6zjfhein20m/7DQw=";
+    hash = "sha256-IEyKG2afGRHUBeqYV6Xm0G4bXbKs3pOeD23KjOQ5LCU=";
   };
 
   nativeBuildInputs = [
