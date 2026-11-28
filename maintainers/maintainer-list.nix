@@ -8274,6 +8274,11 @@
     githubId = 63052937;
     name = "Connor Alecks";
   };
+  edamame_x = {
+    name = "EdamAmex";
+    github = "EdamAme-x";
+    githubId = 121654029;
+  };
   edanaher = {
     email = "nixos@edanaher.net";
     github = "edanaher";
