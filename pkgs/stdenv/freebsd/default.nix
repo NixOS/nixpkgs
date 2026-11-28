@@ -15,12 +15,12 @@
           or (throw "unsupported platform ${localSystem.system} for the pure FreeBSD stdenv");
     in
     files,
+  genericStdenv,
 }:
 
 let
-  genericStdenv = import ../generic { defaultConfig = config; };
-
   inherit (localSystem) system;
+
   mkExtraBuildCommands0 = cc: ''
     rsrc="$out/resource-root"
     mkdir "$rsrc"
