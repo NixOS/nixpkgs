@@ -2,40 +2,53 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch2,
   cmake,
+  llvmPackages,
+  testers,
+  enableOpenmp ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "octomap";
-  version = "1.10.1";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "OctoMap";
     repo = "octomap";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GlYfAZGSMO8nMQxFyvFs+ZM8vBRMlnpfiIXe6kCUJa0=";
+    hash = "sha256-oCBvmYbFZ9aSn/3ljItccrrvaBHngshvn2HTLTzN8kg=";
   };
+
+  outputs = [
+    "out"
+    "dev"
+    "bin"
+  ];
 
   sourceRoot = "${finalAttrs.src.name}/octomap";
 
-  patches = [
-    (fetchpatch2 {
-      name = "prepare-for-next-patch.patch";
-      url = "https://github.com/OctoMap/octomap/commit/c5c714139a82969915b84cd5548dedcd257ebf1e.patch?full_index=1";
-      stripLen = 1;
-      excludes = [ ".gitignore" ];
-      hash = "sha256-p/qvBiqeZt93aI7p7MYG6SUwcRlchHV9AnXKVTzBhRs=";
-    })
-    (fetchpatch2 {
-      name = "fix-gcc16.patch";
-      url = "https://github.com/OctoMap/octomap/commit/d7e54ca1c4074f88381c07bfdd685bd4fced0636.patch?full_index=1";
-      stripLen = 1;
-      hash = "sha256-8ZwX1CJFykMduEEXIqTRH9VHn7ItvO/ZfdNNDIDmtss=";
-    })
+  nativeBuildInputs = [ cmake ];
+
+  buildInputs = lib.optional (enableOpenmp && stdenv.cc.isClang) llvmPackages.openmp;
+
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_TESTING" finalAttrs.finalPackage.doCheck)
+    (lib.cmakeBool "OCTOMAP_USE_OPENMP" enableOpenmp)
   ];
 
-  nativeBuildInputs = [ cmake ];
+  doCheck = true;
+
+  passthru = {
+    inherit enableOpenmp;
+    tests = {
+      cmake-config = testers.hasCmakeConfigModules {
+        package = finalAttrs.finalPackage;
+      };
+      pkg-config = testers.hasPkgConfigModules {
+        package = finalAttrs.finalPackage;
+      };
+    };
+  };
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -50,5 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
       nim65s
     ];
     platforms = lib.platforms.unix ++ lib.platforms.windows;
+    cmakeConfigModules = [ "octomap" ];
+    pkgConfigModules = [ "octomap" ];
   };
 })
