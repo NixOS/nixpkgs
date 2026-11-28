@@ -1,31 +1,42 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   flex,
+  versionCheckHook,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xmlindent";
-  version = "0.2.17";
+  version = "0.2.18";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/project/xmlindent/xmlindent/${finalAttrs.version}/xmlindent-${finalAttrs.version}.tar.gz";
-    sha256 = "0k15rxh51a5r4bvfm6c4syxls8al96cx60a9mn6pn24nns3nh3rs";
+  src = fetchFromGitHub {
+    owner = "penberg";
+    repo = "xmlindent";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-cYMHgi1TqMBzt/jqwPgwwFwE1UWvg8LaaKDvgAVg5Uo=";
   };
 
   buildInputs = [ flex ];
 
   preConfigure = ''
-    substituteInPlace Makefile --replace "PREFIX=/usr/local" "PREFIX=$out"
+    substituteInPlace Makefile --replace-fail "PREFIX=/usr/local" "PREFIX=$out"
   '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "-v";
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "XML stream reformatter";
     mainProgram = "xmlindent";
     homepage = "https://xmlindent.sourceforge.net/";
+    changelog = "https://github.com/penberg/xmlindent/blob/v${finalAttrs.version}/ChangeLog";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ kamadorueda ];
   };
 })
