@@ -9,7 +9,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nbted";
-  version = "1.5.2-unstable-2026-02-27";
+  version = "1.5.2";
 
   src = fetchFromGitHub {
     owner = "C4K3";
