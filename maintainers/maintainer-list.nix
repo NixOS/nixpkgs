@@ -10508,6 +10508,11 @@
     githubId = 34658064;
     name = "Grace Dinh";
   };
+  geekiac = {
+    github = "Geekiac";
+    githubId = 10864878;
+    name = "Steven Smith";
+  };
   geekiot-hub = {
     email = "geekiot@proton.me";
     github = "geekiot-hub";
