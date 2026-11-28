@@ -2947,6 +2947,7 @@ mapAliases {
   wasm-bindgen-cli = wasm-bindgen-cli_0_2_130;
   wasm-strip = throw "'wasm-strip' has been removed due to upstream deprecation. Use 'wabt' instead."; # Added 2025-11-06
   wasynth = throw "'wasynth' has been removed as it was discontinued upstream."; # Added 2026-09-04
+  watchyourlan = throw "'watchyourlan' has been removed as it is unmaintained upstream"; # Added 2026-11-25
   wavebox = throw "'wavebox' has been removed due to lack of maintenance in nixpkgs"; # Added 2025-06-24
   wavelog = throw "'wavelog' has been removed due to lack of module, rendering the package useless"; # Added 2026-11-20
   waveterm = throw "'waveterm' has been removed due to EOL Electron and lack of maintainers in nixpkgs"; # Added 2026-09-17
