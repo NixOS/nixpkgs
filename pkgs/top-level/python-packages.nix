@@ -21237,7 +21237,7 @@ self: super: with self; {
 
   todoist-api-python = callPackage ../development/python-modules/todoist-api-python { };
 
-  toggl-cli = callPackage ../development/python-modules/toggl-cli { };
+  togglcli = callPackage ../development/python-modules/togglcli { };
 
   togrill-bluetooth = callPackage ../development/python-modules/togrill-bluetooth { };
 

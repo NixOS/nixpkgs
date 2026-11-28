@@ -28,7 +28,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "toggl-cli";
+  pname = "togglcli";
   version = "4.0.1";
   pyproject = true;
 
