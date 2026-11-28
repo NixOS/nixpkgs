@@ -14,7 +14,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "django-embed-video";
-  version = "1.4.11";
+  version = "1.5.0";
 
   pyproject = true;
 
@@ -33,7 +33,7 @@ buildPythonPackage (finalAttrs: {
     owner = "jazzband";
     repo = "django-embed-video";
     tag = finalAttrs.version;
-    hash = "sha256-aftT558x/ffbfotzPfmG2ByDBlvV4m36XD7WMzRIBXw=";
+    hash = "sha256-T9g3YMZFfn+NlbrBU/mroZ20NdAx5L8xRnxfQ1A4dM4=";
   };
 
   pythonImportsCheck = [ "embed_video" ];
