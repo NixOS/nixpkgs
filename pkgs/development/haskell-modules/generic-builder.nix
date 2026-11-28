@@ -205,6 +205,7 @@ in
   preFixup ? null,
   postFixup ? null,
   shellHook ? "",
+  setupHooks ? [ ],
   coreSetup ? false, # Use only core packages to build Setup.hs.
   useCpphs ? false,
   hardeningDisable ? null,
@@ -873,6 +874,7 @@ lib.fix (
           "--test-wrapper=${testWrapperScript}"
           ${lib.escapeShellArgs (map (opt: "--test-option=${opt}") testFlags)}
         )
+        echo "checkFlags: ${testTargetsString} $checkFlags ''${checkFlagsArray:+"''${checkFlagsArray[@]}"}"
         export NIX_GHC_PACKAGE_PATH_FOR_TEST="''${NIX_GHC_PACKAGE_PATH_FOR_TEST:-$packageConfDir:}"
         ${setupCommand} test ${testTargetsString} $checkFlags ''${checkFlagsArray:+"''${checkFlagsArray[@]}"}
         runHook postCheck
@@ -1072,7 +1074,7 @@ lib.fix (
             ghcCommandCaps = lib.toUpper ghcCommand';
           in
           runCommandCC name {
-            inherit shellHook;
+            inherit shellHook setupHooks;
 
             depsBuildBuild = lib.optional isCross ghcEnvForBuild;
             nativeBuildInputs = [
@@ -1146,5 +1148,6 @@ lib.fix (
     // optionalAttrs (__darwinAllowLocalNetworking || args ? __darwinAllowLocalNetworking) {
       inherit __darwinAllowLocalNetworking;
     }
+    // optionalAttrs (args ? setupHooks) { inherit setupHooks; }
   )
 )
