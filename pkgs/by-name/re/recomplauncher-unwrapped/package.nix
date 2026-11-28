@@ -24,7 +24,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "recomplauncher-unwrapped";
-  version = "0.90.0-beta.68";
+  version = "0.90.0-beta.69";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "elripalda";
     repo = "RecompLauncher";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bTlrD9vQP7ukoLUhee5MY4b8Bqo+6iy8MlbwAE6yCmM=";
+    hash = "sha256-LDCm94rQr680UyFjsBwY/sRSrQLq+ZI2KgyaAAho8XQ=";
   };
 
   patches = [
@@ -84,7 +84,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     webkitgtk_4_1
   ];
 
-  cargoHash = "sha256-Aa0FleW/1DQTfclQBO+tLruX6H6r4qCf30Z2L/ABfPs=";
+  cargoHash = "sha256-JiWxrygAAlNhK3rwSuPPHCbQBLiT5NbLBAP8Erz+gOI=";
 
   # gamefiles test runs lsof on macOS
   nativeCheckInputs = [
