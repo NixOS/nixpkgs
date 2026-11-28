@@ -74,6 +74,10 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
+  patches = [
+    ./fix-cgroup-detection.patch
+  ];
+
   meta = {
     description = "Monitor your system resources and processes";
     homepage = "https://gitlab.gnome.org/GNOME/Incubator/resources";

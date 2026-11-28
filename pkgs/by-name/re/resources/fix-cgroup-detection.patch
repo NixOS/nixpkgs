@@ -1,0 +1,8 @@
+diff --git a/lib/process_data/src/cgroup.rs b/lib/process_data/src/cgroup.rs
+--- a/lib/process_data/src/cgroup.rs
++++ b/lib/process_data/src/cgroup.rs
+@@ -1,5 +1,5 @@
+ static RE_CGROUP: Lazy<Regex> = lazy_regex!(
+-    r"(?U)/(?:app|background)\.slice/(?:app-|dbus-:)(?:(?P<launcher>[^-]+)-)?(?P<cgroup>[^-]+)(?:-[0-9]+|@[0-9]+)?\.(?:scope|service)"
++    r"(?U)/(?:app|background)\.slice/(?:[^/]+/)*(?:app-|dbus-:)(?:(?P<launcher>[^-]+)-)?(?P<cgroup>[^-]+)(?:-[0-9]+|@[0-9]+)?\.(?:scope|service)"
+ );
