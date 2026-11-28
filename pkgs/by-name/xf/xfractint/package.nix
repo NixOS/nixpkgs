@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
     libxft
   ];
 
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
   configurePhase = ''
     runHook preConfigure
 
