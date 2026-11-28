@@ -40,6 +40,14 @@ in
         These options conflict because only one SSH agent can be installed at a time.'';
     };
 
+    environment.extraInit = ''
+      # For non-graphical logins. (Or, any login not inheriting the systemd
+      # user environment.)
+      if [ -z "$SSH_AUTH_SOCK" ] && [ -n "$XDG_RUNTIME_DIR" ]; then
+        export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/gcr/ssh"
+      fi
+    '';
+
     systemd = {
       packages = [ cfg.package ];
       user.services.gcr-ssh-agent.wantedBy = [ "default.target" ];
