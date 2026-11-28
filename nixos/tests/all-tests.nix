@@ -2004,6 +2004,7 @@ in
   velocity = runTest ./velocity.nix;
   vengi-tools = runTest ./vengi-tools.nix;
   veroroute = runTest ./veroroute.nix;
+  versitygw = runTest ./versitygw.nix;
   victorialogs = import ./victorialogs { inherit runTest; };
   victoriametrics = import ./victoriametrics { inherit runTest; };
   victoriatraces = import ./victoriatraces { inherit runTest; };

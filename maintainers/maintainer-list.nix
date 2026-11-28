@@ -26015,6 +26015,12 @@
     keys = [ { fingerprint = "7DCA 5615 8AB2 621F 2F32  9FF4 1C7C E491 479F A273"; } ];
     name = "Rahul Butani";
   };
+  rrittste = {
+    name = "Robin Rittsteiger";
+    email = "robinrittsteiger@gmail.com";
+    github = "rrittste";
+    githubId = 2920345;
+  };
   rrvsh = {
     email = "rafiq@rrv.sh";
     github = "rrvsh";
