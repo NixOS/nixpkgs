@@ -22,10 +22,13 @@ maturinBuildHook() {
         "--offline"
         "--target" "@rustcTargetSpec@"
         "--manylinux" "off"
-        "--strip"
         "--out" "$dist"
         "--interpreter" "$interpreter_name"
     )
+
+    if [ -z "${dontStrip-}" ]; then
+      flagsArray+=("--strip")
+    fi
 
     if [ -n "${maturinBuildProfile}" ]; then
       flagsArray+=("--profile" "${maturinBuildProfile}")
