@@ -4,7 +4,6 @@
   python,
   buildPythonPackage,
   nix-update-script,
-  fetchurl,
 
   # build-time dependencies
   setuptools,
@@ -12,22 +11,10 @@
   perl,
 
   # static libraries
-  pkgsStatic,
-  gmpStatic ? pkgsStatic.gmp,
+  gmp,
+  gmpStatic ? gmp.override { withStatic = true; },
   pari,
-  pariStatic_2_15 ? pari.overrideAttrs (
-    finalAttrs: oldAttrs: {
-      version = "2.15.4";
-      src = fetchurl {
-        url = "https://pari.math.u-bordeaux.fr/pub/pari/OLD/${lib.versions.majorMinor finalAttrs.version}/pari-${finalAttrs.version}.tar.gz";
-        hash = "sha256-w1Rb/uDG37QLd/tLurr5mdguYAabn20ovLbPAEyMXA8=";
-      };
-      installTargets = [
-        "install"
-        "install-lib-sta"
-      ];
-    }
-  ),
+  pariStatic ? pari.override { withStatic = true; },
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -42,6 +29,10 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-t8nuov7BZNSEd5ReIKsArtLvwh7BWs7rfaTswdypKgg=";
   };
 
+  patches = [
+    ./pari_2_17.patch
+  ];
+
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail 'requires = ["setuptools", "wheel", "cython==3.2.3"]' \
@@ -51,7 +42,7 @@ buildPythonPackage (finalAttrs: {
   preBuild = ''
     mkdir libcache
     ln -s ${gmpStatic} libcache/gmp
-    ln -s ${pariStatic_2_15} libcache/pari
+    ln -s ${pariStatic} libcache/pari
   '';
 
   build-system = [
