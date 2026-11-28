@@ -1,0 +1,50 @@
+--- a/build.rs
++++ b/build.rs
+@@ -415,6 +415,16 @@ fn bundle_precompiled() -> Info {
+     Info { lib_name, include_dirs, cpp_root }
+ }
+ 
++/// `pkg-config --cflags --libs mbgl-core`, split into its flags.
++fn mbgl_core_flags() -> Vec<String> {
++    let output = Command::new(env::var("PKG_CONFIG").unwrap_or("pkg-config".to_string()))
++        .args(["--cflags", "--libs", "mbgl-core"])
++        .output()
++        .unwrap();
++    assert!(output.status.success(), "{}", String::from_utf8_lossy(&output.stderr));
++    String::from_utf8(output.stdout).unwrap().split_whitespace().map(str::to_owned).collect()
++}
++
+ fn clone_repository<P: AsRef<Path>>(
+     clone_dir: P,
+     folder_name: &str,
+@@ -668,9 +678,9 @@ fn build_mln() {
+     let info = if precompiled {
+         bundle_precompiled()
+     } else if system_lib {
+-        // Using pkg config
+-        // let mut cfg = pkg_config::Config::new();
+-        panic!("Not implemented")
++        let flags = mbgl_core_flags();
++        let include_dirs = flags.iter().filter_map(|f| f.strip_prefix("-I")).map(PathBuf::from);
++        Info { lib_name: "mbgl-core".to_string(), include_dirs: include_dirs.collect(), cpp_root: PathBuf::new() }
+     } else {
+         const MAPLIBRE_NATIVE_DIR_NAME: &str = "maplibre-native";
+         let respository_dir = if local_repository.is_empty() {
+@@ -710,7 +720,16 @@ fn build_mln() {
+         precompiled || source_core_uses_ndebug,
+     );
+     let is_apple = target_os == "macos" || target_os == "ios";
+-    if !amalgam_lib {
++    if system_lib {
++        // After the bridge and `mbgl-core`, which `build_bridge` links.
++        for flag in mbgl_core_flags() {
++            if let Some(dir) = flag.strip_prefix("-L") {
++                println!("cargo:rustc-link-search=native={dir}");
++            } else if let Some(lib) = flag.strip_prefix("-l").filter(|lib| *lib != "mbgl-core") {
++                println!("cargo:rustc-link-lib={lib}");
++            }
++        }
++    } else if !amalgam_lib {
+         // The dependent libs are not bundled in the core lib, so we have to link manually
+         // Required for mlt-cpp. Cpp root link search was already added above
+         println!(

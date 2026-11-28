@@ -3,25 +3,29 @@
   aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
+  hatch-vcs,
   hatchling,
   pyprojectVersionPatchHook,
   pytest-asyncio,
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ttn-client";
-  version = "1.3.1";
+  version = "1.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "angelnu";
     repo = "thethingsnetwork_python_client";
-    tag = "v${version}";
-    hash = "sha256-Fh2l3SL72D0yXwOil73VFQjCLli3GZwsatNIYVmOoTA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-xxgtgrnyNwNaADQ1iEhBEUc4w1a59m2ec8EFhS6QMZQ=";
   };
 
-  build-system = [ hatchling ];
+  build-system = [
+    hatchling
+    hatch-vcs
+  ];
 
   nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
@@ -40,10 +44,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    description = "Module to fetch/receive and parse uplink messages from The Thinks Network";
+    description = "Module to fetch/receive and parse uplink messages from The Things Network";
     homepage = "https://github.com/angelnu/thethingsnetwork_python_client";
-    changelog = "https://github.com/angelnu/thethingsnetwork_python_client/releases/tag/${src.tag}";
+    changelog = "https://github.com/angelnu/thethingsnetwork_python_client/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
