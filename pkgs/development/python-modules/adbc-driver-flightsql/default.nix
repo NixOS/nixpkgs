@@ -22,7 +22,7 @@ buildPythonPackage (finalAttrs: {
   # nixpkgs-update: no auto update
   src = fetchPypi {
     pname = "adbc_driver_flightsql";
-    inherit (finalAttrs) version;
+    version = finalAttrs.version;
     hash = "sha256-sGer82TlJTwDPOht0fgxnrR4DSZu3cmzZssaEUna+cE=";
   };
 
