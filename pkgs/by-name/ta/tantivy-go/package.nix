@@ -8,13 +8,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tantivy-go";
-  version = "1.0.6";
+  version = "1.0.7";
 
   src = fetchFromGitHub {
     owner = "anyproto";
     repo = "tantivy-go";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-59RzOEC2bKDJSCvoRxRd1QNVRlHboewlO8ifAiVDqME=";
+    hash = "sha256-mdv5KNT1vXit/KkqJ/ZIL8arTyjana1yxnJatarK6VA=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/rust";
