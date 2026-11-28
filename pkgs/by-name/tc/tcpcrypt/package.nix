@@ -9,6 +9,7 @@
   libnfnetlink,
   libnetfilter_conntrack,
   libnetfilter_queue,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -41,7 +42,15 @@ stdenv.mkDerivation (finalAttrs: {
     libnetfilter_queue
   ];
 
+  # https://github.com/sorbo/tcpcrypt/blob/b2673e88570d3370e6b37698f58d5ee9bb116d8d/user/src/checksum.c#L64
+  #
+  # in_cksum() casts a `struct tcp_ph` through `unsigned short *`, so with
+  # strict aliasing and optimization enabled, GCC breaks the program.
+  env.CFLAGS = "-O2 -fno-strict-aliasing";
+
   enableParallelBuilding = true;
+
+  passthru.tests.nixos = nixosTests.tcpcrypt;
 
   meta = {
     broken = stdenv.hostPlatform.isDarwin;
