@@ -509,7 +509,7 @@ in
 
             serviceConfig = {
               Type = "oneshot";
-              UMask = 27;
+              UMask = "0027";
 
               User = "mautrix-meta-${name}";
               Group = "mautrix-meta";
@@ -563,7 +563,7 @@ in
               SystemCallArchitectures = "native";
               SystemCallErrorNumber = "EPERM";
               SystemCallFilter = [ "@system-service" ];
-              UMask = 27;
+              UMask = "0027";
 
               WorkingDirectory = fullDataDir cfg;
               ReadWritePaths = fullDataDir cfg;

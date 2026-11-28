@@ -124,7 +124,7 @@ in
             "@system-service"
             "~@privileged"
           ];
-          UMask = 66;
+          UMask = "0066";
         };
       };
     };

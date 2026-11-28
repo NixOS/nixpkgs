@@ -495,7 +495,7 @@ in
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
         SystemCallArchitectures = "native";
-        UMask = 27;
+        UMask = "0027";
       };
     };
 

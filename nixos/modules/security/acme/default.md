@@ -223,7 +223,7 @@ Nix config. Instead, generate them one time with a systemd service:
     };
     serviceConfig = {
       Type = "oneshot";
-      UMask = 77;
+      UMask = "0077";
     };
     path = [ pkgs.bind ];
     script = ''

@@ -181,7 +181,7 @@ in
         Group = "terraria";
         Type = "forking";
         GuessMainPID = true;
-        UMask = 7;
+        UMask = "0007";
         ExecStart = "${tmuxCmd} new -d ${lib.getExe cfg.package} ${lib.concatStringsSep " " flags}";
         ExecStop = "${stopScript} $MAINPID";
       };

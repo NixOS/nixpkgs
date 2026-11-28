@@ -394,7 +394,7 @@ in
         Type = "oneshot";
         RemainAfterExit = true;
         User = user;
-        UMask = 77;
+        UMask = "0077";
         WorkingDirectory = "${monica}";
         RuntimeDirectory = "monica/cache";
         RuntimeDirectoryMode = 700;

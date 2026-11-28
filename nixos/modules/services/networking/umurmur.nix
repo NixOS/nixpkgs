@@ -196,7 +196,7 @@ in
         ReadWritePaths = "/dev/shm";
 
         # hardening
-        UMask = 27;
+        UMask = "0027";
         MemoryDenyWriteExecute = true;
         AmbientCapabilities = [ "" ];
         CapabilityBoundingSet = [ "" ];

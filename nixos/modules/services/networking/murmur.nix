@@ -404,7 +404,7 @@ in
         RestrictRealtime = true;
         SystemCallArchitectures = "native";
         SystemCallFilter = "@system-service";
-        UMask = 27;
+        UMask = "0027";
       };
     };
 

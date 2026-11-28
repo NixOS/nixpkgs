@@ -318,7 +318,7 @@ in
         SystemCallErrorNumber = "EPERM";
         SystemCallFilter = [ "@system-service" ] ++ collectorAttrs "systemCalls";
         Type = "simple";
-        UMask = 27;
+        UMask = "0027";
       };
     };
 
