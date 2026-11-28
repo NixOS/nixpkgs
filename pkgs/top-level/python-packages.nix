@@ -23209,6 +23209,8 @@ self: super: with self; {
 
   x690 = callPackage ../development/python-modules/x690 { };
 
+  xacro = callPackage ../development/python-modules/xacro { };
+
   xapian = callPackage ../development/python-modules/xapian { inherit (pkgs) xapian; };
 
   xarray = callPackage ../development/python-modules/xarray { };
