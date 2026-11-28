@@ -1,9 +1,11 @@
 {
   lib,
+  stdenv,
   runCommand,
   python,
   writableTmpDirAsHomeHook,
   xvfb-run,
+  writeShellScriptBin,
   pkgs,
 }:
 
@@ -16,12 +18,7 @@ let
     (fs.toList)
   ];
 
-  brokenTests = [
-    # FIX:
-    # scipy.sparse.linalg._eigen.arpack.arpack.ArpackNoConvergence: ARPACK
-    # error -1: No convergence (20221 iterations, 1/3 eigenvectors converged)
-    ./resonant-cavity.py
-  ];
+  brokenTests = [ ];
 
   # /path/to/foo.py -> "foo"
   nameOf = file: lib.removeSuffix ".py" (lib.baseNameOf file);
@@ -29,32 +26,43 @@ let
   mkTest =
     file:
     runCommand "test-${nameOf file}"
-      {
-        nativeBuildInputs =
-          let
-            pyEnv = python.withPackages (ps: with ps; [ emerge ]);
+      (
+        {
+          nativeBuildInputs =
+            let
+              pyEnv = python.withPackages (ps: with ps; [ emerge ]);
 
-            # Since we're calling this file using python's `callPackage`, it tries to use
-            # `python3Packages.mesa` rather than the toplevel one. However, the former has
-            # been removed because it's broken.
-            #
-            # As a workaround, we're getting the toplevel `mesa` through `pkgs`.
-            mesa = pkgs.mesa;
-          in
-          [
-            pyEnv
-            writableTmpDirAsHomeHook
-            xvfb-run
-            mesa.llvmpipeHook # OpenGL context
-          ];
+              # Since we're calling this file using python's `callPackage`, it tries to use
+              # `python3Packages.mesa` rather than the toplevel one. However, the former has
+              # been removed because it's broken.
+              #
+              # As a workaround, we're getting the toplevel `mesa` through `pkgs`.
+              mesa = pkgs.mesa;
+            in
+            [
+              pyEnv
+              writableTmpDirAsHomeHook
+              xvfb-run
+              mesa.llvmpipeHook # OpenGL context
+            ]
+            ++ lib.optionals stdenv.hostPlatform.isDarwin [
+              # pyvista runs `pgrep -qx Finder` on Darwin to detect a GUI session; without
+              # pgrep in PATH it crashes with FileNotFoundError. Exit 1 signals Finder is
+              # not running so it falls back to checking $DISPLAY / offscreen rendering.
+              (writeShellScriptBin "pgrep" "exit 1")
+            ];
 
-        env.EMERGE_MP_SOLVER = lib.optionalString python.pkgs.emerge.cudaSupport "CUDSS";
-        env.NUMBA_DISABLE_JIT = 1; # quite slow and won't be cached anyways
+          env.EMERGE_MP_SOLVER = lib.optionalString python.pkgs.emerge.cudaSupport "CUDSS";
 
-        meta.broken = lib.elem file brokenTests;
-      }
+          meta.broken = lib.elem file brokenTests;
+        }
+        // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+          # Cocoa VTK requires WindowServer / GPU access for OpenGL context creation
+          __noChroot = true;
+        }
+      )
       ''
-        xvfb-run python ${file}
+        ${lib.optionalString (!stdenv.hostPlatform.isDarwin) "xvfb-run "}python ${file}
         mkdir -p $out
         cp *.png $out
       '';
