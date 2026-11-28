@@ -18568,10 +18568,10 @@ with self;
     };
     # Force core provided JSON::PP backend when cross building since dynamic
     # loading attempts of other backends presumably fail
-    preConfigure = lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+    preConfigure = lib.optionalString (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) ''
       substituteInPlace lib/JSON.pm \
         --replace-fail 'my $backend = exists $ENV{PERL_JSON_BACKEND} ? $ENV{PERL_JSON_BACKEND} : 1;' \
-                       'my $backend = "JSON::PP";'
+                       'my $backend = exists $ENV{PERL_JSON_BACKEND} ? $ENV{PERL_JSON_BACKEND} : "JSON::PP";'
     '';
     buildInputs = [ TestPod ];
     meta = {
