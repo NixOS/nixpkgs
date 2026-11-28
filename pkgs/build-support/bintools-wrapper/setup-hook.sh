@@ -55,7 +55,7 @@ fi
 export NIX_BINTOOLS${role_post}=@out@
 
 for cmd in \
-    ar as ld nm objcopy objdump readelf ranlib strip strings size windres rc
+    ar as ld nm objcopy objdump readelf ranlib strip strings size windres rc dlltool
 do
     if
         PATH=$_PATH type -p "@targetPrefix@${cmd}" > /dev/null
