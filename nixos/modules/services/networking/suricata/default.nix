@@ -154,6 +154,15 @@ in
       '';
     };
 
+    enabledRules = mkOption {
+      type = types.listOf types.str;
+      default = [ ];
+      description = ''
+        List of rules that should be re-enabled despite being disabled via
+        {option}`services.suricata.disabledRules`.
+      '';
+    };
+
     dropRules = mkOption {
       type = types.listOf types.str;
       default = [ ];
@@ -261,6 +270,7 @@ in
               ${python.interpreter} ${pkg}/bin/suricata-update update-sources
               ${python.interpreter} ${pkg}/bin/suricata-update update --suricata-conf ${cfg.configFile} --no-test \
                 --disable-conf ${pkgs.writeText "suricata-disable-conf" "${concatStringsSep "\n" cfg.disabledRules}"} \
+                --enable-conf ${pkgs.writeText "suricata-enable-conf" "${concatStringsSep "\n" cfg.enabledRules}"} \
                 --drop-conf ${pkgs.writeText "suricata-drop.conf" "${concatStringsSep "\n" cfg.dropRules}"}
             '';
           serviceConfig = {
