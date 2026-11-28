@@ -54,6 +54,11 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail systemd-ask-password  "${systemd}/bin/systemd-ask-password" \
       --replace-fail sleep                 "${coreutils}/bin/sleep" \
       --replace-fail udevadm               "${systemd}/bin/udevadm"
+  ''
+  # without static-pie, ldd reports static binaries as "not a dynamic executable"
+  + lib.optionalString (!stdenv.hostPlatform.isx86_64) ''
+    substituteInPlace Makefile \
+      --replace-fail 'grep --quiet --silent "statically linked"' 'grep --quiet --silent -e "statically linked" -e "not a dynamic executable"'
   '';
 
   strictDeps = true;
@@ -135,6 +140,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://stratis-storage.github.io";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ nickcao ];
-    platforms = [ "x86_64-linux" ];
+    platforms = lib.platforms.linux;
   };
 })
