@@ -37,6 +37,7 @@ let
   ];
 
   hostPackages = {
+    linux-riscv64 = [ ];
     linux-arm = [
       (fetchNupkg {
         pname = "Microsoft.NETCore.App.Crossgen2.linux-arm";
@@ -157,6 +158,7 @@ let
   };
 
   targetPackages = {
+    linux-riscv64 = [ ];
     linux-arm = [
       (fetchNupkg {
         pname = "Microsoft.AspNetCore.App.Runtime.linux-arm";
@@ -408,6 +410,10 @@ rec {
   aspnetcore_9_0 = buildAspNetCore {
     version = "9.0.23";
     srcs = {
+      linux-riscv64 = {
+        url = "https://github.com/liberodark/dotnet_riscv/releases/download/9.0.120/dotnet-sdk-9.0.120-linux-riscv64.tar.gz";
+        hash = "sha512-qbSFjTAQMOPKCla5J3jTVzqmpWWXoWIUWkTphzgE1chO9sk9+GMhYtenWF2V35U7UrwKOa/qPcc538XAYHyrpg==";
+      };
       linux-arm = {
         url = "https://builds.dotnet.microsoft.com/dotnet/aspnetcore/Runtime/9.0.23/aspnetcore-runtime-9.0.23-linux-arm.tar.gz";
         hash = "sha512-4QmLiZv4lU1+yUbxEoxjrvOZydhxQjL/VzbKI6VurKMfUFTwN/C3QQusFnQxYD+phhC7BH5RIHIGYWb6nPdVjg==";
@@ -446,6 +452,10 @@ rec {
   runtime_9_0 = buildNetRuntime {
     version = "9.0.23";
     srcs = {
+      linux-riscv64 = {
+        url = "https://github.com/liberodark/dotnet_riscv/releases/download/9.0.120/dotnet-sdk-9.0.120-linux-riscv64.tar.gz";
+        hash = "sha512-qbSFjTAQMOPKCla5J3jTVzqmpWWXoWIUWkTphzgE1chO9sk9+GMhYtenWF2V35U7UrwKOa/qPcc538XAYHyrpg==";
+      };
       linux-arm = {
         url = "https://builds.dotnet.microsoft.com/dotnet/Runtime/9.0.23/dotnet-runtime-9.0.23-linux-arm.tar.gz";
         hash = "sha512-on/woD/L19o2ML63GH/yr4VtLh6HDU+j3NTFBOWGkRNS7AO0RlsurzxibkWIRUlxUSLlLqTNFwMoeBpvkgwNSw==";
@@ -525,6 +535,10 @@ rec {
   sdk_9_0_1xx = buildNetSdk {
     version = "9.0.124";
     srcs = {
+      linux-riscv64 = {
+        url = "https://github.com/liberodark/dotnet_riscv/releases/download/9.0.120/dotnet-sdk-9.0.120-linux-riscv64.tar.gz";
+        hash = "sha512-qbSFjTAQMOPKCla5J3jTVzqmpWWXoWIUWkTphzgE1chO9sk9+GMhYtenWF2V35U7UrwKOa/qPcc538XAYHyrpg==";
+      };
       linux-arm = {
         url = "https://builds.dotnet.microsoft.com/dotnet/Sdk/9.0.124/dotnet-sdk-9.0.124-linux-arm.tar.gz";
         hash = "sha512-2Q0G0FtvqdAU+dhFSG4wQnAywQEmSF05gQkK8AXj1Kyci3NGUUgTnp97i3La9eQmKeK6sCPva8EQ+Xzg4mfEUQ==";
