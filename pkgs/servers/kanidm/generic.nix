@@ -12,7 +12,7 @@
   lib,
   formats,
   nixosTests,
-  rustPlatform,
+  rustPackages_1_100,
   fetchFromGitHub,
   installShellFiles,
   nix-update-script,
@@ -46,7 +46,7 @@ let
     See upgrade guide at https://kanidm.github.io/kanidm/master/server_updates.html
   '';
 in
-rustPlatform.buildRustPackage (finalAttrs: {
+rustPackages_1_100.rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kanidm" + (lib.optionalString enableSecretProvisioning "-with-secret-provisioning");
   inherit version cargoHash;
 
@@ -91,23 +91,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
       // lib.optionalAttrs (lib.versionAtLeast finalAttrs.version "1.9") {
         server_migration_path = "/etc/kanidm/migrations.d";
       };
-      # lower required rust-version in Cargo.toml to allow backporting
-      rustVersion =
-        if lib.versionAtLeast finalAttrs.version "1.11" then
-          {
-            from = "1.96";
-            to = "1.95";
-          }
-        else
-          null;
     in
     ''
       cp ${format profile} libs/profiles/${finalAttrs.env.KANIDM_BUILD_PROFILE}.toml
       substituteInPlace libs/profiles/${finalAttrs.env.KANIDM_BUILD_PROFILE}.toml --replace-fail '@htmx_ui_pkg_path@' "$out/ui/hpkg"
-    ''
-    + lib.optionalString (rustVersion != null) ''
-      substituteInPlace Cargo.toml \
-        --replace-fail 'rust-version = "${rustVersion.from}"' 'rust-version = "${rustVersion.to}"'
     '';
 
   nativeBuildInputs = [
