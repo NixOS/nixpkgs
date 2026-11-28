@@ -20,14 +20,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "django-otp-webauthn";
-  version = "0.10.3";
+  version = "0.11.0a5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Stormbase";
     repo = "django-otp-webauthn";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BmbCC0Tf4Ghp/bjRc2q5efRx3MWR8tARiT4iMq51jP0=";
+    hash = "sha256-1CbgBiBH+lMaD6LhqWLNV/JMxCCZQ1o+g7OlEtN0nOE=";
   };
 
   build-system = [
