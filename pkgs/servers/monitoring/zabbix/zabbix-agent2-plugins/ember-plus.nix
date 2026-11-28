@@ -2,6 +2,8 @@
   lib,
   buildGoModule,
   fetchurl,
+  bash,
+  cmake,
 }:
 
 import ../versions.nix (
@@ -14,6 +16,18 @@ import ../versions.nix (
       url = "https://cdn.zabbix.com/zabbix-agent2-plugins/sources/ember-plus/zabbix-agent2-plugin-ember-plus-${finalAttrs.version}.tar.gz";
       hash = emberPlusHash;
     };
+
+    nativeBuildInputs = [
+      cmake
+    ];
+
+    buildPhase = ''
+      runHook preBuild
+
+      make SHELL=${lib.getExe bash}
+
+      runHook postBuild
+    '';
 
     vendorHash = null;
 
