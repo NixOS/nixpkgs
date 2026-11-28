@@ -6,12 +6,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tkrzw";
-  version = "1.0.32";
+  version = "1.0.34";
   # TODO: defeat multi-output reference cycles
 
   src = fetchurl {
     url = "https://dbmx.net/tkrzw/pkg/tkrzw-${finalAttrs.version}.tar.gz";
-    hash = "sha256-00BN+saJhjK2l4DA8JlMX2upYhkaYcmw9LU7qLsncxw=";
+    hash = "sha256-r+iUwVMv7aCGt6lGcvQS+AF1jL6BQx/TyIUU+ifr42k=";
   };
 
   postPatch = ''
