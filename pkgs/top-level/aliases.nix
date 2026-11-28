@@ -1025,6 +1025,7 @@ mapAliases {
   garage_0_8_7 = throw "'garage_0_8_7' has been removed as it is unmaintained upstream"; # Added 2025-06-23
   garage_0_9 = throw "'garage_0_9' has been removed as it is unmaintained upstream"; # Added 2025-09-16
   garage_0_9_4 = throw "'garage_0_9_4' has been removed as it is unmaintained upstream"; # Added 2025-09-16
+  garage_1 = throw "'garage_1' has been removed as this version has reached its end of life. Please migrate to garage_2: https://garagehq.deuxfleurs.fr/documentation/working-documents/migration-2/"; # Added 2026-11-28
   garage_1_2_0 = throw "'garage_1_2_0' has been removed. Use 'garage_1' instead."; # Added 2025-09-16
   garage_1_x = warnAlias "'garage_1_x' has been renamed to 'garage_1'" garage_1; # Added 2025-06-23
   garage_2_0_0 = throw "'garage_2_0_0' has been removed. Use 'garage_2' instead."; # Added 2025-09-16
