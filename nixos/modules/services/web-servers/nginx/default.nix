@@ -252,7 +252,7 @@ let
               ssl_prefer_server_ciphers off;
 
               # Support TLS session resumption (cache and tickets)
-              ssl_session_cache shared:SSL:10m; # ~40k sessions
+              ssl_session_cache shared:SSL:10M; # ~40k sessions
               ssl_session_timeout 1d;
             ''}
 
@@ -264,7 +264,7 @@ let
               brotli on;
               brotli_static on;
               brotli_comp_level 5;
-              brotli_window 512k;
+              brotli_window 512K;
               brotli_min_length 256;
               brotli_types ${lib.concatStringsSep " " compressMimeTypes};
             ''}
@@ -1091,7 +1091,7 @@ in
 
       clientMaxBodySize = mkOption {
         type = types.str;
-        default = "10m";
+        default = "10M";
         description = "Set nginx global client_max_body_size.";
       };
 
@@ -1213,8 +1213,8 @@ in
 
                 keysZoneSize = mkOption {
                   type = types.str;
-                  default = "10m";
-                  example = "32m";
+                  default = "10M";
+                  example = "32M";
                   description = "Set size to shared memory zone.";
                 };
 
@@ -1255,8 +1255,8 @@ in
 
                 maxSize = mkOption {
                   type = types.str;
-                  default = "1g";
-                  example = "2048m";
+                  default = "1G";
+                  example = "2048M";
                   description = "Set maximum cache size";
                 };
               };
