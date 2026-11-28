@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch2,
   pkg-config,
   cairo,
   harfbuzz,
@@ -42,6 +43,17 @@ stdenv.mkDerivation (finalAttrs: {
     url = "mirror://gnome/sources/pango/${lib.versions.majorMinor finalAttrs.version}/pango-${finalAttrs.version}.tar.xz";
     hash = "sha256-NCOFtso7fHNFXXyAoTt9vkSJ4AvDvUxb1u1NzkIeN0o=";
   };
+
+  patches = [
+    # Fix incompatible pointer type error with Clang 22 when building CoreText support.
+    # Upstream MR: https://gitlab.gnome.org/GNOME/pango/-/merge_requests/947
+    ./coretext-fix-incompatible-pointer-type-error-with-clang.patch
+    # Fix build failure with Clang 23.
+    (fetchpatch2 {
+      url = "https://gitlab.gnome.org/GNOME/pango/-/commit/919d0b32c02a7d0aa9739473349c73ac5f63ec10.diff";
+      hash = "sha256-AIXWouZauj9ETjsbnY7jBPszkcT3mZOMxP2Q/2GyNsU=";
+    })
+  ];
 
   depsBuildBuild = [
     pkg-config
