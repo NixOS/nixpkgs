@@ -37,6 +37,7 @@ in
     ./smallwm.nix
     ./stumpwm.nix
     ./spectrwm.nix
+    ./sxwm.nix
     ./tinywm.nix
     ./twm.nix
     ./windowmaker.nix
