@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "types-mock";
-  version = "5.2.0.20260518";
+  version = "5.2.0.20261122";
   pyproject = true;
 
   src = fetchPypi {
     pname = "types_mock";
     inherit version;
-    hash = "sha256-Sa+cGKrEyqkODh6EN+IWDNiz8SYFPa5kU9ZbOTWQ/Pk=";
+    hash = "sha256-wgpRwUMYFES19BXQZI3od04KsKwhfELcnPTGym8RMz0=";
   };
 
   build-system = [ setuptools ];
