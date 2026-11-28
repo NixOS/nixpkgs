@@ -20,7 +20,7 @@
   # present for the tests to succeed.
   enableCuda ? config.cudaSupport,
   # type of GPU architecture
-  nvidiaArch ? "sm_60",
+  nvidiaArch ? lib.head cudaPackages.flags.realArches,
   cudaPackages,
 }:
 
@@ -31,11 +31,14 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "elpa";
   version = "2026.02.002";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   passthru = { inherit (blas) isILP64; };
 
   src = fetchurl {
     url = "https://elpa.mpcdf.mpg.de/software/tarball-archive/Releases/${finalAttrs.version}/elpa-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-AuPFn+xTzY62akzBX6T78ZDPllQiciP7itVXE+lCeTI=";
+    hash = "sha256-AuPFn+xTzY62akzBX6T78ZDPllQiciP7itVXE+lCeTI=";
   };
 
   patches = [
@@ -51,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs --build ./fdep/fortran_dependencies.pl
 
     # Fix the test script generator
-    substituteInPlace Makefile.am --replace '#!/bin/bash' '#!${stdenv.shell}'
+    substituteInPlace Makefile.am --replace-fail '#!/bin/bash' '#!${stdenv.shell}'
   ''
   + lib.optionalString enableCuda ''
     patchShebangs --build ./nvcc_wrap ./manual_cpp
@@ -66,11 +69,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     autoreconfHook
+    mpi
     perl
   ]
   ++ lib.optionals enableCuda [
     cudaPackages.cuda_nvcc
-    cudaPackages.libcusolver
     python3
   ];
 
@@ -83,6 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals enableCuda [
     cudaPackages.cuda_cudart
     cudaPackages.libcublas
+    cudaPackages.libcusolver
   ];
 
   env =
