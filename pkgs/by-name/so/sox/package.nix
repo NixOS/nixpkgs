@@ -27,10 +27,9 @@
   libsndfile,
   enableWavpack ? true,
   wavpack,
-  # amrnb and amrwb are unfree, disabled by default
+  # Early versions where unfree so it was disabled
   enableAMR ? false,
-  amrnb,
-  amrwb,
+  opencore-amr,
   enableLibpulseaudio ?
     stdenv.hostPlatform.isLinux && lib.meta.availableOn stdenv.hostPlatform libpulseaudio,
   libpulseaudio,
@@ -76,8 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional enableLibsndfile libsndfile
     ++ lib.optional enableWavpack wavpack
     ++ lib.optionals enableAMR [
-      amrnb
-      amrwb
+      opencore-amr
     ]
     ++ lib.optional enableLibpulseaudio libpulseaudio;
 

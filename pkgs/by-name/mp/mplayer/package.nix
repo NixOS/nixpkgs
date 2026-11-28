@@ -39,8 +39,7 @@
   bluraySupport ? config.mplayer.bluraySupport or true,
   libbluray,
   amrSupport ? config.mplayer.amrSupport or false,
-  amrnb,
-  amrwb,
+  opencore-amr,
   cacaSupport ? config.mplayer.cacaSupport or true,
   libcaca,
   lameSupport ? config.mplayer.lameSupport or true,
@@ -167,8 +166,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional cddaSupport cdparanoia
   ++ lib.optional jackaudioSupport libjack2
   ++ lib.optionals amrSupport [
-    amrnb
-    amrwb
+    opencore-amr
   ]
   ++ lib.optional x264Support x264
   ++ lib.optional pulseSupport libpulseaudio
