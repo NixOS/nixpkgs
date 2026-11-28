@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   config,
   enableCuda ? config.cudaSupport,
@@ -26,6 +27,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-ILClzqjjQmk0Quk27XYMH5Dq6hQg+YHNscQwwxF2JI4=";
   };
 
+  patches = [
+    # https://github.com/Dr-Noob/peakperf/pull/35
+    (fetchpatch {
+      url = "https://github.com/Dr-Noob/peakperf/commit/b5a225e60aa94f80e50037671e1d9e3d4946fe14.patch";
+      hash = "sha256-6IwDcPjohj25AX+JH7DefXJVQhxKWxuUpCL67Lfk6Jk=";
+    })
+  ];
+
   nativeBuildInputs = [
     cmake
     installShellFiles
@@ -38,6 +47,10 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = lib.optionals enableCuda [
     cudaPackages.cuda_cudart
     cudaPackages.cuda_nvml_dev
+  ];
+
+  cmakeFlags = lib.optionals enableCuda [
+    (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaPackages.flags.cmakeCudaArchitecturesString)
   ];
 
   postInstall = ''
