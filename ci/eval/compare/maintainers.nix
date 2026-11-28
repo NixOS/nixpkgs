@@ -54,12 +54,15 @@ let
     drv:
     (lib.unique (
       map (pos: lib.removePrefix nixpkgsRoot pos.file) (
+        let
+          info = drv.attributePositionInformation;
+        in
         lib.filter (x: x != null) [
-          (drv.meta.maintainersPosition or null)
-          (drv.meta.teamsPosition or null)
-          (lib.unsafeGetAttrPos "src" drv)
-          (lib.unsafeGetAttrPos "pname" drv)
-          (lib.unsafeGetAttrPos "version" drv)
+          (info.meta.maintainers.__pos or null)
+          (info.meta.teams.__pos or null)
+          (info.src.__pos or null)
+          (info.pname.__pos or null)
+          (info.version.__pos or null)
         ]
         ++ lib.optionals (drv ? meta.position) [
           # Use ".meta.position" for cases when most of the package is
