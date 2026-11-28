@@ -26,14 +26,14 @@ in
 {
   julia_110-bin = wrapJulia (
     callPackage (import ./generic-bin.nix {
-      version = "1.10.12";
+      version = "1.10.14";
       knownVulnerabilities = [
-        "Julia 1.10 vendors outdated security dependencies (MbedTLS 2.28.10, curl 8.4.0 in Julia 1.10.12, curl 8.7.1 in Julia 1.10.13). See https://julialang.org/downloads/."
+        "Julia 1.10 vendors outdated security dependencies (MbedTLS 2.28.10, curl 8.7.1). See https://julialang.org/downloads/."
       ];
       sha256 = {
-        x86_64-linux = "03dw4zykf09wnzc7mm8yv6k8hfb2pv0f090db34gyxlx6kz0vidh";
-        aarch64-linux = "18p5h0h00320rfc3yhjgp9z4f5xfgpzimphpzqmn8jbhjqhpn9fc";
-        aarch64-darwin = "0gvqmdnqgs2gv72zsnnppfhbsj7qynvimll9hm4nvm905bp2mcak";
+        x86_64-linux = "11kklq36yvmjxjn7d6qqm09ndn66mz9vscd9blh38khacsnrpmvg";
+        aarch64-linux = "1a340894g83q2kgvbkzlkz68r43lwd20jfrhbyinjq2abiy2gpbv";
+        aarch64-darwin = "1mamlr2irr0q2wndhmqrnkav4xlp7ig363r2xajglmn06f1cbw4a";
       };
     }) { }
   );
@@ -77,10 +77,10 @@ in
   julia_110 = wrapJulia (
     callPackage
       (import ./generic.nix {
-        version = "1.10.12";
-        hash = "sha256-KIFenIPyMWflO9SnnAhea5VHrigIrLI0FatcVYqFzuw=";
+        version = "1.10.14";
+        hash = "sha256-dwFSM8jHZ7qhaeKjJJOadofG5BjVlokQKskjzyRJopk=";
         knownVulnerabilities = [
-          "Julia 1.10 vendors outdated security dependencies (MbedTLS 2.28.10, curl 8.4.0 in Julia 1.10.12, curl 8.7.1 in Julia 1.10.13). See https://julialang.org/downloads/."
+          "Julia 1.10 vendors outdated security dependencies (MbedTLS 2.28.10, curl 8.7.1). See https://julialang.org/downloads/."
         ];
         patches = [
           # Revert https://github.com/JuliaLang/julia/pull/55354
@@ -90,13 +90,6 @@ in
             url = "https://github.com/JuliaLang/julia/commit/0be37db8c5b5a440bd9a11960ae9c998027b7337.patch";
             revert = true;
             hash = "sha256-gXC3LE3AuHMlSdA4dW+rbAhJpSB6ZMaz9X1qrHDPX7Y=";
-          })
-          # stackwalk: derive glibc longjmp pointer mangling
-          # https://github.com/JuliaLang/julia/pull/62775
-          # Probably not needed after the next release on this branch (1.10.13+)
-          (fetchpatch2 {
-            url = "https://github.com/JuliaLang/julia/commit/cf08907c8fc7ffc64dc664e2dd7469707824b601.patch?full_index=1";
-            hash = "sha256-1Dq5gEo+MiBoIZq8xBHNONwDrwLLQ3Yr6qQh6EJKCCQ=";
           })
         ];
       })
