@@ -155,6 +155,9 @@ goBuild (finalAttrs: {
   pname = "ollama";
   version = "0.40.18";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "ollama";
     repo = "ollama";
@@ -307,7 +310,7 @@ goBuild (finalAttrs: {
         -DCMAKE_BUILD_WITH_INSTALL_RPATH=ON \
         -DFETCHCONTENT_SOURCE_DIR_LLAMA_CPP="$TMPDIR/llama-cpp-src" \
         -DOLLAMA_MLX_BACKENDS="" \
-        $cmakeFlags \
+        "''${cmakeFlags[@]}" \
         ${cmakeFlagsCudaArchitectures} \
         ${cmakeFlagsRocmTargets} \
         ${cmakeFlagsBackend}
