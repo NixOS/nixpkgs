@@ -1,43 +1,59 @@
 {
   lib,
   fetchFromGitHub,
+  fetchurl,
   rustPlatform,
   writeShellScriptBin,
+  callPackage,
 
-  # nativeBuildInputs
   pkg-config,
   protobuf,
 
-  # buildInputs
   fontconfig,
   libgit2,
   openssl,
+  aws-lc,
   sqlite,
   zstd,
 
-  redis,
   versionCheckHook,
-  nix-update-script,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "golem";
-  version = "1.5.10";
+  version = "1.6.3";
 
   src = fetchFromGitHub {
     owner = "golemcloud";
     repo = "golem";
     tag = "v${version}";
-    hash = "sha256-6a+OTIKDuo9ievCypGV/3jg4dNqMIHAC/EwYVTAaLUg=";
+    hash = "sha256-zmFxRKbLVkzFQx4YoTNPMdi5d/Ekm1H4B993k0HO6Rw=";
   };
 
-  # Taker from https://github.com/golemcloud/golem/blob/v1.0.26/Makefile.toml#L399
+  # Manifest pinning the built-in tool plug-in WASMs (bash, python,
+  # filesystem-tools, ...), published as a release asset outside the tag.
+  # golem-registry-service's build.rs embeds it; the WASMs themselves are
+  # downloaded and sha256-verified on first boot.
+  builtinArtifactsManifest = fetchurl {
+    url = "https://github.com/golemcloud/golem/releases/download/v${version}/builtin-artifacts.release.json";
+    hash = "sha256-RMJxM882qurGgLeZuTv0SBXR0eowXGI2ZzXockZm2B4=";
+  };
+
+  # Version substitution from upstream's Makefile.toml. Also restore
+  # golem-common's implicit mac_address feature, which `dep:mac_address`
+  # removes: cargo-auditable's rustc wrapper passes a bare
+  # `--features mac_address`, which cargo otherwise rejects, aborting the
+  # workspace metadata call that every build script needs.
   postPatch = ''
     grep -rl --include 'Cargo.toml' '0\.0\.0' | xargs sed -i "s/0\.0\.0/${version}/g"
+    substituteInPlace golem-common/Cargo.toml \
+      --replace-fail '    "dep:mac_address",' '    "mac_address",'
+    cp ${builtinArtifactsManifest} builtin-artifacts.release.json
   '';
 
-  # shadow_rs (used by golem-common) shells out to `git describe` during
-  # build.rs execution. The unpacked archive has no .git directory, so
-  # provide a stub `git` that returns the current tag.
+  # Embed the manifest above, like the official release binaries.
+  GOLEM_BUILTIN_RELEASE = "1";
+
+  # shadow_rs runs `git describe` in build.rs; the tarball has no .git.
   gitStub = writeShellScriptBin "git" ''
     case "$1" in
       describe) echo "v${version}"; exit 0 ;;
@@ -56,15 +72,29 @@ rustPlatform.buildRustPackage rec {
     fontconfig
     libgit2
     (lib.getDev openssl)
+    aws-lc
     sqlite
     zstd
   ];
 
-  cargoHash = "sha256-MmMaeRA+4W78UBtj0G3UW2IgLJW1R5FrrvyGqU/YoCc=";
+  cargoHash = "sha256-2gFNMsXuRqjibgaJM6M04Yx9TOzsrDgj5qdJqUaC1S4=";
 
-  # Tests are failing in the sandbox because of some redis integration tests
-  doCheck = false;
-  checkInputs = [ redis ];
+  # Unit tests only, like upstream's `unit-tests` task. The rest of the
+  # workspace's test suites are integration tests that need Redis, Postgres
+  # and built binaries.
+  cargoTestFlags = [
+    "--workspace"
+    "--exclude"
+    "golem-schema-derive"
+    "--lib"
+  ];
+
+  # Compares the embedded manifest with the checked-in fixture that upstream's
+  # release tests use; we embed the real release manifest instead.
+  checkFlags = [
+    "--skip"
+    "builtin_artifact_release_defaults_use_verified_cache"
+  ];
 
   nativeInstallCheckInputs = [
     versionCheckHook
@@ -73,7 +103,9 @@ rustPlatform.buildRustPackage rec {
   doInstallCheck = true;
 
   passthru = {
-    updateScript = nix-update-script { };
+    # nix-update only bumps version, src and cargoHash; the release manifest
+    # above needs its hash updated separately.
+    updateScript = lib.getExe (callPackage ./update.nix { });
   };
 
   meta = {
