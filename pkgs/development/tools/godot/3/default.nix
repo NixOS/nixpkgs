@@ -219,9 +219,6 @@ stdenv.mkDerivation (finalAttrs: {
       "aarch64-linux"
     ];
     mainProgram = "godot3";
-    maintainers = with lib.maintainers; [
-      rotaerk
-      twey
-    ];
+    maintainers = with lib.maintainers; [ rotaerk ];
   };
 })

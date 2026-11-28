@@ -94,6 +94,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://swift.im/swiften.html";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.twey ];
+    maintainers = [ ];
   };
 })

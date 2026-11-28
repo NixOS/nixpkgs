@@ -40,9 +40,6 @@ buildPythonPackage rec {
     homepage = "https://rseichter.github.io/automx2/";
     changelog = "https://github.com/rseichter/automx2/blob/${version}/CHANGELOG";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [
-      twey
-      aras14hd
-    ];
+    maintainers = with lib.maintainers; [ aras14hd ];
   };
 }

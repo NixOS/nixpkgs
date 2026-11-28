@@ -118,7 +118,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       florianjacob
       sebbel
-      twey
       boozedog
       niklaskorz
       leona

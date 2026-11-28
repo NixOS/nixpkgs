@@ -24,6 +24,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/mzipay/Autologging";
     changelog = "https://github.com/mzipay/Autologging/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ twey ];
+    maintainers = [ ];
   };
 })

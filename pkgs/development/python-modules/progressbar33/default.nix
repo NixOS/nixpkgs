@@ -21,6 +21,6 @@ buildPythonPackage rec {
     homepage = "https://pypi.org/project/progressbar33/";
     description = "Text progressbar library for python";
     license = lib.licenses.lgpl3Plus;
-    maintainers = with lib.maintainers; [ twey ];
+    maintainers = [ ];
   };
 }

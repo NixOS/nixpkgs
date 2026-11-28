@@ -43,6 +43,6 @@ buildPythonPackage rec {
     description = "Pure Python image size library";
     homepage = "https://github.com/ojii/imgsize";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ twey ];
+    maintainers = [ ];
   };
 }

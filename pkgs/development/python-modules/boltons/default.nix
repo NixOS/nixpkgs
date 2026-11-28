@@ -56,6 +56,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/mahmoud/boltons";
     changelog = "https://github.com/mahmoud/boltons/blob/${version}/CHANGELOG.md";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ twey ];
+    maintainers = [ ];
   };
 }

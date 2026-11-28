@@ -79,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://support.appfire.com/space/ACLI/60555464/Appfire+Command+Line+Interface+(CLI)";
     license = lib.licenses.unfreeRedistributable;
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
-    maintainers = with lib.maintainers; [ twey ];
+    maintainers = [ ];
     mainProgram = "acli";
     inherit (jre.meta) platforms;
   };

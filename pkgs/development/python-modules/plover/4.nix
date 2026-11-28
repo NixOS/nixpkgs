@@ -99,7 +99,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://www.openstenoproject.org/plover/";
     mainProgram = "plover";
     maintainers = with lib.maintainers; [
-      twey
       kovirobi
       pandapip1
       ShamrockLee

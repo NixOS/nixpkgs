@@ -67,7 +67,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/mahmoud/glom";
     changelog = "https://github.com/mahmoud/glom/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ twey ];
+    maintainers = [ ];
     mainProgram = "glom";
   };
 }

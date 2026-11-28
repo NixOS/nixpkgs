@@ -30794,12 +30794,6 @@
     github = "twesterhout";
     githubId = 14264576;
   };
-  twey = {
-    email = "twey@twey.co.uk";
-    github = "Twey";
-    githubId = 101639;
-    name = "James ‘Twey’ Kay";
-  };
   twhitehead = {
     name = "Tyson Whitehead";
     email = "twhitehead@gmail.com";

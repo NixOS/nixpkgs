@@ -45,6 +45,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/click-contrib/click-repl";
     description = "Subcommand REPL for click apps";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ twey ];
+    maintainers = [ ];
   };
 })
