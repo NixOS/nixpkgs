@@ -616,6 +616,9 @@ in
     (mkRemovedOptionModule [ "services" "sharkey" ] ''
       services.sharkey has been removed together with pkgs.sharkey.
     '')
+    (mkRemovedOptionModule [ "boot" "loader" "refind" ] ''
+      boot.loader.refind has been removed together with pkgs.refind because rEFInd was unmaintained.
+    '')
     # Do NOT add any option renames here, see top of the file
   ];
 }
