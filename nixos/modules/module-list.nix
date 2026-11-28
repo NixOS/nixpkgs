@@ -1114,6 +1114,7 @@
   ./services/monitoring/opentelemetry-collector.nix
   ./services/monitoring/orbit.nix
   ./services/monitoring/osquery.nix
+  ./services/monitoring/otelite.nix
   ./services/monitoring/parsedmarc.nix
   ./services/monitoring/perses.nix
   ./services/monitoring/pgscv.nix
