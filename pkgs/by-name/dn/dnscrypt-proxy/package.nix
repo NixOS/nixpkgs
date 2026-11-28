@@ -1,14 +1,17 @@
 {
   lib,
-  buildGo127Module,
+  stdenv,
+  buildGoModule,
   fetchFromGitHub,
   fetchpatch,
   nixosTests,
 }:
 
-buildGo127Module (finalAttrs: {
+buildGoModule (finalAttrs: {
   pname = "dnscrypt-proxy";
-  version = "2.1.20";
+  version = "2.1.21";
+
+  __darwinAllowLocalNetworking = true;
 
   vendorHash = null;
 
@@ -16,7 +19,7 @@ buildGo127Module (finalAttrs: {
     owner = "DNSCrypt";
     repo = "dnscrypt-proxy";
     rev = finalAttrs.version;
-    hash = "sha256-mNOtMC5GXIE/SSPNyuEBbXQvYj4vvVAc83cQ2jeT978=";
+    hash = "sha256-qWedfrfPrI4DTg9x/ZgkX9itlEJEd92nvrgUMRUgXZc=";
   };
 
   patches = [
@@ -34,8 +37,10 @@ buildGo127Module (finalAttrs: {
   passthru.tests = { inherit (nixosTests) dnscrypt-proxy; };
 
   meta = {
+    # TestUDPListenerReplySource fails on Darwin.
+    broken = stdenv.hostPlatform.isDarwin;
+    changelog = "https://github.com/DNSCrypt/dnscrypt-proxy/blob/${finalAttrs.version}/ChangeLog";
     description = "Tool that provides secure DNS resolution";
-
     license = lib.licenses.isc;
     homepage = "https://dnscrypt.info/";
     maintainers = with lib.maintainers; [
@@ -44,6 +49,6 @@ buildGo127Module (finalAttrs: {
       waynr
     ];
     mainProgram = "dnscrypt-proxy";
-    platforms = with lib.platforms; unix;
+    platforms = lib.platforms.unix;
   };
 })
