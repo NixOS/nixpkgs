@@ -68,6 +68,7 @@ in
       fonts.packages = with pkgs; [
         ubuntu-classic # Ubuntu is default font
       ];
+      i18n.spellcheck.enable = lib.mkDefault true;
 
       # Xwayland is partly hardcoded in Mir so it can't really be fully turned off, and it must be on PATH for X11 apps *and Lomiri's web browser* to work.
       # Until Mir/Lomiri can be properly used without it, force it on so everything behaves as expected.
