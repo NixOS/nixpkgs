@@ -4214,6 +4214,7 @@ with pkgs;
     mkRuby
     ruby_3_4
     ruby_4_0
+    ruby_4_1
     ;
 
   ruby = ruby_3_4;
@@ -4221,6 +4222,7 @@ with pkgs;
 
   rubyPackages_3_4 = recurseIntoAttrs ruby_3_4.gems;
   rubyPackages_4_0 = recurseIntoAttrs ruby_4_0.gems;
+  rubyPackages_4_1 = recurseIntoAttrs ruby_4_1.gems;
 
   inherit (callPackages ../applications/networking/cluster/spark { })
     spark_4_0
