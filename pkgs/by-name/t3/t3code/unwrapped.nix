@@ -1,4 +1,6 @@
 {
+  autoPatchelfHook,
+  callPackage,
   cctools,
   copyDesktopItems,
   electron_44,
@@ -17,6 +19,7 @@
   python3,
   spdx-license-list-data,
   stdenv,
+  vulkan-loader,
   writeDarwinBundle,
   xcbuild,
   fetchPnpmDeps,
@@ -34,6 +37,13 @@ stdenv.mkDerivation (
     # Upstream package.json requires Node.js 26; the nixpkgs default is still 24.
     nodejs = nodejs_26;
     pnpm = pnpm_12;
+    captureHelpers = lib.genAttrs [ "kde" "hyprland" ] (
+      backend:
+      callPackage ./capture-helper.nix {
+        inherit backend;
+        inherit (finalAttrs) src version;
+      }
+    );
     desktopIcon =
       if stdenv.hostPlatform.isDarwin then
         "assets/prod/black-macos-1024.png"
@@ -43,7 +53,7 @@ stdenv.mkDerivation (
   in
   {
     pname = "t3code-unwrapped";
-    version = "0.1.8";
+    version = "0.1.13";
     strictDeps = true;
     __structuredAttrs = true;
 
@@ -51,7 +61,7 @@ stdenv.mkDerivation (
       owner = "pingdotgg";
       repo = "t3code";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-QPZpT/1zm5sLIDw3AOzUCIrmOFPwUU8jP/q1A8GzLow=";
+      hash = "sha256-Frk9YQmkR5MrIo0+eMmYqFkit/Y2tf3JkOXy1c6srbs=";
     };
 
     postPatch = ''
@@ -77,6 +87,7 @@ stdenv.mkDerivation (
       cacert
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
+      autoPatchelfHook
       copyDesktopItems
       pkg-config
     ]
@@ -87,7 +98,11 @@ stdenv.mkDerivation (
       xcbuild
     ];
 
-    buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ libsecret ];
+    buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+      libsecret
+      stdenv.cc.cc.lib
+      vulkan-loader
+    ];
 
     pnpmWorkspaces = [
       # `...` suffix is used to also include other workspace packages that are
@@ -109,7 +124,7 @@ stdenv.mkDerivation (
         ;
 
       fetcherVersion = 5;
-      hash = "sha256-ir2iMNpT5nA4ieTZT/7v5tawKH137DcfGFuzgxHfJjY=";
+      hash = "sha256-5ncmrXOIU3sxrB6XaauC/6PPL4YyHaUO62ST1y1O2B8=";
     };
 
     preBuild = ''
@@ -124,6 +139,10 @@ stdenv.mkDerivation (
       # Exclude the `@t3tools/monorepo` workspace from the pending rebuild since
       # `vp config` needs git
       pnpm rebuild --pending "''${pnpmInstallFlags[@]}" --filter '!@t3tools/monorepo'
+
+      # pnpmConfigHook only patches root node_modules. Workspace shims must also
+      # use Nix's shell: macOS /bin/sh breaks pnpm's sandbox helper lookup.
+      patchShebangs apps/*/node_modules packages/*/node_modules scripts/node_modules
     '';
 
     pnpmBuildScript = "build:desktop";
@@ -132,15 +151,15 @@ stdenv.mkDerivation (
       pnpm vp cache clean
     '';
 
-    # Many dependencies vendors many prebuilt native artifacts for non-host
-    # platforms, and some of those binaries are statically linked. Let fixup
-    # handle wrappers, shebangs, and stripping, but skip patchelf on the
-    # vendored tree.
+    # The pnpm tree includes static, musl, and foreign-platform binaries.
+    # Generic RPATH fixups cannot inspect some of these static prebuilds.
     dontPatchELF = true;
-    # The tmpdir audit hook also shells out to patchelf while scanning every
-    # vendored ELF for leaked build paths. That produces spurious warnings on
-    # some dependencies' static foreign-platform binaries.
+    # The tmpdir audit also runs patchelf on every ELF, causing spurious errors.
     noAuditTmpdir = true;
+    # Patch only host modules in postFixup, avoiding unrelated musl dependencies.
+    dontAutoPatchelf = true;
+    # Speech backends load sibling libraries relative to their own directory.
+    autoPatchelfFlags = [ "--preserve-origin" ];
 
     installPhase = ''
       runHook preInstall
@@ -166,6 +185,20 @@ stdenv.mkDerivation (
       install -Dm755 \
         native/browser-secret/build/${stdenv.hostPlatform.node.arch}/t3-browser-secret \
         "$out"/libexec/t3code/apps/desktop/prod-resources/browser-secret/t3-browser-secret
+
+      # Shared Electron uses the unpackaged resource paths in DesktopSnapShot.
+      while IFS= read -r file; do
+        install -Dm444 "apps/desktop/gnome-extension/$file" \
+          "$out/libexec/t3code/apps/desktop/gnome-extension/$file"
+      done < <(jq -r '.files[]' apps/desktop/gnome-extension/bundle.json)
+
+      # The setup code rejects symlinks, including for bundled helpers.
+      install -Dm755 ${lib.getExe captureHelpers.kde} \
+        "$out/libexec/t3code/native/kde-snap-shot/target/release/t3-kde-snap-shot"
+      install -Dm755 ${lib.getExe captureHelpers.hyprland} \
+        "$out/libexec/t3code/native/hyprland-snap-shot/target/release/t3-hyprland-snap-shot"
+      cp -r ${captureHelpers.hyprland}/share/t3code/hyprland-capture/protocols \
+        "$out/libexec/t3code/native/hyprland-snap-shot/"
     ''
     + ''
 
@@ -176,9 +209,15 @@ stdenv.mkDerivation (
 
       makeWrapper ${lib.getExe electron} "$out"/bin/t3code-desktop \
         --add-flags "$out"/libexec/t3code/apps/desktop \
+        --set-default T3CODE_DESKTOP_LAUNCHER_PATH "$out/bin/t3code-desktop" \
         --inherit-argv0
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      # Match upstream's single-architecture bundle exclusions, including objc-js.
+      find "$out/libexec/t3code" -type d \
+        -path '*/prebuilds/darwin-${if stdenv.hostPlatform.isAarch64 then "x64" else "arm64"}' \
+        -prune -exec rm -rf {} +
+
       # node-pty tries to chmod this helper at runtime, but the Nix store is
       # immutable by then.
       find "$out"/libexec/t3code \
@@ -194,6 +233,24 @@ stdenv.mkDerivation (
       # stdenv.shell to avoid Darwin's intermittent ENOEXEC fallback issues.
       ${stdenv.shell} ${lib.getExe writeDarwinBundle} \
         "$out" "${appName}" t3code-desktop t3code
+
+      # Import upstream's usage descriptions without running its packaging CLI.
+      pnpm --dir scripts exec node --input-type=module - \
+        "$out/Applications/${appName}.app/Contents/Info.plist" <<'EOF'
+      import { readFileSync, writeFileSync } from "node:fs";
+      import { Effect, Path } from "effect";
+      import plist from "plist";
+      import { createBuildConfig } from "./build-desktop-artifact.ts";
+
+      const config = createBuildConfig("mac", "dir", "${finalAttrs.version}", false, false);
+      const { mac } = await Effect.runPromise(Effect.provide(config, Path.layer));
+      const file = process.argv[2];
+      const info = plist.parse(readFileSync(file, "utf8"));
+      for (const [key, value] of Object.entries(mac.extendInfo)) {
+        if (/^NS.*UsageDescription$/.test(key)) info[key] = value;
+      }
+      writeFileSync(file, plist.build(info));
+      EOF
     ''
     + ''
       mkdir --parents \
@@ -213,10 +270,28 @@ stdenv.mkDerivation (
     '';
 
     postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
-      # Electron's Node runtime does not provide libstdc++ for the bundled node-pty prebuild
-      for module in "$out"/libexec/t3code/node_modules/.pnpm/node-pty@*/node_modules/node-pty/prebuilds/linux-${stdenv.hostPlatform.node.arch}/pty.node; do
-        patchelf --add-rpath ${lib.makeLibraryPath [ stdenv.cc.cc.lib ]} "$module"
-      done
+      # Resolve libstdc++ and Vulkan through buildInputs, retaining $ORIGIN for
+      # the speech library's sibling ggml libraries.
+      autoPatchelf \
+        "$out"/libexec/t3code/node_modules/.pnpm/node-pty@*/node_modules/node-pty/prebuilds/linux-${stdenv.hostPlatform.node.arch} \
+        "$out"/libexec/t3code/node_modules/.pnpm/@koromix+koffi-linux-${stdenv.hostPlatform.node.arch}@*/node_modules/@koromix/koffi-linux-${stdenv.hostPlatform.node.arch}/linux_${stdenv.hostPlatform.node.arch} \
+        "$out"/libexec/t3code/node_modules/.pnpm/@transcribe-cpp+linux-${stdenv.hostPlatform.node.arch}-cpu-vulkan@*/node_modules/@transcribe-cpp/linux-${stdenv.hostPlatform.node.arch}-cpu-vulkan
+    '';
+
+    doInstallCheck = stdenv.hostPlatform.isLinux && stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+    installCheckPhase = ''
+      runHook preInstallCheck
+
+      # The standalone Node CLI can mask missing C++ runtime dependencies;
+      # exercise local dictation with the same runtime as the desktop worker.
+      ELECTRON_RUN_AS_NODE=1 ${lib.getExe electron} --input-type=module -e '
+        const speech = await import(process.argv[1]);
+        if (!speech.getAvailableBackends().some(backend => backend.kind === "cpu")) {
+          throw new Error("Native speech CPU backend is unavailable");
+        }
+      ' "$out/libexec/t3code/apps/server/node_modules/transcribe-cpp/dist/index.js"
+
+      runHook postInstallCheck
     '';
 
     desktopItems = [
@@ -227,12 +302,14 @@ stdenv.mkDerivation (
         exec = "t3code-desktop %U";
         terminal = false;
         icon = "t3code";
-        startupWMClass = "t3code";
+        startupWMClass = "com.t3tools.T3Code";
         categories = [ "Development" ];
+        mimeTypes = [ "x-scheme-handler/t3code" ];
       })
     ];
 
     passthru = {
+      inherit captureHelpers;
       updateScript = nix-update-script {
         attrPath = "t3code.unwrapped";
         extraArgs = [ "--use-github-releases" ];
