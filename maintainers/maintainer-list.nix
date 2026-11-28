@@ -28816,12 +28816,6 @@
     githubId = 32478597;
     name = "Subin Kim";
   };
-  sugar700 = {
-    email = "sugar@sugar.lgbt";
-    github = "sugar700";
-    githubId = 1297598;
-    name = "sugar";
-  };
   suhr = {
     email = "suhr@i2pmail.org";
     github = "suhr";
