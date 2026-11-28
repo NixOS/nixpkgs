@@ -30,6 +30,9 @@
   wayland,
   wayvr,
   xwayland-satellite,
+  makeWrapper,
+  libGL,
+  libuuid,
   withOpenVR ? !stdenv.hostPlatform.isAarch64,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -53,8 +56,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
-    rustPlatform.bindgenHook
+    makeWrapper
     autoPatchelfHook
+    rustPlatform.bindgenHook
   ];
 
   buildInputs = [
@@ -78,7 +82,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     wayland
     vulkan-loader
   ]
-  ++ lib.optionals withOpenVR [ openvr ];
+  ++ lib.optionals withOpenVR [
+    libGL
+    openvr
+    libuuid
+  ];
 
   env.SHADERC_LIB_DIR = "${lib.getLib shaderc}/lib";
 
@@ -103,8 +111,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   postInstall = ''
     install -D wayvr/wayvr.desktop -t $out/share/applications
     install -D wayvr/wayvr.svg -t $out/share/icons/hicolor/scalable/apps
-
     rm $out/bin/prost_build
+
+    # This really is not optimal but wayvr will complain about missing libraries and refuse to start with --openvr.
+    # steam-run *should* provide most of these libraries but for some whatever reason it doesnt, this is a workaround for now.
+    wrapProgram $out/bin/wayvr \
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath finalAttrs.buildInputs}
   '';
 
   preFixup = ''
