@@ -1,0 +1,273 @@
+From 273ab7996c6c1d67fdba61db1b21bda8b98cf944 Mon Sep 17 00:00:00 2001
+From: Atlas Yu <pseudoc@163.com>
+Date: Tue, 3 Nov 2026 13:37:18 +0800
+Subject: [PATCH] media: intel: ipu7: psys: fix ABI mismatch with in-tree
+ intel-ipu7
+
+On kernels >= 6.17, intel-ipu7 is built in-tree from staging while
+intel-ipu7-psys is built out-of-tree. The in-tree struct ipu7_bus_device
+does not include acquire_fw_task_buffer_lock or get_running_fw_task_count
+added in 0e8c71a, causing out-of-bounds memory corruption in the 1k slab
+when psys writes get_running_fw_task_count or locks the mutex. Moreover,
+the in-tree intel-ipu7 DMA unmap path does not perform the task-drain
+wait or mutex fencing.
+
+Move acquire_fw_task_buffer_lock into struct ipu7_psys and perform the
+running firmware task drain and mutex fencing in ipu-psys around
+ipu7_dma_unmap_sgtable().
+
+Also restore the ipu7_dir debugfs field placement at the end of
+struct ipu7_device and the kernel >= 6.17 debugfs handling in ipu-psys
+that were inadvertently reverted in a4de245.
+
+Fixes: 0e8c71a8a5bd ("IPU7/IPU8 release for iot for kernel version 7.0.0 on 2026-06-29")
+Fixes: a4de245aa8c7 ("IPU7 release for iot on 2026-09-26")
+Closes: https://github.com/intel/ipu7-drivers/issues/93
+Signed-off-by: Atlas Yu <pseudoc@163.com>
+---
+ drivers/media/pci/intel/ipu7/ipu7.h           |   6 +-
+ drivers/media/pci/intel/ipu7/psys/ipu-psys.c  | 109 ++++++++++++------
+ drivers/media/pci/intel/ipu7/psys/ipu7-psys.h |   2 +
+ 3 files changed, 80 insertions(+), 37 deletions(-)
+
+diff --git a/drivers/media/pci/intel/ipu7/ipu7.h b/drivers/media/pci/intel/ipu7/ipu7.h
+index 41f3efd..b48bc1d 100644
+--- a/drivers/media/pci/intel/ipu7/ipu7.h
++++ b/drivers/media/pci/intel/ipu7/ipu7.h
+@@ -81,13 +81,13 @@ struct ipu7_device {
+ 
+ 	void __iomem *base;
+ 	void __iomem *pb_base;
+-#ifdef CONFIG_DEBUG_FS
+-	struct dentry *ipu7_dir;
+-#endif
+ 	u8 hw_ver;
+ 	bool ipc_reinit;
+ 	bool secure_mode;
+ 	bool ipu7_bus_ready_to_probe;
++#ifdef CONFIG_DEBUG_FS
++	struct dentry *ipu7_dir;
++#endif
+ };
+ 
+ #define IPU_DMA_MASK			39
+diff --git a/drivers/media/pci/intel/ipu7/psys/ipu-psys.c b/drivers/media/pci/intel/ipu7/psys/ipu-psys.c
+index 3c6bcbb..c0b3574 100644
+--- a/drivers/media/pci/intel/ipu7/psys/ipu-psys.c
++++ b/drivers/media/pci/intel/ipu7/psys/ipu-psys.c
+@@ -36,6 +36,8 @@
+ #include "ipu7-boot.h"
+ 
+ #define IPU_PSYS_NUM_DEVICES		4U
++#define WAIT_FW_TASK_CLEAR_TIME_MS	17
++#define WAIT_FW_TASK_CLEAR_TIMES	5
+ 
+ static int psys_runtime_pm_resume(struct device *dev);
+ static int psys_runtime_pm_suspend(struct device *dev);
+@@ -47,6 +49,64 @@ static dev_t ipu7_psys_dev_t;
+ static DECLARE_BITMAP(ipu7_psys_devices, IPU_PSYS_NUM_DEVICES);
+ static DEFINE_MUTEX(ipu7_psys_mutex);
+ 
++static unsigned int ipu7_psys_get_running_fw_task_count(struct ipu7_psys *psys)
++{
++	struct ipu7_psys_fh *fh;
++	unsigned int count = 0;
++
++	if (!psys)
++		return 0;
++
++	mutex_lock(&psys->mutex);
++	list_for_each_entry(fh, &psys->fhs, list) {
++		mutex_lock(&fh->ip->task_mutex);
++		count += list_count_nodes(&fh->ip->tq_running_list);
++		mutex_unlock(&fh->ip->task_mutex);
++	}
++	mutex_unlock(&psys->mutex);
++
++	return count;
++}
++
++static void ipu7_psys_dma_unmap_sgtable(struct ipu7_bus_device *adev,
++					struct sg_table *sgt,
++					enum dma_data_direction dir,
++					unsigned long attrs)
++{
++	struct ipu7_psys *psys = ipu7_bus_get_drvdata(adev);
++	unsigned int prev_task_cnt = UINT_MAX;
++	unsigned int not_decreasing_count = 0;
++	unsigned int curr_task_cnt;
++
++	if (!psys) {
++		ipu7_dma_unmap_sgtable(adev, sgt, dir, attrs);
++		return;
++	}
++
++	mutex_lock(&psys->acquire_fw_task_buffer_lock);
++	while (1) {
++		curr_task_cnt = ipu7_psys_get_running_fw_task_count(psys);
++		if (curr_task_cnt == 0)
++			break;
++
++		if (curr_task_cnt >= prev_task_cnt)
++			not_decreasing_count++;
++		else
++			not_decreasing_count = 0;
++		prev_task_cnt = curr_task_cnt;
++
++		if (not_decreasing_count > WAIT_FW_TASK_CLEAR_TIMES) {
++			dev_warn(&adev->auxdev.dev,
++				 "wait running fw tasks clear timeout\n");
++			break;
++		}
++
++		msleep(WAIT_FW_TASK_CLEAR_TIME_MS);
++	}
++	ipu7_dma_unmap_sgtable(adev, sgt, dir, attrs);
++	mutex_unlock(&psys->acquire_fw_task_buffer_lock);
++}
++
+ static int ipu7_psys_get_userpages(struct ipu7_dma_buf_attach *attach)
+ {
+ 	struct vm_area_struct *vma;
+@@ -206,7 +266,7 @@ static void ipu7_dma_buf_unmap(struct dma_buf_attachment *attach,
+ 	struct ipu7_device *isp = pci_get_drvdata(pdev);
+ 	struct ipu7_bus_device *adev = isp->psys;
+ 
+-	ipu7_dma_unmap_sgtable(adev, sgt, dir, DMA_ATTR_SKIP_CPU_SYNC);
++	ipu7_psys_dma_unmap_sgtable(adev, sgt, dir, DMA_ATTR_SKIP_CPU_SYNC);
+ 	dma_unmap_sgtable(&pdev->dev, sgt, DMA_BIDIRECTIONAL, 0);
+ }
+ 
+@@ -503,8 +563,8 @@ static inline void ipu7_psys_kbuf_unmap(struct ipu7_psys_fh *fh,
+ 	}
+ 
+ 	if (!kbuf->userptr)
+-		ipu7_dma_unmap_sgtable(fh->psys->adev, kbuf->sgt,
+-				       DMA_BIDIRECTIONAL, 0);
++		ipu7_psys_dma_unmap_sgtable(fh->psys->adev, kbuf->sgt,
++					    DMA_BIDIRECTIONAL, 0);
+ 
+ 	if (kbuf->sgt)
+ 		dma_buf_unmap_attachment_unlocked(kbuf->db_attach,
+@@ -775,8 +835,8 @@ static int ipu7_psys_mapbuf_locked(int fd, struct ipu7_psys_fh *fh,
+ kbuf_map_fail:
+ 	if (!IS_ERR_OR_NULL(kbuf->sgt)) {
+ 		if (!kbuf->userptr)
+-			ipu7_dma_unmap_sgtable(psys->adev, kbuf->sgt,
+-					       DMA_BIDIRECTIONAL, 0);
++			ipu7_psys_dma_unmap_sgtable(psys->adev, kbuf->sgt,
++						    DMA_BIDIRECTIONAL, 0);
+ 		dma_buf_unmap_attachment_unlocked(kbuf->db_attach,
+ 						  kbuf->sgt,
+ 						  DMA_BIDIRECTIONAL);
+@@ -1016,27 +1076,6 @@ ipu7_psys_get_task_queue(struct ipu7_psys_stream *ip,
+ 	return NULL;
+ }
+ 
+-static unsigned int ipu7_psys_get_running_fw_task_count(
+-					      struct ipu7_bus_device *adev)
+-{
+-	struct ipu7_psys *psys = ipu7_bus_get_drvdata(adev);
+-	struct ipu7_psys_fh *fh;
+-	unsigned int count = 0;
+-
+-	if (!psys)
+-		return 0;
+-
+-	mutex_lock(&psys->mutex);
+-	list_for_each_entry(fh, &psys->fhs, list) {
+-		mutex_lock(&fh->ip->task_mutex);
+-		count += list_count_nodes(&fh->ip->tq_running_list);
+-		mutex_unlock(&fh->ip->task_mutex);
+-	}
+-	mutex_unlock(&psys->mutex);
+-
+-	return count;
+-}
+-
+ static long ipu_psys_task_request(struct ipu_psys_task_request *task,
+ 				  struct ipu7_psys_fh *fh)
+ {
+@@ -1049,9 +1088,9 @@ static long ipu_psys_task_request(struct ipu_psys_task_request *task,
+ 		return -EINVAL;
+ 	}
+ 
+-	mutex_lock(&psys->adev->acquire_fw_task_buffer_lock);
++	mutex_lock(&psys->acquire_fw_task_buffer_lock);
+ 	tq = ipu7_psys_get_task_queue(fh->ip, task);
+-	mutex_unlock(&psys->adev->acquire_fw_task_buffer_lock);
++	mutex_unlock(&psys->acquire_fw_task_buffer_lock);
+ 	if (!tq) {
+ 		dev_err(&psys->dev, "Failed to get task queue\n");
+ 		return -EINVAL;
+@@ -1362,7 +1401,11 @@ static int ipu7_psys_init_debugfs(struct ipu7_psys *psys)
+ 	struct dentry *file;
+ 	struct dentry *dir;
+ 
++#if LINUX_VERSION_CODE < KERNEL_VERSION(6, 17, 0)
+ 	dir = debugfs_create_dir("psys", psys->adev->isp->ipu7_dir);
++#else
++	dir = debugfs_create_dir("ipu7-psys", NULL);
++#endif
+ 	if (IS_ERR(dir))
+ 		return -ENOMEM;
+ 
+@@ -1454,6 +1497,7 @@ static int ipu7_psys_probe(struct auxiliary_device *auxdev,
+ 	psys->timeout = IPU_PSYS_CMD_TIMEOUT_MS;
+ 
+ 	mutex_init(&psys->mutex);
++	mutex_init(&psys->acquire_fw_task_buffer_lock);
+ 	INIT_LIST_HEAD(&psys->fhs);
+ 
+ 	ret = ipu7_fw_psys_init(psys);
+@@ -1474,8 +1518,6 @@ static int ipu7_psys_probe(struct auxiliary_device *auxdev,
+ 	}
+ 
+ 	dev_set_drvdata(dev, psys);
+-	adev->get_running_fw_task_count =
+-		ipu7_psys_get_running_fw_task_count;
+ 	mutex_unlock(&ipu7_psys_mutex);
+ #ifdef CONFIG_DEBUG_FS
+ 	psys_fw_log_init(psys);
+@@ -1491,6 +1533,7 @@ static int ipu7_psys_probe(struct auxiliary_device *auxdev,
+ out_fw_release:
+ 	ipu7_fw_psys_release(psys);
+ out_mutex_destroy:
++	mutex_destroy(&psys->acquire_fw_task_buffer_lock);
+ 	mutex_destroy(&psys->mutex);
+ 	cdev_del(&psys->cdev);
+ out_unlock:
+@@ -1511,11 +1554,8 @@ static void ipu7_psys_remove(struct auxiliary_device *auxdev)
+ 	struct ipu7_psys *psys = dev_get_drvdata(&auxdev->dev);
+ 	struct device *dev = &auxdev->dev;
+ 
+-	psys->adev->get_running_fw_task_count = NULL;
+ #ifdef CONFIG_DEBUG_FS
+-	struct ipu7_device *isp = psys->adev->isp;
+-
+-	if (isp->ipu7_dir)
++	if (psys->debugfsdir)
+ 		debugfs_remove_recursive(psys->debugfsdir);
+ #endif
+ 
+@@ -1526,6 +1566,7 @@ static void ipu7_psys_remove(struct auxiliary_device *auxdev)
+ 	cdev_del(&psys->cdev);
+ 	mutex_unlock(&ipu7_psys_mutex);
+ 
++	mutex_destroy(&psys->acquire_fw_task_buffer_lock);
+ 	mutex_destroy(&psys->mutex);
+ 
+ 	unregister_chrdev_region(ipu7_psys_dev_t, IPU_PSYS_NUM_DEVICES);
+diff --git a/drivers/media/pci/intel/ipu7/psys/ipu7-psys.h b/drivers/media/pci/intel/ipu7/psys/ipu7-psys.h
+index a72ce4a..076cfde 100644
+--- a/drivers/media/pci/intel/ipu7/psys/ipu7-psys.h
++++ b/drivers/media/pci/intel/ipu7/psys/ipu7-psys.h
+@@ -113,6 +113,8 @@ struct ipu7_psys {
+ 	struct device dev;
+ 
+ 	struct mutex mutex;	/* Psys various */
++	/* Serialize task queue acquisition against DMA unmap / TLB invalidation */
++	struct mutex acquire_fw_task_buffer_lock;
+ 	int ready; /* psys fw status */
+ 	spinlock_t ready_lock;	/* protect psys firmware state */
+ 
