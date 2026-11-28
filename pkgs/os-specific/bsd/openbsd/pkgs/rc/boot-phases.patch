@@ -9,18 +9,18 @@ nix-based system, for example, re-linking code objects and setting PATH.
 diff --git a/etc/rc b/etc/rc
 --- a/etc/rc
 +++ b/etc/rc
-@@ -9,6 +9,10 @@ set +o sh
+@@ -8,6 +8,10 @@
+ set +o sh
  
  # Subroutines (have to come first).
- 
++
 +daemon_phase() {
 +	. /etc/rc.order/$1
 +}
-+
+ 
  # Strip in- and whole-line comments from a file.
  # Strip leading and trailing whitespace if IFS is set.
- # Usage: stripcom /path/to/file
-@@ -359,7 +363,6 @@ trap : 3	# Shouldn't be needed.
+@@ -370,7 +374,6 @@
  
  export HOME=/
  export INRC=1
@@ -28,7 +28,7 @@ diff --git a/etc/rc b/etc/rc
  
  # /etc/myname contains my symbolic name.
  if [[ -f /etc/myname ]]; then
-@@ -431,17 +434,12 @@ fi
+@@ -442,17 +445,12 @@
  # From now on, allow user to interrupt (^C) the boot process.
  trap "echo 'Boot interrupted.'; exit 1" 3
  
@@ -46,19 +46,20 @@ diff --git a/etc/rc b/etc/rc
  
  rm -f /fastboot
  
-@@ -503,9 +501,9 @@ mount -s /var >/dev/null 2>&1		# cannot be on NFS
- mount -s /var/log >/dev/null 2>&1	# cannot be on NFS
- mount -s /usr >/dev/null 2>&1		# if NFS, fstab must use IP address
+@@ -532,9 +530,9 @@
+     }
+ } ) 2>/dev/null
  
 -reorder_libs 2>&1 |&
-+daemon_phase 10
- 
+-
 -start_daemon slaacd dhcpleased resolvd >/dev/null 2>&1
++daemon_phase 10
++
 +daemon_phase 20
  
  echo 'starting network'
  
-@@ -515,12 +513,10 @@ ifconfig -g carp carpdemote 128
+@@ -544,11 +542,9 @@
  
  sh /etc/netstart
  
@@ -66,23 +67,22 @@ diff --git a/etc/rc b/etc/rc
 +daemon_phase 30
  
  store_random
- 
--wait_reorder_libs
 -
+-wait_reorder_libs
+ 
  # Load pf rules and bring up pfsync interface.
  if [[ $pf != NO ]]; then
- 	if [[ -f /etc/pf.conf ]]; then
-@@ -541,8 +537,7 @@ dmesg >/var/run/dmesg.boot
+@@ -571,8 +567,7 @@
  make_keys
  
  echo -n 'starting early daemons:'
 -start_daemon syslogd ldattach bpflogd pflogd nsd unbound ntpd
--start_daemon iscsid isakmpd iked sasyncd ldapd npppd
+-start_daemon lldpd iscsid isakmpd iked sasyncd ldapd npppd
 +daemon_phase 40
  echo '.'
  
  # Load IPsec rules.
-@@ -551,11 +545,7 @@ if [[ $ipsec != NO && -f /etc/ipsec.conf ]]; then
+@@ -581,11 +576,7 @@
  fi
  
  echo -n 'starting RPC daemons:'
@@ -95,7 +95,7 @@ diff --git a/etc/rc b/etc/rc
  echo '.'
  
  # Check and mount remaining file systems and enable additional swap.
-@@ -648,43 +637,24 @@ echo 'preserving editor files.'; /usr/libexec/vi.recover
+@@ -669,30 +660,15 @@
  run_upgrade_script sysmerge
  
  echo -n 'starting network daemons:'
@@ -103,7 +103,7 @@ diff --git a/etc/rc b/etc/rc
 -start_daemon relayd dhcpd dhcrelay mrouted dvmrpd radiusd eigrpd route6d
 -start_daemon dhcp6leased rad hostapd lpd smtpd slowcgi bgplgd httpd ftpd
 -start_daemon ftpproxy ftpproxy6 tftpd tftpproxy identd inetd rarpd bootparamd
--start_daemon rbootd mopd vmd spamd spamlogd sndiod
+-start_daemon rbootd mopd vmd spamd spamlogd sndiod rtrd
 +daemon_phase 60
  echo '.'
  
@@ -124,22 +124,22 @@ diff --git a/etc/rc b/etc/rc
 -fi
 -
  [[ -f /etc/rc.local ]] && sh /etc/rc.local
- 
-+daemon_phase 70
 +
++daemon_phase 70
+ 
  # Disable carp interlock.
  ifconfig -g carp -carpdemote 128
- 
+@@ -700,12 +676,8 @@
  mixerctl_conf
  
  echo -n 'starting local daemons:'
 -start_daemon apmd sensorsd hotplugd watchdogd cron wsmoused xenodm
 +daemon_phase 80
  echo '.'
- 
+-
 -# Re-link the kernel, placing the objects in a random order.
 -# Replace current with relinked kernel and inform root about it.
 -/usr/libexec/reorder_kernel &
--
+ 
  date
  exit 0
