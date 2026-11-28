@@ -75,6 +75,9 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://www.pymanopt.org/";
     changelog = "https://github.com/pymanopt/pymanopt/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ yl3dy ];
+    maintainers = with lib.maintainers; [
+      yl3dy
+      stephen-huan
+    ];
   };
 })
