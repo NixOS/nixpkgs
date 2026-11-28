@@ -1,16 +1,16 @@
 diff --git a/hatch_build.py b/hatch_build.py
-index da19ad8..f33e582 100644
+index 1f2cf93..048a7a6 100644
 --- a/hatch_build.py
 +++ b/hatch_build.py
-@@ -1,7 +1,6 @@
+@@ -1,6 +1,6 @@
  import hashlib
- import os
++import os
  import subprocess
 -import sys
  from pathlib import Path
  from tempfile import TemporaryDirectory
  
-@@ -57,46 +56,33 @@ class BuildHook(BuildHookInterface):
+@@ -56,46 +56,33 @@ class BuildHook(BuildHookInterface):
  
          build_data["pure_python"] = False
  
@@ -36,7 +36,7 @@ index da19ad8..f33e582 100644
 -        )
 -
          # Keep track of breaking changes
-         hashes: dict[str, str] = dict()
+         hashes: dict[str, str] = {}
  
          # Make binaries for all known driver version
 -        for driver in sorted(subprocess.check_output(
@@ -69,7 +69,7 @@ index da19ad8..f33e582 100644
  
              # Find and vendor the binary for this version
              binary = Dirs.build.joinpath("nvibrant")
-@@ -109,12 +95,6 @@ class BuildHook(BuildHookInterface):
+@@ -108,12 +95,6 @@ class BuildHook(BuildHookInterface):
              build_data["force_include"][str(target)] = f"nvibrant/resources/{target.name}"
              hashes.setdefault(hashlib.md5(target.read_bytes()).hexdigest(), driver)
  

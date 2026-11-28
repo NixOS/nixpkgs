@@ -14,10 +14,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pyproject = true;
 
   passthru = {
-    nvibrantVersion = "1.2.1";
+    nvibrantVersion = "1.3.1";
 
     oldestDriverVersion = "515.43.04";
-    latestDriverVersion = "610.43.02";
+    latestDriverVersion = "620.73.04";
 
     _version = lib.concatStringsSep "-" [
       finalAttrs.passthru.nvibrantVersion
@@ -31,14 +31,14 @@ python3Packages.buildPythonApplication (finalAttrs: {
         repo = "nvibrant";
         name = "nvibrant";
         tag = "v${finalAttrs.passthru.nvibrantVersion}";
-        hash = "sha256-M83WSQiJwzFZl8ECkZjKigvLTlMkzRa6o2hqPOt1378=";
+        hash = "sha256-7jNFzgdP740TNfQ+8zI3qhIAdlrCNh/zPSk9iACmxJY=";
       };
       open-gpu = fetchFromGitHub {
         owner = "nvidia";
         repo = "open-gpu-kernel-modules";
         name = "open-gpu";
         tag = finalAttrs.passthru.oldestDriverVersion;
-        hash = "sha256-MfLR5sYSjBrENWkCChcS9rk1zSlRFfTRpof/4lQ3qow=";
+        hash = "sha256-ftIBcSQGYfXAVXUPjqMcDiElofLKL7Idr9KoR/93JzU=";
 
         # since .git isn't deterministic, we can't use it to checkout tags in
         # the build phase, so instead we generate patches for each version
@@ -140,7 +140,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   meta = {
-    description = "Configure NVIDIA's Digital Vibrance on Wayland";
+    description = "NVIDIA Digital Vibrance and Dithering on Wayland";
     homepage = "https://github.com/Tremeschin/nvibrant";
     mainProgram = "nvibrant";
     license = lib.licenses.gpl3Only;
