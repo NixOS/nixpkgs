@@ -34,6 +34,13 @@ buildPythonPackage rec {
     hash = "sha256-8g9+mSLueJxLcTeWduv+ZWtnWRP+Uk8u5yLhue9OUZc=";
   };
 
+  # Peewee 4 compatibility: https://github.com/etesync/etebase-py/pull/59
+  postPatch = ''
+    substituteInPlace etesync/api.py \
+      --replace-fail "from playhouse.sqlite_ext import SqliteExtDatabase" \
+        "from peewee import SqliteDatabase as SqliteExtDatabase"
+  '';
+
   propagatedBuildInputs = [
     appdirs
     asn1crypto
@@ -64,7 +71,6 @@ buildPythonPackage rec {
   '';
 
   meta = {
-    broken = lib.versionAtLeast peewee.version "4";
     homepage = "https://www.etesync.com/";
     description = "Python API to interact with an EteSync server";
     license = lib.licenses.lgpl3;
