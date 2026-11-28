@@ -11,13 +11,13 @@
 # https://github.com/kubernetes/kube-openapi/pull/616
 buildGo126Module rec {
   pname = "jx";
-  version = "3.17.80";
+  version = "3.17.120";
 
   src = fetchFromGitHub {
     owner = "jenkins-x";
     repo = "jx";
     rev = "v${version}";
-    sha256 = "sha256-rRaJEqPk07obKfXvRAmluZYh+foj2FYMJxFbQPzOU2w=";
+    sha256 = "sha256-Gi7p2y6Rwejzv+lw43FdXjzoQcnIgFSU+F4xQao0874=";
   };
 
   vendorHash = "sha256-Rupnzj1kw0den6O0RZ5Fg5pZWRsfLuor3ntAiQjfIn8=";
