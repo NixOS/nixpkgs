@@ -15,14 +15,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyswitchbot";
-  version = "3.8.1";
+  version = "3.15.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sblibs";
     repo = "pySwitchbot";
     tag = finalAttrs.version;
-    hash = "sha256-DjB7vYFwZNfvz0HQRiPBA7et1ohAflBvbDogL3ns8jA=";
+    hash = "sha256-uFz+rZxP7JWnG9Jqj/GyDE0uVIkVPhsmYSS+ryCgagM=";
   };
 
   build-system = [ poetry-core ];
