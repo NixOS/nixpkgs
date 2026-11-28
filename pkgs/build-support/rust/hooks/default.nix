@@ -1,6 +1,8 @@
 {
+  buildPackages,
   cargo-nextest,
   clang,
+  concatText,
   diffutils,
   lib,
   makeSetupHook,
@@ -127,15 +129,34 @@
     meta.license = lib.licenses.mit;
   } ./maturin-build-hook.sh;
 
-  bindgenHook = makeSetupHook {
-    name = "rust-bindgen-hook";
-    substitutions = {
-      libclang = (lib.getLib clang.cc);
-      inherit clang;
-      targetFlag = lib.optionalString (
-        !lib.systems.equals stdenv.targetPlatform stdenv.hostPlatform
-      ) "--target=${stdenv.targetPlatform.config}";
-    };
-    meta.license = lib.licenses.mit;
-  } ./rust-bindgen-hook.sh;
+  bindgenHook =
+    let
+      isCross = !lib.systems.equals stdenv.targetPlatform stdenv.hostPlatform;
+      hostRustTarget = stdenv.hostPlatform.rust.rustcTarget;
+      targetRustTarget = stdenv.targetPlatform.rust.rustcTarget;
+      isSplitBuildPlatform = isCross && hostRustTarget != targetRustTarget;
+    in
+    makeSetupHook
+      {
+        name = "rust-bindgen-hook";
+        substitutions = {
+          libclang = (lib.getLib clang.cc);
+          inherit clang;
+          targetFlag = lib.optionalString isCross "--target=${stdenv.targetPlatform.config}";
+        }
+        // lib.optionalAttrs isSplitBuildPlatform {
+          buildClang = buildPackages.clang;
+          buildRustTarget = lib.replaceStrings [ "-" ] [ "_" ] hostRustTarget;
+        };
+        meta.license = lib.licenses.mit;
+      }
+      (
+        if isSplitBuildPlatform then
+          concatText "rust-bindgen-hook.sh" [
+            ./rust-bindgen-hook.sh
+            ./rust-bindgen-hook-build-platform.sh
+          ]
+        else
+          ./rust-bindgen-hook.sh
+      );
 }
