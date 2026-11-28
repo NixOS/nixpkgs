@@ -137,8 +137,8 @@ in
   # Build configuration
 
   ## Addon signing/sideloading
-  enableAddonSigning ? true,
-  enableAddonSideload ? false,
+  enableAddonSigning ? false,
+  enableAddonSideload ? true,
 
   ## Optimizations
   enableRustSimd ? true,
