@@ -43,14 +43,23 @@ if test -n "$bootable"; then
 fi
 
 if test -n "$usbBootable"; then
-    usbBootFlags="-isohybrid-mbr ${isohybridMbrImage}"
+    usbBootFlags="-isohybrid-mbr ${isohybridMbrImage} --mbr-force-bootable"
 fi
 
 if test -n "$efiBootable"; then
+    # -isohybrid-gpt-basdat marks the El Torito image in an overlapping,
+    # invalid GPT. Firmware that requires a real ESP partition ignores it.
+    # Append the ESP after the ISO and record it as EFI System (0xef maps
+    # to the ESP type GUID). -partition_offset 16 keeps that GPT valid and
+    # leaves the ISO mountable from the start of the image and from the
+    # first partition. El Torito points at the appended partition, so
+    # optical boot and USB boot share one ESP.
     efiBootFlags="-eltorito-alt-boot
-                  -e $efiBootImage
+                  -e --interval:appended_partition_2:all::
                   -no-emul-boot
-                  -isohybrid-gpt-basdat"
+                  -append_partition 2 0xef $efiBootImage
+                  -appended_part_as_gpt
+                  -partition_offset 16"
 fi
 
 touch pathlist
