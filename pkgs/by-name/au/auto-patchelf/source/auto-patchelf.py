@@ -24,6 +24,8 @@ from elftools.elf.enums import ENUM_E_TYPE, ENUM_EI_OSABI  # type: ignore
 
 DEFAULT_BINTOOLS = "@defaultBintools@"
 
+DF_1_PIE = 0x08000000
+
 
 @contextmanager
 def open_elf(path: Path) -> Iterator[ELFFile]:
@@ -32,9 +34,22 @@ def open_elf(path: Path) -> Iterator[ELFFile]:
 
 
 def is_static_executable(elf: ELFFile) -> bool:
-    # Statically linked executables have an ELF type of EXEC but no INTERP.
-    return (elf.header["e_type"] == 'ET_EXEC'
-            and not elf.get_section_by_name(".interp"))
+    # Statically linked executables have no INTERP section. Their ELF type is
+    # EXEC, or DYN for static PIE executables, which are marked with DF_1_PIE.
+    # Shared libraries are also DYN without INTERP but lack DF_1_PIE and still
+    # need to be patched, so they must not be treated as static executables.
+    if elf.get_section_by_name(".interp"):
+        return False
+    if elf.header["e_type"] == 'ET_EXEC':
+        return True
+    if elf.header["e_type"] != 'ET_DYN':
+        return False
+    for section in elf.iter_sections():
+        if isinstance(section, DynamicSection):
+            for tag in section.iter_tags():
+                if tag.entry.d_tag == 'DT_FLAGS_1' and int(tag.entry.d_val) & DF_1_PIE:
+                    return True
+    return False
 
 
 def is_dynamic_executable(elf: ELFFile) -> bool:
