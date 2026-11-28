@@ -20,13 +20,13 @@
 
 let
   pname = "gui-for-singbox";
-  version = "1.28.1";
+  version = "1.29.0";
 
   src = fetchFromGitHub {
     owner = "GUI-for-Cores";
     repo = "GUI.for.SingBox";
     tag = "v${version}";
-    hash = "sha256-tPG+FmLCSp3nxU9+FFKPP82KJJeasS11gwOMeIJBabI=";
+    hash = "sha256-12qnCcmkIeeiahaskhR/L2wxRDw84XzocgiKnWws2eU=";
   };
 
   metaCommon = {
@@ -40,8 +40,6 @@ let
     inherit pname version src;
 
     sourceRoot = "${finalAttrs.src.name}/frontend";
-
-    patches = [ ./frontend-runtime-path.patch ];
 
     nativeBuildInputs = [
       nodejs
@@ -58,7 +56,7 @@ let
         ;
       pnpm = pnpm_10;
       fetcherVersion = 3;
-      hash = "sha256-oL4u6LiGIN8MVHGKfd5rwW01qYey+NaisxobEt71Q4w=";
+      hash = "sha256-tZ7qbDt1RjBmFq8VNkGa7x2Y44e91yYVcsIowLLM0YA=";
     };
 
     buildPhase = ''
@@ -86,8 +84,6 @@ in
 
 buildGo127Module {
   inherit pname version src;
-
-  patches = [ ./xdg-path-and-restart-patch.patch ];
 
   vendorHash = "sha256-RhN9P6W5/z1NVMkPtboLwkpoMX7ulb6nnzSsOsFpvao=";
 
