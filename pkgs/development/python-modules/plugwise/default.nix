@@ -17,14 +17,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "plugwise";
-  version = "1.17.0";
+  version = "1.18.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "plugwise";
     repo = "python-plugwise";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WbByJFtDji5qswlulIKR+9zV9IRFzFKwBOallK+bZM0=";
+    hash = "sha256-RRlVfvAQLXPbf1jDxzj04GOEvsCLv4dqU/+d2wAbS90=";
   };
 
   postPatch = ''
