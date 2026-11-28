@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "microsoft-kiota-serialization-multipart";
-  version = "1.18.0";
+  version = "1.19.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "kiota-python";
     tag = "microsoft-kiota-serialization-multipart-v${version}";
-    hash = "sha256-r7svcJmv9amLzJQn0qb75DA2efGLAhrC6AIEH/dxy3A=";
+    hash = "sha256-6+4QSiEkf5C5qdCQZeGpFXiiI/8r5vcymLsOq3AvQOo=";
   };
 
   sourceRoot = "${src.name}/packages/serialization/multipart/";
