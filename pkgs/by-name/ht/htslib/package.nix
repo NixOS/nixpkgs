@@ -13,11 +13,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "htslib";
-  version = "1.24";
+  version = "1.25";
 
   src = fetchurl {
     url = "https://github.com/samtools/htslib/releases/download/${finalAttrs.version}/htslib-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-KKjeGROBx6l6NWdc6sdvoeqV57Z41qLp1gCnh05Ad94=";
+    hash = "sha256-FYwnHk4phrst0RKDtkDtwQxWaVspPfd6EJzplIAwNzA=";
   };
 
   buildInputs = [
