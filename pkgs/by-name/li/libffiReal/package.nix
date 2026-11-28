@@ -30,6 +30,9 @@ stdenv.mkDerivation (finalAttrs: {
     # Threading tests need to be linked against pthread
     # See: https://github.com/libffi/libffi/pull/944
     ./freebsd-tsan-pthread.patch
+    # loongarch: ignore return buffer for void calls
+    # See: https://github.com/libffi/libffi/pull/1083
+    ./loongarch-ignore-return-buffer-for-void-calls.patch
   ];
 
   strictDeps = true;
