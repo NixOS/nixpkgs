@@ -117,10 +117,105 @@ in
   # We use `callPackage' to be able to omit function arguments that can be
   # obtained from `pkgs` or `buildPackages`.
   # Use `newScope' for sets of packages in `pkgs' (see e.g. `gnome' below).
+  /**
+    Calls a package function with its arguments filled in from the package set for the current build/host target combination.
+
+    Arguments in `args` take precedence, and the result is overridable through `.override`. See [](#chap-overrides).
+
+    # Examples
+
+    :::{.example}
+    ## `pkgs.callPackage` usage example
+
+    ```nix
+    let
+      pkgs = import <nixpkgs> { };
+
+      packageFn =
+        { foo, enableBaz ? true, stdenv }:
+        stdenv.mkDerivation {
+          ...
+        };
+
+      package = pkgs.callPackage packageFn { foo = "bar"; };
+    in
+    {
+      inherit package;
+      packageWithoutBaz = package.override { enableBaz = false; };
+    }
+    ```
+    :::
+
+    # Inputs
+
+    *`fn`* (Function or path)
+
+    : Package function, or path to a file containing one, that takes an attribute set as an argument.
+
+    *`args`* (Attribute set)
+
+    : Explicit arguments that take precedence over the spliced package set.
+
+    # Type
+
+    ```
+    callPackage :: ((AttrSet -> a) | Path) -> AttrSet -> a
+    ```
+  */
   callPackage = pkgs.newScope { };
 
+  /**
+    Like `pkgs.callPackage`, but for a function that returns an attribute
+    set of derivations. The override function is added to the
+    individual attributes.
+
+    # Inputs
+
+    *`fn`* (Function or path)
+
+    : Package function, or path to a file containing one, that takes an attribute set as an argument.
+
+    *`args`* (Attribute set)
+
+    : Explicit arguments that take precedence over the spliced package set.
+
+    # Type
+
+    ```
+    callPackage :: ((AttrSet -> a) | Path) -> AttrSet -> a
+    ```
+  */
   callPackages = lib.callPackagesWith pkgsForCall;
 
+  /**
+    Calls a package function with its arguments filled in from the package set for the current build/host target combination and `extraAutoArgs`.
+
+    Arguments in `args` take precedence, and the result is overridable through `.override`. See [](#chap-overrides).
+
+    Partially parametrized form of [`lib.callPackageWith`](#function-library-lib.customisation.callPackageWith) with `autoArgs` set to `extraAutoArgs` on top of the spliced package set. See its documentation for details.
+
+    # Inputs
+
+    *`extraAutoArgs`* (Attribute set)
+
+    : Arguments to conditionally apply to `fn` on top of the spliced package set.
+
+      Each argument gets supplied if the function pattern names it. That is, `foo` gets supplied to `{ foo }: ...`.
+
+    *`fn`* (Function or path)
+
+    : Package function, or path to a file containing one, that takes an attribute set as an argument.
+
+    *`extra`* (Attribute set)
+
+    : Explicit arguments that take precedence over the spliced package set and `extraAutoArgs`.
+
+    # Type
+
+    ```
+    callPackage :: ((AttrSet -> a) | Path) -> AttrSet -> a
+    ```
+  */
   newScope = extra: lib.callPackageWith (pkgsForCall // extra);
 
   pkgs = if actuallySplice then splicedPackages // { recurseForDerivations = false; } else pkgs;
