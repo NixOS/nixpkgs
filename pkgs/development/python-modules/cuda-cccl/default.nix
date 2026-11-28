@@ -125,6 +125,10 @@ buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } (finalAttrs
     #   ModuleNotFoundError: No module named 'numba_cuda_mlir'
     "tests/compute/test_jit_backend.py"
     "tests/compute/test_void_ptr_wrapper_validation.py"
+
+    # Looks up the version of the unpackaged `numba-cuda-mlir` at import time
+    #   importlib.metadata.PackageNotFoundError: No package metadata was found for numba-cuda-mlir
+    "tests/compute/test_transform.py"
   ];
 
   # Tests require access to a GPU
