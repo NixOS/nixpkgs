@@ -7,13 +7,13 @@
 let
   self = python3Packages.buildPythonApplication {
     pname = "setconf";
-    version = "0.7.7";
+    version = "0.7.8";
 
     src = fetchFromGitHub {
       owner = "xyproto";
       repo = "setconf";
       rev = self.version;
-      hash = "sha256-HYZdDtDlGrT3zssDdMW3559hhC+cPy8qkmM8d9zEa1A=";
+      hash = "sha256-ZyqtMGHd3AbpirWkHhMiPKLVr3H6Fw2IVPuImWbuW3U=";
     };
 
     build-system = with python3Packages; [ setuptools ];
