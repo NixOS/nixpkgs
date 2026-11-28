@@ -129,10 +129,32 @@
     fetchSubmodules = true;
   };
 
+  # 26 November 2026: GitHub only supports the "smart" Git HTTP protocol, so
+  # isn't a suitable target for this test[0].  Further, I (@me-and) haven't
+  # been able to find any server that *only* supports the "dumb" protocol,
+  # which means testing the "dumb" protocol still works requires setting
+  # environment variables to prevent the "smart" protocol being used.  That
+  # means we're still testing that the "dumb" protocol works, but we're not
+  # testing automatic fallback to the "dumb" protocol for servers that don't
+  # support the "smart" protocol.
+  #
+  # [0]: https://github.blog/news-insights/the-library/git-dumb-http-transport-to-be-turned-off-in-90-days/
+  #
+  # To test automatic fallback, I believe we'd need to do one of the following:
+  #
+  # - Find a server that's both sufficiently reliable to be used for Nixpkgs
+  #   tests, and that doesn't support the "smart" protocol at all.  In this
+  #   circumstance, I expect we'd also want to add a check that the server
+  #   doesn't get updated to add "smart" support in future, so we make sure the
+  #   test doesn't silently switch to using the "smart" protocol after all.
+  # - Swap this test for one that spins up a pair of VMs or containers.  One
+  #   would run a Git server that is configured to only support the "dumb"
+  #   protocol, and the other would perform the fetchgit operation.
   dumb-http-signed-tag = testers.invalidateFetcherByDrvHash fetchgit {
     name = "dumb-http-signed-tag-source";
     url = "https://git.scottworley.com/pub/git/pinch";
     rev = "v3.0.14";
+    preFetch = "export GIT_SMART_HTTP=0";
     sha256 = "sha256-bd0Lx75Gd1pcBJtwz5WGki7XoYSpqhinCT3a77wpY2c=";
   };
 
