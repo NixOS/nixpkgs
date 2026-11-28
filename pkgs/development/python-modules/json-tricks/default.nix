@@ -27,6 +27,12 @@ buildPythonPackage rec {
     pytest7CheckHook
   ];
 
+  disabledTests = [
+    # pandas 3 infers the str dtype for string columns, which is decoded
+    # back as object dtype, so Series.equals() fails
+    "test_pandas_series"
+  ];
+
   pythonImportsCheck = [ "json_tricks" ];
 
   meta = {
