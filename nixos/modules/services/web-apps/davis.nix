@@ -314,6 +314,34 @@ in
           message = "services.davis.mail.dsn and services.davis.mail.dsnFile cannot both be set.";
         }
       ];
+      warnings =
+        lib.optional
+          (
+            lib.elem cfg.config.WEBDAV_ENABLED [
+              true
+              "true"
+            ]
+            &&
+              lib.any
+                (
+                  name:
+                  lib.elem (filteredConfig.${name} or null) [
+                    null
+                    ""
+                  ]
+                )
+                [
+                  "WEBDAV_TMP_DIR"
+                  "WEBDAV_PUBLIC_DIR"
+                ]
+          )
+          ''
+            services.davis: WebDAV is enabled without explicit storage paths.
+            Set services.davis.config.WEBDAV_TMP_DIR and services.davis.config.WEBDAV_PUBLIC_DIR.
+            Create those directories and give the Davis service user write access.
+            For paths outside services.davis.dataDir, also set
+            systemd.services.phpfpm-davis.serviceConfig.ReadWritePaths.
+          '';
       services.davis.config = {
         APP_ENV = "prod";
         APP_CACHE_DIR = "${cfg.dataDir}/var/cache";
@@ -325,7 +353,7 @@ in
         ADMIN_LOGIN = cfg.adminLogin;
         ADMIN_PASSWORD._secret = cfg.adminPasswordFile;
         APP_TIMEZONE = config.time.timeZone;
-        WEBDAV_ENABLED = false;
+        WEBDAV_ENABLED = lib.mkDefault false;
         CALDAV_ENABLED = true;
         CARDDAV_ENABLED = true;
       }
@@ -455,7 +483,7 @@ in
           ExecStart = [
             "${cfg.package}/bin/console cache:clear --no-debug"
             "${cfg.package}/bin/console cache:warmup --no-debug"
-            "${cfg.package}/bin/console doctrine:migrations:migrate"
+            "${cfg.package}/bin/console doctrine:migrations:migrate --no-interaction --allow-no-migration"
           ];
         };
         restartTriggers = [
@@ -491,11 +519,6 @@ in
                 "/" = {
                   extraConfig = ''
                     try_files $uri $uri/ /index.php$is_args$args;
-                  '';
-                };
-                "~* ^/.well-known/(caldav|carddav)$" = {
-                  extraConfig = ''
-                    return 302 https://$host/dav/;
                   '';
                 };
                 "~ ^(.+\\.php)(.*)$" = {
