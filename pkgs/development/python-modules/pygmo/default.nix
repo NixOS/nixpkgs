@@ -17,13 +17,13 @@
 toPythonModule (
   stdenv.mkDerivation rec {
     pname = "pygmo";
-    version = "2.19.7";
+    version = "2.19.8";
 
     src = fetchFromGitHub {
       owner = "esa";
       repo = "pygmo2";
       tag = "v${version}";
-      hash = "sha256-279KNnP11f5ob2senIVmbnlmhRp2p3RoZLsQRE6yJ5Q=";
+      hash = "sha256-mKdoAnYLw2qWV+dXfrr7T0K9AeifgpthUOF925nMilo=";
     };
 
     cmakeFlags = [ "-DPYGMO_INSTALL_PATH=${placeholder "out"}/${python.sitePackages}" ];
