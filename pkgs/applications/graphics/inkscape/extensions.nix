@@ -10,6 +10,7 @@
 
 {
   applytransforms = callPackage ./extensions/applytransforms { };
+  brother-pe = callPackage ./extensions/brother-pe { };
 
   hexmap = stdenv.mkDerivation (finalAttrs: {
     pname = "hexmap";
