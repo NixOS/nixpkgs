@@ -21,7 +21,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cf";
-  version = "1.0.0-beta.32";
+  version = "1.0.0-rc.6";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "cloudflare";
     repo = "cf";
     tag = "cf@${finalAttrs.version}";
-    hash = "sha256-6ik19YeOjF1wUp+61832dg1/UBRwKYE0UTcZvuLKFco=";
+    hash = "sha256-pgK3pTzociobzg6V44vtIqxrzuwPo7w/JweixKXKWyg=";
   };
 
   pnpmWorkspaces = [ "cf" ];
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     pnpm = pnpm_12;
     fetcherVersion = 5;
-    hash = "sha256-ZAA8UPS3mlxla7JcWacueXUCPRzXcfj8cs0LIBkQcXg=";
+    hash = "sha256-wlRBLTcBLlh+tQGQyq3mWgMQh24msPrmGTC54Ty+c8I=";
   };
 
   nativeBuildInputs = [
