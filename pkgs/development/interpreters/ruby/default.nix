@@ -255,6 +255,14 @@ let
             export HOME=$TMPDIR
           '';
 
+          # YJIT builds with `-g -C lto=thin`. ThinLTO renames promoted local
+          # symbols to `<name>.llvm.<hash>`, and the hash covers the absolute
+          # source paths in the debug info. Without the remap, the symbols in
+          # libruby depend on the build directory.
+          preBuild = opString yjitSupport ''
+            export NIX_RUSTFLAGS+=" --remap-path-prefix=$NIX_BUILD_TOP=/"
+          '';
+
           # fails with "16993 tests, 2229489 assertions, 105 failures, 14 errors, 89 skips"
           # mostly TZ- and patch-related tests
           # TZ- failures are caused by nix sandboxing, I didn't investigate others
