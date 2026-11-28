@@ -45,6 +45,95 @@
     '';
   };
 
+  simple-deep = testers.invalidateFetcherByDrvHash fetchgit {
+    name = "simple-deep-nix-source";
+    url = "https://github.com/NixOS/nix";
+    rev = "9d9dbe6ed05854e03811c361a3380e09183f4f4a";
+    deepClone = true;
+    hash = "sha256-7DszvbCNTjpzGRmpIVAWXk20P0/XTrWZ79KSOGLrUWY=";
+    postFetch = ''
+      rm -r $out/.git
+    '';
+  };
+
+  simple-deep-nogit = testers.invalidateFetcherByDrvHash fetchgit {
+    name = "simple-deep-nogit-nix-source";
+    url = "https://github.com/NixOS/nix";
+    rev = "9d9dbe6ed05854e03811c361a3380e09183f4f4a";
+    deepClone = true;
+    leaveDotGit = false;
+    hash = "sha256-7DszvbCNTjpzGRmpIVAWXk20P0/XTrWZ79KSOGLrUWY=";
+  };
+
+  parent-rev = testers.invalidateFetcherByDrvHash fetchgit {
+    name = "parent-rev-nix-source";
+    url = "https://github.com/NixOS/nix";
+    rev = "9d9dbe6ed05854e03811c361a3380e09183f4f4a";
+    deepClone = true;
+    postFetch = ''
+      { git -C "$out" rev-parse HEAD~1 || echo "git rev-parse HEAD~1 failed"; } | tee "$out"/parent_commit.txt
+      rm -r $out/.git
+    '';
+    hash = "sha256-HG33g/bst24lBkm2VPtO0y3OloCU/4N60Ufi5DISjD4=";
+  };
+
+  parent-rev-nogit = testers.invalidateFetcherByDrvHash fetchgit {
+    name = "parent-rev-nogit-nix-source";
+    url = "https://github.com/NixOS/nix";
+    rev = "9d9dbe6ed05854e03811c361a3380e09183f4f4a";
+    deepClone = true;
+    leaveDotGit = false;
+    postCheckout = ''
+      { git -C "$out" rev-parse HEAD~1 || echo "git rev-parse HEAD~1 failed"; } | tee "$out"/parent_commit.txt
+    '';
+    hash = "sha256-HG33g/bst24lBkm2VPtO0y3OloCU/4N60Ufi5DISjD4=";
+  };
+
+  simple-deep-tag = testers.invalidateFetcherByDrvHash fetchgit {
+    name = "simple-tag-nix-source";
+    url = "https://github.com/NixOS/nix";
+    tag = "2.3.15";
+    deepClone = true;
+    postFetch = ''
+      rm -r "$out"/.git
+    '';
+    hash = "sha256-7DszvbCNTjpzGRmpIVAWXk20P0/XTrWZ79KSOGLrUWY=";
+  };
+
+  simple-deep-tag-nogit = testers.invalidateFetcherByDrvHash fetchgit {
+    name = "simple-tag-nix-source";
+    url = "https://github.com/NixOS/nix";
+    tag = "2.3.15";
+    deepClone = true;
+    leaveDotGit = false;
+    hash = "sha256-7DszvbCNTjpzGRmpIVAWXk20P0/XTrWZ79KSOGLrUWY=";
+  };
+
+  deep-describe-tag = testers.invalidateFetcherByDrvHash fetchgit {
+    name = "describe-tag-nix-source";
+    url = "https://github.com/NixOS/nix";
+    tag = "2.3.15";
+    deepClone = true;
+    leaveDotGit = false;
+    postCheckout = ''
+      { git -C "$out" describe || echo "git describe failed"; } | tee "$out"/describe-output.txt
+    '';
+    hash = "sha256-y7l+46lVP2pzJwGON5qEV0EoxWofRoWAym5q9VXvpc8=";
+  };
+
+  describe-tag-and-parent-rev = testers.invalidateFetcherByDrvHash fetchgit {
+    name = "describe-tag-and-parent-rev-nix-source";
+    url = "https://github.com/NixOS/nix";
+    tag = "2.3.15";
+    deepClone = true;
+    leaveDotGit = false;
+    postCheckout = ''
+      { git -C "$out" describe || echo "git describe failed"; } | tee "$out"/describe-output.txt
+      { git -C "$out" rev-parse HEAD~1 || echo "git rev-parse HEAD~1 failed"; } | tee "$out"/parent_commit.txt
+    '';
+    hash = "sha256-tPxc4mPweoS4PjBKj6PAGFsAAnQ52KXVSrnQl5cC7k0=";
+  };
+
   sparseCheckout = testers.invalidateFetcherByDrvHash fetchgit {
     name = "sparse-checkout-nix-source";
     url = "https://github.com/NixOS/nix";

@@ -180,6 +180,12 @@ checkout_hash(){
         hash=$(hash_from_ref "$ref")
     fi
 
+    local refspec="$hash"
+    # If "$ref" is a tag, still fetch that ref so that `git cat-file` won't fail.
+    if [[ "$ref" =~ ^refs/tags ]]; then
+        refspec="+$ref:$ref"
+    fi
+
     local -a fetchTagsArgs=()
     # Avoid fetching all tags at clone time when not leaving .git,
     # but keep/restore the behaviour before
@@ -193,8 +199,20 @@ checkout_hash(){
     local -a fetchTargetArgs
     if [[ -n "$deepClone" ]]; then
         fetchTargetArgs=(origin)
+        # Avoid fetching unspecified branches and tags to enhance hash stability
+        # but only do so when not leaving .git for backward hash compatibility.
+        if [[ -z "$leaveDotGit" ]]; then
+            fetchTargetArgs+=("$refspec")
+        fi
     else
-        fetchTargetArgs=(--depth=1 origin "$hash")
+        fetchTargetArgs=(--depth=1 origin)
+        # Name tag "$ref" to make `git describe` work reproducibly in `NIX_PREFETCH_GIT_CHECKOUT_HOOK`.
+        # but only when not leaving `.git` for hash compatibility.
+        if [[ -z "$leaveDotGit" ]]; then
+            fetchTargetArgs+=("$refspec")
+        else
+            fetchTargetArgs+=("$hash")
+        fi
     fi
     if ! clean_git fetch "${fetchTagsArgs[@]}" ${builder:+--progress} "${fetchTargetArgs[@]}"; then
         echo "ERROR: \`git fetch' failed." >&2
@@ -240,9 +258,16 @@ checkout_ref(){
         ref=$(ref_from_hash "$hash")
     fi
 
+    local refspec
+    if [[ -z "$leaveDotGit" ]] && [[ "$ref" =~ ^refs/tags ]]; then
+        refspec="+$ref:$ref"
+    else
+        refspec="$ref"
+    fi
+
     if test -n "$ref"; then
         # --depth option is ignored on http repository.
-        clean_git fetch ${builder:+--progress} --depth 1 origin +"$ref" || return 1
+        clean_git fetch ${builder:+--progress} --depth 1 origin "$refspec" || return 1
         clean_git checkout -b "$branchName" FETCH_HEAD || return 1
     else
         return 1
@@ -281,13 +306,6 @@ clone(){
     if [[ -n "$fetchTags" ]]; then
         echo "fetching all tags..." >&2
         clean_git fetch origin 'refs/tags/*:refs/tags/*' || echo "warning: failed to fetch some tags" >&2
-    fi
-
-    # Name tag "$ref" to make `git describe` work reproducibly in `NIX_PREFETCH_GIT_CHECKOUT_HOOK`.
-    # Name only when not leaving `.git` for compatibility purposes.
-    if [[ "$ref" =~ ^refs/tags/ ]] && [[ -z "$leaveDotGit" ]]; then
-        echo "refer to FETCH_HEAD as its original name $ref"
-        clean_git update-ref "$ref" FETCH_HEAD
     fi
 
     # Checkout linked sources.
