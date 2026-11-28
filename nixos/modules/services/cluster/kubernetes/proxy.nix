@@ -12,6 +12,14 @@ let
   top = config.services.kubernetes;
   otop = options.services.kubernetes;
   cfg = top.proxy;
+
+  # --flag=value form; interpolate path literals so they end up in the store
+  optionFormat = option: {
+    option = "--${option}";
+    sep = "=";
+    explicitBool = true;
+    formatArg = v: if builtins.isPath v then "${v}" else generators.mkValueStringDefault { } v;
+  };
 in
 {
   imports = [
@@ -77,23 +85,24 @@ in
       ];
       serviceConfig = {
         Slice = "kubernetes.slice";
-        ExecStart = ''
-          ${top.package}/bin/kube-proxy \
-          --bind-address=${cfg.bindAddress} \
-          ${optionalString (top.clusterCidr != null) "--cluster-cidr=${top.clusterCidr}"} \
-          ${
-            optionalString (cfg.featureGates != { })
-              "--feature-gates=${
+        ExecStart = concatStringsSep " " [
+          "${top.package}/bin/kube-proxy"
+          (cli.toCommandLineShell optionFormat {
+            bind-address = cfg.bindAddress;
+            cluster-cidr = top.clusterCidr;
+            feature-gates =
+              if cfg.featureGates == { } then
+                null
+              else
                 concatStringsSep "," (
                   builtins.attrValues (mapAttrs (n: v: "${n}=${trivial.boolToString v}") cfg.featureGates)
-                )
-              }"
-          } \
-          --hostname-override=${cfg.hostname} \
-          --kubeconfig=${top.lib.mkKubeConfig "kube-proxy" cfg.kubeconfig} \
-          ${optionalString (cfg.verbosity != null) "--v=${toString cfg.verbosity}"} \
-          ${cfg.extraOpts}
-        '';
+                );
+            hostname-override = cfg.hostname;
+            kubeconfig = top.lib.mkKubeConfig "kube-proxy" cfg.kubeconfig;
+            v = cfg.verbosity;
+          })
+          cfg.extraOpts
+        ];
         WorkingDirectory = top.dataDir;
         Restart = "on-failure";
         RestartSec = 5;
