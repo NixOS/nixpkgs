@@ -10,7 +10,33 @@ let
   cfg = config.services.mesh-llm;
 
   settingsFormat = pkgs.formats.toml { };
-  configFile = settingsFormat.generate "mesh-llm-config.toml" cfg.settings;
+  # Each package in `plugins` becomes a `[[plugin]]` entry. An entry with the
+  # same name in `settings.plugin` is merged into it, so per-plugin settings
+  # such as `url` stay in `settings`.
+  # The same package from two modules would give two entries, which MeshLLM refuses.
+  plugins = lib.unique cfg.plugins;
+  pluginName =
+    p:
+    p.pluginName
+      or (throw "services.mesh-llm.plugins: ${lib.getName p} has no passthru.pluginName; add it as a [[plugin]] entry in services.mesh-llm.settings instead");
+  manualPlugins = cfg.settings.plugin or [ ];
+  manualPlugin = name: lib.findFirst (entry: (entry.name or null) == name) { } manualPlugins;
+  packagedPlugins = map (
+    p:
+    {
+      name = pluginName p;
+      command = lib.getExe p;
+    }
+    // manualPlugin (pluginName p)
+  ) plugins;
+  packagedNames = map pluginName plugins;
+  finalSettings =
+    cfg.settings
+    // lib.optionalAttrs (plugins != [ ]) {
+      plugin =
+        packagedPlugins ++ lib.filter (entry: !(lib.elem (entry.name or null) packagedNames)) manualPlugins;
+    };
+  configFile = settingsFormat.generate "mesh-llm-config.toml" finalSettings;
 in
 {
   options.services.mesh-llm = {
@@ -20,6 +46,23 @@ in
       example = "pkgs.mesh-llm.override { skippy-native-runtime = pkgs.skippy-native-runtime.override { vulkanSupport = true; }; }";
       extraDescription = ''
         The native runtime it bundles decides the GPU backend the node can use.
+      '';
+    };
+
+    plugins = lib.mkOption {
+      type = lib.types.listOf lib.types.package;
+      default = [ ];
+      example = lib.literalExpression "[ pkgs.mesh-llmPlugins.openai-endpoint ]";
+      description = ''
+        Plugin packages to run, such as those in `pkgs.mesh-llmPlugins`.
+        Each one becomes a `[[plugin]]` entry in the configuration, which the
+        service then writes like [](#opt-services.mesh-llm.settings). The
+        host's settings for a plugin, such as `url` or `args`, go in a `plugin`
+        entry of [](#opt-services.mesh-llm.settings) with the same `name`.
+        MeshLLM accepts a plugin's own `[plugin.settings]` only for plugins
+        installed with `mesh-llm plugins install`; plugins that read
+        environment variables get them from
+        [](#opt-services.mesh-llm.environmentFiles).
       '';
     };
 
@@ -49,8 +92,9 @@ in
       };
       description = ''
         MeshLLM configuration (`~/.mesh-llm/config.toml`), such as the models
-        to serve. When set, it replaces the file at every start, so changes
-        made in the console are lost. When empty, MeshLLM manages the file.
+        to serve. When set, or when [](#opt-services.mesh-llm.plugins) is set,
+        it replaces the file at every start, so changes made in the console
+        are lost. Otherwise MeshLLM manages the file.
         It ends up in the Nix store; put secrets in
         [](#opt-services.mesh-llm.environmentFiles) instead.
       '';
@@ -145,7 +189,7 @@ in
         MESH_LLM_JOIN_FILE = "%d/join-token";
       };
 
-      preStart = lib.optionalString (cfg.settings != { }) ''
+      preStart = lib.optionalString (finalSettings != { }) ''
         install -D -m 0600 ${configFile} "$HOME/.mesh-llm/config.toml"
       '';
 

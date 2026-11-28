@@ -129,22 +129,27 @@ Keep the file in a secret manager instead, such as sops-nix or agenix.
 `mesh-llm auth status` shows the owner ID.
 The service doesn't start if it can't load the keystore.
 For an encrypted keystore, set `MESH_LLM_OWNER_PASSPHRASE` in one of the [](#opt-services.mesh-llm.environmentFiles).
-When [](#opt-services.mesh-llm.settings) is set, the service rewrites the configuration at every start, and changes saved in the console last only until then.
+When [](#opt-services.mesh-llm.settings) or [](#opt-services.mesh-llm.plugins) is set, the service rewrites the configuration at every start, and changes saved in the console last only until then.
 
 ## Add plugins {#module-services-mesh-llm-plugins}
 
-Add plugins as `[[plugin]]` entries in [](#opt-services.mesh-llm.settings), with `command` pointing at the plugin's executable.
+Add plugins from `pkgs.mesh-llmPlugins` to [](#opt-services.mesh-llm.plugins).
+The host's settings for a plugin, such as `url` or `args`, go in a `plugin` entry of [](#opt-services.mesh-llm.settings) with the same `name`.
+MeshLLM accepts a plugin's own `[plugin.settings]` only for plugins installed with `mesh-llm plugins install`; plugins that read environment variables get them from [](#opt-services.mesh-llm.environmentFiles).
 Connect an existing OpenAI-compatible server with the `openai-endpoint` plugin:
 
 ```nix
+{ pkgs, ... }:
 {
-  services.mesh-llm.settings.plugin = [
-    {
-      name = "openai-endpoint";
-      command = "/path/to/openai-endpoint";
-      url = "http://127.0.0.1:8000/v1";
-    }
-  ];
+  services.mesh-llm = {
+    plugins = [ pkgs.mesh-llmPlugins.openai-endpoint ];
+    settings.plugin = [
+      {
+        name = "openai-endpoint";
+        url = "http://127.0.0.1:8000/v1";
+      }
+    ];
+  };
 }
 ```
 
