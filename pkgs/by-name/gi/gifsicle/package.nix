@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gifsicle";
-  version = "1.98";
+  version = "1.99";
 
   src = fetchurl {
     url = "https://www.lcdf.org/gifsicle/gifsicle-${finalAttrs.version}.tar.gz";
-    hash = "sha256-6dTMCBbblcZNMuefd4g22w8ffrFYaEkL0zAQTlFGtm4=";
+    hash = "sha256-whoB9nCjNvVBKxhw5abCQSUqNAij5pnSFtWL1BARrgY=";
   };
 
   buildInputs = lib.optionals gifview [
