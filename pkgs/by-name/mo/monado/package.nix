@@ -66,6 +66,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "monado";
   version = "25.1.0";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "monado";
@@ -90,6 +93,10 @@ stdenv.mkDerivation (finalAttrs: {
     glslang
     pkg-config
     python3
+    wayland-scanner
+  ]
+  ++ lib.optionals enableCuda [
+    cudaPackages.cuda_nvcc
   ];
 
   # known disabled drivers/features:
@@ -144,7 +151,6 @@ stdenv.mkDerivation (finalAttrs: {
     tracy
   ]
   ++ lib.optionals enableCuda [
-    cudaPackages.cuda_nvcc
     cudaPackages.cuda_cudart
   ];
 
