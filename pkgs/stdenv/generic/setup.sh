@@ -997,6 +997,11 @@ if ((NIX_BUILD_CORES <= 0)); then
 fi
 export NIX_BUILD_CORES
 
+# We need to determine when we are already using a jobserver because passing -j
+# can lead to a (silently) discarded jobserver.
+inJobserver() {
+  [[ ${MAKEFLAGS-} == *--jobserver-auth=* || ${MAKEFLAGS-} == *--jobserver-fds=* ]]
+}
 
 # Prevent SSL libraries from using certificates in /etc/ssl, unless set explicitly.
 # Leave it in impure shells for convenience.
@@ -1518,10 +1523,13 @@ buildPhase() {
 
         # shellcheck disable=SC2086
         local flagsArray=(
-            ${enableParallelBuilding:+-j${NIX_BUILD_CORES}}
             SHELL="$SHELL"
         )
         concatTo flagsArray makeFlags makeFlagsArray buildFlags buildFlagsArray
+
+        if [[ -n "${enableParallelBuilding-}" ]] && ! inJobserver; then
+            flagsArray+=("-j${NIX_BUILD_CORES}")
+        fi
 
         echoCmd 'build flags' "${flagsArray[@]}"
         make ${makefile:+-f $makefile} "${flagsArray[@]}"
@@ -1556,11 +1564,14 @@ checkPhase() {
         # Old bash empty array hack
         # shellcheck disable=SC2086
         local flagsArray=(
-            ${enableParallelChecking:+-j${NIX_BUILD_CORES}}
             SHELL="$SHELL"
         )
 
         concatTo flagsArray makeFlags makeFlagsArray checkFlags=VERBOSE=y checkFlagsArray checkTarget
+
+        if [[ -n "${enableParallelChecking-}" ]] && ! inJobserver; then
+            flagsArray+=("-j${NIX_BUILD_CORES}")
+        fi
 
         echoCmd 'check flags' "${flagsArray[@]}"
         make ${makefile:+-f $makefile} "${flagsArray[@]}"
@@ -1590,11 +1601,14 @@ installPhase() {
 
     # shellcheck disable=SC2086
     local flagsArray=(
-        ${enableParallelInstalling:+-j${NIX_BUILD_CORES}}
         SHELL="$SHELL"
     )
 
     concatTo flagsArray makeFlags makeFlagsArray installFlags installFlagsArray installTargets=install
+
+    if [[ -n "${enableParallelInstalling-}" ]] && ! inJobserver; then
+        flagsArray+=("-j${NIX_BUILD_CORES}")
+    fi
 
     echoCmd 'install flags' "${flagsArray[@]}"
     make ${makefile:+-f $makefile} "${flagsArray[@]}"
@@ -1672,12 +1686,15 @@ installCheckPhase() {
         # Old bash empty array hack
         # shellcheck disable=SC2086
         local flagsArray=(
-            ${enableParallelChecking:+-j${NIX_BUILD_CORES}}
             SHELL="$SHELL"
         )
 
         concatTo flagsArray makeFlags makeFlagsArray \
           installCheckFlags installCheckFlagsArray installCheckTarget=installcheck
+
+        if [[ -n "${enableParallelChecking-}" ]] && ! inJobserver; then
+            flagsArray+=("-j${NIX_BUILD_CORES}")
+        fi
 
         echoCmd 'installcheck flags' "${flagsArray[@]}"
         make ${makefile:+-f $makefile} "${flagsArray[@]}"
