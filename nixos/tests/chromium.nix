@@ -27,7 +27,10 @@
 
       programs.chromium = {
         enable = true;
+        homepageLocation = "https://example.org";
+        extraOpts.BrowserSignin = 0;
         extraOptsRecommended = {
+          SpellcheckEnabled = true;
           # Set policy for Memory Saver, so we don't race against a
           # "Make Chromium faster" in-product help promo (pop-up):
           HighEfficiencyModeEnabled = false;
@@ -46,6 +49,12 @@
 
   testScript = ''
     machine.wait_for_x()
+
+    with subtest("policy files are regular files with mode 0644"):
+        for browser in ("chromium", "opt/chrome", "brave"):
+            for policy in ("managed/default.json", "managed/extra.json", "recommended/extra.json"):
+                path = f"/etc/{browser}/policies/{policy}"
+                machine.succeed(f"test -f {path} && test ! -L {path} && test $(stat -c %a {path}) = 644")
 
     with subtest("file:///"):
         machine.execute("runuser alice chromium file:/// >&2 &")

@@ -161,12 +161,15 @@ in
             source = "${cfg.plasmaBrowserIntegrationPackage}/etc/chromium/native-messaging-hosts/org.kde.plasma.browser_integration.json";
           };
       "chromium/policies/managed/default.json" = lib.mkIf (defaultProfile != { }) {
+        mode = "0644";
         text = builtins.toJSON defaultProfile;
       };
       "chromium/policies/managed/extra.json" = lib.mkIf (cfg.extraOpts != { }) {
+        mode = "0644";
         text = builtins.toJSON cfg.extraOpts;
       };
       "chromium/policies/recommended/extra.json" = lib.mkIf (cfg.extraOptsRecommended != { }) {
+        mode = "0644";
         text = builtins.toJSON cfg.extraOptsRecommended;
       };
       "chromium/initial_preferences" = lib.mkIf (cfg.initialPrefs != { }) {
@@ -179,22 +182,28 @@ in
             source = "${cfg.plasmaBrowserIntegrationPackage}/etc/opt/chrome/native-messaging-hosts/org.kde.plasma.browser_integration.json";
           };
       "opt/chrome/policies/managed/default.json" = lib.mkIf (defaultProfile != { }) {
+        mode = "0644";
         text = builtins.toJSON defaultProfile;
       };
       "opt/chrome/policies/managed/extra.json" = lib.mkIf (cfg.extraOpts != { }) {
+        mode = "0644";
         text = builtins.toJSON cfg.extraOpts;
       };
       "opt/chrome/policies/recommended/extra.json" = lib.mkIf (cfg.extraOptsRecommended != { }) {
+        mode = "0644";
         text = builtins.toJSON cfg.extraOptsRecommended;
       };
       # for brave
       "brave/policies/managed/default.json" = lib.mkIf (defaultProfile != { }) {
+        mode = "0644";
         text = builtins.toJSON defaultProfile;
       };
       "brave/policies/managed/extra.json" = lib.mkIf (cfg.extraOpts != { }) {
+        mode = "0644";
         text = builtins.toJSON cfg.extraOpts;
       };
       "brave/policies/recommended/extra.json" = lib.mkIf (cfg.extraOptsRecommended != { }) {
+        mode = "0644";
         text = builtins.toJSON cfg.extraOptsRecommended;
       };
     };
