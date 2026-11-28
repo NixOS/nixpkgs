@@ -139,7 +139,10 @@ stdenv.mkDerivation (
           binaryBytecode # deps
         ];
         license = lib.licenses.gpl3Plus;
-        maintainers = with lib.maintainers; [ fgaz ];
+        maintainers = with lib.maintainers; [
+          fgaz
+          iedame
+        ];
         platforms = lib.platforms.all;
         mainProgram = pname;
       }
