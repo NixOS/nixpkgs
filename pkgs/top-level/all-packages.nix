@@ -576,14 +576,18 @@ with pkgs;
           openssl = buildPackages.openssl.override {
             fetchurl = stdenv.fetchurlBoot;
             buildPackages = {
-              coreutils = buildPackages.coreutils.override {
-                fetchurl = stdenv.fetchurlBoot;
-                inherit perl;
-                xz = buildPackages.xz.override { fetchurl = stdenv.fetchurlBoot; };
-                gmpSupport = false;
-                aclSupport = false;
-                attrSupport = false;
-              };
+              coreutils =
+                if (config.linuxBootstrapCoreutils.${stdenv.buildPlatform.system} or null) != null then
+                  buildPackages.coreutils
+                else
+                  buildPackages.coreutils.override {
+                    fetchurl = stdenv.fetchurlBoot;
+                    inherit perl;
+                    xz = buildPackages.xz.override { fetchurl = stdenv.fetchurlBoot; };
+                    gmpSupport = false;
+                    aclSupport = false;
+                    attrSupport = false;
+                  };
               inherit perl;
             };
             inherit perl;
@@ -1748,11 +1752,22 @@ with pkgs;
   # bootstrapping. We cannot override it for `coreutils-full`, because that
   # pulls in openssl from the previous stage as well.
   # `coreutils-prefixed` does not use openssl, though, so it can be overridden.
-  coreutils-full = callPackage ../by-name/co/coreutils/package.nix { minimal = false; };
-  coreutils-prefixed = coreutils.override {
-    withPrefix = true;
-    singleBinary = false;
-  };
+  coreutils-full =
+    if (config.linuxBootstrapCoreutils.${stdenv.hostPlatform.system} or null) != null then
+      coreutils
+    else
+      callPackage ../by-name/co/coreutils/package.nix { minimal = false; };
+  coreutils-prefixed =
+    if (config.linuxBootstrapCoreutils.${stdenv.hostPlatform.system} or null) != null then
+      uutils-coreutils.override {
+        prefix = "g";
+        buildMulticallBinary = false;
+      }
+    else
+      coreutils.override {
+        withPrefix = true;
+        singleBinary = false;
+      };
 
   cron = isc-cron;
 
