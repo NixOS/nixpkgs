@@ -125,7 +125,14 @@ lib.warnIf (withDocs != null)
       "bash_cv_dev_fd=standard"
       "gt_cv_func_printf_posix=yes"
     ]
-    ++ lib.optionals (stdenv.hostPlatform.libc == "musl") [
+    ++ lib.optionals (stdenv.hostPlatform.libc == "musl" || stdenv.hostPlatform.isDarwin) [
+      # On Darwin, the bundled libintl's setlocale() calls
+      # CFLocaleCopyPreferredLanguages whenever the locale is reset to the
+      # default. Bash does that in forked subshells (e.g. when
+      # `$(LC_ALL=C cmd)` restores the locale), and CoreFoundation is not
+      # safe to use after fork() without exec(), so those children
+      # intermittently die with SIGSEGV.
+      # https://github.com/NixOS/nixpkgs/issues/570561
       "--disable-nls"
     ]
     ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
