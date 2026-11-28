@@ -310,8 +310,15 @@ let
         propagatedBuildInputs = lib.optional withNuma numactl;
 
         postPatch = ''
-          substituteInPlace scripts/galera_new_cluster.sh \
-            --replace ":-mariadb" ":-mysql"
+          # Pass the bootstrap flag through systemd's manager environment.
+          sed -i '/^# INSTALL_RUNDIR/,$d; /^echo _WSREP_NEW_CLUSTER/,$d' scripts/galera_new_cluster.sh
+          cat >> scripts/galera_new_cluster.sh <<'EOF'
+          trap 'systemctl unset-environment _WSREP_NEW_CLUSTER' EXIT
+          trap 'exit 1' HUP INT TERM
+
+          systemctl set-environment _WSREP_NEW_CLUSTER=--wsrep-new-cluster &&
+              systemctl restart "''${1:-mysql.service}"
+          EOF
         '';
 
         cmakeFlags =
