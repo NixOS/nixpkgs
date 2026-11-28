@@ -446,6 +446,9 @@ stdenv.mkDerivation (finalAttrs: {
       install -Dm444 "$ICAInstDir/icons/000_Receiver_64.png" \
         $out/share/icons/hicolor/64x64/apps/Citrix-Receiver.png
 
+      # Keep the manually downloaded tarball available for rebuilds after garbage collection.
+      echo "$src" > "$out/share/workspace_dependencies.pin"
+
       runHook postInstall
     '';
 
