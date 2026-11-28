@@ -11,7 +11,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "conftest";
-  version = "0.71.0";
+  version = "0.71.1";
 
   __darwinAllowLocalNetworking = true; # required for tests
 
@@ -19,9 +19,9 @@ buildGoModule (finalAttrs: {
     owner = "open-policy-agent";
     repo = "conftest";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7nz+0NRoGPnY+u6Sj7l//z/i4vW1S173AoUDIS0LuaI=";
+    hash = "sha256-xu0Q46/pJzrA2Ps3iTOfHBcQQz0hoviWxbHih7bUfvk=";
   };
-  vendorHash = "sha256-ie0U9LkqZgVhduIIvJ9Mp1VljgEKyW3FWtQ/1mF/DIg=";
+  vendorHash = "sha256-MVOJ8VBw8X3jQ5/nuvf3C89qZE7SUG+Unx4UYimwWcQ=";
 
   ldflags = [
     "-s"
