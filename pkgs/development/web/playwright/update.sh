@@ -32,7 +32,15 @@ python_version=$(github_api_get https://api.github.com/repos/microsoft/playwrigh
 # Playwright version, but upstream occasionally ships additional npm-only patch
 # releases. Resolve the latest patch in the same major.minor series.
 driver_version_url="https://github.com/microsoft/playwright-python/raw/v${python_version}/DRIVER_VERSION"
-python_driver_version=$(curl -fsSL "$driver_version_url" | grep -Eo '[0-9]+\.[0-9]+\.[0-9]+')
+driver_version_file=$(curl -fsSL "$driver_version_url")
+# The new playwright-python release process pins DRIVER_VERSION to a
+# microsoft/playwright commit; use the Python release's version to select the
+# corresponding npm major.minor series in that case.
+if [[ $driver_version_file =~ [0-9]+\.[0-9]+\.[0-9]+ ]]; then
+    python_driver_version=${BASH_REMATCH[0]}
+else
+    python_driver_version=$python_version
+fi
 python_major_minor=$(major_minor "$python_driver_version")
 resolve_driver_version_latest_patch() {
     local mm_escaped
