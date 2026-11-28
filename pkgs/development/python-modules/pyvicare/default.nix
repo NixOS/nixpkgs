@@ -13,14 +13,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyvicare";
-  version = "2.66.0";
+  version = "2.67.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openviess";
     repo = "PyViCare";
     tag = finalAttrs.version;
-    hash = "sha256-OyzBppjdBHAcKMnjELE73r2BtIkuTmA4EneRHJUS77E=";
+    hash = "sha256-8rzjrr7fWwyD22HRtBM6Esaun4Cu74XEmXaYwY066gk=";
   };
 
   build-system = [ hatchling ];
