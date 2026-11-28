@@ -32,6 +32,21 @@ stdenv.mkDerivation (finalAttrs: {
     ./cxx20-bfe-test.patch
   ];
 
+  outputs = [
+    "out"
+    "dev"
+  ];
+
+  # The installed CMake package hardcodes $out as its import prefix, so the
+  # headers must be installed to (and exported from) $dev directly rather
+  # than moved there after install.
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail '$<INSTALL_INTERFACE:include>' '$<INSTALL_INTERFACE:''${CMAKE_INSTALL_INCLUDEDIR}>' \
+      --replace-fail 'DESTINATION include)' 'DESTINATION ''${CMAKE_INSTALL_INCLUDEDIR})' \
+      --replace-fail 'DESTINATION include/pagmo)' 'DESTINATION ''${CMAKE_INSTALL_INCLUDEDIR}/pagmo)'
+  '';
+
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [
