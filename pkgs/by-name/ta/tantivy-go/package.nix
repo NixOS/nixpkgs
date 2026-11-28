@@ -4,6 +4,7 @@
   pkg-config,
   rustPlatform,
   zstd,
+  llvmPackages,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -19,7 +20,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/rust";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    llvmPackages.llvm
+  ];
 
   buildInputs = [ zstd ];
 
@@ -35,6 +39,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   postPatch = ''
     ln -s ${./Cargo.lock} Cargo.lock
     chmod +w ../bindings.h
+  '';
+
+  # Removes LLVM sections rejected by go linker in dependent packages (anytype-heart)
+  # github.com/anyproto/anytype-heart/pkg/lib/localstore/ftsearch: disallowed LTO section ".llvmbc" in #cgo LDFLAGS: /build/source/deps/libs/linux-arm64-musl/libtantivy_go.a
+  postInstall = ''
+    llvm-objcopy --remove-section=.llvmbc --remove-section=.llvmcmd $out/lib/libtantivy_go.a
   '';
 
   meta = {
