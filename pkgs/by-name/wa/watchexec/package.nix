@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "watchexec";
-  version = "2.5.1";
+  version = "2.8.0";
 
   src = fetchFromGitHub {
     owner = "watchexec";
     repo = "watchexec";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Dobb+l24nL01od+KET3PGgDzFaYr1LPhkPrbpA3G6y4=";
+    hash = "sha256-IyzJpf7VEUKy9qGgwaDRQJr2E8J1hw1RifuW9/UUCWM=";
   };
 
-  cargoHash = "sha256-ZwF5nNI2ESwgaH129MhcJPlhtmxqwhhQ9W49u9bilRk=";
+  cargoHash = "sha256-m3lDL9HfXpIYZLrjtrSa8FWgVT3eXDAkBkMknHqwR4I=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -30,8 +30,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   checkFlags = [
-    "--skip=help"
-    "--skip=help_short"
+    # v2.8.0: these fail in the build sandbox, but seem to work fine outside it
+    "--skip=args::filtering::tests::relative_watched_paths_resolve_against_the_workdir"
+    "--skip=dirs::tests::discovers_the_origin_of_a_watched_path"
+    "--skip=dirs::tests::discovers_the_same_origin_from_anywhere_in_the_project"
   ];
 
   postPatch = ''
