@@ -1,0 +1,8 @@
+diff --git a/.cargo/config.toml b/.cargo/config.toml
+deleted file mode 100644
+index 059c0a6..0000000
+--- a/.cargo/config.toml
++++ /dev/null
+@@ -1,2 +0,0 @@
+-[target.'cfg(all(target_arch = "x86_64", not(target_env = "musl")))']
+-rustflags = ["-C", "target-cpu=x86-64-v2"]
