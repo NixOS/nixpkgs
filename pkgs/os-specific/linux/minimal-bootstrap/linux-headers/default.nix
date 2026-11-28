@@ -2,8 +2,8 @@
   lib,
   fetchurl,
   bash,
-  gcc,
-  musl,
+  hostPlatform,
+  gcc-buildbuild,
   binutils,
   gnumake,
   gnused,
@@ -28,8 +28,7 @@ bash.runCommand "${pname}-${version}"
     inherit pname version;
 
     nativeBuildInputs = [
-      gcc
-      musl
+      gcc-buildbuild
       binutils
       gnumake
       gnused
@@ -54,7 +53,7 @@ bash.runCommand "${pname}-${version}"
     cd linux-${version}
 
     # Build
-    make -j $NIX_BUILD_CORES CC=musl-gcc HOSTCC=musl-gcc ARCH=x86 headers
+    make -j $NIX_BUILD_CORES HOSTCC=gcc ARCH=${hostPlatform.linuxArch} headers
 
     # Install
     find usr/include -name '.*' -exec rm {} +

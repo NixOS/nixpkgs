@@ -343,7 +343,7 @@ lib.makeScope
         };
 
         linux-headers = callPackage ./linux-headers {
-          gcc = gcc-latest;
+          gcc-buildbuild = gcc10;
           gnumake = gnumake-musl;
           gnutar = gnutar-latest;
         };
