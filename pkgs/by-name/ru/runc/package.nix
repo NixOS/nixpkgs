@@ -16,7 +16,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "runc";
-  version = "1.5.3";
+  version = "1.6.0";
 
   __structuredAttrs = true;
 
@@ -24,7 +24,7 @@ buildGoModule (finalAttrs: {
     owner = "opencontainers";
     repo = "runc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4BbLZtIjX1UXDHTbi5dH9MhtGmGDVTzMztOiIZolrZk=";
+    hash = "sha256-mRmD/reiUOQwe6J5leznUJXS1qEzDvo5uYAgPtHggEQ=";
   };
 
   vendorHash = null;
