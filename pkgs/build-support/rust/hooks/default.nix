@@ -2,6 +2,7 @@
   cargo-nextest,
   clang,
   diffutils,
+  rust-advisory-db,
   lib,
   makeSetupHook,
   rust,
@@ -17,21 +18,48 @@
   tests,
   pkgsCross,
 }:
-{
-  cargoBuildHook = makeSetupHook {
-    name = "cargo-build-hook.sh";
+lib.fix (self: {
+  cargoAuditHook = makeSetupHook {
+    name = "cargo-audit-hook.sh";
     substitutions = {
-      inherit (stdenv.targetPlatform.rust) rustcTargetSpec;
-      inherit (rust.envVars) setEnv;
+      inherit (stdenv.targetPlatform.rust.platform) arch os;
+      auditDatabase = rust-advisory-db;
+    };
+    propagatedBuildInputs = [
+      pkgsHostTarget.cargo-audit
+      pkgsHostTarget.jq
+    ];
+  } ./cargo-audit-hook.sh;
 
-    };
-    passthru.tests = {
-      test = tests.rust-hooks.cargoBuildHook;
-      ${if stdenv.hostPlatform.isLinux then "testCross" else null} =
-        pkgsCross.riscv64.tests.rust-hooks.cargoBuildHook;
-    };
-    meta.license = lib.licenses.mit;
-  } ./cargo-build-hook.sh;
+  cargoBuildHook = lib.makeOverridable (
+    {
+      withCargoAuditHook ? true,
+    }:
+    makeSetupHook {
+      name = "cargo-build-hook.sh";
+      substitutions = {
+        inherit (stdenv.targetPlatform.rust) rustcTargetSpec;
+        inherit (rust.envVars) setEnv;
+
+      };
+
+      # Modify bootstrap config if any are added here
+      propagatedBuildInputs = lib.optionals withCargoAuditHook [
+        self.cargoAuditHook
+      ];
+
+      passthru.bootstrap = self.cargoBuildHook.override {
+        withCargoAuditHook = false;
+      };
+
+      passthru.tests = {
+        test = tests.rust-hooks.cargoBuildHook;
+        ${if stdenv.hostPlatform.isLinux then "testCross" else null} =
+          pkgsCross.riscv64.tests.rust-hooks.cargoBuildHook;
+      };
+      meta.license = lib.licenses.mit;
+    } ./cargo-build-hook.sh
+  ) { };
 
   cargoCheckHook = makeSetupHook {
     name = "cargo-check-hook.sh";
@@ -137,4 +165,4 @@
     };
     meta.license = lib.licenses.mit;
   } ./rust-bindgen-hook.sh;
-}
+})
