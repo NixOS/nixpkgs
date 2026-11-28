@@ -9,6 +9,28 @@ let
   nssModulesPath = config.system.nssModules.path;
   cfg = config.services.nscd;
 
+  nsncdSandbox = {
+    CapabilityBoundingSet = "";
+    AmbientCapabilities = "";
+    PrivateDevices = true;
+    ProtectClock = true;
+    ProtectHostname = true;
+    ProtectKernelTunables = true;
+    ProtectKernelModules = true;
+    ProtectKernelLogs = true;
+    ProtectControlGroups = true;
+    LockPersonality = true;
+    RestrictRealtime = true;
+    RestrictNamespaces = true;
+    SystemCallArchitectures = "native";
+    RestrictAddressFamilies = [
+      "AF_UNIX"
+      "AF_INET"
+      "AF_INET6"
+      "AF_NETLINK"
+    ];
+  };
+
 in
 
 {
@@ -156,7 +178,8 @@ in
           "${cfg.package}/bin/nscd --invalidate group"
           "${cfg.package}/bin/nscd --invalidate hosts"
         ];
-      };
+      }
+      // lib.optionalAttrs cfg.enableNsncd nsncdSandbox;
     };
   };
 }
