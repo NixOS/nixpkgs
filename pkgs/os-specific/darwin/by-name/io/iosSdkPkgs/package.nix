@@ -18,8 +18,6 @@
 
 let
 
-  minSdkVersion = stdenv.targetPlatform.minSdkVersion or "9.0";
-
 in
 
 rec {

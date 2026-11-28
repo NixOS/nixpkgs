@@ -19,7 +19,6 @@ let
   inherit (lib) getExe recurseIntoAttrs;
 
   inherit (writers)
-    makeFSharpWriter
     writeBash
     writeBashBin
     writeBabashka

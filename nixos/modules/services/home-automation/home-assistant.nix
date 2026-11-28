@@ -33,7 +33,6 @@ let
     mkMerge
     mkOption
     mkRemovedOptionModule
-    mkRenamedOptionModule
     optionals
     optionalString
     recursiveUpdate

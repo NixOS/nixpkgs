@@ -7,7 +7,7 @@
 
 let
   cfg = config.services.torrentstream;
-  dataDir = "/var/lib/torrentstream/";
+
 in
 {
   options.services.torrentstream = {

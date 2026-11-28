@@ -1,7 +1,7 @@
 { pkgs, lib, ... }:
 
 let
-  chipVersion = pkgs.python3Packages.home-assistant-chip-core.version;
+
 in
 
 {

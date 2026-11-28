@@ -69,7 +69,6 @@ gcc14Stdenv.mkDerivation (finalAttrs: {
         toUpper
         splitString
         last
-        listToAttrs
         pipe
         ;
       inherit (builtins) map;

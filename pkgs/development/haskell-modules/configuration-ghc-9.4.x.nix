@@ -1,7 +1,7 @@
 { pkgs, haskellLib }:
 
 let
-  inherit (pkgs) fetchpatch lib;
+  inherit (pkgs) lib;
 in
 
 with haskellLib;

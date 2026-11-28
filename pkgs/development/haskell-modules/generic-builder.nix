@@ -278,7 +278,6 @@ let
     optional
     optionals
     optionalString
-    versionAtLeast
     concatStringsSep
     enableFeature
     optionalAttrs

@@ -20,7 +20,6 @@ let
     head
     isList
     isString
-    length
     mapAttrs'
     match
     nameValuePair

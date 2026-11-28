@@ -17,7 +17,6 @@ let
     nameValuePair
     ;
   inherit (lib.lists)
-    elem
     flatten
     optional
     optionals

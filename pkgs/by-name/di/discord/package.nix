@@ -45,9 +45,7 @@ let
   inherit (metadata)
     meta
     binaryName
-    desktopName
     self
-    branch
     ;
 
   pkgArgs = removeAttrs (args // metadata // { inherit source; }) [

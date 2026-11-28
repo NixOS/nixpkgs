@@ -3,7 +3,7 @@
   ratchet,
 }:
 let
-  inherit (ratchet) pname version;
+  inherit (ratchet) pname;
 in
 runCommand "${pname}-tests" { meta.timeout = 60; } ''
   set -euo pipefail

@@ -19,21 +19,6 @@ let
     )
   );
 
-  fishFunctions = lib.mapAttrs' (
-    name: value: {
-      name = "fish/functions/${name}.fish";
-      value.source =
-        let
-          body = if lib.isPath value then lib.readFile value else value;
-        in
-        indentFishFile "${name}.fish" ''
-          function ${name}
-            ${lib.strings.removeSuffix "\n" body}
-          end
-        '';
-    }
-  );
-
   envShellInit = pkgs.writeText "shellInit" cfge.shellInit;
   envLoginShellInit = pkgs.writeText "loginShellInit" cfge.loginShellInit;
   envInteractiveShellInit = pkgs.writeText "interactiveShellInit" cfge.interactiveShellInit;

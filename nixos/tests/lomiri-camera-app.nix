@@ -61,8 +61,7 @@ in
 
       testScript =
         let
-          qrLabel = "Feed";
-          qrContent = "Test";
+
         in
         ''
           import datetime

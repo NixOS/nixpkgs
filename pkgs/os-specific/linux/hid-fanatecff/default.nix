@@ -10,7 +10,7 @@
 }:
 
 let
-  moduleDir = "lib/modules/${kernel.modDirVersion}/kernel/drivers/hid";
+
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hid-fanatecff";

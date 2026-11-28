@@ -8,8 +8,7 @@
   pytest-benchmark,
 }:
 let
-  owner = "whtsky";
-  repo = "pixelmatch-py";
+
 in
 buildPythonPackage rec {
   pname = "pixelmatch";

@@ -4,7 +4,7 @@
 let
   inherit (pkgs) runCommand;
   # splicing doesn't seem to work right here
-  inherit (pkgs.buildPackages) dumpnar rsync nukeReferences;
+  inherit (pkgs.buildPackages) dumpnar nukeReferences;
 
   unpacked =
     let

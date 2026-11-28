@@ -10,19 +10,6 @@ let
 
   makeColor = i: lib.concatMapStringsSep "," (x: "0x" + lib.substring (2 * i) 2 x);
 
-  isUnicode = config.i18n.defaultCharset == "UTF-8" || cfg.useXkbConfig;
-
-  optimizedKeymap =
-    pkgs.runCommand "keymap"
-      {
-        nativeBuildInputs = [ pkgs.buildPackages.kbd ];
-        LOADKEYS_KEYMAP_PATH = "${consoleEnv pkgs.kbd}/share/keymaps/**";
-        preferLocalBuild = true;
-      }
-      ''
-        loadkeys -b ${lib.optionalString isUnicode "-u"} "${cfg.keyMap}" > $out
-      '';
-
   # Sadly, systemd-vconsole-setup doesn't support binary keymaps.
   vconsoleConf =
     withFont:

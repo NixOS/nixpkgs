@@ -10,13 +10,12 @@ let
   inherit (lib)
     concatStrings
     listToAttrs
-    makeOverridable
     mapAttrsToList
     nameValuePair
     ;
   json = formats.json { };
 in
-rec {
+{
 
   # Derive a pin file from workspace state.
   mkPinFile =
@@ -37,7 +36,7 @@ rec {
     let
       inherit (import generated) workspaceStateFile hashes;
       workspaceState = lib.importJSON workspaceStateFile;
-      pinFile = mkPinFile workspaceState;
+
     in
     rec {
 

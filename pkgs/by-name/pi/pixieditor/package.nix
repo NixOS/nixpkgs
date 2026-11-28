@@ -28,8 +28,6 @@
   nix-update-script,
 }:
 let
-  inherit (dotnetCorePackages) fetchNupkg;
-
   buildInfo = {
     id = "NixOS";
     name = "for NixOS";

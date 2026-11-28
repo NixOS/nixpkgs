@@ -7,7 +7,6 @@
 
 let
   cfg = config.programs.steam;
-  gamescopeCfg = config.programs.gamescope;
 
   extraCompatPaths = lib.makeSearchPathOutput "steamcompattool" "" cfg.extraCompatPackages;
 

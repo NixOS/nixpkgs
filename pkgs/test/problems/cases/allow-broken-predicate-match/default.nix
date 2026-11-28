@@ -1,6 +1,6 @@
 { nixpkgs }:
 let
-  lib = pkgs.lib;
+
   pkgs = import nixpkgs {
     system = "x86_64-linux";
     overlays = [ ];

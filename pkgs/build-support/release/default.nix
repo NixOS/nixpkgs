@@ -13,7 +13,6 @@ let
     lcov
     libtool
     makeGCOVReport
-    runCommand
     stdenv
     vmTools
     xz

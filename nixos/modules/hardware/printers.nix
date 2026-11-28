@@ -8,7 +8,6 @@ let
   cfg = config.hardware.printers;
 
   inherit (lib)
-    concatLines
     escapeShellArg
     mkOption
     ;

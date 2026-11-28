@@ -213,7 +213,6 @@ let
     let
       acmeServer = data.server;
       useDns = data.dnsProvider != null;
-      destPath = "/var/lib/acme/${cert}";
 
       # Minica and lego have a "feature" which replaces * with _. We need
       # to make this substitution to reference the output files from both programs.

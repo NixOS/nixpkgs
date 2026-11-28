@@ -41,8 +41,7 @@
 let
 
   # Hide symbols to prevent accidental use
-  rust-jemalloc-sys = throw "polars: use polarsMemoryAllocator over rust-jemalloc-sys";
-  jemalloc = throw "polars: use polarsMemoryAllocator over jemalloc";
+
 in
 
 buildPythonPackage (finalAttrs: {
