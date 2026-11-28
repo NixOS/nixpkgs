@@ -626,6 +626,7 @@ mapAliases {
   collada2gltf = throw "collada2gltf has been removed from Nixpkgs, as it has been unmaintained upstream for 5 years and does not build with supported GCC versions"; # Added 2025-08-08
   colloid-kde = throw "'colloid-kde' has been removed, as it is only compatible with Plasma 5, which is EOL"; # Added 2025-08-20
   colorstorm = throw "'colorstorm' has been removed because it was unmaintained in nixpkgs and upstream was rewritten."; # Added 2025-06-15
+  comet-gog_heroic = throw "'comet-gog_heroic' has been removed, as Heroic now uses 'comet-gog'"; # Added 2026-11-25
   commonsBcel = warnAlias "'commonsBcel' has been renamed to 'commons-bcel'" commons-bcel; # Added 2026-02-08
   commonsBsf = warnAlias "'commonsBsf' has been renamed to 'commons-bsf'" commons-bsf; # Added 2026-02-08
   commonsCompress = warnAlias "'commonsCompress' has been renamed to 'commons-compress'" commons-compress; # Added 2026-02-08

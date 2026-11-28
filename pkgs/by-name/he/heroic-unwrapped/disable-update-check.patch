@@ -1,0 +1,42 @@
+diff --git a/src/backend/config.ts b/src/backend/config.ts
+--- a/src/backend/config.ts
++++ b/src/backend/config.ts
+@@ -387,7 +387,7 @@ class GlobalConfigV0 extends GlobalConfig {
+       autoInstallDxvkNvapi: isLinux,
+       addSteamShortcuts: false,
+       preferSystemLibs: false,
+-      checkForUpdatesOnStartup: !isFlatpak,
++      checkForUpdatesOnStartup: false,
+       autoUpdateGames: false,
+       backupSaves: true,
+       maxSaveBackupSize: 1,
+diff --git a/src/backend/main.ts b/src/backend/main.ts
+--- a/src/backend/main.ts
++++ b/src/backend/main.ts
+@@ -275,7 +275,7 @@ async function initializeWindow(): Promise<BrowserWindow> {
+       join(publicDir, 'index.html'),
+       startHash ? { hash: startHash } : undefined
+     )
+-    if (globalConf.checkForUpdatesOnStartup) {
++    if (false) {
+       autoUpdater.checkForUpdates()
+     }
+   }
+@@ -745,15 +745,10 @@ addHandler('getGameSdl', async (event, appName) =>
+   libraryManagerMap['legendary'].getGameSdl(appName)
+ )
+ 
+-addHandler('showUpdateSetting', () => !isFlatpak)
++addHandler('showUpdateSetting', () => false)
+ 
+ addHandler('getLatestReleases', async () => {
+-  const { checkForUpdatesOnStartup } = GlobalConfig.get().getSettings()
+-  if (checkForUpdatesOnStartup) {
+-    return getLatestReleases()
+-  } else {
+-    return []
+-  }
++  return []
+ })
+ 
+ addHandler('getCurrentChangelog', async () => {

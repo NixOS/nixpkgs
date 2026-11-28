@@ -1742,8 +1742,6 @@ with pkgs;
 
   cmdpack = callPackages ../tools/misc/cmdpack { };
 
-  comet-gog_heroic = callPackage ../by-name/co/comet-gog/package.nix { comet-gog_kind = "heroic"; };
-
   # The `coreutils` package (in pkgs/by-name) is built with dependencies from
   # bootstrapping. We cannot override it for `coreutils-full`, because that
   # pulls in openssl from the previous stage as well.

@@ -16,10 +16,13 @@
 
   # Electron updates can break Heroic, so try to use same version as upstream.
   # If the used electron version is higher than upstream's then the node-abi package might need to be updated
-  electron_43,
+  # Electron version: devDependencies.electron in upstream package.json
+  electron_45,
 
   # Helper versions: RELEASE_TAGS in upstream meta/downloadHelperBinaries.ts
-  comet-gog_heroic,
+  aurelia,
+  butler,
+  comet-gog,
   gogdl,
   legendary-gl,
   nile,
@@ -29,7 +32,7 @@
 
 let
   pnpm = pnpm_12;
-  electron = electron_43;
+  electron = electron_45;
   appId = "com.heroicgameslauncher.hgl";
 
   epic-integration = callPackage ./epic-integration.nix { };
@@ -38,7 +41,9 @@ let
   helpersDir = "$out/share/heroic/resources/app.asar.unpacked/build/bin";
   linuxHelpersDir = "${helpersDir}/${stdenv.hostPlatform.node.arch}/linux";
   linuxHelpers = lib.concatMapStringsSep " " lib.getExe [
-    comet-gog_heroic
+    aurelia
+    butler
+    comet-gog
     gogdl
     legendary-gl
     nile
@@ -47,7 +52,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "heroic-unwrapped";
-  version = "2.22.4";
+  version = "3.0.0-beta.1";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -56,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Heroic-Games-Launcher";
     repo = "HeroicGamesLauncher";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3P2u2Pzle3KpYPehfJXGrqg3OAxUrTIlUH3yiWBDPpg=";
+    hash = "sha256-VC7qK0QXAEz9vjdNlfy+aPGlMRGETN2QNU5bEulSgfA=";
   };
 
   pnpmDeps = fetchPnpmDeps {
@@ -67,13 +72,14 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     inherit pnpm;
     fetcherVersion = 4;
-    hash = "sha256-ffvwX+R4b8VezeJiKR9k3kRhf2tVXTUGUFw606lKL9A=";
+    hash = "sha256-HWVXtaee0OFGvIcwYRJtjKfJi1ZC3WpJxbV4HKi5eTo=";
   };
 
   patches = [
     # Make Heroic create Steam shortcuts (to non-steam games) with the correct path to heroic.
     ./fix-non-steam-shortcuts.patch
     ./fix-notification-name.patch
+    ./disable-update-check.patch
   ];
 
   nativeBuildInputs = [
@@ -142,8 +148,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Copied, not symlinked, so Windows programs under Wine/Proton aren't confused.
     cp -t ${helpersDir}/x64/win32 \
-      ${comet-gog_heroic.dummy-service}/GalaxyCommunication.exe \
+      ${comet-gog.dummy-service}/GalaxyCommunication.exe \
       ${epic-integration}/EpicGamesLauncher.exe
+
+    makeWrapper ${lib.getExe electron} $out/bin/heroic "''${makeWrapperArgs[@]}"
   '';
 
   makeWrapperArgs = [
@@ -163,10 +171,6 @@ stdenv.mkDerivation (finalAttrs: {
     ":"
     (lib.makeBinPath [ umu-launcher ])
   ];
-
-  postFixup = ''
-    makeWrapper ${lib.getExe electron} $out/bin/heroic "''${makeWrapperArgs[@]}"
-  '';
 
   passthru = {
     inherit epic-integration;
