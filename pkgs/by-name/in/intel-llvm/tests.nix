@@ -19,18 +19,46 @@ let
     '';
   };
 
+  # std::div and std::complex in a kernel need include/sycl/stl_wrappers
+  # ahead of libstdc++. Otherwise the real <cstdlib> is used and the device
+  # compiler rejects it as an undefined function.
+  stlWrappersSrc = writeTextFile {
+    name = "stl-wrappers.cpp";
+    text = ''
+      #include <sycl/sycl.hpp>
+      #include <complex>
+      #include <cstdlib>
+
+      int main() {
+        sycl::queue{}.single_task([] { (void)std::div(7, 3); });
+        sycl::queue{}.parallel_for(sycl::nd_range<1>{1, 1}, [](sycl::nd_item<1> it) {
+          (void)sycl::reduce_over_group(it.get_group(), std::complex<float>{}, sycl::plus<>());
+        });
+      }
+    '';
+  };
+
   targets = [
     # SPIR-V is a bit of a special case; it's always available
     # and needs no device libraries.
     {
       name = "spir64";
       flags = [ ];
+      checkStlWrappers = true;
     }
     # ...unless the new offload driver is used, which links them at compile
     # time and errors out if they can't be found.
     {
       name = "spir64-new-offload-driver";
       flags = [ "--offload-new-driver" ];
+    }
+    # Same compile as spir64, with the setup hook's NIX_CFLAGS_COMPILE cleared.
+    # libcxx-cxxflags has to provide <sycl/sycl.hpp> and <CL/cl.h> on its own.
+    {
+      name = "spir64-without-setup-cflags";
+      flags = [ ];
+      ignoreSetupHookCflags = true;
+      checkStlWrappers = true;
     }
   ]
   ++ lib.optional (lib.elem "native_cpu" backends) {
@@ -54,7 +82,12 @@ let
   };
 
   mkTest =
-    { name, flags }:
+    {
+      name,
+      flags,
+      ignoreSetupHookCflags ? false,
+      checkStlWrappers ? false,
+    }:
     stdenv.mkDerivation {
       name = "intel-llvm-test-sycl-compile-${name}";
 
@@ -64,7 +97,15 @@ let
 
       buildPhase = ''
         echo "Checking if a SYCL program can be built for ${name}..."
+        ${lib.optionalString ignoreSetupHookCflags ''
+          export NIX_CFLAGS_COMPILE=
+          export NIX_CFLAGS_COMPILE_BEFORE=
+        ''}
         clang++ -fsycl ${lib.escapeShellArgs flags} $src -o test
+        ${lib.optionalString checkStlWrappers ''
+          echo "Checking std::div and std::complex in a kernel for ${name}..."
+          clang++ -fsycl ${lib.escapeShellArgs flags} ${stlWrappersSrc} -o stl-wrappers
+        ''}
       '';
 
       installPhase = ''
