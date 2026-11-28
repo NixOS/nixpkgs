@@ -88,6 +88,9 @@ let
       prince213
       ryan4yin
     ];
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+    mainProgram = "qq";
   };
 in
 if stdenv.hostPlatform.isDarwin then
