@@ -9,7 +9,11 @@ cargoCheckHook() {
         pushd "${buildAndTestSubdir}"
     fi
 
-    local flagsArray=("-j" "$NIX_BUILD_CORES")
+    local flagsArray=()
+
+    if ! inJobserver; then
+      flagsArray+=("-j" "$NIX_BUILD_CORES")
+    fi
 
     export RUST_TEST_THREADS=$NIX_BUILD_CORES
     if [[ ! -z ${dontUseCargoParallelTests-} ]]; then

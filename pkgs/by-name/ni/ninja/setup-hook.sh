@@ -4,15 +4,17 @@ ninjaBuildPhase() {
     runHook preBuild
 
     local buildCores=1
+    local flagsArray=()
 
     # Parallel building is enabled by default.
-    if [ "${enableParallelBuilding-1}" ]; then
+    # NOTE: -j disables ninja's client jobserver mode.
+    if [ "${enableParallelBuilding-1}" ] && ! inJobserver; then
         buildCores="$NIX_BUILD_CORES"
+        flagsArray+=("-j$buildCores")
+    elif [ -z "${enableParallelBuilding-1}" ]; then
+        flagsArray+=("-j1")
     fi
 
-    local flagsArray=(
-        "-j$buildCores"
-    )
     concatTo flagsArray ninjaFlags ninjaFlagsArray
 
     echoCmd 'build flags' "${flagsArray[@]}"
@@ -34,14 +36,15 @@ ninjaCheckPhase() {
         echo "no test target found in ninja, doing nothing"
     else
         local buildCores=1
+        local flagsArray=()
 
-        if [ "${enableParallelChecking-1}" ]; then
+        if [ "${enableParallelChecking-1}" ] && ! inJobserver; then
             buildCores="$NIX_BUILD_CORES"
+            flagsArray+=("-j$buildCores")
+        elif [ -z "${enableParallelChecking-1}" ]; then
+          flagsArray+=("-j1")
         fi
 
-        local flagsArray=(
-            "-j$buildCores"
-        )
         concatTo flagsArray ninjaFlags ninjaFlagsArray checkTarget
 
         echoCmd 'check flags' "${flagsArray[@]}"
@@ -55,16 +58,16 @@ ninjaInstallPhase() {
     runHook preInstall
 
     local buildCores=1
+    local flagsArray=()
 
     # Parallel building is enabled by default.
-    if [ "${enableParallelInstalling-1}" ]; then
+    if [ "${enableParallelInstalling-1}" ] && ! inJobserver; then
         buildCores="$NIX_BUILD_CORES"
+        flagsArray+=("-j$buildCores")
+    elif [ -z "${enableParallelInstalling-1}" ]; then
+        flagsArray+=("-j1")
     fi
 
-    # shellcheck disable=SC2086
-    local flagsArray=(
-        "-j$buildCores"
-    )
     concatTo flagsArray ninjaFlags ninjaFlagsArray installTargets=install
 
     echoCmd 'install flags' "${flagsArray[@]}"
