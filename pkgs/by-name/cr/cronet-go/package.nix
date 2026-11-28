@@ -13,8 +13,10 @@
   python3,
   xcbuild,
 
+  # propagatedBuildInputs
+  apple-sdk_26,
+
   # buildInputs
-  apple-sdk_15,
   darwin,
 }:
 let
@@ -29,16 +31,16 @@ in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "cronet-go";
   # NOTE: https://github.com/SagerNet/sing-box/blob/stable/.github/CRONET_GO_VERSION
-  version = "150.0.7871.63-3";
+  version = "154.0.8037.49-2";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "SagerNet";
     repo = "cronet-go";
     # NOTE: keep rev for easier overriding
-    rev = "049f2909701ca088c9569f6b303bba5376a2b2ff";
+    rev = "e265295f7be0bc2209ec36078028667e6b9c217e";
     fetchSubmodules = true;
-    hash = "sha256-705cctVHseRSJuEPFxlTRJJUWsNgZ4y5ZQ9nwhyTqFY=";
+    hash = "sha256-3rxR8bRsh0EJQJ6fqVOS/7E+OO001b9BvQM1Q7QdIyM=";
   };
 
   patches = [
@@ -71,7 +73,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   ]
   ++ lib.optional stdenvNoCC.hostPlatform.isDarwin xcbuild;
 
-  buildInputs = lib.optional stdenvNoCC.hostPlatform.isDarwin apple-sdk_15;
+  # for statically linking to libcronet.a
+  propagatedBuildInputs = lib.optional stdenvNoCC.hostPlatform.isDarwin apple-sdk_26;
 
   buildPhase = ''
     runHook preBuild
