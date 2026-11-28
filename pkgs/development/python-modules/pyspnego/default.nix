@@ -14,14 +14,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyspnego";
-  version = "0.12.3";
+  version = "0.12.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jborean93";
     repo = "pyspnego";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WUxIYAHkDUV6rYkKLB6yAauLuZS19lD7I+24hE5BLaw=";
+    hash = "sha256-8DHU/4IWwYV71vkhESRf5YLz1WEdZktUEcxxOsFjS9g=";
   };
 
   build-system = [ setuptools ];
