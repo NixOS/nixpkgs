@@ -216,6 +216,24 @@ in
     systemd.services.plymouth-quit.wantedBy = [ "multi-user.target" ];
     systemd.services.plymouth-poweroff.wantedBy = [ "poweroff.target" ];
     systemd.services.plymouth-reboot.wantedBy = [ "reboot.target" ];
+    systemd.shutdownRamfs.storePaths = [
+      "${cfg.package}/libexec/plymouth/plymouthd-fd-escrow"
+    ];
+    systemd.services.plymouth-switch-root-initramfs = mkIf config.systemd.shutdownRamfs.enable {
+      wantedBy = [
+        "halt.target"
+        "kexec.target"
+        "poweroff.target"
+        "reboot.target"
+      ];
+      after = [ "generate-shutdown-ramfs.service" ];
+      before = [
+        "systemd-halt.service"
+        "systemd-kexec.service"
+        "systemd-poweroff.service"
+        "systemd-reboot.service"
+      ];
+    };
     systemd.services.plymouth-read-write.wantedBy = [ "sysinit.target" ];
     systemd.services.systemd-ask-password-plymouth.wantedBy = [ "sysinit.target" ];
     systemd.paths.systemd-ask-password-plymouth.wantedBy = [ "sysinit.target" ];
@@ -306,13 +324,6 @@ in
         plymouth-start.wantedBy = [
           "initrd-switch-root.target"
           "sysinit.target"
-        ];
-        plymouth-switch-root-initramfs.wantedBy = [
-          "halt.target"
-          "kexec.target"
-          "plymouth-switch-root-initramfs.service"
-          "poweroff.target"
-          "reboot.target"
         ];
         plymouth-switch-root.wantedBy = [ "initrd-switch-root.target" ];
       };
