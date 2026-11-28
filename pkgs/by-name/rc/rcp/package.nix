@@ -1,12 +1,12 @@
 {
   lib,
-  pkgsStatic,
   fetchFromGitHub,
+  stdenv,
+  rustPlatform,
   aws-lc,
   pkg-config,
 }:
-
-pkgsStatic.rustPlatform.buildRustPackage (finalAttrs: {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rcp";
   version = "0.42.0";
 
@@ -56,6 +56,6 @@ pkgsStatic.rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "rcp";
     maintainers = with lib.maintainers; [ wykurz ];
     # procfs only supports Linux and Android
-    broken = pkgsStatic.stdenv.hostPlatform.isDarwin;
+    broken = stdenv.hostPlatform.isStatic && stdenv.hostPlatform.isDarwin;
   };
 })
