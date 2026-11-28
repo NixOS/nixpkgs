@@ -1,0 +1,209 @@
+diff --git a/tests/test--compare-all.py b/tests/test--compare-all.py
+index d412b18..8681d2b 100755
+--- a/tests/test--compare-all.py
++++ b/tests/test--compare-all.py
+@@ -4,7 +4,7 @@ import os,sys
+ import glob
+ import filecmp
+
+-import pyemf
++import pyemf3 as pyemf
+
+ FILTER=''.join([(len(repr(chr(x)))==3) and chr(x) or '.' for x in range(256)])
+
+diff --git a/tests/test--run-all.py b/tests/test--run-all.py
+index de1232c..25d5d94 100755
+--- a/tests/test--run-all.py
++++ b/tests/test--run-all.py
+@@ -5,7 +5,7 @@ from __future__ import print_function
+ import os,sys
+ import glob
+ import filecmp
+-import pyemf
++import pyemf3 as pyemf
+
+ is_py3 = sys.version_info[0] == 3
+ if is_py3:
+diff --git a/tests/test-1.py b/tests/test-1.py
+index 05e92ac..77b7f4f 100755
+--- a/tests/test-1.py
++++ b/tests/test-1.py
+@@ -1,6 +1,6 @@
+ #!/usr/bin/env python
+
+-import pyemf
++import pyemf3 as pyemf
+
+ width=8
+ height=6
+diff --git a/tests/test-arc-chord-pie.py b/tests/test-arc-chord-pie.py
+index 416bc35..b0254a2 100755
+--- a/tests/test-arc-chord-pie.py
++++ b/tests/test-arc-chord-pie.py
+@@ -1,6 +1,6 @@
+ #!/usr/bin/env python
+
+-import pyemf
++import pyemf3 as pyemf
+
+ width=8
+ height=6
+diff --git a/tests/test-deleteobject.py b/tests/test-deleteobject.py
+index 372908f..7ea8179 100755
+--- a/tests/test-deleteobject.py
++++ b/tests/test-deleteobject.py
+@@ -1,6 +1,6 @@
+ #!/usr/bin/env python
+
+-import pyemf
++import pyemf3 as pyemf
+
+ # Test of handles and deleting objects.
+
+diff --git a/tests/test-drawing1.py b/tests/test-drawing1.py
+index a5c1c6d..1b08448 100755
+--- a/tests/test-drawing1.py
++++ b/tests/test-drawing1.py
+@@ -1,6 +1,6 @@
+ #!/usr/bin/env python
+
+-import pyemf
++import pyemf3 as pyemf
+
+ width=8
+ height=6
+diff --git a/tests/test-fontbackground.py b/tests/test-fontbackground.py
+index df2cc30..68e46a7 100755
+--- a/tests/test-fontbackground.py
++++ b/tests/test-fontbackground.py
+@@ -1,6 +1,6 @@
+ #!/usr/bin/env python
+
+-import pyemf
++import pyemf3 as pyemf
+
+ width=8
+ height=6
+diff --git a/tests/test-optimize16bit.py b/tests/test-optimize16bit.py
+index c312b14..ea29ada 100755
+--- a/tests/test-optimize16bit.py
++++ b/tests/test-optimize16bit.py
+@@ -2,7 +2,7 @@
+
+ # Test of bounds checking and 16bit/32bit versions of polygon, polyline, etc.
+
+-import pyemf
++import pyemf3 as pyemf
+
+ width=8
+ height=6
+diff --git a/tests/test-paths1.py b/tests/test-paths1.py
+index c599c87..64934f5 100755
+--- a/tests/test-paths1.py
++++ b/tests/test-paths1.py
+@@ -1,6 +1,6 @@
+ #!/usr/bin/env python
+
+-import pyemf
++import pyemf3 as pyemf
+
+ def path(emf,text,x,y,size=300):
+     emf.TextOut(x,y,text);
+diff --git a/tests/test-poly1.py b/tests/test-poly1.py
+index 36cfa71..add8684 100755
+--- a/tests/test-poly1.py
++++ b/tests/test-poly1.py
+@@ -2,7 +2,7 @@
+
+ # Test of bounds checking and 16bit/32bit versions of polygon, polyline, etc.
+
+-import pyemf
++import pyemf3 as pyemf
+
+ width=8
+ height=6
+diff --git a/tests/test-poly2.py b/tests/test-poly2.py
+index 134c944..93aa5f2 100755
+--- a/tests/test-poly2.py
++++ b/tests/test-poly2.py
+@@ -2,7 +2,7 @@
+
+ # Test polygon fill mode
+
+-import pyemf
++import pyemf3 as pyemf
+
+ def polygon(emf,x,y):
+     points=[(x,y+100),(x+400,y+400),(x+500,y+100),(x+800,y+400),(x+800,y+100),(x,y+400),
+diff --git a/tests/test-polyline1.py b/tests/test-polyline1.py
+index 3eeff10..628b03e 100755
+--- a/tests/test-polyline1.py
++++ b/tests/test-polyline1.py
+@@ -1,6 +1,6 @@
+ #!/usr/bin/env python
+
+-import pyemf
++import pyemf3 as pyemf
+
+ width=8
+ height=6
+diff --git a/tests/test-selectclippath1.py b/tests/test-selectclippath1.py
+index ead16ee..e06f223 100755
+--- a/tests/test-selectclippath1.py
++++ b/tests/test-selectclippath1.py
+@@ -1,6 +1,6 @@
+ #!/usr/bin/env python
+
+-import pyemf
++import pyemf3 as pyemf
+
+ print("Test of clip paths.")
+
+diff --git a/tests/test-setpixel.py b/tests/test-setpixel.py
+index 7d0cc89..4797639 100755
+--- a/tests/test-setpixel.py
++++ b/tests/test-setpixel.py
+@@ -1,6 +1,6 @@
+ #!/usr/bin/env python
+
+-import pyemf
++import pyemf3 as pyemf
+
+ print("Test of SetPixel")
+
+diff --git a/tests/test-stockobject.py b/tests/test-stockobject.py
+index c069246..de16548 100755
+--- a/tests/test-stockobject.py
++++ b/tests/test-stockobject.py
+@@ -1,6 +1,6 @@
+ #!/usr/bin/env python
+
+-import pyemf
++import pyemf3 as pyemf
+
+ print("Test of GetStockObject")
+
+diff --git a/tests/test-viewport-window-origin.py b/tests/test-viewport-window-origin.py
+index bf26ca1..60c00f2 100755
+--- a/tests/test-viewport-window-origin.py
++++ b/tests/test-viewport-window-origin.py
+@@ -1,6 +1,6 @@
+ #!/usr/bin/env python
+
+-import pyemf
++import pyemf3 as pyemf
+
+ print("Test of viewport origin and window origin.")
+
+diff --git a/tests/test-worldtransform1.py b/tests/test-worldtransform1.py
+index ab3efae..a6fcda2 100755
+--- a/tests/test-worldtransform1.py
++++ b/tests/test-worldtransform1.py
+@@ -1,6 +1,6 @@
+ #!/usr/bin/env python
+
+-import pyemf
++import pyemf3 as pyemf
+
+ import math
+ if 'radians' not in dir(math):

@@ -1,0 +1,13 @@
+--- a/pyemf3/emf.py
++++ b/pyemf3/emf.py
+@@ -999,8 +999,8 @@ def RoundRect(self,left,top,right,bottom,cornerwidth,cornerheight):
+ @type cornerheight: int
+
+         """
+-        return self._append(emr.ROUNDRECT((((left,top),(right,bottom)),
+-                                           cornerwidth,cornerheight)))
++        return self._append(emr.ROUNDRECT(((left,top),(right,bottom)),
++                                           cornerwidth,cornerheight))
+
+     def Arc(self,left,top,right,bottom,xstart,ystart,xend,yend):
+         """
