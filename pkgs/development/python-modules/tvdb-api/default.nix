@@ -8,7 +8,7 @@
 
 buildPythonPackage {
   pname = "tvdb-api";
-  version = "3.2.0-beta";
+  version = "3.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
