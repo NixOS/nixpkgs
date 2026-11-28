@@ -5116,6 +5116,8 @@ self: super: with self; {
 
   dkimpy = callPackage ../development/python-modules/dkimpy { };
 
+  dl-translate = callPackage ../development/python-modules/dl-translate { };
+
   dlib = callPackage ../development/python-modules/dlib { inherit (pkgs) dlib; };
 
   dlinfo = callPackage ../development/python-modules/dlinfo { };
@@ -6184,6 +6186,10 @@ self: super: with self; {
   ffmpy = callPackage ../development/python-modules/ffmpy { };
 
   ffpyplayer = callPackage ../development/python-modules/ffpyplayer { };
+
+  ffsubsync = callPackage ../development/python-modules/ffsubsync {
+    inherit (pkgs) ffmpeg;
+  };
 
   fhirpy = callPackage ../development/python-modules/fhirpy { };
 
@@ -23057,6 +23063,8 @@ self: super: with self; {
   whirlpool-sixth-sense = callPackage ../development/python-modules/whirlpool-sixth-sense { };
 
   whisper = callPackage ../development/python-modules/whisper { };
+
+  whisper-timestamped = callPackage ../development/python-modules/whisper-timestamped { };
 
   whispers = callPackage ../development/python-modules/whispers { };
 
