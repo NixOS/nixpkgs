@@ -18,14 +18,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "soco";
-  version = "0.32.2";
+  version = "0.32.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SoCo";
     repo = "SoCo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-m7THP4vlQm2x2N+BxyZ0GOFCEzW/SZu4WZrfgNhnHyk=";
+    hash = "sha256-vZ26P7psAQ46JIi3L0fm+Ngycou35nrnOhAzNe2Dt9A=";
   };
 
   postPatch = ''
