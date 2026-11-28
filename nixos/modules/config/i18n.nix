@@ -199,6 +199,7 @@ in
 
     environment.sessionVariables = {
       LOCALE_ARCHIVE = "/run/current-system/sw/lib/locale/locale-archive";
+      SYSTEMD_LOCALE_DIRECTORY = "/run/current-system/sw/lib/locale";
     }
     # When imperative, leave LANG/LC_* to pam_systemd so /etc/set-environment
     # does not override what localectl wrote to /etc/locale.conf.
@@ -211,6 +212,7 @@ in
 
     systemd.globalEnvironment = lib.mkIf (cfg.glibcLocales != null && cfg.supportedLocales != [ ]) {
       LOCALE_ARCHIVE = "${cfg.glibcLocales}/lib/locale/locale-archive";
+      SYSTEMD_LOCALE_DIRECTORY = "${cfg.glibcLocales}/lib/locale";
     };
 
     # ‘/etc/locale.conf’ is used by systemd.
