@@ -37,6 +37,6 @@ buildPythonPackage (finalAttrs: {
     mainProgram = "chardetect";
     homepage = "https://github.com/chardet/chardet";
     license = lib.licenses.lgpl21Plus;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ cktiel ];
   };
 })
