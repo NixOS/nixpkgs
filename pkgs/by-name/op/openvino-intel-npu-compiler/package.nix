@@ -111,6 +111,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = ./update.sh;
 
+  requiredSystemFeatures = [ "big-parallel" ];
+
   meta = {
     description = "OpenVINO Intel NPU Compiler (VPUXCompilerL0)";
     homepage = "https://github.com/openvinotoolkit/npu_compiler";
