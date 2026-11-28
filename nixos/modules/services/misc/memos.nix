@@ -93,6 +93,8 @@ in
 
         ::: {.note}
         By default, generated from [](opt-${opt.settings}).
+        When using a custom file with {option}`services.memos.openFirewall`,
+        set `services.memos.settings.MEMOS_PORT` to the port in that file.
         :::
       '';
       example = "/var/lib/memos/memos.env";
@@ -117,7 +119,7 @@ in
     };
 
     networking.firewall.allowedTCPPorts = lib.mkIf cfg.openFirewall [
-      cfg.port
+      (lib.toInt (toString (cfg.settings.MEMOS_PORT or 8081)))
     ];
 
     systemd.tmpfiles.settings."10-memos" = {
