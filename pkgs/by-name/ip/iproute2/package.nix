@@ -105,6 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [
       fpletz
+      Cosipa
     ];
   };
 })
