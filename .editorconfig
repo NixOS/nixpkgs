@@ -91,6 +91,7 @@ trim_trailing_whitespace = unset
 [registry.dat]
 end_of_line = unset
 insert_final_newline = unset
+trim_trailing_whitespace = unset
 
 # see https://manual.jule.dev/project/code-style.html#indentions
 [*.jule]
