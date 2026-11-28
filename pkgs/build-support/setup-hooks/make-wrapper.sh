@@ -13,23 +13,24 @@ assertExecutable() {
 # makeWrapper EXECUTABLE OUT_PATH ARGS
 
 # ARGS:
-# --argv0        NAME    : set the name of the executed process to NAME
-#                          (if unset or empty, defaults to EXECUTABLE)
-# --inherit-argv0        : the executable inherits argv0 from the wrapper.
-#                          (use instead of --argv0 '$0')
-# --resolve-argv0        : if argv0 doesn't include a / character, resolve it against PATH
-# --set          VAR VAL : add VAR with value VAL to the executable's environment
-# --set-default  VAR VAL : like --set, but only adds VAR if not already set in
-#                          the environment
-# --unset        VAR     : remove VAR from the environment
-# --chdir        DIR     : change working directory (use instead of --run "cd DIR")
-# --run          COMMAND : run command before the executable
-# --add-flag     ARG     : prepend the single argument ARG to the invocation of the executable
-#                          (that is, *before* any arguments passed on the command line)
-# --append-flag  ARG     : append the single argument ARG to the invocation of the executable
-#                          (that is, *after* any arguments passed on the command line)
-# --add-flags    ARGS    : prepend ARGS verbatim to the Bash-interpreted invocation of the executable
-# --append-flags ARGS    : append ARGS verbatim to the Bash-interpreted invocation of the executable
+# --argv0         NAME    : set the name of the executed process to NAME
+#                           (if unset or empty, defaults to EXECUTABLE)
+# --inherit-argv0         : the executable inherits argv0 from the wrapper.
+#                           (use instead of --argv0 '$0')
+# --resolve-argv0         : if argv0 doesn't include a / character, resolve it against PATH
+# --set           VAR VAL : add VAR with value VAL to the executable's environment
+# --set-from-file VAR FILE : add VAR with value from FILE (newlines removed)
+# --set-default   VAR VAL : like --set, but only adds VAR if not already set in
+#                           the environment
+# --unset         VAR     : remove VAR from the environment
+# --chdir         DIR     : change working directory (use instead of --run "cd DIR")
+# --run           COMMAND : run command before the executable
+# --add-flag      ARG     : prepend the single argument ARG to the invocation of the executable
+#                           (that is, *before* any arguments passed on the command line)
+# --append-flag   ARG     : append the single argument ARG to the invocation of the executable
+#                           (that is, *after* any arguments passed on the command line)
+# --add-flags     ARGS    : prepend ARGS verbatim to the Bash-interpreted invocation of the executable
+# --append-flags  ARGS    : append ARGS verbatim to the Bash-interpreted invocation of the executable
 
 # --prefix          ENV SEP VAL   : suffix/prefix ENV with VAL, separated by SEP
 # --suffix
@@ -130,6 +131,13 @@ makeShellWrapper() {
             value="${params[$((n + 2))]}"
             n=$((n + 2))
             echo "export $varName=${value@Q}" >> "$wrapper"
+        elif [[ "$p" == "--set-from-file" ]]; then
+            varName="${params[$((n + 1))]}"
+            value="${params[$((n + 2))]}"
+            n=$((n + 2))
+            printf 'export %s="%s"\n' \
+                "$varName" \
+                "\$(tr -d '\\n' < ${value@Q})" >> "$wrapper"
         elif [[ "$p" == "--set-default" ]]; then
             varName="${params[$((n + 1))]}"
             value="${params[$((n + 2))]}"
