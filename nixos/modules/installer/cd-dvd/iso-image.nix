@@ -893,7 +893,7 @@ in
           mount --bind --make-private /sysroot/iso /tmp-iso
           umount /sysroot/iso
           mount -t tmpfs -o size="$fsSize" tmpfs /sysroot/iso
-          cp -r /tmp-iso/* /sysroot/iso/
+          cp -r /tmp-iso/. /sysroot/iso/
           umount /tmp-iso
           rm -r /tmp-iso
         '';
