@@ -8,6 +8,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "faketty";
   version = "1.0.21";
 
+  __structuredAttrs = true;
+
   src = fetchCrate {
     inherit (finalAttrs) pname version;
     hash = "sha256-IDikuswaa8QZovwoks31hrmsFDtcniiaIddSXrU5pjI=";
