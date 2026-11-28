@@ -23,14 +23,14 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "hyperscan";
-  version = "0.8.2";
+  version = "0.9.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "darvid";
     repo = "python-hyperscan";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jIDUfl6ReWvypfWecM8hReux6YxzXSsLCFU3AO97xUY=";
+    hash = "sha256-zy2yDAD2xOc0YXcCJ3KbSN0WPTLlCme+5l3mTUvsYwo=";
   };
 
   env.CMAKE_ARGS = lib.toString [
