@@ -6,16 +6,16 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "elasticsearch_exporter";
-  version = "1.10.0";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "prometheus-community";
     repo = "elasticsearch_exporter";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-xVDqyYYwzxfFxZ3K2SMFfPoJw47SXS6czsWLC++LOOk=";
+    hash = "sha256-RZ/GyBVZjP7Co6/QORhhllC62x1V7Cfujg821g7Kyf0=";
   };
 
-  vendorHash = "sha256-8y0M1b34eJpuHOuXPemhB5kKwBSgU7cMFxOaIZFS/bo=";
+  vendorHash = "sha256-+Xmj+oNv9ODlKOpnwpGyjz0cZT4F4txJr0KcCMtUwQc=";
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) elasticsearch; };
 
