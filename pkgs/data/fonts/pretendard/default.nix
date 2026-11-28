@@ -1,7 +1,8 @@
 {
   lib,
-  stdenvNoCC,
   fetchzip,
+  stdenvNoCC,
+  installFonts,
 }:
 
 let
@@ -13,7 +14,7 @@ let
       typeface,
       hash,
     }:
-    stdenvNoCC.mkDerivation {
+    stdenvNoCC.mkDerivation (finalAttrs: {
       inherit pname version;
 
       src = fetchzip {
@@ -22,13 +23,12 @@ let
         inherit hash;
       };
 
-      installPhase = ''
-        runHook preInstall
+      nativeBuildInputs = [ installFonts ];
+      dontInstallFonts = true;
 
-        install -Dm644 public/static/*.otf -t $out/share/fonts/opentype
+      preInstall = ''installFont 'otf' "$out/share/fonts/opentype"'';
 
-        runHook postInstall
-      '';
+      sourceRoot = "${finalAttrs.src.name}/public/static";
 
       meta = {
         homepage = "https://github.com/orioncactus/pretendard";
@@ -37,8 +37,7 @@ let
         platforms = lib.platforms.all;
         maintainers = with lib.maintainers; [ sudosubin ];
       };
-    };
-
+    });
 in
 {
   pretendard = mkPretendard {
