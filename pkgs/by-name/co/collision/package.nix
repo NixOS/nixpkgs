@@ -21,13 +21,13 @@
 
 crystal.buildCrystalPackage rec {
   pname = "Collision";
-  version = "3.14.0";
+  version = "3.14.1";
 
   src = fetchFromGitHub {
     owner = "GeopJr";
     repo = "Collision";
     tag = "v${version}";
-    hash = "sha256-GcCqItSHUhhS0yrOM8bMzkVsVHyC97c+yccw5ZP61IU=";
+    hash = "sha256-GmGMUA38GaDrvf+vS56vkHPeQwvdN/IlWUDKtoNs0Z8=";
   };
 
   postPatch = ''
