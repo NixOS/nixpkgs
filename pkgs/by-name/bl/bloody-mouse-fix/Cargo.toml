@@ -1,0 +1,10 @@
+[package]
+name = "mouse_fix"
+version = "1.0.0"
+edition = "2021"
+authors = ["Benyamin Eskandari <me@benyaamin.com>"]
+
+
+[dependencies]
+uinput = { git = "https://github.com/jbruechert/rust-uinput" }
+evdev-rs = "0.6.1"
