@@ -197,6 +197,7 @@ stdenv.mkDerivation (finalAttrs: {
       pluiedev
     ];
     mainProgram = "vesktop";
+    mainDarwinApp = "Vesktop.app";
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
