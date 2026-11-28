@@ -10,6 +10,14 @@ let
   format = pkgs.formats.json { };
 in
 {
+  imports = [
+    (lib.mkRemovedOptionModule [
+      "services"
+      "automx2"
+      "domain"
+    ] "Please use `services.automx2.domains` instead.")
+  ];
+
   options = {
     services.automx2 = {
       enable = lib.mkEnableOption "automx2";
@@ -19,11 +27,11 @@ in
         "automx2"
       ] { };
 
-      domain = lib.mkOption {
-        type = lib.types.str;
-        example = "example.com";
+      domains = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        example = [ "example.com" ];
         description = ''
-          E-Mail-Domain for which mail client autoconfig/autoconfigure should be set up.
+          E-Mail-Domains for which mail client autoconfig/autoconfigure should be set up.
           The `autoconfig` and `autodiscover` subdomains are automatically prepended and set up with ACME.
           The names of those domains are hardcoded in the mail clients and are not configurable.
         '';
@@ -44,25 +52,26 @@ in
       };
     };
   };
-
   config = lib.mkIf cfg.enable {
     services.nginx = {
       enable = true;
-      virtualHosts = {
-        "autoconfig.${cfg.domain}" = {
-          enableACME = true;
-          forceSSL = true;
-          serverAliases = [ "autodiscover.${cfg.domain}" ];
-          locations = {
-            "/".proxyPass = "http://127.0.0.1:${toString cfg.port}/";
-            "/initdb".extraConfig = ''
-              # Limit access to clients connecting from localhost
-              allow 127.0.0.1;
-              deny all;
-            '';
+      virtualHosts = lib.attrsets.mergeAttrsList (
+        lib.lists.forEach cfg.domains (domain: {
+          "autoconfig.${domain}" = {
+            enableACME = true;
+            forceSSL = true;
+            serverAliases = [ "autodiscover.${domain}" ];
+            locations = {
+              "/".proxyPass = "http://127.0.0.1:${toString cfg.port}/";
+              "/initdb".extraConfig = ''
+                # Limit access to clients connecting from localhost
+                allow 127.0.0.1;
+                deny all;
+              '';
+            };
           };
-        };
-      };
+        })
+      );
     };
 
     systemd.services.automx2 = {
