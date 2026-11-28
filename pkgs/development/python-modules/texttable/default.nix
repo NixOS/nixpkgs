@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "texttable";
-  version = "1.7.0";
+  version = "1.7.3";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-LSBo+1URWAfTrHekymj6SIA+hOuw7iNA+FgQejZSJjg=";
+    hash = "sha256-/5mqdWLGy80JgstvrpFFEmsZh4GCSWzcRrjWgWchxdo=";
   };
 
   build-system = [ setuptools ];
