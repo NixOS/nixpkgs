@@ -84,7 +84,10 @@ stdenv.mkDerivation (finalAttrs: {
     zstd
   ];
 
-  cmakeFlags = lib.optional (!finalAttrs.finalPackage.doCheck) "-DENABLE_TESTING=OFF";
+  cmakeFlags = [
+    "-DCMAKE_INSTALL_SYSCONFDIR=/etc"
+  ]
+  ++ lib.optional (!finalAttrs.finalPackage.doCheck) "-DENABLE_TESTING=OFF";
 
   doCheck = true;
 
