@@ -109,6 +109,19 @@ fn installs_and_reinstalls() {
     assert!(!conf.contains(&t1), "{conf}");
     assert!(conf.contains("\n//+Generation 1\n"), "{conf}");
 
+    // The generation folders can start collapsed and be listed after the extra entries.
+    let conf = install(&config(json!({
+        "expandGenerations": false,
+        "extraEntriesPosition": "beforeGenerations",
+    })));
+    assert!(
+        conf.contains("\n/memtest\n  protocol: efi\n/NixOS generations\n"),
+        "{conf}"
+    );
+    assert!(conf.contains("\n/NixOS profile 'extra'\n"), "{conf}");
+    assert!(!conf.contains("/+NixOS"), "{conf}");
+    assert!(conf.ends_with("# NixOS boot entries end here"), "{conf}");
+
     fs::remove_dir_all(&base).unwrap();
 }
 

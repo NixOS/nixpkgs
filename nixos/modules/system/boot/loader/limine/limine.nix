@@ -77,6 +77,8 @@ let
       maxGenerations = if cfg.maxGenerations == null then 0 else cfg.maxGenerations;
       hostArchitecture = pkgs.stdenv.hostPlatform.parsed.cpu;
       extraEntries = cfg.extraEntries;
+      extraEntriesPosition = cfg.extraEntriesPosition;
+      expandGenerations = cfg.expandGenerations;
       additionalFiles = cfg.additionalFiles;
       validateChecksums = cfg.validateChecksums;
     }
@@ -150,6 +152,36 @@ in
       '';
       description = ''
         A string which is appended to the end of limine.conf. The config format can be found [here](https://github.com/limine-bootloader/limine/blob/trunk/CONFIG.md).
+
+        See [](#opt-boot.loader.limine.extraEntriesPosition) to place these entries
+        before the generation folders instead.
+      '';
+    };
+
+    extraEntriesPosition = lib.mkOption {
+      default = "end";
+      type = lib.types.enum [
+        "end"
+        "beforeGenerations"
+      ];
+      example = "beforeGenerations";
+      description = ''
+        Where [](#opt-boot.loader.limine.extraEntries) are placed in the boot menu.
+
+        - `"end"`: after the generation folders, at the end of limine.conf.
+        - `"beforeGenerations"`: directly after the default entry, so the
+          generation folders are listed last.
+      '';
+    };
+
+    expandGenerations = lib.mkOption {
+      default = true;
+      type = lib.types.bool;
+      example = false;
+      description = ''
+        Whether the folders listing the generations of each system profile
+        are expanded when the boot menu opens. If disabled, they start
+        collapsed and can still be expanded from the menu.
       '';
     };
 

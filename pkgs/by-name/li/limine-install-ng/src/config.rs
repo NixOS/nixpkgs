@@ -36,9 +36,29 @@ pub struct InstallConfig {
     /// `0` keeps every generation.
     pub max_generations: usize,
     pub extra_entries: String,
+    #[serde(default)]
+    pub extra_entries_position: ExtraEntriesPosition,
+    /// Whether the generation folders start expanded in the menu.
+    #[serde(default = "default_true")]
+    pub expand_generations: bool,
     /// Destination relative to the ESP, mapped to its source.
     pub additional_files: BTreeMap<String, PathBuf>,
     pub validate_checksums: bool,
+}
+
+/// Where the extra entries are placed in `limine.conf`.
+#[derive(Debug, Default, Clone, Copy, PartialEq, Eq, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub enum ExtraEntriesPosition {
+    /// After the generation folders, at the end of the file.
+    #[default]
+    End,
+    /// Directly after the default entry, before the generation folders.
+    BeforeGenerations,
+}
+
+fn default_true() -> bool {
+    true
 }
 
 #[derive(Debug, Deserialize)]

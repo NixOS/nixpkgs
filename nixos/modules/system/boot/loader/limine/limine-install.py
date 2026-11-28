@@ -588,7 +588,8 @@ def install_bootloader() -> None:
         group_name = (
             "generations" if profile == "system" else f"profile '{profile}'"
         )
-        config_file += f"/+{config('distroName')} {group_name}\n"
+        expand = "+" if config("expandGenerations") else ""
+        config_file += f"/{expand}{config('distroName')} {group_name}\n"
 
         isFirst = True
 
@@ -605,12 +606,15 @@ def install_bootloader() -> None:
     config_header += config_entry(
         1, current_system_boot_spec, str(config("distroName")), time, generation
     )
+    if config("extraEntriesPosition") == "beforeGenerations":
+        config_header += str(config("extraEntries"))
     config_file = config_header + config_file
 
     config_file_path = os.path.join(limine_install_dir, "limine.conf")
     config_file += f"\n# {config('distroName')} boot entries end here\n\n"
 
-    config_file += str(config("extraEntries"))
+    if config("extraEntriesPosition") == "end":
+        config_file += str(config("extraEntries"))
 
     with open(f"{config_file_path}.tmp", "w") as file:
         file.truncate()

@@ -12,6 +12,7 @@ let
     stableEntry = ./stable-entry.nix;
     uefi = ./uefi.nix;
     distroName = ./distroName.nix;
+    menuLayout = ./menu-layout.nix;
   };
 in
 lib.mapAttrs (_: runTest) tests
