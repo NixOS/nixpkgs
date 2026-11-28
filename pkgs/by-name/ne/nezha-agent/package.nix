@@ -8,16 +8,16 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "nezha-agent";
-  version = "2.4.0";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "nezhahq";
     repo = "agent";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HiR2D+EiYB4N3HbzGz7W2v5RVq19ph22dyyBr4eCltI=";
+    hash = "sha256-DW82DWoUTPfT/yGiim++uAwBpOdIZpgs1bo9DKKtjzY=";
   };
 
-  vendorHash = "sha256-KDPTFTY8T9igj0FvDym2byzrUxQeUhbxn03ua3L8nNQ=";
+  vendorHash = "sha256-/P2emb7AgKQz7tOnnsKm5udmxduqgdbYB97x6QkdDBU=";
 
   ldflags = [
     "-s"
@@ -39,6 +39,8 @@ buildGoModule (finalAttrs: {
       ++ lib.optionals stdenv.hostPlatform.isDarwin [
         # os/user.Current() cannot resolve the Nix build UID
         "TestTask_RejectsMalformedFrame_OpOnlyCommandsUseLegacyBehavior/list_falls_back_to_home_directory"
+        # macOS system certificate verification (trustd) is unavailable in the Nix sandbox (OSStatus -26276)
+        "TestUTLSRoundTripperRejectsUntrustedServerCertificate"
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
@@ -67,7 +69,7 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "Agent of Nezha Monitoring";
     homepage = "https://github.com/nezhahq/agent";
-    license = lib.licenses.asl20;
+    license = lib.licenses.wtfpl;
     maintainers = with lib.maintainers; [ moraxyc ];
     mainProgram = "nezha-agent";
   };
