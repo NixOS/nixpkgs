@@ -1,7 +1,8 @@
 --- a/koboldcpp.py
 +++ b/koboldcpp.py
-@@ -5080,8 +5080,7 @@
-         if os.name == "posix" and "DISPLAY" in os.environ:  # UNIX-like systems
+@@ -6064,8 +6064,7 @@
+-        if os.name == "posix" and "DISPLAY" in os.environ:  # UNIX-like systems
++        if sys.platform == "linux" and (os.environ.get("DISPLAY") or os.environ.get("WAYLAND_DISPLAY")):
              clean_env = os.environ.copy()
              clean_env.pop("LD_LIBRARY_PATH", None)
 -            clean_env["PATH"] = "/usr/bin:/bin"
