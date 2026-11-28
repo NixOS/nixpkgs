@@ -27,6 +27,12 @@ stdenv.mkDerivation {
       url = "https://lore.kernel.org/kvm/20261128061232.64870-1-mikatammi@gmail.com/raw";
       hash = "sha256-ID7BtAms8xFiyJYNKEA5m9VgJSgm2A+PUVemD36FCNQ=";
     })
+    # Fixes messages cut off with musl, whose printf rejects %Lu; drop once kvmtool has it
+    (fetchpatch {
+      name = "use-llu-instead-of-Lu.patch";
+      url = "https://lore.kernel.org/kvm/20261128114931.68152-1-mikatammi@gmail.com/raw";
+      hash = "sha256-KyFX1gz+n5mDG60KKfUvGjiHRpzRiimxWykLjsd34FA=";
+    })
   ];
 
   buildInputs = lib.optionals withLibfdt [ dtc ];
