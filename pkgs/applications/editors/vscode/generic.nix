@@ -77,6 +77,11 @@
 
   extraNativeBuildInputs ? [ ],
 
+  extraPostPatch ? "",
+
+  # Extra makeWrapper arguments, appended to gappsWrapperArgs (Linux only)
+  extraWrapperArgs ? [ ],
+
   # Customize FHS environment
   # Function that takes default buildFHSEnv arguments and returns modified arguments
   customizeFHSEnv ? args: args,
@@ -400,6 +405,7 @@ stdenv.mkDerivation (
         }
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true --wayland-text-input-version=3}}"
         --append-flags ${lib.escapeShellArg commandLineArgs}
+        ${lib.escapeShellArgs extraWrapperArgs}
       )
     '';
 
@@ -492,7 +498,8 @@ stdenv.mkDerivation (
           ''
             chmod +x ${vscodeRipgrep}
           ''
-      );
+      )
+      + extraPostPatch;
 
     postFixup = lib.optionalString stdenv.hostPlatform.isLinux (
       ''
