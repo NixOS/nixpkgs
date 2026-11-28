@@ -7877,10 +7877,6 @@ with pkgs;
     ];
   };
 
-  floorp-bin = wrapFirefox floorp-bin-unwrapped {
-    pname = "floorp-bin";
-  };
-
   inherit
     ({
       freeoffice = callPackage ../applications/office/softmaker/freeoffice.nix { };

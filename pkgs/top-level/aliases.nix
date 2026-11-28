@@ -929,8 +929,10 @@ mapAliases {
   flattenReferencesGraph = warnAlias "'flattenReferencesGraph' has been renamed to 'flatten-references-graph'" flatten-references-graph; # Added 2026-02-08
   flclash = throw "'flclash' has been removed due to low number of users and lack of maintenance."; # Added 2026-08-17
   flint3 = flint; # Added 2025-09-21
-  floorp = throw "floorp has been replaced with floorp-bin, as building from upstream sources has become unfeasible starting with version 12.x"; # Added 2025-09-06
-  floorp-unwrapped = throw "floorp-unwrapped has been replaced with floorp-bin-unwrapped, as building from upstream sources has become unfeasible starting with version 12.x"; # Added 2025-09-06
+  floorp = throw "'floorp' has been removed, as building from upstream sources has become unfeasible starting with version 12.x"; # Added 2025-09-06
+  floorp-bin = throw "'floorp-bin' has been removed due to limited maintainer capacity to keep up with updates, as well as no committer being listed as maintainer."; # Added 2026-11-27
+  floorp-bin-unwrapped = throw "'floorp-bin-unwrapped' has been removed due to limited maintainer capacity to keep up with updates, as well as no committer being listed as maintainer."; # Added 2026-11-27
+  floorp-unwrapped = throw "'floorp-unwrapped' has been removed, as building from upstream sources has become unfeasible starting with version 12.x"; # Added 2025-09-06
   flow-editor = throw "'flow-editor' has been renamed to/replaced by 'flow-control'"; # Converted to throw 2025-10-27
   fltk13 = warnAlias "'fltk13' has been renamed to 'fltk_1_3'" fltk_1_3; # Added 2026-01-14
   fltk13-minimal = warnAlias "'fltk13-minimal' has been renamed to 'fltk_1_3-minimal'" fltk_1_3-minimal; # Added 2026-01-14
