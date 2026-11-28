@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
-    swiftc -O -o vzvm Sources/vzvm/*.swift
+    swiftc -target ${stdenv.hostPlatform.swift.triple} -O -o vzvm Sources/vzvm/*.swift
 
     runHook postBuild
   '';
