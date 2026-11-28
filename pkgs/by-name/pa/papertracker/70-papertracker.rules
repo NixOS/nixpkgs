@@ -1,0 +1,11 @@
+# Paper_Tracker udev rules
+# Based on /etc/udev/rules.d/70-papertracker-usb.rules created by the official installer.
+
+# Paper_Tracker video serial interfaces
+SUBSYSTEM=="tty", ATTRS{idVendor}=="0425", ATTRS{idProduct}=="0001|0002|0003|0400|0500|0600|0700|0800", TAG+="uaccess"
+
+# Paper_Tracker PowerHub
+SUBSYSTEM=="usb", ATTR{idVendor}=="0425", ATTR{idProduct}=="1000", MODE="0660", GROUP="plugdev", TAG+="uaccess"
+
+# Bigscreen Bigeye (Bigscreen Beyond 2e's eyetracking cameras)
+SUBSYSTEM=="usb", ATTR{idVendor}=="35bd", ATTR{idProduct}=="0202", MODE="0660", GROUP="plugdev", TAG+="uaccess"
