@@ -393,41 +393,37 @@ in
           ''
             configDir=${escapeShellArg cfg.configDir}
             encodingXml="$configDir/encoding.xml"
+            copyEncodingXml=true
+            if [[ -e $encodingXml ]]; then
+              # this intentionally removes trailing newlines
+              currentText="$(<"$encodingXml")"
+              configuredText="$(<${encodingXmlFile})"
+
+              if [[ $currentText == "$configuredText" ]]; then
+                copyEncodingXml=false
+              else
           ''
           + (
             if cfg.forceEncodingConfig then
               ''
-                if [[ -e $encodingXml ]]; then
-                  # this intentionally removes trailing newlines
-                  currentText="$(<"$encodingXml")"
-                  configuredText="$(<${encodingXmlFile})"
-                  if [[ $currentText == "$configuredText" ]]; then
-                    # don't need to do anything
-                    exit 0
-                  else
-                    encodingXmlBackup="$configDir/encoding.xml.backup-$(date -u +"%FT%H_%M_%SZ")"
-                    mv --update=none-fail -T "$encodingXml" "$encodingXmlBackup"
-                  fi
-                fi
-                cp --update=none-fail -T ${encodingXmlFile} "$encodingXml"
-                chmod u+w "$encodingXml"
+                encodingXmlBackup="$configDir/encoding.xml.backup-$(date -u +"%FT%H_%M_%SZ")"
+                mv --update=none-fail -T "$encodingXml" "$encodingXmlBackup"
               ''
             else
               ''
-                if [[ -e $encodingXml ]]; then
-                  # this intentionally removes trailing newlines
-                  currentText="$(<"$encodingXml")"
-                  configuredText="$(<${encodingXmlFile})"
-                  if [[ $currentText != "$configuredText" ]]; then
-                    echo "WARN: $encodingXml already exists and is different from the configured settings. transcoding options NOT applied." >&2
-                    echo "WARN: Set config.services.jellyfin.forceEncodingConfig = true to override." >&2
-                  fi
-                else
-                  cp --update=none-fail -T ${encodingXmlFile} "$encodingXml"
-                  chmod u+w "$encodingXml"
-                fi
+                echo "WARN: $encodingXml already exists and is different from the configured settings. transcoding options NOT applied." >&2
+                echo "WARN: Set config.services.jellyfin.forceEncodingConfig = true to override." >&2
               ''
           )
+          + ''
+              fi
+            fi
+
+            if [[ $copyEncodingXml == true ]]; then
+              cp --update=none-fail -T ${encodingXmlFile} "$encodingXml"
+              chmod u+w "$encodingXml"
+            fi
+          ''
         );
 
         # This is mostly follows: https://github.com/jellyfin/jellyfin/blob/master/fedora/jellyfin.service
