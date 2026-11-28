@@ -11,21 +11,21 @@
 
 buildNpmPackage rec {
   pname = "fcast-receiver";
-  version = "2.2.1";
+  version = "2.2.4";
 
   src = fetchFromGitLab {
     domain = "gitlab.futo.org";
     owner = "videostreaming";
     repo = "fcast";
-    rev = "520907fbb8e3103d7eab9d925e572a966f4e74f3";
-    hash = "sha256-5ERnlX4Jw6kv0BSNNA2mnJCYoIQJDuUrZVoKIYuWBYA=";
+    tag = "electron-v${version}";
+    hash = "sha256-pbptK8LvdN2b/3SpRyTXKmMX9bN4mOmOiUsys67Syew=";
   };
 
   sourceRoot = "${src.name}/receivers/electron";
 
   makeCacheWritable = true;
 
-  npmDepsHash = "sha256-EgNpKOjpv7QMsmcVGEpU81UIi/z4vA1S8xXmespx6Ew=";
+  npmDepsHash = "sha256-H05I4gDCZq+pkmynEg88Na7oxuK04G284+G7G1J7HVM=";
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
