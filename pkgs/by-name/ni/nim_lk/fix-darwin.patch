@@ -1,0 +1,291 @@
+From 09f42a01605f904eb93ca5fd3d4a42d4251c8c8f Mon Sep 17 00:00:00 2001
+From: eveeifyeve <open-source@eveeifyeve.dev>
+Date: Sun, 25 Oct 2026 15:30:15 +1100
+Subject: [PATCH] Fix darwin support
+
+---
+ src/nim_lk.nim      | 114 +++++++++++++++++++++++++++++++-------------
+ tests/test_purl.nim |   2 +-
+ 2 files changed, 81 insertions(+), 35 deletions(-)
+
+diff --git a/src/nim_lk.nim b/src/nim_lk.nim
+index 09ced9d..c0c170a 100644
+--- a/src/nim_lk.nim
++++ b/src/nim_lk.nim
+@@ -135,7 +135,8 @@ proc matchRev(url: string; wanted: VersionRange): GitPair =
+       except ParseVersionError: discard
+     if result.rev == "" and pairs.len > 0:
+       result = pairs[pairs.high]
+-    doAssert result.rev != "", url
++    if result.rev == "":
++      quit("no refs found at " & url)
+ 
+ proc collectMetadata(data: JsonNode) =
+   let storePath = data{"path"}.getStr
+@@ -153,7 +154,8 @@ proc collectMetadata(data: JsonNode) =
+   data{"srcDir"} = %pkg.srcDir
+ 
+ proc prefetchGit(cloneUrl: string; pair: GitPair; subDir = ""): JsonNode =
+-  assert pair.rev != ""
++  if pair.rev == "":
++    quit("no revision to fetch for " & cloneUrl)
+   var archiveUri = cloneUrl.parseUri
+   archiveUri.scheme = "https"
+   archiveUri.path.removeSuffix ".git"
+@@ -177,7 +179,8 @@ proc prefetchGit(cloneUrl: string; pair: GitPair; subDir = ""): JsonNode =
+     if lines.len <= off:
+       quit("failed to parse nix-prefetch-url output: " & lines)
+     off.inc parseUntil(lines, storePath, {'\n'}, off).succ
+-    doAssert off == lines.len, "unrecognized nix-prefetch-url output:\n" & lines
++    if off != lines.len:
++      quit("unrecognized nix-prefetch-url output:\n" & lines)
+     result = %*
+       {
+         "method":  "fetchzip",
+@@ -226,10 +229,17 @@ proc selectGitCommit(url: string): GitPair =
+   stdout.writeLine "select a tag from ", url, ":"
+   for pair in pairs:
+     stdout.writeLine "\t", pair.`rev`, "\t", pair.`ref`
+-  let choice = stdin.readLine.strip
++  var choice: string
++  try:
++    choice = stdin.readLine.strip
++  except CatchableError:
++    quit("no selection could be read from stdin for " & url)
++  if choice == "":
++    quit("no ref or revision selected for " & url)
+   for pair in pairs:
+     if choice == pair.`ref` or choice == pair.`rev`:
+       return pair
++  quit("no ref or revision matched \"" & choice & "\" for " & url)
+ 
+ proc containsPackageUri(lockAttrs: JsonNode; pkgUrl: string): bool =
+   for e in lockAttrs.items:
+@@ -238,7 +248,9 @@ proc containsPackageUri(lockAttrs: JsonNode; pkgUrl: string): bool =
+ 
+ proc containsPackage(lockAttrs: JsonNode; pkgName: string): bool =
+   for e in lockAttrs.items:
+-    for other in e{"packages"}.items:
++    let pkgs = e{"packages"}
++    if pkgs.isNil: continue
++    for other in pkgs.items:
+       if other.getStr == pkgName:
+         return true
+ 
+@@ -273,6 +285,7 @@ proc getPackageUrl(name: string): tuple[url: Uri, meth: string] =
+         let client = newHttpClient()
+         var raw = client.getContent(githubPackagesUrl)
+         close(client)
++        createDir(registryPath.parentDir)
+         writeFile(registryPath, raw)
+         globalRegistry = parseJson(raw)
+     var
+@@ -334,11 +347,14 @@ proc generateLockfile(directoryPath: string): JsonNode =
+   return %*{"depends": deps}
+ 
+ proc containsComponent(bom: JsonNode; bomRef: string): bool =
+-  for c in bom{"components"}.items:
++  let comps = bom{"components"}
++  if comps.isNil: return false
++  for c in comps.items:
+     if c{"bom-ref"}.getStr == bomRef:
+       return true
+ 
+ proc containsString(node: JsonNode; s: string): bool =
++  if node.isNil: return false
+   for e in node.elems:
+     if e.getStr == s:
+       return true
+@@ -369,6 +385,8 @@ proc toNimPurl(s: string): string =
+ proc queueNimbleDependencies(
+     bom: JsonNode; bomRef: string; pkgInfo: PackageInfo; queue: var Dependencies) =
+   let dependsOn = newJArray()
++  if bom{"dependencies"}.isNil:
++    bom{"dependencies"} = newJArray()
+   bom{"dependencies"}.add(%*{ "ref": bomRef, "dependsOn": dependsOn })
+   for (dn, dv) in pkgInfo.requires:
+     case dn
+@@ -383,26 +401,34 @@ proc queueNimbleDependencies(
+         queue.addLast dep
+ 
+ proc getComponent(bom: JsonNode; bomRef: string; byName = false): JsonNode =
+-  for e in bom{"components"}.elems:
+-    if e{"bom-ref"}.getStr == bomRef: return e
+-  if result.isNil and byName:
+-    for e in bom{"components"}.elems:
+-      if e{"name"}.getStr == bomRef: return e
++  let comps = bom{"components"}
++  if not comps.isNil:
++    for e in comps.elems:
++      if e{"bom-ref"}.getStr == bomRef: return e
++    if byName:
++      for e in comps.elems:
++        if e{"name"}.getStr == bomRef: return e
+   return newJObject()
+ 
+ proc getDepends(bom: JsonNode; bomRef: string): JsonNode =
+-  for e in bom{"dependencies"}.elems:
++  let deps = bom{"dependencies"}
++  if deps.isNil: return newJObject()
++  for e in deps.elems:
+     if e{"ref"}.getStr == bomRef: return e
+   return newJObject()
+ 
+ proc queueBomDependencies(bom: JsonNode; bomRef: string; queue: var Dependencies) =
+-  for depRef in bom.getDepends(bomRef){"dependsOn"}.elems:
++  let dependsOn = bom.getDepends(bomRef){"dependsOn"}
++  if dependsOn.isNil: return
++  for depRef in dependsOn.elems:
+     queue.addLast Dependency(kind: dkBom, bomRef: depRef.getStr, bom: bom)
+       # process these later
+ 
+ proc addComponent(bom: JsonNode; dep: Dependency, queue: var Dependencies; loadSboms = false) =
+   ## Add a component that was discovered as a dependency.
+   var depBomRef = dep.bomRef
++  if bom{"components"}.isNil:
++    bom{"components"} = newJArray()
+   case dep.kind
+   of dkBom:
+     let comp = dep.bom.getComponent(depBomRef)
+@@ -438,9 +464,14 @@ proc addComponent(bom: JsonNode; dep: Dependency, queue: var Dependencies; loadS
+     else:
+       quit("unhandled fetch method " & dep.meth & " for " & $dep.url)
+     let sbomPath = fodPath / "sbom.json"
++    var farBom: JsonNode
+     if loadSboms and sbomPath.fileExists:
++      farBom = sbomPath.parseFile
++      if farBom{"metadata", "component"}.isNil:
++        stderr.writeLine "no metadata.component in ", sbomPath
++        farBom = nil
++    if not farBom.isNil:
+       let
+-        farBom = sbomPath.parseFile
+         comp = farBom{"metadata","component"}
+         farBomRef = comp{"bom-ref"}.getStr
+       if depBomRef == "":
+@@ -449,16 +480,18 @@ proc addComponent(bom: JsonNode; dep: Dependency, queue: var Dependencies; loadS
+         stderr.writeLine "warning: resolved ", depBomRef, " to a bom that uses bom-ref ", farBomRef
+       if not bom.containsComponent(depBomRef):
+         comp{"externalReferences"} = extRefs
+-        let farProps = comp{"properties"}
++        var farProps = comp{"properties"}
++        if farProps.isNil:
++          farProps = newJArray()
++          comp{"properties"} = farProps
+         for pair in props:
+           # overlay the FOD properties that we've verified
+           block overlaying:
+             for farPair in farProps:
+               if farPair{"name"} == pair{"name"}:
+-                pair{"value"} = pair{"value"}
++                farPair{"value"} = pair{"value"}
+                 break overlaying
+             farProps.add pair
+-        assert not bom.containsComponent(depBomRef)
+         bom{"components"}.add comp
+         queueBomDependencies(farBom, depBomRef, queue)
+     else:
+@@ -478,7 +511,10 @@ proc addComponent(bom: JsonNode; dep: Dependency, queue: var Dependencies; loadS
+           "externalReferences": extRefs,
+           "properties": props
+         }
+-      assert not bom.containsComponent(depBomRef)
++      if bom.containsComponent(depBomRef):
++        # already present, skip re-adding
++        stderr.writeLine "component ", depBomRef, " is already in the BOM"
++        return
+       bom{"components"}.add comp
+       bom.queueNimbleDependencies(depBomRef, pkgInfo, queue)
+ 
+@@ -553,17 +589,21 @@ proc updateFromSources(bom: JsonNode; bomRef, sourcesPath: string) =
+   discard
+ 
+ proc updateFodData(bom: JsonNode; bomRef, version: string; fodData: JsonNode): bool =
+-  let
+-    comp = bom.getComponent(bomRef)
+-    props = comp{"properties"}
++  let comp = bom.getComponent(bomRef)
++  var props = comp{"properties"}
++  if props.isNil:
++    props = newJArray()
++    comp{"properties"} = props
+   if comp{"version"}.getStr != version:
+     comp{"version"} = %version
+     result = true
+-  for extRef in comp{"externalReferences"}.elems:
+-    if extRef{"type"}.getStr == "source-distribution":
+-      if extRef{"url"} != fodData{"url"}:
+-        extRef{"url"} = fodData{"url"}
+-        result = true
++  let extRefs = comp{"externalReferences"}
++  if not extRefs.isNil:
++    for extRef in extRefs.elems:
++      if extRef{"type"}.getStr == "source-distribution":
++        if extRef{"url"} != fodData{"url"}:
++          extRef{"url"} = fodData{"url"}
++          result = true
+   for (key, val) in fodData.pairs:
+     let vs = val.getStr
+     if vs != "":
+@@ -571,11 +611,15 @@ proc updateFodData(bom: JsonNode; bomRef, version: string; fodData: JsonNode): b
+ 
+ proc update(bom: JsonNode; bomRef: string; byName: bool): bool =
+   let comp = bom.getComponent(bomRef, byName)
+-  assert not comp.isNil
+-  var bomRef = comp{"bom-ref"}.getStr
+-  assert not bomRef.isNil
++  var compRef = comp{"bom-ref"}.getStr
++  if compRef == "":
++    stderr.writeLine "no component \"", bomRef, "\" in the BOM"
++    return false
+   var suitableRefFound = false
+   let extRefs = comp{"externalReferences"}
++  if extRefs.isNil:
++    stderr.writeLine "no \"externalReferences\" on component ", compRef
++    return false
+   for extRef in extRefs.elems:
+     if result: break
+     if extRef{"type"}.getStr == "vcs":
+@@ -586,11 +630,11 @@ proc update(bom: JsonNode; bomRef: string; byName: bool): bool =
+         stderr.writeLine("assuming ", url, " is a git URL")
+       let gitPair = url.selectGitCommit()
+       let pkgData = url.prefetchGit gitPair
+-      result = bom.updateFodData(bomRef, gitPair.`ref`.strip(chars={'v'}), pkgData)
++      result = bom.updateFodData(compRef, gitPair.`ref`.strip(chars={'v'}), pkgData)
+       if result:
+-        bom.updateFromSources(bomRef, pkgData{"path"}.getStr)
++        bom.updateFromSources(compRef, pkgData{"path"}.getStr)
+   if not suitableRefFound:
+-    stderr.writeLine "cannot update from \"externalReferences\": ", extRefs
++    stderr.writeLine "cannot update ", compRef, " from its \"externalReferences\""
+ 
+ type Mode = enum
+   unspecifiedMode,
+@@ -681,8 +725,10 @@ proc main =
+     stdout.writeLine generateBom(packagePath).pretty
+   of listComponentsMode:
+     let bom = packagePath.parseSbom()
+-    for comp in bom{"components"}.elems:
+-      stdout.writeLine comp{"bom-ref"}.getStr
++    let comps = bom{"components"}
++    if not comps.isNil:
++      for comp in comps.elems:
++        stdout.writeLine comp{"bom-ref"}.getStr
+   of updateComponentMode:
+     var updated = false
+     if componentArgs.len == 0:
+diff --git a/tests/test_purl.nim b/tests/test_purl.nim
+index e5f0ac0..b278809 100644
+--- a/tests/test_purl.nim
++++ b/tests/test_purl.nim
+@@ -1,6 +1,6 @@
+ import
+   std/[json, options, os, unittest],
+-  ../src/nim_lk/purl
++  ../src/nim_lk/purls
+ 
+ proc findTestVectors: string =
+   var parent = getCurrentDir()
+-- 
+2.55.0
+

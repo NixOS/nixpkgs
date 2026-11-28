@@ -25,6 +25,7 @@ buildNimSbom (finalAttrs: {
 
   patches = [
     ./nil.patch
+    ./fix-darwin.patch
   ];
 
   postFixup = ''
