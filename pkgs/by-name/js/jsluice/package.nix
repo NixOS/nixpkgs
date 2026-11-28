@@ -6,16 +6,16 @@
 
 buildGoModule {
   pname = "jsluice";
-  version = "0-unstable-2023-06-23";
+  version = "0-unstable-2024-01-10";
 
   src = fetchFromGitHub {
     owner = "BishopFox";
     repo = "jsluice";
-    rev = "f10429e1016a9573da0157eacde8f7feb9deb8c7";
-    hash = "sha256-l9rwC1ljtt7Q+FYKdQFhtnLJDS8OwMJXIIpZgya0zwU=";
+    rev = "0ddfab153e060a9eeaded4d8669233f7c071e7e4";
+    hash = "sha256-8BgpUvdHcooB2Kll91OCWKV6mMZVyyxkfYQx/vWEo0o=";
   };
 
-  vendorHash = "sha256-u4E+b/vChXArovtaZ4LODaINWit86i5K4GyHLR0JSyU=";
+  vendorHash = "sha256-uecg0Oi1VCCi/pZqtdiKmJNKhpqDrhxe/HpWGymKlow=";
 
   ldflags = [
     "-s"
