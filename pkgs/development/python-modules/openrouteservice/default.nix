@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "openrouteservice";
-  version = "2.3.3";
+  version = "10.0.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
