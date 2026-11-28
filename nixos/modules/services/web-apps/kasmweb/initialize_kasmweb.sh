@@ -92,9 +92,9 @@ sed -i -e "s/ token:.*/ token: \"@defaultManagerToken@\"/g" \
 
 # Generate a salt and hash for the desired passwords. Update the yaml
 ADMIN_SALT=$(cat /proc/sys/kernel/random/uuid)
-ADMIN_HASH=$(printf @defaultAdminPassword@${ADMIN_SALT} | sha256sum | cut -c-64)
+ADMIN_HASH=$(printf '%s' "@defaultAdminPassword@${ADMIN_SALT}" | sha256sum | cut -c-64)
 USER_SALT=$(cat /proc/sys/kernel/random/uuid)
-USER_HASH=$(printf @defaultUserPassword@${USER_SALT} | sha256sum | cut -c-64)
+USER_HASH=$(printf '%s' "@defaultUserPassword@${USER_SALT}" | sha256sum | cut -c-64)
 
 yq -i  '(.users.[] | select(.username=="admin@kasm.local") | .salt) = "'${ADMIN_SALT}'"'  @datastorePath@/conf/database/seed_data/default_properties.yaml
 yq -i  '(.users.[] | select(.username=="admin@kasm.local") | .pw_hash) = "'${ADMIN_HASH}'"'  @datastorePath@/conf/database/seed_data/default_properties.yaml
